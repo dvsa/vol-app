@@ -20,29 +20,29 @@ class LetterSectionController extends AbstractInternalController implements Left
     protected $tableName = 'admin-letter-section';
     protected $defaultTableSortField = 'sectionKey';
     protected $defaultTableOrderField = 'ASC';
-    
+
     protected $listDto = ListDTO::class;
     protected $itemDto = ItemDTO::class;
     protected $itemParams = ['id'];
-    
+
     protected $formClass = LetterSectionForm::class;
     protected $addFormClass = LetterSectionForm::class;
     protected $mapperClass = LetterSectionMapper::class;
-    
+
     protected $createCommand = CreateDTO::class;
     protected $updateCommand = UpdateDTO::class;
     protected $deleteCommand = DeleteDTO::class;
-    
+
     protected $addContentTitle = 'Add Letter Section';
     protected $editContentTitle = 'Edit Letter Section (Creates New Version)';
-    
+
     protected $deleteModalTitle = 'Remove Letter Section';
     protected $deleteConfirmMessage = 'Are you sure you want to remove this letter section?';
     protected $deleteSuccessMessage = 'The letter section has been removed';
-    
+
     protected $addSuccessMessage = 'Letter section created successfully';
     protected $editSuccessMessage = 'Letter section updated successfully (new version created)';
-    
+
     protected $inlineScripts = [
         'indexAction' => ['table-actions'],
         'addAction' => ['forms/letter-section'],
@@ -55,27 +55,27 @@ class LetterSectionController extends AbstractInternalController implements Left
     public function versionHistoryAction()
     {
         $id = $this->params()->fromRoute('id');
-        
+
         // Get the section with all versions
         $response = $this->handleQuery(
             ItemDTO::create(['id' => $id])
         );
-        
+
         if (!$response->isOk()) {
             $this->flashMessenger()->addErrorMessage('Unable to load version history');
             return $this->redirect()->toRoute('admin-dashboard/letter-management/letter-section');
         }
-        
+
         $data = $response->getResult();
-        
+
         $view = new ViewModel([
             'section' => $data,
             'versions' => $data['versions'] ?? [],
             'currentVersionId' => $data['currentVersion']['id'] ?? null,
         ]);
-        
+
         $view->setTemplate('admin/letter-section/version-history');
-        
+
         return $view;
     }
 

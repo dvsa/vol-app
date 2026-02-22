@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ContinuationReview\Section;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -60,7 +62,7 @@ class DeclarationReviewServiceTest extends MockeryTestCase
         $this->sut = new DeclarationReviewService($abstractReviewServiceServices);
     }
 
-    public function testGetConfigFromDataNullSignature()
+    public function testGetConfigFromDataNullSignature(): void
     {
         $this->continuationDetail->setSignatureType(null);
 
@@ -83,10 +85,8 @@ class DeclarationReviewServiceTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider getConfigFromDataDeclarationMarkupDataProvider
-     */
-    public function testGetConfigFromDataDeclarationMarkup($expectedMarkup, $goodsOrPsv, $licenceType, $isNi, $isLgv)
+    #[\PHPUnit\Framework\Attributes\DataProvider('getConfigFromDataDeclarationMarkupDataProvider')]
+    public function testGetConfigFromDataDeclarationMarkup(mixed $expectedMarkup, mixed $goodsOrPsv, mixed $licenceType, mixed $isNi, mixed $isLgv): void
     {
         $this->continuationDetail->setSignatureType(null);
         $this->continuationDetail->getLicence()->setGoodsOrPsv(new RefData($goodsOrPsv));
@@ -117,7 +117,7 @@ class DeclarationReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function getConfigFromDataDeclarationMarkupDataProvider()
+    public static function getConfigFromDataDeclarationMarkupDataProvider(): array
     {
         return [
             [
@@ -269,7 +269,7 @@ class DeclarationReviewServiceTest extends MockeryTestCase
         ];
     }
 
-    public function testGetConfigFromDataNoSignature()
+    public function testGetConfigFromDataNoSignature(): void
     {
         $this->continuationDetail->setSignatureType(new RefData(RefData::SIG_SIGNATURE_NOT_REQUIRED));
 
@@ -292,7 +292,7 @@ class DeclarationReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetConfigFromDataPhysicalSignature()
+    public function testGetConfigFromDataPhysicalSignature(): void
     {
         $this->continuationDetail->setSignatureType(new RefData(RefData::SIG_PHYSICAL_SIGNATURE));
         $this->continuationDetail->getLicence()->setTrafficArea((new TrafficArea())->setIsNi(false));
@@ -320,7 +320,7 @@ class DeclarationReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetConfigFromDataDigitalSignature()
+    public function testGetConfigFromDataDigitalSignature(): void
     {
         $this->continuationDetail->setSignatureType(new RefData(RefData::SIG_DIGITAL_SIGNATURE));
         $mockDigitalSignature = m::mock();

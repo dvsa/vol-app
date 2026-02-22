@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Application Financial History Review Service Test
  *
@@ -40,10 +42,8 @@ class ApplicationFinancialHistoryReviewServiceTest extends MockeryTestCase
         $this->sut = new ApplicationFinancialHistoryReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider providerGetConfigFromData
-     */
-    public function testGetConfigFromData($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerGetConfigFromData')]
+    public function testGetConfigFromData(mixed $data, mixed $expected): void
     {
         $this->mockTranslator->shouldReceive('translate')
             ->andReturnUsing(
@@ -53,7 +53,7 @@ class ApplicationFinancialHistoryReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function providerGetConfigFromData()
+    public static function providerGetConfigFromData(): array
     {
         return [
             'Nos' => [

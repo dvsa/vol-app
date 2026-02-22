@@ -18,13 +18,14 @@ use Psr\Container\ContainerInterface;
  */
 class GenerateEntities extends AbstractCommandHandler
 {
-    private const ENTITY_RELATIVE_PATH = '/module/Api/src/Entity';
-    private const TEST_RELATIVE_PATH = '/test/module/Api/src/Entity';
-    private const PROJECT_ROOT_DEPTH = 6; // Depth from this file to project root
-    
+    private const string ENTITY_RELATIVE_PATH = '/module/Api/src/Entity';
+    private const string TEST_RELATIVE_PATH = '/test/module/Api/src/Entity';
+    private const int PROJECT_ROOT_DEPTH = 6; // Depth from this file to project root
+
     private Doctrine3SchemaIntrospector $schemaIntrospector;
     private EntityGenerator $entityGenerator;
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->schemaIntrospector = $container->get(Doctrine3SchemaIntrospector::class);
@@ -38,14 +39,14 @@ class GenerateEntities extends AbstractCommandHandler
         assert($command instanceof Command);
 
         $config = $this->loadConfiguration($command);
-        
+
         // Get all tables from database
         $tableNames = $this->schemaIntrospector->getTableNames();
-        
+
         // Get relationships (including ManyToMany from join tables)
         $relationships = $this->schemaIntrospector->getRelationships();
         $config['relationships'] = $relationships;
-        
+
         // Get list of join tables to exclude from entity generation
         $joinTableNames = [];
         foreach ($relationships as $tableName => $tableRelationships) {
@@ -56,7 +57,7 @@ class GenerateEntities extends AbstractCommandHandler
             }
         }
         $joinTableNames = array_unique($joinTableNames);
-        
+
         // Get table metadata and filter out ignored tables and join tables
         $tables = [];
         foreach ($tableNames as $tableName) {
@@ -64,14 +65,14 @@ class GenerateEntities extends AbstractCommandHandler
             if (in_array($tableName, $joinTableNames)) {
                 continue;
             }
-            
+
             $tableMetadata = $this->schemaIntrospector->getTableMetadata($tableName);
-            
+
             // Skip tables with @settings['ignore'] in comment
             if ($this->shouldIgnoreTable($tableMetadata)) {
                 continue;
             }
-            
+
             $tables[] = $tableMetadata;
         }
 
@@ -85,7 +86,7 @@ class GenerateEntities extends AbstractCommandHandler
 
         // Create OLCS Result object
         $olcsResult = new Result();
-        
+
         if ($result->isSuccessful()) {
             $olcsResult->addMessage(sprintf('Generated %d entities in %.2f seconds', $result->getEntityCount(), $result->getDuration()));
         } else {
@@ -93,11 +94,11 @@ class GenerateEntities extends AbstractCommandHandler
                 $olcsResult->addMessage('Error: ' . $error);
             }
         }
-        
+
         foreach ($result->getWarnings() as $warning) {
             $olcsResult->addMessage('Warning: ' . $warning);
         }
-        
+
         // Store additional data as flags
         $olcsResult->setFlag('success', $result->isSuccessful());
         $olcsResult->setFlag('entityCount', $result->getEntityCount());
@@ -106,7 +107,7 @@ class GenerateEntities extends AbstractCommandHandler
         $olcsResult->setFlag('duration', $result->getDuration());
         $olcsResult->setFlag('dryRun', $command->isDryRun());
         // Report the actual output path used
-        $actualOutputPath = $config['replace'] 
+        $actualOutputPath = $config['replace']
             ? $this->getEntityPath()
             : $config['outputPath'];
         $olcsResult->setFlag('outputPath', $actualOutputPath);
@@ -121,13 +122,13 @@ class GenerateEntities extends AbstractCommandHandler
     {
         $defaultConfigPath = 'data/db/EntityConfig.php';
         $configPath = $command->getConfigPath() ?? $defaultConfigPath;
-        
+
         if (!file_exists($configPath)) {
             throw new \RuntimeException(sprintf('Configuration file not found: %s', $configPath));
         }
 
         $entityConfig = include $configPath;
-        
+
         return [
             'entityConfig' => $entityConfig,
             'mappingConfig' => $entityConfig['mappingConfig'] ?? [],
@@ -149,9 +150,9 @@ class GenerateEntities extends AbstractCommandHandler
         }
 
         // Look for @settings['ignore'] in the comment
-        return preg_match('/@settings\s*\[\s*[\'"]ignore[\'"]\s*\]/', $comment) === 1;
+        return preg_match('/@settings\s*\[\s*[\'"]ignore[\'"]\s*\]/', (string) $comment) === 1;
     }
-    
+
     /**
      * Get project root directory
      */
@@ -159,7 +160,7 @@ class GenerateEntities extends AbstractCommandHandler
     {
         return dirname(__DIR__, self::PROJECT_ROOT_DEPTH);
     }
-    
+
     /**
      * Get entity directory path
      */
@@ -167,7 +168,7 @@ class GenerateEntities extends AbstractCommandHandler
     {
         return $this->getProjectRoot() . self::ENTITY_RELATIVE_PATH;
     }
-    
+
     /**
      * Get test directory path
      */
@@ -183,16 +184,16 @@ class GenerateEntities extends AbstractCommandHandler
     {
         // If replace mode is enabled, write directly to the Entity directory
         // Otherwise use the specified output path (default: /tmp/generated-entities)
-        $outputPath = $config['replace'] 
+        $outputPath = $config['replace']
             ? $this->getEntityPath()
             : $config['outputPath'];
-        
+
         // Create output directories
         $this->createDirectories($outputPath);
 
         foreach ($result->getEntities() as $entityData) {
             $namespaceFolder = $entityData->getNamespaceFolder();
-            
+
             // Handle path construction - avoid Entity/Entity duplication
             if (empty($namespaceFolder) || $namespaceFolder === 'Entity') {
                 // For root entities, write directly to output path
@@ -203,12 +204,12 @@ class GenerateEntities extends AbstractCommandHandler
                 $namespacePath = $outputPath . '/' . $namespaceFolder;
                 $testNamespacePath = $this->getTestPath() . '/' . $namespaceFolder;
             }
-            
+
             // Create directories if they don't exist
             if (!is_dir($namespacePath)) {
                 mkdir($namespacePath, 0755, true);
             }
-            
+
             // Write abstract entity
             $abstractPath = $namespacePath . '/Abstract' . $entityData->getClassName() . '.php';
             file_put_contents($abstractPath, $entityData->getAbstractContent());
@@ -225,7 +226,7 @@ class GenerateEntities extends AbstractCommandHandler
                 mkdir($testNamespacePath, 0755, true);
             }
             $testPath = $testNamespacePath . '/' . $entityData->getClassName() . 'EntityTest.php';
-            
+
             // Never overwrite existing test files - they may contain custom test logic
             if (!file_exists($testPath)) {
                 file_put_contents($testPath, $entityData->getTestContent());

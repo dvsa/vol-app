@@ -19,7 +19,7 @@ class IrhpApplication implements MapperInterface
      *
      * @return IrhpApplication
      */
-    public function __construct(private ApplicationStepsPostDataTransformer $applicationStepsPostDataTransformer)
+    public function __construct(private readonly ApplicationStepsPostDataTransformer $applicationStepsPostDataTransformer)
     {
     }
 
@@ -104,7 +104,7 @@ class IrhpApplication implements MapperInterface
 
             return $cmdData;
         } elseif ($data['topFields']['irhpPermitType'] == RefData::IRHP_BILATERAL_PERMIT_TYPE_ID) {
-            $selectedCountryIds = explode(',', $data['fields']['selectedCountriesCsv']);
+            $selectedCountryIds = explode(',', (string) $data['fields']['selectedCountriesCsv']);
 
             $countries = $data['fields']['countries'];
             $permitsRequired = [];
@@ -162,7 +162,7 @@ class IrhpApplication implements MapperInterface
             if (isset($formData['fields']['irhpPermitApplications']) && is_array($formData['fields']['irhpPermitApplications'])) {
                 foreach ($formData['fields']['irhpPermitApplications'] as $irhpPermitApplication) {
                     $irhpPermitStock = $irhpPermitApplication['irhpPermitWindow']['irhpPermitStock'];
-                    $validFromYear = date('Y', strtotime($irhpPermitStock['validFrom']));
+                    $validFromYear = date('Y', strtotime((string) $irhpPermitStock['validFrom']));
                     $countryId = $irhpPermitStock['country']['id'];
 
                     $yearArr[$countryId][$validFromYear] = $irhpPermitApplication['permitsRequired'];
@@ -172,7 +172,7 @@ class IrhpApplication implements MapperInterface
 
         // For each available window, prepare the data needed by the NoOfPermits fieldset builder
         foreach ($irhpWindows as $window) {
-            $windowYear = date('Y', strtotime($window['irhpPermitStock']['validFrom']));
+            $windowYear = date('Y', strtotime((string) $window['irhpPermitStock']['validFrom']));
             $permitsRequired = 0;
             if (isset($yearArr[$window['irhpPermitStock']['country']['id']][$windowYear])) {
                 $permitsRequired = $yearArr[$window['irhpPermitStock']['country']['id']][$windowYear];

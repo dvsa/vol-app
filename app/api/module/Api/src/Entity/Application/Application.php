@@ -1126,7 +1126,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
         $completions = [];
         $converter = new CamelCaseToUnderscore();
         foreach ($applicationCompletion as $key => $value) {
-            if (preg_match('/^([a-zA-Z]+)Status$/', $key, $matches)) {
+            if (preg_match('/^([a-zA-Z]+)Status$/', (string) $key, $matches)) {
                 $section = strtolower((string) $converter->filter($matches[1]));
                 $completions[$section] = (int)$value;
             }
@@ -1167,7 +1167,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
         $data = $completion->serialize([]);
 
         foreach ($data as $key => $value) {
-            if (preg_match('/^([a-zA-Z]+)Status$/', $key) && (int)$value !== self::VARIATION_STATUS_UNCHANGED) {
+            if (preg_match('/^([a-zA-Z]+)Status$/', (string) $key) && (int)$value !== self::VARIATION_STATUS_UNCHANGED) {
                 return true;
             }
         }
@@ -1190,7 +1190,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
         $filter = new CamelCaseToUnderscore();
 
         foreach ($data as $key => $value) {
-            if (!preg_match('/^([a-zA-Z]+)Status$/', $key, $matches)) {
+            if (!preg_match('/^([a-zA-Z]+)Status$/', (string) $key, $matches)) {
                 continue;
             }
 
@@ -2152,16 +2152,11 @@ class Application extends AbstractApplication implements ContextProviderInterfac
             }
         }
 
-        switch($size) {
-            case self::PSV_VEHICLE_SIZE_SMALL:
-                $this->psvOperateSmallVhl = 'Y';
-                break;
-            case self::PSV_VEHICLE_SIZE_MEDIUM_LARGE:
-                $this->psvOperateSmallVhl = 'N';
-                break;
-            default:
-                $this->psvOperateSmallVhl = null;
-        }
+        $this->psvOperateSmallVhl = match ($size) {
+            self::PSV_VEHICLE_SIZE_SMALL => 'Y',
+            self::PSV_VEHICLE_SIZE_MEDIUM_LARGE => 'N',
+            default => null,
+        };
 
         $this->psvWhichVehicleSizes = $vehicleSize;
 
@@ -2202,7 +2197,8 @@ class Application extends AbstractApplication implements ContextProviderInterfac
 
         if ($this->psvLimousines === 'Y') {
             //for small vehicles we don't always ask further questions
-            if ($this->psvWhichVehicleSizes instanceof RefData
+            if (
+                $this->psvWhichVehicleSizes instanceof RefData
                 && $this->psvWhichVehicleSizes->getId() === self::PSV_VEHICLE_SIZE_SMALL
             ) {
                 return true;

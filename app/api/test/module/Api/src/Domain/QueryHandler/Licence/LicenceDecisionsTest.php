@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LicenceDecisionsTest.php
  *
@@ -36,7 +38,7 @@ class LicenceDecisionsTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQueryDecisionsTrue()
+    public function testHandleQueryDecisionsTrue(): void
     {
         $licenceId = 1;
 
@@ -84,7 +86,7 @@ class LicenceDecisionsTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryDecisionsFalse()
+    public function testHandleQueryDecisionsFalse(): void
     {
         $licenceId = 1;
 

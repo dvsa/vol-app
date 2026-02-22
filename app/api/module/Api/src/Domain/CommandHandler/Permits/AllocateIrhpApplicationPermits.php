@@ -254,6 +254,7 @@ final class AllocateIrhpApplicationPermits extends AbstractCommandHandler
             $this->irhpPermitAllocator->allocate($this->result, $irhpPermitApplication, $criteria, $expiryDate);
         }
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

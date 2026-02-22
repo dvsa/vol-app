@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer\PrintJob;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -22,10 +24,8 @@ class PrintJobTest extends AbstractConsumerTestCase
     /** @var  \Dvsa\Olcs\Cli\Service\Queue\Consumer\PrintJob\PrintJob */
     protected $sut;
 
-    /**
-    * @dataProvider dpGetCommandData
-    */
-    public function testGetCommandData($itemId, $entityId, $options, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetCommandData')]
+    public function testGetCommandData(mixed $itemId, mixed $entityId, mixed $options, mixed $expected): void
     {
         $item = new QueueEntity();
         $item->setId($itemId);
@@ -35,7 +35,7 @@ class PrintJobTest extends AbstractConsumerTestCase
         $this->assertEquals($expected, $this->sut->getCommandData($item));
     }
 
-    public function dpGetCommandData()
+    public static function dpGetCommandData(): array
     {
         return [
             'with list of documents' => [
@@ -80,7 +80,7 @@ class PrintJobTest extends AbstractConsumerTestCase
     /**
      * Tests that print job retries correctly
      */
-    public function testProcessMessageHandlesNotReadyException()
+    public function testProcessMessageHandlesNotReadyException(): void
     {
         $message = 'exception message';
         $userId = 11;

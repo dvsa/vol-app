@@ -21,6 +21,7 @@ class Variation extends CommonVariation
         parent::__construct($formHelper, $authService);
     }
 
+    #[\Override]
     public function alterForm($form): void
     {
         parent::alterForm($form);

@@ -156,6 +156,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      *
      * @return mixed]
      */
+    #[\Override]
     protected function getConvictionsPenaltiesForm($data, $params = [])
     {
         $params['variationType'] = $this->getVariationType();
@@ -170,6 +171,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      *
      * @return mixed
      */
+    #[\Override]
     protected function getConvictionsPenaltiesTable($data)
     {
         /**

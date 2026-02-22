@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Cache;
 
 use Dvsa\Olcs\Api\Domain\Command\Cache\ClearForLicence as Cmd;
@@ -28,7 +30,7 @@ class ClearForLicenceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $licId = 999;
         $licNo = 'OB1234567';

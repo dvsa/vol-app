@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Tests RestResponseTrait
  *
@@ -8,24 +10,34 @@
 
 namespace Dvsa\OlcsTest\Db\Traits;
 
+use Dvsa\Olcs\Db\Traits\RestResponseTrait;
 use Laminas\Http\Response;
+use Mockery as m;
+
+// phpcs:ignore PSR1.Classes.ClassDeclaration.MultipleClasses, Squiz.Classes.ClassFileName.NoMatch
+class RestResponseTraitStub
+{
+    use RestResponseTrait;
+}
 
 /**
  * Tests RestResponseTrait
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+// phpcs:ignore PSR1.Classes.ClassDeclaration.MultipleClasses
 class RestResponseTraitTest extends \PHPUnit\Framework\TestCase
 {
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+
     /**
      * Test that getNewResponse returns a new instance
-     *
-     * @group Traits
-     * @group RestResponseTrait
      */
-    public function testGetNewResponse()
+    #[\PHPUnit\Framework\Attributes\Group('Traits')]
+    #[\PHPUnit\Framework\Attributes\Group('RestResponseTrait')]
+    public function testGetNewResponse(): void
     {
-        $trait = $this->getMockForTrait(\Dvsa\Olcs\Db\Traits\RestResponseTrait::class);
+        $trait = new RestResponseTraitStub();
 
         $response = $trait->getNewResponse();
 
@@ -40,13 +52,11 @@ class RestResponseTraitTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test respond
-     *
-     * @dataProvider providerRespond
-     *
-     * @group Traits
-     * @group RestResponseTrait
      */
-    public function testRespond($input, $expected)
+    #[\PHPUnit\Framework\Attributes\Group('Traits')]
+    #[\PHPUnit\Framework\Attributes\Group('RestResponseTrait')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerRespond')]
+    public function testRespond(mixed $input, mixed $expected): void
     {
         $expectedContent = json_encode(
             [
@@ -59,53 +69,30 @@ class RestResponseTraitTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $mockResponse = $this->createPartialMock(
-            Response::class,
-            [
-                'setStatusCode',
-                'setContent',
-                'getReasonPhrase'
-            ]
-        );
+        $mockResponse = m::mock(Response::class)->makePartial();
 
-        $trait = $this->getMockForTrait(
-            \Dvsa\Olcs\Db\Traits\RestResponseTrait::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            // This argument is an array of mocked methods
-            ['getNewResponse']
-        );
-
-        $mockResponse->expects($this->once())
-            ->method('setStatusCode')
+        $mockResponse->shouldReceive('setStatusCode')
+            ->once()
             ->with($expected['code']);
 
-        $mockResponse->expects($this->once())
-            ->method('setContent')
+        $mockResponse->shouldReceive('setContent')
+            ->once()
             ->with($expectedContent);
 
-        $mockResponse->expects($this->once())
-            ->method('getReasonPhrase')
-            ->will($this->returnValue($expected['reasonPhrase']));
+        $mockResponse->shouldReceive('getReasonPhrase')
+            ->andReturn($expected['reasonPhrase']);
 
-        $trait->expects($this->once())
-            ->method('getNewResponse')
-            ->will($this->returnValue($mockResponse));
+        $trait = m::mock(RestResponseTraitStub::class)->makePartial();
 
-        switch (count($input)) {
-            case 1:
-                $response = $trait->respond($input[0]);
-                break;
-            case 2:
-                $response = $trait->respond($input[0], $input[1]);
-                break;
-            case 3:
-                $response = $trait->respond($input[0], $input[1], $input[2]);
-                break;
-        }
+        $trait->shouldReceive('getNewResponse')
+            ->once()
+            ->andReturn($mockResponse);
+
+        $response = match (count($input)) {
+            1 => $trait->respond($input[0]),
+            2 => $trait->respond($input[0], $input[1]),
+            3 => $trait->respond($input[0], $input[1], $input[2]),
+        };
 
         $this->assertEquals($response, $mockResponse);
     }
@@ -115,7 +102,7 @@ class RestResponseTraitTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function providerRespond()
+    public static function providerRespond(): array
     {
         return [
             [

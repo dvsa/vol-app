@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\CandidatePermits;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
@@ -16,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class ApggCandidatePermitsCreatorTest extends MockeryTestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $irhpApplication = m::mock(IrhpApplication::class);
 

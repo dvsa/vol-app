@@ -38,11 +38,11 @@ final class ProcessRequestMap extends AbstractCommandHandler implements
     use QueueAwareTrait;
     use ToggleAwareTrait;
 
-    public const MISSING_TMP_DIR_ERROR = 'No tmp directory specified in config';
-    public const MISSING_PACK_FILE_ERROR = 'Could not fetch EBSR pack file';
-    public const MISSING_TEMPLATE_ERROR = 'Missing template: %s';
-    public const DOC_QUEUED_MESSAGE = 'TransXchange PDF queued: %s';
-    public const SCALE_DESC = ' (%s Scale)';
+    public const string MISSING_TMP_DIR_ERROR = 'No tmp directory specified in config';
+    public const string MISSING_PACK_FILE_ERROR = 'Could not fetch EBSR pack file';
+    public const string MISSING_TEMPLATE_ERROR = 'Missing template: %s';
+    public const string DOC_QUEUED_MESSAGE = 'TransXchange PDF queued: %s';
+    public const string SCALE_DESC = ' (%s Scale)';
 
     protected $repoServiceName = 'Bus';
 
@@ -88,7 +88,6 @@ final class ProcessRequestMap extends AbstractCommandHandler implements
 
             $s3Options = ['s3Filename' => $submission->getId() . '.xml'];
             $xmlFilename = $this->s3Processor->process($xmlFilename, $s3Options);
-
         } catch (\Exception $e) {
             $message = $e->getMessage();
 
@@ -168,6 +167,7 @@ final class ProcessRequestMap extends AbstractCommandHandler implements
         return $this->documentDescriptions[$templateFile] . $scaleString;
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->s3Processor = $container->get(S3Processor::class);

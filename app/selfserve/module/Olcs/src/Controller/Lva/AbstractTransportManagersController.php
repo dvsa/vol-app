@@ -1099,6 +1099,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @return \Common\Service\Cqrs\Response|\Laminas\Http\Response|null
      */
+    #[\Override]
     protected function checkForRedirect($lvaId)
     {
         if (!$this->isButtonPressed('cancel')) {

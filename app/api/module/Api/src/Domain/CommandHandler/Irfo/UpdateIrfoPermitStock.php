@@ -18,7 +18,7 @@ use Dvsa\Olcs\Api\Entity\Irfo\IrfoPermitStock as IrfoPermitStockEntity;
  */
 final class UpdateIrfoPermitStock extends AbstractCommandHandler implements TransactionedInterface
 {
-    public const MAX_IDS_COUNT = 100;
+    public const int MAX_IDS_COUNT = 100;
 
     protected $repoServiceName = 'IrfoPermitStock';
 

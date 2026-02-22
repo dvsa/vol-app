@@ -206,6 +206,7 @@ class SubmissionSections extends LaminasElement implements ElementPrepareAwareIn
      *
      * @return SubmissionSections
      */
+    #[\Override]
     public function setValue($value)
     {
         $this->getSubmissionType()->setValue($value['submissionType']);

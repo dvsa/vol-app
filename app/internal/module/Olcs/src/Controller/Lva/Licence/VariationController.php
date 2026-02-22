@@ -31,8 +31,6 @@ class VariationController extends AbstractVariationController implements Licence
     protected $lva = 'licence';
     protected string $location = 'internal';
 
-    protected FormHelperService $formHelper;
-
     /**
      * @param NiTextTranslation        $niTextTranslationUtil
      * @param AuthorizationService     $authService
@@ -45,12 +43,10 @@ class VariationController extends AbstractVariationController implements Licence
         AuthorizationService $authService,
         TranslationHelperService $translationHelper,
         $processingCreateVariation,
-        FormHelperService $formHelper,
+        protected FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelper,
         protected $navigation
     ) {
-        $this->formHelper = $formHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

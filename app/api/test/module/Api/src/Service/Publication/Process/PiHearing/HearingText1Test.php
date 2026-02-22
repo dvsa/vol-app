@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Process\PiHearing;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -21,16 +23,15 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 class HearingText1Test extends MockeryTestCase
 {
     /**
-     * @dataProvider processTestProvider
      *
      * @param $organisationType
      * @param $personPrefix
      *
-     * @group publicationFilter
-     *
-     * Test the hearing text1 filter
      */
-    public function testProcess($organisationType, $personPrefix)
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the hearing text1 filter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('processTestProvider')]
+    public function testProcess(mixed $organisationType, mixed $personPrefix): void
     {
 
         $sut = new HearingText1();
@@ -122,7 +123,7 @@ class HearingText1Test extends MockeryTestCase
      *
      * @return array
      */
-    public function processTestProvider()
+    public static function processTestProvider(): array
     {
         return [
             [OrganisationEntity::ORG_TYPE_REGISTERED_COMPANY, 'Director(s): '],

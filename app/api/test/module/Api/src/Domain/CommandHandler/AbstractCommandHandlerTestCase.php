@@ -151,16 +151,14 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
         $this->sideEffects = [];
         $this->commands = [];
 
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
 
         $this->initReferences();
     }
 
-    protected function mockRepo($name, $class)
+    protected function mockRepo(mixed $name, mixed $class): mixed
     {
         if (!$class instanceof m\MockInterface) {
             $class = m::mock($class);
@@ -179,7 +177,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
         return $class;
     }
 
-    protected function initReferences()
+    protected function initReferences(): void
     {
         if (!$this->initRefdata) {
             foreach ($this->refData as $id => $mock) {
@@ -219,9 +217,10 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
     {
         $this->initRefdata = false;
         $this->assertCommandData();
+        parent::assertPostConditions();
     }
 
-    public function expectedCacheSideEffect($cacheId, $uniqueId = null, $result = null, $times = 1)
+    public function expectedCacheSideEffect(mixed $cacheId, mixed $uniqueId = null, mixed $result = null, int $times = 1): void
     {
         $data = [
             'id' => $cacheId,
@@ -245,13 +244,13 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
      * @param string|null $processAfterDate
      */
     public function expectedQueueSideEffect(
-        $entityId,
-        $queueType,
+        mixed $entityId,
+        mixed $queueType,
         array $options = [],
-        $result = null,
-        $processAfterDate = null,
-        $times = 1
-    ) {
+        mixed $result = null,
+        mixed $processAfterDate = null,
+        int $times = 1
+    ): void {
         if ($result === null) {
             $result = new Result();
         }
@@ -276,13 +275,13 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
      * @param string|null $processAfterDate
      */
     public function expectedEmailQueueSideEffect(
-        $emailCmdClass,
+        mixed $emailCmdClass,
         array $cmdData,
-        $entityId,
-        $result,
-        $processAfterDate = null,
-        $times = 1
-    ) {
+        mixed $entityId,
+        mixed $result,
+        mixed $processAfterDate = null,
+        int $times = 1
+    ): void {
         $emailOptions = [
             'commandClass' => $emailCmdClass,
             'commandData' => $cmdData
@@ -309,7 +308,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
         return $result;
     }
 
-    public function expectedSideEffect($class, $data, $result, $times = 1)
+    public function expectedSideEffect(mixed $class, mixed $data, mixed $result, int $times = 1): void
     {
         $this->commandHandler->shouldReceive('handleCommand')
             ->times($times)
@@ -322,7 +321,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
             );
     }
 
-    public function expectedSideEffectAsSystemUser($class, $data, $result, $times = 1)
+    public function expectedSideEffectAsSystemUser(mixed $class, mixed $data, mixed $result, int $times = 1): void
     {
         $this->identityProvider
             ->shouldReceive('setMasqueradedAsSystemUser')
@@ -334,7 +333,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
         $this->expectedSideEffect($class, $data, $result, $times);
     }
 
-    public function expectedSideEffectThrowsException($class, $data, $exception)
+    public function expectedSideEffectThrowsException(mixed $class, mixed $data, mixed $exception): void
     {
         $this->commandHandler->shouldReceive('handleCommand')
             ->once()
@@ -347,7 +346,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
             );
     }
 
-    public function expectedLicenceCacheClearSideEffect($licenceId)
+    public function expectedLicenceCacheClearSideEffect(mixed $licenceId): void
     {
         $this->expectedSideEffect(
             ClearForLicence::class,
@@ -358,7 +357,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
         );
     }
 
-    public function expectedLicenceCacheClear($licenceMock)
+    public function expectedLicenceCacheClear(mixed $licenceMock): mixed
     {
         $organisationMock = m::mock(Organisation::class);
 
@@ -369,7 +368,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
         return $licenceMock;
     }
 
-    public function expectedOrganisationCacheClearSideEffect($orgId)
+    public function expectedOrganisationCacheClearSideEffect(mixed $orgId): void
     {
         $this->expectedSideEffect(
             ClearForOrganisation::class,
@@ -380,7 +379,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
         );
     }
 
-    public function expectedOrganisationCacheClear($organisationMock)
+    public function expectedOrganisationCacheClear(mixed $organisationMock): mixed
     {
         $this->expectedUserCacheClear([111, 222]);
 
@@ -397,14 +396,14 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
         return $organisationMock;
     }
 
-    public function expectedUserCacheClear($userIds)
+    public function expectedUserCacheClear(mixed $userIds): void
     {
         foreach (CacheEncryption::USER_CACHES as $cacheType) {
             $this->expectedCacheClear($cacheType, $userIds);
         }
     }
 
-    public function expectedCacheClear($cacheType, $uniqueIds)
+    public function expectedCacheClear(mixed $cacheType, mixed $uniqueIds): void
     {
         $this->mockedSmServices[CacheEncryption::class]
             ->expects('removeCustomItems')
@@ -412,7 +411,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
             ->andReturn([]);
     }
 
-    public function expectedSingleCacheClear(string $cacheType, string $uniqueId)
+    public function expectedSingleCacheClear(string $cacheType, string $uniqueId): void
     {
         $this->mockedSmServices[CacheEncryption::class]
             ->expects('removeCustomItem')
@@ -420,7 +419,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
             ->andReturnTrue();
     }
 
-    public function expectedListCacheClear(string $cacheType)
+    public function expectedListCacheClear(string $cacheType): void
     {
         $this->mockedSmServices[CacheEncryption::class]
             ->expects('removeCustomItem')
@@ -428,7 +427,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
             ->andReturnTrue();
     }
 
-    public function expectedCacheClearFromUserCollection($entityMock)
+    public function expectedCacheClearFromUserCollection(mixed $entityMock): mixed
     {
         $this->expectedUserCacheClear([111, 222]);
 
@@ -445,22 +444,22 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
         return $entityMock;
     }
 
-    public function mapRefData($key)
+    public function mapRefData(mixed $key): mixed
     {
         return $this->refData[$key] ?? null;
     }
 
-    public function mapCategoryReference($key)
+    public function mapCategoryReference(mixed $key): mixed
     {
         return $this->categoryReferences[$key] ?? null;
     }
 
-    public function mapSubCategoryReference($key)
+    public function mapSubCategoryReference(mixed $key): mixed
     {
         return $this->subCategoryReferences[$key] ?? null;
     }
 
-    public function mapReference($class, $id)
+    public function mapReference(mixed $class, mixed $id): mixed
     {
         return $this->references[$class][$id] ?? null;
     }
@@ -468,7 +467,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
     /**
      * @NOTE must be called after the tested method has been executed
      */
-    private function assertCommandData()
+    private function assertCommandData(): void
     {
         foreach ($this->commands as $command) {
             /** @var CommandInterface $cmd */
@@ -486,7 +485,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
         }
     }
 
-    protected function setupIsInternalUser($isInternalUser = true)
+    protected function setupIsInternalUser(mixed $isInternalUser = true): void
     {
         $this->mockedSmServices[\LmcRbacMvc\Service\AuthorizationService::class]
             ->shouldReceive('isGranted')
@@ -502,7 +501,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
      *
      * @return @void
      */
-    protected function setupIsExternalUser($isExternalUser = true)
+    protected function setupIsExternalUser(bool $isExternalUser = true): void
     {
         $this->mockedSmServices[\LmcRbacMvc\Service\AuthorizationService::class]
             ->shouldReceive('isGranted')
@@ -520,7 +519,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
      *
      * @return Application
      */
-    protected function getTestingApplication(Licence $licence = null, $status = null, $isVariation = 0)
+    protected function getTestingApplication(Licence $licence = null, mixed $status = null, int $isVariation = 0): Application
     {
         if ($licence === null) {
             $licence = $this->getTestingLicence();
@@ -545,8 +544,8 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
      */
     protected function getTestingLicence(
         Organisation $organisation = null,
-        $status = null
-    ) {
+        mixed $status = null
+    ): Licence {
         if ($organisation === null) {
             $organisation = new Organisation();
         }

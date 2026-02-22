@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Cases\Pi;
 
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
@@ -11,9 +13,8 @@ use Mockery as m;
 
 /**
  * SLA Exception List Query Handler Test
- *
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Cases\Pi\SlaExceptionList
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Cases\Pi\SlaExceptionList::class)]
 class SlaExceptionListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
@@ -27,7 +28,7 @@ class SlaExceptionListTest extends QueryHandlerTestCase
     /**
      * Test successful query execution with multiple SLA exceptions
      */
-    public function testHandleQueryWithMultipleResults()
+    public function testHandleQueryWithMultipleResults(): void
     {
         // Create mock SLA exceptions
         $slaException1 = m::mock(SlaExceptionEntity::class);
@@ -84,7 +85,7 @@ class SlaExceptionListTest extends QueryHandlerTestCase
     /**
      * Test query execution with no results
      */
-    public function testHandleQueryWithNoResults()
+    public function testHandleQueryWithNoResults(): void
     {
         // Mock repository call returning empty array
         $this->repoMap['SlaException']
@@ -109,7 +110,7 @@ class SlaExceptionListTest extends QueryHandlerTestCase
     /**
      * Test date formatting when dates are strings
      */
-    public function testHandleQueryWithStringDates()
+    public function testHandleQueryWithStringDates(): void
     {
         // Create mock SLA exception with string dates
         $slaException = m::mock(SlaExceptionEntity::class);
@@ -141,19 +142,18 @@ class SlaExceptionListTest extends QueryHandlerTestCase
     /**
      * Test query handler repository configuration
      */
-    public function testRepositoryConfiguration()
+    public function testRepositoryConfiguration(): void
     {
         $reflection = new \ReflectionClass($this->sut);
-        
+
         $repoServiceNameProperty = $reflection->getProperty('repoServiceName');
-        $repoServiceNameProperty->setAccessible(true);
         $this->assertEquals('SlaException', $repoServiceNameProperty->getValue($this->sut));
     }
 
     /**
      * Test single SLA exception result
      */
-    public function testHandleQueryWithSingleResult()
+    public function testHandleQueryWithSingleResult(): void
     {
         // Create mock SLA exception
         $slaException = m::mock(SlaExceptionEntity::class);
@@ -178,7 +178,7 @@ class SlaExceptionListTest extends QueryHandlerTestCase
         // Assertions
         $this->assertEquals(1, $result['count']);
         $this->assertCount(1, $result['result']);
-        
+
         $singleResult = $result['result'][0];
         $this->assertEquals(5, $singleResult['id']);
         $this->assertEquals('Weekly reporting', $singleResult['slaDescription']);
@@ -190,7 +190,7 @@ class SlaExceptionListTest extends QueryHandlerTestCase
     /**
      * Test that result array structure is consistent
      */
-    public function testResultStructure()
+    public function testResultStructure(): void
     {
         // Mock empty result
         $this->repoMap['SlaException']

@@ -26,9 +26,7 @@ class AcquiredRightsClientTest extends MockeryTestCase
         $this->sut = new AcquiredRightsClient($this->httpClient);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function fetchByReferenceValidDataReturnsApplicationReferenceModel()
     {
         $this->httpClient->shouldReceive('get')->andReturn($this->generateResponse(200, [
@@ -44,9 +42,7 @@ class AcquiredRightsClientTest extends MockeryTestCase
         $this->assertInstanceOf(ApplicationReference::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function fetchByReferenceNotFoundReturnsNotFoundException()
     {
         $this->expectException(ReferenceNotFoundException::class);
@@ -61,9 +57,7 @@ class AcquiredRightsClientTest extends MockeryTestCase
         $this->sut->fetchByReference('ABC1234');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function fetchByReferenceConnectExceptionReturnsServiceException()
     {
         $this->expectException(ServiceException::class);
@@ -78,9 +72,7 @@ class AcquiredRightsClientTest extends MockeryTestCase
         $this->sut->fetchByReference('ABC1234');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function fetchByReferenceRequestExceptionReturnsServiceException()
     {
         $this->expectException(ServiceException::class);
@@ -94,9 +86,7 @@ class AcquiredRightsClientTest extends MockeryTestCase
         $this->sut->fetchByReference('ABC1234');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function fetchByReferenceInvalidJsonReturnsServiceException()
     {
         $this->expectException(ServiceException::class);
@@ -108,9 +98,7 @@ class AcquiredRightsClientTest extends MockeryTestCase
         $this->sut->fetchByReference('ABC1234');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function fetchByReferenceMapperParseExceptionReturnsMapperParseException()
     {
         $this->expectException(MapperParseException::class);

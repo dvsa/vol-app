@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * DeleteApplicationOperatingCentreTest.php
  *
@@ -22,6 +24,7 @@ use Mockery as m;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class DeleteApplicationOperatingCentreTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
@@ -32,7 +35,8 @@ class DeleteApplicationOperatingCentreTest extends AbstractCommandHandlerTestCas
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             S4::class => [
@@ -46,7 +50,7 @@ class DeleteApplicationOperatingCentreTest extends AbstractCommandHandlerTestCas
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(
             [

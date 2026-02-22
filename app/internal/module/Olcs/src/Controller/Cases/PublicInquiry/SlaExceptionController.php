@@ -65,6 +65,7 @@ class SlaExceptionController extends AbstractInternalController implements CaseC
      *
      * @return array|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function addAction()
     {
         return $this->add(
@@ -91,7 +92,7 @@ class SlaExceptionController extends AbstractInternalController implements CaseC
         // Case ID should already be set in initial data via mapper
         // But if it's missing, get it from route as fallback
         $caseId = $data['fields']['case'] ?? $this->params()->fromRoute('case');
-        
+
         if ($caseId) {
             $form->get('fields')->get('case')->setValue($caseId);
         }

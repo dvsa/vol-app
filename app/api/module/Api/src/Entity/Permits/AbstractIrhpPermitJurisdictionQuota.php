@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrhpPermitJurisdictionQuota implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrhpPermitJurisdictionQuota implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

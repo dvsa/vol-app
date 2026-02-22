@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * OtherActiveLicences Test
  *
@@ -32,7 +34,7 @@ class OtherActiveLicencesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $data = [];
         $query = Qry::create($data);

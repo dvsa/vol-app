@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\DataRetention;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;

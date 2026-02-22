@@ -38,6 +38,7 @@ class VariationSoleTrader extends CommonVariationSoleTrader
      *
      * @return Form
      */
+    #[\Override]
     public function alterForm($form, array $params)
     {
         $form = parent::alterForm($form, $params);

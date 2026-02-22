@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -12,7 +14,7 @@ use Laminas\Form\Form;
  */
 class InspectionRequestTest extends MockeryTestCase
 {
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $mockForm = new Form();
 
@@ -29,7 +31,7 @@ class InspectionRequestTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromErrors($mockForm, $errors));
     }
 
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $data = [
             'data' => ['foo' => 'bar']
@@ -42,7 +44,7 @@ class InspectionRequestTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($data));
     }
 
-    public function testMapEnforcementAreaFromLicence()
+    public function testMapEnforcementAreaFromLicence(): void
     {
         $data = [
             'enforcementArea' => ['name' => 'foo']
@@ -51,7 +53,7 @@ class InspectionRequestTest extends MockeryTestCase
         $this->assertEquals('foo', Sut::mapEnforcementAreaFromLicence($data));
     }
 
-    public function testMapEnforcementAreaFromApplication()
+    public function testMapEnforcementAreaFromApplication(): void
     {
         $data = [
             'licence' => ['enforcementArea' => ['name' => 'foo']]
@@ -60,7 +62,7 @@ class InspectionRequestTest extends MockeryTestCase
         $this->assertEquals('foo', Sut::mapEnforcementAreaFromApplication($data));
     }
 
-    public function testMapFromResultTypeApp()
+    public function testMapFromResultTypeApp(): void
     {
         $data = [
             'foo' => 'bar',
@@ -83,7 +85,7 @@ class InspectionRequestTest extends MockeryTestCase
         );
     }
 
-    public function testMapFromResultTypeLic()
+    public function testMapFromResultTypeLic(): void
     {
         $data = [
             'foo' => 'bar',

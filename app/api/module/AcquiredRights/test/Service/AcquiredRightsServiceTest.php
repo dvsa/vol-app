@@ -15,6 +15,7 @@ use Laminas\Log\LoggerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class AcquiredRightsServiceTest extends MockeryTestCase
 {
     protected $sut;
@@ -40,9 +41,7 @@ class AcquiredRightsServiceTest extends MockeryTestCase
             ->byDefault();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function verifyAcquiredRightsByReferenceValidThrowsNoExceptions()
     {
         $this->sut = new AcquiredRightsService(
@@ -56,9 +55,7 @@ class AcquiredRightsServiceTest extends MockeryTestCase
         $this->sut->verifyAcquiredRightsByReference('ABC1234', $dateOfBirth);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function verifyAcquiredRightsByReferenceExpiryElapsedThrowsAcquiredRightsExpiredException()
     {
         $this->expectException(AcquiredRightsExpiredException::class);
@@ -76,9 +73,7 @@ class AcquiredRightsServiceTest extends MockeryTestCase
         $this->sut->verifyAcquiredRightsByReference('ABC1234', $dateOfBirth);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function verifyAcquiredRightsByReferenceDateOfBirthMismatchThrowsDateOfBirthMismatchException()
     {
         $this->expectException(DateOfBirthMismatchException::class);
@@ -94,10 +89,8 @@ class AcquiredRightsServiceTest extends MockeryTestCase
         $this->sut->verifyAcquiredRightsByReference('ABC1234', $dateOfBirth);
     }
 
-    /**
-     * @test
-     * @dataProvider dataProviderVerifyAcquiredRightsByReferenceApplicationNotApproved
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderVerifyAcquiredRightsByReferenceApplicationNotApproved')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function verifyAcquiredRightsByReferenceApplicationNotApprovedThrowsAcquiredRightsNotApprovedException(string $status, bool $shouldThrow)
     {
         if ($shouldThrow) {
@@ -123,7 +116,7 @@ class AcquiredRightsServiceTest extends MockeryTestCase
         $this->sut->verifyAcquiredRightsByReference('ABC1234', $dateOfBirth);
     }
 
-    public function dataProviderVerifyAcquiredRightsByReferenceApplicationNotApproved(): array
+    public static function dataProviderVerifyAcquiredRightsByReferenceApplicationNotApproved(): array
     {
         return [
             ApplicationReference::APPLICATION_STATUS_SUBMITTED => [
@@ -153,9 +146,7 @@ class AcquiredRightsServiceTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function verifyAcquiredRightsByReferenceThrowsSoftExceptionAreLoggedAsInfoAndRethrown()
     {
         $exception = new class () extends AcquiredRightsException implements SoftExceptionInterface {
@@ -177,9 +168,7 @@ class AcquiredRightsServiceTest extends MockeryTestCase
         $this->sut->verifyAcquiredRightsByReference('ABC1234', $dateOfBirth);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function verifyAcquiredRightsByReferenceThrowsOtherExceptionsAreLoggedAsErrAndRethrown()
     {
         $exception = new class () extends AcquiredRightsException {
@@ -201,9 +190,7 @@ class AcquiredRightsServiceTest extends MockeryTestCase
         $this->sut->verifyAcquiredRightsByReference('ABC1234', $dateOfBirth);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function verifyAcquiredRightsByReferenceThrowsWhenInputFieldDefinedValidationErrorIsRethrown()
     {
         $exception = new ReferenceNotFoundException();

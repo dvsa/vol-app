@@ -120,6 +120,7 @@ class SiController extends AbstractInternalController implements CaseControllerI
      *
      * @return Response
      */
+    #[\Override]
     public function indexAction()
     {
         $case = $this->handleQuery(CaseDto::create(['id' => $this->params()->fromRoute('case')]))->getResult();

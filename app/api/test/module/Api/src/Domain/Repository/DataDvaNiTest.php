@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\DBAL\Connection;
@@ -9,9 +11,7 @@ use Dvsa\Olcs\Api\Domain\Repository\DataDvaNi;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\DataDvaNi
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\DataDvaNi::class)]
 class DataDvaNiTest extends MockeryTestCase
 {
     public $mockResult;
@@ -36,7 +36,7 @@ class DataDvaNiTest extends MockeryTestCase
         $this->sut = new DataDvaNi($this->mockConn);
     }
 
-    public function testFetchNiOperatorLicences()
+    public function testFetchNiOperatorLicences(): void
     {
         $this->mockConn
             ->shouldReceive('prepare')

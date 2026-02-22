@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener;
 
 use Common\Rbac\User as RbacUser;
 use Common\Service\Cqrs\Query\QuerySender;
+use Laminas\EventManager\EventManagerInterface;
 use Laminas\Navigation\Page\AbstractPage;
 use LmcRbacMvc\Service\AuthorizationService;
 use Olcs\Controller\Listener\Navigation as NavigationListener;
@@ -16,10 +19,6 @@ use Laminas\Navigation\Page\Uri;
 use Laminas\Mvc\MvcEvent;
 use Common\Service\Cqrs\Response as CqrsResponse;
 
-/**
- * Class NavigationToggleTest
- * @package OlcsTest\Listener
- */
 class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     /**
@@ -75,10 +74,17 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
 
     public function testAttach(): void
     {
-        /** @var \Laminas\EventManager\EventManagerInterface | m\MockInterface $mockEventManager */
-        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
-        $mockEventManager->shouldReceive('attach')->once()
-            ->with(MvcEvent::EVENT_DISPATCH, [$this->sut, 'onDispatch'], 20);
+        /** @var EventManagerInterface | m\MockInterface $mockEventManager */
+        $mockEventManager = m::mock(EventManagerInterface::class);
+        $mockEventManager->expects('attach')
+            ->with(
+                MvcEvent::EVENT_DISPATCH,
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onDispatch';
+                }),
+                20
+            );
 
         $this->sut->attach($mockEventManager);
     }
@@ -135,10 +141,8 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpDispatchNoReferer
-     */
-    public function testOnDispatchWithNoReferal($eligibleForPermits): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpDispatchNoReferer')]
+    public function testOnDispatchWithNoReferal(bool $eligibleForPermits): void
     {
         $this->mockAuthService->shouldReceive('getIdentity->isAnonymous')->once()->withNoArgs()->andReturn(false);
 
@@ -181,7 +185,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
      *
      * @psalm-return list{list{true}, list{false}}
      */
-    public function dpDispatchNoReferer(): array
+    public static function dpDispatchNoReferer(): array
     {
         return [
             [true],
@@ -229,10 +233,8 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpDispatchWithoutMatchedReferer
-     */
-    public function testOnDispatchWithNoGovUkReferal($eligibleForPermits): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpDispatchWithoutMatchedReferer')]
+    public function testOnDispatchWithNoGovUkReferal(bool $eligibleForPermits): void
     {
         $this->mockAuthService->shouldReceive('getIdentity->isAnonymous')
             ->andReturn(false);
@@ -279,7 +281,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
      *
      * @psalm-return list{list{true}, list{false}}
      */
-    public function dpDispatchWithoutMatchedReferer(): array
+    public static function dpDispatchWithoutMatchedReferer(): array
     {
         return [
             [true],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create ReputeNotLost Test
  */
@@ -27,7 +29,8 @@ class CreateReputeNotLostTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             TmCaseDecisionEntity::DECISION_REPUTE_NOT_LOST,
@@ -42,7 +45,7 @@ class CreateReputeNotLostTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'case' => 11,

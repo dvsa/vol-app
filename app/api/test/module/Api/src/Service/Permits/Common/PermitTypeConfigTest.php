@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Common;
 
 use Dvsa\Olcs\Api\Service\Permits\Common\PermitTypeConfig;
@@ -28,7 +30,7 @@ class PermitTypeConfigTest extends MockeryTestCase
         parent::setUp();
     }
 
-    public function testGetRestrictedCountriesQuestionKey()
+    public function testGetRestrictedCountriesQuestionKey(): void
     {
         $this->assertEquals(
             self::RESTRICTED_COUNTRIES_QUESTION_KEY,
@@ -36,7 +38,7 @@ class PermitTypeConfigTest extends MockeryTestCase
         );
     }
 
-    public function testGetRestrictedCountryIds()
+    public function testGetRestrictedCountryIds(): void
     {
         $this->assertEquals(
             self::RESTRICTED_COUNTRY_IDS,

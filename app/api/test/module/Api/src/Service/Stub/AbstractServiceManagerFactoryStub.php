@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Stub;
 
 use Dvsa\Olcs\Api\Service\AbstractServiceManagerFactory;

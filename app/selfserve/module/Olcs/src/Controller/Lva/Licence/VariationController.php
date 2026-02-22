@@ -30,8 +30,6 @@ class VariationController extends AbstractVariationController
     protected $lva = 'licence';
     protected string $location = 'external';
 
-    protected LicenceLvaAdapter $lvaAdapter;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -44,7 +42,7 @@ class VariationController extends AbstractVariationController
         AuthorizationService $authService,
         TranslationHelperService $translationHelper,
         $processingCreateVariation,
-        LicenceLvaAdapter $lvaAdapter,
+        protected LicenceLvaAdapter $lvaAdapter,
         FlashMessengerHelperService $flashMessengerHelper
     ) {
 
@@ -55,6 +53,5 @@ class VariationController extends AbstractVariationController
             $processingCreateVariation,
             $flashMessengerHelper
         );
-        $this->lvaAdapter = $lvaAdapter;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Inspection Request / Create
  *
@@ -46,7 +48,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             InspectionRequestEntity::REQUEST_TYPE_NEW_OP,
@@ -69,7 +72,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandCreateFromApplication()
+    public function testHandleCommandCreateFromApplication(): void
     {
         $this->mockAuthService();
 
@@ -159,7 +162,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandCreateFromLicence()
+    public function testHandleCommandCreateFromLicence(): void
     {
         $this->mockAuthService();
 
@@ -238,7 +241,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    protected function mockAuthService()
+    protected function mockAuthService(): void
     {
         /** @var Team $mockTeam */
         $mockTeam = m::mock(Team::class)->makePartial();

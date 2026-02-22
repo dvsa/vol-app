@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Undertakings (Declarations) Form Service Test
  *
@@ -21,7 +23,8 @@ class UndertakingsTest extends AbstractLvaFormServiceTestCase
 {
     protected $classToTest = Undertakings::class;
 
-    public function testGetForm()
+    #[\Override]
+    public function testGetForm(): void
     {
         // Mocks
         $mockForm = m::mock(\Common\Form\Form::class);

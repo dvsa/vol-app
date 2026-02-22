@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Application Psv Oc Total Auth Review Service Test
  *
@@ -36,10 +38,8 @@ class ApplicationPsvOcTotalAuthReviewServiceTest extends MockeryTestCase
         $this->sut = new ApplicationPsvOcTotalAuthReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider licenceTypeProvider
-     */
-    public function testGetConfigFromData($licenceType, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceTypeProvider')]
+    public function testGetConfigFromData(mixed $licenceType, mixed $expected): void
     {
         $data = [
             'licenceType' => ['id' => $licenceType],
@@ -50,7 +50,7 @@ class ApplicationPsvOcTotalAuthReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function licenceTypeProvider()
+    public static function licenceTypeProvider(): array
     {
         return [
             'standard national' => [

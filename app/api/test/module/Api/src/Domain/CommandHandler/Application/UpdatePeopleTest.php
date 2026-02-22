@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * UpdatePeopleTest
  *
@@ -35,7 +37,8 @@ class UpdatePeopleTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'title_mr', 'org_t_llp', 'org_t_st'
@@ -46,7 +49,7 @@ class UpdatePeopleTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandSole()
+    public function testHandleCommandSole(): void
     {
         $data = [
             'id' => 52,
@@ -110,7 +113,7 @@ class UpdatePeopleTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['person' => 79, 'organisationPerson' => 47], $response->getIds());
     }
 
-    public function testHandleCommandLlpAppPerson()
+    public function testHandleCommandLlpAppPerson(): void
     {
         $data = [
             'id' => 52,
@@ -178,7 +181,7 @@ class UpdatePeopleTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['person' => 79, 'applicationOrganisationPerson' => 23], $response->getIds());
     }
 
-    public function testHandleCommandLlpOrgPerson()
+    public function testHandleCommandLlpOrgPerson(): void
     {
         $data = [
             'id' => 52,

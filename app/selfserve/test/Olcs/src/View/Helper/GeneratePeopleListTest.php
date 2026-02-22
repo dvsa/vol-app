@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Generate People List Test
  *
@@ -156,7 +158,7 @@ class GeneratePeopleListTest extends MockeryTestCase
      *
      * @psalm-param 0|1|2 $count
      */
-    private function getTestPeopleArray(int $count)
+    private function getTestPeopleArray(int $count): array
     {
         $testData = [];
         for ($i = 0; $i < $count; $i++) {

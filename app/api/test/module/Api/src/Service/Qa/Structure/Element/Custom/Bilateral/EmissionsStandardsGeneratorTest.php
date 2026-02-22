@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Bilateral;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\Element\Custom\Bilateral\EmissionsStandards;
@@ -16,10 +18,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class EmissionsStandardsGeneratorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpGenerate
-     */
-    public function testGenerate($answerValue, $expectedYesNo)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
+    public function testGenerate(mixed $answerValue, mixed $expectedYesNo): void
     {
         $elementGeneratorContext = m::mock(ElementGeneratorContext::class);
         $elementGeneratorContext->shouldReceive('getAnswerValue')
@@ -41,7 +41,7 @@ class EmissionsStandardsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate(): array
     {
         return [
             ['string_value', 'Y'],

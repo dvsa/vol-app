@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update IrfoDetails Test
  */
@@ -37,7 +39,8 @@ class UpdateIrfoDetailsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ContactDetailsEntity::CONTACT_TYPE_IRFO_OPERATOR
@@ -52,7 +55,7 @@ class UpdateIrfoDetailsTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithTradingNames()
+    public function testHandleCommandWithTradingNames(): void
     {
         $data = [
             'id' => 111,
@@ -121,7 +124,7 @@ class UpdateIrfoDetailsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandWithIrfoPartners()
+    public function testHandleCommandWithIrfoPartners(): void
     {
         $data = [
             'id' => 111,
@@ -211,7 +214,7 @@ class UpdateIrfoDetailsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('deleted partner', $deletedIrfoPartners[0]->getName());
     }
 
-    public function testHandleCommandWithNewIrfoContactDetails()
+    public function testHandleCommandWithNewIrfoContactDetails(): void
     {
         $data = [
             'id' => 111,
@@ -328,7 +331,7 @@ class UpdateIrfoDetailsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandWithUpdatedIrfoContactDetails()
+    public function testHandleCommandWithUpdatedIrfoContactDetails(): void
     {
         $data = [
             'id' => 111,

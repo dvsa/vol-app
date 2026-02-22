@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Bookmark;
 
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
@@ -23,7 +25,7 @@ class HearingBundleTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['case' => 987, 'bundle' => ['foo' => ['bar']]]);
 
@@ -35,7 +37,7 @@ class HearingBundleTest extends QueryHandlerTestCase
         $this->assertEquals(['SERIALIZED'], $this->sut->handleQuery($query));
     }
 
-    public function testHandleQueryNotFound()
+    public function testHandleQueryNotFound(): void
     {
         $query = Qry::create(['case' => 987, 'bundle' => ['foo' => ['bar']]]);
 

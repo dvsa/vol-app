@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Queue\Factories;
 
 use Dvsa\Olcs\Queue\Factories\MessageBuilderFactory;
@@ -19,7 +21,7 @@ class MessageBuilderFactoryTest extends TestCase
         $this->sut = new MessageBuilderFactory();
     }
 
-    public function testCreateService()
+    public function testCreateService(): void
     {
         $this->assertInstanceOf(MessageBuilder::class, $this->sut->__invoke($this->mockSl, MessageBuilder::class));
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Command\Application;
 
 use Dvsa\Olcs\Api\Domain\Command\Application\SetDefaultTrafficAreaAndEnforcementArea;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\SetDefaultTrafficAreaAndEnforcement
  */
 class SetDefaultTrafficAreaAndEnforcementAreaTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $data = [
             'id' => 111,

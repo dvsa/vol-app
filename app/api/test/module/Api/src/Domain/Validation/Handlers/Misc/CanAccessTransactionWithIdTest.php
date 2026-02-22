@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Misc;
 
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessTransactionWithId;
@@ -25,12 +27,12 @@ class CanAccessTransactionWithIdTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider dataProvider
      *
      * @param $expected
      * @param $isValid
      */
-    public function testIsValid($expected, $isValid)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
+    public function testIsValid(mixed $expected, mixed $isValid): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -41,7 +43,7 @@ class CanAccessTransactionWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function dataProvider()
+    public static function dataProvider(): array
     {
         return [
             [true, true],

@@ -27,7 +27,7 @@ use Doctrine\Common\Collections\Collection;
  *    }
  * )
  */
-abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

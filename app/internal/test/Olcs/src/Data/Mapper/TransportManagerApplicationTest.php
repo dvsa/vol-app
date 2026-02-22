@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Common\RefData;
@@ -7,12 +9,10 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\TransportManagerApplication as Sut;
 
-/**
- * @covers \Olcs\Data\Mapper\TransportManagerApplication
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Data\Mapper\TransportManagerApplication::class)]
 class TransportManagerApplicationTest extends MockeryTestCase
 {
-    public function testMapFromResultForTable()
+    public function testMapFromResultForTable(): void
     {
         $data = [
             'extra' => [
@@ -23,10 +23,8 @@ class TransportManagerApplicationTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResultForTable($data));
     }
 
-    /**
-     * @dataProvider dpTestMapFromResult
-     */
-    public function testMapFromResult($inputStatus, $outputStatus)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestMapFromResult')]
+    public function testMapFromResult(mixed $inputStatus, mixed $outputStatus): void
     {
         $data = [
             'tmType' => ['id' => 3],
@@ -73,7 +71,7 @@ class TransportManagerApplicationTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
-    public function dpTestMapFromResult()
+    public static function dpTestMapFromResult(): array
     {
         return [
             [
@@ -91,7 +89,7 @@ class TransportManagerApplicationTest extends MockeryTestCase
         ];
     }
 
-    public function testMapFromFrom()
+    public function testMapFromFrom(): void
     {
         $data = [
             'details' => [
@@ -134,7 +132,7 @@ class TransportManagerApplicationTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($data));
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $formMessages = [
             'details' => [

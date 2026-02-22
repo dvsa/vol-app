@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Cache;
 
 use Dvsa\Olcs\Api\Domain\Command\Cache\Generate as Cmd;
@@ -20,19 +22,15 @@ class GenerateTest extends AbstractCommandHandlerTestCase
     {
         $this->sut = m::mock(Handler::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
 
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
-    public function testHandleCommand($uniqueId, $messages)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
+    public function testHandleCommand(mixed $uniqueId, mixed $messages): void
     {
         $cacheId = 'cacheId';
 
@@ -56,7 +54,7 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($messages, $result->getMessages());
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand(): array
     {
         return [
             [null, ['Cache updated for cacheId without a unique id']],
@@ -64,7 +62,7 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandWithQueryException()
+    public function testHandleCommandWithQueryException(): void
     {
         $commandParams = [
             'id' => 'cacheId',

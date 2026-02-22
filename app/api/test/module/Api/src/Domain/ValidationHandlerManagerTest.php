@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Validation Handler Manager Test
  *
@@ -33,7 +35,7 @@ class ValidationHandlerManagerTest extends MockeryTestCase
         $this->sut = new ValidationHandlerManager($container, []);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $mock = m::mock(HandlerInterface::class);
 
@@ -42,13 +44,13 @@ class ValidationHandlerManagerTest extends MockeryTestCase
         $this->assertSame($mock, $this->sut->get('Foo'));
     }
 
-    public function testValidate()
+    public function testValidate(): void
     {
         $plugin = m::mock(HandlerInterface::class);
         $this->assertNull($this->sut->validate($plugin));
     }
 
-    public function testValidateInvalid()
+    public function testValidateInvalid(): void
     {
         $this->expectException(InvalidServiceException::class);
         $this->sut->validate(null);

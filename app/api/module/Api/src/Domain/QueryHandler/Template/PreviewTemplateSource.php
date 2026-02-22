@@ -71,6 +71,7 @@ class PreviewTemplateSource extends AbstractQueryHandler
      * @throws NotFoundExceptionInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
@@ -23,12 +25,12 @@ class ContinuationDetailMarkerTest extends TestCase
         $this->sut = new \Olcs\Service\Marker\ContinuationDetailMarker();
     }
 
-    public function testCanRenderWithNoData()
+    public function testCanRenderWithNoData(): void
     {
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRender()
+    public function testCanRender(): void
     {
         $data = [
             'continuationDetail' => ['continuation' => ''],
@@ -40,7 +42,7 @@ class ContinuationDetailMarkerTest extends TestCase
         $this->assertTrue($this->sut->canRender());
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $data = [
             'continuationDetail' => ['continuation' => ['year' => '2015', 'month' => '07']],

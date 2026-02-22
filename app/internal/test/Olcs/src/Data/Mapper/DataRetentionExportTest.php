@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -12,12 +14,12 @@ use Mockery as m;
  */
 class DataRetentionExportTest extends MockeryTestCase
 {
-    public function testMapFromResult()
+    public function testMapFromResult(): void
     {
         $this->assertEquals(['FOO'], Sut::mapFromResult(['FOO']));
     }
 
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $formData = [
             'exportOptions' => [
@@ -38,7 +40,7 @@ class DataRetentionExportTest extends MockeryTestCase
         );
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $form = m::mock(FormInterface::class);
         $this->assertEquals(['FOO'], Sut::mapFromErrors($form, ['FOO']));

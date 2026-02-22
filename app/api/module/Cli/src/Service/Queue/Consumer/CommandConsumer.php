@@ -17,6 +17,7 @@ class CommandConsumer extends AbstractCommandConsumer
      * @param QueueEntity $item
      * @return string
      */
+    #[\Override]
     protected function getCommandName(QueueEntity $item)
     {
         return json_decode($item->getOptions(), true)['commandClass'];

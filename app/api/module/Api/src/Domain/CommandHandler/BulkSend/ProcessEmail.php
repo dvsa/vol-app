@@ -29,6 +29,7 @@ class ProcessEmail extends AbstractEmailHandler
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      * @throws \Dvsa\Olcs\Email\Exception\EmailNotSentException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->template = $command->getTemplateName();
@@ -56,6 +57,7 @@ class ProcessEmail extends AbstractEmailHandler
      *
      * @return array
      */
+    #[\Override]
     protected function getTemplateVariables($recordObject): array
     {
         $vars = [
@@ -103,6 +105,7 @@ class ProcessEmail extends AbstractEmailHandler
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getTranslateToWelsh($recordObject)
     {
         return $recordObject->getTranslateToWelsh();

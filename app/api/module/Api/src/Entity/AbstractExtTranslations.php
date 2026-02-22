@@ -28,7 +28,7 @@ use Doctrine\ORM\Mapping as ORM;
  *    }
  * )
  */
-abstract class AbstractExtTranslations implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractExtTranslations implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Office Copy Test / Application
  *
@@ -39,7 +41,8 @@ class CreateOfficeCopyTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             CommunityLicEntity::STATUS_PENDING,
@@ -55,7 +58,7 @@ class CreateOfficeCopyTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandInterimNotInForce()
+    public function testHandleCommandInterimNotInForce(): void
     {
         $licenceId = 1;
         $identifier = 2;
@@ -139,7 +142,7 @@ class CreateOfficeCopyTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(CommunityLicEntity::STATUS_PENDING, $communityLic->getStatus()->getId());
     }
 
-    public function testHandleCommandInterimInForce()
+    public function testHandleCommandInterimInForce(): void
     {
         $licenceId = 1;
         $identifier = 2;
@@ -235,7 +238,7 @@ class CreateOfficeCopyTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(CommunityLicEntity::STATUS_ACTIVE, $communityLic->getStatus()->getId());
     }
 
-    public function testHandleCommandOfficeCopyExists()
+    public function testHandleCommandOfficeCopyExists(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

@@ -22,7 +22,7 @@ class CacheClear extends AbstractCommandHandler implements CacheAwareInterface
     /**
      * Valid cache namespace identifiers from CacheEncryption service
      */
-    private const VALID_NAMESPACES = [
+    private const array VALID_NAMESPACES = [
         'user_account',
         'sys_param',
         'sys_param_list',
@@ -103,7 +103,7 @@ class CacheClear extends AbstractCommandHandler implements CacheAwareInterface
      */
     private function clearByNamespace(string $namespaces, bool $dryRun): Result
     {
-        $namespaceList = array_map('trim', explode(',', $namespaces));
+        $namespaceList = array_map(trim(...), explode(',', $namespaces));
         $totalDeleted = 0;
 
         foreach ($namespaceList as $namespace) {
@@ -239,7 +239,6 @@ class CacheClear extends AbstractCommandHandler implements CacheAwareInterface
         // We need to use reflection to access it since there's no getter
         $reflection = new \ReflectionClass($this->getCache());
         $cacheProperty = $reflection->getProperty('cache');
-        $cacheProperty->setAccessible(true);
         $cacheStorage = $cacheProperty->getValue($this->getCache());
 
         if (!$cacheStorage instanceof RedisAdapter) {

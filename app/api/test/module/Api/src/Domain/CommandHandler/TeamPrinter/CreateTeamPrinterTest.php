@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create TeamPrinter Test
  *
@@ -35,7 +37,8 @@ class CreateTeamPrinterTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             TeamEntity::class => [
@@ -55,7 +58,7 @@ class CreateTeamPrinterTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(
             [
@@ -88,7 +91,7 @@ class CreateTeamPrinterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(111, $res['id']['team']);
     }
 
-    public function testHandleCommandWithVaidationException()
+    public function testHandleCommandWithVaidationException(): void
     {
         $this->expectException(ValidationException::class);
 

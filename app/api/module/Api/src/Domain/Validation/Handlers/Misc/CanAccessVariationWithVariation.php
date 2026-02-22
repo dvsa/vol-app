@@ -15,6 +15,7 @@ namespace Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc;
  */
 class CanAccessVariationWithVariation extends CanAccessApplicationWithId
 {
+    #[\Override]
     protected function getId($dto)
     {
         return $dto->getVariation();

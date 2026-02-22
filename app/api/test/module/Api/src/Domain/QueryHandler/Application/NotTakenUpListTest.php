@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * NotTakenUpList Test
  *
@@ -28,9 +30,8 @@ class NotTakenUpListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
 
         $this->sut = new NotTakenUpList();
@@ -46,7 +47,7 @@ class NotTakenUpListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $trafficAreaId = 1;
         $query = Qry::create(['date' => new DateTime('2015-01-01')]);

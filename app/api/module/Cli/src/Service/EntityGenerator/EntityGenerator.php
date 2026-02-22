@@ -23,7 +23,8 @@ class EntityGenerator implements EntityGeneratorInterface
         private readonly EntityConfigService $entityConfigService,
         private readonly InverseRelationshipProcessor $inverseRelationshipProcessor,
         private readonly PropertyNameResolver $propertyNameResolver
-    ) {}
+    ) {
+    }
 
 
     public function generateEntities(array $tables, array $config): GenerationResult
@@ -32,9 +33,7 @@ class EntityGenerator implements EntityGeneratorInterface
         $result = new GenerationResult();
 
         // Filter out tables that should be ignored
-        $filteredTables = array_filter($tables, function (TableMetadata $table): bool {
-            return !$this->entityConfigService->shouldIgnoreTable($table->getTableName());
-        });
+        $filteredTables = array_filter($tables, fn(TableMetadata $table): bool => !$this->entityConfigService->shouldIgnoreTable($table->getTableName()));
 
         // First pass: Generate base entities
         foreach ($filteredTables as $table) {
@@ -69,7 +68,7 @@ class EntityGenerator implements EntityGeneratorInterface
         $tableName = $table->getTableName();
         $className = $this->generateClassName($tableName, $config);
         $namespace = $this->getNamespace($className, $config);
-        
+
         $relativeNamespace = $this->getRelativeNamespace($className, $config);
         $entityData = new EntityData(
             $tableName,
@@ -80,7 +79,7 @@ class EntityGenerator implements EntityGeneratorInterface
 
         // Process columns and generate fields with EntityConfig support
         $fields = $this->processColumnsWithConfig($table, $config);
-        
+
         // Generate abstract entity
         $abstractContent = $this->generateAbstractEntity($entityData, $table, $fields, $config);
         $entityData->setAbstractContent($abstractContent);
@@ -120,13 +119,13 @@ class EntityGenerator implements EntityGeneratorInterface
         foreach ($table->getColumns() as $column) {
             $columnName = $column->getName();
             $fieldConfig = $tableConfig[$columnName] ?? null;
-            
+
             // Set table metadata on RelationshipTypeHandler BEFORE getting handler
             $this->setTableOnRelationshipHandlers($table);
-            
+
             // Get the appropriate type handler with EntityConfig support
             $handler = $this->typeHandlerRegistry->getHandler($column, $fieldConfig ? ['fieldConfig' => $fieldConfig] : []);
-            
+
             if ($handler === null) {
                 throw new \RuntimeException(
                     sprintf('No type handler found for column %s.%s', $tableName, $columnName)
@@ -151,7 +150,7 @@ class EntityGenerator implements EntityGeneratorInterface
         $className = $this->generateClassName($tableName, $config);
         $namespace = $this->getNamespace($className, $config);
         $entityClass = $namespace . '\\' . $className;
-        
+
         if ($this->entityConfigService->shouldSkipManyToMany($entityClass)) {
             // Skip adding ManyToMany relationships for this entity
             return $fields;
@@ -200,7 +199,7 @@ class EntityGenerator implements EntityGeneratorInterface
             $handlerConfig = array_merge($handlerConfig, $config);
         }
         $property = $handler->generateProperty($column, $handlerConfig);
-        
+
         // Check for property name override in field config first (e.g., address table)
         if ($fieldConfig && $fieldConfig->property !== null) {
             $property['name'] = $fieldConfig->property;
@@ -249,12 +248,12 @@ class EntityGenerator implements EntityGeneratorInterface
             }
         }
         $joinTableNames = array_unique($joinTableNames);
-        
+
         $inverseRelationships = $this->inverseRelationshipProcessor->processInverseRelationships($tables, $joinTableNames);
 
         foreach ($result->getEntities() as $entityData) {
             $className = $entityData->getClassName();
-            
+
             if (isset($inverseRelationships[$className])) {
                 $this->addInverseRelationshipsToEntity($entityData, $inverseRelationships[$className]);
             }
@@ -273,13 +272,13 @@ class EntityGenerator implements EntityGeneratorInterface
         foreach ($relationships as $relationship) {
             // Create inverse relationship field
             // Determine the proper type for the relationship
-            $propertyType = $relationship['relationshipType']->isCollection() 
-                ? '\\Doctrine\\Common\\Collections\\ArrayCollection'
+            $propertyType = $relationship['relationshipType']->isCollection()
+                ? \Doctrine\Common\Collections\ArrayCollection::class
                 : '\\Dvsa\\Olcs\\Api\\Entity\\' . $relationship['sourceEntity'];
-            
+
             // Generate annotations
             $annotations = [$this->inverseRelationshipProcessor->generateInverseAnnotation($relationship)];
-            
+
             // Add OrderBy annotation if specified
             if (!empty($relationship['orderBy'])) {
                 $orderByAnnotation = $this->inverseRelationshipProcessor->generateOrderByAnnotation($relationship['orderBy']);
@@ -287,7 +286,7 @@ class EntityGenerator implements EntityGeneratorInterface
                     $annotations[] = $orderByAnnotation;
                 }
             }
-            
+
             $inverseField = [
                 'column' => null, // No direct column for inverse relationships
                 'handler' => null,
@@ -336,7 +335,7 @@ class EntityGenerator implements EntityGeneratorInterface
     private function getCollections(array $fields): array
     {
         $collections = [];
-        
+
         foreach ($fields as $field) {
             if ($field['isCollection'] ?? false) {
                 $collections[] = [
@@ -379,7 +378,7 @@ class EntityGenerator implements EntityGeneratorInterface
     {
         $metadata = $entityData->getMetadata();
         $table = $metadata['table'] ?? null;
-        
+
         $templateData = [
             'namespace' => $entityData->getNamespace(),
             'className' => $entityData->getClassName(),
@@ -400,7 +399,7 @@ class EntityGenerator implements EntityGeneratorInterface
         // From: Dvsa\Olcs\Api\Entity\System
         // To:   Dvsa\OlcsTest\Api\Entity\System
         $testNamespace = str_replace('Dvsa\\Olcs\\Api\\Entity', 'Dvsa\\OlcsTest\\Api\\Entity', $entityData->getNamespace());
-        
+
         $templateData = [
             'namespace' => $testNamespace,
             'className' => $entityData->getClassName(),
@@ -418,12 +417,9 @@ class EntityGenerator implements EntityGeneratorInterface
     {
         // Check for custom class name mapping
         $classMapping = $config['mappingConfig']['classNameForTable'] ?? [];
-        if (isset($classMapping[$tableName])) {
-            return $classMapping[$tableName];
-        }
 
         // Convert snake_case to PascalCase
-        return str_replace('_', '', ucwords($tableName, '_'));
+        return $classMapping[$tableName] ?? str_replace('_', '', ucwords($tableName, '_'));
     }
 
     /**
@@ -432,7 +428,7 @@ class EntityGenerator implements EntityGeneratorInterface
     private function getNamespace(string $className, array $config): string
     {
         $namespaces = $config['namespaces'] ?? [];
-        
+
         // Check if the className is directly mapped to a namespace
         if (isset($namespaces[$className])) {
             return 'Dvsa\\Olcs\\Api\\Entity\\' . $namespaces[$className];
@@ -448,14 +444,9 @@ class EntityGenerator implements EntityGeneratorInterface
     private function getRelativeNamespace(string $className, array $config): string
     {
         $namespaces = $config['namespaces'] ?? [];
-        
-        // Check if the className is directly mapped to a namespace
-        if (isset($namespaces[$className])) {
-            return $namespaces[$className];
-        }
 
         // Default to empty string (root Entity folder)
-        return '';
+        return $namespaces[$className] ?? '';
     }
 
     /**
@@ -466,33 +457,35 @@ class EntityGenerator implements EntityGeneratorInterface
         // Get the foreign table name and convert to entity name
         $foreignTable = $relationship['foreign_table'];
         $entityName = $this->generateClassName($foreignTable, []);
-        
+
         // Get namespace for the target entity from entity config
         $namespace = $this->entityConfigService->getEntityNamespace($entityName) ?? 'Generic';
         $targetEntityClass = 'Dvsa\\Olcs\\Api\\Entity\\' . $namespace . '\\' . $entityName;
-        
+
         // Check if ManyToMany relationships should be skipped for the target entity
         if ($this->entityConfigService->shouldSkipManyToMany($targetEntityClass)) {
             // Skip creating ManyToMany relationship to this target entity
             return null;
         }
-        
+
         // Check if there's an inversedBy configuration for this join table
         // This happens when a join table also has an entity configuration
         $joinTableConfig = $this->entityConfigService->getTableConfig($relationship['join_table']);
         $propertyNameFromConfig = null;
-        
+
         // Look for the foreign key that points back to our table
         foreach ($joinTableConfig as $columnName => $fieldConfig) {
-            if ($fieldConfig instanceof FieldConfig && 
-                $fieldConfig->inversedBy !== null && 
-                $fieldConfig->inversedBy->entity === $this->generateClassName($tableName, [])) {
+            if (
+                $fieldConfig instanceof FieldConfig &&
+                $fieldConfig->inversedBy !== null &&
+                $fieldConfig->inversedBy->entity === $this->generateClassName($tableName, [])
+            ) {
                 // Use the property name from the inversedBy configuration
                 $propertyNameFromConfig = $fieldConfig->inversedBy->property;
                 break;
             }
         }
-        
+
         if ($propertyNameFromConfig !== null) {
             // Check if target entity is NOT RefData
             if ($entityName !== 'RefData') {
@@ -512,7 +505,7 @@ class EntityGenerator implements EntityGeneratorInterface
                 $inverseJoinColumn = $relationship['inverse_join_columns'][0] ?? null;
                 if ($inverseJoinColumn) {
                     // Remove _id suffix if present, otherwise use whole column name
-                    $basePropertyName = preg_replace('/_id$/', '', $inverseJoinColumn);
+                    $basePropertyName = preg_replace('/_id$/', '', (string) $inverseJoinColumn);
                     // Convert snake_case to camelCase (e.g., action_type -> actionType)
                     $basePropertyName = lcfirst(str_replace('_', '', ucwords($basePropertyName, '_')));
                     $propertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
@@ -526,7 +519,7 @@ class EntityGenerator implements EntityGeneratorInterface
                 $inverseJoinColumn = $relationship['inverse_join_columns'][0] ?? null;
                 if ($inverseJoinColumn) {
                     // Remove _id suffix and convert snake_case to camelCase
-                    $basePropertyName = preg_replace('/_id$/', '', $inverseJoinColumn);
+                    $basePropertyName = preg_replace('/_id$/', '', (string) $inverseJoinColumn);
                     $basePropertyName = lcfirst(str_replace('_', '', ucwords($basePropertyName, '_')));
                     $propertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
                 } else {
@@ -536,27 +529,27 @@ class EntityGenerator implements EntityGeneratorInterface
                 }
             }
         }
-        
+
         // Get namespace for the target entity from entity config
         $namespace = $this->entityConfigService->getEntityNamespace($entityName) ?? 'Generic';
         $targetEntity = 'Dvsa\\Olcs\\Api\\Entity\\' . $namespace . '\\' . $entityName;
-        
+
         // Use the is_owning flag if it exists, otherwise determine from join columns
         if (isset($relationship['is_owning'])) {
             $isOwning = $relationship['is_owning'];
         } else {
             // Fallback to original logic for backwards compatibility
             $firstJoinColumn = $relationship['join_columns'][0] ?? null;
-            if ($firstJoinColumn && preg_match('/^(.+?)_id$/', $firstJoinColumn, $matches)) {
+            if ($firstJoinColumn && preg_match('/^(.+?)_id$/', (string) $firstJoinColumn, $matches)) {
                 // Check if the first column's table name matches our current table
                 $firstColumnTable = $matches[1];
                 $isOwning = ($firstColumnTable === $tableName);
             } else {
                 // Fallback to alphabetical ordering if we can't determine from columns
-                $isOwning = strcmp($tableName, $foreignTable) < 0;
+                $isOwning = strcmp($tableName, (string) $foreignTable) < 0;
             }
         }
-        
+
         // Generate the inverse property name
         if (!$isOwning) {
             // For inverse side, mappedBy should reference the property name on the owning side
@@ -571,7 +564,7 @@ class EntityGenerator implements EntityGeneratorInterface
             $joinColumn = $relationship['join_columns'][0] ?? null;
             if ($joinColumn) {
                 // Remove _id suffix and convert snake_case to camelCase
-                $basePropertyName = preg_replace('/_id$/', '', $joinColumn);
+                $basePropertyName = preg_replace('/_id$/', '', (string) $joinColumn);
                 $basePropertyName = lcfirst(str_replace('_', '', ucwords($basePropertyName, '_')));
                 $inversePropertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
             } else {
@@ -579,12 +572,12 @@ class EntityGenerator implements EntityGeneratorInterface
                 $inversePropertyName = $this->generateInversePropertyName($tableName);
             }
         }
-        
+
         // Build annotation based on ownership
-        $annotation = $isOwning 
+        $annotation = $isOwning
             ? $this->buildOwningManyToManyAnnotation($targetEntity, $inversePropertyName, $relationship)
             : $this->buildInverseManyToManyAnnotation($targetEntity, $inversePropertyName);
-        
+
         return $this->buildManyToManyFieldArray($propertyName, $annotation);
     }
 
@@ -595,15 +588,17 @@ class EntityGenerator implements EntityGeneratorInterface
     {
         $tableConfig = $this->entityConfigService->getTableConfig($foreignTable);
         $targetEntityName = $this->generateClassName($tableName, []);
-        
+
         foreach ($tableConfig as $fieldName => $fieldConfig) {
-            if ($fieldConfig instanceof FieldConfig && 
-                $fieldConfig->inversedBy !== null && 
-                $fieldConfig->inversedBy->entity === $targetEntityName) {
+            if (
+                $fieldConfig instanceof FieldConfig &&
+                $fieldConfig->inversedBy !== null &&
+                $fieldConfig->inversedBy->entity === $targetEntityName
+            ) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -665,7 +660,7 @@ class EntityGenerator implements EntityGeneratorInterface
             'annotation' => $annotation,
             'property' => [
                 'name' => $propertyName,
-                'type' => '\\Doctrine\\Common\\Collections\\ArrayCollection',
+                'type' => \Doctrine\Common\Collections\ArrayCollection::class,
                 'docBlock' => ucfirst(str_replace('_', ' ', $propertyName)),
                 'defaultValue' => 'null',
                 'nullable' => false,
@@ -720,14 +715,14 @@ class EntityGenerator implements EntityGeneratorInterface
     {
         $imports = [];
         $hasTranslatable = false;
-        
+
         foreach ($fields as $field) {
             // Only gather imports from fields that have handlers
             if ($field['handler'] !== null) {
                 $handlerImports = $field['handler']->getRequiredImports();
                 $imports = array_merge($imports, $handlerImports);
             }
-            
+
             // Check if field is translatable
             if ($field['fieldConfig'] && $field['fieldConfig']->translatable) {
                 $hasTranslatable = true;

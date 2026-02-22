@@ -22,8 +22,6 @@ class DeclarationsInternalController extends \Olcs\Controller\Lva\AbstractDeclar
     protected $lva = 'variation';
     protected string $location = 'internal';
 
-    protected StringHelperService $stringHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -39,11 +37,9 @@ class DeclarationsInternalController extends \Olcs\Controller\Lva\AbstractDeclar
         FormServiceManager $formServiceManager,
         TranslationHelperService $translationHelper,
         FlashMessengerHelperService $flashMessengerHelper,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Validators;
 
 use Dvsa\Olcs\Api\Domain\Validation\Validators\CanDeleteSurrender;
@@ -22,10 +24,8 @@ class CanDeleteSurrenderTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValid($surrender, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $surrender, mixed $expected): void
     {
         $statusEntity = m::mock(RefData::class);
 
@@ -55,7 +55,7 @@ class CanDeleteSurrenderTest extends AbstractValidatorsTestCase
         $this->assertSame($expected, $this->sut->isValid(1));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             'is_withdrawn' => [

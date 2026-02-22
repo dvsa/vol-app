@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Bus Test
  */
@@ -28,7 +30,8 @@ class CreateBusTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             BusRegEntity::STATUS_NEW,
@@ -47,7 +50,7 @@ class CreateBusTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $licenceId = 11;
         $busRegId = 111;

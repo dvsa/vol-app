@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Template Source Test
  */
@@ -33,7 +35,7 @@ class UpdateTemplateSourceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $templateId = 7;
         $source = '{{key1}} {{key2}}';
@@ -93,7 +95,7 @@ class UpdateTemplateSourceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedMessages, $result->getMessages());
     }
 
-    public function testValidationExceptionOnTemplateRenderingFailure()
+    public function testValidationExceptionOnTemplateRenderingFailure(): void
     {
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('Unable to render template content with dataset Dataset 2: Something went wrong');

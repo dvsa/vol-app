@@ -91,7 +91,7 @@ class LicenceStatusMarker extends AbstractMarker
         if (count($rules) > 0) {
             usort(
                 $rules,
-                fn($a, $b) => strtotime($b['startDate']) - strtotime($a['startDate'])
+                fn($a, $b) => strtotime((string) $b['startDate']) - strtotime((string) $a['startDate'])
             );
             return $rules[0];
         }

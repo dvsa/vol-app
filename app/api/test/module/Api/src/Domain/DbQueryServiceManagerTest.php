@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain;
 
 use Dvsa\Olcs\Api\Domain\Repository\Query\QueryInterface;
@@ -19,19 +21,19 @@ class DbQueryServiceManagerTest extends MockeryTestCase
         $this->sut = new DbQueryServiceManager($container, []);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $mock = m::mock(QueryInterface::class);
         $this->sut->setService('Foo', $mock);
         $this->assertSame($mock, $this->sut->get('Foo'));
     }
 
-    public function testValidate()
+    public function testValidate(): void
     {
         $this->assertNull($this->sut->validate(m::mock(QueryInterface::class)));
     }
 
-    public function testValidateInvalid()
+    public function testValidateInvalid(): void
     {
         $this->expectException(InvalidServiceException::class);
         $this->sut->validate(null);

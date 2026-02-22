@@ -26,9 +26,7 @@ class StoreSubmissionSnapshotTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand(bool $hasLicence, string $licNo): void
     {
         $licence = $this->getLicence($hasLicence, $licNo);
@@ -85,7 +83,7 @@ class StoreSubmissionSnapshotTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function getLicence(bool $hasLicence, string $licNo)
+    public function getLicence(bool $hasLicence, string $licNo): mixed
     {
         if (!$hasLicence) {
             return null;
@@ -97,7 +95,7 @@ class StoreSubmissionSnapshotTest extends AbstractCommandHandlerTestCase
         return $licence;
     }
 
-    public function dpHandleCommand(): array
+    public static function dpHandleCommand(): array
     {
         return [
             [true, 'AB123456'],

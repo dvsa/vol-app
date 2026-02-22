@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Template;
 
 use Dvsa\Olcs\Api\Service\Template\StrategySelectingViewRenderer;
@@ -17,7 +19,7 @@ use Twig\Loader\LoaderInterface as TwigLoader;
  */
 class StrategySelectingViewRendererTest extends MockeryTestCase
 {
-    public function testUseTwigRendererWhenTemplateIsEditable()
+    public function testUseTwigRendererWhenTemplateIsEditable(): void
     {
         $locale = 'en_GB';
         $format = 'plain';
@@ -54,7 +56,7 @@ class StrategySelectingViewRendererTest extends MockeryTestCase
         );
     }
 
-    public function testUseLegacyRendererWhenTemplateIsNotEditable()
+    public function testUseLegacyRendererWhenTemplateIsNotEditable(): void
     {
         $locale = 'cy_GB';
         $format = 'html';

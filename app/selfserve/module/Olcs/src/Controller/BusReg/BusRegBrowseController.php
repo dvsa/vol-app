@@ -42,6 +42,7 @@ class BusRegBrowseController extends AbstractController
      *
      * @return \Laminas\Http\Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         /** @var \Laminas\Form\Form $form */

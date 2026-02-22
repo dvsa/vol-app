@@ -10,9 +10,7 @@ use Olcs\Service\EditorJs\HtmlConverter;
 use PHPUnit\Framework\TestCase;
 use Mockery as m;
 
-/**
- * @covers \Olcs\Form\Element\EditorJs
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Form\Element\EditorJs::class)]
 class EditorJsTest extends TestCase
 {
     private EditorJs $sut;
@@ -73,16 +71,14 @@ class EditorJsTest extends TestCase
         $this->assertNull($this->sut->getValue());
     }
 
-    /**
-     * @dataProvider isValidEditorJsJsonProvider
-     */
-    public function testIsValidEditorJsJson($input, $expected): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidEditorJsJsonProvider')]
+    public function testIsValidEditorJsJson(mixed $input, mixed $expected): void
     {
         $result = $this->sut->isValidEditorJsJson($input);
         $this->assertEquals($expected, $result);
     }
 
-    public function isValidEditorJsJsonProvider(): array
+    public static function isValidEditorJsJsonProvider(): array
     {
         return [
             'valid json' => [

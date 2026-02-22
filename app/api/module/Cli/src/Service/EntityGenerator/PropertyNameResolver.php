@@ -9,18 +9,18 @@ use Doctrine\Inflector\Inflector;
 
 /**
  * Property Name Resolver Service
- * 
+ *
  * Handles smart property naming including proper pluralization for collections
  * and respects existing naming conventions in the OLCS codebase
  */
 final readonly class PropertyNameResolver
 {
     private Inflector $inflector;
-    
+
     /**
      * Known irregular plurals and naming exceptions in OLCS
      */
-    private const PLURAL_OVERRIDES = [
+    private const array PLURAL_OVERRIDES = [
         'rolePermission' => 'rolePermissions',
         'organisationPerson' => 'organisationPersons',
         'transportManagerLicence' => 'transportManagerLicences',
@@ -37,7 +37,7 @@ final readonly class PropertyNameResolver
     /**
      * Properties that should remain singular even for collections
      */
-    private const SINGULAR_COLLECTIONS = [
+    private const array SINGULAR_COLLECTIONS = [
         'operatingCentreTrafficArea',
         'correspondenceAddress',
         'establishmentAddress',
@@ -50,7 +50,7 @@ final readonly class PropertyNameResolver
 
     /**
      * Resolve the property name for a field, handling pluralization for collections
-     * 
+     *
      * @param string $basePropertyName The base property name from config/schema
      * @param bool $isCollection Whether this is a collection relationship
      * @param string|null $entityConfigProperty Override from EntityConfig if specified
@@ -93,7 +93,7 @@ final readonly class PropertyNameResolver
 
     /**
      * Get the singular form of a property name
-     * 
+     *
      * @param string $propertyName The property name to singularize
      * @return string The singular form
      */
@@ -101,17 +101,14 @@ final readonly class PropertyNameResolver
     {
         // Check reverse overrides
         $reverseOverrides = array_flip(self::PLURAL_OVERRIDES);
-        if (isset($reverseOverrides[$propertyName])) {
-            return $reverseOverrides[$propertyName];
-        }
 
-        return $this->inflector->singularize($propertyName);
+        return $reverseOverrides[$propertyName] ?? $this->inflector->singularize($propertyName);
     }
 
 
     /**
      * Get the method name for a property (e.g., rolePermissions -> RolePermissions)
-     * 
+     *
      * @param string $propertyName The property name
      * @return string The method name suffix (e.g., for getRolePermissions)
      */

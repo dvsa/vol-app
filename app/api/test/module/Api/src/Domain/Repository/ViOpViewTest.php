@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * VI Operator view test
  *
@@ -28,7 +30,7 @@ class ViOpViewTest extends RepositoryTestCase
         $this->setUpSut(ViOpViewRepo::class);
     }
 
-    public function testFetchDiscsToPrint()
+    public function testFetchDiscsToPrint(): void
     {
         $mockQb = m::mock(QueryBuilder::class)
             ->shouldReceive('select')
@@ -58,7 +60,7 @@ class ViOpViewTest extends RepositoryTestCase
         $this->assertEquals(['result'], $this->sut->fetchForExport());
     }
 
-    public function testClearLicencesViIndicators()
+    public function testClearLicencesViIndicators(): void
     {
         $params = [['licId' => 1]];
 
@@ -66,7 +68,7 @@ class ViOpViewTest extends RepositoryTestCase
         $this->sut->clearLicencesViIndicators($params);
     }
 
-    public function testClearLicencesViIndicatorsException()
+    public function testClearLicencesViIndicatorsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\RuntimeException::class);
 

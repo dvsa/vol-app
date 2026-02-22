@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Refuse BusReg Test
  */
@@ -29,7 +31,8 @@ class RefuseBusRegTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             BusRegEntity::STATUS_REFUSED
@@ -41,7 +44,7 @@ class RefuseBusRegTest extends AbstractCommandHandlerTestCase
     /**
      * test handleCommand when Ebsr
      */
-    public function testHandleCommandEbsr()
+    public function testHandleCommandEbsr(): void
     {
         $id = 99;
         $ebsrId = 55;
@@ -75,7 +78,7 @@ class RefuseBusRegTest extends AbstractCommandHandlerTestCase
     /**
      * test handleCommand when not Ebsr
      */
-    public function testHandleCommandNotEbsr()
+    public function testHandleCommandNotEbsr(): void
     {
         $id = 99;
 

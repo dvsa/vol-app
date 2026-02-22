@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\TaskAlphaSplit;
 
 use Mockery as m;
@@ -23,7 +25,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             UserEntity::class => [
@@ -34,7 +37,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandAllParams()
+    public function testHandleCommandAllParams(): void
     {
         $command = Cmd::create(
             [

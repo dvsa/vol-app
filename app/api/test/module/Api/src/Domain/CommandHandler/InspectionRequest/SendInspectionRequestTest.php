@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Inspection Request / SendInspectionRequest
  *
@@ -212,7 +214,7 @@ class SendInspectionRequestTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function mockAuthService()
+    protected function mockAuthService(): void
     {
         $mockContactDetails = m::mock(ContactDetails::class)->makePartial();
         $mockContactDetails->setEmailAddress('terry@example.com');
@@ -232,7 +234,7 @@ class SendInspectionRequestTest extends AbstractCommandHandlerTestCase
             ->andReturn($mockUser);
     }
 
-    public function testHandleCommandAndPopulateForLicenceRequest()
+    public function testHandleCommandAndPopulateForLicenceRequest(): void
     {
         $inspectionRequestId = 189781;
         $inspectionRequest = [
@@ -409,7 +411,7 @@ class SendInspectionRequestTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedResult, $result->toArray());
     }
 
-    public function testHandleCommandAndPopulateForApplicationRequest()
+    public function testHandleCommandAndPopulateForApplicationRequest(): void
     {
         $inspectionRequestId = 189781;
         $inspectionRequest = [
@@ -625,7 +627,7 @@ class SendInspectionRequestTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedResult, $result->toArray());
     }
 
-    public function testHandleCommandNoInspectionRequest()
+    public function testHandleCommandNoInspectionRequest(): void
     {
         $inspectionRequestId = 189781;
         $inspectionRequest = null;
@@ -654,7 +656,7 @@ class SendInspectionRequestTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedResult, $result->toArray());
     }
 
-    public function testThrowsExceptionNoSysParam()
+    public function testThrowsExceptionNoSysParam(): void
     {
         $mockQryResult = m::mock(QueryResult::class);
         $this->queryHandler->shouldReceive('handleQuery')->once()->andReturn($mockQryResult);

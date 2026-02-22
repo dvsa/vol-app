@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Command\IrhpPermitWindow;
 
 use Dvsa\Olcs\Api\Domain\Command\IrhpPermitWindow\Close;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\Command\IrhpPermitWindow\Close;
  */
 class CloseTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = Close::create(['id' => 111, 'foo' => 'bar']);
 

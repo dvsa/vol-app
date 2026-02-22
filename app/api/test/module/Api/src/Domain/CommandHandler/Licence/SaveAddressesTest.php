@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Save Addresses test
  *
@@ -47,11 +49,12 @@ class SaveAddressesTest extends AbstractCommandHandlerTestCase
             CacheEncryption::class => m::mock(CacheEncryption::class),
             'EventHistoryCreator' => m::mock(EventHistoryCreator::class)
         ];
-    
+
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             \Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact::TYPE_PRIMARY,
@@ -67,7 +70,7 @@ class SaveAddressesTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithFullyPopulatedNewData()
+    public function testHandleCommandWithFullyPopulatedNewData(): void
     {
         $data = [
             'id' => 10,
@@ -290,7 +293,7 @@ class SaveAddressesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleExistingCorrespondenceUpdateWithNoChangeAndDifferentPhoneNumbers()
+    public function testHandleExistingCorrespondenceUpdateWithNoChangeAndDifferentPhoneNumbers(): void
     {
         $data = [
             'id' => 10,
@@ -416,7 +419,7 @@ class SaveAddressesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleExistingCorrespondenceUpdateWithNoChangeAndDeletedPhoneNumbers()
+    public function testHandleExistingCorrespondenceUpdateWithNoChangeAndDeletedPhoneNumbers(): void
     {
         $data = [
             'id' => 10,
@@ -545,7 +548,7 @@ class SaveAddressesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleExistingCorrespondenceUpdateWithNoChangeAndDeletedTransportConsultant()
+    public function testHandleExistingCorrespondenceUpdateWithNoChangeAndDeletedTransportConsultant(): void
     {
         $data = [
             'id' => 10,
@@ -680,7 +683,7 @@ class SaveAddressesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleExistingCorrespondenceUpdateWithNoChangeAndDeletedTcWithoutCd()
+    public function testHandleExistingCorrespondenceUpdateWithNoChangeAndDeletedTcWithoutCd(): void
     {
         $data = [
             'id' => 10,
@@ -802,7 +805,7 @@ class SaveAddressesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleExistingCorrespondenceUpdateWithNoChangeAndDeletedTcWithoutAddress()
+    public function testHandleExistingCorrespondenceUpdateWithNoChangeAndDeletedTcWithoutAddress(): void
     {
         $data = [
             'id' => 10,

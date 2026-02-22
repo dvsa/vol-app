@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\CompaniesHouse;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -19,7 +21,7 @@ class CompaniesHouseCompanyEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testArrayConversion()
+    public function testArrayConversion(): void
     {
         $data = [
             'addressLine1' => 'test_addressLine1',

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Class
  *
@@ -15,5 +17,5 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
  */
 class StatementRequestDateTest extends SingleValueTestAbstract
 {
-    public const SUT_CLASS_NAME = '\Dvsa\Olcs\Api\Service\Document\Bookmark\StatementRequestDate';
+    public const SUT_CLASS_NAME = \Dvsa\Olcs\Api\Service\Document\Bookmark\StatementRequestDate::class;
 }

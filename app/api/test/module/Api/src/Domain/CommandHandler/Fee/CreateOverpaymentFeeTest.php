@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Overpayment Fee Test
  *
@@ -55,7 +57,8 @@ class CreateOverpaymentFeeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             FeeEntity::class => [
@@ -70,7 +73,7 @@ class CreateOverpaymentFeeTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $fee1 = $this->mapReference(FeeEntity::class, 100);
         $fee2 = $this->mapReference(FeeEntity::class, 101);

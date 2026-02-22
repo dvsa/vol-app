@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Publication test
  *
@@ -37,7 +39,7 @@ class PublicationTest extends RepositoryTestCase
      *
      * @return m\MockInterface
      */
-    public function getMockRepo($qb)
+    public function getMockRepo(mixed $qb): mixed
     {
         $repo = m::mock(EntityRepository::class);
         $repo->shouldReceive('createQueryBuilder')
@@ -50,7 +52,7 @@ class PublicationTest extends RepositoryTestCase
     /**
      * Tests fetch latest publication for traffic area and type
      */
-    public function testFetchLatestForTrafficAreaAndType()
+    public function testFetchLatestForTrafficAreaAndType(): void
     {
         $trafficArea = 'M';
         $pubType = 'A&D';
@@ -68,7 +70,7 @@ class PublicationTest extends RepositoryTestCase
         $this->sut->fetchLatestForTrafficAreaAndType($trafficArea, $pubType);
     }
 
-    public function testFetchLatestForTrafficAreaAndTypeNotFound()
+    public function testFetchLatestForTrafficAreaAndTypeNotFound(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\NotFoundException::class);
 
@@ -95,7 +97,7 @@ class PublicationTest extends RepositoryTestCase
      *
      * @return m\MockInterface
      */
-    public function getMockTaAndTypeQb($trafficArea, $pubType, $results)
+    public function getMockTaAndTypeQb(mixed $trafficArea, mixed $pubType, mixed $results): m\MockInterface
     {
         $mockQb = m::mock(QueryBuilder::class);
         $mockQb->shouldReceive('expr->eq')->with('m.trafficArea', ':trafficArea')->once()->andReturnSelf();
@@ -124,7 +126,7 @@ class PublicationTest extends RepositoryTestCase
     /**
      * tests fetchPendingList
      */
-    public function testFetchPendingList()
+    public function testFetchPendingList(): void
     {
         /** @var PendingList|m\Mock $query */
         $query = m::mock(PendingList::class);
@@ -169,12 +171,12 @@ class PublicationTest extends RepositoryTestCase
     }
 
     /**
-     * @dataProvider providePublishedListCases
      *
      * @param $withPubType
      * @param $withTrafficArea
      */
-    public function testFetchPublishedList($withPubType, $withTrafficArea)
+    #[\PHPUnit\Framework\Attributes\DataProvider('providePublishedListCases')]
+    public function testFetchPublishedList(mixed $withPubType, mixed $withTrafficArea): void
     {
         /** @var QueryInterface|m\Mock $query */
         $query = m::mock(QueryInterface::class);
@@ -300,7 +302,7 @@ class PublicationTest extends RepositoryTestCase
         );
     }
 
-    public function providePublishedListCases()
+    public static function providePublishedListCases(): array
     {
         return [
             [false, true],

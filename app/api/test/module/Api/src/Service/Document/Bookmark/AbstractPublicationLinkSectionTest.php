@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Domain\Query as DomainQry;
@@ -15,7 +17,7 @@ use org\bovigo\vfs\vfsStream;
  */
 class AbstractPublicationLinkSectionTest extends MockeryTestCase
 {
-    public function testSetGet()
+    public function testSetGet(): void
     {
         $sut = new AbstractPublicationLinkSectionStub();
 
@@ -33,7 +35,7 @@ class AbstractPublicationLinkSectionTest extends MockeryTestCase
         static::assertIsArray($bookmarkSnippets);
     }
 
-    public function testGetBookmarkSnippetsByClass()
+    public function testGetBookmarkSnippetsByClass(): void
     {
         $expectExt = 'unit';
 
@@ -63,7 +65,7 @@ class AbstractPublicationLinkSectionTest extends MockeryTestCase
         );
     }
 
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $sut = new AbstractPublicationLinkSectionStub();
 
@@ -74,7 +76,7 @@ class AbstractPublicationLinkSectionTest extends MockeryTestCase
         static::assertEquals(9999, $actual->getId());
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $snippetFiles = [
             'unit_SnippetFile1',
@@ -140,7 +142,7 @@ class AbstractPublicationLinkSectionTest extends MockeryTestCase
         );
     }
 
-    public function testRenderNoEntries()
+    public function testRenderNoEntries(): void
     {
         /** @var AbstractPublicationLinkSectionStub|m\MockInterface $sut */
         $sut = m::mock(AbstractPublicationLinkSectionStub::class . '[getPubTypeSection]');

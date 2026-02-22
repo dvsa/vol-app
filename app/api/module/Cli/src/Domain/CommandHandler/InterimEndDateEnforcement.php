@@ -20,6 +20,7 @@ final class InterimEndDateEnforcement extends AbstractCommandHandler
 
     private EventHistoryCreator $eventHistoryCreator;
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->eventHistoryCreator = $container->get(EventHistoryCreator::class);

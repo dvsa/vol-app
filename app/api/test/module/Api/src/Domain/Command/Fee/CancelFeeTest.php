@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CancelFeeTest
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\Fee\CancelFee;
  */
 class CancelFeeTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = CancelFee::create(
             [

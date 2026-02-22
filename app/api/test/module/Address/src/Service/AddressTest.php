@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Address\Service;
 
 use Dvsa\Olcs\Address\Service\Address;
@@ -30,7 +32,7 @@ class AddressTest extends MockeryTestCase
         $this->sut = new Address($this->client);
     }
 
-    public function testFetchByPostcodeWithResults()
+    public function testFetchByPostcodeWithResults(): void
     {
         $postcode = 'AB1 1AB';
 
@@ -44,7 +46,7 @@ class AddressTest extends MockeryTestCase
         $this->assertEquals('bar', $objAsArray[0]['address_line1']);
     }
 
-    public function testFetchByPostcodeWithoutResults()
+    public function testFetchByPostcodeWithoutResults(): void
     {
         //  expect
         $this->expectException(Exception::class);
@@ -57,7 +59,7 @@ class AddressTest extends MockeryTestCase
         $this->sut->lookupAddress($postcode);
     }
 
-    protected function mockClientLookup($postcode, $content = null, $statusCode = 200)
+    protected function mockClientLookup(mixed $postcode, mixed $content = null, int $statusCode = 200): void
     {
         /** @var Response $response */
         $response = m::mock(Response::class)->makePartial();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\PrintScheduler;
 
 use Dvsa\Olcs\Api\Domain\Command\PrintScheduler\PrintJob as Cmd;
@@ -73,7 +75,8 @@ class PrintJobTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
         ];
@@ -87,7 +90,7 @@ class PrintJobTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandNoUser()
+    public function testHandleCommandNoUser(): void
     {
         $command = Cmd::create(
             [
@@ -119,13 +122,13 @@ class PrintJobTest extends AbstractCommandHandlerTestCase
         $this->assertSame(["Printed successfully"], $result->getMessages());
     }
 
-    public function testHandleCommandConvertUsingWebService()
+    public function testHandleCommandConvertUsingWebService(): void
     {
         $this->config = [
             'print' => ['server' => 'PRINT_SERVER'],
             'convert_to_pdf' => ['uri' => 'http://web.com:8080/foo']
         ];
-        $this->sut->__construct($this->config, $this->mockFileUploader, $this->convertToPdfService);
+        $this->setSutConfig($this->config);
         $command = Cmd::create(['id' => 'QUEUE_ID', 'documents' => ['DOC_ID'], 'title' => 'JOB', 'user' => '']);
 
         $this->repoMap['SystemParameter']->shouldReceive('fetchValue')
@@ -151,13 +154,13 @@ class PrintJobTest extends AbstractCommandHandlerTestCase
         $this->assertSame(["Printed successfully"], $result->getMessages());
     }
 
-    public function testHandleCommandConvertUsingWebServiceError()
+    public function testHandleCommandConvertUsingWebServiceError(): void
     {
         $this->config = [
             'print' => ['server' => 'PRINT_SERVER'],
             'convert_to_pdf' => ['uri' => 'http://web.com:8080/foo']
         ];
-        $this->sut->__construct($this->config, $this->mockFileUploader, $this->convertToPdfService);
+        $this->setSutConfig($this->config);
         $command = Cmd::create(['id' => 'QUEUE_ID', 'documents' => ['DOC_ID'], 'title' => 'JOB', 'user' => '']);
 
         $this->repoMap['SystemParameter']->shouldReceive('fetchValue')
@@ -185,13 +188,13 @@ class PrintJobTest extends AbstractCommandHandlerTestCase
     /**
      * Test https://jira.i-env.net/browse/OLCS-15140 Convert to PDF timeout
      */
-    public function testHandleCommandConvertUsingWebServiceTimeout()
+    public function testHandleCommandConvertUsingWebServiceTimeout(): void
     {
         $this->config = [
             'print' => ['server' => 'PRINT_SERVER'],
             'convert_to_pdf' => ['uri' => 'http://web.com:8080/foo']
         ];
-        $this->sut->__construct($this->config, $this->mockFileUploader, $this->convertToPdfService);
+        $this->setSutConfig($this->config);
         $command = Cmd::create(['id' => 'QUEUE_ID', 'documents' => ['DOC_ID'], 'title' => 'JOB', 'user' => '']);
 
         $this->repoMap['SystemParameter']->shouldReceive('fetchValue')
@@ -216,7 +219,7 @@ class PrintJobTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandSelfserveUser()
+    public function testHandleCommandSelfserveUser(): void
     {
         $command = Cmd::create(['id' => 'QUEUE_ID', 'documents' => ['DOC_ID'], 'title' => 'JOB', 'user' => 'USER_ID']);
 
@@ -241,7 +244,7 @@ class PrintJobTest extends AbstractCommandHandlerTestCase
         $this->assertSame(["Printed successfully"], $result->getMessages());
     }
 
-    public function testHandleCommandPdfCreateError()
+    public function testHandleCommandPdfCreateError(): void
     {
         $command = Cmd::create(['id' => 'QUEUE_ID', 'documents' => ['DOC_ID'], 'title' => 'JOB', 'user' => 'USER_ID']);
 
@@ -266,7 +269,7 @@ class PrintJobTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandPdfMissing()
+    public function testHandleCommandPdfMissing(): void
     {
         $command = Cmd::create(['id' => 'QUEUE_ID', 'documents' => ['DOC_ID'], 'title' => 'JOB', 'user' => 'USER_ID']);
 
@@ -291,7 +294,7 @@ class PrintJobTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandPrintCreateError()
+    public function testHandleCommandPrintCreateError(): void
     {
         $command = Cmd::create(['id' => 'QUEUE_ID', 'documents' => ['DOC_ID'], 'title' => 'JOB', 'user' => 'USER_ID']);
 
@@ -316,7 +319,7 @@ class PrintJobTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandInternalUser()
+    public function testHandleCommandInternalUser(): void
     {
         $command = Cmd::create(['id' => 'QUEUE_ID', 'documents' => ['DOC_ID'], 'title' => 'JOB', 'user' => 'USER_ID']);
 
@@ -345,7 +348,7 @@ class PrintJobTest extends AbstractCommandHandlerTestCase
         $this->assertSame(["Printed successfully"], $result->getMessages());
     }
 
-    public function testHandleCommandInternalUserMultiDocs()
+    public function testHandleCommandInternalUserMultiDocs(): void
     {
         $command = Cmd::create(
             ['id' => 'QUEUE_ID', 'documents' => ['DOC_ID', 'DOC2_ID'], 'title' => 'JOB', 'user' => 'USER_ID']
@@ -447,7 +450,7 @@ class PrintJobTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Printed successfully'], $result->getMessages());
     }
 
-    public function testHandleCommandInternalUserMultiDocsMergeError()
+    public function testHandleCommandInternalUserMultiDocsMergeError(): void
     {
         $command = Cmd::create(
             ['id' => 'QUEUE_ID', 'documents' => ['DOC_ID', 'DOC2_ID'], 'title' => 'JOB', 'user' => 'USER_ID']
@@ -544,7 +547,7 @@ class PrintJobTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandCannotDownloadFile()
+    public function testHandleCommandCannotDownloadFile(): void
     {
         $command = Cmd::create(['id' => 'QUEUE_ID', 'documents' => ['DOC_ID'], 'title' => 'JOB', 'user' => 'USER_ID']);
 
@@ -559,7 +562,7 @@ class PrintJobTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandInternalUserNoPrinter()
+    public function testHandleCommandInternalUserNoPrinter(): void
     {
         $command = Cmd::create(['id' => 'QUEUE_ID', 'documents' => ['DOC_ID'], 'title' => 'JOB', 'user' => 'USER_ID']);
 
@@ -571,7 +574,7 @@ class PrintJobTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandStubLicence()
+    public function testHandleCommandStubLicence(): void
     {
         $command = Cmd::create(['id' => 'QUEUE_ID', 'documents' => ['DOC_ID'], 'title' => 'JOB', 'user' => 'USER_ID']);
 
@@ -593,7 +596,7 @@ class PrintJobTest extends AbstractCommandHandlerTestCase
         $this->assertSame(["Printed successfully (stub to licence 34)"], $result->getMessages());
     }
 
-    public function testHandleCommandStubLicenceMultiDocs()
+    public function testHandleCommandStubLicenceMultiDocs(): void
     {
         $command = Cmd::create(
             ['id' => 'QUEUE_ID', 'documents' => ['DOC_ID', 'DOC2_ID'], 'title' => 'JOB', 'user' => 'USER_ID']
@@ -624,12 +627,12 @@ class PrintJobTest extends AbstractCommandHandlerTestCase
     }
 
     private function expectPrintFile(
-        $commandPdfResult = 0,
-        $fileExists = true,
-        $commandLprResult = 0,
-        $userName = 'PRINT_USER',
-        $copies = 1
-    ) {
+        int $commandPdfResult = 0,
+        bool $fileExists = true,
+        int $commandLprResult = 0,
+        string $userName = 'PRINT_USER',
+        int $copies = 1
+    ): void {
         $this->sut->shouldReceive('executeCommand')
             ->with("soffice --headless --convert-to pdf:writer_pdf_Export --outdir /tmp 'TEMP_FILE.rtf' 2>&1", [], 0)
             ->once()
@@ -646,7 +649,13 @@ class PrintJobTest extends AbstractCommandHandlerTestCase
         $this->expectLpr($userName, $commandLprResult, $fileExists, $copies);
     }
 
-    private function expectLpr($userName, $commandLprResult, $fileExists, $copies = 1)
+    private function setSutConfig(array $config): void
+    {
+        $reflection = new \ReflectionProperty(CommandHandler::class, 'config');
+        $reflection->setValue($this->sut, $config);
+    }
+
+    private function expectLpr(mixed $userName, mixed $commandLprResult, mixed $fileExists, int $copies = 1): void
     {
         $this->sut->shouldReceive('fileExists')->with('TEMP_FILE.pdf')->once()->andReturn($fileExists);
         if (!$fileExists) {

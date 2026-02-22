@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain;
 
 use Dvsa\Olcs\Api\Domain\FormControlServiceManager;
@@ -19,12 +21,12 @@ class FormControlServiceManagerTest extends MockeryTestCase
         $this->sut = new FormControlServiceManager($container, []);
     }
 
-    public function testValidate()
+    public function testValidate(): void
     {
         $this->assertNull($this->sut->validate(m::mock(FormControlStrategyInterface::class)));
     }
 
-    public function testValidateInvalid()
+    public function testValidateInvalid(): void
     {
         $this->expectException(InvalidServiceException::class);
         $this->sut->validate(null);

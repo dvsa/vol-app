@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\MyAccount;
 
 use Dvsa\Olcs\Api\Rbac\JWTIdentityProvider;
@@ -56,7 +58,8 @@ class UpdateMyAccountTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ContactDetailsEntity::CONTACT_TYPE_USER,
@@ -76,7 +79,7 @@ class UpdateMyAccountTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithNewContactDetails()
+    public function testHandleCommandWithNewContactDetails(): void
     {
         $userId = 1;
 
@@ -128,7 +131,6 @@ class UpdateMyAccountTest extends AbstractCommandHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($user, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_LOCAL_AUTHORITY);
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')
@@ -185,10 +187,8 @@ class UpdateMyAccountTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestHandleCommandWithUpdatedContactDetails
-     */
-    public function testHandleCommandWithUpdatedContactDetails($data, $isInternal)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommandWithUpdatedContactDetails')]
+    public function testHandleCommandWithUpdatedContactDetails(mixed $data, mixed $isInternal): void
     {
         $this->setupIsInternalUser($isInternal);
 
@@ -299,7 +299,6 @@ class UpdateMyAccountTest extends AbstractCommandHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($user, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_LOCAL_AUTHORITY);
 
         $this->repoMap['User']->shouldReceive('fetchById')
@@ -347,7 +346,7 @@ class UpdateMyAccountTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpTestHandleCommandWithUpdatedContactDetails()
+    public static function dpTestHandleCommandWithUpdatedContactDetails(): array
     {
         return [
             [
@@ -374,7 +373,7 @@ class UpdateMyAccountTest extends AbstractCommandHandlerTestCase
                         ],
                     ],
                 ],
-                0
+                "isInternal" => 0
             ],
             [
                 'data' => [
@@ -406,12 +405,12 @@ class UpdateMyAccountTest extends AbstractCommandHandlerTestCase
                         ],
                     ],
                 ],
-                1
+                "isInternal" => 1
             ]
         ];
     }
 
-    public function testHandleCommandWithNoPersonTitle()
+    public function testHandleCommandWithNoPersonTitle(): void
     {
         $userId = 1;
 
@@ -462,7 +461,6 @@ class UpdateMyAccountTest extends AbstractCommandHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($user, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_LOCAL_AUTHORITY);
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')

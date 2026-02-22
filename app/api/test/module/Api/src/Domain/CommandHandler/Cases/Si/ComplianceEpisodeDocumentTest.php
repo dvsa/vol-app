@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Cases\Si;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Cases\Si\ComplianceEpisodeDocument;
@@ -28,7 +30,7 @@ class ComplianceEpisodeDocumentTest extends AbstractCommandHandlerTestCase
     /**
      * Tests a successful compliance episode
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $xmlString = 'xml string';
         $documentId = 123;
@@ -43,7 +45,7 @@ class ComplianceEpisodeDocumentTest extends AbstractCommandHandlerTestCase
     /**
      * tests correct exception is thrown when errors are returned
      */
-    public function testHandleCommandWithException()
+    public function testHandleCommandWithException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\Exception::class);
 
@@ -65,7 +67,7 @@ class ComplianceEpisodeDocumentTest extends AbstractCommandHandlerTestCase
      *
      * @return UploadCmd
      */
-    private function documentSideEffect($xmlString, $documentId)
+    private function documentSideEffect(mixed $xmlString, mixed $documentId): void
     {
         $documentData = [
             'content' => base64_encode($xmlString),
@@ -89,7 +91,7 @@ class ComplianceEpisodeDocumentTest extends AbstractCommandHandlerTestCase
      *
      * @return ComplianceEpisodeProcessCmd
      */
-    private function complianceEpisodeSideEffect($documentId, $hasErrors)
+    private function complianceEpisodeSideEffect(mixed $documentId, mixed $hasErrors): void
     {
         $dtoData = ['id' => $documentId];
 

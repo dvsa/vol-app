@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Text\Custom\EcmtRemoval\NoOfPermits;
 
 use Dvsa\Olcs\Api\Domain\Command\Fee\CancelFee as CancelFeeCmd;
@@ -22,7 +24,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class FeeCreatorTest extends MockeryTestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $licenceId = 7;
         $irhpApplicationId = 53;

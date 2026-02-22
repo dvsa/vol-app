@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Helper;
 
 use Olcs\Helper\ApplicationProcessingHelper;
@@ -22,13 +24,13 @@ class ApplicationProcessingHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getNavigationProvider
      *
      * @param int $applicationId
      * @param string $activeSection
      * @param array $sections
      */
-    public function testGetNavigation($applicationId, $activeSection, $sections)
+    #[\PHPUnit\Framework\Attributes\DataProvider('getNavigationProvider')]
+    public function testGetNavigation(mixed $applicationId, mixed $activeSection, mixed $sections): void
     {
         $expected = [];
 
@@ -51,7 +53,7 @@ class ApplicationProcessingHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->sut->getNavigation($applicationId, $activeSection));
     }
 
-    public function getNavigationProvider()
+    public static function getNavigationProvider(): array
     {
         return [
             [7, 'notes', ['notes' => [], 'tasks' => []]],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
@@ -18,7 +20,7 @@ class TranslationKeyTextTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchByParentLanguage()
+    public function testFetchByParentLanguage(): void
     {
         $queryBuilder = $this->createMockQb('BLAH');
 
@@ -40,7 +42,7 @@ class TranslationKeyTextTest extends RepositoryTestCase
         self::assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchAll()
+    public function testFetchAll(): void
     {
         $locale = 'en_GB';
         $hydrationMode = Query::HYDRATE_ARRAY;

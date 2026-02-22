@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Test
  *
@@ -35,7 +37,7 @@ class UpdateTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsValidNoContext()
+    public function testIsValidNoContext(): void
     {
         $data = [
             'application' => null
@@ -46,7 +48,7 @@ class UpdateTest extends AbstractHandlerTestCase
         $this->assertFalse($this->sut->isValid($dto));
     }
 
-    public function testIsValidWithContextNoAccess()
+    public function testIsValidWithContextNoAccess(): void
     {
         $data = [
             'id' => 111,
@@ -63,7 +65,7 @@ class UpdateTest extends AbstractHandlerTestCase
         $this->assertEquals(false, $this->sut->isValid($dto));
     }
 
-    public function testIsValidWithContextNoOwnership()
+    public function testIsValidWithContextNoOwnership(): void
     {
         $data = [
             'id' => 111,
@@ -81,7 +83,7 @@ class UpdateTest extends AbstractHandlerTestCase
         $this->assertEquals(false, $this->sut->isValid($dto));
     }
 
-    public function testIsValidWithContextAndOwnership()
+    public function testIsValidWithContextAndOwnership(): void
     {
         $data = [
             'id' => 111,
@@ -105,7 +107,7 @@ class UpdateTest extends AbstractHandlerTestCase
         $this->assertEquals(true, $this->sut->isValid($dto));
     }
 
-    public function testIsValidWithContextAndOwnershipWithoutMatching()
+    public function testIsValidWithContextAndOwnershipWithoutMatching(): void
     {
         $data = [
             'id' => 111,
@@ -131,7 +133,7 @@ class UpdateTest extends AbstractHandlerTestCase
         $this->assertEquals(false, $this->sut->isValid($dto));
     }
 
-    public function getLicenceFromApplication()
+    public function getLicenceFromApplication(): mixed
     {
         $licence = m::mock(Licence::class);
 

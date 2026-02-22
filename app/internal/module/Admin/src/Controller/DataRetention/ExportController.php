@@ -53,6 +53,7 @@ class ExportController extends AbstractInternalController implements LeftViewPro
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'Export deleted items');

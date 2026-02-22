@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -13,17 +15,17 @@ use Laminas\Form\FormInterface;
 class ConditionUndertakingTest extends MockeryTestCase
 {
     /**
-     * @dataProvider mapFromResultDataProvider
      *
      * @param $inData
      * @param $expected
      */
-    public function testMapFromResult($inData, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromResultDataProvider')]
+    public function testMapFromResult(mixed $inData, mixed $expected): void
     {
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public function mapFromResultDataProvider()
+    public static function mapFromResultDataProvider(): array
     {
         return [
             // add condition attached to OC 24
@@ -71,7 +73,7 @@ class ConditionUndertakingTest extends MockeryTestCase
         ];
     }
 
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $inData = [
             'fields' => [
@@ -96,7 +98,7 @@ class ConditionUndertakingTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($inData));
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $mockForm = m::mock(FormInterface::class);
         $errors = ['field' => 'data'];

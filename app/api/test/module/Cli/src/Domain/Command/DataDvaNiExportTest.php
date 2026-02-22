@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\Command;
 
 use Dvsa\Olcs\Cli\Domain\Command\DataDvaNiExport;
@@ -10,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class DataDvaNiExportTest extends MockeryTestCase
 {
-    public function test()
+    public function test(): void
     {
         $params = [
             'reportName' => 'unit_ReportName',

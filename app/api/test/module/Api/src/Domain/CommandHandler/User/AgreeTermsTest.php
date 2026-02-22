@@ -28,7 +28,7 @@ class AgreeTermsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $userId = 999;
 

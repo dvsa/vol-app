@@ -348,6 +348,7 @@ class TransXChangeConsumer extends AbstractConsumer
         return $message['MessageAttributes'][$attribute]['StringValue'] ?? null;
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): self
     {
         parent::__invoke($container, $requestedName, $options);

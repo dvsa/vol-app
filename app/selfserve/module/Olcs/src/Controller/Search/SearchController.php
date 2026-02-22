@@ -24,8 +24,6 @@ class SearchController extends AbstractController
 {
     use ViewHelperManagerAware;
 
-    protected $viewHelperManager;
-
     public $navigationId;
 
     /**
@@ -46,12 +44,10 @@ class SearchController extends AbstractController
         protected FormHelperService $formHelper,
         protected $navigation,
         protected FormElementManager $formElementManager,
-        $viewHelperManager,
+        protected $viewHelperManager,
         protected $dataServiceManager,
         protected TranslationHelperService $translationHelper
     ) {
-        $this->viewHelperManager = $viewHelperManager;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
@@ -62,6 +58,7 @@ class SearchController extends AbstractController
      *
      * @return \Laminas\Http\Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $index = $this->params()->fromRoute('index');

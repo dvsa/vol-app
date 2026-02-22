@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Queue Create Command Handler Test
  *
@@ -47,7 +49,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
     /**
      * Test handleCommand method
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->mockAuthService();
 
@@ -100,7 +102,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    protected function mockAuthService()
+    protected function mockAuthService(): void
     {
         /** @var User $mockUser */
         $mockUser = m::mock(UserEntity::class)->makePartial();

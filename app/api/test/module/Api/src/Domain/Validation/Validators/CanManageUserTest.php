@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Validators;
 
 use Dvsa\Olcs\Api\Domain\Validation\Validators\CanManageUser as Sut;
@@ -24,10 +26,8 @@ class CanManageUserTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValid($canManageUser, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $canManageUser, mixed $expected): void
     {
         $this->setIsGranted(Permission::INTERNAL_USER, false);
 
@@ -41,10 +41,8 @@ class CanManageUserTest extends AbstractValidatorsTestCase
         $this->assertEquals($expected, $this->sut->isValid(111));
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValidWithoutId($canManageUser, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValidWithoutId(mixed $canManageUser, mixed $expected): void
     {
         $this->setIsGranted(Permission::INTERNAL_USER, false);
 
@@ -53,14 +51,14 @@ class CanManageUserTest extends AbstractValidatorsTestCase
         $this->assertEquals($expected, $this->sut->isValid(null));
     }
 
-    public function testIsValidInternal()
+    public function testIsValidInternal(): void
     {
         $this->setIsGranted(Permission::INTERNAL_USER, true);
 
         $this->assertEquals(true, $this->sut->isValid(111));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [true, true],

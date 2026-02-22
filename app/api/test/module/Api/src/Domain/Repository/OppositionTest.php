@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Opposition Repo test
  *
@@ -29,7 +31,7 @@ class OppositionTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchUsingId()
+    public function testFetchUsingId(): void
     {
         $id = 99;
         $mockResult = [0 => 'result'];
@@ -83,7 +85,7 @@ class OppositionTest extends RepositoryTestCase
         $this->assertEquals($result, $mockResult[0]);
     }
 
-    public function testApplyFiltersCase()
+    public function testApplyFiltersCase(): void
     {
         // mock SUT to allow testing the protected method
         $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
@@ -102,7 +104,7 @@ class OppositionTest extends RepositoryTestCase
         $sut->applyListFilters($qb, $query);
     }
 
-    public function testApplyFiltersLicence()
+    public function testApplyFiltersLicence(): void
     {
         // mock SUT to allow testing the protected method
         $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
@@ -121,7 +123,7 @@ class OppositionTest extends RepositoryTestCase
         $sut->applyListFilters($qb, $query);
     }
 
-    public function testApplyFiltersApplication()
+    public function testApplyFiltersApplication(): void
     {
         // mock SUT to allow testing the protected method
         $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
@@ -140,7 +142,7 @@ class OppositionTest extends RepositoryTestCase
         $sut->applyListFilters($qb, $query);
     }
 
-    public function testFetchByApplicationId()
+    public function testFetchByApplicationId(): void
     {
         $applicationId = 69;
 

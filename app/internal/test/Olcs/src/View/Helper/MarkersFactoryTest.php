@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\View\Helper;
 
 use Psr\Container\ContainerInterface;
@@ -15,7 +17,7 @@ use Olcs\View\Helper\RenderMarkers;
  */
 class MarkersFactoryTest extends TestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockMarkersService = m::mock(MarkerService::class);
 

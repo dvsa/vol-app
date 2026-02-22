@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa;
 
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
@@ -51,7 +53,7 @@ class QaEntityProviderTest extends MockeryTestCase
         $this->qaEntityProvider = new QaEntityProvider($this->irhpApplicationRepo, $this->irhpPermitApplicationRepo);
     }
 
-    public function testGetWithIrhpApplication()
+    public function testGetWithIrhpApplication(): void
     {
         $this->assertSame(
             $this->irhpApplication,
@@ -59,7 +61,7 @@ class QaEntityProviderTest extends MockeryTestCase
         );
     }
 
-    public function testGetWithIrhpPermitApplication()
+    public function testGetWithIrhpPermitApplication(): void
     {
         $this->irhpPermitApplication->shouldReceive('getIrhpApplication')
             ->withNoArgs()
@@ -71,7 +73,7 @@ class QaEntityProviderTest extends MockeryTestCase
         );
     }
 
-    public function testGetNotFoundException()
+    public function testGetNotFoundException(): void
     {
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage('Mismatched IrhpApplication and IrhpPermitApplication');

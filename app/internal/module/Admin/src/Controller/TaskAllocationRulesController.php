@@ -114,6 +114,7 @@ class TaskAllocationRulesController extends AbstractInternalController
      *
      * @return \Olcs\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'Task allocation rules');
@@ -128,6 +129,7 @@ class TaskAllocationRulesController extends AbstractInternalController
      *
      * @return \Laminas\Form\Form
      */
+    #[\Override]
     public function getForm($name)
     {
         $form = parent::getForm($name);
@@ -231,6 +233,7 @@ class TaskAllocationRulesController extends AbstractInternalController
      *
      * @return \Olcs\View\Model\ViewModel
      */
+    #[\Override]
     public function editAction()
     {
         $query = $this->params()->fromQuery();

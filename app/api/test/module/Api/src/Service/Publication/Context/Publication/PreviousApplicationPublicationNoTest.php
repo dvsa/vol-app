@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\Publication;
 
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
@@ -14,13 +16,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class PreviousApplicationPublicationNoTest extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     * @dataProvider CheckByApplicationAppStatusProvider
-     *
-     * Test the previous hearing date filter
-     */
-    public function testProvideByApplication($appStatus)
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('CheckByApplicationAppStatusProvider')]
+    public function testProvideByApplication(mixed $appStatus): void
     {
         $pubType = 'A&D';
         $trafficArea = 'trafficArea';
@@ -55,13 +53,9 @@ class PreviousApplicationPublicationNoTest extends MockeryTestCase
         $this->assertEquals($expectedOutput, $sut->provide($publication, new \ArrayObject()));
     }
 
-    /**
-     * @group publicationFilter
-     * @dataProvider CheckByLicenceAppStatusProvider
-     *
-     * Test the previous hearing date filter
-     */
-    public function testProvideByLicence($appStatus)
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('CheckByLicenceAppStatusProvider')]
+    public function testProvideByLicence(mixed $appStatus): void
     {
         $pubType = 'A&D';
         $trafficArea = 'trafficArea';
@@ -100,7 +94,7 @@ class PreviousApplicationPublicationNoTest extends MockeryTestCase
      * data provider for application status where we get previous publications by application id
      * @return array
      */
-    public function checkByLicenceAppStatusProvider()
+    public static function checkByLicenceAppStatusProvider(): array
     {
         return [
             [ApplicationEntity::APPLICATION_STATUS_GRANTED],
@@ -114,7 +108,7 @@ class PreviousApplicationPublicationNoTest extends MockeryTestCase
      * data provider for application status where we get previous publications by application id
      * @return array
      */
-    public function checkByApplicationAppStatusProvider()
+    public static function checkByApplicationAppStatusProvider(): array
     {
         return [
             [ApplicationEntity::APPLICATION_STATUS_WITHDRAWN],

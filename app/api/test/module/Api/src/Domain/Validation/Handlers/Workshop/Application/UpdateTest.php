@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update test
  *
@@ -36,10 +38,8 @@ class UpdateTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider contextProvider
-     */
-    public function testIsValidNoContextOrWrongContext($application, $id)
+    #[\PHPUnit\Framework\Attributes\DataProvider('contextProvider')]
+    public function testIsValidNoContextOrWrongContext(mixed $application, mixed $id): void
     {
         $data = [
             'application' => $application
@@ -54,7 +54,7 @@ class UpdateTest extends AbstractHandlerTestCase
         $this->assertFalse($this->sut->isValid($dto));
     }
 
-    public function contextProvider()
+    public static function contextProvider(): array
     {
         return [
             [null, null],
@@ -62,10 +62,8 @@ class UpdateTest extends AbstractHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider licenceProvider
-     */
-    public function testIsValidWithOwnership($licenceId, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceProvider')]
+    public function testIsValidWithOwnership(mixed $licenceId, mixed $expected): void
     {
         $data = [
             'id' => 111,
@@ -95,7 +93,7 @@ class UpdateTest extends AbstractHandlerTestCase
         $this->assertEquals($expected, $this->sut->isValid($dto));
     }
 
-    public function licenceProvider()
+    public static function licenceProvider(): array
     {
         return [
             [123, true],
@@ -103,7 +101,7 @@ class UpdateTest extends AbstractHandlerTestCase
         ];
     }
 
-    public function getLicenceFromApplication()
+    public function getLicenceFromApplication(): mixed
     {
         $licence = m::mock(Licence::class);
 
@@ -116,7 +114,7 @@ class UpdateTest extends AbstractHandlerTestCase
         return $licence;
     }
 
-    public function getWorkshops()
+    public function getWorkshops(): array
     {
         $workshop = m::mock(Workshop::class);
 

@@ -20,6 +20,7 @@ class GenerateEntities extends AbstractCommand
     /**
      * Create instance from array
      */
+    #[\Override]
     public static function create(array $data = []): self
     {
         $instance = new self();

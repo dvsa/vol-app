@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler\MessageQueue\Consumer\CompaniesHouse;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -24,6 +26,7 @@ use Dvsa\Olcs\Queue\Service\Message\MessageBuilder;
 use Dvsa\Olcs\Queue\Service\Queue;
 use Dvsa\Olcs\Transfer\Command\Document\PrintLetter;
 use Mockery as m;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
 {
@@ -33,6 +36,7 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
         ]
     ];
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new ProcessInsolvency();
@@ -41,7 +45,7 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
         $this->mockRepo('Team', Team::class);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->setupStandardService();
         $this->setupMockCHRepo();
@@ -68,10 +72,8 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
         $this->assertEquals($messages, $response->getMessages());
     }
 
-    /**
-     * @dataProvider addressData
-     */
-    public function testHandleCommandCreatesTasks($licence, $team)
+    #[DataProvider('addressData')]
+    public function testHandleCommandCreatesTasks(mixed $licence, mixed $team): void
     {
         $this->setupStandardService();
         $this->setupMockCHRepo();
@@ -110,10 +112,8 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
         $this->assertEquals($messages, $response->getMessages());
     }
 
-    /**
-     * @dataProvider emailTestsDataProvider
-     */
-    public function testHandleCommandSendsEmails($licence)
+    #[DataProvider('emailTestsDataProvider')]
+    public function testHandleCommandSendsEmails(mixed $licence): void
     {
         $this->setupStandardService();
         $this->setupMockCHRepo();
@@ -151,12 +151,12 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
         $this->assertEquals($messages, $response->getMessages());
     }
 
-    public function testHandleCommandSendsEmailsWithNoRegisteredUsers()
+    public function testHandleCommandSendsEmailsWithNoRegisteredUsers(): void
     {
         $this->setupStandardService();
         $this->setupMockCHRepo();
 
-        $licence = $this->getMockLicences()[2];
+        $licence = self::getMockLicences()[2];
 
         $this->repoMap['Organisation']
             ->shouldReceive('getByCompanyOrLlpNo')
@@ -191,12 +191,12 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
         $this->assertEquals($messages, $response->getMessages());
     }
 
-    public function testHandleCommandSendsEmailsWithNoCorrespondenceEmail()
+    public function testHandleCommandSendsEmailsWithNoCorrespondenceEmail(): void
     {
         $this->setupStandardService();
         $this->setupMockCHRepo();
 
-        $licence = $this->getMockLicences()[3];
+        $licence = self::getMockLicences()[3];
 
         $this->repoMap['Organisation']
             ->shouldReceive('getByCompanyOrLlpNo')
@@ -232,7 +232,7 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
         $this->assertEquals($messages, $response->getMessages());
     }
 
-    public function testHandleCommandNoMessages()
+    public function testHandleCommandNoMessages(): void
     {
         $queueService = m::mock(Queue::class);
 
@@ -260,7 +260,7 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
         $this->assertEquals($messages, $response->getMessages());
     }
 
-    protected function getMockQueueService()
+    protected function getMockQueueService(): mixed
     {
         $queueService = m::mock(Queue::class);
 
@@ -281,7 +281,7 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
         return $queueService;
     }
 
-    protected function getMockCompaniesHouseClient()
+    protected function getMockCompaniesHouseClient(): m\MockInterface
     {
         $mockClient = m::mock(CompaniesHouseClient::class);
         $mockClient->shouldReceive('getInsolvencyDetails')
@@ -291,7 +291,7 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
         return $mockClient;
     }
 
-    protected function mockInsolvencyDataResponse()
+    protected function mockInsolvencyDataResponse(): array
     {
         return [
             [
@@ -361,19 +361,19 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
         ];
     }
 
-    private function getMockLicences()
+    private static function getMockLicences(): ArrayCollection
     {
-        $mockOrgGB = $this->getMockOrganisationWithUserEmails([
+        $mockOrgGB = self::getMockOrganisationWithUserEmails([
             'emailgb1@example.com',
             'emailgb2@example.com'
         ]);
 
-        $mockOrgNI = $this->getMockOrganisationWithUserEmails([
+        $mockOrgNI = self::getMockOrganisationWithUserEmails([
             'emailni1@example.com',
             'emailni2@example.com'
         ]);
 
-        $mockOrgGBNoRegisteredUsers = $this->getMockOrganisationWithUserEmails([]);
+        $mockOrgGBNoRegisteredUsers = self::getMockOrganisationWithUserEmails([]);
 
         $mockCorrespondenceDetailsGB = m::mock(ContactDetails::class)
             ->shouldReceive('getEmailAddress')
@@ -481,7 +481,7 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
         ]);
     }
 
-    private function getMockOrganisationWithUserEmails(array $emails)
+    private static function getMockOrganisationWithUserEmails(array $emails): mixed
     {
         $mockUsers = array_map(
             static function ($emailAddress) {
@@ -509,33 +509,33 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
             ->getMock());
     }
 
-    public function addressData()
+    public static function addressData(): array
     {
         return [
             'GBLicence' => [
-                $this->getMockLicences()[0],
+                self::getMockLicences()[0],
                 ProcessInsolvency::GB_TEAMLEADER_TASK,
             ],
             'NILicence' => [
-                $this->getMockLicences()[1],
+                self::getMockLicences()[1],
                 ProcessInsolvency::NI_TEAMLEADER_TASK,
             ]
         ];
     }
 
-    public function emailTestsDataProvider()
+    public static function emailTestsDataProvider(): array
     {
         return [
             'GBLicence' => [
-                $this->getMockLicences()[0],
+                self::getMockLicences()[0],
             ],
             'NILicence' => [
-                $this->getMockLicences()[1],
+                self::getMockLicences()[1],
             ]
         ];
     }
 
-    protected function setupStandardService()
+    protected function setupStandardService(): void
     {
         $this->mockedSmServices = [
             CompaniesHouseClient::class => $this->getMockCompaniesHouseClient(),
@@ -546,7 +546,7 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
         $this->setupService();
     }
 
-    private function setupSideEffects(int $numberOfQueueItems)
+    private function setupSideEffects(int $numberOfQueueItems): void
     {
         $result = new Result();
         $result->addId('documents', 1, true);

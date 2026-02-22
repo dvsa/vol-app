@@ -79,9 +79,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
     protected const A_DECISION_VALUE = 'A_DECISION_VALUE';
 
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionIsCallable(): void
     {
         // Setup
@@ -92,9 +90,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'indexAction']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionReturnsViewModel(): void
     {
         // Setup
@@ -111,9 +107,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionReturnsViewModelWithPanelWhenFlashMessageHasPanelNamespace(): void
     {
         // Setup
@@ -139,9 +133,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $this->assertSame($expected, $result->getVariable('panel'));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionReturnsViewModelWithPanelBodyWhenFlashMessageHasPanelNamespaceSecondMessage(): void
     {
         // Setup
@@ -168,9 +160,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $this->assertSame($expected, $result->getVariable('panel'));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionReturnsViewModelWithBackRouteToLicenceOverview(): void
     {
         // Setup
@@ -192,9 +182,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $this->assertSame($expectedUrl, $result->getVariable('backLink'));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionReturnsViewModelWithSwitchBoardForm(): void
     {
         // Setup
@@ -211,9 +199,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $this->assertInstanceOf(Form::class, $result->getVariable('form'));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionSwitchBoardOnlyHasAddWhenLicenceHasNoVehicles(): void
     {
         // Setup
@@ -246,9 +232,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $this->assertArrayNotHasKey(SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW, $options);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionSwitchBoardRemovesTransferOptionWhenLicenceIsNotMLH(): void
     {
         // Setup
@@ -276,9 +260,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $this->assertArrayNotHasKey(SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_TRANSFER, $options);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionSwitchBoardRemovesViewOptionButKeepsViewRemovedWhenAllVehiclesHaveBeenRemoved(): void
     {
         // Setup
@@ -307,9 +289,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $this->assertArrayHasKey(SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW_REMOVED, $options);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionSwitchBoardHasViewOptionRemovesViewRemovedWhenNoVehiclesHaveBeenRemoved(): void
     {
         // Setup
@@ -338,9 +318,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $this->assertArrayHasKey(SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW, $options);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWithPostShouldReturnRedirectToIndexActionWhenFormIsInvalid(): void
     {
         // Setup
@@ -369,11 +347,8 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $this->assertSame($expectedResponse, $result);
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider indexActionWithPostShouldRedirectToPageDependantOnDecisionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('indexActionWithPostShouldRedirectToPageDependantOnDecisionProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWithPostShouldRedirectToPageDependantOnDecision(string $request, int $activeVehicleCount, array $route): void
     {
         // Setup
@@ -406,7 +381,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
      *
      * @psalm-return array{'Add decision': list{'add', 1, list{'licence/vehicle/add/GET', array<never, never>, array<never, never>, true}}, 'Remove Decision': list{'remove', 1, list{'licence/vehicle/remove/GET', array<never, never>, array<never, never>, true}}, 'Reprint decision': list{'reprint', 1, list{'licence/vehicle/reprint/GET', array<never, never>, array<never, never>, true}}, 'Transfer decision': list{'transfer', 1, list{'licence/vehicle/transfer/GET', array<never, never>, array<never, never>, true}}, 'View decision': list{'view', 1, list{'licence/vehicle/list/GET', array<never, never>, array<never, never>, true}}, 'View removed decision': list{'view-removed', 0, list{'licence/vehicle/list/GET', array<never, never>, array{query: array{includeRemoved: ''}, fragment: 'removed-table'}, true}}}
      */
-    public function indexActionWithPostShouldRedirectToPageDependantOnDecisionProvider(): array
+    public static function indexActionWithPostShouldRedirectToPageDependantOnDecisionProvider(): array
     {
         return [
             'Add decision' => [

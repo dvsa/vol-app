@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\ContinuationDetail;
 
 use Dvsa\Olcs\Api\Domain\Command\ContinuationDetail\ProcessReminder as Command;
@@ -29,10 +31,8 @@ class ProcessReminderTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider detailsProvider
-     */
-    public function testHandleCommand($isGoods, $template)
+    #[\PHPUnit\Framework\Attributes\DataProvider('detailsProvider')]
+    public function testHandleCommand(mixed $isGoods, mixed $template): void
     {
         $command = Command::create(['id' => 1, 'user' => 2]);
 
@@ -92,7 +92,7 @@ class ProcessReminderTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['document' => 101], $result->getIds());
     }
 
-    public function detailsProvider()
+    public static function detailsProvider(): array
     {
         return [
             [true, 'LIC_CONTD_NO_CHECKLIST_GV'],

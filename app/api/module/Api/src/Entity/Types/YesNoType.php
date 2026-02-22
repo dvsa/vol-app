@@ -35,6 +35,7 @@ class YesNoType extends Type
      * @param AbstractPlatform $platform
      * @return null|string
      */
+    #[\Override]
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         unset($platform);
@@ -49,6 +50,7 @@ class YesNoType extends Type
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
      * @return int
      */
+    #[\Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         unset($platform);

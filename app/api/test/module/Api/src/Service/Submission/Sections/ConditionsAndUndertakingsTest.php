@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
 use Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking;
@@ -8,7 +10,7 @@ use Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking;
  * Class ConditionsAndUndertakingsTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class ConditionsAndUndertakingsTest extends AbstractSubmissionSectionTest
+class ConditionsAndUndertakingsTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\ConditionsAndUndertakings::class;
 
@@ -17,11 +19,11 @@ class ConditionsAndUndertakingsTest extends AbstractSubmissionSectionTest
      *
      * @return array
      */
-    public function sectionTestProvider()
+    public static function sectionTestProvider(): array
     {
-        $case = $this->getCase();
+        $case = static::getCase();
         $case->getLicence()->addConditionUndertakings(
-            $this->generateConditionsUndertakings(
+            static::generateConditionsUndertakings(
                 $case->getLicence(),
                 ConditionUndertaking::TYPE_CONDITION,
                 999,
@@ -32,7 +34,7 @@ class ConditionsAndUndertakingsTest extends AbstractSubmissionSectionTest
         );
 
         $case->getLicence()->addConditionUndertakings(
-            $this->generateConditionsUndertakings(
+            static::generateConditionsUndertakings(
                 $case->getLicence(),
                 ConditionUndertaking::TYPE_UNDERTAKING,
                 35,

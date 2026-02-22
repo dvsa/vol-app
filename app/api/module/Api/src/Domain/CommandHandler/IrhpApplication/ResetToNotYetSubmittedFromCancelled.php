@@ -53,6 +53,7 @@ class ResetToNotYetSubmittedFromCancelled extends AbstractCommandHandler impleme
         $this->result->addId('irhpApplication', $irhpApplicationId);
         return $this->result;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

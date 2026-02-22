@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\LocalAuthority;
 
 use Dvsa\Olcs\Api\Entity\Bus\LocalAuthority as Entity;
@@ -17,7 +19,7 @@ class LocalAuthorityEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $description = 'some lta name';
         $emailAddress = 'some@email.com';

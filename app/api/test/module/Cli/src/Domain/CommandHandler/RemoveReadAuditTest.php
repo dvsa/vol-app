@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Remove Read Audit Test
  *
@@ -40,7 +42,7 @@ class RemoveReadAuditTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $date = date('Y-m-d', strtotime('-1 year'));
 

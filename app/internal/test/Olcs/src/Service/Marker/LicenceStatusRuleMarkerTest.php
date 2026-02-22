@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
@@ -23,12 +25,12 @@ class LicenceStatusRuleMarkerTest extends TestCase
         $this->sut = new \Olcs\Service\Marker\LicenceStatusRuleMarker();
     }
 
-    public function testCanRenderWithNoData()
+    public function testCanRenderWithNoData(): void
     {
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderNotValid()
+    public function testCanRenderNotValid(): void
     {
         $data = [
             'licence' => [
@@ -41,7 +43,7 @@ class LicenceStatusRuleMarkerTest extends TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderRulesWrongStatus()
+    public function testCanRenderRulesWrongStatus(): void
     {
         $data = [
             'licence' => [
@@ -60,7 +62,7 @@ class LicenceStatusRuleMarkerTest extends TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderNoRules()
+    public function testCanRenderNoRules(): void
     {
         $data = [
             'licence' => [
@@ -83,7 +85,7 @@ class LicenceStatusRuleMarkerTest extends TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRender()
+    public function testCanRender(): void
     {
         $data = [
             'licence' => [
@@ -106,7 +108,7 @@ class LicenceStatusRuleMarkerTest extends TestCase
         $this->assertTrue($this->sut->canRender());
     }
 
-    public function testRenderCurtailedWithEndDate()
+    public function testRenderCurtailedWithEndDate(): void
     {
         $data = [
             'licence' => [
@@ -149,7 +151,7 @@ class LicenceStatusRuleMarkerTest extends TestCase
         $this->assertSame('HTML1', $this->sut->render());
     }
 
-    public function testRenderRevokedWithoutEndDate()
+    public function testRenderRevokedWithoutEndDate(): void
     {
         $data = [
             'licence' => [
@@ -192,7 +194,7 @@ class LicenceStatusRuleMarkerTest extends TestCase
         $this->assertSame('HTML1', $this->sut->render());
     }
 
-    public function testRenderRevokedWithStartProcessedDate()
+    public function testRenderRevokedWithStartProcessedDate(): void
     {
         $data = [
             'licence' => [

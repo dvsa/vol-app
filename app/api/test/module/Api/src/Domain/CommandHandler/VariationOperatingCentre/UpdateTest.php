@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\VariationOperatingCentre;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -35,14 +37,15 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $applicationId = 100;
         $data = [
@@ -83,7 +86,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandForbidden()
+    public function testHandleCommandForbidden(): void
     {
         $data = [
             'id' => 'A111',
@@ -107,7 +110,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandLicence()
+    public function testHandleCommandLicence(): void
     {
         $data = [
             'id' => 'L111',
@@ -149,7 +152,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandLicenceWithoutDeltas()
+    public function testHandleCommandLicenceWithoutDeltas(): void
     {
         $applicationId = 222;
         $data = [

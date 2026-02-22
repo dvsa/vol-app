@@ -22,7 +22,7 @@ use Doctrine\Common\Collections\Collection;
  * @ORM\MappedSuperclass
  * @ORM\Table(name="printer")
  */
-abstract class AbstractPrinter implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractPrinter implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Bus;
 
 use Dvsa\Olcs\Api\Entity\Bus\BusReg;
@@ -20,7 +22,7 @@ class BusRegOtherServiceEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $busReg = new BusReg();
         $serviceNo = 'foo';
@@ -29,7 +31,7 @@ class BusRegOtherServiceEntityTest extends EntityTester
         $this->assertEquals($serviceNo, $busRegOtherService->getServiceNo());
     }
 
-    public function testGetCalculatedValues()
+    public function testGetCalculatedValues(): void
     {
         $busRegOtherService = new Entity(new BusReg(), 'foo');
         $this->assertEquals($busRegOtherService->getCalculatedValues(), ['busReg' => null]);

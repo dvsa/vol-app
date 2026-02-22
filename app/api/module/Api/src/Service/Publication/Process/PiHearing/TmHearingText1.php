@@ -25,6 +25,7 @@ final class TmHearingText1 extends AbstractText1
      * @param ImmutableArrayObject $context
      * @return PublicationLink
      */
+    #[\Override]
     public function process(PublicationLink $publication, ImmutableArrayObject $context)
     {
         $hearingText = [];

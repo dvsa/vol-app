@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PermitsTest\Data\Mapper;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -51,10 +53,8 @@ class IrhpFeeTest extends TestCase
         $this->irhpFee->mapForFormOptions($data, $this->form);
     }
 
-    /**
-     * @dataProvider dpMapForFormOptionsOther
-     */
-    public function testMapForFormOptionsOther($isBilateral, $hasOutstandingFees): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpMapForFormOptionsOther')]
+    public function testMapForFormOptionsOther(bool $isBilateral, bool $hasOutstandingFees): void
     {
         $data = [
             'application' => [
@@ -74,7 +74,7 @@ class IrhpFeeTest extends TestCase
      *
      * @psalm-return list{list{false, false}, list{false, true}, list{true, true}}
      */
-    public function dpMapForFormOptionsOther(): array
+    public static function dpMapForFormOptionsOther(): array
     {
         return [
             [false, false],

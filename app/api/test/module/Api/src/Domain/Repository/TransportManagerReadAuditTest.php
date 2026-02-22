@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
@@ -13,7 +15,8 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TransportManagerReadAuditTest extends AbstractReadAuditTest
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
+class TransportManagerReadAuditTest extends AbstractReadAuditTestCase
 {
     /** @var TransportManagerReadAudit|m\MockInterface */
     protected $sut;
@@ -23,12 +26,12 @@ class TransportManagerReadAuditTest extends AbstractReadAuditTest
         $this->setUpSut(TransportManagerReadAudit::class, true);
     }
 
-    public function testFetchOneOrMore()
+    public function testFetchOneOrMore(): void
     {
         parent::commonTestFetchOneOrMore('transportManager');
     }
 
-    public function testFetchList()
+    public function testFetchList(): void
     {
         parent::commonTestFetchList(
             ReadTransportManager::create(['id' => 111]),
@@ -36,7 +39,7 @@ class TransportManagerReadAuditTest extends AbstractReadAuditTest
         );
     }
 
-    public function testDeleteOlderThan()
+    public function testDeleteOlderThan(): void
     {
         parent::commonTestDeleteOlderThan(TransportManagerReadAuditEntity::class);
     }

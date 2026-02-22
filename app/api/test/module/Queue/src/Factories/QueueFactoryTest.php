@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Queue\Factories;
 
 use Aws\Sqs\SqsClient;
@@ -33,7 +35,7 @@ class QueueFactoryTest extends TestCase
         $this->sm = $sm;
     }
 
-    public function testCreateService()
+    public function testCreateService(): void
     {
         $sqsClient = \Mockery::mock(SqsClient::class);
         // Mocks

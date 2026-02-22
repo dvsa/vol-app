@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Tm;
 
 use Dvsa\Olcs\Api\Entity\System\RefData;
@@ -22,7 +24,7 @@ class TmCaseDecisionEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $case = m::mock(CasesEntity::class);
         $decision = m::mock(RefData::class);
@@ -33,7 +35,7 @@ class TmCaseDecisionEntityTest extends EntityTester
         $this->assertSame($decision, $entity->getDecision());
     }
 
-    public function testCreateForReputeNotLost()
+    public function testCreateForReputeNotLost(): void
     {
         $data = [
             'case' => 11,
@@ -60,7 +62,7 @@ class TmCaseDecisionEntityTest extends EntityTester
         $this->assertEquals($data['reputeNotLostReason'], $entity->getReputeNotLostReason());
     }
 
-    public function testUpdateForReputeNotLost()
+    public function testUpdateForReputeNotLost(): void
     {
         $data = [
             'isMsi' => 'Y',
@@ -92,7 +94,7 @@ class TmCaseDecisionEntityTest extends EntityTester
         $this->assertEquals($data['reputeNotLostReason'], $entity->getReputeNotLostReason());
     }
 
-    public function testCreateForNoFurtherAction()
+    public function testCreateForNoFurtherAction(): void
     {
         $data = [
             'case' => 11,
@@ -119,7 +121,7 @@ class TmCaseDecisionEntityTest extends EntityTester
         $this->assertEquals($data['noFurtherActionReason'], $entity->getNoFurtherActionReason());
     }
 
-    public function testUpdateForNoFurtherAction()
+    public function testUpdateForNoFurtherAction(): void
     {
         $data = [
             'isMsi' => 'Y',
@@ -151,7 +153,7 @@ class TmCaseDecisionEntityTest extends EntityTester
         $this->assertEquals($data['noFurtherActionReason'], $entity->getNoFurtherActionReason());
     }
 
-    public function testCreateForDeclareUnfit()
+    public function testCreateForDeclareUnfit(): void
     {
         $unfitnessReason = m::mock(RefData::class)->makePartial();
         $unfitnessReason->setId('unfit');
@@ -192,7 +194,7 @@ class TmCaseDecisionEntityTest extends EntityTester
         $this->assertEquals($data['rehabMeasures'], $entity->getRehabMeasures());
     }
 
-    public function testUpdateForDeclareUnfit()
+    public function testUpdateForDeclareUnfit(): void
     {
         $unfitnessReason = m::mock(RefData::class)->makePartial();
         $unfitnessReason->setId('unfit');
@@ -238,7 +240,7 @@ class TmCaseDecisionEntityTest extends EntityTester
         $this->assertEquals($data['rehabMeasures'], $entity->getRehabMeasures());
     }
 
-    public function testUpdateForDeclareUnfitThrowsIncorrectNotifiedDateException()
+    public function testUpdateForDeclareUnfitThrowsIncorrectNotifiedDateException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -262,7 +264,7 @@ class TmCaseDecisionEntityTest extends EntityTester
         $entity->update($data);
     }
 
-    public function testUpdateForDeclareUnfitThrowsIncorrectUnfitnessEndDateException()
+    public function testUpdateForDeclareUnfitThrowsIncorrectUnfitnessEndDateException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

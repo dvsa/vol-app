@@ -8,7 +8,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Application\UpdateVehicleSize as Handler
 use Dvsa\Olcs\Transfer\Command\Application\UpdateVehicleSize as Command;
 use Mockery as m;
 
-class UpdateVehicleSizeTest extends AbstractUpdateApplicationTest
+class UpdateVehicleSizeTest extends AbstractUpdateApplicationTestCase
 {
     protected string $handlerClass = Handler::class;
     protected string $commandClass = Command::class;
@@ -24,6 +24,7 @@ class UpdateVehicleSizeTest extends AbstractUpdateApplicationTest
         'psvvs_small',
     ];
 
+    #[\Override]
     protected function setupApplication(): m\MockInterface&m\LegacyMockInterface
     {
         $application = parent::setupApplication();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Misc;
 
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsInternalPublications;
@@ -25,7 +27,7 @@ class IsInternalPublicationsTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsValidInternalPublications()
+    public function testIsValidInternalPublications(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -35,7 +37,7 @@ class IsInternalPublicationsTest extends AbstractHandlerTestCase
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsValidInternalPublicationsFail()
+    public function testIsValidInternalPublicationsFail(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);

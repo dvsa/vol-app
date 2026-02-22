@@ -34,6 +34,7 @@ class ConvictionsPenalties extends CommonConvictionsPenalties
      *
      * @return \Laminas\Form\Form
      */
+    #[\Override]
     protected function alterForm($form, array $params)
     {
         parent::alterForm($form, $params);

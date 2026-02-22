@@ -27,6 +27,7 @@ class ApplicationSafety extends Safety
      *
      * @return \Laminas\Form\FormInterface
      */
+    #[\Override]
     public function getForm()
     {
         $form = $this->formHelper->createForm('Lva\Safety');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Bilateral;
 
 use Dvsa\Olcs\Api\Entity\Generic\Answer;
@@ -52,16 +54,14 @@ class NoOfPermitsGeneratorTest extends MockeryTestCase
         $this->noOfPermitsGenerator = new NoOfPermitsGenerator($noOfPermitsFactory, $this->noOfPermitsTextFactory);
     }
 
-    /**
-     * @dataProvider dpGenerateOneTextbox
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerateOneTextbox')]
     public function testGenerateOneTextbox(
-        $permitUsageSelection,
-        $cabotageSelection,
-        $isAssociatedWithBilateralCabotageOnlyApplicationPathGroup,
-        $required,
-        $expectedText
-    ) {
+        mixed $permitUsageSelection,
+        mixed $cabotageSelection,
+        mixed $isAssociatedWithBilateralCabotageOnlyApplicationPathGroup,
+        mixed $required,
+        mixed $expectedText
+    ): void {
         $this->irhpPermitApplication->shouldReceive('getBilateralPermitUsageSelection')
             ->withNoArgs()
             ->andReturn($permitUsageSelection);
@@ -90,7 +90,7 @@ class NoOfPermitsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerateOneTextbox()
+    public static function dpGenerateOneTextbox(): array
     {
         return [
             'single, standard only, not associated with bilateral only application group' => [
@@ -186,10 +186,8 @@ class NoOfPermitsGeneratorTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpGenerateTwoTextboxes
-     */
-    public function testGenerateTwoTextboxes($permitUsageSelection, $required, $expectedText1, $expectedText2)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerateTwoTextboxes')]
+    public function testGenerateTwoTextboxes(mixed $permitUsageSelection, mixed $required, mixed $expectedText1, mixed $expectedText2): void
     {
         $this->irhpPermitApplication->shouldReceive('getBilateralPermitUsageSelection')
             ->withNoArgs()
@@ -239,7 +237,7 @@ class NoOfPermitsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerateTwoTextboxes()
+    public static function dpGenerateTwoTextboxes(): array
     {
         return [
             'single' => [

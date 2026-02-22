@@ -148,7 +148,7 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
      *
      * @param array          $data           Phone Contact data
      * @param ContactDetails $contactDetails Contact Details entity
-     * @param Licence $licence entity 
+     * @param Licence $licence entity
      *
      * @return void
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
@@ -195,7 +195,7 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
                 } elseif ($contact->getVersion() != $version) {
                     $result->addMessage('Phone contact ' . $phoneType . ' updated');
                     $result->setFlag('hasChanged', true);
-                    
+
                     // create Event History record
                     $this->eventHistoryCreator->create($contact, EventHistoryTypeEntity::EVENT_CODE_CHANGE_CORRESPONDENCE_ADDRESS, null, $licence);
                 }

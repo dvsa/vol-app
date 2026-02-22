@@ -21,6 +21,7 @@ class CanUploadEbsr extends AbstractDoesOwnEntity
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($entityId)
     {
         if ($entityId === null) {

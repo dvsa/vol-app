@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Bookmark;
 
 use Mockery as m;
@@ -37,14 +39,14 @@ class BusFeeTypeBundleTest extends QueryHandlerTestCase
     }
 
     /**
-     * @dataProvider handleQueryProvider
      *
      * @param int         $variationNumber
      * @param string      $feeType
      * @param bool        $isScotland
      * @param string|null $trafficAreaCode
      */
-    public function testHandleQuery($variationNumber, $feeType, $isScotland, $trafficAreaCode)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleQueryProvider')]
+    public function testHandleQuery(mixed $variationNumber, mixed $feeType, mixed $isScotland, mixed $trafficAreaCode): void
     {
         $receivedDate = '2017-12-25';
         $receivedDateTime = new \DateTime('2017-12-25');
@@ -97,7 +99,7 @@ class BusFeeTypeBundleTest extends QueryHandlerTestCase
      *
      * @return array
      */
-    public function handleQueryProvider()
+    public static function handleQueryProvider(): array
     {
         return [
             [0, FeeTypeEntity::FEE_TYPE_BUSAPP, true, TrafficAreaEntity::SCOTTISH_TRAFFIC_AREA_CODE],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Document;
 
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanDeleteDocumentWithId;
@@ -24,7 +26,7 @@ class CanDeleteDocumentWithIdTest extends AbstractHandlerTestCase
     /**
      * Valid if document can be accessed and deleted
      */
-    public function testIsValidIfCanAccessAndCanDelete()
+    public function testIsValidIfCanAccessAndCanDelete(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -39,7 +41,7 @@ class CanDeleteDocumentWithIdTest extends AbstractHandlerTestCase
     /**
      * Invalid if the document can be deleted, but cannot be accessed
      */
-    public function testIsValidIfCannotAccessAndCanDelete()
+    public function testIsValidIfCannotAccessAndCanDelete(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -54,7 +56,7 @@ class CanDeleteDocumentWithIdTest extends AbstractHandlerTestCase
     /**
      * Invalid if the document can be accessed, but cannot be deleted
      */
-    public function testIsValidIfCanAccessAndCannotDelete()
+    public function testIsValidIfCanAccessAndCannotDelete(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -69,7 +71,7 @@ class CanDeleteDocumentWithIdTest extends AbstractHandlerTestCase
     /**
      * Invalid if the document cannot be deleted and cannot be accessed
      */
-    public function testIsValidIfCannotAccessAndCannotDelete()
+    public function testIsValidIfCannotAccessAndCannotDelete(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);

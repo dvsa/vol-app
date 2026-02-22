@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Common;
 
 use Dvsa\Olcs\Api\Service\Permits\Bilateral\Common\ModifiedAnswerUpdater;
@@ -38,7 +40,7 @@ class ModifiedAnswerUpdaterTest extends MockeryTestCase
         );
     }
 
-    public function testUpdateAnswerChanged()
+    public function testUpdateAnswerChanged(): void
     {
         $newAnswer = 'new_answer';
 
@@ -53,10 +55,8 @@ class ModifiedAnswerUpdaterTest extends MockeryTestCase
         $this->modifiedAnswerUpdater->update($this->qaContext, 'old_answer', $newAnswer);
     }
 
-    /**
-     * @dataProvider dpUpdateOldAnswerNullOrAnswerNotChanged
-     */
-    public function testUpdateOldAnswerNullOrAnswerNotChanged($oldAnswer)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpUpdateOldAnswerNullOrAnswerNotChanged')]
+    public function testUpdateOldAnswerNullOrAnswerNotChanged(mixed $oldAnswer): void
     {
         $newAnswer = 'answer';
 
@@ -67,7 +67,7 @@ class ModifiedAnswerUpdaterTest extends MockeryTestCase
         $this->modifiedAnswerUpdater->update($this->qaContext, $oldAnswer, $newAnswer);
     }
 
-    public function dpUpdateOldAnswerNullOrAnswerNotChanged()
+    public static function dpUpdateOldAnswerNullOrAnswerNotChanged(): array
     {
         return [
             ['answer'],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Scoring;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class SuccessfulCandidatePermitsLoggerTest extends MockeryTestCase
 {
-    public function testLog()
+    public function testLog(): void
     {
         $candidatePermit1Id = 1;
         $candidatePermit1EmissionsCategory = RefData::EMISSIONS_CATEGORY_EURO6_REF;

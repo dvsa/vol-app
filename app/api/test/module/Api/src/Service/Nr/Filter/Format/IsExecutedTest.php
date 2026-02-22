@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Nr\Filter\Format;
 
 use Dvsa\Olcs\Api\Service\Nr\Filter\Format\IsExecuted;
@@ -14,11 +16,11 @@ class IsExecutedTest extends TestCase
     /**
      * Tests the filter
      *
-     * @dataProvider filterProvider
      * @param $input
      * @param $expectedOutput
      */
-    public function testFilter($input, $expectedOutput)
+    #[\PHPUnit\Framework\Attributes\DataProvider('filterProvider')]
+    public function testFilter(mixed $input, mixed $expectedOutput): void
     {
         $sut = new IsExecuted();
         $this->assertEquals($expectedOutput, $sut->filter($input));
@@ -27,7 +29,7 @@ class IsExecutedTest extends TestCase
     /**
      * data provider for testFilterProvider
      */
-    public function filterProvider()
+    public static function filterProvider(): array
     {
         $sut = new IsExecuted();
 

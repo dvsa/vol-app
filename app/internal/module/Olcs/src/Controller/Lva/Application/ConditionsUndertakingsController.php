@@ -34,8 +34,6 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
     protected $lva = 'application';
     protected string $location = 'internal';
 
-    protected StringHelperService $stringHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -55,13 +53,11 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
         FlashMessengerHelperService $flashMessengerHelper,
         FormServiceManager $formServiceManager,
         TableFactory $tableFactory,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         ApplicationConditionsUndertakingsAdapter $lvaAdapter,
         protected RestrictionHelperService $restrictionHelper,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,
@@ -78,6 +74,7 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
      *
      * @return array
      */
+    #[\Override]
     protected function getRenderVariables()
     {
         return ['title' => null];

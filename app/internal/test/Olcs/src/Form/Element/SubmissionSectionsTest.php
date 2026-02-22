@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * SubmissionSections Element Tests
  *
@@ -19,7 +21,7 @@ use Mockery as m;
  */
 class SubmissionSectionsTest extends TestCase
 {
-    public function testGetInputSpecification()
+    public function testGetInputSpecification(): void
     {
         $sut = new SubmissionSections();
         $this->assertIsArray($sut->getInputSpecification());
@@ -27,10 +29,8 @@ class SubmissionSectionsTest extends TestCase
         $this->assertArrayHasKey('filters', $sut->getInputSpecification());
     }
 
-    /**
-     * @dataProvider getSubmissionSectionsProvider
-     */
-    public function testSetValue($submissionType, $submissionTypeSubmit, $sections)
+    #[\PHPUnit\Framework\Attributes\DataProvider('getSubmissionSectionsProvider')]
+    public function testSetValue(mixed $submissionType, mixed $submissionTypeSubmit, mixed $sections): void
     {
         $data = [
             'submissionType' => $submissionType,
@@ -60,7 +60,7 @@ class SubmissionSectionsTest extends TestCase
     /**
      * Tests prepare submissionSections element for Non-TM
      */
-    public function testPrepareElementNonTm()
+    public function testPrepareElementNonTm(): void
     {
 
         $name = 'test';
@@ -115,7 +115,7 @@ class SubmissionSectionsTest extends TestCase
     /**
      * Tests prepare submissionSections element for TM
      */
-    public function testPrepareElementForTm()
+    public function testPrepareElementForTm(): void
     {
         $name = 'test';
         $transportManagerId = 3;
@@ -166,7 +166,7 @@ class SubmissionSectionsTest extends TestCase
         $this->assertNotEmpty($sut->getSubmissionType());
     }
 
-    public function getSubmissionSectionsProvider()
+    public static function getSubmissionSectionsProvider(): array
     {
         return [
             [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Confirm printing
  *
@@ -35,7 +37,7 @@ class ConfirmPrintingTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWithAssigningNumber()
+    public function testHandleCommandWithAssigningNumber(): void
     {
         $niFlag = 'N';
         $licenceType = 'ltyp_r';
@@ -105,7 +107,7 @@ class ConfirmPrintingTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithSetPrintingOff()
+    public function testHandleCommandWithSetPrintingOff(): void
     {
         $niFlag = 'N';
         $licenceType = 'ltyp_r';
@@ -158,7 +160,7 @@ class ConfirmPrintingTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithException()
+    public function testHandleCommandWithException(): void
     {
         $this->expectException(RuntimeException::class);
 

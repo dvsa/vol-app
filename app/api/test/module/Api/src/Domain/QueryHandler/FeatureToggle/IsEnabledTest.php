@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\FeatureToggle;
 
 use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
@@ -27,7 +29,7 @@ class IsEnabledTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWithAllEnabled()
+    public function testHandleCommandWithAllEnabled(): void
     {
         $this->mockedSmServices[ToggleService::class]
             ->shouldReceive('isEnabled')
@@ -44,7 +46,7 @@ class IsEnabledTest extends QueryHandlerTestCase
         $this->assertEquals(true, $this->sut->handleQuery($this->qry)['isEnabled']);
     }
 
-    public function testHandleCommandWithLastOneDisabled()
+    public function testHandleCommandWithLastOneDisabled(): void
     {
         $this->mockedSmServices[ToggleService::class]
             ->shouldReceive('isEnabled')
@@ -61,7 +63,7 @@ class IsEnabledTest extends QueryHandlerTestCase
         $this->assertEquals(false, $this->sut->handleQuery($this->qry)['isEnabled']);
     }
 
-    public function testHandleCommandWithFirstDisabled()
+    public function testHandleCommandWithFirstDisabled(): void
     {
         $this->mockedSmServices[ToggleService::class]
             ->shouldReceive('isEnabled')

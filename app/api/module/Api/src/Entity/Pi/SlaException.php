@@ -31,6 +31,7 @@ class SlaException extends AbstractSlaException
      *
      * @return int
      */
+    #[\Override]
     public function getId()
     {
         return $this->id;
@@ -67,7 +68,8 @@ class SlaException extends AbstractSlaException
      *
      * @return string
      */
-    public function __toString()
+    #[\Override]
+    public function __toString(): string
     {
         return $this->getSlaDescription() . ' - ' . $this->getSlaExceptionDescription();
     }

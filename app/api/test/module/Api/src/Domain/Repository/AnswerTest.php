@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\NoResultException;
@@ -21,7 +23,7 @@ class AnswerTest extends RepositoryTestCase
         $this->setUpSut(Answer::class);
     }
 
-    public function testFetchByQuestionIdAndEntityTypeAndId()
+    public function testFetchByQuestionIdAndEntityTypeAndId(): void
     {
         $questionId = 47;
         $entityType = 'entityTypeName';
@@ -69,7 +71,7 @@ class AnswerTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchByQuestionIdAndEntityTypeAndIdNotFound()
+    public function testFetchByQuestionIdAndEntityTypeAndIdNotFound(): void
     {
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage('Answer not found');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Nysiis;
 
 use Dvsa\Olcs\Api\Domain\Exception\NysiisException;
@@ -19,9 +21,8 @@ class NysiisRestClientTest extends MockeryTestCase
 {
     public function setUp(): void
     {
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
 
         parent::setUp();
@@ -31,10 +32,9 @@ class NysiisRestClientTest extends MockeryTestCase
      * tests makeRequest
      *
      * @param $outputJson
-     *
-     * @dataProvider makeRequestProvider
      */
-    public function testMakeRequest($outputJson)
+    #[\PHPUnit\Framework\Attributes\DataProvider('makeRequestProvider')]
+    public function testMakeRequest(mixed $outputJson): void
     {
         $volFirstName = 'vol first name';
         $volFamilyName = 'vol family name';
@@ -62,7 +62,7 @@ class NysiisRestClientTest extends MockeryTestCase
     /**
      * data provider for makeRequest
      */
-    public function makeRequestProvider()
+    public static function makeRequestProvider(): array
     {
         return [
             ['38{"nysiisFirstName":"nysiis first name","nysiisFamilyName":"nysiis family name"}0'],
@@ -74,10 +74,9 @@ class NysiisRestClientTest extends MockeryTestCase
     /**
      * @param $response
      * @param $errorMessage
-     *
-     * @dataProvider invalidResponseProvider
      */
-    public function testMakeRequestInvalidResponse($response, $errorMessage)
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidResponseProvider')]
+    public function testMakeRequestInvalidResponse(mixed $response, mixed $errorMessage): void
     {
         $volFirstName = 'vol first name';
         $volFamilyName = 'vol family name';
@@ -96,7 +95,7 @@ class NysiisRestClientTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function invalidResponseProvider()
+    public static function invalidResponseProvider(): array
     {
         $invalidResponse1 = new HttpResponse();
         $invalidResponse1->setStatusCode(400);
@@ -117,7 +116,7 @@ class NysiisRestClientTest extends MockeryTestCase
      * @param $inputJson
      * @return m\MockInterface
      */
-    public function basicRestClient($inputJson)
+    public function basicRestClient(mixed $inputJson): mixed
     {
         $restClient = m::mock(RestClient::class);
         $restClient->shouldReceive('setEncType')->with('application/json; charset=UTF-8')->once();

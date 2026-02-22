@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Close Submission Test
  *
@@ -32,7 +34,7 @@ class CloseSubmissionTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandCloseableSubmission()
+    public function testHandleCommandCloseableSubmission(): void
     {
         $command = Cmd::create(
             [
@@ -67,7 +69,7 @@ class CloseSubmissionTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf('DateTime', $savedSubmission->getClosedDate());
     }
 
-    public function testHandleCommandNotCloseableSubmission()
+    public function testHandleCommandNotCloseableSubmission(): void
     {
         $command = Cmd::create(
             [

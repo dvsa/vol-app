@@ -109,6 +109,7 @@ class PeopleController extends AbstractController
      *
      * @return array|Response|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $adapter = $this->getVariationPeopleAdapter();

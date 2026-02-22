@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Permits\ReadyToPrintRangeType;
@@ -18,7 +20,7 @@ class ReadyToPrintRangeTypeTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $irhpPermitStockId = 100;
         $irhpPermitRangeTypes = [

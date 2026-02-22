@@ -16,9 +16,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\Lva\SectionAccessService
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Lva\SectionAccessService::class)]
 class SectionAccessServiceTest extends MockeryTestCase
 {
     /**
@@ -81,7 +79,7 @@ class SectionAccessServiceTest extends MockeryTestCase
             ->andReturn($sections);
     }
 
-    public function testGetAccessibleSectionsApplication()
+    public function testGetAccessibleSectionsApplication(): void
     {
         /** @var RefData|m\MockInterface $goodsOrPsv */
         $goodsOrPsv = m::mock(RefData::class)->makePartial();
@@ -145,7 +143,7 @@ class SectionAccessServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $sections);
     }
 
-    public function testGetAccessibleSectionsVariation()
+    public function testGetAccessibleSectionsVariation(): void
     {
         /** @var ApplicationCompletion $appCompletion */
         $appCompletion = m::mock(ApplicationCompletion::class);
@@ -216,7 +214,7 @@ class SectionAccessServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $sections);
     }
 
-    public function testGetAccessibleSectionsForLicence()
+    public function testGetAccessibleSectionsForLicence(): void
     {
         /** @var Licence $mockLic */
         $mockLic = m::mock(Licence::class);
@@ -234,7 +232,7 @@ class SectionAccessServiceTest extends MockeryTestCase
         static::assertEquals('EXPECTED', $sut->getAccessibleSectionsForLicence($mockLic));
     }
 
-    public function testGetAccessibleSectionsForLicenceContinuation()
+    public function testGetAccessibleSectionsForLicenceContinuation(): void
     {
         /** @var Licence $mockLic */
         $mockLic = m::mock(Licence::class);
@@ -255,7 +253,7 @@ class SectionAccessServiceTest extends MockeryTestCase
     /**
      * Helper method to DRY up the test
      */
-    private function setSharedMockRestrictionHelperExpectations($access)
+    private function setSharedMockRestrictionHelperExpectations(mixed $access): void
     {
         $this->mockRestrictionHelper->shouldReceive('isRestrictionSatisfied')
             ->with(['access'], $access, 'has_access')

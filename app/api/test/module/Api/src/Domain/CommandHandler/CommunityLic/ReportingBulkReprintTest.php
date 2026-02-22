@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\CommunityLic;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -24,7 +26,7 @@ class ReportingBulkReprintTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $documentIdentifier = 'documents/Report/Community_licence/2019/02/csvFilename.csv';
         $userId = 491;

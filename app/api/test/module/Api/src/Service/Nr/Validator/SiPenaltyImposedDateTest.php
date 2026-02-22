@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Nr\Validator;
 
 use Dvsa\Olcs\Api\Service\Nr\Validator\SiPenaltyImposedDate;
@@ -12,12 +14,12 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 class SiPenaltyImposedDateTest extends TestCase
 {
     /**
-     * @dataProvider provideIsValid
      * @param $imposedErrus
      * @param $valid
      * @param string $error
      */
-    public function testIsValid($imposedErrus, $valid, $error = '')
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIsValid')]
+    public function testIsValid(mixed $imposedErrus, mixed $valid, string $error = ''): void
     {
         $value = ['imposedErrus' => [0 => $imposedErrus]];
 
@@ -31,7 +33,7 @@ class SiPenaltyImposedDateTest extends TestCase
         }
     }
 
-    public function provideIsValid()
+    public static function provideIsValid(): array
     {
         return [
             [

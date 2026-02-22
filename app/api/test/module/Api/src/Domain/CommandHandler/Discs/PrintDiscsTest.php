@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Discs;
 
 use Dvsa\Olcs\Api\Domain\Command\Document\GenerateAndStore;
@@ -39,7 +41,7 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $startNumber = 1;
         $userId = 2;
@@ -104,7 +106,7 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    protected function getDiscs()
+    protected function getDiscs(): mixed
     {
         $discs = [];
         for ($i = 0; $i <= $this->batchSize +  2; $i++) {
@@ -113,7 +115,7 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
         return $discs;
     }
 
-    protected function getKnownValues($startNumber)
+    protected function getKnownValues(mixed $startNumber): mixed
     {
         $knownValues = [
             'Disc_List' => []

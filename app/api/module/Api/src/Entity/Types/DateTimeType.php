@@ -24,6 +24,7 @@ class DateTimeType extends DoctrineDateTimeType
      * @return \DateTime|string|null
      * @throws ConversionException
      */
+    #[\Override]
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if ($value === null) {
@@ -62,6 +63,7 @@ class DateTimeType extends DoctrineDateTimeType
      *
      * @return null|string
      */
+    #[\Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         if ($value === null) {

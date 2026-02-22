@@ -319,6 +319,7 @@ class CognitoAdapter extends AbstractAdapter
     /**
      * @return mixed|string
      */
+    #[\Override]
     public function getIdentity()
     {
         $identity = parent::getIdentity();

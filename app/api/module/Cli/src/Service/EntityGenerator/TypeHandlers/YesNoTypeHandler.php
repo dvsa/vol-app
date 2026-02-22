@@ -18,17 +18,17 @@ class YesNoTypeHandler extends AbstractTypeHandler
         // Check if a FieldConfig object was passed in config array
         if (isset($config['fieldConfig']) && $config['fieldConfig'] instanceof FieldConfig) {
             $fieldConfig = $config['fieldConfig'];
-            return $fieldConfig->type === CustomFieldType::YESNO 
+            return $fieldConfig->type === CustomFieldType::YESNO
                 || $fieldConfig->type === CustomFieldType::YESNO_NULL;
         }
-        
+
         // Legacy support: Check if config is passed as array with column name as key
         $columnConfig = $config[$column->getName()] ?? null;
-        
+
         if ($columnConfig !== null) {
             // Handle both FieldConfig object and array formats
             if ($columnConfig instanceof FieldConfig) {
-                return $columnConfig->type === CustomFieldType::YESNO 
+                return $columnConfig->type === CustomFieldType::YESNO
                     || $columnConfig->type === CustomFieldType::YESNO_NULL;
             } elseif (is_array($columnConfig) && isset($columnConfig['type'])) {
                 $type = $columnConfig['type'];
@@ -47,7 +47,7 @@ class YesNoTypeHandler extends AbstractTypeHandler
     public function supportsWithConfig(ColumnMetadata $column, FieldConfig|null $fieldConfig = null): bool
     {
         if ($fieldConfig?->type !== null) {
-            return $fieldConfig->type === CustomFieldType::YESNO 
+            return $fieldConfig->type === CustomFieldType::YESNO
                 || $fieldConfig->type === CustomFieldType::YESNO_NULL;
         }
 
@@ -57,14 +57,14 @@ class YesNoTypeHandler extends AbstractTypeHandler
     public function generateAnnotation(ColumnMetadata $column, array $config = []): string
     {
         // Determine if this is yesno or yesnonull
-        $fieldConfig = isset($config[$column->getName()]) 
-            ? FieldConfig::fromArray($config[$column->getName()]) 
+        $fieldConfig = isset($config[$column->getName()])
+            ? FieldConfig::fromArray($config[$column->getName()])
             : null;
 
         $doctrineType = $this->getDoctrineType($column, $fieldConfig);
 
         $options = [];
-        
+
         // Add nullable option
         if ($column->isNullable() || $doctrineType === 'yesnonull') {
             $options[] = 'nullable=true';
@@ -98,7 +98,7 @@ class YesNoTypeHandler extends AbstractTypeHandler
         $doctrineType = $fieldConfig?->type?->getDoctrineType() ?? 'yesno';
 
         $options = [];
-        
+
         // Add nullable option
         $isNullable = $column->isNullable() || $fieldConfig?->type === CustomFieldType::YESNO_NULL;
         $options[] = $isNullable ? 'nullable=true' : 'nullable=false';
@@ -124,6 +124,7 @@ class YesNoTypeHandler extends AbstractTypeHandler
     /**
      * Override to not remove _id suffix for regular columns
      */
+    #[\Override]
     protected function generatePropertyName(string $columnName): string
     {
         // For regular columns, just convert to camelCase without removing _id
@@ -138,7 +139,7 @@ class YesNoTypeHandler extends AbstractTypeHandler
         // YesNo type typically stores Y/N but we want to initialize with 0/1
         // Get the raw default value from the database
         $rawDefault = $column->getDefault();
-        
+
         // Generate the properly formatted default value for PHP code
         if ($rawDefault !== null) {
             // Database stores 0 or 1, so we just use that numeric value directly
@@ -157,6 +158,7 @@ class YesNoTypeHandler extends AbstractTypeHandler
         ];
     }
 
+    #[\Override]
     public function getPriority(): int
     {
         return 100; // High priority for custom types
@@ -168,11 +170,11 @@ class YesNoTypeHandler extends AbstractTypeHandler
     private function generateComment(ColumnMetadata $column, array $config): string
     {
         $comment = $column->getComment() ?: $this->generatePropertyName($column->getName());
-        
+
         // Clean up the comment (remove doctrine type hints)
         $comment = preg_replace('/\s*\(DC2Type:[^)]+\)\s*/', '', $comment);
-        $comment = trim($comment);
-        
+        $comment = trim((string) $comment);
+
         if (empty($comment)) {
             $comment = ucfirst(str_replace('_', ' ', $column->getName()));
         }

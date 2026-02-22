@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -13,7 +15,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\StandardConditions;
  */
 class StandardConditionsTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new StandardConditions();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -21,10 +23,8 @@ class StandardConditionsTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
-    public function testRender($niFlag, $licenceType, $vehicleType, $path)
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
+    public function testRender(mixed $niFlag, mixed $licenceType, mixed $vehicleType, mixed $path): void
     {
         $bookmark = $this->createPartialMock(StandardConditions::class, ['getSnippet']);
 
@@ -48,7 +48,7 @@ class StandardConditionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('snippet', $bookmark->render());
     }
 
-    public function renderDataProvider()
+    public static function renderDataProvider(): array
     {
         return [
             [

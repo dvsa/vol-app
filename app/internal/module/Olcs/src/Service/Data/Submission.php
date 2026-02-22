@@ -48,7 +48,7 @@ class Submission
      */
     public function extractSelectedSubmissionSectionsData($submission, $submissionSectionRefData, $submissionConfig)
     {
-        $selectedSectionsArray = json_decode($submission['dataSnapshot'], true);
+        $selectedSectionsArray = json_decode((string) $submission['dataSnapshot'], true);
 
         // add section description text from ref data
         foreach ($selectedSectionsArray as $sectionId => $selectedSectionData) {

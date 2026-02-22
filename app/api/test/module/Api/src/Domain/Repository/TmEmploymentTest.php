@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * TmEmploymentTest
  *
@@ -23,7 +25,7 @@ class TmEmploymentTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testBuildDefaultQuery()
+    public function testBuildDefaultQuery(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
 
@@ -41,7 +43,7 @@ class TmEmploymentTest extends RepositoryTestCase
         $this->assertSame('RESULT', $this->sut->fetchById(834));
     }
 
-    public function testFetchByTransportManager()
+    public function testFetchByTransportManager(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
 
@@ -61,7 +63,7 @@ class TmEmploymentTest extends RepositoryTestCase
         $this->assertSame('RESULT', $this->sut->fetchByTransportManager(534));
     }
 
-    public function testApplyListJoins()
+    public function testApplyListJoins(): void
     {
         $this->setUpSut(Repo::class, true);
 
@@ -75,7 +77,7 @@ class TmEmploymentTest extends RepositoryTestCase
         $this->sut->applyListJoins($mockQb);
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         $this->setUpSut(Repo::class, true);
 

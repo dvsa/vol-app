@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Letter\LetterInstanceIssue;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterInstanceIssue\UpdateContent as CommandHandler;
@@ -22,7 +24,7 @@ class UpdateContentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $issueId = 42;
         $editedContent = '{"blocks":[{"type":"paragraph","data":{"text":"Hello world"}}],"version":"2.28.2"}';

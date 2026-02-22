@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Is System User Test
  *
@@ -31,7 +33,7 @@ class IsSystemUserTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsSystemUser()
+    public function testIsSystemUser(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -44,7 +46,7 @@ class IsSystemUserTest extends AbstractHandlerTestCase
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsNonSystemUser()
+    public function testIsNonSystemUser(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\System\PublicHoliday;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\System\PublicHoliday\Delete as Handler;
@@ -22,7 +24,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 99999;
 

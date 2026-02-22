@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -7,7 +9,7 @@ use Olcs\Data\Mapper\TaskAllocationRule as Sut;
 
 class TaskAllocationRuleTest extends MockeryTestCase
 {
-    public function testMapFromResult()
+    public function testMapFromResult(): void
     {
         $data = [
             'id' => 1404,
@@ -37,7 +39,7 @@ class TaskAllocationRuleTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
-    public function testMapFromResultAlphaSplit()
+    public function testMapFromResultAlphaSplit(): void
     {
         $data = [
             'id' => 1404,
@@ -68,14 +70,14 @@ class TaskAllocationRuleTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
-    public function testMapFromResultNew()
+    public function testMapFromResultNew(): void
     {
         $data = [];
         $expected = [];
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $data = [
             'details' => [
@@ -105,7 +107,7 @@ class TaskAllocationRuleTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($data));
     }
 
-    public function testMapFromFormWithTeamId()
+    public function testMapFromFormWithTeamId(): void
     {
         $data = [
             'details' => [
@@ -135,7 +137,7 @@ class TaskAllocationRuleTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($data));
     }
 
-    public function testMapFromFormWithAlphaSplit()
+    public function testMapFromFormWithAlphaSplit(): void
     {
         $data = [
             'details' => [

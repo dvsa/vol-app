@@ -41,7 +41,7 @@ class TransportManagerFurniture implements
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'transportManager',
-            [$this, 'onTransportManager'],
+            $this->onTransportManager(...),
             $priority
         );
     }

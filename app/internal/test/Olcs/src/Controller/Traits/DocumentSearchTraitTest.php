@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Traits;
 
 use Common\Service\Helper\FormHelperService;
@@ -8,9 +10,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Data\DocumentSubCategory;
 
-/**
- * @covers \Olcs\Controller\Traits\DocumentSearchTrait
- */
+#[\PHPUnit\Framework\Attributes\CoversTrait(\Olcs\Controller\Traits\DocumentSearchTrait::class)]
 class DocumentSearchTraitTest extends MockeryTestCase
 {
     protected $mockFormHelper;
@@ -33,7 +33,7 @@ class DocumentSearchTraitTest extends MockeryTestCase
             ->shouldAllowMockingProtectedMethods(true);
     }
 
-    public function testUpdateSelectValueOptions()
+    public function testUpdateSelectValueOptions(): void
     {
         $options = [
             'exists1' => 'exists1_Val',
@@ -73,10 +73,8 @@ class DocumentSearchTraitTest extends MockeryTestCase
         $this->sut->traitUpdateSelectValueOptions($mockEl, $changeOptions);
     }
 
-    /**
-     * @dataProvider dpTestMapDocumentFilters
-     */
-    public function testMapDocumentFilters($extra, $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestMapDocumentFilters')]
+    public function testMapDocumentFilters(mixed $extra, mixed $expect): void
     {
         $mockRequest = m::mock(\Laminas\Http\Request::class);
         $mockRequest->shouldReceive('getQuery->toArray')->once()->andReturn(['query' => 'unit_Query']);
@@ -89,7 +87,7 @@ class DocumentSearchTraitTest extends MockeryTestCase
         );
     }
 
-    public function dpTestMapDocumentFilters()
+    public static function dpTestMapDocumentFilters(): array
     {
         $def = [
             'sort' => 'issuedDate',
@@ -140,7 +138,7 @@ class DocumentSearchTraitTest extends MockeryTestCase
         ];
     }
 
-    public function testGetDocumentForm()
+    public function testGetDocumentForm(): void
     {
         $expectCategory = 8777;
         $filters = [
@@ -183,7 +181,7 @@ class DocumentSearchTraitTest extends MockeryTestCase
         $this->sut->traitGetDocumentForm($filters);
     }
 
-    public function testGetDocumentsTable()
+    public function testGetDocumentsTable(): void
     {
         $mockDocumentListResponse = m::mock(\Common\Service\Cqrs\Response::class);
         $mockDocumentListResponse->shouldReceive('isOk')->with()->once()->andReturn(true);
@@ -205,7 +203,7 @@ class DocumentSearchTraitTest extends MockeryTestCase
         $this->assertSame('TABLE', $this->sut->getDocumentsTable($filters));
     }
 
-    public function testGetExtensionListNoValues()
+    public function testGetExtensionListNoValues(): void
     {
         $mockDocumentListResponse = m::mock(\Common\Service\Cqrs\Response::class);
         $mockDocumentListResponse->shouldReceive('isOk')->with()->once()->andReturn(true);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Validating Reprint Caller Test
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\CommunityLic\ValidatingReprintCaller;
  */
 class ValidatingReprintCallerTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = ValidatingReprintCaller::create(
             [

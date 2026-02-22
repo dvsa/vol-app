@@ -52,7 +52,7 @@ class DocumentGenerationController extends AbstractDocumentController
      */
     public function generateAction()
     {
-        $form = $this->generateForm('GenerateDocument', [$this, 'processGenerate']);
+        $form = $this->generateForm('GenerateDocument', $this->processGenerate(...));
 
         $this->loadScripts(['generate-document']);
 

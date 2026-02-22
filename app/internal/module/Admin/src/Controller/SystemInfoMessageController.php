@@ -50,6 +50,7 @@ class SystemInfoMessageController extends AbstractInternalController
 
     protected $tableViewTemplate = 'pages/system/info-messages';
 
+    #[\Override]
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'System messages');

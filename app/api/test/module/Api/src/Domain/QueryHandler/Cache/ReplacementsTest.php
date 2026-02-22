@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Cache;
 
 use Dvsa\Olcs\Api\Service\Translator\TranslationLoader;
@@ -32,7 +34,7 @@ class ReplacementsTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = ReplacementsQry::create([]);
         $this->assertEquals(['messages'], $this->sut->handleQuery($query));

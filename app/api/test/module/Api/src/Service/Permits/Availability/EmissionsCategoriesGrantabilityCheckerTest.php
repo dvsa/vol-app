@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Availability;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
@@ -17,10 +19,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class EmissionsCategoriesGrantabilityCheckerTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestIsGrantable
-     */
-    public function testIsGrantable($requiredEuro5, $availableEuro5, $requiredEuro6, $availableEuro6, $isGrantable)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsGrantable')]
+    public function testIsGrantable(mixed $requiredEuro5, mixed $availableEuro5, mixed $requiredEuro6, mixed $availableEuro6, mixed $isGrantable): void
     {
         $irhpPermitStockId = 57;
 
@@ -54,7 +54,7 @@ class EmissionsCategoriesGrantabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    public function dpTestIsGrantable()
+    public static function dpTestIsGrantable(): array
     {
         return [
             [5, 5, 5, 5, true],

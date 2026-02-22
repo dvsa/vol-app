@@ -31,6 +31,7 @@ class ApplicationAddresses extends CommonAddress
      *
      * @return void
      */
+    #[\Override]
     protected function alterForm(Form $form, array $params)
     {
         parent::alterForm($form, $params);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Naming Service Test
  *
@@ -55,7 +57,7 @@ class NamingServiceTest extends MockeryTestCase
         $this->sut->__invoke($sm, NamingService::class);
     }
 
-    public function testInvokeFail()
+    public function testInvokeFail(): void
     {
         $this->expectException('\RuntimeException');
 
@@ -78,7 +80,7 @@ class NamingServiceTest extends MockeryTestCase
         $this->sut->__invoke($sm, NamingService::class);
     }
 
-    public function testGenerateName()
+    public function testGenerateName(): void
     {
         $date = new DateTime();
 
@@ -102,7 +104,7 @@ class NamingServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $name);
     }
 
-    public function testGenerateNameWithUnknown()
+    public function testGenerateNameWithUnknown(): void
     {
         $date = new DateTime();
 
@@ -118,7 +120,7 @@ class NamingServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $name);
     }
 
-    public function testGenerateNameWithEntity()
+    public function testGenerateNameWithEntity(): void
     {
         $date = new DateTime();
 

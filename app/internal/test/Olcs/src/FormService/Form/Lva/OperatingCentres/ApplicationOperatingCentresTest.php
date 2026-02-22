@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva\OperatingCentres;
 
 use Laminas\Form\ElementInterface;
@@ -67,7 +69,7 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
         $this->sut = new ApplicationOperatingCentres($this->mockFormHelper, m::mock(\LmcRbacMvc\Service\AuthorizationService::class), $this->tableBuilder, $fsm);
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         $params = [
             'operatingCentres' => [],
@@ -110,7 +112,7 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
         $this->assertSame($this->form, $form);
     }
 
-    protected function mockPopulateFormTable($data)
+    protected function mockPopulateFormTable(mixed $data): m\MockInterface
     {
         $columns = [
             'noOfVehiclesRequired' => [

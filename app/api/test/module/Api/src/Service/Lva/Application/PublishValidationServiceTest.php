@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Lva\Application;
 
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
@@ -36,7 +38,7 @@ class PublishValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestC
         $this->sut = (new PublishValidationService())->__invoke($sm, PublishValidationService::class);
     }
 
-    public function testValidate()
+    public function testValidate(): void
     {
         /* @var $application ApplicationEntity  */
         $application = m::mock(ApplicationEntity::class)->makePartial();
@@ -58,7 +60,7 @@ class PublishValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestC
         $this->assertEmpty($result);
     }
 
-    public function testValidateAllFail()
+    public function testValidateAllFail(): void
     {
         /* @var $application ApplicationEntity  */
         $application = m::mock(ApplicationEntity::class)->makePartial();

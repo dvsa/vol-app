@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Add Months Rounding Down Test
  *
@@ -28,9 +30,8 @@ class SlaCalculatorTest extends MockeryTestCase
     public $dateTimeProcessor;
     public function setUp(): void
     {
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
 
         $this->publicHolidayRepo = m::mock(PublicHolidayRepo::class);
@@ -43,7 +44,6 @@ class SlaCalculatorTest extends MockeryTestCase
     /**
      * Test the SLA date calculator given a set of params
      *
-     * @dataProvider slaDateProvider
      *
      * @param $date String date to start from
      * @param $days Integer offset days from $date
@@ -51,14 +51,15 @@ class SlaCalculatorTest extends MockeryTestCase
      * @param $publicHolidays Boolean if true, public holidays are taken into account
      * @param $expected String expected result
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('slaDateProvider')]
     public function testApplySla(
-        $date,
-        $days,
-        $weekends,
-        $publicHolidays,
-        $trafficArea,
-        $expected
-    ) {
+        mixed $date,
+        mixed $days,
+        mixed $weekends,
+        mixed $publicHolidays,
+        mixed $trafficArea,
+        mixed $expected
+    ): void {
         $date = new \DateTime($date);
 
         $this->publicHolidayRepo->shouldReceive('fetchBetweenByTa')
@@ -76,7 +77,7 @@ class SlaCalculatorTest extends MockeryTestCase
         $this->assertEquals($expected, $result->format('Y-m-d'));
     }
 
-    private function generateTa($trafficArea)
+    private function generateTa(mixed $trafficArea): mixed
     {
         $ta = m::mock(TrafficArea::class)->makePartial();
         $ta->setId($trafficArea);
@@ -84,7 +85,7 @@ class SlaCalculatorTest extends MockeryTestCase
         return $ta;
     }
 
-    private function generateSla($days, $weekends, $publicHolidays)
+    private function generateSla(mixed $days, mixed $weekends, mixed $publicHolidays): mixed
     {
         $sla = new Sla();
         $sla->setDays($days);
@@ -94,7 +95,7 @@ class SlaCalculatorTest extends MockeryTestCase
         return $sla;
     }
 
-    public function slaDateProvider()
+    public static function slaDateProvider(): array
     {
         return [
             ['2015-12-18', -35, true, false, 'B', '2015-10-30'],
@@ -125,7 +126,7 @@ class SlaCalculatorTest extends MockeryTestCase
      * @param $trafficArea
      * @return array
      */
-    private function generateSelectPublicHolidaysArray($startDate, $endDate)
+    private function generateSelectPublicHolidaysArray(mixed $startDate, mixed $endDate): mixed
     {
         $publicHolidays = $this->getAllPublicHolidays();
         $returnHolidays = [];
@@ -144,7 +145,7 @@ class SlaCalculatorTest extends MockeryTestCase
      *
      * @return array
      */
-    private function getAllPublicHolidays()
+    private function getAllPublicHolidays(): array
     {
         return [
             // all public holidays for England 2015-16

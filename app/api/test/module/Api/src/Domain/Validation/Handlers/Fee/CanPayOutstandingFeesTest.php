@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Fee;
 
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
@@ -25,12 +27,12 @@ class CanPayOutstandingFeesTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider dataProvider
      *
      * @param $expected
      * @param $isValid
      */
-    public function testIsValidOrganisation($expected, $isValid)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
+    public function testIsValidOrganisation(mixed $expected, mixed $isValid): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -42,12 +44,12 @@ class CanPayOutstandingFeesTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider dataProvider
      *
      * @param $expected
      * @param $isValid
      */
-    public function testIsValidApplication($expected, $isValid)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
+    public function testIsValidApplication(mixed $expected, mixed $isValid): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -60,12 +62,12 @@ class CanPayOutstandingFeesTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider dataProvider
      *
      * @param $expected
      * @param $isValid
      */
-    public function testIsValidIrhpApplication($expected, $isValid)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
+    public function testIsValidIrhpApplication(mixed $expected, mixed $isValid): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -79,12 +81,12 @@ class CanPayOutstandingFeesTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider dataProvider
      *
      * @param $expected
      * @param $isValid
      */
-    public function testIsValidFees($expected, $isValid)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
+    public function testIsValidFees(mixed $expected, mixed $isValid): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -99,7 +101,7 @@ class CanPayOutstandingFeesTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function testIsValidFeesMixed()
+    public function testIsValidFeesMixed(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -115,7 +117,7 @@ class CanPayOutstandingFeesTest extends AbstractHandlerTestCase
         $this->assertSame(false, $this->sut->isValid($dto));
     }
 
-    public function testIsValidNoContext()
+    public function testIsValidNoContext(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -127,7 +129,7 @@ class CanPayOutstandingFeesTest extends AbstractHandlerTestCase
         $this->assertSame(false, $this->sut->isValid($dto));
     }
 
-    public function dataProvider()
+    public static function dataProvider(): array
     {
         return [
             [true, true],

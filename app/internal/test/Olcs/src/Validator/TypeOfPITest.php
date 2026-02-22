@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Validator;
 
 use Olcs\Validator\TypeOfPI;
@@ -11,18 +13,18 @@ use Olcs\Validator\TypeOfPI;
 class TypeOfPITest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @dataProvider provideIsValid
      * @param $expected
      * @param $value
      */
-    public function testIsValid($expected, $value)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIsValid')]
+    public function testIsValid(mixed $expected, mixed $value): void
     {
         $sut = new TypeOfPI();
 
         $this->assertEquals($expected, $sut->isValid($value));
     }
 
-    public function provideIsValid()
+    public static function provideIsValid(): array
     {
         return [
             [true, ['test1']],

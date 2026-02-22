@@ -28,9 +28,9 @@ class RelationshipTypeHandler extends AbstractTypeHandler
         if ($this->currentTable === null) {
             return false;
         }
-        
+
         $columnName = $column->getName();
-        
+
         // Check if this column is part of a foreign key constraint
         foreach ($this->currentTable->getForeignKeys() as $foreignKey) {
             $localColumns = is_array($foreignKey) ? ($foreignKey['local_columns'] ?? []) : $foreignKey->getLocalColumns();
@@ -38,7 +38,7 @@ class RelationshipTypeHandler extends AbstractTypeHandler
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -46,11 +46,11 @@ class RelationshipTypeHandler extends AbstractTypeHandler
     {
         $targetEntity = $this->getTargetEntity($column, $config);
         $referencedColumn = $this->getReferencedColumn($column, $config);
-        
+
         // Determine if this should be OneToOne based on unique constraint
         $isOneToOne = $this->isOneToOneRelationship($column);
         $relationType = $isOneToOne ? 'OneToOne' : 'ManyToOne';
-        
+
         $options = [
             'targetEntity="' . $targetEntity . '"',
             'fetch="LAZY"'
@@ -70,13 +70,13 @@ class RelationshipTypeHandler extends AbstractTypeHandler
         if (!empty($cascadeOptions)) {
             $options[] = 'cascade={' . implode(', ', array_map(fn($c) => '"' . $c . '"', $cascadeOptions)) . '}';
         }
-        
+
         // Check for orphanRemoval
         $orphanRemoval = $this->getOrphanRemoval($column, $config);
         if ($orphanRemoval) {
             $options[] = 'orphanRemoval=true';
         }
-        
+
         // Check for indexBy
         $indexBy = $this->getIndexBy($column, $config);
         if ($indexBy !== null) {
@@ -88,21 +88,21 @@ class RelationshipTypeHandler extends AbstractTypeHandler
             $relationType,
             implode(', ', $options)
         )];
-        
+
         $annotations[] = sprintf("@ORM\JoinColumn(%s)", implode(', ', $joinOptions));
-        
+
         // Add OrderBy annotation if specified (only for collections)
         if ($relationType === 'OneToMany' || $relationType === 'ManyToMany') {
             $orderBy = $this->getOrderBy($column, $config);
             if (!empty($orderBy)) {
                 $orderByPairs = [];
                 foreach ($orderBy as $field => $direction) {
-                    $orderByPairs[] = sprintf('"%s" = "%s"', $field, strtoupper($direction));
+                    $orderByPairs[] = sprintf('"%s" = "%s"', $field, strtoupper((string) $direction));
                 }
                 $annotations[] = sprintf('@ORM\OrderBy({%s})', implode(', ', $orderByPairs));
             }
         }
-        
+
         return implode("\n     * ", $annotations);
     }
 
@@ -116,7 +116,7 @@ class RelationshipTypeHandler extends AbstractTypeHandler
         }
 
         $columnName = $column->getName();
-        
+
         // Check if this column is part of a unique constraint (excluding composite constraints)
         foreach ($this->currentTable->getUniqueConstraints() as $constraint) {
             $columns = $constraint['columns'] ?? [];
@@ -144,6 +144,7 @@ class RelationshipTypeHandler extends AbstractTypeHandler
         ];
     }
 
+    #[\Override]
     public function getPriority(): int
     {
         return 50; // Medium priority
@@ -155,7 +156,7 @@ class RelationshipTypeHandler extends AbstractTypeHandler
     private function getTargetEntity(ColumnMetadata $column, array $config): string
     {
         $columnName = $column->getName();
-        
+
         // Check if there's a custom mapping in config
         if (isset($config['targetEntity'][$columnName])) {
             return $config['targetEntity'][$columnName];
@@ -175,10 +176,10 @@ class RelationshipTypeHandler extends AbstractTypeHandler
                             // Convert table name to entity name
                             $entityName = $this->tableNameToEntityName($foreignTableName);
                         }
-                        
+
                         // Check if there's a namespace mapping
                         $namespace = $this->getEntityNamespace($entityName, $config);
-                        
+
                         return $namespace . '\\' . $entityName;
                     }
                 }
@@ -188,15 +189,15 @@ class RelationshipTypeHandler extends AbstractTypeHandler
         // Try to derive from column name as fallback
         if (preg_match('/^(.+)_id$/', $columnName, $matches)) {
             $entityName = $this->columnNameToEntityName($matches[1]);
-            
+
             // Check if there's a namespace mapping
             $namespace = $this->getEntityNamespace($entityName, $config);
-            
+
             return $namespace . '\\' . $entityName;
         }
 
         // Fallback to RefData for unrecognized patterns
-        return 'Dvsa\\Olcs\\Api\\Entity\\System\\RefData';
+        return \Dvsa\Olcs\Api\Entity\System\RefData::class;
     }
 
     /**
@@ -204,13 +205,8 @@ class RelationshipTypeHandler extends AbstractTypeHandler
      */
     private function getReferencedColumn(ColumnMetadata $column, array $config): string
     {
-        // Check config for custom referenced column
-        if (isset($config['referencedColumn'][$column->getName()])) {
-            return $config['referencedColumn'][$column->getName()];
-        }
-
         // Default to 'id'
-        return 'id';
+        return $config['referencedColumn'][$column->getName()] ?? 'id';
     }
 
     /**
@@ -266,7 +262,7 @@ class RelationshipTypeHandler extends AbstractTypeHandler
     private function getEntityNamespace(string $entityName, array $config): string
     {
         $namespaces = $config['namespaces'] ?? [];
-        
+
         // The namespace config maps entity names to namespace folders
         if (isset($namespaces[$entityName])) {
             return 'Dvsa\\Olcs\\Api\\Entity\\' . $namespaces[$entityName];
@@ -282,7 +278,7 @@ class RelationshipTypeHandler extends AbstractTypeHandler
     private function generateComment(ColumnMetadata $column, array $config): string
     {
         $comment = $column->getComment();
-        
+
         if (empty($comment)) {
             $propertyName = $this->generatePropertyName($column->getName());
             $comment = ucfirst(str_replace(['-', '_'], ' ', $propertyName));

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CreateLicenceStatusRuleTest.php
  *
@@ -36,7 +38,8 @@ class CreateLicenceStatusRuleTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function initReferences()
+    #[\Override]
+    public function initReferences(): void
     {
         $this->references = [
             Licence::class => [
@@ -49,7 +52,7 @@ class CreateLicenceStatusRuleTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'licence' => 1,

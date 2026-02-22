@@ -94,6 +94,7 @@ final class DeleteDocument extends AbstractCommandHandler implements AuthAwareIn
 
         return $result;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

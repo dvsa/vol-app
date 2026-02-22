@@ -89,6 +89,7 @@ class SurrenderController extends AbstractInternalController implements
      * @return array|mixed
      */
 
+    #[\Override]
     public function onDispatch(MvcEvent $e)
     {
         $this->licenceId = (int)$this->params('licence');
@@ -103,6 +104,7 @@ class SurrenderController extends AbstractInternalController implements
      *
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $this->setupData();
@@ -216,6 +218,7 @@ class SurrenderController extends AbstractInternalController implements
         }
     }
 
+    #[\Override]
     public function alterTable($table, $data)
     {
         $tableName = $table->getAttributes()['name'];

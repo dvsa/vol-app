@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Bus Fee Test
  */
@@ -35,7 +37,8 @@ class CreateBusFeeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             FeeTypeEntity::FEE_TYPE_BUSVAR,
@@ -48,12 +51,12 @@ class CreateBusFeeTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider handleCommandProvider
      *
      * @param int $variationNumber
      * @param string $feeType
      */
-    public function testHandleCommand($variationNumber, $feeType)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
+    public function testHandleCommand(mixed $variationNumber, mixed $feeType): void
     {
         $busRegId = 111;
         $regNo = 12345;
@@ -135,7 +138,7 @@ class CreateBusFeeTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider(): array
     {
         return [
             [0, FeeTypeEntity::FEE_TYPE_BUSAPP],

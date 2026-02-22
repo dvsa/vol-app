@@ -15,6 +15,7 @@ namespace Dvsa\Olcs\Api\Domain\Validation\Handlers\Workshop\Application;
  */
 class Update extends Modify
 {
+    #[\Override]
     protected function getWorkshops($dto)
     {
         return [$this->getRepo('Workshop')->fetchById($dto->getId())];

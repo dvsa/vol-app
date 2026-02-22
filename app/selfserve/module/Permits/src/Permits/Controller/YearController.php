@@ -74,6 +74,7 @@ class YearController extends AbstractSelfserveController
      *
      * @return void
      */
+    #[\Override]
     public function retrieveData()
     {
         parent::retrieveData();
@@ -91,6 +92,7 @@ class YearController extends AbstractSelfserveController
      *
      * @return void
      */
+    #[\Override]
     public function mergeTemplateVars()
     {
         $this->templateVarsConfig['question']['backUriOptions'] = [
@@ -110,6 +112,7 @@ class YearController extends AbstractSelfserveController
      *
      * @return void
      */
+    #[\Override]
     public function handlePostCommand(array &$config, array $params)
     {
         if ($params['type'] == RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID && $params['year'] >= 2020) {

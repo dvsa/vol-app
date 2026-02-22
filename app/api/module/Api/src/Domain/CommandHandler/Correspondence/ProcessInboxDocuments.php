@@ -15,11 +15,11 @@ final class ProcessInboxDocuments extends AbstractCommandHandler implements Emai
 {
     use EmailAwareTrait;
 
-    public const EMAIL_TYPE_STANDARD = 'standard';
-    public const EMAIL_TYPE_CONTINUATION = 'continuation';
+    public const string EMAIL_TYPE_STANDARD = 'standard';
+    public const string EMAIL_TYPE_CONTINUATION = 'continuation';
 
-    public const MSG_SEND_REMINDER_EMAIL = 'Sending email reminder for licence %s to %s';
-    public const ERR_SEND_REMINDER = 'Error: Email reminder sending error for licence %s and org %s';
+    public const string MSG_SEND_REMINDER_EMAIL = 'Sending email reminder for licence %s to %s';
+    public const string ERR_SEND_REMINDER = 'Error: Email reminder sending error for licence %s and org %s';
 
     protected $repoServiceName = 'CorrespondenceInbox';
 

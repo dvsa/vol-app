@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Financial Standing Rate test
  *
@@ -27,7 +29,7 @@ class FinancialStandingRateTest extends RepositoryTestCase
         $this->setUpSut(RateRepo::class);
     }
 
-    public function testFetchRatesInEffect()
+    public function testFetchRatesInEffect(): void
     {
         $date = new \DateTime();
 
@@ -78,7 +80,7 @@ class FinancialStandingRateTest extends RepositoryTestCase
         $this->assertEquals('RESULT', $result);
     }
 
-    public function testFetchByCategoryTypeAndDate()
+    public function testFetchByCategoryTypeAndDate(): void
     {
         $qb = $this->createMockQb('BLAH');
 

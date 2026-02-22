@@ -46,14 +46,14 @@ class BusRegEntityTest extends EntityTester
     protected $entityClass = Entity::class;
 
     /**
-     * @dataProvider shouldCreateFeeProvider
      *
      * @param $receivedDate
      * @param $status
      * @param $fees
      * @param $expectedResult
      */
-    public function testShouldCreateFee($receivedDate, $status, $fees, $expectedResult)
+    #[\PHPUnit\Framework\Attributes\DataProvider('shouldCreateFeeProvider')]
+    public function testShouldCreateFee(mixed $receivedDate, mixed $status, mixed $fees, mixed $expectedResult): void
     {
         $statusRefData = new RefData($status);
         $entity = new Entity();
@@ -69,7 +69,7 @@ class BusRegEntityTest extends EntityTester
      *
      * @return array
      */
-    public function shouldCreateFeeProvider()
+    public static function shouldCreateFeeProvider(): array
     {
         $outstandingFee = m::mock(FeeEntity::class);
         $outstandingFee->shouldReceive('isPaid')->andReturn(false);
@@ -102,7 +102,7 @@ class BusRegEntityTest extends EntityTester
         ];
     }
 
-    private function getAssertionsForCanEditIsTrue()
+    private function getAssertionsForCanEditIsTrue(): void
     {
         $id = 15;
         $regNo = 12345;
@@ -119,7 +119,7 @@ class BusRegEntityTest extends EntityTester
         $this->entity->setLicence($licenceEntityMock);
     }
 
-    private function getAssertionsForCanEditIsFalseDueToVariation()
+    private function getAssertionsForCanEditIsFalseDueToVariation(): void
     {
         $id = 15;
         $otherBusId = 16;
@@ -143,10 +143,9 @@ class BusRegEntityTest extends EntityTester
      * @param bool   $isLatestVariation
      * @param string $status
      * @param bool   $expected
-     *
-     * @dataProvider isReadOnlyProvider
      */
-    public function testIsReadOnly($isLatestVariation, $status, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isReadOnlyProvider')]
+    public function testIsReadOnly(mixed $isLatestVariation, mixed $status, mixed $expected): void
     {
         $busRegStatus = new RefDataEntity($status);
 
@@ -163,7 +162,7 @@ class BusRegEntityTest extends EntityTester
      *
      * @return array
      */
-    public function isReadOnlyProvider()
+    public static function isReadOnlyProvider(): array
     {
         return [
             [false, Entity::STATUS_NEW, true],
@@ -192,10 +191,9 @@ class BusRegEntityTest extends EntityTester
      *
      * @param string $status
      * @param bool   $expected
-     *
-     * @dataProvider isCancellationProvider
      */
-    public function testIsCancellation($status, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isCancellationProvider')]
+    public function testIsCancellation(mixed $status, mixed $expected): void
     {
         $busRegStatus = new RefDataEntity($status);
 
@@ -209,7 +207,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function isCancellationProvider()
+    public static function isCancellationProvider(): array
     {
         return [
             [Entity::STATUS_NEW, false],
@@ -229,10 +227,9 @@ class BusRegEntityTest extends EntityTester
      *
      * @param string $status
      * @param bool   $expected
-     *
-     * @dataProvider dpIsCancelled
      */
-    public function testIsCancelled($status, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsCancelled')]
+    public function testIsCancelled(mixed $status, mixed $expected): void
     {
         $busRegStatus = new RefDataEntity($status);
 
@@ -246,7 +243,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function dpIsCancelled()
+    public static function dpIsCancelled(): array
     {
         return [
             [Entity::STATUS_NEW, false],
@@ -266,10 +263,9 @@ class BusRegEntityTest extends EntityTester
      *
      * @param string $isTxcApp
      * @param bool   $expected
-     *
-     * @dataProvider isFromEbsrProvider
      */
-    public function testIsFromEbsr($isTxcApp, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isFromEbsrProvider')]
+    public function testIsFromEbsr(mixed $isTxcApp, mixed $expected): void
     {
         $busReg = new Entity();
         $busReg->setIsTxcApp($isTxcApp);
@@ -282,7 +278,7 @@ class BusRegEntityTest extends EntityTester
      *
      * @return array
      */
-    public function isFromEbsrProvider()
+    public static function isFromEbsrProvider(): array
     {
         return [
             ['Y', true],
@@ -294,10 +290,9 @@ class BusRegEntityTest extends EntityTester
      * Tests whether bus reg is from a data refresh
      *
      * @param $isDataRefresh
-     *
-     * @dataProvider isEbsrRefreshProvider
      */
-    public function testIsEbsrRefresh($isDataRefresh)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isEbsrRefreshProvider')]
+    public function testIsEbsrRefresh(mixed $isDataRefresh): void
     {
         $ebsrSubmission = m::mock(EbsrSubmission::class);
         $ebsrSubmission->shouldReceive('isDataRefresh')->once()->andReturn($isDataRefresh);
@@ -313,7 +308,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function isEbsrRefreshProvider()
+    public static function isEbsrRefreshProvider(): array
     {
         return [
             [true],
@@ -326,10 +321,9 @@ class BusRegEntityTest extends EntityTester
      *
      * @param int  $noticePeriodId
      * @param bool $expected
-     *
-     * @dataProvider isScottishRulesProvider
      */
-    public function testIsScottishRules($noticePeriodId, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isScottishRulesProvider')]
+    public function testIsScottishRules(mixed $noticePeriodId, mixed $expected): void
     {
         $noticePeriod = new BusNoticePeriodEntity();
         $noticePeriod->setId($noticePeriodId);
@@ -344,7 +338,7 @@ class BusRegEntityTest extends EntityTester
      *
      * @return array
      */
-    public function isScottishRulesProvider()
+    public static function isScottishRulesProvider(): array
     {
         return [
             [BusNoticePeriodEntity::NOTICE_PERIOD_SCOTLAND, true],
@@ -352,7 +346,7 @@ class BusRegEntityTest extends EntityTester
         ];
     }
 
-    public function testIsVariation()
+    public function testIsVariation(): void
     {
         $busReg = new Entity();
 
@@ -372,7 +366,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * Tests calculated values
      */
-    public function testGetCalculatedValues()
+    public function testGetCalculatedValues(): void
     {
         $id = 15;
         $regNo = 12345;
@@ -408,7 +402,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * Tests calculated bundle values
      */
-    public function testGetCalculatedBundleValues()
+    public function testGetCalculatedBundleValues(): void
     {
         $bundledGetters = [
             'isLatestVariation',
@@ -446,51 +440,43 @@ class BusRegEntityTest extends EntityTester
     /**
      * Tests canDelete throws exception correctly
      */
-    public function testCanDeleteThrowsException()
+    public function testCanDeleteThrowsException(): void
     {
         $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanEditIsFalseDueToVariation();
         $this->entity->canDelete();
-
-        return true;
     }
 
     /**
      * Tests can delete doesn't throw exception when isVariation is true
      */
-    public function testCanDeleteTrue()
+    public function testCanDeleteTrue(): void
     {
         $this->getAssertionsForCanEditIsTrue();
         $this->assertEquals(true, $this->entity->canDelete());
-
-        return true;
     }
 
     /**
      * Tests updateStops throws exception correctly
      */
-    public function testUpdateStopsThrowsCanEditExceptionForLatestVariation()
+    public function testUpdateStopsThrowsCanEditExceptionForLatestVariation(): void
     {
         $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanEditIsFalseDueToVariation();
         $this->entity->updateStops(null, null, null, null, null, null, null, null, null);
-
-        return true;
     }
 
     /**
      * Tests updateQualitySchemes throws exception correctly
      */
-    public function testUpdateQualitySchemesThrowsCanEditExceptionForLatestVariation()
+    public function testUpdateQualitySchemesThrowsCanEditExceptionForLatestVariation(): void
     {
         $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanEditIsFalseDueToVariation();
         $this->entity->updateQualitySchemes(null, null, null, null, null);
-
-        return true;
     }
 
     /**
@@ -508,20 +494,18 @@ class BusRegEntityTest extends EntityTester
     /**
      * Tests updateTaAuthority throws exception correctly
      */
-    public function testUpdateTaAuthorityThrowsCanEditExceptionForLatestVariation()
+    public function testUpdateTaAuthorityThrowsCanEditExceptionForLatestVariation(): void
     {
         $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanEditIsFalseDueToVariation();
         $this->entity->updateTaAuthority(null);
-
-        return true;
     }
 
     /**
      * Tests updateStops
      */
-    public function testUpdateStops()
+    public function testUpdateStops(): void
     {
         $useAllStops = 'Y';
         $hasManoeuvre = 'N';
@@ -556,14 +540,12 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($notFixedStopDetail, $this->entity->getNotFixedStopDetail());
         $this->assertEquals($subsidised, $this->entity->getSubsidised());
         $this->assertEquals($subsidyDetail, $this->entity->getSubsidyDetail());
-
-        return true;
     }
 
     /**
      * tests updateQualitySchemes
      */
-    public function testUpdateQualitySchemes()
+    public function testUpdateQualitySchemes(): void
     {
         $isQualityPartnership = 'Y';
         $qualityPartnershipDetails = 'string';
@@ -586,14 +568,12 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($qualityPartnershipFacilitiesUsed, $this->entity->getQualityPartnershipFacilitiesUsed());
         $this->assertEquals($isQualityContract, $this->entity->getIsQualityContract());
         $this->assertEquals($qualityContractDetails, $this->entity->getQualityContractDetails());
-
-        return true;
     }
 
     /**
      * tests updateTaAuthority
      */
-    public function testUpdateTaAuthority()
+    public function testUpdateTaAuthority(): void
     {
         $stoppingArrangements = 'Stopping arrangements';
 
@@ -604,8 +584,6 @@ class BusRegEntityTest extends EntityTester
         );
 
         $this->assertEquals($stoppingArrangements, $this->entity->getStoppingArrangements());
-
-        return true;
     }
 
     public function testUpdateServiceDetails(): void
@@ -650,7 +628,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($busNoticePeriod, $this->entity->getBusNoticePeriod());
     }
 
-    public function testCreateNew()
+    public function testCreateNew(): void
     {
         $latestBusRouteNo = 3;
         $licNo = '123';
@@ -702,13 +680,12 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider createVariationProvider
      *
      * @param $statusId
-     *
      * @return bool
      */
-    public function testCreateVariation($statusId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('createVariationProvider')]
+    public function testCreateVariation(mixed $statusId): void
     {
         $id = 15;
         $regNo = 12345;
@@ -798,8 +775,6 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($busReg, $busReg->getOtherServices()->first()->getBusReg());
         $this->assertEquals('otherService1', $busReg->getOtherServices()->first()->getServiceNo());
         $this->assertEquals('otherService2', $busReg->getOtherServices()->last()->getServiceNo());
-
-        return true;
     }
 
     /**
@@ -807,7 +782,7 @@ class BusRegEntityTest extends EntityTester
      *
      * @return array
      */
-    public function createVariationProvider()
+    public static function createVariationProvider(): array
     {
         return [
             [Entity::STATUS_VAR],
@@ -818,7 +793,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * Tests updateServiceRegister
      */
-    public function testUpdateServiceRegister()
+    public function testUpdateServiceRegister(): void
     {
         $timetableAcceptable = 'Y';
         $mapSupplied = 'Y';
@@ -853,24 +828,20 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($timetableAcceptable, $this->entity->getTimetableAcceptable());
         $this->assertEquals($mapSupplied, $this->entity->getMapSupplied());
         $this->assertEquals($routeDescription, $this->entity->getRouteDescription());
-
-        return true;
     }
 
     /**
      * Tests updateServiceRegister throws exception correctly
      */
-    public function testUpdateServiceRegisterThrowsExceptionForLatestVariation()
+    public function testUpdateServiceRegisterThrowsExceptionForLatestVariation(): void
     {
         $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanEditIsFalseDueToVariation();
         $this->entity->updateServiceRegister(null, null, null, null, null, null, null, null, null);
-
-        return true;
     }
 
-    private function getAssertionsForCanMakeDecisionIsTrue()
+    private function getAssertionsForCanMakeDecisionIsTrue(): void
     {
         $id = 15;
         $regNo = 12345;
@@ -887,7 +858,7 @@ class BusRegEntityTest extends EntityTester
         $this->entity->setLicence($licenceEntityMock);
     }
 
-    private function getAssertionsForCanMakeDecisionIsFalse()
+    private function getAssertionsForCanMakeDecisionIsFalse(): void
     {
         $id = 15;
         $otherBusId = 16;
@@ -905,7 +876,7 @@ class BusRegEntityTest extends EntityTester
         $this->entity->setLicence($licenceEntityMock);
     }
 
-    public function testResetStatus()
+    public function testResetStatus(): void
     {
         $this->getAssertionsForCanMakeDecisionIsTrue();
 
@@ -928,17 +899,15 @@ class BusRegEntityTest extends EntityTester
     /**
      * Tests resetStatus throws exception correctly
      */
-    public function testResetStatusThrowsCanMakeDecisionException()
+    public function testResetStatusThrowsCanMakeDecisionException(): void
     {
         $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanMakeDecisionIsFalse();
-        $this->entity->resetStatus(null);
-
-        return true;
+        $this->entity->resetStatus();
     }
 
-    public function testCancelByAdmin()
+    public function testCancelByAdmin(): void
     {
         $this->getAssertionsForCanMakeDecisionIsTrue();
 
@@ -962,7 +931,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * Tests cancelByAdmin throws exception correctly
      */
-    public function testCancelByAdminThrowsCanMakeDecisionException()
+    public function testCancelByAdminThrowsCanMakeDecisionException(): void
     {
         $this->expectException(ForbiddenException::class);
 
@@ -972,14 +941,12 @@ class BusRegEntityTest extends EntityTester
         $status->setId(Entity::STATUS_ADMIN);
 
         $this->entity->cancelByAdmin($status, null);
-
-        return true;
     }
 
     /**
      * Tests cancelByAdmin throws exception correctly
      */
-    public function testCancelByAdminThrowsIncorrectStatusException()
+    public function testCancelByAdminThrowsIncorrectStatusException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -989,11 +956,9 @@ class BusRegEntityTest extends EntityTester
         $status->setId(Entity::STATUS_REGISTERED);
 
         $this->entity->cancelByAdmin($status, null);
-
-        return true;
     }
 
-    public function testWithdraw()
+    public function testWithdraw(): void
     {
         $this->getAssertionsForCanMakeDecisionIsTrue();
 
@@ -1017,7 +982,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * Tests withdraw throws exception correctly
      */
-    public function testWithdrawThrowsCanMakeDecisionException()
+    public function testWithdrawThrowsCanMakeDecisionException(): void
     {
         $this->expectException(ForbiddenException::class);
 
@@ -1029,14 +994,12 @@ class BusRegEntityTest extends EntityTester
         $reason = new RefDataEntity();
 
         $this->entity->withdraw($status, $reason);
-
-        return true;
     }
 
     /**
      * Tests withdraw throws exception correctly
      */
-    public function testWithdrawThrowsIncorrectStatusException()
+    public function testWithdrawThrowsIncorrectStatusException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -1048,11 +1011,9 @@ class BusRegEntityTest extends EntityTester
         $reason = new RefDataEntity();
 
         $this->entity->withdraw($status, $reason);
-
-        return true;
     }
 
-    public function testRefuse()
+    public function testRefuse(): void
     {
         $this->getAssertionsForCanMakeDecisionIsTrue();
 
@@ -1076,7 +1037,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * Tests refuse throws exception correctly
      */
-    public function testRefuseThrowsCanMakeDecisionException()
+    public function testRefuseThrowsCanMakeDecisionException(): void
     {
         $this->expectException(ForbiddenException::class);
 
@@ -1086,14 +1047,12 @@ class BusRegEntityTest extends EntityTester
         $status->setId(Entity::STATUS_REFUSED);
 
         $this->entity->refuse($status, null);
-
-        return true;
     }
 
     /**
      * Tests refuse throws exception correctly
      */
-    public function testRefuseThrowsIncorrectStatusException()
+    public function testRefuseThrowsIncorrectStatusException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -1103,18 +1062,16 @@ class BusRegEntityTest extends EntityTester
         $status->setId(Entity::STATUS_REGISTERED);
 
         $this->entity->refuse($status, null);
-
-        return true;
     }
 
     /**
-     * @dataProvider provideCalculateNoticeDate
      *
      * @param array  $busNoticePeriodData
      * @param array  $busRegData
      * @param string $expectedEffectiveDate
      */
-    public function testRefuseByShortNotice($busNoticePeriodData, $busRegData, $expectedEffectiveDate)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCalculateNoticeDate')]
+    public function testRefuseByShortNotice(mixed $busNoticePeriodData, mixed $busRegData, mixed $expectedEffectiveDate): void
     {
         $this->getAssertionsForCanMakeDecisionIsTrue();
 
@@ -1128,12 +1085,12 @@ class BusRegEntityTest extends EntityTester
                 $parent->setEffectiveDate($value['effectiveDate']);
                 $value = $parent;
             }
-            $this->entity->{'set' . ucwords($key)}($value);
+            $this->entity->{'set' . ucwords((string) $key)}($value);
         }
 
         $busNoticePeriod = new BusNoticePeriodEntity();
         foreach ($busNoticePeriodData as $key => $value) {
-            $busNoticePeriod->{'set' . ucwords($key)}($value);
+            $busNoticePeriod->{'set' . ucwords((string) $key)}($value);
         }
         $this->entity->setBusNoticePeriod($busNoticePeriod);
 
@@ -1148,7 +1105,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($expectedEffectiveDate, $this->entity->getEffectiveDate());
     }
 
-    public function provideCalculateNoticeDate()
+    public static function provideCalculateNoticeDate(): array
     {
         $scotRules = [
             'standardPeriod' => 42,
@@ -1303,18 +1260,16 @@ class BusRegEntityTest extends EntityTester
     /**
      * Tests refuseByShortNotice throws exception correctly
      */
-    public function testRefuseByShortNoticeThrowsCanMakeDecisionException()
+    public function testRefuseByShortNoticeThrowsCanMakeDecisionException(): void
     {
         $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanMakeDecisionIsFalse();
 
         $this->entity->refuseByShortNotice(null);
-
-        return true;
     }
 
-    public function testGrant()
+    public function testGrant(): void
     {
         /** @var Entity|m\MockInterface $sut */
         $sut = m::mock(Entity::class)->makePartial();
@@ -1337,14 +1292,12 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($status, $sut->getRevertStatus());
         $this->assertInstanceOf(\DateTime::class, $sut->getStatusChangeDate());
         $this->assertEquals($reasons, $sut->getVariationReasons());
-
-        return true;
     }
 
     /**
      * Tests grant throws exception correctly
      */
-    public function testGrantThrowsCanMakeDecisionException()
+    public function testGrantThrowsCanMakeDecisionException(): void
     {
         $this->expectException(ForbiddenException::class);
 
@@ -1354,14 +1307,12 @@ class BusRegEntityTest extends EntityTester
         $status->setId(Entity::STATUS_REGISTERED);
 
         $this->entity->grant($status, null);
-
-        return true;
     }
 
     /**
      * Tests grant throws exception correctly
      */
-    public function testGrantThrowsNotGrantableException()
+    public function testGrantThrowsNotGrantableException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -1374,14 +1325,12 @@ class BusRegEntityTest extends EntityTester
         $status->setId(Entity::STATUS_REGISTERED);
 
         $sut->grant($status, null);
-
-        return true;
     }
 
     /**
      * Tests grant throws exception correctly
      */
-    public function testGrantThrowsIncorrectStatusException()
+    public function testGrantThrowsIncorrectStatusException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -1395,17 +1344,15 @@ class BusRegEntityTest extends EntityTester
         $status->setId(Entity::STATUS_REGISTERED);
 
         $sut->grant($status, null);
-
-        return true;
     }
 
     /**
-     * @dataProvider getStatusForGrantDataProvider
      *
      * @param string $statusId
      * @param array  $expected
      */
-    public function testGetStatusForGrant($statusId, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('getStatusForGrantDataProvider')]
+    public function testGetStatusForGrant(mixed $statusId, mixed $expected): void
     {
         $status = new RefDataEntity();
         $status->setId($statusId);
@@ -1414,7 +1361,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->getStatusForGrant());
     }
 
-    public function getStatusForGrantDataProvider()
+    public static function getStatusForGrantDataProvider(): array
     {
         return [
             [Entity::STATUS_NEW, Entity::STATUS_REGISTERED],
@@ -1424,19 +1371,19 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider isShortNoticeRefusedDataProvider
      *
      * @param string $shortNoticeRefused
      * @param array  $expected
      */
-    public function testIsShortNoticeRefused($shortNoticeRefused, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isShortNoticeRefusedDataProvider')]
+    public function testIsShortNoticeRefused(mixed $shortNoticeRefused, mixed $expected): void
     {
         $this->entity->setShortNoticeRefused($shortNoticeRefused);
 
         $this->assertEquals($expected, $this->entity->isShortNoticeRefused());
     }
 
-    public function isShortNoticeRefusedDataProvider()
+    public static function isShortNoticeRefusedDataProvider(): array
     {
         return [
             [null, false],
@@ -1446,14 +1393,14 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider getDecisionDataProvider
      *
      * @param string $statusId
      * @param string $shortNoticeRefused
      * @param bool   $withWithdrawnReason
      * @param array  $expected
      */
-    public function testGetDecision($statusId, $shortNoticeRefused, $withWithdrawnReason, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('getDecisionDataProvider')]
+    public function testGetDecision(mixed $statusId, mixed $shortNoticeRefused, mixed $withWithdrawnReason, mixed $expected): void
     {
         $status = new RefDataEntity();
         $status->setId($statusId);
@@ -1475,7 +1422,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->getDecision());
     }
 
-    public function getDecisionDataProvider()
+    public static function getDecisionDataProvider(): array
     {
         return [
             // registered
@@ -1530,7 +1477,7 @@ class BusRegEntityTest extends EntityTester
         ];
     }
 
-    private function getAssertionsForIsGrantable()
+    private function getAssertionsForIsGrantable(): void
     {
         $this->entity->setTimetableAcceptable('Y');
         $this->entity->setMapSupplied('Y');
@@ -1557,7 +1504,7 @@ class BusRegEntityTest extends EntityTester
         $this->entity->setStatus(new RefDataEntity(Entity::STATUS_NEW));
     }
 
-    private function getAssertionsForIsGrantableCancellation()
+    private function getAssertionsForIsGrantableCancellation(): void
     {
         $this->getAssertionsForIsGrantable();
         $this->entity->setTimetableAcceptable('N');
@@ -1568,12 +1515,12 @@ class BusRegEntityTest extends EntityTester
      * Tests that timetable and supplied map don't need to be set to yes for granting a cancellation.
      * New and variation should return false
      *
-     * @dataProvider dpIsGrantableForCancellation
      *
      * @param $status
      * @param $expected
      */
-    public function testIsGrantableForCancellation($status, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsGrantableForCancellation')]
+    public function testIsGrantableForCancellation(mixed $status, mixed $expected): void
     {
         $this->getAssertionsForIsGrantableCancellation();
 
@@ -1586,21 +1533,21 @@ class BusRegEntityTest extends EntityTester
     /**
      * Tests that grant is only possible when in certain statuses
      *
-     * @dataProvider provideIsGrantableForStatusCases
      *
      * @param $status
      * @param $expected
      */
-    public function testIsGrantableForStatus($status, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIsGrantableForStatusCases')]
+    public function testIsGrantableForStatus(mixed $status, mixed $expected): void
     {
         $this->getAssertionsForIsGrantable();
         $this->entity->setStatus(new RefDataEntity($status));
         $this->assertEquals($expected, $this->entity->isGrantable());
     }
 
-    public function provideIsGrantableForStatusCases()
+    public static function provideIsGrantableForStatusCases(): \Generator
     {
-        foreach ($this->getAllStatuses() as $status) {
+        foreach (self::getAllStatuses() as $status) {
             yield [$status, in_array($status, [Entity::STATUS_NEW, Entity::STATUS_VAR, Entity::STATUS_CANCEL], true)];
         }
     }
@@ -1610,7 +1557,7 @@ class BusRegEntityTest extends EntityTester
      *
      * @return array
      */
-    public function dpIsGrantableForCancellation()
+    public static function dpIsGrantableForCancellation(): array
     {
         return [
             [Entity::STATUS_NEW, false],
@@ -1619,7 +1566,7 @@ class BusRegEntityTest extends EntityTester
         ];
     }
 
-    public function testIsGrantable()
+    public function testIsGrantable(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1627,7 +1574,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(true, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithoutTimetableAcceptable()
+    public function testIsGrantableWithoutTimetableAcceptable(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1637,7 +1584,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithoutMapSupplied()
+    public function testIsGrantableWithoutMapSupplied(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1647,7 +1594,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithoutTrcConditionChecked()
+    public function testIsGrantableWithoutTrcConditionChecked(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1657,7 +1604,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithoutCopiedToLaPte()
+    public function testIsGrantableWithoutCopiedToLaPte(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1667,7 +1614,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithoutLaShortNote()
+    public function testIsGrantableWithoutLaShortNote(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1684,7 +1631,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithoutApplicationSigned()
+    public function testIsGrantableWithoutApplicationSigned(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1694,7 +1641,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithoutEffectiveDate()
+    public function testIsGrantableWithoutEffectiveDate(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1704,7 +1651,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithoutReceivedDate()
+    public function testIsGrantableWithoutReceivedDate(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1723,9 +1670,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertFalse($this->entity->isGrantable());
     }
 
-    /**
-     * @dataProvider dpTestIsGrantableServiceNo
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsGrantableServiceNo')]
     public function testIsGrantableServiceNo(?string $serviceNo, bool $expectedResult): void
     {
         $this->getAssertionsForIsGrantable();
@@ -1734,7 +1679,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($expectedResult, $this->entity->isGrantable());
     }
 
-    public function dpTestIsGrantableServiceNo(): array
+    public static function dpTestIsGrantableServiceNo(): array
     {
         return [
             ['serviceNo' => null, 'expectedResult' => false],
@@ -1744,7 +1689,7 @@ class BusRegEntityTest extends EntityTester
         ];
     }
 
-    public function testIsGrantableWithoutStartPoint()
+    public function testIsGrantableWithoutStartPoint(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1754,7 +1699,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithoutFinishPoint()
+    public function testIsGrantableWithoutFinishPoint(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1764,7 +1709,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithoutBusServiceTypes()
+    public function testIsGrantableWithoutBusServiceTypes(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1774,7 +1719,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithoutTrafficAreas()
+    public function testIsGrantableWithoutTrafficAreas(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1784,7 +1729,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithoutLocalAuthoritys()
+    public function testIsGrantableWithoutLocalAuthoritys(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1794,7 +1739,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithNoticePeriodScotland()
+    public function testIsGrantableWithNoticePeriodScotland(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1817,7 +1762,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(true, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithFeePaid()
+    public function testIsGrantableWithFeePaid(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1834,7 +1779,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(true, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithFeeOutstanding()
+    public function testIsGrantableWithFeeOutstanding(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1851,7 +1796,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithMixedFeesGrantable()
+    public function testIsGrantableWithMixedFeesGrantable(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1874,7 +1819,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(true, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithMixedFeesNonGrantable()
+    public function testIsGrantableWithMixedFeesNonGrantable(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1900,7 +1845,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithoutShortNotice()
+    public function testIsGrantableWithoutShortNotice(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1915,7 +1860,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithShortNoticeBankHoliday()
+    public function testIsGrantableWithShortNoticeBankHoliday(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1934,7 +1879,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(true, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithShortNoticeConnection()
+    public function testIsGrantableWithShortNoticeConnection(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1958,7 +1903,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(true, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithShortNoticeHoliday()
+    public function testIsGrantableWithShortNoticeHoliday(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -1982,7 +1927,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(true, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithShortNoticeNotAvailable()
+    public function testIsGrantableWithShortNoticeNotAvailable(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -2006,7 +1951,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(true, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithShortNoticePolice()
+    public function testIsGrantableWithShortNoticePolice(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -2030,7 +1975,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(true, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithShortNoticeReplacement()
+    public function testIsGrantableWithShortNoticeReplacement(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -2054,7 +1999,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(true, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithShortNoticeSpecialOccasion()
+    public function testIsGrantableWithShortNoticeSpecialOccasion(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -2078,7 +2023,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(true, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithShortNoticeTimetable()
+    public function testIsGrantableWithShortNoticeTimetable(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -2102,7 +2047,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(true, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithShortNoticeTrc()
+    public function testIsGrantableWithShortNoticeTrc(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -2126,7 +2071,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(true, $this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithShortNoticeUnforseen()
+    public function testIsGrantableWithShortNoticeUnforseen(): void
     {
         $this->getAssertionsForIsGrantable();
 
@@ -2150,7 +2095,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals(true, $this->entity->isGrantable());
     }
 
-    public function testGetContextValue()
+    public function testGetContextValue(): void
     {
         /** @var LicenceEntity $licence */
         $licence = m::mock(LicenceEntity::class)->makePartial();
@@ -2164,14 +2109,14 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dpGetPublicationSectionForGrantEmailProvider
      *
      * @param string $status
      * @param string $revertStatus
      * @param string $shortNotice
      * @param string $section
      */
-    public function testGetPublicationSectionForGrantEmail($status, $revertStatus, $shortNotice, $section)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetPublicationSectionForGrantEmailProvider')]
+    public function testGetPublicationSectionForGrantEmail(mixed $status, mixed $revertStatus, mixed $shortNotice, mixed $section): void
     {
         $entity = new Entity();
         $status = new RefData($status);
@@ -2183,7 +2128,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($section, $entity->getPublicationSectionForGrantEmail());
     }
 
-    public function dpGetPublicationSectionForGrantEmailProvider()
+    public static function dpGetPublicationSectionForGrantEmailProvider(): array
     {
         return [
             [Entity::STATUS_REGISTERED, Entity::STATUS_NEW, 'Y', PublicationSection::BUS_NEW_SHORT_SECTION],
@@ -2198,11 +2143,11 @@ class BusRegEntityTest extends EntityTester
     /**
      * Tests the method throws exception if status is incorrect
      *
-     * @dataProvider publicationSectionForGrantEmailInvalidStatusProvider
      *
      * @param string $status
      */
-    public function testPublicationSectionForGrantEmailStatusException($status)
+    #[\PHPUnit\Framework\Attributes\DataProvider('publicationSectionForGrantEmailInvalidStatusProvider')]
+    public function testPublicationSectionForGrantEmailStatusException(mixed $status): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\RuntimeException::class);
 
@@ -2218,7 +2163,7 @@ class BusRegEntityTest extends EntityTester
      *
      * @return array
      */
-    public function publicationSectionForGrantEmailInvalidStatusProvider()
+    public static function publicationSectionForGrantEmailInvalidStatusProvider(): array
     {
         return [
             [Entity::STATUS_NEW],
@@ -2234,12 +2179,12 @@ class BusRegEntityTest extends EntityTester
     /**
      * Tests the method throws exception if revertStatus is incorrect
      *
-     * @dataProvider publicationSectionForGrantEmailInvalidRevertStatusProvider
      *
      * @param        $status
      * @param string $revertStatus
      */
-    public function testPublicationSectionForGrantEmailRevertStatusException($status, $revertStatus)
+    #[\PHPUnit\Framework\Attributes\DataProvider('publicationSectionForGrantEmailInvalidRevertStatusProvider')]
+    public function testPublicationSectionForGrantEmailRevertStatusException(mixed $status, mixed $revertStatus): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\RuntimeException::class);
 
@@ -2257,7 +2202,7 @@ class BusRegEntityTest extends EntityTester
      *
      * @return array
      */
-    public function publicationSectionForGrantEmailInvalidRevertStatusProvider()
+    public static function publicationSectionForGrantEmailInvalidRevertStatusProvider(): array
     {
         return [
             [Entity::STATUS_REGISTERED, Entity::STATUS_CANCEL],
@@ -2276,7 +2221,7 @@ class BusRegEntityTest extends EntityTester
         ];
     }
 
-    public function testPublicationLinksForGrantEmail()
+    public function testPublicationLinksForGrantEmail(): void
     {
         $pub3No = 1234;
         $pub3TrafficArea = 'trafficArea3';
@@ -2335,13 +2280,13 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider getFormattedServiceNumbersProvider
      *
      * @param string          $serviceNo
      * @param ArrayCollection $otherServiceNumbers
      * @param string          $expected
      */
-    public function testGetFormattedServiceNumbers($serviceNo, $otherServiceNumbers, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('getFormattedServiceNumbersProvider')]
+    public function testGetFormattedServiceNumbers(mixed $serviceNo, mixed $otherServiceNumbers, mixed $expected): void
     {
         $busReg = new Entity();
         $busReg->setOtherServices($otherServiceNumbers);
@@ -2355,7 +2300,7 @@ class BusRegEntityTest extends EntityTester
      *
      * @return array
      */
-    public function getFormattedServiceNumbersProvider()
+    public static function getFormattedServiceNumbersProvider(): array
     {
         $serviceNo1 = '4567';
         $serviceNo2 = '8910';
@@ -2388,10 +2333,9 @@ class BusRegEntityTest extends EntityTester
      * @param $effectiveDate
      * @param $receivedDate
      * @param $expected
-     *
-     * @dataProvider isShortNoticeStandardProvider
      */
-    public function testIsShortNoticeStandardRules($variationNo, $receivedDate, $effectiveDate, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isShortNoticeStandardProvider')]
+    public function testIsShortNoticeStandardRules(mixed $variationNo, mixed $receivedDate, mixed $effectiveDate, mixed $expected): void
     {
         /** @var m\Mock|BusNoticePeriodEntity $standardRules */
         $standardRules = m::mock(BusNoticePeriodEntity::class);
@@ -2412,7 +2356,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function isShortNoticeStandardProvider()
+    public static function isShortNoticeStandardProvider(): array
     {
         return [
             [0, '2014-05-31', '2014-07-01', 'Y'], //31 days
@@ -2439,10 +2383,9 @@ class BusRegEntityTest extends EntityTester
      * @param $effectiveDate
      * @param $receivedDate
      * @param $expected
-     *
-     * @dataProvider isShortNoticeNewScottishProvider
      */
-    public function testIsShortNoticeNewScottishRules($variationNo, $receivedDate, $effectiveDate, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isShortNoticeNewScottishProvider')]
+    public function testIsShortNoticeNewScottishRules(mixed $variationNo, mixed $receivedDate, mixed $effectiveDate, mixed $expected): void
     {
         /** @var m\Mock|BusNoticePeriodEntity $standardRules */
         $standardRules = m::mock(BusNoticePeriodEntity::class);
@@ -2463,7 +2406,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function isShortNoticeNewScottishProvider()
+    public static function isShortNoticeNewScottishProvider(): array
     {
         return [
             [0, '2014-05-31', '2014-07-01', 'Y'], //31 days
@@ -2480,10 +2423,9 @@ class BusRegEntityTest extends EntityTester
      * @param $effectiveDate
      * @param $receivedDate
      * @param $expected
-     *
-     * @dataProvider isShortNoticeWalesProvider
      */
-    public function testIsShortNoticeNewWalesRules($variationNo, $receivedDate, $effectiveDate, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isShortNoticeWalesProvider')]
+    public function testIsShortNoticeNewWalesRules(mixed $variationNo, mixed $receivedDate, mixed $effectiveDate, mixed $expected): void
     {
         $standardRules = m::mock(BusNoticePeriodEntity::class);
         $standardRules->shouldReceive('isScottishRules')->once()->andReturn(false);
@@ -2504,7 +2446,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function isShortNoticeWalesProvider()
+    public static function isShortNoticeWalesProvider(): array
     {
         return [
             [0, '2014-05-31', '2014-07-01', 'Y'], //31 days
@@ -2524,16 +2466,15 @@ class BusRegEntityTest extends EntityTester
      * @param $parentDate
      * @param $standardPeriodCalled
      * @param $expected
-     *
-     * @dataProvider isShortNoticeVariationScottishProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isShortNoticeVariationScottishProvider')]
     public function testIsShortNoticeVariationScottishRules(
-        $receivedDate,
-        $effectiveDate,
-        $parentDate,
-        $standardPeriodCalled,
-        $expected
-    ) {
+        mixed $receivedDate,
+        mixed $effectiveDate,
+        mixed $parentDate,
+        mixed $standardPeriodCalled,
+        mixed $expected
+    ): void {
         /** @var m\Mock|BusNoticePeriodEntity $scottishRules */
         $scottishRules = m::mock(BusNoticePeriodEntity::class);
         $scottishRules->shouldReceive('isScottishRules')->once()->andReturn(true);
@@ -2557,7 +2498,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function isShortNoticeVariationScottishProvider()
+    public static function isShortNoticeVariationScottishProvider(): array
     {
         return [
             ['2014-07-15', '2014-07-21', '2014-06-11', 0, 'Y'], //parent less than 90 days
@@ -2574,10 +2515,9 @@ class BusRegEntityTest extends EntityTester
      * @param $effectiveDate
      * @param $receivedDate
      * @param $parent
-     *
-     * @dataProvider shortNoticeScottishRulesWithMissingParentProvider
      */
-    public function testShortNoticeScottishRulesWithMissingParent($effectiveDate, $receivedDate, $parent)
+    #[\PHPUnit\Framework\Attributes\DataProvider('shortNoticeScottishRulesWithMissingParentProvider')]
+    public function testShortNoticeScottishRulesWithMissingParent(mixed $effectiveDate, mixed $receivedDate, mixed $parent): void
     {
         /** @var m\Mock|BusNoticePeriodEntity $scottishRules */
         $scottishRules = m::mock(BusNoticePeriodEntity::class);
@@ -2597,7 +2537,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function shortNoticeScottishRulesWithMissingParentProvider()
+    public static function shortNoticeScottishRulesWithMissingParentProvider(): array
     {
         return [
             ['2016-12-25', '2016-12-26', null],
@@ -2610,10 +2550,9 @@ class BusRegEntityTest extends EntityTester
      *
      * @param $effectiveDate
      * @param $receivedDate
-     *
-     * @dataProvider shortNoticeMissingDatesProvider
      */
-    public function testShortNoticeMissingDates($effectiveDate, $receivedDate)
+    #[\PHPUnit\Framework\Attributes\DataProvider('shortNoticeMissingDatesProvider')]
+    public function testShortNoticeMissingDates(mixed $effectiveDate, mixed $receivedDate): void
     {
         $scottishRules = m::mock(BusNoticePeriodEntity::class);
         $scottishRules->shouldReceive('isScottishRules')->never();
@@ -2630,7 +2569,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function shortNoticeMissingDatesProvider()
+    public static function shortNoticeMissingDatesProvider(): array
     {
         return [
             ['2016-12-25', null],
@@ -2642,7 +2581,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * tests getOpenTaskIds when there are tasks
      */
-    public function testGetOpenTaskIds()
+    public function testGetOpenTaskIds(): void
     {
         $busReg = new Entity();
 
@@ -2666,14 +2605,14 @@ class BusRegEntityTest extends EntityTester
     /**
      * tests getOpenTaskIds with no tasks
      */
-    public function testGetOpenTaskIdsWithEmpty()
+    public function testGetOpenTaskIdsWithEmpty(): void
     {
         $busReg = new Entity();
         $busReg->setTasks(new ArrayCollection());
         $this->assertEquals([], $busReg->getOpenTaskIds());
     }
 
-    public function testIsLatestVariation()
+    public function testIsLatestVariation(): void
     {
         $regNo = 'foo';
         $busReg = new Entity();
@@ -2690,7 +2629,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertTrue($busReg->isLatestVariation());
     }
 
-    public function testNotIsLatestVariation()
+    public function testNotIsLatestVariation(): void
     {
         $regNo = 'foo';
         $busReg = new Entity();
@@ -2712,7 +2651,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertFalse($busReg->isLatestVariation());
     }
 
-    public function testIsEbsrRefreshNoSubmissions()
+    public function testIsEbsrRefreshNoSubmissions(): void
     {
         $busReg = new Entity();
         $busReg->setEbsrSubmissions(new ArrayCollection());
@@ -2720,7 +2659,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertFalse($busReg->isEbsrRefresh());
     }
 
-    public function testAddOtherServiceNumber()
+    public function testAddOtherServiceNumber(): void
     {
         $busReg = new Entity();
         $busReg->addOtherServiceNumber('foo');
@@ -2729,7 +2668,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($otherServices, $busReg->getOtherServices());
     }
 
-    public function testGetRelatedOrganisation()
+    public function testGetRelatedOrganisation(): void
     {
         $busReg = new Entity();
         /** @var m\Mock|LicenceEntity $mockLicence */
@@ -2744,12 +2683,12 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals('foo', $busReg->getRelatedOrganisation());
     }
 
-    public function testGetRelatedOrganisationNoLicence()
+    public function testGetRelatedOrganisationNoLicence(): void
     {
         $this->assertNull((new Entity())->getRelatedOrganisation());
     }
 
-    public function testCreateVariationFailsWhenCannotCreateVariation()
+    public function testCreateVariationFailsWhenCannotCreateVariation(): void
     {
         $this->expectException(ForbiddenException::class);
         /** @var Entity|m\Mock $busReg */
@@ -2761,56 +2700,56 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider provideCanWithdrawCases
      *
      * @param $status
      * @param $expected
      */
-    public function testCanWithdraw($status, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanWithdrawCases')]
+    public function testCanWithdraw(mixed $status, mixed $expected): void
     {
         $busReg = new Entity();
         $busReg->setStatus(new RefData($status));
         $this->assertSame($expected, $busReg->canWithdraw());
     }
 
-    public function provideCanWithdrawCases()
+    public static function provideCanWithdrawCases(): \Generator
     {
         $allowedStatuses = [Entity::STATUS_NEW, Entity::STATUS_VAR, Entity::STATUS_CANCEL];
-        foreach ($this->getAllStatuses() as $status) {
+        foreach (self::getAllStatuses() as $status) {
             yield [$status, in_array($status, $allowedStatuses, true)];
         }
     }
 
     /**
-     * @dataProvider provideCanRefuseCases
      *
      * @param $status
      * @param $expected
      */
-    public function testCanRefuse($status, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanRefuseCases')]
+    public function testCanRefuse(mixed $status, mixed $expected): void
     {
         $busReg = new Entity();
         $busReg->setStatus(new RefData($status));
         $this->assertSame($expected, $busReg->canRefuse());
     }
 
-    public function provideCanRefuseCases()
+    public static function provideCanRefuseCases(): \Generator
     {
         $allowedStatuses = [Entity::STATUS_NEW, Entity::STATUS_VAR, Entity::STATUS_CANCEL];
-        foreach ($this->getAllStatuses() as $status) {
+        foreach (self::getAllStatuses() as $status) {
             yield [$status, in_array($status, $allowedStatuses, true)];
         }
     }
 
     /**
-     * @dataProvider provideCanRefuseByShortNoticeCases
      *
      * @param $status
      * @param $isShortNotice
      * @param $isShortNoticeRefused
      * @param $expected
      */
-    public function testCanRefuseByShortNotice($status, $isShortNotice, $isShortNoticeRefused, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanRefuseByShortNoticeCases')]
+    public function testCanRefuseByShortNotice(mixed $status, mixed $isShortNotice, mixed $isShortNoticeRefused, mixed $expected): void
     {
         $busReg = new Entity();
         $busReg->setStatus(new RefData($status));
@@ -2819,7 +2758,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertSame($expected, $busReg->canRefuseByShortNotice());
     }
 
-    public function provideCanRefuseByShortNoticeCases()
+    public static function provideCanRefuseByShortNoticeCases(): \Generator
     {
         $allowedStatuses = [Entity::STATUS_NEW, Entity::STATUS_VAR, Entity::STATUS_CANCEL];
         $isShortNoticeAllowed = [
@@ -2832,7 +2771,7 @@ class BusRegEntityTest extends EntityTester
             'N' => true,
             'something-else' => false,
         ];
-        foreach ($this->getAllStatuses() as $status) {
+        foreach (self::getAllStatuses() as $status) {
             $allowedByStatus = in_array($status, $allowedStatuses, true);
             foreach ($isShortNoticeAllowed as $isShortNotice => $allowedByIsShortNotice) {
                 foreach ($isShortNoticeRefusedAllowed as $isShortNoticeRefused => $allowedByIsShortNoticeRefused) {
@@ -2848,13 +2787,13 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider provideCanCreateCancellationCases
      *
      * @param $status
      * @param $isLatestVariation
      * @param $expected
      */
-    public function testCanCreateCancellation($status, $isLatestVariation, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanCreateCancellationCases')]
+    public function testCanCreateCancellation(mixed $status, mixed $isLatestVariation, mixed $expected): void
     {
         /** @var Entity|m\Mock $busReg */
         $busReg = m::mock(Entity::class)->makePartial();
@@ -2863,14 +2802,14 @@ class BusRegEntityTest extends EntityTester
         $this->assertSame($expected, $busReg->canCreateCancellation());
     }
 
-    public function provideCanCreateCancellationCases()
+    public static function provideCanCreateCancellationCases(): \Generator
     {
         $allowedStatuses = [Entity::STATUS_REGISTERED];
         $isLatestVariationAllowed = [
             [true, true],
             [false, false],
         ];
-        foreach ($this->getAllStatuses() as $status) {
+        foreach (self::getAllStatuses() as $status) {
             $allowedByStatus = in_array($status, $allowedStatuses, true);
             foreach ($isLatestVariationAllowed as [$isLatestVariation, $allowedByIsLatestVariation]) {
                 yield [
@@ -2883,35 +2822,34 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider provideCanPrintCases
      *
      * @param $status
      * @param $expected
      */
-    public function testCanPrint($status, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanPrintCases')]
+    public function testCanPrint(mixed $status, mixed $expected): void
     {
         $busReg = new Entity();
         $busReg->setStatus(new RefData($status));
         $this->assertSame($expected, $busReg->canPrint());
     }
 
-    public function provideCanPrintCases()
+    public static function provideCanPrintCases(): \Generator
     {
         $allowedStatuses = [Entity::STATUS_REGISTERED, Entity::STATUS_CANCELLED];
-        foreach ($this->getAllStatuses() as $status) {
+        foreach (self::getAllStatuses() as $status) {
             yield [$status, in_array($status, $allowedStatuses, true)];
         }
     }
 
     /**
-     * @dataProvider provideCanRequestNewRouteMapCases
      *
      * @param $isFromEbsr
      * @param $expected
-     *
      * @internal     param $status
      */
-    public function testRequestNewRouteMapPrint($isFromEbsr, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanRequestNewRouteMapCases')]
+    public function testRequestNewRouteMapPrint(mixed $isFromEbsr, mixed $expected): void
     {
         /** @var Entity|m\Mock $busReg */
         $busReg = m::mock(Entity::class)->makePartial();
@@ -2919,7 +2857,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertSame($expected, $busReg->canRequestNewRouteMap());
     }
 
-    public function provideCanRequestNewRouteMapCases()
+    public static function provideCanRequestNewRouteMapCases(): array
     {
         return [
             ['isFromEbsr' => true, 'expected' => true],
@@ -2928,13 +2866,13 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider provideCanRepublishCases
      *
      * @param $status
      * @param $isLatestVariation
      * @param $expected
      */
-    public function testCanRepublish($status, $isLatestVariation, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanRepublishCases')]
+    public function testCanRepublish(mixed $status, mixed $isLatestVariation, mixed $expected): void
     {
         /** @var Entity|m\Mock $busReg */
         $busReg = m::mock(Entity::class)->makePartial();
@@ -2943,14 +2881,14 @@ class BusRegEntityTest extends EntityTester
         $this->assertSame($expected, $busReg->canRepublish());
     }
 
-    public function provideCanRepublishCases()
+    public static function provideCanRepublishCases(): \Generator
     {
         $allowedStatuses = [Entity::STATUS_REGISTERED, Entity::STATUS_CANCELLED];
         $isLatestVariationAllowed = [
             [true, true],
             [false, false],
         ];
-        foreach ($this->getAllStatuses() as $status) {
+        foreach (self::getAllStatuses() as $status) {
             $allowedByStatus = in_array($status, $allowedStatuses, true);
             foreach ($isLatestVariationAllowed as [$isLatestVariation, $allowedByIsLatestVariation]) {
                 yield [
@@ -2963,13 +2901,13 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider provideCanCancelByAdminCases
      *
      * @param $status
      * @param $isLatestVariation
      * @param $expected
      */
-    public function testCanCancelByAdmin($status, $isLatestVariation, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanCancelByAdminCases')]
+    public function testCanCancelByAdmin(mixed $status, mixed $isLatestVariation, mixed $expected): void
     {
         /** @var Entity|m\Mock $busReg */
         $busReg = m::mock(Entity::class)->makePartial();
@@ -2978,14 +2916,14 @@ class BusRegEntityTest extends EntityTester
         $this->assertSame($expected, $busReg->canCancelByAdmin());
     }
 
-    public function provideCanCancelByAdminCases()
+    public static function provideCanCancelByAdminCases(): \Generator
     {
         $allowedStatuses = [Entity::STATUS_REGISTERED];
         $isLatestVariationAllowed = [
             [true, true],
             [false, false],
         ];
-        foreach ($this->getAllStatuses() as $status) {
+        foreach (self::getAllStatuses() as $status) {
             $allowedByStatus = in_array($status, $allowedStatuses, true);
             foreach ($isLatestVariationAllowed as [$isLatestVariation, $allowedByIsLatestVariation]) {
                 yield [
@@ -2998,13 +2936,13 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider provideCanResetRegistrationCases
      *
      * @param $status
      * @param $isLatestVariation
      * @param $expected
      */
-    public function testCanResetRegistration($status, $isLatestVariation, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanResetRegistrationCases')]
+    public function testCanResetRegistration(mixed $status, mixed $isLatestVariation, mixed $expected): void
     {
         /** @var Entity|m\Mock $busReg */
         $busReg = m::mock(Entity::class)->makePartial();
@@ -3013,7 +2951,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertSame($expected, $busReg->canResetRegistration());
     }
 
-    public function provideCanResetRegistrationCases()
+    public static function provideCanResetRegistrationCases(): \Generator
     {
         $allowedStatuses = [
             Entity::STATUS_ADMIN,
@@ -3028,7 +2966,7 @@ class BusRegEntityTest extends EntityTester
             [true, true],
             [false, false],
         ];
-        foreach ($this->getAllStatuses() as $status) {
+        foreach (self::getAllStatuses() as $status) {
             $allowedByStatus = in_array($status, $allowedStatuses, true);
             foreach ($isLatestVariationAllowed as [$isLatestVariation, $allowedByIsLatestVariation]) {
                 yield [
@@ -3041,13 +2979,13 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider provideCanCreateVariationCases
      *
      * @param $status
      * @param $isLatestVariation
      * @param $expected
      */
-    public function testCantCreateVariation($status, $isLatestVariation, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanCreateVariationCases')]
+    public function testCantCreateVariation(mixed $status, mixed $isLatestVariation, mixed $expected): void
     {
         /** @var Entity|m\Mock $busReg */
         $busReg = m::mock(Entity::class)->makePartial();
@@ -3056,7 +2994,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertSame($expected, $busReg->canCreateVariation());
     }
 
-    public function provideCanCreateVariationCases()
+    public static function provideCanCreateVariationCases(): \Generator
     {
         $allowedStatuses = [
             Entity::STATUS_REGISTERED,
@@ -3065,7 +3003,7 @@ class BusRegEntityTest extends EntityTester
             [true, true],
             [false, false],
         ];
-        foreach ($this->getAllStatuses() as $status) {
+        foreach (self::getAllStatuses() as $status) {
             $allowedByStatus = in_array($status, $allowedStatuses, true);
             foreach ($isLatestVariationAllowed as [$isLatestVariation, $allowedByIsLatestVariation]) {
                 yield [
@@ -3077,7 +3015,7 @@ class BusRegEntityTest extends EntityTester
         }
     }
 
-    private function getAllStatuses()
+    private static function getAllStatuses(): array
     {
         return [
             Entity::STATUS_NEW,

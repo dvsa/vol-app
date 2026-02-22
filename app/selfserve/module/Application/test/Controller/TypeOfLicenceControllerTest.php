@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Application\Controller;
 
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;

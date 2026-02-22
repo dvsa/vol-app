@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * PublicationLinkByTm Test
  *
@@ -29,7 +31,7 @@ class PublicationLinkByTmTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $count = 25;
         $query = Qry::create([]);

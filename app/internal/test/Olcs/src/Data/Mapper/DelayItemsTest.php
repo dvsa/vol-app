@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -12,7 +14,7 @@ use Laminas\Form\Form;
  */
 class DelayItemsTest extends MockeryTestCase
 {
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $mockForm = new Form();
 
@@ -23,7 +25,7 @@ class DelayItemsTest extends MockeryTestCase
         $this->assertEquals($errors, Sut::mapFromErrors($mockForm, $errors));
     }
 
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $data = [
             'fields' => ['nextReviewDate' => '2018-01-01'],
@@ -38,7 +40,7 @@ class DelayItemsTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($data));
     }
 
-    public function testMapFromResult()
+    public function testMapFromResult(): void
     {
         $data = ['data'];
         $this->assertEquals($data, Sut::mapFromResult($data));

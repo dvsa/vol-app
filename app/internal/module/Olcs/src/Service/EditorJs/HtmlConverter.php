@@ -106,9 +106,9 @@ class HtmlConverter
         $html = preg_replace('/\s{2,}/', ' ', $html);
 
         // Remove empty paragraph tags
-        $html = preg_replace('/<p>\s*<\/p>/', '', $html);
+        $html = preg_replace('/<p>\s*<\/p>/', '', (string) $html);
 
-        return trim($html);
+        return trim((string) $html);
     }
 
     /**
@@ -295,6 +295,6 @@ class HtmlConverter
         // Clean up whitespace
         $text = preg_replace('/\s+/', ' ', $text);
 
-        return trim($text);
+        return trim((string) $text);
     }
 }

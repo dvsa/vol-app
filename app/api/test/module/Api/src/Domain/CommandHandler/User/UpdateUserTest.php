@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update User Test
  */
@@ -94,7 +96,8 @@ class UpdateUserTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ContactDetailsEntity::CONTACT_TYPE_USER
@@ -112,7 +115,7 @@ class UpdateUserTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithNewContactDetails()
+    public function testHandleCommandWithNewContactDetails(): void
     {
         $userId = 111;
 
@@ -225,7 +228,7 @@ class UpdateUserTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithUpdatedContactDetails()
+    public function testHandleCommandWithUpdatedContactDetails(): void
     {
         $userId = 111;
         $licenceNumber = 'LIC123';
@@ -359,7 +362,7 @@ class UpdateUserTest extends AbstractCommandHandlerTestCase
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function testHandleCommandWithPasswordResetByEmail()
+    public function testHandleCommandWithPasswordResetByEmail(): void
     {
         $userId = 111;
 
@@ -487,7 +490,7 @@ class UpdateUserTest extends AbstractCommandHandlerTestCase
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function testHandleCommandWithPasswordResetByPost()
+    public function testHandleCommandWithPasswordResetByPost(): void
     {
         $userId = 111;
 
@@ -658,7 +661,7 @@ class UpdateUserTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandForTm()
+    public function testHandleCommandForTm(): void
     {
         $userId = 111;
         $applicationId = 3;
@@ -792,7 +795,7 @@ class UpdateUserTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandThrowsIncorrectPermissionException()
+    public function testHandleCommandThrowsIncorrectPermissionException(): void
     {
         $data = [
             'id' => 111,
@@ -819,7 +822,7 @@ class UpdateUserTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandThrowsRolesPermissionException()
+    public function testHandleCommandThrowsRolesPermissionException(): void
     {
         $userId = 111;
 
@@ -876,7 +879,7 @@ class UpdateUserTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandThrowsRolesPermissionErrorWhenAttemptingToUpdateUserWithHigherRole()
+    public function testHandleCommandThrowsRolesPermissionErrorWhenAttemptingToUpdateUserWithHigherRole(): void
     {
         $userId = 111;
 
@@ -935,7 +938,7 @@ class UpdateUserTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandThrowsRolesPermissionLastUserException()
+    public function testHandleCommandThrowsRolesPermissionLastUserException(): void
     {
         $userId = 111;
 
@@ -1132,7 +1135,7 @@ class UpdateUserTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    private function getMockIdentity()
+    private function getMockIdentity(): m\MockInterface
     {
         $mockUser = m::mock(UserEntity::class)
             ->shouldReceive('isAllowedToPerformActionOnRoles')

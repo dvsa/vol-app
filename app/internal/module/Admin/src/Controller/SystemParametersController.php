@@ -66,6 +66,7 @@ class SystemParametersController extends AbstractInternalController implements L
         return $view;
     }
 
+    #[\Override]
     public function indexAction()
     {
 

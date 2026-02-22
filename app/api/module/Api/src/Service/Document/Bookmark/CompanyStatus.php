@@ -34,6 +34,6 @@ class CompanyStatus extends DynamicBookmark
             'voluntary-arrangement' => 'Voluntary Arrangement',
         ];
 
-        return strtr($companyStatus, $statuses);
+        return strtr($companyStatus ?? '', $statuses);
     }
 }

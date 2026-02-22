@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Variation Transport Managers Review Service Test
  *
@@ -44,7 +46,7 @@ class VariationTransportManagersReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetConfigFromDataOneOfEach()
+    public function testGetConfigFromDataOneOfEach(): void
     {
         $tm1 = [
             'action' => 'A',
@@ -100,7 +102,7 @@ class VariationTransportManagersReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function testGetConfigFromDataMultipleAndNone()
+    public function testGetConfigFromDataMultipleAndNone(): void
     {
         $tm1 = [
             'action' => 'A',

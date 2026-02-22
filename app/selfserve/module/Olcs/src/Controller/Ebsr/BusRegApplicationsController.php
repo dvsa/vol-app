@@ -75,6 +75,7 @@ class BusRegApplicationsController extends AbstractController
      *
      * @return Response|ViewModel|null
      */
+    #[\Override]
     public function indexAction()
     {
         /** @var \Laminas\Http\Request $request */

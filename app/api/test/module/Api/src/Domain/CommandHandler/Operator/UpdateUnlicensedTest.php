@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Unlicensed Operator Command Handler Test
  *
@@ -42,7 +44,8 @@ class UpdateUnlicensedTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ContactDetailsEntity::CONTACT_TYPE_CORRESPONDENCE_ADDRESS,
@@ -86,7 +89,7 @@ class UpdateUnlicensedTest extends AbstractCommandHandlerTestCase
         $licence->setTrafficArea($this->mapReference(TrafficAreaEntity::class, 'N'));
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $contactDetailsData = [
             'id' => 10,

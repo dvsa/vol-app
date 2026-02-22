@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Internal;
 
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep;
@@ -56,7 +58,7 @@ class QuestionHandlerDelegatorTest extends MockeryTestCase
         $this->questionHandlerDelegator->registerQuestionHandler(20, $handler3);
     }
 
-    public function testDelegate()
+    public function testDelegate(): void
     {
         $qaContext = m::mock(QaContext::class);
 
@@ -79,7 +81,7 @@ class QuestionHandlerDelegatorTest extends MockeryTestCase
         );
     }
 
-    public function testDelegateHandlerNotFound()
+    public function testDelegateHandlerNotFound(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No question handler specified for question id 99');

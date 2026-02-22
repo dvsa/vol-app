@@ -57,6 +57,7 @@ class FinancialStandingRateController extends AbstractInternalController
     protected $addContentTitle = 'Add financial standing rate';
     protected $editContentTitle = 'Edit financial standing rate';
 
+    #[\Override]
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'Financial standing rates');

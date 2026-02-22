@@ -26,6 +26,7 @@ class ApplicationTypeOfLicence extends CommonApplicationTypeOfLicence
      * @param array $params
      * @return \Laminas\Form\Form
      */
+    #[\Override]
     protected function alterForm(Form $form, $params = [])
     {
         parent::alterForm($form, $params);

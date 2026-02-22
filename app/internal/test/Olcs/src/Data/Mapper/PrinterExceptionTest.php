@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Printer Exception mapper test
  *
@@ -20,15 +22,13 @@ use Laminas\Form\FormInterface;
  */
 class PrinterExceptionTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider fromResultProvider
-     */
-    public function testMapFromResult($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('fromResultProvider')]
+    public function testMapFromResult(mixed $data, mixed $expected): void
     {
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
-    public function fromResultProvider()
+    public static function fromResultProvider(): array
     {
         return [
             'data' => [
@@ -78,15 +78,13 @@ class PrinterExceptionTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider fromFormProvider
-     */
-    public function testMapFromForm($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('fromFormProvider')]
+    public function testMapFromForm(mixed $data, mixed $expected): void
     {
         $this->assertEquals($expected, Sut::mapFromForm($data));
     }
 
-    public function fromFormProvider()
+    public static function fromFormProvider(): array
     {
         return [
             'user' => [
@@ -136,7 +134,7 @@ class PrinterExceptionTest extends MockeryTestCase
         ];
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $errors = [
             'messages' => [

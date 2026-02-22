@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\OpFaoName;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\OpFaoName;
  */
 class OpFaoNameTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new OpFaoName();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -19,7 +21,7 @@ class OpFaoNameTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderWithNoCorrespondenceAddress()
+    public function testRenderWithNoCorrespondenceAddress(): void
     {
         $bookmark = new OpFaoName();
         $bookmark->setData(
@@ -34,7 +36,7 @@ class OpFaoNameTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testRenderWithCorrespondenceAddress()
+    public function testRenderWithCorrespondenceAddress(): void
     {
         $bookmark = new OpFaoName();
         $bookmark->setData(

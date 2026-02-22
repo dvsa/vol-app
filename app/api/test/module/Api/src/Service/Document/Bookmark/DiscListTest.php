@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\DiscList;
@@ -13,7 +15,7 @@ use Mockery as m;
  */
 class DiscListTest extends m\Adapter\Phpunit\MockeryTestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new DiscList();
         $query = $bookmark->getQuery([123, 456]);
@@ -23,7 +25,7 @@ class DiscListTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query[1]);
     }
 
-    public function testRenderWithNoData()
+    public function testRenderWithNoData(): void
     {
         $parser = new RtfParser();
         $bookmark = new DiscList();
@@ -35,7 +37,7 @@ class DiscListTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertEquals('', $result);
     }
 
-    public function testRenderWithTwoDiscsStillReturnsFullPage()
+    public function testRenderWithTwoDiscsStillReturnsFullPage(): void
     {
         $data = [
             [
@@ -202,7 +204,7 @@ class DiscListTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $bookmark = $this->createPartialMock(\Dvsa\Olcs\Api\Service\Document\Bookmark\DiscList::class, ['getSnippet']);
 
-        $bookmark->expects($this->any())
+        $bookmark->expects($this->atLeastOnce())
             ->method('getSnippet')
             ->willReturn('snippet');
 

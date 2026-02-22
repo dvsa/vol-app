@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-  backupGlobals="true"
-  colors="true"
-  executionOrder="random"
-  convertWarningsToExceptions="false"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         backupGlobals="true"
+         colors="true"
+         executionOrder="random"
+         failOnDeprecation="true"
+         failOnNotice="true"
+         failOnWarning="true"
+         failOnRisky="true"
+         failOnIncomplete="true"
+         failOnSkipped="true"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
+         displayDetailsOnTestsThatTriggerNotices="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         displayDetailsOnIncompleteTests="true"
+         displayDetailsOnSkippedTests="true"
 >
   <php>
     <ini name="date.timezone" value="UTC"/>
-    <ini name="memory_limit" value="4G" />
+    <ini name="memory_limit" value="4G"/>
   </php>
   <testsuites>
     <testsuite name="Module Unit Test">
@@ -17,8 +27,17 @@
     <testsuite name="Address">
       <directory>./test/module/Address</directory>
     </testsuite>
+    <testsuite name="AwsSdk">
+      <directory>./test/module/AwsSdk</directory>
+    </testsuite>
     <testsuite name="Cli">
       <directory>./test/module/Cli</directory>
+    </testsuite>
+    <testsuite name="CompaniesHouse">
+      <directory>./test/module/CompaniesHouse</directory>
+    </testsuite>
+    <testsuite name="Cpms">
+      <directory>./test/module/Cpms</directory>
     </testsuite>
     <testsuite name="DocumentShare">
       <directory>./test/module/DocumentShare</directory>
@@ -29,19 +48,7 @@
     <testsuite name="Snapshot">
       <directory>./test/module/Snapshot</directory>
     </testsuite>
-    <testsuite name="ApiDomain">
-      <directory>./test/module/Api/src/Domain</directory>
-    </testsuite>
-    <testsuite name="ApiEntity">
-      <directory>./test/module/Api/src/Entity</directory>
-    </testsuite>
-    <testsuite name="ApiService">
-      <directory>./test/module/Api/src/Service</directory>
-    </testsuite>
-    <testsuite name="ApiListener">
-      <directory>./test/module/Api/src/Listener</directory>
-    </testsuite>
-    <testsuite name="ApiMisc">
+    <testsuite name="Api">
       <directory>./test/module/Api/src</directory>
     </testsuite>
     <testsuite name="OLDOlcs">
@@ -50,15 +57,8 @@
     <testsuite name="OLD Scanning">
       <directory>./test/module/Scanning</directory>
     </testsuite>
-    <testsuite name="AwsSDK">
-      <directory>./test/module/AwsSdk</directory>
-    </testsuite>
     <testsuite name="Queue">
       <directory>./test/module/Queue</directory>
     </testsuite>
   </testsuites>
-  <logging/>
-  <listeners>
-    <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener"/>
-  </listeners>
 </phpunit>

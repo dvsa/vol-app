@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\ApplicationBundle;
@@ -15,7 +17,7 @@ use Mockery as m;
  */
 class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQueryLicence()
+    public function testGetQueryLicence(): void
     {
         $bookmark = new Sut();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -25,7 +27,7 @@ class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(['licenceType'], $query->getBundle());
     }
 
-    public function testGetQueryCaseNewApplication()
+    public function testGetQueryCaseNewApplication(): void
     {
         $bookmark = new Sut();
         $query = $bookmark->getQuery(['licence' => 123, 'case' => 99]);
@@ -35,7 +37,7 @@ class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(['application' => ['licenceType'], 'licence' => ['licenceType']], $query->getBundle());
     }
 
-    public function testGetQueryApplication()
+    public function testGetQueryApplication(): void
     {
         $bookmark = new Sut();
         $query = $bookmark->getQuery(['application' => 456]);
@@ -45,7 +47,7 @@ class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(['licenceType'], $query->getBundle());
     }
 
-    public function testGetQueryCase()
+    public function testGetQueryCase(): void
     {
         $bookmark = new Sut();
         $query = $bookmark->getQuery(['case' => 456]);
@@ -55,7 +57,7 @@ class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(['application' => ['licenceType'], 'licence' => ['licenceType']], $query->getBundle());
     }
 
-    public function testGetQueryNull()
+    public function testGetQueryNull(): void
     {
         $bookmark = new Sut();
         $query = $bookmark->getQuery([]);
@@ -63,10 +65,8 @@ class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(null, $query);
     }
 
-    /**
-     * @dataProvider dpRenderDataProvider
-     */
-    public function testRender($expectSnippet, $licenceTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderDataProvider')]
+    public function testRender(mixed $expectSnippet, mixed $licenceTypeId): void
     {
         $bookmark = new Sut();
         $bookmark->setData(['licenceType' => ['id' => $licenceTypeId]]);
@@ -81,7 +81,7 @@ class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function dpRenderDataProvider()
+    public static function dpRenderDataProvider(): array
     {
         return [
             [true, Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL],
@@ -91,10 +91,8 @@ class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider dpRenderCaseDataDataProvider
-     */
-    public function testRenderCaseData($expectSnippet, $data)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderCaseDataDataProvider')]
+    public function testRenderCaseData(mixed $expectSnippet, mixed $data): void
     {
         $bookmark = new Sut();
         $bookmark->setData($data);
@@ -109,7 +107,7 @@ class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function dpRenderCaseDataDataProvider()
+    public static function dpRenderCaseDataDataProvider(): array
     {
         return [
             [

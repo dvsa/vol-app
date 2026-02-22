@@ -30,6 +30,7 @@ class IrfoPsvAuth extends AbstractRepository
      * @throws Exception\NotFoundException
      * @throws Exception\VersionConflictException
      */
+    #[\Override]
     public function fetchById($id, $hydrateMode = Query::HYDRATE_OBJECT, $version = null)
     {
         $qb = $this->createQueryBuilder();

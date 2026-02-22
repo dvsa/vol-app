@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\ContinuationDetail;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -28,7 +30,8 @@ class SubmitTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             RefData::SIG_PHYSICAL_SIGNATURE,
@@ -38,7 +41,7 @@ class SubmitTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandPhysicalSignature()
+    public function testHandleCommandPhysicalSignature(): void
     {
         $data = [
             'id' => 154,
@@ -71,7 +74,7 @@ class SubmitTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['continuationDetail' => 154], $result->getIds());
     }
 
-    public function testHandleCommandDigitalSignature()
+    public function testHandleCommandDigitalSignature(): void
     {
         $data = [
             'id' => 154,
@@ -105,7 +108,7 @@ class SubmitTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['continuationDetail' => 154], $result->getIds());
     }
 
-    public function testHandleCommandNoFees()
+    public function testHandleCommandNoFees(): void
     {
         $data = [
             'id' => 154,
@@ -149,7 +152,7 @@ class SubmitTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['continuationDetail' => 154], $result->getIds());
     }
 
-    public function testHandleCommandNoFeesDontUseDefaultsForTotals()
+    public function testHandleCommandNoFeesDontUseDefaultsForTotals(): void
     {
         $data = [
             'id' => 154,

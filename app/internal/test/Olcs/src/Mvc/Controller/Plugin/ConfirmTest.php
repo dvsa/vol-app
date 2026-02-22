@@ -58,11 +58,9 @@ class ConfirmTest extends TestCase
             $this->uploadHelper
         ])->makePartial();
     }
-    /**
-     * @group        confirmPlugin
-     * @dataProvider dpTestInvokeGenerateForm
-     */
-    public function testInvokeGenerateForm($confirmLabel, $cancelLabel, $defaultLabelParams): void
+    #[\PHPUnit\Framework\Attributes\Group('confirmPlugin')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestInvokeGenerateForm')]
+    public function testInvokeGenerateForm(mixed $confirmLabel, mixed $cancelLabel, mixed $defaultLabelParams): void
     {
         $plugin = new Confirm();
         $this->configHelper = [];
@@ -124,7 +122,7 @@ class ConfirmTest extends TestCase
         $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $result);
     }
 
-    public function dpTestInvokeGenerateForm(): array
+    public static function dpTestInvokeGenerateForm(): array
     {
         return [
             ['Continue', 'Cancel', true],
@@ -132,9 +130,7 @@ class ConfirmTest extends TestCase
         ];
     }
 
-    /**
-     * @group confirmPlugin
-     */
+    #[\PHPUnit\Framework\Attributes\Group('confirmPlugin')]
     public function testInvokeProcessForm(): void
     {
         $plugin = new Confirm();
@@ -173,9 +169,7 @@ class ConfirmTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /**
-     * @group confirmPlugin
-     */
+    #[\PHPUnit\Framework\Attributes\Group('confirmPlugin')]
     public function testInvokeProcessInvalidForm(): void
     {
         $plugin = new Confirm();

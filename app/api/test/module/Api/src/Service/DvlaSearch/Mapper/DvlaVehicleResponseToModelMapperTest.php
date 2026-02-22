@@ -20,13 +20,13 @@ class DvlaVehicleResponseToModelMapperTest extends TestCase
         $this->sut = new DvlaVehicleResponseToModelMapper();
     }
 
-    public function testVehicleNodeMissing()
+    public function testVehicleNodeMissing(): void
     {
         $this->expectException(BadResponseException::class);
         $this->sut->map([]);
     }
 
-    public function testGetFromArray()
+    public function testGetFromArray(): void
     {
         $result = $this->sut->map([
             'vehicle' => [
@@ -76,7 +76,7 @@ class DvlaVehicleResponseToModelMapperTest extends TestCase
         );
     }
 
-    public function testDateParsing()
+    public function testDateParsing(): void
     {
         $result = $this->sut->map([
             'vehicle' => [

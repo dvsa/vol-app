@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class LicenceTest extends MockeryTestCase
 {
-    public function testIsValidNoLicence()
+    public function testIsValidNoLicence(): void
     {
         $sut = new Licence();
 
@@ -34,13 +36,13 @@ class LicenceTest extends MockeryTestCase
     /**
      * Returns whether a licence is allowed to receive ebsr submissions based on the status
      *
-     * @dataProvider isValidProvider
      *
      * @param $status
      * @param $goodsOrPsv
      * @param $valid
      */
-    public function testIsValid($status, $goodsOrPsv, $valid)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
+    public function testIsValid(mixed $status, mixed $goodsOrPsv, mixed $valid): void
     {
         $sut = new Licence();
 
@@ -66,7 +68,7 @@ class LicenceTest extends MockeryTestCase
      *
      * @return array
      */
-    public function isValidProvider()
+    public static function isValidProvider(): array
     {
         return [
             [LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, LicenceEntity::LICENCE_CATEGORY_PSV, false],

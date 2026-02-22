@@ -43,7 +43,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractSurrender implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSurrender implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -155,7 +155,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     protected $discDestroyed;
 
     /**
-     *  NUMBER of discs that have been declared lost 
+     *  NUMBER of discs that have been declared lost
      *
      * @var int
      *
@@ -183,7 +183,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
 
     /**
      *  information relating TO stolen discs
-  
+
      *
      * @var string
      *

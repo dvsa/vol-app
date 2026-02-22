@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * GetByCase Test
  */
@@ -26,7 +28,7 @@ class GetByCaseTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['case' => 1]);
 
@@ -43,7 +45,7 @@ class GetByCaseTest extends QueryHandlerTestCase
         $this->assertEquals(['foo'], $result->serialize());
     }
 
-    public function testHandleQueryNoResult()
+    public function testHandleQueryNoResult(): void
     {
         $query = Qry::create(['case' => 1]);
 

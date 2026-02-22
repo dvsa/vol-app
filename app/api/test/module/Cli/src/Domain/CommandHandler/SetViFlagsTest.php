@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler;
 
 use Doctrine\DBAL\Connection;
@@ -29,7 +31,7 @@ class SetViFlagsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $mockStmt = m::mock(Statement::class);
         $mockStmt->expects('executeQuery')->withNoArgs()->andReturn(m::mock(Result::class));

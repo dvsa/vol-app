@@ -27,8 +27,6 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
     protected $lva = 'variation';
     protected string $location = 'internal';
 
-    protected StringHelperService $stringHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -47,12 +45,10 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
         FlashMessengerHelperService $flashMessengerHelper,
         FormServiceManager $formServiceManager,
         TableFactory $tableFactory,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         VariationConditionsUndertakingsAdapter $lvaAdapter,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,
@@ -74,7 +70,7 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
     public function restoreAction()
     {
         $id = $this->params('child_id');
-        $ids = explode(',', $id);
+        $ids = explode(',', (string) $id);
 
         $response = $this->handleCommand(
             \Dvsa\Olcs\Transfer\Command\Variation\RestoreListConditionUndertaking::create(
@@ -104,6 +100,7 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
      *
      * @return array
      */
+    #[\Override]
     protected function getRenderVariables()
     {
         return ['title' => null];

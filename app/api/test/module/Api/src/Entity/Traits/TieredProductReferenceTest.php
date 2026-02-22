@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Traits;
 
 use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
@@ -27,7 +29,7 @@ class TieredProductReferenceTest extends MockeryTestCase
         'Dec' => FeeType::FEE_TYPE_ECMT_ISSUE_25_PRODUCT_REF,
     ];
 
-    public function testGenericGetProdRefForTierFuture()
+    public function testGenericGetProdRefForTierFuture(): void
     {
         $sut = new StubTieredProductReference();
         $this->assertEquals(
@@ -41,7 +43,7 @@ class TieredProductReferenceTest extends MockeryTestCase
         );
     }
 
-    public function testGenericGetProdRefForTierPast()
+    public function testGenericGetProdRefForTierPast(): void
     {
         $sut = new StubTieredProductReference();
         $this->expectException(BadRequestException::class);
@@ -57,11 +59,8 @@ class TieredProductReferenceTest extends MockeryTestCase
         );
     }
 
-    /**
-     *
-     * @dataProvider productRefMonthProvider
-     */
-    public function testGenericGetProdRefForTierMonths($expected, $validFrom, $validTo, $now, $refs)
+    #[\PHPUnit\Framework\Attributes\DataProvider('productRefMonthProvider')]
+    public function testGenericGetProdRefForTierMonths(mixed $expected, mixed $validFrom, mixed $validTo, mixed $now, mixed $refs): void
     {
         $sut = new StubTieredProductReference();
         $this->assertEquals(
@@ -75,7 +74,7 @@ class TieredProductReferenceTest extends MockeryTestCase
         );
     }
 
-    public function productRefMonthProvider()
+    public static function productRefMonthProvider(): array
     {
         $validFrom = new DateTime('first day of January next year');
         $validTo = new DateTime('last day of December next year');

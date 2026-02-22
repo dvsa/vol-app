@@ -15,7 +15,7 @@ class SlaException extends AbstractRepository
      * Fetch active SLA exceptions
      *
      * @param \DateTime|null $checkDate Date to check against (default: now)
-     * 
+     *
      * @return array
      */
     public function fetchActive($checkDate = null)
@@ -44,7 +44,7 @@ class SlaException extends AbstractRepository
      * Fetch SLA exceptions by description pattern
      *
      * @param string $pattern Search pattern
-     * 
+     *
      * @return array
      */
     public function fetchByDescriptionPattern($pattern)
@@ -64,7 +64,7 @@ class SlaException extends AbstractRepository
 
     /**
      * Fetch all SLA exceptions ordered by description
-     * 
+     *
      * @return array
      */
     public function fetchAllOrdered()

@@ -20,8 +20,6 @@ class TaskController extends AbstractController implements CaseControllerInterfa
         ControllerTraits\TaskActionTrait::getTaskForm as traitGetTaskForm;
     }
 
-    protected TreeRouteStack $router;
-
     protected string $helperClass;
 
     public function __construct(
@@ -29,7 +27,7 @@ class TaskController extends AbstractController implements CaseControllerInterfa
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        TreeRouteStack $router,
+        protected TreeRouteStack $router,
         protected SubCategory $subCategoryDataService
     ) {
         parent::__construct(
@@ -38,7 +36,6 @@ class TaskController extends AbstractController implements CaseControllerInterfa
             $tableFactory,
             $viewHelperManager
         );
-        $this->router = $router;
     }
 
     /**

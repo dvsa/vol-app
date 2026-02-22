@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
 use Common\Service\Helper\UrlHelperService;
+use Laminas\EventManager\EventManagerInterface;
 use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Laminas\View\HelperPluginManager;
@@ -31,20 +34,23 @@ class IrhpApplicationFurnitureTest extends TestCase
             ->shouldAllowMockingProtectedMethods();
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
-        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
-        $mockEventManager->shouldReceive('attach')->once()
+        $mockEventManager = m::mock(EventManagerInterface::class);
+        $mockEventManager->expects('attach')
             ->with(
                 RouteParams::EVENT_PARAM . 'irhpAppId',
-                [$this->sut, 'onIrhpApplicationFurniture'],
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onIrhpApplicationFurniture';
+                }),
                 1
             );
 
         $this->sut->attach($mockEventManager);
     }
 
-    protected function onIrhpPermitSetup($irhpApplicationData)
+    protected function onIrhpPermitSetup(mixed $irhpApplicationData): void
     {
         $mockQuerySender = m::mock(QuerySender::class);
         $this->sut->setQuerySender($mockQuerySender);
@@ -64,10 +70,8 @@ class IrhpApplicationFurnitureTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider dpOnIrhpApplicationFurniture
-     */
-    public function testOnIrhpApplicationFurniture($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpOnIrhpApplicationFurniture')]
+    public function testOnIrhpApplicationFurniture(mixed $data, mixed $expected): void
     {
         $irhpApplicationId = 2;
         $irhpAppData = [
@@ -211,7 +215,7 @@ class IrhpApplicationFurnitureTest extends TestCase
         $this->sut->onIrhpApplicationFurniture($event);
     }
 
-    public function dpOnIrhpApplicationFurniture()
+    public static function dpOnIrhpApplicationFurniture(): array
     {
         return [
             [
@@ -309,7 +313,7 @@ class IrhpApplicationFurnitureTest extends TestCase
         ];
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $mockNavigation = m::mock(\Laminas\Navigation\Navigation::class);

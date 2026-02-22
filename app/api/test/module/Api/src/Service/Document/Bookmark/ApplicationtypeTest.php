@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\Applicationtype as Sut;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Applicationtype as Sut;
  */
 class ApplicationtypeTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQueryApplication()
+    public function testGetQueryApplication(): void
     {
         $bookmark = new Sut();
         $query = $bookmark->getQuery(['application' => 123]);
@@ -20,7 +22,7 @@ class ApplicationtypeTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(['licenceType'], $query->getBundle());
     }
 
-    public function testGetQueryCase()
+    public function testGetQueryCase(): void
     {
         $bookmark = new Sut();
         $query = $bookmark->getQuery(['case' => 12399]);
@@ -31,7 +33,7 @@ class ApplicationtypeTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(['licenceType'], $query->getBundle());
     }
 
-    public function testGetQueryNull()
+    public function testGetQueryNull(): void
     {
         $bookmark = new Sut();
         $query = $bookmark->getQuery([]);
@@ -39,7 +41,7 @@ class ApplicationtypeTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(null, $query);
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $bookmark = new Sut();
         $bookmark->setData(['licenceType' => ['description' => 'DESCRIPTION']]);

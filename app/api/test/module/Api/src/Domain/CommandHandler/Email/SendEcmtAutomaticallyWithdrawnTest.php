@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
 
 use Dvsa\Olcs\Api\Domain\Command\Email\SendEcmtAutomaticallyWithdrawn as SendEcmtAutomaticallyWithdrawnCmd;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
 /**
  * Test the permit app successful email
  */
-class SendEcmtAutomaticallyWithdrawnTest extends AbstractEcmtAnnualPermitTest
+class SendEcmtAutomaticallyWithdrawnTest extends AbstractEcmtAnnualPermitTestCase
 {
     protected $commandClass = SendEcmtAutomaticallyWithdrawnCmd::class;
     protected $commandHandlerClass = SendEcmtAutomaticallyWithdrawnHandler::class;

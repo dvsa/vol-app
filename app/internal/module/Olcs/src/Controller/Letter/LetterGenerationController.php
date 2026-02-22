@@ -156,7 +156,6 @@ class LetterGenerationController extends AbstractInternalController implements L
 
         $entityContext = $this->extractEntityContext($allParams);
 
-
         $commandData = [
             'letterType' => $letterTypeId,
             'selectedIssues' => $postData['letterIssues'] ?? [],
@@ -170,7 +169,6 @@ class LetterGenerationController extends AbstractInternalController implements L
         $command = \Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Generate::create($commandData);
 
         $response = $this->handleCommand($command);
-
 
         if (!$response->isOk()) {
             $messages = $response->getResult()['messages'] ?? [];
@@ -730,9 +728,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $result = $response->getResult();
 
         // Filter active issue types only
-        $issueTypes = array_filter($result['results'] ?? [], function ($issueType) {
-            return !empty($issueType['isActive']);
-        });
+        $issueTypes = array_filter($result['results'] ?? [], fn($issueType) => !empty($issueType['isActive']));
 
         return array_values($issueTypes);
     }

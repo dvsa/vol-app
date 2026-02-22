@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CeasePsvDiscsTest.php
  *
@@ -33,7 +35,7 @@ class CeasePsvDiscsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(['licence' => 1]);
         $this->repoMap['PsvDisc']

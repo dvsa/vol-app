@@ -46,11 +46,11 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
     use UploaderAwareTrait;
     use QueueAwareTrait;
 
-    public const MISSING_SI_CATEGORY_ERROR = 'Si category %s is not valid';
-    public const MISSING_IMPOSED_PENALTY_ERROR = 'Imposed penalty %s is not valid';
-    public const MISSING_REQUESTED_PENALTY_ERROR = 'Requested penalty %s is not valid';
-    public const MISSING_MEMBER_STATE_ERROR = 'Member state %s not found';
-    public const WORKFLOW_ID_EXISTS = 'Erru request with workflow id %s already exists';
+    public const string MISSING_SI_CATEGORY_ERROR = 'Si category %s is not valid';
+    public const string MISSING_IMPOSED_PENALTY_ERROR = 'Imposed penalty %s is not valid';
+    public const string MISSING_REQUESTED_PENALTY_ERROR = 'Requested penalty %s is not valid';
+    public const string MISSING_MEMBER_STATE_ERROR = 'Member state %s not found';
+    public const string WORKFLOW_ID_EXISTS = 'Erru request with workflow id %s already exists';
 
     protected $repoServiceName = 'Cases';
 
@@ -541,6 +541,7 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
     {
         return $this->errors;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

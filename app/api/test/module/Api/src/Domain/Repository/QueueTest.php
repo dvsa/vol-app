@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\DBAL\Connection;
@@ -25,7 +27,7 @@ class QueueTest extends RepositoryTestCase
         $this->setUpSut(QueueRepo::class, true);
     }
 
-    public function testGetNextItem()
+    public function testGetNextItem(): void
     {
         $item = m::mock(QueueEntity::class)->makePartial();
 
@@ -60,7 +62,7 @@ class QueueTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testGetNextItemInclude()
+    public function testGetNextItemInclude(): void
     {
         $item = m::mock(QueueEntity::class)->makePartial();
 
@@ -96,7 +98,7 @@ class QueueTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testGetNextItemExclude()
+    public function testGetNextItemExclude(): void
     {
         $item = m::mock(QueueEntity::class)->makePartial();
 
@@ -132,7 +134,7 @@ class QueueTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testEnqueueContinuationNotSought()
+    public function testEnqueueContinuationNotSought(): void
     {
         $options1 = '{"id":1,"version":2}';
         $options2 = '{"id":3,"version":4}';
@@ -171,7 +173,7 @@ class QueueTest extends RepositoryTestCase
         $this->assertEquals(2, $this->sut->enqueueContinuationNotSought($licences));
     }
 
-    public function testIsItemTypeQueuedTrue()
+    public function testIsItemTypeQueuedTrue(): void
     {
         $qb = $this->createMockQb('[QUERY]');
         $this->mockCreateQueryBuilder($qb);
@@ -190,7 +192,7 @@ class QueueTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testIsItemTypeQueuedFalse()
+    public function testIsItemTypeQueuedFalse(): void
     {
         $qb = $this->createMockQb('[QUERY]');
         $this->mockCreateQueryBuilder($qb);
@@ -209,7 +211,7 @@ class QueueTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchNextItemIncludingPostponedWithIncludeTypes()
+    public function testFetchNextItemIncludingPostponedWithIncludeTypes(): void
     {
         $item = m::mock(QueueEntity::class)->makePartial();
 
@@ -233,7 +235,7 @@ class QueueTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchNextItemIncludingPostponedWithexcludeTypes()
+    public function testFetchNextItemIncludingPostponedWithexcludeTypes(): void
     {
         $item = m::mock(QueueEntity::class)->makePartial();
 
@@ -259,10 +261,9 @@ class QueueTest extends RepositoryTestCase
     /**
      * @param array $results
      * @param bool  $expected
-     *
-     * @dataProvider dpIsItemInQueue
      */
-    public function testIsItemInQueue($results, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsItemInQueue')]
+    public function testIsItemInQueue(mixed $results, mixed $expected): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -285,7 +286,7 @@ class QueueTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function dpIsItemInQueue()
+    public static function dpIsItemInQueue(): array
     {
         return [
             'exists in the queue' => [['RESULTS'], true],

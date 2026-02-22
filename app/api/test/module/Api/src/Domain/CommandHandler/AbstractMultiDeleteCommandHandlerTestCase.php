@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler;
 
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
@@ -11,7 +13,7 @@ use Mockery as m;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-abstract class AbstractDeleteCommandHandlerTest extends AbstractCommandHandlerTestCase
+abstract class AbstractMultiDeleteCommandHandlerTestCase extends AbstractCommandHandlerTestCase
 {
     protected $cmdClass = 'changeMe';
     protected $sutClass = 'changeMe';
@@ -27,31 +29,54 @@ abstract class AbstractDeleteCommandHandlerTest extends AbstractCommandHandlerTe
         parent::setUp();
     }
 
-    public function testHandleCommandSingleId()
+    public function testHandleCommandMultiId(): void
     {
-        $id = 999;
-        $command = $this->cmdClass::create(['id' => $id]);
+        $id1 = 999;
+        $id2 = 777;
 
-        $entity = m::mock($this->entityClass);
+        $command = $this->buildCommand($id1, $id2);
+
+        $entity1 = m::mock($this->entityClass);
 
         $this->repoMap[$this->repoServiceName]
             ->shouldReceive('fetchById')
-            ->with($id)
+            ->with($id1)
             ->once()
-            ->andReturn($entity);
+            ->andReturn($entity1);
 
-        $entity->shouldReceive('canDelete')->once()->andReturn(true);
+        $entity1->shouldReceive('canDelete')->once()->andReturn(true);
 
         $this->repoMap[$this->repoServiceName]
             ->shouldReceive('delete')
             ->once()
-            ->with($entity);
+            ->with($entity1);
+
+        $entity2 = m::mock($this->entityClass);
+
+        $this->repoMap[$this->repoServiceName]
+            ->shouldReceive('fetchById')
+            ->with($id2)
+            ->once()
+            ->andReturn($entity2);
+
+        $entity2->shouldReceive('canDelete')->once()->andReturn(true);
+
+        $this->repoMap[$this->repoServiceName]
+            ->shouldReceive('delete')
+            ->once()
+            ->with($entity2);
 
         $result = $this->sut->handleCommand($command);
 
         $expected = [
-            'id' => ['id' . $id => $id],
-            'messages' => ['Id ' . $id . ' deleted']
+            'id' => [
+                'id' . $id1 => $id1,
+                'id' . $id2 => $id2
+            ],
+            'messages' => [
+                'Id ' . $id1 . ' deleted',
+                'Id ' . $id2 . ' deleted'
+            ]
         ];
 
         $this->assertEquals($expected, $result->toArray());
@@ -60,21 +85,22 @@ abstract class AbstractDeleteCommandHandlerTest extends AbstractCommandHandlerTe
     /**
      * Tests when an entity can't be deleted
      */
-    public function testHandleCantDelete()
+    public function testHandleCantDelete(): void
     {
-        $id = 999;
-        $exceptionMessage = 'Id ' . $id . ' (' . $this->repoServiceName . ') is not allowed to be deleted';
+        $id1 = 999;
+        $id2 = 777;
+        $exceptionMessage = 'Id ' . $id1 . ' (' . $this->repoServiceName . ') is not allowed to be deleted';
 
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage($exceptionMessage);
 
-        $command = $this->cmdClass::create(['id' => $id]);
+        $command = $this->buildCommand($id1, $id2);
 
         $entity = m::mock($this->entityClass);
 
         $this->repoMap[$this->repoServiceName]
             ->shouldReceive('fetchById')
-            ->with($id)
+            ->with($id1)
             ->once()
             ->andReturn($entity);
 
@@ -89,14 +115,22 @@ abstract class AbstractDeleteCommandHandlerTest extends AbstractCommandHandlerTe
     /**
      * Tests when an entity can't be found
      */
-    public function testHandleNotFound()
+    public function testHandleNotFound(): void
     {
-        $id = 999;
-        $command = $this->cmdClass::create(['id' => $id]);
+        $id1 = 999;
+        $id2 = 777;
+
+        $command = $this->buildCommand($id1, $id2);
 
         $this->repoMap[$this->repoServiceName]
             ->shouldReceive('fetchById')
-            ->with($id)
+            ->with($id1)
+            ->once()
+            ->andThrow(NotFoundException::class);
+
+        $this->repoMap[$this->repoServiceName]
+            ->shouldReceive('fetchById')
+            ->with($id2)
             ->once()
             ->andThrow(NotFoundException::class);
 
@@ -107,10 +141,23 @@ abstract class AbstractDeleteCommandHandlerTest extends AbstractCommandHandlerTe
         $expected = [
             'id' => [],
             'messages' => [
-                'Id ' . $id . ' not found',
-            ]
+                'Id ' . $id1 . ' not found',
+                'Id ' . $id2 . ' not found'
+            ],
         ];
 
         $this->assertEquals($expected, $this->sut->handleCommand($command)->toArray());
+    }
+
+    private function buildCommand(int $id1, int $id2): mixed
+    {
+        $cmdData = [
+            'ids' => [
+                $id1,
+                $id2,
+            ],
+        ];
+
+        return $this->cmdClass::create($cmdData);
     }
 }

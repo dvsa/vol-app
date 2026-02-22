@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Bus;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,9 +21,7 @@ use Dvsa\Olcs\Transfer\Command\Publication\Bus as PublicationBusCmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Bus\GrantBusReg
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Bus\GrantBusReg::class)]
 class GrantBusRegTest extends AbstractCommandHandlerTestCase
 {
     public const BUS_REG_ID = 9999;
@@ -41,7 +41,8 @@ class GrantBusRegTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             BusRegEntity::STATUS_REGISTERED,
@@ -52,7 +53,7 @@ class GrantBusRegTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandThrowsIncorrectStatusException()
+    public function testHandleCommandThrowsIncorrectStatusException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -74,7 +75,7 @@ class GrantBusRegTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandThrowsMissingVariationReasonsException()
+    public function testHandleCommandThrowsMissingVariationReasonsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -100,10 +101,8 @@ class GrantBusRegTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider handleCommandProvider
-     */
-    public function testHandleCommand($oldStatus)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
+    public function testHandleCommand(mixed $oldStatus): void
     {
         $command = BusGrantBusRegCmd::create(
             [
@@ -169,7 +168,7 @@ class GrantBusRegTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider(): array
     {
         return [
             [BusRegEntity::STATUS_VAR],
@@ -177,10 +176,8 @@ class GrantBusRegTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider handleCommandEbsrProvider
-     */
-    public function testHandleCommandEbsrRecord($oldStatus, $emailSideEffectClass)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandEbsrProvider')]
+    public function testHandleCommandEbsrRecord(mixed $oldStatus, mixed $emailSideEffectClass): void
     {
         $ebsrId = 55;
 
@@ -240,7 +237,7 @@ class GrantBusRegTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function handleCommandEbsrProvider()
+    public static function handleCommandEbsrProvider(): array
     {
         return [
             [BusRegEntity::STATUS_VAR, SendEbsrRegistered::class],

@@ -55,9 +55,7 @@ class ValidatableAdapterFactoryTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -67,11 +65,9 @@ class ValidatableAdapterFactoryTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->__invoke(...));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
-    public function invokeReturnsAnInstanceOfValidatableAdapterInterfaceWhenAdapterDefinedAsInstancedClass()
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokeReturnsAnInstanceOfValidatableAdapterInterfaceWhenAdapterDefinedAsInstancedClass(): void
     {
         // Setup
         $this->setUpSut();
@@ -84,11 +80,9 @@ class ValidatableAdapterFactoryTest extends MockeryTestCase
         $this->assertSame($expectedAdapter, $result, 'Provided adapter does not match the expectedAdapter instance configured');
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
-    public function invokeReturnsAnInstanceOfValidatableAdapterInterfaceWhenAdapterDefinedAsClassReferenceStringAndExistsInServiceManager()
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokeReturnsAnInstanceOfValidatableAdapterInterfaceWhenAdapterDefinedAsClassReferenceStringAndExistsInServiceManager(): void
     {
         // Setup
         $this->setUpSut();
@@ -102,11 +96,9 @@ class ValidatableAdapterFactoryTest extends MockeryTestCase
         $this->assertSame($expectedAdapter, $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
-    public function invokeReturnsAnInstanceOfValidatableAdapterInterfaceDefinedAsClassReferenceStringAndDoesNotExistInServiceManagerAndInstantiates()
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokeReturnsAnInstanceOfValidatableAdapterInterfaceDefinedAsClassReferenceStringAndDoesNotExistInServiceManagerAndInstantiates(): void
     {
         // Setup
         $this->setUpSut();
@@ -119,10 +111,8 @@ class ValidatableAdapterFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(ValidatableAdapterInterface::class, $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeThrowsExceptionWhenConfigAuthNamespaceNotDefined(): void
     {
         // Setup
@@ -137,10 +127,8 @@ class ValidatableAdapterFactoryTest extends MockeryTestCase
         $this->sut->__invoke($this->serviceManager(), null);
     }
 
-    /**
-     * @test
-     * @depends invokeThrowsExceptionWhenConfigAuthNamespaceNotDefined
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeThrowsExceptionWhenConfigAuthNamespaceNotDefined')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeThrowsExceptionWhenConfigAuthDefaultAdapterNotDefined(): void
     {
         // Setup
@@ -155,10 +143,8 @@ class ValidatableAdapterFactoryTest extends MockeryTestCase
         $this->sut->__invoke($this->serviceManager(), null);
     }
 
-    /**
-     * @test
-     * @depends invokeThrowsExceptionWhenConfigAuthDefaultAdapterNotDefined
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeThrowsExceptionWhenConfigAuthDefaultAdapterNotDefined')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeThrowsExceptionWhenConfigAuthAdapterNotDefined(): void
     {
         // Setup
@@ -173,10 +159,8 @@ class ValidatableAdapterFactoryTest extends MockeryTestCase
         $this->sut->__invoke($this->serviceManager(), null);
     }
 
-    /**
-     * @test
-     * @depends invokeThrowsExceptionWhenConfigAuthAdapterNotDefined
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeThrowsExceptionWhenConfigAuthAdapterNotDefined')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeThrowsExceptionWhenConfigAuthAdapterDefinedAndAdapterConfigAdapterNotDefined(): void
     {
         // Setup
@@ -191,10 +175,8 @@ class ValidatableAdapterFactoryTest extends MockeryTestCase
         $this->sut->__invoke($this->serviceManager(), null);
     }
 
-    /**
-     * @test
-     * @depends invokeThrowsExceptionWhenConfigAuthAdapterDefinedAndAdapterConfigAdapterNotDefined
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeThrowsExceptionWhenConfigAuthAdapterDefinedAndAdapterConfigAdapterNotDefined')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeThrowsExceptionWhenConfigAuthAdapterNotInstanceOfValidatableAdapterInterface(): void
     {
         // Setup
@@ -219,7 +201,7 @@ class ValidatableAdapterFactoryTest extends MockeryTestCase
         $this->sut = new ValidatableAdapterFactory();
     }
 
-    protected function setUpDefaultServices(ServiceManager $serviceManager)
+    protected function setUpDefaultServices(ServiceManager $serviceManager): void
     {
         $this->configService();
     }
@@ -228,7 +210,7 @@ class ValidatableAdapterFactoryTest extends MockeryTestCase
      * @param array|null $config
      * @return array
      */
-    protected function configService(array $config = null): array
+    protected function configService(?array $config = null): array
     {
         if (! $this->serviceManager->has('config')) {
             $this->serviceManager->setService('config', static::CONFIG_WITH_ADAPTER_DEFINED);
@@ -244,7 +226,7 @@ class ValidatableAdapterFactoryTest extends MockeryTestCase
     /**
      * @param null $adapter
      */
-    protected function configureAdapter($adapter = null): void
+    protected function configureAdapter(mixed $adapter = null): void
     {
         $config = static::CONFIG_WITH_ADAPTER_DEFINED;
         $config[LoginFactory::CONFIG_NAMESPACE][LoginFactory::AUTH_CONFIG_ADAPTERS]['some_adapter'][LoginFactory::ADAPTER_CONFIG_ADAPTER] = $adapter;

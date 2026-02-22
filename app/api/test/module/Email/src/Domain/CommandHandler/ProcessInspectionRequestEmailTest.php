@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Process Inspection Request Email Test
  *
@@ -23,6 +25,7 @@ use Olcs\Logging\Log\Logger;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class ProcessInspectionRequestEmailTest extends AbstractCommandHandlerTestCase
 {
     /**
@@ -44,7 +47,7 @@ class ProcessInspectionRequestEmailTest extends AbstractCommandHandlerTestCase
         Logger::getLogger()->addWriter($logWriter);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         // stub data
         $emails = [
@@ -87,7 +90,7 @@ class ProcessInspectionRequestEmailTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand(Cmd::create([]));
     }
 
-    public function testHandleCommandEmailFail()
+    public function testHandleCommandEmailFail(): void
     {
         $emails = [1 => '4355'];
         $email1 = ['error'];
@@ -108,7 +111,7 @@ class ProcessInspectionRequestEmailTest extends AbstractCommandHandlerTestCase
         $this->assertMatchesRegularExpression('/Could not retrieve email 4355/', $this->logWriter->events[0]['message']);
     }
 
-    public function testHandleCommandEmailInvalidSubject()
+    public function testHandleCommandEmailInvalidSubject(): void
     {
         $emails = [1 => '4355'];
         $email1 = ['subject' => 'spam!'];
@@ -129,7 +132,7 @@ class ProcessInspectionRequestEmailTest extends AbstractCommandHandlerTestCase
         $this->assertMatchesRegularExpression('/Unable to parse email subject line: spam!/', $this->logWriter->events[0]['message']);
     }
 
-    public function testHandleCommandNoEmails()
+    public function testHandleCommandNoEmails(): void
     {
         // stub data
         $emails = [];
@@ -143,7 +146,7 @@ class ProcessInspectionRequestEmailTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand(Cmd::create([]));
     }
 
-    public function testHandleCommandNotFound()
+    public function testHandleCommandNotFound(): void
     {
         $emails = [1 => '4355'];
         $email1 = ['subject' => '[ Maintenance Inspection ] REQUEST=23456,STATUS=S',];

@@ -47,6 +47,7 @@ class RequestMap extends AbstractCommandConsumer
      *
      * @return string
      */
+    #[\Override]
     public function failed(QueueEntity $item, $reason = null)
     {
         $cmdData = $this->getCommandData($item);

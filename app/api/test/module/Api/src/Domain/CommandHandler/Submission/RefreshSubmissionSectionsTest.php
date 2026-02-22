@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Submission;
 
 use Dvsa\Olcs\Api\Domain\Repository\TransportManagerApplication as TmApplicationRepo;
@@ -38,6 +40,7 @@ class RefreshSubmissionSectionsTest extends AbstractCommandHandlerTestCase
         ]
     ];
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new RefreshSubmissionSections();
@@ -81,7 +84,8 @@ class RefreshSubmissionSectionsTest extends AbstractCommandHandlerTestCase
         $this->initReferences();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'case-summary',
@@ -100,7 +104,7 @@ class RefreshSubmissionSectionsTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandSingleSection()
+    public function testHandleCommandSingleSection(): void
     {
         $data = [
             'id' => 122,
@@ -152,7 +156,7 @@ class RefreshSubmissionSectionsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($refreshData, $newDataSnapshot['operating-centres']);
     }
 
-    public function testHandleCommandSubSection()
+    public function testHandleCommandSubSection(): void
     {
         $data = [
             'id' => 122,
@@ -219,7 +223,7 @@ class RefreshSubmissionSectionsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    private function getMockSubmission()
+    private function getMockSubmission(): mixed
     {
         $mockDataSnapshot = '
 {

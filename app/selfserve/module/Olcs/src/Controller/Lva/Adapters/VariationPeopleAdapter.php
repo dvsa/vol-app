@@ -25,6 +25,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
      *
      * @return bool
      */
+    #[\Override]
     public function canModify(): bool
     {
         // i.e. they *can't* modify exceptional org types
@@ -37,6 +38,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
      *
      * @return string
      */
+    #[\Override]
     protected function getTableConfig(): string
     {
         if (!$this->useDeltas()) {
@@ -53,6 +55,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
      *
      * @return void
      */
+    #[\Override]
     public function alterFormForOrganisation(Form $form, $table): void
     {
         if ($this->canModify()) {
@@ -86,6 +89,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
      *
      * @return \Dvsa\Olcs\Transfer\Command\Licence\CreatePeople
      */
+    #[\Override]
     protected function getCreateCommand($params): CreatePeople
     {
         $params['id'] = $this->getApplicationId();
@@ -99,6 +103,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
      *
      * @return \Dvsa\Olcs\Transfer\Command\AbstractCommand
      */
+    #[\Override]
     protected function getUpdateCommand($params): \Dvsa\Olcs\Transfer\Command\Application\UpdatePeople
     {
         $params['person'] = $params['id'];
@@ -113,6 +118,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
      *
      * @return \Dvsa\Olcs\Transfer\Command\AbstractCommand
      */
+    #[\Override]
     protected function getDeleteCommand($params): \Dvsa\Olcs\Transfer\Command\Application\DeletePeople
     {
         $params['id'] = $this->getApplicationId();

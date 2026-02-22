@@ -1,26 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\AcquiredRights\Client;
 
 use Dvsa\Olcs\AcquiredRights\Client\Mapper\ApplicationReferenceMapper;
 use Dvsa\Olcs\AcquiredRights\Exception\MapperParseException;
 use Dvsa\Olcs\AcquiredRights\Model\ApplicationReference;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 class ApplicationReferenceMapperTest extends MockeryTestCase
 {
-    protected $sut;
+    protected ApplicationReferenceMapper $sut;
 
     public function setUp(): void
     {
         $this->sut = new ApplicationReferenceMapper();
     }
 
-    /**
-     * @test
-     * @dataProvider dataProviderResponseDataAndExceptionMap
-     */
-    public function createFromResponseArrayValidOrThrowsAppropriateExceptions(array $data, string $exceptionMessage = null)
+    #[DataProvider('dataProviderResponseDataAndExceptionMap')]
+    #[Test]
+    public function createFromResponseArrayValidOrThrowsAppropriateExceptions(array $data, string $exceptionMessage = null): void
     {
         if (!is_null($exceptionMessage)) {
             $this->expectException(MapperParseException::class);
@@ -32,95 +34,95 @@ class ApplicationReferenceMapperTest extends MockeryTestCase
         $this->sut::createFromResponseArray($data);
     }
 
-    public function dataProviderResponseDataAndExceptionMap(): array
+    public static function dataProviderResponseDataAndExceptionMap(): array
     {
         return [
             'Valid' => [
-                $this->generateData(),
+                self::generateData(),
                 null
             ],
             'ID is not defined' => [
-                $this->generateData([], 'id'),
+                self::generateData([], 'id'),
                 'Id must not be empty().'
             ],
             'ID is empty string' => [
-                $this->generateData([
+                self::generateData([
                     'id' => '',
                 ]),
                 'Id must not be empty().'
             ],
             'ID does not match regex (UUIDv4)' => [
-                $this->generateData([
+                self::generateData([
                     'id' => 'ljnsdgnjlsdgljnsdgljknsdg',
                 ]),
                 'Id is not a valid UUIDv4.'
             ],
             'Reference is not defined' => [
-                $this->generateData([], 'reference'),
+                self::generateData([], 'reference'),
                 'Reference must not be empty().'
             ],
             'Reference is empty string' => [
-                $this->generateData([
+                self::generateData([
                     'reference' => '',
                 ]),
                 'Reference must not be empty().'
             ],
             'Reference does not match regex (7 Character AlphaNum String)' => [
-                $this->generateData([
+                self::generateData([
                     'reference' => 'ABC123',
                 ]),
                 'Reference is not valid.'
             ],
             'Status is not defined' => [
-                $this->generateData([], 'status'),
+                self::generateData([], 'status'),
                 'Status must not be empty().'
             ],
             'Status is empty string' => [
-                $this->generateData([
+                self::generateData([
                     'status' => '',
                 ]),
                 'Status must not be empty().'
             ],
             'Status is not in allowed values' => [
-                $this->generateData([
+                self::generateData([
                     'status' => 'Some non-existent status',
                 ]),
                 'Application Status is not valid.'
             ],
             'SubmittedOn is not defined' => [
-                $this->generateData([], 'submittedOn'),
+                self::generateData([], 'submittedOn'),
                 'Submitted On must not be empty().'
             ],
             'SubmittedOn is empty string' => [
-                $this->generateData([
+                self::generateData([
                     'submittedOn' => '',
                 ]),
                 'Submitted On must not be empty().'
             ],
             'SubmittedOn does not match timestamp format' => [
-                $this->generateData([
+                self::generateData([
                     'submittedOn' => '10 Jan 1990',
                 ]),
                 'Submitted On could not parse into DateTime from format'
             ],
             'DateOfBirh is not defined' => [
-                $this->generateData([], 'dateOfBirth'),
+                self::generateData([], 'dateOfBirth'),
                 'Date of Birth must not be empty().'
             ],
             'Date of Birth is empty string' => [
-                $this->generateData([
+                self::generateData([
                     'dateOfBirth' => '',
                 ]),
                 'Date of Birth must not be empty().'
             ],
             'Date of Birth does not match timestamp format' => [
-                $this->generateData([
+                self::generateData([
                     'dateOfBirth' => '10 Jan 1990',
                 ]),
                 'Date of Birth could not parse into DateTime from format'
             ],
             'Status Update On does not match timestamp format' => [
-                $this->generateData([
+                self::generateData([
                     'statusUpdateOn' => '10 Jan 1990',
                 ]),
                 'Status Update On could not parse into DateTime from format'
@@ -128,7 +130,7 @@ class ApplicationReferenceMapperTest extends MockeryTestCase
         ];
     }
 
-    protected function generateData(array $override = [], string $unsetKey = null): array
+    private static function generateData(array $override = [], string $unsetKey = null): array
     {
         $result = array_merge([
             'id' => '6fcf9551-ade4-4b48-b078-6db59559a182',

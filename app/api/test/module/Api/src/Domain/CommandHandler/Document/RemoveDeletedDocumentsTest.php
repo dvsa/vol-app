@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Document;
 
 use Dvsa\Olcs\Api\Domain\Command\Queue\Create;
@@ -33,7 +35,7 @@ class RemoveDeletedDocumentsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create([]);
 
@@ -88,7 +90,7 @@ class RemoveDeletedDocumentsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandQueueItemCreated()
+    public function testHandleCommandQueueItemCreated(): void
     {
         $command = Cmd::create([]);
 
@@ -124,7 +126,7 @@ class RemoveDeletedDocumentsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandNoDocumentsToDelete()
+    public function testHandleCommandNoDocumentsToDelete(): void
     {
         $command = Cmd::create([]);
 
@@ -147,7 +149,7 @@ class RemoveDeletedDocumentsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandQueueItemCreatedWhenDocumentPostponed()
+    public function testHandleCommandQueueItemCreatedWhenDocumentPostponed(): void
     {
         $command = Cmd::create([]);
 
@@ -187,7 +189,7 @@ class RemoveDeletedDocumentsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandQueueItemCreatedWhenDocumentAndQueueItemPostponed()
+    public function testHandleCommandQueueItemCreatedWhenDocumentAndQueueItemPostponed(): void
     {
         $command = Cmd::create([]);
 
@@ -228,7 +230,7 @@ class RemoveDeletedDocumentsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandQueueItemNotCreatedWhenQueueItemPostponedBeforeDocument()
+    public function testHandleCommandQueueItemNotCreatedWhenQueueItemPostponedBeforeDocument(): void
     {
         $command = Cmd::create([]);
 
@@ -263,7 +265,7 @@ class RemoveDeletedDocumentsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandDisabled()
+    public function testHandleCommandDisabled(): void
     {
         $command = Cmd::create([]);
 

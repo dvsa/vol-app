@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpApplication;
 
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
@@ -32,7 +34,7 @@ class UpdateMultipleNoOfPermitsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsNotReadyForNoOfPermits()
+    public function testIsNotReadyForNoOfPermits(): void
     {
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('IRHP application is not ready for number of permits');
@@ -54,7 +56,7 @@ class UpdateMultipleNoOfPermitsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testMultilateralFeesRequiredChanged()
+    public function testMultilateralFeesRequiredChanged(): void
     {
         $irhpApplicationId = 44;
 
@@ -187,7 +189,7 @@ class UpdateMultipleNoOfPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testMultilateralFeesRequiredNotChanged()
+    public function testMultilateralFeesRequiredNotChanged(): void
     {
         $irhpApplicationId = 44;
 
@@ -307,7 +309,7 @@ class UpdateMultipleNoOfPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpUnsupportedPermitType()
+    public static function dpUnsupportedPermitType(): array
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],
@@ -319,10 +321,8 @@ class UpdateMultipleNoOfPermitsTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpUnsupportedPermitType
-     */
-    public function testUnsupportedPermitType($irhpPermitTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpUnsupportedPermitType')]
+    public function testUnsupportedPermitType(mixed $irhpPermitTypeId): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(
@@ -393,7 +393,7 @@ class UpdateMultipleNoOfPermitsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testMultilateralPermitsRequiredOutOfRange()
+    public function testMultilateralPermitsRequiredOutOfRange(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(
@@ -493,7 +493,7 @@ class UpdateMultipleNoOfPermitsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testMultilateralMissingPermitsRequiredData()
+    public function testMultilateralMissingPermitsRequiredData(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(

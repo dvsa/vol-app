@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -32,7 +34,7 @@ class BilateralApplicationValidationModifierTest extends MockeryTestCase
         );
     }
 
-    public function testMapForFormOptionsFieldsNotPresent()
+    public function testMapForFormOptionsFieldsNotPresent(): void
     {
         $data = [
             'key1' => 'value1',
@@ -49,7 +51,7 @@ class BilateralApplicationValidationModifierTest extends MockeryTestCase
         );
     }
 
-    public function testMapForFormOptionsFieldsPresent()
+    public function testMapForFormOptionsFieldsPresent(): void
     {
         $data = [
             'fields' => [

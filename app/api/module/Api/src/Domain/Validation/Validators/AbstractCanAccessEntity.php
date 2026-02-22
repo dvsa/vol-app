@@ -15,6 +15,7 @@ namespace Dvsa\Olcs\Api\Domain\Validation\Validators;
  */
 abstract class AbstractCanAccessEntity extends AbstractDoesOwnEntity
 {
+    #[\Override]
     public function isValid($entityId)
     {
         if ($this->isInternalUser()) {

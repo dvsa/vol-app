@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Is Owner Test
  *
@@ -31,7 +33,7 @@ class IsOwnerTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    public function testIsValidTrue()
+    public function testIsValidTrue(): void
     {
         $organisation = m::mock();
 
@@ -45,7 +47,7 @@ class IsOwnerTest extends AbstractValidatorsTestCase
         $this->assertEquals(true, $this->sut->isValid($orgProvider));
     }
 
-    public function testIsValidFalse()
+    public function testIsValidFalse(): void
     {
         $organisation1 = m::mock();
         $organisation2 = m::mock();
@@ -60,7 +62,7 @@ class IsOwnerTest extends AbstractValidatorsTestCase
         $this->assertEquals(false, $this->sut->isValid($orgProvider));
     }
 
-    public function testIsValidUserWithoutOrganisation()
+    public function testIsValidUserWithoutOrganisation(): void
     {
         /** @var OrganisationProviderInterface $orgProvider */
         $orgProvider = m::mock(OrganisationProviderInterface::class);
@@ -71,7 +73,7 @@ class IsOwnerTest extends AbstractValidatorsTestCase
         $this->assertEquals(false, $this->sut->isValid($orgProvider));
     }
 
-    public function testIsValidUserWithoutEntityOrganisation()
+    public function testIsValidUserWithoutEntityOrganisation(): void
     {
         $organisation = m::mock();
 

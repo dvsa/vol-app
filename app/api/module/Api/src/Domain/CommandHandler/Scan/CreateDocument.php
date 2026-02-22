@@ -23,8 +23,8 @@ final class CreateDocument extends AbstractCommandHandler implements Transaction
 {
     use UploaderAwareTrait;
 
-    public const INVALID_MIME = 'SCAN_INVALID_MIME';
-    public const SCAN_NOT_FOUND = 'SCAN_NOT_FOUND';
+    public const string INVALID_MIME = 'SCAN_INVALID_MIME';
+    public const string SCAN_NOT_FOUND = 'SCAN_NOT_FOUND';
 
     protected $repoServiceName = 'Scan';
 

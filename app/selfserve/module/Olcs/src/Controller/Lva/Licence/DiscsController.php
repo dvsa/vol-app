@@ -26,8 +26,6 @@ class DiscsController extends Lva\AbstractDiscsController
     protected $lva = 'licence';
     protected string $location = 'external';
 
-    protected LicenceLvaAdapter $lvaAdapter;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -47,7 +45,7 @@ class DiscsController extends Lva\AbstractDiscsController
         FormServiceManager $formServiceManager,
         TableFactory $tableFactory,
         GuidanceHelperService $guidanceHelper,
-        LicenceLvaAdapter $lvaAdapter,
+        protected LicenceLvaAdapter $lvaAdapter,
         ScriptFactory $scriptFactory
     ) {
         parent::__construct(
@@ -60,6 +58,5 @@ class DiscsController extends Lva\AbstractDiscsController
             $guidanceHelper,
             $scriptFactory
         );
-        $this->lvaAdapter = $lvaAdapter;
     }
 }

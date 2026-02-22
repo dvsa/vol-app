@@ -48,6 +48,7 @@ class ExpireIrhpPermits extends AbstractRawQuery
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getParams()
     {
         $today = new DateTime();
@@ -63,6 +64,7 @@ class ExpireIrhpPermits extends AbstractRawQuery
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getParamTypes()
     {
         return [

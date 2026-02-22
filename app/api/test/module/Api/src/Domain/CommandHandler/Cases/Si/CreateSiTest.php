@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Cases\Si;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -27,7 +29,8 @@ class CreateSiTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             CaseEntity::class => [
@@ -47,7 +50,7 @@ class CreateSiTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $caseId = 1;
         $notificationNumber = 'ABC123';
@@ -117,7 +120,7 @@ class CreateSiTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($reason, $savedSi->getReason());
     }
 
-    public function testHandleCommandThrowsErruException()
+    public function testHandleCommandThrowsErruException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

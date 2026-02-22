@@ -18,13 +18,13 @@ final class ConditionUndertaking extends AbstractContext implements AddressForma
 {
     use AddressFormatterAwareTrait;
 
-    public const ATTACHED_LIC = 'Attached to Licence.';
-    public const ATTACHED_OC = 'Attached to Operating Centre: %s';
+    public const string ATTACHED_LIC = 'Attached to Licence.';
+    public const string ATTACHED_OC = 'Attached to Operating Centre: %s';
 
-    public const COND_NEW = 'New %s: %s';
-    public const COND_REMOVE = '%s to be removed: %s';
-    public const COND_UPDATE = 'Current %s: %s';
-    public const COND_AMENDED = 'Amended to: %s';
+    public const string COND_NEW = 'New %s: %s';
+    public const string COND_REMOVE = '%s to be removed: %s';
+    public const string COND_UPDATE = 'Current %s: %s';
+    public const string COND_AMENDED = 'Amended to: %s';
 
     /**
      * @param PublicationLink $publication

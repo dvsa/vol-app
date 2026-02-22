@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\AwsSdk\Factories;
 
 use Aws\Credentials\CredentialsInterface;
@@ -38,7 +40,7 @@ class S3ClientFactoryTest extends TestCase
         $this->sm = $sm;
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         // Params
         $config = [

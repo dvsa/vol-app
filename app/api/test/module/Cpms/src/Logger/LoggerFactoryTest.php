@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cpms\Logger;
 
 use Dvsa\Olcs\Cpms\Logger\LoggerFactory;
@@ -8,10 +10,8 @@ use PHPUnit\Framework\TestCase;
 
 class LoggerFactoryTest extends TestCase
 {
-    /**
-     * @dataProvider dpTestCreateLogger
-     */
-    public function testCreateLogger($dpData)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCreateLogger')]
+    public function testCreateLogger(mixed $dpData): void
     {
         $zendLogLevel = $dpData['zendLogLevel'];
         $logPath = '/var/tmp/backend.log';
@@ -26,7 +26,7 @@ class LoggerFactoryTest extends TestCase
         $this->assertEquals($dpData['expectedMonologLevel'], $logger->getHandlers()[0]->getLevel());
     }
 
-    public function dpTestCreateLogger()
+    public static function dpTestCreateLogger(): array
     {
         return [
 

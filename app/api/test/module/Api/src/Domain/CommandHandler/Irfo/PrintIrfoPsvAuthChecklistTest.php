@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Print IRFO PSV Auth Checklist Test
  */
@@ -34,12 +36,12 @@ class PrintIrfoPsvAuthChecklistTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider handleCommandProvider
      *
      * @param int $irfoFeeTypeId
      * @param string $expectedTemplate
      */
-    public function testHandleCommand($irfoFeeTypeId, $expectedTemplate)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
+    public function testHandleCommand(mixed $irfoFeeTypeId, mixed $expectedTemplate): void
     {
         $data = [
             'ids' => array_fill(0, Sut::MAX_IDS_COUNT, 'id')
@@ -140,7 +142,7 @@ class PrintIrfoPsvAuthChecklistTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider(): array
     {
         return [
             [
@@ -174,7 +176,7 @@ class PrintIrfoPsvAuthChecklistTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandWithMaxIdsCountExceeded()
+    public function testHandleCommandWithMaxIdsCountExceeded(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

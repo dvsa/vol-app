@@ -291,6 +291,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
      *
      * @return HttpResponse| ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         if (null !== $this->commentItemDto) {
@@ -556,7 +557,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
 
         $defaultDataProvider->setParams($this->plugin('params'));
 
-        $action = ucfirst($this->params()->fromRoute('action'));
+        $action = ucfirst((string) $this->params()->fromRoute('action'));
 
         /**
         * @var Form $form
@@ -644,7 +645,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
         * @var Request $request
         */
         $request = $this->getRequest();
-        $action = ucfirst($this->params()->fromRoute('action'));
+        $action = ucfirst((string) $this->params()->fromRoute('action'));
         $form = $this->getForm($formClass);
         $this->placeholder()->setPlaceholder('form', $form);
         $this->placeholder()->setPlaceholder('contentTitle', $contentTitle);
@@ -837,7 +838,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
     public function redirectConfig(array $restResponse)
     {
         $action = $this->params()->fromRoute('action', null);
-        $action = strtolower($action);
+        $action = strtolower((string) $action);
 
         // Intercept cancelled forms to allow alternative redirect config
         if ($this->hasCancelledForm() && isset($this->redirectConfig['cancel'])) {
@@ -948,18 +949,19 @@ abstract class AbstractInternalController extends AbstractOlcsController
      *
      * @return void
      */
+    #[\Override]
     protected function attachDefaultListeners()
     {
         parent::attachDefaultListeners();
 
         $listener = new CrudListener($this, $this->flashMessengerHelperService, $this->routeIdentifier, $this->crudConfig);
-        $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, [$listener, 'onDispatch'], 2);
+        $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, $listener->onDispatch(...), 2);
 
         if (method_exists($this, 'setNavigationCurrentLocation')) {
-            $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, [$this, 'setNavigationCurrentLocation'], 6);
+            $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, $this->setNavigationCurrentLocation(...), 6);
         }
 
-        $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, [$this, 'attachScripts'], -100);
+        $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, $this->attachScripts(...), -100);
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\DvlaSearch;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\DvlaSearch\Vehicle;
@@ -24,7 +26,7 @@ class VehicleTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $queryData = ['vrm' => "ABC123"];
 
@@ -54,7 +56,7 @@ class VehicleTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testNoVehicleReturnsEmptyResultSetHandleQuery()
+    public function testNoVehicleReturnsEmptyResultSetHandleQuery(): void
     {
         $queryData = ['vrm' => "ABC123"];
         $this->mockedSmServices[DvlaSearchService::class]->shouldReceive('getVehicle')

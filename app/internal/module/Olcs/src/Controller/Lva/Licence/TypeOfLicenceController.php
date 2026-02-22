@@ -31,8 +31,6 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController implements
     protected string $location = 'internal';
     protected $lva = 'licence';
 
-    protected FormHelperService $formHelper;
-
     /**
      * @param NiTextTranslation           $niTextTranslationUtil
      * @param AuthorizationService        $authService
@@ -48,12 +46,10 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController implements
         FlashMessengerHelperService $flashMessengerHelper,
         ScriptFactory $scriptFactory,
         FormServiceManager $formServiceManager,
-        FormHelperService $formHelper,
+        protected FormHelperService $formHelper,
         VariationLvaService $variationLvaService,
         protected $navigation
     ) {
-        $this->formHelper = $formHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

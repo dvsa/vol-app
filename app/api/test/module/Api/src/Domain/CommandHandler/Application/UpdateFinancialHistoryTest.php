@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Financial History Test
  *
@@ -33,7 +35,7 @@ class UpdateFinancialHistoryTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = $this->getCommand();
 
@@ -74,7 +76,7 @@ class UpdateFinancialHistoryTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    protected function getCommand()
+    protected function getCommand(): mixed
     {
         $data = [
             'id' => 1,
@@ -91,7 +93,7 @@ class UpdateFinancialHistoryTest extends AbstractCommandHandlerTestCase
         return Cmd::create($data);
     }
 
-    protected function getApplication()
+    protected function getApplication(): m\MockInterface
     {
         return m::mock(ApplicationEntity::class)->makePartial();
     }

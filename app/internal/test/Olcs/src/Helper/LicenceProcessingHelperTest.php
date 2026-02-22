@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Helper;
 
 use Olcs\Helper\LicenceProcessingHelper;
@@ -20,13 +22,13 @@ class LicenceProcessingHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getNavigationProvider
      *
      * @param int $licenceId
      * @param string $activeSection
      * @param array $sections
      */
-    public function testGetNavigation($licenceId, $activeSection, $sections)
+    #[\PHPUnit\Framework\Attributes\DataProvider('getNavigationProvider')]
+    public function testGetNavigation(mixed $licenceId, mixed $activeSection, mixed $sections): void
     {
         $expected = [];
 
@@ -49,7 +51,7 @@ class LicenceProcessingHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->sut->getNavigation($licenceId, $activeSection));
     }
 
-    public function getNavigationProvider()
+    public static function getNavigationProvider(): array
     {
         return [
             [7, 'notes', ['notes' => [], 'tasks' => []]],

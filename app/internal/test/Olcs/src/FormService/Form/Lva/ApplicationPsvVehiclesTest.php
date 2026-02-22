@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
@@ -23,7 +25,8 @@ class ApplicationPsvVehiclesTest extends AbstractLvaFormServiceTestCase
         parent::setUp();
     }
 
-    public function testGetForm()
+    #[\Override]
+    public function testGetForm(): void
     {
         $formActions = m::mock();
         $formActions->shouldReceive('get->setLabel')

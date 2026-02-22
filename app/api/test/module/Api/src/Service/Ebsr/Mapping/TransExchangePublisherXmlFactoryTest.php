@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\Mapping;
 
 use Dvsa\Olcs\Api\Service\Ebsr\Mapping\TransExchangePublisherXmlFactory;
@@ -14,7 +16,7 @@ use Psr\Container\ContainerInterface;
  */
 class TransExchangePublisherXmlFactoryTest extends TestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockSl = m::mock(ContainerInterface::class);
 

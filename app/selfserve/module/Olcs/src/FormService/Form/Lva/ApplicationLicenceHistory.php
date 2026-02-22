@@ -30,6 +30,7 @@ class ApplicationLicenceHistory extends LicenceHistory
      *
      * @return Form
      */
+    #[\Override]
     protected function alterForm($form)
     {
         parent::alterForm($form);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\QuestionText\Custom\Ecmt;
 
 use Dvsa\Olcs\Api\Entity\ContactDetails\Country as CountryEntity;
@@ -53,17 +55,15 @@ class RestrictedCountriesGeneratorTest extends MockeryTestCase
         $this->restrictedCountriesGenerator = new RestrictedCountriesGenerator($this->questionTextGenerator);
     }
 
-    /**
-     * @dataProvider dpGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate(
-        $irhpPermitTypeId,
-        $applicationPathGroupId,
-        $excludedRestrictedCountryIds,
-        $expectedQuestionKey,
-        $expectedQuestionSummaryKey,
-        $expectedGuidanceKey
-    ) {
+        mixed $irhpPermitTypeId,
+        mixed $applicationPathGroupId,
+        mixed $excludedRestrictedCountryIds,
+        mixed $expectedQuestionKey,
+        mixed $expectedQuestionSummaryKey,
+        mixed $expectedGuidanceKey
+    ): void {
         $this->irhpApplicationEntity->shouldReceive('getIrhpPermitType->getId')
             ->withNoArgs()
             ->andReturn($irhpPermitTypeId);
@@ -111,7 +111,7 @@ class RestrictedCountriesGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate(): array
     {
         return [
             [
@@ -165,10 +165,8 @@ class RestrictedCountriesGeneratorTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpGenerateExceptionOnUnsupportedType
-     */
-    public function testGenerateExceptionOnUnsupportedType($irhpPermitTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerateExceptionOnUnsupportedType')]
+    public function testGenerateExceptionOnUnsupportedType(mixed $irhpPermitTypeId): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('This question does not support permit type ' . $irhpPermitTypeId);
@@ -180,7 +178,7 @@ class RestrictedCountriesGeneratorTest extends MockeryTestCase
         $this->restrictedCountriesGenerator->generate($this->qaContext);
     }
 
-    public function dpGenerateExceptionOnUnsupportedType()
+    public static function dpGenerateExceptionOnUnsupportedType(): array
     {
         return [
             [IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL],

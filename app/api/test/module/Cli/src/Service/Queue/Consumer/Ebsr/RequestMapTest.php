@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer\Ebsr;
 
 use Dvsa\Olcs\Api\Domain\Command\Bus\Ebsr\ProcessRequestMap as ProcessRequestMapCmd;
@@ -14,10 +16,9 @@ use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\Olcs\Cli\Service\Queue\Consumer\Ebsr\RequestMap;
 use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\Ebsr\RequestMap
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\Ebsr\RequestMap::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer::class)]
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class RequestMapTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = RequestMap::class;
@@ -25,7 +26,7 @@ class RequestMapTest extends AbstractConsumerTestCase
     /** @var  RequestMap */
     protected $sut;
 
-    public function testGetCommandData()
+    public function testGetCommandData(): void
     {
         $user = new User('pid', 'type');
         $user->setId(1);
@@ -41,7 +42,7 @@ class RequestMapTest extends AbstractConsumerTestCase
     /**
      * Tests task is created when map request fails
      */
-    public function testFailed()
+    public function testFailed(): void
     {
         $busRegId = 123;
         $regNo = '456/789';

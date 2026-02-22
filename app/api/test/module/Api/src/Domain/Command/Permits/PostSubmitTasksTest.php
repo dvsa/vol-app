@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Command\Permits;
 
 use Dvsa\Olcs\Api\Domain\Command\Permits\PostSubmitTasks;
@@ -10,7 +12,7 @@ use Dvsa\Olcs\Api\Domain\Command\Permits\PostSubmitTasks;
  */
 class PostSubmitTasksTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $sut = PostSubmitTasks::create(
             [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Search;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Search\Licence as LicenceQueryHandler;
@@ -34,20 +36,16 @@ class LicenceTest extends QueryHandlerTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
-    public function handleQueryIsCallable()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleQueryIsCallable(): void
     {
         // Assert
-        $this->assertIsCallable([$this->sut, 'handleQuery']);
+        $this->assertIsCallable($this->sut->handleQuery(...));
     }
 
-    /**
-     * @test
-     * @depends handleQueryIsCallable
-     */
-    public function handleQueryLegacyTest()
+    #[\PHPUnit\Framework\Attributes\Depends('handleQueryIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleQueryLegacyTest(): void
     {
         $query = Qry::create(['id' => 1]);
         $licenceId = 7;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Bus Processing Registration History Controller Test
  *
@@ -44,10 +46,8 @@ class BusProcessingRegistrationHistoryControllerTest extends MockeryTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider redirectConfigProvider
-     */
-    public function testRedirectConfig($restResponse, $output)
+    #[\PHPUnit\Framework\Attributes\DataProvider('redirectConfigProvider')]
+    public function testRedirectConfig(mixed $restResponse, mixed $output): void
     {
         $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
             [
@@ -68,7 +68,7 @@ class BusProcessingRegistrationHistoryControllerTest extends MockeryTestCase
      *
      * @return array
      */
-    public function redirectConfigProvider()
+    public static function redirectConfigProvider(): array
     {
         return [
             [

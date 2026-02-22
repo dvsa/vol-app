@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Ecmt;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -88,7 +90,7 @@ class RestrictedCountriesAnswerSaverTest extends MockeryTestCase
         );
     }
 
-    public function testSaveWhenYes()
+    public function testSaveWhenYes(): void
     {
         $stockId = 81;
 
@@ -165,7 +167,7 @@ class RestrictedCountriesAnswerSaverTest extends MockeryTestCase
         $this->restrictedCountriesAnswerSaver->save($this->qaContext, $postData);
     }
 
-    public function testSaveWhenNo()
+    public function testSaveWhenNo(): void
     {
         $restrictedCountries = 'N';
         $selectedRestrictedCountries = null;

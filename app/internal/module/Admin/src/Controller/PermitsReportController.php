@@ -25,6 +25,7 @@ class PermitsReportController extends AbstractInternalController implements Left
      *
      * @return ViewModel|Response
      */
+    #[\Override]
     public function indexAction()
     {
         $form = $this->getForm(PermitsReport::class);

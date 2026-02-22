@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Cases;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -24,7 +26,7 @@ class ConditionUndertakingEntityTest extends EntityTester
     /**
      * Test constructor
      */
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $mockConditionType = m::mock(RefDataEntity::class);
 

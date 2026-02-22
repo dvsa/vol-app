@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * IrfoPsvAuth Test
  */
@@ -29,7 +31,7 @@ class IrfoPsvAuthTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $id = 4;
         $query = Qry::create(['id' => $id]);
@@ -69,7 +71,7 @@ class IrfoPsvAuthTest extends QueryHandlerTestCase
         $this->assertArrayHasKey('isGeneratable', $results);
     }
 
-    public function testHandleQueryNotGrantable()
+    public function testHandleQueryNotGrantable(): void
     {
         $id = 4;
         $query = Qry::create(['id' => $id]);

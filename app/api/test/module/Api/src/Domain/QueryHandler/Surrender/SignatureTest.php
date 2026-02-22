@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Surrender;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Surrender\GetSignature as QryHandler;
@@ -20,7 +22,7 @@ class SignatureTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = GetSignature::create(['id' => 1]);
         $mockSurrender = m::mock(\Dvsa\Olcs\Api\Entity\Surrender::class);

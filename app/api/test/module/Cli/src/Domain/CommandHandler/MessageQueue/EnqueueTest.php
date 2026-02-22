@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler\MessageQueue;
 
 use Aws\Command;
@@ -14,6 +16,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use Olcs\Logging\Log\Logger;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class EnqueueTest extends AbstractCommandHandlerTestCase
 {
     protected $sut;
@@ -40,7 +43,7 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->mockedSmServices[MessageBuilder::class]->shouldReceive('buildMessages')->andReturn([
             new CompanyProfile(['companyOrLlpNo' => 123], 'queue_url'),
@@ -86,7 +89,7 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testExceptionHandling()
+    public function testExceptionHandling(): void
     {
         $this->mockedSmServices[MessageBuilder::class]->shouldReceive('buildMessages')->andReturn([
             new CompanyProfile(['companyOrLlpNo' => 123], 'queue_url'),
@@ -95,7 +98,7 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
 
         $logWriter = m::mock(\Laminas\Log\Writer\WriterInterface::class);
         $logWriter->shouldReceive('write')->once();
-        $this->logger = m::mock(\Laminas\Log\Logger::class, [])->makePartial();
+        $this->logger = m::mock(\Dvsa\OlcsTest\SafeLogger::class, [])->makePartial();
         $this->logger->addWriter($logWriter);
 
         Logger::setLogger($this->logger);

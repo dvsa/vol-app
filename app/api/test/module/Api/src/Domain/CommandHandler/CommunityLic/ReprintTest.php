@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\CommunityLic;
 
 use Dvsa\Olcs\Api\Domain\Command\CommunityLic\GenerateBatch as GenerateBatchCmd;
@@ -17,9 +19,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Command\Licence\UpdateTotalCommunityLicences as UpdateTotalCommunityLicencesCommand;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\CommunityLic\Reprint
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\CommunityLic\Reprint::class)]
 class ReprintTest extends AbstractCommandHandlerTestCase
 {
     /** @var Reprint */
@@ -36,7 +36,8 @@ class ReprintTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             CommunityLicEntity::STATUS_ACTIVE
@@ -47,10 +48,9 @@ class ReprintTest extends AbstractCommandHandlerTestCase
 
     /**
      * Tests handle command in situations where db updates are made
-     *
-     * @dataProvider dpHandleCommand
      */
-    public function testHandleCommand($isBatchReprint, $dbUpdateDisabled, $dbParamCheckedTimes)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
+    public function testHandleCommand(mixed $isBatchReprint, mixed $dbUpdateDisabled, mixed $dbParamCheckedTimes): void
     {
         $licenceId = 1;
         $communityLicenceId1 = 10;
@@ -184,7 +184,7 @@ class ReprintTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(CommunityLicEntity::STATUS_ACTIVE, $communityLic2->getStatus()->getId());
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand(): array
     {
         return [
             [false, 0, 0],
@@ -193,7 +193,7 @@ class ReprintTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandWithoutDbUpdate()
+    public function testHandleCommandWithoutDbUpdate(): void
     {
         $licenceId = 1;
         $communityLicenceIds = [10];
@@ -251,7 +251,7 @@ class ReprintTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithException()
+    public function testHandleCommandWithException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

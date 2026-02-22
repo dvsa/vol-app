@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Delete Application Links Test
  *
@@ -32,7 +34,8 @@ class DeleteApplicationLinksTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -49,7 +52,7 @@ class DeleteApplicationLinksTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $oc = $this->mapReference(OperatingCentre::class, 1);
         $aoc1 = $this->mapReference(ApplicationOperatingCentre::class, 1);

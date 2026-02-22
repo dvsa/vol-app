@@ -27,6 +27,7 @@ class PhoneContact extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     public function buildDefaultListQuery(QueryBuilder $qb, QueryInterface $query, $compositeFields = [])
     {
         // add calculated columns to allow ordering by them

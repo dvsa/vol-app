@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Inspection;
 
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
@@ -22,10 +24,8 @@ class InspectionRequestEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider datesProvider
-     */
-    public function testUpdateInspectionRequest($dueDate, $duePeriod, $dueExpected, $requestDate, $requestDateExpected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('datesProvider')]
+    public function testUpdateInspectionRequest(mixed $dueDate, mixed $duePeriod, mixed $dueExpected, mixed $requestDate, mixed $requestDateExpected): void
     {
         /** @var Entity $sut */
         $sut = m::mock(Entity::class)->makePartial();
@@ -68,7 +68,7 @@ class InspectionRequestEntityTest extends EntityTester
         $this->assertEquals('inspector_notes', $sut->getInspectorNotes());
     }
 
-    public function datesProvider()
+    public static function datesProvider(): array
     {
         return [
             [null, 3, (new DateTime('now'))->add(new \DateInterval('P3M')), null, new DateTime('now')],
@@ -76,7 +76,7 @@ class InspectionRequestEntityTest extends EntityTester
         ];
     }
 
-    public function testUpdateInspectionRequestNotValid()
+    public function testUpdateInspectionRequestNotValid(): void
     {
         /** @var Entity $sut */
         $sut = m::mock(Entity::class)->makePartial();
@@ -123,7 +123,7 @@ class InspectionRequestEntityTest extends EntityTester
         }
     }
 
-    public function testUpdateInspectionRequestDueDateNotInRange()
+    public function testUpdateInspectionRequestDueDateNotInRange(): void
     {
         /** @var Entity $sut */
         $sut = m::mock(Entity::class)->makePartial();
@@ -167,7 +167,7 @@ class InspectionRequestEntityTest extends EntityTester
         }
     }
 
-    public function testUpdateInspectionRequestRequestDateInFuture()
+    public function testUpdateInspectionRequestRequestDateInFuture(): void
     {
         /** @var Entity $sut */
         $sut = m::mock(Entity::class)->makePartial();

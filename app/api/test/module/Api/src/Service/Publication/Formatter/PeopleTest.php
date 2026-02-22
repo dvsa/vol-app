@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Formatter;
 
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
@@ -21,7 +23,7 @@ class PeopleTest extends MockeryTestCase
     {
     }
 
-    public function testSoletrader()
+    public function testSoletrader(): void
     {
         $organisation = new Organisation();
         $organisation->setType(new RefData(Organisation::ORG_TYPE_SOLE_TRADER));
@@ -29,7 +31,7 @@ class PeopleTest extends MockeryTestCase
         $this->assertNull(Formatter::format($organisation, []));
     }
 
-    public function testNotPersons()
+    public function testNotPersons(): void
     {
         $organisation = new Organisation();
         $organisation->setType(new RefData(Organisation::ORG_TYPE_LLP));
@@ -37,7 +39,7 @@ class PeopleTest extends MockeryTestCase
         $this->assertNull(Formatter::format($organisation, []));
     }
 
-    public function testLtd()
+    public function testLtd(): void
     {
         $organisation = new Organisation();
         $organisation->setType(new RefData(Organisation::ORG_TYPE_REGISTERED_COMPANY));
@@ -51,7 +53,7 @@ class PeopleTest extends MockeryTestCase
         );
     }
 
-    public function testLlp()
+    public function testLlp(): void
     {
         $organisation = new Organisation();
         $organisation->setType(new RefData(Organisation::ORG_TYPE_LLP));
@@ -65,7 +67,7 @@ class PeopleTest extends MockeryTestCase
         );
     }
 
-    public function testPartnership()
+    public function testPartnership(): void
     {
         $organisation = new Organisation();
         $organisation->setType(new RefData(Organisation::ORG_TYPE_PARTNERSHIP));
@@ -79,7 +81,7 @@ class PeopleTest extends MockeryTestCase
         );
     }
 
-    public function testOther()
+    public function testOther(): void
     {
         $organisation = new Organisation();
         $organisation->setType(new RefData(Organisation::ORG_TYPE_OTHER));

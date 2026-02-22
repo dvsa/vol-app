@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\ApplyRanges;
 
 use Dvsa\Olcs\Api\Service\Permits\ApplyRanges\RestrictedCountryIdsProvider;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class RestrictedCountryIdsProviderTest extends MockeryTestCase
 {
-    public function testGetIds()
+    public function testGetIds(): void
     {
         $restrictedCountryIds = ['AT', 'GR', 'HU', 'IT', 'RU'];
 

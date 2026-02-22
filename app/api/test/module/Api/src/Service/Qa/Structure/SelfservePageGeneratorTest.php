@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure;
 
 use Dvsa\Olcs\Api\Domain\FormControlServiceManager;
@@ -26,7 +28,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class SelfservePageGeneratorTest extends MockeryTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $selfservePage = m::mock(SelfservePage::class);
 

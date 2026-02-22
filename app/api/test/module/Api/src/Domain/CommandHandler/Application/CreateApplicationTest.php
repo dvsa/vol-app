@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Application Test
  *
@@ -52,7 +54,8 @@ class CreateApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             Licence::LICENCE_STATUS_NOT_SUBMITTED,
@@ -80,7 +83,7 @@ class CreateApplicationTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandMinimal()
+    public function testHandleCommandMinimal(): void
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
             ->times(3)
@@ -140,10 +143,8 @@ class CreateApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertNull($app->getLicence()->getTrafficArea());
     }
 
-    /**
-     * @dataProvider environmentProvider
-     */
-    public function testHandleCommand($isInternal, $isExternal, $licenceStatus, $appliedVia)
+    #[\PHPUnit\Framework\Attributes\DataProvider('environmentProvider')]
+    public function testHandleCommand(mixed $isInternal, mixed $isExternal, mixed $licenceStatus, mixed $appliedVia): void
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
             ->times(4)
@@ -260,10 +261,8 @@ class CreateApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertSame(0, $app->getLgvDeclarationConfirmation());
     }
 
-    /**
-     * @dataProvider environmentProvider
-     */
-    public function testHandleCommandGb($isInternal, $isExternal, $licenceStatus, $appliedVia)
+    #[\PHPUnit\Framework\Attributes\DataProvider('environmentProvider')]
+    public function testHandleCommandGb(mixed $isInternal, mixed $isExternal, mixed $licenceStatus, mixed $appliedVia): void
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
             ->times(4)
@@ -383,7 +382,7 @@ class CreateApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertSame(1, $app->getLgvDeclarationConfirmation());
     }
 
-    public function environmentProvider()
+    public static function environmentProvider(): array
     {
         return [
             [true, false, Licence::LICENCE_STATUS_UNDER_CONSIDERATION, ApplicationEntity::APPLIED_VIA_PHONE],

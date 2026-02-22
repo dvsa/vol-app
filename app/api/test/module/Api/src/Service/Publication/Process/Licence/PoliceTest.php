@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Process\Licence;
 
 use Dvsa\Olcs\Api\Entity\Publication\PublicationLink;
@@ -13,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class PoliceTest extends MockeryTestCase
 {
-    public function testProcessApplicationPeople()
+    public function testProcessApplicationPeople(): void
     {
         $sut = new \Dvsa\Olcs\Api\Service\Publication\Process\Licence\Police();
 

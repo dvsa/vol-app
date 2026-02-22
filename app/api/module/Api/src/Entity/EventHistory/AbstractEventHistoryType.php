@@ -27,7 +27,7 @@ use Doctrine\ORM\Mapping as ORM;
  *    }
  * )
  */
-abstract class AbstractEventHistoryType implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractEventHistoryType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

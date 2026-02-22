@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,9 +15,7 @@ use Dvsa\Olcs\Transfer\Command\Application\DeleteOperatingCentres as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Application\DeleteOperatingCentres
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Application\DeleteOperatingCentres::class)]
 class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
 {
     /** @var CommandHandler\Application\DeleteOperatingCentres  */
@@ -30,7 +30,8 @@ class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -46,7 +47,7 @@ class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'application' => 111,
@@ -121,7 +122,7 @@ class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandCannotDelete()
+    public function testHandleCommandCannotDelete(): void
     {
         $data = [
             'application' => 111,
@@ -158,7 +159,7 @@ class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandRemovingAllOcs()
+    public function testHandleCommandRemovingAllOcs(): void
     {
         $data = [
             'application' => 111,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * EndIrhpPermitsTest
  *
@@ -54,13 +56,11 @@ class EndIrhpPermitsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommandWithTaskCreation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandWithTaskCreation')]
     public function testHandleCommandWithTaskCreationFromActivePermitsAndValidApplications(
-        $context,
-        $expectedDescription
-    ) {
+        mixed $context,
+        mixed $expectedDescription
+    ): void {
         $activeIrhpPermit1Id = 84;
         $activeIrhpPermit1 = m::mock(IrhpPermit::class);
         $activeIrhpPermit1->shouldReceive('getId')
@@ -150,10 +150,8 @@ class EndIrhpPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    /**
-     * @dataProvider dpHandleCommandWithTaskCreation
-     */
-    public function testHandleCommandWithTaskCreationFromActivePermitsOnly($context, $expectedDescription)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandWithTaskCreation')]
+    public function testHandleCommandWithTaskCreationFromActivePermitsOnly(mixed $context, mixed $expectedDescription): void
     {
         $activeIrhpPermit1Id = 84;
         $activeIrhpPermit1 = m::mock(IrhpPermit::class);
@@ -220,10 +218,8 @@ class EndIrhpPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    /**
-     * @dataProvider dpHandleCommandWithTaskCreation
-     */
-    public function testHandleCommandWithTaskCreationFromValidApplicationsOnly($context, $expectedDescription)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandWithTaskCreation')]
+    public function testHandleCommandWithTaskCreationFromValidApplicationsOnly(mixed $context, mixed $expectedDescription): void
     {
         $this->repoMap['IrhpPermit']->shouldReceive('fetchList')
             ->with(m::type(GetListByLicence::class), Query::HYDRATE_OBJECT)
@@ -290,7 +286,7 @@ class EndIrhpPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpHandleCommandWithTaskCreation()
+    public static function dpHandleCommandWithTaskCreation(): array
     {
         return [
             [
@@ -308,7 +304,7 @@ class EndIrhpPermitsTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandWithNoTaskCreation()
+    public function testHandleCommandWithNoTaskCreation(): void
     {
         $this->repoMap['IrhpPermit']->shouldReceive('fetchList')
             ->with(m::type(GetListByLicence::class), Query::HYDRATE_OBJECT)

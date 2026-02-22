@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\ConditionUndertaking;
 
 use Mockery as m;
@@ -27,7 +29,7 @@ class GetListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQueryNoLicenceNoApplication()
+    public function testHandleQueryNoLicenceNoApplication(): void
     {
         $data = [];
         $query = Qry::create($data);
@@ -37,7 +39,7 @@ class GetListTest extends QueryHandlerTestCase
         $this->sut->handleQuery($query);
     }
 
-    public function testHandleQueryLicenceAndApplication()
+    public function testHandleQueryLicenceAndApplication(): void
     {
         $data = ['application' => 234, 'licence' => 237];
         $query = Qry::create($data);
@@ -47,7 +49,7 @@ class GetListTest extends QueryHandlerTestCase
         $this->sut->handleQuery($query);
     }
 
-    public function testHandleQueryApplication()
+    public function testHandleQueryApplication(): void
     {
         $data = ['application' => 234];
         $query = Qry::create($data);
@@ -86,7 +88,7 @@ class GetListTest extends QueryHandlerTestCase
         $this->assertSame(1, $result['count']);
     }
 
-    public function testHandleQueryVariation()
+    public function testHandleQueryVariation(): void
     {
         $data = ['application' => 234];
         $query = Qry::create($data);
@@ -130,7 +132,7 @@ class GetListTest extends QueryHandlerTestCase
         $this->assertSame(1, $result['count']);
     }
 
-    public function testHandleQueryLicence()
+    public function testHandleQueryLicence(): void
     {
         $data = ['licence' => 54, 'conditionType' => ConditionUndertakingEntity::TYPE_CONDITION];
         $query = Qry::create($data);

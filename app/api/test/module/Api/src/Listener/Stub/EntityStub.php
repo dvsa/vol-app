@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Listener\Stub;
 
 use Doctrine\Persistence\NotifyPropertyChanged;
@@ -12,12 +14,12 @@ class EntityStub implements NotifyPropertyChanged
 {
     protected $lastModifiedBy;
 
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setLastModifiedBy(mixed $lastModifiedBy): void
     {
         $this->lastModifiedBy = $lastModifiedBy;
     }
 
-    public function addPropertyChangedListener(PropertyChangedListener $listener)
+    public function addPropertyChangedListener(PropertyChangedListener $listener): void
     {
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * SystemParameter mapper test
  *
@@ -20,7 +22,7 @@ use Laminas\Form\FormInterface;
  */
 class SystemParameterTest extends MockeryTestCase
 {
-    public function testMapFromResult()
+    public function testMapFromResult(): void
     {
         $data = [
             'foo' => 'bar',
@@ -36,7 +38,7 @@ class SystemParameterTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $data = ['system-parameter-details' => ['foo' => 'bar', 'hiddenId' => 1]];
         $expected = ['foo' => 'bar', 'id' => 1];
@@ -44,7 +46,7 @@ class SystemParameterTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($data));
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $errors = [
             'messages' => [

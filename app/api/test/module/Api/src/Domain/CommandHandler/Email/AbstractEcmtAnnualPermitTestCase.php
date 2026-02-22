@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -19,7 +21,7 @@ use Mockery as m;
 /**
  * Abstract ECMT annual permit email tester
  */
-abstract class AbstractEcmtAnnualPermitTest extends AbstractPermitTest
+abstract class AbstractEcmtAnnualPermitTestCase extends AbstractPermitTestCase
 {
     public $orgEmails;
     public $contactDetails;
@@ -28,10 +30,9 @@ abstract class AbstractEcmtAnnualPermitTest extends AbstractPermitTest
     public $orgEmail2;
     /**
      * test handle command
-     *
-     * @dataProvider dpLocaleMappings
      */
-    public function testHandleCommand($licenceTranslateToWelsh, $expectedLocale)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpLocaleMappings')]
+    public function testHandleCommand(mixed $licenceTranslateToWelsh, mixed $expectedLocale): void
     {
         $paymentDeadlineNumDays = '10';
 
@@ -100,10 +101,9 @@ abstract class AbstractEcmtAnnualPermitTest extends AbstractPermitTest
 
     /**
      * test handle command when the application created by internal user
-     *
-     * @dataProvider dpLocaleMappings
      */
-    public function testHandleCommandForCreatedByInternalUser($licenceTranslateToWelsh, $expectedLocale)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpLocaleMappings')]
+    public function testHandleCommandForCreatedByInternalUser(mixed $licenceTranslateToWelsh, mixed $expectedLocale): void
     {
         $paymentDeadlineNumDays = '10';
 
@@ -171,10 +171,9 @@ abstract class AbstractEcmtAnnualPermitTest extends AbstractPermitTest
 
     /**
      * test handle command awaiting fee
-     *
-     * @dataProvider dpLocaleMappings
      */
-    public function testHandleCommandAwaitingFee($licenceTranslateToWelsh, $expectedLocale)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpLocaleMappings')]
+    public function testHandleCommandAwaitingFee(mixed $licenceTranslateToWelsh, mixed $expectedLocale): void
     {
         $permitsRequired = 8;
         $permitsAwarded = 6;
@@ -306,7 +305,7 @@ abstract class AbstractEcmtAnnualPermitTest extends AbstractPermitTest
         $this->assertSame($this->subject, $message->getSubject());
     }
 
-    public function dpLocaleMappings()
+    public static function dpLocaleMappings(): array
     {
         return [
             ['N', 'en_GB'],
@@ -317,7 +316,7 @@ abstract class AbstractEcmtAnnualPermitTest extends AbstractPermitTest
     /**
      * test the exception is dealt with when there are no email addresses
      */
-    public function testHandleCommandException()
+    public function testHandleCommandException(): void
     {
         $this->organisation->shouldReceive('getAdminEmailAddresses')->once()->withNoArgs()->andReturn([]);
         $this->applicationEntity->shouldReceive('getCreatedBy')->once()->withNoArgs()->andReturn(null);

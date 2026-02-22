@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\InputFilter;
 
 use Dvsa\Olcs\Api\Service\Ebsr\InputFilter\XmlStructureInputFactory;
@@ -16,7 +18,7 @@ use Psr\Container\ContainerInterface;
 
 class XmlStructureInputFactoryTest extends TestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $maxSchemaErrors = 3;
         $schemaVersion = 2.5;
@@ -65,7 +67,7 @@ class XmlStructureInputFactoryTest extends TestCase
     /**
      * Tests create service with validation disabled
      */
-    public function testInvokeDisabledValidators()
+    public function testInvokeDisabledValidators(): void
     {
         $config = [
             'ebsr' => [
@@ -93,7 +95,7 @@ class XmlStructureInputFactoryTest extends TestCase
     /**
      * test correct exception thrown when the max errors config is missing
      */
-    public function testInvokeMissingMaxErrorsConfig()
+    public function testInvokeMissingMaxErrorsConfig(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('No config specified for max_schema_errors');
@@ -120,7 +122,7 @@ class XmlStructureInputFactoryTest extends TestCase
     /**
      * test correct exception thrown when the max errors config is missing
      */
-    public function testInvokeMissingSchemaVersionConfig()
+    public function testInvokeMissingSchemaVersionConfig(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('No config specified for transxchange schema version');
@@ -148,7 +150,7 @@ class XmlStructureInputFactoryTest extends TestCase
     /**
      * test correct exception thrown when the max errors config is missing
      */
-    public function testInvokeMissingXmlMessageExclude()
+    public function testInvokeMissingXmlMessageExclude(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('No config specified for xml messages to exclude');

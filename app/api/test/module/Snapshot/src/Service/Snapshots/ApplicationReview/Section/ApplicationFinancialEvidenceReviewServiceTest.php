@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ApplicationReview\Section;
 
 use Dvsa\Olcs\Api\Domain\QueryHandlerManager;
@@ -42,10 +44,8 @@ class ApplicationFinancialEvidenceReviewServiceTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider uploadProvider
-     */
-    public function testGetConfigFromDataWithoutDocs($uploaded, $reviewText)
+    #[\PHPUnit\Framework\Attributes\DataProvider('uploadProvider')]
+    public function testGetConfigFromDataWithoutDocs(mixed $uploaded, mixed $reviewText): void
     {
         $data = [
             'id' => 123,
@@ -92,7 +92,7 @@ class ApplicationFinancialEvidenceReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function uploadProvider()
+    public static function uploadProvider(): array
     {
         return [
             [
@@ -106,7 +106,7 @@ class ApplicationFinancialEvidenceReviewServiceTest extends MockeryTestCase
         ];
     }
 
-    public function testGetConfigFromDataWithDocs()
+    public function testGetConfigFromDataWithDocs(): void
     {
         $data = [
             'id' => 123,

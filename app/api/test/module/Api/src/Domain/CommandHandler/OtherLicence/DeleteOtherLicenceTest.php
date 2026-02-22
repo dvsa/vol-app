@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Delete Licence History Test
  *
@@ -32,7 +34,7 @@ class DeleteOtherLicenceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = $this->getCommand();
 
@@ -80,7 +82,7 @@ class DeleteOtherLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    protected function getCommand()
+    protected function getCommand(): mixed
     {
         $data = [
             'ids' => [1, 2, 3]

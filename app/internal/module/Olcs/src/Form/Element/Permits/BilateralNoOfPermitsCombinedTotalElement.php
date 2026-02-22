@@ -20,10 +20,7 @@ class BilateralNoOfPermitsCombinedTotalElement extends Hidden implements InputPr
                 [
                     'name' => Callback::class,
                     'options' => [
-                        'callback' => [
-                            BilateralNoOfPermitsCombinedTotalValidator::class,
-                            'validateNonZeroValuePresent'
-                        ],
+                        'callback' => BilateralNoOfPermitsCombinedTotalValidator::validateNonZeroValuePresent(...),
                         'messages' => [
                             Callback::INVALID_VALUE => 'Enter a number of permits in at least one field'
                         ]

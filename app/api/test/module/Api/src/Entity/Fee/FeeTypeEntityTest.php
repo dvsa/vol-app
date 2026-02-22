@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Fee;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -32,7 +34,7 @@ class FeeTypeEntityTest extends EntityTester
         $this->sut = $this->instantiate($this->entityClass);
     }
 
-    public function testIsMiscellaneous()
+    public function testIsMiscellaneous(): void
     {
         $this->assertFalse($this->sut->isMiscellaneous());
 
@@ -45,9 +47,9 @@ class FeeTypeEntityTest extends EntityTester
      * @param string $fixedValue
      * @param string $fiveYearValue
      * @param array $expected
-     * @dataProvider bundleDataProvider
      */
-    public function testGetCalculatedBundleValues($fixedValue, $fiveYearValue, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('bundleDataProvider')]
+    public function testGetCalculatedBundleValues(mixed $fixedValue, mixed $fiveYearValue, mixed $expected): void
     {
         $this->sut->setFixedValue($fixedValue);
         $this->sut->setFiveYearValue($fiveYearValue);
@@ -55,7 +57,7 @@ class FeeTypeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getCalculatedBundleValues());
     }
 
-    public function bundleDataProvider()
+    public static function bundleDataProvider(): array
     {
         return [
             [
@@ -77,9 +79,9 @@ class FeeTypeEntityTest extends EntityTester
 
     /**
      * @param boolean $expected
-     * @dataProvider countryCodeProvider
      */
-    public function testGetCountryCode(mixed $isNi, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('countryCodeProvider')]
+    public function testGetCountryCode(mixed $isNi, mixed $expected): void
     {
         $this->sut->setIsNi($isNi);
 
@@ -89,7 +91,7 @@ class FeeTypeEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function countryCodeProvider()
+    public static function countryCodeProvider(): array
     {
         return [
             ['Y', 'NI'],
@@ -98,7 +100,7 @@ class FeeTypeEntityTest extends EntityTester
         ];
     }
 
-    public function testIsShowQuantity()
+    public function testIsShowQuantity(): void
     {
         $feeType = new RefData();
         $feeType->setId(Entity::FEE_TYPE_IRFOPSVANN);
@@ -110,64 +112,56 @@ class FeeTypeEntityTest extends EntityTester
         $this->assertFalse($this->sut->isShowQuantity());
     }
 
-    /**
-     * @dataProvider dpIsEcmtApplication
-     */
-    public function testIsEcmtApplication(string $feeType, bool $expectedResult)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsEcmtApplication')]
+    public function testIsEcmtApplication(string $feeType, bool $expectedResult): void
     {
         $feeTypeRefData = new RefData($feeType);
         $this->sut->setFeeType($feeTypeRefData);
         $this->assertEquals($expectedResult, $this->sut->isEcmtApplication());
     }
 
-    public function dpIsEcmtApplication(): array
+    public static function dpIsEcmtApplication(): array
     {
-        return $this->listTypes([Entity::FEE_TYPE_ECMT_APP]);
+        return self::listTypes([Entity::FEE_TYPE_ECMT_APP]);
     }
 
-    /**
-     * @dataProvider dpIsEcmtIssue
-     */
-    public function testIsEcmtIssue(string $feeType, bool $expectedResult)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsEcmtIssue')]
+    public function testIsEcmtIssue(string $feeType, bool $expectedResult): void
     {
         $feeTypeRefData = new RefData($feeType);
         $this->sut->setFeeType($feeTypeRefData);
         $this->assertEquals($expectedResult, $this->sut->isEcmtIssue());
     }
 
-    public function dpIsEcmtIssue(): array
+    public static function dpIsEcmtIssue(): array
     {
-        return $this->listTypes([Entity::FEE_TYPE_ECMT_ISSUE]);
+        return self::listTypes([Entity::FEE_TYPE_ECMT_ISSUE]);
     }
 
-    /**
-     * @dataProvider dpIsIrhpApplicationIssue
-     */
-    public function testIsIrhpApplicationIssue(string $feeType, bool $expectedResult)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsIrhpApplicationIssue')]
+    public function testIsIrhpApplicationIssue(string $feeType, bool $expectedResult): void
     {
         $feeTypeRefData = new RefData($feeType);
         $this->sut->setFeeType($feeTypeRefData);
         $this->assertEquals($expectedResult, $this->sut->isIrhpApplicationIssue());
     }
 
-    public function dpIsIrhpApplicationIssue(): array
+    public static function dpIsIrhpApplicationIssue(): array
     {
-        return $this->listTypes([Entity::FEE_TYPE_IRHP_ISSUE]);
+        return self::listTypes([Entity::FEE_TYPE_IRHP_ISSUE]);
     }
 
-    /**
-     * @dataProvider dpIsIrhpApplication
-     */
-    public function testIsIrhpApplication(string $feeType, bool $expectedResult)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsIrhpApplication')]
+    public function testIsIrhpApplication(string $feeType, bool $expectedResult): void
     {
         $feeTypeRefData = new RefData($feeType);
         $this->sut->setFeeType($feeTypeRefData);
         $this->assertEquals($expectedResult, $this->sut->isIrhpApplication());
     }
 
-    public function dpIsIrhpApplication(): array
+    public static function dpIsIrhpApplication(): array
     {
-        return $this->listTypes([Entity::FEE_TYPE_IRHP_ISSUE, Entity::FEE_TYPE_IRHP_APP, Entity::FEE_TYPE_IRFOGVPERMIT]);
+        return self::listTypes([Entity::FEE_TYPE_IRHP_ISSUE, Entity::FEE_TYPE_IRHP_APP, Entity::FEE_TYPE_IRFOGVPERMIT]);
     }
 
     /**
@@ -178,7 +172,7 @@ class FeeTypeEntityTest extends EntityTester
      *
      * @return array
      */
-    private function listTypes(array $matchingTypes): array
+    private static function listTypes(array $matchingTypes): array
     {
         $returnTypes = [];
 
@@ -219,7 +213,7 @@ class FeeTypeEntityTest extends EntityTester
         return $returnTypes;
     }
 
-    public function testUpdateNewFeeType()
+    public function testUpdateNewFeeType(): void
     {
         $this->sut->setEffectiveFrom(new \DateTime('2014-10-26T00:00:00+00:00'));
         $this->sut->setAnnualValue(10);

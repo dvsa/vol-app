@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Clean up abandoned variations Test
  */
@@ -36,7 +38,7 @@ class CleanUpAbandonedVariationsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
 
         $mockVariation1 = m::mock(ApplicationEntity::class);

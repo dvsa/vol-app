@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Publication link test
  *
@@ -48,7 +50,7 @@ class PublicationLinkTest extends RepositoryTestCase
      * @param $qb
      * @return m\MockInterface
      */
-    private function getMockRepo($qb)
+    private function getMockRepo(mixed $qb): mixed
     {
         $repo = m::mock(EntityRepository::class);
         $repo->shouldReceive('createQueryBuilder')
@@ -62,7 +64,7 @@ class PublicationLinkTest extends RepositoryTestCase
      * @param QueryInterface $query
      * @return m\MockInterface
      */
-    private function getPublicationAndSectionQb($query)
+    private function getPublicationAndSectionQb(mixed $query): m\MockInterface
     {
         $mockQb = m::mock(QueryBuilder::class);
         $mockQb->shouldReceive('expr->eq')->with('m.publication', ':byPublication')->once()->andReturnSelf();
@@ -90,7 +92,7 @@ class PublicationLinkTest extends RepositoryTestCase
      * @param QueryInterface $query
      * @return m\MockInterface
      */
-    private function getPublicationNoPubTypeTaQb($query)
+    private function getPublicationNoPubTypeTaQb(mixed $query): m\MockInterface
     {
         $mockQb = m::mock(QueryBuilder::class);
         $mockQb->shouldReceive('expr->eq')->with('p.pubType', ':byPubType')->once()->andReturnSelf();
@@ -136,7 +138,7 @@ class PublicationLinkTest extends RepositoryTestCase
      * @param UnpublishedPi|PreviousPublicationByPi $mockQb
      * @return mixed
      */
-    private function addPi(QueryInterface $query, $mockQb)
+    private function addPi(QueryInterface $query, mixed $mockQb): m\MockInterface
     {
         $mockQb->shouldReceive('expr->eq')->with('m.pi', ':byPi')->once()->andReturnSelf();
         $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
@@ -149,7 +151,7 @@ class PublicationLinkTest extends RepositoryTestCase
      * @param $mockQb
      * @return mixed
      */
-    private function addBus(QueryInterface $query, $mockQb)
+    private function addBus(QueryInterface $query, mixed $mockQb): m\MockInterface
     {
         $mockQb->shouldReceive('expr->eq')->with('m.busReg', ':byBusReg')->once()->andReturnSelf();
         $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
@@ -162,7 +164,7 @@ class PublicationLinkTest extends RepositoryTestCase
      * @param $mockQb
      * @return mixed
      */
-    private function addApplication(QueryInterface $query, $mockQb)
+    private function addApplication(QueryInterface $query, mixed $mockQb): m\MockInterface
     {
         $mockQb->shouldReceive('expr->eq')->with('m.application', ':byApplication')->once()->andReturnSelf();
         $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
@@ -178,7 +180,7 @@ class PublicationLinkTest extends RepositoryTestCase
      * @param $mockQb
      * @return mixed
      */
-    private function addLicence(QueryInterface $query, $mockQb)
+    private function addLicence(QueryInterface $query, mixed $mockQb): m\MockInterface
     {
         $mockQb->shouldReceive('expr->eq')->with('m.licence', ':byLicence')->once()->andReturnSelf();
         $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
@@ -195,7 +197,7 @@ class PublicationLinkTest extends RepositoryTestCase
      * @param bool|false $results
      * @return mixed
      */
-    private function addQueryResult($mockQb, $results = false)
+    private function addQueryResult(mixed $mockQb, bool $results = false): m\MockInterface
     {
         if ($results === false) {
             $results = [0 => m::mock(PublicationLinkEntity::class)];
@@ -217,7 +219,7 @@ class PublicationLinkTest extends RepositoryTestCase
      * @param bool|false $results
      * @return mixed
      */
-    private function addPreviousPublicationResult($mockQb, $results = false)
+    private function addPreviousPublicationResult(mixed $mockQb, bool $results = false): m\MockInterface
     {
         if ($results === false) {
             $results = [0 => m::mock(PublicationLinkEntity::class)];
@@ -241,7 +243,7 @@ class PublicationLinkTest extends RepositoryTestCase
     /**
      * Tests fetch unpublished application
      */
-    public function testFetchSingleUnpublishedApplication()
+    public function testFetchSingleUnpublishedApplication(): void
     {
         $query = UnpublishedApplication::create(
             [
@@ -268,7 +270,7 @@ class PublicationLinkTest extends RepositoryTestCase
     /**
      * Tests fetch unpublished pi
      */
-    public function testFetchSingleUnpublishedPi()
+    public function testFetchSingleUnpublishedPi(): void
     {
         $query = UnpublishedPi::create(
             [
@@ -295,7 +297,7 @@ class PublicationLinkTest extends RepositoryTestCase
     /**
      * Tests fetch unpublished bus
      */
-    public function testFetchSingleUnpublishedBus()
+    public function testFetchSingleUnpublishedBus(): void
     {
         $query = UnpublishedBusReg::create(
             [
@@ -322,7 +324,7 @@ class PublicationLinkTest extends RepositoryTestCase
     /**
      * Tests fetch previous publication
      */
-    public function testFetchPreviousPublicationPi()
+    public function testFetchPreviousPublicationPi(): void
     {
         $query = PreviousPublicationByPi::create(
             [
@@ -350,7 +352,7 @@ class PublicationLinkTest extends RepositoryTestCase
     /**
      * Tests fetch previous publication
      */
-    public function testFetchPreviousPublicationApp()
+    public function testFetchPreviousPublicationApp(): void
     {
         $query = PreviousPublicationByApplication::create(
             [
@@ -378,7 +380,7 @@ class PublicationLinkTest extends RepositoryTestCase
     /**
      * Tests fetch previous publication
      */
-    public function testFetchPreviousPublicationLic()
+    public function testFetchPreviousPublicationLic(): void
     {
         $query = PreviousPublicationByLicence::create(
             [
@@ -406,7 +408,7 @@ class PublicationLinkTest extends RepositoryTestCase
     /**
      * Tests the tm list filter is applied correctly
      */
-    public function testApplyListFiltersTm()
+    public function testApplyListFiltersTm(): void
     {
         $sut = m::mock(PublicationLinkRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
@@ -425,7 +427,7 @@ class PublicationLinkTest extends RepositoryTestCase
     /**
      * Tests the licence list filter is applied correctly
      */
-    public function testApplyListFiltersLicence()
+    public function testApplyListFiltersLicence(): void
     {
         $sut = m::mock(PublicationLinkRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
@@ -444,7 +446,7 @@ class PublicationLinkTest extends RepositoryTestCase
     /**
      * Tests the applciation list filter is applied correctly
      */
-    public function testApplyListFiltersApplication()
+    public function testApplyListFiltersApplication(): void
     {
         $sut = m::mock(PublicationLinkRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
@@ -460,7 +462,7 @@ class PublicationLinkTest extends RepositoryTestCase
         $sut->applyListFilters($mockQb, $query);
     }
 
-    public function testFetchIneligiblePiPublicationLinks()
+    public function testFetchIneligiblePiPublicationLinks(): void
     {
         $publicationEntityId = 1;
         $today = (new Datetime())->format('Y-m-d');

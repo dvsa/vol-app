@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Assertion\User;
 
 use Dvsa\Olcs\Api\Assertion\User\ReadUserSelfserve as Sut;
@@ -27,16 +29,14 @@ class ReadUserSelfserveTest extends MockeryTestCase
         $this->auth = m::mock(AuthorizationService::class);
     }
 
-    /**
-     * @dataProvider getAssertForOperatorDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getAssertForOperatorDataProvider')]
     public function testAssertForOperator(
-        $currentUserType,
-        $currentUserEntityId,
-        $userType,
-        $userEntityId,
-        $expected
-    ) {
+        mixed $currentUserType,
+        mixed $currentUserEntityId,
+        mixed $userType,
+        mixed $userEntityId,
+        mixed $expected
+    ): void {
         $currentUserOrgUser = m::mock(OrganisationUser::class);
         $currentUserOrgUser->shouldReceive('getOrganisation->getId')->andReturn($currentUserEntityId);
 
@@ -56,7 +56,7 @@ class ReadUserSelfserveTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->assert($this->auth, $user));
     }
 
-    public function getAssertForOperatorDataProvider()
+    public static function getAssertForOperatorDataProvider(): array
     {
         return [
             // operator manages operator

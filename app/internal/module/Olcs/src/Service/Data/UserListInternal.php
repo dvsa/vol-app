@@ -114,6 +114,7 @@ class UserListInternal extends AbstractListDataService
      *
      * @return array
      */
+    #[\Override]
     public function formatData(array $data)
     {
         $optionData = [];
@@ -156,6 +157,7 @@ class UserListInternal extends AbstractListDataService
      *
      * @return array
      */
+    #[\Override]
     public function formatDataForGroups(array $data)
     {
         $optionData = [];

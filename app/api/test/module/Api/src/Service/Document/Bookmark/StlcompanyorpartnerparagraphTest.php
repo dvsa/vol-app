@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\LicenceBundle;
@@ -12,7 +14,7 @@ use Mockery as m;
  */
 class StlcompanyorpartnerparagraphTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new Sut();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -22,7 +24,7 @@ class StlcompanyorpartnerparagraphTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(['organisation' => ['type']], $query->getBundle());
     }
 
-    public function testRenderLtd()
+    public function testRenderLtd(): void
     {
         $mockParser = m::mock();
         $mockParser->shouldReceive('getFileExtension')->with()->once()->andReturn('rtf');
@@ -34,10 +36,8 @@ class StlcompanyorpartnerparagraphTest extends \PHPUnit\Framework\TestCase
         $this->assertStringStartsWith('It is important that a director of the company (who', $bookmark->render());
     }
 
-    /**
-     * @dataProvider dpRenderPartnershipsDataProvider
-     */
-    public function testRenderPartnerships($organisationTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderPartnershipsDataProvider')]
+    public function testRenderPartnerships(mixed $organisationTypeId): void
     {
         $mockParser = m::mock();
         $mockParser->shouldReceive('getFileExtension')->with()->once()->andReturn('rtf');
@@ -49,7 +49,7 @@ class StlcompanyorpartnerparagraphTest extends \PHPUnit\Framework\TestCase
         $this->assertStringStartsWith('It is important that a partner who can speak and', $bookmark->render());
     }
 
-    public function dpRenderPartnershipsDataProvider()
+    public static function dpRenderPartnershipsDataProvider(): array
     {
         return [
             [Organisation::ORG_TYPE_PARTNERSHIP],
@@ -57,10 +57,8 @@ class StlcompanyorpartnerparagraphTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider dpRenderOthersDataProvider
-     */
-    public function testRenderOthers($organisationTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderOthersDataProvider')]
+    public function testRenderOthers(mixed $organisationTypeId): void
     {
         $bookmark = new Sut();
         $bookmark->setData(['organisation' => ['type' => ['id' => $organisationTypeId]]]);
@@ -68,7 +66,7 @@ class StlcompanyorpartnerparagraphTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($bookmark->render());
     }
 
-    public function dpRenderOthersDataProvider()
+    public static function dpRenderOthersDataProvider(): array
     {
         return [
             [Organisation::ORG_TYPE_SOLE_TRADER],

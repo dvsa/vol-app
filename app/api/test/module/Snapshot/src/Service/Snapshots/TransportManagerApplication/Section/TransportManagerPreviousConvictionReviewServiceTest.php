@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Transport Manager Previous Conviction Review Service Test
  *
@@ -44,10 +46,8 @@ class TransportManagerPreviousConvictionReviewServiceTest extends MockeryTestCas
         );
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testGetConfig($tma, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testGetConfig(mixed $tma, mixed $expected): void
     {
         $this->mockTranslator->shouldReceive('translate')
             ->andReturnUsing(
@@ -57,7 +57,7 @@ class TransportManagerPreviousConvictionReviewServiceTest extends MockeryTestCas
         $this->assertEquals($expected, $this->sut->getConfig($tma));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         /** @var Entity\Tm\TransportManager $tm1 */
         $tm1 = m::mock(Entity\Tm\TransportManager::class)->makePartial();

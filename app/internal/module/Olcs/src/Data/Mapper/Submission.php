@@ -32,7 +32,7 @@ class Submission implements MapperInterface
         }
 
         if (isset($data['submissionType']['id'])) {
-            $snapshot = json_decode($data['dataSnapshot'], true);
+            $snapshot = json_decode((string) $data['dataSnapshot'], true);
 
             $formData['fields']['submissionSections'] = [
                 'submissionType' => $data['submissionType']['id'],

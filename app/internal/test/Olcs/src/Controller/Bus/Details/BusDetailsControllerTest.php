@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Bus Details Controller Test
  */
@@ -37,12 +39,12 @@ class BusDetailsControllerTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider alterFormProvider
      *
      * @param array $data
      * @param bool  $readonly
      */
-    public function testAlterFormForService($data, $readonly)
+    #[\PHPUnit\Framework\Attributes\DataProvider('alterFormProvider')]
+    public function testAlterFormForService(mixed $data, mixed $readonly): void
     {
         $mockForm = $this->getAlterFormAssertions($data, $readonly);
         $result = $this->sut->alterFormForService($mockForm, []);
@@ -51,12 +53,12 @@ class BusDetailsControllerTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider alterFormProvider
      *
      * @param array $data
      * @param bool  $readonly
      */
-    public function testAlterFormForTa($data, $readonly)
+    #[\PHPUnit\Framework\Attributes\DataProvider('alterFormProvider')]
+    public function testAlterFormForTa(mixed $data, mixed $readonly): void
     {
         $mockForm = $this->getAlterFormAssertions($data, $readonly);
         $result = $this->sut->alterFormForTa($mockForm, []);
@@ -65,12 +67,12 @@ class BusDetailsControllerTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider alterFormProvider
      *
      * @param array $data
      * @param bool  $readonly
      */
-    public function testAlterFormForStop($data, $readonly)
+    #[\PHPUnit\Framework\Attributes\DataProvider('alterFormProvider')]
+    public function testAlterFormForStop(mixed $data, mixed $readonly): void
     {
         $mockForm = $this->getAlterFormAssertions($data, $readonly);
         $result = $this->sut->alterFormForStop($mockForm, []);
@@ -79,12 +81,12 @@ class BusDetailsControllerTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider alterFormProvider
      *
      * @param array $data
      * @param bool  $readonly
      */
-    public function testAlterFormForQuality($data, $readonly)
+    #[\PHPUnit\Framework\Attributes\DataProvider('alterFormProvider')]
+    public function testAlterFormForQuality(mixed $data, mixed $readonly): void
     {
         $mockForm = $this->getAlterFormAssertions($data, $readonly);
         $result = $this->sut->alterFormForQuality($mockForm, []);
@@ -97,7 +99,7 @@ class BusDetailsControllerTest extends MockeryTestCase
      * @param  bool  $readonly
      * @return m\MockInterface
      */
-    public function getAlterFormAssertions($data, $readonly)
+    public function getAlterFormAssertions(mixed $data, mixed $readonly): m\MockInterface
     {
         $this->sut = m::mock(Sut::class)
             ->makePartial()
@@ -131,7 +133,7 @@ class BusDetailsControllerTest extends MockeryTestCase
         return $mockForm;
     }
 
-    public function alterFormProvider()
+    public static function alterFormProvider(): array
     {
         return [
             [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\AnswersSummary;
 
 use DateTime;
@@ -20,10 +22,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class BilateralIpaAnswersSummaryRowsAdderTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpAddRows
-     */
-    public function testAddRows($isSnapshot, $availableStocks, $isMultiStock, $expectedSlug)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpAddRows')]
+    public function testAddRows(mixed $isSnapshot, mixed $availableStocks, mixed $isMultiStock, mixed $expectedSlug): void
     {
         $countryId = 'NO';
         $periodNameKey = 'period-key';
@@ -89,7 +89,7 @@ class BilateralIpaAnswersSummaryRowsAdderTest extends MockeryTestCase
         $sut->addRows($answersSummary, $irhpPermitApplication, $isSnapshot);
     }
 
-    public function dpAddRows()
+    public static function dpAddRows(): array
     {
         $noStocks = [];
         $oneStock = [['id' => 1]];

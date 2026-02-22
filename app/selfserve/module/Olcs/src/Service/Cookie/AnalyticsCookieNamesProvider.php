@@ -38,7 +38,7 @@ class AnalyticsCookieNamesProvider implements CookieNamesProviderInterface
 
         $cookieArray = $cookie->getArrayCopy();
         foreach ($cookieArray as $cookieName => $cookieValue) {
-            if (str_starts_with($cookieName, self::GAT_PREFIX)) {
+            if (str_starts_with((string) $cookieName, self::GAT_PREFIX)) {
                 $names[] = $cookieName;
             }
         }

@@ -45,6 +45,7 @@ abstract class AbstractOverviewController extends AbstractController
      *
      * @return \Olcs\View\Model\LvaOverview
      */
+    #[\Override]
     public function indexAction()
     {
         $applicationId = $this->getApplicationId();
@@ -160,6 +161,7 @@ abstract class AbstractOverviewController extends AbstractController
      *
      * @return null|\Laminas\Http\Response
      */
+    #[\Override]
     protected function checkForRedirect($lvaId)
     {
         if (

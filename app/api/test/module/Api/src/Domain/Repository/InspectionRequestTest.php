@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Inspection Request test
  *
@@ -32,7 +34,7 @@ class InspectionRequestTest extends RepositoryTestCase
     /**
      * testFetchForInspectionRequest
      */
-    public function testFetchForInspectionRequest()
+    public function testFetchForInspectionRequest(): void
     {
 
         $qb = $this->createMockQb('QUERY');
@@ -123,7 +125,7 @@ class InspectionRequestTest extends RepositoryTestCase
         static::assertEquals($expect, $this->query);
     }
 
-    public function testFetchLicenceOperatingCentreCount()
+    public function testFetchLicenceOperatingCentreCount(): void
     {
         $inspectionRequestId = 1;
 
@@ -167,7 +169,7 @@ class InspectionRequestTest extends RepositoryTestCase
         $this->assertEquals(115, $result);
     }
 
-    public function testFetchPage()
+    public function testFetchPage(): void
     {
         $licenceId = 1;
 
@@ -221,7 +223,7 @@ class InspectionRequestTest extends RepositoryTestCase
         $this->assertEquals(['result' => ['foo'], 'count' => 1], $this->sut->fetchPage($query, $licenceId));
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         $licenceId = 1;
 
@@ -239,7 +241,7 @@ class InspectionRequestTest extends RepositoryTestCase
         $this->assertNull($this->sut->applyListFilters($qb, $query));
     }
 
-    public function testApplyListJoins()
+    public function testApplyListJoins(): void
     {
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);

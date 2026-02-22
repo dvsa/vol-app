@@ -29,6 +29,7 @@ class LicenceBusinessDetails extends CommonLicenceBusinessDetails
      *
      * @return void
      */
+    #[\Override]
     public function alterForm($form, $params)
     {
         parent::alterForm($form, $params);

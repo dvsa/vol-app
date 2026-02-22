@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CreateNextPublicationTest
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\Publication\CreateNextPublication;
  */
 class CreateNextPublicationTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $id = 5;
         $command = CreateNextPublication::create(['id' => $id]);

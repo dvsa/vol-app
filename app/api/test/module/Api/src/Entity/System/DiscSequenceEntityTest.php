@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\System;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -19,7 +21,7 @@ class DiscSequenceEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testGetDiscPrefix()
+    public function testGetDiscPrefix(): void
     {
         $entity = new Entity();
         $entity->setRPrefix('AB');
@@ -30,7 +32,7 @@ class DiscSequenceEntityTest extends EntityTester
         $this->assertEquals('EF', $entity->getDiscPrefix('ltyp_si'));
     }
 
-    public function testSetAndGetDiscNumber()
+    public function testSetAndGetDiscNumber(): void
     {
         $entity = new Entity();
         $entity->setDiscStartNumber('ltyp_r', 1);

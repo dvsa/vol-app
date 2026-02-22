@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Approve Waive Test
  *
@@ -39,7 +41,8 @@ class ApproveWaiveTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function initReferences()
+    #[\Override]
+    public function initReferences(): void
     {
         $this->refData = [
             FeeEntity::STATUS_PAID,
@@ -49,7 +52,7 @@ class ApproveWaiveTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandApproveWaive()
+    public function testHandleCommandApproveWaive(): void
     {
         $feeId = 69;
         $transactionId = 99;
@@ -136,7 +139,7 @@ class ApproveWaiveTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($this->mapRefdata(FeeEntity::STATUS_PAID), $fee->getFeeStatus());
     }
 
-    public function testHandleCommandApproveWaiveError()
+    public function testHandleCommandApproveWaiveError(): void
     {
         $feeId = 69;
 

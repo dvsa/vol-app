@@ -32,7 +32,6 @@ class TaxiPhvController extends Lva\AbstractTaxiPhvController implements Variati
 
     protected $lva = 'variation';
     protected string $location = 'internal';
-    protected StringHelperService $stringHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -55,11 +54,9 @@ class TaxiPhvController extends Lva\AbstractTaxiPhvController implements Variati
         TableFactory $tableFactory,
         ScriptFactory $scriptFactory,
         TranslationHelperService $translationHelper,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

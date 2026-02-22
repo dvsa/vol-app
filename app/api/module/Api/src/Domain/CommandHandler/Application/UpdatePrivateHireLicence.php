@@ -91,6 +91,7 @@ final class UpdatePrivateHireLicence extends AbstractCommandHandler implements T
             \Dvsa\Olcs\Api\Domain\Command\Application\UpdateApplicationCompletion::create($data)
         );
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

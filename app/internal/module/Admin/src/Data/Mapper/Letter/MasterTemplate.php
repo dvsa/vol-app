@@ -39,7 +39,7 @@ class MasterTemplate implements MapperInterface
     public static function mapFromForm(array $data): array
     {
         $commandData = $data['masterTemplate'] ?? [];
-        
+
         // Ensure boolean value for isDefault
         if (isset($commandData['isDefault'])) {
             $commandData['isDefault'] = (bool) $commandData['isDefault'];

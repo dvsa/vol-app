@@ -76,7 +76,7 @@ class IrhpPermitAdminFurniture implements
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'stockId',
-            [$this, 'onIrhpPermitAdminFurniture'],
+            $this->onIrhpPermitAdminFurniture(...),
             $priority
         );
     }
@@ -143,8 +143,8 @@ class IrhpPermitAdminFurniture implements
             );
         }
 
-        $validFrom = date('d/m/Y', strtotime($permitStock['validFrom']));
-        $validTo = date('d/m/Y', strtotime($permitStock['validTo']));
+        $validFrom = date('d/m/Y', strtotime((string) $permitStock['validFrom']));
+        $validTo = date('d/m/Y', strtotime((string) $permitStock['validTo']));
         $initialStock = $permitStock['initialStock'];
         $name = $permitStock['irhpPermitType']['name']['description'];
 

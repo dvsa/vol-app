@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Remind Username Selfserve Test
  */
@@ -29,7 +31,7 @@ class RemindUsernameSelfserveTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandSingle()
+    public function testHandleCommandSingle(): void
     {
         $data = [
             'licenceNumber' => 'AB12345678',
@@ -71,7 +73,7 @@ class RemindUsernameSelfserveTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandMultiple()
+    public function testHandleCommandMultiple(): void
     {
         $data = [
             'licenceNumber' => 'AB12345678',
@@ -116,7 +118,7 @@ class RemindUsernameSelfserveTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandThrowsNotFoundException()
+    public function testHandleCommandThrowsNotFoundException(): void
     {
         $data = [
             'licenceNumber' => 'AB12345678',

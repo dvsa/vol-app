@@ -100,6 +100,7 @@ class PeopleController extends Lva\AbstractPeopleController
      *
      * @return Response
      */
+    #[\Override]
     public function addAction()
     {
         return $this->redirectToIndexWithPermissionError();
@@ -124,6 +125,7 @@ class PeopleController extends Lva\AbstractPeopleController
      * @return mixed
      * @throws ResourceNotFoundException
      */
+    #[\Override]
     public function editAction()
     {
         $response = parent::editAction();

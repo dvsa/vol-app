@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Variation;
 
 use Doctrine\ORM\Query;
@@ -22,10 +24,8 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpValidate
-     */
-    public function testValidate($vehicleType, $totAuthHgvVehicles, $totAuthLgvVehicles, $totAuthTrailers, $data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValidate')]
+    public function testValidate(mixed $vehicleType, mixed $totAuthHgvVehicles, mixed $totAuthLgvVehicles, mixed $totAuthTrailers, mixed $data, mixed $expected): void
     {
         $this->expectException(ValidationException::class);
 
@@ -58,7 +58,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function dpValidate()
+    public static function dpValidate(): array
     {
         return [
             'LGV without required data' => [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Fee Test
  *
@@ -18,7 +20,7 @@ use Dvsa\Olcs\Api\Entity\Fee\Fee;
  */
 class CreateFeeTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $data = [
             'foo' => 'bar',

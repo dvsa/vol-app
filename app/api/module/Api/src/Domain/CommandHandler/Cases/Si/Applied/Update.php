@@ -18,7 +18,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
  */
 final class Update extends AbstractCommandHandler
 {
-    public const DATE_FORMAT = 'Y-m-d';
+    public const string DATE_FORMAT = 'Y-m-d';
 
     protected $repoServiceName = 'SiPenalty';
 

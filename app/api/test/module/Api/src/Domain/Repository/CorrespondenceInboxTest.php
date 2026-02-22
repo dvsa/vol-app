@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\QueryBuilder;
@@ -7,9 +9,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Entity;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\CorrespondenceInbox
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\CorrespondenceInbox::class)]
 class CorrespondenceInboxTest extends RepositoryTestCase
 {
     /** @var  Repository\CorrespondenceInbox */
@@ -20,7 +20,7 @@ class CorrespondenceInboxTest extends RepositoryTestCase
         $this->setUpSut(Repository\CorrespondenceInbox::class);
     }
 
-    public function testGetAllRequiringPrint()
+    public function testGetAllRequiringPrint(): void
     {
         $minDate = '2015-01-01';
         $maxDate = '2016-01-01';
@@ -70,7 +70,7 @@ class CorrespondenceInboxTest extends RepositoryTestCase
         static::assertEquals('EXPECT', $this->sut->getAllRequiringPrint($minDate, $maxDate));
     }
 
-    public function testGetAllRequiringReminder()
+    public function testGetAllRequiringReminder(): void
     {
         $minDate = '2015-01-01';
         $maxDate = '2016-01-01';
@@ -129,7 +129,7 @@ class CorrespondenceInboxTest extends RepositoryTestCase
         static::assertEquals('EXPECT', $this->sut->getAllRequiringReminder($minDate, $maxDate));
     }
 
-    public function testFetchByDocumentId()
+    public function testFetchByDocumentId(): void
     {
         $documentId = 123;
 

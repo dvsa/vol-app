@@ -119,6 +119,7 @@ final class UpdateOperatingCentres extends AbstractCommandHandler implements Tra
 
         return $this->totals;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

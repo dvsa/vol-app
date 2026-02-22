@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Licence;
 
 use DMS\PHPUnitExtensions\ArraySubset\Assert;
@@ -56,10 +58,8 @@ class LicenceTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dptestHandleQuery
-     */
-    public function testHandleQuery($isLicenceSurrenderAllowed, $openApplicationsForLicence)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dptestHandleQuery')]
+    public function testHandleQuery(mixed $isLicenceSurrenderAllowed, mixed $openApplicationsForLicence): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -129,10 +129,8 @@ class LicenceTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    /**
-     * @dataProvider dptestHandleQuery
-     */
-    public function testHandleQueryNoContinuationDetail($isLicenceSurrenderAllowed, $openApplicationsForLicence)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dptestHandleQuery')]
+    public function testHandleQueryNoContinuationDetail(mixed $isLicenceSurrenderAllowed, mixed $openApplicationsForLicence): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -199,17 +197,15 @@ class LicenceTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    /**
-     * @dataProvider dptestHandleQueryShowExpiryWarningDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dptestHandleQueryShowExpiryWarningDataProvider')]
     public function testHandleQueryShowExpiryWarning(
-        $expected,
-        $isExpiring,
-        $isSystemParamDisabled,
-        $continuationDetailStatusId,
-        $isLicenceSurrenderAllowed,
-        $openApplicationsForLicence
-    ) {
+        mixed $expected,
+        mixed $isExpiring,
+        mixed $isSystemParamDisabled,
+        mixed $continuationDetailStatusId,
+        mixed $isLicenceSurrenderAllowed,
+        mixed $openApplicationsForLicence
+    ): void {
         $query = Qry::create(['id' => 111]);
 
         /** @var LicenceEntity $licence */
@@ -263,7 +259,7 @@ class LicenceTest extends QueryHandlerTestCase
         $this->assertSame($isLicenceSurrenderAllowed, $resultArray['isLicenceSurrenderAllowed']);
     }
 
-    public function dptestHandleQueryShowExpiryWarningDataProvider()
+    public static function dptestHandleQueryShowExpiryWarningDataProvider(): array
     {
         return [
             'should show' => [
@@ -273,8 +269,6 @@ class LicenceTest extends QueryHandlerTestCase
                 'continuationDetailStatusId' => ContinuationDetail::STATUS_PRINTED,
                 'isLicenceSurrenderAllowed' => true,
                 'openApplicationsForLicence' => [],
-                'activeVehicleCount' => 1,
-                'totalVehicleCount' => 1,
             ],
             'licence is expiring' => [
                 'expected' => false,
@@ -283,8 +277,6 @@ class LicenceTest extends QueryHandlerTestCase
                 'continuationDetailStatusId' => ContinuationDetail::STATUS_PRINTED,
                 'isLicenceSurrenderAllowed' => true,
                 'openApplicationsForLicence' => [],
-                'activeVehicleCount' => 1,
-                'totalVehicleCount' => 1,
             ],
             'system Parameter disabled' => [
                 'expected' => false,
@@ -293,8 +285,6 @@ class LicenceTest extends QueryHandlerTestCase
                 'continuationDetailStatusId' => ContinuationDetail::STATUS_PRINTED,
                 'isLicenceSurrenderAllowed' => false,
                 'openApplicationsForLicence' => ['some data'],
-                'activeVehicleCount' => 1,
-                'totalVehicleCount' => 1,
             ],
             'wrong continuation detail status' => [
                 'expected' => false,
@@ -303,19 +293,15 @@ class LicenceTest extends QueryHandlerTestCase
                 'continuationDetailStatusId' => ContinuationDetail::STATUS_PRINTING,
                 'isLicenceSurrenderAllowed' => false,
                 'openApplicationsForLicence' => ['some data'],
-                'activeVehicleCount' => 1,
-                'totalVehicleCount' => 1,
             ],
         ];
     }
 
-    /**
-     * @dataProvider dptestHandleQuery
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dptestHandleQuery')]
     public function testHandleQueryShowExpiryWarningNoContinuationDetail(
-        $isLicenceSurrenderAllowed,
-        $openApplicationsForLicence
-    ) {
+        mixed $isLicenceSurrenderAllowed,
+        mixed $openApplicationsForLicence
+    ): void {
         $query = Qry::create(['id' => 111]);
 
         /** @var LicenceEntity $licence */
@@ -367,7 +353,7 @@ class LicenceTest extends QueryHandlerTestCase
         }
     }
 
-    public function dptestHandleQuery()
+    public static function dptestHandleQuery(): array
     {
         return [
             [

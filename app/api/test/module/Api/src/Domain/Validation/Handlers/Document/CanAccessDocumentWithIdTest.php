@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Document;
 
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
@@ -25,12 +27,12 @@ class CanAccessDocumentWithIdTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider provider
      *
      * @param $canAccess
      * @param $expected
      */
-    public function testIsValid($canAccess, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $canAccess, mixed $expected): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -42,12 +44,12 @@ class CanAccessDocumentWithIdTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider provider
      *
      * @param $canAccess
      * @param $expected
      */
-    public function testIsValidWithIdentifier($canAccess, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValidWithIdentifier(mixed $canAccess, mixed $expected): void
     {
         /** @var CommandInterface $dto */
         $dto = \Dvsa\Olcs\Transfer\Query\Document\Download::create(['identifier' => 76]);
@@ -57,7 +59,7 @@ class CanAccessDocumentWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [true, true],

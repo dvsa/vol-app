@@ -24,9 +24,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\Letter\LetterPreviewService
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Letter\LetterPreviewService::class)]
 class LetterPreviewServiceTest extends MockeryTestCase
 {
     private LetterPreviewService $sut;
@@ -665,10 +663,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         // Verify context is passed with licence and application IDs
         $mockSectionRenderer->shouldReceive('render')
-            ->with($mockSection, m::on(function ($context) {
-                return isset($context['licence']) && $context['licence'] === 123
-                    && isset($context['application']) && $context['application'] === 456;
-            }))
+            ->with($mockSection, m::on(fn($context) => isset($context['licence']) && $context['licence'] === 123
+                && isset($context['application']) && $context['application'] === 456))
             ->once()
             ->andReturn('<div class="section">Content</div>');
 
@@ -735,14 +731,12 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         // Verify all context IDs are present
         $mockSectionRenderer->shouldReceive('render')
-            ->with($mockSection, m::on(function ($context) {
-                return $context['licence'] === 111
-                    && $context['application'] === 222
-                    && $context['user'] === 333
-                    && $context['case'] === 444
-                    && $context['busRegId'] === 555
-                    && $context['organisation'] === 666;
-            }))
+            ->with($mockSection, m::on(fn($context) => $context['licence'] === 111
+                && $context['application'] === 222
+                && $context['user'] === 333
+                && $context['case'] === 444
+                && $context['busRegId'] === 555
+                && $context['organisation'] === 666))
             ->once()
             ->andReturn('<div class="section">Content</div>');
 
@@ -837,9 +831,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         // Verify context is passed to issue renderer
         $mockIssueRenderer->shouldReceive('render')
-            ->with($mockIssue, m::on(function ($context) {
-                return isset($context['licence']) && $context['licence'] === 789;
-            }))
+            ->with($mockIssue, m::on(fn($context) => isset($context['licence']) && $context['licence'] === 789))
             ->once()
             ->andReturn('<div class="issue">Issue content</div>');
 
@@ -900,11 +892,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $this->mockVolGrabReplacementService->shouldReceive('replaceGrabsInHtml')
             ->once()
-            ->with(m::on(function ($html) {
-                return strpos($html, '[[TODAYS_DATE]]') !== false;
-            }), m::on(function ($context) {
-                return isset($context['licence']) && $context['licence'] === 123;
-            }))
+            ->with(m::on(fn($html) => str_contains((string) $html, '[[TODAYS_DATE]]')), m::on(fn($context) => isset($context['licence']) && $context['licence'] === 123))
             ->andReturn('<html><p>Section content with 23rd January 2026</p> 23rd January 2026</html>');
 
         $result = $this->sut->renderPreview($mockLetterInstance, $mockTemplate);

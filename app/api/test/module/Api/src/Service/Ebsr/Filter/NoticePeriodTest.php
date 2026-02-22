@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\Filter;
 
 use Dvsa\Olcs\Api\Service\Ebsr\Filter\NoticePeriod;
@@ -12,11 +14,11 @@ use PHPUnit\Framework\TestCase as TestCase;
 class NoticePeriodTest extends TestCase
 {
     /**
-     * @dataProvider provideFilter
      * @param $data
      * @param $expected
      */
-    public function testFilter($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFilter')]
+    public function testFilter(mixed $data, mixed $expected): void
     {
         $sut = new NoticePeriod();
         $result = $sut->filter($data);
@@ -24,7 +26,7 @@ class NoticePeriodTest extends TestCase
         $this->assertEquals($expected, $result['busNoticePeriod']);
     }
 
-    public function provideFilter()
+    public static function provideFilter(): array
     {
         return [
             [['trafficAreas' => ['English']], 2],

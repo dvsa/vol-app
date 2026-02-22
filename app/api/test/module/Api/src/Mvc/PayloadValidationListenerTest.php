@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Mvc;
 
 use Dvsa\Olcs\Api\Mvc\PayloadValidationListener as Sut;
@@ -28,17 +30,17 @@ class PayloadValidationListenerTest extends MockeryTestCase
         parent::setUp();
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
         $mockEventManager = m::mock(EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')
             ->once()
-            ->with(MvcEvent::EVENT_ROUTE, [$this->sut, 'onRoute'], 1);
+            ->with(MvcEvent::EVENT_ROUTE, m::type(\Closure::class), 1);
 
         $this->sut->attach($mockEventManager);
     }
 
-    public function testOnRouteNoRequest()
+    public function testOnRouteNoRequest(): void
     {
         $mockMvcEvent = m::mock(MvcEvent::class);
         $mockMvcEvent->shouldReceive('getRequest')
@@ -50,7 +52,7 @@ class PayloadValidationListenerTest extends MockeryTestCase
         $this->assertNull($result);
     }
 
-    public function testOnRouteNoRouteMatch()
+    public function testOnRouteNoRouteMatch(): void
     {
         $mockHttpRequest = m::mock(HttpRequest::class);
 
@@ -67,7 +69,7 @@ class PayloadValidationListenerTest extends MockeryTestCase
         $this->assertNull($result);
     }
 
-    public function testOnRouteNoDtoClass()
+    public function testOnRouteNoDtoClass(): void
     {
         $mockHttpRequest = m::mock(HttpRequest::class);
 
@@ -90,7 +92,7 @@ class PayloadValidationListenerTest extends MockeryTestCase
         $this->assertNull($result);
     }
 
-    public function testOnRouteGetValid()
+    public function testOnRouteGetValid(): void
     {
         $params = [];
 
@@ -134,7 +136,7 @@ class PayloadValidationListenerTest extends MockeryTestCase
         $this->assertNull($result);
     }
 
-    public function testOnRouteGetNotValid()
+    public function testOnRouteGetNotValid(): void
     {
         $params = [];
 
@@ -184,7 +186,7 @@ class PayloadValidationListenerTest extends MockeryTestCase
         $this->assertEquals('["ERROR"]', $result->getContent());
     }
 
-    public function testOnRoutePostJsonNotValid()
+    public function testOnRoutePostJsonNotValid(): void
     {
         $params = [];
         $data = ['POST_DATA'];
@@ -246,7 +248,7 @@ class PayloadValidationListenerTest extends MockeryTestCase
         $this->assertEquals('["ERROR"]', $result->getContent());
     }
 
-    public function testOnRoutePostXmlNotValid()
+    public function testOnRoutePostXmlNotValid(): void
     {
         $params = [];
         $data = '<xml><some_data>POST_DATA</some_data></xml>';
@@ -305,7 +307,7 @@ class PayloadValidationListenerTest extends MockeryTestCase
         $this->assertEquals('', $result->getContent());
     }
 
-    public function testOnRoutePostDataNotValid()
+    public function testOnRoutePostDataNotValid(): void
     {
         $params = [];
         $data = ['data'];

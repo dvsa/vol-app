@@ -11,6 +11,7 @@ use Dvsa\Olcs\Api\Domain\Command\Bus\Ebsr\ProcessPackTransaction as ProcessPackT
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\Command\Queue\Create as CreateQueue;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class ProcessPackTest extends ProcessPackTestCase
 {
     public function setUp(): void
@@ -19,7 +20,7 @@ class ProcessPackTest extends ProcessPackTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $cmdData = [
             'organisation' => 11,
@@ -36,7 +37,7 @@ class ProcessPackTest extends ProcessPackTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithException()
+    public function testHandleCommandWithException(): void
     {
         $cmdData = [
             'organisation' => 11,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Nr\InputFilter;
 
 use Dvsa\Olcs\Api\Service\InputFilter\Input;
@@ -17,7 +19,7 @@ use Psr\Container\ContainerInterface;
  */
 class SeriousInfringementInputFactoryTest extends TestCase
 {
-    public function testCreateService()
+    public function testCreateService(): void
     {
         $mockFilter = m::mock(\Laminas\Filter\AbstractFilter::class);
         $mockValidator = m::mock(\Laminas\Validator\AbstractValidator::class);

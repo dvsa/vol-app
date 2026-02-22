@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\DBAL\Connection;
@@ -25,7 +27,7 @@ class IrhpPermitRangeTest extends RepositoryTestCase
         $this->setUpSut(IrhpPermitRange::class);
     }
 
-    public function testGetCombinedRangeSizeWithoutEmissionsCategoryId()
+    public function testGetCombinedRangeSizeWithoutEmissionsCategoryId(): void
     {
         $combinedRangeSize = 1002;
         $stockId = 5;
@@ -67,10 +69,8 @@ class IrhpPermitRangeTest extends RepositoryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestGetCombinedRangeSizeWithEmissionsCategoryId
-     */
-    public function testGetCombinedRangeSizeWithEmissionsCategoryId($emissionsCategoryId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetCombinedRangeSizeWithEmissionsCategoryId')]
+    public function testGetCombinedRangeSizeWithEmissionsCategoryId(mixed $emissionsCategoryId): void
     {
         $combinedRangeSize = 1002;
         $stockId = 5;
@@ -120,7 +120,7 @@ class IrhpPermitRangeTest extends RepositoryTestCase
         );
     }
 
-    public function dpTestGetCombinedRangeSizeWithEmissionsCategoryId()
+    public static function dpTestGetCombinedRangeSizeWithEmissionsCategoryId(): array
     {
         return [
             [RefData::EMISSIONS_CATEGORY_EURO5_REF],
@@ -128,7 +128,7 @@ class IrhpPermitRangeTest extends RepositoryTestCase
         ];
     }
 
-    public function testGetByStockId()
+    public function testGetByStockId(): void
     {
         $expectedResult = [
             IrhpPermitRangeEntity::class,
@@ -175,7 +175,7 @@ class IrhpPermitRangeTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchByPermitNumberAndStock()
+    public function testFetchByPermitNumberAndStock(): void
     {
         $permitNumber = 200;
         $permitStock = 3;
@@ -238,7 +238,7 @@ class IrhpPermitRangeTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchRangeIdToCountryIdAssociations()
+    public function testFetchRangeIdToCountryIdAssociations(): void
     {
         $stockId = 14;
 
@@ -271,7 +271,7 @@ class IrhpPermitRangeTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchReadyToPrint()
+    public function testFetchReadyToPrint(): void
     {
         $irhpPermitStockId = 100;
         $results = [
@@ -328,7 +328,7 @@ class IrhpPermitRangeTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFindOverlappingRangesByType()
+    public function testFindOverlappingRangesByType(): void
     {
         $irhpPermitStockId = 1;
         $prefix = 'UK';
@@ -367,7 +367,7 @@ class IrhpPermitRangeTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFindOverlappingRangesByTypeWithRange()
+    public function testFindOverlappingRangesByTypeWithRange(): void
     {
         $irhpPermitStockId = 1;
         $irhpPermitRangeId = 2;

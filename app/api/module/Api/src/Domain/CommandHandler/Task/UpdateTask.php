@@ -20,7 +20,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
  */
 final class UpdateTask extends AbstractCommandHandler implements TransactionedInterface
 {
-    public const ERR_TEAM_INVALID = 'task.edit.team.invalid';
+    public const string ERR_TEAM_INVALID = 'task.edit.team.invalid';
 
     protected $repoServiceName = 'Task';
 

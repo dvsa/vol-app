@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Move document test
  *
@@ -30,7 +32,7 @@ class MoveDocumentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWithAppplication()
+    public function testHandleCommandWithAppplication(): void
     {
         $data = [
             'targetId' => 1,

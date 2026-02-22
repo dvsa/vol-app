@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Dvsa\Olcs\Api\Domain\Command\Fee\UpdateFeeStatus;
@@ -49,7 +51,8 @@ class WithdrawApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'apsts_withdrawn',
@@ -59,7 +62,7 @@ class WithdrawApplicationTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Command::create(['id' => 532, 'reason' => 'withdrawn']);
 
@@ -156,7 +159,7 @@ class WithdrawApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Snapshot created', 'Application 1 withdrawn.'], $result->getMessages());
     }
 
-    public function testHandleCommandCloseTasks()
+    public function testHandleCommandCloseTasks(): void
     {
         $command = Command::create(['id' => 532, 'reason' => 'withdrawn']);
 
@@ -267,7 +270,7 @@ class WithdrawApplicationTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandVariationNotPublishable()
+    public function testHandleCommandVariationNotPublishable(): void
     {
         $command = Command::create(['id' => 532, 'reason' => 'withdrawn']);
 
@@ -311,7 +314,7 @@ class WithdrawApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Snapshot created', 'Application 1 withdrawn.'], $result->getMessages());
     }
 
-    public function testHandleCommandVariationPublishable()
+    public function testHandleCommandVariationPublishable(): void
     {
         $command = Command::create(['id' => 532, 'reason' => 'withdrawn']);
 
@@ -378,7 +381,7 @@ class WithdrawApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Snapshot created', 'Application 1 withdrawn.'], $result->getMessages());
     }
 
-    public function testHandleCommandVariation()
+    public function testHandleCommandVariation(): void
     {
         $command = Command::create(['id' => 532, 'reason' => 'withdrawn']);
 
@@ -437,7 +440,7 @@ class WithdrawApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Snapshot created', 'Application 1 withdrawn.'], $result->getMessages());
     }
 
-    public function testHandleCommandRefund()
+    public function testHandleCommandRefund(): void
     {
         $command = Command::create(['id' => 532, 'reason' => 'withdrawn']);
 

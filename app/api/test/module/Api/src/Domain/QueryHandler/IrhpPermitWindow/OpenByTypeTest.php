@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpPermitWindow;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -25,7 +27,7 @@ class OpenByTypeTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $query = ListQuery::create(['irhpPermitType' => 5, 'currentDateTime' => '2020-05-01 10:10:20']);
 

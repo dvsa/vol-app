@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\ApplyRanges;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -88,7 +90,7 @@ class ForCpProviderTest extends MockeryTestCase
         );
     }
 
-    public function testSelectRangeForNoCountriesRequested()
+    public function testSelectRangeForNoCountriesRequested(): void
     {
         $selectedRangeEntity = m::mock(IrhpPermitRange::class);
 
@@ -118,7 +120,7 @@ class ForCpProviderTest extends MockeryTestCase
         );
     }
 
-    public function testSelectRangeForOneOrMoreCountriesRequested()
+    public function testSelectRangeForOneOrMoreCountriesRequested(): void
     {
         $applicationCountries = [
             m::mock(Country::class),

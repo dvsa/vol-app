@@ -196,9 +196,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionIsCallable(): void
     {
         // Setup
@@ -208,10 +206,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->indexAction(...));
     }
 
-    /**
-     * @test
-     * @depends indexActionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenGettingReturnsViewModel(): ViewModel
     {
         // Setup
@@ -227,22 +223,16 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         return $result;
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionWhenGettingReturnsViewModel
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionWhenGettingReturnsViewModel')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenGettingReturnsViewModelWithTheCorrectTemplate(ViewModel $viewModel): void
     {
         // Assert
         $this->assertEquals(static::ADD_VEHICLES_VIEW_TEMPLATE, $viewModel->getTemplate());
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionWhenGettingReturnsViewModel
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionWhenGettingReturnsViewModel')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenGettingReturnsViewModelWithABackLinkToTheApplicationOverviewPage(): void
     {
         // Setup
@@ -259,11 +249,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->assertEquals(static::URL_TO_APPLICATION_OVERVIEW_PAGE, $result->getVariable(static::BACK_URL_VARIABLE));
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionWhenGettingReturnsViewModel
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionWhenGettingReturnsViewModel')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenGettingReturnsViewModelWithForm(): void
     {
         // Setup
@@ -278,11 +265,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->assertInstanceOf(AddVehiclesQuestionForm::class, $form);
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionWhenGettingReturnsViewModelWithForm
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionWhenGettingReturnsViewModelWithForm')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenGettingReturnsViewModelWithFormWithoutData(): void
     {
         // Setup
@@ -300,11 +284,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $form->getData();
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionWhenGettingReturnsViewModelWithForm
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionWhenGettingReturnsViewModelWithForm')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenGettingReturnsViewModelWithFormWithDataWhenInputHasBeenFlashed(): void
     {
         // Setup
@@ -325,11 +306,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->assertEquals(static::FORM_DATA_FROM_INPUT_WITH_AN_INVALID_RADIO_OPTION, $form->getData());
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionWhenGettingReturnsViewModelWithForm
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionWhenGettingReturnsViewModelWithForm')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenGettingReturnsViewModelWithFormWithNoPreSelectedWhenAUserHasCompletedTheVehicleSectionWithoutVehicles(): void
     {
         // Setup
@@ -349,11 +327,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->assertSame(static::RADIO_OPTION_NO, $form->getRadioInput()->getValue('application-version'));
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionWhenGettingReturnsViewModelWithForm
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionWhenGettingReturnsViewModelWithForm')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenGettingAndUserHasAlreadyAddedVehiclesThrowResourceNotFoundException(): void
     {
         // Setup
@@ -371,11 +346,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $this->routeMatch());
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenGettingAndAUserProvidesTheIdOfAVariationReturnsA404(): void
     {
         // Setup
@@ -395,11 +367,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $routeMatch);
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenGettingAndAUserProvidesAnApplicationIdWhichDoesNotExistReturnsA404(): void
     {
         // Setup
@@ -416,11 +385,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction(new Request(), $this->routeMatch());
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenGettingAndAUserProvidesAnApplicationWhichHasAStatusOtherThenNotSubmittedReturnsARedirectToTheSubmissionSummaryPage(): void
     {
         // Setup
@@ -445,11 +411,11 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
      * @throws BailOutException
      * @throws ResourceNotFoundException
      *
-     * @test
      *
-     * @depends indexActionIsCallable
-     * @dataProvider invalidCqrsResponseStatusCodesDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidCqrsResponseStatusCodesDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenGettingThrowsExceptionIfApplicationResponseHasAStatusOtherThen200(int $invalidStatusCode): void
     {
         // Setup
@@ -466,11 +432,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction(new Request(), $this->routeMatch());
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenGettingAndAUserProvidesAnApplicationWhichDoesNotHaveTheLicenceCategoryGoodsReturnA404(): void
     {
         // Setup
@@ -488,11 +451,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction(new Request(), $this->routeMatch());
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenGettingAndAUserProvidesAnApplicationWhichHasAnUnsupportedLicenceTypeReturnA404(): void
     {
         // Setup
@@ -513,7 +473,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function supportedLicenceTypeDataProvider(): array
+    public static function supportedLicenceTypeDataProvider(): array
     {
         return [
             'standard national' => [RefData::LICENCE_TYPE_STANDARD_NATIONAL],
@@ -529,11 +489,11 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
      * @throws BailOutException
      * @throws ResourceNotFoundException
      *
-     * @test
      *
-     * @depends indexActionIsCallable
-     * @dataProvider supportedLicenceTypeDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('supportedLicenceTypeDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenGettingAndAUserProvidesAnApplicationWithASupportedLicenceTypeDoesNotReturnA404(string $licenceType): void
     {
         // Setup
@@ -560,7 +520,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function invalidInputSetDataProvider(): array
+    public static function invalidInputSetDataProvider(): array
     {
         return [
             'no radio option' => [[]],
@@ -572,11 +532,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingAndUserHasAlreadyAddedVehiclesThrowResourceNotFoundException(): void
     {
         // Setup
@@ -594,13 +551,9 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $this->routeMatch());
     }
 
-    /**
-     *
-     * @test
-     *
-     * @depends indexActionIsCallable
-     * @dataProvider invalidInputSetDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidInputSetDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingAndAUserHasSuppliedInvalidInputRedirectBack(array $invalidInputSet): void
     {
         // Setup
@@ -621,11 +574,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->assertSame($expectedRedirect, $result);
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingAndAUserHasSuppliedInvalidInputFlashTheUsersInputWithCustomNamespace(): void
     {
         // Setup
@@ -644,11 +594,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $this->routeMatch());
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingAndAUserHasSuppliedInvalidInputFlashTheUsersInputWithJson(): void
     {
         // Setup
@@ -667,11 +614,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $this->routeMatch());
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionWhenPostingAndAUserHasSuppliedInvalidInputFlashTheUsersInputWithJson
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionWhenPostingAndAUserHasSuppliedInvalidInputFlashTheUsersInputWithJson')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingAndAUserHasSuppliedInvalidInputFlashTheUsersInputWithJsonContainingOriginalInput(): void
     {
         // Setup
@@ -689,11 +633,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $this->routeMatch());
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionWhenPostingAndAUserHasSuppliedInvalidInputFlashTheUsersInputWithJson
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionWhenPostingAndAUserHasSuppliedInvalidInputFlashTheUsersInputWithJson')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingAndAUserHasSuppliedInvalidInputFlashTheUsersInputWithJsonContainingOriginalInputFilteredByForm(): void
     {
         // Setup
@@ -711,11 +652,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $this->routeMatch());
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingAndAUserSelectsReturnToOverviewAndYesRedirectsAUserToOverview(): void
     {
         // Setup
@@ -737,11 +675,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->assertSame($expectedRedirect, $result);
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingAndAUserSelectsReturnToOverviewAndYesUpdateVehicleSectionStatusToIncomplete(): void
     {
         // Setup
@@ -756,11 +691,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->commandSender()->shouldHaveReceived('send')->withArgs(fn($command) => $this->assertCommandUpdatesVehicleSectionToBeIncomplete($command));
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingWhenAUserSelectsNextAndYesReturnsA404(): void
     {
         // Setup
@@ -776,11 +708,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $this->routeMatch());
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingWhenAUserSelectsNextAndYesUpdateVehicleSectionStatusToIncomplete(): void
     {
         // Setup
@@ -798,11 +727,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->commandSender()->shouldHaveReceived('send')->withArgs(fn($command) => $this->assertCommandUpdatesVehicleSectionToBeIncomplete($command));
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingWhenAUserSelectNextAndNoRedirectsToTheSafetyAndComplianceStep(): void
     {
         // Setup
@@ -824,11 +750,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->assertSame($expectedRedirect, $result);
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingWhenAUserSelectsNextAndNoUpdateVehicleSectionStatusToComplete(): void
     {
         // Setup
@@ -843,11 +766,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->commandSender()->shouldHaveReceived('send')->withArgs(fn($command) => $this->assertCommandUpdatesVehicleSectionToBeCompleted($command));
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingWhenAUserSelectsSaveAndReturnToOverviewAndTheNoRadioOptionIsSelectedUpdateVehicleSectionStatusToComplete(): void
     {
         // Setup
@@ -862,9 +782,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->commandSender()->shouldHaveReceived('send')->withArgs(fn($command) => $this->assertCommandUpdatesVehicleSectionToBeCompleted($command));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingWhenAUserSelectsSaveAndReturnToOverviewAndTheNoRadioOptionIsSelectedUpdateVehicleSectionStatusToCompleteExposesBailOutExceptionsFromTheCommandHandler(): void
     {
         // Setup
@@ -883,7 +801,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function invalidCqrsResponseStatusCodesDataProvider(): array
+    public static function invalidCqrsResponseStatusCodesDataProvider(): array
     {
         return [
             '102 status code' => [\Laminas\Http\Response::STATUS_CODE_102],
@@ -897,11 +815,11 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
      * @throws BailOutException
      * @throws ResourceNotFoundException
      *
-     * @test
      *
-     * @depends indexActionWhenPostingWhenAUserSelectsSaveAndReturnToOverviewAndTheNoRadioOptionIsSelectedUpdateVehicleSectionStatusToComplete
-     * @dataProvider invalidCqrsResponseStatusCodesDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionWhenPostingWhenAUserSelectsSaveAndReturnToOverviewAndTheNoRadioOptionIsSelectedUpdateVehicleSectionStatusToComplete')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidCqrsResponseStatusCodesDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingWhenAUserSelectsSaveAndReturnToOverviewAndTheUserHasSelectedNotToAddVehicleDetailsThrowsExceptionIfCommandResponseHasAStatusOtherThen200(int $invalidStatusCode): void
     {
         // Setup
@@ -918,11 +836,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $this->routeMatch());
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionWhenPostingWhenAUserSelectsSaveAndReturnToOverviewAndTheNoRadioOptionIsSelectedUpdateVehicleSectionStatusToComplete
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionWhenPostingWhenAUserSelectsSaveAndReturnToOverviewAndTheNoRadioOptionIsSelectedUpdateVehicleSectionStatusToComplete')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingWhenAUserSelectsSaveAndReturnToOverviewAndTheUserHasSelectedNotToAddVehicleDetailsExposesBailOutExceptionsFromTheCommandHandler(): void
     {
         // Setup
@@ -939,11 +854,8 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $this->routeMatch());
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingWhenAUserSelectsSaveAndReturnToOverviewAndTheUserHasSelectedNotToAddVehicleDetailsRedirectsAUserToTheApplicationOverview(): void
     {
         // Setup
@@ -962,12 +874,9 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->assertSame($expectedRedirect, $result);
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     * @depends indexActionWhenGettingAndAUserProvidesTheIdOfAVariationReturnsA404
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionWhenGettingAndAUserProvidesTheIdOfAVariationReturnsA404')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingAndAUserProvidesTheIdOfAVariationReturnsA404(): void
     {
         // Setup
@@ -987,12 +896,9 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $routeMatch);
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     * @depends indexActionWhenGettingAndAUserProvidesAnApplicationIdWhichDoesNotExistReturnsA404
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionWhenGettingAndAUserProvidesAnApplicationIdWhichDoesNotExistReturnsA404')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingAndAUserProvidesAnApplicationIdWhichDoesNotExistReturnsA404(): void
     {
         // Setup
@@ -1009,12 +915,9 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($this->postRequest(), $this->routeMatch());
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     * @depends indexActionWhenGettingAndAUserProvidesAnApplicationWhichHasAStatusOtherThenNotSubmittedReturnsARedirectToTheSubmissionSummaryPage
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionWhenGettingAndAUserProvidesAnApplicationWhichHasAStatusOtherThenNotSubmittedReturnsARedirectToTheSubmissionSummaryPage')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingAndAUserProvidesAnApplicationWhichHasAStatusOtherThenNotSubmittedReturnsARedirectToTheSubmissionSummaryPage(): void
     {
         // Setup
@@ -1039,12 +942,12 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
      * @throws BailOutException
      * @throws ResourceNotFoundException
      *
-     * @test
      *
-     * @depends indexActionIsCallable
-     * @depends indexActionWhenGettingThrowsExceptionIfApplicationResponseHasAStatusOtherThen200
-     * @dataProvider invalidCqrsResponseStatusCodesDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionWhenGettingThrowsExceptionIfApplicationResponseHasAStatusOtherThen200')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidCqrsResponseStatusCodesDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingThrowsExceptionIfApplicationResponseHasAStatusOtherThen200(int $invalidStatusCode): void
     {
         // Setup
@@ -1061,12 +964,9 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($this->postRequest(), $this->routeMatch());
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     * @depends indexActionWhenGettingAndAUserProvidesAnApplicationWhichDoesNotHaveTheLicenceCategoryGoodsReturnA404
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionWhenGettingAndAUserProvidesAnApplicationWhichDoesNotHaveTheLicenceCategoryGoodsReturnA404')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingAndAUserProvidesAnApplicationWhichDoesNotHaveTheLicenceCategoryGoodsReturnA404(): void
     {
         // Setup
@@ -1084,12 +984,9 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($this->postRequest(), $this->routeMatch());
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     * @depends indexActionWhenGettingAndAUserProvidesAnApplicationWhichHasAnUnsupportedLicenceTypeReturnA404
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionWhenGettingAndAUserProvidesAnApplicationWhichHasAnUnsupportedLicenceTypeReturnA404')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingAndAUserProvidesAnApplicationWhichHasAnUnsupportedLicenceTypeReturnA404(): void
     {
         // Setup
@@ -1114,12 +1011,12 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
      * @throws BailOutException
      * @throws ResourceNotFoundException
      *
-     * @test
      *
-     * @depends indexActionIsCallable
-     * @depends indexActionWhenGettingAndAUserProvidesAnApplicationWithASupportedLicenceTypeDoesNotReturnA404
-     * @dataProvider supportedLicenceTypeDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionWhenGettingAndAUserProvidesAnApplicationWithASupportedLicenceTypeDoesNotReturnA404')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('supportedLicenceTypeDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionWhenPostingAndAUserProvidesAnApplicationWithASupportedLicenceTypeDoesNotReturnA404(string $licenceType): void
     {
         // Setup

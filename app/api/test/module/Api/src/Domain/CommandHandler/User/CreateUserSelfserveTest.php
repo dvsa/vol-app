@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create User Selfserve Test
  */
@@ -54,7 +56,8 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ContactDetailsEntity::CONTACT_TYPE_USER
@@ -63,7 +66,7 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function commonHandleCommandTest()
+    public function commonHandleCommandTest(): mixed
     {
         $userId = 111;
 
@@ -159,7 +162,7 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
         return $savedUser;
     }
 
-    public function testHandleCommandForPartner()
+    public function testHandleCommandForPartner(): void
     {
         /** @var ContactDetailsEntity $partnerContactDetails */
         $partnerContactDetails = m::mock(ContactDetailsEntity::class)->makePartial();
@@ -172,7 +175,6 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($currentUser, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_PARTNER);
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')
@@ -183,7 +185,7 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(UserEntity::USER_TYPE_PARTNER, $savedUser->getUserType());
     }
 
-    public function testHandleCommandForLocalAuthority()
+    public function testHandleCommandForLocalAuthority(): void
     {
         /** @var LocalAuthorityEntity $localAuthority */
         $localAuthority = m::mock(LocalAuthorityEntity::class)->makePartial();
@@ -196,7 +198,6 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($currentUser, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_LOCAL_AUTHORITY);
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')
@@ -207,7 +208,7 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(UserEntity::USER_TYPE_LOCAL_AUTHORITY, $savedUser->getUserType());
     }
 
-    public function testHandleCommandForOperator()
+    public function testHandleCommandForOperator(): void
     {
         /** @var OrganisationEntity $organisation */
         $organisation = m::mock(OrganisationEntity::class)->makePartial();
@@ -230,7 +231,7 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(UserEntity::USER_TYPE_OPERATOR, $savedUser->getUserType());
     }
 
-    public function testHandleCommandForTm()
+    public function testHandleCommandForTm(): void
     {
         /** @var OrganisationEntity $organisation */
         $organisation = m::mock(OrganisationEntity::class)->makePartial();
@@ -258,7 +259,7 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(UserEntity::USER_TYPE_OPERATOR, $savedUser->getUserType());
     }
 
-    public function testHandleCommandThrowsIncorrectUserTypeException()
+    public function testHandleCommandThrowsIncorrectUserTypeException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -297,7 +298,6 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($currentUser, 'wrong');
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')
@@ -306,7 +306,7 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandThrowsUsernameExistsException()
+    public function testHandleCommandThrowsUsernameExistsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -329,7 +329,7 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandThrowsExceptionWhenUnableToStoreUser()
+    public function testHandleCommandThrowsExceptionWhenUnableToStoreUser(): void
     {
         $this->expectException(\Exception::class);
 

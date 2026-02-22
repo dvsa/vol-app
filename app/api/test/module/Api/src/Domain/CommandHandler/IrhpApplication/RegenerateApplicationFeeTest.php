@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpApplication;
 
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
@@ -27,7 +29,7 @@ class RegenerateApplicationFeeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $irhpApplicationId = 47;
         $licenceId = 32;
@@ -154,7 +156,7 @@ class RegenerateApplicationFeeTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testForbidden()
+    public function testForbidden(): void
     {
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage(

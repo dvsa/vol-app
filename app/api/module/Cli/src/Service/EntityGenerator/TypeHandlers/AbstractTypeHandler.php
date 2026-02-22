@@ -29,9 +29,9 @@ abstract class AbstractTypeHandler implements TypeHandlerInterface
     {
         // Remove _id suffix if present for relationships
         $propertyName = preg_replace('/_id$/', '', $columnName);
-        
+
         // Convert to camelCase
-        return lcfirst(str_replace('_', '', ucwords($propertyName, '_')));
+        return lcfirst(str_replace('_', '', ucwords((string) $propertyName, '_')));
     }
 
     /**

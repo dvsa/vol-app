@@ -83,6 +83,7 @@ class LicenceController extends AbstractSelfserveController
      *
      * @return void
      */
+    #[\Override]
     public function mergeTemplateVars()
     {
         $permitTypeId = $this->data[LicencesAvailable::DATA_KEY]['permitTypeId'];
@@ -175,6 +176,7 @@ class LicenceController extends AbstractSelfserveController
      *
      * @return void
      */
+    #[\Override]
     public function handlePostCommand(array &$config, array $params)
     {
         $licencesAvailable = $this->data[LicencesAvailable::DATA_KEY];

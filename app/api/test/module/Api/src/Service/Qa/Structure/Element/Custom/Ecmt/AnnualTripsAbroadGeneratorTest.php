@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Ecmt;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication as IrhpApplicationEntity;
@@ -19,10 +21,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class AnnualTripsAbroadGeneratorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTrueFalse
-     */
-    public function testGenerate($isNi)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTrueFalse')]
+    public function testGenerate(mixed $isNi): void
     {
         $intensityWarningThreshold = 47;
 
@@ -60,7 +60,7 @@ class AnnualTripsAbroadGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpTrueFalse()
+    public static function dpTrueFalse(): array
     {
         return [
             [true],

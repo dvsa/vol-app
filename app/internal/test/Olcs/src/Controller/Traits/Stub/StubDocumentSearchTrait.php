@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Traits\Stub;
 
 use Common\Form\Form;
@@ -13,33 +15,26 @@ class StubDocumentSearchTrait
 {
     use \Olcs\Controller\Traits\DocumentSearchTrait;
 
-    protected FormHelperService $formHelper;
-    protected DocumentSubCategory $docSubCategoryDataService;
-
-    public function __construct(
-        FormHelperService $formHelper,
-        DocumentSubCategory $docSubCategoryDataService
-    ) {
-        $this->formHelper = $formHelper;
-        $this->docSubCategoryDataService = $docSubCategoryDataService;
+    public function __construct(protected FormHelperService $formHelper, protected DocumentSubCategory $docSubCategoryDataService)
+    {
     }
 
-    protected function getDocumentTableName()
+    protected function getDocumentTableName(): string
     {
         return 'DocTableName';
     }
 
-    public function traitUpdateSelectValueOptions($el, $options)
+    public function traitUpdateSelectValueOptions(mixed $el, mixed $options): void
     {
         $this->updateSelectValueOptions($el, $options);
     }
 
-    public function traitMapDocumentFilters(array $extra)
+    public function traitMapDocumentFilters(array $extra): array
     {
         return $this->mapDocumentFilters($extra);
     }
 
-    public function traitGetDocumentForm(array $extra)
+    public function traitGetDocumentForm(array $extra): mixed
     {
         return $this->getDocumentForm($extra);
     }

@@ -11,9 +11,9 @@ use Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation;
 use Dvsa\Olcs\Api\Entity\System\Category;
 use Dvsa\Olcs\Api\Entity\System\SubCategory;
 use Dvsa\Olcs\Snapshot\Service\Snapshots\Messaging\Generator;
-use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCreateSnapshotHandlerTest;
+use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCreateSnapshotHandlerTestCase;
 
-class StoreSnapshotTest extends AbstractCreateSnapshotHandlerTest
+class StoreSnapshotTest extends AbstractCreateSnapshotHandlerTestCase
 {
     protected $cmdClass = Cmd::class;
     protected $sutClass = Sut::class;

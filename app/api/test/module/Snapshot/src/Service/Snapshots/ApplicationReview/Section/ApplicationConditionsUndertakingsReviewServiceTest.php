@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Application Conditions Undertakings Review Service Test
  *
@@ -47,7 +49,7 @@ class ApplicationConditionsUndertakingsReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetConfigFromDataWithNoneAdded()
+    public function testGetConfigFromDataWithNoneAdded(): void
     {
         // Params
         $data = [
@@ -74,7 +76,7 @@ class ApplicationConditionsUndertakingsReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($inputData));
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         // Params
         $data = [

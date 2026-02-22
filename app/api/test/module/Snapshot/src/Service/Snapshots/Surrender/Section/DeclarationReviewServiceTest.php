@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\Surrender\Section;
 
 use Dvsa\Olcs\Api\Entity\Surrender;
@@ -31,7 +33,7 @@ class DeclarationReviewServiceTest extends MockeryTestCase
         $this->sut = new DeclarationReviewService($abstractReviewServiceServices);
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         $mockEntity = m::mock(Surrender::class);
 

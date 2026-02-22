@@ -34,6 +34,7 @@ class SubmissionLegislation extends AbstractPublicInquiryData
      *
      * @return array
      */
+    #[\Override]
     public function formatData(array $data)
     {
         $optionData = [];

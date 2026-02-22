@@ -20,7 +20,7 @@ final class Create extends AbstractCommandHandler
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var Cmd $command */
-        
+
         $letterIssue = new LetterIssueEntity();
 
         // Set all properties - versioning will be handled by repository
@@ -54,7 +54,7 @@ final class Create extends AbstractCommandHandler
 
         $this->result->addId('letterIssue', $letterIssue->getId());
         $this->result->addMessage("Letter issue '{$letterIssue->getHeading()}' created");
-        
+
         return $this->result;
     }
 }

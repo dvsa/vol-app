@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\CompaniesHouse\Service;
 
 use Dvsa\Olcs\CompaniesHouse\Service\Client;
@@ -20,7 +22,7 @@ class ClientFactoryTest extends MockeryTestCase
         $this->sut = new ClientFactory();
     }
 
-    public function testOptionsMissing()
+    public function testOptionsMissing(): void
     {
         //  expect
         $this->expectException(\RuntimeException::class);
@@ -31,7 +33,7 @@ class ClientFactoryTest extends MockeryTestCase
         $this->sut->__invoke($this->sl, Client::class, null);
     }
 
-    public function testOptionsBaseUriMissing()
+    public function testOptionsBaseUriMissing(): void
     {
         //  expect
         $this->expectException(\RuntimeException::class);
@@ -50,7 +52,7 @@ class ClientFactoryTest extends MockeryTestCase
         $this->sut->__invoke($this->sl, Client::class, null);
     }
 
-    public function testOptions()
+    public function testOptions(): void
     {
         $this->sl->shouldReceive('get')->with('Configuration')->once()->andReturn(
             [

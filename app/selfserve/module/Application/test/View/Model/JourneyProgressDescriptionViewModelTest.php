@@ -28,10 +28,8 @@ class JourneyProgressDescriptionViewModelTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
-    public function constructThrowsExceptionIfCurrentSectionIsNotInSections()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructThrowsExceptionIfCurrentSectionIsNotInSections(): void
     {
         // Expect
         $this->expectException(InvalidArgumentException::class);
@@ -40,10 +38,8 @@ class JourneyProgressDescriptionViewModelTest extends MockeryTestCase
         $this->setUpSut(static::AN_UNKNOWN_SECTION_ID, static::AN_EMPTY_SECTIONS_ARRAY);
     }
 
-    /**
-     * @test
-     */
-    public function constructHasCorrectTemplate()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructHasCorrectTemplate(): void
     {
         // Setup
         $this->setUpSut(static::A_SECTION_ID, static::AN_ARRAY_WITH_A_SECTION);
@@ -52,10 +48,8 @@ class JourneyProgressDescriptionViewModelTest extends MockeryTestCase
         $this->assertEquals(static::VIEW_MODEL_TEMPLATE, $this->sut->getTemplate());
     }
 
-    /**
-     * @test
-     */
-    public function constructSetsTextVariable()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructSetsTextVariable(): void
     {
         // Setup
         $this->setUpSut(static::A_SECTION_ID, static::AN_ARRAY_WITH_A_SECTION);
@@ -64,9 +58,7 @@ class JourneyProgressDescriptionViewModelTest extends MockeryTestCase
         $this->assertEquals(static::APPLICATION_STEPS_TRANSLATION_KEY, $this->sut->getVariable(static::TEXT_VARIABLE_NAME));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructSetsDataVariable(): array
     {
         // Setup
@@ -79,21 +71,17 @@ class JourneyProgressDescriptionViewModelTest extends MockeryTestCase
         return $dataVariable;
     }
 
-    /**
-     * @test
-     * @depends __construct_SetsDataVariable
-     */
-    public function constructSetsDataVariableWithCurrentSectionNumber(array $data)
+    #[\PHPUnit\Framework\Attributes\Depends('__construct_SetsDataVariable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructSetsDataVariableWithCurrentSectionNumber(array $data): void
     {
         // Assert
         $this->assertEquals(static::A_SECTIONS_NUMBER_IN_A_JOURNEY, $data[0]);
     }
 
-    /**
-     * @test
-     * @depends __construct_SetsDataVariable
-     */
-    public function constructSetsDataVariableWithNumberOfSections(array $data)
+    #[\PHPUnit\Framework\Attributes\Depends('__construct_SetsDataVariable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructSetsDataVariableWithNumberOfSections(array $data): void
     {
         // Assert
         $this->assertEquals(count(static::AN_ARRAY_WITH_A_SECTION), $data[1]);

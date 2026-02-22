@@ -96,6 +96,7 @@ class TransportManagerDetailsEmploymentController extends AbstractInternalContro
      * @param  array                              $data
      * @return \Common\Service\Table\TableBuilder
      */
+    #[\Override]
     protected function alterTable($table, $data)
     {
         $disableTable = !empty($data['extra']['transportManager']['removedDate']);
@@ -110,6 +111,7 @@ class TransportManagerDetailsEmploymentController extends AbstractInternalContro
         return $table;
     }
 
+    #[\Override]
     public function detailsAction()
     {
         return $this->notFoundAction();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer;
 
 use Doctrine\DBAL\Exception as DBALException;
@@ -15,10 +17,8 @@ use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Cli\Service\Queue\Consumer\ContinuationChecklist;
 use Dvsa\Olcs\Transfer\Command\ContinuationDetail\Update;
 
-/**
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\ContinuationChecklist
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\ContinuationChecklist::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer::class)]
 class ContinuationChecklistTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = ContinuationChecklist::class;
@@ -26,7 +26,7 @@ class ContinuationChecklistTest extends AbstractConsumerTestCase
     /** @var  ContinuationChecklist */
     protected $sut;
 
-    public function testProcessMessageSuccess()
+    public function testProcessMessageSuccess(): void
     {
         $user = new UserEntity('pid', 'type');
         $user->setId(1);
@@ -64,7 +64,7 @@ class ContinuationChecklistTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testProcessMessageFailure()
+    public function testProcessMessageFailure(): void
     {
         $user = new UserEntity('pid', 'type');
         $user->setId(1);
@@ -113,10 +113,8 @@ class ContinuationChecklistTest extends AbstractConsumerTestCase
         );
     }
 
-    /**
-     * @dataProvider dpHandledExceptionProvider
-     */
-    public function testProcessMessageFailureHandledExceptions($exception, $exceptionMessageString)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandledExceptionProvider')]
+    public function testProcessMessageFailureHandledExceptions(mixed $exception, mixed $exceptionMessageString): void
     {
         $user = new UserEntity('pid', 'type');
         $user->setId(1);
@@ -165,7 +163,7 @@ class ContinuationChecklistTest extends AbstractConsumerTestCase
         );
     }
 
-    public function dpHandledExceptionProvider(): array
+    public static function dpHandledExceptionProvider(): array
     {
         return [
             [ORMException::class, 'ORM Exception'],

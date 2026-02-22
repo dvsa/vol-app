@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Mvc\Controller\ParameterProvider;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -14,13 +16,13 @@ use Laminas\Mvc\Controller\Plugin\Params;
 class PreviousPiHearingDataTest extends TestCase
 {
     /**
-     * @dataProvider provideParametersProvider
      *
      * @param $venueOther
      * @param $venue
      * @param $outputVenue
      */
-    public function testProvideParameters($venueOther, $venue, $outputVenue)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideParametersProvider')]
+    public function testProvideParameters(mixed $venueOther, mixed $venue, mixed $outputVenue): void
     {
         $piId = 44;
         $presidingTc = 22;
@@ -68,7 +70,7 @@ class PreviousPiHearingDataTest extends TestCase
     /**
      * @return array
      */
-    public function provideParametersProvider()
+    public static function provideParametersProvider(): array
     {
         return [
             ['other venue', 11, 'other'],

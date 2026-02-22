@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Financial Standing Helper Service Test
  *
@@ -50,7 +52,7 @@ class FinancialStandingHelperServiceTest extends MockeryTestCase
         parent::setUp();
     }
 
-    private function createService()
+    private function createService(): mixed
     {
         $mockRepoServiceManager = m::mock()
             ->shouldReceive('get')->with('FinancialStandingRate')->once()
@@ -70,16 +72,16 @@ class FinancialStandingHelperServiceTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider financeCalculationProvider
      * @param array $auths
      * @param int $expected
      */
-    public function testGetFinanceCalculation($auths, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('financeCalculationProvider')]
+    public function testGetFinanceCalculation(mixed $auths, mixed $expected): void
     {
         $this->assertEquals($expected, $this->sut->getFinanceCalculation($auths));
     }
 
-    public function financeCalculationProvider()
+    public static function financeCalculationProvider(): array
     {
         // For an operator:
         //  * with a goods standard international application with 3 vehicles,
@@ -219,7 +221,7 @@ class FinancialStandingHelperServiceTest extends MockeryTestCase
         ];
     }
 
-    public function testGetRatesForView()
+    public function testGetRatesForView(): void
     {
         $expected = [
             'restrictedHeavyGoodsFirst' => 3100.0,
@@ -244,7 +246,7 @@ class FinancialStandingHelperServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetAdditionalVehicleRateNull()
+    public function testGetAdditionalVehicleRateNull(): void
     {
         $mockRatesRepo = m::mock()
             ->shouldReceive('fetchRatesInEffect')
@@ -256,7 +258,7 @@ class FinancialStandingHelperServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetFirstVehicleRateNull()
+    public function testGetFirstVehicleRateNull(): void
     {
         $mockRatesRepo = m::mock()
             ->shouldReceive('fetchRatesInEffect')
@@ -268,7 +270,7 @@ class FinancialStandingHelperServiceTest extends MockeryTestCase
         );
     }
 
-    public function getStubRates()
+    public function getStubRates(): array
     {
         return [
             $this->getStubRate(
@@ -323,7 +325,7 @@ class FinancialStandingHelperServiceTest extends MockeryTestCase
         ];
     }
 
-    protected function getStubRate($firstVehicleRate, $additionalVehicleRate, $goodsOrPsv, $licenceType, $vehicleType)
+    protected function getStubRate(mixed $firstVehicleRate, mixed $additionalVehicleRate, mixed $goodsOrPsv, mixed $licenceType, mixed $vehicleType): mixed
     {
         $rate = new FinancialStandingRate();
         $goodsOrPsvChild = new RefData();
@@ -343,7 +345,7 @@ class FinancialStandingHelperServiceTest extends MockeryTestCase
         return $rate;
     }
 
-    public function testGetFinanceCalculationForOrganisation()
+    public function testGetFinanceCalculationForOrganisation(): void
     {
         $organisationId = 69;
 
@@ -395,7 +397,7 @@ class FinancialStandingHelperServiceTest extends MockeryTestCase
         $this->assertEquals(86500, $this->sut->getFinanceCalculationForOrganisation($organisationId));
     }
 
-    public function testGetRequiredFinanceWhenApplicationIncluded()
+    public function testGetRequiredFinanceWhenApplicationIncluded(): void
     {
         $applicationType = Licence::LICENCE_TYPE_RESTRICTED;
         $applicationTotAuthVehicles = 9;
@@ -533,7 +535,7 @@ class FinancialStandingHelperServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetRequiredFinancewhenApplicationNotIncluded()
+    public function testGetRequiredFinancewhenApplicationNotIncluded(): void
     {
         $licence1Type = Licence::LICENCE_TYPE_STANDARD_NATIONAL;
         $licence1TotAuthVehicles = 6;
@@ -658,7 +660,7 @@ class FinancialStandingHelperServiceTest extends MockeryTestCase
         );
     }
 
-    private function createMockApplicationOrLicence($class, $type, $totAuthVehicles, $totAuthHgvVehicles, $totAuthLgvVehicles, $category)
+    private function createMockApplicationOrLicence(mixed $class, mixed $type, mixed $totAuthVehicles, mixed $totAuthHgvVehicles, mixed $totAuthLgvVehicles, mixed $category): mixed
     {
         $licence = m::mock($class)->makePartial();
         $licence->shouldReceive('getLicenceType->getId')
@@ -680,7 +682,7 @@ class FinancialStandingHelperServiceTest extends MockeryTestCase
         return $licence;
     }
 
-    public function testGetOtherNewApplications()
+    public function testGetOtherNewApplications(): void
     {
         $organisationId = 53;
         $applicationId = 42;

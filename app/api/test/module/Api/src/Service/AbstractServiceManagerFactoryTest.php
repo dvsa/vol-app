@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service;
 
 use Dvsa\OlcsTest\Api\Service\Stub\AbstractServiceManagerFactoryStub;
@@ -13,7 +15,7 @@ use Psr\Container\ContainerInterface;
  */
 class AbstractServiceManagerFactoryTest extends MockeryTestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockSl = m::mock(ContainerInterface::class)
             ->shouldReceive('get')

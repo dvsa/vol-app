@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpApplication;
 
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
@@ -34,10 +36,8 @@ class AnswersSummaryTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleQuery
-     */
-    public function testHandleQuery($translateToWelsh, $expectedLocale)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]
+    public function testHandleQuery(mixed $translateToWelsh, mixed $expectedLocale): void
     {
         $previousLocale = 'sq_AL';
 
@@ -103,7 +103,7 @@ class AnswersSummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpHandleQuery()
+    public static function dpHandleQuery(): array
     {
         return [
             ['Y', 'cy_GB'],
@@ -111,10 +111,8 @@ class AnswersSummaryTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleQuery
-     */
-    public function testHandleQueryForBilateral($translateToWelsh, $expectedLocale)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]
+    public function testHandleQueryForBilateral(mixed $translateToWelsh, mixed $expectedLocale): void
     {
         $previousLocale = 'sq_AL';
         $irhpPermitApplicationId = 100;
@@ -188,7 +186,7 @@ class AnswersSummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryForBilateralMismatchedIds()
+    public function testHandleQueryForBilateralMismatchedIds(): void
     {
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage('Mismatched IrhpApplication and IrhpPermitApplication');

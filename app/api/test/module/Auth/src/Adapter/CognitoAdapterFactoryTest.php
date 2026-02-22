@@ -26,9 +26,7 @@ class CognitoAdapterFactoryTest extends MockeryTestCase
         $this->setUpServiceManager();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -38,11 +36,9 @@ class CognitoAdapterFactoryTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->__invoke(...));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
-    public function invokeReturnsAnInstanceOfCognitoAdapter()
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokeReturnsAnInstanceOfCognitoAdapter(): void
     {
         // Setup
         $this->setUpSut();
@@ -59,7 +55,7 @@ class CognitoAdapterFactoryTest extends MockeryTestCase
         $this->sut = new CognitoAdapterFactory();
     }
 
-    protected function setUpDefaultServices(ServiceManager $serviceManager)
+    protected function setUpDefaultServices(ServiceManager $serviceManager): void
     {
         $serviceManager->setService(Client::class, m::mock(Client::class));
     }

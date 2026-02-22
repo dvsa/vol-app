@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\MappedSuperclass
  * @ORM\Table(name="legacy_case_action")
  */
-abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

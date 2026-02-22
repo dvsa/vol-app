@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler;
 
 use Doctrine\DBAL\Result;
@@ -40,7 +42,7 @@ class CompaniesHouseVsOlcsDiffsExportTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testMakeCsvsFromResult()
+    public function testMakeCsvsFromResult(): void
     {
         $cmd = Cmd::create(
             [
@@ -77,7 +79,7 @@ class CompaniesHouseVsOlcsDiffsExportTest extends AbstractCommandHandlerTestCase
         static::assertEquals($expectMsg, implode('', $actual->toArray()['messages']));
     }
 
-    private function mockRepoMethod($repoMethod)
+    private function mockRepoMethod(mixed $repoMethod): void
     {
         $row1 = [
             'col1' => 'val11',
@@ -99,7 +101,7 @@ class CompaniesHouseVsOlcsDiffsExportTest extends AbstractCommandHandlerTestCase
             ->andReturn($mockDbalResult);
     }
 
-    private function checkFileContent($fileName)
+    private function checkFileContent(mixed $fileName): void
     {
         static::assertSame(
             'col1,col2' . "\n" .

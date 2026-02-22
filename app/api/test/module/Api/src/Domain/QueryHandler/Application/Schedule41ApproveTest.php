@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Application;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Application\Publish;
@@ -27,7 +29,7 @@ class Schedule41ApproveTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 510]);
 
@@ -59,7 +61,7 @@ class Schedule41ApproveTest extends QueryHandlerTestCase
         $this->assertCount(0, $resultArray['errors']);
     }
 
-    public function testHandleQueryErrors()
+    public function testHandleQueryErrors(): void
     {
         $query = Qry::create(['id' => 510]);
 
@@ -92,7 +94,7 @@ class Schedule41ApproveTest extends QueryHandlerTestCase
         $this->assertArrayHasKey('S41_APP_APPROVE_OC', $resultArray['errors']);
     }
 
-    public function testHandleQueryErrorsVariation()
+    public function testHandleQueryErrorsVariation(): void
     {
         $query = Qry::create(['id' => 510]);
 

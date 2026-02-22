@@ -16,8 +16,6 @@ abstract class AbstractIrhpPermitProcessingController extends AbstractIrhpPermit
 {
     use ProcessingControllerTrait;
 
-    protected TreeRouteStack $router;
-
     protected string $helperClass;
 
     public function __construct(
@@ -25,9 +23,8 @@ abstract class AbstractIrhpPermitProcessingController extends AbstractIrhpPermit
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        TreeRouteStack $router
+        protected TreeRouteStack $router
     ) {
         parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
-        $this->router = $router;
     }
 }

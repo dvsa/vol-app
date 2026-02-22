@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\QueryBuilder;
@@ -39,7 +41,7 @@ class DocumentToDeleteTest extends RepositoryTestCase
      * @param $qb
      * @return m\MockInterface
      */
-    public function getMockRepo($qb)
+    public function getMockRepo(mixed $qb): mixed
     {
         $repo = m::mock(EntityRepository::class);
         $repo->shouldReceive('createQueryBuilder')
@@ -49,7 +51,7 @@ class DocumentToDeleteTest extends RepositoryTestCase
         return $repo;
     }
 
-    public function testFetchListOfDocumentToDelete()
+    public function testFetchListOfDocumentToDelete(): void
     {
         /** @var QueryBuilder $qb */
         $mockQb = $this->createMockQb('{{QUERY}}');
@@ -69,7 +71,7 @@ class DocumentToDeleteTest extends RepositoryTestCase
         static::assertEquals($expected, $this->query);
     }
 
-    public function testFetchListOfDocumentToDeleteIncludingPostponed()
+    public function testFetchListOfDocumentToDeleteIncludingPostponed(): void
     {
         /** @var QueryBuilder $qb */
         $mockQb = $this->createMockQb('{{QUERY}}');

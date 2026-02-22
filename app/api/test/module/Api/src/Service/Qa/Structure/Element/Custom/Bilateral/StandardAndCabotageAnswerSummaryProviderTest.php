@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Bilateral;
 
 use Dvsa\Olcs\Api\Entity\Generic\Answer;
@@ -21,7 +23,7 @@ class StandardAndCabotageAnswerSummaryProviderTest extends MockeryTestCase
         $this->sut = new StandardAndCabotageAnswerSummaryProvider();
     }
 
-    public function testGetTemplateName()
+    public function testGetTemplateName(): void
     {
         $this->assertEquals(
             'bilateral-standard-and-cabotage',
@@ -29,10 +31,8 @@ class StandardAndCabotageAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpGetTemplateVariables
-     */
-    public function testGetTemplateVariables($cabotageSelection, $isSnapshot, $expectedTemplateVariables)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetTemplateVariables')]
+    public function testGetTemplateVariables(mixed $cabotageSelection, mixed $isSnapshot, mixed $expectedTemplateVariables): void
     {
         $qaContext = m::mock(QaContext::class);
         $qaContext->shouldReceive('getQaEntity->getBilateralCabotageSelection')
@@ -47,7 +47,7 @@ class StandardAndCabotageAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public function dpGetTemplateVariables()
+    public static function dpGetTemplateVariables(): array
     {
         $expectedCabotageOnlyTemplateVariables = [
             'yesNo' => 'qanda.bilaterals.cabotage.yes-answer',

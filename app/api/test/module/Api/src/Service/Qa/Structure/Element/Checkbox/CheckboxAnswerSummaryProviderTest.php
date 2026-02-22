@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Checkbox;
 
 use Dvsa\Olcs\Api\Service\Qa\QaContext;
@@ -23,7 +25,7 @@ class CheckboxAnswerSummaryProviderTest extends MockeryTestCase
         $this->checkboxAnswerSummaryProvider = new CheckboxAnswerSummaryProvider();
     }
 
-    public function testGetTemplateName()
+    public function testGetTemplateName(): void
     {
         $this->assertEquals(
             'generic',
@@ -31,10 +33,8 @@ class CheckboxAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpGetTemplateVariables
-     */
-    public function testGetTemplateVariables($isSnapshot)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetTemplateVariables')]
+    public function testGetTemplateVariables(mixed $isSnapshot): void
     {
         $labelKey = 'label.key';
 
@@ -59,7 +59,7 @@ class CheckboxAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public function dpGetTemplateVariables()
+    public static function dpGetTemplateVariables(): array
     {
         return [
             [true],

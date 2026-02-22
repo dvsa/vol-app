@@ -45,6 +45,7 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
     /**
      * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         // Redirect to add action if VRMs are not in session.

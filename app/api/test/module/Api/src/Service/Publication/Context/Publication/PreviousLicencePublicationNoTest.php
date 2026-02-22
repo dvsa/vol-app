@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\Publication;
 
 use Dvsa\Olcs\Api\Entity\Publication\PublicationLink;
@@ -13,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class PreviousLicencePublicationNoTest extends MockeryTestCase
 {
-    public function testProvide()
+    public function testProvide(): void
     {
         $pubType = 'PUB_TYPE';
         $trafficArea = 'TRAFFIC_AREA';

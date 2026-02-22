@@ -1,8 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener\RouteParam;
 
+use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\Navigation\Navigation;
+use Laminas\View\HelperPluginManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Olcs\Service\Marker\MarkerService;
@@ -15,7 +22,7 @@ use Laminas\Navigation\Page\AbstractPage;
 
 class ApplicationTest extends MockeryTestCase
 {
-    protected $sut;
+    private Application $sut;
 
     public function setUp(): void
     {
@@ -24,7 +31,7 @@ class ApplicationTest extends MockeryTestCase
         parent::setUp();
     }
 
-    protected function setupMockApplication($id, $applicationData)
+    protected function setupMockApplication(mixed $id, mixed $applicationData): void
     {
         $mockAnnotationBuilder = m::mock();
         $mockQueryService  = m::mock();
@@ -53,26 +60,33 @@ class ApplicationTest extends MockeryTestCase
         $this->sut->setMarkerService($mockMarkerService);
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
-        $sut = new Application();
+        $this->sut = new Application();
 
-        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
-        $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'application', [$sut, 'onApplication'], 1);
+        $mockEventManager = m::mock(EventManagerInterface::class);
+        $mockEventManager->expects('attach')
+            ->with(
+                RouteParams::EVENT_PARAM . 'application',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onApplication';
+                }),
+                1
+            );
 
-        $sut->attach($mockEventManager);
+        $this->sut->attach($mockEventManager);
     }
 
     /**
-     * @dataProvider onApplicationProvider
      * @param string $status
      * @param string $category
      * @param string $type
      * @param bool $canHaveCases
      * @param int $expectedCallsNo
      */
-    public function testOnApplication($status, $category, $type, $canHaveCases, $expectedCallsNo)
+    #[DataProvider('onApplicationProvider')]
+    public function testOnApplication(mixed $status, mixed $category, mixed $type, mixed $canHaveCases, mixed $expectedCallsNo): void
     {
         $applicationId = 69;
         $application = [
@@ -119,7 +133,7 @@ class ApplicationTest extends MockeryTestCase
         $mockApplicationCaseNavigationService = m::mock('\StdClass');
         $mockApplicationCaseNavigationService->shouldReceive('setVisible')->times($expectedCallsNo)->with(false);
 
-        $mockNavigationService = m::mock(\Laminas\Navigation\Navigation::class);
+        $mockNavigationService = m::mock(Navigation::class);
         $mockNavigationService
             ->shouldReceive('findOneById')
             ->with('application_case')
@@ -145,7 +159,7 @@ class ApplicationTest extends MockeryTestCase
         $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer)->once();
         $mockPlaceholder->shouldReceive('getContainer')->with('note')->andReturn($mockContainer)->once();
 
-        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
 
         $mockSidebar = m::mock()
@@ -172,7 +186,7 @@ class ApplicationTest extends MockeryTestCase
         $this->sut->onApplication($event);
     }
 
-    public function testModifyCommunityLicenceNav()
+    public function testModifyCommunityLicenceNav(): void
     {
         $status = RefData::APPLICATION_STATUS_UNDER_CONSIDERATION;
         $category = RefData::LICENCE_CATEGORY_PSV;
@@ -223,7 +237,7 @@ class ApplicationTest extends MockeryTestCase
         $mockApplicationCaseNavigationService = m::mock('\StdClass');
         $mockApplicationCaseNavigationService->shouldReceive('setVisible')->times($expectedCallsNo)->with(false);
 
-        $mockNavigationService = m::mock(\Laminas\Navigation\Navigation::class);
+        $mockNavigationService = m::mock(Navigation::class);
         $mockNavigationService->shouldReceive('findOneById')
             ->with('application_case')
             ->andReturn($mockApplicationCaseNavigationService);
@@ -270,7 +284,7 @@ class ApplicationTest extends MockeryTestCase
         $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer)->once();
         $mockPlaceholder->shouldReceive('getContainer')->with('note')->andReturn($mockContainer)->once();
 
-        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
 
         $mockSidebar = m::mock()
@@ -297,7 +311,7 @@ class ApplicationTest extends MockeryTestCase
         $this->sut->onApplication($event);
     }
 
-    public function testModifyOperatingCentreNav()
+    public function testModifyOperatingCentreNav(): void
     {
         $status = RefData::APPLICATION_STATUS_UNDER_CONSIDERATION;
         $category = RefData::LICENCE_CATEGORY_GOODS_VEHICLE;
@@ -350,7 +364,7 @@ class ApplicationTest extends MockeryTestCase
         $mockApplicationCaseNavigationService = m::mock('\StdClass');
         $mockApplicationCaseNavigationService->shouldReceive('setVisible')->times($expectedCallsNo)->with(false);
 
-        $mockNavigationService = m::mock(\Laminas\Navigation\Navigation::class);
+        $mockNavigationService = m::mock(Navigation::class);
         $mockNavigationService->shouldReceive('findOneById')
             ->with('application_case')
             ->andReturn($mockApplicationCaseNavigationService);
@@ -397,7 +411,7 @@ class ApplicationTest extends MockeryTestCase
         $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer)->once();
         $mockPlaceholder->shouldReceive('getContainer')->with('note')->andReturn($mockContainer)->once();
 
-        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
 
         $mockSidebar = m::mock()
@@ -424,7 +438,7 @@ class ApplicationTest extends MockeryTestCase
         $this->sut->onApplication($event);
     }
 
-    public function onApplicationProvider()
+    public static function onApplicationProvider(): array
     {
         return [
             [
@@ -465,7 +479,7 @@ class ApplicationTest extends MockeryTestCase
         ];
     }
 
-    public function testSetupPublishApplicationButtonExistingPublicationTrue()
+    public function testSetupPublishApplicationButtonExistingPublicationTrue(): void
     {
         $applicationData = [
             'id' => 1066,
@@ -497,11 +511,11 @@ class ApplicationTest extends MockeryTestCase
         $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer)->once();
         $mockPlaceholder->shouldReceive('getContainer')->with('note')->andReturn($mockContainer)->once();
 
-        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $this->sut->setViewHelperManager($mockViewHelperManager);
 
-        $mockNavigationService = m::mock(\Laminas\Navigation\Navigation::class);
+        $mockNavigationService = m::mock(Navigation::class);
         $mockNavigationService->shouldReceive('findOneById')->andReturn(
             m::mock()->shouldReceive('setVisible')->getMock()
         );
@@ -526,7 +540,7 @@ class ApplicationTest extends MockeryTestCase
         $this->sut->onApplication($event);
     }
 
-    public function testSetupPublishApplicationButtonExistingPublicationFalse()
+    public function testSetupPublishApplicationButtonExistingPublicationFalse(): void
     {
         $applicationData = [
             'id' => 1066,
@@ -558,11 +572,11 @@ class ApplicationTest extends MockeryTestCase
         $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer)->once();
         $mockPlaceholder->shouldReceive('getContainer')->with('note')->andReturn($mockContainer)->once();
 
-        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $this->sut->setViewHelperManager($mockViewHelperManager);
 
-        $mockNavigationService = m::mock(\Laminas\Navigation\Navigation::class);
+        $mockNavigationService = m::mock(Navigation::class);
         $mockNavigationService->shouldReceive('findOneById')->andReturn(
             m::mock()->shouldReceive('setVisible')->getMock()
         );
@@ -586,7 +600,7 @@ class ApplicationTest extends MockeryTestCase
         $this->sut->onApplication($event);
     }
 
-    public function testSetupPublishApplicationButton()
+    public function testSetupPublishApplicationButton(): void
     {
         $applicationData = [
             'id' => 1066,
@@ -618,11 +632,11 @@ class ApplicationTest extends MockeryTestCase
         $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->with('note')->andReturn($mockContainer)->once();
 
-        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $this->sut->setViewHelperManager($mockViewHelperManager);
 
-        $mockNavigationService = m::mock(\Laminas\Navigation\Navigation::class);
+        $mockNavigationService = m::mock(Navigation::class);
         $mockNavigationService->shouldReceive('findOneById')->andReturn(
             m::mock()->shouldReceive('setVisible')->getMock()
         );
@@ -644,7 +658,7 @@ class ApplicationTest extends MockeryTestCase
         $this->sut->onApplication($event);
     }
 
-    public function dataProviderSetupPublishApplicationButton()
+    public function dataProviderSetupPublishApplicationButton(): array
     {
         return [
             // isVariation, status, isPublishable, goodsOrPsv, licenceType, isVisible
@@ -665,10 +679,10 @@ class ApplicationTest extends MockeryTestCase
         ];
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
-        $mockNavigationService = m::mock(\Laminas\Navigation\Navigation::class);
-        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
+        $mockNavigationService = m::mock(Navigation::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $mockSidebar = m::mock();
         $mockTransferAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
@@ -696,9 +710,9 @@ class ApplicationTest extends MockeryTestCase
         $this->assertSame($mockMarkerService, $sut->getMarkerService());
     }
 
-    public function testOnApplicationNotFound()
+    public function testOnApplicationNotFound(): void
     {
-        $this->expectException(\Common\Exception\ResourceNotFoundException::class);
+        $this->expectException(ResourceNotFoundException::class);
 
         $applicationId = 69;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\AnswersSummary;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,10 +24,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class BilateralAnswersSummaryRowsAdderTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpSnapshot
-     */
-    public function testAddRows($isSnapshot, $countriesQuestionKey)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
+    public function testAddRows(mixed $isSnapshot, mixed $countriesQuestionKey): void
     {
         $countryNamesFormattedAnswer = 'country names line 1<br>country names line 2';
         $countryNamesAnswersSummaryRow = m::mock(AnswersSummaryRow::class);
@@ -156,7 +156,7 @@ class BilateralAnswersSummaryRowsAdderTest extends MockeryTestCase
         $bilateralAnswersSummaryRowsAdder->addRows($answersSummary, $irhpApplication, $isSnapshot);
     }
 
-    public function dpSnapshot()
+    public static function dpSnapshot(): array
     {
         return [
             [true, 'permits.irhp.application.question.countries-snapshot'],
@@ -164,7 +164,7 @@ class BilateralAnswersSummaryRowsAdderTest extends MockeryTestCase
         ];
     }
 
-    private function createMockIrhpPermitApplication($countryName)
+    private function createMockIrhpPermitApplication(mixed $countryName): mixed
     {
         $irhpPermitStock = m::mock(IrhpPermitStockEntity::class);
         $irhpPermitStock->shouldReceive('getCountry->getCountryDesc')

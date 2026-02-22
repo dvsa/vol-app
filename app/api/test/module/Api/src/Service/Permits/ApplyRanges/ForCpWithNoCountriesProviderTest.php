@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\ApplyRanges;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -84,7 +86,7 @@ class ForCpWithNoCountriesProviderTest extends MockeryTestCase
         );
     }
 
-    public function testSelectRangeFromRestrictedWithFewestCountries()
+    public function testSelectRangeFromRestrictedWithFewestCountries(): void
     {
         $this->unrestrictedWithLowestStartNumberProvider->shouldReceive('getRange')
             ->with($this->ranges)
@@ -111,7 +113,7 @@ class ForCpWithNoCountriesProviderTest extends MockeryTestCase
         );
     }
 
-    public function testExceptionOnNoRestrictedWithFewestCountries()
+    public function testExceptionOnNoRestrictedWithFewestCountries(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(
@@ -133,7 +135,7 @@ class ForCpWithNoCountriesProviderTest extends MockeryTestCase
         $this->forCpWithNoCountriesProvider->selectRange($this->result, $this->ranges);
     }
 
-    public function testMultipleRestrictedWithFewestCountries()
+    public function testMultipleRestrictedWithFewestCountries(): void
     {
         $this->unrestrictedWithLowestStartNumberProvider->shouldReceive('getRange')
             ->with($this->ranges)
@@ -166,7 +168,7 @@ class ForCpWithNoCountriesProviderTest extends MockeryTestCase
         );
     }
 
-    public function testSelectRangeFromUnrestrictedWithLowestStartNumber()
+    public function testSelectRangeFromUnrestrictedWithLowestStartNumber(): void
     {
         $this->unrestrictedWithLowestStartNumberProvider->shouldReceive('getRange')
             ->with($this->ranges)

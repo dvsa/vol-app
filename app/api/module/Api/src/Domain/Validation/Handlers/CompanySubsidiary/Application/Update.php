@@ -23,6 +23,7 @@ class Update extends Modify
      * @param $dto
      * @return mixed
      */
+    #[\Override]
     protected function getLicence($dto)
     {
         $application = $this->getRepo('Application')->fetchById($dto->getApplication());
@@ -36,6 +37,7 @@ class Update extends Modify
      * @param $dto
      * @return bool
      */
+    #[\Override]
     protected function hasContext($dto)
     {
         return $dto->getApplication() !== null;

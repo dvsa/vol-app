@@ -8,6 +8,7 @@ class CompanyProfile extends AbstractMessage
 {
     public const MESSAGE_DELAY = 1;
 
+    #[\Override]
     public function processMessageData(): void
     {
         if (!array_key_exists('companyOrLlpNo', $this->messageData)) {

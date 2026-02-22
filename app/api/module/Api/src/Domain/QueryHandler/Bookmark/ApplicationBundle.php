@@ -29,6 +29,7 @@ class ApplicationBundle extends AbstractBundle
      *
      * @return array|null
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $entity = null;

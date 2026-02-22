@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Fees;
 
 use Dvsa\Olcs\Api\Domain\Repository\SystemParameter as SystemParameterRepository;
@@ -15,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class DaysToPayIssueFeeProviderTest extends MockeryTestCase
 {
-    public function testGetDays()
+    public function testGetDays(): void
     {
         $daysToPayIssueFee = 10;
 

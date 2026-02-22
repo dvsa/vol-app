@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Irfo;
 
 use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
@@ -47,7 +49,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->status = new RefData();
     }
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $entity = new Entity($this->mockOrg, $this->mockType, $this->status);
 
@@ -56,7 +58,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertSame($this->status, $entity->getStatus());
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         /** @var IrfoPsvAuthTypeEntity $irfoPsvAuthType */
         $irfoPsvAuthType = m::mock(IrfoPsvAuthTypeEntity::class)->makePartial();
@@ -95,7 +97,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals('blah/999', $this->entity->getIrfoFileNo());
     }
 
-    public function testPopulateIrfoFeeId()
+    public function testPopulateIrfoFeeId(): void
     {
         $this->mockOrg->shouldReceive('getId')->once()->andReturn(44);
 
@@ -105,7 +107,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals('IR0000044', $entity->getIrfoFeeId());
     }
 
-    public function testIsGrantableWithApplicationFee()
+    public function testIsGrantableWithApplicationFee(): void
     {
         $status = new RefData();
         $status->setId(Entity::STATUS_PENDING);
@@ -121,7 +123,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertTrue($this->entity->isGrantable($fee));
     }
 
-    public function testIsGrantableWithApplicationFeeNotPaid()
+    public function testIsGrantableWithApplicationFeeNotPaid(): void
     {
         $status = new RefData();
         $status->setId(Entity::STATUS_PENDING);
@@ -137,7 +139,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertFalse($this->entity->isGrantable($fee));
     }
 
-    public function testIsGrantableWithApplicationFeePaidInvalidState()
+    public function testIsGrantableWithApplicationFeePaidInvalidState(): void
     {
         $status = new RefData();
         $status->setId(Entity::STATUS_GRANTED);
@@ -153,7 +155,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertFalse($this->entity->isGrantable($fee));
     }
 
-    public function testGrant()
+    public function testGrant(): void
     {
         $status = new RefData();
         $status->setId(Entity::STATUS_PENDING);
@@ -172,7 +174,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($newStatus, $this->entity->getStatus());
     }
 
-    public function testGrantFeeNotPaidThrowsException()
+    public function testGrantFeeNotPaidThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -191,7 +193,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->entity->grant($newStatus, $fee);
     }
 
-    public function testGrantInvalidStateThrowsException()
+    public function testGrantInvalidStateThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -213,11 +215,11 @@ class IrfoPsvAuthEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider isRefusableStates
      * @param $input
      * @param $expected
      */
-    public function testIsRefusable($input, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isRefusableStates')]
+    public function testIsRefusable(mixed $input, mixed $expected): void
     {
         $status = new RefData();
         $status->setId($input);
@@ -226,7 +228,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isRefusable());
     }
 
-    public function testIsRefusableInvalidState()
+    public function testIsRefusableInvalidState(): void
     {
         $status = new RefData();
         $status->setId(Entity::STATUS_GRANTED);
@@ -235,7 +237,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertFalse($this->entity->isRefusable());
     }
 
-    public function testRefuse()
+    public function testRefuse(): void
     {
         $status = new RefData();
         $status->setId(Entity::STATUS_PENDING);
@@ -249,7 +251,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($newStatus, $this->entity->getStatus());
     }
 
-    public function testRefuseThrowsException()
+    public function testRefuseThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -263,10 +265,8 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->entity->refuse($newStatus);
     }
 
-    /**
-     * @dataProvider isWithdrawableStates
-     */
-    public function testIsWithdrawable($input, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isWithdrawableStates')]
+    public function testIsWithdrawable(mixed $input, mixed $expected): void
     {
         $status = new RefData();
         $status->setId($input);
@@ -275,7 +275,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isWithdrawable());
     }
 
-    public function testWithdraw()
+    public function testWithdraw(): void
     {
         $status = new RefData();
         $status->setId(Entity::STATUS_PENDING);
@@ -289,7 +289,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($newStatus, $this->entity->getStatus());
     }
 
-    public function testWithdrawThrowsException()
+    public function testWithdrawThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -303,7 +303,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->entity->withdraw($newStatus);
     }
 
-    public function isWithdrawableStates()
+    public static function isWithdrawableStates(): array
     {
         return [
             [Entity::STATUS_PENDING, true],
@@ -316,7 +316,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         ];
     }
 
-    public function isRefusableStates()
+    public static function isRefusableStates(): array
     {
         return [
             [Entity::STATUS_PENDING, true],
@@ -329,10 +329,8 @@ class IrfoPsvAuthEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider isCnsableStates
-     */
-    public function testIsCnsable($input, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isCnsableStates')]
+    public function testIsCnsable(mixed $input, mixed $expected): void
     {
         $status = new RefData();
         $status->setId($input);
@@ -341,7 +339,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isCnsable());
     }
 
-    public function isCnsableStates()
+    public static function isCnsableStates(): array
     {
         return [
             [Entity::STATUS_PENDING, false],
@@ -354,7 +352,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         ];
     }
 
-    public function testContinuationNotSought()
+    public function testContinuationNotSought(): void
     {
         $status = new RefData();
         $status->setId(Entity::STATUS_RENEW);
@@ -368,7 +366,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($newStatus, $this->entity->getStatus());
     }
 
-    public function testContinuationNotSoughtThrowsException()
+    public function testContinuationNotSoughtThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -382,10 +380,8 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->entity->continuationNotSought($newStatus);
     }
 
-    /**
-     * @dataProvider isApprovableStates
-     */
-    public function testIsApprovable($statusId, $outstandingFees, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isApprovableStates')]
+    public function testIsApprovable(mixed $statusId, mixed $outstandingFees, mixed $expected): void
     {
         $status = new RefData();
         $status->setId($statusId);
@@ -394,7 +390,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isApprovable($outstandingFees));
     }
 
-    public function isApprovableStates()
+    public static function isApprovableStates(): array
     {
         return [
             [Entity::STATUS_PENDING, [], false],
@@ -408,7 +404,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         ];
     }
 
-    public function testApprove()
+    public function testApprove(): void
     {
         $status = new RefData();
         $status->setId(Entity::STATUS_GRANTED);
@@ -425,7 +421,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertInstanceOf(\DateTime::class, $this->entity->getRenewalDate());
     }
 
-    public function testApproveThrowsException()
+    public function testApproveThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -439,10 +435,8 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->entity->approve($newStatus, ['FEE']);
     }
 
-    /**
-     * @dataProvider isRenewableStates
-     */
-    public function testIsRenewable($input, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isRenewableStates')]
+    public function testIsRenewable(mixed $input, mixed $expected): void
     {
         $status = new RefData();
         $status->setId($input);
@@ -451,7 +445,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isRenewable());
     }
 
-    public function isRenewableStates()
+    public static function isRenewableStates(): array
     {
         return [
             [Entity::STATUS_PENDING, true],
@@ -464,7 +458,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         ];
     }
 
-    public function testRenew()
+    public function testRenew(): void
     {
         $status = new RefData();
         $status->setId(Entity::STATUS_PENDING);
@@ -478,7 +472,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($newStatus, $this->entity->getStatus());
     }
 
-    public function testRenewThrowsException()
+    public function testRenewThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -492,10 +486,8 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->entity->renew($newStatus);
     }
 
-    /**
-     * @dataProvider isGeneratableDataProvider
-     */
-    public function testIsGeneratable($statusId, $outstandingFees, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isGeneratableDataProvider')]
+    public function testIsGeneratable(mixed $statusId, mixed $outstandingFees, mixed $expected): void
     {
         $status = new RefData();
         $status->setId($statusId);
@@ -504,7 +496,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isGeneratable($outstandingFees));
     }
 
-    public function isGeneratableDataProvider()
+    public static function isGeneratableDataProvider(): array
     {
         return [
             [Entity::STATUS_PENDING, [], false],
@@ -518,7 +510,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         ];
     }
 
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $status = new RefData();
         $status->setId(Entity::STATUS_APPROVED);
@@ -538,7 +530,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals(55, $this->entity->getCopiesIssuedTotal());
     }
 
-    public function testGenerateThrowsException()
+    public function testGenerateThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -549,7 +541,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->entity->generate(['FEE']);
     }
 
-    public function testIsResetableState()
+    public function testIsResetableState(): void
     {
         $status = new RefData();
         $this->entity->setStatus($status);
@@ -565,7 +557,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         static::assertTrue($this->entity->isResetable());
     }
 
-    public function testReset()
+    public function testReset(): void
     {
         $newStatus = new RefData();
 
@@ -579,7 +571,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         static::assertSame($newStatus, $this->entity->getStatus());
     }
 
-    public function testReexpectException()
+    public function testReexpectException(): void
     {
         $this->expectException(BadRequestException::class);
 
@@ -593,7 +585,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         static::assertEquals('UNIT_STATUS', $this->entity->getStatus()->getId());
     }
 
-    public function testGetRelatedOrganisation()
+    public function testGetRelatedOrganisation(): void
     {
         /** @var Organisation $mockOrg */
         $mockOrg = m::mock(Organisation::class);

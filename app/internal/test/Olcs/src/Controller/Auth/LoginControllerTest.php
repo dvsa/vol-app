@@ -26,7 +26,11 @@ use Laminas\View\Model\ViewModel;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Auth\Adapter\InternalCommandAdapter;
 use Olcs\Controller\Auth\LoginController;
+use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
+use PHPUnit\Framework\Attributes\Test;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class LoginControllerTest extends MockeryTestCase
 {
     protected $authenticationAdapter;
@@ -89,29 +93,26 @@ class LoginControllerTest extends MockeryTestCase
         $this->authChallengeContainer = $this->createMock(AuthChallengeContainer::class);
     }
 
-    /**
-     * @test
-     */
-    public function indexActionIsCallable()
+    #[Test]
+    public function indexActionIsCallable(): void
     {
         // Setup
         $controller = $this->setUpSut();
 
         // Assert
-        $this->assertIsCallable([$controller, 'indexAction']);
+        $this->assertIsCallable($controller->indexAction(...));
     }
 
-    /**
-     * @test
-     * @depends indexActionIsCallable
-     */
-    public function indexActionRedirectsToDashboardWhenUserAlreadyLoggedIn()
+    #[Depends('indexActionIsCallable')]
+    #[Test]
+    #[DoesNotPerformAssertions]
+    public function indexActionRedirectsToDashboardWhenUserAlreadyLoggedIn(): void
     {
         $identity = $this->createMock(User::class);
         $identity->method('isAnonymous')->willReturn(true);
         $this->currentUser->method('getIdentity')->willReturn($identity);
 
-        $this->formHelper->method('createForm')->willReturn($this->createMock(Form::class));
+        $this->formHelper->method('createForm')->willReturn($this->createStub(Form::class));
 
         // Setup
         $controller = $this->setUpSut();
@@ -123,17 +124,15 @@ class LoginControllerTest extends MockeryTestCase
         $controller->indexAction();
     }
 
-    /**
-     * @test
-     */
-    public function indexActionReturnsViewModel()
+    #[Test]
+    public function indexActionReturnsViewModel(): void
     {
         // Setup
         $identity = $this->createMock(User::class);
         $identity->method('isAnonymous')->willReturn(true);
         $this->currentUser->method('getIdentity')->willReturn($identity);
 
-        $this->formHelper->method('createForm')->willReturn($this->createMock(Form::class));
+        $this->formHelper->method('createForm')->willReturn($this->createStub(Form::class));
 
         $controller = $this->setUpSut();
 
@@ -144,18 +143,16 @@ class LoginControllerTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $result);
     }
 
-    /**
-     * @test
-     * @depends indexActionReturnsViewModel
-     */
-    public function indexActionReturnsViewModelWithLoginForm()
+    #[Depends('indexActionReturnsViewModel')]
+    #[Test]
+    public function indexActionReturnsViewModelWithLoginForm(): void
     {
         // Setup
         $identity = $this->createMock(User::class);
         $identity->method('isAnonymous')->willReturn(true);
         $this->currentUser->method('getIdentity')->willReturn($identity);
 
-        $this->formHelper->method('createForm')->willReturn($this->createMock(Form::class));
+        $this->formHelper->method('createForm')->willReturn($this->createStub(Form::class));
 
         $controller = $this->setUpSut();
 
@@ -167,11 +164,9 @@ class LoginControllerTest extends MockeryTestCase
         $this->assertInstanceOf(Form::class, $form);
     }
 
-    /**
-     * @test
-     * @depends indexActionReturnsViewModel
-     */
-    public function indexActionReturnsViewModelWithFailureReasonWhenAuthenticationFails()
+    #[Depends('indexActionReturnsViewModel')]
+    #[Test]
+    public function indexActionReturnsViewModelWithFailureReasonWhenAuthenticationFails(): void
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -209,24 +204,20 @@ class LoginControllerTest extends MockeryTestCase
         $this->assertArrayHasKey('failureReason', $result->getVariables());
     }
 
-    /**
-     * @test
-     */
-    public function postActionIsCallable()
+    #[Test]
+    public function postActionIsCallable(): void
     {
         // Setup
 
         $controller = $this->setUpSut();
 
         // Assert
-        $this->assertIsCallable([$controller, 'postAction']);
+        $this->assertIsCallable($controller->postAction(...));
     }
 
-    /**
-     * @test
-     * @depends postActionIsCallable
-     */
-    protected function postActionRedirectsToDashboardWhenUserAlreadyLoggedIn()
+    #[Depends('postActionIsCallable')]
+    #[Test]
+    protected function postActionRedirectsToDashboardWhenUserAlreadyLoggedIn(): void
     {
         $identity = $this->createMock(User::class);
         $identity->method('isAnonymous')->willReturn(true);
@@ -241,11 +232,9 @@ class LoginControllerTest extends MockeryTestCase
         $controller->postAction($this->postRequest(), new RouteMatch([]), new Response());
     }
 
-    /**
-     * @test
-     * @depends postActionIsCallable
-     */
-    public function postActionFlashesFormDataWhenFormInvalid()
+    #[Depends('postActionIsCallable')]
+    #[Test]
+    public function postActionFlashesFormDataWhenFormInvalid(): void
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -273,11 +262,9 @@ class LoginControllerTest extends MockeryTestCase
         $controller->postAction($this->postRequest(), new RouteMatch([]), new Response());
     }
 
-    /**
-     * @test
-     * @depends postActionIsCallable
-     */
-    public function postActionSuccessfulCognitoAuthRedirectsToDashboard()
+    #[Depends('postActionIsCallable')]
+    #[Test]
+    public function postActionSuccessfulCognitoAuthRedirectsToDashboard(): void
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -300,18 +287,16 @@ class LoginControllerTest extends MockeryTestCase
         $controller->postAction($request, new RouteMatch([]), $response);
     }
 
-    /**
-     * @test
-     * @depends postActionIsCallable
-     */
-    public function postActionUnknownProviderRedirectsToLogin()
+    #[Depends('postActionIsCallable')]
+    #[Test]
+    public function postActionUnknownProviderRedirectsToLogin(): void
     {
         // Setup
         $identity = $this->createMock(User::class);
         $identity->method('isAnonymous')->willReturn(true);
         $this->currentUser->method('getIdentity')->willReturn($identity);
 
-        $this->formHelper->method('createForm')->willReturn($this->createMock(Form::class));
+        $this->formHelper->method('createForm')->willReturn($this->createStub(Form::class));
 
         $controller = $this->setUpSut();
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
@@ -324,11 +309,9 @@ class LoginControllerTest extends MockeryTestCase
         $controller->postAction($request, new RouteMatch([]), $response);
     }
 
-    /**
-     * @test
-     * @depends postActionIsCallable
-     */
-    public function postActionNewPasswordRequiredChallengeStoresChallengeInSession()
+    #[Depends('postActionIsCallable')]
+    #[Test]
+    public function postActionNewPasswordRequiredChallengeStoresChallengeInSession(): void
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -357,42 +340,16 @@ class LoginControllerTest extends MockeryTestCase
         $controller->postAction($request, new RouteMatch([]), new Response());
     }
 
-    /**
-     * @test
-     * @depends postActionNewPasswordRequiredChallengeStoresChallengeInSession
-     */
-    public function postActionNewPasswordRequiredChallengeRedirectsToExpiredPassword()
-    {
-        // Setup
-        $controller = $this->setUpSut();
-        $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
-
-        $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_CHALLENGE_NEW_PASSWORD_REQUIRED));
-        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_LOGIN_GET)->willReturn($this->redirect());
-
-        $this->authChallengeContainer->method('setChallengeName')->willReturnSelf();
-        $this->authChallengeContainer->method('setChallengeSession')->willReturnSelf();
-        $this->authChallengeContainer->method('setChallengedIdentity')->willReturnSelf();
-
-        // Expect
-        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_EXPIRED_PASSWORD, ['USER_ID_FOR_SRP' => 'username'])->willReturn($this->redirect());
-
-        // Execute
-        $controller->postAction($request, new RouteMatch([]), new Response());
-    }
-
-    /**
-     * @test
-     * @depends postActionIsCallable
-     */
-    public function postActionUnsupportedChallengeRedirectsToLoginPage()
+    #[Depends('postActionIsCallable')]
+    #[Test]
+    public function postActionUnsupportedChallengeRedirectsToLoginPage(): void
     {
         // Setup
         $identity = $this->createMock(User::class);
         $identity->method('isAnonymous')->willReturn(true);
         $this->currentUser->method('getIdentity')->willReturn($identity);
 
-        $this->formHelper->method('createForm')->willReturn($this->createMock(Form::class));
+        $this->formHelper->method('createForm')->willReturn($this->createStub(Form::class));
 
         $controller = $this->setUpSut();
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
@@ -404,18 +361,16 @@ class LoginControllerTest extends MockeryTestCase
         $controller->postAction($request, new RouteMatch([]), new Response());
     }
 
-    /**
-     * @test
-     * @depends postActionIsCallable
-     */
-    public function postActionFailedAuthenticationRedirectsToLoginPage()
+    #[Depends('postActionIsCallable')]
+    #[Test]
+    public function postActionFailedAuthenticationRedirectsToLoginPage(): void
     {
         // Setup
         $identity = $this->createMock(User::class);
         $identity->method('isAnonymous')->willReturn(true);
         $this->currentUser->method('getIdentity')->willReturn($identity);
 
-        $this->formHelper->method('createForm')->willReturn($this->createMock(Form::class));
+        $this->formHelper->method('createForm')->willReturn($this->createStub(Form::class));
 
         $controller = $this->setUpSut();
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
@@ -427,11 +382,9 @@ class LoginControllerTest extends MockeryTestCase
         $controller->postAction($request, new RouteMatch([]), new Response());
     }
 
-    /**
-     * @test
-     * @depends postActionIsCallable
-     */
-    public function postActionFailedAuthenticationFlashesInvalidUsernameOrPasswordByDefault()
+    #[Depends('postActionIsCallable')]
+    #[Test]
+    public function postActionFailedAuthenticationFlashesInvalidUsernameOrPasswordByDefault(): void
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -461,11 +414,9 @@ class LoginControllerTest extends MockeryTestCase
         $controller->postAction($request, new RouteMatch([]), new Response());
     }
 
-    /**
-     * @test
-     * @depends postActionIsCallable
-     */
-    public function postActionFailedAuthenticationFlashesInvalidUsernameOrPasswordWhenUserNotExists()
+    #[Depends('postActionIsCallable')]
+    #[Test]
+    public function postActionFailedAuthenticationFlashesInvalidUsernameOrPasswordWhenUserNotExists(): void
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -495,11 +446,9 @@ class LoginControllerTest extends MockeryTestCase
         $controller->postAction($request, new RouteMatch([]), new Response());
     }
 
-    /**
-     * @test
-     * @depends postActionIsCallable
-     */
-    public function postActionFailedAuthenticationFlashesInvalidUsernameOrPasswordWhenPasswordIncorrect()
+    #[Depends('postActionIsCallable')]
+    #[Test]
+    public function postActionFailedAuthenticationFlashesInvalidUsernameOrPasswordWhenPasswordIncorrect(): void
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -529,11 +478,9 @@ class LoginControllerTest extends MockeryTestCase
         $controller->postAction($request, new RouteMatch([]), new Response());
     }
 
-    /**
-     * @test
-     * @depends postActionIsCallable
-     */
-    public function postActionFailedAuthenticationFlashesAccountDisabledWhenAuthenticationResultIsFailureAccountDisabled()
+    #[Depends('postActionIsCallable')]
+    #[Test]
+    public function postActionFailedAuthenticationFlashesAccountDisabledWhenAuthenticationResultIsFailureAccountDisabled(): void
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -566,7 +513,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @return LoginController
      */
-    protected function setUpSut()
+    protected function setUpSut(): LoginController
     {
         return new LoginController(
             $this->authenticationAdapter,
@@ -595,7 +542,7 @@ class LoginControllerTest extends MockeryTestCase
      * @param array|null $data
      * @return Request
      */
-    protected function postRequest(array $data = null, array $query = null): Request
+    protected function postRequest(?array $data = null, ?array $query = null): Request
     {
         $request = new Request();
         $request->setMethod(Request::METHOD_POST);

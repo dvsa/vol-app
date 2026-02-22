@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Internal;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
@@ -15,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class ApplicationUpdaterTest extends MockeryTestCase
 {
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $irhpApplication = m::mock(IrhpApplication::class);
 

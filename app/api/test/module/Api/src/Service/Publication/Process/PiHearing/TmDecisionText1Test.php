@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Process\PiHearing;
 
 use Dvsa\Olcs\Api\Entity\Publication\PublicationLink;
@@ -14,12 +16,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class TmDecisionText1Test extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the TmDecisionText1 filter
-     */
-    public function testProcess()
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the TmDecisionText1 filter')]
+    public function testProcess(): void
     {
         $sut = new TmDecisionText1();
 

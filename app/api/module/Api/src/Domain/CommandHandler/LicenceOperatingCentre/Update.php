@@ -76,6 +76,7 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
 
         return $this->result;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->helper = $container->get('OperatingCentreHelper');

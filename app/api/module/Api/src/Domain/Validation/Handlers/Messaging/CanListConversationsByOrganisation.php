@@ -19,6 +19,7 @@ class CanListConversationsByOrganisation extends CanListConversations implements
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto)
     {
         if (!$this->canAccessOrganisation($dto->getOrganisation())) {

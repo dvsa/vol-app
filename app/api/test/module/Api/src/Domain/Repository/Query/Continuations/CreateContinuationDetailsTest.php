@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Continuations;
 
 use Dvsa\Olcs\Api\Domain\Repository\Query\Continuations\CreateContinuationDetails;
@@ -42,17 +44,17 @@ class CreateContinuationDetailsTest extends BaseAbstractDbQueryTestCase
         ],
     ];
 
-    protected function getSut()
+    protected function getSut(): CreateContinuationDetails
     {
         return new CreateContinuationDetails();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return '';
     }
 
-    public function testExecuteInsert()
+    public function testExecuteInsert(): void
     {
         $this->connection->shouldReceive('quote')
             ->times(8)
@@ -79,7 +81,7 @@ class CreateContinuationDetailsTest extends BaseAbstractDbQueryTestCase
         $this->assertEquals(1, $this->sut->executeInsert([1, 1], false, 'status', 2));
     }
 
-    public function testExecuteInsertException()
+    public function testExecuteInsertException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\RuntimeException::class);
 

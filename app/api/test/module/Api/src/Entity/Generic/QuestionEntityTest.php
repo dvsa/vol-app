@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Generic;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -31,10 +33,8 @@ class QuestionEntityTest extends EntityTester
         $this->entity = $this->instantiate($this->entityClass);
     }
 
-    /**
-    * @dataProvider dpIsCustom
-    */
-    public function testIsCustom($id, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsCustom')]
+    public function testIsCustom(mixed $id, mixed $expected): void
     {
         $questionType = new RefData($id);
 
@@ -43,7 +43,7 @@ class QuestionEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isCustom());
     }
 
-    public function dpIsCustom()
+    public static function dpIsCustom(): array
     {
         return [
             [Entity::QUESTION_TYPE_STRING, false],
@@ -53,17 +53,15 @@ class QuestionEntityTest extends EntityTester
         ];
     }
 
-    /**
-    * @dataProvider dpGetActiveQuestionText
-    */
-    public function testGetActiveQuestionText($questionTexts, $dateToCheck, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetActiveQuestionText')]
+    public function testGetActiveQuestionText(mixed $questionTexts, mixed $dateToCheck, mixed $expected): void
     {
         $this->entity->setQuestionTexts($questionTexts);
 
         $this->assertEquals($expected, $this->entity->getActiveQuestionText($dateToCheck));
     }
 
-    public function dpGetActiveQuestionText()
+    public static function dpGetActiveQuestionText(): array
     {
         $inPast = new DateTime('last year');
         $lastWeek = new DateTime('-1 week');
@@ -115,7 +113,7 @@ class QuestionEntityTest extends EntityTester
         ];
     }
 
-    public function testGetDecodedOptionSource()
+    public function testGetDecodedOptionSource(): void
     {
         $optionSourceAsJson = '{"option1": "value1", "option2": "value2"}';
 
@@ -133,7 +131,7 @@ class QuestionEntityTest extends EntityTester
         );
     }
 
-    public function testGetStandardAnswer()
+    public function testGetStandardAnswer(): void
     {
         $activeQuestionTextId = 77;
 

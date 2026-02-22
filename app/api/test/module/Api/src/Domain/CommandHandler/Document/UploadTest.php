@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Document;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -18,9 +20,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use org\bovigo\vfs\vfsStream;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Document\Upload
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Document\Upload::class)]
 class UploadTest extends AbstractCommandHandlerTestCase
 {
     public const BODY = 'expect_body';
@@ -47,7 +47,8 @@ class UploadTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $refData = new Entity\System\RefData();
 
@@ -94,10 +95,8 @@ class UploadTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpLinkedEntity
-     */
-    public function testHandleCommand($key, $id, $entityClass)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpLinkedEntity')]
+    public function testHandleCommand(mixed $key, mixed $id, mixed $entityClass): void
     {
         $data = [
             'content' => base64_encode(self::BODY),
@@ -167,7 +166,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpLinkedEntity()
+    public static function dpLinkedEntity(): array
     {
         return [
             [
@@ -213,7 +212,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandFileAndIsExternalNull()
+    public function testHandleCommandFileAndIsExternalNull(): void
     {
         $gzBody = gzcompress(self::BODY);
 
@@ -295,7 +294,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
     /**
      * Tests EBSR doc upload throws exception if file isn't zip
      */
-    public function testHandleCommandInvalidEbsrMime()
+    public function testHandleCommandInvalidEbsrMime(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -326,7 +325,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandInvalidMime()
+    public function testHandleCommandInvalidMime(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -360,7 +359,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandError()
+    public function testHandleCommandError(): void
     {
         $this->expectException(\Exception::class);
 
@@ -394,7 +393,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithAdditionalCopy()
+    public function testHandleCommandWithAdditionalCopy(): void
     {
         $data = [
             'content' => base64_encode(self::BODY),

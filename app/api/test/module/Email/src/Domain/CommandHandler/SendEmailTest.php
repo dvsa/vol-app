@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Email\Domain\CommandHandler;
 
 use Dvsa\Olcs\Email\Service\Email;
@@ -18,6 +20,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Document as DocumentRepo;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class SendEmailTest extends AbstractCommandHandlerTestCase
 {
     /**
@@ -52,7 +55,7 @@ class SendEmailTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandEmptyBody()
+    public function testHandleCommandEmptyBody(): void
     {
         $this->expectException(\RuntimeException::class);
 
@@ -65,7 +68,7 @@ class SendEmailTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'to' => 'foo@bar.com',
@@ -105,7 +108,7 @@ class SendEmailTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandAlt()
+    public function testHandleCommandAlt(): void
     {
         $docId1 = 33;
         $docIdentifier1 = 'abcde123';
@@ -199,7 +202,7 @@ class SendEmailTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandNoAttachment()
+    public function testHandleCommandNoAttachment(): void
     {
         $this->expectException(\RuntimeException::class);
 

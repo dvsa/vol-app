@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use DateTime;
@@ -25,7 +27,7 @@ class IrhpPermitStockTest extends RepositoryTestCase
         $this->setUpSut(IrhpPermitStock::class);
     }
 
-    public function testFetchReadyToPrint()
+    public function testFetchReadyToPrint(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -55,7 +57,7 @@ class IrhpPermitStockTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchReadyToPrintBilateral()
+    public function testFetchReadyToPrintBilateral(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -89,7 +91,7 @@ class IrhpPermitStockTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchAll()
+    public function testFetchAll(): void
     {
         $irhpPermitStocks = [
             m::mock(IrhpPermitStockEntity::class),
@@ -108,10 +110,8 @@ class IrhpPermitStockTest extends RepositoryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpFetchOpenBilateralStocksByCountryNotMorocco
-     */
-    public function testFetchOpenBilateralStocksByCountryNotMorocco($countryId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFetchOpenBilateralStocksByCountryNotMorocco')]
+    public function testFetchOpenBilateralStocksByCountryNotMorocco(mixed $countryId): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -154,7 +154,7 @@ class IrhpPermitStockTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function dpFetchOpenBilateralStocksByCountryNotMorocco()
+    public static function dpFetchOpenBilateralStocksByCountryNotMorocco(): array
     {
         return [
             [Country::ID_NORWAY],
@@ -163,7 +163,7 @@ class IrhpPermitStockTest extends RepositoryTestCase
         ];
     }
 
-    public function testFetchOpenBilateralStocksByCountryMorocco()
+    public function testFetchOpenBilateralStocksByCountryMorocco(): void
     {
         $qb = $this->createMockQb('BLAH');
 

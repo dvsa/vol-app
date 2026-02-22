@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Permits;
 
 use Doctrine\DBAL\Connection;
@@ -67,7 +69,7 @@ class ExpireIrhpApplicationsTest extends AbstractDbQueryTestCase
         ],
     ];
 
-    public function paramProvider()
+    public static function paramProvider(): array
     {
         return [
             [
@@ -88,12 +90,12 @@ class ExpireIrhpApplicationsTest extends AbstractDbQueryTestCase
         ];
     }
 
-    protected function getSut()
+    protected function getSut(): ExpireIrhpApplicationsQry
     {
         return new ExpireIrhpApplicationsQry();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return 'UPDATE ia_table ia '
             . 'SET ia.status = :expiredStatus, '

@@ -24,6 +24,7 @@ final class DeleteForResponsibilities extends AbstractDeleteCommandHandler imple
 {
     protected $repoServiceName = 'TransportManagerApplication';
 
+    #[\Override]
     protected function doDelete(array $ids)
     {
         $applications = [];

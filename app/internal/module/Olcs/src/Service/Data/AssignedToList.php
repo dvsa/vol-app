@@ -72,6 +72,7 @@ class AssignedToList extends UserListInternal
      *
      * @return array
      */
+    #[\Override]
     public function fetchListOptions($context = null, $useGroups = false)
     {
         $data = $this->fetchListData($context);

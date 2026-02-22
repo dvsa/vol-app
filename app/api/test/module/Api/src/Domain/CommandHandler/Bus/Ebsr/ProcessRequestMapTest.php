@@ -71,8 +71,6 @@ class ProcessRequestMapTest extends AbstractCommandHandlerTestCase
             ]
         ];
 
-
-
         $this->sut->setConfig($config);
 
         $id = 99;
@@ -214,7 +212,7 @@ class ProcessRequestMapTest extends AbstractCommandHandlerTestCase
      * @param $command
      * @param $busReg
      */
-    private function busEntity($command, $busReg): void
+    private function busEntity(mixed $command, mixed $busReg): void
     {
         $this->repoMap['Bus']->shouldReceive('fetchUsingId')
             ->once()
@@ -229,11 +227,11 @@ class ProcessRequestMapTest extends AbstractCommandHandlerTestCase
      * @param $numRequests
      */
     private function commonAssertions(
-        $command,
-        $busReg,
-        $documentIdentifier,
-        $submissionId,
-        $numRequests,
+        mixed $command,
+        mixed $busReg,
+        mixed $documentIdentifier,
+        mixed $submissionId,
+        mixed $numRequests,
     ): void {
         $xmlFilename = 'filename.xml';
 

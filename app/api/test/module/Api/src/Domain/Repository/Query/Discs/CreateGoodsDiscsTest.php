@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Discs;
 
 use Dvsa\Olcs\Api\Domain\Repository\Query\Discs\CreateGoodsDiscs;
@@ -59,7 +61,7 @@ class CreateGoodsDiscsTest extends AbstractDbQueryTestCase
         ],
     ];
 
-    public function paramProvider()
+    public static function paramProvider(): array
     {
         return [
             [
@@ -79,12 +81,12 @@ class CreateGoodsDiscsTest extends AbstractDbQueryTestCase
         ];
     }
 
-    protected function getSut()
+    protected function getSut(): CreateGoodsDiscs
     {
         return new CreateGoodsDiscs();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return 'INSERT INTO goods_disc (licence_vehicle_id, is_copy, created_on, created_by) '
         . 'SELECT lv.id, :isCopy, NOW(), :currentUserId '

@@ -17,13 +17,22 @@ final class Update extends AbstractCommandHandler
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var Cmd $command */
-        
+
         /** @var \Dvsa\Olcs\Api\Entity\Letter\LetterTodo $entity */
         $entity = $this->getRepo()->fetchUsingId($command);
-        
+
         // Update working properties - versioning will be handled by repository
         $entity->setDescription($command->getDescription());
-        
-        if ($command->getHelpText() \!== null) {
+
+        if ($command->getHelpText() !== null) {
             $entity->setHelpText($command->getHelpText());
         }
+
+        $this->getRepo()->save($entity);
+
+        $this->result->addId('letterTodo', $entity->getId());
+        $this->result->addMessage('Letter Todo updated');
+
+        return $this->result;
+    }
+}

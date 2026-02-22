@@ -23,9 +23,7 @@ class IdentityProviderFactoryTest extends MockeryTestCase
         $this->setUpServiceManager();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -35,11 +33,9 @@ class IdentityProviderFactoryTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->__invoke(...));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
-    public function invokeReturnsInstanceWhenItImplementsIdentityProviderInterface()
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokeReturnsInstanceWhenItImplementsIdentityProviderInterface(): void
     {
         // Setup
         $this->setUpSut();
@@ -53,11 +49,9 @@ class IdentityProviderFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(JWTIdentityProvider::class, $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
-    public function invokeThrowsExceptionWhenConfigIsMissing()
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokeThrowsExceptionWhenConfigIsMissing(): void
     {
         // Setup
         $this->setUpSut();
@@ -71,11 +65,9 @@ class IdentityProviderFactoryTest extends MockeryTestCase
         $this->sut->__invoke($this->serviceManager(), null);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
-    public function invokeThrowsExceptionWhenContainerDoesNotHaveRequestedInstance()
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokeThrowsExceptionWhenContainerDoesNotHaveRequestedInstance(): void
     {
         // Setup
         $this->setUpSut();
@@ -89,11 +81,9 @@ class IdentityProviderFactoryTest extends MockeryTestCase
         $this->sut->__invoke($this->serviceManager(), null);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
-    public function invokeThrowsExceptionWhenInstanceDoesNotImplementIdentityProviderInterface()
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokeThrowsExceptionWhenInstanceDoesNotImplementIdentityProviderInterface(): void
     {
         // Setup
         $this->setUpSut();
@@ -113,7 +103,7 @@ class IdentityProviderFactoryTest extends MockeryTestCase
         $this->sut = new IdentityProviderFactory();
     }
 
-    protected function config(array $config = [])
+    protected function config(array $config = []): void
     {
         $this->serviceManager->setService('config', $config);
     }

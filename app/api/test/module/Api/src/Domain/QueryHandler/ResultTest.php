@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -12,14 +14,14 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class ResultTest extends MockeryTestCase
 {
-    public function testResultWithoutEntity()
+    public function testResultWithoutEntity(): void
     {
         $sut = new Result(null);
 
         static::assertNull($sut->serialize());
     }
 
-    public function testResultWithEntityAndBundle()
+    public function testResultWithEntityAndBundle(): void
     {
         $expected = ['foo' => 'bar', 'cake' => 'bar'];
 
@@ -33,7 +35,7 @@ class ResultTest extends MockeryTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    public function testResultWithEntityAndBundleAndData()
+    public function testResultWithEntityAndBundleAndData(): void
     {
         $data = [
             'cake' => [
@@ -70,7 +72,7 @@ class ResultTest extends MockeryTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    public function testResultWithEntityAndBundleAndDataSetValue()
+    public function testResultWithEntityAndBundleAndDataSetValue(): void
     {
         $data = ['cake' => 'mix', 'stuff' => 'foo'];
         $expected = ['foo' => 'bar', 'cake' => 'choc', 'stuff' => 'foo'];
@@ -86,7 +88,7 @@ class ResultTest extends MockeryTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    public function testResult()
+    public function testResult(): void
     {
         $result = new Result(m::mock(BundleSerializableInterface::class));
         $this->assertFalse($result->isEmpty());

@@ -58,6 +58,7 @@ class QaController extends AbstractOlcsController
      *
      * @return ViewModel|\Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         $routeName = $this->event->getRouteMatch()->getMatchedRouteName();

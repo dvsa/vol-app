@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Reset to Not Yet Submitted from Cancelled test
  */
@@ -36,7 +38,8 @@ class ResetToNotYetSubmittedFromCancelledTest extends AbstractCommandHandlerTest
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrhpInterface::STATUS_NOT_YET_SUBMITTED
@@ -45,7 +48,7 @@ class ResetToNotYetSubmittedFromCancelledTest extends AbstractCommandHandlerTest
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $irhpApplicationId = 459;
         $permitsRequired = 13;

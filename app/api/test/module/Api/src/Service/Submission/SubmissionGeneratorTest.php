@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission;
 
 use Dvsa\Olcs\Api\Entity\Cases\Cases as CaseEntity;
@@ -15,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class SubmissionGeneratorTest extends MockeryTestCase
 {
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $mockConfig = ['cfg'];
         /** @var SectionGeneratorPluginManager $mockSectionGeneratorPluginManager */
@@ -29,7 +31,7 @@ class SubmissionGeneratorTest extends MockeryTestCase
      * Test exception thrown for invalid exception types
      * @throws \Exception
      */
-    public function testGenerateSubmissionInvalidSubmissionType()
+    public function testGenerateSubmissionInvalidSubmissionType(): void
     {
         $mockConfig = ['cfg'];
 
@@ -62,7 +64,7 @@ class SubmissionGeneratorTest extends MockeryTestCase
      * @param $expectedSections
      * @throws \Exception
      */
-    public function testGenerateSubmissionValidSubmission()
+    public function testGenerateSubmissionValidSubmission(): void
     {
         $sectionId = 'valid_submission_type';
         $mockConfig = [
@@ -115,7 +117,7 @@ class SubmissionGeneratorTest extends MockeryTestCase
     /**
      * Branch test for TM submissions that remove sections
      */
-    public function testGenerateSubmissionValidTmSubmission()
+    public function testGenerateSubmissionValidTmSubmission(): void
     {
         $sectionId = 'valid_submission_type';
         $mockConfig = [
@@ -177,10 +179,8 @@ class SubmissionGeneratorTest extends MockeryTestCase
         static::assertNotContains('people', $actualSectionData);
     }
 
-    /**
-     * @dataProvider dpTestGenerateSubmissionSectionData
-     */
-    public function testGenerateSubmissionSectionData($subSection, $data, $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerateSubmissionSectionData')]
+    public function testGenerateSubmissionSectionData(mixed $subSection, mixed $data, mixed $expect): void
     {
         $sectionId = 8888;
 
@@ -203,16 +203,16 @@ class SubmissionGeneratorTest extends MockeryTestCase
         static::assertEquals($expect, $sut->generateSubmissionSectionData($mockSubmission, $sectionId, $subSection));
     }
 
-    public function dpTestGenerateSubmissionSectionData()
+    public static function dpTestGenerateSubmissionSectionData(): array
     {
         return [
             [
-                'subsection' => null,
+                'subSection' => null,
                 'data' => ['EXPECTED'],
                 'expect' => ['EXPECTED'],
             ],
             [
-                'subsection' => 'unit_SubSectKey',
+                'subSection' => 'unit_SubSectKey',
                 'data' => [
                     'unit_SubSectKey' => 'SUB_EXPECTED',
                 ],

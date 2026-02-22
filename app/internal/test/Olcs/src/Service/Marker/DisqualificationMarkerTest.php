@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
@@ -23,12 +25,12 @@ class DisqualificationMarkerTest extends TestCase
         $this->sut = new \Olcs\Service\Marker\DisqualificationMarker();
     }
 
-    public function testCanRenderWithNoData()
+    public function testCanRenderWithNoData(): void
     {
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRender()
+    public function testCanRender(): void
     {
         $data = [
             'organisation' => ['disqualifications' => ['XX']],
@@ -39,7 +41,7 @@ class DisqualificationMarkerTest extends TestCase
         $this->assertTrue($this->sut->canRender());
     }
 
-    public function testRenderActiveWithEndDate()
+    public function testRenderActiveWithEndDate(): void
     {
         $data = [
             'organisation' => [
@@ -75,7 +77,7 @@ class DisqualificationMarkerTest extends TestCase
         $this->assertSame('HTML1', $this->sut->render());
     }
 
-    public function testRenderNotActiveWithOutEndDate()
+    public function testRenderNotActiveWithOutEndDate(): void
     {
         $data = [
             'organisation' => [

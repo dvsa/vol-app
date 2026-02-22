@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Impounding Test
  *
@@ -38,7 +40,8 @@ class CreateImpoundingTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'impt_hearing',
@@ -72,7 +75,7 @@ class CreateImpoundingTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithoutPublish()
+    public function testHandleCommandWithoutPublish(): void
     {
         $command = Cmd::create(
             [
@@ -124,11 +127,11 @@ class CreateImpoundingTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider provideImpoundingLicencePublishCommands
      * @param $licType Goods or PSV
      * @param $commandData Expected Command Data for publish
      */
-    public function testHandleCommandWithPublishForLicenceCases($licType, $commandData)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideImpoundingLicencePublishCommands')]
+    public function testHandleCommandWithPublishForLicenceCases(mixed $licType, mixed $commandData): void
     {
         $command = Cmd::create(
             [
@@ -184,11 +187,11 @@ class CreateImpoundingTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider provideImpoundingApplicationPublishCommands
      * @param $licType Goods or PSV
      * @param $commandData Expected Command Data for publish
      */
-    public function testHandleCommandWithPublishForApplicationCases($licType, $commandData)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideImpoundingApplicationPublishCommands')]
+    public function testHandleCommandWithPublishForApplicationCases(mixed $licType, mixed $commandData): void
     {
         $command = Cmd::create(
             [
@@ -252,7 +255,7 @@ class CreateImpoundingTest extends AbstractCommandHandlerTestCase
      * Provides licence type and expected publish command data for cases attached to licence
      * @return array
      */
-    public function provideImpoundingLicencePublishCommands()
+    public static function provideImpoundingLicencePublishCommands(): array
     {
         return [
             [
@@ -282,7 +285,7 @@ class CreateImpoundingTest extends AbstractCommandHandlerTestCase
      * Provides licence type and expected publish command data for cases attached to application
      * @return array
      */
-    public function provideImpoundingApplicationPublishCommands()
+    public static function provideImpoundingApplicationPublishCommands(): array
     {
         return [
             [

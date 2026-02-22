@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler\Bus;
 
 use Dvsa\Olcs\Api\Domain\Repository\Bus as BusRepo;
@@ -25,7 +27,7 @@ class ExpireTest extends AbstractCommandHandlerTestCase
     /**
      * tests handleCommand
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $numExpired = 666;
         $this->repoMap['Bus']->expects('expireRegistrations')->withNoArgs()->andReturn($numExpired);

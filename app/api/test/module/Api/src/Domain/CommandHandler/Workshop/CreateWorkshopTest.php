@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Workshop Test
  *
@@ -41,7 +43,8 @@ class CreateWorkshopTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -50,7 +53,7 @@ class CreateWorkshopTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'licence' => 111,
@@ -115,10 +118,10 @@ class CreateWorkshopTest extends AbstractCommandHandlerTestCase
             ->with(m::type(WorkshopEntity::class), EventHistoryTypeEntity::EVENT_CODE_ADD_SAFETY_INSPECTOR)
             ->once();
         $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')
-            ->with($contactDetails, EventHistoryTypeEntity::EVENT_CODE_ADD_SAFETY_INSPECTOR, null,  $licence)
+            ->with($contactDetails, EventHistoryTypeEntity::EVENT_CODE_ADD_SAFETY_INSPECTOR, null, $licence)
             ->once();
         $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')
-            ->with($contactDetails->getAddress(), EventHistoryTypeEntity::EVENT_CODE_ADD_SAFETY_INSPECTOR, null,  $licence)
+            ->with($contactDetails->getAddress(), EventHistoryTypeEntity::EVENT_CODE_ADD_SAFETY_INSPECTOR, null, $licence)
             ->once();
 
         $result = $this->sut->handleCommand($command);

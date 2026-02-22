@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Dashboard Controller Test
  *
@@ -46,15 +48,12 @@ class DashboardControllerTest extends MockeryTestCase
 
         $reflectionClass = new ReflectionClass(\Olcs\Controller\DashboardController::class);
         $reflectionProperty = $reflectionClass->getProperty('dashboardProcessingService');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->sut, $this->mockDashboardProcessingService);
 
         $reflectionProperty = $reflectionClass->getProperty('dashboardTmApplicationsDataMapper');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->sut, $this->mockDashboardTmApplicationsDataMapper);
 
         $reflectionProperty = $reflectionClass->getProperty('tableFactory');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->sut, $this->mockTableFactory);
     }
 
@@ -63,7 +62,7 @@ class DashboardControllerTest extends MockeryTestCase
      *
      * @psalm-return list{list{true, true, true}, list{true, false, true}, list{false, true, false}, list{false, false, true}}
      */
-    public function dataProviderCorrectDashboardShown(): array
+    public static function dataProviderCorrectDashboardShown(): array
     {
         return [
             [true, true, true],
@@ -74,13 +73,13 @@ class DashboardControllerTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider dataProviderCorrectDashboardShown
      *
      * @param bool $permissionSelfserveLva
      * @param bool $permissionSelfserveTmDashboard
      * @param bool $standardView
      */
-    public function testCorrectDashboardShown($permissionSelfserveLva, $permissionSelfserveTmDashboard, $standardView): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderCorrectDashboardShown')]
+    public function testCorrectDashboardShown(bool $permissionSelfserveLva, bool $permissionSelfserveTmDashboard, bool $standardView): void
     {
         $this->sut->shouldReceive('isGranted')
             ->with(RefData::PERMISSION_SELFSERVE_LVA)

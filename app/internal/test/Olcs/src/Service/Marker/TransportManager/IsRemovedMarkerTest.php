@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
@@ -23,19 +25,19 @@ class IsRemovedMarkerTest extends TestCase
         $this->sut = new \Olcs\Service\Marker\TransportManager\IsRemovedMarker();
     }
 
-    public function testCanRenderWithNoData()
+    public function testCanRenderWithNoData(): void
     {
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderWithData()
+    public function testCanRenderWithData(): void
     {
         $this->sut->setData(['transportManager' => ['removedDate' => 'notnull']]);
 
         $this->assertTrue($this->sut->canRender());
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $this->sut->setData(['transportManager' => ['removedDate' => '1990-2-10 10:00']]);
 

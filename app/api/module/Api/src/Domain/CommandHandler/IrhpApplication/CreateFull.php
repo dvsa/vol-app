@@ -171,6 +171,7 @@ class CreateFull extends AbstractCommandHandler implements TransactionedInterfac
             $irhpPermitApplicationRepo->save($irhpPermitApplication);
         }
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

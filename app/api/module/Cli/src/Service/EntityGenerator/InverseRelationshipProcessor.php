@@ -17,7 +17,8 @@ readonly class InverseRelationshipProcessor
     public function __construct(
         private EntityConfigService $configService,
         private PropertyNameResolver $propertyNameResolver
-    ) {}
+    ) {
+    }
 
     /**
      * Process all inverse relationships and return them grouped by target entity
@@ -28,13 +29,13 @@ readonly class InverseRelationshipProcessor
 
         foreach ($tables as $table) {
             $tableName = $table->getTableName();
-            
+
             // Skip processing inverse relationships for join tables
             // Join tables should only create ManyToMany relationships, not OneToMany
             if (in_array($tableName, $joinTableNames)) {
                 continue;
             }
-            
+
             $tableConfig = $this->configService->getTableConfig($tableName);
 
             foreach ($table->getColumns() as $column) {
@@ -113,18 +114,18 @@ readonly class InverseRelationshipProcessor
     ): RelationshipType {
         // Check if this is a foreign key column
         $foreignKeys = $table->getForeignKeys();
-        
+
         foreach ($foreignKeys as $fk) {
             // Handle both array and object structures for foreign keys
             $localColumns = is_array($fk) ? ($fk['localColumns'] ?? $fk['local_columns'] ?? []) : $fk->getLocalColumns();
-            
+
             if (in_array($sourceColumn, $localColumns)) {
                 // Check if this FK column is part of a unique constraint
                 $uniqueConstraints = $table->getUniqueConstraints();
-                
+
                 foreach ($uniqueConstraints as $uc) {
                     $columns = is_array($uc) ? ($uc['columns'] ?? []) : $uc->getColumns();
-                    
+
                     // Check if the foreign key column is in any unique constraint
                     if (in_array($sourceColumn, $columns)) {
                         // If it's a single-column unique constraint, it's definitely OneToOne
@@ -135,7 +136,7 @@ readonly class InverseRelationshipProcessor
                         // but we'll be conservative and only treat single-column unique as OneToOne
                     }
                 }
-                
+
                 // Regular FK without unique constraint = ManyToOne (so inverse is OneToMany)
                 return RelationshipType::ONE_TO_MANY;
             }
@@ -176,7 +177,7 @@ readonly class InverseRelationshipProcessor
         $columnName = preg_replace('/_id$/', '', $columnName);
 
         // Convert to camelCase
-        return lcfirst(str_replace('_', '', ucwords($columnName, '_')));
+        return lcfirst(str_replace('_', '', ucwords((string) $columnName, '_')));
     }
 
     /**
@@ -189,8 +190,9 @@ readonly class InverseRelationshipProcessor
         $mappedBy = $relationshipData['mappedBy'];
 
         $options = [];
-        $options[] = sprintf('targetEntity="Dvsa\\Olcs\\Api\\Entity\\%s\\%s"', 
-            $this->getEntityNamespace($sourceEntity), 
+        $options[] = sprintf(
+            'targetEntity="Dvsa\\Olcs\\Api\\Entity\\%s\\%s"',
+            $this->getEntityNamespace($sourceEntity),
             $sourceEntity
         );
         $options[] = sprintf('mappedBy="%s"', $mappedBy);
@@ -218,8 +220,9 @@ readonly class InverseRelationshipProcessor
 
         $optionsStr = implode(', ', $options);
 
-        return sprintf('@ORM\\%s(%s)', 
-            ucfirst($relationshipType->value), 
+        return sprintf(
+            '@ORM\\%s(%s)',
+            ucfirst((string) $relationshipType->value),
             $optionsStr
         );
     }
@@ -235,7 +238,7 @@ readonly class InverseRelationshipProcessor
 
         $orderPairs = [];
         foreach ($orderBy as $field => $direction) {
-            $orderPairs[] = sprintf('"%s" = "%s"', $field, strtoupper($direction));
+            $orderPairs[] = sprintf('"%s" = "%s"', $field, strtoupper((string) $direction));
         }
 
         return sprintf('@ORM\\OrderBy({%s})', implode(', ', $orderPairs));

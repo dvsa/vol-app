@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Queue Retry command test
  *
@@ -18,7 +20,7 @@ use Dvsa\Olcs\Api\Entity\Queue\Queue as QueueEntity;
  */
 class RetryTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $item = new QueueEntity();
         $command = Retry::create(['item' => $item, 'retryAfter' => 60, 'lastError' => 'last error']);

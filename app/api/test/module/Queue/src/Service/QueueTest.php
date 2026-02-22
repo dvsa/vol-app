@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Queue\Service;
 
 use Aws\Command;
@@ -28,7 +30,7 @@ class QueueTest extends MockeryTestCase
         parent::setUp();
     }
 
-    public function testSendMessage()
+    public function testSendMessage(): void
     {
         $message = [
             'MessageBody' => 'some_message_body',
@@ -42,7 +44,7 @@ class QueueTest extends MockeryTestCase
         $this->assertTrue(true);
     }
 
-    public function testSendMessageWithExceptionThrown()
+    public function testSendMessageWithExceptionThrown(): void
     {
         $this->logger = m::mock(\Laminas\Log\Logger::class);
         $this->logger->shouldReceive('err')
@@ -76,7 +78,7 @@ class QueueTest extends MockeryTestCase
         $this->sut->sendMessage($message);
     }
 
-    public function testFetchMessagesEmpty()
+    public function testFetchMessagesEmpty(): void
     {
         $this->queue->shouldReceive('receiveMessage')
             ->with([
@@ -91,7 +93,7 @@ class QueueTest extends MockeryTestCase
         $this->assertEmpty($this->sut->fetchMessages('queueUrl', 3));
     }
 
-    public function testFetchMessagesNotEmpty()
+    public function testFetchMessagesNotEmpty(): void
     {
         $this->queue->shouldReceive('receiveMessage')
             ->with([
@@ -119,7 +121,7 @@ class QueueTest extends MockeryTestCase
         $this->assertCount(1, $messages);
     }
 
-    public function testFetchMessagesWithExceptionThrown()
+    public function testFetchMessagesWithExceptionThrown(): void
     {
         $this->logger = m::mock(\Laminas\Log\Logger::class);
         $this->logger->shouldReceive('err')
@@ -142,7 +144,7 @@ class QueueTest extends MockeryTestCase
         $this->sut->fetchMessages('queueUrl', 1);
     }
 
-    public function testFetchMessagesMoreThan10()
+    public function testFetchMessagesMoreThan10(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("maxMessages must be 10 or less");
@@ -150,7 +152,7 @@ class QueueTest extends MockeryTestCase
         $this->sut->fetchMessages('queueUrl', 11);
     }
 
-    public function testDeleteMessageWithExceptionThrown()
+    public function testDeleteMessageWithExceptionThrown(): void
     {
         $this->logger = m::mock(\Laminas\Log\Logger::class);
         $this->logger->shouldReceive('err')
@@ -175,7 +177,7 @@ class QueueTest extends MockeryTestCase
         $this->sut->deleteMessage('queue_url', 'receipt_handle');
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $this->queue->shouldReceive('deleteMessage')->with([
             'QueueUrl' => 'queue_url',

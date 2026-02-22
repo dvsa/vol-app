@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Variation People Review Service Test
  *
@@ -48,10 +50,8 @@ class VariationPeopleReviewServiceTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider simpleProvider
-     */
-    public function testGetConfigFromDataSimple($orgType)
+    #[\PHPUnit\Framework\Attributes\DataProvider('simpleProvider')]
+    public function testGetConfigFromDataSimple(mixed $orgType): void
     {
         $data = [
             'licence' => [
@@ -73,10 +73,8 @@ class VariationPeopleReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testGetConfigFromData($data, $noOfPeople, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testGetConfigFromData(mixed $data, mixed $noOfPeople, mixed $expected): void
     {
         $this->mockPeopleReview->shouldReceive('shouldShowPosition')
             ->with($data)
@@ -88,7 +86,7 @@ class VariationPeopleReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [
@@ -142,7 +140,7 @@ class VariationPeopleReviewServiceTest extends MockeryTestCase
         ];
     }
 
-    public function simpleProvider()
+    public static function simpleProvider(): array
     {
         return [
             [Organisation::ORG_TYPE_SOLE_TRADER],

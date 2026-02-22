@@ -35,6 +35,7 @@ class RemoveAllForLicence extends AbstractRawQuery
      *
      * @return array
      */
+    #[\Override]
     protected function getParams()
     {
         $today = new DateTime();

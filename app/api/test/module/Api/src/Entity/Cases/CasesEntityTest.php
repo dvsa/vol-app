@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Cases;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,9 +24,8 @@ use Doctrine\Common\Collections\Criteria;
 /**
  * Cases Entity Unit Tests
  * Initially auto-generated but won't be overridden
- *
- * @covers \Dvsa\Olcs\Api\Entity\Cases\Cases
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Cases\Cases::class)]
 class CasesEntityTest extends EntityTester
 {
     /** @var  \Dvsa\Olcs\Api\Entity\Cases\Cases */
@@ -146,7 +147,8 @@ class CasesEntityTest extends EntityTester
         $this->assertEquals($categorys, $this->entity->getCategorys());
         $this->assertEquals($outcomes, $this->entity->getOutcomes());
         $this->assertEquals($ecmsNo, $this->entity->getEcmsNo());
-        $this->assertEquals($description, $this->entity->getDescription());;
+        $this->assertEquals($description, $this->entity->getDescription());
+        ;
     }
 
     /**
@@ -340,9 +342,7 @@ class CasesEntityTest extends EntityTester
         $this->entity->reopen();
     }
 
-    /**
-     * @dataProvider canAddSiProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('canAddSiProvider')]
     public function testCanAddSi(?m\mockInterface $erruRequest, ?\DateTime $closedDate, bool $expectedResult): void
     {
         $sut = $this->instantiate($this->entityClass);
@@ -355,7 +355,7 @@ class CasesEntityTest extends EntityTester
     /**
      * data provider for testCanAddSi
      */
-    public function canAddSiProvider(): array
+    public static function canAddSiProvider(): array
     {
         $erruRequestNoModify = m::mock(ErruRequestEntity::class);
         $erruRequestNoModify->shouldReceive('canModify')->andReturn(false);
@@ -375,9 +375,7 @@ class CasesEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider canSendMsiResponseProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('canSendMsiResponseProvider')]
     public function testCanSendMsiResponse(
         ?m\mockInterface $erruRequest,
         ArrayCollection $si,
@@ -395,7 +393,7 @@ class CasesEntityTest extends EntityTester
     /**
      * data provider for testCanSendMsiResponse
      */
-    public function canSendMsiResponseProvider(): array
+    public static function canSendMsiResponseProvider(): array
     {
         $siResponseSet = m::mock(SeriousInfringement::class);
         $siResponseSet->shouldReceive('responseSet')->andReturn(true);

@@ -66,6 +66,7 @@ class NoOfPermitsController extends AbstractSelfserveController
     /**
      * @return \Laminas\Http\Response|null
      */
+    #[\Override]
     public function handlePost()
     {
         if (isset($this->postParams['Submit']['SelectOtherCountriesButton'])) {

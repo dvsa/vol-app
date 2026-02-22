@@ -17,9 +17,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\BusRegSearchView\BusRegSearchViewList
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\BusRegSearchView\BusRegSearchViewList::class)]
 class BusRegSearchViewListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
@@ -40,7 +38,7 @@ class BusRegSearchViewListTest extends QueryHandlerTestCase
      * @param null $organisationId
      * @return m\MockInterface
      */
-    private function getCurrentUser($localAuthorityId = null, $organisationId = null)
+    private function getCurrentUser(mixed $localAuthorityId = null, mixed $organisationId = null): m\MockInterface
     {
         /** @var \Dvsa\Olcs\Api\Entity\User\User|m\MockInterface $mockUser */
         $mockUser = m::mock(\Dvsa\Olcs\Api\Entity\User\User::class)->makePartial();
@@ -74,7 +72,7 @@ class BusRegSearchViewListTest extends QueryHandlerTestCase
     /**
      * Test handle query for Operator users
      */
-    public function testHandleQueryOperator()
+    public function testHandleQueryOperator(): void
     {
         $organisationId = 1;
         $localAuthorityId = null;
@@ -133,7 +131,7 @@ class BusRegSearchViewListTest extends QueryHandlerTestCase
     /**
      * Test handle query for LA users
      */
-    public function testHandleQueryLocalAuthority()
+    public function testHandleQueryLocalAuthority(): void
     {
         $organisationId = null;
         $localAuthorityId = 1;
@@ -198,7 +196,7 @@ class BusRegSearchViewListTest extends QueryHandlerTestCase
     /**
      * Test handle query converts query
      */
-    public function testHandleQueryConversion()
+    public function testHandleQueryConversion(): void
     {
         $organisationId = null;
         $localAuthorityId = 1;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Task;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -21,7 +23,7 @@ class TaskEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $category = new Category();
         $subCategory = new SubCategory();

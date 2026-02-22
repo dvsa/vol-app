@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Psv Discs Test
  *
@@ -33,7 +35,8 @@ class CreatePsvDiscsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
 
@@ -48,7 +51,7 @@ class CreatePsvDiscsTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandFailedValidation()
+    public function testHandleCommandFailedValidation(): void
     {
         $data = [
             'licence' => 111,
@@ -69,7 +72,7 @@ class CreatePsvDiscsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'licence' => 111,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Ecmt;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\Element\Custom\Ecmt\IntJourneys;
@@ -14,10 +16,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class IntJourneysTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTrueFalse
-     */
-    public function testGetRepresentation($showNiWarning)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTrueFalse')]
+    public function testGetRepresentation(mixed $showNiWarning): void
     {
         $radioRepresentation = [
             'radioKey1' => 'radioValue1',
@@ -41,7 +41,7 @@ class IntJourneysTest extends MockeryTestCase
         );
     }
 
-    public function dpTrueFalse()
+    public static function dpTrueFalse(): array
     {
         return [
             [true],

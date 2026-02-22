@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Listener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -14,9 +16,7 @@ use Dvsa\Olcs\Api\Domain\Repository\User as UserRepo;
 use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 
-/**
- * @covers \Dvsa\Olcs\Api\Listener\OlcsEntityListener
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Listener\OlcsEntityListener::class)]
 class OlcsEntityListenerTest extends MockeryTestCase
 {
     /** @var  OlcsEntityListener */
@@ -77,12 +77,12 @@ class OlcsEntityListenerTest extends MockeryTestCase
         $this->sut = (new OlcsEntityListener())->__invoke($this->mockSl, OlcsEntityListener::class);
     }
 
-    public function testGetSubscribedEvents()
+    public function testGetSubscribedEvents(): void
     {
         static::assertEquals(['preSoftDelete'], $this->sut->getSubscribedEvents());
     }
 
-    public function testUpdateFieldMethodNotExists()
+    public function testUpdateFieldMethodNotExists(): void
     {
         $mockEntity = m::mock();
 
@@ -109,7 +109,7 @@ class OlcsEntityListenerTest extends MockeryTestCase
         $this->sut->preSoftDelete($lifecycleEvent);
     }
 
-    public function testUpdateFieldNotNotify()
+    public function testUpdateFieldNotNotify(): void
     {
         $mockEntity = m::mock(Entity\Note\Note::class);
 
@@ -143,10 +143,8 @@ class OlcsEntityListenerTest extends MockeryTestCase
         $this->sut->preSoftDelete($lifecycleEvent);
     }
 
-    /**
-     * @dataProvider dpTestModifiedBy
-     */
-    public function testModifiedBy($currentUser, $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestModifiedBy')]
+    public function testModifiedBy(mixed $currentUser, mixed $expect): void
     {
         $mockEntity = new EntityStub();
 
@@ -188,7 +186,7 @@ class OlcsEntityListenerTest extends MockeryTestCase
         $this->sut->preSoftDelete($lifecycleEvent);
     }
 
-    public function dpTestModifiedBy()
+    public static function dpTestModifiedBy(): array
     {
         $mockUser = Entity\User\User::create(
             'abc',
@@ -199,7 +197,7 @@ class OlcsEntityListenerTest extends MockeryTestCase
         return [
             [
                 'currentUser' => $mockUser,
-                'expectUpdate' => $mockUser,
+                'expect' => $mockUser,
             ],
             [
                 'currentUser' => Entity\User\User::anon(),
@@ -212,7 +210,7 @@ class OlcsEntityListenerTest extends MockeryTestCase
         ];
     }
 
-    public function testGetModifiedByUserSystem()
+    public function testGetModifiedByUserSystem(): void
     {
         $mockEntity = new EntityStub();
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Bilateral;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication as IrhpPermitApplicationEntity;
@@ -23,7 +25,7 @@ class NoOfPermitsAnswerSummaryProviderTest extends MockeryTestCase
         $this->noOfPermitsAnswerSummaryProvider = new NoOfPermitsAnswerSummaryProvider();
     }
 
-    public function testGetTemplateName()
+    public function testGetTemplateName(): void
     {
         $this->assertEquals(
             'bilateral-permits-required',
@@ -31,7 +33,7 @@ class NoOfPermitsAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public function testShouldIncludeSlug()
+    public function testShouldIncludeSlug(): void
     {
         $qaEntity = m::mock(QaEntityInterface::class);
 
@@ -40,10 +42,8 @@ class NoOfPermitsAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpGetTemplateVariables
-     */
-    public function testGetTemplateVariables($bilateralPermitUsageSelection, $bilateralRequired, $expectedTemplateVariables)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetTemplateVariables')]
+    public function testGetTemplateVariables(mixed $bilateralPermitUsageSelection, mixed $bilateralRequired, mixed $expectedTemplateVariables): void
     {
         $isSnapshot = false;
 
@@ -71,7 +71,7 @@ class NoOfPermitsAnswerSummaryProviderTest extends MockeryTestCase
         $this->assertEquals($expectedTemplateVariables, $templateVariables);
     }
 
-    public function dpGetTemplateVariables()
+    public static function dpGetTemplateVariables(): array
     {
         $requiredStandard = 5;
         $requiredCabotage = 7;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * PiSlaException Repository Test
  *
@@ -30,10 +32,10 @@ class PiSlaExceptionTest extends RepositoryTestCase
     }
 
 
-    public function testFetchByPi()
+    public function testFetchByPi(): void
     {
         $piId = 123;
-        
+
         $qb = $this->createMockQb('BLAH');
 
         $this->mockCreateQueryBuilder($qb);
@@ -47,7 +49,7 @@ class PiSlaExceptionTest extends RepositoryTestCase
         );
 
         $result = $this->sut->fetchByPi($piId);
-        
+
         $this->assertEquals(['RESULT1', 'RESULT2'], $result);
 
         $expectedQuery = 'BLAH ' .
@@ -59,10 +61,10 @@ class PiSlaExceptionTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchByCase()
+    public function testFetchByCase(): void
     {
         $caseId = 456;
-        
+
         $qb = $this->createMockQb('BLAH');
 
         $this->mockCreateQueryBuilder($qb);
@@ -76,7 +78,7 @@ class PiSlaExceptionTest extends RepositoryTestCase
         );
 
         $result = $this->sut->fetchByCase($caseId);
-        
+
         $this->assertEquals(['CASE_RESULT'], $result);
 
         $expectedQuery = 'BLAH ' .
@@ -89,11 +91,11 @@ class PiSlaExceptionTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchActiveByPi()
+    public function testFetchActiveByPi(): void
     {
         $piId = 789;
         $checkDate = new \DateTime('2024-01-15');
-        
+
         $qb = $this->createMockQb('BLAH');
 
         $this->mockCreateQueryBuilder($qb);
@@ -107,7 +109,7 @@ class PiSlaExceptionTest extends RepositoryTestCase
         );
 
         $result = $this->sut->fetchActiveByPi($piId, $checkDate);
-        
+
         $this->assertEquals(['ACTIVE_RESULT'], $result);
 
         $expectedQuery = 'BLAH ' .
@@ -120,11 +122,11 @@ class PiSlaExceptionTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchActiveByPiWithDefaultDate()
+    public function testFetchActiveByPiWithDefaultDate(): void
     {
         $piId = 999;
         // Not passing checkDate parameter - should use current date
-        
+
         $qb = $this->createMockQb('BLAH');
 
         $this->mockCreateQueryBuilder($qb);
@@ -138,7 +140,7 @@ class PiSlaExceptionTest extends RepositoryTestCase
         );
 
         $result = $this->sut->fetchActiveByPi($piId);
-        
+
         $this->assertEquals(['ACTIVE_DEFAULT_RESULT'], $result);
 
         // Check that query contains today's date and proper structure
@@ -150,10 +152,10 @@ class PiSlaExceptionTest extends RepositoryTestCase
         $this->assertStringContainsString('ORDER BY se.slaDescription ASC', $this->query);
     }
 
-    public function testFetchByPiWithEmptyResult()
+    public function testFetchByPiWithEmptyResult(): void
     {
         $piId = 888;
-        
+
         $qb = $this->createMockQb('BLAH');
 
         $this->mockCreateQueryBuilder($qb);
@@ -167,7 +169,7 @@ class PiSlaExceptionTest extends RepositoryTestCase
         );
 
         $result = $this->sut->fetchByPi($piId);
-        
+
         $this->assertEquals([], $result);
 
         $expectedQuery = 'BLAH ' .
@@ -179,10 +181,10 @@ class PiSlaExceptionTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchByCaseWithEmptyResult()
+    public function testFetchByCaseWithEmptyResult(): void
     {
         $caseId = 777;
-        
+
         $qb = $this->createMockQb('BLAH');
 
         $this->mockCreateQueryBuilder($qb);
@@ -196,7 +198,7 @@ class PiSlaExceptionTest extends RepositoryTestCase
         );
 
         $result = $this->sut->fetchByCase($caseId);
-        
+
         $this->assertEquals([], $result);
 
         $expectedQuery = 'BLAH ' .

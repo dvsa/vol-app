@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\View\Helper;
 
 use Mockery as m;
@@ -22,13 +24,13 @@ class RenderMarkersTest extends TestCase
         $this->sut = new \Olcs\View\Helper\RenderMarkers();
     }
 
-    public function testGetSetMarkerService()
+    public function testGetSetMarkerService(): void
     {
         $this->sut->setMarkerService('MS');
         $this->assertSame('MS', $this->sut->getMarkerService());
     }
 
-    public function testInvokeAll()
+    public function testInvokeAll(): void
     {
         $mockMarkerService = m::mock();
         $this->sut->setMarkerService($mockMarkerService);
@@ -49,7 +51,7 @@ class RenderMarkersTest extends TestCase
         );
     }
 
-    public function testInvokeSpecific()
+    public function testInvokeSpecific(): void
     {
         $mockMarkerService = m::mock();
         $this->sut->setMarkerService($mockMarkerService);

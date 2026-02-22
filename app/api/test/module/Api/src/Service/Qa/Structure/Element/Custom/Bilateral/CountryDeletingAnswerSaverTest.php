@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Bilateral;
 
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep;
@@ -59,7 +61,7 @@ class CountryDeletingAnswerSaverTest extends MockeryTestCase
         );
     }
 
-    public function testSaveAnswerIsYes()
+    public function testSaveAnswerIsYes(): void
     {
         $this->genericAnswerFetcher->shouldReceive('fetch')
             ->with($this->applicationStep, self::POST_DATA)
@@ -74,7 +76,7 @@ class CountryDeletingAnswerSaverTest extends MockeryTestCase
         );
     }
 
-    public function testSaveAnswerIsNotYes()
+    public function testSaveAnswerIsNotYes(): void
     {
         $clientReturnCode = 'RETURN_CODE';
 

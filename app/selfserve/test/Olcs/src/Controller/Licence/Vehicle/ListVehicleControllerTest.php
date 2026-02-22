@@ -29,7 +29,6 @@ use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\Mvc\Controller\Plugin\Url;
-use Laminas\Mvc\Controller\PluginManager;
 use Laminas\Router\Http\RouteMatch;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\Parameters;
@@ -42,6 +41,9 @@ use Mockery\MockInterface;
 use Olcs\Controller\Licence\Vehicle\ListVehicleController;
 use Olcs\Form\Model\Form\Vehicle\ListVehicleSearch;
 use Olcs\Table\TableEnum;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @see ListVehicleController
@@ -132,9 +134,7 @@ class ListVehicleControllerTest extends MockeryTestCase
      */
     protected $serviceLocatorMock;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionIsCallable(): void
     {
         $this->setUpSut();
@@ -142,9 +142,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'indexAction']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function postActionIsCallable(): void
     {
         $this->setUpSut();
@@ -152,9 +150,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'postAction']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionRespondsInHtmlFormatWhenNoFormatIsProvided(): void
     {
         // Setup
@@ -171,9 +167,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided(): void
     {
         // Setup
@@ -189,9 +183,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionRespondsInHtmlFormatWithLicence(): void
     {
         // Setup
@@ -214,11 +206,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertSame($licenceData, $result->getVariables()['licence'] ?? null);
     }
 
-    /**
-     * @depends indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided
-     *
-     * @test
-     */
+    #[Depends('indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided')]
+    #[Test]
     public function indexActionRespondsInHtmlFormatWithExportCurrentAndRemovedCsvAction(): void
     {
         // Setup
@@ -233,11 +222,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertArrayHasKey('exportCurrentAndRemovedCsvAction', $result->getVariables());
     }
 
-    /**
-     * @depends indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided
-     *
-     * @test
-     */
+    #[Depends('indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided')]
+    #[Test]
     public function indexActionRespondsInHtmlFormatWithExportCurrentAndRemovedCsvActionWithFormatQueryParameter(): void
     {
         // Setup
@@ -259,9 +245,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertEquals($expectedUrl, $result->getVariables()['exportCurrentAndRemovedCsvAction']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionRespondsInHtmlFormatWithExportCurrentAndRemovedCsvActionWithIncludeRemovedQueryParameter(): void
     {
         // Setup
@@ -283,9 +267,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertEquals($expectedUrl, $result->getVariables()['exportCurrentAndRemovedCsvAction']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionRespondsInHtmlFormatAndConfiguresCurrentVehicleTableQuery(): void
     {
         // Setup
@@ -312,9 +294,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionRespondsInHtmlFormatAndConfiguresCurrentVehicleTablePageWhenNoPageIsSetOnARequest(): void
     {
         // Setup
@@ -333,9 +313,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionRespondsInHtmlFormatAndConfiguresCurrentVehicleTablePageWhenEmptyPageIsSetOnARequest(): void
     {
         // Setup
@@ -357,7 +335,7 @@ class ListVehicleControllerTest extends MockeryTestCase
      *
      * @psalm-return array{'title when table total not equal to one': list{2, 'licence.vehicle.list.section.removed.header.title.plural'}, 'title when table total is one': list{1, 'licence.vehicle.list.section.removed.header.title.singular'}}
      */
-    public function setUpRemovedTableTitleData(): array
+    public static function setUpRemovedTableTitleData(): array
     {
         return [
             'title when table total not equal to one' => [2, 'licence.vehicle.list.section.removed.header.title.plural'],
@@ -365,11 +343,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider setUpRemovedTableTitleData
-     *
-     * @test
-     */
+    #[DataProvider('setUpRemovedTableTitleData')]
+    #[Test]
     public function indexActionRespondsInHtmlFormatWithCorrectRemovedVehicleTableTitle(int $total, string $expectedTranslationKey): void
     {
         // Setup
@@ -392,11 +367,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertEquals($expectedTitle, $title);
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided
-     */
+    #[Depends('indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided')]
+    #[Test]
     public function indexActionSetShowRemovedVehiclesToFalseWhenALicenceHasNoRemovedVehicles(): void
     {
         // Setup
@@ -413,11 +385,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertTrue($matcher->matches((array) $result->getVariables()), 'Expected result variables to have a key "showRemovedVehicles" with a value of false');
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided
-     */
+    #[Depends('indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided')]
+    #[Test]
     public function indexActionSetShowRemovedVehiclesToTrueWhenALicenceHasOneRemovedVehicle(): void
     {
         // Setup
@@ -434,11 +403,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertTrue($matcher->matches((array) $result->getVariables()), 'Expected result variables to have a key "showRemovedVehicles" with a value of true');
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionSetShowRemovedVehiclesToTrueWhenALicenceHasOneRemovedVehicle
-     */
+    #[Depends('indexActionSetShowRemovedVehiclesToTrueWhenALicenceHasOneRemovedVehicle')]
+    #[Test]
     public function indexActionSetsExpandRemovedVehiclesWhenQueryParamIsSetAndALicenceHasOneRemovedVehicle(): void
     {
         // Setup
@@ -455,11 +421,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertTrue($result->getVariable('showRemovedVehiclesExpanded'));
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionSetShowRemovedVehiclesToTrueWhenALicenceHasOneRemovedVehicle
-     */
+    #[Depends('indexActionSetShowRemovedVehiclesToTrueWhenALicenceHasOneRemovedVehicle')]
+    #[Test]
     public function indexActionDoesNotSetExpandRemovedVehiclesWhenQueryParamIsSetAndThereAreNoRemovedVehicles(): void
     {
         // Setup
@@ -476,9 +439,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertArrayNotHasKey('showRemovedVehiclesExpanded', $result->getVariables());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionToggleUrlIncludesFragmentWhenQueryParamIsNotSetAndALicenceHasOneRemovedVehicle(): void
     {
         // Setup
@@ -499,11 +460,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertEquals(static::A_URL, $result->getVariable('toggleRemovedAction'));
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     */
+    #[Depends('indexActionIsCallable')]
+    #[Test]
     public function indexActionToggleUrlDoesNotIncludeFragmentWhenQueryParamIsSetAndALicenceHasOneRemovedVehicle(): void
     {
         // Setup
@@ -528,7 +486,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function buttonTranslationKeyTypes(): array
+    public static function buttonTranslationKeyTypes(): array
     {
         return [
             'title' => ['title'],
@@ -536,9 +494,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionDoesNotSetToggleRemovedVehiclesActionWhenNoRemovedVehicles(): void
     {
         // Setup
@@ -554,9 +510,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertArrayNotHasKey('toggleRemovedAction', $variables);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionDoesNotSetToggleRemovedVehiclesActionWhenSearching(): void
     {
         // Setup
@@ -571,9 +525,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertArrayNotHasKey('toggleRemovedAction', $variables);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionSetToggleRemovedVehiclesActionToShowRemovedVehiclesWhenNoQueryParamIsSet(): void
     {
         // Setup
@@ -592,9 +544,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertStringNotContainsString($notExpectedString, $variables['toggleRemovedAction'] ?? '', $message);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionSetToggleRemovedVehiclesActionToHideRemovedVehiclesWhenQueryParamIsSet(): void
     {
         // Setup
@@ -612,11 +562,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertStringNotContainsString($notExpectedString, $variables['toggleRemovedAction'] ?? '', $message);
     }
 
-    /**
-     *
-     * @test
-     * @dataProvider buttonTranslationKeyTypes
-     */
+    #[DataProvider('buttonTranslationKeyTypes')]
+    #[Test]
     public function indexActionSetToggleRemovedVehiclesActionTitleWithRelevantMessageWhenQueryParamIsSetAndLicenceHasRemovedVehicles(string $type): void
     {
         // Setup
@@ -637,11 +584,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertEquals($expectedTitle, $variables[$expectedKey], sprintf('Expected result variable "%s" to have a value of "%s"', $expectedKey, $expectedTitle));
     }
 
-    /**
-     *
-     * @test
-     * @dataProvider buttonTranslationKeyTypes
-     */
+    #[DataProvider('buttonTranslationKeyTypes')]
+    #[Test]
     public function indexActionDoesNotSetToggleRemovedVehiclesActionTitleWhenQueryParamIsNotSetAndLicenceDoesNotHaveRemovedVehicles(string $type): void
     {
         // Setup
@@ -660,13 +604,23 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertArrayNotHasKey($expectedKey, $variables, sprintf('Expected result variables to not have a key "%s"', $expectedKey));
     }
 
-    /**
-     * @return array
-     */
-    public function invalidInputDataProvider(): array
+    public static function invalidInputDataNoMessageProvider(): array
     {
         return [
-            // $inputSetName => [$input, $expectedValidationErrorMessage]
+            'sort-r query param set to invalid column' => [['sort-r' => 'foo']],
+            'sort-r query param set to empty' => [['sort-r' => '']],
+            'sort-c query param set to invalid column' => [['sort-c' => 'bar']],
+            'sort-c query param set to empty' => [['sort-c' => '']],
+            'order-r is invalid' => [['order-r' => 'foo']],
+            'order-r is empty' => [['order-r' => '']],
+            'order-c is invalid' => [['order-c' => 'foo']],
+            'order-c is empty' => [['order-c' => '']],
+        ];
+    }
+
+    public static function invalidInputDataProvider(): array
+    {
+        return [
             'sort-r query param set to invalid column' => [['sort-r' => 'foo'], 'table.validation.error.sort.in-array'],
             'sort-r query param set to empty' => [['sort-r' => ''], 'table.validation.error.sort.in-array'],
             'sort-c query param set to invalid column' => [['sort-c' => 'bar'], 'table.validation.error.sort.in-array'],
@@ -681,10 +635,9 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function validInputDataProvider(): array
+    public static function validInputDataProvider(): array
     {
         return [
-            // $inputSetName => [$input, $expectedValidationErrorMessage]
             'sort removed vehicles table by "v.vrm" column' => [['sort-r' => 'v.vrm']],
             'sort removed vehicles table by "specifiedDate" column' => [['sort-r' => 'specifiedDate']],
             'sort removed vehicles table by "removalDate" column' => [['sort-r' => 'removalDate']],
@@ -697,13 +650,9 @@ class ListVehicleControllerTest extends MockeryTestCase
         ];
     }
 
-    /**
-     *
-     * @depends indexActionIsCallable
-     *
-     * @dataProvider invalidInputDataProvider
-     * @test
-     */
+    #[Depends('indexActionIsCallable')]
+    #[DataProvider('invalidInputDataNoMessageProvider')]
+    #[Test]
     public function indexActionValidatesInputWhenInvalidReturnsRedirectResponse(array $input): void
     {
         // Setup
@@ -722,14 +671,9 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertSame($expectedResponse, $response);
     }
 
-    /**
-     *
-     * @depends indexActionIsCallable
-     *
-     * @dataProvider invalidInputDataProvider
-     *
-     * @test
-     */
+    #[Depends('indexActionIsCallable')]
+    #[DataProvider('invalidInputDataProvider')]
+    #[Test]
     public function indexActionValidatesInputWhenInvalidFlashesValidationMessages(array $input, string $expectedFlashMessage): void
     {
         // Setup
@@ -745,14 +689,9 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $routeMatch);
     }
 
-    /**
-     *
-     * @depends indexActionIsCallable
-     *
-     * @dataProvider invalidInputDataProvider
-     *
-     * @test
-     */
+    #[Depends('indexActionIsCallable')]
+    #[DataProvider('invalidInputDataProvider')]
+    #[Test]
     public function indexActionValidatesInputWhenInvalidTranslatesValidationMessages(array $input, string $expectedFlashMessage): void
     {
         // Setup
@@ -769,13 +708,9 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $routeMatch);
     }
 
-    /**
-     *
-     * @depends indexActionIsCallable
-     *
-     * @dataProvider validInputDataProvider
-     * @test
-     */
+    #[Depends('indexActionIsCallable')]
+    #[DataProvider('validInputDataProvider')]
+    #[Test]
     public function indexActionValidatesInputWhenValidReturnsViewModel(array $input): void
     {
         // Setup
@@ -791,9 +726,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $response);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionReturnsRemovedVehiclesTableExcludingActiveVehicles(): void
     {
         // Setup
@@ -808,9 +741,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $routeMatch);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionReturnsRemovedVehiclesTableSortedByDefault(): void
     {
         // Setup
@@ -825,9 +756,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $routeMatch);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionReturnsRemovedVehiclesTableOrderedByDefault(): void
     {
         // Setup
@@ -842,9 +771,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $routeMatch);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionReturnsRemovedVehiclesTableLimitsTo10ByDefault(): void
     {
         // Setup
@@ -859,9 +786,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $routeMatch);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionReturnsRemovedVehiclesTableSetsPageToFirstPageByDefault(): void
     {
         // Setup
@@ -876,9 +801,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $routeMatch);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function postActionRespondsInHtmlFormatSetsUserOCRSOptInPreferenceCheckboxValidValuesRunsCommand(): void
     {
         // Setup
@@ -900,9 +823,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->sut->postAction($request, $routeMatch);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function postActionRespondsInHtmlFormatSetsUserOCRSOptInPreferenceCheckboxInvalidValuesReturnsIndexActionWithErrors(): void
     {
         // Setup
@@ -922,9 +843,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionHidesRemovedVehiclesWhenSearchingAndLicenceHasRemovedVehicles(): void
     {
         // Setup
@@ -1099,7 +1018,7 @@ class ListVehicleControllerTest extends MockeryTestCase
      * @param null $params
      * @return MockInterface
      */
-    protected function expectTableToBePrepared(ServiceLocatorInterface $serviceLocator, string $tableName, $data = null, $params = null): MockInterface
+    protected function expectTableToBePrepared(ServiceLocatorInterface $serviceLocator, string $tableName, mixed $data = null, mixed $params = null): MockInterface
     {
         $any = IsAnything::anything();
         $tableBuilder = $this->setUpTableBuilder();
@@ -1118,7 +1037,7 @@ class ListVehicleControllerTest extends MockeryTestCase
      * @param array|null $input
      * @return Request
      */
-    protected function setUpRequest(string $url, array $input = null)
+    protected function setUpRequest(string $url, ?array $input = null): Request
     {
         $uri = m::mock(Http::class);
         $uri->shouldIgnoreMissing($uri);

@@ -9,21 +9,8 @@ namespace Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces;
  */
 class GenerationResult
 {
-    private array $entities;
-    private array $errors;
-    private array $warnings;
-    private float $duration;
-
-    public function __construct(
-        array $entities = [],
-        array $errors = [],
-        array $warnings = [],
-        float $duration = 0.0
-    ) {
-        $this->entities = $entities;
-        $this->errors = $errors;
-        $this->warnings = $warnings;
-        $this->duration = $duration;
+    public function __construct(private array $entities = [], private array $errors = [], private array $warnings = [], private float $duration = 0.0)
+    {
     }
 
     public function getEntities(): array

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Continuation;
 
 use Doctrine\ORM\Query;
@@ -32,7 +34,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ContinuationDetailEntity::STATUS_PREPARED,
@@ -51,7 +54,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $month = 1;
         $year = 2015;
@@ -117,7 +120,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($result->toArray(), $expected);
     }
 
-    public function testContinuationExists()
+    public function testContinuationExists(): void
     {
         $month = 1;
         $year = 2015;
@@ -163,7 +166,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($result->toArray(), $expected);
     }
 
-    public function testNoLicencesFound()
+    public function testNoLicencesFound(): void
     {
         $month = 1;
         $year = 2015;

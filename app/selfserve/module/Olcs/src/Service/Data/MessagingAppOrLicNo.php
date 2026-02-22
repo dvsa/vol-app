@@ -39,6 +39,7 @@ class MessagingAppOrLicNo extends AbstractListDataService
         return $this->getData('licapp');
     }
 
+    #[\Override]
     public function formatDataForGroups(array $data): array
     {
         $optionData = [

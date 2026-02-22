@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Application\View\Model;
 
 use Common\RefData;
@@ -78,9 +80,7 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
         $this->assertEquals(1, $viewModel->getVariable('sectionNumber'));
     }
 
-    /**
-     * @dataProvider dpTestViewForPeople
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestViewForPeople')]
     public function testViewForPeople($data): void
     {
         $sectionDetails = ['enabled' => true];
@@ -97,7 +97,7 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
      *
      * @psalm-return array{'org type from licence': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1, applicationCompletion: array{peopleStatus: 1}, licence: array{organisation: array{type: array{id: 'org_t_llp'}}}}}, 'org type from organisation': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1, applicationCompletion: array{peopleStatus: 1}, organisation: array{type: array{id: 'org_t_llp'}}}}}
      */
-    public function dpTestViewForPeople(): array
+    public static function dpTestViewForPeople(): array
     {
         return [
             'org type from licence' => [
@@ -135,9 +135,7 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestViewForOperatingCentres
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestViewForOperatingCentres')]
     public function testViewForOperatingCentres($data, $expected): void
     {
         $sectionDetails = ['enabled' => true];
@@ -154,7 +152,7 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
      *
      * @psalm-return array{'vehicleType not set': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1, applicationCompletion: array{operatingCentresStatus: 1}}, expected: 'section.name.operating_centres'}, 'vehicleType set to LGV': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1, applicationCompletion: array{operatingCentresStatus: 1}, vehicleType: array{id: 'app_veh_type_lgv'}}, expected: 'section.name.operating_centres.lgv'}, 'vehicleType set to mixed': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1, applicationCompletion: array{operatingCentresStatus: 1}, vehicleType: array{id: 'app_veh_type_mixed'}}, expected: 'section.name.operating_centres'}}
      */
-    public function dpTestViewForOperatingCentres(): array
+    public static function dpTestViewForOperatingCentres(): array
     {
         return [
             'vehicleType not set' => [

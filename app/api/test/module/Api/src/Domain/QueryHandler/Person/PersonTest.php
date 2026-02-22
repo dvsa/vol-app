@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Person;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Person\Person as QueryHandler;
@@ -22,7 +24,7 @@ class PersonTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 111]);
 

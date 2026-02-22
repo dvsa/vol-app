@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Vehicles Psv Status Test
  *
@@ -35,7 +37,8 @@ class UpdateVehiclesPsvStatusTest extends AbstractUpdateStatusTestCase
         parent::setUp();
     }
 
-    public function initReferences()
+    #[\Override]
+    public function initReferences(): void
     {
         $this->refData = [
             Licence::LICENCE_TYPE_STANDARD_NATIONAL,
@@ -45,7 +48,7 @@ class UpdateVehiclesPsvStatusTest extends AbstractUpdateStatusTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithChange()
+    public function testHandleCommandWithChange(): void
     {
         $this->applicationCompletion->setVehiclesPsvStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -54,7 +57,7 @@ class UpdateVehiclesPsvStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
-    public function testHandleCommandWithoutChange()
+    public function testHandleCommandWithoutChange(): void
     {
         $this->applicationCompletion->setVehiclesPsvStatus(ApplicationCompletionEntity::STATUS_COMPLETE);
 
@@ -63,7 +66,7 @@ class UpdateVehiclesPsvStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusUnchanged(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
-    public function testHandleCommandWithoutVehicles()
+    public function testHandleCommandWithoutVehicles(): void
     {
         $this->applicationCompletion->setVehiclesPsvStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -72,14 +75,14 @@ class UpdateVehiclesPsvStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandTotAuthVehiclesNotSet()
+    public function testHandleCommandTotAuthVehiclesNotSet(): void
     {
         $this->applicationCompletion->setVehiclesPsvStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandTooMany()
+    public function testHandleCommandTooMany(): void
     {
         $this->applicationCompletion->setVehiclesPsvStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -101,7 +104,7 @@ class UpdateVehiclesPsvStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->applicationCompletion->setVehiclesPsvStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -123,7 +126,7 @@ class UpdateVehiclesPsvStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
-    public function testHandleCommandRestricted()
+    public function testHandleCommandRestricted(): void
     {
         $this->applicationCompletion->setVehiclesPsvStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 

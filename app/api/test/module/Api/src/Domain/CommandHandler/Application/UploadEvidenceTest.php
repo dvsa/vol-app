@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Application\UploadEvidence;
@@ -37,7 +39,8 @@ class UploadEvidenceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->categoryReferences = [
             CategoryEntity::CATEGORY_APPLICATION => m::mock(CategoryEntity::class),
@@ -58,7 +61,7 @@ class UploadEvidenceTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(['id' => 111, 'financialEvidence' => true,  'supportingEvidence' => false]);
 
@@ -131,7 +134,7 @@ class UploadEvidenceTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandFinancialEvidenceTaskExists()
+    public function testHandleCommandFinancialEvidenceTaskExists(): void
     {
         $command = Cmd::create(['id' => 111, 'financialEvidence' => true, 'supportingEvidence' => false]);
 
@@ -181,7 +184,7 @@ class UploadEvidenceTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandNoFinancialEvidenceDocs()
+    public function testHandleCommandNoFinancialEvidenceDocs(): void
     {
         $command = Cmd::create(['id' => 111, 'financialEvidence' => true, 'supportingEvidence' => false]);
 
@@ -213,7 +216,7 @@ class UploadEvidenceTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testCommandHandlerWithOc()
+    public function testCommandHandlerWithOc(): void
     {
         $command = Cmd::create(
             [
@@ -323,7 +326,7 @@ class UploadEvidenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $this->sut->handleCommand($command)->toArray());
     }
 
-    public function testCommandHandlerWithOcTaskExists()
+    public function testCommandHandlerWithOcTaskExists(): void
     {
         $command = Cmd::create(
             [
@@ -412,7 +415,7 @@ class UploadEvidenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $this->sut->handleCommand($command)->toArray());
     }
 
-    public function testCommandHandlerNoOcException()
+    public function testCommandHandlerNoOcException(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -453,7 +456,7 @@ class UploadEvidenceTest extends AbstractCommandHandlerTestCase
 
         $this->sut->handleCommand($command)->toArray();
     }
-    public function testHandleCommandWithSupportingDocs()
+    public function testHandleCommandWithSupportingDocs(): void
     {
         $command = Cmd::create(['id' => 10, 'financialEvidence' => false,'supportingEvidence' => true, ]);
 

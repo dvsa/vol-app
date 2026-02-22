@@ -28,10 +28,8 @@ class UserListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider handleQueryProvider
-     */
-    public function testHandleQuery($isInternal, $canAccessAll, $queryData): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleQueryProvider')]
+    public function testHandleQuery(mixed $isInternal, mixed $canAccessAll, mixed $queryData): void
     {
         $userData = [
             'isInternal' => $isInternal,
@@ -49,7 +47,6 @@ class UserListTest extends QueryHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($user, User::USER_TYPE_OPERATOR);
 
         $this->repoMap['User']->shouldReceive('fetchList')->with($query, \Doctrine\ORM\Query::HYDRATE_OBJECT)
@@ -62,7 +59,7 @@ class UserListTest extends QueryHandlerTestCase
         $this->assertSame('COUNT', $result['count']);
     }
 
-    public function handleQueryProvider(): array
+    public static function handleQueryProvider(): array
     {
         return [
             'not internal and does not have full access' => [false, false, ['QUERY']],

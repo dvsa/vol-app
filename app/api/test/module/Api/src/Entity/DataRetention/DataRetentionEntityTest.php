@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\DataRetention;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -20,7 +22,7 @@ class DataRetentionEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testMarkForDelete()
+    public function testMarkForDelete(): void
     {
         $dataRetentionEntity = new Entity();
         $dataRetentionEntity->setActionConfirmation(false);
@@ -35,7 +37,7 @@ class DataRetentionEntityTest extends EntityTester
         );
     }
 
-    public function testMarkForReview()
+    public function testMarkForReview(): void
     {
         $dataRetentionEntity = new Entity();
         $dataRetentionEntity->setActionConfirmation(true);
@@ -51,7 +53,7 @@ class DataRetentionEntityTest extends EntityTester
         );
     }
 
-    public function testMarkForDelay()
+    public function testMarkForDelay(): void
     {
         $dateString = '2060-01-01';
         $date = new \DateTime($dateString);

@@ -58,6 +58,7 @@ final class Precheck extends AbstractCommandHandler
 
         return $systemParameterRepo->getDataRetentionDeleteLimit();
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

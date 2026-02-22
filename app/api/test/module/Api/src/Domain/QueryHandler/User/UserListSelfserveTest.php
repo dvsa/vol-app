@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * UserListSelfserveTest
  */
@@ -37,14 +39,13 @@ class UserListSelfserveTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function commonHandleQueryTest()
+    public function commonHandleQueryTest(): void
     {
         $user = m::mock(\Dvsa\Olcs\Api\Entity\User\User::class)->makePartial();
         $user->setId(74);
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($user, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_PARTNER);
 
         $this->repoMap['User']->shouldReceive('fetchList')->andReturn([$user]);
@@ -58,7 +59,7 @@ class UserListSelfserveTest extends QueryHandlerTestCase
         $this->assertSame('COUNT', $result['count']);
     }
 
-    public function testHandleQueryForPartner()
+    public function testHandleQueryForPartner(): void
     {
         /** @var ContactDetailsEntity $partnerContactDetails */
         $partnerContactDetails = m::mock(ContactDetailsEntity::class)->makePartial();
@@ -72,7 +73,6 @@ class UserListSelfserveTest extends QueryHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($currentUser, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_PARTNER);
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')
@@ -81,7 +81,7 @@ class UserListSelfserveTest extends QueryHandlerTestCase
         $this->commonHandleQueryTest();
     }
 
-    public function testHandleQueryForLocalAuthority()
+    public function testHandleQueryForLocalAuthority(): void
     {
         /** @var LocalAuthorityEntity $localAuthority */
         $localAuthority = m::mock(LocalAuthorityEntity::class)->makePartial();
@@ -95,7 +95,6 @@ class UserListSelfserveTest extends QueryHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($currentUser, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_LOCAL_AUTHORITY);
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')
@@ -104,7 +103,7 @@ class UserListSelfserveTest extends QueryHandlerTestCase
         $this->commonHandleQueryTest();
     }
 
-    public function testHandleQueryForOperator()
+    public function testHandleQueryForOperator(): void
     {
         /** @var OrganisationEntity $organisation */
         $organisation = m::mock(OrganisationEntity::class)->makePartial();
@@ -126,7 +125,7 @@ class UserListSelfserveTest extends QueryHandlerTestCase
         $this->commonHandleQueryTest();
     }
 
-    public function testHandleQueryForTm()
+    public function testHandleQueryForTm(): void
     {
         /** @var OrganisationEntity $organisation */
         $organisation = m::mock(OrganisationEntity::class)->makePartial();
@@ -152,7 +151,7 @@ class UserListSelfserveTest extends QueryHandlerTestCase
         $this->commonHandleQueryTest();
     }
 
-    public function testHandleQueryThrowsIncorrectUserTypeException()
+    public function testHandleQueryThrowsIncorrectUserTypeException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -166,7 +165,6 @@ class UserListSelfserveTest extends QueryHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($currentUser, 'wrong_user_type');
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')
@@ -175,7 +173,7 @@ class UserListSelfserveTest extends QueryHandlerTestCase
         $this->commonHandleQueryTest();
     }
 
-    public function testHandleQueryThrowsIncorrectFilterException()
+    public function testHandleQueryThrowsIncorrectFilterException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -191,7 +189,6 @@ class UserListSelfserveTest extends QueryHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($currentUser, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_PARTNER);
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')

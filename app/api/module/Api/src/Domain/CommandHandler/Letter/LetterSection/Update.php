@@ -17,7 +17,7 @@ final class Update extends AbstractCommandHandler
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var Cmd $command */
-        
+
         /** @var \Dvsa\Olcs\Api\Entity\Letter\LetterSection $letterSection */
         $letterSection = $this->getRepo()->fetchUsingId($command);
 
@@ -43,7 +43,7 @@ final class Update extends AbstractCommandHandler
 
         $this->result->addId('letterSection', $letterSection->getId());
         $this->result->addMessage("Letter section '{$letterSection->getName()}' updated");
-        
+
         return $this->result;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Availability;
 
 use DateTime;
@@ -67,7 +69,7 @@ class WindowAvailabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    public function testHasAvailabilityTrue()
+    public function testHasAvailabilityTrue(): void
     {
         $this->stockAvailabilityChecker->shouldReceive('hasAvailability')
             ->with($this->irhpPermitStock1Id)
@@ -79,7 +81,7 @@ class WindowAvailabilityCheckerTest extends MockeryTestCase
         $this->assertTrue($this->windowAvailabilityChecker->hasAvailability($this->now));
     }
 
-    public function testAvailabilityFalse()
+    public function testAvailabilityFalse(): void
     {
         $this->stockAvailabilityChecker->shouldReceive('hasAvailability')
             ->with($this->irhpPermitStock1Id)

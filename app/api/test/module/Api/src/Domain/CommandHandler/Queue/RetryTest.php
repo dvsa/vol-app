@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Queue Retry Command Handler Test
  *
@@ -38,7 +40,7 @@ class RetryTest extends AbstractCommandHandlerTestCase
     /**
      * Test handleCommand method
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $item = new QueueEntity();
         $command = Cmd::create(['item' => $item, 'retryAfter' => 60, 'lastError' => 'last error']);

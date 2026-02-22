@@ -24,7 +24,7 @@ use Dvsa\Olcs\Transfer\Command\Application\UpdatePsvVehicles as Cmd;
  */
 final class UpdatePsvVehicles extends AbstractCommandHandler implements TransactionedInterface
 {
-    public const ERR_PSV_VE_NO_ROWS = 'ERR_PSV_VE_NO_ROWS';
+    public const string ERR_PSV_VE_NO_ROWS = 'ERR_PSV_VE_NO_ROWS';
 
     protected $repoServiceName = 'Application';
 

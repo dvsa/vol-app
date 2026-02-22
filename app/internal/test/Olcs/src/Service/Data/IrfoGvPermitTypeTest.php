@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -7,11 +9,8 @@ use Olcs\Service\Data\IrfoGvPermitType;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermitTypeList as Qry;
 use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/**
- * Class IrfoGvPermitType Test
- * @package CommonTest\Service
- */
 class IrfoGvPermitTypeTest extends AbstractDataServiceTestCase
 {
     /** @var IrfoGvPermitType */
@@ -24,35 +23,28 @@ class IrfoGvPermitTypeTest extends AbstractDataServiceTestCase
         $this->sut = new IrfoGvPermitType($this->abstractDataServiceServices);
     }
 
-    public function testFormatData()
+    public function testFormatData(): void
     {
-        $source = $this->getSingleSource();
-        $expected = $this->getSingleExpected();
-
-        $this->assertEquals($expected, $this->sut->formatData($source));
+        $this->assertEquals(self::SINGLE_EXPECTED, $this->sut->formatData(self::SINGLE_SOURCE));
     }
 
-    /**
-     * @dataProvider provideFetchListOptions
-     * @param $input
-     * @param $expected
-     */
-    public function testFetchListOptions($input, $expected)
+    #[DataProvider('provideFetchListOptions')]
+    public function testFetchListOptions(mixed $input, mixed $expected): void
     {
         $this->sut->setData('IrfoGvPermitType', $input);
 
         $this->assertEquals($expected, $this->sut->fetchListOptions(''));
     }
 
-    public function provideFetchListOptions()
+    public static function provideFetchListOptions(): array
     {
         return [
-            [$this->getSingleSource(), $this->getSingleExpected()],
+            [self::SINGLE_SOURCE, self::SINGLE_EXPECTED],
             [false, []]
         ];
     }
 
-    public function testFetchListData()
+    public function testFetchListData(): void
     {
         $results = ['results' => 'results'];
 
@@ -76,7 +68,7 @@ class IrfoGvPermitTypeTest extends AbstractDataServiceTestCase
         $this->assertEquals($results['results'], $this->sut->fetchListData());  //ensure data is cached
     }
 
-    public function testFetchLicenceDataWithException()
+    public function testFetchLicenceDataWithException(): void
     {
         $this->expectException(DataServiceException::class);
 
@@ -94,31 +86,5 @@ class IrfoGvPermitTypeTest extends AbstractDataServiceTestCase
         $this->mockHandleQuery($mockResponse);
 
         $this->sut->fetchListData();
-    }
-
-    /**
-     * @return array
-     */
-    protected function getSingleExpected()
-    {
-        $expected = [
-            'val-1' => 'Value 1',
-            'val-2' => 'Value 2',
-            'val-3' => 'Value 3',
-        ];
-        return $expected;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getSingleSource()
-    {
-        $source = [
-            ['id' => 'val-1', 'description' => 'Value 1'],
-            ['id' => 'val-2', 'description' => 'Value 2'],
-            ['id' => 'val-3', 'description' => 'Value 3'],
-        ];
-        return $source;
     }
 }

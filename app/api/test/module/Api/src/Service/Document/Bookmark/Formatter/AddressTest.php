@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark\Formatter;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\Formatter\Address;
@@ -11,10 +13,8 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Formatter\Address;
  */
 class AddressTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider addressProvider
-     */
-    public function testFormat($input, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('addressProvider')]
+    public function testFormat(mixed $input, mixed $expected): void
     {
         $this->assertEquals(
             $expected,
@@ -22,7 +22,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function addressProvider()
+    public static function addressProvider(): array
     {
         return [
             [

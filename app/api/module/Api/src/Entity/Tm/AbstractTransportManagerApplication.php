@@ -45,7 +45,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTransportManagerApplication implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTransportManagerApplication implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -96,7 +96,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     protected $tmType;
 
     /**
-     * type of signature used from ref data one of sig_physical_signature	the application is signed with a physical signature sig_digital_signature	the application is signed digitally sig_signature_not_required
+     * type of signature used from ref data one of sig_physical_signature   the application is signed with a physical signature sig_digital_signature   the application is signed digitally sig_signature_not_required
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
@@ -116,7 +116,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     protected $tmDigitalSignature;
 
     /**
-     * type of signature used from ref data one of sig_physical_signature	the application is signed with a physical signature sig_digital_signature	the application is signed digitally sig_signature_not_required
+     * type of signature used from ref data one of sig_physical_signature   the application is signed with a physical signature sig_digital_signature   the application is signed digitally sig_signature_not_required
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *

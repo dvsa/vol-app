@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Metadata;
 
 use Dvsa\Olcs\Api\Entity\ContactDetails\Country;
@@ -65,10 +67,8 @@ class CountryGeneratorTest extends MockeryTestCase
         $this->countryGenerator = new CountryGenerator($this->periodArrayGenerator);
     }
 
-    /**
-     * @dataProvider dpGenerate
-     */
-    public function testGenerate($isMorocco, $behaviour, $periodLabel)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
+    public function testGenerate(mixed $isMorocco, mixed $behaviour, mixed $periodLabel): void
     {
         $selectedPeriodId = 42;
 
@@ -105,10 +105,8 @@ class CountryGeneratorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpGenerate
-     */
-    public function testGenerateNoPeriodSelected($isMorocco, $behaviour, $periodLabel)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
+    public function testGenerateNoPeriodSelected(mixed $isMorocco, mixed $behaviour, mixed $periodLabel): void
     {
         $this->irhpApplication->shouldReceive('getIrhpPermitApplicationByStockCountryId')
             ->with($this->countryId)
@@ -138,7 +136,7 @@ class CountryGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate(): array
     {
         return [
             [false, Behaviour::STANDARD, 'Select period'],

@@ -42,6 +42,7 @@ class PublicationController extends AbstractInternalController implements
         return $view;
     }
 
+    #[\Override]
     public function editAction()
     {
         $publicationLink = $this->getPublicationLink();

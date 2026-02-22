@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Sla Test
  */
@@ -30,7 +32,8 @@ class UpdateSlaTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             SlaEntity::VERBAL_DECISION_ONLY,
@@ -42,11 +45,10 @@ class UpdateSlaTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider writtenOutcomeProvider
-     *
      * @param string|null $writtenOutcome
      */
-    public function testHandleCommand($writtenOutcome)
+    #[\PHPUnit\Framework\Attributes\DataProvider('writtenOutcomeProvider')]
+    public function testHandleCommand(mixed $writtenOutcome): void
     {
         $id = 11;
         $version = 22;
@@ -87,7 +89,7 @@ class UpdateSlaTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function writtenOutcomeProvider()
+    public static function writtenOutcomeProvider(): array
     {
         return [
             [SlaEntity::VERBAL_DECISION_ONLY],

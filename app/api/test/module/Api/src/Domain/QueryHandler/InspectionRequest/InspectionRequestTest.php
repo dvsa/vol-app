@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Inspection Request Test
  *
@@ -30,7 +32,7 @@ class InspectionRequestTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $bundle = [
             'reportType',

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Si;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -24,7 +26,7 @@ class ErruRequestFailureEntityTest extends EntityTester
     /**
      * Tests creation of erru request failures
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $document = m::mock(Document::class);
 
@@ -44,10 +46,9 @@ class ErruRequestFailureEntityTest extends EntityTester
     /**
      * Makes sure if the input field is a string then the data is ignored
      */
-    public function testCreateWithStringInput()
+    public function testCreateWithStringInput(): void
     {
         $document = m::mock(Document::class);
-
 
         $errors = ['foo' => 'bar'];
         $errorsJson = json_encode($errors);

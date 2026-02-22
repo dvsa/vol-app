@@ -302,15 +302,19 @@ class LetterInstance extends AbstractLetterInstance
     public function hasAllRequiredContent()
     {
         foreach ($this->letterInstanceSections as $section) {
-            if ($section->getLetterSectionVersion()->getRequiresInput() &&
-                empty($section->getEditedContent())) {
+            if (
+                $section->getLetterSectionVersion()->getRequiresInput() &&
+                empty($section->getEditedContent())
+            ) {
                 return false;
             }
         }
 
         foreach ($this->letterInstanceIssues as $issue) {
-            if ($issue->getLetterIssueVersion()->getRequiresInput() &&
-                empty($issue->getEditedContent())) {
+            if (
+                $issue->getLetterIssueVersion()->getRequiresInput() &&
+                empty($issue->getEditedContent())
+            ) {
                 return false;
             }
         }

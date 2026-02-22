@@ -17,6 +17,7 @@ class UserWithName extends User
      *
      * @return array
      */
+    #[\Override]
     public function fetchListOptions($context, $useGroups = false)
     {
         $data = $this->fetchUserListData();

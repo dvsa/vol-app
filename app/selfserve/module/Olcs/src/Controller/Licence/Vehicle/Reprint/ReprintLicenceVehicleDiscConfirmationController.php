@@ -56,6 +56,7 @@ class ReprintLicenceVehicleDiscConfirmationController extends AbstractVehicleCon
      * @return mixed
      * @throws Exception
      */
+    #[\Override]
     public function indexAction()
     {
         if (!$this->session->hasVrms()) {

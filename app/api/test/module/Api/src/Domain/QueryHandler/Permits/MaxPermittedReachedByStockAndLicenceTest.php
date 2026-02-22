@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
@@ -47,7 +49,7 @@ class MaxPermittedReachedByStockAndLicenceTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQueryNotEcmtAnnual()
+    public function testHandleQueryNotEcmtAnnual(): void
     {
         $this->irhpPermitType->shouldReceive('isEcmtAnnual')
             ->withNoArgs()
@@ -73,10 +75,8 @@ class MaxPermittedReachedByStockAndLicenceTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    /**
-     * @dataProvider dpHandleQueryEcmtAnnual
-     */
-    public function testHandleQueryEcmtAnnual($maxPermittedCount, $expectedMaxPermittedReached)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQueryEcmtAnnual')]
+    public function testHandleQueryEcmtAnnual(mixed $maxPermittedCount, mixed $expectedMaxPermittedReached): void
     {
         $this->irhpPermitType->shouldReceive('isEcmtAnnual')
             ->withNoArgs()
@@ -112,7 +112,7 @@ class MaxPermittedReachedByStockAndLicenceTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function dpHandleQueryEcmtAnnual()
+    public static function dpHandleQueryEcmtAnnual(): array
     {
         return [
             [2, false],

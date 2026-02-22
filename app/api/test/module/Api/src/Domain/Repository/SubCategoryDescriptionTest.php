@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 /**
@@ -14,7 +16,7 @@ class SubCategoryDescriptionTest extends RepositoryTestCase
         $this->setUpSut(\Dvsa\Olcs\Api\Domain\Repository\SubCategoryDescription::class, true);
     }
 
-    public function testApplyListFiltersNoFilters()
+    public function testApplyListFiltersNoFilters(): void
     {
         $qb = $this->createMockQb('QUERY');
 
@@ -38,7 +40,7 @@ class SubCategoryDescriptionTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testApplyListFiltersAllN()
+    public function testApplyListFiltersAllN(): void
     {
         $qb = $this->createMockQb('QUERY');
 

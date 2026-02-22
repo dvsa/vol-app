@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\QueryHandler\CompaniesHouse;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,7 +21,7 @@ class OrganisationsTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create([]);
 

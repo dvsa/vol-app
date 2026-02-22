@@ -12,6 +12,7 @@ abstract class AbstractEcmtShortTermEmailHandler extends AbstractEmailHandler
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getTranslateToWelsh($recordObject)
     {
         return $recordObject->getLicence()->getTranslateToWelsh();

@@ -19,7 +19,7 @@ class ApplicationOperatingCentreBuilder implements BuilderInterface
     /**
      * @param int|null $id
      */
-    public function __construct(Application $application, int $id = null)
+    public function __construct(Application $application, ?int $id = null)
     {
         $oc = new OperatingCentre();
         $this->instance = new ApplicationOperatingCentre($application, $oc);
@@ -59,7 +59,7 @@ class ApplicationOperatingCentreBuilder implements BuilderInterface
      * @param int|null $id
      * @return self
      */
-    public static function forApplication(Application $application, int $id = null): self
+    public static function forApplication(Application $application, ?int $id = null): self
     {
         return new static($application, $id);
     }

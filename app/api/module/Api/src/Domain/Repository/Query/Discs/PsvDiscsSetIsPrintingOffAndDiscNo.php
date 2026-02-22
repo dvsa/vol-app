@@ -31,6 +31,7 @@ class PsvDiscsSetIsPrintingOffAndDiscNo extends AbstractRawQuery
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getParams()
     {
         $today = new DateTime();
@@ -43,6 +44,7 @@ class PsvDiscsSetIsPrintingOffAndDiscNo extends AbstractRawQuery
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getParamTypes()
     {
         return [

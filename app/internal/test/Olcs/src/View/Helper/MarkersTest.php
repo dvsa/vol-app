@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\View\Helper;
 
 use Olcs\View\Helper\Markers;
@@ -14,11 +16,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 class MarkersTest extends MockeryTestCase
 {
     /**
-     * @dataProvider provideInvoke
      * @param $input
      * @param $expected
      */
-    public function testInvoke($input, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideInvoke')]
+    public function testInvoke(mixed $input, mixed $expected): void
     {
         $sut = new Markers();
 
@@ -42,7 +44,7 @@ class MarkersTest extends MockeryTestCase
         }
     }
 
-    public function provideInvoke()
+    public static function provideInvoke(): array
     {
         return [
             [

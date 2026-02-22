@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\System;
 
 use Dvsa\Olcs\Api\Entity\System\Language;
@@ -22,7 +24,7 @@ class TranslationKeyTextEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testCreateUpdate()
+    public function testCreateUpdate(): void
     {
         $translationKey = m::mock(TranslationKey::class);
         $language = m::mock(Language::class);

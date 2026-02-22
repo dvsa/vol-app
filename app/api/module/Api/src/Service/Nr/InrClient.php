@@ -15,7 +15,7 @@ class InrClient implements InrClientInterface
     {
     }
 
-    private ?int $lastStatusCode;
+    private ?int $lastStatusCode = null;
 
     public function getLastStatusCode(): int
     {

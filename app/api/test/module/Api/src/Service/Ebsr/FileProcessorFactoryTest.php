@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr;
 
 use Dvsa\Olcs\Api\Service\Ebsr\FileProcessor;
@@ -16,7 +18,7 @@ use Psr\Container\ContainerInterface;
  */
 class FileProcessorFactoryTest extends TestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockUploader = m::mock(FileUploaderInterface::class);
 

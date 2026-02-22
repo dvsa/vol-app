@@ -44,6 +44,7 @@ class LicenceOperatingCentres extends CommonLicenceOperatingCentres
      *
      * @return void
      */
+    #[\Override]
     protected function alterForm(Form $form, array $params)
     {
         parent::alterForm($form, $params);

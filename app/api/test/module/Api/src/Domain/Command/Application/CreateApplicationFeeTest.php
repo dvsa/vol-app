@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Command\Application;
 
 use Dvsa\Olcs\Api\Domain\Command\Application\CreateApplicationFee;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\CreateApplicationFee;
  */
 class CreateApplicationFeeTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = CreateApplicationFee::create(
             [

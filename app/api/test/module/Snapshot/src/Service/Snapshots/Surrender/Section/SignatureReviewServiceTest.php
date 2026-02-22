@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\Surrender\Section;
 
 use Dvsa\Olcs\Api\Entity\DigitalSignature;
@@ -35,7 +37,7 @@ class SignatureReviewServiceTest extends MockeryTestCase
         $this->sut = new SignatureReviewService($abstractReviewServiceServices);
     }
 
-    public function testPhysicalSignature()
+    public function testPhysicalSignature(): void
     {
         $surrender = $this->mockSurrender(RefData::SIG_PHYSICAL_SIGNATURE);
 
@@ -59,7 +61,7 @@ class SignatureReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $markup);
     }
 
-    public function testDigitalSignature()
+    public function testDigitalSignature(): void
     {
         $date = new \DateTime("2019-01-29");
         $signature = m::mock(DigitalSignature::class);
@@ -80,7 +82,7 @@ class SignatureReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $markup);
     }
 
-    protected function mockSurrender($signatureType)
+    protected function mockSurrender(mixed $signatureType): mixed
     {
         $refData = m::mock(RefData::class);
         $refData->shouldReceive('getId')->andReturn($signatureType);

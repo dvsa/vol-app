@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Next Publication Test
  */
@@ -29,14 +31,15 @@ class CreateNextPublicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [PublicationEntity::PUB_NEW_STATUS];
 
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 4;
         $trafficAreaMock = m::mock(TrafficAreaEntity::class);

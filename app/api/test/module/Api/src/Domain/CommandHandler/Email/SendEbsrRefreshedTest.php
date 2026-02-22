@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Send Ebsr Refreshed Email Test
  *
@@ -14,13 +16,13 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrRefreshed;
 
 /**
  * Send Ebsr Refreshed Email Test
- * @group ebsrEmails
  *
  * @author Craig R <uk@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\Group('ebsrEmails')]
 class SendEbsrRefreshedTest extends SendEbsrEmailTestAbstract
 {
     protected $template = 'ebsr-refreshed';
     protected $sutClass = \Dvsa\Olcs\Api\Domain\CommandHandler\Email\SendEbsrRefreshed::class;
-    protected $cmdClass = SendEbsrRefreshed::class;
+    protected const CMD_CLASS = SendEbsrRefreshed::class;
 }
