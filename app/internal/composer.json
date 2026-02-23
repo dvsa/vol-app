@@ -29,7 +29,7 @@
     "lm-commons/lmc-rbac-mvc": "^3.5",
     "firebase/php-jwt": "^7.0",
     "olcs/olcs-auth": "^9.0",
-    "olcs/olcs-common": "^9.8",
+    "olcs/olcs-common": "^9.10.1",
     "olcs/olcs-logging": "^8.0",
     "olcs/olcs-transfer": "^8.6.1",
     "olcs/olcs-utils": "^7.0",
