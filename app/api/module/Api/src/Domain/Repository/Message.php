@@ -133,4 +133,15 @@ class Message extends AbstractRepository
 
         return count($qb->getQuery()->getScalarResult());
     }
+    public function fetchLastMessageByConversation(int $conversationId): ?\Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage
+    {
+        $qb = $this->createQueryBuilder();
+
+        return $qb->where($qb->expr()->eq($this->alias . '.messagingConversation', ':conversationId'))
+            ->setParameter('conversationId', $conversationId)
+            ->orderBy($this->alias . '.createdOn', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
