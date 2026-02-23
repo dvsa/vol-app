@@ -107,4 +107,17 @@ class LetterType
      * @Form\Attributes({"id":"letterTestData","class":"medium"})
      */
     public $letterTestData = null;
+
+    /**
+     * @Form\Options({
+     *     "label": "Appendices",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Olcs\Service\Data\Letter\LetterAppendix",
+     *     "use_groups": false
+     * })
+     * @Form\Type("DynamicSelect")
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"appendices","class":"medium chosen-select-large","multiple":"multiple"})
+     */
+    public $appendices = null;
 }

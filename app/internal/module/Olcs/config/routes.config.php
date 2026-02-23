@@ -247,6 +247,28 @@ $routes = [
                 ],
                 'may_terminate' => true,
             ],
+            'prepare-to-send' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/prepare-to-send',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'prepareToSend',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'save-appendix-content' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/save-appendix-content',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'saveAppendixContent',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
         ],
     ],
     'template_lists' => [

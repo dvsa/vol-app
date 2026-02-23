@@ -104,6 +104,15 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
     protected $displayOrder = 0;
 
     /**
+     * Caseworker edited EditorJS content
+     *
+     * @var array
+     *
+     * @ORM\Column(type="json", name="edited_content", nullable=true)
+     */
+    protected $editedContent;
+
+    /**
      * Version
      *
      * @var int
@@ -265,6 +274,29 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
     public function getDisplayOrder()
     {
         return $this->displayOrder;
+    }
+
+    /**
+     * Set the edited content
+     *
+     * @param array $editedContent new value being set
+     *
+     * @return LetterInstanceAppendix
+     */
+    public function setEditedContent($editedContent)
+    {
+        $this->editedContent = $editedContent;
+
+        return $this;
+    }
+
+    /**
+     * Get the edited content
+     *
+     * @return array     */
+    public function getEditedContent()
+    {
+        return $this->editedContent;
     }
 
     /**

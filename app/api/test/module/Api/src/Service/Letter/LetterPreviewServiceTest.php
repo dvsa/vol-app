@@ -53,6 +53,17 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturnUsing(fn($html, $context) => $html)
             ->byDefault();
 
+        $mockAppendixRenderer = m::mock(SectionRendererInterface::class);
+        $mockAppendixRenderer->shouldReceive('render')
+            ->withAnyArgs()
+            ->andReturn('')
+            ->byDefault();
+
+        $this->mockRendererManager->shouldReceive('get')
+            ->with('appendix')
+            ->andReturn($mockAppendixRenderer)
+            ->byDefault();
+
         $this->sut = new LetterPreviewService(
             $this->mockRendererManager,
             $this->mockContentStore,
@@ -94,6 +105,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getCase')->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
+            ->andReturn(new ArrayCollection());
 
         $result = $this->sut->renderPreview($mockLetterInstance, null);
 
@@ -145,6 +158,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
+            ->andReturn(new ArrayCollection());
 
         $templateContent = '<html>{{LETTER_REFERENCE}} {{SECTIONS_CONTENT}} {{ISSUES_CONTENT}}</html>';
         $mockTemplate = m::mock(MasterTemplate::class);
@@ -200,6 +215,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
+            ->andReturn(new ArrayCollection());
 
         $templateContent = '{{CASEWORKER_NAME}}';
         $mockTemplate = m::mock(MasterTemplate::class);
@@ -242,6 +259,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
+            ->andReturn(new ArrayCollection());
 
         $templateContent = '{{CASEWORKER_NAME}}';
         $mockTemplate = m::mock(MasterTemplate::class);
@@ -287,6 +306,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
+            ->andReturn(new ArrayCollection());
 
         $templateContent = '{{ENTITY_REFERENCE}}';
         $mockTemplate = m::mock(MasterTemplate::class);
@@ -337,6 +358,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
+            ->andReturn(new ArrayCollection());
 
         $templateContent = '{{ENTITY_REFERENCE}}';
         $mockTemplate = m::mock(MasterTemplate::class);
@@ -383,6 +406,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
+            ->andReturn(new ArrayCollection());
 
         $templateContent = '{{SALUTATION}}';
         $mockTemplate = m::mock(MasterTemplate::class);
@@ -433,6 +458,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
+            ->andReturn(new ArrayCollection());
 
         $templateContent = '{{SALUTATION}}';
         $mockTemplate = m::mock(MasterTemplate::class);
@@ -475,6 +502,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
+            ->andReturn(new ArrayCollection());
 
         $templateContent = '{{SALUTATION}}';
         $mockTemplate = m::mock(MasterTemplate::class);
@@ -517,6 +546,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
+            ->andReturn(new ArrayCollection());
 
         $templateContent = '{{DVSA_ADDRESS}}';
         $mockTemplate = m::mock(MasterTemplate::class);
@@ -571,6 +602,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
+            ->andReturn(new ArrayCollection());
 
         $templateContent = '{{ISSUES_CONTENT}}';
         $mockTemplate = m::mock(MasterTemplate::class);
@@ -627,6 +660,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
+            ->andReturn(new ArrayCollection());
 
         // Verify context is passed with licence and application IDs
         $mockSectionRenderer->shouldReceive('render')
@@ -695,6 +730,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn($mockBusReg);
         $mockLetterInstance->shouldReceive('getOrganisation')
             ->andReturn($mockOrganisation);
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
+            ->andReturn(new ArrayCollection());
 
         // Verify all context IDs are present
         $mockSectionRenderer->shouldReceive('render')
@@ -745,6 +782,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
+            ->andReturn(new ArrayCollection());
 
         // Verify context is empty when all entities are null
         $mockSectionRenderer->shouldReceive('render')
@@ -793,6 +832,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
+            ->andReturn(new ArrayCollection());
 
         // Verify context is passed to issue renderer
         $mockIssueRenderer->shouldReceive('render')
@@ -849,6 +890,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
+            ->andReturn(new ArrayCollection());
 
         $templateContent = '<html>{{SECTIONS_CONTENT}} [[TODAYS_DATE]]</html>';
         $mockTemplate = m::mock(MasterTemplate::class);
@@ -899,6 +942,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getCase')->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
+            ->andReturn(new ArrayCollection());
 
         // Override default mock to verify vol-grab replacement is called even without template
         $this->mockVolGrabReplacementService->shouldReceive('replaceGrabsInHtml')

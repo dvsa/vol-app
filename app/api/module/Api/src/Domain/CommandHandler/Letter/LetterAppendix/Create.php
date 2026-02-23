@@ -14,20 +14,41 @@ use Dvsa\Olcs\Transfer\Command\Letter\LetterAppendix\Create as Cmd;
 final class Create extends AbstractCommandHandler
 {
     protected $repoServiceName = 'LetterAppendix';
-    
+
     protected $extraRepos = ['LetterAppendix', 'Document'];
 
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var Cmd $command */
-        
+
         $entity = new LetterAppendixEntity();
-        
+
         // Set working properties - versioning will be handled by repository
         $entity->setName($command->getName());
         $entity->setDescription($command->getDescription());
-        
+
         if ($command->getDocument()) {
             $document = $this->getRepo('Document')->fetchById($command->getDocument());
             $entity->setDocument($document);
         }
+
+        $entity->setAppendixType($command->getAppendixType());
+
+        if ($command->getDefaultContent()) {
+            $entity->setDefaultContent(
+                is_string($command->getDefaultContent())
+                    ? json_decode($command->getDefaultContent(), true)
+                    : $command->getDefaultContent()
+            );
+        }
+
+        $entity->setAppendixKey($command->getAppendixKey());
+
+        $this->getRepo()->save($entity);
+
+        $this->result->addId('letterAppendix', $entity->getId());
+        $this->result->addMessage("Letter appendix '{$entity->getName()}' created");
+
+        return $this->result;
+    }
+}

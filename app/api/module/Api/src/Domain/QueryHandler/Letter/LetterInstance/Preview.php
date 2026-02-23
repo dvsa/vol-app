@@ -60,7 +60,9 @@ class Preview extends AbstractQueryHandler
             'letterTodoVersion'
         ],
         'letterInstanceAppendices' => [
-            'letterAppendixVersion'
+            'letterAppendixVersion' => [
+                'document'
+            ]
         ],
         'createdBy' => [
             'contactDetails' => [

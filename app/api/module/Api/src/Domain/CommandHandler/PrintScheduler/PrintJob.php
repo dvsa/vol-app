@@ -417,6 +417,11 @@ class PrintJob extends AbstractCommandHandler
      */
     private function convertToPdf($fileName)
     {
+        // If file is already a PDF, no conversion needed
+        if (str_ends_with(strtolower($fileName), '.pdf')) {
+            return $fileName;
+        }
+
         $pdfFileName = str_replace('.rtf', '.pdf', $fileName);
         if ($this->useWebService()) {
             try {

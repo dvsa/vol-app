@@ -1,21 +1,17 @@
 OLCS.ready(function () {
   "use strict";
 
-  // Track dirty state per issue
+  // Track dirty state per issue and appendix
   var dirtyMap = {};
 
-  // Listen for EditorJS changes via hidden input mutations
-  $(".issue-editor-group").each(function () {
-    var $group = $(this);
-    var issueId = $group.data("issue-id");
-    dirtyMap[issueId] = false;
+  // Helper to set up dirty tracking on a hidden input
+  function setupDirtyTracking($group, entityId) {
+    dirtyMap[entityId] = false;
 
-    // Watch for changes to the hidden input (EditorJS component syncs content here)
     var hiddenInput = $group.find("input[type='hidden']")[0];
     if (hiddenInput) {
       var observer = new MutationObserver(function () {
-        dirtyMap[issueId] = true;
-        // Hide saved indicator when content changes
+        dirtyMap[entityId] = true;
         $group.find(".save-indicator").hide();
       });
       observer.observe(hiddenInput, {
@@ -34,7 +30,7 @@ OLCS.ready(function () {
           set: function (val) {
             originalSetter.call(this, val);
             if (val !== originalValue) {
-              dirtyMap[issueId] = true;
+              dirtyMap[entityId] = true;
               $group.find(".save-indicator").hide();
             }
           },
@@ -44,9 +40,23 @@ OLCS.ready(function () {
         });
       }
     }
+  }
+
+  // Listen for EditorJS changes via hidden input mutations - issues
+  $(".issue-editor-group").each(function () {
+    var $group = $(this);
+    var issueId = "issue-" + $group.data("issue-id");
+    setupDirtyTracking($group, issueId);
   });
 
-  // Save button handler
+  // Listen for EditorJS changes via hidden input mutations - appendices
+  $(".appendix-editor-group").each(function () {
+    var $group = $(this);
+    var appendixId = "appendix-" + $group.data("appendix-id");
+    setupDirtyTracking($group, appendixId);
+  });
+
+  // Save issue button handler
   $(".save-issue-btn").on("click", function (e) {
     e.preventDefault();
 
@@ -57,7 +67,6 @@ OLCS.ready(function () {
     var hiddenInput = $group.find("input[type='hidden']");
     var editedContent = hiddenInput.val();
 
-    // Disable button during save
     $btn.prop("disabled", true).text("Saving...");
 
     $.ajax({
@@ -71,16 +80,58 @@ OLCS.ready(function () {
       }),
       success: function (response) {
         if (response.success) {
-          // Mark as clean
-          dirtyMap[issueId] = false;
-
-          // Update version for optimistic locking
+          dirtyMap["issue-" + issueId] = false;
           $btn.data("version", response.version);
-
-          // Show saved indicator
           $group.find(".save-indicator").show();
+          $btn.prop("disabled", false).text("Save changes");
+        } else {
+          showError(response.message || "Failed to save changes");
+          $btn.prop("disabled", false).text("Save changes");
+        }
+      },
+      error: function (xhr) {
+        var message = "Failed to save changes";
+        try {
+          var resp = JSON.parse(xhr.responseText);
+          if (resp.message) {
+            message = resp.message;
+          }
+        } catch (e) {
+          // Use default message
+        }
+        showError(message);
+        $btn.prop("disabled", false).text("Save changes");
+      },
+    });
+  });
 
-          // Restore button
+  // Save appendix button handler
+  $(".save-appendix-btn").on("click", function (e) {
+    e.preventDefault();
+
+    var $btn = $(this);
+    var appendixId = $btn.data("appendix-id");
+    var version = $btn.data("version");
+    var $group = $btn.closest(".appendix-editor-group");
+    var hiddenInput = $group.find("input[type='hidden']");
+    var editedContent = hiddenInput.val();
+
+    $btn.prop("disabled", true).text("Saving...");
+
+    $.ajax({
+      url: "/letter/save-appendix-content",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({
+        appendixId: appendixId,
+        editedContent: editedContent,
+        version: version,
+      }),
+      success: function (response) {
+        if (response.success) {
+          dirtyMap["appendix-" + appendixId] = false;
+          $btn.data("version", response.version);
+          $group.find(".save-indicator").show();
           $btn.prop("disabled", false).text("Save changes");
         } else {
           showError(response.message || "Failed to save changes");
@@ -106,26 +157,33 @@ OLCS.ready(function () {
   // Back to preview handler with unsaved changes warning
   $("#back-to-preview").on("click", function (e) {
     var unsavedSections = [];
+
     $(".issue-editor-group").each(function () {
       var $group = $(this);
-      var issueId = $group.data("issue-id");
+      var issueId = "issue-" + $group.data("issue-id");
       if (dirtyMap[issueId]) {
         var heading = $group.find("h3").text().trim();
         unsavedSections.push(heading);
       }
     });
 
+    $(".appendix-editor-group").each(function () {
+      var $group = $(this);
+      var appendixId = "appendix-" + $group.data("appendix-id");
+      if (dirtyMap[appendixId]) {
+        var heading = $group.find("h3").text().trim();
+        unsavedSections.push(heading);
+      }
+    });
+
     if (unsavedSections.length === 0) {
-      // All clean, allow normal navigation
       return;
     }
 
-    // Prevent navigation
     e.preventDefault();
 
     var href = $(this).attr("href");
 
-    // Build modal content
     var listItems = unsavedSections
       .map(function (name) {
         return "<li>" + $("<span>").text(name).html() + "</li>";

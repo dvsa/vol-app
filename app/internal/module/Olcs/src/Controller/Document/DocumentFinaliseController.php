@@ -195,7 +195,7 @@ class DocumentFinaliseController extends AbstractDocumentController
             $this->formHelper->disableElement($form, 'form-actions->printAndPost');
         }
 
-        $labelText = 'Would you like to send this letter?';
+        $labelText = 'How would you like to send this letter?';
         $subText = '';
 
         if ($this->isProposeToRevoke()) {

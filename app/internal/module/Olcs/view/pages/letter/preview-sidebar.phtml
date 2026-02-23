@@ -32,6 +32,26 @@
     <?php endif; ?>
 </div>
 
+<?php if (!empty($appendicesList)): ?>
+<div class="small-module">
+    <h4 class="title">Editable Appendices:</h4>
+    <div class="govuk-checkboxes govuk-checkboxes--small small-module__details">
+        <?php foreach ($appendicesList as $appendix): ?>
+        <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" type="checkbox"
+                   id="appendix-<?= $this->escapeHtmlAttr($appendix['id']) ?>"
+                   name="appendices[]"
+                   value="<?= $this->escapeHtmlAttr($appendix['id']) ?>">
+            <label class="govuk-label govuk-checkboxes__label"
+                   for="appendix-<?= $this->escapeHtmlAttr($appendix['id']) ?>">
+                <?= $this->escapeHtml($appendix['name']) ?>
+            </label>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+<?php endif; ?>
+
 <div class="small-module">
     <h4 class="title">Actions</h4>
     <p class="small-module__details">

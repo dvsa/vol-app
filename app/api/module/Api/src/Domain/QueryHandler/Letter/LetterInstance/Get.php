@@ -28,7 +28,9 @@ class Get extends AbstractQueryByIdHandler
             'letterTodoVersion'
         ],
         'letterInstanceAppendices' => [
-            'letterAppendixVersion'
+            'letterAppendixVersion' => [
+                'document'
+            ]
         ]
     ];
 }
