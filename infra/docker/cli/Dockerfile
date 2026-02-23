@@ -16,11 +16,14 @@ RUN apk add --no-cache icu-dev libzip-dev cups-client poppler-utils bash \
   && docker-php-ext-configure intl \
   && docker-php-ext-configure zip \
   && docker-php-ext-install pdo_mysql opcache intl zip
-RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl \
-    && python3 -m venv /opt/venv \
-    && /opt/venv/bin/pip install --no-cache-dir awscli \
-    && /opt/venv/bin/aws --version \
-    && mysql --version
+
+RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq \
+  && python3 -m venv /opt/venv \
+  && /opt/venv/bin/pip install --no-cache-dir awscli \
+  && ln -sf /opt/venv/bin/aws /usr/local/bin/aws \
+  && /usr/local/bin/aws --version \
+  && mysql --version \
+  && jq --version
 
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
@@ -48,12 +51,12 @@ RUN chown -R root:www-data /var/www/html \
   # Ensure Laminas binary is executable for CLI jobs.
   && chmod +x /var/www/html/vendor/bin/laminas
 
-  # Create olcsdump directory.
-RUN mkdir -p /mnt/data/olcsdump \
+  # Create olcsdump and anondump directory.
+RUN mkdir -p /mnt/data/olcsdump /mnt/data/anondump\
   # Set directory ownership.
-  && chown root:www-data /mnt/data/olcsdump /mnt/data/scripts/ \
+  && chown root:www-data /mnt/data/olcsdump /mnt/data/scripts/ /mnt/data/anondump \
   # Set directory permissions.
-  && chmod 775 /mnt/data/olcsdump /mnt/data/scripts/ \
+  && chmod 775 /mnt/data/olcsdump /mnt/data/scripts/ /mnt/data/anondump \
   # Ensure scripts are executable.
   && chmod +x /mnt/data/scripts/*.sh
 
