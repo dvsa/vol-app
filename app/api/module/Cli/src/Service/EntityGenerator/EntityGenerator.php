@@ -122,8 +122,8 @@ class EntityGenerator implements EntityGeneratorInterface
             $columnName = $column->getName();
             $fieldConfig = $tableConfig[$columnName] ?? null;
 
-            // Set table metadata on RelationshipTypeHandler BEFORE getting handler
-            $this->setTableOnRelationshipHandlers($table);
+            // Set table metadata on handlers BEFORE getting handler
+            $this->setTableOnHandlers($table);
 
             // Get the appropriate type handler with EntityConfig support
             $handler = $this->typeHandlerRegistry->getHandler($column, $fieldConfig ? ['fieldConfig' => $fieldConfig] : []);
@@ -772,12 +772,15 @@ class EntityGenerator implements EntityGeneratorInterface
     }
 
     /**
-     * Set table metadata on all RelationshipTypeHandlers in the registry
+     * Set table metadata on handlers that need table context
      */
-    private function setTableOnRelationshipHandlers(TableMetadata $table): void
+    private function setTableOnHandlers(TableMetadata $table): void
     {
         foreach ($this->typeHandlerRegistry->getHandlers() as $handler) {
             if ($handler instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\RelationshipTypeHandler) {
+                $handler->setCurrentTable($table);
+            }
+            if ($handler instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\PrimaryKeyTypeHandler) {
                 $handler->setCurrentTable($table);
             }
         }

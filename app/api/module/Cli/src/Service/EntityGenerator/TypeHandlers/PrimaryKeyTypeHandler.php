@@ -5,17 +5,49 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers;
 
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\ColumnMetadata;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\TableMetadata;
 
 /**
  * Type handler for primary key fields
  */
 class PrimaryKeyTypeHandler extends AbstractTypeHandler
 {
+    private ?TableMetadata $currentTable = null;
+
+    /**
+     * Set the current table being processed
+     */
+    public function setCurrentTable(?TableMetadata $table): void
+    {
+        $this->currentTable = $table;
+    }
+
     #[\Override]
     public function supports(ColumnMetadata $column, array $config = []): bool
     {
-        // Handle any primary key column
-        return $column->isPrimary();
+        if (!$column->isPrimary()) {
+            return false;
+        }
+
+        // Auto-increment PKs are always handled here (single-column identity PKs)
+        if ($column->isAutoIncrement()) {
+            return true;
+        }
+
+        // Non-auto-increment PKs that are also foreign keys should be handled
+        // by RelationshipTypeHandler (generates ManyToOne with @ORM\Id)
+        if ($this->currentTable !== null) {
+            foreach ($this->currentTable->getForeignKeys() as $foreignKey) {
+                $localColumns = is_array($foreignKey)
+                    ? ($foreignKey['local_columns'] ?? [])
+                    : $foreignKey->getLocalColumns();
+                if (in_array($column->getName(), $localColumns)) {
+                    return false; // Let RelationshipTypeHandler handle it
+                }
+            }
+        }
+
+        return true;
     }
 
     #[\Override]

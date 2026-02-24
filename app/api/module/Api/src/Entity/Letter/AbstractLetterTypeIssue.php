@@ -42,24 +42,26 @@ abstract class AbstractLetterTypeIssue implements BundleSerializableInterface, J
     use ModifiedOnTrait;
 
     /**
-     * Primary key
+     * LetterType
      *
-     * @var int
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
      *
      * @ORM\Id
-     * @ORM\Column(type="integer", name="letter_type_id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterType", fetch="LAZY")
+     * @ORM\JoinColumn(name="letter_type_id", referencedColumnName="id")
      */
-    protected $letter_type_id = 0;
+    protected $letterType;
 
     /**
-     * Primary key
+     * LetterIssueVersion
      *
-     * @var int
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion
      *
      * @ORM\Id
-     * @ORM\Column(type="integer", name="letter_issue_version_id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion", fetch="LAZY")
+     * @ORM\JoinColumn(name="letter_issue_version_id", referencedColumnName="id")
      */
-    protected $letter_issue_version_id = 0;
+    protected $letterIssueVersion;
 
     /**
      * Created by
@@ -100,51 +102,51 @@ abstract class AbstractLetterTypeIssue implements BundleSerializableInterface, J
 
 
     /**
-     * Set the letter_type_id
+     * Set the letter type
      *
-     * @param int $letter_type_id new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterType $letterType new value being set
      *
      * @return LetterTypeIssue
      */
-    public function setLetter_type_id($letter_type_id)
+    public function setLetterType($letterType)
     {
-        $this->letter_type_id = $letter_type_id;
+        $this->letterType = $letterType;
 
         return $this;
     }
 
     /**
-     * Get the letter_type_id
+     * Get the letter type
      *
-     * @return int
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterType
      */
-    public function getLetter_type_id()
+    public function getLetterType()
     {
-        return $this->letter_type_id;
+        return $this->letterType;
     }
 
     /**
-     * Set the letter_issue_version_id
+     * Set the letter issue version
      *
-     * @param int $letter_issue_version_id new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion $letterIssueVersion new value being set
      *
      * @return LetterTypeIssue
      */
-    public function setLetter_issue_version_id($letter_issue_version_id)
+    public function setLetterIssueVersion($letterIssueVersion)
     {
-        $this->letter_issue_version_id = $letter_issue_version_id;
+        $this->letterIssueVersion = $letterIssueVersion;
 
         return $this;
     }
 
     /**
-     * Get the letter_issue_version_id
+     * Get the letter issue version
      *
-     * @return int
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion
      */
-    public function getLetter_issue_version_id()
+    public function getLetterIssueVersion()
     {
-        return $this->letter_issue_version_id;
+        return $this->letterIssueVersion;
     }
 
     /**

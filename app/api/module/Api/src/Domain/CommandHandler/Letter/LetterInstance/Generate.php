@@ -124,9 +124,13 @@ final class Generate extends AbstractCommandHandler
             $application = $this->getRepo('Application')->fetchById($command->getApplication());
             $letterInstance->setApplication($application);
 
-            // Set recipient organisation from application's licence
+            // Set licence from application (if not already set by the licence block above)
             $licence = $application->getLicence();
             if ($licence) {
+                if ($letterInstance->getLicence() === null) {
+                    $letterInstance->setLicence($licence);
+                }
+
                 $organisation = $licence->getOrganisation();
                 if ($organisation) {
                     $letterInstance->setOrganisation($organisation);
@@ -138,17 +142,29 @@ final class Generate extends AbstractCommandHandler
             $case = $this->getRepo('Cases')->fetchById($command->getCase());
             $letterInstance->setCase($case);
 
-            // Set recipient organisation from case's licence or application
+            // Set licence (and application) from case's relationships
             $licence = $case->getLicence();
             if ($licence) {
+                if ($letterInstance->getLicence() === null) {
+                    $letterInstance->setLicence($licence);
+                }
+
                 $organisation = $licence->getOrganisation();
                 if ($organisation) {
                     $letterInstance->setOrganisation($organisation);
                 }
             } elseif ($case->getApplication()) {
                 $application = $case->getApplication();
+                if ($letterInstance->getApplication() === null) {
+                    $letterInstance->setApplication($application);
+                }
+
                 $licence = $application->getLicence();
                 if ($licence) {
+                    if ($letterInstance->getLicence() === null) {
+                        $letterInstance->setLicence($licence);
+                    }
+
                     $organisation = $licence->getOrganisation();
                     if ($organisation) {
                         $letterInstance->setOrganisation($organisation);
@@ -161,9 +177,13 @@ final class Generate extends AbstractCommandHandler
             $busReg = $this->getRepo('BusReg')->fetchById($command->getBusReg());
             $letterInstance->setBusReg($busReg);
 
-            // Set recipient organisation from bus registration's licence
+            // Set licence from bus registration
             $licence = $busReg->getLicence();
             if ($licence) {
+                if ($letterInstance->getLicence() === null) {
+                    $letterInstance->setLicence($licence);
+                }
+
                 $organisation = $licence->getOrganisation();
                 if ($organisation) {
                     $letterInstance->setOrganisation($organisation);
@@ -180,9 +200,13 @@ final class Generate extends AbstractCommandHandler
             $irhpApplication = $this->getRepo('IrhpApplication')->fetchById($command->getIrhpApplication());
             $letterInstance->setIrhpApplication($irhpApplication);
 
-            // Set recipient organisation from IRHP application's licence
+            // Set licence from IRHP application
             $licence = $irhpApplication->getLicence();
             if ($licence) {
+                if ($letterInstance->getLicence() === null) {
+                    $letterInstance->setLicence($licence);
+                }
+
                 $organisation = $licence->getOrganisation();
                 if ($organisation) {
                     $letterInstance->setOrganisation($organisation);

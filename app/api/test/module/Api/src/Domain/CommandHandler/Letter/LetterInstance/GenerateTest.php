@@ -239,6 +239,7 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         $this->assertSame(999, $result->getId('letterInstance'));
 
         $this->assertSame($application, $letterInstance->getApplication());
+        $this->assertSame($licence, $letterInstance->getLicence());
         $this->assertSame($organisation, $letterInstance->getOrganisation());
     }
 
@@ -298,6 +299,7 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         $this->assertSame(999, $result->getId('letterInstance'));
 
         $this->assertSame($case, $letterInstance->getCase());
+        $this->assertSame($licence, $letterInstance->getLicence());
         $this->assertSame($organisation, $letterInstance->getOrganisation());
     }
 
@@ -362,6 +364,8 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         $this->assertSame(999, $result->getId('letterInstance'));
 
         $this->assertSame($case, $letterInstance->getCase());
+        $this->assertSame($application, $letterInstance->getApplication());
+        $this->assertSame($licence, $letterInstance->getLicence());
         $this->assertSame($organisation, $letterInstance->getOrganisation());
     }
 }

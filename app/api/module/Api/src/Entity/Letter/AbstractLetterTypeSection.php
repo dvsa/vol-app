@@ -42,24 +42,26 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
     use ModifiedOnTrait;
 
     /**
-     * Primary key
+     * LetterType
      *
-     * @var int
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
      *
      * @ORM\Id
-     * @ORM\Column(type="integer", name="letter_type_id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterType", fetch="LAZY")
+     * @ORM\JoinColumn(name="letter_type_id", referencedColumnName="id")
      */
-    protected $letter_type_id = 0;
+    protected $letterType;
 
     /**
-     * Primary key
+     * LetterSectionVersion
      *
-     * @var int
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion
      *
      * @ORM\Id
-     * @ORM\Column(type="integer", name="letter_section_version_id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion", fetch="LAZY")
+     * @ORM\JoinColumn(name="letter_section_version_id", referencedColumnName="id")
      */
-    protected $letter_section_version_id = 0;
+    protected $letterSectionVersion;
 
     /**
      * Created by
@@ -118,51 +120,51 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
 
 
     /**
-     * Set the letter_type_id
+     * Set the letter type
      *
-     * @param int $letter_type_id new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterType $letterType new value being set
      *
      * @return LetterTypeSection
      */
-    public function setLetter_type_id($letter_type_id)
+    public function setLetterType($letterType)
     {
-        $this->letter_type_id = $letter_type_id;
+        $this->letterType = $letterType;
 
         return $this;
     }
 
     /**
-     * Get the letter_type_id
+     * Get the letter type
      *
-     * @return int
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterType
      */
-    public function getLetter_type_id()
+    public function getLetterType()
     {
-        return $this->letter_type_id;
+        return $this->letterType;
     }
 
     /**
-     * Set the letter_section_version_id
+     * Set the letter section version
      *
-     * @param int $letter_section_version_id new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion $letterSectionVersion new value being set
      *
      * @return LetterTypeSection
      */
-    public function setLetter_section_version_id($letter_section_version_id)
+    public function setLetterSectionVersion($letterSectionVersion)
     {
-        $this->letter_section_version_id = $letter_section_version_id;
+        $this->letterSectionVersion = $letterSectionVersion;
 
         return $this;
     }
 
     /**
-     * Get the letter_section_version_id
+     * Get the letter section version
      *
-     * @return int
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion
      */
-    public function getLetter_section_version_id()
+    public function getLetterSectionVersion()
     {
-        return $this->letter_section_version_id;
+        return $this->letterSectionVersion;
     }
 
     /**
