@@ -415,6 +415,7 @@ return [
             Cli\Domain\Command\Bus\Expire::class => CommandHandler\Bus\Expire::class,
             Cli\Domain\Command\Permits\WithdrawUnpaidIrhp::class => CommandHandler\Permits\WithdrawUnpaidIrhp::class,
             Cli\Domain\Command\LastTmLetter::class => CommandHandler\LastTmLetter::class,
+            Cli\Domain\Command\FirstTmLetter::class => CommandHandler\FirstTmLetter::class,
             Cli\Domain\Command\Permits\CloseExpiredWindows::class => CommandHandler\Permits\CloseExpiredWindows::class,
             Cli\Domain\Command\Permits\CancelUnsubmittedBilateral::class => CommandHandler\Permits\CancelUnsubmittedBilateral::class,
             Cli\Domain\Command\Permits\MarkExpiredPermits::class => CommandHandler\Permits\MarkExpiredPermits::class,

@@ -26,8 +26,8 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
     use EmailAwareTrait;
 
     protected const GB_GV_TEMPLATE = [
-        'identifier' => 'GV_letter_to_op_regarding_no_TM_specified',
-        'id' => 919
+        'identifier' => 'GV_loss_of_TM_1st_letter',
+        'id' => 1284
     ];
     protected const GB_PSV_TEMPLATE = [
         'identifier' => 'PSV_letter_to_op_regarding_no_TM_specified',
@@ -66,9 +66,9 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
         /** @var LicenceEntity $licence */
         foreach ($eligibleLicences as $licence) {
             $document = $this->generateDocuments($licence);
-            $this->printAndEmailDocument($document);
+            //$this->printAndEmailDocument($document);
             $this->updateLastTmLetterDate($licence);
-            $this->sendEmailToOperator($licence);
+            //$this->sendEmailToOperator($licence);
         }
 
         return $this->result;
@@ -102,14 +102,16 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
         $message = new Message($email, 'email.last-tm-operator-notification.subject');
         $message->setTranslateToWelsh($translateToWelsh);
         $message->setHighPriority();
-        $message->setDocs([$this->result->getId('document')]);
+        //$message->setDocs([$this->result->getId('document')]);
 
         $this->sendEmailTemplate(
             $message,
-            'last-tm-operator-notification',
+            'licensing-information-standard',
             [
                 'licNo' => $licence->getLicNo(),
-                'registeredToSelfserve' => $registeredToSelfserve,
+                'operatorName' => $licence->getOrganisation()->getName(),
+                    // @NOTE the http://selfserve part gets replaced
+                    'url' => 'http://selfserve/correspondence'
             ]
         );
     }
@@ -167,7 +169,7 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
             'query' => [
                 'licence' => $licence->getId(),
             ],
-            'description' => 'Last TM letter Licence ' . $licence->getLicNo(),
+            'description' => 'Last TM letter Licence ' . $licence->getLicNo() . ' 1st letter',
             'licence' => $licence->getId(),
             'category' => Category::CATEGORY_TRANSPORT_MANAGER,
             'subCategory' => Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CORRESPONDENCE,
