@@ -26,6 +26,7 @@ final class ReplacePsvDiscs extends AbstractCommandHandler implements Transactio
     // @NOTE Don't need repo
     protected $repoServiceName = '';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

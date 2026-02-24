@@ -23,6 +23,7 @@ final class DeleteForResponsibilities extends AbstractDeleteCommandHandler imple
 {
     protected $repoServiceName = 'TransportManagerLicence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $ids = $command->getIds();

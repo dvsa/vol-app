@@ -13,6 +13,7 @@ class CanConfirmSurrender extends AbstractCanAccessEntity implements ValidatorIn
 
     protected $repo = 'Licence';
 
+    #[\Override]
     public function isValid($entityId)
     {
         $surrender = $this->getRepo('Surrender')->fetchOneByLicenceId($entityId);

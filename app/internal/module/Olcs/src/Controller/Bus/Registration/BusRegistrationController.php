@@ -36,6 +36,7 @@ class BusRegistrationController extends AbstractActionController implements BusR
      *
      * @return void
      */
+    #[\Override]
     public function onDispatch(MvcEvent $e)
     {
         $this->busRegId = $this->params()->fromRoute('busRegId');
@@ -47,6 +48,7 @@ class BusRegistrationController extends AbstractActionController implements BusR
      *
      * @return ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->notFoundAction();

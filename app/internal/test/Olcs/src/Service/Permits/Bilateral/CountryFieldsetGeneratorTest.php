@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CountryFieldsetGenerator Test
  *
@@ -24,7 +26,7 @@ use Laminas\Form\Fieldset;
  */
 class CountryFieldsetGeneratorTest extends TestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $countryId = 'NO';
         $countryName = 'Norway';

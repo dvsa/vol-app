@@ -39,7 +39,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTmCaseDecision implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTmCaseDecision implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -252,7 +252,8 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -275,7 +276,8 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -298,7 +300,8 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Get the decision
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getDecision()
     {
         return $this->decision;
@@ -321,7 +324,8 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -344,7 +348,8 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -369,7 +374,8 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getDecisionDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -398,7 +404,8 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getNotifiedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -425,7 +432,8 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Get the is msi
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsMsi()
     {
         return $this->isMsi;
@@ -448,7 +456,8 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Get the repute not lost reason
      *
-     * @return string     */
+     * @return string
+     */
     public function getReputeNotLostReason()
     {
         return $this->reputeNotLostReason;
@@ -473,7 +482,8 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getUnfitnessStartDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -502,7 +512,8 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getUnfitnessEndDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -529,7 +540,8 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Get the no further action reason
      *
-     * @return string     */
+     * @return string
+     */
     public function getNoFurtherActionReason()
     {
         return $this->noFurtherActionReason;
@@ -552,7 +564,8 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -575,7 +588,8 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -710,6 +724,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query\Expr\Comparison;
@@ -25,7 +27,7 @@ class CommunityLicTest extends RepositoryTestCase
         $this->setUpSut(CommunityLicRepo::class);
     }
 
-    public function testFetchOfficeCopy()
+    public function testFetchOfficeCopy(): void
     {
         $licenceId = 1;
         $issueNo = 0;
@@ -71,7 +73,7 @@ class CommunityLicTest extends RepositoryTestCase
         $this->assertEquals(['result'], $this->sut->fetchOfficeCopy($licenceId));
     }
 
-    public function testFetchValidLicences()
+    public function testFetchValidLicences(): void
     {
         $licenceId = 1;
         $issueNo = 0;
@@ -112,7 +114,7 @@ class CommunityLicTest extends RepositoryTestCase
         $this->assertEquals('result', $this->sut->fetchValidLicences($licenceId));
     }
 
-    public function testFetchLicencesById()
+    public function testFetchLicencesById(): void
     {
         $mockQb = m::mock();
         $mockQb->shouldReceive('expr->in')->with('m.id', ':ids')->once()->andReturn('id');
@@ -124,7 +126,7 @@ class CommunityLicTest extends RepositoryTestCase
         $this->assertEquals('result', $this->sut->fetchLicencesByIds([1]));
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         // it's quite hard to test this protected method because of a lot of doctrine's
         // internal methods mocking required
@@ -157,7 +159,7 @@ class CommunityLicTest extends RepositoryTestCase
         $sut->applyListFilters($mockQb, $mockQuery);
     }
 
-    public function testExpireAllForLicence()
+    public function testExpireAllForLicence(): void
     {
         $licenceId = 123;
 
@@ -166,7 +168,7 @@ class CommunityLicTest extends RepositoryTestCase
         $this->sut->expireAllForLicence($licenceId, 'foo');
     }
 
-    public function testExpireAllForLicenceNoStatus()
+    public function testExpireAllForLicenceNoStatus(): void
     {
         $licenceId = 123;
 
@@ -175,7 +177,7 @@ class CommunityLicTest extends RepositoryTestCase
         $this->sut->expireAllForLicence($licenceId);
     }
 
-    public function testFetchForSuspension()
+    public function testFetchForSuspension(): void
     {
         $mockQb = m::mock();
         $mockQb->shouldReceive('innerJoin')->with('m.communityLicSuspensions', 's')->andReturnSelf();
@@ -198,7 +200,7 @@ class CommunityLicTest extends RepositoryTestCase
         $this->assertEquals('result', $this->sut->fetchForSuspension('foo'));
     }
 
-    public function testFetchForActivation()
+    public function testFetchForActivation(): void
     {
         $mockQb = m::mock();
         $mockQb->shouldReceive('innerJoin')->with('m.communityLicSuspensions', 's')->andReturnSelf();
@@ -216,15 +218,13 @@ class CommunityLicTest extends RepositoryTestCase
         $this->assertEquals('result', $this->sut->fetchForActivation('foo'));
     }
 
-    public function testCountActiveByLicenceIdIsDefined()
+    public function testCountActiveByLicenceIdIsDefined(): void
     {
         $this->assertIsCallable([$this->sut, 'countActiveByLicenceId']);
     }
 
-    /**
-     * @depends testCountActiveByLicenceIdIsDefined
-     */
-    public function testCountActiveByLicenceIdFiltersResultsByLicenceId()
+    #[\PHPUnit\Framework\Attributes\Depends('testCountActiveByLicenceIdIsDefined')]
+    public function testCountActiveByLicenceIdFiltersResultsByLicenceId(): void
     {
         // Set Up
         $serviceManager = $this->setUpServiceManager();
@@ -239,10 +239,8 @@ class CommunityLicTest extends RepositoryTestCase
         $sut->countActiveByLicenceId(1);
     }
 
-    /**
-     * @depends testCountActiveByLicenceIdIsDefined
-     */
-    public function testCountActiveByLicenceIdSetsALicenceIdParameterWithTheProvidedLicenceIdValue()
+    #[\PHPUnit\Framework\Attributes\Depends('testCountActiveByLicenceIdIsDefined')]
+    public function testCountActiveByLicenceIdSetsALicenceIdParameterWithTheProvidedLicenceIdValue(): void
     {
         // Set Up
         $serviceManager = $this->setUpServiceManager();
@@ -258,10 +256,8 @@ class CommunityLicTest extends RepositoryTestCase
         $sut->countActiveByLicenceId($expectedLicenceId);
     }
 
-    /**
-     * @depends testCountActiveByLicenceIdIsDefined
-     */
-    public function testCountActiveByLicenceIdFiltersResultsToCommunityLicencesByStatus()
+    #[\PHPUnit\Framework\Attributes\Depends('testCountActiveByLicenceIdIsDefined')]
+    public function testCountActiveByLicenceIdFiltersResultsToCommunityLicencesByStatus(): void
     {
         // Set Up
         $serviceManager = $this->setUpServiceManager();
@@ -276,10 +272,8 @@ class CommunityLicTest extends RepositoryTestCase
         $sut->countActiveByLicenceId(1);
     }
 
-    /**
-     * @depends testCountActiveByLicenceIdIsDefined
-     */
-    public function testCountActiveByLicenceIdFiltersResultsToCommunityLicencesThatAreActive()
+    #[\PHPUnit\Framework\Attributes\Depends('testCountActiveByLicenceIdIsDefined')]
+    public function testCountActiveByLicenceIdFiltersResultsToCommunityLicencesThatAreActive(): void
     {
         // Set Up
         $serviceManager = $this->setUpServiceManager();
@@ -294,10 +288,8 @@ class CommunityLicTest extends RepositoryTestCase
         $sut->countActiveByLicenceId(1);
     }
 
-    /**
-     * @depends testCountActiveByLicenceIdIsDefined
-     */
-    public function testCountActiveByLicenceIdFiltersResultsByIssueNumber()
+    #[\PHPUnit\Framework\Attributes\Depends('testCountActiveByLicenceIdIsDefined')]
+    public function testCountActiveByLicenceIdFiltersResultsByIssueNumber(): void
     {
         // Set Up
         $serviceManager = $this->setUpServiceManager();
@@ -312,10 +304,8 @@ class CommunityLicTest extends RepositoryTestCase
         $sut->countActiveByLicenceId(1);
     }
 
-    /**
-     * @depends testCountActiveByLicenceIdIsDefined
-     */
-    public function testCountActiveByLicenceIdFiltersResultsToCommunityLicencesWithAZeroIssueNumber()
+    #[\PHPUnit\Framework\Attributes\Depends('testCountActiveByLicenceIdIsDefined')]
+    public function testCountActiveByLicenceIdFiltersResultsToCommunityLicencesWithAZeroIssueNumber(): void
     {
         // Set Up
         $serviceManager = $this->setUpServiceManager();
@@ -330,10 +320,8 @@ class CommunityLicTest extends RepositoryTestCase
         $sut->countActiveByLicenceId(1);
     }
 
-    /**
-     * @depends testCountActiveByLicenceIdIsDefined
-     */
-    public function testCountActiveByLicenceIdCountsCommunityLicenceIds()
+    #[\PHPUnit\Framework\Attributes\Depends('testCountActiveByLicenceIdIsDefined')]
+    public function testCountActiveByLicenceIdCountsCommunityLicenceIds(): void
     {
         // Set Up
         $serviceManager = $this->setUpServiceManager();
@@ -348,10 +336,8 @@ class CommunityLicTest extends RepositoryTestCase
         $sut->countActiveByLicenceId(1);
     }
 
-    /**
-     * @depends testCountActiveByLicenceIdIsDefined
-     */
-    public function testCountActiveByLicenceIdReturnsTheIntegerFromTheExecutedQueryResult()
+    #[\PHPUnit\Framework\Attributes\Depends('testCountActiveByLicenceIdIsDefined')]
+    public function testCountActiveByLicenceIdReturnsTheIntegerFromTheExecutedQueryResult(): void
     {
         // Set Up
         $serviceManager = $this->setUpServiceManager();

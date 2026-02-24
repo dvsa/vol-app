@@ -11,6 +11,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class EnvironmentalComplaintControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): EnvironmentalComplaintController
     {
         $translationHelperService = $container->get(TranslationHelperService::class);

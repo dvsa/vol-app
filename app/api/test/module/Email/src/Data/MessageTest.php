@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Email\Data;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -20,7 +22,7 @@ class MessageTest extends MockeryTestCase
         $this->sut = new Message(' TO ', 'SUBJECT');
     }
 
-    public function testTo()
+    public function testTo(): void
     {
         $this->assertSame('TO', $this->sut->getTo());
 
@@ -30,7 +32,7 @@ class MessageTest extends MockeryTestCase
         $this->assertSame($expected, $this->sut->getTo());
     }
 
-    public function testCcFromString()
+    public function testCcFromString(): void
     {
         $input = '   test1@test.com,  test2@test.com,test3@test.com, test4@test.com,   ';
         $expected = [
@@ -44,13 +46,13 @@ class MessageTest extends MockeryTestCase
         $this->assertSame($expected, $this->sut->getCc());
     }
 
-    public function testCcFromStringWithEmpty()
+    public function testCcFromStringWithEmpty(): void
     {
         $this->sut->setCcFromString('');
         $this->assertSame([], $this->sut->getCc());
     }
 
-    public function testCc()
+    public function testCc(): void
     {
         $value = [' ABCDEFG '];
         $expected = ['ABCDEFG'];
@@ -58,7 +60,7 @@ class MessageTest extends MockeryTestCase
         $this->assertSame($expected, $this->sut->getCc());
     }
 
-    public function testBcc()
+    public function testBcc(): void
     {
         $value = [' bcc1 ', ' bcc2 '];
         $expected = ['bcc1', 'bcc2'];
@@ -66,14 +68,14 @@ class MessageTest extends MockeryTestCase
         $this->assertSame($expected, $this->sut->getBcc());
     }
 
-    public function testDocs()
+    public function testDocs(): void
     {
         $value = ['doc1', 'doc2'];
         $this->sut->setDocs($value);
         $this->assertSame($value, $this->sut->getDocs());
     }
 
-    public function testSubject()
+    public function testSubject(): void
     {
         $this->assertSame('SUBJECT', $this->sut->getSubject());
 
@@ -82,56 +84,56 @@ class MessageTest extends MockeryTestCase
         $this->assertSame($value, $this->sut->getSubject());
     }
 
-    public function testFromEmail()
+    public function testFromEmail(): void
     {
         $value = 'ABCDEFG';
         $this->sut->setFromEmail($value);
         $this->assertSame($value, $this->sut->getFromEmail());
     }
 
-    public function testFromName()
+    public function testFromName(): void
     {
         $value = 'ABCDEFG';
         $this->sut->setFromName($value);
         $this->assertSame($value, $this->sut->getFromName());
     }
 
-    public function testPlainBody()
+    public function testPlainBody(): void
     {
         $value = 'ABCDEFG';
         $this->sut->setPlainBody($value);
         $this->assertSame($value, $this->sut->getPlainBody());
     }
 
-    public function testHtmlBody()
+    public function testHtmlBody(): void
     {
         $value = 'ABCDEFG';
         $this->sut->setHtmlBody($value);
         $this->assertSame($value, $this->sut->getHtmlBody());
     }
 
-    public function testHasHtml()
+    public function testHasHtml(): void
     {
         $value = 'ABCDEFG';
         $this->sut->setHasHtml($value);
         $this->assertSame($value, $this->sut->getHasHtml());
     }
 
-    public function testLocale()
+    public function testLocale(): void
     {
         $value = 'ABCDEFG';
         $this->sut->setLocale($value);
         $this->assertSame($value, $this->sut->getLocale());
     }
 
-    public function testSubjectVars()
+    public function testSubjectVars(): void
     {
         $value = ['ABCDEFG', 'HIJ'];
         $this->sut->setSubjectVariables($value);
         $this->assertSame($value, $this->sut->getSubjectVariables());
     }
 
-    public function testTranslateToWelshYes()
+    public function testTranslateToWelshYes(): void
     {
         $this->assertSame('en_GB', $this->sut->getLocale());
 
@@ -140,7 +142,7 @@ class MessageTest extends MockeryTestCase
         $this->assertSame('cy_GB', $this->sut->getLocale());
     }
 
-    public function testTranslateToWelshNo()
+    public function testTranslateToWelshNo(): void
     {
         $this->assertSame('en_GB', $this->sut->getLocale());
 
@@ -149,7 +151,7 @@ class MessageTest extends MockeryTestCase
         $this->assertSame('en_GB', $this->sut->getLocale());
     }
 
-    public function testGetSubjectReplaceVars()
+    public function testGetSubjectReplaceVars(): void
     {
         $this->sut->setSubject('My name is %s and I am %d years old');
         $this->sut->setSubjectVariables(['Billy', 82]);
@@ -157,7 +159,7 @@ class MessageTest extends MockeryTestCase
         $this->assertSame('My name is Billy and I am 82 years old', $this->sut->getSubjectReplaceVariables());
     }
 
-    public function testBuildCommand()
+    public function testBuildCommand(): void
     {
         $this->sut->setFromName('from name');
         $this->sut->setFromEmail('from@test.me');

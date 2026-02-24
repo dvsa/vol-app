@@ -42,7 +42,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLicenceVehicle implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLicenceVehicle implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -250,7 +250,8 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -273,7 +274,8 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -296,7 +298,8 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Get the vehicle
      *
-     * @return \Dvsa\Olcs\Api\Entity\Vehicle\Vehicle     */
+     * @return \Dvsa\Olcs\Api\Entity\Vehicle\Vehicle
+     */
     public function getVehicle()
     {
         return $this->vehicle;
@@ -319,7 +322,8 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
     public function getApplication()
     {
         return $this->application;
@@ -342,7 +346,8 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Get the interim application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
     public function getInterimApplication()
     {
         return $this->interimApplication;
@@ -365,7 +370,8 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -388,7 +394,8 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -413,7 +420,8 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getReceivedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -442,7 +450,8 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getRemovalDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -471,7 +480,8 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getRemovalLetterSeedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -498,7 +508,8 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Get the vi action
      *
-     * @return string     */
+     * @return string
+     */
     public function getViAction()
     {
         return $this->viAction;
@@ -523,7 +534,8 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getWarningLetterSeedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -552,7 +564,8 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getWarningLetterSentDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -581,7 +594,8 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getSpecifiedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -608,7 +622,8 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -631,7 +646,8 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -703,6 +719,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

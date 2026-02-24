@@ -22,6 +22,7 @@ class ContentSectionRenderer extends AbstractSectionRenderer
      * @return string HTML output wrapped in <div class="section">
      * @throws \InvalidArgumentException if entity is not supported
      */
+    #[\Override]
     public function render(object $entity, array $context = []): string
     {
         if (!$this->supports($entity)) {
@@ -48,6 +49,7 @@ class ContentSectionRenderer extends AbstractSectionRenderer
      * @param object $entity
      * @return bool
      */
+    #[\Override]
     public function supports(object $entity): bool
     {
         return $entity instanceof LetterInstanceSection;

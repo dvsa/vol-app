@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Bus\Ebsr;
 
 use Doctrine\ORM\Query;
@@ -31,7 +33,8 @@ class CreateSubmissionTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             DocumentEntity::class => [
@@ -50,7 +53,7 @@ class CreateSubmissionTest extends AbstractCommandHandlerTestCase
     /**
      * Tests handleCommand
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = CreateSubmissionCmd::create(
             [

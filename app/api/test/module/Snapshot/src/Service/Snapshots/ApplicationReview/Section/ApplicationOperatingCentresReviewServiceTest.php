@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Application Operating Centres Review Service Test
  *
@@ -74,10 +76,8 @@ class ApplicationOperatingCentresReviewServiceTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider psvProvider
-     */
-    public function testGetConfigFromDataWithEmptyOcList($isGoods, $expectedOcServiceProperty, $expectedTaServiceProperty)
+    #[\PHPUnit\Framework\Attributes\DataProvider('psvProvider')]
+    public function testGetConfigFromDataWithEmptyOcList(mixed $isGoods, mixed $expectedOcServiceProperty, mixed $expectedTaServiceProperty): void
     {
         $expectedOcService = $this->{$expectedOcServiceProperty};
         $expectedTaService = $this->{$expectedTaServiceProperty};
@@ -109,10 +109,8 @@ class ApplicationOperatingCentresReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    /**
-     * @dataProvider psvProvider
-     */
-    public function testGetConfigFromDataWithOcList($isGoods, $expectedOcServiceProperty, $expectedTaServiceProperty)
+    #[\PHPUnit\Framework\Attributes\DataProvider('psvProvider')]
+    public function testGetConfigFromDataWithOcList(mixed $isGoods, mixed $expectedOcServiceProperty, mixed $expectedTaServiceProperty): void
     {
         $expectedOcService = $this->{$expectedOcServiceProperty};
         $expectedTaService = $this->{$expectedTaServiceProperty};
@@ -160,7 +158,7 @@ class ApplicationOperatingCentresReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function psvProvider()
+    public static function psvProvider(): array
     {
         return [
             [
@@ -176,10 +174,8 @@ class ApplicationOperatingCentresReviewServiceTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpGetHeaderTranslationKey
-     */
-    public function testGetHeaderTranslationKey($vehicleTypeId, $expectedTranslationKey)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetHeaderTranslationKey')]
+    public function testGetHeaderTranslationKey(mixed $vehicleTypeId, mixed $expectedTranslationKey): void
     {
         $reviewData = [
             'vehicleType' => [
@@ -193,7 +189,7 @@ class ApplicationOperatingCentresReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function dpGetHeaderTranslationKey()
+    public static function dpGetHeaderTranslationKey(): array
     {
         return [
             [RefData::APP_VEHICLE_TYPE_PSV, 'review-section-key'],

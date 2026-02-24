@@ -36,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractApplicationTracking implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractApplicationTracking implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -391,7 +391,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -414,7 +415,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
     public function getApplication()
     {
         return $this->application;
@@ -437,7 +439,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -460,7 +463,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -483,7 +487,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the type of licence status
      *
-     * @return int     */
+     * @return int
+     */
     public function getTypeOfLicenceStatus()
     {
         return $this->typeOfLicenceStatus;
@@ -506,7 +511,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the business type status
      *
-     * @return int     */
+     * @return int
+     */
     public function getBusinessTypeStatus()
     {
         return $this->businessTypeStatus;
@@ -529,7 +535,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the business details status
      *
-     * @return int     */
+     * @return int
+     */
     public function getBusinessDetailsStatus()
     {
         return $this->businessDetailsStatus;
@@ -552,7 +559,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the addresses status
      *
-     * @return int     */
+     * @return int
+     */
     public function getAddressesStatus()
     {
         return $this->addressesStatus;
@@ -575,7 +583,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the people status
      *
-     * @return int     */
+     * @return int
+     */
     public function getPeopleStatus()
     {
         return $this->peopleStatus;
@@ -598,7 +607,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the taxi phv status
      *
-     * @return int     */
+     * @return int
+     */
     public function getTaxiPhvStatus()
     {
         return $this->taxiPhvStatus;
@@ -621,7 +631,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the operating centres status
      *
-     * @return int     */
+     * @return int
+     */
     public function getOperatingCentresStatus()
     {
         return $this->operatingCentresStatus;
@@ -644,7 +655,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the financial evidence status
      *
-     * @return int     */
+     * @return int
+     */
     public function getFinancialEvidenceStatus()
     {
         return $this->financialEvidenceStatus;
@@ -667,7 +679,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the transport managers status
      *
-     * @return int     */
+     * @return int
+     */
     public function getTransportManagersStatus()
     {
         return $this->transportManagersStatus;
@@ -690,7 +703,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the vehicles status
      *
-     * @return int     */
+     * @return int
+     */
     public function getVehiclesStatus()
     {
         return $this->vehiclesStatus;
@@ -713,7 +727,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the vehicles psv status
      *
-     * @return int     */
+     * @return int
+     */
     public function getVehiclesPsvStatus()
     {
         return $this->vehiclesPsvStatus;
@@ -736,7 +751,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the vehicles size status
      *
-     * @return int     */
+     * @return int
+     */
     public function getVehiclesSizeStatus()
     {
         return $this->vehiclesSizeStatus;
@@ -759,7 +775,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the psv operate small status
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvOperateSmallStatus()
     {
         return $this->psvOperateSmallStatus;
@@ -782,7 +799,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the psv operate large status
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvOperateLargeStatus()
     {
         return $this->psvOperateLargeStatus;
@@ -805,7 +823,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the psv small conditions status
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvSmallConditionsStatus()
     {
         return $this->psvSmallConditionsStatus;
@@ -828,7 +847,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the psv operate novelty status
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvOperateNoveltyStatus()
     {
         return $this->psvOperateNoveltyStatus;
@@ -851,7 +871,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the psv small part written status
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvSmallPartWrittenStatus()
     {
         return $this->psvSmallPartWrittenStatus;
@@ -874,7 +895,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the psv documentary evidence small status
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvDocumentaryEvidenceSmallStatus()
     {
         return $this->psvDocumentaryEvidenceSmallStatus;
@@ -897,7 +919,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the psv documentary evidence large status
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvDocumentaryEvidenceLargeStatus()
     {
         return $this->psvDocumentaryEvidenceLargeStatus;
@@ -920,7 +943,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the psv main occupation undertakings status
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvMainOccupationUndertakingsStatus()
     {
         return $this->psvMainOccupationUndertakingsStatus;
@@ -943,7 +967,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the vehicles declarations status
      *
-     * @return int     */
+     * @return int
+     */
     public function getVehiclesDeclarationsStatus()
     {
         return $this->vehiclesDeclarationsStatus;
@@ -966,7 +991,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the discs status
      *
-     * @return int     */
+     * @return int
+     */
     public function getDiscsStatus()
     {
         return $this->discsStatus;
@@ -989,7 +1015,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the community licences status
      *
-     * @return int     */
+     * @return int
+     */
     public function getCommunityLicencesStatus()
     {
         return $this->communityLicencesStatus;
@@ -1012,7 +1039,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the safety status
      *
-     * @return int     */
+     * @return int
+     */
     public function getSafetyStatus()
     {
         return $this->safetyStatus;
@@ -1035,7 +1063,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the conditions undertakings status
      *
-     * @return int     */
+     * @return int
+     */
     public function getConditionsUndertakingsStatus()
     {
         return $this->conditionsUndertakingsStatus;
@@ -1058,7 +1087,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the financial history status
      *
-     * @return int     */
+     * @return int
+     */
     public function getFinancialHistoryStatus()
     {
         return $this->financialHistoryStatus;
@@ -1081,7 +1111,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the licence history status
      *
-     * @return int     */
+     * @return int
+     */
     public function getLicenceHistoryStatus()
     {
         return $this->licenceHistoryStatus;
@@ -1104,7 +1135,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the convictions penalties status
      *
-     * @return int     */
+     * @return int
+     */
     public function getConvictionsPenaltiesStatus()
     {
         return $this->convictionsPenaltiesStatus;
@@ -1127,7 +1159,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the declarations internal status
      *
-     * @return int     */
+     * @return int
+     */
     public function getDeclarationsInternalStatus()
     {
         return $this->declarationsInternalStatus;
@@ -1150,7 +1183,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -1159,6 +1193,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

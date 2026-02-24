@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -12,7 +14,7 @@ use Laminas\Form\Form;
  */
 class DocumentRelinkTest extends MockeryTestCase
 {
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $data = [
             'document-relink-details' => [
@@ -31,7 +33,7 @@ class DocumentRelinkTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($data));
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $mockForm = new Form();
 

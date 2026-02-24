@@ -29,7 +29,7 @@ use Doctrine\Common\Collections\Collection;
  *    }
  * )
  */
-abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -128,7 +128,8 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -151,7 +152,8 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
     /**
      * Get the companies house company
      *
-     * @return \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany     */
+     * @return \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany
+     */
     public function getCompaniesHouseCompany()
     {
         return $this->companiesHouseCompany;
@@ -174,7 +176,8 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
     /**
      * Get the name
      *
-     * @return string     */
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -197,7 +200,8 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
     /**
      * Get the role
      *
-     * @return string     */
+     * @return string
+     */
     public function getRole()
     {
         return $this->role;
@@ -222,7 +226,8 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getDateOfBirth($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -249,7 +254,8 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -258,6 +264,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

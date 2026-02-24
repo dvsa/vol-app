@@ -17,6 +17,7 @@ class EbsrList implements AssertionInterface
      * @param AuthorizationService $authorizationService
      * @return bool
      */
+    #[\Override]
     public function assert(AuthorizationService $authorizationService)
     {
         $currentUser = $authorizationService->getIdentity();

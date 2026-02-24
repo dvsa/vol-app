@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Bilateral;
 
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep as ApplicationStepEntity;
@@ -76,7 +78,7 @@ class PermitUsageGeneratorTest extends MockeryTestCase
         parent::setUp();
     }
 
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $returnedOptions = [
             (new RefData(RefData::JOURNEY_MULTIPLE))->setDescription('Multiple'),
@@ -118,7 +120,7 @@ class PermitUsageGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGenerateWithEmptyPermitUsageList()
+    public function testGenerateWithEmptyPermitUsageList(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\NotFoundException::class);
         $this->expectExceptionMessage('Permit usage not found');

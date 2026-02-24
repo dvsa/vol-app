@@ -13,6 +13,7 @@ class IrhpApplicationEnableDisableMessagingController extends AbstractEnableDisa
 {
     protected $navigationId = 'licence_irhp_permits-application';
 
+    #[\Override]
     public function getLeftView(): ?ViewModel
     {
         if ($this->getRequest()->isXmlHttpRequest()) {
@@ -25,11 +26,13 @@ class IrhpApplicationEnableDisableMessagingController extends AbstractEnableDisa
         return $view;
     }
 
+    #[\Override]
     protected function getRoutePrefix(): string
     {
         return 'licence/irhp-application-conversation';
     }
 
+    #[\Override]
     protected function getOrganisationId(): int
     {
         $queryResponse = $this->handleQuery(Licence::create(['id' => $this->params()->fromRoute('licence')]));

@@ -20,6 +20,7 @@ class CanAccessApplicationOrLicenceWithId extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         $applicationId = $this->getApplication($dto);

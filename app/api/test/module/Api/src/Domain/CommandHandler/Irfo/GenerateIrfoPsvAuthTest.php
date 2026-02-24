@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Generate Irfo Psv Auth Test
  */
@@ -35,7 +37,8 @@ class GenerateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrfoPsvAuthEntity::JOURNEY_FREQ_DAILY,
@@ -51,12 +54,12 @@ class GenerateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider handleCommandProvider
      *
      * @param int $irfoFeeTypeId
      * @param array $expectedDocs
      */
-    public function testHandleCommand($irfoFeeTypeId, $expectedDocs)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
+    public function testHandleCommand(mixed $irfoFeeTypeId, mixed $expectedDocs): void
     {
         $id = 99;
         $orgId = 101;
@@ -124,7 +127,7 @@ class GenerateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider(): array
     {
         return [
             [

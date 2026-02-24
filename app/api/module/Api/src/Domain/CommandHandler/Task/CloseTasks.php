@@ -23,6 +23,7 @@ final class CloseTasks extends AbstractCommandHandler implements TransactionedIn
 {
     protected $repoServiceName = 'Task';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

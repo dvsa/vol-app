@@ -17,6 +17,7 @@ class LetterSection extends AbstractVersionedRepository
      *
      * @return array
      */
+    #[\Override]
     protected function getVersionedFields(): array
     {
         return [
@@ -37,6 +38,7 @@ class LetterSection extends AbstractVersionedRepository
      *
      * @return string
      */
+    #[\Override]
     protected function getVersionEntityClass(): string
     {
         return LetterSectionVersion::class;
@@ -47,6 +49,7 @@ class LetterSection extends AbstractVersionedRepository
      *
      * @return string
      */
+    #[\Override]
     protected function getEntityShortName(): string
     {
         return 'LetterSection';

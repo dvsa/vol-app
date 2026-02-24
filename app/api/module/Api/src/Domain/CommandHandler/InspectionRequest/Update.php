@@ -30,6 +30,7 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
     /**
      * @param \Dvsa\Olcs\Transfer\Command\InspectionRequest\Update $command
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

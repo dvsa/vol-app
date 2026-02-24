@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\OpNameOnly;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\OpNameOnly;
  */
 class OpNameOnlyTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new OpNameOnly();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -19,7 +21,7 @@ class OpNameOnlyTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderWithNoOpName()
+    public function testRenderWithNoOpName(): void
     {
         $bookmark = new OpNameOnly();
         $bookmark->setData([]);
@@ -30,7 +32,7 @@ class OpNameOnlyTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $bookmark = new OpNameOnly();
         $bookmark->setData(

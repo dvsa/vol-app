@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create New User Test
  *
@@ -73,7 +75,8 @@ class CreateNewUserTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ContactDetails::CONTACT_TYPE_TRANSPORT_MANAGER,
@@ -85,7 +88,7 @@ class CreateNewUserTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'application' => 111,
@@ -211,7 +214,7 @@ class CreateNewUserTest extends AbstractCommandHandlerTestCase
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function testHandleCommandWithEmail()
+    public function testHandleCommandWithEmail(): void
     {
         $data = [
             'application' => 111,
@@ -393,7 +396,7 @@ class CreateNewUserTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $response->toArray());
     }
 
-    public function testHandleCommandWithEmailWithUsernameInUse()
+    public function testHandleCommandWithEmailWithUsernameInUse(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -422,7 +425,7 @@ class CreateNewUserTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithEmailWithMissingEmail()
+    public function testHandleCommandWithEmailWithMissingEmail(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -441,7 +444,7 @@ class CreateNewUserTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithEmailWithMissingEmailAndUsername()
+    public function testHandleCommandWithEmailWithMissingEmailAndUsername(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -460,7 +463,7 @@ class CreateNewUserTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithExceptionCreatingUserInAuthService()
+    public function testHandleCommandWithExceptionCreatingUserInAuthService(): void
     {
         $data = [
             'application' => 111,

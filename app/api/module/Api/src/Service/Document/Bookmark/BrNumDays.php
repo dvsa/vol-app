@@ -23,6 +23,7 @@ class BrNumDays extends SingleValueAbstract
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         $period = 'standardPeriod';

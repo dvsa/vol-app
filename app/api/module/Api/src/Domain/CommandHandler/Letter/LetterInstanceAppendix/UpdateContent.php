@@ -15,6 +15,7 @@ final class UpdateContent extends AbstractCommandHandler
 {
     protected $repoServiceName = 'LetterInstanceAppendix';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var Cmd $command */

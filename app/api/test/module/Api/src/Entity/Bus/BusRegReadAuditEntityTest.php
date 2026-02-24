@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Bus;
 
 use Dvsa\Olcs\Api\Entity\Bus\BusReg;
@@ -21,7 +23,7 @@ class BusRegReadAuditEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testBusRegRealAudit()
+    public function testBusRegRealAudit(): void
     {
         $user = new User('123', 'foo');
         $busReg = new BusReg();

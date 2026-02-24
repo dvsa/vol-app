@@ -19,6 +19,7 @@ class AbstractPublicInquiryDataServicesFactory implements FactoryInterface
      * @return AbstractPublicInquiryDataServices
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AbstractPublicInquiryDataServices
     {
         return new AbstractPublicInquiryDataServices(

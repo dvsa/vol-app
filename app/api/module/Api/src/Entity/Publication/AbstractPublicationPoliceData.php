@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractPublicationPoliceData implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractPublicationPoliceData implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -186,7 +186,8 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -209,7 +210,8 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * Get the publication link
      *
-     * @return \Dvsa\Olcs\Api\Entity\Publication\PublicationLink     */
+     * @return \Dvsa\Olcs\Api\Entity\Publication\PublicationLink
+     */
     public function getPublicationLink()
     {
         return $this->publicationLink;
@@ -232,7 +234,8 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * Get the person
      *
-     * @return \Dvsa\Olcs\Api\Entity\Person\Person     */
+     * @return \Dvsa\Olcs\Api\Entity\Person\Person
+     */
     public function getPerson()
     {
         return $this->person;
@@ -255,7 +258,8 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -278,7 +282,8 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -301,7 +306,8 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * Get the forename
      *
-     * @return string     */
+     * @return string
+     */
     public function getForename()
     {
         return $this->forename;
@@ -324,7 +330,8 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * Get the family name
      *
-     * @return string     */
+     * @return string
+     */
     public function getFamilyName()
     {
         return $this->familyName;
@@ -349,7 +356,8 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getBirthDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -376,7 +384,8 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * Get the olbs dob
      *
-     * @return string     */
+     * @return string
+     */
     public function getOlbsDob()
     {
         return $this->olbsDob;
@@ -399,7 +408,8 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -422,7 +432,8 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -431,6 +442,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

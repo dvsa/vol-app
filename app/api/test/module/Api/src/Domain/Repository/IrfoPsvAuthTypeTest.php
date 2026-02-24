@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * IrfoPsvAuthType repo test
  *
@@ -26,7 +28,7 @@ class IrfoPsvAuthTypeTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         $this->setUpSut(Repo::class, true);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository\GetDbValue as GetDbValueRepo;
@@ -15,7 +17,7 @@ class GetDbValueTest extends RepositoryTestCase
         $this->setUpSut(GetDbValueRepo::class, true);
     }
 
-    public function testFetchOneEntityByX()
+    public function testFetchOneEntityByX(): void
     {
         $fetchBy = 'id';
         $args = [0 => 'arg'];

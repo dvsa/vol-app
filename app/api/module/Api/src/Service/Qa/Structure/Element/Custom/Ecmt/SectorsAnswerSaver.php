@@ -26,6 +26,7 @@ class SectorsAnswerSaver implements AnswerSaverInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function save(QaContext $qaContext, array $postData)
     {
         $answer = $this->genericAnswerFetcher->fetch(

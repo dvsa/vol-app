@@ -29,7 +29,7 @@ use Doctrine\Common\Collections\Collection;
  *    }
  * )
  */
-abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -219,7 +219,8 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -242,7 +243,8 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Get the company number
      *
-     * @return string     */
+     * @return string
+     */
     public function getCompanyNumber()
     {
         return $this->companyNumber;
@@ -265,7 +267,8 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Get the company name
      *
-     * @return string     */
+     * @return string
+     */
     public function getCompanyName()
     {
         return $this->companyName;
@@ -288,7 +291,8 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Get the company status
      *
-     * @return string     */
+     * @return string
+     */
     public function getCompanyStatus()
     {
         return $this->companyStatus;
@@ -311,7 +315,8 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Get the address line1
      *
-     * @return string     */
+     * @return string
+     */
     public function getAddressLine1()
     {
         return $this->addressLine1;
@@ -334,7 +339,8 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Get the address line2
      *
-     * @return string     */
+     * @return string
+     */
     public function getAddressLine2()
     {
         return $this->addressLine2;
@@ -357,7 +363,8 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Get the country
      *
-     * @return string     */
+     * @return string
+     */
     public function getCountry()
     {
         return $this->country;
@@ -380,7 +387,8 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Get the locality
      *
-     * @return string     */
+     * @return string
+     */
     public function getLocality()
     {
         return $this->locality;
@@ -403,7 +411,8 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Get the po box
      *
-     * @return string     */
+     * @return string
+     */
     public function getPoBox()
     {
         return $this->poBox;
@@ -426,7 +435,8 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Get the postal code
      *
-     * @return string     */
+     * @return string
+     */
     public function getPostalCode()
     {
         return $this->postalCode;
@@ -449,7 +459,8 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Get the premises
      *
-     * @return string     */
+     * @return string
+     */
     public function getPremises()
     {
         return $this->premises;
@@ -472,7 +483,8 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Get the region
      *
-     * @return string     */
+     * @return string
+     */
     public function getRegion()
     {
         return $this->region;
@@ -495,7 +507,8 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Get the insolvency processed
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getInsolvencyProcessed()
     {
         return $this->insolvencyProcessed;
@@ -518,7 +531,8 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -653,6 +667,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

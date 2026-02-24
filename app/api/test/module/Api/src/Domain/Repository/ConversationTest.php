@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\QueryBuilder;
@@ -13,7 +15,7 @@ class ConversationTest extends RepositoryTestCase
         $this->setUpSut(Conversation::class);
     }
 
-    public function testApplyOrderForListing()
+    public function testApplyOrderForListing(): void
     {
         $qb = m::mock(QueryBuilder::class);
         $roleNames = ['role1', 'role2'];
@@ -69,7 +71,7 @@ class ConversationTest extends RepositoryTestCase
         $this->assertSame($qb, $result);
     }
 
-    public function testFilterByStatuses()
+    public function testFilterByStatuses(): void
     {
         $qb = m::mock(QueryBuilder::class);
         $statuses = ['open', 'closed'];

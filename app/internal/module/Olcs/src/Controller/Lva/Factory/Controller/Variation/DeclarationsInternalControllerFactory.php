@@ -20,6 +20,7 @@ class DeclarationsInternalControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return DeclarationsInternalController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DeclarationsInternalController
     {
 

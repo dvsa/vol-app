@@ -17,6 +17,7 @@ final class Create extends AbstractCommandHandler
 
     protected $extraRepos = ['LetterAppendix', 'Document'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var Cmd $command */

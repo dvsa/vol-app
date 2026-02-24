@@ -13,9 +13,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 
-/**
- * @covers \Dvsa\Olcs\Cli\Domain\CommandHandler\DataDvaNiExport
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Domain\CommandHandler\DataDvaNiExport::class)]
 class DataDvaNiExportTest extends AbstractCommandHandlerTestCase
 {
     public $mockDbalResult;
@@ -52,14 +50,14 @@ class DataDvaNiExportTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    private function createTempDir()
+    private function createTempDir(): mixed
     {
         $this->tempDir = sys_get_temp_dir() . '/phpunit_' . uniqid();
         mkdir($this->tempDir);
         return $this->tempDir;
     }
 
-    private function cleanupRealTempDir()
+    private function cleanupRealTempDir(): void
     {
         if ($this->tempDir && is_dir($this->tempDir)) {
             $files = new \RecursiveIteratorIterator(
@@ -74,7 +72,7 @@ class DataDvaNiExportTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function testInvalidReportException()
+    public function testInvalidReportException(): void
     {
         $cmd = Cmd::create(
             [
@@ -90,7 +88,7 @@ class DataDvaNiExportTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($cmd);
     }
 
-    public function testNiOperatorLicence()
+    public function testNiOperatorLicence(): void
     {
         $tempDir = $this->createTempDir();
 
@@ -131,7 +129,7 @@ class DataDvaNiExportTest extends AbstractCommandHandlerTestCase
 
         $date = new DateTime('now');
 
-        $expectCsvFile =  '/tmp/NiGvLicences-' . $date->format(DataDvaNiExport::FILE_DATETIME_FORMAT) . '.csv';
+        $expectCsvFile =  sys_get_temp_dir() . '/NiGvLicences-' . $date->format(DataDvaNiExport::FILE_DATETIME_FORMAT) . '.csv';
         $expectTgzFile =  'dvaoplic-' . $date->format(DataDvaNiExport::FILE_DATETIME_FORMAT) . '.tar.gz';
 
         $expectMsg =

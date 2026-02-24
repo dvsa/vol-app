@@ -58,6 +58,7 @@ class OperatorProcessingTasksController extends OperatorController
      * @see    \Olcs\Controller\Traits\TaskActionTrait
      * @return string
      */
+    #[\Override]
     protected function getTaskActionType()
     {
         return 'organisation';
@@ -69,6 +70,7 @@ class OperatorProcessingTasksController extends OperatorController
      * @see    \Olcs\Controller\Traits\TaskActionTrait
      * @return array
      */
+    #[\Override]
     protected function getTaskActionFilters()
     {
         return [

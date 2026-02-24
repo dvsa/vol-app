@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Company Subsidiary Test
  *
@@ -33,19 +35,19 @@ class AbstractHandlerTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testGetValidatorManager()
+    public function testGetValidatorManager(): void
     {
         $this->assertSame($this->validatorManager, $this->sut->getValidatorManager());
     }
 
-    public function testGetRepo()
+    public function testGetRepo(): void
     {
         $repo = $this->mockRepo('SomeRepo');
 
         $this->assertSame($repo, $this->sut->getRepo('SomeRepo'));
     }
 
-    public function testCall()
+    public function testCall(): void
     {
         $organisationProvider = m::mock(OrganisationProviderInterface::class);
 
@@ -54,7 +56,7 @@ class AbstractHandlerTest extends AbstractHandlerTestCase
         $this->assertEquals(true, $this->sut->isOwner($organisationProvider));
     }
 
-    public function testCallMissing()
+    public function testCallMissing(): void
     {
         $this->expectException(\RuntimeException::class);
 

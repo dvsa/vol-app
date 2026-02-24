@@ -27,6 +27,7 @@ final class Submit extends AbstractCommandHandler implements TransactionedInterf
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command Command */

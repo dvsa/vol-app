@@ -9,6 +9,7 @@ namespace Olcs\Service\Marker;
  */
 class SoleTraderDisqualificationMarker extends AbstractMarker
 {
+    #[\Override]
     public function canRender()
     {
         $data = $this->getData();
@@ -33,6 +34,7 @@ class SoleTraderDisqualificationMarker extends AbstractMarker
         return true;
     }
 
+    #[\Override]
     public function render()
     {
         $data = $this->getData();
@@ -50,7 +52,7 @@ class SoleTraderDisqualificationMarker extends AbstractMarker
             [
                 'startDateTime' => $startDateTime,
                 'endDateTime' => $endDateTime,
-                'active' => strtolower($disqualification['status']) == 'active',
+                'active' => strtolower((string) $disqualification['status']) == 'active',
                 'organisationId' => $data['organisation']['id'],
                 'personId' => $person['id'],
             ]

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\Command\IrhpPermitWindow\Close as CloseWindowCmd;
@@ -24,7 +26,7 @@ class CloseExpiredWindowsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $params = ['since' => '-1 day'];
         $w1Id = 10;
@@ -74,7 +76,7 @@ class CloseExpiredWindowsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWhenNoWindowsToBeClosed()
+    public function testHandleCommandWhenNoWindowsToBeClosed(): void
     {
         $params = ['since' => '-1 day'];
 

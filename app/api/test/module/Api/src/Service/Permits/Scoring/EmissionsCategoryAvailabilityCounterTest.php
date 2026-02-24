@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Scoring;
 
 use Dvsa\Olcs\Api\Domain\Repository\IrhpApplication as IrhpApplicationRepository;
@@ -17,10 +19,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class EmissionsCategoryAvailabilityCounterTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestGetCount
-     */
-    public function testGetCount($emissionsCategoryId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetCount')]
+    public function testGetCount(mixed $emissionsCategoryId): void
     {
         $combinedRangeSize = 160;
         $allocatedCount = 25;
@@ -58,7 +58,7 @@ class EmissionsCategoryAvailabilityCounterTest extends MockeryTestCase
         );
     }
 
-    public function dpTestGetCount()
+    public static function dpTestGetCount(): array
     {
         return [
             [RefData::EMISSIONS_CATEGORY_EURO6_REF],

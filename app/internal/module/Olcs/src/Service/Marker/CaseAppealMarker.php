@@ -9,6 +9,7 @@ namespace Olcs\Service\Marker;
  */
 class CaseAppealMarker extends AbstractMarker
 {
+    #[\Override]
     public function canRender()
     {
         $data = $this->getData();
@@ -16,6 +17,7 @@ class CaseAppealMarker extends AbstractMarker
         return isset($data['cases']) && count($this->getCasesWithAppeals($data)) > 0;
     }
 
+    #[\Override]
     public function render()
     {
         $data = $this->getData();

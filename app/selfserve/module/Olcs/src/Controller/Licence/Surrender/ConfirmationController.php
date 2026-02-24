@@ -32,6 +32,7 @@ class ConfirmationController extends AbstractSurrenderController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
     }
 
+    #[\Override]
     public function indexAction()
     {
         $params = $this->getViewVariables();
@@ -72,6 +73,7 @@ class ConfirmationController extends AbstractSurrenderController
      * @return array
      *
      */
+    #[\Override]
     protected function getViewVariables(): array
     {
         $this->data['surrender'] = $this->getSurrender();

@@ -34,6 +34,7 @@ class CheckRepute extends AbstractCommandHandler
     ) {
     }
 
+    #[\Override]
     public function handleCommand(CommandInterface|CheckReputeCmd $command)
     {
         /* @var $repo TransportManagerRepo */

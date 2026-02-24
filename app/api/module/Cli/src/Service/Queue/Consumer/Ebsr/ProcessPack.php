@@ -17,6 +17,7 @@ class ProcessPack extends AbstractCommandConsumer
      * @param QueueEntity $item
      * @return array
      */
+    #[\Override]
     public function getCommandData(QueueEntity $item)
     {
         return json_decode($item->getOptions(), true);

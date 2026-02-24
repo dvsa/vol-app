@@ -37,6 +37,7 @@ class LicenceProcessingPublicationsController extends AbstractInternalController
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -50,6 +51,7 @@ class LicenceProcessingPublicationsController extends AbstractInternalController
      *
      * @return ViewModel
      */
+    #[\Override]
     public function editAction()
     {
         $publicationLink = $this->getPublicationLink();

@@ -19,6 +19,7 @@ final class GetByCase extends AbstractQueryHandler
      *
      * @return array|\Dvsa\Olcs\Api\Domain\QueryHandler\Result
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $tmCaseDecision = $this->getRepo()->fetchLatestUsingCase($query);

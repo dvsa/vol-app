@@ -40,7 +40,7 @@ class VolGrabReplacementService
      * Regex pattern to match [[TOKEN_NAME]] placeholders
      * Only matches uppercase letters, numbers, and underscores (bookmark token format)
      */
-    private const GRAB_PATTERN = '/\[\[([A-Z0-9_]+)\]\]/';
+    private const string GRAB_PATTERN = '/\[\[([A-Z0-9_]+)\]\]/';
 
     /**
      * Replace VOL grabs in EditorJS JSON content

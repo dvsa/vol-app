@@ -31,6 +31,7 @@ final class DeleteWorkshop extends AbstractCommandHandler implements Transaction
 
     private EventHistoryCreator $eventHistoryCreator;
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();
@@ -44,23 +45,24 @@ final class DeleteWorkshop extends AbstractCommandHandler implements Transaction
 
             // create Event History record
             $this->eventHistoryCreator->create($workshop, EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR);
-            
+
             if ($contactDetails) {
-                
                 $this->eventHistoryCreator->create(
-                    $contactDetails, 
-                    EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR, 
+                    $contactDetails,
+                    EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR,
                     null,
-                    $workshop->getLicence());  
+                    $workshop->getLicence()
+                );
 
                 $address = $contactDetails->getAddress();
 
                 if ($address) {
                     $this->eventHistoryCreator->create(
-                        $address, 
-                        EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR, 
-                        null, 
-                        $workshop->getLicence());
+                        $address,
+                        EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR,
+                        null,
+                        $workshop->getLicence()
+                    );
                 }
             }
         }
@@ -70,6 +72,7 @@ final class DeleteWorkshop extends AbstractCommandHandler implements Transaction
         return $result;
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->eventHistoryCreator = $container->get('EventHistoryCreator');

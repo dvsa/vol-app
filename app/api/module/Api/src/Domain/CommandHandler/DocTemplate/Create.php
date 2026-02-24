@@ -49,6 +49,7 @@ class Create extends AbstractCommandHandler implements
      * @return Result
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         //Generate path identifier for docstore

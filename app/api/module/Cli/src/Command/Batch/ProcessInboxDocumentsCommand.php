@@ -10,11 +10,13 @@ class ProcessInboxDocumentsCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:process-inbox-documents';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Process inbox documents.');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

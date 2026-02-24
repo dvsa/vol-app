@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\FilteredTranslateableText;
@@ -28,7 +30,7 @@ class JsonDecodingFilteredTranslateableTextGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testFilteredTranslateableTextWhenString()
+    public function testFilteredTranslateableTextWhenString(): void
     {
         $value = '{"value1": "test1", "value2": "test2", "value3": ["test3", "test4"]}';
 
@@ -53,7 +55,7 @@ class JsonDecodingFilteredTranslateableTextGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testReturnNullWhenNotString()
+    public function testReturnNullWhenNotString(): void
     {
         $this->assertNull(
             $this->jsonDecodingFilteredTranslateableTextGenerator->generate(null)

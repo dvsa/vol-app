@@ -25,6 +25,7 @@ final class CreatePsvDiscs extends AbstractCommandHandler implements Transaction
 {
     protected $repoServiceName = 'PsvDisc';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\EventHistory;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\EventHistory\EventHistory as QueryHandler;
@@ -30,9 +32,9 @@ class EventHistoryTest extends QueryHandlerTestCase
      * @param string $entityType
      * @param int $entityPk
      * @param int $entityVersion
-     * @dataProvider eventHistoryDetailsProvider
      */
-    public function testHandleQuery($details, $entityType, $entityPk, $entityVersion)
+    #[\PHPUnit\Framework\Attributes\DataProvider('eventHistoryDetailsProvider')]
+    public function testHandleQuery(mixed $details, mixed $entityType, mixed $entityPk, mixed $entityVersion): void
     {
         $query = Qry::create(['id' => 69]);
 
@@ -85,7 +87,7 @@ class EventHistoryTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    public function eventHistoryDetailsProvider()
+    public static function eventHistoryDetailsProvider(): array
     {
         return [
             [['foo' => 'bar'], 'application', 1, 2],
@@ -94,7 +96,7 @@ class EventHistoryTest extends QueryHandlerTestCase
         ];
     }
 
-    public function testHandleQueryWithException()
+    public function testHandleQueryWithException(): void
     {
         $query = Qry::create(['id' => 69]);
 

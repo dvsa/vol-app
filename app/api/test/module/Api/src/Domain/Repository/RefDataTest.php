@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Mockery as m;
@@ -19,7 +21,7 @@ class RefDataTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
@@ -59,7 +61,7 @@ class RefDataTest extends RepositoryTestCase
         $sut->applyListFilters($mockDqb, $query);
     }
 
-    public function testApplyListJoins()
+    public function testApplyListJoins(): void
     {
         $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
@@ -72,7 +74,7 @@ class RefDataTest extends RepositoryTestCase
         $sut->applyListJoins($mockQb);
     }
 
-    public function testFetchByCategoryId()
+    public function testFetchByCategoryId(): void
     {
         $categoryId = 'permit_status';
 

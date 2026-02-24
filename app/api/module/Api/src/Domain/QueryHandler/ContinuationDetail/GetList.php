@@ -22,6 +22,7 @@ class GetList extends AbstractQueryHandler
 
     protected $extraRepos = ['Continuation'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $continuation = $this->getRepo('Continuation')->fetchWithTa($query->getContinuationId());

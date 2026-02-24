@@ -8,6 +8,7 @@ use Laminas\Http\Response;
 
 class BusCloseConversationController extends AbstractCloseConversationController
 {
+    #[\Override]
     protected function getRedirect(): Response
     {
         $params = [

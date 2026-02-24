@@ -22,6 +22,7 @@ class GetList extends AbstractQueryHandler
      * @param QueryInterface $query
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $irhpPermitSectors = $this->getRepo()->fetchByIrhpPermitStockId($query->getIrhpPermitStock());

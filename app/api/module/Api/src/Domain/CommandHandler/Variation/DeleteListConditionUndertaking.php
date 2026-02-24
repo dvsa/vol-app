@@ -27,6 +27,7 @@ final class DeleteListConditionUndertaking extends AbstractCommandHandler implem
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Repository\ConditionUndertaking $repo */

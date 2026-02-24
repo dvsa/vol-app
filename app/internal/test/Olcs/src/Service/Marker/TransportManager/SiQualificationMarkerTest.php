@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Marker\TransportManager;
 
 use Mockery as m;
@@ -23,12 +25,12 @@ class SiQualificationMarkerTest extends TestCase
         $this->sut = new \Olcs\Service\Marker\TransportManager\SiQualificationMarker();
     }
 
-    public function testCanRenderWithNoData()
+    public function testCanRenderWithNoData(): void
     {
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderWithGb()
+    public function testCanRenderWithGb(): void
     {
         $data = [
             'transportManagerApplications' => [
@@ -63,7 +65,7 @@ class SiQualificationMarkerTest extends TestCase
         $this->assertTrue($this->sut->canRender());
     }
 
-    public function testCanRenderWithNi()
+    public function testCanRenderWithNi(): void
     {
         $data = [
             'transportManagerApplications' => [
@@ -98,7 +100,7 @@ class SiQualificationMarkerTest extends TestCase
         $this->assertTrue($this->sut->canRender());
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $data = [
             'transportManagerApplications' => [

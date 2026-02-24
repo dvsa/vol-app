@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * StandardFieldsetPopulator Test
  *
@@ -23,7 +25,7 @@ use Laminas\Form\Fieldset;
  */
 class StandardFieldsetPopulatorTest extends TestCase
 {
-    public function testPopulate()
+    public function testPopulate(): void
     {
         $field1 = [
             'cabotage' => 'field1cabotage',

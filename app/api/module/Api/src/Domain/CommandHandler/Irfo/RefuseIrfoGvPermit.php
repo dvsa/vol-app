@@ -21,6 +21,7 @@ final class RefuseIrfoGvPermit extends AbstractCommandHandler implements Transac
 {
     protected $repoServiceName = 'IrfoGvPermit';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

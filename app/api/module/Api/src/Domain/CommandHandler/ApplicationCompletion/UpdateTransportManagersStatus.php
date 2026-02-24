@@ -22,6 +22,7 @@ final class UpdateTransportManagersStatus extends AbstractUpdateStatus
 
     protected $section = 'TransportManagers';
 
+    #[\Override]
     protected function isSectionValid(Application $application)
     {
         $requiredTransportManager = [

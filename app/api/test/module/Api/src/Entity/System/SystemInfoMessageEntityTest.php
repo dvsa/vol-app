@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\System;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler;
@@ -19,17 +21,15 @@ class SystemInfoMessageEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider dataProviderTestCalculated
-     */
-    public function testCalculated(Entity $entity, $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestCalculated')]
+    public function testCalculated(Entity $entity, mixed $expect): void
     {
         $actual = $entity->getCalculatedBundleValues();
 
         static::assertEquals($expect, $actual);
     }
 
-    public function dataProviderTestCalculated()
+    public static function dataProviderTestCalculated(): array
     {
         $now = time();
 

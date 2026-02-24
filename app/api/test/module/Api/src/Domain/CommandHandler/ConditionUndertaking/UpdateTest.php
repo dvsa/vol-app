@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\ConditionUndertaking;
 
 use Doctrine\ORM\Query;
@@ -30,7 +32,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'TYPE',
@@ -47,7 +50,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandFailValidation()
+    public function testHandleCommandFailValidation(): void
     {
         $data = [
             'attachedTo' => 'cat_oc',
@@ -59,7 +62,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 154,
@@ -90,7 +93,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
             }
         );
 
-        $eventHistoryType = $command->getType() === ConditionUndertaking::TYPE_CONDITION ? 
+        $eventHistoryType = $command->getType() === ConditionUndertaking::TYPE_CONDITION ?
             EventHistoryTypeEntity::EVENT_CODE_CONDITION_CHANGED : EventHistoryTypeEntity::EVENT_CODE_UNDERTAKING_CHANGED;
 
         $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')
@@ -103,7 +106,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['conditionUndertaking' => 154], $result->getIds());
     }
 
-    public function testHandleCommandWithOperatingCentre()
+    public function testHandleCommandWithOperatingCentre(): void
     {
         $data = [
             'id' => 154,
@@ -138,7 +141,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
             }
         );
 
-        $eventHistoryType = $command->getType() === ConditionUndertaking::TYPE_CONDITION ? 
+        $eventHistoryType = $command->getType() === ConditionUndertaking::TYPE_CONDITION ?
             EventHistoryTypeEntity::EVENT_CODE_CONDITION_CHANGED : EventHistoryTypeEntity::EVENT_CODE_UNDERTAKING_CHANGED;
 
         $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')

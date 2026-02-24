@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Surrender;
 
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
@@ -32,7 +34,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWithNoSurrender()
+    public function testHandleCommandWithNoSurrender(): void
     {
         $command = $this->createCommand();
 
@@ -61,7 +63,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
 
-    public function testHandleCommandWithWithdrawnSurrender()
+    public function testHandleCommandWithWithdrawnSurrender(): void
     {
         $command = $this->createCommand();
 
@@ -87,7 +89,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
 
-    public function testHandleCommandWithIncorrectSurrenderStatus()
+    public function testHandleCommandWithIncorrectSurrenderStatus(): void
     {
         $command = $this->createCommand();
 
@@ -103,7 +105,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    protected function createCommand()
+    protected function createCommand(): mixed
     {
         $data = [
             'id' => self::LIC_ID,

@@ -26,6 +26,7 @@ abstract class AbstractController extends LaminasAbstractRestfulController
      * @return mixed
      * @throws Exception\DomainException if no route matches in event or invalid HTTP method
      */
+    #[\Override]
     public function onDispatch(MvcEvent $e)
     {
         $data = [
@@ -72,6 +73,7 @@ abstract class AbstractController extends LaminasAbstractRestfulController
      *
      * @return array
      */
+    #[\Override]
     public function notFoundAction()
     {
         return $this->respond(Response::STATUS_CODE_404, 'Resource not found');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Cancel Application Test
  *
@@ -34,7 +36,8 @@ class CancelApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ApplicationEntity::APPLICATION_STATUS_CANCELLED,
@@ -44,7 +47,7 @@ class CancelApplicationTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandForVariation()
+    public function testHandleCommandForVariation(): void
     {
         $applicationId = 834;
         $command = Cmd::create(['id' => $applicationId]);
@@ -89,7 +92,7 @@ class CancelApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandForApplication()
+    public function testHandleCommandForApplication(): void
     {
         $applicationId = 834;
         $command = Cmd::create(['id' => $applicationId]);

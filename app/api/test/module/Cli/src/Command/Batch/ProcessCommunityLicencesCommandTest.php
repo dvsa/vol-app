@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Command\Batch;
 
 use Olcs\Logging\Log\Logger;
@@ -16,6 +18,7 @@ use Dvsa\Olcs\Cli\Domain\Query\CommunityLic\CommunityLicencesForSuspensionList;
 use Dvsa\Olcs\Cli\Domain\Query\CommunityLic\CommunityLicencesForActivationList;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class ProcessCommunityLicencesCommandTest extends TestCase
 {
     private CommandTester $commandTester;
@@ -31,16 +34,14 @@ class ProcessCommunityLicencesCommandTest extends TestCase
         $application = new Application();
         $application->add($command);
 
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
 
         $this->commandTester = new CommandTester($application->find('batch:process-community-licences'));
     }
 
-    public function testExecuteWithDryRun()
+    public function testExecuteWithDryRun(): void
     {
         $this->mockQueryHandlerManager->expects($this->exactly(2))
             ->method('handleQuery')
@@ -56,7 +57,7 @@ class ProcessCommunityLicencesCommandTest extends TestCase
         $this->assertEquals(0, $this->commandTester->getStatusCode());
     }
 
-    public function testExecuteSuspensionAndActivation()
+    public function testExecuteSuspensionAndActivation(): void
     {
         $this->mockQueryHandlerManager->method('handleQuery')
             ->willReturnCallback(function ($query) {
@@ -67,14 +68,18 @@ class ProcessCommunityLicencesCommandTest extends TestCase
                 }
                 return ['count' => 0, 'result' => []];
             });
+        $matcher = $this->exactly(2);
 
-        $this->mockCommandHandlerManager->expects($this->exactly(2))
-            ->method('handleCommand')
-            ->withConsecutive(
-                [$this->isInstanceOf(SuspendCommunityLic::class)],
-                [$this->isInstanceOf(ActivateCommunityLic::class)]
-            )
-            ->willReturn(new Result());
+        $this->mockCommandHandlerManager->expects($matcher)
+            ->method('handleCommand')->willReturnCallback(function (...$parameters) use ($matcher) {
+                if ($matcher->numberOfInvocations() === 1) {
+                    $this->assertSame($this->isInstanceOf(SuspendCommunityLic::class), $parameters[0]);
+                }
+                if ($matcher->numberOfInvocations() === 2) {
+                    $this->assertSame($this->isInstanceOf(ActivateCommunityLic::class), $parameters[0]);
+                }
+                return new Result();
+            });
 
         $this->commandTester->execute([]);
 

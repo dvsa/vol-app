@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\PrintScan;
 
 use Dvsa\Olcs\Api\Entity\PrintScan\TeamPrinter;
@@ -22,7 +24,7 @@ class TeamPrinterEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $team = new TeamEntity();
         $team->setId(1);

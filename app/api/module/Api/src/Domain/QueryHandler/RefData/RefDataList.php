@@ -15,6 +15,7 @@ class RefDataList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'RefData';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $repo \Dvsa\Olcs\Api\Domain\Repository\RefData */

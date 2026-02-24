@@ -8,6 +8,7 @@ use Olcs\Logging\Log\Logger;
 
 class AddDays implements DateTimeCalculatorInterface
 {
+    #[\Override]
     public function calculateDate(\DateTime $date, int $days): \DateTime
     {
         // ensure date is set to midnight to avoid date discrepancies

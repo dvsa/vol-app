@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Dvsa\Olcs\Api\Domain\QueryHandlerManager;
 use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Entity\Application\PreviousConviction;
 use Dvsa\Olcs\Api\Entity\Cases\Cases as CasesEntity;
@@ -43,27 +46,22 @@ use Dvsa\Olcs\Api\Entity\Vehicle\Vehicle;
 use Laminas\View\Renderer\PhpRenderer;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/**
- * Class AbstractSubmissionSectionTest
- * @author Shaun Lizzio <shaun@valtech.co.uk>
- */
-abstract class AbstractSubmissionSectionTest extends MockeryTestCase
+abstract class AbstractSubmissionSectionTestCase extends MockeryTestCase
 {
     protected $submissionSection = '';
-    protected $licenceStatus = 'lic_status';
-    protected $organisationType = 'org_type';
-    protected $licenceType = 'lic_type';
-    protected $goodsOrPsv = 'goods';
-    protected $natureOfBusiness = 'nob1';
+    protected const LICENCE_STATUS = 'lic_status';
+    protected const ORGANISATION_TYPE = 'org_type';
+    protected const LICENCE_TYPE = 'lic_type';
+    protected const GOODS_OR_PSV = 'goods';
+    protected const NATURE_OF_BUSINESS = 'nob1';
 
-    /**
-     * @dataProvider sectionTestProvider
-     */
-    public function testGenerateSection($input = null, $expectedResult = null)
+    #[DataProvider('sectionTestProvider')]
+    public function testGenerateSection(mixed $input, mixed $expectedResult = null): void
     {
         if (!empty($input)) {
-            $mockQueryHandler = m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class);
+            $mockQueryHandler = m::mock(QueryHandlerManager::class);
             $mockViewRenderer = m::mock(PhpRenderer::class);
             $sut = new $this->submissionSection($mockQueryHandler, $mockViewRenderer);
 
@@ -76,23 +74,18 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         }
     }
 
-    /**
-     * Filter provider
-     *
-     * @return array
-     */
-    abstract public function sectionTestProvider();
+    abstract public static function sectionTestProvider(): array;
 
     /**
      * Return a case attached to an application
      *
      * @return CasesEntity
      */
-    protected function getApplicationCase()
+    protected static function getApplicationCase(): mixed
     {
-        $case = $this->getCase();
+        $case = static::getCase();
         $case->setCaseType(new RefData('case_t_app'));
-        $application = $this->generateApplication(
+        $application = static::generateApplication(
             852,
             $case->getLicence(),
             Application::APPLICATION_STATUS_UNDER_CONSIDERATION,
@@ -104,7 +97,7 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $case;
     }
 
-    protected function getCase()
+    public static function getCase(): mixed
     {
         $openDate = new \DateTime('2012-01-01 15:00:00');
         $caseType = new RefData('case_t_app');
@@ -113,20 +106,20 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         $categorys = new ArrayCollection(['cat1', 'cat2']);
         $outcomes = new ArrayCollection(['out1']);
 
-        $organisation = $this->generateOrganisation();
-        $licence = $this->generateLicence($organisation, 7);
+        $organisation = static::generateOrganisation();
+        $licence = static::generateLicence($organisation, 7);
 
-        $application = $this->generateApplication(344, $licence, Application::APPLICATION_STATUS_GRANTED);
+        $application = static::generateApplication(344, $licence, Application::APPLICATION_STATUS_GRANTED);
 
         $ecmsNo = 'ecms1234';
         $description = 'case description';
-        $transportManager = $this->generateTransportManager(43);
+        $transportManager = static::generateTransportManager(43);
 
         $tmApplications = new ArrayCollection();
         $tmApplications->add(
-            $this->generateTransportManagerApplication(
+            static::generateTransportManagerApplication(
                 522,
-                $this->generateTransportManager(216),
+                static::generateTransportManager(216),
                 Application::APPLICATION_STATUS_GRANTED
             )
         );
@@ -135,7 +128,7 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
 
         $tmLicences = new ArrayCollection();
         $tmLicences->add(
-            $this->generateTransportManagerLicence(
+            static::generateTransportManagerLicence(
                 234,
                 $licence,
                 $transportManager
@@ -145,9 +138,9 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
 
         $transportManager->setTmApplications($tmApplications);
         $transportManager->setTmLicences($tmLicences);
-        $transportManager->setEmployments($this->generateArrayCollection('TmEmployment'));
-        $transportManager->setOtherLicences($this->generateArrayCollection('OtherLicence'));
-        $transportManager->setPreviousConvictions($this->generateArrayCollection('PreviousConviction'));
+        $transportManager->setEmployments(static::generateArrayCollection('TmEmployment'));
+        $transportManager->setOtherLicences(static::generateArrayCollection('OtherLicence'));
+        $transportManager->setPreviousConvictions(static::generateArrayCollection('PreviousConviction'));
 
         $case = new CasesEntity(
             $openDate,
@@ -164,21 +157,21 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         $case->setId(99);
         $case->setAnnualTestHistory('ath');
 
-        $case->setComplaints($this->generateComplaints($case));
-        $case->setStatements($this->generateStatements($case));
-        $case->setOppositions($this->generateOppositions($case));
+        $case->setComplaints(static::generateComplaints($case));
+        $case->setStatements(static::generateStatements($case));
+        $case->setOppositions(static::generateOppositions($case));
 
-        $case->setConvictions($this->generateConvictions());
+        $case->setConvictions(static::generateConvictions());
         $case->setConvictionNote('conv_note1');
 
-        $case->setSeriousInfringements($this->generateSeriousInfringements());
-        $case->setErruRequest($this->generateErruRequest());
+        $case->setSeriousInfringements(static::generateSeriousInfringements());
+        $case->setErruRequest(static::generateErruRequest());
         $case->setPenaltiesNote('pen-notes1');
 
         $case->setProhibitionNote('prohibition-note');
-        $case->setProhibitions($this->generateArrayCollection('Prohibition'));
+        $case->setProhibitions(static::generateArrayCollection('Prohibition'));
 
-        $cu = $this->generateConditionsUndertakings(
+        $cu = static::generateConditionsUndertakings(
             $case,
             ConditionUndertaking::TYPE_CONDITION,
             29
@@ -189,7 +182,7 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $case;
     }
 
-    protected function generateRefDataEntity($id, $description = 'desc')
+    protected static function generateRefDataEntity(mixed $id, string $description = 'desc'): mixed
     {
         $refData = new RefData($id);
         $refData->setDescription($id . '-' . $description);
@@ -197,11 +190,11 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $refData;
     }
 
-    protected function generatePerson($id)
+    protected static function generatePerson(mixed $id): mixed
     {
         $person = new Person($id);
         $person->setId($id);
-        $person->setTitle($this->generateRefDataEntity('title'));
+        $person->setTitle(static::generateRefDataEntity('title'));
         $person->setForename('fn' . $id);
         $person->setFamilyName('sn' . $id);
         $person->setBirthDate(new \DateTime('1977-01-' . $id));
@@ -210,26 +203,26 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $person;
     }
 
-    protected function generateTransportManager($id)
+    protected static function generateTransportManager(mixed $id): mixed
     {
         $tm = new TransportManager($id);
         $tm->setId($id);
         $tm->setVersion(($id + 10));
-        $tm->setTmType($this->generateRefDataEntity('tmType'));
+        $tm->setTmType(static::generateRefDataEntity('tmType'));
 
-        $tm->setHomeCd($this->generateContactDetails(533, ContactDetails::CONTACT_TYPE_REGISTERED_ADDRESS));
-        $tm->setWorkCd($this->generateContactDetails(343, ContactDetails::CONTACT_TYPE_CORRESPONDENCE_ADDRESS));
+        $tm->setHomeCd(static::generateContactDetails(533, ContactDetails::CONTACT_TYPE_REGISTERED_ADDRESS));
+        $tm->setWorkCd(static::generateContactDetails(343, ContactDetails::CONTACT_TYPE_CORRESPONDENCE_ADDRESS));
 
-        $tm->setQualifications($this->generateArrayCollection('tmQualification'));
+        $tm->setQualifications(static::generateArrayCollection('tmQualification'));
 
         return $tm;
     }
 
-    protected function generateTransportManagerApplication(
-        $id,
-        $transportManager,
-        $applicationStatus = Application::APPLICATION_STATUS_UNDER_CONSIDERATION
-    ) {
+    protected static function generateTransportManagerApplication(
+        mixed $id,
+        mixed $transportManager,
+        mixed $applicationStatus = Application::APPLICATION_STATUS_UNDER_CONSIDERATION
+    ): TransportManagerApplication {
         $entity = new TransportManagerApplication($id);
         $entity->setId($id);
         $entity->setTransportManager($transportManager);
@@ -242,20 +235,20 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         $entity->setHoursSun(7);
 
         $organisation = new Organisation();
-        $organisationType = $this->generateRefDataEntity($this->organisationType);
+        $organisationType = static::generateRefDataEntity(static::ORGANISATION_TYPE);
         $organisation->setType($organisationType);
         $organisation->setName('Org name');
 
-        $licence = $this->generateLicence($organisation, 55);
+        $licence = static::generateLicence($organisation, 55);
 
         $entity->setApplication(
-            $this->generateApplication(852, $licence, $applicationStatus, false)
+            static::generateApplication(852, $licence, $applicationStatus, false)
         );
 
         return $entity;
     }
 
-    protected function generateTransportManagerLicence($id, $licence, $transportManager)
+    protected static function generateTransportManagerLicence(mixed $id, mixed $licence, mixed $transportManager): mixed
     {
         $entity = new TransportManagerLicence($licence, $transportManager);
         $entity->setId($id);
@@ -270,17 +263,17 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $entity;
     }
 
-    protected function generateOrganisation()
+    protected static function generateOrganisation(): mixed
     {
         $organisation = new Organisation();
-        $organisationType = $this->generateRefDataEntity($this->organisationType);
+        $organisationType = static::generateRefDataEntity(static::ORGANISATION_TYPE);
         $organisation->setType($organisationType);
         $organisation->setName('Org name');
-        $organisation->setNatureOfBusiness($this->natureOfBusiness);
+        $organisation->setNatureOfBusiness(static::NATURE_OF_BUSINESS);
 
         $organisationPersons = new ArrayCollection();
         $organisationPerson = new OrganisationPerson();
-        $organisationPerson->setPerson($this->generatePerson(1));
+        $organisationPerson->setPerson(static::generatePerson(1));
         $organisationPersons->add($organisationPerson);
         $organisation->setOrganisationPersons($organisationPersons);
 
@@ -288,19 +281,19 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         $applications = new ArrayCollection();
 
         for ($i = 1; $i < 3; $i++) {
-            $licence = $this->generateLicence($organisation, $i);
-            $application = $this->generateApplication($i, $licence, Application::APPLICATION_STATUS_GRANTED);
+            $licence = static::generateLicence($organisation, $i);
+            $application = static::generateApplication($i, $licence, Application::APPLICATION_STATUS_GRANTED);
 
             if ($i == 1) {
                 // assign some tms to the first application
                 $application->setTransportManagers(
-                    $this->generateTransportManagerApplications()
+                    static::generateTransportManagerApplications()
                 );
             }
             $applications->add($application);
 
             $applications->add(
-                $this->generateApplication((100 + $i), $licence, Application::APPLICATION_STATUS_UNDER_CONSIDERATION)
+                static::generateApplication((100 + $i), $licence, Application::APPLICATION_STATUS_UNDER_CONSIDERATION)
             );
 
             $licence->setApplications($applications);
@@ -309,34 +302,34 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         }
         $organisation->setLicences($organisationLicences);
 
-        $organisation->setLeadTcArea($this->generateTrafficArea('B'));
+        $organisation->setLeadTcArea(static::generateTrafficArea('B'));
 
         return $organisation;
     }
 
-    protected function generateLicence(Organisation $organisation, $id = null)
+    protected static function generateLicence(Organisation $organisation, mixed $id = null): mixed
     {
         $licence = m::mock(Licence::class)->makePartial();
         $licence->initCollections();
         $licence->setOrganisation($organisation);
-        $licence->setStatus($this->generateRefDataEntity($this->licenceStatus));
+        $licence->setStatus(static::generateRefDataEntity(static::LICENCE_STATUS));
 
         $licence->setId($id);
         $licence->setVersion($id);
-        $licence->setLicenceType($this->generateRefDataEntity($this->licenceType));
-        $licence->setGoodsOrPsv($this->generateRefDataEntity($this->goodsOrPsv));
+        $licence->setLicenceType(static::generateRefDataEntity(static::LICENCE_TYPE));
+        $licence->setGoodsOrPsv(static::generateRefDataEntity(static::GOODS_OR_PSV));
         $licence->setLicNo('OB12345');
         $licence->setTotAuthTrailers(5);
 
-        $licence->setLicenceVehicles($this->generateLicenceVehicles($licence));
+        $licence->setLicenceVehicles(static::generateLicenceVehicles($licence));
 
-        $licence->setOperatingCentres($this->generateLicenceOperatingCentres($licence));
+        $licence->setOperatingCentres(static::generateLicenceOperatingCentres($licence));
 
-        $licence->setApplications($this->generateApplications($licence));
-        $licence->setTmLicences($this->generateTmLicences($licence));
+        $licence->setApplications(static::generateApplications($licence));
+        $licence->setTmLicences(static::generateTmLicences($licence));
 
         $licence->setConditionUndertakings(
-            $this->generateConditionsUndertakings(
+            static::generateConditionsUndertakings(
                 $licence,
                 ConditionUndertaking::TYPE_CONDITION,
                 58,
@@ -349,7 +342,7 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $licence;
     }
 
-    protected function generateLicenceVehicles($licence)
+    protected static function generateLicenceVehicles(mixed $licence): mixed
     {
         $licenceVehicles = new ArrayCollection();
         $vehicle = new Vehicle();
@@ -364,15 +357,15 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $licenceVehicles;
     }
 
-    protected function generateTmLicences(Licence $licence)
+    protected static function generateTmLicences(Licence $licence): mixed
     {
         $licenceTms = new ArrayCollection();
 
         $tm = new TransportManager();
-        $tm->setTmType($this->generateRefDataEntity('tm_type1'));
+        $tm->setTmType(static::generateRefDataEntity('tm_type1'));
         $tm->setId(153);
         $tm->setVersion(306);
-        $tm->setHomeCd($this->generateContactDetails(83));
+        $tm->setHomeCd(static::generateContactDetails(83));
 
         $tm->setOtherLicences([]);
         $tml = new TransportManagerLicence($licence, $tm);
@@ -382,18 +375,18 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $licenceTms;
     }
 
-    protected function generateTransportManagerApplications()
+    protected static function generateTransportManagerApplications(): mixed
     {
         $applicationTms = new ArrayCollection();
 
         $tm = new TransportManager();
-        $tm->setTmType($this->generateRefDataEntity('tm_type1'));
+        $tm->setTmType(static::generateRefDataEntity('tm_type1'));
         $tm->setId(153);
         $tm->setVersion(306);
-        $tm->setHomeCd($this->generateContactDetails(83));
+        $tm->setHomeCd(static::generateContactDetails(83));
 
-        $tm->setOtherLicences($this->generateArrayCollection('OtherLicence', 1));
-        $tm->setQualifications($this->generateArrayCollection('tmQualification'));
+        $tm->setOtherLicences(static::generateArrayCollection('OtherLicence', 1));
+        $tm->setQualifications(static::generateArrayCollection('tmQualification'));
 
         $tma = new TransportManagerApplication();
         $tma->setTransportManager($tm);
@@ -403,7 +396,7 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $applicationTms;
     }
 
-    protected function generateOtherLicence($id)
+    protected static function generateOtherLicence(mixed $id): mixed
     {
         $entity = new OtherLicence();
         $entity->setId($id);
@@ -412,27 +405,27 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         $entity->setHolderName($id . '-holderName');
 
         $organisation = new Organisation();
-        $organisationType = $this->generateRefDataEntity($this->organisationType);
+        $organisationType = static::generateRefDataEntity(static::ORGANISATION_TYPE);
         $organisation->setType($organisationType);
         $organisation->setName('Org name');
 
-        $licence = $this->generateLicence($organisation, 55);
+        $licence = static::generateLicence($organisation, 55);
 
         $entity->setApplication(
-            $this->generateApplication(2255, $licence, Application::APPLICATION_STATUS_UNDER_CONSIDERATION)
+            static::generateApplication(2255, $licence, Application::APPLICATION_STATUS_UNDER_CONSIDERATION)
         );
         return $entity;
     }
 
-    protected function generateConditionsUndertakings(
-        $parentEntity,
-        $condType,
-        $id = 1,
-        $addedVia = null,
-        $attachTo = null,
-        $createdOn = null
-    ) {
-        $cu = new ConditionUndertaking($this->generateRefDataEntity($condType), 'Y', 'N');
+    protected static function generateConditionsUndertakings(
+        mixed $parentEntity,
+        mixed $condType,
+        int $id = 1,
+        mixed $addedVia = null,
+        mixed $attachTo = null,
+        mixed $createdOn = null
+    ): ArrayCollection {
+        $cu = new ConditionUndertaking(static::generateRefDataEntity($condType), 'Y', 'N');
 
         $addedViaByParent = null;
         $attachToByParent = null;
@@ -444,7 +437,7 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
             $addedViaByParent = ConditionUndertaking::ADDED_VIA_APPLICATION;
             $attachToByParent = ConditionUndertaking::ATTACHED_TO_OPERATING_CENTRE;
 
-            $cu->setOperatingCentre($this->generateOperatingCentre());
+            $cu->setOperatingCentre(static::generateOperatingCentre());
         } elseif ($parentEntity instanceof CasesEntity) {
             $addedViaByParent = ConditionUndertaking::ADDED_VIA_CASE;
             $attachToByParent = ConditionUndertaking::ATTACHED_TO_LICENCE;
@@ -457,10 +450,10 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
             ->setVersion((100 + $id))
             ->setCreatedOn($createdOn ?: new \DateTime('2011-01-23'))
             ->setAddedVia(
-                $this->generateRefDataEntity($addedVia ?: $addedViaByParent)
+                static::generateRefDataEntity($addedVia ?: $addedViaByParent)
             )
             ->setAttachedTo(
-                $this->generateRefDataEntity($attachTo ?: $attachToByParent)
+                static::generateRefDataEntity($attachTo ?: $attachToByParent)
             );
 
         $conditionUndertakings = new ArrayCollection();
@@ -469,25 +462,25 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $conditionUndertakings;
     }
 
-    protected function generateTmQualification($id)
+    protected static function generateTmQualification(mixed $id): mixed
     {
         $entity = new TmQualification();
         $entity->setId($id);
         $entity->setVersion(($id + 4));
-        $entity->setQualificationType($this->generateRefDataEntity('tm-qual'));
-        $entity->setCountryCode($this->generateCountry('GB'));
+        $entity->setQualificationType(static::generateRefDataEntity('tm-qual'));
+        $entity->setCountryCode(static::generateCountry('GB'));
         $entity->setSerialNo('12344321');
         $entity->setIssuedDate(new \DateTime('2008-12-04'));
 
         return $entity;
     }
 
-    protected function generateLicenceOperatingCentres($licence)
+    protected static function generateLicenceOperatingCentres(mixed $licence): mixed
     {
         $operatingCentres = new ArrayCollection();
 
         for ($i = 1; $i <= 2; $i++) {
-            $operatingCentre = $this->generateOperatingCentre($i);
+            $operatingCentre = static::generateOperatingCentre($i);
             $loc = new \Dvsa\Olcs\Api\Entity\Licence\LicenceOperatingCentre($licence, $operatingCentre);
             $loc->setNoOfVehiclesRequired(6);
             $loc->setNoOfTrailersRequired(4);
@@ -497,18 +490,18 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $operatingCentres;
     }
 
-    protected function generateOperatingCentre($i = 1)
+    protected static function generateOperatingCentre(int $i = 1): mixed
     {
         $operatingCentre = new OperatingCentre();
         $operatingCentre->setId($i);
         $operatingCentre->setVersion($i);
 
-        $address = $this->generateAddress($i);
+        $address = static::generateAddress($i);
         $operatingCentre->setAddress($address);
         return $operatingCentre;
     }
 
-    protected function generateAddress($id)
+    protected static function generateAddress(mixed $id): mixed
     {
         $address = new Address($id);
         $address->setId($id);
@@ -521,13 +514,13 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $address;
     }
 
-    protected function generateApplications(Licence $licence)
+    protected static function generateApplications(Licence $licence): mixed
     {
         $applications = new ArrayCollection();
-        $grantedApp = $this->generateApplication(63, $licence, Application::APPLICATION_STATUS_GRANTED);
+        $grantedApp = static::generateApplication(63, $licence, Application::APPLICATION_STATUS_GRANTED);
 
         $grantedApp->setConditionUndertakings(
-            $this->generateConditionsUndertakings(
+            static::generateConditionsUndertakings(
                 $grantedApp,
                 ConditionUndertaking::TYPE_UNDERTAKING,
                 88
@@ -535,41 +528,41 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         );
 
         $applications->add(
-            $this->generateApplication(75, $licence, Application::APPLICATION_STATUS_NOT_SUBMITTED)
+            static::generateApplication(75, $licence, Application::APPLICATION_STATUS_NOT_SUBMITTED)
         );
 
         $applications->add(
-            $this->generateApplication(75, $licence, Application::APPLICATION_STATUS_REFUSED)
+            static::generateApplication(75, $licence, Application::APPLICATION_STATUS_REFUSED)
         );
 
         $applications->add(
-            $this->generateApplication(75, $licence, Application::APPLICATION_STATUS_GRANTED, true)
+            static::generateApplication(75, $licence, Application::APPLICATION_STATUS_GRANTED, true)
         );
 
         $applications->add(
-            $this->generateApplication(777, $licence, Application::APPLICATION_STATUS_UNDER_CONSIDERATION, true)
+            static::generateApplication(777, $licence, Application::APPLICATION_STATUS_UNDER_CONSIDERATION, true)
         );
 
         return $applications;
     }
 
-    protected function generateApplication($id, Licence $licence, $status, $isVariation = false)
+    protected static function generateApplication(mixed $id, Licence $licence, mixed $status, bool $isVariation = false): mixed
     {
         $application = m::mock(Application::class)->makePartial();
         $application->initCollections();
         $application->setLicence($licence);
-        $application->setStatus($this->generateRefDataEntity($status));
+        $application->setStatus(static::generateRefDataEntity($status));
         $application->setIsVariation($isVariation);
 
         $application->setId($id);
         $application->setVersion(($id * 2));
         $application->setReceivedDate(new \DateTime('2014-05-05'));
-        $application->setGoodsOrPsv($this->generateRefDataEntity('goods'));
-        $application->setVehicleType($this->generateRefDataEntity(RefData::APP_VEHICLE_TYPE_HGV));
-        $application->setLicenceType($this->generateRefDataEntity('lic_type'));
+        $application->setGoodsOrPsv(static::generateRefDataEntity('goods'));
+        $application->setVehicleType(static::generateRefDataEntity(RefData::APP_VEHICLE_TYPE_HGV));
+        $application->setLicenceType(static::generateRefDataEntity('lic_type'));
 
         $application->setConditionUndertakings(
-            $this->generateConditionsUndertakings(
+            static::generateConditionsUndertakings(
                 $application,
                 ConditionUndertaking::TYPE_UNDERTAKING,
                 34
@@ -579,7 +572,7 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $application;
     }
 
-    protected function generateTrafficArea($id)
+    protected static function generateTrafficArea(mixed $id): mixed
     {
         $ta = new TrafficArea();
 
@@ -589,44 +582,44 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $ta;
     }
 
-    protected function generateContactDetails($id, $type = 'cd_type')
+    protected static function generateContactDetails(mixed $id, string $type = 'cd_type'): mixed
     {
-        $cd = new ContactDetails($this->generateRefDataEntity($type));
-        $cd->setAddress($this->generateAddress($id));
-        $cd->setPerson($this->generatePerson(22));
+        $cd = new ContactDetails(static::generateRefDataEntity($type));
+        $cd->setAddress(static::generateAddress($id));
+        $cd->setPerson(static::generatePerson(22));
         $cd->setEmailAddress('blah@blah.com');
 
         return $cd;
     }
 
-    protected function generateComplaints(CasesEntity $case)
+    protected static function generateComplaints(CasesEntity $case): mixed
     {
         $complaints = new ArrayCollection();
 
         // add compliance complaint
         $complaints->add(
-            $this->generateComplaint(
+            static::generateComplaint(
                 253,
                 $case,
-                $this->generateContactDetails(423, ContactDetails::CONTACT_TYPE_COMPLAINANT),
+                static::generateContactDetails(423, ContactDetails::CONTACT_TYPE_COMPLAINANT),
                 1,
                 '04-05-2006'
             )
         );
         $complaints->add(
-            $this->generateComplaint(
+            static::generateComplaint(
                 543,
                 $case,
-                $this->generateContactDetails(423, ContactDetails::CONTACT_TYPE_COMPLAINANT),
+                static::generateContactDetails(423, ContactDetails::CONTACT_TYPE_COMPLAINANT),
                 1,
                 '03-05-2006'
             )
         );
         $complaints->add(
-            $this->generateComplaint(
+            static::generateComplaint(
                 563,
                 $case,
-                $this->generateContactDetails(423, ContactDetails::CONTACT_TYPE_COMPLAINANT),
+                static::generateContactDetails(423, ContactDetails::CONTACT_TYPE_COMPLAINANT),
                 1,
                 null
             )
@@ -634,28 +627,28 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
 
         // add env complaint
         $complaints->add(
-            $this->generateComplaint(
+            static::generateComplaint(
                 253,
                 $case,
-                $this->generateContactDetails(423, ContactDetails::CONTACT_TYPE_COMPLAINANT),
+                static::generateContactDetails(423, ContactDetails::CONTACT_TYPE_COMPLAINANT),
                 0,
                 '04-05-2006'
             )
         );
         $complaints->add(
-            $this->generateComplaint(
+            static::generateComplaint(
                 543,
                 $case,
-                $this->generateContactDetails(423, ContactDetails::CONTACT_TYPE_COMPLAINANT),
+                static::generateContactDetails(423, ContactDetails::CONTACT_TYPE_COMPLAINANT),
                 0,
                 '03-05-2006'
             )
         );
         $complaints->add(
-            $this->generateComplaint(
+            static::generateComplaint(
                 563,
                 $case,
-                $this->generateContactDetails(423, ContactDetails::CONTACT_TYPE_COMPLAINANT),
+                static::generateContactDetails(423, ContactDetails::CONTACT_TYPE_COMPLAINANT),
                 0,
                 null
             )
@@ -663,17 +656,17 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $complaints;
     }
 
-    protected function generateComplaint(
-        $id,
+    protected static function generateComplaint(
+        mixed $id,
         CasesEntity $case,
         ContactDetails $contactDetails,
-        $isCompliance = 1,
-        $complaintDate = null
-    ) {
+        int $isCompliance = 1,
+        mixed $complaintDate = null
+    ): Complaint {
         $complaint = new Complaint(
             $case,
             (bool) $isCompliance,
-            $this->generateRefDataEntity(Complaint::COMPLAIN_STATUS_OPEN),
+            static::generateRefDataEntity(Complaint::COMPLAIN_STATUS_OPEN),
             new \DateTime($complaintDate ?? 'now'),
             $contactDetails
         );
@@ -687,30 +680,30 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         $complaint->setIsCompliance($isCompliance);
 
         if (!$isCompliance) {
-            $complaint->setOperatingCentres(new ArrayCollection([$this->generateOperatingCentre(633)]));
+            $complaint->setOperatingCentres(new ArrayCollection([static::generateOperatingCentre(633)]));
         }
         return $complaint;
     }
 
-    protected function generateStatements(CasesEntity $case)
+    protected static function generateStatements(CasesEntity $case): mixed
     {
         $statements = new ArrayCollection();
 
         $statements->add(
-            $this->generateStatement(253, $case)
+            static::generateStatement(253, $case)
         );
 
         return $statements;
     }
 
-    protected function generateStatement($id, CasesEntity $case)
+    protected static function generateStatement(mixed $id, CasesEntity $case): mixed
     {
-        $entity = new Statement($case, $this->generateRefDataEntity('statement_type1'));
+        $entity = new Statement($case, static::generateRefDataEntity('statement_type1'));
         $entity->setId($id);
         $entity->setVersion(($id + 2));
         $entity->setRequestedDate(new \DateTime('2008-08-11'));
         $entity->setRequestorsContactDetails(
-            $this->generateContactDetails(
+            static::generateContactDetails(
                 744,
                 ContactDetails::CONTACT_TYPE_COMPLAINANT
             )
@@ -723,34 +716,34 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $entity;
     }
 
-    protected function generateOppositions(CasesEntity $case)
+    protected static function generateOppositions(CasesEntity $case): mixed
     {
         $oppositions = new ArrayCollection();
 
         $oppositions->add(
-            $this->generateOpposition(243, $case, null)
+            static::generateOpposition(243, $case, null)
         );
 
         $oppositions->add(
-            $this->generateOpposition(263, $case, '11-12-2013')
+            static::generateOpposition(263, $case, '11-12-2013')
         );
 
         $oppositions->add(
-            $this->generateOpposition(253, $case, '10-12-2013')
+            static::generateOpposition(253, $case, '10-12-2013')
         );
 
         return $oppositions;
     }
 
-    protected function generateOpposition(
-        $id,
+    protected static function generateOpposition(
+        mixed $id,
         CasesEntity $case,
-        $raisedDate = null
-    ) {
+        mixed $raisedDate = null
+    ): Opposition {
         $entity = new Opposition(
             $case,
-            $this->generateOpposer(),
-            $this->generateRefDataEntity('opposition_type' . $id),
+            static::generateOpposer(),
+            static::generateRefDataEntity('opposition_type' . $id),
             1,
             1,
             1,
@@ -762,23 +755,23 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         $entity->setRaisedDate($raisedDate ? new \DateTime($raisedDate) : null);
 
         $grounds = new ArrayCollection();
-        $grounds->add($this->generateRefDataEntity('g1'));
-        $grounds->add($this->generateRefDataEntity('g2'));
+        $grounds->add(static::generateRefDataEntity('g1'));
+        $grounds->add(static::generateRefDataEntity('g2'));
         $entity->setGrounds($grounds);
 
         return $entity;
     }
 
-    protected function generateOpposer($id = 834)
+    protected static function generateOpposer(int $id = 834): mixed
     {
-        $contactDetails = $this->generateContactDetails(
+        $contactDetails = static::generateContactDetails(
             744,
             ContactDetails::CONTACT_TYPE_COMPLAINANT
         );
         $entity = new Opposer(
             $contactDetails,
-            $this->generateRefDataEntity('opposer_type1'),
-            $this->generateRefDataEntity('opposition_type1')
+            static::generateRefDataEntity('opposer_type1'),
+            static::generateRefDataEntity('opposition_type1')
         );
         $entity->setId($id);
         $entity->setVersion(($id + 2));
@@ -786,22 +779,22 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $entity;
     }
 
-    protected function generateConvictions()
+    protected static function generateConvictions(): mixed
     {
         $convictions = new ArrayCollection();
 
         $convictions->add(
-            $this->generateConviction(734, Conviction::DEFENDANT_TYPE_ORGANISATION)
+            static::generateConviction(734, Conviction::DEFENDANT_TYPE_ORGANISATION)
         );
 
         $convictions->add(
-            $this->generateConviction(734, Conviction::DEFENDANT_TYPE_DIRECTOR)
+            static::generateConviction(734, Conviction::DEFENDANT_TYPE_DIRECTOR)
         );
 
         return $convictions;
     }
 
-    protected function generateConviction($id, $defendantType)
+    protected static function generateConviction(mixed $id, mixed $defendantType): mixed
     {
         $entity = new Conviction();
         $entity->setId($id);
@@ -817,12 +810,12 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         $entity->setIsDealtWith(true);
         $entity->setPersonFirstname('fn');
         $entity->setPersonLastname('sn');
-        $entity->setDefendantType($this->generateRefDataEntity($defendantType));
+        $entity->setDefendantType(static::generateRefDataEntity($defendantType));
 
         return $entity;
     }
 
-    protected function generatePreviousConviction($id)
+    protected static function generatePreviousConviction(mixed $id): mixed
     {
         $entity = new PreviousConviction();
         $entity->setId($id);
@@ -835,13 +828,13 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $entity;
     }
 
-    protected function generateErruRequest()
+    protected static function generateErruRequest(): mixed
     {
         /** @var ErruRequest $entity */
         $entity = m::mock(ErruRequest::class)->makePartial();
         $entity
             ->setNotificationNumber('notificationNo')
-            ->setMemberStateCode($this->generateCountry('GB'))
+            ->setMemberStateCode(static::generateCountry('GB'))
             ->setVrm('erruVrm1')
             ->setTransportUndertakingName('tun')
             ->setOriginatingAuthority('erru_oa');
@@ -849,54 +842,54 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $entity;
     }
 
-    protected function generateSeriousInfringements()
+    protected static function generateSeriousInfringements(): mixed
     {
         $sis = new ArrayCollection();
 
         $sis->add(
-            $this->generateSeriousInfringement(734)
+            static::generateSeriousInfringement(734)
         );
 
         return $sis;
     }
 
-    protected function generateSeriousInfringement($id)
+    protected static function generateSeriousInfringement(mixed $id): mixed
     {
         /** @var SeriousInfringement $entity */
         $entity = m::mock(SeriousInfringement::class)->makePartial();
         $entity->setId($id);
         $entity->setVersion(($id + 2));
-        $entity->setSiCategory($this->generateSiCategory(274, 'sicatdesc'));
-        $entity->setSiCategoryType($this->generateSiCategoryType(274, 'sicattypedesc'));
+        $entity->setSiCategory(static::generateSiCategory(274, 'sicatdesc'));
+        $entity->setSiCategoryType(static::generateSiCategoryType(274, 'sicattypedesc'));
         $entity->setInfringementDate(new \DateTime('2009-11-30'));
         $entity->setCheckDate(new \DateTime('2010-07-20'));
 
-        $entity->setAppliedPenalties($this->generateArrayCollection('appliedPenalty'));
-        $entity->setImposedErrus($this->generateArrayCollection('imposedErru'));
-        $entity->setRequestedErrus($this->generateArrayCollection('requestedErru'));
+        $entity->setAppliedPenalties(static::generateArrayCollection('appliedPenalty'));
+        $entity->setImposedErrus(static::generateArrayCollection('imposedErru'));
+        $entity->setRequestedErrus(static::generateArrayCollection('requestedErru'));
 
         return $entity;
     }
 
-    protected function generateArrayCollection($entity, $count = 1)
+    protected static function generateArrayCollection(mixed $entity, int $count = 1): mixed
     {
         $ac = new ArrayCollection();
         $method = 'generate' . ucfirst((string) $entity);
         for ($i = 1; $i <= $count; $i++) {
             $ac->add(
-                $this->$method($i)
+                static::$method($i)
             );
         }
 
         return $ac;
     }
 
-    protected function generateAppliedPenalty($id)
+    protected static function generateAppliedPenalty(mixed $id): mixed
     {
         $entity = new SiPenalty(
             m::mock(SeriousInfringement::class)->makePartial(),
-            $this->generateSiPenaltyType(533),
-            $this->generateRequestedErru(),
+            static::generateSiPenaltyType(533),
+            static::generateRequestedErru(),
             'imposed',
             new \DateTime('2013-06-31'),
             new \DateTime('2013-08-31'),
@@ -908,13 +901,13 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $entity;
     }
 
-    protected function generateImposedErru($id = 101)
+    protected static function generateImposedErru(int $id = 101): mixed
     {
         /** @var SiPenaltyErruImposed | m\MockInterface $entity */
         $entity = m::mock(SiPenaltyErruImposed::class)->makePartial();
         $entity->setId($id);
         $entity->setVersion(23);
-        $entity->setSiPenaltyImposedType($this->generateSiPenaltyImposedType(42));
+        $entity->setSiPenaltyImposedType(static::generateSiPenaltyImposedType(42));
         $entity->setFinalDecisionDate(new \DateTime('2014-12-31'));
         $entity->setStartDate(new \DateTime('2014-06-31'));
         $entity->setEndDate(new \DateTime('2014-08-31'));
@@ -923,19 +916,19 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $entity;
     }
 
-    protected function generateRequestedErru($id = 101)
+    protected static function generateRequestedErru(int $id = 101): mixed
     {
         /** @var SiPenaltyErruRequested | m\MockInterface $entity */
         $entity = m::mock(SiPenaltyErruRequested::class)->makePartial();
         $entity->setId($id);
         $entity->setVersion(34);
-        $entity->setSiPenaltyRequestedType($this->generateSiPenaltyRequestedType(952));
+        $entity->setSiPenaltyRequestedType(static::generateSiPenaltyRequestedType(952));
         $entity->setDuration('duration1');
 
         return $entity;
     }
 
-    protected function generateSiPenaltyType($id)
+    protected static function generateSiPenaltyType(mixed $id): mixed
     {
         $entity = new SiPenaltyType();
         $entity->setId($id);
@@ -945,7 +938,7 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $entity;
     }
 
-    protected function generateSiPenaltyImposedType($id)
+    protected static function generateSiPenaltyImposedType(mixed $id): mixed
     {
         $entity = new SiPenaltyImposedType();
         $entity->setId($id);
@@ -955,7 +948,7 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $entity;
     }
 
-    protected function generateSiPenaltyRequestedType($id)
+    protected static function generateSiPenaltyRequestedType(mixed $id): mixed
     {
         $entity = new SiPenaltyRequestedType();
         $entity->setId($id);
@@ -965,7 +958,7 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $entity;
     }
 
-    protected function generateCountry($id, $isMemberState = true)
+    protected static function generateCountry(mixed $id, bool $isMemberState = true): mixed
     {
         $entity = new Country();
         $entity->setId($id);
@@ -976,7 +969,7 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $entity;
     }
 
-    protected function generateSiCategory($id, $desc)
+    protected static function generateSiCategory(mixed $id, mixed $desc): mixed
     {
         $entity = new SiCategory();
         $entity->setId($id);
@@ -986,7 +979,7 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $entity;
     }
 
-    protected function generateSiCategoryType($id, $desc)
+    protected static function generateSiCategoryType(mixed $id, mixed $desc): mixed
     {
         $entity = new SiCategoryType();
         $entity->setId($id);
@@ -996,7 +989,7 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         return $entity;
     }
 
-    protected function generateProhibition($id)
+    protected static function generateProhibition(mixed $id): mixed
     {
         $entity = new Prohibition();
         $entity->setId($id);
@@ -1006,12 +999,12 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         $entity->setVrm('VR12 MAB');
         $entity->setIsTrailer(false);
         $entity->setImposedAt('imposed-at');
-        $entity->setProhibitionType($this->generateRefDataEntity('prohibition-type1'));
+        $entity->setProhibitionType(static::generateRefDataEntity('prohibition-type1'));
 
         return $entity;
     }
 
-    protected function generateTmEmployment($id)
+    protected static function generateTmEmployment(mixed $id): mixed
     {
         $entity = new TmEmployment();
         $entity->setId($id);
@@ -1019,12 +1012,12 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         $entity->setPosition('Some position');
         $entity->setEmployerName('Employer name');
         $entity->setHoursPerWeek(32);
-        $entity->setContactDetails($this->generateContactDetails(54));
+        $entity->setContactDetails(static::generateContactDetails(54));
 
         return $entity;
     }
 
-    protected function mockSetRepos($sut): void
+    protected function mockSetRepos(mixed $sut): void
     {
         $sut->setRepos([]);
     }

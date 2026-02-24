@@ -21,6 +21,7 @@ class IrhpApplicationProcessingTasksControllerFactory implements FactoryInterfac
      * @param  array|null         $options
      * @return IrhpApplicationProcessingTasksController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpApplicationProcessingTasksController
     {
         $scriptFactory = $container->get(ScriptFactory::class);

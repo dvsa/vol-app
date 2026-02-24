@@ -31,6 +31,7 @@ class TransactioningCommandHandler implements CommandHandlerInterface
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      * @throws \Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         try {
@@ -52,6 +53,7 @@ class TransactioningCommandHandler implements CommandHandlerInterface
      * @return bool
      * @throws \Dvsa\Olcs\Api\Domain\Exception\DisabledHandlerException
      */
+    #[\Override]
     public function checkEnabled(): bool
     {
         return $this->wrapped->checkEnabled();

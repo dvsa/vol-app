@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -36,7 +38,7 @@ class SendInternationalGoodsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 999;
         $command = Cmd::create(['id' => $id]);
@@ -79,7 +81,7 @@ class SendInternationalGoodsTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['International goods sent to: ' . $email . ' and CC to ' . $ccList], $result->getMessages());
     }
 
-    public function testNoEmailThrowException()
+    public function testNoEmailThrowException(): void
     {
         $this->expectException(
             \InvalidArgumentException::class

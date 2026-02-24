@@ -23,6 +23,7 @@ class InterimVehicles extends DynamicBookmark implements TranslatorAwareInterfac
      *
      * @return QueryInterface
      */
+    #[\Override]
     public function getQuery(array $data): QueryInterface
     {
         return Qry::create(['id' => $data['application']]);
@@ -33,6 +34,7 @@ class InterimVehicles extends DynamicBookmark implements TranslatorAwareInterfac
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         switch ($this->data['vehicleType']['id']) {

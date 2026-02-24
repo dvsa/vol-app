@@ -77,6 +77,7 @@ class PrintLetter implements FactoryInterface
         );
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->repoDocTemplate = $container->get('RepositoryServiceManager')->get('DocTemplate');

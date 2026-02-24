@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * PublishTest.php
  */
@@ -33,7 +35,8 @@ class PublishTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [PublicationEntity::PUB_PRINTED_STATUS];
 
@@ -46,7 +49,7 @@ class PublishTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $pubId = 11;
         $generatedDocId = 2345;

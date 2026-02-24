@@ -22,6 +22,7 @@ class TypeOfLicence extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var Entity $entity */

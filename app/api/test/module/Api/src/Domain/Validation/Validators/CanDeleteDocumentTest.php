@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Validators;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,10 +21,10 @@ class CanDeleteDocumentTest extends AbstractValidatorsTestCase
      */
     protected $sut;
 
-    private const IS_SYSTEM_USER = 0;
-    private const IS_INTERNAL_USER = 1;
-    private const IS_EXTERNAL_USER = 2;
-    private const DOCUMENT_ID = "123";
+    private const int IS_SYSTEM_USER = 0;
+    private const int IS_INTERNAL_USER = 1;
+    private const int IS_EXTERNAL_USER = 2;
+    private const string DOCUMENT_ID = "123";
 
     public function setUp(): void
     {
@@ -42,7 +44,6 @@ class CanDeleteDocumentTest extends AbstractValidatorsTestCase
             ->shouldReceive('fetchById')
             ->with(static::DOCUMENT_ID)
             ->andReturn($this->getMockDocument(true));
-
 
         $this->assertTrue($this->sut->isValid(static::DOCUMENT_ID));
     }

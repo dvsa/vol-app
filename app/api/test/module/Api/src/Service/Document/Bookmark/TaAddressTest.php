@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\TaAddress;
@@ -15,7 +17,7 @@ class TaAddressTest extends \PHPUnit\Framework\TestCase
     /**
      * Test getQuery
      */
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new TaAddress();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -25,10 +27,9 @@ class TaAddressTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test render
-     *
-     * @dataProvider dataProvider
      */
-    public function testRender($query, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
+    public function testRender(mixed $query, mixed $expected): void
     {
         $bookmark = new TaAddress();
         $bookmark->setData($query);
@@ -44,7 +45,7 @@ class TaAddressTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider(): array
     {
         return [
             'licence' => [

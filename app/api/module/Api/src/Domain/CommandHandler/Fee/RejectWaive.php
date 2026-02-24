@@ -33,6 +33,7 @@ final class RejectWaive extends AbstractCommandHandler implements TransactionedI
 
     protected $repoServiceName = 'Fee';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

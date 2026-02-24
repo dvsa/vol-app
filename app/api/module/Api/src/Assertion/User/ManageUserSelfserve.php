@@ -12,6 +12,7 @@ use Dvsa\Olcs\Api\Entity\User\User;
  */
 class ManageUserSelfserve implements AssertionInterface
 {
+    #[\Override]
     public function assert(AuthorizationService $authorizationService, User $context = null)
     {
         if (!isset($context)) {

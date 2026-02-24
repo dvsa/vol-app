@@ -20,6 +20,7 @@ class InterimUnlinkedTm extends DynamicBookmark
      *
      * @return array
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(['id' => $data['application']]);
@@ -30,6 +31,7 @@ class InterimUnlinkedTm extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         if ($this->data['licenceType']['id'] === Licence::LICENCE_TYPE_RESTRICTED) {

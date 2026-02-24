@@ -20,6 +20,7 @@ class VariationSchedule41ControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return VariationSchedule41Controller
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): VariationSchedule41Controller
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

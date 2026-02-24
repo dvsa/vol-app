@@ -45,7 +45,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTransportManagerApplication implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTransportManagerApplication implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -96,7 +96,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     protected $tmType;
 
     /**
-     * type of signature used from ref data one of sig_physical_signature	the application is signed with a physical signature sig_digital_signature	the application is signed digitally sig_signature_not_required
+     * type of signature used from ref data one of sig_physical_signature the application is signed with a physical signature sig_digital_signature the application is signed digitally sig_signature_not_required
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
@@ -116,7 +116,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     protected $tmDigitalSignature;
 
     /**
-     * type of signature used from ref data one of sig_physical_signature	the application is signed with a physical signature sig_digital_signature	the application is signed digitally sig_signature_not_required
+     * type of signature used from ref data one of sig_physical_signature the application is signed with a physical signature sig_digital_signature the application is signed digitally sig_signature_not_required
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
@@ -373,7 +373,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -396,7 +397,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the transport manager
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     */
     public function getTransportManager()
     {
         return $this->transportManager;
@@ -419,7 +421,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
     public function getApplication()
     {
         return $this->application;
@@ -442,7 +445,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the tm type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getTmType()
     {
         return $this->tmType;
@@ -465,7 +469,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the tm signature type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getTmSignatureType()
     {
         return $this->tmSignatureType;
@@ -488,7 +493,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the tm digital signature
      *
-     * @return \Dvsa\Olcs\Api\Entity\DigitalSignature     */
+     * @return \Dvsa\Olcs\Api\Entity\DigitalSignature
+     */
     public function getTmDigitalSignature()
     {
         return $this->tmDigitalSignature;
@@ -511,7 +517,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the op signature type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getOpSignatureType()
     {
         return $this->opSignatureType;
@@ -534,7 +541,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the op digital signature
      *
-     * @return \Dvsa\Olcs\Api\Entity\DigitalSignature     */
+     * @return \Dvsa\Olcs\Api\Entity\DigitalSignature
+     */
     public function getOpDigitalSignature()
     {
         return $this->opDigitalSignature;
@@ -557,7 +565,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the tm application status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getTmApplicationStatus()
     {
         return $this->tmApplicationStatus;
@@ -580,7 +589,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -603,7 +613,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -626,7 +637,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the is owner
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsOwner()
     {
         return $this->isOwner;
@@ -649,7 +661,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the action
      *
-     * @return string     */
+     * @return string
+     */
     public function getAction()
     {
         return $this->action;
@@ -672,7 +685,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the hours mon
      *
-     * @return string     */
+     * @return string
+     */
     public function getHoursMon()
     {
         return $this->hoursMon;
@@ -695,7 +709,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the hours tue
      *
-     * @return string     */
+     * @return string
+     */
     public function getHoursTue()
     {
         return $this->hoursTue;
@@ -718,7 +733,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the hours wed
      *
-     * @return string     */
+     * @return string
+     */
     public function getHoursWed()
     {
         return $this->hoursWed;
@@ -741,7 +757,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the hours thu
      *
-     * @return string     */
+     * @return string
+     */
     public function getHoursThu()
     {
         return $this->hoursThu;
@@ -764,7 +781,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the hours fri
      *
-     * @return string     */
+     * @return string
+     */
     public function getHoursFri()
     {
         return $this->hoursFri;
@@ -787,7 +805,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the hours sat
      *
-     * @return string     */
+     * @return string
+     */
     public function getHoursSat()
     {
         return $this->hoursSat;
@@ -810,7 +829,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the hours sun
      *
-     * @return string     */
+     * @return string
+     */
     public function getHoursSun()
     {
         return $this->hoursSun;
@@ -833,7 +853,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the has other licences
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getHasOtherLicences()
     {
         return $this->hasOtherLicences;
@@ -856,7 +877,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the has other employment
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getHasOtherEmployment()
     {
         return $this->hasOtherEmployment;
@@ -879,7 +901,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the has convictions
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getHasConvictions()
     {
         return $this->hasConvictions;
@@ -902,7 +925,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the has previous licences
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getHasPreviousLicences()
     {
         return $this->hasPreviousLicences;
@@ -925,7 +949,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the has undertaken training
      *
-     * @return string     */
+     * @return string
+     */
     public function getHasUndertakenTraining()
     {
         return $this->hasUndertakenTraining;
@@ -948,7 +973,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the declaration confirmation
      *
-     * @return string     */
+     * @return string
+     */
     public function getDeclarationConfirmation()
     {
         return $this->declarationConfirmation;
@@ -971,7 +997,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the additional information
      *
-     * @return string     */
+     * @return string
+     */
     public function getAdditionalInformation()
     {
         return $this->additionalInformation;
@@ -994,7 +1021,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -1017,7 +1045,8 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -1089,6 +1118,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

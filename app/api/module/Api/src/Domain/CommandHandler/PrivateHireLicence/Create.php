@@ -29,7 +29,7 @@ final class Create extends AbstractCommandHandler implements
 {
     use AuthAwareTrait;
 
-    public const PHL_INVALID_TA = 'PHL_INVALID_TA';
+    public const string PHL_INVALID_TA = 'PHL_INVALID_TA';
 
     protected $repoServiceName = 'PrivateHireLicence';
 
@@ -39,6 +39,7 @@ final class Create extends AbstractCommandHandler implements
     {
     }
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): \Dvsa\Olcs\Api\Domain\Command\Result
     {
         /* @var $command Command */

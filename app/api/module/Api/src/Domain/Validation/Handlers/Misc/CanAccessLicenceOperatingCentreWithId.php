@@ -20,6 +20,7 @@ class CanAccessLicenceOperatingCentreWithId extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canAccessLicenceOperatingCentre($this->getId($dto));

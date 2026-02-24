@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\View\Helper;
 
 use Olcs\View\Helper\SubmissionSectionTable;
@@ -15,11 +17,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 class SubmissionSectionMultipleTablesTest extends TestCase
 {
     /**
-     * @dataProvider provideInvoke
      * @param $input
      * @param $expected
      */
-    public function testInvoke($input, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideInvoke')]
+    public function testInvoke(mixed $input, mixed $expected): void
     {
         $sut = new SubmissionSectionMultipleTables();
 
@@ -52,7 +54,7 @@ class SubmissionSectionMultipleTablesTest extends TestCase
         );
     }
 
-    public function provideInvoke()
+    public static function provideInvoke(): array
     {
         return [
             [

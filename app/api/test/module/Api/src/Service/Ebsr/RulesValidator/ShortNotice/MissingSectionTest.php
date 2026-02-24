@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator\ShortNotice;
 
 use Dvsa\Olcs\Api\Entity\Bus\BusReg as BusRegEntity;
@@ -14,13 +16,13 @@ class MissingSectionTest extends \PHPUnit\Framework\TestCase
     /**
      * tests whether the short notice section exists correctly
      *
-     * @dataProvider isValidProvider
      *
      * @param string $isShortNotice
      * @param array $value
      * @param bool $valid
      */
-    public function testIsValid($isShortNotice, $value, $valid)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
+    public function testIsValid(mixed $isShortNotice, mixed $value, mixed $valid): void
     {
         $sut = new MissingSection();
         $busReg = new BusRegEntity();
@@ -36,7 +38,7 @@ class MissingSectionTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function isValidProvider()
+    public static function isValidProvider(): array
     {
         return [
             ['N', [], true],

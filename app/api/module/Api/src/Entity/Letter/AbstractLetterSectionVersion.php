@@ -35,7 +35,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLetterSectionVersion implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLetterSectionVersion implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -239,7 +239,8 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -262,7 +263,8 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Get the letter section
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterSection     */
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterSection
+     */
     public function getLetterSection()
     {
         return $this->letterSection;
@@ -285,7 +287,8 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Get the section type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getSectionType()
     {
         return $this->sectionType;
@@ -308,7 +311,8 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Get the goods or psv
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getGoodsOrPsv()
     {
         return $this->goodsOrPsv;
@@ -331,7 +335,8 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -354,7 +359,8 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -377,7 +383,8 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Get the name
      *
-     * @return string     */
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -400,7 +407,8 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Get the default content
      *
-     * @return array     */
+     * @return array
+     */
     public function getDefaultContent()
     {
         return $this->defaultContent;
@@ -423,7 +431,8 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Get the help text
      *
-     * @return string     */
+     * @return string
+     */
     public function getHelpText()
     {
         return $this->helpText;
@@ -446,7 +455,8 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Get the min length
      *
-     * @return int     */
+     * @return int
+     */
     public function getMinLength()
     {
         return $this->minLength;
@@ -469,7 +479,8 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Get the max length
      *
-     * @return int     */
+     * @return int
+     */
     public function getMaxLength()
     {
         return $this->maxLength;
@@ -492,7 +503,8 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Get the is locked
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsLocked()
     {
         return $this->isLocked;
@@ -515,7 +527,8 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Get the requires input
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getRequiresInput()
     {
         return $this->requiresInput;
@@ -538,7 +551,8 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Get the is ni
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsNi()
     {
         return $this->isNi;
@@ -563,7 +577,8 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getPublishFrom($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -590,7 +605,8 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Get the version number
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersionNumber()
     {
         return $this->versionNumber;
@@ -613,7 +629,8 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -622,6 +639,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

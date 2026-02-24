@@ -31,6 +31,7 @@ abstract class AbstractPublishController extends \Common\Controller\Lva\Abstract
      *
      * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $applicationPublish = $this->getApplicationPublish($this->getIdentifier());

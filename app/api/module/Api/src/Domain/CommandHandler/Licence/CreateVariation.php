@@ -49,6 +49,7 @@ final class CreateVariation extends AbstractCommandHandler implements AuthAwareI
      * @return Result
      * @throws ForbiddenException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

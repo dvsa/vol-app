@@ -36,6 +36,7 @@ final class CreateFromGrant extends AbstractCommandHandler implements Transactio
 
     protected $extraRepos = ['Application'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

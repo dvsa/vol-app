@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\TranslationKey;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -34,7 +36,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 4095;
         $translationKey = 'TEST_STR_ID';
@@ -160,7 +162,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandBadLanguage()
+    public function testHandleCommandBadLanguage(): void
     {
         $id = 'TEST_STR_ID';
         $translationsArray = [

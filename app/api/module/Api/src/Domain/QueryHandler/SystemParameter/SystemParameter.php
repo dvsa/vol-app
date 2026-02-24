@@ -17,6 +17,7 @@ class SystemParameter extends AbstractQueryHandler implements CacheAwareInterfac
 
     protected $repoServiceName = 'SystemParameter';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query): Result
     {
         assert($query instanceof SysParamQry);

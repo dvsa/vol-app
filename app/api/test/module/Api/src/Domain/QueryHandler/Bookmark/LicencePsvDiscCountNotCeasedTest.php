@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Bookmark;
 
 use Mockery as m;
@@ -24,7 +26,7 @@ class LicencePsvDiscCountNotCeasedTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 1102]);
 
@@ -43,7 +45,7 @@ class LicencePsvDiscCountNotCeasedTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryNotFound()
+    public function testHandleQueryNotFound(): void
     {
         $query = Qry::create(['id' => 1102]);
 

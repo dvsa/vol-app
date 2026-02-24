@@ -14,6 +14,7 @@ final class CasesWithOppositionDates extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Cases';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $case = $this->getRepo()->fetchUsingId($query);

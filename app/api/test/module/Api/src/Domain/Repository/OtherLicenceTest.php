@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * OtherLicenceTest
  *
@@ -23,7 +25,7 @@ class OtherLicenceTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchByTransportManager()
+    public function testFetchByTransportManager(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
 
@@ -41,7 +43,7 @@ class OtherLicenceTest extends RepositoryTestCase
         $this->assertSame('RESULT', $this->sut->fetchByTransportManager(834));
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         $this->setUpSut(Repo::class, true);
 
@@ -57,7 +59,7 @@ class OtherLicenceTest extends RepositoryTestCase
         $this->sut->applyListFilters($mockQb, $mockQ);
     }
 
-    public function testFetchForTransportManagerApplication()
+    public function testFetchForTransportManagerApplication(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('ol')->once()->andReturn($mockQb);
@@ -73,7 +75,7 @@ class OtherLicenceTest extends RepositoryTestCase
         $this->assertEquals(['RESULT'], $this->sut->fetchForTransportManagerApplication(1));
     }
 
-    public function testFetchForTransportManagerLicence()
+    public function testFetchForTransportManagerLicence(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('ol')->once()->andReturn($mockQb);

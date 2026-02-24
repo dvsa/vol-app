@@ -85,6 +85,7 @@ class ApplicationCompletion extends AbstractApplicationCompletion
      * @return array
      * @deprecated
      */
+    #[\Override]
     protected function getCalculatedValues()
     {
         return ['application' => null];

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Grant Test
  *
@@ -32,7 +34,7 @@ class GrantTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandOppositionNotPassed()
+    public function testHandleCommandOppositionNotPassed(): void
     {
         $query = Grant::create(['id' => 111]);
 
@@ -58,7 +60,7 @@ class GrantTest extends QueryHandlerTestCase
         $this->assertSame($expected, $result);
     }
 
-    public function testHandleCommandValidationError()
+    public function testHandleCommandValidationError(): void
     {
         $query = Grant::create(['id' => 111]);
 

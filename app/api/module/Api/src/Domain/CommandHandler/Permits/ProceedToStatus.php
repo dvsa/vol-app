@@ -18,6 +18,7 @@ final class ProceedToStatus extends AbstractCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $status = $this->refData($command->getStatus());

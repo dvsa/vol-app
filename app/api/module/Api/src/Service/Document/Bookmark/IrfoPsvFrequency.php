@@ -16,6 +16,7 @@ class IrfoPsvFrequency extends DynamicBookmark
      * @param array $data
      * @return Qry
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(
@@ -30,6 +31,7 @@ class IrfoPsvFrequency extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         return (!empty($this->data['journeyFrequency']['description']))

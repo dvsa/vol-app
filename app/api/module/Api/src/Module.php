@@ -21,6 +21,7 @@ class Module implements BootstrapListenerInterface
      *
      * @return void
      */
+    #[\Override]
     public function onBootstrap(EventInterface $e)
     {
         $sm = $e->getApplication()->getServiceManager();

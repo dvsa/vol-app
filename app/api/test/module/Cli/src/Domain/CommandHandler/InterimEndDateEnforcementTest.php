@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler;
 
 use Dvsa\Olcs\Api\Domain\Repository;
@@ -22,16 +24,14 @@ class InterimEndDateEnforcementTest extends AbstractCommandHandlerTestCase
             Creator::class => m::mock(Creator::class)
         ];
 
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
 
         parent::setUp();
     }
 
-    public function testHandleCommandWithMatchingApplications()
+    public function testHandleCommandWithMatchingApplications(): void
     {
         $applicationRepo = $this->repoMap['Application'];
 
@@ -51,7 +51,7 @@ class InterimEndDateEnforcementTest extends AbstractCommandHandlerTestCase
         $this->assertContains('Complete', $response->getMessages());
     }
 
-    public function testHandleCommandWithNoMatchingApplications()
+    public function testHandleCommandWithNoMatchingApplications(): void
     {
         $applicationRepo = $this->repoMap['Application'];
 
@@ -68,7 +68,7 @@ class InterimEndDateEnforcementTest extends AbstractCommandHandlerTestCase
         $this->assertContains('Complete', $response->getMessages());
     }
 
-    public function testHandleCommandWithMatchingApplicationsInDryRunMakesNoSavesOrEvents()
+    public function testHandleCommandWithMatchingApplicationsInDryRunMakesNoSavesOrEvents(): void
     {
         $applicationRepo = $this->repoMap['Application'];
 
@@ -88,7 +88,7 @@ class InterimEndDateEnforcementTest extends AbstractCommandHandlerTestCase
         $this->assertContains('Complete', $response->getMessages());
     }
 
-    private function createMockApplication()
+    private function createMockApplication(): m\MockInterface
     {
         return
             m::mock(Application::class)

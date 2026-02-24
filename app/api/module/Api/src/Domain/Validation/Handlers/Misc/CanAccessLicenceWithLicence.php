@@ -15,6 +15,7 @@ namespace Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc;
  */
 class CanAccessLicenceWithLicence extends CanAccessLicenceWithId
 {
+    #[\Override]
     protected function getId($dto)
     {
         return $dto->getLicence();

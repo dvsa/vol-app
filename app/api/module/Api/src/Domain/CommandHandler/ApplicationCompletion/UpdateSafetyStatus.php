@@ -24,6 +24,7 @@ final class UpdateSafetyStatus extends AbstractUpdateStatus
 
     protected $section = 'Safety';
 
+    #[\Override]
     protected function isSectionValid(Application $application)
     {
         $licence = $application->getLicence();

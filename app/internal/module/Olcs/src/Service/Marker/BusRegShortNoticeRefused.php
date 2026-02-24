@@ -9,6 +9,7 @@ namespace Olcs\Service\Marker;
  */
 class BusRegShortNoticeRefused extends AbstractMarker
 {
+    #[\Override]
     public function canRender()
     {
         $data = $this->getData();
@@ -16,6 +17,7 @@ class BusRegShortNoticeRefused extends AbstractMarker
         return isset($data['busReg']) && $data['busReg']['shortNoticeRefused'] === 'Y';
     }
 
+    #[\Override]
     public function render()
     {
         return $this->renderPartial(

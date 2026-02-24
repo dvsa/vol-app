@@ -44,6 +44,7 @@ class JWTIdentityProvider implements IdentityProviderInterface
      * @throws HeaderNotFoundException
      * @throws NotFoundException
      */
+    #[\Override]
     public function getIdentity(): IdentityInterface
     {
         if (!is_null($this->identity)) {

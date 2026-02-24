@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\AandDStoredPublicationDate;
@@ -19,22 +21,20 @@ class AandDStoredPublicationDateTest extends MockeryTestCase
         $this->sut = new AandDStoredPublicationDate();
     }
 
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $query = $this->sut->getQuery(['application' => 1]);
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    /**
-     * @dataProvider publicationsProvider
-     */
-    public function testRender($data, $result)
+    #[\PHPUnit\Framework\Attributes\DataProvider('publicationsProvider')]
+    public function testRender(mixed $data, mixed $result): void
     {
         $this->sut->setData($data);
         $this->assertEquals($result, $this->sut->render());
     }
 
-    public function publicationsProvider()
+    public static function publicationsProvider(): array
     {
         return [
             [

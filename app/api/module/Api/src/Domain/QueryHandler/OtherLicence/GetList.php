@@ -15,6 +15,7 @@ class GetList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'OtherLicence';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var \Dvsa\Olcs\Api\Domain\Repository\OtherLicence $repo */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
@@ -20,7 +22,7 @@ class HearingTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchOneByCase()
+    public function testFetchOneByCase(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -39,7 +41,7 @@ class HearingTest extends RepositoryTestCase
         static::assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchOneByCaseNull()
+    public function testFetchOneByCaseNull(): void
     {
         $qb = $this->createMockQb('BLAH');
 

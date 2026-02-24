@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Change Business Type Test
  *
@@ -36,7 +38,8 @@ class ChangeBusinessTypeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function initReferences()
+    #[\Override]
+    public function initReferences(): void
     {
         $this->refData = [
             Organisation::ORG_TYPE_SOLE_TRADER
@@ -45,7 +48,7 @@ class ChangeBusinessTypeTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandRequiresConfirmation()
+    public function testHandleCommandRequiresConfirmation(): void
     {
         $this->expectException(RequiresConfirmationException::class);
 
@@ -67,7 +70,7 @@ class ChangeBusinessTypeTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 111,

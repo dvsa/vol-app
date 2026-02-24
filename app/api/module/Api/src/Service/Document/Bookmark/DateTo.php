@@ -14,6 +14,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\CommunityLicBundle as CommunityLicQry;
  */
 class DateTo extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         $query = [
@@ -24,6 +25,7 @@ class DateTo extends DynamicBookmark
         return $query;
     }
 
+    #[\Override]
     public function render()
     {
         if (

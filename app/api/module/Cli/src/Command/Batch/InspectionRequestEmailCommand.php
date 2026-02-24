@@ -10,11 +10,13 @@ class InspectionRequestEmailCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:inspection-request-email';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Process inspection request email');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

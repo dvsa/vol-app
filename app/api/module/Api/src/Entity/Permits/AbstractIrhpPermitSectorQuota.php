@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -146,7 +146,8 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -169,7 +170,8 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
     /**
      * Get the sector
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\Sectors     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\Sectors
+     */
     public function getSector()
     {
         return $this->sector;
@@ -192,7 +194,8 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
     /**
      * Get the irhp permit stock
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock
+     */
     public function getIrhpPermitStock()
     {
         return $this->irhpPermitStock;
@@ -215,7 +218,8 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -238,7 +242,8 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -261,7 +266,8 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
     /**
      * Get the quota number
      *
-     * @return int     */
+     * @return int
+     */
     public function getQuotaNumber()
     {
         return $this->quotaNumber;
@@ -284,7 +290,8 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -293,6 +300,7 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

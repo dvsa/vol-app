@@ -26,6 +26,7 @@ final class AssociateS4 extends AbstractCommandHandler implements TransactionedI
 {
     protected $repoServiceName = 'LicenceOperatingCentre';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         foreach ($command->getLicenceOperatingCentres() as $operatingCentre) {

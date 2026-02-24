@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Allocate;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication;
@@ -16,16 +18,14 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class BilateralCriteriaTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpMatches
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpMatches')]
     public function testMatches(
-        $rangeCabotage,
-        $rangeJourneyId,
-        $criteriaStandardOrCabotage,
-        $criteriaJourneyId,
-        $expected
-    ) {
+        mixed $rangeCabotage,
+        mixed $rangeJourneyId,
+        mixed $criteriaStandardOrCabotage,
+        mixed $criteriaJourneyId,
+        mixed $expected
+    ): void {
         $irhpPermitRange = m::mock(IrhpPermitRange::class);
         $irhpPermitRange->shouldReceive('getCabotage')
             ->withNoArgs()
@@ -42,7 +42,7 @@ class BilateralCriteriaTest extends MockeryTestCase
         );
     }
 
-    public function dpMatches()
+    public static function dpMatches(): array
     {
         return [
             [

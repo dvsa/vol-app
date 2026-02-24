@@ -29,6 +29,7 @@ final class Venue extends AbstractContext implements AddressFormatterAwareInterf
      *
      * @return \ArrayObject
      */
+    #[\Override]
     public function provide(PublicationLink $publication, \ArrayObject $context)
     {
         if ($context->offsetGet('venue')) {

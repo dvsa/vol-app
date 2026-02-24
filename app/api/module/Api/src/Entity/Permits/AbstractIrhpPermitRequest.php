@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -164,7 +164,8 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -187,7 +188,8 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * Get the irhp application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
+     */
     public function getIrhpApplication()
     {
         return $this->irhpApplication;
@@ -210,7 +212,8 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * Get the irhp permit application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
+     */
     public function getIrhpPermitApplication()
     {
         return $this->irhpPermitApplication;
@@ -233,7 +236,8 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -256,7 +260,8 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -279,7 +284,8 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * Get the permits required
      *
-     * @return int     */
+     * @return int
+     */
     public function getPermitsRequired()
     {
         return $this->permitsRequired;
@@ -302,7 +308,8 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -374,6 +381,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

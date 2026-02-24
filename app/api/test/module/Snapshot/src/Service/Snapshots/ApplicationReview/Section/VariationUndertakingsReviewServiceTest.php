@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Variation Undertakings Review Service Test
  *
@@ -40,10 +42,8 @@ class VariationUndertakingsReviewServiceTest extends MockeryTestCase
         $this->sut = new VariationUndertakingsReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider providerGetConfigFromData
-     */
-    public function testGetConfigFromData($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerGetConfigFromData')]
+    public function testGetConfigFromData(mixed $data, mixed $expected): void
     {
         $this->mockTranslator->shouldReceive('translate')
             ->with('markup-application_undertakings_PSV430')
@@ -128,7 +128,7 @@ class VariationUndertakingsReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function providerGetConfigFromData()
+    public static function providerGetConfigFromData(): array
     {
         return [
             'psv, special restricted, not internal' => [

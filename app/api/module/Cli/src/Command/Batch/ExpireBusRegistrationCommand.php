@@ -10,11 +10,13 @@ class ExpireBusRegistrationCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:expire-bus-registration';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Expire bus registrations past their end date.');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

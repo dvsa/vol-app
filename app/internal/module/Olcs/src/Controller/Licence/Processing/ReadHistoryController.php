@@ -30,6 +30,7 @@ class ReadHistoryController extends AbstractInternalController implements Licenc
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

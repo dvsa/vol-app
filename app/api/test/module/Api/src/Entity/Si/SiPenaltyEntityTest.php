@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Si;
 
 use Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested;
@@ -26,7 +28,7 @@ class SiPenaltyEntityTest extends EntityTester
     /**
      * Tests create and update
      */
-    public function testCreateAndUpdate()
+    public function testCreateAndUpdate(): void
     {
         $si = m::mock(SeriousInfringement::class);
         $penaltyType = m::mock(SiPenaltyType::class);

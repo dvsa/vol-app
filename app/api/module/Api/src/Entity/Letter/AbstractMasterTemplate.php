@@ -32,7 +32,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractMasterTemplate implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractMasterTemplate implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -152,7 +152,8 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -175,7 +176,8 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -198,7 +200,8 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -221,7 +224,8 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     /**
      * Get the name
      *
-     * @return string     */
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -244,7 +248,8 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     /**
      * Get the template content
      *
-     * @return string     */
+     * @return string
+     */
     public function getTemplateContent()
     {
         return $this->templateContent;
@@ -267,7 +272,8 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     /**
      * Get the is default
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsDefault()
     {
         return $this->isDefault;
@@ -290,7 +296,8 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     /**
      * Get the locale
      *
-     * @return string     */
+     * @return string
+     */
     public function getLocale()
     {
         return $this->locale;
@@ -313,7 +320,8 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -322,6 +330,7 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

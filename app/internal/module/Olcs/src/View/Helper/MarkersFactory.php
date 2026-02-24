@@ -16,6 +16,7 @@ class MarkersFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): RenderMarkers
     {
         $markersHelper = new RenderMarkers();

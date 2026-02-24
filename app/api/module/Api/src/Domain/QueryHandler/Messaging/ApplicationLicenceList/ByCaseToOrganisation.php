@@ -23,6 +23,7 @@ class ByCaseToOrganisation extends AbstractQueryHandler implements ToggleRequire
     protected $extraRepos = [Repository\Cases::class];
 
     /** @param GetApplicationListByCaseToOrganisationQuery|QueryInterface $query */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $casesRepo = $this->getRepo(Repository\Cases::class);

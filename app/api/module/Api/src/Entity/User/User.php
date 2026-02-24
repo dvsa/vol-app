@@ -622,6 +622,7 @@ class User extends AbstractUser implements OrganisationProviderInterface
      *
      * @return null|Organisation
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         if ($this->getOrganisationUsers()->isEmpty()) {
@@ -682,6 +683,7 @@ class User extends AbstractUser implements OrganisationProviderInterface
      *
      * @return array
      */
+    #[\Override]
     protected function getCalculatedBundleValues()
     {
         return ['userType' => $this->getUserType()];

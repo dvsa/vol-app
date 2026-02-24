@@ -34,6 +34,7 @@ final class UpdateUndertakingsStatus extends AbstractUpdateStatus implements Aut
      *
      * @return bool
      */
+    #[\Override]
     protected function isSectionValid(Application $application)
     {
         if ($this->isInternalUser()) {

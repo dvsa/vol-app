@@ -32,6 +32,7 @@ final class ResetFees extends AbstractCommandHandler implements
      * Resets an array of fees if they are 'un-paid', i.e. by way of a reversal
      * or adjustment
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $fees = $command->getFees();

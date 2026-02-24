@@ -22,6 +22,7 @@ class StandardFieldsGenerator implements FieldsGeneratorInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function generate(IrhpPermitStock $irhpPermitStock, ?IrhpPermitApplication $irhpPermitApplication)
     {
         $applicationPathGroupId = $irhpPermitStock->getApplicationPathGroup()->getId();

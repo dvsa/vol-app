@@ -102,6 +102,7 @@ abstract class AbstractReadonlyRepository implements ReadonlyRepositoryInterface
      *
      * @return void
      */
+    #[\Override]
     public function initService(RepositoryServiceManager $serviceManager)
     {
         // no-op
@@ -236,6 +237,7 @@ abstract class AbstractReadonlyRepository implements ReadonlyRepositoryInterface
      *
      * @return mixed
      */
+    #[\Override]
     public function fetchUsingId(QryCmd $query, $hydrateMode = Query::HYDRATE_OBJECT, $version = null)
     {
         return $this->fetchById($query->getId(), $hydrateMode, $version);
@@ -251,6 +253,7 @@ abstract class AbstractReadonlyRepository implements ReadonlyRepositoryInterface
      * @return mixed
      * @throws Exception\NotFoundException
      */
+    #[\Override]
     public function fetchById($id, $hydrateMode = Query::HYDRATE_OBJECT, $version = null)
     {
         // If we are not locking and requesting an object, check the cache first
@@ -326,6 +329,7 @@ abstract class AbstractReadonlyRepository implements ReadonlyRepositoryInterface
      *
      * @return array
      */
+    #[\Override]
     public function fetchByIds(array $ids, $hydrateMode = Query::HYDRATE_OBJECT)
     {
         if (empty($ids)) {
@@ -349,6 +353,7 @@ abstract class AbstractReadonlyRepository implements ReadonlyRepositoryInterface
      *
      * @return \ArrayIterator|\Traversable
      */
+    #[\Override]
     public function fetchList(QueryInterface $query, $hydrateMode = Query::HYDRATE_ARRAY)
     {
         $this->query = $query;
@@ -370,6 +375,7 @@ abstract class AbstractReadonlyRepository implements ReadonlyRepositoryInterface
      *
      * @return \ArrayIterator|\Traversable
      */
+    #[\Override]
     public function fetchPaginatedList(QueryBuilder $qb, $hydrateMode = Query::HYDRATE_ARRAY, QueryInterface $originalQuery = null)
     {
         $query = $qb->getQuery();
@@ -391,6 +397,7 @@ abstract class AbstractReadonlyRepository implements ReadonlyRepositoryInterface
      *
      * @return int
      */
+    #[\Override]
     public function fetchCount(QueryInterface $query)
     {
         $qb = $this->createQueryBuilder();
@@ -435,6 +442,7 @@ abstract class AbstractReadonlyRepository implements ReadonlyRepositoryInterface
      *
      * @return int
      */
+    #[\Override]
     public function fetchPaginatedCount(QueryBuilder $qb)
     {
         return (int)$this->getPaginator($qb)->count();
@@ -488,6 +496,7 @@ abstract class AbstractReadonlyRepository implements ReadonlyRepositoryInterface
      * @throws Exception\RuntimeException
      * @throws Exception\VersionConflictException
      */
+    #[\Override]
     public function lock($entity, $version)
     {
         if (!($entity instanceof $this->entity)) {
@@ -508,6 +517,7 @@ abstract class AbstractReadonlyRepository implements ReadonlyRepositoryInterface
      *
      * @return RefDataEntity|null
      */
+    #[\Override]
     public function getRefdataReference($id)
     {
         return $this->getReference(RefDataEntity::class, $id);
@@ -520,6 +530,7 @@ abstract class AbstractReadonlyRepository implements ReadonlyRepositoryInterface
      *
      * @return Category|null
      */
+    #[\Override]
     public function getCategoryReference($id)
     {
         return $this->getReference(Category::class, $id);
@@ -532,6 +543,7 @@ abstract class AbstractReadonlyRepository implements ReadonlyRepositoryInterface
      *
      * @return SubCategory|null
      */
+    #[\Override]
     public function getSubCategoryReference($id)
     {
         return $this->getReference(SubCategory::class, $id);
@@ -548,6 +560,7 @@ abstract class AbstractReadonlyRepository implements ReadonlyRepositoryInterface
      * @template T
      * @throws ORMException
      */
+    #[\Override]
     public function getReference($entityClass, $id)
     {
         return !empty($id) ? $this->getEntityManager()->getReference($entityClass, $id) : null;

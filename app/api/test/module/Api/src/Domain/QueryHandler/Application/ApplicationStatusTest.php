@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Application;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler;
@@ -8,9 +10,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\DataService\ApplicationStatus
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\DataService\ApplicationStatus::class)]
 class ApplicationStatusTest extends QueryHandlerTestCase
 {
     /** @var QueryHandler\DataService\ApplicationStatus  */
@@ -28,7 +28,7 @@ class ApplicationStatusTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         /** @var QueryInterface | m\MockInterface $query */
         $query = m::mock(QueryInterface::class);

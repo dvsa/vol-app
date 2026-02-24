@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Common;
 
 use Dvsa\Olcs\Api\Service\Permits\Common\PermitTypeConfig;
@@ -15,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class StockBasedRestrictedCountryIdsProviderTest extends MockeryTestCase
 {
-    public function testGetIds()
+    public function testGetIds(): void
     {
         $irhpPermitStockId = 67;
 

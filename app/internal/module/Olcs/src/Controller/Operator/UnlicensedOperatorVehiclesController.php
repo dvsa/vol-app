@@ -41,6 +41,7 @@ class UnlicensedOperatorVehiclesController extends AbstractInternalController im
     protected $listDto = ListDto::class;
     protected $listVars = ['organisation'];
 
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -108,6 +109,7 @@ class UnlicensedOperatorVehiclesController extends AbstractInternalController im
      * @param  array $data
      * @return TableBuilder
      */
+    #[\Override]
     protected function alterTable($table, $data)
     {
         $columnToRemove = $data['extra']['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_PSV
@@ -119,6 +121,7 @@ class UnlicensedOperatorVehiclesController extends AbstractInternalController im
         return $table;
     }
 
+    #[\Override]
     public function addAction()
     {
         return $this->add(
@@ -132,6 +135,7 @@ class UnlicensedOperatorVehiclesController extends AbstractInternalController im
         );
     }
 
+    #[\Override]
     public function editAction()
     {
         return $this->edit(

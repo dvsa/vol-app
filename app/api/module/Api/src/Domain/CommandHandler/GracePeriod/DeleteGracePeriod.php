@@ -22,6 +22,7 @@ final class DeleteGracePeriod extends AbstractCommandHandler implements Transact
 {
     protected $repoServiceName = 'GracePeriod';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

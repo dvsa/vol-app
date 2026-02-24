@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\TwoWeeksBefore;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\TwoWeeksBefore;
  */
 class TwoWeeksBeforeTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new TwoWeeksBefore();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -19,7 +21,7 @@ class TwoWeeksBeforeTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderWithNoExpiryDate()
+    public function testRenderWithNoExpiryDate(): void
     {
         $bookmark = new TwoWeeksBefore();
         $bookmark->setData(
@@ -34,7 +36,7 @@ class TwoWeeksBeforeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testRenderWithTwoWeeksBefore()
+    public function testRenderWithTwoWeeksBefore(): void
     {
         $bookmark = new TwoWeeksBefore();
         $bookmark->setData(

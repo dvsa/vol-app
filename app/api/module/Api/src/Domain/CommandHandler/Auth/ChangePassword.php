@@ -24,6 +24,7 @@ class ChangePassword extends AbstractCommandHandler implements AuthAwareInterfac
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         assert($command instanceof \Dvsa\Olcs\Transfer\Command\Auth\ChangePassword);

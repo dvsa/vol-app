@@ -11,64 +11,67 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\ColumnMetadata;
  */
 class PrimaryKeyTypeHandler extends AbstractTypeHandler
 {
+    #[\Override]
     public function supports(ColumnMetadata $column, array $config = []): bool
     {
         // Handle any primary key column
         return $column->isPrimary();
     }
 
+    #[\Override]
     public function generateAnnotation(ColumnMetadata $column, array $config = []): string
     {
         $annotations = [];
-        
+
         // Add @ORM\Id
         $annotations[] = '@ORM\Id';
-        
+
         // Add column definition
         $columnDef = sprintf(
             '@ORM\Column(type="%s", name="%s"',
             $column->getType(),
             $column->getName()
         );
-        
+
         // Add length for string types
         if ($column->getLength() && in_array($column->getType(), ['string', 'char'])) {
             $columnDef .= sprintf(', length=%d', $column->getLength());
         }
-        
+
         // Add nullable if needed
         if ($column->isNullable()) {
             $columnDef .= ', nullable=true';
         } else {
             $columnDef .= ', nullable=false';
         }
-        
+
         $columnDef .= ')';
         $annotations[] = $columnDef;
-        
+
         // Add generation strategy only for auto-increment columns
         if ($column->isAutoIncrement()) {
             $annotations[] = '@ORM\GeneratedValue(strategy="IDENTITY")';
         }
-        
+
         return implode("\n     * ", $annotations);
     }
 
+    #[\Override]
     public function generateProperty(ColumnMetadata $column, array $config = []): array
     {
         // Map database types to PHP types
-        $phpType = match($column->getType()) {
+        $phpType = match ($column->getType()) {
             'integer', 'bigint', 'smallint' => 'int',
             'string', 'char', 'varchar' => 'string',
             'boolean' => 'bool',
             'float', 'double', 'decimal' => 'float',
             default => 'mixed'
         };
-        
+
         // Generate appropriate default value
         $defaultValue = 'null';
         if (!$column->isNullable() && !$column->isAutoIncrement()) {
-            $defaultValue = match($phpType) {
+            $defaultValue = match ($phpType) {
                 'int' => '0',
                 'string' => "''",
                 'bool' => 'false',
@@ -76,13 +79,13 @@ class PrimaryKeyTypeHandler extends AbstractTypeHandler
                 default => 'null'
             };
         }
-        
+
         // Generate descriptive docBlock
         $docBlock = sprintf(
             'Primary key%s',
             $column->isAutoIncrement() ? '.  Auto incremented if numeric.' : ''
         );
-        
+
         return [
             'name' => $column->getName(),
             'type' => $phpType,
@@ -93,11 +96,13 @@ class PrimaryKeyTypeHandler extends AbstractTypeHandler
         ];
     }
 
+    #[\Override]
     public function getPriority(): int
     {
         return 100; // High priority to handle before other handlers
     }
 
+    #[\Override]
     public function getRequiredImports(): array
     {
         return ['Doctrine\ORM\Mapping as ORM'];

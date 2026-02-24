@@ -61,6 +61,7 @@ class Licence extends AbstractDataService implements ListDataInterface
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function fetchListOptions($context, $useGroups = false)
     {
         $data = $this->fetchLicenceListData();

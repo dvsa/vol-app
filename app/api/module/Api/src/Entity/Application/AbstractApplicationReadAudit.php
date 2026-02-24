@@ -34,7 +34,7 @@ use Doctrine\Common\Collections\Collection;
  *    }
  * )
  */
-abstract class AbstractApplicationReadAudit implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractApplicationReadAudit implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -105,7 +105,8 @@ abstract class AbstractApplicationReadAudit implements BundleSerializableInterfa
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -128,7 +129,8 @@ abstract class AbstractApplicationReadAudit implements BundleSerializableInterfa
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
     public function getApplication()
     {
         return $this->application;
@@ -151,7 +153,8 @@ abstract class AbstractApplicationReadAudit implements BundleSerializableInterfa
     /**
      * Get the user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getUser()
     {
         return $this->user;
@@ -160,6 +163,7 @@ abstract class AbstractApplicationReadAudit implements BundleSerializableInterfa
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

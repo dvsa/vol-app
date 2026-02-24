@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query;
 
 use Doctrine\DBAL\Result as DbalResult;
@@ -15,12 +17,10 @@ use Mockery as m;
  */
 abstract class AbstractDbQueryTestCase extends BaseAbstractDbQueryTestCase
 {
-    abstract public function paramProvider();
+    abstract public static function paramProvider(): array;
 
-    /**
-     * @dataProvider paramProvider
-     */
-    public function testExecuteWithException($inputParams, $inputTypes, $expectedParams, $expectedTypes)
+    #[\PHPUnit\Framework\Attributes\DataProvider('paramProvider')]
+    public function testExecuteWithException(mixed $inputParams, mixed $inputTypes, mixed $expectedParams, mixed $expectedTypes): void
     {
         $this->mockIdentityProvider
             ->shouldReceive('getMasqueradedAsSystemUser')
@@ -39,10 +39,8 @@ abstract class AbstractDbQueryTestCase extends BaseAbstractDbQueryTestCase
         $this->sut->execute($inputParams, $inputTypes);
     }
 
-    /**
-     * @dataProvider paramProvider
-     */
-    public function testExecute($inputParams, $inputTypes, $expectedParams, $expectedTypes)
+    #[\PHPUnit\Framework\Attributes\DataProvider('paramProvider')]
+    public function testExecute(mixed $inputParams, mixed $inputTypes, mixed $expectedParams, mixed $expectedTypes): void
     {
         $this->mockIdentityProvider
             ->shouldReceive('getMasqueradedAsSystemUser')
@@ -61,10 +59,8 @@ abstract class AbstractDbQueryTestCase extends BaseAbstractDbQueryTestCase
         $this->assertEquals($result, $this->sut->execute($inputParams, $inputTypes));
     }
 
-    /**
-     * @dataProvider paramProvider
-     */
-    public function testExecuteAsSystemUser($inputParams, $inputTypes, $expectedParams, $expectedTypes)
+    #[\PHPUnit\Framework\Attributes\DataProvider('paramProvider')]
+    public function testExecuteAsSystemUser(mixed $inputParams, mixed $inputTypes, mixed $expectedParams, mixed $expectedTypes): void
     {
         $this->mockIdentityProvider
             ->shouldReceive('getMasqueradedAsSystemUser')

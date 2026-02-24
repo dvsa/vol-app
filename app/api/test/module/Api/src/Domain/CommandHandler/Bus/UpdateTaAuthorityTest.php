@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Ta Authority Test
  */
@@ -30,7 +32,8 @@ class UpdateTaAuthorityTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             LocalAuthorityEntity::class => [
@@ -44,7 +47,7 @@ class UpdateTaAuthorityTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $stoppingArrangements = 'stoppingArrangements';
 

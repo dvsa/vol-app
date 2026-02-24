@@ -40,7 +40,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrhpApplication implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrhpApplication implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -363,7 +363,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -386,7 +387,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -409,7 +411,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Get the international journeys
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getInternationalJourneys()
     {
         return $this->internationalJourneys;
@@ -432,7 +435,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Get the source
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getSource()
     {
         return $this->source;
@@ -455,7 +459,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Get the status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getStatus()
     {
         return $this->status;
@@ -478,7 +483,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Get the sectors
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\Sectors     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\Sectors
+     */
     public function getSectors()
     {
         return $this->sectors;
@@ -501,7 +507,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Get the irhp permit type
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType
+     */
     public function getIrhpPermitType()
     {
         return $this->irhpPermitType;
@@ -524,7 +531,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Get the withdraw reason
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getWithdrawReason()
     {
         return $this->withdrawReason;
@@ -547,7 +555,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -570,7 +579,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -593,7 +603,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Get the in scope
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getInScope()
     {
         return $this->inScope;
@@ -616,7 +627,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Get the checked answers
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getCheckedAnswers()
     {
         return $this->checkedAnswers;
@@ -639,7 +651,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Get the declaration
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getDeclaration()
     {
         return $this->declaration;
@@ -664,7 +677,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getDateReceived($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -693,7 +707,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getCancellationDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -722,7 +737,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getWithdrawnDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -751,7 +767,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getExpiryDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -778,7 +795,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Get the checked
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getChecked()
     {
         return $this->checked;
@@ -801,7 +819,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Get the cor certificate number
      *
-     * @return string     */
+     * @return string
+     */
     public function getCorCertificateNumber()
     {
         return $this->corCertificateNumber;
@@ -824,7 +843,8 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -1337,6 +1357,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

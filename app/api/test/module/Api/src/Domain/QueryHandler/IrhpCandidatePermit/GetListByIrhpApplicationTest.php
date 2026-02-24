@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpCandidatePermit;
 
 use Doctrine\ORM\Query;
@@ -27,7 +29,7 @@ class GetListByIrhpApplicationTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQueryWithEmptyList()
+    public function testHandleQueryWithEmptyList(): void
     {
         $irhpApplicationId = 10;
         $page = 1;
@@ -81,14 +83,12 @@ class GetListByIrhpApplicationTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    /**
-     * @dataProvider dpTestHandleQuery
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQuery')]
     public function testHandleQuery(
-        $queryData,
-        $bundledIrhpCandidatePermits,
-        $expectedResult
-    ) {
+        mixed $queryData,
+        mixed $bundledIrhpCandidatePermits,
+        mixed $expectedResult
+    ): void {
         $query = GetListByIrhpApplicationQry::create($queryData);
 
         $irhpCandidatePermits = [
@@ -150,7 +150,7 @@ class GetListByIrhpApplicationTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function dpTestHandleQuery()
+    public static function dpTestHandleQuery(): array
     {
         return [
             'page 1' => [

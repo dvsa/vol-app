@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\TransportManager;
 
 use Dvsa\Olcs\Api\Entity\Person\Person as PersonEntity;
@@ -15,12 +17,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class PersonTest extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the transport manager name filter
-     */
-    public function testProvideWithTitle()
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the transport manager name filter')]
+    public function testProvideWithTitle(): void
     {
         $id = 66;
 

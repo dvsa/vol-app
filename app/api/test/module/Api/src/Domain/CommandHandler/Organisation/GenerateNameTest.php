@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Organisation;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,9 +15,7 @@ use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Organisation\GenerateName
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Organisation\GenerateName::class)]
 class GenerateNameTest extends AbstractCommandHandlerTestCase
 {
     public const PERSON_ID = 8001;
@@ -57,7 +57,8 @@ class GenerateNameTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             Entity\Organisation\Organisation::ORG_TYPE_REGISTERED_COMPANY,
@@ -69,7 +70,7 @@ class GenerateNameTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testGenerateNameNull()
+    public function testGenerateNameNull(): void
     {
         $cmd = TransferCmd\Organisation\GenerateName::create(['organisation' => self::ORG_ID]);
 
@@ -84,10 +85,8 @@ class GenerateNameTest extends AbstractCommandHandlerTestCase
         static::assertEquals(['Unable to generate name'], $actual->getMessages());
     }
 
-    /**
-     * @dataProvider dpTestGenerateName
-     */
-    public function testGenerateName($type, $orgPersons, $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerateName')]
+    public function testGenerateName(mixed $type, mixed $orgPersons, mixed $expect): void
     {
         $cmd = TransferCmd\Organisation\GenerateName::create(['organisation' => self::ORG_ID]);
 
@@ -107,44 +106,44 @@ class GenerateNameTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($cmd);
     }
 
-    public function dpTestGenerateName()
+    public static function dpTestGenerateName(): array
     {
         return [
             'ST' => [
                 'type' => Entity\Organisation\Organisation::ORG_TYPE_SOLE_TRADER,
                 'orgPersons' => [
-                    $this->getMockOrgPerson('unit_Fist', 'unit_Last'),
+                    self::getMockOrgPerson('unit_Fist', 'unit_Last'),
                 ],
                 'expect' => 'unit_Fist unit_Last',
             ],
             'Partner x 1' => [
                 'type' => Entity\Organisation\Organisation::ORG_TYPE_PARTNERSHIP,
                 'orgPersons' => [
-                    $this->getMockOrgPerson('unit_Fist', 'unit_Last'),
+                    self::getMockOrgPerson('unit_Fist', 'unit_Last'),
                 ],
                 'expect' => 'unit_Fist unit_Last',
             ],
             'Partner x 2' => [
                 'type' => Entity\Organisation\Organisation::ORG_TYPE_PARTNERSHIP,
                 'orgPersons' => [
-                    $this->getMockOrgPerson('unit_Fist', 'unit_Last'),
-                    $this->getMockOrgPerson('unit_Fist2', 'unit_Last2'),
+                    self::getMockOrgPerson('unit_Fist', 'unit_Last'),
+                    self::getMockOrgPerson('unit_Fist2', 'unit_Last2'),
                 ],
                 'expect' => 'unit_Fist unit_Last & unit_Fist2 unit_Last2',
             ],
             'Partner > 2' => [
                 'type' => Entity\Organisation\Organisation::ORG_TYPE_PARTNERSHIP,
                 'orgPersons' => [
-                    $this->getMockOrgPerson('unit_Fist', 'unit_Last'),
-                    $this->getMockOrgPerson('unit_Fist2', 'unit_Last2'),
-                    $this->getMockOrgPerson('unit_Fist3', 'unit_Last3'),
+                    self::getMockOrgPerson('unit_Fist', 'unit_Last'),
+                    self::getMockOrgPerson('unit_Fist2', 'unit_Last2'),
+                    self::getMockOrgPerson('unit_Fist3', 'unit_Last3'),
                 ],
                 'expect' => 'unit_Fist unit_Last & Partners',
             ],
         ];
     }
 
-    private function getMockOrgPerson($firstName, $lastName)
+    private static function getMockOrgPerson(mixed $firstName, mixed $lastName): Entity\Organisation\OrganisationPerson
     {
         $mockPerson = new Entity\Person\Person();
         $mockPerson
@@ -157,10 +156,8 @@ class GenerateNameTest extends AbstractCommandHandlerTestCase
         return $mockRel;
     }
 
-    /**
-     * @dataProvider dpTestHandleOk
-     */
-    public function testHandleOk($cmdData)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleOk')]
+    public function testHandleOk(mixed $cmdData): void
     {
         $cmd = TransferCmd\Organisation\GenerateName::create($cmdData);
 
@@ -187,7 +184,7 @@ class GenerateNameTest extends AbstractCommandHandlerTestCase
         static::assertEquals(['Name succesfully generated'], $actual->getMessages());
     }
 
-    public function dpTestHandleOk()
+    public static function dpTestHandleOk(): array
     {
         return [
             [
@@ -204,7 +201,7 @@ class GenerateNameTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleFailAppIsVariation()
+    public function testHandleFailAppIsVariation(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -220,7 +217,7 @@ class GenerateNameTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleFailNotSoleTraiderOrPartnership()
+    public function testHandleFailNotSoleTraiderOrPartnership(): void
     {
         $this->expectException(ValidationException::class);
 

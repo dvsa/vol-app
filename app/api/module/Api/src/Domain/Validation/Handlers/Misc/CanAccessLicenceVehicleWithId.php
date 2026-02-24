@@ -20,6 +20,7 @@ class CanAccessLicenceVehicleWithId extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canAccessLicenceVehicle($dto->getId());

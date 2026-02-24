@@ -36,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractImpounding implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractImpounding implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -251,7 +251,8 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -274,7 +275,8 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Get the impounding type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getImpoundingType()
     {
         return $this->impoundingType;
@@ -297,7 +299,8 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -320,7 +323,8 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Get the presiding tc
      *
-     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc     */
+     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     */
     public function getPresidingTc()
     {
         return $this->presidingTc;
@@ -343,7 +347,8 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Get the outcome
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getOutcome()
     {
         return $this->outcome;
@@ -366,7 +371,8 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Get the venue
      *
-     * @return \Dvsa\Olcs\Api\Entity\Venue     */
+     * @return \Dvsa\Olcs\Api\Entity\Venue
+     */
     public function getVenue()
     {
         return $this->venue;
@@ -389,7 +395,8 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -412,7 +419,8 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -437,7 +445,8 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getHearingDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -466,7 +475,8 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getApplicationReceiptDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -495,7 +505,8 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getOutcomeSentDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -522,7 +533,8 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Get the notes
      *
-     * @return string     */
+     * @return string
+     */
     public function getNotes()
     {
         return $this->notes;
@@ -547,7 +559,8 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getCloseDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -574,7 +587,8 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Get the venue other
      *
-     * @return string     */
+     * @return string
+     */
     public function getVenueOther()
     {
         return $this->venueOther;
@@ -597,7 +611,8 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Get the vrm
      *
-     * @return string     */
+     * @return string
+     */
     public function getVrm()
     {
         return $this->vrm;
@@ -620,7 +635,8 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -692,6 +708,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

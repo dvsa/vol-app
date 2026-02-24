@@ -28,6 +28,7 @@ class VariationPsvOcTotalAuthReviewService extends AbstractVariationOcTotalAuthR
      * @param array $data
      * @return string
      */
+    #[\Override]
     protected function getChangedKeys($data)
     {
         $changedKeys['totAuthVehicles'] = 'vehicles';

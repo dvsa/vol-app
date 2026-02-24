@@ -24,6 +24,7 @@ final class ConditionUndertaking extends AbstractContext implements AddressForma
      *
      * @return \ArrayObject
      */
+    #[\Override]
     public function provide(PublicationLink $publicationLink, \ArrayObject $context)
     {
         // only add data if we are working on certain sections

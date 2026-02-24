@@ -17,6 +17,7 @@ class OpenByCountry extends AbstractQueryHandler
     protected $repoServiceName = 'IrhpPermitWindow';
     protected $bundle = ['irhpPermitStock' => ['irhpPermitType' => ['name'], 'country']];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         // fetch the list of all open windows for selected countries

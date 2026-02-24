@@ -31,6 +31,7 @@ final class HandleOcVariationFees extends AbstractCommandHandler implements Tran
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Application $application */

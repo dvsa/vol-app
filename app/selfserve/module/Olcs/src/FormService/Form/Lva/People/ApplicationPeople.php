@@ -34,6 +34,7 @@ class ApplicationPeople extends CommonApplicationPeople
      *
      * @return void
      */
+    #[\Override]
     public function alterForm(Form $form, array $params = [])
     {
         parent::alterForm($form, $params);

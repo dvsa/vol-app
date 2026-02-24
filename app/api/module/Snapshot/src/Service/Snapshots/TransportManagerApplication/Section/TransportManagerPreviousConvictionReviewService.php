@@ -24,6 +24,7 @@ class TransportManagerPreviousConvictionReviewService extends AbstractReviewServ
      * @param array $data
      * @return array
      */
+    #[\Override]
     public function getConfig(TransportManagerApplication $tma)
     {
         return [

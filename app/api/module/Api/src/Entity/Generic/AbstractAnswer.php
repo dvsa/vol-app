@@ -38,7 +38,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -224,7 +224,8 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -247,7 +248,8 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Get the question text
      *
-     * @return \Dvsa\Olcs\Api\Entity\Generic\QuestionText     */
+     * @return \Dvsa\Olcs\Api\Entity\Generic\QuestionText
+     */
     public function getQuestionText()
     {
         return $this->questionText;
@@ -270,7 +272,8 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Get the irhp application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
+     */
     public function getIrhpApplication()
     {
         return $this->irhpApplication;
@@ -293,7 +296,8 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Get the irhp permit application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
+     */
     public function getIrhpPermitApplication()
     {
         return $this->irhpPermitApplication;
@@ -316,7 +320,8 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -339,7 +344,8 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -362,7 +368,8 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Get the ans integer
      *
-     * @return int     */
+     * @return int
+     */
     public function getAnsInteger()
     {
         return $this->ansInteger;
@@ -385,7 +392,8 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Get the ans string
      *
-     * @return string     */
+     * @return string
+     */
     public function getAnsString()
     {
         return $this->ansString;
@@ -408,7 +416,8 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Get the ans decimal
      *
-     * @return string     */
+     * @return string
+     */
     public function getAnsDecimal()
     {
         return $this->ansDecimal;
@@ -433,7 +442,8 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getAnsDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -462,7 +472,8 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getAnsDatetime($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -489,7 +500,8 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Get the ans boolean
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getAnsBoolean()
     {
         return $this->ansBoolean;
@@ -512,7 +524,8 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Get the ans text
      *
-     * @return string     */
+     * @return string
+     */
     public function getAnsText()
     {
         return $this->ansText;
@@ -535,7 +548,8 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Get the ans array
      *
-     * @return string     */
+     * @return string
+     */
     public function getAnsArray()
     {
         return $this->ansArray;
@@ -558,7 +572,8 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -567,6 +582,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

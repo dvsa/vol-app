@@ -30,6 +30,7 @@ class IsSystemUser extends AbstractHandler implements AuthAwareInterface
      *
      * @return boolean
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->isSystemUser();

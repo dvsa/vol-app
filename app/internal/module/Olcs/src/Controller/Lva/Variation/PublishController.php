@@ -22,8 +22,6 @@ class PublishController extends \Olcs\Controller\Lva\AbstractPublishController
     protected $lva = 'variation';
     protected string $location = 'internal';
 
-    protected StringHelperService $stringHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -37,13 +35,11 @@ class PublishController extends \Olcs\Controller\Lva\AbstractPublishController
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         FormHelperService $formHelper,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         protected FormServiceManager $formServiceManager,
         protected $navigation,
         protected FlashMessengerHelperService $flashMessengerHelper
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct($niTextTranslationUtil, $authService, $formHelper);
     }
 }

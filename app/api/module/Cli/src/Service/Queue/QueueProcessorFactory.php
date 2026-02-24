@@ -7,6 +7,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class QueueProcessorFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         return new QueueProcessor(

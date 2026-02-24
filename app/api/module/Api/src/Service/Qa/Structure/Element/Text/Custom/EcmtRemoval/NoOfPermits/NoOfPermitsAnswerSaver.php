@@ -27,6 +27,7 @@ class NoOfPermitsAnswerSaver implements AnswerSaverInterface
      * @param QaContext $qaContext
      * @param array $postData
      */
+    #[\Override]
     public function save(QaContext $qaContext, array $postData)
     {
         $permitsRequired = $this->genericAnswerFetcher->fetch(

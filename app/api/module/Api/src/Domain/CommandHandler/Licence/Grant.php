@@ -23,6 +23,7 @@ final class Grant extends AbstractCommandHandler implements TransactionedInterfa
 {
     protected $repoServiceName = 'Licence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Licence $licence */

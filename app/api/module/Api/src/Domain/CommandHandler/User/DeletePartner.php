@@ -18,6 +18,7 @@ final class DeletePartner extends AbstractCommandHandler implements Transactione
 {
     protected $repoServiceName = 'Partner';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $partner = $this->getRepo()->fetchUsingId($command);

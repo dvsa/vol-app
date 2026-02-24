@@ -47,6 +47,7 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -77,6 +78,7 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->redirectTo([]);
@@ -87,6 +89,7 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
      *
      * @return Response
      */
+    #[\Override]
     public function detailsAction()
     {
         return $this->notFoundAction();
@@ -97,6 +100,7 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
      *
      * @return Response
      */
+    #[\Override]
     public function addAction()
     {
         return $this->notFoundAction();
@@ -107,6 +111,7 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
      *
      * @return Response
      */
+    #[\Override]
     public function deleteAction()
     {
         return $this->notFoundAction();

@@ -25,6 +25,7 @@ class History extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var \Dvsa\Olcs\Transfer\Query\Processing\History $query */

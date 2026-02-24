@@ -67,7 +67,7 @@ return [
             'title' => 'Identifier',
             'name' => 'filename',
             'sort' => 'filename',
-            'formatter' => fn($row) => Escape::html(ltrim($row['filename'], '/')),
+            'formatter' => fn($row) => Escape::html(ltrim((string) $row['filename'], '/')),
         ],
         [
             'title' => 'Type',

@@ -11,6 +11,7 @@ class TrafficAreaList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'TrafficArea';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $userInfo = $this->getUserData();

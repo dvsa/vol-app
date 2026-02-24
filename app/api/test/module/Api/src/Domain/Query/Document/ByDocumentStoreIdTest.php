@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ByDocumentStoreId test
  */
@@ -10,7 +12,7 @@ use Dvsa\Olcs\Api\Domain\Query\Document\ByDocumentStoreId;
 
 class ByDocumentStoreIdTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $documentStoreId = 'ABC';
 

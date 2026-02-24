@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Modify test
  *
@@ -36,10 +38,8 @@ class ModifyTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider contextProvider
-     */
-    public function testIsValidNoContextOrWrongContext($application, $licence, $ids)
+    #[\PHPUnit\Framework\Attributes\DataProvider('contextProvider')]
+    public function testIsValidNoContextOrWrongContext(mixed $application, mixed $licence, mixed $ids): void
     {
         $data = [
             'application' => $application,
@@ -56,7 +56,7 @@ class ModifyTest extends AbstractHandlerTestCase
         $this->assertFalse($this->sut->isValid($dto));
     }
 
-    public function contextProvider()
+    public static function contextProvider(): array
     {
         return [
             [null, null, null],
@@ -65,10 +65,8 @@ class ModifyTest extends AbstractHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider licenceProvider
-     */
-    public function testIsValidWithOwnership($licenceId, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceProvider')]
+    public function testIsValidWithOwnership(mixed $licenceId, mixed $expected): void
     {
         $data = [
             'ids' => [111],
@@ -95,7 +93,7 @@ class ModifyTest extends AbstractHandlerTestCase
         $this->assertEquals($expected, $this->sut->isValid($dto));
     }
 
-    public function licenceProvider()
+    public static function licenceProvider(): array
     {
         return [
             [123, true],
@@ -103,7 +101,7 @@ class ModifyTest extends AbstractHandlerTestCase
         ];
     }
 
-    public function getLicenceFromApplication()
+    public function getLicenceFromApplication(): mixed
     {
         $licence = m::mock(Licence::class);
 
@@ -116,7 +114,7 @@ class ModifyTest extends AbstractHandlerTestCase
         return $licence;
     }
 
-    public function getWorkshops()
+    public function getWorkshops(): array
     {
         $workshop = m::mock(Workshop::class);
 
@@ -126,7 +124,7 @@ class ModifyTest extends AbstractHandlerTestCase
         return [$workshop];
     }
 
-    public function mockGetLicenceFromApplication($licence, $application)
+    public function mockGetLicenceFromApplication(mixed $licence, mixed $application): void
     {
         $mockApplication = m::mock(Application::class)
             ->shouldReceive('getLicence')

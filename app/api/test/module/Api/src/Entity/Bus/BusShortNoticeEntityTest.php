@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Bus;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -31,7 +33,7 @@ class BusShortNoticeEntityTest extends EntityTester
     /**
      * Tests calculated values
      */
-    public function testGetCalculatedBundleValues()
+    public function testGetCalculatedBundleValues(): void
     {
         $isLatestVariation = true;
 
@@ -50,7 +52,7 @@ class BusShortNoticeEntityTest extends EntityTester
     /**
      * Test exception is thrown when edit not allowed
      */
-    public function testUpdateThrowsException()
+    public function testUpdateThrowsException(): void
     {
         $this->expectException(ForbiddenException::class);
 
@@ -105,7 +107,7 @@ class BusShortNoticeEntityTest extends EntityTester
     /**
      * Tests the update function
      */
-    public function testUpdate()
+    public function testUpdate(): void
     {
         /** @var BusRegEntity $busReg */
         $busReg = m::mock(BusRegEntity::class);
@@ -181,7 +183,7 @@ class BusShortNoticeEntityTest extends EntityTester
     /**
      * Tests the reset function
      */
-    public function testReset()
+    public function testReset(): void
     {
         $this->entity->setBankHolidayChange('Y');
         $this->entity->setUnforseenChange('Y');
@@ -226,17 +228,15 @@ class BusShortNoticeEntityTest extends EntityTester
         $this->assertEquals(null, $this->entity->getPoliceDetail());
     }
 
-    public function testFromData()
+    public function testFromData(): void
     {
         $this->entity->fromData(['connectionDetail' => 'foo', 'holidayDetail' => 'bar']);
         $this->assertEquals($this->entity->getConnectionDetail(), 'foo');
         $this->assertEquals($this->entity->getHolidayDetail(), 'bar');
     }
 
-    /**
-     * @dataProvider hasGrantableDetailsProvider
-     */
-    public function testHasGrantableDetails($change, $details, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('hasGrantableDetailsProvider')]
+    public function testHasGrantableDetails(mixed $change, mixed $details, mixed $expected): void
     {
         $this->entity->setBankHolidayChange($change['bankHolidayChange']);
         $this->entity->setConnectionChange($change['connectionChange']);
@@ -262,7 +262,7 @@ class BusShortNoticeEntityTest extends EntityTester
         $this->assertEquals($this->entity->hasGrantableDetails(), $expected);
     }
 
-    public function hasGrantableDetailsProvider()
+    public static function hasGrantableDetailsProvider(): array
     {
         return [
             [

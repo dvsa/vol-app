@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Transaction Test
  *
@@ -34,7 +36,7 @@ class TransactionTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 69]);
 
@@ -119,7 +121,7 @@ class TransactionTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryRefundMultiplePayments()
+    public function testHandleQueryRefundMultiplePayments(): void
     {
         $query = Qry::create(['id' => 69]);
 
@@ -196,7 +198,7 @@ class TransactionTest extends QueryHandlerTestCase
         );
     }
 
-    private function getMockFee($id, $amount)
+    private function getMockFee(mixed $id, mixed $amount): mixed
     {
 
         $fee = m::mock(Fee::class)

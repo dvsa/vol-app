@@ -13,6 +13,7 @@ class SettingsCookieNamesProvider implements CookieNamesProviderInterface
      *
      * @psalm-return list{array{name: 'langPref', domain: null}, array{name: 'cookie_seen', domain: null}}
      */
+    #[\Override]
     public function getNames(Cookie $cookie): array
     {
         return [

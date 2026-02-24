@@ -26,7 +26,7 @@ use Doctrine\Common\Collections\Collection;
  *    }
  * )
  */
-abstract class AbstractLicenceNoGen implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLicenceNoGen implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -86,7 +86,8 @@ abstract class AbstractLicenceNoGen implements BundleSerializableInterface, Json
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -109,7 +110,8 @@ abstract class AbstractLicenceNoGen implements BundleSerializableInterface, Json
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -118,6 +120,7 @@ abstract class AbstractLicenceNoGen implements BundleSerializableInterface, Json
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

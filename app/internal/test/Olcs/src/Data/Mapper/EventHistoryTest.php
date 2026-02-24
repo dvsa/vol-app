@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -10,7 +12,7 @@ use Olcs\Data\Mapper\EventHistory;
  */
 class EventHistoryTest extends MockeryTestCase
 {
-    public function testMapFromResult()
+    public function testMapFromResult(): void
     {
         $data = [
             'eventData' => 'bar',

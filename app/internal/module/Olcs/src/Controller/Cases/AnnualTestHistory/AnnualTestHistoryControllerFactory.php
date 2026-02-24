@@ -11,6 +11,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class AnnualTestHistoryControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AnnualTestHistoryController
     {
         $translationHelperService = $container->get(TranslationHelperService::class);

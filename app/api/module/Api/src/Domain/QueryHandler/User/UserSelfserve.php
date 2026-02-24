@@ -23,6 +23,7 @@ class UserSelfserve extends AbstractQueryHandler
      *
      * @return \Dvsa\Olcs\Api\Domain\QueryHandler\Result
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $user = $this->getRepo()->fetchUsingId($query);

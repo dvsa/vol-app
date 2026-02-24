@@ -20,6 +20,7 @@ class EssentialInformationControllerFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): EssentialInformationController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

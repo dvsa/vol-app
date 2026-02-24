@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTaskAllocationRule implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTaskAllocationRule implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -200,7 +200,8 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -223,7 +224,8 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * Get the category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\Category     */
+     * @return \Dvsa\Olcs\Api\Entity\System\Category
+     */
     public function getCategory()
     {
         return $this->category;
@@ -246,7 +248,8 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * Get the sub category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory     */
+     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory
+     */
     public function getSubCategory()
     {
         return $this->subCategory;
@@ -269,7 +272,8 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * Get the team
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\Team     */
+     * @return \Dvsa\Olcs\Api\Entity\User\Team
+     */
     public function getTeam()
     {
         return $this->team;
@@ -292,7 +296,8 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * Get the user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getUser()
     {
         return $this->user;
@@ -315,7 +320,8 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * Get the goods or psv
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getGoodsOrPsv()
     {
         return $this->goodsOrPsv;
@@ -338,7 +344,8 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * Get the traffic area
      *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea     */
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     */
     public function getTrafficArea()
     {
         return $this->trafficArea;
@@ -361,7 +368,8 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -384,7 +392,8 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -407,7 +416,8 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * Get the is mlh
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsMlh()
     {
         return $this->isMlh;
@@ -430,7 +440,8 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -502,6 +513,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

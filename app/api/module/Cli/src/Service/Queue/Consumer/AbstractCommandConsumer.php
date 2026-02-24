@@ -62,6 +62,7 @@ abstract class AbstractCommandConsumer extends AbstractConsumer
      *
      * @return string
      */
+    #[\Override]
     public function processMessage(QueueEntity $item)
     {
         if (!empty($this->maxAttempts) && $item->getAttempts() > $this->maxAttempts) {

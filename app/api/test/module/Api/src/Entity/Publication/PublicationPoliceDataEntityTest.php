@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Publication;
 
 use Dvsa\Olcs\Api\Entity\Publication\PublicationLink;
@@ -30,10 +32,9 @@ class PublicationPoliceDataEntityTest extends EntityTester
 
     /**
      * Tests create
-     *
-     * @dataProvider birthDateProvider
      */
-    public function testCreate($birthDate)
+    #[\PHPUnit\Framework\Attributes\DataProvider('birthDateProvider')]
+    public function testCreate(mixed $birthDate): void
     {
         $publicationLinkMock = m::mock(PublicationLink::class);
         $forename = 'forename';
@@ -53,7 +54,7 @@ class PublicationPoliceDataEntityTest extends EntityTester
         $this->assertEquals($familyName, $sut->getFamilyName());
     }
 
-    public function birthDateProvider()
+    public static function birthDateProvider(): array
     {
         return [
             [null],

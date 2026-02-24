@@ -17,6 +17,7 @@ use Psr\Container\ContainerInterface;
  */
 class SectionRendererFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(
         ContainerInterface $container,
         $requestedName,

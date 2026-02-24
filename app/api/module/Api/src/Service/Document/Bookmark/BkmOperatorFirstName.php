@@ -18,6 +18,7 @@ class BkmOperatorFirstName extends StaticBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         return 'Sir or Madam';

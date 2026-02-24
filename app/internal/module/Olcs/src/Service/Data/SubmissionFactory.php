@@ -16,6 +16,7 @@ class SubmissionFactory implements FactoryInterface
      * @return Submission
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Submission
     {
         return new Submission(

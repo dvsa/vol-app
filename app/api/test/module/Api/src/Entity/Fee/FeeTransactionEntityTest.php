@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Fee;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -32,16 +34,16 @@ class FeeTransactionEntityTest extends EntityTester
 
     /**
      * @param boolean $expected
-     * @dataProvider isRefundedProvider
      */
-    public function testIsRefundedOrReversed(array $feeTransactions, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isRefundedProvider')]
+    public function testIsRefundedOrReversed(array $feeTransactions, mixed $expected): void
     {
         $this->sut->setReversingFeeTransactions(new ArrayCollection($feeTransactions));
 
         $this->assertSame($expected, $this->sut->isRefundedOrReversed());
     }
 
-    public function isRefundedProvider()
+    public static function isRefundedProvider(): array
     {
         return [
             [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Licence;
 
 use Dvsa\Olcs\Api\Domain\Command as DomainCmd;
@@ -34,7 +36,7 @@ class UpdateBusinessDetailsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         //  save business details
         $saveCmdData = [
@@ -92,10 +94,8 @@ class UpdateBusinessDetailsTest extends AbstractCommandHandlerTestCase
         static::assertEquals($expected, $actual->toArray());
     }
 
-    /**
-     * @dataProvider dpTestHandleCmdTaskNotCreated
-     */
-    public function testHandleCmdTaskNotCreated($hasChanged, $isGranted)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCmdTaskNotCreated')]
+    public function testHandleCmdTaskNotCreated(mixed $hasChanged, mixed $isGranted): void
     {
         $saveCmdResult = new Result();
         $saveCmdResult->addMessage('Business Details updated');
@@ -122,7 +122,7 @@ class UpdateBusinessDetailsTest extends AbstractCommandHandlerTestCase
         static::assertEquals($expected, $actual->toArray());
     }
 
-    public function dpTestHandleCmdTaskNotCreated()
+    public static function dpTestHandleCmdTaskNotCreated(): array
     {
         return [
             [
@@ -140,7 +140,7 @@ class UpdateBusinessDetailsTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    private function mockIsGranted($permission, $result)
+    private function mockIsGranted(mixed $permission, mixed $result): void
     {
         $this->mockAuthSrv
             ->shouldReceive('isGranted')

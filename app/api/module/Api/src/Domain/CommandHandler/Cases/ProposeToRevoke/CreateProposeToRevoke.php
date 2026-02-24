@@ -33,6 +33,7 @@ final class CreateProposeToRevoke extends AbstractCommandHandler implements Tran
      * @return Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         // create and save a record

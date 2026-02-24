@@ -52,7 +52,7 @@ class DocumentGenerationController extends AbstractDocumentController
      */
     public function generateAction()
     {
-        $form = $this->generateForm('GenerateDocument', [$this, 'processGenerate']);
+        $form = $this->generateForm('GenerateDocument', $this->processGenerate(...));
 
         $this->loadScripts(['generate-document']);
 
@@ -367,6 +367,7 @@ class DocumentGenerationController extends AbstractDocumentController
      *
      * @return bool
      */
+    #[\Override]
     protected function isLettersDatabaseDrivenEnabled(): bool
     {
         $result = $this->handleQuery(

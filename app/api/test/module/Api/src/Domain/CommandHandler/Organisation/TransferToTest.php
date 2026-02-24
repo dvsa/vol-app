@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Organisation;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -41,7 +43,8 @@ class TransferToTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
 
@@ -53,7 +56,7 @@ class TransferToTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandFromAndToSame()
+    public function testHandleCommandFromAndToSame(): void
     {
         $data = [
             'id' => 12,
@@ -72,7 +75,7 @@ class TransferToTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithNoAssociatedEntities()
+    public function testHandleCommandWithNoAssociatedEntities(): void
     {
         $data = [
             'id' => 12,
@@ -136,7 +139,7 @@ class TransferToTest extends AbstractCommandHandlerTestCase
         $this->assertSame($expectedResult, $result->getMessages());
     }
 
-    public function testHandleCommandLicences()
+    public function testHandleCommandLicences(): void
     {
         $data = [
             'id' => 12,
@@ -212,7 +215,7 @@ class TransferToTest extends AbstractCommandHandlerTestCase
         $this->assertSame($expectedResult, $result->getMessages());
     }
 
-    public function testHandleCommandNotes()
+    public function testHandleCommandNotes(): void
     {
         $data = [
             'id' => 12,
@@ -287,7 +290,7 @@ class TransferToTest extends AbstractCommandHandlerTestCase
         $this->assertSame($expectedResult, $result->getMessages());
     }
 
-    public function testHandleCommandIrfoGvPermit()
+    public function testHandleCommandIrfoGvPermit(): void
     {
         $data = [
             'id' => 12,
@@ -368,7 +371,7 @@ class TransferToTest extends AbstractCommandHandlerTestCase
         $this->assertSame($expectedResult, $result->getMessages());
     }
 
-    public function testHandleCommandIrfoPsvAuths()
+    public function testHandleCommandIrfoPsvAuths(): void
     {
         $data = [
             'id' => 12,
@@ -449,7 +452,7 @@ class TransferToTest extends AbstractCommandHandlerTestCase
         $this->assertSame($expectedResult, $result->getMessages());
     }
 
-    public function testHandleCommandTask()
+    public function testHandleCommandTask(): void
     {
         $data = [
             'id' => 12,
@@ -530,7 +533,7 @@ class TransferToTest extends AbstractCommandHandlerTestCase
         $this->assertSame($expectedResult, $result->getMessages());
     }
 
-    public function testHandleCommandDisqualification()
+    public function testHandleCommandDisqualification(): void
     {
         $data = [
             'id' => 12,
@@ -601,7 +604,7 @@ class TransferToTest extends AbstractCommandHandlerTestCase
         $this->assertSame($expectedResult, $result->getMessages());
     }
 
-    public function testHandleCommandEbsrSubmission()
+    public function testHandleCommandEbsrSubmission(): void
     {
         $data = [
             'id' => 12,
@@ -676,7 +679,7 @@ class TransferToTest extends AbstractCommandHandlerTestCase
         $this->assertSame($expectedResult, $result->getMessages());
     }
 
-    public function testHandleCommandTxcInbox()
+    public function testHandleCommandTxcInbox(): void
     {
         $data = [
             'id' => 12,
@@ -751,7 +754,7 @@ class TransferToTest extends AbstractCommandHandlerTestCase
         $this->assertSame($expectedResult, $result->getMessages());
     }
 
-    public function testHandleCommandEventHistory()
+    public function testHandleCommandEventHistory(): void
     {
         $data = [
             'id' => 12,
@@ -826,7 +829,7 @@ class TransferToTest extends AbstractCommandHandlerTestCase
         $this->assertSame($expectedResult, $result->getMessages());
     }
 
-    public function testHandleCommandUsers()
+    public function testHandleCommandUsers(): void
     {
         $data = [
             'id' => 12,
@@ -903,7 +906,7 @@ class TransferToTest extends AbstractCommandHandlerTestCase
         $this->assertSame($expectedResult, $result->getMessages());
     }
 
-    public function testHandleCommandPersons()
+    public function testHandleCommandPersons(): void
     {
         $data = [
             'id' => 12,
@@ -980,7 +983,7 @@ class TransferToTest extends AbstractCommandHandlerTestCase
         $this->assertSame($expectedResult, $result->getMessages());
     }
 
-    public function testHandleCommandLicencesPartial()
+    public function testHandleCommandLicencesPartial(): void
     {
         $data = [
             'id' => 12,
@@ -1035,7 +1038,7 @@ class TransferToTest extends AbstractCommandHandlerTestCase
         $this->assertSame($expectedResult, $result->getMessages());
     }
 
-    public function testHandleCommandNoLicences()
+    public function testHandleCommandNoLicences(): void
     {
         $data = [
             'id' => 12,
@@ -1059,7 +1062,7 @@ class TransferToTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithException()
+    public function testHandleCommandWithException(): void
     {
         $this->expectException(ValidationException::class);
         $data = [

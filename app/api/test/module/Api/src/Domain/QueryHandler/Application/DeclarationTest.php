@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Application;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Application\Declaration;
@@ -42,7 +44,7 @@ class DeclarationTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -121,7 +123,7 @@ class DeclarationTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $this->sut->handleQuery($query)->serialize());
     }
 
-    public function testHandleQueryWithSignature()
+    public function testHandleQueryWithSignature(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -202,7 +204,7 @@ class DeclarationTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $this->sut->handleQuery($query)->serialize());
     }
 
-    public function testHandleQueryInterimFeeNotExist()
+    public function testHandleQueryInterimFeeNotExist(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -322,7 +324,7 @@ class DeclarationTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $this->sut->handleQuery($query)->serialize());
     }
 
-    public function testHandleQueryInterimFeeNotExistAndNotApplicable()
+    public function testHandleQueryInterimFeeNotExistAndNotApplicable(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -448,7 +450,7 @@ class DeclarationTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $this->sut->handleQuery($query)->serialize());
     }
 
-    public function testHandleQueryInterimFeeTypeNotExist()
+    public function testHandleQueryInterimFeeTypeNotExist(): void
     {
         $query = Qry::create(['id' => 111]);
 

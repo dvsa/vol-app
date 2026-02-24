@@ -26,6 +26,7 @@ final class UpdateQualitySchemes extends AbstractCommandHandler implements Trans
      * @return Result
      * @throws \Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var UpdateQualityCmd $command */

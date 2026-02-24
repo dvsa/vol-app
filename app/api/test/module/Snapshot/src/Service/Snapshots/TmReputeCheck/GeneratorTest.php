@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\TmReputeCheck;
 
 use Dvsa\Olcs\Snapshot\Service\Snapshots\AbstractGeneratorServices;
@@ -29,10 +31,9 @@ class GeneratorTest extends MockeryTestCase
     /**
      * Tests the snapshot generation process. Currently tests the XML data is translated into what the snapshot
      * code expects, next step is to also validate output
-     *
-     * @dataProvider dpGenerate
      */
-    public function testGenerate($input, $expectedConfig, $expectedOutput)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
+    public function testGenerate(mixed $input, mixed $expectedConfig, mixed $expectedOutput): void
     {
         $this->viewRenderer->shouldReceive('render')
             ->once()
@@ -51,14 +52,14 @@ class GeneratorTest extends MockeryTestCase
         $this->assertEquals($expectedOutput, $this->sut->generate($input));
     }
 
-    public function dpGenerate(): array
+    public static function dpGenerate(): array
     {
         return [
-            [$this->getExpectedInput(), $this->getExpectedConfig(), $this->getExpectedOutput()],
+            [self::getExpectedInput(), self::getExpectedConfig(), self::getExpectedOutput()],
         ];
     }
 
-    private function getExpectedInput(): array
+    private static function getExpectedInput(): array
     {
         return [
             'version' => '3.4',
@@ -173,7 +174,7 @@ class GeneratorTest extends MockeryTestCase
         ];
     }
 
-    private function getExpectedConfig(): array
+    private static function getExpectedConfig(): array
     {
         return [
             'tmName' => 'Penelope Creighton-Ward',
@@ -248,7 +249,7 @@ class GeneratorTest extends MockeryTestCase
         ];
     }
 
-    private function getExpectedOutput(): string
+    private static function getExpectedOutput(): string
     {
         return '<html>';
     }

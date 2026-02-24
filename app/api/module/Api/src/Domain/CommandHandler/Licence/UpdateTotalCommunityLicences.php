@@ -24,6 +24,7 @@ final class UpdateTotalCommunityLicences extends AbstractCommandHandler
 
     protected $extraRepos = ['CommunityLic'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Licence $licence */

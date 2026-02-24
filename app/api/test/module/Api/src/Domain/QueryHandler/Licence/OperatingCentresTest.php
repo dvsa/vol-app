@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Operating Centres Test
  *
@@ -51,7 +53,7 @@ class OperatingCentresTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -106,7 +108,7 @@ class OperatingCentresTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    public function testHandleQueryWithTa()
+    public function testHandleQueryWithTa(): void
     {
         $query = Qry::create(['id' => 111]);
 

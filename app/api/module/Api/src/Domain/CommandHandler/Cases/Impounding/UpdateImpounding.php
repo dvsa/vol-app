@@ -31,6 +31,7 @@ class UpdateImpounding extends AbstractImpounding implements TransactionedInterf
      * @return Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

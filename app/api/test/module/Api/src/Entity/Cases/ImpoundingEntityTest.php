@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Cases;
 
 use Dvsa\Olcs\Api\Entity\Venue;
@@ -24,7 +26,7 @@ class ImpoundingEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testSetOtherVenueProperties()
+    public function testSetOtherVenueProperties(): void
     {
         $mockCase = m::mock(CasesEntity::class);
         $mockImpoundingType = m::mock(RefDataEntity::class);
@@ -37,7 +39,7 @@ class ImpoundingEntityTest extends EntityTester
         $this->assertEquals('foo', $sut->getVenueOther());
     }
 
-    public function testUpdatePaperwork()
+    public function testUpdatePaperwork(): void
     {
         $impoundingType = m::mock(RefDataEntity::class);
         $impoundingType->shouldReceive('getId')->once()->andReturn(Entity::TYPE_PAPERWORK);
@@ -81,14 +83,14 @@ class ImpoundingEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider updateHearingProvider
      *
      * @param $inputVenue
      * @param $inputOther
      * @param $savedVenue
      * @param $savedOther
      */
-    public function testUpdateHearing($inputVenue, $inputOther, $savedVenue, $savedOther)
+    #[\PHPUnit\Framework\Attributes\DataProvider('updateHearingProvider')]
+    public function testUpdateHearing(mixed $inputVenue, mixed $inputOther, mixed $savedVenue, mixed $savedOther): void
     {
         $impoundingType = m::mock(RefDataEntity::class);
         $impoundingType->shouldReceive('getId')->once()->andReturn(Entity::TYPE_HEARING);
@@ -129,7 +131,7 @@ class ImpoundingEntityTest extends EntityTester
         $this->assertSame($notes, $entity->getNotes());
     }
 
-    public function updateHearingProvider()
+    public static function updateHearingProvider(): array
     {
         $mockVenue = m::mock(Venue::class);
 

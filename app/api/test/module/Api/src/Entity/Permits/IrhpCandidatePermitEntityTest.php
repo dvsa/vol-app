@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Permits;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit as Entity;
@@ -25,7 +27,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testCreateNew()
+    public function testCreateNew(): void
     {
         $irhpPermitApplication = m::mock(IrhpPermitApplicationEntity::class);
         $requestedEmissionsCategory = new RefData(RefData::EMISSIONS_CATEGORY_EURO6_REF);
@@ -48,7 +50,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $this->assertEquals(1, $candidatePermit->getWanted());
     }
 
-    public function testCreateForApgg()
+    public function testCreateForApgg(): void
     {
         $irhpPermitApplication = m::mock(IrhpPermitApplicationEntity::class);
 
@@ -68,7 +70,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $this->assertEquals(1, $candidatePermit->getWanted());
     }
 
-    public function testPrepareForScoring()
+    public function testPrepareForScoring(): void
     {
         $requestedEmissionsCategory = new RefData(RefData::EMISSIONS_CATEGORY_EURO6_REF);
 
@@ -83,7 +85,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $this->assertNull($candidatePermit->getAssignedEmissionsCategory());
     }
 
-    public function testHasRandomizedScore()
+    public function testHasRandomizedScore(): void
     {
         $requestedEmissionsCategory = new RefData(RefData::EMISSIONS_CATEGORY_EURO6_REF);
 
@@ -94,7 +96,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $this->assertTrue($candidatePermit->hasRandomizedScore());
     }
 
-    public function testApplyRandomizedScore()
+    public function testApplyRandomizedScore(): void
     {
         $deviationData = [
             'licenceData' => [
@@ -115,7 +117,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $this->assertNotNull($candidatePermit->getRandomizedScore());
     }
 
-    public function testApplyRange()
+    public function testApplyRange(): void
     {
         $requestedEmissionsCategory = new RefData(RefData::EMISSIONS_CATEGORY_EURO6_REF);
 
@@ -133,7 +135,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $this->assertSame($range, $candidatePermit->getIrhpPermitRange());
     }
 
-    public function testApplyRangeExceptionOnEmissionsCategoryMismatch()
+    public function testApplyRangeExceptionOnEmissionsCategoryMismatch(): void
     {
         $requestedEmissionsCategory = new RefData(RefData::EMISSIONS_CATEGORY_EURO6_REF);
 
@@ -155,7 +157,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $candidatePermit->applyRange($range);
     }
 
-    public function testMarkAsSuccessful()
+    public function testMarkAsSuccessful(): void
     {
         $candidatePermit = m::mock(Entity::class)->makePartial();
         $candidatePermit->setSuccessful(0);
@@ -167,7 +169,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $this->assertSame($assignedEmissionsCategory, $candidatePermit->getAssignedEmissionsCategory());
     }
 
-    public function testMarkAsSuccessfulExceptionOnAlreadySuccessful()
+    public function testMarkAsSuccessfulExceptionOnAlreadySuccessful(): void
     {
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage(
@@ -181,10 +183,8 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $candidatePermit->markAsSuccessful($assignedEmissionsCategory);
     }
 
-    /**
-     * @dataProvider canDeleteProvider
-     */
-    public function testCanDelete($isUc, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('canDeleteProvider')]
+    public function testCanDelete(mixed $isUc, mixed $expected): void
     {
         $irhpPermitApplication = m::mock(IrhpPermitApplicationEntity::class);
 
@@ -201,7 +201,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->canDelete());
     }
 
-    public function canDeleteProvider()
+    public static function canDeleteProvider(): array
     {
         return [
             [true, true],
@@ -209,7 +209,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         ];
     }
 
-    public function testUpdateIrhpPermitRange()
+    public function testUpdateIrhpPermitRange(): void
     {
         $irhpPermitApplication = m::mock(IrhpPermitApplicationEntity::class);
 
@@ -236,7 +236,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $this->assertSame($newRangeEmissionsCategory, $entity->getAssignedEmissionsCategory());
     }
 
-    public function testUpdateIrhpPermitRangeWrongStatus()
+    public function testUpdateIrhpPermitRangeWrongStatus(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -257,10 +257,8 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $entity->updateIrhpPermitRange($newRange);
     }
 
-    /**
-     * @dataProvider isApplicationUnderConsiderationProvider
-     */
-    public function testIsApplicationUnderConsideration($uc, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isApplicationUnderConsiderationProvider')]
+    public function testIsApplicationUnderConsideration(mixed $uc, mixed $expected): void
     {
         $irhpPermitApplication = m::mock(IrhpPermitApplicationEntity::class);
 
@@ -279,7 +277,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $this->assertSame($expected, $entity->isApplicationUnderConsideration());
     }
 
-    public function isApplicationUnderConsiderationProvider()
+    public static function isApplicationUnderConsiderationProvider(): array
     {
         return [
             [false, false],
@@ -287,7 +285,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         ];
     }
 
-    public function testReviveFromUnsuccessful()
+    public function testReviveFromUnsuccessful(): void
     {
         $candidatePermit = m::mock(Entity::class)->makePartial();
         $candidatePermit->setSuccessful(1);
@@ -305,7 +303,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $this->assertNull($candidatePermit->getRandomFactor());
     }
 
-    public function testUpdateWanted()
+    public function testUpdateWanted(): void
     {
         $candidatePermit = m::mock(Entity::class)->makePartial();
         $candidatePermit->setWanted(1);

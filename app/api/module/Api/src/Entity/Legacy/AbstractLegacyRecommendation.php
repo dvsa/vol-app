@@ -35,7 +35,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLegacyRecommendation implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLegacyRecommendation implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -249,7 +249,8 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -272,7 +273,8 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -295,7 +297,8 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Get the action
      *
-     * @return \Dvsa\Olcs\Api\Entity\Legacy\LegacyCaseAction     */
+     * @return \Dvsa\Olcs\Api\Entity\Legacy\LegacyCaseAction
+     */
     public function getAction()
     {
         return $this->action;
@@ -318,7 +321,8 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Get the from user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getFromUser()
     {
         return $this->fromUser;
@@ -341,7 +345,8 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Get the to user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getToUser()
     {
         return $this->toUser;
@@ -364,7 +369,8 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -387,7 +393,8 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -412,7 +419,8 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getRecDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -439,7 +447,8 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Get the pi reason
      *
-     * @return string     */
+     * @return string
+     */
     public function getPiReason()
     {
         return $this->piReason;
@@ -462,7 +471,8 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Get the comment
      *
-     * @return string     */
+     * @return string
+     */
     public function getComment()
     {
         return $this->comment;
@@ -487,7 +497,8 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEffectiveDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -514,7 +525,8 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Get the notes
      *
-     * @return string     */
+     * @return string
+     */
     public function getNotes()
     {
         return $this->notes;
@@ -537,7 +549,8 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Get the pi decision
      *
-     * @return string     */
+     * @return string
+     */
     public function getPiDecision()
     {
         return $this->piDecision;
@@ -560,7 +573,8 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Get the request
      *
-     * @return string     */
+     * @return string
+     */
     public function getRequest()
     {
         return $this->request;
@@ -583,7 +597,8 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Get the revoke lic
      *
-     * @return string     */
+     * @return string
+     */
     public function getRevokeLic()
     {
         return $this->revokeLic;
@@ -606,7 +621,8 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Get the status
      *
-     * @return string     */
+     * @return string
+     */
     public function getStatus()
     {
         return $this->status;
@@ -629,7 +645,8 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Get the total points
      *
-     * @return int     */
+     * @return int
+     */
     public function getTotalPoints()
     {
         return $this->totalPoints;
@@ -652,7 +669,8 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -661,6 +679,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository\SeriousInfringement as SiRepo;
@@ -17,7 +19,7 @@ class SeriousInfringementTest extends RepositoryTestCase
         $this->setUpSut(SiRepo::class, true);
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         $qb = $this->createMockQb('QUERY');
 

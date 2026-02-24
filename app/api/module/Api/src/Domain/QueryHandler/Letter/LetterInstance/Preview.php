@@ -77,6 +77,7 @@ class Preview extends AbstractQueryHandler
      * @param QueryInterface $query
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query): array
     {
         /** @var LetterInstanceEntity $letterInstance */
@@ -129,7 +130,7 @@ class Preview extends AbstractQueryHandler
             if (count($result) > 0) {
                 return $result[0];
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Log and continue without template
         }
 
@@ -177,6 +178,7 @@ class Preview extends AbstractQueryHandler
      * @param array|null $options
      * @return self
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): self
     {
         $this->previewService = $container->get(LetterPreviewService::class);

@@ -14,6 +14,7 @@ class LicenceVehicleSmallLimit extends DynamicBookmark
 {
     public const EMPTY_AUTH = 'Total number (if any)';
 
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(
@@ -23,6 +24,7 @@ class LicenceVehicleSmallLimit extends DynamicBookmark
         );
     }
 
+    #[\Override]
     public function render()
     {
         if (empty($this->data['totAuthSmallVehicles'])) {

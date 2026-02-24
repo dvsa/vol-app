@@ -33,6 +33,7 @@ class PromptController extends AbstractSelfserveController
      *
      * @return \Laminas\Http\Response|null
      */
+    #[\Override]
     public function checkConditionalDisplay()
     {
         if (!$this->currentUser()->getUserData()['eligibleForPrompt']) {

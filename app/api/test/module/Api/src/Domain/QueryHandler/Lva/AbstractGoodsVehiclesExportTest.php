@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Lva;
 
 use Doctrine\ORM\QueryBuilder;
@@ -9,9 +11,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Lva\AbstractGoodsVehiclesExport
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Lva\AbstractGoodsVehiclesExport::class)]
 class AbstractGoodsVehiclesExportTest extends QueryHandlerTestCase
 {
     /** @var  DummyAbstractGoodsVehiclesExport */
@@ -20,12 +20,12 @@ class AbstractGoodsVehiclesExportTest extends QueryHandlerTestCase
     public function setUp(): void
     {
         $this->sut = new class extends AbstractGoodsVehiclesExport {
-            public function getData(QueryBuilder $qb)
+            public function getData(QueryBuilder $qb): array
             {
                 return parent::getData($qb);
             }
 
-            public function handleQuery(QueryInterface $query)
+            public function handleQuery(QueryInterface $query): void
             {
             }
         };
@@ -35,7 +35,7 @@ class AbstractGoodsVehiclesExportTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testGetData()
+    public function testGetData(): void
     {
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);

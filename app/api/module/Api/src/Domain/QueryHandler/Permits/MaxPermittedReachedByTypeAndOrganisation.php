@@ -35,6 +35,7 @@ class MaxPermittedReachedByTypeAndOrganisation extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $irhpPermitTypeId = $query->getIrhpPermitType();
@@ -87,6 +88,7 @@ class MaxPermittedReachedByTypeAndOrganisation extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

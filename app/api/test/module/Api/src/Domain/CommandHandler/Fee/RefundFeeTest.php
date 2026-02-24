@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Refund Fee Test
  *
@@ -59,7 +61,8 @@ class RefundFeeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             TransactionEntity::TYPE_REFUND,
@@ -81,7 +84,7 @@ class RefundFeeTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $now = new DateTime();
 
@@ -202,7 +205,7 @@ class RefundFeeTest extends AbstractCommandHandlerTestCase
         $this->assertNull($transaction->getReference());
     }
 
-    public function testHandleCommandCpmsResponseException()
+    public function testHandleCommandCpmsResponseException(): void
     {
         $feeId = 69;
 
@@ -230,7 +233,7 @@ class RefundFeeTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandCpmsServiceException()
+    public function testHandleCommandCpmsServiceException(): void
     {
         $feeId = 69;
 

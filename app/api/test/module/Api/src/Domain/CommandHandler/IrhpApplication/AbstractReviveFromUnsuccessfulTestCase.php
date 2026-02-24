@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpApplication;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-abstract class AbstractReviveFromUnsuccessfulTest extends AbstractCommandHandlerTestCase
+abstract class AbstractReviveFromUnsuccessfulTestCase extends AbstractCommandHandlerTestCase
 {
     protected $applicationRepoServiceName = 'changeMe';
 
@@ -47,7 +49,8 @@ abstract class AbstractReviveFromUnsuccessfulTest extends AbstractCommandHandler
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrhpInterface::STATUS_UNDER_CONSIDERATION
@@ -56,7 +59,7 @@ abstract class AbstractReviveFromUnsuccessfulTest extends AbstractCommandHandler
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $irhpCandidatePermit1 = m::mock(IrhpCandidatePermit::class);
         $irhpCandidatePermit1->shouldReceive('reviveFromUnsuccessful')
@@ -117,7 +120,7 @@ abstract class AbstractReviveFromUnsuccessfulTest extends AbstractCommandHandler
         );
     }
 
-    public function testHandleCommandException()
+    public function testHandleCommandException(): void
     {
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('Application cannot be revived from unsuccessful');

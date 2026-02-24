@@ -46,7 +46,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractApplication implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractApplication implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -987,7 +987,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -1010,7 +1011,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -1033,7 +1035,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getStatus()
     {
         return $this->status;
@@ -1056,7 +1059,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the variation type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getVariationType()
     {
         return $this->variationType;
@@ -1079,7 +1083,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the psv which vehicle sizes
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getPsvWhichVehicleSizes()
     {
         return $this->psvWhichVehicleSizes;
@@ -1102,7 +1107,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the licence type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getLicenceType()
     {
         return $this->licenceType;
@@ -1125,7 +1131,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the goods or psv
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getGoodsOrPsv()
     {
         return $this->goodsOrPsv;
@@ -1148,7 +1155,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the vehicle type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getVehicleType()
     {
         return $this->vehicleType;
@@ -1171,7 +1179,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the grant authority
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getGrantAuthority()
     {
         return $this->grantAuthority;
@@ -1194,7 +1203,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the withdrawn reason
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getWithdrawnReason()
     {
         return $this->withdrawnReason;
@@ -1217,7 +1227,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the interim status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getInterimStatus()
     {
         return $this->interimStatus;
@@ -1240,7 +1251,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the applied via
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getAppliedVia()
     {
         return $this->appliedVia;
@@ -1263,7 +1275,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -1286,7 +1299,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -1309,7 +1323,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the signature type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getSignatureType()
     {
         return $this->signatureType;
@@ -1332,7 +1347,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the digital signature
      *
-     * @return \Dvsa\Olcs\Api\Entity\DigitalSignature     */
+     * @return \Dvsa\Olcs\Api\Entity\DigitalSignature
+     */
     public function getDigitalSignature()
     {
         return $this->digitalSignature;
@@ -1355,7 +1371,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the is variation
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsVariation()
     {
         return $this->isVariation;
@@ -1378,7 +1395,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the has entered reg
      *
-     * @return string     */
+     * @return string
+     */
     public function getHasEnteredReg()
     {
         return $this->hasEnteredReg;
@@ -1401,7 +1419,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the tot auth trailers
      *
-     * @return int     */
+     * @return int
+     */
     public function getTotAuthTrailers()
     {
         return $this->totAuthTrailers;
@@ -1424,7 +1443,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the tot auth vehicles
      *
-     * @return int     */
+     * @return int
+     */
     public function getTotAuthVehicles()
     {
         return $this->totAuthVehicles;
@@ -1447,7 +1467,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the tot auth hgv vehicles
      *
-     * @return int     */
+     * @return int
+     */
     public function getTotAuthHgvVehicles()
     {
         return $this->totAuthHgvVehicles;
@@ -1470,7 +1491,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the tot auth lgv vehicles
      *
-     * @return int     */
+     * @return int
+     */
     public function getTotAuthLgvVehicles()
     {
         return $this->totAuthLgvVehicles;
@@ -1493,7 +1515,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the tot community licences
      *
-     * @return int     */
+     * @return int
+     */
     public function getTotCommunityLicences()
     {
         return $this->totCommunityLicences;
@@ -1516,7 +1539,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the lgv declaration confirmation
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getLgvDeclarationConfirmation()
     {
         return $this->lgvDeclarationConfirmation;
@@ -1539,7 +1563,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the bankrupt
      *
-     * @return string     */
+     * @return string
+     */
     public function getBankrupt()
     {
         return $this->bankrupt;
@@ -1562,7 +1587,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the administration
      *
-     * @return string     */
+     * @return string
+     */
     public function getAdministration()
     {
         return $this->administration;
@@ -1585,7 +1611,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the disqualified
      *
-     * @return string     */
+     * @return string
+     */
     public function getDisqualified()
     {
         return $this->disqualified;
@@ -1608,7 +1635,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the liquidation
      *
-     * @return string     */
+     * @return string
+     */
     public function getLiquidation()
     {
         return $this->liquidation;
@@ -1631,7 +1659,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the receivership
      *
-     * @return string     */
+     * @return string
+     */
     public function getReceivership()
     {
         return $this->receivership;
@@ -1654,7 +1683,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the insolvency confirmation
      *
-     * @return string     */
+     * @return string
+     */
     public function getInsolvencyConfirmation()
     {
         return $this->insolvencyConfirmation;
@@ -1677,7 +1707,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the insolvency details
      *
-     * @return string     */
+     * @return string
+     */
     public function getInsolvencyDetails()
     {
         return $this->insolvencyDetails;
@@ -1700,7 +1731,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the safety confirmation
      *
-     * @return string     */
+     * @return string
+     */
     public function getSafetyConfirmation()
     {
         return $this->safetyConfirmation;
@@ -1723,7 +1755,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the declaration confirmation
      *
-     * @return string     */
+     * @return string
+     */
     public function getDeclarationConfirmation()
     {
         return $this->declarationConfirmation;
@@ -1746,7 +1779,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the financial evidence uploaded
      *
-     * @return int     */
+     * @return int
+     */
     public function getFinancialEvidenceUploaded()
     {
         return $this->financialEvidenceUploaded;
@@ -1769,7 +1803,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the small vehicle evidence uploaded
      *
-     * @return int     */
+     * @return int
+     */
     public function getSmallVehicleEvidenceUploaded()
     {
         return $this->smallVehicleEvidenceUploaded;
@@ -1792,7 +1827,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the occupation evidence uploaded
      *
-     * @return int     */
+     * @return int
+     */
     public function getOccupationEvidenceUploaded()
     {
         return $this->occupationEvidenceUploaded;
@@ -1817,7 +1853,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getReceivedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1846,7 +1883,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getTargetCompletionDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1875,7 +1913,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getGrantedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1904,7 +1943,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getRefusedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1933,7 +1973,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getWithdrawnDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1960,7 +2001,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the prev has licence
      *
-     * @return string     */
+     * @return string
+     */
     public function getPrevHasLicence()
     {
         return $this->prevHasLicence;
@@ -1983,7 +2025,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the prev had licence
      *
-     * @return string     */
+     * @return string
+     */
     public function getPrevHadLicence()
     {
         return $this->prevHadLicence;
@@ -2006,7 +2049,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the prev been refused
      *
-     * @return string     */
+     * @return string
+     */
     public function getPrevBeenRefused()
     {
         return $this->prevBeenRefused;
@@ -2029,7 +2073,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the prev been revoked
      *
-     * @return string     */
+     * @return string
+     */
     public function getPrevBeenRevoked()
     {
         return $this->prevBeenRevoked;
@@ -2052,7 +2097,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the prev been at pi
      *
-     * @return string     */
+     * @return string
+     */
     public function getPrevBeenAtPi()
     {
         return $this->prevBeenAtPi;
@@ -2075,7 +2121,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the prev been disqualified tc
      *
-     * @return string     */
+     * @return string
+     */
     public function getPrevBeenDisqualifiedTc()
     {
         return $this->prevBeenDisqualifiedTc;
@@ -2098,7 +2145,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the prev purchased assets
      *
-     * @return string     */
+     * @return string
+     */
     public function getPrevPurchasedAssets()
     {
         return $this->prevPurchasedAssets;
@@ -2121,7 +2169,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the override ooo
      *
-     * @return string     */
+     * @return string
+     */
     public function getOverrideOoo()
     {
         return $this->overrideOoo;
@@ -2144,7 +2193,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the prev conviction
      *
-     * @return string     */
+     * @return string
+     */
     public function getPrevConviction()
     {
         return $this->prevConviction;
@@ -2167,7 +2217,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the convictions confirmation
      *
-     * @return string     */
+     * @return string
+     */
     public function getConvictionsConfirmation()
     {
         return $this->convictionsConfirmation;
@@ -2190,7 +2241,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the psv operate small vhl
      *
-     * @return string     */
+     * @return string
+     */
     public function getPsvOperateSmallVhl()
     {
         return $this->psvOperateSmallVhl;
@@ -2213,7 +2265,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the psv small vhl notes
      *
-     * @return string     */
+     * @return string
+     */
     public function getPsvSmallVhlNotes()
     {
         return $this->psvSmallVhlNotes;
@@ -2236,7 +2289,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the psv small vhl confirmation
      *
-     * @return string     */
+     * @return string
+     */
     public function getPsvSmallVhlConfirmation()
     {
         return $this->psvSmallVhlConfirmation;
@@ -2259,7 +2313,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the psv no small vhl confirmation
      *
-     * @return string     */
+     * @return string
+     */
     public function getPsvNoSmallVhlConfirmation()
     {
         return $this->psvNoSmallVhlConfirmation;
@@ -2282,7 +2337,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the psv medium vhl confirmation
      *
-     * @return string     */
+     * @return string
+     */
     public function getPsvMediumVhlConfirmation()
     {
         return $this->psvMediumVhlConfirmation;
@@ -2305,7 +2361,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the psv medium vhl notes
      *
-     * @return string     */
+     * @return string
+     */
     public function getPsvMediumVhlNotes()
     {
         return $this->psvMediumVhlNotes;
@@ -2328,7 +2385,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the psv limousines
      *
-     * @return string     */
+     * @return string
+     */
     public function getPsvLimousines()
     {
         return $this->psvLimousines;
@@ -2351,7 +2409,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the psv no limousine confirmation
      *
-     * @return string     */
+     * @return string
+     */
     public function getPsvNoLimousineConfirmation()
     {
         return $this->psvNoLimousineConfirmation;
@@ -2374,7 +2433,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the psv only limousines confirmation
      *
-     * @return string     */
+     * @return string
+     */
     public function getPsvOnlyLimousinesConfirmation()
     {
         return $this->psvOnlyLimousinesConfirmation;
@@ -2397,7 +2457,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the psv income records confirmation
      *
-     * @return string     */
+     * @return string
+     */
     public function getPsvIncomeRecordsConfirmation()
     {
         return $this->psvIncomeRecordsConfirmation;
@@ -2420,7 +2481,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the psv occupation records confirmation
      *
-     * @return string     */
+     * @return string
+     */
     public function getPsvOccupationRecordsConfirmation()
     {
         return $this->psvOccupationRecordsConfirmation;
@@ -2443,7 +2505,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the psv total vehicle small
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvTotalVehicleSmall()
     {
         return $this->psvTotalVehicleSmall;
@@ -2466,7 +2529,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the psv total vehicle large
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvTotalVehicleLarge()
     {
         return $this->psvTotalVehicleLarge;
@@ -2491,7 +2555,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getInterimStart($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -2520,7 +2585,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getInterimEnd($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -2547,7 +2613,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the interim auth vehicles
      *
-     * @return int     */
+     * @return int
+     */
     public function getInterimAuthVehicles()
     {
         return $this->interimAuthVehicles;
@@ -2570,7 +2637,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the interim auth hgv vehicles
      *
-     * @return int     */
+     * @return int
+     */
     public function getInterimAuthHgvVehicles()
     {
         return $this->interimAuthHgvVehicles;
@@ -2593,7 +2661,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the interim auth lgv vehicles
      *
-     * @return int     */
+     * @return int
+     */
     public function getInterimAuthLgvVehicles()
     {
         return $this->interimAuthLgvVehicles;
@@ -2616,7 +2685,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the interim auth trailers
      *
-     * @return int     */
+     * @return int
+     */
     public function getInterimAuthTrailers()
     {
         return $this->interimAuthTrailers;
@@ -2639,7 +2709,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the interim reason
      *
-     * @return string     */
+     * @return string
+     */
     public function getInterimReason()
     {
         return $this->interimReason;
@@ -2662,7 +2733,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the is maintenance suitable
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsMaintenanceSuitable()
     {
         return $this->isMaintenanceSuitable;
@@ -2685,7 +2757,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the auth signature
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getAuthSignature()
     {
         return $this->authSignature;
@@ -2708,7 +2781,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the ni flag
      *
-     * @return string     */
+     * @return string
+     */
     public function getNiFlag()
     {
         return $this->niFlag;
@@ -2731,7 +2805,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the request inspection
      *
-     * @return int     */
+     * @return int
+     */
     public function getRequestInspection()
     {
         return $this->requestInspection;
@@ -2754,7 +2829,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the request inspection comment
      *
-     * @return string     */
+     * @return string
+     */
     public function getRequestInspectionComment()
     {
         return $this->requestInspectionComment;
@@ -2777,7 +2853,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the request inspection delay
      *
-     * @return int     */
+     * @return int
+     */
     public function getRequestInspectionDelay()
     {
         return $this->requestInspectionDelay;
@@ -2800,7 +2877,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -2823,7 +2901,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the application referred to pi
      *
-     * @return string     */
+     * @return string
+     */
     public function getApplicationReferredToPi()
     {
         return $this->applicationReferredToPi;
@@ -2846,7 +2925,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the application completion
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion
+     */
     public function getApplicationCompletion()
     {
         return $this->applicationCompletion;
@@ -3058,7 +3138,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the application tracking
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\ApplicationTracking     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\ApplicationTracking
+     */
     public function getApplicationTracking()
     {
         return $this->applicationTracking;
@@ -3823,6 +3904,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

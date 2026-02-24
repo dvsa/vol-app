@@ -12,6 +12,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\LicenceBundle as Qry;
  */
 class TaName extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         if (empty($data['licence'])) {
@@ -21,6 +22,7 @@ class TaName extends DynamicBookmark
         return Qry::create(['id' => $data['licence'], 'bundle' => ['trafficArea']]);
     }
 
+    #[\Override]
     public function render()
     {
         return $this->data['trafficArea']['name'];

@@ -11,6 +11,7 @@ use Dvsa\Olcs\Api\Entity\User\Permission;
  */
 abstract class AbstractCanEditEntity extends AbstractDoesOwnEntity
 {
+    #[\Override]
     public function isValid($entityId)
     {
         if ($this->isGranted(Permission::INTERNAL_EDIT)) {

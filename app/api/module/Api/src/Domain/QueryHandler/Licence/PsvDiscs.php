@@ -18,6 +18,7 @@ class PsvDiscs extends AbstractQueryHandler
 
     protected $extraRepos = ['PsvDisc'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var LicenceEntity $licence */

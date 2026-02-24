@@ -40,7 +40,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLicenceOperatingCentre implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLicenceOperatingCentre implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -263,7 +263,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -286,7 +287,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -309,7 +311,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get the operating centre
      *
-     * @return \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre     */
+     * @return \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
+     */
     public function getOperatingCentre()
     {
         return $this->operatingCentre;
@@ -332,7 +335,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get the s4
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\S4     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\S4
+     */
     public function getS4()
     {
         return $this->s4;
@@ -355,7 +359,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -378,7 +383,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -401,7 +407,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get the ad placed
      *
-     * @return int     */
+     * @return int
+     */
     public function getAdPlaced()
     {
         return $this->adPlaced;
@@ -424,7 +431,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get the ad placed in
      *
-     * @return string     */
+     * @return string
+     */
     public function getAdPlacedIn()
     {
         return $this->adPlacedIn;
@@ -449,7 +457,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getAdPlacedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -476,7 +485,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get the permission
      *
-     * @return string     */
+     * @return string
+     */
     public function getPermission()
     {
         return $this->permission;
@@ -499,7 +509,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get the no of trailers required
      *
-     * @return int     */
+     * @return int
+     */
     public function getNoOfTrailersRequired()
     {
         return $this->noOfTrailersRequired;
@@ -522,7 +533,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get the no of vehicles required
      *
-     * @return int     */
+     * @return int
+     */
     public function getNoOfVehiclesRequired()
     {
         return $this->noOfVehiclesRequired;
@@ -545,7 +557,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get the no of vehicles possessed
      *
-     * @return int     */
+     * @return int
+     */
     public function getNoOfVehiclesPossessed()
     {
         return $this->noOfVehiclesPossessed;
@@ -568,7 +581,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get the no of trailers possessed
      *
-     * @return int     */
+     * @return int
+     */
     public function getNoOfTrailersPossessed()
     {
         return $this->noOfTrailersPossessed;
@@ -591,7 +605,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get the vi action
      *
-     * @return string     */
+     * @return string
+     */
     public function getViAction()
     {
         return $this->viAction;
@@ -614,7 +629,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get the is interim
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsInterim()
     {
         return $this->isInterim;
@@ -637,7 +653,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get the publication appropriate
      *
-     * @return string     */
+     * @return string
+     */
     public function getPublicationAppropriate()
     {
         return $this->publicationAppropriate;
@@ -660,7 +677,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -683,7 +701,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -692,6 +711,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

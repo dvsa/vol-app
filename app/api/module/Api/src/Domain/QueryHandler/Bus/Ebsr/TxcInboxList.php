@@ -29,6 +29,7 @@ class TxcInboxList extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var TxcInboxRepo $repo */

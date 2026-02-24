@@ -26,6 +26,7 @@ final class UpdateSubmissionAction extends AbstractCommandHandler implements Tra
 
     protected $repoServiceName = 'SubmissionAction';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $submissionAction = $this->getRepo()->fetchUsingId($command, Query::HYDRATE_OBJECT, $command->getVersion());

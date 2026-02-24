@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Team mapper test
  *
@@ -20,7 +22,7 @@ use Laminas\Form\FormInterface;
  */
 class TeamTest extends MockeryTestCase
 {
-    public function testMapFromResult()
+    public function testMapFromResult(): void
     {
         $data = [
             'foo' => 'bar',
@@ -58,7 +60,7 @@ class TeamTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $data = ['team-details' => ['foo' => 'bar']];
         $expected = ['foo' => 'bar'];
@@ -66,7 +68,7 @@ class TeamTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($data));
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $errors = [
             'messages' => [

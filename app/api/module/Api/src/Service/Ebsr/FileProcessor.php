@@ -41,6 +41,7 @@ class FileProcessor implements FileProcessorInterface
      *
      * @return void
      */
+    #[\Override]
     public function setSubDirPath($subDirPath)
     {
         $this->subDirPath = $subDirPath;
@@ -55,6 +56,7 @@ class FileProcessor implements FileProcessorInterface
      * @throws \RuntimeException
      * @throws EbsrPackException
      */
+    #[\Override]
     public function fetchXmlFileNameFromDocumentStore($identifier): string
     {
         $targetDir = $this->tmpDir . $this->subDirPath;

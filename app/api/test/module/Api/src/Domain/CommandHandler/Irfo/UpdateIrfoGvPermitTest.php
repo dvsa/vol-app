@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Irfo Gv Permit Test
  */
@@ -28,7 +30,8 @@ class UpdateIrfoGvPermitTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             IrfoGvPermitType::class => [
@@ -39,7 +42,7 @@ class UpdateIrfoGvPermitTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 11,

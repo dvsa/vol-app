@@ -23,6 +23,7 @@ class QueueRunScoringPermitted extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $stockId = $query->getId();

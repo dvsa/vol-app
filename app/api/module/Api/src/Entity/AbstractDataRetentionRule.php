@@ -34,7 +34,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractDataRetentionRule implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractDataRetentionRule implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -181,7 +181,8 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -204,7 +205,8 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     /**
      * Get the action type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getActionType()
     {
         return $this->actionType;
@@ -227,7 +229,8 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -250,7 +253,8 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -273,7 +277,8 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -296,7 +301,8 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     /**
      * Get the retention period
      *
-     * @return int     */
+     * @return int
+     */
     public function getRetentionPeriod()
     {
         return $this->retentionPeriod;
@@ -319,7 +325,8 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     /**
      * Get the max data set
      *
-     * @return int     */
+     * @return int
+     */
     public function getMaxDataSet()
     {
         return $this->maxDataSet;
@@ -342,7 +349,8 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     /**
      * Get the is enabled
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsEnabled()
     {
         return $this->isEnabled;
@@ -365,7 +373,8 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     /**
      * Get the is custom rule
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsCustomRule()
     {
         return $this->isCustomRule;
@@ -388,7 +397,8 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     /**
      * Get the populate procedure
      *
-     * @return string     */
+     * @return string
+     */
     public function getPopulateProcedure()
     {
         return $this->populateProcedure;
@@ -411,7 +421,8 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     /**
      * Get the custom procedure
      *
-     * @return string     */
+     * @return string
+     */
     public function getCustomProcedure()
     {
         return $this->customProcedure;
@@ -420,6 +431,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -11,9 +11,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Transfer\Query\CompaniesHouse\AlertList as AlertListQry;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\CompaniesHouseAlert
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\CompaniesHouseAlert::class)]
 class CompaniesHouseAlertTest extends RepositoryTestCase
 {
     /** @var  Repository\CompaniesHouseAlert | m\MockInterface */

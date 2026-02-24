@@ -23,6 +23,7 @@ class UploadEvidence extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var Entity\Application\Application $application */

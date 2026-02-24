@@ -26,5 +26,4 @@ interface EntityGeneratorInterface
      * @return EntityData
      */
     public function generateEntity(TableMetadata $table, array $config): EntityData;
-
 }

@@ -19,6 +19,7 @@ class GetList extends AbstractQueryHandler
      * @param QueryInterface $query Query
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $list = $this->getRepo()->fetchList($query);

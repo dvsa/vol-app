@@ -20,6 +20,7 @@ class ReadyToPrintType extends AbstractQueryHandler
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return ['results' => $this->getRepo()->fetchReadyToPrint()];

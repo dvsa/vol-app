@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\QuestionText\Custom\Bilateral;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication;
@@ -47,7 +49,7 @@ class PermitUsageGeneratorTest extends MockeryTestCase
         $this->permitUsageGenerator = new PermitUsageGenerator($this->questionTextGenerator);
     }
 
-    public function testGenerateOnePermitUsageAvailable()
+    public function testGenerateOnePermitUsageAvailable(): void
     {
         $journeys = [
             1 => m::mock(RefData::class),
@@ -67,7 +69,7 @@ class PermitUsageGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGenerateTwoPermitUsagesAvalable()
+    public function testGenerateTwoPermitUsagesAvalable(): void
     {
         $journeys = [
             1 => m::mock(RefData::class),

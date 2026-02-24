@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpCandidatePermit;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange;
@@ -35,7 +37,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
     /**
      * Test the Happy Path
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $cmdData = [
             'irhpPermitApplication' => 2211,

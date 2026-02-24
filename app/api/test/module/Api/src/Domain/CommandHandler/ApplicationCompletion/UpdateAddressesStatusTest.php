@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\ApplicationCompletion;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -33,7 +35,8 @@ class UpdateAddressesStatusTest extends AbstractUpdateStatusTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             Licence::LICENCE_TYPE_STANDARD_NATIONAL,
@@ -43,21 +46,21 @@ class UpdateAddressesStatusTest extends AbstractUpdateStatusTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandNoCorAddWithChange()
+    public function testHandleCommandNoCorAddWithChange(): void
     {
         $this->applicationCompletion->setAddressesStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandNoCorAddWithoutChange()
+    public function testHandleCommandNoCorAddWithoutChange(): void
     {
         $this->applicationCompletion->setAddressesStatus(ApplicationCompletionEntity::STATUS_INCOMPLETE);
 
         $this->expectStatusUnchanged(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandNoPhoneContactsExternal()
+    public function testHandleCommandNoPhoneContactsExternal(): void
     {
         $this->setupIsExternalUser(true);
 
@@ -72,7 +75,7 @@ class UpdateAddressesStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandNoPhoneContactsInternal()
+    public function testHandleCommandNoPhoneContactsInternal(): void
     {
         $this->setupIsExternalUser(false);
 
@@ -91,7 +94,7 @@ class UpdateAddressesStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
-    public function testHandleCommandNoEstAddWhenRequired()
+    public function testHandleCommandNoEstAddWhenRequired(): void
     {
         $this->applicationCompletion->setAddressesStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -109,7 +112,7 @@ class UpdateAddressesStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithEstAddWhenRequired()
+    public function testHandleCommandWithEstAddWhenRequired(): void
     {
         $this->applicationCompletion->setAddressesStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -131,7 +134,7 @@ class UpdateAddressesStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
-    public function testHandleCommandWithoutReqEstAdd()
+    public function testHandleCommandWithoutReqEstAdd(): void
     {
         $this->applicationCompletion->setAddressesStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 

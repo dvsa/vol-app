@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\TransportManagerApplication\Section;
 
 use Dvsa\Olcs\Api\Entity\Application\Application;
@@ -35,17 +37,15 @@ class TransportManagerDeclarationReviewServiceTest extends MockeryTestCase
         $this->sut = new TransportManagerDeclarationReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testGetConfig(
-        $isTypeInternal,
-        $niFlag,
-        $goodsOrPsvId,
-        $expectedMarkupTranslationKey,
-        $expectedResidencyClauseKey,
-        $expectedRoleClauseKey
-    ) {
+        mixed $isTypeInternal,
+        mixed $niFlag,
+        mixed $goodsOrPsvId,
+        mixed $expectedMarkupTranslationKey,
+        mixed $expectedResidencyClauseKey,
+        mixed $expectedRoleClauseKey
+    ): void {
         $translatedResidencyClauseKey = 'translated residency clause key';
         $translatedRoleClauseKey = 'translated role clause key';
 
@@ -80,7 +80,7 @@ class TransportManagerDeclarationReviewServiceTest extends MockeryTestCase
         $this->assertEquals(['markup' => $expectedMarkup], $this->sut->getConfig($tma));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [

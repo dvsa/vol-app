@@ -22,6 +22,7 @@ final class PublishedList extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var PublicationRepo $repo */

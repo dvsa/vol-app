@@ -22,6 +22,7 @@ final class UpdatePartner extends AbstractCommandHandler implements Transactione
 
     protected $extraRepos = ['ContactDetails'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var ContactDetails $partner */

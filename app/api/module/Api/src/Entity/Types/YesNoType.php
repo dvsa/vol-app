@@ -20,6 +20,7 @@ class YesNoType extends Type
 {
     public const YESNO = 'yesno';
 
+    #[\Override]
     public function getSqlDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
         unset($fieldDeclaration);
@@ -35,6 +36,7 @@ class YesNoType extends Type
      * @param AbstractPlatform $platform
      * @return null|string
      */
+    #[\Override]
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         unset($platform);
@@ -49,6 +51,7 @@ class YesNoType extends Type
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
      * @return int
      */
+    #[\Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         unset($platform);
@@ -56,6 +59,7 @@ class YesNoType extends Type
         return (strtoupper($value) == 'Y' || strtoupper($value) == 'YES') ? 1 : 0;
     }
 
+    #[\Override]
     public function getName()
     {
         return self::YESNO;

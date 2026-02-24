@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * BkmOperatorFirstName Test
  */
@@ -13,7 +15,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BkmOperatorFirstName as Sut;
  */
 class BkmOperatorFirstNameTest extends \PHPUnit\Framework\TestCase
 {
-    public function testRender()
+    public function testRender(): void
     {
         $bookmark = new Sut();
         $this->assertEquals('Sir or Madam', $bookmark->render());

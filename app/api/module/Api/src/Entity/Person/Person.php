@@ -75,6 +75,7 @@ class Person extends AbstractPerson implements OrganisationProviderInterface
      *
      * @return array
      */
+    #[\Override]
     protected function getCalculatedBundleValues()
     {
         return ['disqualificationStatus' => $this->getDisqualificationStatus()];
@@ -95,6 +96,7 @@ class Person extends AbstractPerson implements OrganisationProviderInterface
      *
      * @return array
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         $list = [];

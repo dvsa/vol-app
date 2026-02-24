@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\InputFilter;
 
 use Dvsa\Olcs\Api\Service\Ebsr\InputFilter\ProcessedDataInputFactory;
@@ -18,7 +20,7 @@ class ProcessedDataInputFactoryTest extends TestCase
     /**
      * Tests create service
      */
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockValidator = m::mock(\Laminas\Validator\AbstractValidator::class);
 
@@ -42,7 +44,7 @@ class ProcessedDataInputFactoryTest extends TestCase
     /**
      * Tests create service with disabled validators
      */
-    public function testInvokeDisabledValidators()
+    public function testInvokeDisabledValidators(): void
     {
         $config = [
             'ebsr' => [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpApplication;
 
 use DateTime;
@@ -44,7 +46,8 @@ class CreateFullTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             IrhpPermitType::class => [
@@ -67,7 +70,7 @@ class CreateFullTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandBilateral()
+    public function testHandleCommandBilateral(): void
     {
         $permitTypeId = IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL;
         $licenceId = 2;
@@ -148,7 +151,7 @@ class CreateFullTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandMultilateral()
+    public function testHandleCommandMultilateral(): void
     {
         $permitTypeId = IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL;
         $licenceId = 2;
@@ -234,7 +237,7 @@ class CreateFullTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithDeclaration()
+    public function testHandleCommandWithDeclaration(): void
     {
         $permitTypeId = IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL;
         $licenceId = 2;
@@ -327,7 +330,7 @@ class CreateFullTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandNoPermitTypeFound()
+    public function testHandleCommandNoPermitTypeFound(): void
     {
         $permitTypeId = 999;
         $licenceId = 2;

@@ -16,6 +16,7 @@ class CgrInputFactory implements FactoryInterface
     public const XML_VALID_EXCLUDE_MSG = 'No config specified for xml messages to exclude';
     public const SCHEMA_PATH = '/../../../data/nr/xsd/CheckGoodRepute_Response.xsd';
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Input
     {
         $config = $container->get('config');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * BkmOperatorAddress4 Test
  */
@@ -13,7 +15,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BkmOperatorAddress4 as Sut;
  */
 class BkmOperatorAddress4Test extends \PHPUnit\Framework\TestCase
 {
-    public function testRender()
+    public function testRender(): void
     {
         $bookmark = new Sut();
         $this->assertEquals('', $bookmark->render());

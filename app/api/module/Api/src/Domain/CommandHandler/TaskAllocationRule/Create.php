@@ -26,6 +26,7 @@ final class Create extends AbstractCommandHandler
      * @throws ORMException
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         $repo = $this->getRepo(Repository\TaskAllocationRule::class);

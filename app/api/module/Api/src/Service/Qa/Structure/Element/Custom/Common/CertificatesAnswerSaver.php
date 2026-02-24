@@ -25,6 +25,7 @@ class CertificatesAnswerSaver implements AnswerSaverInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function save(QaContext $qaContext, array $postData)
     {
         $this->baseAnswerSaver->save($qaContext, $postData, Question::QUESTION_TYPE_BOOLEAN);

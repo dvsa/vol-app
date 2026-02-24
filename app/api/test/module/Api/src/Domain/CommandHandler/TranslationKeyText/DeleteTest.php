@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\TranslationKeyText;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -27,7 +29,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 2;
 
@@ -66,7 +68,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandCantFind()
+    public function testHandleCommandCantFind(): void
     {
         $id = 2;
 

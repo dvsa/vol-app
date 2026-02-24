@@ -32,6 +32,7 @@ final class Generate extends AbstractCommandHandler
         'Organisation',
     ];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var Cmd $command */

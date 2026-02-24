@@ -38,7 +38,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractComplaint implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractComplaint implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -253,7 +253,8 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -276,7 +277,8 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -299,7 +301,8 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the complainant contact details
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     */
     public function getComplainantContactDetails()
     {
         return $this->complainantContactDetails;
@@ -322,7 +325,8 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getStatus()
     {
         return $this->status;
@@ -345,7 +349,8 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the complaint type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getComplaintType()
     {
         return $this->complaintType;
@@ -368,7 +373,8 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -391,7 +397,8 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -414,7 +421,8 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the is compliance
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsCompliance()
     {
         return $this->isCompliance;
@@ -439,7 +447,8 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getComplaintDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -466,7 +475,8 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -489,7 +499,8 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the vrm
      *
-     * @return string     */
+     * @return string
+     */
     public function getVrm()
     {
         return $this->vrm;
@@ -512,7 +523,8 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the driver forename
      *
-     * @return string     */
+     * @return string
+     */
     public function getDriverForename()
     {
         return $this->driverForename;
@@ -535,7 +547,8 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the driver family name
      *
-     * @return string     */
+     * @return string
+     */
     public function getDriverFamilyName()
     {
         return $this->driverFamilyName;
@@ -560,7 +573,8 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getClosedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -587,7 +601,8 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -610,7 +625,8 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -682,6 +698,7 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

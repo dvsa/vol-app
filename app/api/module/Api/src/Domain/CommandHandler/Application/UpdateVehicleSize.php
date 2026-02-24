@@ -15,6 +15,7 @@ final class UpdateVehicleSize extends AbstractUpdateApplication
     ];
     protected string $confirmMessage = 'vehicle size updated';
 
+    #[\Override]
     public function updateApplication(ApplicationEntity $application, Command|CommandInterface $command): void
     {
         $application->updatePsvVehicleSize($this->getRepo()->getRefdataReference($command->getPsvVehicleSize()));

@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -125,7 +125,8 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
     /**
      * Get the letter_issue_version_id
      *
-     * @return int     */
+     * @return int
+     */
     public function getLetter_issue_version_id()
     {
         return $this->letter_issue_version_id;
@@ -148,7 +149,8 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
     /**
      * Get the letter_todo_version_id
      *
-     * @return int     */
+     * @return int
+     */
     public function getLetter_todo_version_id()
     {
         return $this->letter_todo_version_id;
@@ -171,7 +173,8 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -194,7 +197,8 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -217,7 +221,8 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
     /**
      * Get the display order
      *
-     * @return int     */
+     * @return int
+     */
     public function getDisplayOrder()
     {
         return $this->displayOrder;
@@ -226,6 +231,7 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

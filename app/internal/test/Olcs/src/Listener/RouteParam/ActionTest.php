@@ -1,7 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener\RouteParam;
 
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\Router\RouteStackInterface;
+use Laminas\View\Helper\Placeholder;
+use Laminas\View\Helper\Placeholder\Container;
+use Laminas\View\HelperPluginManager;
 use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -12,18 +19,28 @@ use Olcs\Listener\RouteParams;
 
 class ActionTest extends TestCase
 {
-    public function testAttach()
+    private Action $sut;
+
+    public function testAttach(): void
     {
-        $sut = new Action();
+        $this->sut = new Action();
 
-        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
-        $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'action', [$sut, 'onAction'], 1);
+        $mockEventManager = m::mock(EventManagerInterface::class);
+        $mockEventManager->expects('attach')
+            ->with(
+                RouteParams::EVENT_PARAM . 'action',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onAction';
+                }),
+                1
+            );
 
-        $sut->attach($mockEventManager);
+        $this->sut->attach($mockEventManager);
     }
 
-    public function testOnAction()
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testOnAction(): void
     {
         $action = 'add';
 
@@ -32,18 +49,18 @@ class ActionTest extends TestCase
 
         $event = new Event(null, $routeParam);
 
-        $mockRouter = m::mock(\Laminas\Router\RouteStackInterface::class);
+        $mockRouter = m::mock(RouteStackInterface::class);
         $mockRouter->shouldReceive('assemble')
             ->with(['action' => $action])
             ->andReturn('http://anything/');
 
-        $mockContainer = m::mock(\Laminas\View\Helper\Placeholder\Container::class);
+        $mockContainer = m::mock(Container::class);
         $mockContainer->shouldReceive('set')->with($action);
 
-        $mockPlaceholder = m::mock(\Laminas\View\Helper\Placeholder::class);
+        $mockPlaceholder = m::mock(Placeholder::class);
         $mockPlaceholder->shouldReceive('getContainer')->with('action')->andReturn($mockContainer);
 
-        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
 
         $sut = new Action();
@@ -52,9 +69,9 @@ class ActionTest extends TestCase
         $sut->onAction($event);
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
-        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
 
         $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);

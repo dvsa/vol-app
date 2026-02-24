@@ -18,6 +18,7 @@ class DeletePreviousConviction extends AbstractHandler implements AuthAwareInter
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         if ($this->isInternalUser()) {

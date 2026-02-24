@@ -21,6 +21,7 @@ class TranslationLoaderFactory implements FactoryInterface
      * @param array|null $options
      * @return TranslationLoader
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TranslationLoader
     {
         $repoServiceManager = $container->get('RepositoryServiceManager');

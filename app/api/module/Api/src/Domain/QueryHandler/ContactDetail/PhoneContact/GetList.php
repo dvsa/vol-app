@@ -21,6 +21,7 @@ class GetList extends AbstractQueryHandler
      * @return array
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var $repo \Dvsa\Olcs\Api\Domain\Repository\PhoneContact */

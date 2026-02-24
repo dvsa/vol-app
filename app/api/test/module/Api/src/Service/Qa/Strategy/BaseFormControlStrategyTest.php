@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Strategy;
 
 use Dvsa\Olcs\Api\Service\Qa\AnswersSummary\AnswerSummaryProviderInterface;
@@ -62,7 +64,7 @@ class BaseFormControlStrategyTest extends MockeryTestCase
         );
     }
 
-    public function testGetFrontendType()
+    public function testGetFrontendType(): void
     {
         $this->assertEquals(
             $this->frontendType,
@@ -70,7 +72,7 @@ class BaseFormControlStrategyTest extends MockeryTestCase
         );
     }
 
-    public function testGetElement()
+    public function testGetElement(): void
     {
         $qaEntity = m::mock(QaEntityInterface::class);
 
@@ -94,7 +96,7 @@ class BaseFormControlStrategyTest extends MockeryTestCase
         );
     }
 
-    public function testGetElementNotSupported()
+    public function testGetElementNotSupported(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Element generator does not support entity type');
@@ -113,10 +115,8 @@ class BaseFormControlStrategyTest extends MockeryTestCase
         $this->baseFormControlStrategy->getElement($elementGeneratorContext);
     }
 
-    /**
-     * @dataProvider dpSaveFormData
-     */
-    public function testSaveFormData($inDestinationName, $outDestinationName)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSaveFormData')]
+    public function testSaveFormData(mixed $inDestinationName, mixed $outDestinationName): void
     {
         $qaEntity = m::mock(QaEntityInterface::class);
 
@@ -145,7 +145,7 @@ class BaseFormControlStrategyTest extends MockeryTestCase
         );
     }
 
-    public function dpSaveFormData()
+    public static function dpSaveFormData(): array
     {
         return [
             [null, BaseFormControlStrategy::FRONTEND_DESTINATION_NEXT_STEP],
@@ -153,7 +153,7 @@ class BaseFormControlStrategyTest extends MockeryTestCase
         ];
     }
 
-    public function testSaveFormDataNotSupported()
+    public function testSaveFormDataNotSupported(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Answer saver does not support entity type');
@@ -178,7 +178,7 @@ class BaseFormControlStrategyTest extends MockeryTestCase
         $this->baseFormControlStrategy->saveFormData($qaContext, $postData);
     }
 
-    public function testClearAnswer()
+    public function testClearAnswer(): void
     {
         $qaEntity = m::mock(QaEntityInterface::class);
 
@@ -197,7 +197,7 @@ class BaseFormControlStrategyTest extends MockeryTestCase
         $this->baseFormControlStrategy->clearAnswer($qaContext);
     }
 
-    public function testClearAnswerNotSupported()
+    public function testClearAnswerNotSupported(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Answer clearer does not support entity type');
@@ -216,7 +216,7 @@ class BaseFormControlStrategyTest extends MockeryTestCase
         $this->baseFormControlStrategy->clearAnswer($qaContext);
     }
 
-    public function testGetQuestionText()
+    public function testGetQuestionText(): void
     {
         $qaEntity = m::mock(QaEntityInterface::class);
 
@@ -240,7 +240,7 @@ class BaseFormControlStrategyTest extends MockeryTestCase
         );
     }
 
-    public function testGetQuestionTextNotSupported()
+    public function testGetQuestionTextNotSupported(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Question text generator does not support entity type');
@@ -259,7 +259,7 @@ class BaseFormControlStrategyTest extends MockeryTestCase
         $this->baseFormControlStrategy->getQuestionText($qaContext);
     }
 
-    public function getAnswerSummaryProvider()
+    public function getAnswerSummaryProvider(): array
     {
         $this->assertSame(
             $this->answerSummaryProvider,

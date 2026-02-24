@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Builder;
 
 interface BuilderInterface
@@ -9,5 +11,5 @@ interface BuilderInterface
      *
      * @return mixed
      */
-    public function build();
+    public function build(): mixed;
 }

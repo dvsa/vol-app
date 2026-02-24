@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Template;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Template\PreviewTemplateSource;
@@ -27,7 +29,7 @@ class PreviewTemplateSourceTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $templateId = 6;
         $locale = 'en_GB';
@@ -101,7 +103,7 @@ class PreviewTemplateSourceTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResponse, $result);
     }
 
-    public function testRenderingFailure()
+    public function testRenderingFailure(): void
     {
         $templateId = 6;
         $locale = 'en_GB';

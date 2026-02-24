@@ -28,7 +28,7 @@ class SiPenaltyErruImposedEntityTest extends EntityTester
     /**
      * Tests entity creation
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $si = m::mock(SeriousInfringement::class);
         $siPenaltyImposedType = m::mock(SiPenaltyImposedType::class);

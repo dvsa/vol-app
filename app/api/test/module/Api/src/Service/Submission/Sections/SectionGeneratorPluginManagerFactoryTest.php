@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
 use Dvsa\Olcs\Api\Service\Submission\Sections\SectionGeneratorPluginManager;
@@ -13,7 +15,7 @@ use Psr\Container\ContainerInterface;
  */
 class SectionGeneratorPluginManagerFactoryTest extends MockeryTestCase
 {
-    public function testCanCreateServiceWithName()
+    public function testCanCreateServiceWithName(): void
     {
         /** @var  \Laminas\ServiceManager\ServiceLocatorInterface $mockSl */
         $mockSl = m::mock(ContainerInterface::class)

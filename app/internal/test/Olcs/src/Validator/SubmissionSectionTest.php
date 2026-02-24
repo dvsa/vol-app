@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Validator;
 
 use Olcs\Validator\SubmissionSection;
@@ -11,18 +13,18 @@ use Olcs\Validator\SubmissionSection;
 class SubmissionSectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @dataProvider provideIsValid
      * @param $expected
      * @param $value
      */
-    public function testIsValid($value, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIsValid')]
+    public function testIsValid(mixed $value, mixed $expected): void
     {
         $sut = new SubmissionSection();
 
         $this->assertEquals($expected, $sut->isValid($value));
     }
 
-    public function provideIsValid()
+    public static function provideIsValid(): array
     {
         return [
             [[], false],

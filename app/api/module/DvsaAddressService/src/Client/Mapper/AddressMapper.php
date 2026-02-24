@@ -15,9 +15,7 @@ class AddressMapper
     public static function mapAddressDataArrayToObjects(array $data): array
     {
         return array_map(
-            function ($address) {
-                return self::mapSingleAddressDataToObject($address);
-            },
+            fn($address) => self::mapSingleAddressDataToObject($address),
             $data
         );
     }
@@ -52,8 +50,6 @@ class AddressMapper
      */
     public static function convertAddressObjectsToArrayRepresentation(array $addresses): array
     {
-        return array_map(function ($addressObject) {
-            return $addressObject->toArray();
-        }, $addresses);
+        return array_map(fn($addressObject) => $addressObject->toArray(), $addresses);
     }
 }

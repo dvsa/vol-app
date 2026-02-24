@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Document;
 
 use Dvsa\Olcs\Api\Domain\Query\Document\ByDocumentStoreId as Query;
@@ -20,7 +22,7 @@ class ByDocumentStoreIdTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $documentStoreId = 'ABC';
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Submission;
 
 use Psr\Container\ContainerInterface;
@@ -36,6 +38,7 @@ class FilterSubmissionSectionsTest extends AbstractCommandHandlerTestCase
         ]
     ];
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new FilterSubmissionSections();
@@ -77,7 +80,8 @@ class FilterSubmissionSectionsTest extends AbstractCommandHandlerTestCase
         $this->initReferences();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'case-summary',
@@ -96,7 +100,7 @@ class FilterSubmissionSectionsTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandSingleSection()
+    public function testHandleCommandSingleSection(): void
     {
         $data = [
             'id' => 122,
@@ -148,7 +152,7 @@ class FilterSubmissionSectionsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($filterData, $newDataSnapshot['operating-centres']);
     }
 
-    public function testHandleCommandSubSection()
+    public function testHandleCommandSubSection(): void
     {
         $data = [
             'id' => 122,
@@ -212,7 +216,7 @@ class FilterSubmissionSectionsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    private function getMockSubmission()
+    private function getMockSubmission(): mixed
     {
         $mockDataSnapshot = '
 {

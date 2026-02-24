@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\Exception\ResourceNotFoundException;
@@ -29,16 +31,23 @@ class LicenceFurnitureTest extends TestCase
         $this->sut = new LicenceFurniture();
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
         $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
-        $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'licence', [$this->sut, 'onLicenceFurniture'], 1);
+        $mockEventManager->expects('attach')
+            ->with(
+                RouteParams::EVENT_PARAM . 'licence',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onLicenceFurniture';
+                }),
+                1
+            );
 
         $this->sut->attach($mockEventManager);
     }
 
-    protected function onLicenceSetup($licenceData)
+    protected function onLicenceSetup(mixed $licenceData): void
     {
         $mockQuerySender = m::mock(QuerySender::class);
         $this->sut->setQuerySender($mockQuerySender);
@@ -58,7 +67,7 @@ class LicenceFurnitureTest extends TestCase
         }
     }
 
-    public function testOnLicenceQueryError()
+    public function testOnLicenceQueryError(): void
     {
         $this->onLicenceSetup(false);
         $routeParam = new RouteParam();
@@ -71,7 +80,7 @@ class LicenceFurnitureTest extends TestCase
         $this->sut->onLicenceFurniture($event);
     }
 
-    public function testOnLicence()
+    public function testOnLicence(): void
     {
         $licenceId = 4;
         $isMlh = true;
@@ -150,7 +159,7 @@ class LicenceFurnitureTest extends TestCase
         $this->sut->onLicenceFurniture($event);
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $mockQuerySender = m::mock(QuerySender::class);

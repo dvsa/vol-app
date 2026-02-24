@@ -21,6 +21,7 @@ class AddressesControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return AddressesController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AddressesController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

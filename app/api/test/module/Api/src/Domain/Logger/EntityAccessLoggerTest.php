@@ -17,13 +17,6 @@ use Hamcrest\Core\IsAnything;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 use Dvsa\Olcs\Api\Entity\System\RefData;
-use Dvsa\Olcs\Transfer\Command\Audit\ReadOrganisation;
-use Dvsa\Olcs\Transfer\Command\Audit\ReadLicence;
-use Dvsa\Olcs\Transfer\Command\Audit\ReadCase;
-use Dvsa\Olcs\Transfer\Command\Audit\ReadApplication;
-use Dvsa\Olcs\Transfer\Command\Audit\ReadBusReg;
-use Dvsa\Olcs\Transfer\Command\Audit\ReadTransportManager;
-use Dvsa\Olcs\Transfer\Command\Audit\ReadIrhpApplication;
 use Dvsa\Olcs\Api\Entity\Cases\Cases;
 use Doctrine\Common\Collections\ArrayCollection;
 use DateTime;
@@ -56,10 +49,8 @@ class EntityAccessLoggerTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
-    public function logAccessToEntityIsCallable()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function logAccessToEntityIsCallable(): void
     {
         // Setup
         $this->setUpSut();
@@ -68,11 +59,9 @@ class EntityAccessLoggerTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->logAccessToEntity(...));
     }
 
-    /**
-     * @test
-     * @depends logAccessToEntityIsCallable
-     */
-    public function logAccessToEntityDoesNotLogAnythingWhenUserDoesNotHaveRequiredPermissionsAndReturnsFalse()
+    #[\PHPUnit\Framework\Attributes\Depends('logAccessToEntityIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function logAccessToEntityDoesNotLogAnythingWhenUserDoesNotHaveRequiredPermissionsAndReturnsFalse(): void
     {
         // Setup
         $this->setUpSut();
@@ -89,25 +78,22 @@ class EntityAccessLoggerTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function entitiesThatAreLoggedForUsersWithTheInternalUserPermissionDataProvider(): array
+    public static function entitiesThatAreLoggedForUsersWithTheInternalUserPermissionDataProvider(): array
     {
         return [
-            'organisation entity' => [$this->organisation(), ReadOrganisation::class],
-            'licence entity' => [$this->licence(), ReadLicence::class],
-            'case entity' => [$this->case(), ReadCase::class],
-            'application entity' => [$this->application(), ReadApplication::class],
-            'bus reg entity' => [$this->busRegistration(), ReadBusReg::class],
-            'transport manager entity' => [$this->transportManager(), ReadTransportManager::class],
-            'irhp application entity' => [$this->irhpApplication(), ReadIrhpApplication::class],
+            'organisation entity' => [self::organisation()],
+            'licence entity' => [self::licence()],
+            'case entity' => [self::case()],
+            'application entity' => [self::application()],
+            'bus reg entity' => [self::busRegistration()],
+            'transport manager entity' => [self::transportManager()],
+            'irhp application entity' => [self::irhpApplication()],
         ];
     }
 
-    /**
-     * @test
-     * @depends logAccessToEntityIsCallable
-     * @dataProvider entitiesThatAreLoggedForUsersWithTheInternalUserPermissionDataProvider
-     */
-    public function logAccessToEntityLogsEntryWhenUserHasInternalUserPermissionAndEntityIsEnabledForLoggingAndReturnsTrue(object $entity)
+    #[\PHPUnit\Framework\Attributes\DataProvider('entitiesThatAreLoggedForUsersWithTheInternalUserPermissionDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function logAccessToEntityLogsEntryWhenUserHasInternalUserPermissionAndEntityIsEnabledForLoggingAndReturnsTrue(object $entity): void
     {
         // Setup
         $this->setUpSut();
@@ -122,11 +108,9 @@ class EntityAccessLoggerTest extends MockeryTestCase
         $this->assertTrue($result);
     }
 
-    /**
-     * @test
-     * @depends logAccessToEntityIsCallable
-     */
-    public function logAccessToEntityThrowsExceptionWhenUserHasInternalUserPermissionAndEntityIsNotEnabledForLogging()
+    #[\PHPUnit\Framework\Attributes\Depends('logAccessToEntityIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function logAccessToEntityThrowsExceptionWhenUserHasInternalUserPermissionAndEntityIsNotEnabledForLogging(): void
     {
         // Setup
         $this->setUpSut();
@@ -141,14 +125,12 @@ class EntityAccessLoggerTest extends MockeryTestCase
         $this->sut->logAccessToEntity($this->entityThatIsNotEnabledForLogging());
     }
 
-    /**
-     * @test
-     * @depends logAccessToEntityIsCallable
-     */
-    public function logAccessToEntityDoesNotLogAnythingWhenUserIsAnonymousAndHasInternalUserPermissionAndEntityIsEnabledForLoggingAndReturnsFalse()
+    #[\PHPUnit\Framework\Attributes\Depends('logAccessToEntityIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function logAccessToEntityDoesNotLogAnythingWhenUserIsAnonymousAndHasInternalUserPermissionAndEntityIsEnabledForLoggingAndReturnsFalse(): void
     {
         // Setup
-        $entity = array_values($this->entitiesThatAreLoggedForUsersWithTheInternalUserPermissionDataProvider())[0];
+        $entity = array_values(self::entitiesThatAreLoggedForUsersWithTheInternalUserPermissionDataProvider())[0];
         $this->setUpSut();
         $this->setUserContext($this->anonymousUser());
         $this->grantAllUsersPermission(Permission::INTERNAL_USER);
@@ -161,14 +143,12 @@ class EntityAccessLoggerTest extends MockeryTestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @test
-     * @depends logAccessToEntityIsCallable
-     */
-    public function logAccessToEntityDoesNotLogAnythingWhenIdentityIsNotSetAndHasInternalUserPermissionAndEntityIsEnabledForLoggingAndReturnsFalse()
+    #[\PHPUnit\Framework\Attributes\Depends('logAccessToEntityIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function logAccessToEntityDoesNotLogAnythingWhenIdentityIsNotSetAndHasInternalUserPermissionAndEntityIsEnabledForLoggingAndReturnsFalse(): void
     {
         // Setup
-        $entity = array_values($this->entitiesThatAreLoggedForUsersWithTheInternalUserPermissionDataProvider())[0];
+        $entity = array_values(self::entitiesThatAreLoggedForUsersWithTheInternalUserPermissionDataProvider())[0];
         $this->setUpSut();
         $this->setUserContext(null);
         $this->grantAllUsersPermission(Permission::INTERNAL_USER);
@@ -184,19 +164,16 @@ class EntityAccessLoggerTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function entitiesThatAreLoggedForUsersWithThePartnerUserPermissionDataProvider(): array
+    public static function entitiesThatAreLoggedForUsersWithThePartnerUserPermissionDataProvider(): array
     {
         return [
-            'licence entity' => [$this->licence(), ReadLicence::class],
+            'licence entity' => [self::licence()],
         ];
     }
 
-    /**
-     * @test
-     * @depends logAccessToEntityIsCallable
-     * @dataProvider entitiesThatAreLoggedForUsersWithThePartnerUserPermissionDataProvider
-     */
-    public function logAccessToEntityLogsEntryWhenUserHasPartnerUserPermissionAndEntityIsEnabledForLoggingAndReturnsTrue(object $entity)
+    #[\PHPUnit\Framework\Attributes\DataProvider('entitiesThatAreLoggedForUsersWithThePartnerUserPermissionDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function logAccessToEntityLogsEntryWhenUserHasPartnerUserPermissionAndEntityIsEnabledForLoggingAndReturnsTrue(object $entity): void
     {
         // Setup
         $this->setUpSut();
@@ -214,24 +191,21 @@ class EntityAccessLoggerTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function entitiesThatHaveNotBeenEnabledForUsersThatHavePartnerUserPermissionDataProvider(): array
+    public static function entitiesThatHaveNotBeenEnabledForUsersThatHavePartnerUserPermissionDataProvider(): array
     {
         return [
-            'organisation entity' => [$this->organisation(), ReadOrganisation::class],
-            'case entity' => [$this->case(), ReadCase::class],
-            'application entity' => [$this->application(), ReadApplication::class],
-            'bus reg entity' => [$this->busRegistration(), ReadBusReg::class],
-            'transport manager entity' => [$this->transportManager(), ReadTransportManager::class],
-            'irhp application entity' => [$this->irhpApplication(), ReadIrhpApplication::class],
+            'organisation entity' => [self::organisation()],
+            'case entity' => [self::case()],
+            'application entity' => [self::application()],
+            'bus reg entity' => [self::busRegistration()],
+            'transport manager entity' => [self::transportManager()],
+            'irhp application entity' => [self::irhpApplication()],
         ];
     }
 
-    /**
-     * @test
-     * @depends logAccessToEntityIsCallable
-     * @dataProvider entitiesThatHaveNotBeenEnabledForUsersThatHavePartnerUserPermissionDataProvider
-     */
-    public function logAccessToEntityThrowsExceptionWhenUserHasPartnerUserPermissionAndEntityIsNotEnabledForLogging(object $entity)
+    #[\PHPUnit\Framework\Attributes\DataProvider('entitiesThatHaveNotBeenEnabledForUsersThatHavePartnerUserPermissionDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function logAccessToEntityThrowsExceptionWhenUserHasPartnerUserPermissionAndEntityIsNotEnabledForLogging(object $entity): void
     {
         // Setup
         $this->setUpSut();
@@ -249,19 +223,16 @@ class EntityAccessLoggerTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function entitiesThatAreLoggedForUsersWithThePartnerAdminPermissionDataProvider(): array
+    public static function entitiesThatAreLoggedForUsersWithThePartnerAdminPermissionDataProvider(): array
     {
         return [
-            'licence entity' => [$this->licence(), ReadLicence::class],
+            'licence entity' => [self::licence()],
         ];
     }
 
-    /**
-     * @test
-     * @depends logAccessToEntityIsCallable
-     * @dataProvider entitiesThatAreLoggedForUsersWithThePartnerAdminPermissionDataProvider
-     */
-    public function logAccessToEntityLogsEntryWhenUserHasPartnerAdminPermissionAndEntityIsEnabledForLoggingAndReturnsTrue(object $entity)
+    #[\PHPUnit\Framework\Attributes\DataProvider('entitiesThatAreLoggedForUsersWithThePartnerAdminPermissionDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function logAccessToEntityLogsEntryWhenUserHasPartnerAdminPermissionAndEntityIsEnabledForLoggingAndReturnsTrue(object $entity): void
     {
         // Setup
         $this->setUpSut();
@@ -279,24 +250,21 @@ class EntityAccessLoggerTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function entitiesThatHaveNotBeenEnabledForUsersThatHavePartnerAdminPermissionDataProvider(): array
+    public static function entitiesThatHaveNotBeenEnabledForUsersThatHavePartnerAdminPermissionDataProvider(): array
     {
         return [
-            'organisation entity' => [$this->organisation(), ReadOrganisation::class],
-            'case entity' => [$this->case(), ReadCase::class],
-            'application entity' => [$this->application(), ReadApplication::class],
-            'bus reg entity' => [$this->busRegistration(), ReadBusReg::class],
-            'transport manager entity' => [$this->transportManager(), ReadTransportManager::class],
-            'irhp application entity' => [$this->irhpApplication(), ReadIrhpApplication::class],
+            'organisation entity' => [self::organisation()],
+            'case entity' => [self::case()],
+            'application entity' => [self::application()],
+            'bus reg entity' => [self::busRegistration()],
+            'transport manager entity' => [self::transportManager()],
+            'irhp application entity' => [self::irhpApplication()],
         ];
     }
 
-    /**
-     * @test
-     * @depends logAccessToEntityIsCallable
-     * @dataProvider entitiesThatHaveNotBeenEnabledForUsersThatHavePartnerAdminPermissionDataProvider
-     */
-    public function logAccessToEntityThrowsExceptionWhenUserHasPartnerAdminPermissionAndEntityIsNotEnabledForLogging(object $entity)
+    #[\PHPUnit\Framework\Attributes\DataProvider('entitiesThatHaveNotBeenEnabledForUsersThatHavePartnerAdminPermissionDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function logAccessToEntityThrowsExceptionWhenUserHasPartnerAdminPermissionAndEntityIsNotEnabledForLogging(object $entity): void
     {
         // Setup
         $this->setUpSut();
@@ -348,9 +316,9 @@ class EntityAccessLoggerTest extends MockeryTestCase
     /**
      * @return Licence
      */
-    protected function licence(): Licence
+    protected static function licence(): Licence
     {
-        $entity = new Licence($this->organisation(), $this->notSubmittedLicenceStatus());
+        $entity = new Licence(self::organisation(), self::notSubmittedLicenceStatus());
         $entity->setId(static::ENTITY_ID);
         return $entity;
     }
@@ -358,7 +326,7 @@ class EntityAccessLoggerTest extends MockeryTestCase
     /**
      * @return Organisation
      */
-    protected function organisation(): Organisation
+    protected static function organisation(): Organisation
     {
         $entity = new Organisation();
         $entity->setId(static::ENTITY_ID);
@@ -368,7 +336,7 @@ class EntityAccessLoggerTest extends MockeryTestCase
     /**
      * @return TransportManager
      */
-    protected function transportManager(): TransportManager
+    protected static function transportManager(): TransportManager
     {
         $entity = new TransportManager();
         $entity->setId(static::ENTITY_ID);
@@ -378,10 +346,10 @@ class EntityAccessLoggerTest extends MockeryTestCase
     /**
      * @return Application
      */
-    protected function application(): Application
+    protected static function application(): Application
     {
         $entity = new Application(
-            $this->licence(),
+            self::licence(),
             new RefData(Application::APPLICATION_STATUS_NOT_SUBMITTED),
             static::IS_NOT_VARIATION
         );
@@ -392,7 +360,7 @@ class EntityAccessLoggerTest extends MockeryTestCase
     /**
      * @return BusReg
      */
-    protected function busRegistration(): BusReg
+    protected static function busRegistration(): BusReg
     {
         $entity = new BusReg();
         $entity->setId(static::ENTITY_ID);
@@ -402,7 +370,7 @@ class EntityAccessLoggerTest extends MockeryTestCase
     /**
      * @return IrhpApplication
      */
-    protected function irhpApplication(): IrhpApplication
+    protected static function irhpApplication(): IrhpApplication
     {
         $entity = new IrhpApplication();
         $entity->setId(static::ENTITY_ID);
@@ -412,7 +380,7 @@ class EntityAccessLoggerTest extends MockeryTestCase
     /**
      * @return Cases
      */
-    protected function case(): Cases
+    protected static function case(): Cases
     {
         $entity = new Cases(
             new DateTime(),
@@ -420,8 +388,8 @@ class EntityAccessLoggerTest extends MockeryTestCase
             new ArrayCollection(),
             new ArrayCollection(),
             static::NO_APPLICATION,
-            $this->licence(),
-            $this->transportManager(),
+            self::licence(),
+            self::transportManager(),
             static::ECMS_NUMBER,
             static::CASE_DESCRIPTION
         );
@@ -432,7 +400,7 @@ class EntityAccessLoggerTest extends MockeryTestCase
     /**
      * @return RefData
      */
-    protected function notSubmittedLicenceStatus(): RefData
+    protected static function notSubmittedLicenceStatus(): RefData
     {
         return new RefData(Licence::LICENCE_STATUS_NOT_SUBMITTED);
     }
@@ -448,7 +416,7 @@ class EntityAccessLoggerTest extends MockeryTestCase
     /**
      * @param User|null $user
      */
-    protected function setUserContext(User $user = null)
+    protected function setUserContext(User $user = null): void
     {
         $identity = null === $user ? null : new Identity($user);
         $this->authorizationService()->allows('getIdentity')->andReturn($identity)->byDefault();
@@ -493,12 +461,12 @@ class EntityAccessLoggerTest extends MockeryTestCase
         return $entity;
     }
 
-    protected function grantAllUsersPermission(string $permission)
+    protected function grantAllUsersPermission(string $permission): void
     {
         $this->authorizationService()->allows('isGranted')->with($permission)->andReturn(static::IS_GRANTED)->byDefault();
     }
 
-    protected function assertThatAuditLogEntryWasMadeForEntity(object $entity)
+    protected function assertThatAuditLogEntryWasMadeForEntity(object $entity): void
     {
         $this->commandHandler()->shouldHaveReceived('handleCommand')->withArgs(function ($command) use ($entity) {
             $this->assertInstanceOf(EntityAccessLogger::ENTITY_AUDIT_LOG_COMMAND_MAP[$entity::class], $command);

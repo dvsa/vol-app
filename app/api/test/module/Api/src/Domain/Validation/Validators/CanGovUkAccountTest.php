@@ -27,7 +27,7 @@ class CanGovUkAccountTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsValidForOperatorUser()
+    public function testIsValidForOperatorUser(): void
     {
         $dto = m::mock(CommandInterface::class);
         $this->setIsGranted(Permission::OPERATOR_ADMIN, false);
@@ -36,14 +36,14 @@ class CanGovUkAccountTest extends AbstractHandlerTestCase
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsValidForOperatorAdmin()
+    public function testIsValidForOperatorAdmin(): void
     {
         $dto = m::mock(CommandInterface::class);
         $this->setIsGranted(Permission::OPERATOR_ADMIN, true);
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsValidForOperatorTransportConsultant()
+    public function testIsValidForOperatorTransportConsultant(): void
     {
         $dto = m::mock(CommandInterface::class);
         $this->setIsGranted(Permission::OPERATOR_ADMIN, false);
@@ -51,7 +51,7 @@ class CanGovUkAccountTest extends AbstractHandlerTestCase
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsValidForTransportManager()
+    public function testIsValidForTransportManager(): void
     {
         $dto = m::mock(CommandInterface::class);
         $this->setIsGranted(Permission::OPERATOR_ADMIN, false);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Licence Conditions Undertakings Review Service Test
  *
@@ -47,7 +49,7 @@ class LicenceConditionsUndertakingsReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         // Params
         $data = [

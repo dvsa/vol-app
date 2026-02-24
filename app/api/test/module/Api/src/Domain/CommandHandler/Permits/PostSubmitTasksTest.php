@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Permits;
 
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
@@ -37,7 +39,7 @@ class PostSubmitTasksTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandForIrhpWithoutAppSubmittedEmail()
+    public function testHandleCommandForIrhpWithoutAppSubmittedEmail(): void
     {
         $this->irhpApplication->shouldReceive('getAppSubmittedEmailCommand')
             ->andReturn(null);
@@ -76,7 +78,7 @@ class PostSubmitTasksTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandForIrhpWithAppSubmittedEmail()
+    public function testHandleCommandForIrhpWithAppSubmittedEmail(): void
     {
         $this->irhpApplication->shouldReceive('getAppSubmittedEmailCommand')
             ->andReturn(SendEcmtShortTermAppSubmittedCmd::class);

@@ -34,7 +34,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLetterAppendixVersion implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLetterAppendixVersion implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -201,7 +201,8 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -224,7 +225,8 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
     /**
      * Get the letter appendix
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterAppendix     */
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterAppendix
+     */
     public function getLetterAppendix()
     {
         return $this->letterAppendix;
@@ -247,7 +249,8 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
     /**
      * Get the document
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
+     */
     public function getDocument()
     {
         return $this->document;
@@ -270,7 +273,8 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -293,7 +297,8 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -316,7 +321,8 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
     /**
      * Get the name
      *
-     * @return string     */
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -339,7 +345,8 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -362,7 +369,8 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
     /**
      * Get the appendix type
      *
-     * @return string     */
+     * @return string
+     */
     public function getAppendixType()
     {
         return $this->appendixType;
@@ -385,7 +393,8 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
     /**
      * Get the default content
      *
-     * @return array     */
+     * @return array
+     */
     public function getDefaultContent()
     {
         return $this->defaultContent;
@@ -408,7 +417,8 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
     /**
      * Get the is locked
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsLocked()
     {
         return $this->isLocked;
@@ -433,7 +443,8 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getPublishFrom($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -460,7 +471,8 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
     /**
      * Get the version number
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersionNumber()
     {
         return $this->versionNumber;
@@ -483,7 +495,8 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -492,6 +505,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

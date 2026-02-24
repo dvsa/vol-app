@@ -30,6 +30,7 @@ class CeaseDiscsForLicence extends AbstractRawQuery
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getParams()
     {
         $today = new DateTime();

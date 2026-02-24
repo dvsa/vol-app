@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\AnswersSummary;
 
 use Dvsa\Olcs\Api\Service\Permits\AnswersSummary\AnswersSummary;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class AnswersSummaryTest extends MockeryTestCase
 {
-    public function testGetRepresentation()
+    public function testGetRepresentation(): void
     {
         $row1Representation = [
             'question' => 'row 1 question',

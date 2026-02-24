@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Overview Test
  *
@@ -54,7 +56,7 @@ class OverviewTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $applicationId  = 69;
         $licenceId      = 7;
@@ -126,7 +128,7 @@ class OverviewTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandNoExistingApplicationTracking()
+    public function testHandleCommandNoExistingApplicationTracking(): void
     {
         $applicationId  = 69;
         $licenceId      = 7;

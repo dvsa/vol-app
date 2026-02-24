@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Command\IrhpPermit;
 
 use Dvsa\Olcs\Api\Domain\Command\IrhpPermit\ReplacementIrhpPermit;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\Command\IrhpPermit\ReplacementIrhpPermit;
  */
 class ReplacementIrhpPermitTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = ReplacementIrhpPermit::create([
             'replaces' => 725,

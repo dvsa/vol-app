@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Process\Variation;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -33,7 +35,7 @@ class Text2Test extends MockeryTestCase
      *
      * @return PublicationLink
      */
-    private function getPublicationLink($organisationType)
+    private function getPublicationLink(mixed $organisationType): mixed
     {
         $publicationLink = new PublicationLink();
 
@@ -47,7 +49,7 @@ class Text2Test extends MockeryTestCase
         return $publicationLink;
     }
 
-    private function addTradingName(PublicationLink $publicationLink, $id, $name)
+    private function addTradingName(PublicationLink $publicationLink, mixed $id, mixed $name): void
     {
         $organisation = $publicationLink->getLicence()->getOrganisation();
         $tradingName = new \Dvsa\Olcs\Api\Entity\Organisation\TradingName($name, $organisation);
@@ -55,7 +57,7 @@ class Text2Test extends MockeryTestCase
         $organisation->addTradingNames($tradingName);
     }
 
-    public function testSoleTrader()
+    public function testSoleTrader(): void
     {
         $publicationLink = $this->getPublicationLink(Organisation::ORG_TYPE_SOLE_TRADER);
         $context = new ImmutableArrayObject([]);
@@ -67,7 +69,7 @@ class Text2Test extends MockeryTestCase
         $this->assertSame($expectedText2, $publicationLink->getText2());
     }
 
-    public function testTradingName()
+    public function testTradingName(): void
     {
         $publicationLink = $this->getPublicationLink(Organisation::ORG_TYPE_SOLE_TRADER);
         $this->addTradingName($publicationLink, 12, 'TRADING_NAME_12');
@@ -82,10 +84,8 @@ class Text2Test extends MockeryTestCase
         $this->assertSame($expectedText2, $publicationLink->getText2());
     }
 
-    /**
-     * @dataProvider dataProviderTestPeople
-     */
-    public function testPeople($organisationTypeId, $peoplePrefix)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestPeople')]
+    public function testPeople(mixed $organisationTypeId, mixed $peoplePrefix): void
     {
         $publicationLink = $this->getPublicationLink($organisationTypeId);
         $context = new ImmutableArrayObject(
@@ -104,7 +104,7 @@ class Text2Test extends MockeryTestCase
         $this->assertSame($expectedText2, $publicationLink->getText2());
     }
 
-    public function dataProviderTestPeople()
+    public static function dataProviderTestPeople(): array
     {
         return [
             [Organisation::ORG_TYPE_LLP, 'Partner(s): '],
@@ -114,7 +114,7 @@ class Text2Test extends MockeryTestCase
         ];
     }
 
-    public function testPeopleMissingContext()
+    public function testPeopleMissingContext(): void
     {
         $publicationLink = $this->getPublicationLink(Organisation::ORG_TYPE_OTHER);
         $context = new ImmutableArrayObject(

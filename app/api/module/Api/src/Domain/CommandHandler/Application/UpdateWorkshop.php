@@ -23,6 +23,7 @@ final class UpdateWorkshop extends AbstractCommandHandler implements Transaction
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = $this->handleSideEffect(WorkshopUpdateWorkshop::create($command->getArrayCopy()));

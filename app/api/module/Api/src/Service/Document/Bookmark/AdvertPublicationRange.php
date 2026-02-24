@@ -25,6 +25,7 @@ class AdvertPublicationRange extends DynamicBookmark
      * @param array $data The context data containing application ID
      * @return Qry The query for fetching application
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create([
@@ -37,6 +38,7 @@ class AdvertPublicationRange extends DynamicBookmark
      *
      * @return string Date range in DD/MM/YYYY - DD/MM/YYYY format, or empty string if no received date
      */
+    #[\Override]
     public function render()
     {
         if (empty($this->data['receivedDate'])) {

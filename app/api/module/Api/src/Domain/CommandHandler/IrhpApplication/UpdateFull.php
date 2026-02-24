@@ -46,6 +46,7 @@ final class UpdateFull extends AbstractCommandHandler implements TransactionedIn
      * @throws NotFoundException
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var IrhpApplicationRepo $irhpApplicationRepo */
@@ -144,6 +145,7 @@ final class UpdateFull extends AbstractCommandHandler implements TransactionedIn
             default => throw new RuntimeException('Unsupported permit type ' . $permitTypeId),
         };
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

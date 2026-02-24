@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractApplicationStep implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractApplicationStep implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -192,7 +192,8 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -215,7 +216,8 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Get the application path
      *
-     * @return \Dvsa\Olcs\Api\Entity\Generic\ApplicationPath     */
+     * @return \Dvsa\Olcs\Api\Entity\Generic\ApplicationPath
+     */
     public function getApplicationPath()
     {
         return $this->applicationPath;
@@ -238,7 +240,8 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Get the question
      *
-     * @return \Dvsa\Olcs\Api\Entity\Generic\Question     */
+     * @return \Dvsa\Olcs\Api\Entity\Generic\Question
+     */
     public function getQuestion()
     {
         return $this->question;
@@ -261,7 +264,8 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -284,7 +288,8 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -307,7 +312,8 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Get the weight
      *
-     * @return string     */
+     * @return string
+     */
     public function getWeight()
     {
         return $this->weight;
@@ -330,7 +336,8 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Get the only on yes
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getOnlyOnYes()
     {
         return $this->onlyOnYes;
@@ -353,7 +360,8 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Get the ignore question validation
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIgnoreQuestionValidation()
     {
         return $this->ignoreQuestionValidation;
@@ -376,7 +384,8 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Get the break on failure
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getBreakOnFailure()
     {
         return $this->breakOnFailure;
@@ -399,7 +408,8 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Get the enabled after submission
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getEnabledAfterSubmission()
     {
         return $this->enabledAfterSubmission;
@@ -422,7 +432,8 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -494,6 +505,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Irfo;
 
 use Dvsa\Olcs\Api\Entity as Entities;
@@ -31,7 +33,7 @@ class IrfoPartnerEntityTest extends EntityTester
         $this->mockOrg = m::mock(Organisation::class);
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $name = 'unit_Name';
 
@@ -41,7 +43,7 @@ class IrfoPartnerEntityTest extends EntityTester
         static::assertEquals($name, $sut->getName());
     }
 
-    public function testGetCalculatedValues()
+    public function testGetCalculatedValues(): void
     {
         $actual = (new Entity($this->mockOrg, ''))->jsonSerialize();
         static::assertNull($actual['organisation']);

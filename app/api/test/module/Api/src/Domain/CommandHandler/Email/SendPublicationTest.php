@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Send Publication Email Test
  *
@@ -48,13 +50,13 @@ class SendPublicationTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider handleCommandProvider
      *
      * @param string $isPolice
      * @param int $policeTimes
      * @param int $nonPoliceTimes
      */
-    public function testHandleCommand($isPolice, $policeTimes, $nonPoliceTimes, $subject)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
+    public function testHandleCommand(mixed $isPolice, mixed $policeTimes, mixed $nonPoliceTimes, mixed $subject): void
     {
         $publicationId = 1234;
         $filename = 'filename.rtf';
@@ -123,7 +125,7 @@ class SendPublicationTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider(): array
     {
         return [
             ['Y', 1, 0, SendPublication::EMAIL_POLICE_SUBJECT],

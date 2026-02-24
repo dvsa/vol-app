@@ -35,7 +35,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLicenceStatusRule implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLicenceStatusRule implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -185,7 +185,8 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -208,7 +209,8 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -231,7 +233,8 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * Get the licence status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getLicenceStatus()
     {
         return $this->licenceStatus;
@@ -254,7 +257,8 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -277,7 +281,8 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -302,7 +307,8 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getStartDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -331,7 +337,8 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEndDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -360,7 +367,8 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getStartProcessedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -389,7 +397,8 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEndProcessedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -416,7 +425,8 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -439,7 +449,8 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -448,6 +459,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

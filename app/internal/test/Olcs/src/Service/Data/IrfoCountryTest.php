@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -7,11 +9,8 @@ use Olcs\Service\Data\IrfoCountry;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoCountryList as Qry;
 use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/**
- * Class IrfoCountry Test
- * @package CommonTest\Service
- */
 class IrfoCountryTest extends AbstractDataServiceTestCase
 {
     /** @var IrfoCountry */
@@ -24,35 +23,20 @@ class IrfoCountryTest extends AbstractDataServiceTestCase
         $this->sut = new IrfoCountry($this->abstractDataServiceServices);
     }
 
-    public function testFormatData()
+    public function testFormatData(): void
     {
-        $source = $this->getSingleSource();
-        $expected = $this->getSingleExpected();
-
-        $this->assertEquals($expected, $this->sut->formatData($source));
+        $this->assertEquals(self::SINGLE_EXPECTED, $this->sut->formatData(self::SINGLE_SOURCE));
     }
 
-    /**
-     * @dataProvider provideFetchListOptions
-     * @param $input
-     * @param $expected
-     */
-    public function testFetchListOptions($input, $expected)
+    #[DataProvider('provideFetchListOptions')]
+    public function testFetchListOptions(mixed $input, mixed $expected): void
     {
         $this->sut->setData('IrfoCountry', $input);
 
         $this->assertEquals($expected, $this->sut->fetchListOptions(''));
     }
 
-    public function provideFetchListOptions()
-    {
-        return [
-            [$this->getSingleSource(), $this->getSingleExpected()],
-            [false, []]
-        ];
-    }
-
-    public function testFetchListData()
+    public function testFetchListData(): void
     {
         $results = ['results' => 'results'];
 
@@ -76,7 +60,7 @@ class IrfoCountryTest extends AbstractDataServiceTestCase
         $this->assertEquals($results['results'], $this->sut->fetchListData());  //ensure data is cached
     }
 
-    public function testFetchLicenceDataWithException()
+    public function testFetchLicenceDataWithException(): void
     {
         $this->expectException(DataServiceException::class);
 
@@ -96,29 +80,11 @@ class IrfoCountryTest extends AbstractDataServiceTestCase
         $this->sut->fetchListData();
     }
 
-    /**
-     * @return array
-     */
-    protected function getSingleExpected()
+    public static function provideFetchListOptions(): array
     {
-        $expected = [
-            'val-1' => 'Value 1',
-            'val-2' => 'Value 2',
-            'val-3' => 'Value 3',
+        return [
+            [self::SINGLE_SOURCE, self::SINGLE_EXPECTED],
+            [false, []]
         ];
-        return $expected;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getSingleSource()
-    {
-        $source = [
-            ['id' => 'val-1', 'description' => 'Value 1'],
-            ['id' => 'val-2', 'description' => 'Value 2'],
-            ['id' => 'val-3', 'description' => 'Value 3'],
-        ];
-        return $source;
     }
 }

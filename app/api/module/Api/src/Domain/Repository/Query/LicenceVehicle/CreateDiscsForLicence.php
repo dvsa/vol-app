@@ -25,6 +25,7 @@ class CreateDiscsForLicence extends AbstractRawQuery
         AND {lv.removalDate} IS NULL
         AND {lv.licence} = :licence';
 
+    #[\Override]
     protected function getQueryTemplate()
     {
         // build query in two parts, as Insert part cannot use aliases

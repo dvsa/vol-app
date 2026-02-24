@@ -16,6 +16,7 @@ class CanAccessCorrespondenceInboxWithId extends AbstractHandler
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canAccessCorrespondenceInbox($this->getId($dto));

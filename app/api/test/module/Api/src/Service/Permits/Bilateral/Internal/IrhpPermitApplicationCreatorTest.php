@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Internal;
 
 use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitApplication as IrhpPermitApplicationRepository;
@@ -20,7 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class IrhpPermitApplicationCreatorTest extends MockeryTestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $stockId = 47;
 

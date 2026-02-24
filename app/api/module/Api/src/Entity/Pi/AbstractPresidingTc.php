@@ -29,7 +29,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractPresidingTc implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractPresidingTc implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -99,7 +99,8 @@ abstract class AbstractPresidingTc implements BundleSerializableInterface, JsonS
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -122,7 +123,8 @@ abstract class AbstractPresidingTc implements BundleSerializableInterface, JsonS
     /**
      * Get the user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getUser()
     {
         return $this->user;
@@ -145,7 +147,8 @@ abstract class AbstractPresidingTc implements BundleSerializableInterface, JsonS
     /**
      * Get the name
      *
-     * @return string     */
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -154,6 +157,7 @@ abstract class AbstractPresidingTc implements BundleSerializableInterface, JsonS
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

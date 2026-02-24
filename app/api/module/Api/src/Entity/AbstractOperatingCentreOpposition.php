@@ -29,7 +29,7 @@ use Doctrine\ORM\Mapping as ORM;
  *    }
  * )
  */
-abstract class AbstractOperatingCentreOpposition implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractOperatingCentreOpposition implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -201,6 +201,7 @@ abstract class AbstractOperatingCentreOpposition implements BundleSerializableIn
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

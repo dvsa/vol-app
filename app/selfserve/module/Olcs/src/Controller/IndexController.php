@@ -21,6 +21,7 @@ class IndexController extends AbstractController
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         // redirect to the login

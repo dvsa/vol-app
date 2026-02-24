@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\BusRegBundle as Qry;
@@ -10,16 +12,14 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BrRegStatus;
  */
 class BrRegStatusTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new BrRegStatus();
         $this->assertInstanceOf(Qry::class, $bookmark->getQuery(['busRegId' => 123]));
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
-    public function testRender($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
+    public function testRender(mixed $data, mixed $expected): void
     {
         $bookmark = new BrRegStatus();
         $bookmark->setData($data);
@@ -29,7 +29,7 @@ class BrRegStatusTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider(): array
     {
         return [
             [

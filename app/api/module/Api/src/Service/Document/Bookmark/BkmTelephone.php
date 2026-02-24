@@ -18,6 +18,7 @@ class BkmTelephone extends DynamicBookmark
      *
      * @return Qry|null
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(
@@ -39,6 +40,7 @@ class BkmTelephone extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         if (empty($this->data['irfoContactDetails']['phoneContacts'])) {

@@ -11,6 +11,7 @@ class Clear extends AbstractSurrenderCommandHandler
      * @param CommandInterface $command
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Surrender $surrender */

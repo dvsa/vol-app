@@ -15,6 +15,7 @@ namespace Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc;
  */
 class CanAccessOrganisationWithOrganisation extends CanAccessOrganisationWithId
 {
+    #[\Override]
     protected function getId($dto)
     {
         return $dto->getOrganisation();

@@ -28,9 +28,9 @@ trait MocksAbstractCommandHandlerServicesTrait
     /**
      * @return mixed
      */
-    abstract protected function setUpMockService(string $class);
+    abstract protected function setUpMockService(string $class): MockInterface;
 
-    protected function setUpAbstractCommandHandlerServices()
+    protected function setUpAbstractCommandHandlerServices(): void
     {
         $this->commandHandlerManager();
         $this->repositoryServiceManager();

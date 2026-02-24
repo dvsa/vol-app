@@ -13,6 +13,7 @@ use Dvsa\Olcs\Api\Entity\Bus\BusRegOtherService;
  */
 final class ServiceDesignation extends AbstractContext
 {
+    #[\Override]
     public function provide(PublicationLink $publication, \ArrayObject $context)
     {
         $busReg = $publication->getBusReg();

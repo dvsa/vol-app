@@ -20,6 +20,7 @@ class PhoneNumbers extends DynamicBookmark
      *
      * @return Qry
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         $bundle = [
@@ -37,6 +38,7 @@ class PhoneNumbers extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         if (empty($this->data)) {

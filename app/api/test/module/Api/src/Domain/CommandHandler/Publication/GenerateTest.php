@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * GenerateTest.php
  */
@@ -36,7 +38,8 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [PublicationEntity::PUB_GENERATED_STATUS];
 
@@ -49,7 +52,7 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 11;
         $docTemplateId = 685;

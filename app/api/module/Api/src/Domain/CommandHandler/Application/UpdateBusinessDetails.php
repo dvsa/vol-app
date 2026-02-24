@@ -23,6 +23,7 @@ final class UpdateBusinessDetails extends AbstractCommandHandler implements Tran
      * @inheritdoc
      * @param \Dvsa\Olcs\Transfer\Command\Application\UpdateBusinessDetails $command
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $data = $command->getArrayCopy();

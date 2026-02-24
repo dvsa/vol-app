@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Process\BusReg;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -18,12 +20,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class Text2Test extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the bus reg text 2 filter
-     */
-    public function testProcess()
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the bus reg text 2 filter')]
+    public function testProcess(): void
     {
         $sut = new BusRegText2();
 

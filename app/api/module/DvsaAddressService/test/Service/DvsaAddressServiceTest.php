@@ -8,7 +8,7 @@ class DvsaAddressServiceTest extends \PHPUnit\Framework\TestCase
 {
     public function testLookupAddress()
     {
-        $logger = $this->createMock(\Laminas\Log\LoggerInterface::class);
+        $logger = $this->createStub(\Laminas\Log\LoggerInterface::class);
         $dvsaAddressServiceClient = $this->createMock(DvsaAddressServiceClient::class);
         $dvsaAddressService = new DvsaAddressService($logger, $dvsaAddressServiceClient);
 

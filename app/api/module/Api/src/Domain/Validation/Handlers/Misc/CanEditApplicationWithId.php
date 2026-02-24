@@ -14,6 +14,7 @@ class CanEditApplicationWithId extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canEditApplication($this->getId($dto));

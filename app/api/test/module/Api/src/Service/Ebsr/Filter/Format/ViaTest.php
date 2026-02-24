@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\Filter\Format;
 
 use Dvsa\Olcs\Api\Service\Ebsr\Filter\Format\Via;
@@ -12,11 +14,11 @@ use PHPUnit\Framework\TestCase as TestCase;
 class ViaTest extends TestCase
 {
     /**
-     * @dataProvider provideFilter
      * @param $expected
      * @param $value
      */
-    public function testFilter($expected, $value)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFilter')]
+    public function testFilter(mixed $expected, mixed $value): void
     {
         $sut = new Via();
 
@@ -24,7 +26,7 @@ class ViaTest extends TestCase
         $this->assertEquals($expected, $result['via']);
     }
 
-    public function provideFilter()
+    public static function provideFilter(): array
     {
         return [
             ['via1, via2', ['via1', 'via2']],

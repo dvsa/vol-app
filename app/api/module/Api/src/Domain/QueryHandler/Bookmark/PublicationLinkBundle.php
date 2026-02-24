@@ -20,6 +20,7 @@ class PublicationLinkBundle extends AbstractQueryHandler
 {
     protected $repoServiceName = 'PublicationLink';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $results = $this->getRepo()->fetchByBusRegId($query->getBusReg());

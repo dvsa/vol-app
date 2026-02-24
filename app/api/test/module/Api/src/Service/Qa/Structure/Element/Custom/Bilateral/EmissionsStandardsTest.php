@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Bilateral;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\Element\Custom\Bilateral\EmissionsStandards;
@@ -12,10 +14,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class EmissionsStandardsTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpGetRepresentation
-     */
-    public function testGetRepresentation($yesNo)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetRepresentation')]
+    public function testGetRepresentation(mixed $yesNo): void
     {
         $emissionsStandards = new EmissionsStandards($yesNo);
 
@@ -27,7 +27,7 @@ class EmissionsStandardsTest extends MockeryTestCase
         );
     }
 
-    public function dpGetRepresentation()
+    public static function dpGetRepresentation(): array
     {
         return [
             ['Y'],

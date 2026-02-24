@@ -73,6 +73,7 @@ class UndertakingsController extends AbstractUndertakingsController
      *
      * @return \Common\View\Model\Section|\Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         // Get signature details from backend

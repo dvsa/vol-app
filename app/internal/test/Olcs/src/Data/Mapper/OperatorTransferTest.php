@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -12,10 +14,8 @@ use Laminas\Form\Form;
  */
 class OperatorTransferTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider fromErrorsProvider
-     */
-    public function testFromErrors($messages, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('fromErrorsProvider')]
+    public function testFromErrors(mixed $messages, mixed $expected): void
     {
 
         $mockForm = m::mock(\Laminas\Form\FormInterface::class)
@@ -27,7 +27,7 @@ class OperatorTransferTest extends MockeryTestCase
         $this->assertNull(Sut::mapFromErrors($mockForm, $messages));
     }
 
-    public function fromErrorsProvider()
+    public static function fromErrorsProvider(): array
     {
         return [
             [

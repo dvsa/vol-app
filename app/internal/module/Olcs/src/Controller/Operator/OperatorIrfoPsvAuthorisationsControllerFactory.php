@@ -11,6 +11,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class OperatorIrfoPsvAuthorisationsControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OperatorIrfoPsvAuthorisationsController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

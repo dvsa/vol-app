@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LegacyOffence Repo test
  *
@@ -29,7 +31,7 @@ class LegacyOffenceTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchCaseLegacyOffenceUsingId()
+    public function testFetchCaseLegacyOffenceUsingId(): void
     {
         $id = 99;
         $case = 24;

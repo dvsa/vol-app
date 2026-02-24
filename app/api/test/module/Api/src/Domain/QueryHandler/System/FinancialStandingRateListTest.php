@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * FinancialStandingRateList Test
  *
@@ -30,7 +32,7 @@ class FinancialStandingRateListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $mockRate1 = m::mock(Entity::class)
             ->shouldReceive('serialize')

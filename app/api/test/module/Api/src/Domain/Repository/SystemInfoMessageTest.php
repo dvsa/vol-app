@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
@@ -8,9 +10,7 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 use Dvsa\Olcs\Transfer\Query\System\InfoMessage\GetListActive as Qry;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\SystemInfoMessage
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\SystemInfoMessage::class)]
 class SystemInfoMessageTest extends RepositoryTestCase
 {
     /** @var  Repository\SystemInfoMessage */
@@ -21,7 +21,7 @@ class SystemInfoMessageTest extends RepositoryTestCase
         $this->setUpSut(Repository\SystemInfoMessage::class);
     }
 
-    public function testListActive()
+    public function testListActive(): void
     {
         $expect = ['RESULTS'];
 

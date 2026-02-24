@@ -19,11 +19,13 @@ abstract class ImageBookmark extends DynamicBookmark implements FileStoreAwareIn
      * we could implement it. It should just expose some basic read and write methods and
      * could internally be backed by whatever storage it wants (disk, memory etc)
      */
+    #[\Override]
     public function setFileStore(/* FileStoreService */ $fileStore)
     {
         $this->fileStore = $fileStore;
     }
 
+    #[\Override]
     public function getFileStore()
     {
         return $this->fileStore;

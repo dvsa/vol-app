@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Queue Complete command test
  *
@@ -18,7 +20,7 @@ use Dvsa\Olcs\Api\Entity\Queue\Queue as QueueEntity;
  */
 class CompleteTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $item = new QueueEntity();
         $command = Complete::create(['item' => $item]);

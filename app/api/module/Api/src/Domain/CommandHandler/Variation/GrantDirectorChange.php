@@ -25,6 +25,7 @@ class GrantDirectorChange extends AbstractCommandHandler implements Transactione
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command Cmd */

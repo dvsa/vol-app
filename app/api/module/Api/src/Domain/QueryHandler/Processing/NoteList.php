@@ -25,6 +25,7 @@ class NoteList extends AbstractQueryHandler
      * @return array
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var \Dvsa\Olcs\Transfer\Query\Processing\NoteList $query */

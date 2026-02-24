@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Process\Schedule41;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -33,7 +35,7 @@ class Text1Test extends MockeryTestCase
      *
      * @return PublicationLink
      */
-    private function getPublicationLink($organisationType)
+    private function getPublicationLink(mixed $organisationType): mixed
     {
         $publicationLink = new PublicationLink();
 
@@ -52,7 +54,7 @@ class Text1Test extends MockeryTestCase
         return $publicationLink;
     }
 
-    public function testText1()
+    public function testText1(): void
     {
         $publicationLink = $this->getPublicationLink(Organisation::ORG_TYPE_LLP);
 
@@ -127,7 +129,7 @@ The operating centre(s) being removed from D12345 as part of this application.";
         $this->assertSame($expectedText, $publicationLink->getText1());
     }
 
-    public function testText1SurrenderS4()
+    public function testText1SurrenderS4(): void
     {
         $publicationLink = $this->getPublicationLink(Organisation::ORG_TYPE_LLP);
 
@@ -203,7 +205,7 @@ D12345 has been surrendered as part of this application.";
         $this->assertSame($expectedText, $publicationLink->getText1());
     }
 
-    public function testText1Upgrade()
+    public function testText1Upgrade(): void
     {
         $refDataSn = new RefData(Licence::LICENCE_TYPE_STANDARD_NATIONAL);
         $refDataSn->setDescription('SN');

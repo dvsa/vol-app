@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Financial Evidence Status Test
  *
@@ -31,14 +33,14 @@ class UpdateFinancialEvidenceStatusTest extends AbstractUpdateStatusTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWithChange()
+    public function testHandleCommandWithChange(): void
     {
         $this->applicationCompletion->setFinancialEvidenceStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
-    public function testHandleCommandWithoutChange()
+    public function testHandleCommandWithoutChange(): void
     {
         $this->applicationCompletion->setFinancialEvidenceStatus(ApplicationCompletionEntity::STATUS_COMPLETE);
 

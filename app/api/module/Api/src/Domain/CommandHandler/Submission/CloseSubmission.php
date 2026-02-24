@@ -27,6 +27,7 @@ final class CloseSubmission extends AbstractCommandHandler implements Transactio
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var CloseSubmissionCmd $command **/

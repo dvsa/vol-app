@@ -38,7 +38,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractQuestion implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractQuestion implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -209,7 +209,8 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -232,7 +233,8 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get the question type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getQuestionType()
     {
         return $this->questionType;
@@ -255,7 +257,8 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get the form control type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getFormControlType()
     {
         return $this->formControlType;
@@ -278,7 +281,8 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get the submit options
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getSubmitOptions()
     {
         return $this->submitOptions;
@@ -301,7 +305,8 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -324,7 +329,8 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -347,7 +353,8 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get the title
      *
-     * @return string     */
+     * @return string
+     */
     public function getTitle()
     {
         return $this->title;
@@ -370,7 +377,8 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -393,7 +401,8 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get the option source
      *
-     * @return string     */
+     * @return string
+     */
     public function getOptionSource()
     {
         return $this->optionSource;
@@ -416,7 +425,8 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get the slug
      *
-     * @return string     */
+     * @return string
+     */
     public function getSlug()
     {
         return $this->slug;
@@ -439,7 +449,8 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -574,6 +585,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

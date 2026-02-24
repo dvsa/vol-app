@@ -17,7 +17,8 @@ readonly class InversedByConfig
         public bool $orphanRemoval = false,
         public array $orderBy = [],
         public string|null $fetch = null
-    ) {}
+    ) {
+    }
 
     /**
      * Create from EntityConfig array data
@@ -43,11 +44,11 @@ readonly class InversedByConfig
         if (is_bool($value)) {
             return $value;
         }
-        
+
         if (is_string($value)) {
             return strtolower($value) === 'true' || $value === '1';
         }
-        
+
         return (bool) $value;
     }
 

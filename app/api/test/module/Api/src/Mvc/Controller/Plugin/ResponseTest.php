@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Mvc\Controller\Plugin;
 
 use Dvsa\Olcs\Api\Domain\Command\Result as CommandResult;
@@ -14,9 +16,7 @@ use Laminas\Http\Headers;
 use Laminas\Http\Response as HttpResponse;
 use Laminas\View\Model\JsonModel;
 
-/**
- * @covers \Dvsa\Olcs\Api\Mvc\Controller\Plugin\Response
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Mvc\Controller\Plugin\Response::class)]
 class ResponseTest extends MockeryTestCase
 {
     /** @var  Plugin\Response */
@@ -31,16 +31,14 @@ class ResponseTest extends MockeryTestCase
         $this->sut = m::mock(Plugin\Response::class)->makePartial();
         $this->sut->shouldReceive('getController->getResponse')->andReturn($this->response);
 
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
 
         parent::setUp();
     }
 
-    public function testNotFound()
+    public function testNotFound(): void
     {
         $result = $this->sut->notFound();
 
@@ -48,7 +46,7 @@ class ResponseTest extends MockeryTestCase
         $this->assertEquals(HttpResponse::STATUS_CODE_404, $result->getStatusCode());
     }
 
-    public function testNotReady()
+    public function testNotReady(): void
     {
         $result = $this->sut->notReady();
 
@@ -57,7 +55,7 @@ class ResponseTest extends MockeryTestCase
         $this->assertNotContains('Retry-After', $result->getHeaders()->toArray());
     }
 
-    public function testNotReadyWithRetryAfter()
+    public function testNotReadyWithRetryAfter(): void
     {
         $retryAfter = 5;
 
@@ -68,7 +66,7 @@ class ResponseTest extends MockeryTestCase
         $this->assertEquals(['Retry-After' => $retryAfter], $result->getHeaders()->toArray());
     }
 
-    public function testError()
+    public function testError(): void
     {
         $result = $this->sut->error(HttpResponse::STATUS_CODE_400);
 
@@ -76,7 +74,7 @@ class ResponseTest extends MockeryTestCase
         $this->assertEquals(HttpResponse::STATUS_CODE_400, $result->getStatusCode());
     }
 
-    public function testErrorWithMessages()
+    public function testErrorWithMessages(): void
     {
         $messages = ['MSG1'];
 
@@ -87,10 +85,8 @@ class ResponseTest extends MockeryTestCase
         $this->assertEquals(HttpResponse::STATUS_CODE_400, $this->response->getStatusCode());
     }
 
-    /**
-     * @dataProvider getSingleResultDataProvider
-     */
-    public function testSingleResult($data)
+    #[\PHPUnit\Framework\Attributes\DataProvider('getSingleResultDataProvider')]
+    public function testSingleResult(mixed $data): void
     {
         $result = $this->sut->singleResult($data);
 
@@ -99,7 +95,7 @@ class ResponseTest extends MockeryTestCase
         $this->assertEquals(HttpResponse::STATUS_CODE_200, $this->response->getStatusCode());
     }
 
-    public function getSingleResultDataProvider()
+    public static function getSingleResultDataProvider(): array
     {
         return [
             // array
@@ -117,7 +113,7 @@ class ResponseTest extends MockeryTestCase
         ];
     }
 
-    public function testMultipleResults()
+    public function testMultipleResults(): void
     {
         $result = $this->sut->multipleResults(2, ['item1', 'item2'], 10, ['extra1']);
 
@@ -129,10 +125,8 @@ class ResponseTest extends MockeryTestCase
         $this->assertEquals(HttpResponse::STATUS_CODE_200, $this->response->getStatusCode());
     }
 
-    /**
-     * @runInSeparateProcess
-     */
-    public function testStreamResult()
+    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
+    public function testStreamResult(): void
     {
         $streanContent = 'UNIT_expect_content';
         $streamHeaders = [
@@ -165,7 +159,7 @@ class ResponseTest extends MockeryTestCase
         static::assertEquals($streanContent, $output);
     }
 
-    public function testSuccessfulUpdate()
+    public function testSuccessfulUpdate(): void
     {
         $data = new CommandResult();
         $data->addId('item', 1);
@@ -178,7 +172,7 @@ class ResponseTest extends MockeryTestCase
         $this->assertEquals(HttpResponse::STATUS_CODE_200, $this->response->getStatusCode());
     }
 
-    public function testSuccessfulCreate()
+    public function testSuccessfulCreate(): void
     {
         $data = new CommandResult();
         $data->addId('item', 1);
@@ -191,7 +185,7 @@ class ResponseTest extends MockeryTestCase
         $this->assertEquals(HttpResponse::STATUS_CODE_201, $this->response->getStatusCode());
     }
 
-    public function testXmlAccepted()
+    public function testXmlAccepted(): void
     {
         $result = $this->sut->xmlAccepted();
 
@@ -199,7 +193,7 @@ class ResponseTest extends MockeryTestCase
         $this->assertEquals(HttpResponse::STATUS_CODE_202, $result->getStatusCode());
     }
 
-    public function testXmlBadRequest()
+    public function testXmlBadRequest(): void
     {
         $result = $this->sut->xmlBadRequest();
 

@@ -21,11 +21,13 @@ class InterimOperatingCentres extends DynamicBookmark
      */
     public const PREFORMATTED = true;
 
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(['id' => $data['application']]);
     }
 
+    #[\Override]
     public function render()
     {
         if (empty($this->data)) {

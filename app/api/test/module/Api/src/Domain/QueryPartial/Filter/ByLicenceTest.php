@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Filter By Licence Test
  *
@@ -26,7 +28,7 @@ class ByLicenceTest extends QueryPartialTestCase
         parent::setUp();
     }
 
-    public function testModifyQuery()
+    public function testModifyQuery(): void
     {
         $licenceId = 69;
 

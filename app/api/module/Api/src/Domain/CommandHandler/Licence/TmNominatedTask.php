@@ -29,6 +29,7 @@ final class TmNominatedTask extends AbstractCommandHandler implements Transactio
 
     protected $repoServiceName = 'Licence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $licences = $this->getRepo()->fetchByIds($command->getIds());

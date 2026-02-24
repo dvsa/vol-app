@@ -15,6 +15,7 @@ class InternalCommandAdapterFactory implements FactoryInterface
      * @param array|null $options
      * @return InternalCommandAdapter
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): InternalCommandAdapter
     {
         $commandSender = $container->get('CommandSender');

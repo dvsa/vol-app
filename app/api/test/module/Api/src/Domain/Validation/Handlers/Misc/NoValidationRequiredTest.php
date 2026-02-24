@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * No Validation Required Test
  *
@@ -32,7 +34,7 @@ class NoValidationRequiredTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsValid()
+    public function testIsValid(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Workshop Test
  *
@@ -39,7 +41,8 @@ class UpdateWorkshopTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -48,7 +51,7 @@ class UpdateWorkshopTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 123,
@@ -83,7 +86,6 @@ class UpdateWorkshopTest extends AbstractCommandHandlerTestCase
         $contactDetails->shouldReceive('getAddress')
             ->andReturn($address);
 
-
         $this->repoMap['Workshop']->shouldReceive('fetchUsingId')
             ->with($command, Query::HYDRATE_OBJECT, 1)
             ->andReturn($workshop)
@@ -105,11 +107,11 @@ class UpdateWorkshopTest extends AbstractCommandHandlerTestCase
         $result1 = new Result();
         $result1->addMessage('Address updated');
         $this->expectedSideEffect(SaveAddress::class, $expectedData, $result1);
-        
+
         $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')
             ->with($address, EventHistoryTypeEntity::EVENT_CODE_EDIT_SAFETY_INSPECTOR, null, $workshop->getLicence())
             ->once();
-   
+
         $result = $this->sut->handleCommand($command);
 
         $expected = [

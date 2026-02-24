@@ -62,7 +62,7 @@ return [
         ],
         [
             'title' => 'Date created',
-            'formatter' => fn($row) => date(Module::$dateTimeSecFormat, strtotime($row['createdOn'])),
+            'formatter' => fn($row) => date(Module::$dateTimeSecFormat, strtotime((string) $row['createdOn'])),
             'sort' => 'createdOn'
         ],
         [

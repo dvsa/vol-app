@@ -34,6 +34,7 @@ final class Publish extends AbstractCommandHandler implements TransactionedInter
      * @return Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /**

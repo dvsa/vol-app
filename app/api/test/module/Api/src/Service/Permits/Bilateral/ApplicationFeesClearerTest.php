@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral;
 
 use Dvsa\Olcs\Api\Domain\Command\Fee\CancelFee as CancelFeeCmd;
@@ -19,7 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class ApplicationFeesClearerTest extends MockeryTestCase
 {
-    public function testRemove()
+    public function testRemove(): void
     {
         $fee1Id = 27;
         $fee2Id = 46;

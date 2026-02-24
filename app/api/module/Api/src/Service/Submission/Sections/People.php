@@ -22,6 +22,7 @@ final class People extends AbstractSection
      *
      * @return array Data array containing information for the submission section
      */
+    #[\Override]
     public function generateSection(CasesEntity $case)
     {
         // get all other persons associated with the licence

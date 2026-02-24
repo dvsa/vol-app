@@ -44,7 +44,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractInspectionRequest implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractInspectionRequest implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -326,7 +326,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -349,7 +350,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -372,7 +374,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
     public function getApplication()
     {
         return $this->application;
@@ -395,7 +398,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the operating centre
      *
-     * @return \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre     */
+     * @return \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
+     */
     public function getOperatingCentre()
     {
         return $this->operatingCentre;
@@ -418,7 +422,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the requestor user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getRequestorUser()
     {
         return $this->requestorUser;
@@ -441,7 +446,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the task
      *
-     * @return \Dvsa\Olcs\Api\Entity\Task\Task     */
+     * @return \Dvsa\Olcs\Api\Entity\Task\Task
+     */
     public function getTask()
     {
         return $this->task;
@@ -464,7 +470,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -487,7 +494,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the request type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getRequestType()
     {
         return $this->requestType;
@@ -510,7 +518,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the result type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getResultType()
     {
         return $this->resultType;
@@ -533,7 +542,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the report type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getReportType()
     {
         return $this->reportType;
@@ -556,7 +566,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -579,7 +590,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -602,7 +614,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the requestor notes
      *
-     * @return string     */
+     * @return string
+     */
     public function getRequestorNotes()
     {
         return $this->requestorNotes;
@@ -625,7 +638,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the inspector notes
      *
-     * @return string     */
+     * @return string
+     */
     public function getInspectorNotes()
     {
         return $this->inspectorNotes;
@@ -650,7 +664,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getDueDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -679,7 +694,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getFromDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -708,7 +724,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getToDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -737,7 +754,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getRequestDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -766,7 +784,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getReturnDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -795,7 +814,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getDeferredDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -822,7 +842,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the inspector name
      *
-     * @return string     */
+     * @return string
+     */
     public function getInspectorName()
     {
         return $this->inspectorName;
@@ -845,7 +866,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the trailers examined no
      *
-     * @return int     */
+     * @return int
+     */
     public function getTrailersExaminedNo()
     {
         return $this->trailersExaminedNo;
@@ -868,7 +890,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the vehicles examined no
      *
-     * @return int     */
+     * @return int
+     */
     public function getVehiclesExaminedNo()
     {
         return $this->vehiclesExaminedNo;
@@ -891,7 +914,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -914,7 +938,8 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -923,6 +948,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\View\Helper;
 
 use Psr\Container\ContainerInterface;
@@ -11,12 +13,12 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 class SubmissionSectionTableTest extends TestCase
 {
     /**
-     * @dataProvider provideInvoke
      * @param $input
      * @param $expected
      * @param $disabled
      */
-    public function testInvoke($input, $expected, $disabled)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideInvoke')]
+    public function testInvoke(mixed $input, mixed $expected, mixed $disabled): void
     {
         $sut = new SubmissionSectionTable();
 
@@ -55,7 +57,7 @@ class SubmissionSectionTableTest extends TestCase
         );
     }
 
-    public function provideInvoke()
+    public static function provideInvoke(): array
     {
         return [
             [

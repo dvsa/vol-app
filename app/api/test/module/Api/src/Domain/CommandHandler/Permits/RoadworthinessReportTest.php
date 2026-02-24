@@ -373,7 +373,7 @@ class RoadworthinessReportTest extends AbstractCommandHandlerTestCase
      * two questions from the Q&A system. This method prevents duplicate assertions and also allows the test
      * code to be more easily altered if extra apps or questions are needed
      */
-    private function addTranlatorAssertions($numApps, $numQuestions): void
+    private function addTranlatorAssertions(mixed $numApps, mixed $numQuestions): void
     {
         for ($i = 0; $i < $numApps; $i++) {
             for ($j = 1; $j <= $numQuestions; $j++) {

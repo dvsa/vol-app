@@ -27,6 +27,7 @@ class RangesByIrhpApplication extends AbstractQueryHandler
      * @param QueryInterface $query query
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var IrhpApplication $irhpApplication */
@@ -55,6 +56,7 @@ class RangesByIrhpApplication extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

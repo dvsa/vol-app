@@ -16,6 +16,7 @@ class ByApplication extends AbstractQueryHandler
 {
     protected $extraRepos = ['Application'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $application = $this->getRepo('Application')->fetchById($query->getApplication());

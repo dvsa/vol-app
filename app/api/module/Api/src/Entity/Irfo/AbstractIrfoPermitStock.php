@@ -38,7 +38,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -188,7 +188,8 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -211,7 +212,8 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
     /**
      * Get the irfo gv permit
      *
-     * @return \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit     */
+     * @return \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit
+     */
     public function getIrfoGvPermit()
     {
         return $this->irfoGvPermit;
@@ -234,7 +236,8 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
     /**
      * Get the irfo country
      *
-     * @return \Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry     */
+     * @return \Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry
+     */
     public function getIrfoCountry()
     {
         return $this->irfoCountry;
@@ -257,7 +260,8 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
     /**
      * Get the status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getStatus()
     {
         return $this->status;
@@ -280,7 +284,8 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -303,7 +308,8 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -326,7 +332,8 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
     /**
      * Get the serial no
      *
-     * @return int     */
+     * @return int
+     */
     public function getSerialNo()
     {
         return $this->serialNo;
@@ -349,7 +356,8 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
     /**
      * Get the valid for year
      *
-     * @return int     */
+     * @return int
+     */
     public function getValidForYear()
     {
         return $this->validForYear;
@@ -374,7 +382,8 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getVoidReturnDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -401,7 +410,8 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -424,7 +434,8 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -433,6 +444,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

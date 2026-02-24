@@ -17,15 +17,16 @@ final class Create extends AbstractCommandHandler
 
     protected $extraRepos = ['MasterTemplate', 'Category', 'SubCategory', 'LetterTestData', 'LetterAppendix'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var Cmd $command */
-        
+
         $letterType = new LetterTypeEntity();
         $letterType->setName($command->getName());
         $letterType->setDescription($command->getDescription());
         $letterType->setIsActive($command->getIsActive());
-        
+
         // Set master template if provided
         if ($command->getMasterTemplate()) {
             $masterTemplate = $this->getRepo('MasterTemplate')->fetchById($command->getMasterTemplate());
@@ -69,7 +70,7 @@ final class Create extends AbstractCommandHandler
 
         $this->result->addId('letterType', $letterType->getId());
         $this->result->addMessage("Letter type '{$letterType->getName()}' created");
-        
+
         return $this->result;
     }
 }

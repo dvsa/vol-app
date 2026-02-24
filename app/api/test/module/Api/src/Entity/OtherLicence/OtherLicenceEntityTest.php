@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\OtherLicence;
 
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
@@ -23,18 +25,17 @@ class OtherLicenceEntityTest extends EntityTester
 
     /**
      * Test update other licence with valid data
-     *
-     * @dataProvider validDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validDataProvider')]
     public function testUpdateOtherLicenceValid(
-        $previousLicenceType,
-        $licNo,
-        $holderName,
-        $willSurrender = null,
-        $disqualificationDate = null,
-        $disqualificationLength = null,
-        $purchaseDate = null
-    ) {
+        mixed $previousLicenceType,
+        mixed $licNo,
+        mixed $holderName,
+        mixed $willSurrender = null,
+        mixed $disqualificationDate = null,
+        mixed $disqualificationLength = null,
+        mixed $purchaseDate = null
+    ): void {
         /** @var m\Mock|Entity $sut */
         $sut = m::mock(Entity::class)->makePartial()
             ->shouldReceive('getPreviousLicenceType')
@@ -76,18 +77,17 @@ class OtherLicenceEntityTest extends EntityTester
 
     /**
      * Test update other licence with invalid data
-     *
-     * @dataProvider invalidDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidDataProvider')]
     public function testUpdateOtherLicenceInvalid(
-        $previousLicenceType,
-        $licNo,
-        $holderName,
-        $willSurrender,
-        $disqualificationDate,
-        $disqualificationLength,
-        $purchaseDate
-    ) {
+        mixed $previousLicenceType,
+        mixed $licNo,
+        mixed $holderName,
+        mixed $willSurrender,
+        mixed $disqualificationDate,
+        mixed $disqualificationLength,
+        mixed $purchaseDate
+    ): void {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
         if (!$previousLicenceType) {
@@ -113,7 +113,7 @@ class OtherLicenceEntityTest extends EntityTester
         );
     }
 
-    public function validDataProvider()
+    public static function validDataProvider(): array
     {
         return [
             [Entity::TYPE_CURRENT, 'licNo', 'holderName', 'Y'],
@@ -126,7 +126,7 @@ class OtherLicenceEntityTest extends EntityTester
         ];
     }
 
-    public function invalidDataProvider()
+    public static function invalidDataProvider(): array
     {
         return [
             // field is required
@@ -142,7 +142,7 @@ class OtherLicenceEntityTest extends EntityTester
         ];
     }
 
-    public function testUpdateOtherLicenceForTml()
+    public function testUpdateOtherLicenceForTml(): void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->updateOtherLicenceForTml('role', 'tml', 'hpw', 'ln', 'oc', 'tav');
@@ -154,14 +154,14 @@ class OtherLicenceEntityTest extends EntityTester
         $this->assertEquals($sut->getTotalAuthVehicles(), 'tav');
     }
 
-    public function testGetRelatedOrganisationWithNoApplication()
+    public function testGetRelatedOrganisationWithNoApplication(): void
     {
         $sut = new Entity();
 
         $this->assertSame(null, $sut->getRelatedOrganisation());
     }
 
-    public function testGetRelatedOrganisationWithApplication()
+    public function testGetRelatedOrganisationWithApplication(): void
     {
         $sut = new Entity();
 
@@ -181,7 +181,7 @@ class OtherLicenceEntityTest extends EntityTester
         $this->assertSame('ORG1', $sut->getRelatedOrganisation());
     }
 
-    public function testGetRelatedOrganisationWithTmLicence()
+    public function testGetRelatedOrganisationWithTmLicence(): void
     {
         $sut = new Entity();
 
@@ -201,7 +201,7 @@ class OtherLicenceEntityTest extends EntityTester
         $this->assertSame('ORG1', $sut->getRelatedOrganisation());
     }
 
-    public function testGetRelatedOrganisationWithTmApplication()
+    public function testGetRelatedOrganisationWithTmApplication(): void
     {
         $sut = new Entity();
 
@@ -227,7 +227,7 @@ class OtherLicenceEntityTest extends EntityTester
         $this->assertSame('ORG1', $sut->getRelatedOrganisation());
     }
 
-    public function testGetRelatedOrganisationWithTransportManager()
+    public function testGetRelatedOrganisationWithTransportManager(): void
     {
         $sut = new Entity();
 

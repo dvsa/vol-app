@@ -32,7 +32,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLegacyOffence implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLegacyOffence implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -233,7 +233,8 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -256,7 +257,8 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -279,7 +281,8 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -302,7 +305,8 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -325,7 +329,8 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the definition
      *
-     * @return string     */
+     * @return string
+     */
     public function getDefinition()
     {
         return $this->definition;
@@ -348,7 +353,8 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the is trailer
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsTrailer()
     {
         return $this->isTrailer;
@@ -371,7 +377,8 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the notes
      *
-     * @return string     */
+     * @return string
+     */
     public function getNotes()
     {
         return $this->notes;
@@ -394,7 +401,8 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the num of offences
      *
-     * @return int     */
+     * @return int
+     */
     public function getNumOfOffences()
     {
         return $this->numOfOffences;
@@ -417,7 +425,8 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the offence authority
      *
-     * @return string     */
+     * @return string
+     */
     public function getOffenceAuthority()
     {
         return $this->offenceAuthority;
@@ -442,7 +451,8 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getOffenceDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -471,7 +481,8 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getOffenceToDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -498,7 +509,8 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the offender name
      *
-     * @return string     */
+     * @return string
+     */
     public function getOffenderName()
     {
         return $this->offenderName;
@@ -521,7 +533,8 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the points
      *
-     * @return int     */
+     * @return int
+     */
     public function getPoints()
     {
         return $this->points;
@@ -544,7 +557,8 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the position
      *
-     * @return string     */
+     * @return string
+     */
     public function getPosition()
     {
         return $this->position;
@@ -567,7 +581,8 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the offence type
      *
-     * @return string     */
+     * @return string
+     */
     public function getOffenceType()
     {
         return $this->offenceType;
@@ -590,7 +605,8 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the vrm
      *
-     * @return string     */
+     * @return string
+     */
     public function getVrm()
     {
         return $this->vrm;
@@ -613,7 +629,8 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -622,6 +639,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

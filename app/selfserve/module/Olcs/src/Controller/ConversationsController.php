@@ -47,6 +47,7 @@ class ConversationsController extends AbstractController implements ToggleAwareI
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
+    #[\Override]
     public function indexAction(): ViewModel
     {
         $params = [
@@ -104,9 +105,9 @@ class ConversationsController extends AbstractController implements ToggleAwareI
             $hasProcessedFiles = $this->processFiles(
                 $form,
                 'form-actions->file',
-                [$this, 'processFileUpload'],
-                [$this, 'deleteFile'],
-                [$this, 'getUploadedFiles'],
+                $this->processFileUpload(...),
+                $this->deleteFile(...),
+                $this->getUploadedFiles(...),
                 'form-actions->file->fileCount',
             );
         }

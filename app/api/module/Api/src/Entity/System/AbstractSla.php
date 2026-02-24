@@ -27,7 +27,7 @@ use Doctrine\ORM\Mapping as ORM;
  *    }
  * )
  */
-abstract class AbstractSla implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSla implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -134,7 +134,8 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -157,7 +158,8 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the category
      *
-     * @return string     */
+     * @return string
+     */
     public function getCategory()
     {
         return $this->category;
@@ -180,7 +182,8 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the field
      *
-     * @return string     */
+     * @return string
+     */
     public function getField()
     {
         return $this->field;
@@ -203,7 +206,8 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the compare to
      *
-     * @return string     */
+     * @return string
+     */
     public function getCompareTo()
     {
         return $this->compareTo;
@@ -226,7 +230,8 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the days
      *
-     * @return int     */
+     * @return int
+     */
     public function getDays()
     {
         return $this->days;
@@ -251,7 +256,8 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEffectiveFrom($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -280,7 +286,8 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEffectiveTo($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -307,7 +314,8 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the public holiday
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getPublicHoliday()
     {
         return $this->publicHoliday;
@@ -330,7 +338,8 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the weekend
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getWeekend()
     {
         return $this->weekend;
@@ -339,6 +348,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

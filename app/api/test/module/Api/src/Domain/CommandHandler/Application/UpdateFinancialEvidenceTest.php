@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Financial Evidence Test
  *
@@ -33,7 +35,7 @@ class UpdateFinancialEvidenceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = $this->getCommand();
 
@@ -71,7 +73,7 @@ class UpdateFinancialEvidenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    protected function getCommand()
+    protected function getCommand(): mixed
     {
         $data = [
             'id' => 1,
@@ -82,7 +84,7 @@ class UpdateFinancialEvidenceTest extends AbstractCommandHandlerTestCase
         return Cmd::create($data);
     }
 
-    protected function getApplication()
+    protected function getApplication(): m\MockInterface
     {
         return m::mock(ApplicationEntity::class)->makePartial();
     }

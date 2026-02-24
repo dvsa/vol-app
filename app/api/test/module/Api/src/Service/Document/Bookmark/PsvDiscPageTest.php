@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\PsvDiscPage;
@@ -13,7 +15,7 @@ use Mockery as m;
  */
 class PsvDiscPageTest extends m\Adapter\Phpunit\MockeryTestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new PsvDiscPage();
         $query = $bookmark->getQuery([123, 456]);
@@ -24,7 +26,7 @@ class PsvDiscPageTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query[1]);
     }
 
-    public function testRenderWithNoData()
+    public function testRenderWithNoData(): void
     {
         $parser = new RtfParser();
         $bookmark = new PsvDiscPage();
@@ -36,7 +38,7 @@ class PsvDiscPageTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertEquals('', $result);
     }
 
-    public function testRenderWithSixDiscsStillReturnsFullPage()
+    public function testRenderWithSixDiscsStillReturnsFullPage(): void
     {
         $data = [
             [
@@ -132,7 +134,7 @@ class PsvDiscPageTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $bookmark = $this->createPartialMock(\Dvsa\Olcs\Api\Service\Document\Bookmark\PsvDiscPage::class, ['getSnippet']);
 
-        $bookmark->expects($this->any())
+        $bookmark->expects($this->atLeastOnce())
             ->method('getSnippet')
             ->willReturn('snippet');
 

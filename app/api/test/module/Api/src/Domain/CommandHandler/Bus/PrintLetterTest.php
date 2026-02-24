@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Bus;
 
 use Dvsa\Olcs\Api\Domain\Command as DomainCmd;
@@ -15,9 +17,7 @@ use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Bus\PrintLetter
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Bus\PrintLetter::class)]
 class PrintLetterTest extends AbstractCommandHandlerTestCase
 {
     public const LIC_ID = 9999;
@@ -32,7 +32,8 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             Entity\Bus\BusReg::STATUS_REGISTERED,
@@ -43,7 +44,7 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandBusReg404()
+    public function testHandleCommandBusReg404(): void
     {
         $cmd = TransferCmd\Bus\PrintLetter::create([]);
 
@@ -57,7 +58,7 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($cmd);
     }
 
-    public function testHandleCommandExcTemplate404()
+    public function testHandleCommandExcTemplate404(): void
     {
         $cmd = TransferCmd\Bus\PrintLetter::create([]);
 
@@ -77,10 +78,8 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($cmd);
     }
 
-    /**
-     * @dataProvider dpTestHandleCommand
-     */
-    public function testHandleCommand($status, $isVariation, $isShortNoticeRefused, array $docCmdData, $isFromEbsr)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommand')]
+    public function testHandleCommand(mixed $status, mixed $isVariation, mixed $isShortNoticeRefused, array $docCmdData, mixed $isFromEbsr): void
     {
         $cmd = TransferCmd\Bus\PrintLetter::create([]);
 
@@ -130,7 +129,7 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
         static::assertEquals($docResult, $this->sut->handleCommand($cmd));
     }
 
-    public function dpTestHandleCommand()
+    public static function dpTestHandleCommand(): array
     {
         return [
             [
@@ -141,7 +140,7 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
                     'template' => Entity\Doc\Document::BUS_REG_NEW,
                     'description' => 'Bus registration letter',
                 ],
-                true
+                "isFromEbsr" => true
             ],
             [
                 'status' => Entity\Bus\BusReg::STATUS_REGISTERED,
@@ -151,7 +150,7 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
                     'template' => Entity\Doc\Document::BUS_REG_NEW_REFUSE_SHORT_NOTICE,
                     'description' => 'Bus registration letter with refused short notice',
                 ],
-                true
+                "isFromEbsr" => true
             ],
             [
                 'status' => Entity\Bus\BusReg::STATUS_REGISTERED,
@@ -161,7 +160,7 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
                     'template' => Entity\Doc\Document::BUS_REG_VARIATION,
                     'description' => 'Bus variation letter',
                 ],
-                true
+                "isFromEbsr" => true
             ],
             [
                 'status' => Entity\Bus\BusReg::STATUS_REGISTERED,
@@ -171,7 +170,7 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
                     'template' => Entity\Doc\Document::BUS_REG_VARIATION_REFUSE_SHORT_NOTICE,
                     'description' => 'Bus variation letter with refused short notice',
                 ],
-                true
+                "isFromEbsr" => true
             ],
             [
                 'status' => Entity\Bus\BusReg::STATUS_CANCELLED,
@@ -181,7 +180,7 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
                     'template' => Entity\Doc\Document::BUS_REG_CANCELLATION,
                     'description' => 'Bus cancelled letter',
                 ],
-                true
+                "isFromEbsr" => true
             ],
             [
                 'status' => Entity\Bus\BusReg::STATUS_CANCELLED,
@@ -191,7 +190,7 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
                     'template' => Entity\Doc\Document::BUS_REG_CANCELLATION_REFUSE_SHORT_NOTICE,
                     'description' => 'Bus cancelled letter with refused short notice',
                 ],
-                true
+                "isFromEbsr" => true
             ],
             [
                 'status' => Entity\Bus\BusReg::STATUS_CANCELLED,
@@ -201,7 +200,7 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
                     'template' => Entity\Doc\Document::BUS_REG_CANCELLATION_REFUSE_SHORT_NOTICE,
                     'description' => 'Bus cancelled letter with refused short notice',
                 ],
-                false
+                "isFromEbsr" => false
             ],
         ];
     }

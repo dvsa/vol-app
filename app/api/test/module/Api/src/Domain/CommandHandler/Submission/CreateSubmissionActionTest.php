@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create SubmissionAction Test
  */
@@ -30,7 +32,8 @@ class CreateSubmissionActionTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'sub_st_rec_grant_as'
@@ -48,7 +51,7 @@ class CreateSubmissionActionTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'submission' => 11,
@@ -107,7 +110,7 @@ class CreateSubmissionActionTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleInvalidCommand()
+    public function testHandleInvalidCommand(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

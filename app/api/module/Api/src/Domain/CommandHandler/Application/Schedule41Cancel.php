@@ -23,6 +23,7 @@ class Schedule41Cancel extends AbstractCommandHandler
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Application $application */

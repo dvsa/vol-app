@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractDocTemplateBookmark implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractDocTemplateBookmark implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -141,7 +141,8 @@ abstract class AbstractDocTemplateBookmark implements BundleSerializableInterfac
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -164,7 +165,8 @@ abstract class AbstractDocTemplateBookmark implements BundleSerializableInterfac
     /**
      * Get the doc template
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\DocTemplate     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\DocTemplate
+     */
     public function getDocTemplate()
     {
         return $this->docTemplate;
@@ -187,7 +189,8 @@ abstract class AbstractDocTemplateBookmark implements BundleSerializableInterfac
     /**
      * Get the doc bookmark
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\DocBookmark     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\DocBookmark
+     */
     public function getDocBookmark()
     {
         return $this->docBookmark;
@@ -210,7 +213,8 @@ abstract class AbstractDocTemplateBookmark implements BundleSerializableInterfac
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -233,7 +237,8 @@ abstract class AbstractDocTemplateBookmark implements BundleSerializableInterfac
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -256,7 +261,8 @@ abstract class AbstractDocTemplateBookmark implements BundleSerializableInterfac
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -265,6 +271,7 @@ abstract class AbstractDocTemplateBookmark implements BundleSerializableInterfac
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

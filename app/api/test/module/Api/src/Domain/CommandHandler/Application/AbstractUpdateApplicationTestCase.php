@@ -13,7 +13,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Command\Application\UpdateApplicationCompletion as UpdateApplicationCompletionCmd;
 use Mockery as m;
 
-abstract class AbstractUpdateApplicationTest extends AbstractCommandHandlerTestCase
+abstract class AbstractUpdateApplicationTestCase extends AbstractCommandHandlerTestCase
 {
     protected int $applicationId = 888;
     protected int $version = 999;
@@ -22,7 +22,7 @@ abstract class AbstractUpdateApplicationTest extends AbstractCommandHandlerTestC
     protected string $confirmationMessage = '';
     protected array $commandData = [];
     protected array $sections = [];
-    private const APP_COMPLETION_RESULT = 'app completion message: %s';
+    private const string APP_COMPLETION_RESULT = 'app completion message: %s';
 
     public function setUp(): void
     {

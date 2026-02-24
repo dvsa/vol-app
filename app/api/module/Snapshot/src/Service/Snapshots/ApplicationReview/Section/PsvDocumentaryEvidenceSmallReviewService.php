@@ -19,6 +19,7 @@ class PsvDocumentaryEvidenceSmallReviewService extends AbstractReviewService
         parent::__construct($abstractReviewServiceServices);
     }
 
+    #[\Override]
     public function getConfigFromData(array $data = []): array
     {
         $queryData = [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Opposition Test
  *
@@ -46,7 +48,7 @@ class UpdateOppositionTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    private function getPayload()
+    private function getPayload(): array
     {
         return [
             'id' => 99,
@@ -96,7 +98,7 @@ class UpdateOppositionTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    private function getReferencedPayload()
+    private function getReferencedPayload(): array
     {
         return [
             'id' => 99,
@@ -145,7 +147,8 @@ class UpdateOppositionTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'ct_obj',
@@ -166,7 +169,7 @@ class UpdateOppositionTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $payload = $this->getPayload();
         $referencedPayload = $this->getReferencedPayload();

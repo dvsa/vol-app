@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Person
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\Person\UpdateFull;
  */
 class UpdateFullTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = UpdateFull::create(
             [

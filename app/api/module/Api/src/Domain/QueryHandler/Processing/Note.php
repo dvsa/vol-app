@@ -17,6 +17,7 @@ class Note extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Note';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var NoteRepository $repo */

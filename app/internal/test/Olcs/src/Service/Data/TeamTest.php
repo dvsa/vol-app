@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -7,15 +9,11 @@ use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 use Dvsa\Olcs\Transfer\Query\Team\TeamListData as Qry;
 use Mockery as m;
 use Olcs\Service\Data\Team;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/**
- * Class TeamTest
- * @package OlcsTest\Service\Data
- */
 class TeamTest extends AbstractDataServiceTestCase
 {
-    /** @var Team */
-    private $sut;
+    private Team $sut;
 
     /** @var  m\MockInterface */
     protected $flashMessengerHelper;
@@ -32,25 +30,30 @@ class TeamTest extends AbstractDataServiceTestCase
         );
     }
 
-    /**
-     * @dataProvider provideFetchListOptions
-     */
-    public function testFetchListOptions($input, $expected)
+    #[DataProvider('provideFetchListOptions')]
+    public function testFetchListOptions(mixed $input, mixed $expected): void
     {
         $this->sut->setData('teamlist', $input);
 
         $this->assertEquals($expected, $this->sut->fetchListOptions(''));
     }
 
-    public function provideFetchListOptions()
+    public static function provideFetchListOptions(): array
     {
         return [
-            [$this->getSingleSource(), $this->getSingleExpected()],
+            [
+                [
+                    ['id' => 'val-1', 'name' => 'Value 1'],
+                    ['id' => 'val-2', 'name' => 'Value 2'],
+                    ['id' => 'val-3', 'name' => 'Value 3'],
+                ],
+                self::SINGLE_EXPECTED,
+            ],
             [false, []]
         ];
     }
 
-    public function testFetchListData()
+    public function testFetchListData(): void
     {
         $results = ['results' => 'results'];
 
@@ -73,7 +76,7 @@ class TeamTest extends AbstractDataServiceTestCase
         $this->assertEquals($results['results'], $this->sut->fetchTeamListData());  //ensure data is cached
     }
 
-    public function testFetchLicenceDataWithError()
+    public function testFetchLicenceDataWithError(): void
     {
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->with(m::type(Qry::class))
@@ -93,21 +96,5 @@ class TeamTest extends AbstractDataServiceTestCase
             ->once();
 
         $this->sut->fetchTeamListData();
-    }
-
-    protected function getSingleExpected()
-    {
-        return [
-            '1' => 'Development',
-            '5' => 'Some other team',
-        ];
-    }
-
-    protected function getSingleSource()
-    {
-        return [
-            ['id' => 1, 'name' => 'Development'],
-            ['id' => 5, 'name' => 'Some other team'],
-        ];
     }
 }

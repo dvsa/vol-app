@@ -14,6 +14,7 @@ class RecordList extends AbstractQueryHandler implements CacheAwareInterface
 {
     use CacheAwareTrait;
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         assert($query instanceof Qry);

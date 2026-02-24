@@ -6,6 +6,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\AbstractHandler;
 
 class Delete extends AbstractHandler
 {
+    #[\Override]
     public function isValid($dto): bool
     {
         if (!$this->canAccessLicence($dto->getId())) {

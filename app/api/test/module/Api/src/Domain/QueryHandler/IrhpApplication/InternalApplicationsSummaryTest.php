@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpApplication;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\IrhpApplication\InternalApplicationsSummary;
@@ -19,7 +21,7 @@ class InternalApplicationsSummaryTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $licenceId = 10;
         $status = IrhpInterface::STATUS_NOT_YET_SUBMITTED;

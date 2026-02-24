@@ -27,6 +27,7 @@ class EndIrhpApplications extends AbstractCommandHandler implements Transactione
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $licenceId = $command->getId();

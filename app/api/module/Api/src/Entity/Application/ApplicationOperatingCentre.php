@@ -59,6 +59,7 @@ class ApplicationOperatingCentre extends AbstractApplicationOperatingCentre impl
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this->getApplication()->getRelatedOrganisation();

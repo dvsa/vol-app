@@ -26,6 +26,7 @@ final class UndoDisqualification extends AbstractCommandHandler implements Cache
 
     protected $repoServiceName = 'TransportManager';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var TransportManager $transportManager */

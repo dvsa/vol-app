@@ -26,6 +26,7 @@ class OrganisationUnprocessedList extends AbstractQueryHandler
      * @return array
      * @throws ValidationException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var EbsrSubmissionRepo $repo */

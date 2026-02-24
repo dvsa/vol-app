@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * UserSelfserveTest
  */
@@ -26,7 +28,7 @@ class UserSelfserveTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $mockUser = m::mock(UserEntity::class);
         $mockUser->shouldReceive('serialize')->once()->andReturn(['foo' => 'bar']);

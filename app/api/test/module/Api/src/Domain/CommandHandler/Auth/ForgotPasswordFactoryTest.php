@@ -14,9 +14,7 @@ use Mockery as m;
 use Dvsa\OlcsTest\MocksServicesTrait;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Auth\ForgotPasswordFactory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Auth\ForgotPasswordFactory::class)]
 class ForgotPasswordFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
@@ -27,9 +25,7 @@ class ForgotPasswordFactoryTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -39,11 +35,9 @@ class ForgotPasswordFactoryTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->__invoke(...));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
-    public function invokeReturnsAnInstanceOfForgotPasswordCommandHandler()
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokeReturnsAnInstanceOfForgotPasswordCommandHandler(): void
     {
         // Setup
         $this->setUpSut();

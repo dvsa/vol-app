@@ -17,6 +17,7 @@ class PublicationLink extends AbstractQueryHandler
 {
     protected $repoServiceName = 'PublicationLink';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var PublicationLinkEntity $publicationLink */

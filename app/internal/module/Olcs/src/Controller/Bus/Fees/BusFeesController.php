@@ -26,26 +26,17 @@ class BusFeesController extends AbstractController implements BusRegControllerIn
     use FeesActionTrait;
     use GenericReceipt;
 
-    protected UrlHelperService $urlHelper;
-    protected IdentityProviderInterface $identityProvider;
-    protected TranslationHelperService $translationHelper;
-    protected DateHelperService $dateHelper;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        UrlHelperService $urlHelper,
-        IdentityProviderInterface $identityProvider,
-        TranslationHelperService $translationHelper,
-        DateHelperService $dateHelper
+        protected UrlHelperService $urlHelper,
+        protected IdentityProviderInterface $identityProvider,
+        protected TranslationHelperService $translationHelper,
+        protected DateHelperService $dateHelper
     ) {
         parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
-        $this->urlHelper = $urlHelper;
-        $this->identityProvider = $identityProvider;
-        $this->translationHelper = $translationHelper;
-        $this->dateHelper = $dateHelper;
     }
 
     /**
@@ -54,6 +45,7 @@ class BusFeesController extends AbstractController implements BusRegControllerIn
      * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return string
      */
+    #[\Override]
     protected function getFeesRoute()
     {
         return 'licence/bus-fees';
@@ -65,6 +57,7 @@ class BusFeesController extends AbstractController implements BusRegControllerIn
      * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return array
      */
+    #[\Override]
     protected function getFeesRouteParams()
     {
         return [
@@ -79,6 +72,7 @@ class BusFeesController extends AbstractController implements BusRegControllerIn
      * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return array
      */
+    #[\Override]
     protected function getFeesTableParams()
     {
         return [
@@ -96,6 +90,7 @@ class BusFeesController extends AbstractController implements BusRegControllerIn
      * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     protected function renderLayout($view)
     {
         return $this->renderView($view);

@@ -24,6 +24,7 @@ final class UploadScoringResult extends ScoringCommandHandler
     *
     * @return Result
     */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->profileMessage('upload scoring result...');

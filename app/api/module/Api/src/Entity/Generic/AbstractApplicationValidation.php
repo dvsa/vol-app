@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractApplicationValidation implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractApplicationValidation implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -173,7 +173,8 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -196,7 +197,8 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * Get the question
      *
-     * @return \Dvsa\Olcs\Api\Entity\Generic\Question     */
+     * @return \Dvsa\Olcs\Api\Entity\Generic\Question
+     */
     public function getQuestion()
     {
         return $this->question;
@@ -219,7 +221,8 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * Get the application step
      *
-     * @return \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep     */
+     * @return \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep
+     */
     public function getApplicationStep()
     {
         return $this->applicationStep;
@@ -242,7 +245,8 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -265,7 +269,8 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -288,7 +293,8 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * Get the rule
      *
-     * @return string     */
+     * @return string
+     */
     public function getRule()
     {
         return $this->rule;
@@ -311,7 +317,8 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * Get the parameters
      *
-     * @return string     */
+     * @return string
+     */
     public function getParameters()
     {
         return $this->parameters;
@@ -334,7 +341,8 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * Get the weight
      *
-     * @return string     */
+     * @return string
+     */
     public function getWeight()
     {
         return $this->weight;
@@ -357,7 +365,8 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * Get the error translation key
      *
-     * @return string     */
+     * @return string
+     */
     public function getErrorTranslationKey()
     {
         return $this->errorTranslationKey;
@@ -380,7 +389,8 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -389,6 +399,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

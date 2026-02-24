@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler;
 
 use Doctrine\ORM\Query;
@@ -7,34 +9,36 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Mockery as m;
 
-abstract class AbstractUpdateDefinedValueTest extends AbstractCommandHandlerTestCase
+abstract class AbstractUpdateCommandHandlerTestCase extends AbstractCommandHandlerTestCase
 {
     protected $repoServiceName = 'changeMe';
+    protected $commandMethodName = 'changeMe';
     protected $entityMethodName = 'changeMe';
     protected $entityClass = 'changeMe';
-    protected $repoClass = 'changeMe';
-    protected $definedValue = 'changeMe';
+
+    private $commandValue = 'commandValue';
 
     public function setUp(): void
     {
-        $this->mockRepo($this->repoServiceName, $this->repoClass);
+        $this->mockRepo($this->repoServiceName, $this->entityClass);
         $this->sut = new $this->sutClass();
 
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         if ($this->sut->isRefData()) {
             $this->refData = [
-                $this->definedValue
+                $this->commandValue
             ];
         }
 
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $entityId = 43;
 
@@ -47,6 +51,9 @@ abstract class AbstractUpdateDefinedValueTest extends AbstractCommandHandlerTest
         $command->shouldReceive('getId')
             ->withNoArgs()
             ->andReturn($entityId);
+        $command->shouldReceive($this->commandMethodName)
+            ->withNoArgs()
+            ->andReturn($this->commandValue);
 
         $this->repoMap[$this->repoServiceName]->shouldReceive('fetchUsingId')
             ->with($command, Query::HYDRATE_OBJECT)
@@ -55,13 +62,13 @@ abstract class AbstractUpdateDefinedValueTest extends AbstractCommandHandlerTest
 
         if ($this->sut->isRefData()) {
             $entity->shouldReceive($this->entityMethodName)
-                ->with($this->refData[$this->definedValue])
+                ->with($this->refData[$this->commandValue])
                 ->once()
                 ->globally()
                 ->ordered();
         } else {
             $entity->shouldReceive($this->entityMethodName)
-                ->with($this->definedValue)
+                ->with($this->commandValue)
                 ->once()
                 ->globally()
                 ->ordered();

@@ -13,6 +13,7 @@ final class Penalty extends AbstractQueryHandler
 {
     protected $repoServiceName = 'SiPenalty';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->result($this->getRepo()->fetchUsingId($query), ['siPenaltyType', 'erruPenaltyRequested']);

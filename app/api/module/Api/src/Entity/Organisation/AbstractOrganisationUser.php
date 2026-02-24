@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractOrganisationUser implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractOrganisationUser implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -159,7 +159,8 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -182,7 +183,8 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
     /**
      * Get the organisation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     */
     public function getOrganisation()
     {
         return $this->organisation;
@@ -205,7 +207,8 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
     /**
      * Get the user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getUser()
     {
         return $this->user;
@@ -228,7 +231,8 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -251,7 +255,8 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -274,7 +279,8 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
     /**
      * Get the is administrator
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsAdministrator()
     {
         return $this->isAdministrator;
@@ -297,7 +303,8 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
     /**
      * Get the sftp access
      *
-     * @return string     */
+     * @return string
+     */
     public function getSftpAccess()
     {
         return $this->sftpAccess;
@@ -320,7 +327,8 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -329,6 +337,7 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

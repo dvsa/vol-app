@@ -32,6 +32,7 @@ class BusRegRegistrationsController extends AbstractController
      *
      * @return ViewModel|\Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         /** @var \Laminas\Http\Request $request */

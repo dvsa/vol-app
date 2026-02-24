@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Mockery as m;
@@ -9,8 +11,8 @@ use Doctrine\ORM\QueryBuilder;
 
 /**
  * @author Mat Evans <mat.evans@valtech.co.uk>
- * @covers \Dvsa\Olcs\Api\Domain\Repository\ConditionUndertaking
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\ConditionUndertaking::class)]
 class ConditionUndertakingTest extends RepositoryTestCase
 {
     /** @var Repository\ConditionUndertaking | m\MockInterface */
@@ -21,7 +23,7 @@ class ConditionUndertakingTest extends RepositoryTestCase
         $this->setUpSut(Repository\ConditionUndertaking::class, true);
     }
 
-    public function testFetchListForLicenceReadOnly()
+    public function testFetchListForLicenceReadOnly(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -47,7 +49,7 @@ class ConditionUndertakingTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForApplication()
+    public function testFetchListForApplication(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -74,7 +76,7 @@ class ConditionUndertakingTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForVariation()
+    public function testFetchListForVariation(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -103,7 +105,7 @@ class ConditionUndertakingTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForLicence()
+    public function testFetchListForLicence(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -130,7 +132,7 @@ class ConditionUndertakingTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForS4()
+    public function testFetchListForS4(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -148,7 +150,7 @@ class ConditionUndertakingTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForLicenceAndConditionType()
+    public function testFetchListForLicenceAndConditionType(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -179,7 +181,7 @@ class ConditionUndertakingTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForLicConditionVariation()
+    public function testFetchListForLicConditionVariation(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -197,7 +199,7 @@ class ConditionUndertakingTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchSmallVehilceUndertakings()
+    public function testFetchSmallVehilceUndertakings(): void
     {
         $licenceId = 1;
 
@@ -223,10 +225,8 @@ class ConditionUndertakingTest extends RepositoryTestCase
         $this->assertEquals('results', $this->sut->fetchSmallVehilceUndertakings($licenceId));
     }
 
-    /**
-     * @dataProvider dpHasLightGoodsVehicleUndertakings
-     */
-    public function testHasLightGoodsVehicleUndertakings($resultCount, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasLightGoodsVehicleUndertakings')]
+    public function testHasLightGoodsVehicleUndertakings(mixed $resultCount, mixed $expected): void
     {
         $licenceId = 42;
 
@@ -291,7 +291,7 @@ class ConditionUndertakingTest extends RepositoryTestCase
         );
     }
 
-    public function dpHasLightGoodsVehicleUndertakings()
+    public static function dpHasLightGoodsVehicleUndertakings(): array
     {
         return [
             [0, false],
@@ -300,7 +300,7 @@ class ConditionUndertakingTest extends RepositoryTestCase
         ];
     }
 
-    public function testDeleteFromVariations()
+    public function testDeleteFromVariations(): void
     {
         $ids = [9001, 9002, 9003];
 
@@ -314,7 +314,7 @@ class ConditionUndertakingTest extends RepositoryTestCase
         $qb->shouldReceive('getQuery->getResult')->once()->andReturn([$mockEnt, $mockEnt2, $mockEnt3]);
         $this->sut
             ->shouldReceive('delete')
-            ->with(m::any([$mockEnt, $mockEnt2, $mockEnt3]))
+            ->with(m::any())
             ->times(3);
 
         static::assertEquals(3, $this->sut->deleteFromVariations($ids));

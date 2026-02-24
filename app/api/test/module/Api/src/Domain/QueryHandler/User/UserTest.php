@@ -185,7 +185,7 @@ class UserTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryThrowsIncorrectPermissionException()
+    public function testHandleQueryThrowsIncorrectPermissionException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 

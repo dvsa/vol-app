@@ -10,6 +10,7 @@ class TransXChangeConsumerSQSQueueCommand extends AbstractSQSCommand
 {
     protected static $defaultName = 'queue:transxchange-consumer';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Processes TransXChange queue items.')
@@ -17,11 +18,13 @@ class TransXChangeConsumerSQSQueueCommand extends AbstractSQSCommand
         parent::configure();
     }
 
+    #[\Override]
     protected function getCommandDto()
     {
         return TransXChangeConsumer::create([]);
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CreateTrailerTest.php
  *
@@ -35,7 +37,7 @@ class CreateGracePeriodTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'startDate' => '2015-01-01',

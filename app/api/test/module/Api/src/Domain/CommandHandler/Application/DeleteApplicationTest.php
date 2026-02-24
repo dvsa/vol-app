@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
@@ -24,12 +26,13 @@ class DeleteApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         parent::initReferences();
     }
 
-    public function testHandleCommandNotVariation()
+    public function testHandleCommandNotVariation(): void
     {
         $data = [
             'id' => 52,
@@ -46,10 +49,8 @@ class DeleteApplicationTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider dpTestHandleCommandWrongStatus
-     */
-    public function testHandleCommandWrongStatus($status)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommandWrongStatus')]
+    public function testHandleCommandWrongStatus(mixed $status): void
     {
         $data = [
             'id' => 52,
@@ -67,7 +68,7 @@ class DeleteApplicationTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpTestHandleCommandWrongStatus()
+    public static function dpTestHandleCommandWrongStatus(): array
     {
         return [
             [Application::APPLICATION_STATUS_CURTAILED],
@@ -79,7 +80,7 @@ class DeleteApplicationTest extends AbstractCommandHandlerTestCase
             [Application::APPLICATION_STATUS_WITHDRAWN],
         ];
     }
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 52,

@@ -19,6 +19,7 @@ class Stlcompanyorpartnerparagraph extends AbstractLicenceType
      *
      * @return Qry
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         $queryClass = static::QUERY_CLASS;
@@ -30,6 +31,7 @@ class Stlcompanyorpartnerparagraph extends AbstractLicenceType
      *
      * @return null|string
      */
+    #[\Override]
     public function render()
     {
         $organisationTypeId = $this->data['organisation']['type']['id'];

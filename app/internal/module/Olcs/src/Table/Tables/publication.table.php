@@ -73,7 +73,7 @@ return [
         [
             'title' => 'Text',
             'formatter' => function ($data) {
-                $string = nl2br($data['text1']) . '<br />' . $data['text2'];
+                $string = nl2br((string) $data['text1']) . '<br />' . $data['text2'];
                 if (strlen($string) > 100) {
                     return substr($string, 0, 100) . ' [...]';
                 }

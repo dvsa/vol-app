@@ -33,8 +33,6 @@ class DiscsController extends Lva\AbstractDiscsController implements VariationCo
     protected $lva = 'variation';
     protected string $location = 'internal';
 
-    protected StringHelperService $stringHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -55,12 +53,10 @@ class DiscsController extends Lva\AbstractDiscsController implements VariationCo
         FormServiceManager $formServiceManager,
         TableFactory $tableFactory,
         GuidanceHelperService $guidanceHelper,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         ScriptFactory $scriptFactory,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

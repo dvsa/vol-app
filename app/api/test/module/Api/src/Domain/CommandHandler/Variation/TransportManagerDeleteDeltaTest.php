@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * TransportManagerDeleteDeltaTest
  *
@@ -32,7 +34,7 @@ class TransportManagerDeleteDeltaTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandInvalidLicence()
+    public function testHandleCommandInvalidLicence(): void
     {
         $command = Command::create(['id' => 863, 'transportManagerLicenceIds' => [345,7621]]);
 
@@ -50,7 +52,7 @@ class TransportManagerDeleteDeltaTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Command::create(['id' => 863, 'transportManagerLicenceIds' => [345,7621]]);
 
@@ -103,7 +105,7 @@ class TransportManagerDeleteDeltaTest extends AbstractCommandHandlerTestCase
     /**
      * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
-    protected function getLicence($id = null)
+    protected function getLicence(mixed $id = null): mixed
     {
         $organisation = new \Dvsa\Olcs\Api\Entity\Organisation\Organisation();
         $status = new \Dvsa\Olcs\Api\Entity\System\RefData();
@@ -116,7 +118,7 @@ class TransportManagerDeleteDeltaTest extends AbstractCommandHandlerTestCase
     /**
      * @return \Dvsa\Olcs\Api\Entity\Application\Application
      */
-    protected function getApplication($licence = null)
+    protected function getApplication(mixed $licence = null): mixed
     {
         if ($licence === null) {
             $licence = $this->getLicence();

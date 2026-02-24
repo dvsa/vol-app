@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Entity\System\RefData;
@@ -10,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 class AuthorisedVehiclesTest extends MockeryTestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new AuthorisedVehicles();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -19,10 +21,8 @@ class AuthorisedVehiclesTest extends MockeryTestCase
         $this->assertEquals(123, $query->getId());
     }
 
-    /**
-     * @dataProvider dpRender
-     */
-    public function testRender($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRender')]
+    public function testRender(mixed $data, mixed $expected): void
     {
         $bookmark = m::mock(AuthorisedVehicles::class)->makePartial();
         $bookmark->shouldReceive('translate')
@@ -38,7 +38,7 @@ class AuthorisedVehiclesTest extends MockeryTestCase
         );
     }
 
-    public function dpRender()
+    public static function dpRender(): array
     {
         return [
             'mixed' => [

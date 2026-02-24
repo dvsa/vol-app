@@ -38,6 +38,7 @@ class CpmsIdentityProvider implements IdentityProviderInterface
     /**
      * @return string
      */
+    #[\Override]
     public function getUserId(): string
     {
         return $this->userId;
@@ -51,6 +52,7 @@ class CpmsIdentityProvider implements IdentityProviderInterface
     /**
      * @return string
      */
+    #[\Override]
     public function getClientId(): string
     {
         return $this->clientId;
@@ -64,6 +66,7 @@ class CpmsIdentityProvider implements IdentityProviderInterface
     /**
      * @return string
      */
+    #[\Override]
     public function getClientSecret(): string
     {
         return $this->clientSecret;
@@ -80,6 +83,7 @@ class CpmsIdentityProvider implements IdentityProviderInterface
     /**
      * @return null|string
      */
+    #[\Override]
     public function getCustomerReference(): ?string
     {
         return $this->customerReference;
@@ -93,6 +97,7 @@ class CpmsIdentityProvider implements IdentityProviderInterface
     /**
      * @return string
      */
+    #[\Override]
     public function getCostCentre(): string
     {
         return $this->costCentre;

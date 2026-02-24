@@ -15,10 +15,11 @@ final class Create extends AbstractCommandHandler
 {
     protected $repoServiceName = 'LetterTestData';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var Cmd $command */
-        
+
         $letterTestData = new LetterTestDataEntity();
         $letterTestData->setName($command->getName());
         $letterTestData->setJson($command->getJson());
@@ -27,7 +28,7 @@ final class Create extends AbstractCommandHandler
 
         $this->result->addId('letterTestData', $letterTestData->getId());
         $this->result->addMessage("Letter test data '{$letterTestData->getName()}' created");
-        
+
         return $this->result;
     }
 }

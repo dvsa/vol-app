@@ -16,6 +16,7 @@ class LetterIssue implements MapperInterface
      * @param array $data Data from query
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data): array
     {
         // Get data from the current version if it exists
@@ -26,18 +27,10 @@ class LetterIssue implements MapperInterface
                 'id' => $data['id'] ?? null,
                 'issueKey' => $currentVersion['issueKey'] ?? $data['issueKey'] ?? null,
                 'heading' => $currentVersion['heading'] ?? $data['heading'] ?? null,
-                'category' => isset($currentVersion['category']['id'])
-                    ? $currentVersion['category']['id']
-                    : (isset($data['category']['id']) ? $data['category']['id'] : null),
-                'subCategory' => isset($currentVersion['subCategory']['id'])
-                    ? $currentVersion['subCategory']['id']
-                    : (isset($data['subCategory']['id']) ? $data['subCategory']['id'] : null),
-                'goodsOrPsv' => isset($currentVersion['goodsOrPsv']['id'])
-                    ? $currentVersion['goodsOrPsv']['id']
-                    : (isset($data['goodsOrPsv']['id']) ? $data['goodsOrPsv']['id'] : null),
-                'letterIssueType' => isset($currentVersion['letterIssueType']['id'])
-                    ? $currentVersion['letterIssueType']['id']
-                    : (isset($data['letterIssueType']['id']) ? $data['letterIssueType']['id'] : null),
+                'category' => $currentVersion['category']['id'] ?? $data['category']['id'] ?? null,
+                'subCategory' => $currentVersion['subCategory']['id'] ?? $data['subCategory']['id'] ?? null,
+                'goodsOrPsv' => $currentVersion['goodsOrPsv']['id'] ?? $data['goodsOrPsv']['id'] ?? null,
+                'letterIssueType' => $currentVersion['letterIssueType']['id'] ?? $data['letterIssueType']['id'] ?? null,
                 'defaultBodyContent' => $currentVersion['defaultBodyContent'] ?? $data['defaultBodyContent'] ?? null,
                 'isNi' => $currentVersion['isNi'] ?? $data['isNi'] ?? false,
                 'requiresInput' => $currentVersion['requiresInput'] ?? $data['requiresInput'] ?? false,

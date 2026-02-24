@@ -269,6 +269,7 @@ class Cases extends AbstractCases implements
     /**
      * Close the case
      */
+    #[\Override]
     public function close()
     {
         $errors = $this->generateCloseableValidationErrors();
@@ -317,6 +318,7 @@ class Cases extends AbstractCases implements
     /**
      * Reopen the case
      */
+    #[\Override]
     public function reopen()
     {
         if (!$this->canReopen()) {
@@ -331,6 +333,7 @@ class Cases extends AbstractCases implements
      *
      * @return bool
      */
+    #[\Override]
     public function canClose()
     {
         if ($this->getOutcomes()->isEmpty()) {
@@ -345,6 +348,7 @@ class Cases extends AbstractCases implements
      *
      * return bool
      */
+    #[\Override]
     public function isClosed()
     {
         return (bool) $this->closedDate != null;
@@ -355,6 +359,7 @@ class Cases extends AbstractCases implements
      *
      * @return bool
      */
+    #[\Override]
     public function canReopen()
     {
         return $this->isClosed();
@@ -433,6 +438,7 @@ class Cases extends AbstractCases implements
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedBundleValues()
     {
         return [
@@ -464,6 +470,7 @@ class Cases extends AbstractCases implements
         );
     }
 
+    #[\Override]
     public function getContextValue()
     {
         return $this->getId();
@@ -493,6 +500,7 @@ class Cases extends AbstractCases implements
      *
      * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation|\Dvsa\Olcs\Api\Entity\Organisation\Organisation[]|null
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         if ($this->getApplication()) {

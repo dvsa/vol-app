@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Variation;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -29,33 +31,33 @@ class DeleteVariationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testThatCommandIsTransactional()
+    public function testThatCommandIsTransactional(): void
     {
         $this->assertInstanceOf(TransactionedInterface::class, $this->sut);
     }
 
-    public function testThatApplicationsAreRejected()
+    public function testThatApplicationsAreRejected(): void
     {
         $this->createMockApplication(false, null);
         $this->expectBadVariationTypeException("Applications can not be deleted");
         $this->sut->handleCommand(DeleteVariation::create(['id' => 'DUMMY_APPLICATION_ID']));
     }
 
-    public function testThatStandardVariationsAreRejected()
+    public function testThatStandardVariationsAreRejected(): void
     {
         $this->createMockApplication(true, null);
         $this->expectBadVariationTypeException("Standard variations can not be deleted");
         $this->sut->handleCommand(DeleteVariation::create(['id' => 'DUMMY_APPLICATION_ID']));
     }
 
-    public function testThatOtherVariationTypesAreRejected()
+    public function testThatOtherVariationTypesAreRejected(): void
     {
         $this->createMockApplication(true, 'vtyp_foo');
         $this->expectBadVariationTypeException("Variations of type 'vtyp_foo' can not be deleted");
         $this->sut->handleCommand(DeleteVariation::create(['id' => 'DUMMY_APPLICATION_ID']));
     }
 
-    public function testThatDirectorChangeVariationsAreDeleted()
+    public function testThatDirectorChangeVariationsAreDeleted(): void
     {
         $application = $this->createMockApplication(true, Application::VARIATION_TYPE_DIRECTOR_CHANGE);
 
@@ -73,7 +75,7 @@ class DeleteVariationTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    private function createMockApplication($isVariation, $variationType)
+    private function createMockApplication(mixed $isVariation, mixed $variationType): mixed
     {
         /** @var Application|m\Mock $application */
         $application = m::mock(Application::class)->makePartial();
@@ -88,24 +90,24 @@ class DeleteVariationTest extends AbstractCommandHandlerTestCase
         return $application;
     }
 
-    private function createMockApplicationOrganisationPerson($personId)
+    private function createMockApplicationOrganisationPerson(mixed $personId): m\MockInterface
     {
         return m::mock(ApplicationOrganisationPerson::class)->shouldReceive('getPerson')->with()->andReturn(
             m::mock(Person::class)->shouldReceive('getId')->with()->andReturn($personId)->getMock()
         )->getMock();
     }
 
-    private function createMockDocument($documentId)
+    private function createMockDocument(mixed $documentId): m\MockInterface
     {
         return m::mock(Document::class)->shouldReceive('getId')->with()->andReturn($documentId)->getMock();
     }
 
-    private function createMockConviction($convictionId)
+    private function createMockConviction(mixed $convictionId): m\MockInterface
     {
         return m::mock(PreviousConviction::class)->shouldReceive('getId')->with()->andReturn($convictionId)->getMock();
     }
 
-    private function expectDeletePersons(m\MockInterface $application)
+    private function expectDeletePersons(m\MockInterface $application): void
     {
         $application->shouldReceive('getApplicationOrganisationPersons')->with()->andReturn(
             [
@@ -121,7 +123,7 @@ class DeleteVariationTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    private function expectDeleteDocuments(m\MockInterface $application)
+    private function expectDeleteDocuments(m\MockInterface $application): void
     {
         $application->shouldReceive('getDocuments')->with()->andReturn(
             [$this->createMockDocument('DUMMY_DOCUMENT_ID_1'), $this->createMockDocument('DUMMY_DOCUMENT_ID_2')]
@@ -134,7 +136,7 @@ class DeleteVariationTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    private function expectDeletePreviousConvictions(m\MockInterface $application)
+    private function expectDeletePreviousConvictions(m\MockInterface $application): void
     {
         $application->shouldReceive('getPreviousConvictions')->with()->andReturn(
             [$this->createMockConviction('DUMMY_CONVICTION_ID_1'), $this->createMockConviction('DUMMY_CONVICTION_ID_2')]
@@ -147,12 +149,12 @@ class DeleteVariationTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    private function expectDeleteApplication(Application $application)
+    private function expectDeleteApplication(Application $application): void
     {
         $this->repoMap['Application']->shouldReceive('delete')->once()->with($application);
     }
 
-    private function assertResult(Result $result, $data)
+    private function assertResult(Result $result, mixed $data): void
     {
         $this->assertSame($data, $result->toArray());
     }
@@ -160,7 +162,7 @@ class DeleteVariationTest extends AbstractCommandHandlerTestCase
     /**
      * @param string $message
      */
-    private function expectBadVariationTypeException($message)
+    private function expectBadVariationTypeException(mixed $message): void
     {
         $this->expectException(BadVariationTypeException::class);
         $this->expectExceptionMessage($message);

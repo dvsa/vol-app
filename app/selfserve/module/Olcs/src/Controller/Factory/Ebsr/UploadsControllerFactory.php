@@ -18,6 +18,7 @@ class UploadsControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return UploadsController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): UploadsController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

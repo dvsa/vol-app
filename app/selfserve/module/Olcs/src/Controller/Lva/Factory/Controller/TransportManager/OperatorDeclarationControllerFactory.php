@@ -21,6 +21,7 @@ class OperatorDeclarationControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return OperatorDeclarationController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OperatorDeclarationController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

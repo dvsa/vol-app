@@ -22,6 +22,7 @@ class SafetyControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return SafetyController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SafetyController
     {
 

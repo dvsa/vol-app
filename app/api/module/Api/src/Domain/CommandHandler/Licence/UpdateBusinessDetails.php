@@ -32,6 +32,7 @@ class UpdateBusinessDetails extends AbstractCommandHandler implements AuthAwareI
      *
      * @return DomainCmd\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $updateResult = $this->handleSideEffect(

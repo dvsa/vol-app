@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -72,7 +74,7 @@ class AssignedToListTest extends AbstractListDataServiceTestCase
         'team' => 1
     ];
 
-    public function mockTransferAnnotationBuilder()
+    public function mockTransferAnnotationBuilder(): void
     {
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->twice()
@@ -91,7 +93,7 @@ class AssignedToListTest extends AbstractListDataServiceTestCase
             );
     }
 
-    public function mockTransferAnnotationBuilderForEmptyUserList()
+    public function mockTransferAnnotationBuilderForEmptyUserList(): void
     {
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->once()
@@ -106,7 +108,7 @@ class AssignedToListTest extends AbstractListDataServiceTestCase
             );
     }
 
-    public function mockUserListResponse()
+    public function mockUserListResponse(): m\MockInterface
     {
         $mockUserListResponse = m::mock()
             ->shouldReceive('isOk')
@@ -119,7 +121,7 @@ class AssignedToListTest extends AbstractListDataServiceTestCase
         return $mockUserListResponse;
     }
 
-    public function mockUserListResponseEmpty()
+    public function mockUserListResponseEmpty(): m\MockInterface
     {
         $mockUserListResponse = m::mock()
             ->shouldReceive('isOk')
@@ -135,7 +137,7 @@ class AssignedToListTest extends AbstractListDataServiceTestCase
     /**
      * @return mixed
      */
-    public function mockCurrentUserResponse()
+    public function mockCurrentUserResponse(): m\MockInterface
     {
         $mockCurrentUserResponse = m::mock()
             ->shouldReceive('isOk')
@@ -147,7 +149,7 @@ class AssignedToListTest extends AbstractListDataServiceTestCase
         return $mockCurrentUserResponse;
     }
 
-    public function mockCurrentUserResponseIsOkFalse()
+    public function mockCurrentUserResponseIsOkFalse(): m\MockInterface
     {
         $mockCurrentUserResponseIsOkFalse = m::mock()
             ->shouldReceive('isOk')
@@ -161,7 +163,7 @@ class AssignedToListTest extends AbstractListDataServiceTestCase
     /**
      * test FetchListOptions using groups
      */
-    public function testFetchListOptions()
+    public function testFetchListOptions(): void
     {
         $this->mockTransferAnnotationBuilder();
 
@@ -193,7 +195,7 @@ class AssignedToListTest extends AbstractListDataServiceTestCase
     /**
      * test FetchListOptions using groups
      */
-    public function testFetchListOptionsEmptyUsers()
+    public function testFetchListOptionsEmptyUsers(): void
     {
         $this->mockTransferAnnotationBuilderForEmptyUserList();
 
@@ -214,7 +216,7 @@ class AssignedToListTest extends AbstractListDataServiceTestCase
     /**
      * test FetchListOptions using groups
      */
-    public function testFetchListOptionsWithGroups()
+    public function testFetchListOptionsWithGroups(): void
     {
         $this->mockTransferAnnotationBuilder();
 
@@ -261,7 +263,7 @@ class AssignedToListTest extends AbstractListDataServiceTestCase
     /**
      * test FetchListOptions using groups
      */
-    public function testFetchListOptionsWithExceptionOnGetCurrentUser()
+    public function testFetchListOptionsWithExceptionOnGetCurrentUser(): void
     {
         $this->mockTransferAnnotationBuilder();
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Traits;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -15,27 +17,27 @@ class DeleteContactDetailsAndAddressTraitStub extends AbstractCommandHandler
      * @param CommandInterface $command
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
-    public function handleCommand(CommandInterface $command)
+    public function handleCommand(CommandInterface $command): Result
     {
         return new Result();
     }
 
-    public function getExtraRepos()
+    public function getExtraRepos(): mixed
     {
         return $this->extraRepos;
     }
 
-    public function setExtraRepos($extraRepos)
+    public function setExtraRepos(mixed $extraRepos): void
     {
         $this->extraRepos = $extraRepos;
     }
 
-    public function maybeDeleteContactDetailsAndAddressStub($contactDetails)
+    public function maybeDeleteContactDetailsAndAddressStub(mixed $contactDetails): void
     {
         $this->maybeDeleteContactDetailsAndAddress($contactDetails);
     }
 
-    public function injectReposStub()
+    public function injectReposStub(): void
     {
         $this->injectRepos();
     }

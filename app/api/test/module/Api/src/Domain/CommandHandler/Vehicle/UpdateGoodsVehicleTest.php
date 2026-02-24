@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Vehicle;
 
 use Doctrine\ORM\Query;
@@ -33,7 +35,8 @@ class UpdateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -42,7 +45,7 @@ class UpdateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandAttemptToUpdateRemovalDate()
+    public function testHandleCommandAttemptToUpdateRemovalDate(): void
     {
         $this->expectException(ForbiddenException::class);
 
@@ -58,7 +61,7 @@ class UpdateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandAttemptToUpdateRemovalDateOnActiveRecord()
+    public function testHandleCommandAttemptToUpdateRemovalDateOnActiveRecord(): void
     {
         $this->expectException(BadRequestException::class);
 
@@ -82,7 +85,7 @@ class UpdateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandAttemptToUpdateRemovedRecord()
+    public function testHandleCommandAttemptToUpdateRemovedRecord(): void
     {
         $this->expectException(BadRequestException::class);
 
@@ -107,7 +110,7 @@ class UpdateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'platedWeight' => 100,
@@ -156,7 +159,7 @@ class UpdateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->assertNull($licenceVehicle->getWarningLetterSeedDate());
     }
 
-    public function testHandleCommandUpdateSeedDates()
+    public function testHandleCommandUpdateSeedDates(): void
     {
         $data = [
             'platedWeight' => 100,
@@ -207,7 +210,7 @@ class UpdateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('2016-01-01', $licenceVehicle->getWarningLetterSentDate()->format('Y-m-d'));
     }
 
-    public function testHandleCommandUpdateRemoved()
+    public function testHandleCommandUpdateRemoved(): void
     {
         $data = [
             'removalDate' => '2015-01-01',

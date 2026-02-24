@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CreateTest
  *
@@ -31,7 +33,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class => [
@@ -45,7 +48,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandTma()
+    public function testHandleCommandTma(): void
     {
         $command = Command::create(
             [
@@ -110,7 +113,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Tm Employment ID 648 created'], $response->getMessages());
     }
 
-    public function testHandleCommandTm()
+    public function testHandleCommandTm(): void
     {
         $command = Command::create(
             [
@@ -173,7 +176,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Tm Employment ID 648 created'], $response->getMessages());
     }
 
-    public function testHandleCommandMissingTmAndTma()
+    public function testHandleCommandMissingTmAndTma(): void
     {
         $command = Command::create(
             [

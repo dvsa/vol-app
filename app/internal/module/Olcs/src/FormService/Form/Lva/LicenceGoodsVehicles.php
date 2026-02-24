@@ -22,6 +22,7 @@ class LicenceGoodsVehicles extends \Common\FormService\Form\Lva\LicenceGoodsVehi
         parent::__construct($formHelper, $authService, $formServiceLocator);
     }
 
+    #[\Override]
     protected function alterForm($form)
     {
         parent::alterForm($form);

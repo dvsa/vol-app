@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTemplate implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTemplate implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -195,7 +195,8 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -218,7 +219,8 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
     /**
      * Get the template test data
      *
-     * @return \Dvsa\Olcs\Api\Entity\Template\TemplateTestData     */
+     * @return \Dvsa\Olcs\Api\Entity\Template\TemplateTestData
+     */
     public function getTemplateTestData()
     {
         return $this->templateTestData;
@@ -241,7 +243,8 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
     /**
      * Get the category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\Category     */
+     * @return \Dvsa\Olcs\Api\Entity\System\Category
+     */
     public function getCategory()
     {
         return $this->category;
@@ -264,7 +267,8 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -287,7 +291,8 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -310,7 +315,8 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
     /**
      * Get the category name
      *
-     * @return string     */
+     * @return string
+     */
     public function getCategoryName()
     {
         return $this->categoryName;
@@ -333,7 +339,8 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
     /**
      * Get the locale
      *
-     * @return string     */
+     * @return string
+     */
     public function getLocale()
     {
         return $this->locale;
@@ -356,7 +363,8 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
     /**
      * Get the format
      *
-     * @return string     */
+     * @return string
+     */
     public function getFormat()
     {
         return $this->format;
@@ -379,7 +387,8 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
     /**
      * Get the name
      *
-     * @return string     */
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -402,7 +411,8 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -425,7 +435,8 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
     /**
      * Get the source
      *
-     * @return string     */
+     * @return string
+     */
     public function getSource()
     {
         return $this->source;
@@ -448,7 +459,8 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -457,6 +469,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

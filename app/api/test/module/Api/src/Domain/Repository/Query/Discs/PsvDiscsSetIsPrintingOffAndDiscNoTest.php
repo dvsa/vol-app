@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * PSV Discs Set Is Printing Off and Disc No Test
  *
@@ -48,7 +50,7 @@ class PsvDiscsSetIsPrintingOffAndDiscNoTest extends AbstractDbQueryTestCase
         ],
     ];
 
-    public function paramProvider()
+    public static function paramProvider(): array
     {
         $today = new DateTime();
         return [
@@ -68,12 +70,12 @@ class PsvDiscsSetIsPrintingOffAndDiscNoTest extends AbstractDbQueryTestCase
         ];
     }
 
-    protected function getSut()
+    protected function getSut(): PsvDiscsSetIsPrintingOffAndDiscNo
     {
         return new PsvDiscsSetIsPrintingOffAndDiscNo();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return 'UPDATE psv_disc pd '
         . 'SET pd.is_printing = 0, '

@@ -23,7 +23,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
  */
 final class PrintIrfoPsvAuthChecklist extends AbstractCommandHandler implements TransactionedInterface
 {
-    public const MAX_IDS_COUNT = 100;
+    public const int MAX_IDS_COUNT = 100;
 
     protected $repoServiceName = 'IrfoPsvAuth';
 
@@ -34,6 +34,7 @@ final class PrintIrfoPsvAuthChecklist extends AbstractCommandHandler implements 
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $ids = $command->getIds();

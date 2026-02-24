@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * EndIrhpApplicationsTest
  *
@@ -38,10 +40,8 @@ class EndIrhpApplicationsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
-    public function testHandleCommand($withdrawReason)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
+    public function testHandleCommand(mixed $withdrawReason): void
     {
         $licenceId = 52;
 
@@ -123,7 +123,7 @@ class EndIrhpApplicationsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand(): array
     {
         return [
             [WithdrawableInterface::WITHDRAWN_REASON_BY_USER],

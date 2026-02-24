@@ -25,6 +25,7 @@ class PermitUsageAnswerSaver implements AnswerSaverInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function save(QaContext $qaContext, array $postData)
     {
         $newAnswer = $this->genericAnswerFetcher->fetch(

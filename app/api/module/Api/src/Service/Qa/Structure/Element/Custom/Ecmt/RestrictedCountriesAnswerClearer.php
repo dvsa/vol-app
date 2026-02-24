@@ -23,6 +23,7 @@ class RestrictedCountriesAnswerClearer implements AnswerClearerInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function clear(QaContext $qaContext)
     {
         $this->genericAnswerClearer->clear($qaContext);

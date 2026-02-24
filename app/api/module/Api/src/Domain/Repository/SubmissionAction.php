@@ -20,6 +20,7 @@ class SubmissionAction extends AbstractRepository
      * @param QueryBuilder $qb
      * @param int          $id
      */
+    #[\Override]
     protected function buildDefaultQuery(QueryBuilder $qb, $id)
     {
         parent::buildDefaultQuery($qb, $id);

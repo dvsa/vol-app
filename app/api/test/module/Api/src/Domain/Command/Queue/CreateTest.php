@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Queue Create command test
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\Queue\Create;
  */
 class CreateTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $params = [
             'type' => 'foo',

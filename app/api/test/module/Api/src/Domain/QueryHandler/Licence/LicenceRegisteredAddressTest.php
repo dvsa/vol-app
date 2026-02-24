@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LicenceRegisteredAddress Test
  */
@@ -26,7 +28,7 @@ class LicenceRegisteredAddressTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $licNo = 'licNo';
 

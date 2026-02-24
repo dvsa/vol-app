@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermitWindow;
 
 use Dvsa\Olcs\Api\Entity\System\RefData;
@@ -32,7 +34,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
     }
 
     // Happy Path
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $cmdData = [
             'id' => 1,
@@ -116,7 +118,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
     /**
      * Test for ended Window - no values are asserted as this tests to ensure that a validation exception is thrown.
      */
-    public function testHandleWindowEnd()
+    public function testHandleWindowEnd(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
         $this->expectExceptionMessage('Windows which have ended cannot be edited');
@@ -149,7 +151,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
      * Test to prevent editing the start date of an active window - no values are asserted as this tests to ensure that
      * a validation exception is thrown.
      */
-    public function testIsActiveEditStartDate()
+    public function testIsActiveEditStartDate(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
         $this->expectExceptionMessage('It is not permitted to edit the start date of an Active Window');
@@ -190,7 +192,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
      * Test to prevent editing the end date of an active window to before todays date - no values are asserted as this
      * tests to ensure that a validation exception is thrown.
      */
-    public function testIsActivePastEndDate()
+    public function testIsActivePastEndDate(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
         $this->expectExceptionMessage('The end date of an Active Window must be greater than or equal to todays date');
@@ -232,7 +234,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
      * Test for overlapping Windows - no values are asserted as this tests to ensure that a validation exception
      * is thrown.
      */
-    public function testOverlappingWindows()
+    public function testOverlappingWindows(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
         $this->expectExceptionMessage('The dates overlap with another window for this Permit stock');

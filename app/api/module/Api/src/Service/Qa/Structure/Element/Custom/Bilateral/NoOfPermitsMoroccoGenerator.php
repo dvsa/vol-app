@@ -24,6 +24,7 @@ class NoOfPermitsMoroccoGenerator implements ElementGeneratorInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function generate(ElementGeneratorContext $context)
     {
         $irhpPermitApplication = $context->getQaEntity();

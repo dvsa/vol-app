@@ -24,6 +24,7 @@ class TotAuthVehiclesGenerator implements ElementGeneratorInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function generate(ElementGeneratorContext $context)
     {
         $textElement = $this->textGenerator->generate($context);

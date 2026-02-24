@@ -78,6 +78,7 @@ ORDER BY
      *
      * @return array
      */
+    #[\Override]
     protected function getParams()
     {
         return [
@@ -104,6 +105,7 @@ ORDER BY
      *
      * @return array
      */
+    #[\Override]
     protected function getParamTypes()
     {
         return [

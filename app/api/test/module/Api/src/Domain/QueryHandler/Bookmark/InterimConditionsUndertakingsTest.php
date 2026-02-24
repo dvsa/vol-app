@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * InterimConditionsUndertakings Test
  *
@@ -31,7 +33,7 @@ class InterimConditionsUndertakingsTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(
             [

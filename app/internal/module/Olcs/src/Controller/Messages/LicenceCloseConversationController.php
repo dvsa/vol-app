@@ -20,6 +20,7 @@ use Olcs\Form\Model\Form\CloseConversation;
 
 class LicenceCloseConversationController extends AbstractCloseConversationController
 {
+    #[\Override]
     protected function getRedirect(): Response
     {
         $params = [

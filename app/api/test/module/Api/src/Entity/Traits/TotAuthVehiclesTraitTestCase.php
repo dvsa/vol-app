@@ -7,12 +7,10 @@ namespace Dvsa\OlcsTest\Api\Entity\Traits;
 /**
  * @see \Dvsa\Olcs\Api\Entity\Traits\TotAuthVehiclesTrait
  */
-trait TotAuthVehiclesTraitTest
+trait TotAuthVehiclesTraitTestCase
 {
-    /**
-     * @test
-     */
-    public function updateTotAuthHgvVehiclesIsCallable()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function updateTotAuthHgvVehiclesIsCallable(): void
     {
         // Assert
         $this->setUpSut();
@@ -21,11 +19,8 @@ trait TotAuthVehiclesTraitTest
         $this->assertIsCallable([$this->sut, 'updateTotAuthHgvVehicles']);
     }
 
-    /**
-     * @test
-     * @depends updateTotAuthHgvVehiclesIsCallable
-     */
-    public function updateTotAuthHgvVehiclesReturnsSelf()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function updateTotAuthHgvVehiclesReturnsSelf(): void
     {
         // Assert
         $this->setUpSut();
@@ -38,10 +33,7 @@ trait TotAuthVehiclesTraitTest
         $this->assertSame($this->sut, $result);
     }
 
-    /**
-     * @return array
-     */
-    public function validTotAuthHgvVehiclesCountsDataProvider(): array
+    public static function validTotAuthHgvVehiclesCountsDataProvider(): array
     {
         return [
             'zero' => [0],
@@ -50,12 +42,9 @@ trait TotAuthVehiclesTraitTest
         ];
     }
 
-    /**
-     * @test
-     * @depends updateTotAuthHgvVehiclesIsCallable
-     * @dataProvider validTotAuthHgvVehiclesCountsDataProvider
-     */
-    public function updateTotAuthHgvVehiclesSetsTotAuthHgvVehicles(mixed $count)
+    #[\PHPUnit\Framework\Attributes\DataProvider('validTotAuthHgvVehiclesCountsDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function updateTotAuthHgvVehiclesSetsTotAuthHgvVehicles(mixed $count): void
     {
         // Assert
         $this->setUpSut();
@@ -67,10 +56,7 @@ trait TotAuthVehiclesTraitTest
         $this->assertSame($count, $this->sut->getTotAuthHgvVehicles());
     }
 
-    /**
-     * @return array
-     */
-    public function invalidTotAuthHgvVehiclesCountsDataProvider(): array
+    public static function invalidTotAuthHgvVehiclesCountsDataProvider(): array
     {
         return [
             'zero string' => ['0'],
@@ -80,11 +66,8 @@ trait TotAuthVehiclesTraitTest
         ];
     }
 
-    /**
-     * @test
-     * @depends updateTotAuthHgvVehiclesIsCallable
-     */
-    public function updateTotAuthHgvVehiclesSetsTotAuthVehiclesToTheTotalOfLgvsAndHgvs()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function updateTotAuthHgvVehiclesSetsTotAuthVehiclesToTheTotalOfLgvsAndHgvs(): void
     {
         // Assert
         $this->setUpSut();
@@ -99,10 +82,8 @@ trait TotAuthVehiclesTraitTest
         $this->assertSame($expectedNumber, $this->sut->getTotAuthVehicles());
     }
 
-    /**
-     * @test
-     */
-    public function updateTotAuthLgvVehiclesIsCallable()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function updateTotAuthLgvVehiclesIsCallable(): void
     {
         // Assert
         $this->setUpSut();
@@ -111,11 +92,8 @@ trait TotAuthVehiclesTraitTest
         $this->assertIsCallable([$this->sut, 'updateTotAuthLgvVehicles']);
     }
 
-    /**
-     * @test
-     * @depends updateTotAuthLgvVehiclesIsCallable
-     */
-    public function updateTotAuthLgvVehiclesReturnsSelf()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function updateTotAuthLgvVehiclesReturnsSelf(): void
     {
         // Assert
         $this->setUpSut();
@@ -128,10 +106,7 @@ trait TotAuthVehiclesTraitTest
         $this->assertSame($this->sut, $result);
     }
 
-    /**
-     * @return array
-     */
-    public function validTotAuthLgvVehiclesCountsDataProvider(): array
+    public static function validTotAuthLgvVehiclesCountsDataProvider(): array
     {
         return [
             'zero' => [0],
@@ -140,12 +115,9 @@ trait TotAuthVehiclesTraitTest
         ];
     }
 
-    /**
-     * @test
-     * @depends updateTotAuthLgvVehiclesIsCallable
-     * @dataProvider validTotAuthLgvVehiclesCountsDataProvider
-     */
-    public function updateTotAuthLgvVehiclesSetsTotAuthHgvVehicles(mixed $count)
+    #[\PHPUnit\Framework\Attributes\DataProvider('validTotAuthLgvVehiclesCountsDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function updateTotAuthLgvVehiclesSetsTotAuthHgvVehicles(mixed $count): void
     {
         // Assert
         $this->setUpSut();
@@ -157,10 +129,7 @@ trait TotAuthVehiclesTraitTest
         $this->assertSame($count, $this->sut->getTotAuthLgvVehicles());
     }
 
-    /**
-     * @return array
-     */
-    public function invalidTotAuthLgvVehiclesCountsDataProvider(): array
+    public static function invalidTotAuthLgvVehiclesCountsDataProvider(): array
     {
         return [
             'zero string' => ['0'],
@@ -170,11 +139,8 @@ trait TotAuthVehiclesTraitTest
         ];
     }
 
-    /**
-     * @test
-     * @depends updateTotAuthLgvVehiclesIsCallable
-     */
-    public function updateTotAuthLgvVehiclesSetsTotAuthVehiclesToTheTotalOfLgvsAndHgvs()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function updateTotAuthLgvVehiclesSetsTotAuthVehiclesToTheTotalOfLgvsAndHgvs(): void
     {
         // Assert
         $this->setUpSut();

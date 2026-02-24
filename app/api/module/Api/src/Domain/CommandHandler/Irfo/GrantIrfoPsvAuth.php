@@ -33,6 +33,7 @@ final class GrantIrfoPsvAuth extends AbstractCommandHandler implements Transacti
      * @return Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         // common IRFO PSV Auth update

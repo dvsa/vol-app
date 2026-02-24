@@ -26,6 +26,7 @@ final class UpdateIrfoDetails extends AbstractCommandHandler implements Transact
 
     protected $extraRepos = ['ContactDetails', 'IrfoPartner'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $org = $this->getRepo()->fetchUsingId($command, Query::HYDRATE_OBJECT, $command->getVersion());

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Application Business Type Review Service Test
  *
@@ -38,7 +40,7 @@ class ApplicationBusinessTypeReviewServiceTest extends MockeryTestCase
         $this->sut = new ApplicationBusinessTypeReviewService($abstractReviewServiceServices);
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         $data = [
             'licence' => [

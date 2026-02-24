@@ -15,6 +15,7 @@ class Get extends AbstractQueryHandler
 {
     protected $repoServiceName = 'SystemInfoMessage';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->result(

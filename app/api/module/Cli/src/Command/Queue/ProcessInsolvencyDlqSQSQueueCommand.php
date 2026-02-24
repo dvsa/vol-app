@@ -10,6 +10,7 @@ class ProcessInsolvencyDlqSQSQueueCommand extends AbstractSQSCommand
 {
     protected static $defaultName = 'queue:process-insolvency-dlq';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Processes the Process Insolvency DLQ (Dead Letter Queue) items.')
@@ -17,11 +18,13 @@ class ProcessInsolvencyDlqSQSQueueCommand extends AbstractSQSCommand
         parent::configure();
     }
 
+    #[\Override]
     protected function getCommandDto()
     {
         return ProcessInsolvencyDlq::create([]);
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

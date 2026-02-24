@@ -44,6 +44,7 @@ class TemplateController extends AbstractInternalController implements LeftViewP
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel(
@@ -64,6 +65,7 @@ class TemplateController extends AbstractInternalController implements LeftViewP
      *
      * @return array
      */
+    #[\Override]
     protected function modifyListQueryParameters($parameters)
     {
         $parameters['emailTemplateCategory'] = $this->params()->fromQuery('emailTemplateCategory');

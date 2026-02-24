@@ -16,6 +16,7 @@ class CanDeleteDocumentWithId extends AbstractHandler
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canAccessDocument($this->getId($dto)) && $this->canDeleteDocument($this->getId($dto));

@@ -36,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -206,7 +206,8 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -229,7 +230,8 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Get the replaces
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermit     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermit
+     */
     public function getReplaces()
     {
         return $this->replaces;
@@ -252,7 +254,8 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Get the irhp permit range
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange
+     */
     public function getIrhpPermitRange()
     {
         return $this->irhpPermitRange;
@@ -275,7 +278,8 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Get the irhp permit application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
+     */
     public function getIrhpPermitApplication()
     {
         return $this->irhpPermitApplication;
@@ -298,7 +302,8 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Get the irhp candidate permit
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit
+     */
     public function getIrhpCandidatePermit()
     {
         return $this->irhpCandidatePermit;
@@ -321,7 +326,8 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Get the status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getStatus()
     {
         return $this->status;
@@ -344,7 +350,8 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -367,7 +374,8 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -390,7 +398,8 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Get the permit number
      *
-     * @return int     */
+     * @return int
+     */
     public function getPermitNumber()
     {
         return $this->permitNumber;
@@ -415,7 +424,8 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getIssueDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -444,7 +454,8 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getExpiryDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -471,7 +482,8 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Get the permit properties
      *
-     * @return string     */
+     * @return string
+     */
     public function getPermitProperties()
     {
         return $this->permitProperties;
@@ -494,7 +506,8 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -503,6 +516,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

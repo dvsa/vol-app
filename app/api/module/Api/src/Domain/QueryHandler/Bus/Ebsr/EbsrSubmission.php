@@ -24,6 +24,7 @@ class EbsrSubmission extends AbstractQueryHandler
      * @return Result
      * @throws NotFoundException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var EbsrSubmissionRepo $repo */

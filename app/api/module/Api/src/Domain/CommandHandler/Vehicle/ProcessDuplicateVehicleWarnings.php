@@ -24,6 +24,7 @@ final class ProcessDuplicateVehicleWarnings extends AbstractCommandHandler
 {
     protected $repoServiceName = 'LicenceVehicle';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $results = $this->getRepo()->fetchQueuedForWarning();

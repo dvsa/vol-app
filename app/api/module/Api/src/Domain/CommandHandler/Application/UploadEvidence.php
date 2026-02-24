@@ -36,6 +36,7 @@ final class UploadEvidence extends AbstractCommandHandler implements Transaction
      * @throws ValidationException
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Application $application */

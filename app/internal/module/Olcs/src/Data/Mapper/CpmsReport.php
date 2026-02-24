@@ -16,6 +16,7 @@ class CpmsReport implements MapperInterface
      *
      * @param array $data
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         return $data;

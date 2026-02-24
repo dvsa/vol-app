@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
@@ -57,7 +59,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         $this->sut = new SlaException($this->abstractListDataServiceServices);
     }
 
-    public function testFetchListData()
+    public function testFetchListData(): void
     {
         $results = ['results' => $this->sampleData];
 
@@ -86,7 +88,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         $this->assertEquals($this->sampleData, $result);
     }
 
-    public function testFetchListDataWithCaching()
+    public function testFetchListDataWithCaching(): void
     {
         // First call should hit the API
         $results = ['results' => $this->sampleData];
@@ -117,7 +119,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         $this->assertEquals($this->sampleData, $result2);
     }
 
-    public function testFetchListDataApiFailure()
+    public function testFetchListDataApiFailure(): void
     {
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->with(m::type(Qry::class))
@@ -138,7 +140,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         $this->sut->fetchListData();
     }
 
-    public function testFormatDataForGroups()
+    public function testFormatDataForGroups(): void
     {
         $expected = [
             'Standard Processing' => [
@@ -161,7 +163,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testFormatDataForGroupsWithEntities()
+    public function testFormatDataForGroupsWithEntities(): void
     {
         // Test with SLA Exception entity objects
         $entity1 = m::mock(SlaExceptionEntity::class);
@@ -191,7 +193,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testFetchListOptionsWithGroups()
+    public function testFetchListOptionsWithGroups(): void
     {
         $results = ['results' => $this->sampleData];
 
@@ -231,7 +233,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testFetchListOptionsWithoutGroups()
+    public function testFetchListOptionsWithoutGroups(): void
     {
         $results = ['results' => $this->sampleData];
 
@@ -261,7 +263,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testFetchListOptionsEmpty()
+    public function testFetchListOptionsEmpty(): void
     {
         $results = ['results' => []];
 
@@ -285,7 +287,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         $this->assertEquals([], $result);
     }
 
-    public function testFormatData()
+    public function testFormatData(): void
     {
         $expected = [
             1 => 'Standard Processing - Complex Case Extension',
@@ -298,7 +300,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testFormatDataWithEntities()
+    public function testFormatDataWithEntities(): void
     {
         $entity1 = m::mock(SlaExceptionEntity::class);
         $entity1->expects('getId')->andReturn(1);

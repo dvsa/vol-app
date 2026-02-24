@@ -27,6 +27,7 @@ class GetGovUkAccountRedirect extends AbstractCommandHandler
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $stateTokenStr = $this->govUkAccountService->createStateToken($command->getArrayCopy());

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LicenceOperatingCentreTest
  *
@@ -26,7 +28,7 @@ class LicenceOperatingCentreTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchByLicence()
+    public function testFetchByLicence(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
 
@@ -46,7 +48,7 @@ class LicenceOperatingCentreTest extends RepositoryTestCase
         $this->assertSame('RESULT', $this->sut->fetchByLicence(7634));
     }
 
-    public function testFetchByLicenceIdForOperatingCentres()
+    public function testFetchByLicenceIdForOperatingCentres(): void
     {
         $qb = $this->createMockQb('{QUERY}');
         $this->mockCreateQueryBuilder($qb);
@@ -78,7 +80,7 @@ class LicenceOperatingCentreTest extends RepositoryTestCase
         $this->assertEquals($expected, $this->query);
     }
 
-    public function testFetchByLicenceIdForOperatingCentresWithQuery()
+    public function testFetchByLicenceIdForOperatingCentresWithQuery(): void
     {
         $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
         $qb = m::mock(\Doctrine\ORM\QueryBuilder::class);
@@ -124,7 +126,7 @@ class LicenceOperatingCentreTest extends RepositoryTestCase
         $this->assertEquals(['foo' => 'bar'], $sut->fetchByLicenceIdForOperatingCentres(1, $query));
     }
 
-    public function testMaybeRemoveAdrColumn()
+    public function testMaybeRemoveAdrColumn(): void
     {
         $data = [
             [

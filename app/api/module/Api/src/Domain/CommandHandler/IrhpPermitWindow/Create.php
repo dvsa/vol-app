@@ -27,6 +27,7 @@ class Create extends AbstractCommandHandler
      * @return Result
      * @throws ValidationException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         /**

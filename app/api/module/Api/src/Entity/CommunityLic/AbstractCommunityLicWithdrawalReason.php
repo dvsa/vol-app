@@ -39,7 +39,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -153,7 +153,8 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -176,7 +177,8 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
     /**
      * Get the community lic withdrawal
      *
-     * @return \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawal     */
+     * @return \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawal
+     */
     public function getCommunityLicWithdrawal()
     {
         return $this->communityLicWithdrawal;
@@ -199,7 +201,8 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
     /**
      * Get the type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getType()
     {
         return $this->type;
@@ -222,7 +225,8 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -245,7 +249,8 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -268,7 +273,8 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -291,7 +297,8 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -300,6 +307,7 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

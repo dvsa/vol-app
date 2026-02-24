@@ -11,6 +11,7 @@ class CanAccessPreviousConviction extends AbstractCanAccessEntity
 {
     protected $repo = 'PreviousConviction';
 
+    #[\Override]
     public function isValid($entityId)
     {
         /* @var $entity \Dvsa\Olcs\Api\Entity\Application\PreviousConviction */

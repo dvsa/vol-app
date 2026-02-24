@@ -24,6 +24,7 @@ class Input extends LaminasInput
      *
      * @return mixed
      */
+    #[\Override]
     public function getValue()
     {
         if (!$this->hasFiltered) {
@@ -40,6 +41,7 @@ class Input extends LaminasInput
      *
      * @return Input
      */
+    #[\Override]
     public function setValue($value)
     {
         $this->hasFiltered = false;

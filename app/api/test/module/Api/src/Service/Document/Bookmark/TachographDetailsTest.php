@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class TachographDetailsTest extends MockeryTestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new TachographDetails();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -22,7 +24,7 @@ class TachographDetailsTest extends MockeryTestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderWithNoTachographDetails()
+    public function testRenderWithNoTachographDetails(): void
     {
         $bookmark = new TachographDetails();
         $bookmark->setData([]);
@@ -33,7 +35,7 @@ class TachographDetailsTest extends MockeryTestCase
         );
     }
 
-    public function testRenderWithTachographDetails()
+    public function testRenderWithTachographDetails(): void
     {
         $bookmark = m::mock(\Dvsa\Olcs\Api\Service\Document\Bookmark\TachographDetails::class)
             ->makePartial()

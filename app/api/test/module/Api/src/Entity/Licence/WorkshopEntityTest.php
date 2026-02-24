@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Licence;
 
 use Mockery as m;
@@ -22,7 +24,7 @@ class WorkshopEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $licence = m::mock(Licence::class);
         $contactDetails = m::mock(ContactDetails::class);

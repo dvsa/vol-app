@@ -23,7 +23,7 @@ final class RecommendWaive extends AbstractCommandHandler implements Transaction
 {
     use AuthAwareTrait;
 
-    public const WAIVE_REFERENCE = 'WAIVE'; // string to go in transaction.reference
+    public const string WAIVE_REFERENCE = 'WAIVE'; // string to go in transaction.reference
 
     protected $repoServiceName = 'Fee';
 
@@ -35,6 +35,7 @@ final class RecommendWaive extends AbstractCommandHandler implements Transaction
      * @return Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

@@ -28,6 +28,7 @@ final class CreateBusFee extends AbstractCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var BusReg $busReg */

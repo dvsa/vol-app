@@ -38,7 +38,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -160,7 +160,8 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -183,7 +184,8 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
     /**
      * Get the community lic
      *
-     * @return \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic     */
+     * @return \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic
+     */
     public function getCommunityLic()
     {
         return $this->communityLic;
@@ -206,7 +208,8 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -229,7 +232,8 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -254,7 +258,8 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getStartDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -283,7 +288,8 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEndDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -310,7 +316,8 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -333,7 +340,8 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -342,6 +350,7 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

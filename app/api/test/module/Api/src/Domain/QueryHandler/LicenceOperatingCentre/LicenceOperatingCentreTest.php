@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Licence Operating Centre Test
  *
@@ -48,7 +50,7 @@ class LicenceOperatingCentreTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -89,7 +91,7 @@ class LicenceOperatingCentreTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    public function testHandleQueryReadOnly()
+    public function testHandleQueryReadOnly(): void
     {
         $this->expectedBundle = [
             'operatingCentre' => [
@@ -139,7 +141,7 @@ class LicenceOperatingCentreTest extends QueryHandlerTestCase
 
         $this->assertEquals($expected, $result->serialize());
     }
-    protected function setAuthUser($role = null)
+    protected function setAuthUser(mixed $role = null): void
     {
         if (is_null($role)) {
             $role = new ArrayCollection([]);

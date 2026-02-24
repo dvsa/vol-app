@@ -22,6 +22,7 @@ class AnswersSummaryRowsAdder implements AnswersSummaryRowsAdderInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function addRows(AnswersSummary $answersSummary, QaEntityInterface $qaEntity, $isSnapshot)
     {
         $supplementedApplicationSteps = $this->supplementedApplicationStepsProvider->get($qaEntity);

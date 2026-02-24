@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Abstract Update Status Test Case
  *
@@ -61,14 +63,14 @@ abstract class AbstractUpdateStatusTestCase extends AbstractCommandHandlerTestCa
             ->andReturn($this->application);
     }
 
-    protected function expectStatusUnchanged($status)
+    protected function expectStatusUnchanged(mixed $status): void
     {
         $this->commonExpectations($this->section . ' section status is unchanged');
 
         $this->assertEquals($status, $this->applicationCompletion->{'get' . $this->section . 'Status'}());
     }
 
-    protected function expectStatusChange($status)
+    protected function expectStatusChange(mixed $status): void
     {
         $this->repoMap['Application']->shouldReceive('save')
             ->once()
@@ -79,7 +81,7 @@ abstract class AbstractUpdateStatusTestCase extends AbstractCommandHandlerTestCa
         $this->assertEquals($status, $this->applicationCompletion->{'get' . $this->section . 'Status'}());
     }
 
-    protected function commonExpectations($message)
+    protected function commonExpectations(mixed $message): void
     {
         $result = $this->sut->handleCommand($this->command);
 

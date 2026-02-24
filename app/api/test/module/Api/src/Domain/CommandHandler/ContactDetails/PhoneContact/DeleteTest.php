@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\ContactDetails\PhoneContact;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\ContactDetails\PhoneContact\Delete as Handler;
@@ -23,7 +25,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function test()
+    public function test(): void
     {
         $id = 99999;
 

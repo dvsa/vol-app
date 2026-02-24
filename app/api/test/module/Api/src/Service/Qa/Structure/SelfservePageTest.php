@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\ApplicationStep;
@@ -56,7 +58,7 @@ class SelfservePageTest extends MockeryTestCase
         );
     }
 
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $applicationStepRepresentation = ['applicationStepRepresentation'];
 
@@ -83,7 +85,7 @@ class SelfservePageTest extends MockeryTestCase
         );
     }
 
-    public function testGetQuestionText()
+    public function testGetQuestionText(): void
     {
         $this->assertSame(
             $this->questionText,

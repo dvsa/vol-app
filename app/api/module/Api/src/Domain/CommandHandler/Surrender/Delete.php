@@ -16,6 +16,7 @@ final class Delete extends AbstractSurrenderCommandHandler
      * @return Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $id = $command->getId();

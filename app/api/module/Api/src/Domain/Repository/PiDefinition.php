@@ -13,6 +13,7 @@ class PiDefinition extends AbstractRepository
 {
     protected $entity = Entity::class;
 
+    #[\Override]
     protected function applyListFilters(\Doctrine\ORM\QueryBuilder $qb, \Dvsa\Olcs\Transfer\Query\QueryInterface $query)
     {
         if (method_exists($query, 'getIsNi') && !empty($query->getIsNi())) {

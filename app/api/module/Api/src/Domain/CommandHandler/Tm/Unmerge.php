@@ -36,6 +36,7 @@ final class Unmerge extends AbstractCommandHandler implements TransactionedInter
      */
     protected $changes = [];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $tm TransportManager */

@@ -29,6 +29,7 @@ class Generate extends AbstractCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $cacheId = $command->getId();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Transaction;
 
 use Dvsa\Olcs\Api\Domain\Command\Fee\PayFee as PayFeeCmd;
@@ -108,7 +110,7 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandSuccess()
+    public function testHandleCommandSuccess(): void
     {
         // set up data
         $paymentId = 69;
@@ -203,7 +205,7 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandSuccessTotalAmountEqualToGrossAmount()
+    public function testHandleCommandSuccessTotalAmountEqualToGrossAmount(): void
     {
         // set up data
         $paymentId = 69;
@@ -341,10 +343,8 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider irfoDataProfider
-     */
-    public function testHandleCommandSuccessTotalAmountGreaterThenGrossAmount($type)
+    #[\PHPUnit\Framework\Attributes\DataProvider('irfoDataProfider')]
+    public function testHandleCommandSuccessTotalAmountGreaterThenGrossAmount(mixed $type): void
     {
         // set up data
         $paymentId = 69;
@@ -585,7 +585,7 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function irfoDataProfider()
+    public static function irfoDataProfider(): array
     {
         return [
             ['PSV'],
@@ -597,10 +597,9 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
      * @param string $cpmsStatus
      * @param string $expectedPaymentStatus
      * @param string $expectedMessage
-     *
-     * @dataProvider failureStatusProvider
      */
-    public function testHandleCommandFailures($cpmsStatus, $expectedPaymentStatus, $expectedMessage)
+    #[\PHPUnit\Framework\Attributes\DataProvider('failureStatusProvider')]
+    public function testHandleCommandFailures(mixed $cpmsStatus, mixed $expectedPaymentStatus, mixed $expectedMessage): void
     {
         // set up data
         $paymentId = 69;
@@ -669,7 +668,7 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function failureStatusProvider()
+    public static function failureStatusProvider(): array
     {
         return [
             [
@@ -698,10 +697,9 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
     /**
      * @param int    $cpmsStatus
      * @param string $expectedMessage
-     *
-     * @dataProvider otherStatusProvider
      */
-    public function testHandleCommandOtherStatus($cpmsStatus, $expectedMessage)
+    #[\PHPUnit\Framework\Attributes\DataProvider('otherStatusProvider')]
+    public function testHandleCommandOtherStatus(mixed $cpmsStatus, mixed $expectedMessage): void
     {
         // set up data
         $paymentId = 69;
@@ -756,7 +754,7 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function otherStatusProvider()
+    public static function otherStatusProvider(): array
     {
         return [
             [
@@ -790,7 +788,7 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandSuccessPartialPayment()
+    public function testHandleCommandSuccessPartialPayment(): void
     {
         $paymentId = 69;
         $guid = 'OLCS-1234-ABCDE';
@@ -894,7 +892,7 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandResolved()
+    public function testHandleCommandResolved(): void
     {
         $paymentId = 69;
         $data = [

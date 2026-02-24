@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * EndIrhpApplicationsAndPermitsTest
  *
@@ -30,10 +32,8 @@ class EndIrhpApplicationsAndPermitsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
-    public function testHandleCommand($withdrawReason, $context)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
+    public function testHandleCommand(mixed $withdrawReason, mixed $context): void
     {
         $licenceId = 52;
 
@@ -78,7 +78,7 @@ class EndIrhpApplicationsAndPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand(): array
     {
         return [
             [

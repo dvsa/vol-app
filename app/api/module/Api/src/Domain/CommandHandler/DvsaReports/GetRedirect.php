@@ -37,6 +37,7 @@ class GetRedirect extends AbstractCommandHandler implements AuthAwareInterface, 
      * @return Result
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $currentUser = $this->getCurrentUser();

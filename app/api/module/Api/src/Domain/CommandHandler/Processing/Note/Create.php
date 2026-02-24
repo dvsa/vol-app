@@ -21,6 +21,7 @@ final class Create extends CreateUpdateAbstract implements TransactionedInterfac
      * @param CreateCommand $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();
@@ -44,6 +45,7 @@ final class Create extends CreateUpdateAbstract implements TransactionedInterfac
      * @param CommandInterface $command
      * @return Entity\Note\Note
      */
+    #[\Override]
     protected function retrieveEntity(CommandInterface $command)
     {
         return new Entity\Note\Note();

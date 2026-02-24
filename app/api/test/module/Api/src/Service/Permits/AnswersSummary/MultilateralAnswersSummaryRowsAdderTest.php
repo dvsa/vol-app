@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\AnswersSummary;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication as IrhpApplicationEntity;
@@ -18,10 +20,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class MultilateralAnswersSummaryRowsAdderTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpSnapshot
-     */
-    public function testAddRows($isSnapshot)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
+    public function testAddRows(mixed $isSnapshot): void
     {
         $formattedAnswer = 'line 1<br>line 2';
 
@@ -99,7 +99,7 @@ class MultilateralAnswersSummaryRowsAdderTest extends MockeryTestCase
         $multilateralAnswersSummaryRowsAdder->addRows($answersSummary, $irhpApplication, $isSnapshot);
     }
 
-    public function dpSnapshot()
+    public static function dpSnapshot(): array
     {
         return [
             [true],

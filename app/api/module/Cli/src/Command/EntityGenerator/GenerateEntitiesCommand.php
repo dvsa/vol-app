@@ -26,6 +26,7 @@ class GenerateEntitiesCommand extends AbstractOlcsCommand
         parent::__construct($commandHandlerManager);
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this->setDescription(self::$defaultDescription)
@@ -55,6 +56,7 @@ class GenerateEntitiesCommand extends AbstractOlcsCommand
             );
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

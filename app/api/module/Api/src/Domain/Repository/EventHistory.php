@@ -39,6 +39,7 @@ class EventHistory extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if ($query->getCase() !== null) {
@@ -86,6 +87,7 @@ class EventHistory extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         $this->getQueryBuilder()->modifyQuery($qb)
@@ -215,7 +217,6 @@ class EventHistory extends AbstractRepository
                 : null;
 
             if ($newValueDeletedDate !== null) {
-
                 $returnValues = [];
 
                 foreach ($cleanValues[1] as $key => $oldValue) {

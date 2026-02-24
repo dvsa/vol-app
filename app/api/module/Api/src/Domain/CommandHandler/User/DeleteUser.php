@@ -51,6 +51,7 @@ final class DeleteUser extends AbstractCommandHandler implements
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      * @throws \Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->guardAgainstLackOfPermission();

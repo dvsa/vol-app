@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ContinuationReview;
 
 use Mockery as m;
@@ -83,10 +85,8 @@ class GeneratorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider licenceTypeProvider
-     */
-    public function testGenerate($isPsv, $licenceType, $vehicleType, $expectedSections)
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceTypeProvider')]
+    public function testGenerate(mixed $isPsv, mixed $licenceType, mixed $vehicleType, mixed $expectedSections): void
     {
         $mockLicence = $this->setUpLicence($isPsv, $licenceType, $vehicleType);
         $mockContinuationDetail = $this->setUpContinuationDetail($mockLicence);
@@ -109,7 +109,7 @@ class GeneratorTest extends MockeryTestCase
         $this->assertEquals($expected, $params);
     }
 
-    protected function getSections()
+    protected function getSections(): array
     {
         return [
             'type_of_licence' => 'foo' ,
@@ -123,39 +123,31 @@ class GeneratorTest extends MockeryTestCase
         ];
     }
 
-    protected function setUpLicence(bool $isPsv, string $licenceType, string $vehicleType)
+    protected function setUpLicence(bool $isPsv, string $licenceType, string $vehicleType): m\MockInterface
     {
         $isRestricted = $licenceType == Licence::LICENCE_TYPE_RESTRICTED;
 
-        $mockLicence = m::mock(Licence::class)
-            ->shouldReceive('getNiFlag')
-            ->andReturn('N')
-            ->once()
-            ->shouldReceive('getLicenceType')
+        $mockLicence = m::mock(Licence::class);
+        $mockLicence->expects('getNiFlag')->withNoArgs()->andReturn('N');
+        $mockLicence->shouldReceive('getLicenceType')->withNoArgs()
             ->andReturn(
                 m::mock()
                     ->shouldReceive('getId')
                     ->andReturn($licenceType)
                     ->once()
                     ->getMock()
-            )
-            ->once()
-            ->shouldReceive('getVehicleType')
+            );
+        $mockLicence->expects('getVehicleType')->withNoArgs()
             ->andReturn(
                 m::mock()
                     ->shouldReceive('getId')
                     ->andReturn($vehicleType)
                     ->once()
                     ->getMock()
-            )
-            ->once()
-            ->shouldReceive('isRestricted')
-            ->andReturn($isRestricted)
-            ->once()
-            ->shouldReceive('getConditionUndertakings')
-            ->andReturn([])
-            ->once()
-            ->shouldReceive('getOrganisation')
+            );
+        $mockLicence->expects('isRestricted')->withNoArgs()->andReturn($isRestricted);
+        $mockLicence->expects('getConditionUndertakings')->withNoArgs()->andReturn([]);
+        $mockLicence->expects('getOrganisation')->withNoArgs()
             ->andReturn(
                 m::mock()
                     ->shouldReceive('getType')
@@ -172,30 +164,28 @@ class GeneratorTest extends MockeryTestCase
                     ->once()
                     ->getMock()
             )
-            ->twice()
-            ->shouldReceive('getLicNo')
-            ->andReturn('OB123')
-            ->once();
+            ->twice();
+        $mockLicence->expects('getLicNo')->withNoArgs()->andReturn('OB123');
 
         if ($isRestricted) {
-            $mockLicence->shouldReceive('isPsv')
-                ->andReturn($isPsv)
-                ->once();
+            $mockLicence->expects('isPsv')->withNoArgs()->andReturn($isPsv);
         }
 
-        return $mockLicence->getMock();
+        return $mockLicence;
     }
 
-    protected function setUpContinuationDetail($mockLicence)
+    protected function setUpContinuationDetail(mixed $mockLicence): mixed
     {
-        return m::mock(ContinuationDetail::class)
-            ->shouldReceive('getLicence')
+        $continuationDetail = m::mock(ContinuationDetail::class);
+        $continuationDetail->expects('getLicence')
+            ->withNoArgs()
             ->andReturn($mockLicence)
-            ->times(5)
-            ->getMock();
+            ->times(5);
+
+        return $continuationDetail;
     }
 
-    protected function setUpServices($mockLicence, $mockContinuationDetail, $sections)
+    protected function setUpServices(mixed $mockLicence, mixed $mockContinuationDetail, mixed $sections): void
     {
         $this->niTextTranslation
             ->shouldReceive('setLocaleForNiFlag')
@@ -236,7 +226,7 @@ class GeneratorTest extends MockeryTestCase
             );
     }
 
-    public function licenceTypeProvider()
+    public static function licenceTypeProvider(): array
     {
         return [
             'NotPsvAndNotRestricted' => [

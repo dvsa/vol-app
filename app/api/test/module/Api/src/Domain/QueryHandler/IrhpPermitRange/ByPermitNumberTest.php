@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpPermitRange;
 
 use Dvsa\Olcs\Api\Domain\Query\IrhpPermitRange\ByPermitNumber as Query;
@@ -20,7 +22,7 @@ class ByPermitNumberTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $permitStock = 1;
         $permitNumber = 100;

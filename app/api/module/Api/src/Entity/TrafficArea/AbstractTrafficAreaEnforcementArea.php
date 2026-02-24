@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -141,7 +141,8 @@ abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableI
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -164,7 +165,8 @@ abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableI
     /**
      * Get the traffic area
      *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea     */
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     */
     public function getTrafficArea()
     {
         return $this->trafficArea;
@@ -187,7 +189,8 @@ abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableI
     /**
      * Get the enforcement area
      *
-     * @return \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea     */
+     * @return \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea
+     */
     public function getEnforcementArea()
     {
         return $this->enforcementArea;
@@ -210,7 +213,8 @@ abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableI
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -233,7 +237,8 @@ abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableI
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -256,7 +261,8 @@ abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableI
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -265,6 +271,7 @@ abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableI
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

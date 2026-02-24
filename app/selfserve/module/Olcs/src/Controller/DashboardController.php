@@ -87,6 +87,7 @@ class DashboardController extends AbstractController
      *
      * @return ViewModel|\Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         if (

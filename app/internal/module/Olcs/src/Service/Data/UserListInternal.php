@@ -75,6 +75,7 @@ class UserListInternal extends AbstractListDataService
      * @return array
      * @throws DataServiceException
      */
+    #[\Override]
     public function fetchListData($context = null)
     {
         $data = $this->getData('userlist');
@@ -114,6 +115,7 @@ class UserListInternal extends AbstractListDataService
      *
      * @return array
      */
+    #[\Override]
     public function formatData(array $data)
     {
         $optionData = [];
@@ -156,6 +158,7 @@ class UserListInternal extends AbstractListDataService
      *
      * @return array
      */
+    #[\Override]
     public function formatDataForGroups(array $data)
     {
         $optionData = [];

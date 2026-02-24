@@ -1,17 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\View\Helper;
 
 use Psr\Container\ContainerInterface;
 use Olcs\View\Helper\Factory\VersionFactory;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \OLCS\View\Helper\Factory\VersionFactory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\OLCS\View\Helper\Factory\VersionFactory::class)]
 class VersionFactoryTest extends TestCase
 {
-    public function testFactoryWithNoVersionWillReturnNotSpecified()
+    public function testFactoryWithNoVersionWillReturnNotSpecified(): void
     {
         $config = ['application_version' => ''];
         $serviceManager = $this->createMock(ContainerInterface::class);
@@ -23,7 +23,7 @@ class VersionFactoryTest extends TestCase
         $this->assertEquals('Not specified', $version->__invoke());
     }
 
-    public function testFactoryWithInvalidVersionWillReturnNotSpecified()
+    public function testFactoryWithInvalidVersionWillReturnNotSpecified(): void
     {
         $config = ['application_version' => ['number' => '1']];
         $serviceManager = $this->createMock(ContainerInterface::class);
@@ -35,7 +35,7 @@ class VersionFactoryTest extends TestCase
         $this->assertEquals('Not specified', $version->__invoke());
     }
 
-    public function testFactoryWithVersionNumber()
+    public function testFactoryWithVersionNumber(): void
     {
         $config['application_version'] = '1.123.111';
         $config = ['application_version' => '1.123.111'];

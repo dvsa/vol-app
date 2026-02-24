@@ -18,6 +18,7 @@ final class UpdateContinuationDetail extends AbstractCommandHandler implements T
 {
     protected $repoServiceName = 'ContinuationDetail';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         assert($command instanceof UpdateContinuationDetailCmd);

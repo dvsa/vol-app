@@ -14,6 +14,7 @@ class IrhpApplicationViewGenerator implements ViewGeneratorInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTemplateName()
     {
         return 'permits/single-question';
@@ -22,6 +23,7 @@ class IrhpApplicationViewGenerator implements ViewGeneratorInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getAdditionalViewVariables(MvcEvent $mvcEvent, array $result)
     {
         return [
@@ -36,6 +38,7 @@ class IrhpApplicationViewGenerator implements ViewGeneratorInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function handleRedirectionRequest(Redirect $redirect, $destinationName): never
     {
         throw new RuntimeException(self::ERR_NOT_SUPPORTED);

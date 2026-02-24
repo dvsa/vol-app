@@ -39,7 +39,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractPrivateHireLicence implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractPrivateHireLicence implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -162,7 +162,8 @@ abstract class AbstractPrivateHireLicence implements BundleSerializableInterface
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -185,7 +186,8 @@ abstract class AbstractPrivateHireLicence implements BundleSerializableInterface
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -208,7 +210,8 @@ abstract class AbstractPrivateHireLicence implements BundleSerializableInterface
     /**
      * Get the contact details
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     */
     public function getContactDetails()
     {
         return $this->contactDetails;
@@ -231,7 +234,8 @@ abstract class AbstractPrivateHireLicence implements BundleSerializableInterface
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -254,7 +258,8 @@ abstract class AbstractPrivateHireLicence implements BundleSerializableInterface
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -277,7 +282,8 @@ abstract class AbstractPrivateHireLicence implements BundleSerializableInterface
     /**
      * Get the private hire licence no
      *
-     * @return string     */
+     * @return string
+     */
     public function getPrivateHireLicenceNo()
     {
         return $this->privateHireLicenceNo;
@@ -300,7 +306,8 @@ abstract class AbstractPrivateHireLicence implements BundleSerializableInterface
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -323,7 +330,8 @@ abstract class AbstractPrivateHireLicence implements BundleSerializableInterface
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -332,6 +340,7 @@ abstract class AbstractPrivateHireLicence implements BundleSerializableInterface
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

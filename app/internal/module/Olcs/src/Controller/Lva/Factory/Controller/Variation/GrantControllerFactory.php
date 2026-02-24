@@ -21,6 +21,7 @@ class GrantControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return GrantController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): GrantController
     {
 

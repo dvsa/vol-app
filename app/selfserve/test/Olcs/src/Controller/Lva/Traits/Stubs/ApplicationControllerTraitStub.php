@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Lva\Traits\Stubs;
 
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
@@ -16,7 +18,7 @@ class ApplicationControllerTraitStub extends AbstractActionController
 
     protected $lva = 'application';
 
-    public function callRender($title, $form = null, $variables = []): \Laminas\View\Model\ViewModel
+    public function callRender(string|\Laminas\View\Model\ViewModel $title, ?\Common\Form\Form $form = null, array $variables = []): \Laminas\View\Model\ViewModel
     {
         return $this->render($title, $form, $variables);
     }

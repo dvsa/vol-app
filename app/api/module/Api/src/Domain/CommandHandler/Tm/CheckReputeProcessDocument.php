@@ -37,6 +37,7 @@ class CheckReputeProcessDocument extends AbstractCommandHandler
     ) {
     }
 
+    #[\Override]
     public function handleCommand(CommandInterface|CheckReputeProcessDocumentCmd $command)
     {
         /* @var $repo DocumentRepo */

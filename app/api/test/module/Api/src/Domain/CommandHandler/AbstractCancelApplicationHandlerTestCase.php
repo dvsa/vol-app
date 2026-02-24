@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler;
 
 use Dvsa\Olcs\Api\Domain\Command\Fee\CancelFee;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Api\Entity\Fee\Fee;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Mockery as m;
 
-abstract class AbstractCancelApplicationHandlerTest extends AbstractCommandHandlerTestCase
+abstract class AbstractCancelApplicationHandlerTestCase extends AbstractCommandHandlerTestCase
 {
     protected $repoServiceName = 'changeMe';
     protected $entityClass = 'changeMe';
@@ -25,7 +27,8 @@ abstract class AbstractCancelApplicationHandlerTest extends AbstractCommandHandl
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             $this->cancelStatus
@@ -34,7 +37,7 @@ abstract class AbstractCancelApplicationHandlerTest extends AbstractCommandHandl
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $applicationId = 4096;
         $feeId1 = 111;

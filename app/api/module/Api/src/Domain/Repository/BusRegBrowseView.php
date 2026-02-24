@@ -78,6 +78,7 @@ class BusRegBrowseView extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $qb->andWhere($qb->expr()->eq($this->alias . '.acceptedDate', ':byAcceptedDate'))

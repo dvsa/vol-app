@@ -24,6 +24,7 @@ class CanAccessLicence extends AbstractCanAccessEntity
      *
      * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
+    #[\Override]
     protected function getEntity($entityId)
     {
         if (is_numeric($entityId)) {

@@ -24,7 +24,6 @@ class DeclarationsInternalController extends \Olcs\Controller\Lva\AbstractDeclar
 
     protected $lva = 'application';
     protected string $location = 'internal';
-    protected StringHelperService $stringHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -42,12 +41,10 @@ class DeclarationsInternalController extends \Olcs\Controller\Lva\AbstractDeclar
         FormServiceManager $formServiceManager,
         TranslationHelperService $translationHelper,
         FlashMessengerHelperService $flashMessengerHelper,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         protected RestrictionHelperService $restrictionHelper,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,
@@ -65,6 +62,7 @@ class DeclarationsInternalController extends \Olcs\Controller\Lva\AbstractDeclar
      *
      * @return null
      */
+    #[\Override]
     protected function alterFormForLva(Form $form, $data = null)
     {
         // Get signature data from application declaration DTO

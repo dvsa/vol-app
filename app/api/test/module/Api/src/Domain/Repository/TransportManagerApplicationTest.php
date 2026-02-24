@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository;
@@ -8,8 +10,8 @@ use Mockery as m;
 
 /**
  * @author Mat Evans <mat.evans@valtech.co.uk>
- * @covers \Dvsa\Olcs\Api\Domain\Repository\TransportManagerApplication
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\TransportManagerApplication::class)]
 class TransportManagerApplicationTest extends RepositoryTestCase
 {
     public const APP_ID = 9001;
@@ -27,7 +29,7 @@ class TransportManagerApplicationTest extends RepositoryTestCase
         $this->mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
     }
 
-    public function testFetchWithContactDetailsByApplication()
+    public function testFetchWithContactDetailsByApplication(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
 
@@ -58,7 +60,7 @@ class TransportManagerApplicationTest extends RepositoryTestCase
         $this->assertSame('RESULT', $this->sut->fetchWithContactDetailsByApplication(self::APP_ID));
     }
 
-    public function testFetchDetails()
+    public function testFetchDetails(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
 
@@ -88,7 +90,7 @@ class TransportManagerApplicationTest extends RepositoryTestCase
         $this->assertSame('RESULT', $this->sut->fetchDetails(self::APP_ID));
     }
 
-    public function testFetchDetailsEmpty()
+    public function testFetchDetailsEmpty(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
 
@@ -123,7 +125,7 @@ class TransportManagerApplicationTest extends RepositoryTestCase
     /**
      * Mock SUT so that can just test the protected method
      */
-    public function testApplyListJoins()
+    public function testApplyListJoins(): void
     {
         $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $mockQb = m::mock();
@@ -139,7 +141,7 @@ class TransportManagerApplicationTest extends RepositoryTestCase
     /**
      * Mock SUT so that can just test the protected method
      */
-    public function testApplyListFiltersUser()
+    public function testApplyListFiltersUser(): void
     {
         $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $mockDqb->shouldReceive('join')->with('tma.transportManager', 'tm')->once();
@@ -155,7 +157,7 @@ class TransportManagerApplicationTest extends RepositoryTestCase
     /**
      * Mock SUT so that can just test the protected method
      */
-    public function testApplyListFiltersApplication()
+    public function testApplyListFiltersApplication(): void
     {
         $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $mockDqb->shouldReceive('expr->eq')->with('tma.application', ':application')->once()->andReturn('EXPR');
@@ -169,7 +171,7 @@ class TransportManagerApplicationTest extends RepositoryTestCase
     /**
      * Mock SUT so that can just test the protected method
      */
-    public function testApplyListFiltersTransportManager()
+    public function testApplyListFiltersTransportManager(): void
     {
         $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $mockDqb->shouldReceive('expr->eq')->with('tma.transportManager', ':transportManager')->once()
@@ -184,7 +186,7 @@ class TransportManagerApplicationTest extends RepositoryTestCase
     /**
      * Mock SUT so that can just test the protected method
      */
-    public function testApplyListFiltersAppStatuses()
+    public function testApplyListFiltersAppStatuses(): void
     {
         $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $mockDqb->shouldReceive('expr->in')->with('a.status', ':appStatuses')->once()->andReturn('EXPR');
@@ -197,7 +199,7 @@ class TransportManagerApplicationTest extends RepositoryTestCase
         $this->sut->applyListFilters($mockDqb, $query);
     }
 
-    public function testFetchForTransportManager()
+    public function testFetchForTransportManager(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tma')->once()->andReturn($mockQb);
@@ -228,7 +230,7 @@ class TransportManagerApplicationTest extends RepositoryTestCase
         $this->assertEquals(['RESULT'], $this->sut->fetchForTransportManager(1, $statuses));
     }
 
-    public function testFetchByTmAndApplication()
+    public function testFetchByTmAndApplication(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
 
@@ -250,7 +252,7 @@ class TransportManagerApplicationTest extends RepositoryTestCase
         $this->assertEquals('RESULT', $this->sut->fetchByTmAndApplication(1, 2, true));
     }
 
-    public function testFetchForResponsibilities()
+    public function testFetchForResponsibilities(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tma')->once()->andReturn($mockQb);
@@ -270,7 +272,7 @@ class TransportManagerApplicationTest extends RepositoryTestCase
         $this->assertEquals(['RESULT'], $this->sut->fetchForResponsibilities(1));
     }
 
-    public function testApplyListFiltersFilterOrgUser()
+    public function testApplyListFiltersFilterOrgUser(): void
     {
         $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $mockDqb->shouldReceive('join')->with('tma.transportManager', 'tm')->once();
@@ -291,7 +293,7 @@ class TransportManagerApplicationTest extends RepositoryTestCase
         $this->sut->applyListFilters($mockDqb, $query);
     }
 
-    public function testFetchStatByAppId()
+    public function testFetchStatByAppId(): void
     {
         $mockQb = $this->createMockQb('{QUERY}');
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Approve Irfo Gv Permit Test
  */
@@ -30,7 +32,8 @@ class ApproveIrfoGvPermitTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrfoGvPermitEntity::STATUS_APPROVED,
@@ -42,7 +45,7 @@ class ApproveIrfoGvPermitTest extends AbstractCommandHandlerTestCase
     /**
      * testHandleCommand
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 99;
 

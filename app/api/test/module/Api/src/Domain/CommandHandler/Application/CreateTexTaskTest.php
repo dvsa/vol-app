@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Mockery as m;
@@ -28,7 +30,8 @@ class CreateTexTaskTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
         ];
@@ -39,7 +42,7 @@ class CreateTexTaskTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithOooDate()
+    public function testHandleCommandWithOooDate(): void
     {
         $command = \Dvsa\Olcs\Api\Domain\Command\Application\CreateTexTask::create(['id' => 32]);
 
@@ -85,7 +88,7 @@ class CreateTexTaskTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['RESULT'], $result->getMessages());
     }
 
-    public function testHandleCommandWithoutOooDate()
+    public function testHandleCommandWithoutOooDate(): void
     {
         $command = \Dvsa\Olcs\Api\Domain\Command\Application\CreateTexTask::create(['id' => 32]);
 
@@ -131,7 +134,7 @@ class CreateTexTaskTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['RESULT'], $result->getMessages());
     }
 
-    public function testHandleCommandInternal()
+    public function testHandleCommandInternal(): void
     {
         $command = \Dvsa\Olcs\Api\Domain\Command\Application\CreateTexTask::create(['id' => 32]);
 

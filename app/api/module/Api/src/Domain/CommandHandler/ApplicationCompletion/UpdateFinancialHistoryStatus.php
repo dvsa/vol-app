@@ -24,6 +24,7 @@ final class UpdateFinancialHistoryStatus extends AbstractUpdateStatus
      *
      * @return bool
      */
+    #[\Override]
     protected function isSectionValid(Application $application)
     {
         if ($application->getInsolvencyConfirmation() !== 'Y') {

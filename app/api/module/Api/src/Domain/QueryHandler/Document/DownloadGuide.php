@@ -18,6 +18,7 @@ class DownloadGuide extends AbstractDownload
      *
      * @throws NotFoundException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query): Stream
     {
         $this->setIsInline($query->isInline());

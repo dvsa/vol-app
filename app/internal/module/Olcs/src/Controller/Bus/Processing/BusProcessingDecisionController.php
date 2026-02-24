@@ -91,6 +91,7 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -104,6 +105,7 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
      *
      * @return Response
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->redirectTo([]);
@@ -114,6 +116,7 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
      *
      * @return Response
      */
+    #[\Override]
     public function addAction()
     {
         return $this->notFoundAction();
@@ -124,6 +127,7 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
      *
      * @return Response
      */
+    #[\Override]
     public function editAction()
     {
         return $this->notFoundAction();
@@ -134,6 +138,7 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
      *
      * @return Response
      */
+    #[\Override]
     public function deleteAction()
     {
         return $this->notFoundAction();

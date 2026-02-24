@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Licence;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -20,14 +22,14 @@ class TrailerEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testGetRelatedOrganisationWithNoLicence()
+    public function testGetRelatedOrganisationWithNoLicence(): void
     {
         $sut = new Entity();
 
         $this->assertSame(null, $sut->getRelatedOrganisation());
     }
 
-    public function testGetRelatedOrganisation()
+    public function testGetRelatedOrganisation(): void
     {
         $sut = new Entity();
 

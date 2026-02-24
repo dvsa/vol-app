@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Community Licence Test / Licence
  *
@@ -37,7 +39,8 @@ class CreateCommunityLicenceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             CommunityLicEntity::STATUS_ACTIVE
@@ -52,7 +55,7 @@ class CreateCommunityLicenceTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $licenceId = 1;
         $data = [
@@ -143,7 +146,7 @@ class CreateCommunityLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(CommunityLicEntity::STATUS_ACTIVE, $communityLic->getStatus()->getId());
     }
 
-    public function testHandleCommandNotValid()
+    public function testHandleCommandNotValid(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

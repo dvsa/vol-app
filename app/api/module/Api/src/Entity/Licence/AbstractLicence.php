@@ -50,7 +50,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLicence implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLicence implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -754,7 +754,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -777,7 +778,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the enforcement area
      *
-     * @return \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea     */
+     * @return \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea
+     */
     public function getEnforcementArea()
     {
         return $this->enforcementArea;
@@ -800,7 +802,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the organisation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     */
     public function getOrganisation()
     {
         return $this->organisation;
@@ -823,7 +826,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the traffic area
      *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea     */
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     */
     public function getTrafficArea()
     {
         return $this->trafficArea;
@@ -846,7 +850,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the correspondence cd
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     */
     public function getCorrespondenceCd()
     {
         return $this->correspondenceCd;
@@ -869,7 +874,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the establishment cd
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     */
     public function getEstablishmentCd()
     {
         return $this->establishmentCd;
@@ -892,7 +898,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the transport consultant cd
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     */
     public function getTransportConsultantCd()
     {
         return $this->transportConsultantCd;
@@ -915,7 +922,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the goods or psv
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getGoodsOrPsv()
     {
         return $this->goodsOrPsv;
@@ -938,7 +946,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the vehicle type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getVehicleType()
     {
         return $this->vehicleType;
@@ -961,7 +970,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the licence type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getLicenceType()
     {
         return $this->licenceType;
@@ -984,7 +994,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getStatus()
     {
         return $this->status;
@@ -1007,7 +1018,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the tachograph ins
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getTachographIns()
     {
         return $this->tachographIns;
@@ -1030,7 +1042,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -1053,7 +1066,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -1076,7 +1090,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the lic no
      *
-     * @return string     */
+     * @return string
+     */
     public function getLicNo()
     {
         return $this->licNo;
@@ -1099,7 +1114,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the lgv declaration confirmation
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getLgvDeclarationConfirmation()
     {
         return $this->lgvDeclarationConfirmation;
@@ -1122,7 +1138,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the vi action
      *
-     * @return string     */
+     * @return string
+     */
     public function getViAction()
     {
         return $this->viAction;
@@ -1145,7 +1162,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the opt out tm letter
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getOptOutTmLetter()
     {
         return $this->optOutTmLetter;
@@ -1168,7 +1186,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the tot auth trailers
      *
-     * @return int     */
+     * @return int
+     */
     public function getTotAuthTrailers()
     {
         return $this->totAuthTrailers;
@@ -1191,7 +1210,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the tot auth vehicles
      *
-     * @return int     */
+     * @return int
+     */
     public function getTotAuthVehicles()
     {
         return $this->totAuthVehicles;
@@ -1214,7 +1234,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the tot auth hgv vehicles
      *
-     * @return int     */
+     * @return int
+     */
     public function getTotAuthHgvVehicles()
     {
         return $this->totAuthHgvVehicles;
@@ -1237,7 +1258,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the tot auth lgv vehicles
      *
-     * @return int     */
+     * @return int
+     */
     public function getTotAuthLgvVehicles()
     {
         return $this->totAuthLgvVehicles;
@@ -1260,7 +1282,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the tot community licences
      *
-     * @return int     */
+     * @return int
+     */
     public function getTotCommunityLicences()
     {
         return $this->totCommunityLicences;
@@ -1283,7 +1306,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the trailers in possession
      *
-     * @return int     */
+     * @return int
+     */
     public function getTrailersInPossession()
     {
         return $this->trailersInPossession;
@@ -1306,7 +1330,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the fabs reference
      *
-     * @return string     */
+     * @return string
+     */
     public function getFabsReference()
     {
         return $this->fabsReference;
@@ -1331,7 +1356,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getExpiryDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1360,7 +1386,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getGrantedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1389,7 +1416,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getReviewDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1418,7 +1446,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getFeeDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1447,7 +1476,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getInForceDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1476,7 +1506,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getSurrenderedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1505,7 +1536,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getRevokedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1534,7 +1566,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getCurtailedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1563,7 +1596,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getSuspendedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1592,7 +1626,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getCnsDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1619,7 +1654,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the safety ins trailers
      *
-     * @return int     */
+     * @return int
+     */
     public function getSafetyInsTrailers()
     {
         return $this->safetyInsTrailers;
@@ -1642,7 +1678,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the safety ins vehicles
      *
-     * @return int     */
+     * @return int
+     */
     public function getSafetyInsVehicles()
     {
         return $this->safetyInsVehicles;
@@ -1665,7 +1702,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the safety ins
      *
-     * @return string     */
+     * @return string
+     */
     public function getSafetyIns()
     {
         return $this->safetyIns;
@@ -1688,7 +1726,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the safety ins varies
      *
-     * @return string     */
+     * @return string
+     */
     public function getSafetyInsVaries()
     {
         return $this->safetyInsVaries;
@@ -1711,7 +1750,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the tachograph ins name
      *
-     * @return string     */
+     * @return string
+     */
     public function getTachographInsName()
     {
         return $this->tachographInsName;
@@ -1734,7 +1774,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the psv discs to be printed no
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvDiscsToBePrintedNo()
     {
         return $this->psvDiscsToBePrintedNo;
@@ -1757,7 +1798,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the translate to welsh
      *
-     * @return string     */
+     * @return string
+     */
     public function getTranslateToWelsh()
     {
         return $this->translateToWelsh;
@@ -1780,7 +1822,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the is maintenance suitable
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsMaintenanceSuitable()
     {
         return $this->isMaintenanceSuitable;
@@ -1803,7 +1846,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -1826,7 +1870,8 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -3284,6 +3329,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

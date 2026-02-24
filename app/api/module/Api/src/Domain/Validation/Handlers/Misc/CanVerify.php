@@ -16,6 +16,7 @@ class CanVerify extends AbstractHandler implements AuthAwareInterface
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto): bool
     {
         return $this->isOperator();

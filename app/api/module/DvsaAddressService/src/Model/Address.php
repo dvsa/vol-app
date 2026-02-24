@@ -71,6 +71,7 @@ class Address implements \JsonSerializable
         return $this->administrativeArea;
     }
 
+    #[\Override]
     public function jsonSerialize(): array
     {
         return [

@@ -31,6 +31,7 @@ final class GrantCommunityLicence extends AbstractCommandHandler implements Tran
 
     protected $extraRepos = ['CommunityLic', 'Licence'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

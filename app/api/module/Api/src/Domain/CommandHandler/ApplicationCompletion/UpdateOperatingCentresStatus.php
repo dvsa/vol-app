@@ -24,6 +24,7 @@ final class UpdateOperatingCentresStatus extends AbstractUpdateStatus
 
     protected $section = 'OperatingCentres';
 
+    #[\Override]
     protected function isSectionValid(Application $application)
     {
         if ($application->mustHaveOperatingCentre() && count($application->getOperatingCentres()) === 0) {

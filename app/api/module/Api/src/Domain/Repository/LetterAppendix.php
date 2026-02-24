@@ -17,6 +17,7 @@ class LetterAppendix extends AbstractVersionedRepository
      *
      * @return array
      */
+    #[\Override]
     protected function getVersionedFields(): array
     {
         return [
@@ -33,6 +34,7 @@ class LetterAppendix extends AbstractVersionedRepository
      *
      * @return string
      */
+    #[\Override]
     protected function getVersionEntityClass(): string
     {
         return LetterAppendixVersion::class;
@@ -43,6 +45,7 @@ class LetterAppendix extends AbstractVersionedRepository
      *
      * @return string
      */
+    #[\Override]
     protected function getEntityShortName(): string
     {
         return 'LetterAppendix';

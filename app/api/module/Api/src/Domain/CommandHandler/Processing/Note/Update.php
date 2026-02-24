@@ -20,6 +20,7 @@ final class Update extends CreateUpdateAbstract implements TransactionedInterfac
      * @param UpdateCommand $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();
@@ -42,6 +43,7 @@ final class Update extends CreateUpdateAbstract implements TransactionedInterfac
      * @param CommandInterface $command
      * @return Entity\Note\Note
      */
+    #[\Override]
     protected function retrieveEntity(CommandInterface $command)
     {
         return $this->getRepo()->fetchById($command->getId(), Query::HYDRATE_OBJECT, $command->getVersion());

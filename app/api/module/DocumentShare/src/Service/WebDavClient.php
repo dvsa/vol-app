@@ -39,6 +39,7 @@ class WebDavClient implements DocumentStoreInterface
      * @param string $path Path
      * @throws \Exception
      */
+    #[\Override]
     public function read($path): File | false
     {
         $tmpFileName = tempnam(sys_get_temp_dir(), self::DS_DOWNLOAD_FILE_PREFIX);
@@ -85,6 +86,7 @@ class WebDavClient implements DocumentStoreInterface
      *
      * @return bool
      */
+    #[\Override]
     public function remove($path, $hard = false): bool
     {
         try {
@@ -103,6 +105,7 @@ class WebDavClient implements DocumentStoreInterface
      * @return WebDavResponse
      * @throws \Exception
      */
+    #[\Override]
     public function write($path, File $file)
     {
         $response = new WebDavResponse();

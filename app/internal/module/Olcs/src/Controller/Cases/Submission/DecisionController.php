@@ -93,6 +93,7 @@ class DecisionController extends AbstractInternalController implements CaseContr
      *
      * @return Laminas/Http/Response
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->notFoundAction();
@@ -103,6 +104,7 @@ class DecisionController extends AbstractInternalController implements CaseContr
      *
      * @return Laminas/Http/Response
      */
+    #[\Override]
     public function detailsAction()
     {
         return $this->notFoundAction();
@@ -113,6 +115,7 @@ class DecisionController extends AbstractInternalController implements CaseContr
      *
      * @return Laminas/Http/Response
      */
+    #[\Override]
     public function deleteAction()
     {
         return $this->notFoundAction();

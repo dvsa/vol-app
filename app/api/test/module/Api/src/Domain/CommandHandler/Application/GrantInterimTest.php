@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Grant Interim Test
  *
@@ -38,7 +40,7 @@ class GrantInterimTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(['id' => 111]);
 
@@ -85,7 +87,7 @@ class GrantInterimTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithFees()
+    public function testHandleCommandWithFees(): void
     {
         $command = Cmd::create(['id' => 111]);
 
@@ -172,7 +174,7 @@ class GrantInterimTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithFeesVariation()
+    public function testHandleCommandWithFeesVariation(): void
     {
         $command = Cmd::create(['id' => 111]);
 
@@ -258,7 +260,7 @@ class GrantInterimTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandNoFees()
+    public function testHandleCommandNoFees(): void
     {
         $command = Cmd::create(['id' => 111]);
 

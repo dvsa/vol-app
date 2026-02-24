@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Doc;
 
 use Dvsa\Olcs\Api\Entity\Application\Application;
@@ -16,10 +18,8 @@ use Dvsa\Olcs\Api\Entity\Tm\TransportManager;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Entity\Doc\Document
- * @covers \Dvsa\Olcs\Api\Entity\Doc\AbstractDocument
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Doc\Document::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Doc\AbstractDocument::class)]
 class DocumentEntityTest extends EntityTester
 {
     /** @var  string */
@@ -39,7 +39,7 @@ class DocumentEntityTest extends EntityTester
     /**
      * tests the related organisation returns null when nothing is found
      */
-    public function testGetRelatedOrganisationNotFound()
+    public function testGetRelatedOrganisationNotFound(): void
     {
         $this->assertNull($this->sut->getRelatedOrganisation());
     }
@@ -47,12 +47,12 @@ class DocumentEntityTest extends EntityTester
     /**
      * tests the related organisation is retrieved properly
      *
-     * @dataProvider relatedOrganisationProvider
      *
      * @param $setterMethod
      * @param $relationClass
      */
-    public function testGetRelatedOrganisation($setterMethod, $relationClass)
+    #[\PHPUnit\Framework\Attributes\DataProvider('relatedOrganisationProvider')]
+    public function testGetRelatedOrganisation(mixed $setterMethod, mixed $relationClass): void
     {
         $organisation = m::mock(Organisation::class);
         $relation = m::mock($relationClass);
@@ -68,7 +68,7 @@ class DocumentEntityTest extends EntityTester
      *
      * @return array
      */
-    public function relatedOrganisationProvider()
+    public static function relatedOrganisationProvider(): array
     {
         return [
             ['setLicence', Licence::class],
@@ -84,15 +84,13 @@ class DocumentEntityTest extends EntityTester
         ];
     }
 
-    public function testGetRelatedLicenceNull()
+    public function testGetRelatedLicenceNull(): void
     {
         static::assertNull($this->sut->getRelatedLicence());
     }
 
-    /**
-     * @dataProvider dpTestGetRelatedLicence
-     */
-    public function testGetRelatedLicence($relSetterMethod, $mockRelClass)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetRelatedLicence')]
+    public function testGetRelatedLicence(mixed $relSetterMethod, mixed $mockRelClass): void
     {
         $mockLic = m::mock(Licence::class);
 
@@ -108,7 +106,7 @@ class DocumentEntityTest extends EntityTester
         static::assertSame($mockLic, $this->sut->getRelatedLicence());
     }
 
-    public function dpTestGetRelatedLicence()
+    public static function dpTestGetRelatedLicence(): array
     {
         return [
             ['setLicence', Licence::class],

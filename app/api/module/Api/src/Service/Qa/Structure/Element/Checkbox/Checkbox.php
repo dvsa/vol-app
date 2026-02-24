@@ -23,6 +23,7 @@ class Checkbox implements ElementInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getRepresentation()
     {
         return [

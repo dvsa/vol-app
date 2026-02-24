@@ -26,6 +26,7 @@ class ByApplicationToOrganisation extends AbstractQueryHandler implements Toggle
      * @param GetApplicationListByApplicationToOrganisationQuery $query
      * @throws NotFoundException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $applicationRepository = $this->getApplicationRepository();

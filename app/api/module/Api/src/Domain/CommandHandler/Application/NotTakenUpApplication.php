@@ -39,6 +39,7 @@ class NotTakenUpApplication extends AbstractCommandHandler implements Transactio
 
     public $extraRepos = ['LicenceVehicle'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $application Application */

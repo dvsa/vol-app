@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Messaging\ApplicationLicenceList;
 
 use ArrayIterator;
@@ -47,7 +49,7 @@ class ByOrganisationTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create([
             'organisation' => 1,
@@ -112,7 +114,7 @@ class ByOrganisationTest extends QueryHandlerTestCase
         $this->assertCount(3, $result['result']['applications']);
     }
 
-    public function testHandleQueryDefersToIdentityIfNoOrganisationIsDefinedInQuery()
+    public function testHandleQueryDefersToIdentityIfNoOrganisationIsDefinedInQuery(): void
     {
         $organisation = m::mock(Organisation::class);
         $organisation

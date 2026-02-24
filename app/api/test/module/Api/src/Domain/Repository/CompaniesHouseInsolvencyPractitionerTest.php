@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
@@ -12,7 +14,7 @@ class CompaniesHouseInsolvencyPractitionerTest extends RepositoryTestCase
         $this->setUpSut(InsolvencyPractitionerRepository::class);
     }
 
-    public function testFetchByCompany()
+    public function testFetchByCompany(): void
     {
         $companyNumber = '01234567';
 

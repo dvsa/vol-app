@@ -15,7 +15,7 @@ class PiSlaException extends AbstractRepository
      * Fetch SLA exceptions for a specific PI
      *
      * @param int $piId PI identifier
-     * 
+     *
      * @return array
      */
     public function fetchByPi($piId)
@@ -37,7 +37,7 @@ class PiSlaException extends AbstractRepository
      * Fetch SLA exceptions for a specific case (through PI)
      *
      * @param int $caseId Case identifier
-     * 
+     *
      * @return array
      */
     public function fetchByCase($caseId)
@@ -62,7 +62,7 @@ class PiSlaException extends AbstractRepository
      *
      * @param int            $piId      PI identifier
      * @param \DateTime|null $checkDate Date to check against (default: now)
-     * 
+     *
      * @return array
      */
     public function fetchActiveByPi($piId, $checkDate = null)

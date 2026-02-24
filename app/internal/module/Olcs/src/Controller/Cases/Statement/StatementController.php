@@ -44,6 +44,7 @@ class StatementController extends AbstractInternalController implements CaseCont
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -119,6 +120,7 @@ class StatementController extends AbstractInternalController implements CaseCont
      *
      * @return string
      */
+    #[\Override]
     protected function getDocumentGenerateRoute()
     {
         return 'case_licence_docs_attachments/entity/generate';
@@ -131,6 +133,7 @@ class StatementController extends AbstractInternalController implements CaseCont
      *
      * @return array
      */
+    #[\Override]
     protected function getDocumentGenerateRouteParams()
     {
         return [

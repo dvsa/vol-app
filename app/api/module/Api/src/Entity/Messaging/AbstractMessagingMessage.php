@@ -36,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractMessagingMessage implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractMessagingMessage implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -160,7 +160,8 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -183,7 +184,8 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     /**
      * Get the messaging conversation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation     */
+     * @return \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation
+     */
     public function getMessagingConversation()
     {
         return $this->messagingConversation;
@@ -206,7 +208,8 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     /**
      * Get the messaging content
      *
-     * @return \Dvsa\Olcs\Api\Entity\Messaging\MessagingContent     */
+     * @return \Dvsa\Olcs\Api\Entity\Messaging\MessagingContent
+     */
     public function getMessagingContent()
     {
         return $this->messagingContent;
@@ -229,7 +232,8 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -252,7 +256,8 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -275,7 +280,8 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -410,6 +416,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

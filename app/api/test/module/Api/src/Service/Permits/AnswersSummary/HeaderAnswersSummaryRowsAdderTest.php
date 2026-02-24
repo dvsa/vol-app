@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\AnswersSummary;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
@@ -57,7 +59,7 @@ class HeaderAnswersSummaryRowsAdderTest extends MockeryTestCase
         );
     }
 
-    public function testAddRowsIsSnapshot()
+    public function testAddRowsIsSnapshot(): void
     {
         $formattedAnswer = 'licenceNo<br>trafficAreaNo';
 
@@ -86,7 +88,7 @@ class HeaderAnswersSummaryRowsAdderTest extends MockeryTestCase
         $this->headerAnswersSummaryRowsAdder->addRows($answersSummary, $this->irhpApplication, true);
     }
 
-    public function testAddRowsIsNotSnapshot()
+    public function testAddRowsIsNotSnapshot(): void
     {
         $permitTypeDescription = 'Bilateral Permit';
 

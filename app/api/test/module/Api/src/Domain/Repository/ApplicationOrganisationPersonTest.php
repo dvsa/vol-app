@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ApplicationOrganisationPersonTest
  *
@@ -28,7 +30,7 @@ class ApplicationOrganisationPersonTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchListForOrganisation()
+    public function testFetchListForOrganisation(): void
     {
         $qb = $this->createMockQb('[QUERY]');
 
@@ -52,7 +54,7 @@ class ApplicationOrganisationPersonTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchForApplicationAndPerson()
+    public function testFetchForApplicationAndPerson(): void
     {
         $qb = $this->createMockQb('[QUERY]');
 
@@ -77,7 +79,7 @@ class ApplicationOrganisationPersonTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchForApplicationAndPersonNotFound()
+    public function testFetchForApplicationAndPersonNotFound(): void
     {
         $qb = $this->createMockQb('[QUERY]');
 
@@ -101,7 +103,7 @@ class ApplicationOrganisationPersonTest extends RepositoryTestCase
         $this->sut->fetchForApplicationAndPerson(34, 76);
     }
 
-    public function testFetchForApplicationAndOriginalPerson()
+    public function testFetchForApplicationAndOriginalPerson(): void
     {
         $qb = $this->createMockQb('[QUERY]');
 
@@ -126,7 +128,7 @@ class ApplicationOrganisationPersonTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchForApplicationAndOriginalPersonNotFound()
+    public function testFetchForApplicationAndOriginalPersonNotFound(): void
     {
         $qb = $this->createMockQb('[QUERY]');
 
@@ -150,7 +152,7 @@ class ApplicationOrganisationPersonTest extends RepositoryTestCase
         $this->sut->fetchForApplicationAndOriginalPerson(34, 76);
     }
 
-    public function testDeleteForPerson()
+    public function testDeleteForPerson(): void
     {
         $qb = $this->createMockQb('[DELETE]');
 

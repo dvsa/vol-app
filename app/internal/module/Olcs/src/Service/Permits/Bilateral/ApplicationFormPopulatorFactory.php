@@ -16,6 +16,7 @@ class ApplicationFormPopulatorFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationFormPopulator
     {
         return new ApplicationFormPopulator(

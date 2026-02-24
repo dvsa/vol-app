@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\Application;
 
 use Dvsa\Olcs\Api\Entity\Person\Person;
@@ -30,7 +32,7 @@ class PeopleTest extends MockeryTestCase
         parent::setUp();
     }
 
-    public function testProvide()
+    public function testProvide(): void
     {
         $publicationLink = $this->getPublicationLink();
         $context = new \ArrayObject();
@@ -70,7 +72,7 @@ class PeopleTest extends MockeryTestCase
     /**
      * @return PublicationLink
      */
-    private function getPublicationLink()
+    private function getPublicationLink(): mixed
     {
         $publicationLink = new PublicationLink();
 
@@ -90,7 +92,7 @@ class PeopleTest extends MockeryTestCase
         return $publicationLink;
     }
 
-    private function addOrganisationPerson(PublicationLink $publicationLink, Person $person)
+    private function addOrganisationPerson(PublicationLink $publicationLink, Person $person): void
     {
         $organisationPerson = new \Dvsa\Olcs\Api\Entity\Organisation\OrganisationPerson();
         $organisationPerson->setPerson($person);
@@ -104,9 +106,9 @@ class PeopleTest extends MockeryTestCase
     private function addApplicationOrganisationPerson(
         PublicationLink $publicationLink,
         Person $person,
-        $action = 'A',
-        $originalPerson = null
-    ) {
+        string $action = 'A',
+        mixed $originalPerson = null
+    ): void {
         $aop = new \Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson(
             $publicationLink->getApplication(),
             $publicationLink->getLicence()->getOrganisation(),
@@ -126,7 +128,7 @@ class PeopleTest extends MockeryTestCase
      *
      * @return \Dvsa\Olcs\Api\Entity\Person\Person
      */
-    private function getPerson($id, $forename, $familyName)
+    private function getPerson(mixed $id, mixed $forename, mixed $familyName): mixed
     {
         $person = new Person();
         $person->setId($id);

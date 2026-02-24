@@ -21,6 +21,7 @@ class TransportManagersReviewService extends AbstractReviewService
      * @param array $data
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(array $data = [])
     {
         $mainItems = [];

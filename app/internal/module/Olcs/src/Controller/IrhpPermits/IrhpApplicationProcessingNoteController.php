@@ -52,6 +52,7 @@ class IrhpApplicationProcessingNoteController extends AbstractInternalController
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -122,6 +123,7 @@ class IrhpApplicationProcessingNoteController extends AbstractInternalController
      *
      * @return ViewModel
      */
+    #[\Override]
     public function addAction()
     {
         // have to overwrite the addAction() due to different naming convention

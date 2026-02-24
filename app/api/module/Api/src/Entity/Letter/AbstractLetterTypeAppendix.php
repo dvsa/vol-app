@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -144,7 +144,8 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
     /**
      * Get the letter_type_id
      *
-     * @return int     */
+     * @return int
+     */
     public function getLetter_type_id()
     {
         return $this->letter_type_id;
@@ -167,7 +168,8 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
     /**
      * Get the letter_appendix_version_id
      *
-     * @return int     */
+     * @return int
+     */
     public function getLetter_appendix_version_id()
     {
         return $this->letter_appendix_version_id;
@@ -190,7 +192,8 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -213,7 +216,8 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -236,7 +240,8 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
     /**
      * Get the display order
      *
-     * @return int     */
+     * @return int
+     */
     public function getDisplayOrder()
     {
         return $this->displayOrder;
@@ -259,7 +264,8 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
     /**
      * Get the is mandatory
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsMandatory()
     {
         return $this->isMandatory;
@@ -282,7 +288,8 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -291,6 +298,7 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

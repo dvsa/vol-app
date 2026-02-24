@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Application\CreateTaxiPhv as CommandHandler;
@@ -24,12 +26,13 @@ class CreateTaxiPhvTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $params = [
             'id' => 323,
@@ -85,7 +88,7 @@ class CreateTaxiPhvTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['CREATE', 'UPDATE_COMPLETION'], $response->getMessages());
     }
 
-    public function testHandleCommandValidation()
+    public function testHandleCommandValidation(): void
     {
         $params = [
             'id' => 323,

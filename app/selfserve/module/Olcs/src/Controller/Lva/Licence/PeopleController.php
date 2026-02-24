@@ -91,6 +91,7 @@ class PeopleController extends Lva\AbstractPeopleController
      *
      * @return void
      */
+    #[\Override]
     protected function alterFormForLva(Form $form, $data = null)
     {
     }
@@ -100,6 +101,7 @@ class PeopleController extends Lva\AbstractPeopleController
      *
      * @return Response
      */
+    #[\Override]
     public function addAction()
     {
         return $this->redirectToIndexWithPermissionError();
@@ -108,6 +110,7 @@ class PeopleController extends Lva\AbstractPeopleController
     /**
      * Disallow deleting
      */
+    #[\Override]
     public function deleteAction()
     {
         $licencePeopleAdapter = $this->getLicencePeopleAdapter();
@@ -124,6 +127,7 @@ class PeopleController extends Lva\AbstractPeopleController
      * @return mixed
      * @throws ResourceNotFoundException
      */
+    #[\Override]
     public function editAction()
     {
         $response = parent::editAction();
@@ -153,6 +157,7 @@ class PeopleController extends Lva\AbstractPeopleController
      *
      * @return Response
      */
+    #[\Override]
     protected function handleCrudAction(
         $data,
         $rowsNotRequired = ['add'],

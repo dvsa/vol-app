@@ -20,6 +20,7 @@ class CanAccessLicenceWithId extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canAccessLicence($this->getId($dto));

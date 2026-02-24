@@ -17,6 +17,7 @@ final class IsEnabled extends AbstractQueryHandler implements ToggleAwareInterfa
 {
     use ToggleAwareTrait;
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $allFeaturesEnabled = true;

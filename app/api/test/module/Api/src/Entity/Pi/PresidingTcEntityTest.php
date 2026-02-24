@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Pi;
 
 use Dvsa\Olcs\Api\Entity\User\User;
@@ -21,7 +23,7 @@ class PresidingTcEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testCreateUpdate()
+    public function testCreateUpdate(): void
     {
         $user = m::mock(User::class)->makePartial();
         $name = 'Test TC';

@@ -28,6 +28,7 @@ class RadioAnswerSummaryProvider implements AnswerSummaryProviderInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTemplateName()
     {
         return 'generic';
@@ -36,6 +37,7 @@ class RadioAnswerSummaryProvider implements AnswerSummaryProviderInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTemplateVariables(QaContext $qaContext, ElementInterface $element, $isSnapshot)
     {
         $options = $qaContext->getApplicationStepEntity()->getDecodedOptionSource();

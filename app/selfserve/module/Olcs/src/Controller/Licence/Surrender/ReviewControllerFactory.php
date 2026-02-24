@@ -21,6 +21,7 @@ class ReviewControllerFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ReviewController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

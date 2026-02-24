@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Query;
 
 use Dvsa\Olcs\Api\Domain\Query;
@@ -7,10 +9,8 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark;
 
 class EachPropertyHasAGetterTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider dataProvider
-     */
-    public function testEachPropertyHasGetter($bookmarkClass)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
+    public function testEachPropertyHasGetter(mixed $bookmarkClass): void
     {
         $reflectionClass = new \ReflectionClass($bookmarkClass);
 
@@ -20,7 +20,7 @@ class EachPropertyHasAGetterTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function dataProvider()
+    public static function dataProvider(): array
     {
         return [
             Bookmark\ApplicationBundle::class => [Bookmark\ApplicationBundle::class],

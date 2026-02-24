@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Impounding Test
  *
@@ -34,7 +36,8 @@ class UpdateImpoundingTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'impt_hearing',
@@ -55,7 +58,7 @@ class UpdateImpoundingTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $impoundingType = 'impt_hearing';
         $venue = 8;

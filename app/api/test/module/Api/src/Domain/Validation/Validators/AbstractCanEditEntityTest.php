@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Validators;
 
 use Dvsa\Olcs\Api\Domain\Validation\Validators\AbstractCanEditEntity;
@@ -22,14 +24,14 @@ class AbstractCanEditEntityTest extends MockeryTestCase
         $this->sut = m::mock(AbstractCanEditEntity::class)->makePartial()->shouldAllowMockingProtectedMethods();
     }
 
-    public function testIsValidInternalEdit()
+    public function testIsValidInternalEdit(): void
     {
         $this->sut->shouldReceive('isGranted')->with(Permission::INTERNAL_EDIT)->once()->andReturn(true);
 
         $this->assertTrue($this->sut->isValid(111));
     }
 
-    public function testIsValidSystem()
+    public function testIsValidSystem(): void
     {
         $this->sut->shouldReceive('isGranted')->with(Permission::INTERNAL_EDIT)->once()->andReturn(false);
         $this->sut->shouldReceive('isSystemUser')->with()->once()->andReturn(true);
@@ -37,7 +39,7 @@ class AbstractCanEditEntityTest extends MockeryTestCase
         $this->assertTrue($this->sut->isValid(111));
     }
 
-    public function testIsValidEntity()
+    public function testIsValidEntity(): void
     {
         $this->sut->shouldReceive('isGranted')->with(Permission::INTERNAL_EDIT)->once()->andReturn(false);
         $this->sut->shouldReceive('isSystemUser')->with()->once()->andReturn(false);

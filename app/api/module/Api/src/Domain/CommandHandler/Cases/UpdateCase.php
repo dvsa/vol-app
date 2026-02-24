@@ -31,6 +31,7 @@ final class UpdateCase extends AbstractCommandHandler implements TransactionedIn
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var UpdateCaseCmd $command **/

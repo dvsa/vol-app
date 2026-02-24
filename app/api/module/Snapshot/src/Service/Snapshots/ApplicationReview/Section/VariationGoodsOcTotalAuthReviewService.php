@@ -23,6 +23,7 @@ class VariationGoodsOcTotalAuthReviewService extends AbstractVariationOcTotalAut
      * @param array $data
      * @return string
      */
+    #[\Override]
     protected function getChangedKeys($data)
     {
         $changedKeys = [];
