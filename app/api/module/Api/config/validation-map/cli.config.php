@@ -20,6 +20,7 @@ return [
     CliCommandHandler\CleanUpAbandonedVariations::class => IsSystemUser::class,
     CliCommandHandler\Bus\Expire::class => IsSystemUser::class,
     CliCommandHandler\LastTmLetter::class => IsSystemUser::class,
+    CliCommandHandler\FirstTmLetter::class => IsSystemUser::class,
     CliCommandHandler\Permits\MarkSuccessfulDaPermitApplications::class => IsSystemUser::class,
     CliCommandHandler\Permits\MarkSuccessfulRemainingPermitApplications::class => IsSystemUser::class,
     CliCommandHandler\Permits\MarkSuccessfulSectorPermitApplications::class => IsSystemUser::class,
