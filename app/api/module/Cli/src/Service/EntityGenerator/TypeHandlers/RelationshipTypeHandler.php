@@ -85,11 +85,18 @@ class RelationshipTypeHandler extends AbstractTypeHandler
             $options[] = 'indexBy="' . $indexBy . '"';
         }
 
-        $annotations = [sprintf(
+        $annotations = [];
+
+        // Add @ORM\Id if this column is part of the primary key (composite key with FK)
+        if ($column->isPrimary()) {
+            $annotations[] = '@ORM\Id';
+        }
+
+        $annotations[] = sprintf(
             "@ORM\%s(%s)",
             $relationType,
             implode(', ', $options)
-        )];
+        );
 
         $annotations[] = sprintf("@ORM\JoinColumn(%s)", implode(', ', $joinOptions));
 
