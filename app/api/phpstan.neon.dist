@@ -37,23 +37,6 @@ parameters:
           paths:
             - module/Api/src/Entity
 
-        # === Suppressed legacy undefined property errors (VOL-6959) ===
-        - message: "#Access to an undefined property Dvsa\\\\Olcs\\\\Api\\\\Entity\\\\Letter\\\\LetterIssueTodo::\\$letterTodoVersion#"
-          paths:
-            - module/Api/src/Entity
-
-        - message: "#Access to an undefined property Dvsa\\\\Olcs\\\\Api\\\\Entity\\\\Letter\\\\LetterTypeAppendix::\\$letterAppendixVersion#"
-          paths:
-            - module/Api/src/Entity
-
-        - message: "#Access to an undefined property Dvsa\\\\Olcs\\\\Api\\\\Entity\\\\Letter\\\\LetterTypeIssue::\\$letterIssueVersion#"
-          paths:
-            - module/Api/src/Entity
-
-        - message: "#Access to an undefined property Dvsa\\\\Olcs\\\\Api\\\\Entity\\\\Letter\\\\LetterTypeSection::\\$letterSectionVersion#"
-          paths:
-            - module/Api/src/Entity
-
         # === Suppressed missing Laminas Mail classes (laminas-mail not required as a direct dependency) ===
         - message: '#(Class|Caught class|Instantiated class|has invalid type) Laminas\\Mail\\#'
           path: module/Email/src/Service/Imap.php
