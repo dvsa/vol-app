@@ -65,10 +65,19 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
 
         /** @var LicenceEntity $licence */
         foreach ($eligibleLicences as $licence) {
-            $document = $this->generateDocuments($licence);
-            //$this->printAndEmailDocument($document);
-            $this->updateLastTmLetterDate($licence);
-            //$this->sendEmailToOperator($licence);
+            
+            /** @var TransportManagerLicence $tmlRepo */
+            $tmlRepo = $this->getRepo('TransportManagerLicence');
+            $removedTms = $tmlRepo->fetchRemovedTmForLicence($licence->getId());
+
+            /** @var TmlEntity $removedTm */
+            foreach ($removedTms as $removedTm) {
+                $document = $this->generateDocuments($licence, $removedTm);
+                $this->updateLastTmLetterDate($licence);
+                //$this->sendEmailToOperator($licence);
+            }
+
+            
         }
 
         return $this->result;
@@ -119,7 +128,7 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
     /**
      * @return array|null
      */
-    private function generateDocuments(LicenceEntity $licence)
+    private function generateDocuments(LicenceEntity $licence, TmlEntity $tml)
     {
         $template = $this->selectTemplate($licence);
 
@@ -168,6 +177,8 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
             'template' => $template['identifier'],
             'query' => [
                 'licence' => $licence->getId(),
+                'transportManager' => $tml->getTransportManager()->getId(),
+                'transportManagerLicence' => $tml->getId()
             ],
             'description' => 'Last TM letter Licence ' . $licence->getLicNo() . ' 1st letter',
             'licence' => $licence->getId(),
