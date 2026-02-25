@@ -1,11 +1,32 @@
 #!/bin/bash
 
-export http_proxy=http://${PROXY}:3128
-export https_proxy=http://${PROXY}:3128
+set -euo pipefail
+
+die(){ echo "ERROR: $*" >&2; exit 1; }
+
+# Required inputs
+: "${AWS_REGION:?AWS_REGION is not set}"
+: "${DB_INSTANCE_ID:?DB_INSTANCE_ID is not set}"
+
+# Validate the ID exists in this account/region
+aws rds describe-db-instances \
+  --db-instance-identifier "$DB_INSTANCE_ID" >/dev/null \
+  || die "DB instance '$DB_INSTANCE_ID' not found in account $(aws sts get-caller-identity --query Account --output text) region $AWS_REGION"
+
+echoerr() { printf '%s\n' "$*" >&2; }
+
+: "${READDB_HOST:?READDB_HOST is required (INT read-replica DB instance id)}"
+: "${ENVIRONMENT_NAME:?ENVIRONMENT_NAME is required (DEV|INT|PREP|PROD)}"
+
+if [[ -n "${PROXY:-}" ]]; then
+  export http_proxy="http://${PROXY}"
+  export https_proxy="http://${PROXY}"
+fi
 export NO_PROXY=169.254.169.254
 
-READDB_HOST=${READDB_HOST}
-ENVIRONMENT=${ENVIRONMENT_NAME}
+: "${READDB_HOST:?READDB_HOST is required (INT read-replica DB instance id)}"
+: "${ENVIRONMENT_NAME:?ENVIRONMENT_NAME is required (DEV|INT|PREP|PROD)}"
+ENVIRONMENT="${ENVIRONMENT_NAME}"
 
 token=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
 ec2_instance_id=$(curl -s -H "X-aws-ec2-metadata-token: $token" http://169.254.169.254/latest/meta-data/instance-id)
