@@ -83,9 +83,9 @@ class DocumentGenerator implements FactoryInterface
             $templateWithoutPrefix = '/templates/' . $template . '.rtf';
 
             $possibleTemplatePaths = [
-                //$template => $template,
+                $template => $template,
                 $templateWithPrefix => $templateWithPrefix,
-                //$templateWithoutPrefix => $templateWithoutPrefix
+                $templateWithoutPrefix => $templateWithoutPrefix
             ];
         }
 

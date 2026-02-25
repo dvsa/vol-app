@@ -25,6 +25,7 @@ return [
     BookmarkQuery\LicenceBundle::class => BookmarkQueryHandler\LicenceBundle::class,
     BookmarkQuery\CaseBundle::class => BookmarkQueryHandler\CaseBundle::class,
     BookmarkQuery\TransportManagerBundle::class => BookmarkQueryHandler\TransportManagerBundle::class,
+    BookmarkQuery\TransportManagerLicenceBundle::class => BookmarkQueryHandler\TransportManagerLicenceBundle::class,
     BookmarkQuery\DocParagraphBundle::class => BookmarkQueryHandler\DocParagraphBundle::class,
     BookmarkQuery\OppositionBundle::class => BookmarkQueryHandler\OppositionBundle::class,
     BookmarkQuery\StatementBundle::class => BookmarkQueryHandler\StatementBundle::class,
