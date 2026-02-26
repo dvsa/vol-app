@@ -12,7 +12,6 @@ use Dvsa\Olcs\Api\Entity\System\SystemParameter;
 use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
-use Dvsa\Olcs\Transfer\Command\Document\PrintLetter;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Transfer\Command\Task\CreateTask;
 use Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence as TmlEntity;
@@ -74,7 +73,6 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
             foreach ($removedTms as $removedTm) {
                 $document = $this->generateDocuments($licence, $removedTm);
                 $this->updateLastTmLetterDate($licence);
-                //$this->sendEmailToOperator($licence);
             }
 
             
@@ -207,54 +205,6 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
     }
 
     /**
-     * @param int $document
-     * @return void
-     */
-    private function printAndEmailDocument($document)
-    {
-        $this->printDocument($document);
-        $this->maybeEmailDocument($document);
-    }
-
-    /**
-     * @param int $document (id)
-     * @return void
-     */
-    private function printDocument($document)
-    {
-        $result = $this->handleSideEffect(
-            PrintLetter::create([
-                'id' => $document,
-                'method' => PrintLetter::METHOD_PRINT_AND_POST
-            ])
-        );
-
-        $this->result->merge($result);
-    }
-
-    /**
-     * @param int $document (id)
-     * @return void
-     */
-    private function maybeEmailDocument($document)
-    {
-        $documentRepo = $this->getRepo('Document');
-        /** @var Document $docEntity */
-        $docEntity = $documentRepo->fetchById($document);
-        $metadata = json_decode($docEntity->getMetadata(), true);
-        if ($this->shouldSendEmail($metadata)) {
-            $result = $this->handleSideEffect(
-                PrintLetter::create([
-                    'id' => $document,
-                    'method' => PrintLetter::METHOD_EMAIL,
-                    'forceCorrespondence' => true
-                ])
-            );
-            $this->result->merge($result);
-        }
-    }
-
-    /**
      * @return array
      */
     private function selectTemplate(LicenceEntity $licence)
@@ -268,20 +218,6 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
         }
 
         return $template;
-    }
-
-    /**
-     * @param array $metadata
-     * @return bool
-     */
-    private function shouldSendEmail($metadata)
-    {
-        return array_key_exists('details', $metadata) &&
-            is_array($metadata['details']) &&
-            array_key_exists('sendToAddress', $metadata['details']) &&
-            $metadata['details']['sendToAddress'] === 'correspondenceAddress' &&
-            array_key_exists('allowEmail', $metadata['details']) &&
-            $metadata['details']['allowEmail'] === 'Y';
     }
 
     /**
