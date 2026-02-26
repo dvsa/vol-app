@@ -7,7 +7,7 @@ $cookieBannerMode = $this->placeholder('cookieBannerMode')->toString();
 
 ?>
 <?php echo $this->doctype(); ?>
-<html lang="en" class="govuk-template--rebranded app-html-class">
+<html lang="en" class="app-html-class">
 
 <head>
   <!-- Meta tags -->
@@ -21,7 +21,7 @@ $cookieBannerMode = $this->placeholder('cookieBannerMode')->toString();
     ->appendName('viewport', 'width=device-width, initial-scale=1.0')
     ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
     ->appendName('theme-color', '#1d70b8')
-    ->appendProperty('og:image', $this->assetPath('assets/rebrand/images/govuk-opengraph-image.png'));
+    ->appendProperty('og:image', $this->assetPath('assets/images/govuk-opengraph-image.png'));
 
   // Optional: session timeout meta if logged in
   if ($isLoggedIn) {
@@ -38,17 +38,17 @@ $cookieBannerMode = $this->placeholder('cookieBannerMode')->toString();
   ?>
 
   <!-- Favicons & Manifest -->
-  <link rel="icon" sizes="48x48" href="<?php echo $this->assetPath('assets/rebrand/images/favicon.ico'); ?>" type="image/x-icon">
-  <link rel="icon" sizes="any" href="<?php echo $this->assetPath('assets/rebrand/images/favicon.svg'); ?>" type="image/svg+xml">
-  <link rel="mask-icon" href="<?php echo $this->assetPath('assets/rebrand/images/govuk-icon-mask.svg'); ?>" color="#1d70b8">
-  <link rel="manifest" href="<?php echo $this->assetPath('assets/rebrand/manifest.json'); ?>">
+  <link rel="icon" sizes="48x48" href="<?php echo $this->assetPath('assets/images/favicon.ico'); ?>" type="image/x-icon">
+  <link rel="icon" sizes="any" href="<?php echo $this->assetPath('assets/images/favicon.svg'); ?>" type="image/svg+xml">
+  <link rel="mask-icon" href="<?php echo $this->assetPath('assets/images/govuk-icon-mask.svg'); ?>" color="#1d70b8">
+  <link rel="manifest" href="<?php echo $this->assetPath('assets/manifest.json'); ?>">
 
   <!-- Apple Touch Icons -->
   <!-- See: https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html#//apple_ref/doc/uid/TP40002051-CH3-SW3 -->
-  <link rel="apple-touch-icon" href="<?php echo $this->assetPath('/assets/rebrand/images/govuk-icon-180.png'); ?>">
-  <link rel="apple-touch-icon" sizes="180x180" href="<?php echo $this->assetPath('/assets/rebrand/images/govuk-icon-180.png'); ?>">
-  <link rel="apple-touch-icon" sizes="192x192" href="<?php echo $this->assetPath('/assets/rebrand/images/govuk-icon-192.png'); ?>">
-  <link rel="apple-touch-icon" sizes="512x512" href="<?php echo $this->assetPath('/assets/rebrand/images/govuk-icon-512.png'); ?>">
+  <link rel="apple-touch-icon" href="<?php echo $this->assetPath('/assets/images/govuk-icon-180.png'); ?>">
+  <link rel="apple-touch-icon" sizes="180x180" href="<?php echo $this->assetPath('/assets/images/govuk-icon-180.png'); ?>">
+  <link rel="apple-touch-icon" sizes="192x192" href="<?php echo $this->assetPath('/assets/images/govuk-icon-192.png'); ?>">
+  <link rel="apple-touch-icon" sizes="512x512" href="<?php echo $this->assetPath('/assets/images/govuk-icon-512.png'); ?>">
 
   <!-- Stylesheets -->
   <?php
@@ -193,7 +193,7 @@ $cookieBannerMode = $this->placeholder('cookieBannerMode')->toString();
   <header class="govuk-header govuk-header--full-width-border" data-module="govuk-header">
     <div class="govuk-header__container govuk-width-container">
       <div class="govuk-header__logo">
-        <a href="/" class="govuk-header__link govuk-header__link--homepage">
+        <a href="/" class="govuk-header__homepage-link">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             focusable="false"

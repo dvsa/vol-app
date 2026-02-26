@@ -194,27 +194,6 @@ var sass = require("sass");
               src: ["**/*.{png,jpg,gif,svg,ico}"],
               dest: "public/assets/images/",
             },
-            // Start of refresh assets
-            // https://github.com/alphagov/govuk-frontend/releases/tag/v5.10.0
-            //
-            // Copy govuk-frontend refresh assets, preserve /refresh/ prefix in destination to force cache busting
-            // when we use the new refreshed assets.
-            //
-            // Documentation states that:
-            // If you copy the font and image files into your application, you’ll need to copy the
-            // dist/govuk/assets/rebrand folder to <YOUR-APP>/assets/rebrand. If you use an automated task to copy
-            // the files, you may need to update your task to automatically copy our new folder.
-            //
-            // Future updates when /refresh is removed when it becomes the default, we revert/remove this.
-            // Significant time should have passed to force another cache bust.
-            //
-            // Retain the previous/current assets (non-rebrand) for backwards compatibility for VOL-Internal or Missed Assets on SS.
-            {
-              expand: true,
-              cwd: "node_modules/govuk-frontend/dist/govuk/assets/rebrand/images/",
-              src: ["**/*.{png,jpg,gif,svg,ico}"],
-              dest: "public/assets/rebrand/images/",
-            },
           ],
         },
         fonts: {
