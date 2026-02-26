@@ -143,9 +143,34 @@ final class Create extends AbstractCommandHandler implements ToggleRequiredInter
     {
         $task = $this->getConversationFromCommand($command)->getTask();
         $task->setDescription($this->getTaskDescription());
-        $task->setActionDate($this->determineActionDate());
+        if ($this->shouldUpdateActionDate($command)) {
+            $task->setActionDate($this->determineActionDate());
+        } else {
+            $existingDate = $task->getActionDate(true); // Pass true to get DateTime
+            $task->setActionDate($existingDate);
+        }
         $this->getTaskRepository()->save($task);
         return $task;
+    }
+
+    private function shouldUpdateActionDate(CreateMessageCommand $command): bool
+    {
+        // Internal users always update the action date (set it 14 days out for operator response)
+        if ($this->isInternalUser()) {
+            return true;
+        }
+
+        // External users: only update the date if the last message was from an internal user
+        if ($this->isExternalUser()) {
+            $conversation = $this->getConversationFromCommand($command);
+            $lastMessage = $this->getMessageRepository()->fetchLastMessageByConversation($conversation->getId());
+            if ($lastMessage === null) {
+                return true;
+            }
+            return $lastMessage->getCreatedBy()->isInternal();
+        }
+
+        return false;
     }
 
     private function getTaskDescription(): string
