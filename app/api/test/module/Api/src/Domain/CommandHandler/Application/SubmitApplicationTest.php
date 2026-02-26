@@ -868,7 +868,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithAutoGrant() : void
+    public function testHandleCommandWithAutoGrant(): void
     {
         $this->setupIsInternalUser(false);
 

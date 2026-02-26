@@ -5564,7 +5564,7 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $application->getOutstandingGrantFees());
     }
 
-    public function testCanAutoGrantReturnsFalseForNonVariation() : void
+    public function testCanAutoGrantReturnsFalseForNonVariation(): void
     {
         $sut = $this->instantiate(Entity::class);
         $sut->setIsVariation(false);
@@ -5572,7 +5572,7 @@ class ApplicationEntityTest extends EntityTester
         $this->assertFalse($sut->canAutoGrant());
     }
 
-    public function testCanAutoGrantReturnsFalseWhenNoOCChanges() : void
+    public function testCanAutoGrantReturnsFalseWhenNoOCChanges(): void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
@@ -5587,7 +5587,7 @@ class ApplicationEntityTest extends EntityTester
         $this->assertFalse($sut->canAutoGrant());
     }
 
-    public function testCanAutoGrantReturnsFalseWhenOtherSectionsChanged() : void
+    public function testCanAutoGrantReturnsFalseWhenOtherSectionsChanged(): void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
@@ -5603,7 +5603,7 @@ class ApplicationEntityTest extends EntityTester
         $this->assertFalse($sut->canAutoGrant());
     }
 
-    public function testCanAutoGrantReturnsFalseWhenHasAdditions() : void
+    public function testCanAutoGrantReturnsFalseWhenHasAdditions(): void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
@@ -5629,7 +5629,7 @@ class ApplicationEntityTest extends EntityTester
         $this->assertFalse($sut->canAutoGrant());
     }
 
-    public function testCanAutoGrantReturnsFalseWhenHasModifications() : void
+    public function testCanAutoGrantReturnsFalseWhenHasModifications(): void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
@@ -5655,7 +5655,7 @@ class ApplicationEntityTest extends EntityTester
         $this->assertFalse($sut->canAutoGrant());
     }
 
-    public function testCanAutoGrantReturnsFalseWhenNoRemainingOCs() : void
+    public function testCanAutoGrantReturnsFalseWhenNoRemainingOCs(): void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
@@ -5682,7 +5682,7 @@ class ApplicationEntityTest extends EntityTester
         $this->assertFalse($sut->canAutoGrant());
     }
 
-    public function testCanAutoGrantReturnsFalseWhenNoRemovals() : void
+    public function testCanAutoGrantReturnsFalseWhenNoRemovals(): void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
@@ -5706,7 +5706,7 @@ class ApplicationEntityTest extends EntityTester
         $this->assertFalse($sut->canAutoGrant());
     }
 
-    public function testCanAutoGrantReturnsTrueForValidScenario() : void
+    public function testCanAutoGrantReturnsTrueForValidScenario(): void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
@@ -5735,7 +5735,7 @@ class ApplicationEntityTest extends EntityTester
         $this->assertTrue($sut->canAutoGrant());
     }
 
-    public function testGetAutoGrantChangeSummaryReturnsEmptyWhenNotAutoGranted() : void
+    public function testGetAutoGrantChangeSummaryReturnsEmptyWhenNotAutoGranted(): void
     {
         $sut = $this->instantiate(Entity::class);
         $sut->setWasAutoGranted(false);
@@ -5746,7 +5746,7 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEmpty($result);
     }
 
-    public function testGetAutoGrantChangeSummaryReturnsAddressAndVehicleReduction() : void
+    public function testGetAutoGrantChangeSummaryReturnsAddressAndVehicleReduction(): void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setWasAutoGranted(true);
@@ -5786,7 +5786,7 @@ class ApplicationEntityTest extends EntityTester
         $this->assertStringContainsString('now 7', $messages[1]);
     }
 
-    public function testGetAutoGrantChangeSummaryHandlesMultipleOCRemovals() : void
+    public function testGetAutoGrantChangeSummaryHandlesMultipleOCRemovals(): void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setWasAutoGranted(true);

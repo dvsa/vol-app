@@ -1023,7 +1023,7 @@ class SummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryWithAutoGrantedApplication() : void
+    public function testHandleQueryWithAutoGrantedApplication(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -1085,7 +1085,7 @@ class SummaryTest extends QueryHandlerTestCase
         $this->assertCount(2, $resultArray['autoGrantChanges']['messages']);
     }
 
-    public function testHandleQueryWithNonAutoGrantedApplication()
+    public function testHandleQueryWithNonAutoGrantedApplication(): void
     {
         $query = Qry::create(['id' => 111]);
 

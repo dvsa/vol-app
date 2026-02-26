@@ -38,7 +38,7 @@ class AutoGrantTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand() : void
+    public function testHandleCommand(): void
     {
         $command = AutoGrantCmd::create(['id' => 111]);
 
@@ -117,7 +117,7 @@ class AutoGrantTest extends AbstractCommandHandlerTestCase
         $this->assertTrue($result->getFlag('autoGranted'));
     }
 
-    public function testCompleteTrackingBuildsCorrectData() : void
+    public function testCompleteTrackingBuildsCorrectData(): void
     {
         $command = AutoGrantCmd::create(['id' => 111]);
 
