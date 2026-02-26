@@ -1023,18 +1023,18 @@ class SummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryWithAutoGrantedApplication()
+    public function testHandleQueryWithAutoGrantedApplication() : void
     {
         $query = Qry::create(['id' => 111]);
 
         $mockRefData = m::mock(Entity\System\RefData::class);
-        $mockRefData->shouldReceive('getId')->andReturn('apsts_consideration');
+        $mockRefData->shouldReceive('getId')->once()->andReturn('apsts_consideration');
 
         /** @var Entity\Application\Application|m\MockInterface $application */
         $application = m::mock(Entity\Application\Application::class)->makePartial();
         $application->setId(111);
-        $application->shouldReceive('getWasAutoGranted')->andReturn(true);
-        $application->shouldReceive('getAutoGrantChangeSummary')->andReturn([
+        $application->shouldReceive('getWasAutoGranted')->once()->andReturn(true);
+        $application->shouldReceive('getAutoGrantChangeSummary')->once()->andReturn([
             'messages' => [
                 'Operating centre removed',
                 'Vehicles reduced by 5'
@@ -1042,19 +1042,20 @@ class SummaryTest extends QueryHandlerTestCase
             'vehicleReduction' => 5,
             'newTotal' => 10
         ]);
-        $application->shouldReceive('serialize')->andReturn(['foo' => 'bar']);
-        $application->shouldReceive('getStatus')->andReturn($mockRefData);
+        $application->shouldReceive('serialize')->once()->andReturn(['foo' => 'bar']);
+        $application->shouldReceive('getStatus')->once()->andReturn($mockRefData);
         $application->shouldReceive('getLicence->getId')->andReturn(1);
-        $application->shouldReceive('getLicenceType->getId')->andReturn(Entity\Licence\Licence::LICENCE_TYPE_STANDARD_NATIONAL);
-        $application->shouldReceive('getTransportManagers')->andReturn(new ArrayCollection());
-        $application->shouldReceive('getLatestOutstandingApplicationFee')->andReturn(null);
-        $application->shouldReceive('canAddOperatingCentresEvidence')->andReturn(false);
-        $application->shouldReceive('canAddFinancialEvidence')->andReturn(false);
+        $application->shouldReceive('getLicenceType->getId')->twice()->andReturn(Entity\Licence\Licence::LICENCE_TYPE_STANDARD_NATIONAL);
+        $application->shouldReceive('getTransportManagers')->once()->andReturn(new ArrayCollection());
+        $application->shouldReceive('getLatestOutstandingApplicationFee')->once()->andReturn(null);
+        $application->shouldReceive('canAddOperatingCentresEvidence')->once()->andReturn(false);
+        $application->shouldReceive('canAddFinancialEvidence')->once()->andReturn(false);
         $application->setIsVariation(0);
         $application->setAuthSignature(1);
 
         $this->mockAppRepo->shouldReceive('fetchUsingId')
             ->with($query)
+            ->once()
             ->andReturn($application);
 
         $this->mockAppRepo->shouldReceive('getRefdataReference->getId')
@@ -1062,12 +1063,14 @@ class SummaryTest extends QueryHandlerTestCase
 
         $this->repoMap['Fee']
             ->shouldReceive('fetchLatestPaidFeeByApplicationId')
+            ->once()
             ->with(111)
             ->andReturn(null);
 
         $this->repoMap['Cases']
             ->shouldReceive('fetchOpenCasesForApplication')
             ->with(111)
+            ->once()
             ->andReturn([]);
 
         $result = $this->sut->handleQuery($query);
@@ -1092,34 +1095,38 @@ class SummaryTest extends QueryHandlerTestCase
         /** @var Entity\Application\Application|m\MockInterface $application */
         $application = m::mock(Entity\Application\Application::class)->makePartial();
         $application->setId(111);
-        $application->shouldReceive('getWasAutoGranted')->andReturn(false);
-        $application->shouldReceive('getAutoGrantChangeSummary')->andReturn([]);
-        $application->shouldReceive('serialize')->andReturn(['foo' => 'bar']);
-        $application->shouldReceive('getStatus')->andReturn($mockRefData);
+        $application->shouldReceive('getWasAutoGranted')->once()->andReturn(false);
+        $application->shouldReceive('getAutoGrantChangeSummary')->once()->andReturn([]);
+        $application->shouldReceive('serialize')->once()->andReturn(['foo' => 'bar']);
+        $application->shouldReceive('getStatus')->once()->andReturn($mockRefData);
         $application->shouldReceive('getLicence->getId')->andReturn(1);
-        $application->shouldReceive('getLicenceType->getId')->andReturn(Entity\Licence\Licence::LICENCE_TYPE_STANDARD_NATIONAL);
-        $application->shouldReceive('getTransportManagers')->andReturn(new ArrayCollection());
-        $application->shouldReceive('getLatestOutstandingApplicationFee')->andReturn(null);
-        $application->shouldReceive('canAddOperatingCentresEvidence')->andReturn(false);
-        $application->shouldReceive('canAddFinancialEvidence')->andReturn(false);
+        $application->shouldReceive('getLicenceType->getId')->twice()->andReturn(Entity\Licence\Licence::LICENCE_TYPE_STANDARD_NATIONAL);
+        $application->shouldReceive('getTransportManagers')->once()->andReturn(new ArrayCollection());
+        $application->shouldReceive('getLatestOutstandingApplicationFee')->once()->andReturn(null);
+        $application->shouldReceive('canAddOperatingCentresEvidence')->once()->andReturn(false);
+        $application->shouldReceive('canAddFinancialEvidence')->once()->andReturn(false);
         $application->setIsVariation(0);
         $application->setAuthSignature(1);
 
         $this->mockAppRepo->shouldReceive('fetchUsingId')
             ->with($query)
+            ->once()
             ->andReturn($application);
 
         $this->mockAppRepo->shouldReceive('getRefdataReference->getId')
+            ->once()
             ->andReturn('apsts_consideration');
 
         $this->repoMap['Fee']
             ->shouldReceive('fetchLatestPaidFeeByApplicationId')
             ->with(111)
+            ->once()
             ->andReturn(null);
 
         $this->repoMap['Cases']
             ->shouldReceive('fetchOpenCasesForApplication')
             ->with(111)
+            ->once()
             ->andReturn([]);
 
         $result = $this->sut->handleQuery($query);

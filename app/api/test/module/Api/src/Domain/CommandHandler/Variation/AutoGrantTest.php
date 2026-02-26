@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Variation;
 
 use Dvsa\Olcs\Api\Domain\Command\Application\Grant\AutoGrant as AutoGrantCmd;
@@ -36,21 +38,21 @@ class AutoGrantTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand() : void
     {
         $command = AutoGrantCmd::create(['id' => 111]);
 
         $tracking = m::mock(ApplicationTracking::class)->makePartial();
-        $tracking->shouldReceive('getId')->andReturn(222);
-        $tracking->shouldReceive('getVersion')->andReturn(1);
+        $tracking->shouldReceive('getId')->once()->andReturn(222);
+        $tracking->shouldReceive('getVersion')->once()->andReturn(1);
 
         /** @var ApplicationEntity $application */
         $application = m::mock(ApplicationEntity::class)->makePartial();
         $application->setId(111);
         $application->setVersion(5);
-        $application->shouldReceive('getApplicationTracking')->andReturn($tracking);
-        $application->shouldReceive('getOverrideOoo')->andReturn(false);
-        $application->shouldReceive('getApplicationReferredToPi')->andReturn('N');
+        $application->shouldReceive('getApplicationTracking')->once()->andReturn($tracking);
+        $application->shouldReceive('getOverrideOoo')->once()->andReturn(false);
+        $application->shouldReceive('getApplicationReferredToPi')->once()->andReturn('N');
         $application->shouldReceive('setWasAutoGranted')->with(true)->once();
 
         $refData = $this->refData;
@@ -58,6 +60,7 @@ class AutoGrantTest extends AbstractCommandHandlerTestCase
         $this->repoMap['Application']
             ->shouldReceive('fetchUsingId')
             ->with($command)
+            ->once()
             ->andReturn($application)
             ->shouldReceive('save')
             ->once()
@@ -114,26 +117,27 @@ class AutoGrantTest extends AbstractCommandHandlerTestCase
         $this->assertTrue($result->getFlag('autoGranted'));
     }
 
-    public function testCompleteTrackingBuildsCorrectData()
+    public function testCompleteTrackingBuildsCorrectData() : void
     {
         $command = AutoGrantCmd::create(['id' => 111]);
 
         $tracking = m::mock(ApplicationTracking::class)->makePartial();
-        $tracking->shouldReceive('getId')->andReturn(222);
-        $tracking->shouldReceive('getVersion')->andReturn(1);
+        $tracking->shouldReceive('getId')->once()->andReturn(222);
+        $tracking->shouldReceive('getVersion')->once()->andReturn(1);
 
         $application = m::mock(ApplicationEntity::class)->makePartial();
         $application->setId(111);
         $application->setVersion(5);
-        $application->shouldReceive('getApplicationTracking')->andReturn($tracking);
-        $application->shouldReceive('getOverrideOoo')->andReturn(true);
-        $application->shouldReceive('getApplicationReferredToPi')->andReturn('Y');
+        $application->shouldReceive('getApplicationTracking')->once()->andReturn($tracking);
+        $application->shouldReceive('getOverrideOoo')->once()->andReturn(true);
+        $application->shouldReceive('getApplicationReferredToPi')->once()->andReturn('Y');
         $application->shouldReceive('setWasAutoGranted')->with(true)->once();
         $refData = $this->refData;
 
         $this->repoMap['Application']
             ->shouldReceive('fetchUsingId')
             ->with($command)
+            ->once()
             ->andReturn($application)
             ->shouldReceive('save')
             ->once()

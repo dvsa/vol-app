@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Variation;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
@@ -14,14 +16,7 @@ use Dvsa\Olcs\Transfer\Command\Variation\Grant as VariationGrantCmd;
 /**
  * AutoGrant
  *
- * Handles auto-granting of eligible variations. A variation qualifies when it
- * contains only operating centre removals and at least one operating centre
- * remains on the licence afterwards.
- *
- * Flow:
- *   1. Mark the application as auto-granted
- *   2. Set all caseworker tracking sections to "Accepted" via Overview
- *   3. Delegate to the standard Variation\Grant command
+ * Handles auto-granting of eligible variations.
  */
 final class AutoGrant extends AbstractCommandHandler implements TransactionedInterface
 {

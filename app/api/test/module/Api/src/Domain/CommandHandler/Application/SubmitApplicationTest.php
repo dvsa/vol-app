@@ -868,7 +868,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithAutoGrant()
+    public function testHandleCommandWithAutoGrant() : void
     {
         $this->setupIsInternalUser(false);
 
@@ -898,11 +898,14 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
 
         $this->mockApp
             ->shouldReceive('canAutoGrant')
+            ->once()
             ->andReturn(true)
             ->shouldReceive('getCode')
+            ->times(2)
             ->andReturn('GV79')
             ->shouldReceive('setStatus')
             ->with($this->mapRefdata(ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION))
+            ->once()
             ->andReturnSelf();
 
 
@@ -912,11 +915,13 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->mockedSmServices[\Dvsa\Olcs\Api\Domain\Util\SlaCalculatorInterface::class]
             ->expects('applySla')
             ->with(m::type(\DateTimeInterface::class), $mockedSlaEntity, null)
+            ->once()
             ->andReturn($expectedTargetCompletionDate);
 
         $this->repoMap['Application']
             ->shouldReceive('fetchUsingId')
             ->with($command, Query::HYDRATE_OBJECT, self::VERSION)
+            ->once()
             ->andReturn($this->mockApp);
 
         $this->repoMap['Application']

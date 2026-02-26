@@ -26,7 +26,7 @@
     </div>
 
     <div class="govuk-button-group">
-      <a class="govuk-button" role="button" draggable="false" data-module="govuk-button" href="<?php echo $this->url('dashboard'); ?>"><?php echo $this->translate('return-home-button-text'); ?></a>
+      <a class="govuk-button" role="button" draggable="false" data-module="govuk-button" href="<?php echo $this->url('dashboard'); ?>"><?php echo $this->escapeHtml($this->translate('return-home-button-text')); ?></a>
     </div>
 
   </div>

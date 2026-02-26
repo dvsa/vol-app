@@ -169,7 +169,7 @@ class AbstractSummaryControllerTest extends MockeryTestCase
         ];
     }
 
-    public function testRenderSummaryWithAutoGrantChanges()
+    public function testRenderSummaryWithAutoGrantChanges() : void
     {
         $params = [
             'autoGrantChanges' => [

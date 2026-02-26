@@ -5564,7 +5564,7 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $application->getOutstandingGrantFees());
     }
 
-    public function testCanAutoGrantReturnsFalseForNonVariation()
+    public function testCanAutoGrantReturnsFalseForNonVariation() : void
     {
         $sut = $this->instantiate(Entity::class);
         $sut->setIsVariation(false);
@@ -5572,7 +5572,7 @@ class ApplicationEntityTest extends EntityTester
         $this->assertFalse($sut->canAutoGrant());
     }
 
-    public function testCanAutoGrantReturnsFalseWhenNoOCChanges()
+    public function testCanAutoGrantReturnsFalseWhenNoOCChanges() : void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
@@ -5582,12 +5582,12 @@ class ApplicationEntityTest extends EntityTester
             'type_of_licence' => ApplicationCompletion::STATUS_NOT_STARTED,
         ];
 
-        $sut->shouldReceive('getVariationCompletion')->andReturn($variationCompletion);
+        $sut->shouldReceive('getVariationCompletion')->once()->andReturn($variationCompletion);
 
         $this->assertFalse($sut->canAutoGrant());
     }
 
-    public function testCanAutoGrantReturnsFalseWhenOtherSectionsChanged()
+    public function testCanAutoGrantReturnsFalseWhenOtherSectionsChanged() : void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
@@ -5598,12 +5598,12 @@ class ApplicationEntityTest extends EntityTester
             'undertakings' => ApplicationCompletion::STATUS_VARIATION_UPDATED,
         ];
 
-        $sut->shouldReceive('getVariationCompletion')->andReturn($variationCompletion);
+        $sut->shouldReceive('getVariationCompletion')->once()->andReturn($variationCompletion);
 
         $this->assertFalse($sut->canAutoGrant());
     }
 
-    public function testCanAutoGrantReturnsFalseWhenHasAdditions()
+    public function testCanAutoGrantReturnsFalseWhenHasAdditions() : void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
@@ -5612,24 +5612,24 @@ class ApplicationEntityTest extends EntityTester
             'operating_centres' => ApplicationCompletion::STATUS_VARIATION_UPDATED,
         ];
 
-        $sut->shouldReceive('getVariationCompletion')->andReturn($variationCompletion);
+        $sut->shouldReceive('getVariationCompletion')->once()->andReturn($variationCompletion);
 
         $licence = m::mock(Licence::class);
-        $licence->shouldReceive('getOperatingCentres')->andReturn(new ArrayCollection([
+        $licence->shouldReceive('getOperatingCentres')->once()->andReturn(new ArrayCollection([
             m::mock(), // 2 existing OCs
             m::mock(),
         ]));
-        $sut->shouldReceive('getLicence')->andReturn($licence);
+        $sut->shouldReceive('getLicence')->once()->andReturn($licence);
 
         $aocAdd = m::mock(ApplicationOperatingCentre::class);
-        $aocAdd->shouldReceive('getAction')->andReturn(ApplicationOperatingCentre::ACTION_ADD);
+        $aocAdd->shouldReceive('getAction')->once()->andReturn(ApplicationOperatingCentre::ACTION_ADD);
 
-        $sut->shouldReceive('getOperatingCentres')->andReturn(new ArrayCollection([$aocAdd]));
+        $sut->shouldReceive('getOperatingCentres')->once()->andReturn(new ArrayCollection([$aocAdd]));
 
         $this->assertFalse($sut->canAutoGrant());
     }
 
-    public function testCanAutoGrantReturnsFalseWhenHasModifications()
+    public function testCanAutoGrantReturnsFalseWhenHasModifications() : void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
@@ -5638,24 +5638,24 @@ class ApplicationEntityTest extends EntityTester
             'operating_centres' => ApplicationCompletion::STATUS_VARIATION_UPDATED,
         ];
 
-        $sut->shouldReceive('getVariationCompletion')->andReturn($variationCompletion);
+        $sut->shouldReceive('getVariationCompletion')->once()->andReturn($variationCompletion);
 
         $licence = m::mock(Licence::class);
-        $licence->shouldReceive('getOperatingCentres')->andReturn(new ArrayCollection([
+        $licence->shouldReceive('getOperatingCentres')->once()->andReturn(new ArrayCollection([
             m::mock(), // 2 existing OCs
             m::mock(),
         ]));
-        $sut->shouldReceive('getLicence')->andReturn($licence);
+        $sut->shouldReceive('getLicence')->once()->andReturn($licence);
 
         $aocUpdate = m::mock(ApplicationOperatingCentre::class);
-        $aocUpdate->shouldReceive('getAction')->andReturn(ApplicationOperatingCentre::ACTION_UPDATE);
+        $aocUpdate->shouldReceive('getAction')->once()->andReturn(ApplicationOperatingCentre::ACTION_UPDATE);
 
-        $sut->shouldReceive('getOperatingCentres')->andReturn(new ArrayCollection([$aocUpdate]));
+        $sut->shouldReceive('getOperatingCentres')->once()->andReturn(new ArrayCollection([$aocUpdate]));
 
         $this->assertFalse($sut->canAutoGrant());
     }
 
-    public function testCanAutoGrantReturnsFalseWhenNoRemainingOCs()
+    public function testCanAutoGrantReturnsFalseWhenNoRemainingOCs() : void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
@@ -5664,25 +5664,25 @@ class ApplicationEntityTest extends EntityTester
             'operating_centres' => ApplicationCompletion::STATUS_VARIATION_UPDATED,
         ];
 
-        $sut->shouldReceive('getVariationCompletion')->andReturn($variationCompletion);
+        $sut->shouldReceive('getVariationCompletion')->once()->andReturn($variationCompletion);
 
         // Only 1 OC on licence
         $licence = m::mock(Licence::class);
-        $licence->shouldReceive('getOperatingCentres')->andReturn(new ArrayCollection([
+        $licence->shouldReceive('getOperatingCentres')->once()->andReturn(new ArrayCollection([
             m::mock(),
         ]));
-        $sut->shouldReceive('getLicence')->andReturn($licence);
+        $sut->shouldReceive('getLicence')->once()->andReturn($licence);
 
         // Deleting the only OC
         $aocDelete = m::mock(ApplicationOperatingCentre::class);
-        $aocDelete->shouldReceive('getAction')->andReturn(ApplicationOperatingCentre::ACTION_DELETE);
+        $aocDelete->shouldReceive('getAction')->once()->andReturn(ApplicationOperatingCentre::ACTION_DELETE);
 
-        $sut->shouldReceive('getOperatingCentres')->andReturn(new ArrayCollection([$aocDelete]));
+        $sut->shouldReceive('getOperatingCentres')->once()->andReturn(new ArrayCollection([$aocDelete]));
 
         $this->assertFalse($sut->canAutoGrant());
     }
 
-    public function testCanAutoGrantReturnsFalseWhenNoRemovals()
+    public function testCanAutoGrantReturnsFalseWhenNoRemovals() : void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
@@ -5691,22 +5691,22 @@ class ApplicationEntityTest extends EntityTester
             'operating_centres' => ApplicationCompletion::STATUS_VARIATION_UPDATED,
         ];
 
-        $sut->shouldReceive('getVariationCompletion')->andReturn($variationCompletion);
+        $sut->shouldReceive('getVariationCompletion')->once()->andReturn($variationCompletion);
 
         $licence = m::mock(Licence::class);
-        $licence->shouldReceive('getOperatingCentres')->andReturn(new ArrayCollection([
+        $licence->shouldReceive('getOperatingCentres')->once()->andReturn(new ArrayCollection([
             m::mock(),
             m::mock(),
         ]));
-        $sut->shouldReceive('getLicence')->andReturn($licence);
+        $sut->shouldReceive('getLicence')->once()->andReturn($licence);
 
         // No deletions
-        $sut->shouldReceive('getOperatingCentres')->andReturn(new ArrayCollection());
+        $sut->shouldReceive('getOperatingCentres')->once()->andReturn(new ArrayCollection());
 
         $this->assertFalse($sut->canAutoGrant());
     }
 
-    public function testCanAutoGrantReturnsTrueForValidScenario()
+    public function testCanAutoGrantReturnsTrueForValidScenario() : void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
@@ -5716,26 +5716,26 @@ class ApplicationEntityTest extends EntityTester
             'undertakings' => ApplicationCompletion::STATUS_VARIATION_UPDATED, // This is ignored
         ];
 
-        $sut->shouldReceive('getVariationCompletion')->andReturn($variationCompletion);
+        $sut->shouldReceive('getVariationCompletion')->once()->andReturn($variationCompletion);
 
         // 2 OCs on licence
         $licence = m::mock(Licence::class);
-        $licence->shouldReceive('getOperatingCentres')->andReturn(new ArrayCollection([
+        $licence->shouldReceive('getOperatingCentres')->once()->andReturn(new ArrayCollection([
             m::mock(),
             m::mock(),
         ]));
-        $sut->shouldReceive('getLicence')->andReturn($licence);
+        $sut->shouldReceive('getLicence')->once()->andReturn($licence);
 
         // Deleting 1 OC
         $aocDelete = m::mock(ApplicationOperatingCentre::class);
-        $aocDelete->shouldReceive('getAction')->andReturn(ApplicationOperatingCentre::ACTION_DELETE);
+        $aocDelete->shouldReceive('getAction')->once()->andReturn(ApplicationOperatingCentre::ACTION_DELETE);
 
-        $sut->shouldReceive('getOperatingCentres')->andReturn(new ArrayCollection([$aocDelete]));
+        $sut->shouldReceive('getOperatingCentres')->once()->andReturn(new ArrayCollection([$aocDelete]));
 
         $this->assertTrue($sut->canAutoGrant());
     }
 
-    public function testGetAutoGrantChangeSummaryReturnsEmptyWhenNotAutoGranted()
+    public function testGetAutoGrantChangeSummaryReturnsEmptyWhenNotAutoGranted() : void
     {
         $sut = $this->instantiate(Entity::class);
         $sut->setWasAutoGranted(false);
@@ -5746,28 +5746,28 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEmpty($result);
     }
 
-    public function testGetAutoGrantChangeSummaryReturnsAddressAndVehicleReduction()
+    public function testGetAutoGrantChangeSummaryReturnsAddressAndVehicleReduction() : void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setWasAutoGranted(true);
         $sut->setTotAuthVehicles(10);
 
         $address = m::mock(Address::class);
-        $address->shouldReceive('getAddressLine1')->andReturn('123 Test Street');
-        $address->shouldReceive('getAddressLine2')->andReturn('Test District');
-        $address->shouldReceive('getAddressLine3')->andReturn(null);
-        $address->shouldReceive('getTown')->andReturn('Testville');
-        $address->shouldReceive('getPostcode')->andReturn('TE1 1ST');
+        $address->shouldReceive('getAddressLine1')->once()->andReturn('123 Test Street');
+        $address->shouldReceive('getAddressLine2')->once()->andReturn('Test District');
+        $address->shouldReceive('getAddressLine3')->once()->andReturn(null);
+        $address->shouldReceive('getTown')->once()->andReturn('Testville');
+        $address->shouldReceive('getPostcode')->once()->andReturn('TE1 1ST');
 
         $oc = m::mock(OperatingCentre::class);
-        $oc->shouldReceive('getAddress')->andReturn($address);
+        $oc->shouldReceive('getAddress')->once()->andReturn($address);
 
         $aoc = m::mock(ApplicationOperatingCentre::class);
-        $aoc->shouldReceive('getAction')->andReturn(ApplicationOperatingCentre::ACTION_DELETE);
-        $aoc->shouldReceive('getOperatingCentre')->andReturn($oc);
-        $aoc->shouldReceive('getNoOfVehiclesRequired')->andReturn(3);
+        $aoc->shouldReceive('getAction')->once()->andReturn(ApplicationOperatingCentre::ACTION_DELETE);
+        $aoc->shouldReceive('getOperatingCentre')->once()->andReturn($oc);
+        $aoc->shouldReceive('getNoOfVehiclesRequired')->once()->andReturn(3);
 
-        $sut->shouldReceive('getOperatingCentres')->andReturn(new ArrayCollection([$aoc]));
+        $sut->shouldReceive('getOperatingCentres')->once()->andReturn(new ArrayCollection([$aoc]));
 
         $result = $sut->getAutoGrantChangeSummary();
 
@@ -5786,43 +5786,43 @@ class ApplicationEntityTest extends EntityTester
         $this->assertStringContainsString('now 7', $messages[1]);
     }
 
-    public function testGetAutoGrantChangeSummaryHandlesMultipleOCRemovals()
+    public function testGetAutoGrantChangeSummaryHandlesMultipleOCRemovals() : void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setWasAutoGranted(true);
         $sut->setTotAuthVehicles(20);
 
         $address1 = m::mock(Address::class);
-        $address1->shouldReceive('getAddressLine1')->andReturn('1 First Street');
-        $address1->shouldReceive('getAddressLine2')->andReturn(null);
-        $address1->shouldReceive('getAddressLine3')->andReturn(null);
-        $address1->shouldReceive('getTown')->andReturn('Town1');
-        $address1->shouldReceive('getPostcode')->andReturn('T1 1AA');
+        $address1->shouldReceive('getAddressLine1')->once()->andReturn('1 First Street');
+        $address1->shouldReceive('getAddressLine2')->once()->andReturn(null);
+        $address1->shouldReceive('getAddressLine3')->once()->andReturn(null);
+        $address1->shouldReceive('getTown')->once()->andReturn('Town1');
+        $address1->shouldReceive('getPostcode')->once()->andReturn('T1 1AA');
 
         $oc1 = m::mock(OperatingCentre::class);
-        $oc1->shouldReceive('getAddress')->andReturn($address1);
+        $oc1->shouldReceive('getAddress')->once()->andReturn($address1);
 
         $aoc1 = m::mock(ApplicationOperatingCentre::class);
-        $aoc1->shouldReceive('getAction')->andReturn(ApplicationOperatingCentre::ACTION_DELETE);
-        $aoc1->shouldReceive('getOperatingCentre')->andReturn($oc1);
-        $aoc1->shouldReceive('getNoOfVehiclesRequired')->andReturn(5);
+        $aoc1->shouldReceive('getAction')->once()->andReturn(ApplicationOperatingCentre::ACTION_DELETE);
+        $aoc1->shouldReceive('getOperatingCentre')->once()->andReturn($oc1);
+        $aoc1->shouldReceive('getNoOfVehiclesRequired')->once()->andReturn(5);
 
         $address2 = m::mock(Address::class);
-        $address2->shouldReceive('getAddressLine1')->andReturn('2 Second Avenue');
-        $address2->shouldReceive('getAddressLine2')->andReturn(null);
-        $address2->shouldReceive('getAddressLine3')->andReturn(null);
-        $address2->shouldReceive('getTown')->andReturn('Town2');
-        $address2->shouldReceive('getPostcode')->andReturn('T2 2BB');
+        $address2->shouldReceive('getAddressLine1')->once()->andReturn('2 Second Avenue');
+        $address2->shouldReceive('getAddressLine2')->once()->andReturn(null);
+        $address2->shouldReceive('getAddressLine3')->once()->andReturn(null);
+        $address2->shouldReceive('getTown')->once()->andReturn('Town2');
+        $address2->shouldReceive('getPostcode')->once()->andReturn('T2 2BB');
 
         $oc2 = m::mock(OperatingCentre::class);
-        $oc2->shouldReceive('getAddress')->andReturn($address2);
+        $oc2->shouldReceive('getAddress')->once()->andReturn($address2);
 
         $aoc2 = m::mock(ApplicationOperatingCentre::class);
-        $aoc2->shouldReceive('getAction')->andReturn(ApplicationOperatingCentre::ACTION_DELETE);
-        $aoc2->shouldReceive('getOperatingCentre')->andReturn($oc2);
-        $aoc2->shouldReceive('getNoOfVehiclesRequired')->andReturn(3);
+        $aoc2->shouldReceive('getAction')->once()->andReturn(ApplicationOperatingCentre::ACTION_DELETE);
+        $aoc2->shouldReceive('getOperatingCentre')->once()->andReturn($oc2);
+        $aoc2->shouldReceive('getNoOfVehiclesRequired')->once()->andReturn(3);
 
-        $sut->shouldReceive('getOperatingCentres')->andReturn(new ArrayCollection([$aoc1, $aoc2]));
+        $sut->shouldReceive('getOperatingCentres')->once()->andReturn(new ArrayCollection([$aoc1, $aoc2]));
 
         $result = $sut->getAutoGrantChangeSummary();
 
