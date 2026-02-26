@@ -19,6 +19,25 @@ RUN apk add --no-cache icu-dev libzip-dev \
 # Install libreoffice, cups-client, poppler-utils
 RUN apk add --no-cache libreoffice cups-client poppler-utils
 
+# Install fonts for document rendering and PDF conversion.
+# LibreOffice auto-substitutes these when documents request MS fonts:
+#   Arial/Times New Roman/Courier New → Liberation Sans/Serif/Mono (font-liberation)
+#   Calibri                           → Carlito                    (font-carlito)
+# Liberation Sans Narrow was explicitly required by document templates.
+# Noto fonts provide broad Unicode coverage for docstore templates.
+# hadolint ignore=DL3019
+RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+  && apk add --no-cache \
+    font-liberation \
+    font-liberation-sans-narrow \
+    font-carlito \
+    font-noto \
+    fontconfig
+
+# Install barcode font for CUPS printing
+COPY 3OF9.TTF /usr/share/fonts/3OF9.TTF
+RUN fc-cache -fv
+
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
 

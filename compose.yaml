@@ -134,7 +134,8 @@ services:
       VIRTUAL_PORT: 8025
 
   pdf-converter:
-    image: gotenberg/gotenberg:8
+    build:
+      context: infra/docker/gotenberg
     ports:
       - "8080:3000"
     environment:

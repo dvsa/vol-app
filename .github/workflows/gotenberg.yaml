@@ -1,0 +1,201 @@
+name: Build and Deploy Gotenberg
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version tag for the image (e.g., 1.0.0)"
+        required: false
+        default: "latest"
+      push_to_prod:
+        description: "Also push to PROD ECR"
+        type: boolean
+        required: false
+        default: false
+
+env:
+  NONPROD_REGISTRY: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
+  PROD_REGISTRY: 146997448015.dkr.ecr.eu-west-1.amazonaws.com
+  AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
+  REGISTRY_MIRROR: ghcr.io
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  security-events: write
+
+jobs:
+  build-and-push:
+    name: Build and Push Gotenberg
+    runs-on: ubuntu-24.04-arm # ARM64 runner
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Lint Dockerfile with Hadolint
+        uses: hadolint/hadolint-action@v3.3.0
+        with:
+          dockerfile: infra/docker/gotenberg/Dockerfile
+          failure-threshold: warning
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/arm64
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.NONPROD_REGISTRY }}/vol-app/gotenberg
+            ${{ env.REGISTRY_MIRROR }}/dvsa/vol-app/gotenberg
+          tags: |
+            type=raw,value=${{ inputs.version }}
+            type=raw,value=latest
+            type=sha,prefix=
+
+      # Build and push to NONPROD
+      - name: Configure AWS credentials (NONPROD)
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to NONPROD ECR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.NONPROD_REGISTRY }}
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY_MIRROR }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Remove existing latest tag from NONPROD ECR
+        run: |
+          echo "Removing existing latest tag from NONPROD ECR if it exists"
+          aws ecr batch-delete-image --repository-name vol-app/gotenberg --image-ids imageTag=latest || true
+
+      - name: Build image locally for scanning
+        uses: docker/build-push-action@v6
+        with:
+          context: infra/docker/gotenberg
+          platforms: linux/arm64
+          push: false
+          load: true
+          tags: gotenberg:test
+          cache-from: type=gha,scope=gotenberg
+          cache-to: type=gha,mode=max,scope=gotenberg
+
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@0.33.1
+        continue-on-error: true
+        with:
+          image-ref: gotenberg:test
+          format: "sarif"
+          output: "trivy-results.sarif"
+          severity: "MEDIUM,HIGH,CRITICAL"
+          exit-code: "1"
+
+      - name: Upload Trivy results to GitHub Security
+        if: always() && success() || failure()
+        uses: github/codeql-action/upload-sarif@v4
+        continue-on-error: true
+        with:
+          sarif_file: "trivy-results.sarif"
+
+      - name: Push to NONPROD
+        uses: docker/build-push-action@v6
+        with:
+          context: infra/docker/gotenberg
+          platforms: linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=gotenberg
+
+      # Sign the NONPROD image
+      - name: Setup Notation CLI
+        uses: notaryproject/notation-action/setup@v1
+        with:
+          version: "1.1.0"
+
+      - name: Sign NONPROD image
+        uses: notaryproject/notation-action/sign@v1
+        with:
+          plugin_name: com.amazonaws.signer.notation.plugin
+          plugin_url: https://d2hvyiie56hcat.cloudfront.net/linux/arm64/plugin/latest/notation-aws-signer-plugin.zip
+          plugin_checksum: b416954ac98a20d71f968c4f7cd7b13905328352f43298a405a8261016a8be51
+          key_id: arn:aws:signer:eu-west-1:054614622558:/signing-profiles/vol_app_20240313124948142600000001
+          target_artifact_reference: ${{ env.NONPROD_REGISTRY }}/vol-app/gotenberg:${{ inputs.version }}
+
+      - name: Summary
+        run: |
+          echo "### Gotenberg NONPROD Build Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** \`${{ inputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Architecture:** \`linux/arm64\`" >> $GITHUB_STEP_SUMMARY
+          echo "**NONPROD ECR:** Pushed and signed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Images:**" >> $GITHUB_STEP_SUMMARY
+          echo "- \`${{ env.NONPROD_REGISTRY }}/vol-app/gotenberg:${{ inputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`${{ env.NONPROD_REGISTRY }}/vol-app/gotenberg:latest\`" >> $GITHUB_STEP_SUMMARY
+
+  push-to-prod:
+    name: Push to PROD ECR
+    needs: build-and-push
+    if: ${{ inputs.push_to_prod }}
+    runs-on: ubuntu-24.04-arm
+    environment: prod
+    steps:
+      - name: Configure AWS credentials (NONPROD)
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to NONPROD ECR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.NONPROD_REGISTRY }}
+
+      - name: Pull image from NONPROD ECR
+        run: |
+          docker pull ${{ env.NONPROD_REGISTRY }}/vol-app/gotenberg:${{ inputs.version }}
+
+      - name: Configure AWS credentials (PROD)
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ vars.ACCOUNT_PROD_TF_OIDC_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to PROD ECR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.PROD_REGISTRY }}
+
+      - name: Remove existing latest tag from PROD ECR
+        run: |
+          echo "Removing existing latest tag from PROD ECR if it exists"
+          aws ecr batch-delete-image --repository-name vol-app/gotenberg --image-ids imageTag=latest || true
+
+      - name: Tag and push to PROD
+        run: |
+          docker tag ${{ env.NONPROD_REGISTRY }}/vol-app/gotenberg:${{ inputs.version }} ${{ env.PROD_REGISTRY }}/vol-app/gotenberg:${{ inputs.version }}
+          docker tag ${{ env.NONPROD_REGISTRY }}/vol-app/gotenberg:${{ inputs.version }} ${{ env.PROD_REGISTRY }}/vol-app/gotenberg:latest
+
+          docker push ${{ env.PROD_REGISTRY }}/vol-app/gotenberg:${{ inputs.version }}
+          docker push ${{ env.PROD_REGISTRY }}/vol-app/gotenberg:latest
+
+      - name: Summary
+        run: |
+          echo "### Gotenberg PROD Push Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** \`${{ inputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Images:**" >> $GITHUB_STEP_SUMMARY
+          echo "- \`${{ env.PROD_REGISTRY }}/vol-app/gotenberg:${{ inputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`${{ env.PROD_REGISTRY }}/vol-app/gotenberg:latest\`" >> $GITHUB_STEP_SUMMARY
