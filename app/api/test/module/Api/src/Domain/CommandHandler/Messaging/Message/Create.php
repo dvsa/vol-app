@@ -97,7 +97,7 @@ class Create extends AbstractCommandHandlerTestCase
         $this->assertArrayHasKey('messages', $result->toArray());
     }
 
-    public function testExternalUserMessageDoesNotUpdateActionDateWhenLastMessageWasExternal() : void
+    public function testExternalUserMessageDoesNotUpdateActionDateWhenLastMessageWasExternal(): void
     {
         $data = [
             'conversation'   => $conversationId = 1,
@@ -162,7 +162,7 @@ class Create extends AbstractCommandHandlerTestCase
         $this->assertArrayHasKey('id', $result->toArray());
     }
 
-    public function testExternalUserMessageUpdatesActionDateWhenLastMessageWasInternal() : void
+    public function testExternalUserMessageUpdatesActionDateWhenLastMessageWasInternal(): void
     {
         $data = [
             'conversation'   => $conversationId = 1,
@@ -223,7 +223,7 @@ class Create extends AbstractCommandHandlerTestCase
         $this->assertArrayHasKey('id', $result->toArray());
     }
 
-    public function testInternalUserMessageAlwaysUpdatesActionDate() : void
+    public function testInternalUserMessageAlwaysUpdatesActionDate(): void
     {
         $data = [
             'conversation'   => $conversationId = 1,
