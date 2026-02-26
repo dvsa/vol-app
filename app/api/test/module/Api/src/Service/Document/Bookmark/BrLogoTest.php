@@ -43,7 +43,7 @@ class BrLogoTest extends \PHPUnit\Framework\TestCase
             ->method('getContent')
             ->willReturn($content);
 
-        $fileStoreMock = $this->createPartialMock(DocumentStoreInterface::class, ['read', 'write', 'remove']);
+        $fileStoreMock = $this->createMock(DocumentStoreInterface::class);
         $fileStoreMock->expects($this->exactly(!empty($image) ? 1 : 0))
             ->method('read')
             ->willReturn($fileMock);

@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Document;
 
+use Common\Auth\Service\RefreshTokenService;
 use Common\Category;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
@@ -13,10 +14,13 @@ use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Laminas\Http\Response;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\Traits\WebDavSessionTrait;
 use Olcs\Service\Helper\WebDavJsonWebTokenGenerationService;
 
 class DocumentFinaliseController extends AbstractDocumentController
 {
+    use WebDavSessionTrait;
+
     public const PRINT_MSGS_SUCCESS = [
         'close' => 'The document has been saved',
         PrintLetterCmd::METHOD_EMAIL => 'The document has been saved and sent by email',
@@ -33,7 +37,9 @@ class DocumentFinaliseController extends AbstractDocumentController
         HelperPluginManager $viewHelperManager,
         array $config,
         private readonly FlashMessengerHelperService $flashMessengerHelper,
-        private readonly WebDavJsonWebTokenGenerationService $webDavJsonWebTokenGenerationService
+        private readonly WebDavJsonWebTokenGenerationService $webDavJsonWebTokenGenerationService,
+        private readonly ?\Redis $redis,
+        private readonly RefreshTokenService $refreshTokenService,
     ) {
         parent::__construct(
             $scriptFactory,
@@ -71,15 +77,15 @@ class DocumentFinaliseController extends AbstractDocumentController
         $category = $data['data']['category']['description'];
         $documentSubCategory = $data['data']['subCategory']['subCategoryName'];
 
-        $jwt = $this->webDavJsonWebTokenGenerationService->generateToken(
-            'intusr',
-            $data['data']['identifier']
-        );
+        $identifier = $data['data']['identifier'];
+        $documentId = (int) $data['data']['id'];
 
-        $url = $this->webDavJsonWebTokenGenerationService->getJwtWebDavLink(
-            $jwt,
-            $data['data']['identifier'],
-        );
+        $internalWebDav = $this->isInternalWebDavEnabled();
+        if ($internalWebDav) {
+            $this->refreshCognitoTokenForWebDav();
+        }
+        $documentSize = (int) ($data['data']['size'] ?? 0);
+        $url = $this->generateWebDavUrl($identifier, $documentId, $internalWebDav, $documentSize);
 
         $link = sprintf(
             '<a class="govuk-link" href="%s" data-file-url="%s" target="_blank">%s</a>',
