@@ -20,6 +20,7 @@ use Dvsa\Olcs\Transfer\Command\Variation\Grant as VariationGrantCmd;
  * Handles auto-granting of eligible variations.
  */
 
+#[\Override]
 final class AutoGrant extends AbstractCommandHandler implements TransactionedInterface
 {
     protected $repoServiceName = 'Application';
