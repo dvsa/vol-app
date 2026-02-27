@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\Licence;
 
 use Dvsa\Olcs\Api\Entity\Publication\PublicationLink;
@@ -15,16 +17,15 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 class LicenceCancelledTest extends MockeryTestCase
 {
     /**
-     * @dataProvider provideTestProvider
      *
      * @param $section
      * @param $expectedString
      *
-     * @group publicationFilter
-     *
-     * Test the application licence cancelled filter
      */
-    public function testProvide($section, $expectedString)
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the application licence cancelled filter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideTestProvider')]
+    public function testProvide(mixed $section, mixed $expectedString): void
     {
 
         $sut = new LicenceCancelled(m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class));
@@ -49,7 +50,7 @@ class LicenceCancelledTest extends MockeryTestCase
      *
      * @return array
      */
-    public function provideTestProvider()
+    public static function provideTestProvider(): array
     {
         $sut = new LicenceCancelled(m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class));
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * UpdateTest
  *
@@ -41,7 +43,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             Country::class => [
@@ -52,7 +55,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $params = [
             'id' => 323,
@@ -131,7 +134,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['PrivateHireLicence ID 564 updated'], $response->getMessages());
     }
 
-    public function testHandleCommandTrafficAreaUpdate()
+    public function testHandleCommandTrafficAreaUpdate(): void
     {
         $params = [
             'id' => 323,
@@ -185,7 +188,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandTrafficAreaWithOnePhl()
+    public function testHandleCommandTrafficAreaWithOnePhl(): void
     {
         $params = [
             'id' => 323,
@@ -243,7 +246,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandTrafficAreaValidationError()
+    public function testHandleCommandTrafficAreaValidationError(): void
     {
         $params = [
             'id' => 323,

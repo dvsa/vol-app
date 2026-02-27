@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\System;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -45,7 +47,8 @@ class GenerateSlaTargetDateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             TrafficAreaEntity::class => [
@@ -56,7 +59,7 @@ class GenerateSlaTargetDateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandForPublicInquiry()
+    public function testHandleCommandForPublicInquiry(): void
     {
         $params = [
             'pi' => 111,
@@ -66,7 +69,7 @@ class GenerateSlaTargetDateTest extends AbstractCommandHandlerTestCase
         $this->doTest($command, $params, 'pi', PiEntity::class, 'Pi', ['pi', 'pi_hearing']);
     }
 
-    public function testHandleCommandForSubmission()
+    public function testHandleCommandForSubmission(): void
     {
         $params = [
             'submission' => 111,
@@ -76,7 +79,7 @@ class GenerateSlaTargetDateTest extends AbstractCommandHandlerTestCase
         $this->doTest($command, $params, 'submission', SubmissionEntity::class, 'Submission', ['submission']);
     }
 
-    public function testHandleCommandForProposeToRevoke()
+    public function testHandleCommandForProposeToRevoke(): void
     {
         $params = [
             'proposeToRevoke' => 111,
@@ -86,7 +89,7 @@ class GenerateSlaTargetDateTest extends AbstractCommandHandlerTestCase
         $this->doTest($command, $params, 'proposeToRevoke', ProposeToRevokeEntity::class, 'ProposeToRevoke', ['ptr']);
     }
 
-    public function testHandleCommandForStatement()
+    public function testHandleCommandForStatement(): void
     {
         $params = [
             'statement' => 111,
@@ -96,7 +99,7 @@ class GenerateSlaTargetDateTest extends AbstractCommandHandlerTestCase
         $this->doTest($command, $params, 'statement', StatementEntity::class, 'Statement', ['statement']);
     }
 
-    public function doTest(Command $command, $params, $entityParam, $entityClass, $repoName, $categories)
+    public function doTest(Command $command, mixed $params, mixed $entityParam, mixed $entityClass, mixed $repoName, mixed $categories): void
     {
 
         $v1 = new \DateTime('2015-01-01');

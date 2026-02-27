@@ -31,6 +31,7 @@ class MarkExpiredPermits extends AbstractCommandHandler
      * @return Result
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         // mark all permits with validity date in the past as expired

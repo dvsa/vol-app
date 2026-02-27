@@ -15,6 +15,7 @@ use Psr\Container\ContainerInterface;
 
 class ApplicationProcessingInspectionRequestControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationProcessingInspectionRequestController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

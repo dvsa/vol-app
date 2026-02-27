@@ -18,6 +18,7 @@ class PiSlaException implements MapperInterface
      * @param array $data API data
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data): array
     {
         // For add form, the data contains the case ID directly as 'id'
@@ -38,7 +39,7 @@ class PiSlaException implements MapperInterface
     public static function mapFromForm(array $data): array
     {
         $fields = $data['fields'] ?? [];
-        
+
         return [
             'case' => $fields['case'] ?? null,
             'slaException' => $fields['slaException'] ?? null,

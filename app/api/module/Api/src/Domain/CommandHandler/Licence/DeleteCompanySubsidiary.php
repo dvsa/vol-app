@@ -26,6 +26,7 @@ class DeleteCompanySubsidiary extends AbstractCompanySubsidiary implements AuthA
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         //  create task

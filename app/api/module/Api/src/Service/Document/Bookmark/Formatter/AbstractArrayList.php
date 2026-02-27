@@ -26,6 +26,7 @@ class AbstractArrayList implements FormatterInterface
      *
      * @return string
      */
+    #[\Override]
     public static function format(array $data)
     {
         if (!empty($data)) {

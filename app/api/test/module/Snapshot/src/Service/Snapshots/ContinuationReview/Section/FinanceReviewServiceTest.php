@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ContinuationReview\Section;
 
 use Dvsa\Olcs\Api\Domain\Repository\Document as DocumentRepository;
@@ -58,7 +60,7 @@ class FinanceReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetConfigFrom()
+    public function testGetConfigFrom(): void
     {
         $result = $this->sut->getConfigFromData($this->continuationDetail);
         $this->assertCount(7, $result);
@@ -114,7 +116,7 @@ class FinanceReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetConfigFromFinanceRequiredLessThanAvailable()
+    public function testGetConfigFromFinanceRequiredLessThanAvailable(): void
     {
         $this->continuationDetail->setAverageBalanceAmount(45);
         $this->continuationDetail->setOverdraftAmount(46);
@@ -160,7 +162,7 @@ class FinanceReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetConfigFromFinanceRequiredGreaterThanAvailable()
+    public function testGetConfigFromFinanceRequiredGreaterThanAvailable(): void
     {
         $this->continuationDetail->setAverageBalanceAmount(4);
         $this->continuationDetail->setOverdraftAmount(5);
@@ -229,7 +231,7 @@ class FinanceReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetConfigFromDataSendInPost()
+    public function testGetConfigFromDataSendInPost(): void
     {
         $this->continuationDetail->setFinancialEvidenceUploaded(false);
         $result = $this->sut->getConfigFromData($this->continuationDetail);
@@ -244,7 +246,7 @@ class FinanceReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetConfigFromDataFilesUploaded()
+    public function testGetConfigFromDataFilesUploaded(): void
     {
         $document1 = new Document(1);
         $document1->setDescription('document1');

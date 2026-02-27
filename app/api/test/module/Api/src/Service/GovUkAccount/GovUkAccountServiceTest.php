@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\GovUkAccount;
 
 use Dvsa\GovUkAccount\Provider\GovUkAccount;
@@ -137,17 +139,15 @@ class GovUkAccountServiceTest extends MockeryTestCase
         $this->assertEquals('some_nonce', $result->getNonce());
     }
 
-    /**
-     * @dataProvider dataProviderMeetsVectorOfTrust
-     */
-    public function testMeetsVectorOfTrust($actual, $minimumConfidence, $shouldPass): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderMeetsVectorOfTrust')]
+    public function testMeetsVectorOfTrust(mixed $actual, mixed $minimumConfidence, mixed $shouldPass): void
     {
         $result = GovUkAccountService::meetsVectorOfTrust($actual, $minimumConfidence);
 
         $this->assertEquals($shouldPass, $result);
     }
 
-    public function dataProviderMeetsVectorOfTrust(): array
+    public static function dataProviderMeetsVectorOfTrust(): array
     {
         return [
             'P0 meets P0' => [GovUkAccountService::VOT_P0, GovUkAccountService::VOT_P0, true],
@@ -162,9 +162,7 @@ class GovUkAccountServiceTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @depends testMeetsVectorOfTrust
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testMeetsVectorOfTrust')]
     public function testMeetsVectorOfTrustIsNotCaseSensitive(): void
     {
         $this->assertTrue(GovUkAccountService::meetsVectorOfTrust('p1', GovUkAccountService::VOT_P1));
@@ -182,22 +180,20 @@ class GovUkAccountServiceTest extends MockeryTestCase
         $this->assertFalse(GovUkAccountService::meetsVectorOfTrust('P9000', GovUkAccountService::VOT_P0));
     }
 
-    public function testProcessNamesWithEmptyArray()
+    public function testProcessNamesWithEmptyArray(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(GovUkAccountService::ERR_MISSING_NAMES);
         GovUkAccountService::processNames([]);
     }
 
-    /**
-     * @dataProvider dpProcessNames
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpProcessNames')]
     public function testProcessNames(array $nameData, array $expectedOutput): void
     {
         $this->assertEquals($expectedOutput, GovUkAccountService::processNames($nameData));
     }
 
-    public function dpProcessNames(): array
+    public static function dpProcessNames(): array
     {
         return [
             'single record' => [

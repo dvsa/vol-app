@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Previous Publication Test
  */
@@ -26,7 +28,7 @@ class PreviousPublicationTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $trafficArea = 99;
         $pi = 88;
@@ -58,7 +60,7 @@ class PreviousPublicationTest extends QueryHandlerTestCase
         $this->assertEquals(['foo' => 'bar'], $this->sut->handleQuery($query)->serialize());
     }
 
-    public function testHandleQueryNull()
+    public function testHandleQueryNull(): void
     {
         $trafficArea = 99;
         $pi = 88;

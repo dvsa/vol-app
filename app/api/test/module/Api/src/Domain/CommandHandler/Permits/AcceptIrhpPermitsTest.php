@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Permits\AcceptIrhpPermits;
@@ -12,6 +14,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class AcceptIrhpPermitsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
@@ -23,7 +26,8 @@ class AcceptIrhpPermitsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrhpInterface::STATUS_ISSUING
@@ -32,7 +36,7 @@ class AcceptIrhpPermitsTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $irhpApplicationId = 54;
 
@@ -75,7 +79,7 @@ class AcceptIrhpPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandIssuingFailed()
+    public function testHandleCommandIssuingFailed(): void
     {
         $irhpApplicationId = 54;
 

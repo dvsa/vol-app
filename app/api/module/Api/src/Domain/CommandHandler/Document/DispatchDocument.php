@@ -34,6 +34,7 @@ final class DispatchDocument extends AbstractCommandHandler implements AuthAware
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->checkCommandParams($command);

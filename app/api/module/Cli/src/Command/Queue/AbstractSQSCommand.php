@@ -20,6 +20,7 @@ abstract class AbstractSQSCommand extends AbstractOlcsCommand
         );
     }
 
+    #[\Override]
     protected function configure()
     {
         $this
@@ -39,6 +40,7 @@ abstract class AbstractSQSCommand extends AbstractOlcsCommand
      * @param OutputInterface $output
      * @return int
      */
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

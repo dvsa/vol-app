@@ -24,6 +24,7 @@ class Grant extends AbstractQueryHandler
      */
     private $grantValidationService;
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var ApplicationEntity $application */
@@ -56,6 +57,7 @@ class Grant extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

@@ -34,7 +34,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractSystemInfoMessage implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSystemInfoMessage implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -164,7 +164,8 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -187,7 +188,8 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -210,7 +212,8 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -233,7 +236,8 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
     /**
      * Get the is internal
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsInternal()
     {
         return $this->isInternal;
@@ -258,7 +262,8 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getStartDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -287,7 +292,8 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEndDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -314,7 +320,8 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -337,7 +344,8 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
     /**
      * Get the importance
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getImportance()
     {
         return $this->importance;
@@ -360,7 +368,8 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -369,6 +378,7 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

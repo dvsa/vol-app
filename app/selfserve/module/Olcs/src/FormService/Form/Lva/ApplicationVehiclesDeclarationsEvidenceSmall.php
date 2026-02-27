@@ -29,6 +29,7 @@ class ApplicationVehiclesDeclarationsEvidenceSmall extends VehiclesDeclarationsE
      *
      * @return Form
      */
+    #[\Override]
     protected function alterForm($form)
     {
         parent::alterForm($form);

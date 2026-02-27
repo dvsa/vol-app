@@ -20,6 +20,7 @@ class IsExternalUser extends AbstractHandler implements AuthAwareInterface
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->isExternalUser();

@@ -17,6 +17,7 @@ class Navigation implements InitializerInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $instance)
     {
         /**

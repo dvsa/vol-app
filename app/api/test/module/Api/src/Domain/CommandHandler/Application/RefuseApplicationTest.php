@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Dvsa\Olcs\Api\Domain\Command\Application\CancelOutstandingFees;
@@ -47,7 +49,8 @@ class RefuseApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'apsts_refused'
@@ -56,7 +59,7 @@ class RefuseApplicationTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Command::create(['id' => 532]);
 
@@ -148,7 +151,7 @@ class RefuseApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Snapshot created', 'Application 1 refused.'], $result->getMessages());
     }
 
-    public function testHandleCommandCloseTasks()
+    public function testHandleCommandCloseTasks(): void
     {
         $command = Command::create(['id' => 532]);
 
@@ -256,7 +259,7 @@ class RefuseApplicationTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandVariationUnpublishable()
+    public function testHandleCommandVariationUnpublishable(): void
     {
         $command = Command::create(['id' => 532]);
 
@@ -302,7 +305,7 @@ class RefuseApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Snapshot created', 'Application 1 refused.'], $result->getMessages());
     }
 
-    public function testHandleCommandVariationPublishable()
+    public function testHandleCommandVariationPublishable(): void
     {
         $command = Command::create(['id' => 532]);
 
@@ -372,7 +375,7 @@ class RefuseApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Snapshot created', 'Application 1 refused.'], $result->getMessages());
     }
 
-    public function testHandleCommandVariation()
+    public function testHandleCommandVariation(): void
     {
         $command = Command::create(['id' => 532]);
 
@@ -436,7 +439,7 @@ class RefuseApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Snapshot created', 'Application 1 refused.'], $result->getMessages());
     }
 
-    public function testHandleCommandRefund()
+    public function testHandleCommandRefund(): void
     {
         $command = Command::create(['id' => 111]);
 

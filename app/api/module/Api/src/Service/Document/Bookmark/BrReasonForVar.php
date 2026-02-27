@@ -18,11 +18,13 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\BusRegBundle as Qry;
  */
 class BrReasonForVar extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(['id' => $data['busRegId'], 'bundle' => ['variationReasons']]);
     }
 
+    #[\Override]
     public function render()
     {
         $localAuthoritys = implode(

@@ -51,6 +51,7 @@ final class PayFee extends AbstractCommandHandler implements TransactionedInterf
      * @return Result
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $fee = $this->getRepo()->fetchUsingId($command);

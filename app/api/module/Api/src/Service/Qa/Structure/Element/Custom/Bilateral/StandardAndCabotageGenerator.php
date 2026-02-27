@@ -23,6 +23,7 @@ class StandardAndCabotageGenerator implements ElementGeneratorInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function generate(ElementGeneratorContext $context)
     {
         return $this->standardAndCabotageFactory->create(

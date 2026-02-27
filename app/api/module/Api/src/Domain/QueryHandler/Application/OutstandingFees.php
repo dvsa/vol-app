@@ -24,6 +24,7 @@ class OutstandingFees extends AbstractQueryHandler
      */
     private $feesHelper;
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $application = $this->getRepo()->fetchUsingId($query);
@@ -58,6 +59,7 @@ class OutstandingFees extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

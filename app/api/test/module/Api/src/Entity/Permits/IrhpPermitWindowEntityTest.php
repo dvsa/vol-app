@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Permits;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -21,7 +23,7 @@ class IrhpPermitWindowEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testCreateUpdate()
+    public function testCreateUpdate(): void
     {
         $irhpPermitStock = m::mock(IrhpPermitStock::class)->makePartial();
         $startDate = '2019-10-01';

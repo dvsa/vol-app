@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\EventHistory;
 
 use Dvsa\Olcs\Api\Domain\Repository\Query\EventHistory\GetEventHistoryDetails;
@@ -20,7 +22,7 @@ class GetEventHistoryDetailsTest extends AbstractDbQueryTestCase
      *
      * @return array
      */
-    public function paramProvider()
+    public static function paramProvider(): array
     {
         return [
             [
@@ -37,7 +39,7 @@ class GetEventHistoryDetailsTest extends AbstractDbQueryTestCase
      *
      * @return mixed
      */
-    protected function getSut()
+    protected function getSut(): mixed
     {
         $sut = new GetEventHistoryDetails();
         $sut->setHistoryTable('application_hist');
@@ -49,7 +51,7 @@ class GetEventHistoryDetailsTest extends AbstractDbQueryTestCase
      *
      * @return string
      */
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return 'SELECT * FROM application_hist WHERE id = :id AND version IN (:version) ORDER BY version DESC LIMIT 2';
     }

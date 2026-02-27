@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Common;
 
 use Dvsa\Olcs\Api\Service\Permits\Bilateral\Common\ModifiedAnswerUpdater;
@@ -15,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class PermitUsageUpdaterTest extends MockeryTestCase
 {
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $oldPermitUsage = 'old_permit_usage_selection';
         $newPermitUsage = 'new_permit_usage_selection';

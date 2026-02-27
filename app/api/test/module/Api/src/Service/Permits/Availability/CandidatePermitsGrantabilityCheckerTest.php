@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Availability;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
@@ -17,10 +19,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class CandidatePermitsGrantabilityCheckerTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpIsGrantable
-     */
-    public function testIsGrantable($range1Count, $range2Count, $range3Count, $expectedResult)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsGrantable')]
+    public function testIsGrantable(mixed $range1Count, mixed $range2Count, mixed $range3Count, mixed $expectedResult): void
     {
         $irhpPermitRange1RequestedPermits = 6;
         $irhpPermitRange1 = m::mock(IrhpPermitRange::class);
@@ -77,7 +77,7 @@ class CandidatePermitsGrantabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    public function dpIsGrantable()
+    public static function dpIsGrantable(): array
     {
         return [
             [3, 5, 0, true],

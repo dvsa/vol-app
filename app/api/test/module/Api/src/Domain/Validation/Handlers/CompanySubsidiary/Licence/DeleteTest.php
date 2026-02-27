@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Delete Test
  *
@@ -34,7 +36,7 @@ class DeleteTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsValidNoContext()
+    public function testIsValidNoContext(): void
     {
         $data = [
             'licence' => null
@@ -45,7 +47,7 @@ class DeleteTest extends AbstractHandlerTestCase
         $this->assertFalse($this->sut->isValid($dto));
     }
 
-    public function testIsValidWithContextNoAccess()
+    public function testIsValidWithContextNoAccess(): void
     {
         $data = [
             'ids' => [111],
@@ -62,7 +64,7 @@ class DeleteTest extends AbstractHandlerTestCase
         $this->assertEquals(false, $this->sut->isValid($dto));
     }
 
-    public function testIsValidWithContextNoOwnership()
+    public function testIsValidWithContextNoOwnership(): void
     {
         $data = [
             'ids' => [111],
@@ -80,7 +82,7 @@ class DeleteTest extends AbstractHandlerTestCase
         $this->assertEquals(false, $this->sut->isValid($dto));
     }
 
-    public function testIsValidWithContextAndOwnership()
+    public function testIsValidWithContextAndOwnership(): void
     {
         $data = [
             'ids' => [111],
@@ -104,7 +106,7 @@ class DeleteTest extends AbstractHandlerTestCase
         $this->assertEquals(true, $this->sut->isValid($dto));
     }
 
-    public function testIsValidWithContextAndOwnershipWithoutMatching()
+    public function testIsValidWithContextAndOwnershipWithoutMatching(): void
     {
         $data = [
             'ids' => [111],
@@ -130,7 +132,7 @@ class DeleteTest extends AbstractHandlerTestCase
         $this->assertEquals(false, $this->sut->isValid($dto));
     }
 
-    public function getLicenceFromLicence()
+    public function getLicenceFromLicence(): mixed
     {
         $licence = m::mock(Licence::class);
 

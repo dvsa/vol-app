@@ -25,6 +25,7 @@ final class UpdatePreviousConvictions extends AbstractCommandHandler implements 
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

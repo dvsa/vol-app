@@ -11,6 +11,7 @@ use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
 
 class LicencePeopleAdapterFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicencePeopleAdapter
     {
         $peopleLvaService = $container->get(PeopleLvaService::class);

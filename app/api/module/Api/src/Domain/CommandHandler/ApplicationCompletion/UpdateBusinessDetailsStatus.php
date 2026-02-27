@@ -24,6 +24,7 @@ final class UpdateBusinessDetailsStatus extends AbstractUpdateStatus
 
     protected $section = 'BusinessDetails';
 
+    #[\Override]
     protected function isSectionValid(Application $application)
     {
         $organisation = $application->getLicence()->getOrganisation();

@@ -93,5 +93,9 @@ return [
             'xmlNs' => 'https://webgate.ec.testa.eu/move-hub/erru/',
             'erruVersion' => "3.4",
         ],
+        'cgr' => [
+            'xmlNs' => 'https://webgate.ec.testa.eu/move-hub/erru/',
+            'erruVersion' => "3.4",
+        ],
     ]
 ];

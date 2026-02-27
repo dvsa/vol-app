@@ -11,9 +11,7 @@ use Mockery as m;
 
 class S3ProcessorTest extends m\Adapter\Phpunit\MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestProcess
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestProcess')]
     public function testProcess(array $s3Options, string $expectedS3Filename): void
     {
         $mockS3Client = m::mock(S3Client::class);
@@ -39,7 +37,7 @@ class S3ProcessorTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertEquals('testurl', $sut->process($identifier, $s3Options));
     }
 
-    public function dpTestProcess(): array
+    public static function dpTestProcess(): array
     {
         return [
             'optional filename provided' => [

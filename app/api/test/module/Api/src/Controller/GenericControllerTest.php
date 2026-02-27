@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Controller;
 
 use Doctrine\ORM\OptimisticLockException;
@@ -19,9 +21,7 @@ use Laminas\Mvc\Controller\Plugin\Params;
 use Laminas\Mvc\Controller\PluginManager;
 use Laminas\View\Model\JsonModel;
 
-/**
- * @covers \Dvsa\Olcs\Api\Controller\GenericController
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Controller\GenericController::class)]
 class GenericControllerTest extends TestCase
 {
     protected $commandHandlerManager;
@@ -32,14 +32,12 @@ class GenericControllerTest extends TestCase
         $this->commandHandlerManager = m::mock(CommandHandlerManager::class);
         $this->queryHandlerManager = m::mock(QueryHandlerManager::class);
 
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $viewModel = new JsonModel();
         $application = new Application();
@@ -62,7 +60,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testGetNotFound()
+    public function testGetNotFound(): void
     {
         $viewModel = new JsonModel();
         $application = new Application();
@@ -86,7 +84,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testGetNotReady()
+    public function testGetNotReady(): void
     {
         $viewModel = new JsonModel();
         $application = new Application();
@@ -110,7 +108,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testGetClientError()
+    public function testGetClientError(): void
     {
         $viewModel = new JsonModel();
         $application = new Application();
@@ -135,7 +133,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testGetServerError()
+    public function testGetServerError(): void
     {
         $viewModel = new JsonModel();
         $application = new Application();
@@ -161,7 +159,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testGetRestResponseError()
+    public function testGetRestResponseError(): void
     {
         $viewModel = new JsonModel();
         $application = new Application();
@@ -186,7 +184,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testGetForbiddenError()
+    public function testGetForbiddenError(): void
     {
         $viewModel = new JsonModel();
         $application = new Application();
@@ -211,7 +209,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testGetList()
+    public function testGetList(): void
     {
         $viewModel = new JsonModel();
         $application = new Application();
@@ -247,7 +245,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testGetListStream()
+    public function testGetListStream(): void
     {
         $dto = new Application();
 
@@ -271,7 +269,7 @@ class GenericControllerTest extends TestCase
         static::assertSame('EXPECT', $actual);
     }
 
-    public function testGetListSingle()
+    public function testGetListSingle(): void
     {
         $singleData = ['id' => 100];
 
@@ -302,7 +300,7 @@ class GenericControllerTest extends TestCase
         static::assertSame($singleData, $actual);
     }
 
-    public function testGetListNotFound()
+    public function testGetListNotFound(): void
     {
         $viewModel = new JsonModel();
         $application = new Application();
@@ -326,7 +324,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testGetListClientError()
+    public function testGetListClientError(): void
     {
         $viewModel = new JsonModel();
         $application = new Application();
@@ -351,7 +349,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testGetListServerError()
+    public function testGetListServerError(): void
     {
         $viewModel = new JsonModel();
         $application = new Application();
@@ -377,7 +375,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testGetListNotReadyError()
+    public function testGetListNotReadyError(): void
     {
         $viewModel = new JsonModel();
         $application = new Application();
@@ -402,7 +400,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testGetListForbiddenExceptionError()
+    public function testGetListForbiddenExceptionError(): void
     {
         $viewModel = new JsonModel();
         $application = new Application();
@@ -428,7 +426,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -453,7 +451,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testUpdateNotFound()
+    public function testUpdateNotFound(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -477,7 +475,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testUpdateClientError()
+    public function testUpdateClientError(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -502,7 +500,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testUpdateConflict()
+    public function testUpdateConflict(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -531,7 +529,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testUpdateOptimisticLock()
+    public function testUpdateOptimisticLock(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -558,7 +556,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testUpdateServerError()
+    public function testUpdateServerError(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -584,7 +582,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testUpdateRestResponseError()
+    public function testUpdateRestResponseError(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -610,7 +608,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testUpdateForbiddenError()
+    public function testUpdateForbiddenError(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -636,7 +634,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testReplaceList()
+    public function testReplaceList(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -661,7 +659,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testReplaceListNotFound()
+    public function testReplaceListNotFound(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -685,7 +683,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testReplaceListClientError()
+    public function testReplaceListClientError(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -710,7 +708,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testReplaceListConflict()
+    public function testReplaceListConflict(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -739,7 +737,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testReplaceListServerError()
+    public function testReplaceListServerError(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -765,7 +763,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -790,7 +788,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testCreateClientError()
+    public function testCreateClientError(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -815,7 +813,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testCreateServerError()
+    public function testCreateServerError(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -841,7 +839,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testCreateRestResponseError()
+    public function testCreateRestResponseError(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -867,7 +865,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testCreateForbiddenError()
+    public function testCreateForbiddenError(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -893,7 +891,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -918,7 +916,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testDeleteNotFound()
+    public function testDeleteNotFound(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -942,7 +940,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testDeleteClientError()
+    public function testDeleteClientError(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -967,7 +965,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testDeleteServerError()
+    public function testDeleteServerError(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -993,7 +991,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testDeleteForbiddenError()
+    public function testDeleteForbiddenError(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -1019,7 +1017,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testDeleteList()
+    public function testDeleteList(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -1044,7 +1042,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testDeleteListNotFound()
+    public function testDeleteListNotFound(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -1068,7 +1066,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testDeleteListClientError()
+    public function testDeleteListClientError(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -1093,7 +1091,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testDeleteListServerError()
+    public function testDeleteListServerError(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -1119,7 +1117,7 @@ class GenericControllerTest extends TestCase
         $this->assertSame($viewModel, $response);
     }
 
-    public function testDeleteListForbiddenError()
+    public function testDeleteListForbiddenError(): void
     {
         $viewModel = new JsonModel();
         $application = new UpdateTypeOfLicence();
@@ -1149,7 +1147,7 @@ class GenericControllerTest extends TestCase
      * @param $mockSl
      * @return GenericController
      */
-    protected function setupSut($mockSl)
+    protected function setupSut(mixed $mockSl): mixed
     {
         $sut = new GenericController($this->queryHandlerManager, $this->commandHandlerManager);
         $sut->setPluginManager($mockSl);
@@ -1163,9 +1161,9 @@ class GenericControllerTest extends TestCase
      * @return m\MockInterface
      */
     protected function getMockSl(
-        $mockResponse,
-        $mockParams
-    ) {
+        mixed $mockResponse,
+        mixed $mockParams
+    ): m\MockInterface {
         $mockSl = m::mock(PluginManager::class);
         $mockSl->shouldReceive('get')->with('response', null)->andReturn($mockResponse);
         $mockSl->shouldReceive('get')->with('params', null)->andReturn($mockParams);

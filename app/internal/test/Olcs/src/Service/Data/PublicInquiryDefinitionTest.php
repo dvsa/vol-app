@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\PublicInquiryDefinition;
@@ -25,7 +27,7 @@ class PublicInquiryDefinitionTest extends AbstractPublicInquiryDataTestCase
         $this->sut = new PublicInquiryDefinition($this->abstractPublicInquiryDataServices);
     }
 
-    public function testFetchListOptionsWithGroups()
+    public function testFetchListOptionsWithGroups(): void
     {
         $this->licenceDataService->shouldReceive('getId')
             ->once()

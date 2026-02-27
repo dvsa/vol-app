@@ -18,6 +18,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\PublicationLinkBundle as Qry;
  */
 class BrNPNo extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         if (!isset($data['busRegId'])) {
@@ -27,6 +28,7 @@ class BrNPNo extends DynamicBookmark
         return Qry::create(['busReg' => $data['busRegId'], 'bundle' => ['publication']]);
     }
 
+    #[\Override]
     public function render()
     {
         if (empty($this->data['Results'])) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Outstanding Fees Test
  *
@@ -33,7 +35,7 @@ class OutstandingFeesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $organisationId = 69;
 
@@ -73,7 +75,7 @@ class OutstandingFeesTest extends QueryHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
 
-    private function getMockFee($feeId)
+    private function getMockFee(mixed $feeId): m\MockInterface
     {
         return m::mock()
             ->shouldReceive('serialize')

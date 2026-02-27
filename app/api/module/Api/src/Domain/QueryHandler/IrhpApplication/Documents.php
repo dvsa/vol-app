@@ -22,6 +22,7 @@ class Documents extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $irhpApplication = $this->getRepo()->fetchUsingId($query);

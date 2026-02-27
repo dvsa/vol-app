@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * PublicationLink Bundle Test
  *
@@ -30,7 +32,7 @@ class PublicationLinkBundleTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['busReg' => 111, 'bundle' => ['foo' => ['bar']]]);
 

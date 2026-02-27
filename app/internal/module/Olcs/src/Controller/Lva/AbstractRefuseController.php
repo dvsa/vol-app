@@ -42,6 +42,7 @@ abstract class AbstractRefuseController extends AbstractApplicationDecisionContr
      *
      * @return \Laminas\Form\Form
      */
+    #[\Override]
     protected function getForm()
     {
         $request  = $this->getRequest();
@@ -61,6 +62,7 @@ abstract class AbstractRefuseController extends AbstractApplicationDecisionContr
      *
      * @return \Common\Service\Cqrs\Response
      */
+    #[\Override]
     protected function processDecision($id, $data)
     {
         return $this->handleCommand(

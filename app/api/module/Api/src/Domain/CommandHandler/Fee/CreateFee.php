@@ -36,6 +36,7 @@ final class CreateFee extends AbstractCommandHandler implements TransactionedInt
 {
     protected $repoServiceName = 'Fee';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $feeType = $this->getRepo()->getReference(FeeType::class, $command->getFeeType());

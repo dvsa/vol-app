@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Generic;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -30,7 +32,7 @@ class AnswerEntityTest extends EntityTester
         $this->entity = $this->instantiate($this->entityClass);
     }
 
-    public function testCreateNewForIrhpApplication()
+    public function testCreateNewForIrhpApplication(): void
     {
         $questionText = m::mock(QuestionText::class);
         $irhpApplication = m::mock(IrhpApplication::class);
@@ -43,7 +45,7 @@ class AnswerEntityTest extends EntityTester
         $this->assertNull($entity->getIrhpPermitApplication());
     }
 
-    public function testCreateNewForIrhpPermitApplication()
+    public function testCreateNewForIrhpPermitApplication(): void
     {
         $questionText = m::mock(QuestionText::class);
         $irhpPermitApplication = m::mock(IrhpPermitApplication::class);
@@ -56,10 +58,8 @@ class AnswerEntityTest extends EntityTester
         $this->assertSame($irhpPermitApplication, $entity->getIrhpPermitApplication());
     }
 
-    /**
-    * @dataProvider dpValueGetterAndSetter
-    */
-    public function testValueGetterAndSetter($questionType, $answerValue)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValueGetterAndSetter')]
+    public function testValueGetterAndSetter(mixed $questionType, mixed $answerValue): void
     {
         $this->assertNull($this->entity->getValue());
         $this->entity->setValue($questionType, $answerValue);
@@ -67,7 +67,7 @@ class AnswerEntityTest extends EntityTester
         $this->assertEquals($answerValue, $this->entity->getValue());
     }
 
-    public function dpValueGetterAndSetter()
+    public static function dpValueGetterAndSetter(): array
     {
         return [
             // string
@@ -100,17 +100,15 @@ class AnswerEntityTest extends EntityTester
         ];
     }
 
-    public function testSetValueForCustomType()
+    public function testSetValueForCustomType(): void
     {
         $this->expectException(RuntimeException::class);
 
         $this->entity->setValue(Question::QUESTION_TYPE_CUSTOM, 'custom');
     }
 
-    /**
-    * @dataProvider dpIsEqualTo
-    */
-    public function testIsEqualTo($questionType, $answerValue, $checkValue, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsEqualTo')]
+    public function testIsEqualTo(mixed $questionType, mixed $answerValue, mixed $checkValue, mixed $expected): void
     {
         $this->assertNull($this->entity->getValue());
 
@@ -119,7 +117,7 @@ class AnswerEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isEqualTo($checkValue));
     }
 
-    public function dpIsEqualTo()
+    public static function dpIsEqualTo(): array
     {
         return [
             // matching values
@@ -162,7 +160,7 @@ class AnswerEntityTest extends EntityTester
         ];
     }
 
-    public function testIsEqualToWhenValueNotSet()
+    public function testIsEqualToWhenValueNotSet(): void
     {
         $this->expectException(RuntimeException::class);
 

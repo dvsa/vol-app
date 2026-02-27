@@ -10,6 +10,9 @@ use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Transfer\Command\ConditionUndertaking\Update as Command;
 use Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking;
 use Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre;
+use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
+use Psr\Container\ContainerInterface;
 
 /**
  * Update ConditionUndertaking
@@ -20,6 +23,9 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
 {
     protected $repoServiceName = 'ConditionUndertaking';
 
+    private EventHistoryCreator $eventHistoryCreator;
+
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command Command */
@@ -46,6 +52,12 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
 
         $this->getRepo()->save($conditionUndertaking);
 
+        $eventHistoryType = $command->getType() === ConditionUndertaking::TYPE_CONDITION ?
+            EventHistoryTypeEntity::EVENT_CODE_CONDITION_CHANGED : EventHistoryTypeEntity::EVENT_CODE_UNDERTAKING_CHANGED;
+
+        // create Event History record
+        $this->eventHistoryCreator->create($conditionUndertaking, $eventHistoryType);
+
         $result = new Result();
         $result->addId('conditionUndertaking', $conditionUndertaking->getId());
         $result->addMessage('ConditionUndertaking updated');
@@ -67,5 +79,12 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
         ) {
             throw new ValidationException(['Operating centre missing']);
         }
+    }
+
+    #[\Override]
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $this->eventHistoryCreator = $container->get('EventHistoryCreator');
+        return parent::__invoke($container, $requestedName, $options);
     }
 }

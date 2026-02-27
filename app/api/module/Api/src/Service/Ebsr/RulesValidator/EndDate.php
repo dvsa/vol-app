@@ -27,6 +27,7 @@ class EndDate extends AbstractValidator
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($value)
     {
         if (!empty($value['endDate']) && $value['txcAppType'] === BusRegEntity::TXC_APP_CANCEL) {

@@ -48,6 +48,7 @@ class QueryBuilder implements QueryBuilderInterface
      *
      * @return $this
      */
+    #[\Override]
     public function modifyQuery(DoctrineQueryBuilder $qb)
     {
         $this->qb = $qb;

@@ -46,6 +46,7 @@ class TransportManagerProcessingNoteController extends AbstractInternalControlle
     ];
     protected $filterForm = FilterForm::class;
 
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

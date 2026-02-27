@@ -17,6 +17,7 @@ class IrhpCandidatePermit implements MapperInterface
      * @param array $data
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         $form['fields']['irhpPermitRangeSelected'] = $data['irhpPermitRange']['id'];

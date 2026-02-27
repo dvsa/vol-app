@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\DvlaSearch;
 
 use Dvsa\Olcs\Api\Service\DvlaSearch\DvlaSearchService as DvlaSearchServiceClient;
@@ -10,7 +12,7 @@ use Psr\Container\ContainerInterface;
 
 class DvlaSearchServiceFactoryTest extends TestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $config = [
             'dvla_search' => [
@@ -20,7 +22,7 @@ class DvlaSearchServiceFactoryTest extends TestCase
             ]
         ];
 
-        $logger = new \Laminas\Log\Logger();
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
 
         $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('config')->andReturn($config);

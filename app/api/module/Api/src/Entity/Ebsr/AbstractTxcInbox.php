@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -199,7 +199,8 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -222,7 +223,8 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
     /**
      * Get the bus reg
      *
-     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg     */
+     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     */
     public function getBusReg()
     {
         return $this->busReg;
@@ -245,7 +247,8 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
     /**
      * Get the local authority
      *
-     * @return \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority     */
+     * @return \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority
+     */
     public function getLocalAuthority()
     {
         return $this->localAuthority;
@@ -268,7 +271,8 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
     /**
      * Get the organisation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     */
     public function getOrganisation()
     {
         return $this->organisation;
@@ -291,7 +295,8 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
     /**
      * Get the zip document
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
+     */
     public function getZipDocument()
     {
         return $this->zipDocument;
@@ -314,7 +319,8 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
     /**
      * Get the route document
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
+     */
     public function getRouteDocument()
     {
         return $this->routeDocument;
@@ -337,7 +343,8 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
     /**
      * Get the pdf document
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
+     */
     public function getPdfDocument()
     {
         return $this->pdfDocument;
@@ -360,7 +367,8 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -383,7 +391,8 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -406,7 +415,8 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
     /**
      * Get the file read
      *
-     * @return string     */
+     * @return string
+     */
     public function getFileRead()
     {
         return $this->fileRead;
@@ -429,7 +439,8 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
     /**
      * Get the variation no
      *
-     * @return int     */
+     * @return int
+     */
     public function getVariationNo()
     {
         return $this->variationNo;
@@ -452,7 +463,8 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -461,6 +473,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

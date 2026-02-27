@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Permits\AvailableYears;
@@ -27,7 +29,7 @@ class AvailableYearsTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQueryEcmtShortTerm()
+    public function testHandleQueryEcmtShortTerm(): void
     {
         $ips1Id = 20;
         $ips2Id = 40;
@@ -103,7 +105,7 @@ class AvailableYearsTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryEcmtAnnual()
+    public function testHandleQueryEcmtAnnual(): void
     {
         $ips1Id = 20;
         $ips2Id = 40;
@@ -160,10 +162,8 @@ class AvailableYearsTest extends QueryHandlerTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestHandleQueryUnsupportedType
-     */
-    public function testHandleQueryUnsupportedType($unsupportedTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQueryUnsupportedType')]
+    public function testHandleQueryUnsupportedType(mixed $unsupportedTypeId): void
     {
         $query = AvailableYearsQuery::create(
             [
@@ -180,7 +180,7 @@ class AvailableYearsTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpTestHandleQueryUnsupportedType()
+    public static function dpTestHandleQueryUnsupportedType(): array
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL],
@@ -189,10 +189,8 @@ class AvailableYearsTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestHandleQueryNoYears
-     */
-    public function testHandleQueryNoYears($irhpPermitTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQueryNoYears')]
+    public function testHandleQueryNoYears(mixed $irhpPermitTypeId): void
     {
         $query = AvailableYearsQuery::create(
             [
@@ -217,7 +215,7 @@ class AvailableYearsTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpTestHandleQueryNoYears()
+    public static function dpTestHandleQueryNoYears(): array
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],

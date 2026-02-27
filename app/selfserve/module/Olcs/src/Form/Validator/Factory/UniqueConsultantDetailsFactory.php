@@ -9,6 +9,7 @@ use Olcs\Session\ConsultantRegistration;
 
 class UniqueConsultantDetailsFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $session = $container->get(ConsultantRegistration::class);

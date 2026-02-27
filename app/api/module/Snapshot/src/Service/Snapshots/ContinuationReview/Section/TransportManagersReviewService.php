@@ -21,6 +21,7 @@ class TransportManagersReviewService extends AbstractReviewService
      *
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(ContinuationDetail $continuationDetail)
     {
         $tmLicences = $continuationDetail->getLicence()->getTmLicences();

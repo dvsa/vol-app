@@ -36,6 +36,7 @@ class Interim extends AbstractQueryHandler
         ApplicationEntity::INTERIM_STATUS_REVOKED
     ];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var ApplicationEntity $application */

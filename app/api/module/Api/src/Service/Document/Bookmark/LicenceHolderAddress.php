@@ -14,6 +14,7 @@ class LicenceHolderAddress extends DynamicBookmark
 {
     protected $params = ['licence'];
 
+    #[\Override]
     public function getQuery(array $data)
     {
         $bundle = [
@@ -24,6 +25,7 @@ class LicenceHolderAddress extends DynamicBookmark
         return Qry::create(['id' => $data['licence'], 'bundle' => $bundle]);
     }
 
+    #[\Override]
     public function render()
     {
         if (isset($this->data['correspondenceCd']['address'])) {

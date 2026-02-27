@@ -31,6 +31,7 @@ class Schedule41Approve extends AbstractCommandHandler implements TransactionedI
      * @return Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $application ApplicationEntity */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PermitsTest\Data\Mapper;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;

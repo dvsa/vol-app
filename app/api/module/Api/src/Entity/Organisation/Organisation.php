@@ -185,6 +185,7 @@ class Organisation extends AbstractOrganisation implements ContextProviderInterf
      * @return array
      * @deprecated
      */
+    #[\Override]
     protected function getCalculatedValues()
     {
         return [
@@ -199,6 +200,7 @@ class Organisation extends AbstractOrganisation implements ContextProviderInterf
      *
      * @return array hasInforceLicences
      */
+    #[\Override]
     protected function getCalculatedBundleValues()
     {
         return [
@@ -478,6 +480,7 @@ class Organisation extends AbstractOrganisation implements ContextProviderInterf
         );
     }
 
+    #[\Override]
     public function getContextValue()
     {
         return $this->getId();
@@ -486,6 +489,7 @@ class Organisation extends AbstractOrganisation implements ContextProviderInterf
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this;

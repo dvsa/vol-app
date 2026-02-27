@@ -94,6 +94,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
      * @return array CPMS response data
      * @throws CpmsResponseException if response is invalid
      */
+    #[\Override]
     public function initiateCardRequest($redirectUrl, array $fees, array $extraParams = [])
     {
         $endPoint = '/api/payment/card';
@@ -112,6 +113,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
      * @return array CPMS response data
      * @throws CpmsResponseException if response is invalid
      */
+    #[\Override]
     public function initiateCnpRequest($redirectUrl, array $fees, $extraParams = [])
     {
         $endPoint = '/api/payment/cardholder-not-present';
@@ -162,6 +164,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
      * @return array|mixed response
      * @see CpmsClient\Service\ApiService::put()
      */
+    #[\Override]
     public function handleResponse($reference, $data, $fee = null)
     {
         /**
@@ -185,6 +188,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
      *
      * @return array ['code' => payment status code, 'message' => 'CPMS error message']
      */
+    #[\Override]
     public function getPaymentStatus($receiptReference, $fee)
     {
         $method   = 'get';
@@ -222,6 +226,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
      *
      * @return string auth code|null
      */
+    #[\Override]
     public function getPaymentAuthCode($receiptReference, $fee)
     {
         $method   = 'get';
@@ -244,6 +249,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
      * @return array CPMS response data
      * @throws CpmsResponseException if response is invalid
      */
+    #[\Override]
     public function recordCashPayment($fees, $amount, $receiptDate, $slipNo, $miscExtraParams = [])
     {
         $method   = 'post';
@@ -290,6 +296,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
      * @return array CPMS response data
      * @throws CpmsResponseException if response is invalid
      */
+    #[\Override]
     public function recordChequePayment(
         $fees,
         $amount,
@@ -345,6 +352,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
      * @return array CPMS response data
      * @throws CpmsResponseException if response is invalid
      */
+    #[\Override]
     public function recordPostalOrderPayment($fees, $amount, $receiptDate, $slipNo, $poNo, $miscExtraParams = [])
     {
         $method   = 'post';
@@ -382,6 +390,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
      *
      * @return array
      */
+    #[\Override]
     public function getReportList()
     {
         $params = [
@@ -403,6 +412,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
      * @param DateTime $end
      * @return array
      */
+    #[\Override]
     public function requestReport($reportCode, \DateTime $start, \DateTime $end)
     {
         $params = [
@@ -426,6 +436,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
      * @param string $reference
      * @return array
      */
+    #[\Override]
     public function getReportStatus($reference)
     {
         $endPoint = '/api/report/' . $reference . '/status';
@@ -448,6 +459,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
      * @param string $token
      * @return array
      */
+    #[\Override]
     public function downloadReport($reference, $token)
     {
         $url = '/api/report/' . $reference . '/download?token=' . $token;
@@ -540,6 +552,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
      * @return array one for each fee payment, key = payment ref, value = refund ref
      * @throws CpmsResponseException if response is invalid
      */
+    #[\Override]
     public function batchRefund($fee, $extraParams = [])
     {
         $method   = 'post';
@@ -623,6 +636,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
      * @return array CPMS response data
      * @throws CpmsResponseException if response is invalid
      */
+    #[\Override]
     public function reversePayment($receiptReference, $paymentMethod, $fees = [], $extraParams = [])
     {
         $method   = 'post';
@@ -656,6 +670,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
      * @param mixed $amount
      * @return string amount formatted to two decimal places with no thousands separator
      */
+    #[\Override]
     public function formatAmount($amount)
     {
         return sprintf("%1\$.2f", $amount);
@@ -664,6 +679,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
     /**
      * @return int
      */
+    #[\Override]
     public function getVersion()
     {
         return 2;
@@ -1161,6 +1177,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
         $identity->setClientId($schemaId);
         $identity->setClientSecret($clientSecret);
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');

@@ -58,6 +58,7 @@ class ReprintLicenceVehicleDiscController extends AbstractVehicleController
      *
      * @return ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $request = $this->getRequest();

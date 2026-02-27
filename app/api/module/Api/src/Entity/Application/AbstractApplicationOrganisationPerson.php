@@ -35,7 +35,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractApplicationOrganisationPerson implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractApplicationOrganisationPerson implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -177,7 +177,8 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -200,7 +201,8 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Get the person
      *
-     * @return \Dvsa\Olcs\Api\Entity\Person\Person     */
+     * @return \Dvsa\Olcs\Api\Entity\Person\Person
+     */
     public function getPerson()
     {
         return $this->person;
@@ -223,7 +225,8 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Get the original person
      *
-     * @return \Dvsa\Olcs\Api\Entity\Person\Person     */
+     * @return \Dvsa\Olcs\Api\Entity\Person\Person
+     */
     public function getOriginalPerson()
     {
         return $this->originalPerson;
@@ -246,7 +249,8 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Get the organisation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     */
     public function getOrganisation()
     {
         return $this->organisation;
@@ -269,7 +273,8 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
     public function getApplication()
     {
         return $this->application;
@@ -292,7 +297,8 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -315,7 +321,8 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -338,7 +345,8 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Get the action
      *
-     * @return string     */
+     * @return string
+     */
     public function getAction()
     {
         return $this->action;
@@ -361,7 +369,8 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Get the position
      *
-     * @return string     */
+     * @return string
+     */
     public function getPosition()
     {
         return $this->position;
@@ -384,7 +393,8 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -393,6 +403,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

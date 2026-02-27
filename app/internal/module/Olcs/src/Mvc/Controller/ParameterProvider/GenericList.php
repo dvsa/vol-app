@@ -43,6 +43,7 @@ class GenericList extends AbstractParameterProvider
      *
      * @return array
      */
+    #[\Override]
     public function provideParameters()
     {
         $params = array_map(

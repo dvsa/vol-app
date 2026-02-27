@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Cases;
 
 use Mockery as m;
@@ -27,7 +29,7 @@ class CasesWithOppositionDatesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 1]);
 
@@ -53,7 +55,7 @@ class CasesWithOppositionDatesTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryWithDates()
+    public function testHandleQueryWithDates(): void
     {
         $query = Qry::create(['id' => 1]);
 
@@ -81,7 +83,7 @@ class CasesWithOppositionDatesTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryFilterPublicationLinks()
+    public function testHandleQueryFilterPublicationLinks(): void
     {
         $query = Qry::create(['id' => 1]);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\System;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,10 +24,8 @@ class TranslationKeyEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider canDeleteProvider
-     */
-    public function testCanDelete($transKeyTexts, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('canDeleteProvider')]
+    public function testCanDelete(mixed $transKeyTexts, mixed $expected): void
     {
         $entity = Entity::create(
             'id',
@@ -35,7 +35,7 @@ class TranslationKeyEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->canDelete());
     }
 
-    public function canDeleteProvider()
+    public static function canDeleteProvider(): array
     {
         $noTexts = new ArrayCollection();
         $texts = new ArrayCollection([m::mock(TranslationKeyText::class)]);
@@ -48,7 +48,7 @@ class TranslationKeyEntityTest extends EntityTester
     /**
      * Test create
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $entity = Entity::create('transKey', 'description');
 

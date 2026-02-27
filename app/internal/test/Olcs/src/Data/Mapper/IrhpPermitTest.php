@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -17,17 +19,17 @@ class IrhpPermitTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider mapFromResultDataProvider
      *
      * @param $data
      * @param $expected
      */
-    public function testMapPermitData($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromResultDataProvider')]
+    public function testMapPermitData(mixed $data, mixed $expected): void
     {
         $this->assertSame($expected, $this->sut->mapFromResult($data));
     }
 
-    public function mapFromResultDataProvider()
+    public static function mapFromResultDataProvider(): array
     {
         return [
             [

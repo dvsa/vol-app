@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -12,11 +14,11 @@ use Mockery as m;
  * Class MostSeriousInfringementTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class MostSeriousInfringementTest extends AbstractSubmissionSectionTest
+class MostSeriousInfringementTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\MostSeriousInfringement::class;
 
-    protected $expectedResult = [
+    protected const EXPECTED_RESULT = [
         'id' => 66,
         'notificationNumber' => 'notificationNo',
         'siCategory' => 'si_cat-desc',
@@ -31,18 +33,18 @@ class MostSeriousInfringementTest extends AbstractSubmissionSectionTest
      *
      * @return array
      */
-    public function sectionTestProvider()
+    public static function sectionTestProvider(): array
     {
-        $case = $this->getCase();
+        $case = static::getCase();
 
-        $expectedResult = ['data' => ['overview' => $this->expectedResult]];
+        $expectedResult = ['data' => ['overview' => static::EXPECTED_RESULT]];
 
         return [
             [$case, $expectedResult],
         ];
     }
 
-    protected function getCase()
+    public static function getCase(): mixed
     {
         $case = parent::getCase();
 
@@ -54,7 +56,7 @@ class MostSeriousInfringementTest extends AbstractSubmissionSectionTest
         $si = m::mock(SeriousInfringement::class)->makePartial();
         $si->setId(66);
         $si->setCheckDate('2014-01-01');
-        $si->setSiCategory($this->generateRefDataEntity('si_cat'));
+        $si->setSiCategory(static::generateRefDataEntity('si_cat'));
         $si->setInfringementDate('2014-05-05');
 
         $siCategoryType = new SiCategoryType();

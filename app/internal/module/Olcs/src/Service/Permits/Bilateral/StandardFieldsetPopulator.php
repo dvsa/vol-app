@@ -27,6 +27,7 @@ class StandardFieldsetPopulator implements FieldsetPopulatorInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function populate(Fieldset $fieldset, array $fields)
     {
         $fieldset->add(

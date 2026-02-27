@@ -16,6 +16,7 @@ class GetList extends AbstractQueryHandler
 
     protected $extraRepos = ['TransportManager'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $transportManager = $this->getRepo('TransportManager')->fetchById($query->getTransportManager());

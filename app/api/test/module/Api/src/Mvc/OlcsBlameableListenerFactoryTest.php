@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Mvc;
 
 use Dvsa\Olcs\Api\Mvc\OlcsBlameableListener;
@@ -10,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 class OlcsBlameableListenerFactoryTest extends MockeryTestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $container = m::mock(ContainerInterface::class);
         $sut = new OlcsBlameableListenerFactory();

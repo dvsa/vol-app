@@ -11,6 +11,7 @@ class LicenceDetailsService extends AbstractReviewService
      * @param Licence $data
      * @return mixed
      */
+    #[\Override]
     public function getConfigFromData(Surrender $surrender)
     {
         $licence = $surrender->getLicence();

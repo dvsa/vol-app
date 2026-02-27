@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractApplicationPath implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractApplicationPath implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -166,7 +166,8 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -189,7 +190,8 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     /**
      * Get the irhp permit type
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType
+     */
     public function getIrhpPermitType()
     {
         return $this->irhpPermitType;
@@ -212,7 +214,8 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     /**
      * Get the application path group
      *
-     * @return \Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup     */
+     * @return \Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup
+     */
     public function getApplicationPathGroup()
     {
         return $this->applicationPathGroup;
@@ -235,7 +238,8 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -258,7 +262,8 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -281,7 +286,8 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     /**
      * Get the title
      *
-     * @return string     */
+     * @return string
+     */
     public function getTitle()
     {
         return $this->title;
@@ -306,7 +312,8 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEffectiveFrom($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -333,7 +340,8 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -405,6 +413,7 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

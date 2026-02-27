@@ -41,6 +41,7 @@ class DecisionsNoFurtherActionController extends AbstractInternalController impl
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -99,6 +100,7 @@ class DecisionsNoFurtherActionController extends AbstractInternalController impl
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->redirectToDetails();
@@ -109,6 +111,7 @@ class DecisionsNoFurtherActionController extends AbstractInternalController impl
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function detailsAction()
     {
         return $this->redirectToDetails();

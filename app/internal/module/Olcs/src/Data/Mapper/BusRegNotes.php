@@ -16,6 +16,7 @@ class BusRegNotes implements MapperInterface
      *
      * @param array $data
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         // Silly busRegId...

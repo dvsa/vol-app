@@ -31,7 +31,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractDigitalSignature implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractDigitalSignature implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -133,7 +133,8 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -156,7 +157,8 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -179,7 +181,8 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -202,7 +205,8 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
     /**
      * Get the attributes
      *
-     * @return string     */
+     * @return string
+     */
     public function getAttributes()
     {
         return $this->attributes;
@@ -225,7 +229,8 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
     /**
      * Get the saml response
      *
-     * @return string     */
+     * @return string
+     */
     public function getSamlResponse()
     {
         return $this->samlResponse;
@@ -248,7 +253,8 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -257,6 +263,7 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

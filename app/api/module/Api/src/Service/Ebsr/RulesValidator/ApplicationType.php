@@ -36,6 +36,7 @@ class ApplicationType extends AbstractValidator
      * @return bool
      * @throws Exception\RuntimeException If validation of $value is impossible
      */
+    #[\Override]
     public function isValid($value, $context = [])
     {
         //data refresh must be nonChargeableChange

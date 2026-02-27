@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Transport Manager Test
  *
@@ -45,7 +47,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ContactDetailsEntity::CONTACT_TYPE_TRANSPORT_MANAGER,
@@ -68,7 +71,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->mockAuthService();
 
@@ -195,7 +198,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(4, $res['id']['homeContactDetails']);
     }
 
-    protected function mockAuthService()
+    protected function mockAuthService(): void
     {
         /** @var Team $mockTeam */
         $mockTeam = m::mock(Team::class)->makePartial();

@@ -20,6 +20,7 @@ class PVehicleRegistrationMark extends DynamicBookmark
      * @param array $data
      * @return Qry|null
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         if (!isset($data['impounding'])) {
@@ -34,6 +35,7 @@ class PVehicleRegistrationMark extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         return $this->data['vrm'];

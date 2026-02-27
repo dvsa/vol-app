@@ -1,8 +1,6 @@
 <?php
 
-/**
- * Cookie Listener Test
- */
+declare(strict_types=1);
 
 namespace OlcsTest\Mvc;
 
@@ -41,7 +39,15 @@ class CookieListenerTest extends MockeryTestCase
     public function testAttach(): void
     {
         $em = m::mock(EventManagerInterface::class);
-        $em->shouldReceive('attach')->with(MvcEvent::EVENT_ROUTE, [$this->sut, 'onRoute'], 1)->once();
+        $em->expects('attach')
+            ->with(
+                MvcEvent::EVENT_ROUTE,
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onRoute';
+                }),
+                1
+            );
 
         $this->sut->attach($em);
     }

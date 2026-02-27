@@ -34,6 +34,7 @@ class ByOrganisation extends AbstractQueryHandler implements ToggleRequiredInter
      *
      * @param ByOrganisationQuery $query
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query): array
     {
         $licenceRepository = $this->getLicenceRepository();

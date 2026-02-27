@@ -17,9 +17,10 @@ interface SectionRendererInterface
      *
      * @param object $entity A letter instance entity (LetterInstanceSection,
      *                       LetterInstanceIssue, LetterInstanceTodo, or LetterInstanceAppendix)
+     * @param array $context Optional context for vol-grab replacement (licence, application, etc.)
      * @return string HTML representation of the content
      */
-    public function render(object $entity): string;
+    public function render(object $entity, array $context = []): string;
 
     /**
      * Check if this renderer supports the given entity

@@ -17,6 +17,7 @@ class MemberStateCode extends AbstractFilter
      *
      * @return array
      */
+    #[\Override]
     public function filter($value)
     {
         if (strtoupper((string) $value['memberStateCode']) === 'UK') {

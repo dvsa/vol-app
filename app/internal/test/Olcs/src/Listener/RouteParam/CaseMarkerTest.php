@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener\RouteParam;
 
+use Laminas\EventManager\EventManagerInterface;
 use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -28,16 +31,23 @@ class CaseMarkerTest extends TestCase
         $this->sut->setQueryService($this->mockQueryService);
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
-        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
-        $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'case', [$this->sut, 'onCase'], 1);
+        $mockEventManager = m::mock(EventManagerInterface::class);
+        $mockEventManager->expects('attach')
+            ->with(
+                RouteParams::EVENT_PARAM . 'case',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onCase';
+                }),
+                1
+            );
 
         $this->sut->attach($mockEventManager);
     }
 
-    protected function mockQuery($expectedDtoParams, $result = false)
+    protected function mockQuery(mixed $expectedDtoParams, mixed $result = false): void
     {
         $mockResponse = m::mock();
 
@@ -58,7 +68,7 @@ class CaseMarkerTest extends TestCase
         }
     }
 
-    public function testOnCase()
+    public function testOnCase(): void
     {
         $mockMarkerService = m::mock(MarkerService::class);
         $this->sut->setMarkerService($mockMarkerService);
@@ -82,7 +92,7 @@ class CaseMarkerTest extends TestCase
         $this->sut->onCase($event);
     }
 
-    public function testOnCaseQueryError()
+    public function testOnCaseQueryError(): void
     {
         $mockMarkerService = m::mock(MarkerService::class);
         $this->sut->setMarkerService($mockMarkerService);
@@ -99,7 +109,7 @@ class CaseMarkerTest extends TestCase
         $this->sut->onCase($event);
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockSl = m::mock(ContainerInterface::class);
         $mockMarkerService = m::mock(MarkerService::class);

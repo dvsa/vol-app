@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
 use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
@@ -32,7 +34,7 @@ class AbstractSectionTest extends MockeryTestCase
         $this->sut = new AbstractSectionStub($this->mockQueryHandler, $this->mockViewRenderer);
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = m::mock(QueryInterface::class);
 
@@ -45,15 +47,13 @@ class AbstractSectionTest extends MockeryTestCase
         static::assertEquals('EXPECT', $this->sut->handleQuery($query));
     }
 
-    /**
-     * @dataProvider dpTestExtractPerson
-     */
-    public function testExtractPerson($contactDetails, $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestExtractPerson')]
+    public function testExtractPerson(mixed $contactDetails, mixed $expect): void
     {
         static::assertEquals($expect, $this->sut->extractPerson($contactDetails));
     }
 
-    public function dpTestExtractPerson()
+    public static function dpTestExtractPerson(): array
     {
         $personData = [
             'title' => '',
@@ -99,15 +99,13 @@ class AbstractSectionTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestFormatDate
-     */
-    public function testFormatDate($dateTime, $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestFormatDate')]
+    public function testFormatDate(mixed $dateTime, mixed $expect): void
     {
         static::assertEquals($expect, $this->sut->formatDate($dateTime));
     }
 
-    public function dpTestFormatDate()
+    public static function dpTestFormatDate(): array
     {
         return [
             [
@@ -125,26 +123,26 @@ class AbstractSectionTest extends MockeryTestCase
         ];
     }
 
-    public function testGetViewRenderer()
+    public function testGetViewRenderer(): void
     {
         static::assertSame($this->mockViewRenderer, $this->sut->getViewRenderer());
     }
 
-    public function testGetRepos()
+    public function testGetRepos(): void
     {
         $repos = ['a' => 'aRepo','b' => 'bRepo'];
         $this->sut->setRepos($repos);
         $this->assertEquals($repos, $this->sut->getRepos());
     }
 
-    public function testGetRepo()
+    public function testGetRepo(): void
     {
         $repos = ['a' => 'aRepo','b' => 'bRepo'];
         $this->sut->setRepos($repos);
         $this->assertEquals($repos['a'], $this->sut->getRepo('a'));
     }
 
-    public function testGetRepoException()
+    public function testGetRepoException(): void
     {
         $this->expectException(RuntimeException::class);
         $repos = ['a' => 'aRepo','b' => 'bRepo'];

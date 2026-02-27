@@ -30,6 +30,7 @@ final class WithdrawBusReg extends AbstractCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /**

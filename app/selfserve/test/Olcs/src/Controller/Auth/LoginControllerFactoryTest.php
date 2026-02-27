@@ -16,6 +16,7 @@ use Olcs\Controller\Auth\LoginController;
 use Olcs\Controller\Auth\LoginControllerFactory;
 use PHPUnit\Framework\TestCase;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class LoginControllerFactoryTest extends TestCase
 {
     /**
@@ -23,9 +24,7 @@ class LoginControllerFactoryTest extends TestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -35,23 +34,21 @@ class LoginControllerFactoryTest extends TestCase
         $this->assertIsCallable($this->sut->__invoke(...));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
-    public function invokeReturnsAnInstanceOfDispatcherWithLoginController()
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokeReturnsAnInstanceOfDispatcherWithLoginController(): void
     {
         // Setup
         $this->setUpSut();
         $serviceManager = $this->createMock(\Interop\Container\ContainerInterface::class);
         $serviceManager->method('get')->willReturnMap([
-            [SelfserveCommandAdapter::class, $this->createMock(SelfserveCommandAdapter::class)],
-            [AuthenticationServiceInterface::class  , $this->createMock(AuthenticationServiceInterface::class)],
-            [CurrentUser::class, $this->createMock(CurrentUser::class)],
-            [FlashMessenger::class, $this->createMock(FlashMessenger::class)],
-            [FormHelperService::class, $this->createMock(FormHelperService::class)],
-            [Redirect::class, $this->createMock(Redirect::class)],
-            [Url::class, $this->createMock(Url::class)],
+            [SelfserveCommandAdapter::class, $this->createStub(SelfserveCommandAdapter::class)],
+            [AuthenticationServiceInterface::class  , $this->createStub(AuthenticationServiceInterface::class)],
+            [CurrentUser::class, $this->createStub(CurrentUser::class)],
+            [FlashMessenger::class, $this->createStub(FlashMessenger::class)],
+            [FormHelperService::class, $this->createStub(FormHelperService::class)],
+            [Redirect::class, $this->createStub(Redirect::class)],
+            [Url::class, $this->createStub(Url::class)],
             ['ControllerPluginManager', $serviceManager]
         ]);
 

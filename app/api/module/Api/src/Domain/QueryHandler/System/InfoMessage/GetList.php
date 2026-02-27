@@ -15,6 +15,7 @@ class GetList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'SystemInfoMessage';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var \Dvsa\Olcs\Api\Domain\Repository\SystemInfoMessage $repo */

@@ -19,6 +19,7 @@ class RefDataSource implements SourceInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function populateOptionList(OptionList $optionList, array $options)
     {
         $refDatas = $this->refDataRepo->fetchByCategoryId($options['categoryId']);

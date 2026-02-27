@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Form\Form;
@@ -31,7 +33,7 @@ class FinancialHistoryTest extends MockeryTestCase
         $this->sut = new FinancialHistory($this->formHelper, $this->translator);
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         /** @var \Laminas\Http\Request $request */
         $request = m::mock(\Laminas\Http\Request::class);

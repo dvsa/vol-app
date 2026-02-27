@@ -32,6 +32,7 @@ final class CreateDeclareUnfit extends AbstractCommandHandler implements Transac
 
     protected $extraRepos = ['TransportManager'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

@@ -23,6 +23,7 @@ final class CancelFee extends AbstractCommandHandler
 {
     protected $repoServiceName = 'Fee';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $fee Fee */

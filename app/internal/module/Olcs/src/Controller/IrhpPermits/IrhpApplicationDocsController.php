@@ -23,17 +23,14 @@ class IrhpApplicationDocsController extends AbstractIrhpPermitController impleme
     use ControllerTraits\DocumentActionTrait;
     use ControllerTraits\DocumentSearchTrait;
 
-    protected DocumentSubCategory $docSubCategoryDataService;
-    protected TranslationHelperService $translationHelper;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
         protected FlashMessengerHelperService $flashMessengerHelper,
-        DocumentSubCategory $docSubCategoryDataService,
-        TranslationHelperService $translationHelper
+        protected DocumentSubCategory $docSubCategoryDataService,
+        protected TranslationHelperService $translationHelper
     ) {
         parent::__construct(
             $scriptFactory,
@@ -41,8 +38,6 @@ class IrhpApplicationDocsController extends AbstractIrhpPermitController impleme
             $tableFactory,
             $viewHelperManager,
         );
-        $this->docSubCategoryDataService = $docSubCategoryDataService;
-        $this->translationHelper = $translationHelper;
     }
 
     /**
@@ -51,6 +46,7 @@ class IrhpApplicationDocsController extends AbstractIrhpPermitController impleme
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return \Laminas\Form\FormInterface
      */
+    #[\Override]
     protected function getConfiguredDocumentForm()
     {
         $filters = $this->getDocumentFilters();
@@ -72,6 +68,7 @@ class IrhpApplicationDocsController extends AbstractIrhpPermitController impleme
      * @see    \Olcs\Controller\Traits\DocumentSearchTrait
      * @return string
      */
+    #[\Override]
     protected function getDocumentTableName()
     {
         return 'documents';
@@ -83,6 +80,7 @@ class IrhpApplicationDocsController extends AbstractIrhpPermitController impleme
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
+    #[\Override]
     protected function getDocumentRoute()
     {
         return 'licence/irhp-application-docs';
@@ -94,6 +92,7 @@ class IrhpApplicationDocsController extends AbstractIrhpPermitController impleme
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
+    #[\Override]
     protected function getDocumentRouteParams()
     {
         return [
@@ -123,6 +122,7 @@ class IrhpApplicationDocsController extends AbstractIrhpPermitController impleme
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     protected function getDocumentView()
     {
         $filters = $this->getDocumentFilters();

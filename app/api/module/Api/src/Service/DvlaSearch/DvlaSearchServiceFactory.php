@@ -18,6 +18,7 @@ class DvlaSearchServiceFactory implements FactoryInterface
      */
     protected $options;
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DvlaSearchService
     {
         $logger = new LaminasLogPsr3Adapter($container->get('Logger'));

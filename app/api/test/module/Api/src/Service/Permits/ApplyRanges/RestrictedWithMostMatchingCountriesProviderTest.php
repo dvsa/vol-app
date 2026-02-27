@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\ApplyRanges;
 
 use Dvsa\Olcs\Api\Service\Permits\ApplyRanges\RestrictedRangesProvider;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class RestrictedWithMostMatchingCountriesProviderTest extends MockeryTestCase
 {
-    public function testGetRanges()
+    public function testGetRanges(): void
     {
         $range1 = [
             'countryIds' => ['HU', 'IT']

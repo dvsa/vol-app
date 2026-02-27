@@ -26,6 +26,7 @@ final class GenerateChecklistDocument extends AbstractCommandHandler implements 
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $continuationDetail = $this->getRepo()->fetchUsingId($command);

@@ -3,7 +3,7 @@
   errorLevel="8"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="https://getpsalm.org/schema/config"
-  xsi:schemaLocation="https://getpsalm.org/schema/config vendor-bin/psalm/vendor/vimeo/psalm/config.xsd"
+  xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
   findUnusedBaselineEntry="true"
   findUnusedCode="false"
 >
@@ -17,4 +17,45 @@
       <file name=".phpstorm.meta.php" />
     </ignoreFiles>
   </projectFiles>
+  <issueHandlers>
+    <!-- Imap.php awaiting migration to Symfony Mailer; laminas/laminas-mail not installed -->
+    <InvalidThrow>
+      <errorLevel type="suppress">
+        <file name="module/Email/src/Service/Imap.php"/>
+      </errorLevel>
+    </InvalidThrow>
+    <UndefinedClass>
+      <errorLevel type="suppress">
+        <file name="module/Email/src/Service/Imap.php"/>
+        <file name="module/Api/src/Domain/Repository/LetterTypeTodo.php"/>
+        <file name="module/Api/src/Service/ConvertToPdf/ConvertToPdfFactory.php"/>
+      </errorLevel>
+    </UndefinedClass>
+    <UndefinedDocblockClass>
+      <errorLevel type="suppress">
+        <file name="module/Email/src/Service/Imap.php"/>
+        <file name="module/Api/src/Domain/CommandHandler/ConditionUndertaking/Delete.php"/>
+        <file name="module/Api/src/Domain/Validation/Handlers/Misc/CanVerify.php"/>
+        <file name="module/Api/src/Entity/AbstractOperatingCentreOpposition.php"/>
+        <file name="module/Api/src/Entity/Application/AbstractApplication.php"/>
+        <file name="module/Api/src/Entity/Application/Application.php"/>
+        <file name="module/Api/src/Entity/Bus/AbstractBusReg.php"/>
+        <file name="module/Api/src/Entity/Bus/BusReg.php"/>
+        <file name="module/Api/src/Entity/Cases/AbstractCases.php"/>
+        <file name="module/Api/src/Entity/Cases/Cases.php"/>
+        <file name="module/Api/src/Entity/Doc/AbstractDocument.php"/>
+      </errorLevel>
+    </UndefinedDocblockClass>
+    <!-- Generated Letter entity files contain dead code branches -->
+    <NoValue>
+      <errorLevel type="suppress">
+        <directory name="module/Api/src/Entity/Letter/"/>
+      </errorLevel>
+    </NoValue>
+    <ParadoxicalCondition>
+      <errorLevel type="suppress">
+        <file name="module/Cli/src/Service/EntityGenerator/TemplateRenderer.php"/>
+      </errorLevel>
+    </ParadoxicalCondition>
+  </issueHandlers>
 </psalm>

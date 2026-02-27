@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Email\Service;
 
 use Dvsa\Olcs\Email\Service\Email;
@@ -24,14 +26,12 @@ class EmailTest extends MockeryTestCase
     {
         $this->sut = new Email();
 
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
     }
 
-    public function testCreateServiceMissingConfig()
+    public function testCreateServiceMissingConfig(): void
     {
         $this->expectException(\RuntimeException::class);
 
@@ -46,7 +46,7 @@ class EmailTest extends MockeryTestCase
     /**
      * Tests create service
      */
-    public function testCreateService()
+    public function testCreateService(): void
     {
         $config = [
             'mail' => [
@@ -76,7 +76,7 @@ class EmailTest extends MockeryTestCase
     /**
      * Tests sending plain text email
      */
-    public function testSendText()
+    public function testSendText(): void
     {
         $mailer = m::mock(MailerInterface::class);
 
@@ -130,7 +130,7 @@ class EmailTest extends MockeryTestCase
     /**
      * Tests sending an email with attachments
      */
-    public function testSendWithAttachments()
+    public function testSendWithAttachments(): void
     {
         $mailer = m::mock(MailerInterface::class);
 
@@ -215,7 +215,7 @@ class EmailTest extends MockeryTestCase
     /**
      * Tests sending an email without attachments
      */
-    public function testSendWithoutAttachments()
+    public function testSendWithoutAttachments(): void
     {
         $mailer = m::mock(MailerInterface::class);
 
@@ -282,10 +282,9 @@ class EmailTest extends MockeryTestCase
 
     /**
      * Tests sending an email without attachments
-     *
-     * @dataProvider toFromAddressProvider
      */
-    public function testToFromAddressException($fromEmail, $fromName, $toEmail, $exceptionMessage)
+    #[\PHPUnit\Framework\Attributes\DataProvider('toFromAddressProvider')]
+    public function testToFromAddressException(mixed $fromEmail, mixed $fromName, mixed $toEmail, mixed $exceptionMessage): void
     {
         $this->expectException(EmailNotSentException::class);
         $this->expectExceptionMessage($exceptionMessage);
@@ -306,7 +305,7 @@ class EmailTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function toFromAddressProvider()
+    public static function toFromAddressProvider(): array
     {
         return [
             ['foo@bar.com', 'from name', null, Email::MISSING_TO_ERROR],
@@ -316,7 +315,7 @@ class EmailTest extends MockeryTestCase
         ];
     }
 
-    public function testSendHandlesException()
+    public function testSendHandlesException(): void
     {
         $this->expectException(\Dvsa\Olcs\Email\Exception\EmailNotSentException::class);
         $this->expectExceptionMessage('Email not sent: exception message');

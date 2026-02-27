@@ -25,6 +25,7 @@ class TmEmployment extends AbstractTmEmployment implements OrganisationProviderI
      *
      * @return array
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         $tmManager = $this->getTransportManager();

@@ -23,6 +23,7 @@ final class UpdatePeopleStatus extends AbstractUpdateStatus
 
     protected $section = 'People';
 
+    #[\Override]
     protected function isSectionValid(Application $application)
     {
         $num = count($application->getLicence()->getOrganisation()->getOrganisationPersons());

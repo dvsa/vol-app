@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Variation Type Of Licence Review Service Test
  *
@@ -40,10 +42,8 @@ class VariationTypeOfLicenceReviewServiceTest extends MockeryTestCase
         $this->sut = new VariationTypeOfLicenceReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider dpGetConfigFromData
-     */
-    public function testGetConfigFromData($licenceLicenceTypeId, $applicationLicenceTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetConfigFromData')]
+    public function testGetConfigFromData(mixed $licenceLicenceTypeId, mixed $applicationLicenceTypeId): void
     {
         $data = [
             'licenceType' => [
@@ -65,7 +65,7 @@ class VariationTypeOfLicenceReviewServiceTest extends MockeryTestCase
         $this->assertEquals(['freetext' => 'translated-text-bar-foo'], $this->sut->getConfigFromData($data));
     }
 
-    public function dpGetConfigFromData()
+    public static function dpGetConfigFromData(): array
     {
         return [
             [
@@ -95,14 +95,12 @@ class VariationTypeOfLicenceReviewServiceTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpGetConfigFromDataStandardInternational
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetConfigFromDataStandardInternational')]
     public function testConfigFromDataStandardInternational(
-        $licenceVehicleTypeId,
-        $applicationVehicleTypeId,
-        $expectedTranslatedValue
-    ) {
+        mixed $licenceVehicleTypeId,
+        mixed $applicationVehicleTypeId,
+        mixed $expectedTranslatedValue
+    ): void {
         $data = [
             'licenceType' => [
                 'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
@@ -149,7 +147,7 @@ class VariationTypeOfLicenceReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function dpGetConfigFromDataStandardInternational()
+    public static function dpGetConfigFromDataStandardInternational(): array
     {
         return [
             [

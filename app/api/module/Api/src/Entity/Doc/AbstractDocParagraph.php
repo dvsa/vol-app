@@ -31,7 +31,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractDocParagraph implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractDocParagraph implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -132,7 +132,8 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -155,7 +156,8 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -178,7 +180,8 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -201,7 +204,8 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
     /**
      * Get the para title
      *
-     * @return string     */
+     * @return string
+     */
     public function getParaTitle()
     {
         return $this->paraTitle;
@@ -224,7 +228,8 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
     /**
      * Get the para text
      *
-     * @return string     */
+     * @return string
+     */
     public function getParaText()
     {
         return $this->paraText;
@@ -247,7 +252,8 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -256,6 +262,7 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

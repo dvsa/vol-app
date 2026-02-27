@@ -31,6 +31,7 @@ final class GenerateBatch extends AbstractCommandHandler implements Transactione
 
     protected $extraRepos = ['Licence', 'Application', 'SystemParameter'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var GenerateBatchCmd $command */

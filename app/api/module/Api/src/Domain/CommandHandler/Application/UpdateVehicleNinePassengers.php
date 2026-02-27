@@ -15,6 +15,7 @@ final class UpdateVehicleNinePassengers extends AbstractUpdateApplication
     ];
     protected string $confirmMessage = 'vehicle nine passengers updated';
 
+    #[\Override]
     protected function updateApplication(ApplicationEntity $application, Command|CommandInterface $command): void
     {
         $application->setPsvNoSmallVhlConfirmation($command->getPsvNoSmallVhlConfirmation());

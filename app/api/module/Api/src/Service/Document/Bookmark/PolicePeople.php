@@ -31,6 +31,7 @@ class PolicePeople extends DynamicBookmark
      * @param array $data
      * @return array
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         $bundle = [
@@ -50,6 +51,7 @@ class PolicePeople extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         $str = self::HEADING_LINE;

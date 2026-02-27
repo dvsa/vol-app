@@ -32,6 +32,7 @@ class GenerateName extends AbstractCommandHandler implements TransactionedInterf
      * @return Result
      * @throws ValidationException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->command = $command;

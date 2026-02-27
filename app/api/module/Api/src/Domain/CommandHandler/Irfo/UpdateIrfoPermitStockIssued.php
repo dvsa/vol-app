@@ -19,7 +19,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
  */
 final class UpdateIrfoPermitStockIssued extends AbstractCommandHandler implements TransactionedInterface
 {
-    public const MAX_IDS_COUNT = 100;
+    public const int MAX_IDS_COUNT = 100;
 
     protected $repoServiceName = 'IrfoPermitStock';
 
@@ -29,6 +29,7 @@ final class UpdateIrfoPermitStockIssued extends AbstractCommandHandler implement
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $ids = $command->getIds();

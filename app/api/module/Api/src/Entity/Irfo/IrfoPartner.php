@@ -33,6 +33,7 @@ class IrfoPartner extends AbstractIrfoPartner
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedValues()
     {
         return [

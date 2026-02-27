@@ -22,7 +22,6 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
 
     protected $lva = 'variation';
     protected string $location = 'internal';
-    protected StringHelperService $stringHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -41,13 +40,11 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
         FormHelperService $formHelper,
         FormServiceManager $formServiceManager,
         ScriptFactory $scriptFactory,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         protected $navigation,
         protected FlashMessengerHelperService $flashMessengerHelper,
         protected FileUploadHelperService $uploadHelper
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

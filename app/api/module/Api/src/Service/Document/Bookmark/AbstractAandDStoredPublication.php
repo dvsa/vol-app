@@ -34,6 +34,7 @@ abstract class AbstractAandDStoredPublication extends DynamicBookmark
      *
      * @return Qry
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         if (!isset($data['application'])) {

@@ -21,6 +21,7 @@ final class Oppositions extends AbstractSection
      *
      * @return array Data array containing information for the submission section
      */
+    #[\Override]
     public function generateSection(CasesEntity $case)
     {
         $iterator = $case->getOppositions()->getIterator();

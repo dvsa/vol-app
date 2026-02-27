@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Print Interim Document Test
  *
@@ -34,10 +36,8 @@ class PrintInterimDocumentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
-    public function testHandleCommand($vehicleType, $isVariation, $expectedData)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
+    public function testHandleCommand(mixed $vehicleType, mixed $isVariation, mixed $expectedData): void
     {
         $command = Cmd::create(['id' => 111]);
 
@@ -72,7 +72,7 @@ class PrintInterimDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand(): array
     {
         return [
             'mixed fleet application' => [

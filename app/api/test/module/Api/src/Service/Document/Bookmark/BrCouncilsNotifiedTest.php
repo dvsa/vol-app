@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Class
  *
@@ -15,9 +17,9 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
  */
 class BrCouncilsNotifiedTest extends \PHPUnit\Framework\TestCase
 {
-    public const SUT_CLASS_NAME = '\Dvsa\Olcs\Api\Service\Document\Bookmark\BrCouncilsNotified';
+    public const SUT_CLASS_NAME = \Dvsa\Olcs\Api\Service\Document\Bookmark\BrCouncilsNotified::class;
 
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $sutClassName = static::SUT_CLASS_NAME;
 
@@ -32,7 +34,7 @@ class BrCouncilsNotifiedTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $sutClassName = static::SUT_CLASS_NAME;
 

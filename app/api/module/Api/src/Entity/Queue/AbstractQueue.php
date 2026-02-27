@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractQueue implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractQueue implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -187,7 +187,8 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -210,7 +211,8 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getType()
     {
         return $this->type;
@@ -233,7 +235,8 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getStatus()
     {
         return $this->status;
@@ -256,7 +259,8 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -279,7 +283,8 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -302,7 +307,8 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the entity id
      *
-     * @return int     */
+     * @return int
+     */
     public function getEntityId()
     {
         return $this->entityId;
@@ -325,7 +331,8 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the options
      *
-     * @return string     */
+     * @return string
+     */
     public function getOptions()
     {
         return $this->options;
@@ -350,7 +357,8 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getProcessAfterDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -377,7 +385,8 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the attempts
      *
-     * @return int     */
+     * @return int
+     */
     public function getAttempts()
     {
         return $this->attempts;
@@ -400,7 +409,8 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the last error
      *
-     * @return string     */
+     * @return string
+     */
     public function getLastError()
     {
         return $this->lastError;
@@ -423,7 +433,8 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -432,6 +443,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

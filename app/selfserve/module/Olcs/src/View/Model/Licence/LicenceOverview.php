@@ -69,6 +69,7 @@ class LicenceOverview extends LvaOverview
      * @param mixed ...$args
      * @return LicenceOverviewSection
      */
+    #[\Override]
     protected function newSectionModel(...$args): LvaOverviewSection
     {
         return new LicenceOverviewSection(...$args);

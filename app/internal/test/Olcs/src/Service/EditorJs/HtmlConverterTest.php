@@ -7,9 +7,7 @@ namespace OlcsTest\Service\EditorJs;
 use Olcs\Service\EditorJs\HtmlConverter;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Olcs\Service\EditorJs\HtmlConverter
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\EditorJs\HtmlConverter::class)]
 class HtmlConverterTest extends TestCase
 {
     private HtmlConverter $sut;
@@ -53,10 +51,8 @@ class HtmlConverterTest extends TestCase
         $this->assertEquals($plainText, $decoded['blocks'][0]['data']['text']);
     }
 
-    /**
-     * @dataProvider htmlElementsProvider
-     */
-    public function testConvertDifferentElements($html, $expectedType, $expectedData): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('htmlElementsProvider')]
+    public function testConvertDifferentElements(mixed $html, mixed $expectedType, mixed $expectedData): void
     {
         $result = $this->sut->convertHtmlToJson($html);
         $decoded = json_decode($result, true);
@@ -65,7 +61,7 @@ class HtmlConverterTest extends TestCase
         $this->assertEquals($expectedData, $decoded['blocks'][0]['data']);
     }
 
-    public function htmlElementsProvider(): array
+    public static function htmlElementsProvider(): array
     {
         return [
             'header h2' => [

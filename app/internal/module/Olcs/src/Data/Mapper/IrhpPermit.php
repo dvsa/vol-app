@@ -17,6 +17,7 @@ class IrhpPermit implements MapperInterface
      * @param array $data
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         if (!empty($data['irhpPermitRange']['countrys'])) {

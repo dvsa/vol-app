@@ -20,6 +20,7 @@ final class DeleteApplicationOperatingCentre extends AbstractCommandHandler impl
     /**
      * Delete application operating centres.
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $s4 = $this->getRepo()->getReference(S4::class, $command->getS4());

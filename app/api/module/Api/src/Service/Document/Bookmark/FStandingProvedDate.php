@@ -19,6 +19,7 @@ class FStandingProvedDate extends DynamicBookmark
      *
      * @return mixed
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         return LicenceQry::create(['id' => $data['licence']]);
@@ -29,6 +30,7 @@ class FStandingProvedDate extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         if (isset($this->data['expiryDate'])) {

@@ -9,9 +9,7 @@ use PHPUnit\Framework\TestCase as TestCase;
 
 class SiDatesTest extends TestCase
 {
-    /**
-     * @dataProvider filterProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('filterProvider')]
     public function testFilter(array $inputPenaltyDates, array $expectedPenaltyDates): void
     {
 
@@ -31,7 +29,7 @@ class SiDatesTest extends TestCase
     /**
      * data provider for testFilterProvider
      */
-    public function filterProvider(): array
+    public static function filterProvider(): array
     {
         return [
             [

@@ -14,6 +14,7 @@ class GetSingle extends AbstractQueryHandler
 {
     protected $repoServiceName = 'OrganisationPerson';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->result(

@@ -26,7 +26,7 @@ use Doctrine\Common\Collections\Collection;
  *    }
  * )
  */
-abstract class AbstractInspectionEmail implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractInspectionEmail implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -150,7 +150,8 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -173,7 +174,8 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     /**
      * Get the inspection request
      *
-     * @return \Dvsa\Olcs\Api\Entity\Inspection\InspectionRequest     */
+     * @return \Dvsa\Olcs\Api\Entity\Inspection\InspectionRequest
+     */
     public function getInspectionRequest()
     {
         return $this->inspectionRequest;
@@ -196,7 +198,8 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     /**
      * Get the subject
      *
-     * @return string     */
+     * @return string
+     */
     public function getSubject()
     {
         return $this->subject;
@@ -219,7 +222,8 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     /**
      * Get the message body
      *
-     * @return string     */
+     * @return string
+     */
     public function getMessageBody()
     {
         return $this->messageBody;
@@ -242,7 +246,8 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     /**
      * Get the email status
      *
-     * @return string     */
+     * @return string
+     */
     public function getEmailStatus()
     {
         return $this->emailStatus;
@@ -265,7 +270,8 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     /**
      * Get the processed
      *
-     * @return string     */
+     * @return string
+     */
     public function getProcessed()
     {
         return $this->processed;
@@ -288,7 +294,8 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     /**
      * Get the sender email address
      *
-     * @return string     */
+     * @return string
+     */
     public function getSenderEmailAddress()
     {
         return $this->senderEmailAddress;
@@ -313,7 +320,8 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getReceivedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -340,7 +348,8 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -349,6 +358,7 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

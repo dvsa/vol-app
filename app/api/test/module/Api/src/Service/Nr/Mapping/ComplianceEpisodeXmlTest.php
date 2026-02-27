@@ -11,9 +11,8 @@ class ComplianceEpisodeXmlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * loads in erru test templates from /module/Api/data/nr/ folder, tests correct data retrieval/mapping
-     *
-     * @dataProvider dpTemplate
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTemplate')]
     public function testXmlMapping(string $template): void
     {
         $domDocument = new \DOMDocument();
@@ -110,7 +109,7 @@ class ComplianceEpisodeXmlTest extends \PHPUnit\Framework\TestCase
     /**
      * data provider for testXmlMapping
      */
-    public function dpTemplate(): array
+    public static function dpTemplate(): array
     {
         return [
             ['notifyCheckResultTemplate.xml'],

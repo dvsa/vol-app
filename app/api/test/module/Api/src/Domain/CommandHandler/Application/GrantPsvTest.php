@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Dvsa\Olcs\Api\Domain\Command\Application\Grant\CommonGrant;
@@ -35,7 +37,8 @@ class GrantPsvTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             Licence::LICENCE_STATUS_VALID,
@@ -46,7 +49,7 @@ class GrantPsvTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 111
@@ -127,7 +130,7 @@ class GrantPsvTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(ApplicationEntity::APPLICATION_STATUS_VALID, $application->getStatus()->getId());
     }
 
-    public function testHandleCommandCloseTasks()
+    public function testHandleCommandCloseTasks(): void
     {
         $data = [
             'id' => 111

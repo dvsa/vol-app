@@ -19,16 +19,19 @@ final readonly class TransactionManager implements TransactionManagerInterface
     {
     }
 
+    #[\Override]
     public function beginTransaction()
     {
         $this->em->beginTransaction();
     }
 
+    #[\Override]
     public function commit()
     {
         $this->em->commit();
     }
 
+    #[\Override]
     public function rollback()
     {
         $this->em->rollback();

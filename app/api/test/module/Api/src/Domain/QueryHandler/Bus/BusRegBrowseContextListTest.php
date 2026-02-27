@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Bus;
 
 use Doctrine\ORM\Query;
@@ -21,7 +23,7 @@ class BusRegBrowseContextListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $context = 'context';
 
@@ -33,7 +35,6 @@ class BusRegBrowseContextListTest extends QueryHandlerTestCase
 
         // Use reflection to set the value of context property
         $reflectionProperty = new \ReflectionProperty(Qry::class, 'context');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($query, $context);
 
         $this->repoMap['BusRegBrowseView']

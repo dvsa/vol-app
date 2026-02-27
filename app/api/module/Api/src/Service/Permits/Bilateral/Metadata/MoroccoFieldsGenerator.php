@@ -10,6 +10,7 @@ class MoroccoFieldsGenerator implements FieldsGeneratorInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function generate(IrhpPermitStock $irhpPermitStock, ?IrhpPermitApplication $irhpPermitApplication)
     {
         $value = null;

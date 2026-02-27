@@ -19,6 +19,7 @@ class IrhpPermitStock implements MapperInterface
      *
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data): array
     {
         return ['permitStockDetails' => $data];

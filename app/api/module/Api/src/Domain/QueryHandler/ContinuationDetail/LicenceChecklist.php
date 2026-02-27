@@ -23,7 +23,7 @@ class LicenceChecklist extends AbstractQueryHandler
 
     protected $extraRepos = ['ConditionUndertaking'];
 
-    private const CONDITIONS_UNDERTAKINGS_SECTION = 'conditions_undertakings';
+    private const string CONDITIONS_UNDERTAKINGS_SECTION = 'conditions_undertakings';
 
     /**
      * @var \Dvsa\Olcs\Api\Service\Lva\SectionAccessService
@@ -38,6 +38,7 @@ class LicenceChecklist extends AbstractQueryHandler
      * @return \Dvsa\Olcs\Api\Domain\QueryHandler\Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var ContinuationDetailEntity $continuationDetail */
@@ -161,6 +162,7 @@ class LicenceChecklist extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

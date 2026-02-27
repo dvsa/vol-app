@@ -1,15 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\PublicInquiryReason;
 use Dvsa\Olcs\Transfer\Query\Reason\ReasonList as Qry;
 use Mockery as m;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/**
- * Class PublicInquiryReasonTest
- * @package OlcsTest\Service\Data
- */
 class PublicInquiryReasonTest extends AbstractPublicInquiryDataTestCase
 {
     private $reasons = [
@@ -27,7 +26,7 @@ class PublicInquiryReasonTest extends AbstractPublicInquiryDataTestCase
         $this->sut = new PublicInquiryReason($this->abstractPublicInquiryDataServices);
     }
 
-    public function testFetchListData()
+    public function testFetchListData(): void
     {
         $results = ['results' => $this->reasons];
 
@@ -50,7 +49,7 @@ class PublicInquiryReasonTest extends AbstractPublicInquiryDataTestCase
         $this->assertEquals($results, $this->sut->fetchListData([]));
     }
 
-    public function testFetchPublicInquiryReasonDataFailure()
+    public function testFetchPublicInquiryReasonDataFailure(): void
     {
         $results = [];
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
@@ -72,14 +71,8 @@ class PublicInquiryReasonTest extends AbstractPublicInquiryDataTestCase
         $this->assertEmpty($this->sut->fetchListData([]));
     }
 
-    /**
-     * @dataProvider provideFetchListOptions
-     *
-     * @param $niFlag
-     * @param $goodsOrPsv
-     * @param $expectedList
-     */
-    public function testFetchListOptions($niFlag, $goodsOrPsv, $expectedList)
+    #[DataProvider('provideFetchListOptions')]
+    public function testFetchListOptions(string $niFlag, string $goodsOrPsv): void
     {
         $this->licenceDataService->shouldReceive('getId')
             ->once()
@@ -96,7 +89,7 @@ class PublicInquiryReasonTest extends AbstractPublicInquiryDataTestCase
             )
             ->once();
 
-        $results = ['results' => $expectedList];
+        $results = ['results' => self::SINGLE_SOURCE];
         $params = [
             'sort' => 'sectionCode, description',
             'order' => 'ASC, ASC',
@@ -126,49 +119,16 @@ class PublicInquiryReasonTest extends AbstractPublicInquiryDataTestCase
 
         $this->mockHandleQuery($mockResponse);
 
-        $this->assertEquals($this->getSingleExpected(), $this->sut->fetchListOptions($params));
+        $this->assertEquals(self::SINGLE_EXPECTED, $this->sut->fetchListOptions($params));
     }
 
-    /**
-     * Data provider for testFetchListOptions
-     *
-     * @return array
-     */
-    public function provideFetchListOptions()
+    public static function provideFetchListOptions(): array
     {
         return [
-            ['Y', 'lcat_psv', $this->getSingleSource()],
-            ['N', 'lcat_psv', $this->getSingleSource()],
-            ['Y', 'lcat_gv', $this->getSingleSource()],
-            ['N', 'lcat_gv', $this->getSingleSource()]
+            ['Y', 'lcat_psv'],
+            ['N', 'lcat_psv'],
+            ['Y', 'lcat_gv'],
+            ['N', 'lcat_gv']
         ];
-    }
-
-    /**
-     * @return array
-     */
-    protected function getSingleExpected()
-    {
-        $expected = [
-            'val-1' => 'Value 1',
-            'val-2' => 'Value 2',
-            'val-3' => 'Value 3',
-        ];
-
-        return $expected;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getSingleSource()
-    {
-        $source = [
-            0 => ['id' => 'val-1', 'description' => 'Value 1'],
-            1 => ['id' => 'val-2', 'description' => 'Value 2'],
-            2 => ['id' => 'val-3', 'description' => 'Value 3']
-        ];
-
-        return $source;
     }
 }

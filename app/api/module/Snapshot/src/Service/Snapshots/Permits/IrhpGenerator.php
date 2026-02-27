@@ -40,6 +40,7 @@ class IrhpGenerator extends AbstractGenerator implements SnapshotGeneratorInterf
      *
      * @throws \Exception
      */
+    #[\Override]
     public function generate(): string
     {
         /** @var IrhpApplication $irhpApplication */
@@ -80,6 +81,7 @@ class IrhpGenerator extends AbstractGenerator implements SnapshotGeneratorInterf
      *
      * @return void
      */
+    #[\Override]
     public function setData(array $data): void
     {
         $this->data = $data;

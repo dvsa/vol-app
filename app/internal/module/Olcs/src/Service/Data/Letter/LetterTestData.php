@@ -24,6 +24,7 @@ class LetterTestData extends AbstractListDataService
      * @return array
      * @throw DataServiceException
      */
+    #[\Override]
     public function fetchListData($context = null)
     {
         $data = (array)$this->getData('letter-test-data');
@@ -45,8 +46,8 @@ class LetterTestData extends AbstractListDataService
 
         if (!$response->isOk()) {
             $body = $response->getBody();
-            $errorMessage = 'Failed to fetch letter test data: ' . 
-                ($body ? $body : 'HTTP ' . $response->getStatusCode());
+            $errorMessage = 'Failed to fetch letter test data: ' .
+                ($body ?: 'HTTP ' . $response->getStatusCode());
             throw new DataServiceException($errorMessage);
         }
 
@@ -64,6 +65,7 @@ class LetterTestData extends AbstractListDataService
      *
      * @return array
      */
+    #[\Override]
     public function formatData(array $data)
     {
         $optionData = [];

@@ -48,6 +48,7 @@ class BusRequestMapController extends AbstractInternalController implements
      *
      * @return null
      */
+    #[\Override]
     public function getLeftView()
     {
         return null;

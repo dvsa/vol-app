@@ -14,6 +14,7 @@ class UserAccess extends DynamicBookmark implements TranslatorAwareInterface
     public const USER_MESSAGE_SELF_SERVE = "You can log in and select 'Manage users' to amend the current users.";
     public const USER_MESSAGE_NON_SELF_SERVE = "You can register for a self-serve account to amend your licence details online.";
 
+    #[\Override]
     public function getQuery(array $data)
     {
         $bundle = [
@@ -34,6 +35,7 @@ class UserAccess extends DynamicBookmark implements TranslatorAwareInterface
     /**
      * @return string
      */
+    #[\Override]
     public function render()
     {
         if (!empty($this->data['organisation']['organisationUsers'])) {

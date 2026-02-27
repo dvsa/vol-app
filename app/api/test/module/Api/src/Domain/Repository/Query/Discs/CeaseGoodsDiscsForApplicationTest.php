@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Discs;
 
 use Dvsa\Olcs\Api\Domain\Repository\Query\Discs\CeaseGoodsDiscsForApplication;
@@ -59,7 +61,7 @@ class CeaseGoodsDiscsForApplicationTest extends AbstractDbQueryTestCase
         ],
     ];
 
-    public function paramProvider()
+    public static function paramProvider(): array
     {
         $today = new DateTime();
 
@@ -75,12 +77,12 @@ class CeaseGoodsDiscsForApplicationTest extends AbstractDbQueryTestCase
         ];
     }
 
-    protected function getSut()
+    protected function getSut(): CeaseGoodsDiscsForApplication
     {
         return new CeaseGoodsDiscsForApplication();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return 'UPDATE goods_disc gd '
         . 'INNER JOIN licence_vehicle lv '

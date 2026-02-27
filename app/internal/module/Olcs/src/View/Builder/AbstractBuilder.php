@@ -15,6 +15,7 @@ abstract class AbstractBuilder implements BuilderInterface
      * precludes the passing of any template variables but can still come
      * in handy when no extra variables need to be set
      */
+    #[\Override]
     public function buildViewFromTemplate($template)
     {
         $view = new ViewModel();
@@ -26,6 +27,7 @@ abstract class AbstractBuilder implements BuilderInterface
      * @param ViewModel $view
      * @return ViewModel
      */
+    #[\Override]
     public function buildView(ViewModel $view)
     {
         return $this->decorateView($view);

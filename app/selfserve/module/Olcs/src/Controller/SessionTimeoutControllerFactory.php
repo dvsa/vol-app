@@ -22,6 +22,7 @@ class SessionTimeoutControllerFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Dispatcher
     {
         $controllerPluginManager = $container->get('ControllerPluginManager');

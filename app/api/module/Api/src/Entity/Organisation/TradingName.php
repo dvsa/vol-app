@@ -29,6 +29,7 @@ class TradingName extends AbstractTradingName
         $this->setName($name);
     }
 
+    #[\Override]
     protected function getCalculatedValues()
     {
         return ['organisation' => null, 'licence' => null];

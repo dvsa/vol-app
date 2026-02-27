@@ -65,6 +65,7 @@ class AddressesController extends Lva\AbstractAddressesController
      *
      * @return void
      */
+    #[\Override]
     protected function alterFormForLva(Form $form, $data = null)
     {
         $this->formHelper->remove($form, 'consultant');

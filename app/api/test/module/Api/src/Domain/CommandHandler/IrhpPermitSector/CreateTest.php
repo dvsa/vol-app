@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermitSector;
 
 use Doctrine\ORM\Query;
@@ -32,7 +34,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $stockId = 999;
         $stockEntity = m::mock(IrhpPermitStock::class);

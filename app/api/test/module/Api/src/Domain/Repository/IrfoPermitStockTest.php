@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * IrfoPermitStock Repo test
  */
@@ -25,7 +27,7 @@ class IrfoPermitStockTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchUsingSerialNoStartEnd()
+    public function testFetchUsingSerialNoStartEnd(): void
     {
         $irfoCountryId = 99;
         $validForYear = 2015;

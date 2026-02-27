@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
@@ -17,7 +19,8 @@ class AddressesTest extends AbstractLvaFormServiceTestCase
     /** @var  \Olcs\FormService\Form\Lva\Addresses */
     protected $sut;
 
-    public function testGetForm()
+    #[\Override]
+    public function testGetForm(): void
     {
         // Mocks
         $mockForm = m::mock(\Laminas\Form\Form::class);

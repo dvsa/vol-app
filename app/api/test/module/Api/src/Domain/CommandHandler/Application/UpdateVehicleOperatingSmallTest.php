@@ -8,7 +8,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Application\UpdateVehicleOperatingSmall 
 use Dvsa\Olcs\Transfer\Command\Application\UpdateVehicleOperatingSmall as Command;
 use Mockery as m;
 
-class UpdateVehicleOperatingSmallTest extends AbstractUpdateApplicationTest
+class UpdateVehicleOperatingSmallTest extends AbstractUpdateApplicationTestCase
 {
     protected string $handlerClass = Handler::class;
     protected string $commandClass = Command::class;
@@ -20,6 +20,7 @@ class UpdateVehicleOperatingSmallTest extends AbstractUpdateApplicationTest
         'psvOperateSmall',
     ];
 
+    #[\Override]
     protected function setupApplication(): m\MockInterface&m\LegacyMockInterface
     {
         $application = parent::setupApplication();

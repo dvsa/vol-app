@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service;
 
 use Dvsa\Olcs\Api\Domain\Repository\IrhpApplication as IrhpApplicationRepo;
@@ -14,9 +16,7 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\FeesHelperService
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\FeesHelperService::class)]
 class FeesHelperServiceTest extends MockeryTestCase
 {
     /**
@@ -63,7 +63,7 @@ class FeesHelperServiceTest extends MockeryTestCase
         parent::setUp();
     }
 
-    private function createService($applicationRepo, $irhpApplicationRepo, $feeRepo, $feeTypeRepo)
+    private function createService(mixed $applicationRepo, mixed $irhpApplicationRepo, mixed $feeRepo, mixed $feeTypeRepo): mixed
     {
         $mockRepoManager = m::mock();
 
@@ -95,14 +95,14 @@ class FeesHelperServiceTest extends MockeryTestCase
         return $sut->__invoke($sm, FeesHelperService::class);
     }
 
-    public function testGetOutstandingFeesForApplication()
+    public function testGetOutstandingFeesForApplication(): void
     {
         $applicationId = 69;
         $licenceId = 7;
         $trafficAreaId = TrafficAreaEntity::NORTH_EASTERN_TRAFFIC_AREA_CODE;
 
-        $applicationFee = $this->getStubFee(99, 99.99);
-        $interimFee = $this->getStubFee(101, 99.99);
+        $applicationFee = self::getStubFee(99, 99.99);
+        $interimFee = self::getStubFee(101, 99.99);
         $fees = [$applicationFee, $interimFee];
 
         // mocks
@@ -144,11 +144,11 @@ class FeesHelperServiceTest extends MockeryTestCase
         $this->assertEquals($fees, $result);
     }
 
-    public function testGetOutstandingFeesForIrhpApplication()
+    public function testGetOutstandingFeesForIrhpApplication(): void
     {
         $irhpApplicationId = 2;
 
-        $irhpApplicationFee = $this->getStubFee(99, 99.99);
+        $irhpApplicationFee = self::getStubFee(99, 99.99);
         $fees = [$irhpApplicationFee];
 
         $irhpApplication = m::mock(IrhpApplicationEntity::class);
@@ -171,7 +171,7 @@ class FeesHelperServiceTest extends MockeryTestCase
         $this->assertEquals($fees, $result);
     }
 
-    public function testGetOutstandingFeesForBrandNewApplication()
+    public function testGetOutstandingFeesForBrandNewApplication(): void
     {
         $applicationId = 69;
         $licenceId = 7;
@@ -212,30 +212,29 @@ class FeesHelperServiceTest extends MockeryTestCase
      * @param string $amount
      * @param array $fees array of FeeEntity
      * @param array $expected allocated amounts e.g. ['97' => '12.45', '98' => '0.05']
-     *
-     * @dataProvider dpTestAllocatePayments()
      */
-    public function testAllocatePayments($amount, $fees, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestAllocatePayments')]
+    public function testAllocatePayments(mixed $amount, mixed $fees, mixed $expected): void
     {
         $this->assertSame($expected, $this->sut->allocatePayments($amount, $fees));
     }
 
-    public function dpTestAllocatePayments()
+    public static function dpTestAllocatePayments(): array
     {
         return [
             [
                 '0.00',
                 [
-                    $this->getStubFee('10', '99.99'),
-                    $this->getStubFee('11', '100.01', '2013-12-11', true),
+                    self::getStubFee('10', '99.99'),
+                    self::getStubFee('11', '100.01', '2013-12-11', true),
                 ],
                 []
             ],
             [
                 '200.00',
                 [
-                    $this->getStubFee('10', '99.99'),
-                    $this->getStubFee('11', '100.01'),
+                    self::getStubFee('10', '99.99'),
+                    self::getStubFee('11', '100.01'),
                 ],
                 [
                     '10' => '99.99',
@@ -245,10 +244,10 @@ class FeesHelperServiceTest extends MockeryTestCase
             [
                 '200.00',
                 [
-                    $this->getStubFee('10', '99.99', '2015-09-04'),
-                    $this->getStubFee('11', '50.01', '2015-09-02'),
-                    $this->getStubFee('12', '100.00', '2015-09-02'),
-                    $this->getStubFee('13', '100.00', '2015-09-05'),
+                    self::getStubFee('10', '99.99', '2015-09-04'),
+                    self::getStubFee('11', '50.01', '2015-09-02'),
+                    self::getStubFee('12', '100.00', '2015-09-02'),
+                    self::getStubFee('13', '100.00', '2015-09-05'),
                 ],
                 [
                     '11' => '50.01',
@@ -260,10 +259,10 @@ class FeesHelperServiceTest extends MockeryTestCase
                 '200.00',
                 [
                     // check tie-break on same invoicedDate
-                    $this->getStubFee('1', '100.00', '2015-09-03'),
-                    $this->getStubFee('2', '100.00', '2015-09-02'),
-                    $this->getStubFee('3', '100.00', '2015-09-02'),
-                    $this->getStubFee('4', '100.00', '2015-09-02'),
+                    self::getStubFee('1', '100.00', '2015-09-03'),
+                    self::getStubFee('2', '100.00', '2015-09-02'),
+                    self::getStubFee('3', '100.00', '2015-09-02'),
+                    self::getStubFee('4', '100.00', '2015-09-02'),
                 ],
                 [
                     '2' => '100.00',
@@ -273,23 +272,23 @@ class FeesHelperServiceTest extends MockeryTestCase
         ];
     }
 
-    public function testGetMinPaymentForFees()
+    public function testGetMinPaymentForFees(): void
     {
         $fees = [
-            $this->getStubFee('1', '5.00', '2015-09-03'),
-            $this->getStubFee('2', '10.00', '2015-09-01'),
-            $this->getStubFee('3', '15.00', '2015-09-02'),
+            self::getStubFee('1', '5.00', '2015-09-03'),
+            self::getStubFee('2', '10.00', '2015-09-01'),
+            self::getStubFee('3', '15.00', '2015-09-02'),
         ];
 
         // minimum is total of fee2 + fee3 then 0.01 allocated to fee1
         $this->assertEquals('25.01', $this->sut->getMinPaymentForFees($fees));
     }
 
-    public function testGetTotalOutstanding()
+    public function testGetTotalOutstanding(): void
     {
          $fees = [
-            $this->getStubFee('1', '99.99'),
-            $this->getStubFee('1', '99.99'),
+            self::getStubFee('1', '99.99'),
+            self::getStubFee('1', '99.99'),
          ];
 
          $this->assertEquals('199.98', $this->sut->getTotalOutstanding($fees));
@@ -299,14 +298,14 @@ class FeesHelperServiceTest extends MockeryTestCase
      * @param string $amount
      * @param array $fees array of FeeEntity
      * @param string $expected formatted amount
-     * @dataProvider overpaymentProvider()
      */
-    public function testGetOverpaymentAmount($amount, $fees, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('overpaymentProvider')]
+    public function testGetOverpaymentAmount(mixed $amount, mixed $fees, mixed $expected): void
     {
         $this->assertSame($expected, $this->sut->getOverpaymentAmount($amount, $fees));
     }
 
-    public function overpaymentProvider()
+    public static function overpaymentProvider(): array
     {
         return [
             'no fees' => [
@@ -317,23 +316,23 @@ class FeesHelperServiceTest extends MockeryTestCase
             'underpayment' => [
                 '0.00',
                 [
-                    $this->getStubFee('10', '99.99'),
-                    $this->getStubFee('11', '100.01'),
+                    self::getStubFee('10', '99.99'),
+                    self::getStubFee('11', '100.01'),
                 ],
                 '-200.00',
             ],
             'overpayment' => [
                 '250',
                 [
-                    $this->getStubFee('10', '99.99'),
-                    $this->getStubFee('11', '100.01'),
+                    self::getStubFee('10', '99.99'),
+                    self::getStubFee('11', '100.01'),
                 ],
                 '50.00',
             ],
         ];
     }
 
-    public function testGetIdsFromFee()
+    public function testGetIdsFromFee(): void
     {
         $application  = m::mock()->shouldReceive('getId')->andReturn(2)->getMock();
         $licence      = m::mock()->shouldReceive('getId')->andReturn(3)->getMock();
@@ -366,7 +365,7 @@ class FeesHelperServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetTotalOutstandingFeeAmountForApplication()
+    public function testGetTotalOutstandingFeeAmountForApplication(): void
     {
         $sut = m::mock(FeesHelperService::class)->makePartial();
 
@@ -398,7 +397,7 @@ class FeesHelperServiceTest extends MockeryTestCase
      * @param string $amount
      * @return FeeEntity
      */
-    private function getStubFee($id, $amount, $invoicedDate = '2015-09-10', $isCancelled = false)
+    private static function getStubFee(mixed $id, mixed $amount, string $invoicedDate = '2015-09-10', bool $isCancelled = false): mixed
     {
         $fee = m::mock(FeeEntity::class)->makePartial()
             ->setId($id)
@@ -414,7 +413,7 @@ class FeesHelperServiceTest extends MockeryTestCase
         return $fee;
     }
 
-    private function refData($id)
+    private function refData(mixed $id): m\MockInterface
     {
         return m::mock(RefData::class)
             ->makePartial()

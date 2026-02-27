@@ -38,6 +38,7 @@ class ApplicationConvictionsPenalties extends ConvictionsPenalties
      *
      * @return Form
      */
+    #[\Override]
     protected function alterForm($form, array $params = [])
     {
         parent::alterForm($form, $params);

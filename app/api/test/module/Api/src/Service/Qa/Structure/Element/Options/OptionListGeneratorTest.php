@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Options;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\Element\Options\OptionFactory;
@@ -50,7 +52,7 @@ class OptionListGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $sourceName = 'direct';
         $sourceOptions = [
@@ -80,7 +82,7 @@ class OptionListGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testExceptionOnUnknownSourceName()
+    public function testExceptionOnUnknownSourceName(): void
     {
         $data = [
             'name' => 'test',

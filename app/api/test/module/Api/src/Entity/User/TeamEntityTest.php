@@ -83,9 +83,7 @@ class TeamEntityTest extends EntityTester
         $this->assertEquals($expectedAllowedAreas, $entity->getAllowedTrafficAreas($excludedTeams));
     }
 
-    /**
-     * @dataProvider dpTestDataAccess
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestDataAccess')]
     public function testDataAccess(bool $isNi, array $expectedAllowedAreas): void
     {
         $trafficArea = m::mock(TrafficArea::class);
@@ -98,7 +96,7 @@ class TeamEntityTest extends EntityTester
         $this->assertEquals($expectedAllowedAreas, $entity->getAllowedTrafficAreas());
     }
 
-    public function dpTestDataAccess(): array
+    public static function dpTestDataAccess(): array
     {
         return [
             'GB User' => [false, TrafficArea::GB_TA_IDS],
@@ -106,10 +104,8 @@ class TeamEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestIsIrfo
-     */
-    public function testisIrfo($isIrfo, $teamId): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsIrfo')]
+    public function testisIrfo(mixed $isIrfo, mixed $teamId): void
     {
         $excludedTeams = [112];
 
@@ -119,7 +115,7 @@ class TeamEntityTest extends EntityTester
         $this->assertEquals($isIrfo, $entity->getIsIrfo($excludedTeams));
     }
 
-    public function dpTestIsIrfo(): array
+    public static function dpTestIsIrfo(): array
     {
         return [
             'Not IRFO' => [false, 100],
@@ -128,10 +124,8 @@ class TeamEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestGetAllowedSearchIndexes
-     */
-    public function testGetAllowedSearchIndexes($expectedIndexes, $teamId, $niTimes, $isNi): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetAllowedSearchIndexes')]
+    public function testGetAllowedSearchIndexes(mixed $expectedIndexes, mixed $teamId, mixed $niTimes, mixed $isNi): void
     {
         $excludedTeams = [112];
 
@@ -145,7 +139,7 @@ class TeamEntityTest extends EntityTester
         $this->assertEquals($expectedIndexes, $entity->getAllowedSearchIndexes($excludedTeams));
     }
 
-    public function dpTestGetAllowedSearchIndexes(): array
+    public static function dpTestGetAllowedSearchIndexes(): array
     {
         return [
             'IRFO' => [Entity::ALL_ELASTICSEARCH_INDEXES, 1004, 2, false],

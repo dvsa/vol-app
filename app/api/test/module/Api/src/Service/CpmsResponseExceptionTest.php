@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service;
 
 use Dvsa\Olcs\Api\Service\CpmsResponseException;
@@ -11,7 +13,7 @@ use Mockery as m;
  */
 class CpmsResponseExceptionTest extends MockeryTestCase
 {
-    public function testSetGet()
+    public function testSetGet(): void
     {
         $mockResp = m::mock(\Laminas\Http\Response::class);
 

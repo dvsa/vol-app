@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Doctrine\ORM\Query;
@@ -32,9 +34,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\MocksAbstractCommandHandlerServicesT
 use Dvsa\OlcsTest\MocksServicesTrait;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Application\SubmitApplication
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Application\SubmitApplication::class)]
 class SubmitApplicationTest extends AbstractCommandHandlerTestCase
 {
     use MocksServicesTrait;
@@ -100,7 +100,8 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
             ->setLicenceType($this->mapRefdata(LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL));
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED,
@@ -124,10 +125,8 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpTestHandleCommand
-     */
-    public function testHandleCommand($isVariation, $expected, $isInternalUser, $goodOrPsv, $hasS4)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommand')]
+    public function testHandleCommand(mixed $isVariation, mixed $expected, mixed $isInternalUser, mixed $goodOrPsv, mixed $hasS4): void
     {
         $this->setupIsInternalUser($isInternalUser);
 
@@ -265,7 +264,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpTestHandleCommand()
+    public static function dpTestHandleCommand(): array
     {
         return [
             'new app' => [
@@ -287,7 +286,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
                     ],
                 ],
                 'isInternalUser' => false,
-                'goodsOrPsv' => LicenceEntity::LICENCE_CATEGORY_PSV,
+                'goodOrPsv' => LicenceEntity::LICENCE_CATEGORY_PSV,
                 'hasS4' => false,
             ],
             'new app S4' => [
@@ -307,7 +306,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
                     ],
                 ],
                 'isInternalUser' => false,
-                'goodsOrPsv' => LicenceEntity::LICENCE_CATEGORY_PSV,
+                'goodOrPsv' => LicenceEntity::LICENCE_CATEGORY_PSV,
                 'hasS4' => true,
             ],
             'variation' => [
@@ -327,7 +326,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
                     ],
                 ],
                 'isInternalUser' => false,
-                'goodsOrPsv' => LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'goodOrPsv' => LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
                 'hasS4' => false,
             ],
             'variation S4' => [
@@ -345,12 +344,12 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
                     ],
                 ],
                 'isInternalUser' => false,
-                'goodsOrPsv' => LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'goodOrPsv' => LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
                 'hasS4' => true,
             ],
             'new app internal' => [
-                false,
-                [
+                "isVariation" => false,
+                "expected" => [
                     'id' => [
                         'application' => self::APP_ID,
                         'licence' => self::LIC_ID,
@@ -364,14 +363,14 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
                         'unit LightGoodsVehicleCondition created',
                     ],
                 ],
-                true,
-                'goodsOrPsv' => LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
+                "isInternalUser" => true,
+                'goodOrPsv' => LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
                 'hasS4' => true,
             ]
         ];
     }
 
-    public function testHandleCommandVariationPsv()
+    public function testHandleCommandVariationPsv(): void
     {
         $this->setupIsInternalUser(false);
 
@@ -482,7 +481,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandSpecialRestricted()
+    public function testHandleCommandSpecialRestricted(): void
     {
         $this->setupIsInternalUser(false);
 
@@ -599,18 +598,16 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider dataProviderApplicationCompletion
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderApplicationCompletion')]
     public function testVariationTasksCreated(
-        $applicationCompletion,
-        $isLtd,
-        $tmaStat,
-        $expectedDescription,
-        $expectedSubCategory,
-        $expectedTaskData,
-        $code
-    ) {
+        mixed $applicationCompletion,
+        mixed $isLtd,
+        mixed $tmaStat,
+        mixed $expectedDescription,
+        mixed $expectedSubCategory,
+        mixed $expectedTaskData,
+        mixed $code
+    ): void {
         $this->setupIsInternalUser(false);
 
         $now = new DateTime();
@@ -701,7 +698,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($now, $application->getReceivedDate());
     }
 
-    public function dataProviderApplicationCompletion()
+    public static function dataProviderApplicationCompletion(): array
     {
         $expectedTaskData = [
             'category' => CategoryEntity::CATEGORY_APPLICATION,
@@ -777,41 +774,41 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
                 'TEST CODE'
             ],
             'tmOnly' => [
-                [
+                "applicationCompletion" => [
                     ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_COMPLETE,
                     ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
                 ],
-                true,
-                'tmpStat' => [
+                "isLtd" => true,
+                'tmaStat' => [
                     'action' => [
                         Entity\Tm\TransportManagerApplication::ACTION_ADD => 1,
                         Entity\Tm\TransportManagerApplication::ACTION_DELETE => 0,
                     ]
                 ],
-                'TM change variation',
-                \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_TM1_DIGITAL,
-                $expectedTaskData,
-                'TEST CODE'
+                "expectedDescription" => 'TM change variation',
+                "expectedSubCategory" => \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_TM1_DIGITAL,
+                "expectedTaskData" => $expectedTaskData,
+                "code" => 'TEST CODE'
             ],
             'tmOnlyDeleteOnly' => [
-                [
+                "applicationCompletion" => [
                     ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_COMPLETE,
                     ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
                 ],
-                true,
-                'tmpStat' => [
+                "isLtd" => true,
+                'tmaStat' => [
                     'action' => [
                         Entity\Tm\TransportManagerApplication::ACTION_ADD => '0',
                         Entity\Tm\TransportManagerApplication::ACTION_DELETE => '1',
                     ]
                 ],
-                'TM1 (Removal only)',
-                \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_TM1_REMOVAL_VARIATION,
-                $expectedTaskData,
-                'TEST CODE'
+                "expectedDescription" => 'TM1 (Removal only)',
+                "expectedSubCategory" => \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_TM1_REMOVAL_VARIATION,
+                "expectedTaskData" => $expectedTaskData,
+                "code" => 'TEST CODE'
             ],
             'tmOnlyFail' => [
-                [
+                "applicationCompletion" => [
                     ApplicationCompletion::SECTION_PEOPLE => ApplicationCompletion::STATUS_COMPLETE,
                     ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_COMPLETE,
                     ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
@@ -819,12 +816,12 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
                     ApplicationCompletion::SECTION_DECLARATION => ApplicationCompletion::STATUS_COMPLETE,
                     ApplicationCompletion::SECTION_CONVICTIONS_AND_PENALTIES => ApplicationCompletion::STATUS_COMPLETE,
                 ],
-                true,
-                'tmpStat' => [],
-                'TEST CODE Application',
-                \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
-                $expectedTaskData,
-                'TEST CODE'
+                "isLtd" => true,
+                'tmaStat' => [],
+                "expectedDescription" => 'TEST CODE Application',
+                "expectedSubCategory" => \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
+                "expectedTaskData" => $expectedTaskData,
+                "code" => 'TEST CODE'
             ],
             'GV80A' => [
                 [
@@ -845,7 +842,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleInvalidStatus()
+    public function testHandleInvalidStatus(): void
     {
         $command = Cmd::create(
             [

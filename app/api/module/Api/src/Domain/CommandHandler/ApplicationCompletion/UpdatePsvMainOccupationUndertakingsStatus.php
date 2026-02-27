@@ -10,6 +10,7 @@ final class UpdatePsvMainOccupationUndertakingsStatus extends AbstractUpdateStat
 {
     protected $section = 'PsvMainOccupationUndertakings';
 
+    #[\Override]
     protected function isSectionValid(Application $application): bool
     {
         return $application->isSectionCompleted($this->section);

@@ -20,6 +20,7 @@ final class InternalApplicationsSummary extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->getRepo()->fetchInternalApplicationsSummary(

@@ -18,6 +18,7 @@ final class TransportManagers extends AbstractContext
      * @param \ArrayObject $context
      * @return \ArrayObject
      */
+    #[\Override]
     public function provide(PublicationLink $publicationLink, \ArrayObject $context)
     {
         $tmData = $publicationLink->getApplication()->getTransportManagers();

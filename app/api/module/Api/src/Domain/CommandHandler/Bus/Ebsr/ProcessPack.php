@@ -27,6 +27,7 @@ final class ProcessPack extends AbstractCommandHandler
      * @return Result
      * @throws \Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         try {

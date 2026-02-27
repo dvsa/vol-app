@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element;
 
 use Dvsa\Olcs\Api\Service\Qa\QaContext;
@@ -15,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class GenericAnswerSaverTest extends MockeryTestCase
 {
-    public function testSave()
+    public function testSave(): void
     {
         $postData = [
             'fieldset13' => [

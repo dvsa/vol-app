@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Translator;
 
 use Dvsa\Olcs\Api\Domain\Repository\Replacement;
@@ -19,7 +21,7 @@ use Psr\Container\ContainerInterface;
  */
 class TranslationLoaderFactoryTest extends MockeryTestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockCache = m::mock(CacheEncryption::class);
         $mockTranslationKeyTextRepo = m::mock(TranslationKeyText::class);

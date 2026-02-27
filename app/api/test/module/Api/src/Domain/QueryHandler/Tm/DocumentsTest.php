@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Documents Test
  *
@@ -35,7 +37,7 @@ class DocumentsTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Query::create(['id' => 1]);
 
@@ -67,7 +69,7 @@ class DocumentsTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryReadOnlyUser()
+    public function testHandleQueryReadOnlyUser(): void
     {
         $query = Query::create(['id' => 1]);
 

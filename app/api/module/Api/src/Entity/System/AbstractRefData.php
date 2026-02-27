@@ -32,7 +32,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractRefData implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractRefData implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -137,7 +137,8 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
     /**
      * Get the id
      *
-     * @return string     */
+     * @return string
+     */
     public function getId()
     {
         return $this->id;
@@ -160,7 +161,8 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
     /**
      * Get the parent
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getParent()
     {
         return $this->parent;
@@ -183,7 +185,8 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -206,7 +209,8 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
     /**
      * Get the ref data category id
      *
-     * @return string     */
+     * @return string
+     */
     public function getRefDataCategoryId()
     {
         return $this->refDataCategoryId;
@@ -229,7 +233,8 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
     /**
      * Get the olbs key
      *
-     * @return string     */
+     * @return string
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -252,7 +257,8 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
     /**
      * Get the display order
      *
-     * @return int     */
+     * @return int
+     */
     public function getDisplayOrder()
     {
         return $this->displayOrder;
@@ -275,7 +281,8 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -284,6 +291,7 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

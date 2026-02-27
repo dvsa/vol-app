@@ -21,6 +21,7 @@ final class UpdateNoFurtherAction extends AbstractCommandHandler implements Tran
 {
     protected $repoServiceName = 'TmCaseDecision';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $tmCaseDecision = $this->getRepo()->fetchUsingId($command, Query::HYDRATE_OBJECT, $command->getVersion());

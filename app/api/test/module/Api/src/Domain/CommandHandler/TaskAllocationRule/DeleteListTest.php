@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\TaskAllocationRule;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\TaskAllocationRule\DeleteList as CommandHandler;
@@ -22,12 +24,13 @@ class DeleteListTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         parent::initReferences();
     }
 
-    public function testHandleCommandAllParams()
+    public function testHandleCommandAllParams(): void
     {
         $command = Cmd::create(
             [

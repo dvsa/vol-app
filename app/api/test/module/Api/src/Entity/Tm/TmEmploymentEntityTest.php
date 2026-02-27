@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Tm;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,7 +24,7 @@ class TmEmploymentEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testGetRelatedOrganisation()
+    public function testGetRelatedOrganisation(): void
     {
         $sut = new Entity();
 

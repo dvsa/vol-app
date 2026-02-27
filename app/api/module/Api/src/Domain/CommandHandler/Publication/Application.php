@@ -38,6 +38,7 @@ class Application extends AbstractCommandHandler implements TransactionedInterfa
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /**

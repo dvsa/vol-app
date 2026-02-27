@@ -433,6 +433,12 @@ return [
                             'label' => 'Test Data',
                             'route' => 'admin-dashboard/admin-letter-test-data',
                         ],
+                        [
+                            'id' => 'admin-dashboard/letter-management/letter-appendices',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'Letter Appendices',
+                            'route' => 'admin-dashboard/admin-letter-appendix',
+                        ],
                     ],
                 ],
                 [

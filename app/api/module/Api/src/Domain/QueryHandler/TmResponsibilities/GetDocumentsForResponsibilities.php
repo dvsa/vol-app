@@ -23,6 +23,7 @@ class GetDocumentsForResponsibilities extends AbstractQueryHandler
 
     protected $extraRepos = ['TransportManagerApplication', 'TransportManagerLicence'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         if ($query->getType() == 'application') {

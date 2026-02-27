@@ -269,6 +269,7 @@ class Cases extends AbstractCases implements
     /**
      * Close the case
      */
+    #[\Override]
     public function close()
     {
         $errors = $this->generateCloseableValidationErrors();
@@ -317,6 +318,7 @@ class Cases extends AbstractCases implements
     /**
      * Reopen the case
      */
+    #[\Override]
     public function reopen()
     {
         if (!$this->canReopen()) {
@@ -331,6 +333,7 @@ class Cases extends AbstractCases implements
      *
      * @return bool
      */
+    #[\Override]
     public function canClose()
     {
         if ($this->getOutcomes()->isEmpty()) {
@@ -345,6 +348,7 @@ class Cases extends AbstractCases implements
      *
      * return bool
      */
+    #[\Override]
     public function isClosed()
     {
         return (bool) $this->closedDate != null;
@@ -355,6 +359,7 @@ class Cases extends AbstractCases implements
      *
      * @return bool
      */
+    #[\Override]
     public function canReopen()
     {
         return $this->isClosed();
@@ -372,10 +377,9 @@ class Cases extends AbstractCases implements
 
     /**
      * Returns whether an Erru Msi response can be sent
-     *
-     * @return bool
+     * NOTE: only cases with requested penalties are responded to
      */
-    public function canSendMsiResponse()
+    public function canSendMsiResponse(): bool
     {
         //check this is an erru case, and if so that the response isn't already sent
         if (!$this->isOpenErruCase()) {
@@ -384,13 +388,29 @@ class Cases extends AbstractCases implements
 
         /** @var SeriousInfringementEntity $si */
         foreach ($this->seriousInfringements as $si) {
-            //each serious infringement must have at least one applied penalty
+            //each serious infringement must have a response to all requested penalties
             if (!$si->responseSet()) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    /**
+     * Whether the case has at least one serious infringement with requested penalties
+     * This determines whether any response is set when the caseworker clicks the send button
+     */
+    public function hasErruRequestedPenalties(): bool
+    {
+        /** @var SeriousInfringementEntity $si */
+        foreach ($this->seriousInfringements as $si) {
+            if ($si->hasRequestedPenalties()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -418,6 +438,7 @@ class Cases extends AbstractCases implements
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedBundleValues()
     {
         return [
@@ -427,6 +448,7 @@ class Cases extends AbstractCases implements
             'canSendMsiResponse' => $this->canSendMsiResponse(),
             'canAddSi' => $this->canAddSi(),
             'isErru' => $this->isErru(),
+            'hasErruRequestedPenalties' => $this->hasErruRequestedPenalties(),
         ];
     }
 
@@ -448,6 +470,7 @@ class Cases extends AbstractCases implements
         );
     }
 
+    #[\Override]
     public function getContextValue()
     {
         return $this->getId();
@@ -477,6 +500,7 @@ class Cases extends AbstractCases implements
      *
      * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation|\Dvsa\Olcs\Api\Entity\Organisation\Organisation[]|null
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         if ($this->getApplication()) {

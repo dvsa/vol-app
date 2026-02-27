@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Delete Application Links Command Test
  *
@@ -20,7 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class DeleteApplicationLinksTest extends MockeryTestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $oc = m::mock(OperatingCentreEntity::class);
 

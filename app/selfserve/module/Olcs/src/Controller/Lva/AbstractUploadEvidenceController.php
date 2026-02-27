@@ -28,8 +28,6 @@ abstract class AbstractUploadEvidenceController extends AbstractController
 
     protected $operatingCentreId;
 
-    protected TranslationHelperService $translationHelper;
-
     /**
      * Data from API
      * @var array
@@ -55,11 +53,10 @@ abstract class AbstractUploadEvidenceController extends AbstractController
         AuthorizationService $authService,
         protected FormHelperService $formHelper,
         FileUploadHelperService $uploadHelper,
-        TranslationHelperService $translationHelper
+        protected TranslationHelperService $translationHelper
     ) {
         $this->uploadHelper = $uploadHelper;
         $this->startTime = (new DateTimeImmutable())->format(DateTimeInterface::ATOM);
-        $this->translationHelper = $translationHelper;
         parent::__construct(
             $niTextTranslationUtil,
             $authService,
@@ -72,6 +69,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
      * @return \Common\View\Model\Section|\Laminas\Http\Response
      * @psalm-suppress UndefinedDocblockClass
      */
+    #[\Override]
     public function indexAction()
     {
         $form = $this->getForm();
@@ -175,13 +173,16 @@ abstract class AbstractUploadEvidenceController extends AbstractController
      */
     public function operatingCentreLoadFileUpload()
     {
+        $startDateTime = new DateTimeImmutable($this->getRequest()->getPost('correlationId', $this->startTime));
         $data = $this->getData();
-        $currentApplicationId = $this->getIdentifier();
+        $currentApplicationId = (int)$this->getIdentifier();
         foreach ($data['operatingCentres'] as $aocData) {
             if ($aocData['operatingCentre']['id'] === $this->operatingCentreId) {
                 return array_filter(
                     $aocData['operatingCentre']['adDocuments'],
-                    fn($document) => $document['isPostSubmissionUpload'] && isset($document['application']['id']) && $document['application']['id'] === $currentApplicationId,
+                    fn($document) => $document['isPostSubmissionUpload']
+                        && isset($document['application']['id']) && $document['application']['id'] === $currentApplicationId
+                        && (new DateTimeImmutable($document['createdOn'])) > $startDateTime,
                 );
             }
         }

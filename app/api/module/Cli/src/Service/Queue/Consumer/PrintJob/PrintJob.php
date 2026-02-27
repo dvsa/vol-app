@@ -22,6 +22,7 @@ class PrintJob extends AbstractCommandConsumer
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getCommandData(QueueEntity $item)
     {
         $options = json_decode($item->getOptions(), true);

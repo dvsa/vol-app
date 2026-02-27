@@ -19,6 +19,7 @@ class ApplicationTrailerLimit extends DynamicBookmark
      *
      * @return Qry
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         $bundle = ['application'];
@@ -30,6 +31,7 @@ class ApplicationTrailerLimit extends DynamicBookmark
      *
      * @return int
      */
+    #[\Override]
     public function render()
     {
         return $this->data['application']['totAuthTrailers'] ?? 0;

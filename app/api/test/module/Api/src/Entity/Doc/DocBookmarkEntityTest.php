@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Doc;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,7 +21,7 @@ class DocBookmarkEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $sut = new Entity();
 

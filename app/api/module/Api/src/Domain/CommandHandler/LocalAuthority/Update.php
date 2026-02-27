@@ -16,6 +16,7 @@ final class Update extends AbstractCommandHandler
 {
     protected $repoServiceName = 'LocalAuthority';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         /**

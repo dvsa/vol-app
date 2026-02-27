@@ -21,6 +21,7 @@ class CaseDocsControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return CaseDocsController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CaseDocsController
     {
         $scriptFactory = $container->get(ScriptFactory::class);

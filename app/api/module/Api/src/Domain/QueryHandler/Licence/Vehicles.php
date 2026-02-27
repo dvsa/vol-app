@@ -16,6 +16,7 @@ class Vehicles extends AbstractQueryHandler
     /**
      * @param VehiclesQuery $query
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $repo = $this->getRepo();

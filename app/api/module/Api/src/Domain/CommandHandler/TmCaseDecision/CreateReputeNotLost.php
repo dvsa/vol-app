@@ -21,6 +21,7 @@ final class CreateReputeNotLost extends AbstractCommandHandler implements Transa
 {
     protected $repoServiceName = 'TmCaseDecision';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         // create and save a record

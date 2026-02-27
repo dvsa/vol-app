@@ -12,6 +12,7 @@ class CanAccessLicenceWithLicNo extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canAccessLicence($dto->getLicenceNumber());

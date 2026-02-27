@@ -31,6 +31,7 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 # cups-pdf is in edge/testing repository (available for both x86_64 and aarch64)
 # hadolint ignore=DL3018
 RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories && \
+    echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
     echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
     apk add --no-cache \
     cups \
@@ -43,7 +44,16 @@ RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositor
     bash \
     tzdata \
     pcre2 \
+    font-liberation \
+    font-liberation-sans-narrow \
+    font-carlito \
+    font-noto \
+    fontconfig \
     && rm -rf /var/cache/apk/*
+
+# Install barcode font for CUPS printing
+COPY 3OF9.TTF /usr/share/fonts/3OF9.TTF
+RUN fc-cache -fv
 
 # Copy FileBrowser binary from builder
 COPY --from=builder /build/filebrowser /usr/local/bin/filebrowser

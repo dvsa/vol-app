@@ -30,6 +30,7 @@ final class CreateOfficeCopy extends AbstractCommandHandler implements Transacti
     protected $repoServiceName = 'CommunityLic';
     protected $extraRepos = ['Licence', 'Application'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

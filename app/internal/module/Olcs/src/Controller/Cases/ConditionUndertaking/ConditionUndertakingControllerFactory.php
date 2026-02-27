@@ -12,6 +12,7 @@ use Laminas\View\HelperPluginManager;
 
 class ConditionUndertakingControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ConditionUndertakingController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\MyAccount;
 
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
@@ -57,7 +59,8 @@ class UpdateMyAccountCognitoTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ContactDetailsEntity::CONTACT_TYPE_USER,
@@ -77,7 +80,7 @@ class UpdateMyAccountCognitoTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $userId = 1;
 
@@ -133,7 +136,6 @@ class UpdateMyAccountCognitoTest extends AbstractCommandHandlerTestCase
         $user->setPid('some-pid');
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($user, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_INTERNAL);
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')

@@ -20,21 +20,16 @@ class IrhpApplicationFeesController extends AbstractIrhpPermitController
     use GenericReceipt;
     use IrhpFeesTrait;
 
-    protected UrlHelperService $urlHelper;
-    protected IdentityProviderInterface $identityProvider;
-    protected TranslationHelperService $translationHelper;
-    protected DateHelperService $dateHelper;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
         protected FlashMessengerHelperService $flashMessengerHelper,
-        UrlHelperService $urlHelper,
-        IdentityProviderInterface $identityProvider,
-        TranslationHelperService $translationHelper,
-        DateHelperService $dateHelper
+        protected UrlHelperService $urlHelper,
+        protected IdentityProviderInterface $identityProvider,
+        protected TranslationHelperService $translationHelper,
+        protected DateHelperService $dateHelper
     ) {
         parent::__construct(
             $scriptFactory,
@@ -42,10 +37,6 @@ class IrhpApplicationFeesController extends AbstractIrhpPermitController
             $tableFactory,
             $viewHelperManager
         );
-        $this->urlHelper = $urlHelper;
-        $this->identityProvider = $identityProvider;
-        $this->translationHelper = $translationHelper;
-        $this->dateHelper = $dateHelper;
     }
 
     /**
@@ -54,6 +45,7 @@ class IrhpApplicationFeesController extends AbstractIrhpPermitController
      * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return string
      */
+    #[\Override]
     protected function getFeesRoute()
     {
         return 'licence/irhp-application-fees';
@@ -65,6 +57,7 @@ class IrhpApplicationFeesController extends AbstractIrhpPermitController
      * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return array
      */
+    #[\Override]
     protected function getFeesRouteParams()
     {
         return [
@@ -80,6 +73,7 @@ class IrhpApplicationFeesController extends AbstractIrhpPermitController
      * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return array
      */
+    #[\Override]
     protected function getFeesTableParams()
     {
         return [
@@ -96,6 +90,7 @@ class IrhpApplicationFeesController extends AbstractIrhpPermitController
      * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     protected function renderLayout($view)
     {
         return $this->renderView($view);

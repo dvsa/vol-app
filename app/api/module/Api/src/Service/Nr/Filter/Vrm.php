@@ -49,6 +49,7 @@ class Vrm extends AbstractFilter
      *
      * @return array
      */
+    #[\Override]
     public function filter($value)
     {
         $value['vrm'] = substr($this->getVrmFilter()->filter($value['vrm']), 0, 15);

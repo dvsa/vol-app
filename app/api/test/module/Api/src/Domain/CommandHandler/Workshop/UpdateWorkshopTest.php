@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Workshop Test
  *
@@ -19,6 +21,9 @@ use Dvsa\Olcs\Transfer\Command\Workshop\UpdateWorkshop as Cmd;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails as ContactDetailsEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Workshop as WorkshopEntity;
+use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
+use Dvsa\Olcs\Api\Entity\ContactDetails\Address as AddressEntity;
 
 /**
  * Update Workshop Test
@@ -31,11 +36,13 @@ class UpdateWorkshopTest extends AbstractCommandHandlerTestCase
     {
         $this->sut = new UpdateWorkshop();
         $this->mockRepo('Workshop', Workshop::class);
+        $this->mockedSmServices ['EventHistoryCreator'] = m::mock(EventHistoryCreator::class);
 
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -44,7 +51,7 @@ class UpdateWorkshopTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 123,
@@ -71,6 +78,14 @@ class UpdateWorkshopTest extends AbstractCommandHandlerTestCase
         $workshop = m::mock(WorkshopEntity::class)->makePartial();
         $workshop->setContactDetails($contactDetails);
 
+        /** @var AddressEntity $address */
+        $address = m::mock(AddressEntity::class)->makePartial();
+        $address->shouldReceive('getVersion')
+            ->andReturn(2);
+
+        $contactDetails->shouldReceive('getAddress')
+            ->andReturn($address);
+
         $this->repoMap['Workshop']->shouldReceive('fetchUsingId')
             ->with($command, Query::HYDRATE_OBJECT, 1)
             ->andReturn($workshop)
@@ -92,6 +107,10 @@ class UpdateWorkshopTest extends AbstractCommandHandlerTestCase
         $result1 = new Result();
         $result1->addMessage('Address updated');
         $this->expectedSideEffect(SaveAddress::class, $expectedData, $result1);
+
+        $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')
+            ->with($address, EventHistoryTypeEntity::EVENT_CODE_EDIT_SAFETY_INSPECTOR, null, $workshop->getLicence())
+            ->once();
 
         $result = $this->sut->handleCommand($command);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * GetDocumentsForResponsibilities Test
  *
@@ -34,7 +36,7 @@ class GetDocumentsForResponsibilitiesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQueryForTypeApplication()
+    public function testHandleQueryForTypeApplication(): void
     {
         $query = Query::create(
             [
@@ -85,7 +87,7 @@ class GetDocumentsForResponsibilitiesTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryForTypeLicence()
+    public function testHandleQueryForTypeLicence(): void
     {
         $query = Query::create(
             [

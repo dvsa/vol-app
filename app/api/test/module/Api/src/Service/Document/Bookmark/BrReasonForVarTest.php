@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Class
  *
@@ -15,9 +17,9 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
  */
 class BrReasonForVarTest extends \PHPUnit\Framework\TestCase
 {
-    public const SUT_CLASS_NAME = '\Dvsa\Olcs\Api\Service\Document\Bookmark\BrReasonForVar';
+    public const SUT_CLASS_NAME = \Dvsa\Olcs\Api\Service\Document\Bookmark\BrReasonForVar::class;
 
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $sutClassName = static::SUT_CLASS_NAME;
 
@@ -29,7 +31,7 @@ class BrReasonForVarTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $sutClassName = static::SUT_CLASS_NAME;
 

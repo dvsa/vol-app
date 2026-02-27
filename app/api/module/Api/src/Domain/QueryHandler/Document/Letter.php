@@ -23,6 +23,7 @@ class Letter extends AbstractQueryHandler
 
     protected $extraRepos = ['DocTemplate'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var Entity\Doc\Document $doc */

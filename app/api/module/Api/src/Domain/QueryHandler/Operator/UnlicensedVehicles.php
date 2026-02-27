@@ -25,6 +25,7 @@ class UnlicensedVehicles extends AbstractQueryHandler
 
     protected $extraRepos = ['LicenceVehicle'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var OrganisationEntity $organisation */

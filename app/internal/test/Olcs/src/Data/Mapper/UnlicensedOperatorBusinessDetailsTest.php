@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Unlicensed Operator Business Details Mapper Test
  *
@@ -19,7 +21,7 @@ use Olcs\Data\Mapper\UnlicensedOperatorBusinessDetails as Sut;
  */
 class UnlicensedOperatorBusinessDetailsTest extends TestCase
 {
-    public function testMapFromResult()
+    public function testMapFromResult(): void
     {
         $input =  [
             'id' => 121,
@@ -128,7 +130,7 @@ class UnlicensedOperatorBusinessDetailsTest extends TestCase
         $this->assertEquals($expected, $output);
     }
 
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $input =  [
             'operator-details' =>  [
@@ -205,7 +207,7 @@ class UnlicensedOperatorBusinessDetailsTest extends TestCase
         $this->assertEquals($expected, $output);
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $errors = [
             'name' => ['name error'],

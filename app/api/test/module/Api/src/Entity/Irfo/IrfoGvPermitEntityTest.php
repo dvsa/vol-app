@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Irfo;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -31,7 +33,7 @@ class IrfoGvPermitEntityTest extends EntityTester
         $this->entity = $this->instantiate($this->entityClass);
     }
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $organisation = m::mock(OrganisationEntity::class);
         $type = m::mock(IrfoGvPermitTypeEntity::class);
@@ -44,7 +46,7 @@ class IrfoGvPermitEntityTest extends EntityTester
         $this->assertSame($status, $entity->getIrfoPermitStatus());
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $irfoGvPermitType = m::mock(IrfoGvPermitTypeEntity::class);
         $yearRequired = 2010;
@@ -79,7 +81,7 @@ class IrfoGvPermitEntityTest extends EntityTester
     /**
      * Tests update throws exception correctly
      */
-    public function testUpdateWithInvalidExpiryDate()
+    public function testUpdateWithInvalidExpiryDate(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -98,7 +100,7 @@ class IrfoGvPermitEntityTest extends EntityTester
         );
     }
 
-    public function testReset()
+    public function testReset(): void
     {
         $status = new RefData();
         $status->setId(Entity::STATUS_APPROVED);
@@ -115,7 +117,7 @@ class IrfoGvPermitEntityTest extends EntityTester
     /**
      * Tests reset throws exception correctly
      */
-    public function testResetThrowsInvalidStatusException()
+    public function testResetThrowsInvalidStatusException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -123,11 +125,9 @@ class IrfoGvPermitEntityTest extends EntityTester
         $status->setId(Entity::STATUS_APPROVED);
 
         $this->entity->reset($status);
-
-        return true;
     }
 
-    public function testWithdraw()
+    public function testWithdraw(): void
     {
         $status = new RefData();
         $status->setId(Entity::STATUS_PENDING);
@@ -144,7 +144,7 @@ class IrfoGvPermitEntityTest extends EntityTester
     /**
      * Tests withdraw throws exception correctly
      */
-    public function testWithdrawThrowsInvalidStatusException()
+    public function testWithdrawThrowsInvalidStatusException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -152,11 +152,9 @@ class IrfoGvPermitEntityTest extends EntityTester
         $status->setId(Entity::STATUS_APPROVED);
 
         $this->entity->withdraw($status);
-
-        return true;
     }
 
-    public function testRefuse()
+    public function testRefuse(): void
     {
         $status = new RefData();
         $status->setId(Entity::STATUS_PENDING);
@@ -173,7 +171,7 @@ class IrfoGvPermitEntityTest extends EntityTester
     /**
      * Tests refuse throws exception correctly
      */
-    public function testRefuseThrowsInvalidStatusException()
+    public function testRefuseThrowsInvalidStatusException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -181,14 +179,12 @@ class IrfoGvPermitEntityTest extends EntityTester
         $status->setId(Entity::STATUS_APPROVED);
 
         $this->entity->refuse($status);
-
-        return true;
     }
 
     /**
      * Tests approve throws exception correctly
      */
-    public function testApproveThrowsInvalidStatusException()
+    public function testApproveThrowsInvalidStatusException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -198,14 +194,12 @@ class IrfoGvPermitEntityTest extends EntityTester
         $fees = [];
 
         $this->entity->approve($status, $fees);
-
-        return true;
     }
 
     /**
      * Tests approve throws exception correctly
      */
-    public function testApproveThrowsNotApprovableException()
+    public function testApproveThrowsNotApprovableException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -218,11 +212,9 @@ class IrfoGvPermitEntityTest extends EntityTester
         $fees = [];
 
         $sut->approve($status, $fees);
-
-        return true;
     }
 
-    public function testApprove()
+    public function testApprove(): void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->shouldReceive('isApprovable')->once()->andReturn(true);
@@ -239,11 +231,9 @@ class IrfoGvPermitEntityTest extends EntityTester
         $sut->approve($newStatus, $fees);
 
         $this->assertEquals($newStatus, $sut->getIrfoPermitStatus());
-
-        return true;
     }
 
-    public function testIsApprovable()
+    public function testIsApprovable(): void
     {
         $status = new RefData();
         $status->setId(Entity::STATUS_PENDING);
@@ -261,7 +251,7 @@ class IrfoGvPermitEntityTest extends EntityTester
         $this->assertEquals(true, $this->entity->isApprovable($fees));
     }
 
-    public function testIsApprovableWhenNotPending()
+    public function testIsApprovableWhenNotPending(): void
     {
         $status = new RefData();
         $status->setId(Entity::STATUS_REFUSED);
@@ -272,7 +262,7 @@ class IrfoGvPermitEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->isApprovable($fees));
     }
 
-    public function testIsApprovableWhenWithoutFees()
+    public function testIsApprovableWhenWithoutFees(): void
     {
         $status = new RefData();
         $status->setId(Entity::STATUS_PENDING);
@@ -283,7 +273,7 @@ class IrfoGvPermitEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->isApprovable($fees));
     }
 
-    public function testIsApprovableWhenOutstandingFees()
+    public function testIsApprovableWhenOutstandingFees(): void
     {
         $status = new RefData();
         $status->setId(Entity::STATUS_PENDING);
@@ -305,10 +295,8 @@ class IrfoGvPermitEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->isApprovable($fees));
     }
 
-    /**
-     * @dataProvider isGeneratableStates
-     */
-    public function testIsGeneratable($input, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isGeneratableStates')]
+    public function testIsGeneratable(mixed $input, mixed $expected): void
     {
         $status = new RefData();
         $status->setId($input);
@@ -317,7 +305,7 @@ class IrfoGvPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isGeneratable());
     }
 
-    public function isGeneratableStates()
+    public static function isGeneratableStates(): array
     {
         return [
             [Entity::STATUS_APPROVED, true],

@@ -36,7 +36,7 @@ class ContactDetailsEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $contactType = m::mock(RefData::class);
 
@@ -45,7 +45,7 @@ class ContactDetailsEntityTest extends EntityTester
         $this->assertSame($contactType, $entity->getContactType());
     }
 
-    public function testUpdateContactDetailsWithPersonAndEmailAddress()
+    public function testUpdateContactDetailsWithPersonAndEmailAddress(): void
     {
         $contactType = m::mock(RefData::class);
         $entity = new ContactDetails($contactType);
@@ -56,10 +56,8 @@ class ContactDetailsEntityTest extends EntityTester
         $this->assertEquals('email@address.com', $entity->getEmailAddress());
     }
 
-    /**
-     * @dataProvider dpTestCreate
-     */
-    public function testCreate($contactType, $data = [], $expect = [])
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCreate')]
+    public function testCreate(mixed $contactType, array $data = [], array $expect = []): void
     {
         $cdTypeEntity = (new RefData())->setId($contactType);
 
@@ -89,7 +87,7 @@ class ContactDetailsEntityTest extends EntityTester
         static::assertEmpty($phoneContacts);
     }
 
-    public function dpTestCreate()
+    public static function dpTestCreate(): array
     {
         return [
             [
@@ -219,10 +217,8 @@ class ContactDetailsEntityTest extends EntityTester
         static::assertEquals($phoneContacts, $sut->getPhoneContacts());
     }
 
-    /**
-     * @dataProvider dpTestUpdate
-     */
-    public function testUpdate($contactType, $data, $expect, $fromInternal)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestUpdate')]
+    public function testUpdate(mixed $contactType, mixed $data, mixed $expect, mixed $fromInternal): void
     {
         $cdTypeEntity = (new RefData())->setId($contactType);
 
@@ -281,7 +277,7 @@ class ContactDetailsEntityTest extends EntityTester
         );
     }
 
-    public function dpTestUpdate()
+    public static function dpTestUpdate(): array
     {
         return [
             //  test CONTACT_TYPE_IRFO_OPERATOR
@@ -339,7 +335,7 @@ class ContactDetailsEntityTest extends EntityTester
                         ],
                     ],
                 ],
-                false
+                "fromInternal" => false
             ],
             //  test update of CONTACT_TYPE_PARTNER
             [
@@ -375,7 +371,7 @@ class ContactDetailsEntityTest extends EntityTester
                         ],
                     ],
                 ],
-                false
+                "fromInternal" => false
             ],
             //  test update of CONTACT_TYPE_OBJECTOR
             [
@@ -430,7 +426,7 @@ class ContactDetailsEntityTest extends EntityTester
                         ],
                     ],
                 ],
-                false
+                "fromInternal" => false
             ],
             //  test update of CONTACT_TYPE_STATEMENT_REQUESTOR
             [
@@ -475,7 +471,7 @@ class ContactDetailsEntityTest extends EntityTester
                         ],
                     ],
                 ],
-                false
+                "fromInternal" => false
             ],
             //  test update of CONTACT_TYPE_USER FROM SelfServe
             [
@@ -523,7 +519,7 @@ class ContactDetailsEntityTest extends EntityTester
                         ],
                     ],
                 ],
-                false
+                "fromInternal" => false
             ],
             [
                 'contactType' => ContactDetails::CONTACT_TYPE_USER,
@@ -570,7 +566,7 @@ class ContactDetailsEntityTest extends EntityTester
                         ],
                     ],
                 ],
-                true
+                "fromInternal" => true
             ],
             'TM from internal' => [
                 'contactType' => ContactDetails::CONTACT_TYPE_TRANSPORT_MANAGER,
@@ -617,7 +613,7 @@ class ContactDetailsEntityTest extends EntityTester
                         ],
                     ],
                 ],
-                true
+                "fromInternal" => true
             ],
             //  test update of CONTACT_TYPE_COMPLAINANT
             [
@@ -662,7 +658,7 @@ class ContactDetailsEntityTest extends EntityTester
                         ],
                     ],
                 ],
-                false
+                "fromInternal" => false
             ],
             //  test update of CONTACT_TYPE_
             [
@@ -715,12 +711,12 @@ class ContactDetailsEntityTest extends EntityTester
                         ],
                     ],
                 ],
-                false
+                "fromInternal" => false
             ],
         ];
     }
 
-    public function testGetPhoneContactNumber()
+    public function testGetPhoneContactNumber(): void
     {
         $sut = new ContactDetails(m::mock(RefData::class));
 
@@ -736,7 +732,7 @@ class ContactDetailsEntityTest extends EntityTester
         $this->assertEquals(self::DEF_PHONE_NR, $sut->getPhoneContactNumber(self::DEF_PHONE_TYPE));
     }
 
-    public function testGetPhoneContactNumberEmpty()
+    public function testGetPhoneContactNumberEmpty(): void
     {
         $sut = new ContactDetails(m::mock(RefData::class));
 

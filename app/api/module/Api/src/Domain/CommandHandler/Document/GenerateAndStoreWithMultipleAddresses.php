@@ -34,6 +34,7 @@ final class GenerateAndStoreWithMultipleAddresses extends AbstractCommandHandler
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $data = $command->getGenerateCommandData();

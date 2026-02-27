@@ -47,7 +47,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractPi implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractPi implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -550,7 +550,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -573,7 +574,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -596,7 +598,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the assigned caseworker
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getAssignedCaseworker()
     {
         return $this->assignedCaseworker;
@@ -619,7 +622,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the assigned to
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getAssignedTo()
     {
         return $this->assignedTo;
@@ -642,7 +646,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the agreed by tc
      *
-     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc     */
+     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     */
     public function getAgreedByTc()
     {
         return $this->agreedByTc;
@@ -665,7 +670,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the decided by tc
      *
-     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc     */
+     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     */
     public function getDecidedByTc()
     {
         return $this->decidedByTc;
@@ -688,7 +694,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the agreed by tc role
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getAgreedByTcRole()
     {
         return $this->agreedByTcRole;
@@ -711,7 +718,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the decided by tc role
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getDecidedByTcRole()
     {
         return $this->decidedByTcRole;
@@ -734,7 +742,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the pi status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getPiStatus()
     {
         return $this->piStatus;
@@ -757,7 +766,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the written outcome
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getWrittenOutcome()
     {
         return $this->writtenOutcome;
@@ -780,7 +790,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -803,7 +814,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -826,7 +838,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the is ecms case
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsEcmsCase()
     {
         return $this->isEcmsCase;
@@ -851,7 +864,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEcmsFirstReceivedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -880,7 +894,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getAgreedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -907,7 +922,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the tm called with operator
      *
-     * @return string     */
+     * @return string
+     */
     public function getTmCalledWithOperator()
     {
         return $this->tmCalledWithOperator;
@@ -930,7 +946,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the witnesses
      *
-     * @return int     */
+     * @return int
+     */
     public function getWitnesses()
     {
         return $this->witnesses;
@@ -953,7 +970,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the is cancelled
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsCancelled()
     {
         return $this->isCancelled;
@@ -978,7 +996,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getDecisionDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1005,7 +1024,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the licence revoked at pi
      *
-     * @return string     */
+     * @return string
+     */
     public function getLicenceRevokedAtPi()
     {
         return $this->licenceRevokedAtPi;
@@ -1028,7 +1048,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the licence curtailed at pi
      *
-     * @return string     */
+     * @return string
+     */
     public function getLicenceCurtailedAtPi()
     {
         return $this->licenceCurtailedAtPi;
@@ -1051,7 +1072,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the licence suspended at pi
      *
-     * @return string     */
+     * @return string
+     */
     public function getLicenceSuspendedAtPi()
     {
         return $this->licenceSuspendedAtPi;
@@ -1076,7 +1098,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getNotificationDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1103,7 +1126,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the decision notes
      *
-     * @return string     */
+     * @return string
+     */
     public function getDecisionNotes()
     {
         return $this->decisionNotes;
@@ -1126,7 +1150,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the comment
      *
-     * @return string     */
+     * @return string
+     */
     public function getComment()
     {
         return $this->comment;
@@ -1151,7 +1176,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getCallUpLetterDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1180,7 +1206,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getBriefToTcDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1209,7 +1236,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getWrittenReasonDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1238,7 +1266,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getDecisionLetterSentDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1267,7 +1296,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getTcWrittenReasonDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1296,7 +1326,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getTcWrittenDecisionDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1325,7 +1356,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getWrittenReasonLetterDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1354,7 +1386,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getWrittenDecisionLetterDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1383,7 +1416,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getClosedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1410,7 +1444,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -1433,7 +1468,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -1456,7 +1492,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the olbs type
      *
-     * @return string     */
+     * @return string
+     */
     public function getOlbsType()
     {
         return $this->olbsType;
@@ -1969,6 +2006,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

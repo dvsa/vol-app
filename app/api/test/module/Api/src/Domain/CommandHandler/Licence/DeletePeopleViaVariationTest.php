@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Licence;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -22,12 +24,12 @@ class DeletePeopleViaVariationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testSutIsCommandHandler()
+    public function testSutIsCommandHandler(): void
     {
         $this->assertInstanceOf(AbstractCommandHandler::class, $this->sut);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->commandHandler->shouldReceive('handleCommand')
             ->once()
@@ -89,7 +91,7 @@ class DeletePeopleViaVariationTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    private function assertDtoSame(ArraySerializableInterface $expected, ArraySerializableInterface $actual)
+    private function assertDtoSame(ArraySerializableInterface $expected, ArraySerializableInterface $actual): void
     {
         $this->assertInstanceOf($expected::class, $actual);
         $this->assertEquals($expected->getArrayCopy(), $actual->getArrayCopy());

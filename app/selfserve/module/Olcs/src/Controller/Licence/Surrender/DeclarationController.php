@@ -40,6 +40,7 @@ class DeclarationController extends AbstractSurrenderController
     /**
      * @return Response|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         if ($this->getRequest()->isPost()) {
@@ -131,6 +132,7 @@ class DeclarationController extends AbstractSurrenderController
      * @return array
      *
      */
+    #[\Override]
     protected function getViewVariables(): array
     {
         return [

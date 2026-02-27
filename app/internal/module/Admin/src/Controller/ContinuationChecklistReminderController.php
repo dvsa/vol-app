@@ -19,19 +19,17 @@ class ContinuationChecklistReminderController extends AbstractController
     use CrudActionTrait;
 
     public const TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER = 'que_typ_cont_check_rem_gen_let';
-    protected FlashMessengerHelperService $flashMessengerHelper;
 
     public function __construct(
         Placeholder $placeholder,
         protected DateHelperService $dateHelper,
-        FlashMessengerHelperService $flashMessengerHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper,
         protected ScriptFactory $scriptFactory,
         protected FormHelperService $formHelper,
         protected ResponseHelperService $responseHelper,
         protected TableFactory $tableFactory
     ) {
         parent::__construct($placeholder);
-        $this->flashMessengerHelper = $flashMessengerHelper;
     }
 
     /**
@@ -39,6 +37,7 @@ class ContinuationChecklistReminderController extends AbstractController
      *
      * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         /** @var \Laminas\Http\Request $request */
@@ -53,11 +52,11 @@ class ContinuationChecklistReminderController extends AbstractController
         }
 
         $nowDate = $this->dateHelper->getDate('Y-m');
-        [$year, $month] = explode('-', $nowDate);
+        [$year, $month] = explode('-', (string) $nowDate);
 
         $filterForm = $this->getChecklistReminderFilterForm($month, $year);
         if ($filterForm->isValid()) {
-            [$year, $month] = explode('-', $filterForm->getData()['filters']['date']);
+            [$year, $month] = explode('-', (string) $filterForm->getData()['filters']['date']);
         }
 
         $response = $this->handleQuery(
@@ -133,7 +132,7 @@ class ContinuationChecklistReminderController extends AbstractController
      */
     public function generateLettersAction()
     {
-        $continuationDetailIds = explode(',', $this->params('child_id'));
+        $continuationDetailIds = explode(',', (string) $this->params('child_id'));
 
         $response = $this->handleCommand(
             QueueCmd::create(
@@ -162,7 +161,7 @@ class ContinuationChecklistReminderController extends AbstractController
      */
     public function exportAction()
     {
-        $continuationDetailIds = explode(',', $this->params('child_id'));
+        $continuationDetailIds = explode(',', (string) $this->params('child_id'));
 
         $response = $this->handleQuery(
             ChecklistRemindersQry::create(['ids' => $continuationDetailIds])

@@ -27,6 +27,7 @@ class ApplicationVehiclesDeclarationsMainUndertakings extends VehiclesDeclaratio
      *
      * @return Form
      */
+    #[\Override]
     protected function alterForm($form)
     {
         parent::alterForm($form);

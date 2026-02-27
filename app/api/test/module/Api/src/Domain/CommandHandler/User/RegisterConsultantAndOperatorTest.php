@@ -23,7 +23,7 @@ class RegisterConsultantAndOperatorTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('Role', \Dvsa\Olcs\Api\Domain\Repository\Role::class);
 
         $mockAuthService = m::mock(\LmcRbacMvc\Service\AuthorizationService::class);
-        $this->mockedSmServices['LmcRbacMvc\Service\AuthorizationService'] = $mockAuthService;
+        $this->mockedSmServices[\LmcRbacMvc\Service\AuthorizationService::class] = $mockAuthService;
 
         parent::setUp();
     }

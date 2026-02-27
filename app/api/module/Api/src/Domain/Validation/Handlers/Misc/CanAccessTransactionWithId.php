@@ -12,6 +12,7 @@ class CanAccessTransactionWithId extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canAccessTransaction($dto->getId());

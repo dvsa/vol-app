@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * IrfoGvPermitType test
  *
@@ -23,7 +25,7 @@ class IrfoGvPermitTypeTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         $this->setUpSut(Repo::class, true);
 
@@ -34,7 +36,7 @@ class IrfoGvPermitTypeTest extends RepositoryTestCase
         $this->sut->applyListFilters($mockQb, $mockQ);
     }
 
-    public function testFetchActiveRecords()
+    public function testFetchActiveRecords(): void
     {
         $qb = $this->createMockQb('QRYSTART');
 

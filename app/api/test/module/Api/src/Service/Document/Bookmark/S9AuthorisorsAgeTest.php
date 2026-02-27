@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Class
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\S9AuthorisorsAge;
  */
 class S9AuthorisorsAgeTest extends \PHPUnit\Framework\TestCase
 {
-    public function testRender()
+    public function testRender(): void
     {
         $bookmark = new S9AuthorisorsAge();
 

@@ -11,15 +11,13 @@ use Laminas\Form\Form;
 
 class UserTest extends MockeryTestCase
 {
-    /**
-    * @dataProvider mapFromResultDataProvider
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromResultDataProvider')]
     public function testMapFromResult(array $inData, array $expected): void
     {
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): array
     {
         return [
             // add
@@ -353,15 +351,13 @@ class UserTest extends MockeryTestCase
         ];
     }
 
-    /**
-    * @dataProvider mapFromFormDataProvider
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromFormDataProvider')]
     public function testMapFromForm(array $inData, array $expected): void
     {
         $this->assertEquals($expected, Sut::mapFromForm($inData));
     }
 
-    public function mapFromFormDataProvider(): array
+    public static function mapFromFormDataProvider(): array
     {
         return [
             // edit - internal
@@ -739,10 +735,8 @@ class UserTest extends MockeryTestCase
         ];
     }
 
-    /**
-    * @dataProvider dpMapFromErrors
-    */
-    public function testMapFromErrors($errors, $expectedFormErrors, $expected): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpMapFromErrors')]
+    public function testMapFromErrors(mixed $errors, mixed $expectedFormErrors, mixed $expected): void
     {
         $mockForm = m::mock(Form::class)
             ->shouldReceive('setMessages')
@@ -753,7 +747,7 @@ class UserTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromErrors($mockForm, $errors));
     }
 
-    public function dpMapFromErrors(): array
+    public static function dpMapFromErrors(): array
     {
         return [
             'username error' => [

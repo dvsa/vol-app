@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Lva\Application;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -33,7 +35,7 @@ class GrantValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestCas
         $this->sut = (new GrantValidationService())->__invoke($sm, GrantValidationService::class);
     }
 
-    public function testHandleQueryNewApp()
+    public function testHandleQueryNewApp(): void
     {
         $sections = [
 
@@ -103,7 +105,7 @@ class GrantValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestCas
         $this->assertEquals($expectedMessages, $result);
     }
 
-    public function testHandleQueryNewAppSr()
+    public function testHandleQueryNewAppSr(): void
     {
         $sections = [
 
@@ -174,7 +176,7 @@ class GrantValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestCas
         $this->assertEquals($expectedMessages, $result);
     }
 
-    public function testHandleQueryNewAppCanGrant()
+    public function testHandleQueryNewAppCanGrant(): void
     {
         $sections = [
 
@@ -217,7 +219,7 @@ class GrantValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestCas
         $this->assertEquals([], $result);
     }
 
-    public function testHandleQueryVariation()
+    public function testHandleQueryVariation(): void
     {
         $sections = [
 
@@ -278,7 +280,7 @@ class GrantValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestCas
         $this->assertEquals($expectedMessages, $result);
     }
 
-    public function testHandleQueryVariationAlt()
+    public function testHandleQueryVariationAlt(): void
     {
         $sections = [
 
@@ -342,7 +344,7 @@ class GrantValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestCas
         $this->assertEquals($expectedMessages, $result);
     }
 
-    public function testHandleCommandS4Validation()
+    public function testHandleCommandS4Validation(): void
     {
         $s4 = m::mock(\Dvsa\Olcs\Api\Entity\Application\S4::class)->makePartial();
 
@@ -367,7 +369,7 @@ class GrantValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestCas
         $this->assertArrayNotHasKey('APP-GRA-OORD-UNKNOWN', $result);
     }
 
-    public function testHandleCommandOppositionUnknown()
+    public function testHandleCommandOppositionUnknown(): void
     {
         /** @var ApplicationEntity $application */
         $application = m::mock(ApplicationEntity::class)->makePartial();
@@ -391,7 +393,7 @@ class GrantValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestCas
         $this->assertArrayHasKey('APP-GRA-OORD-UNKNOWN', $result);
     }
 
-    public function testHandleCommandOppositionNotPassed()
+    public function testHandleCommandOppositionNotPassed(): void
     {
         /** @var ApplicationEntity $application */
         $application = m::mock(ApplicationEntity::class)->makePartial();

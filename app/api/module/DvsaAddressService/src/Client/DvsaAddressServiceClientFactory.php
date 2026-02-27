@@ -21,6 +21,7 @@ class DvsaAddressServiceClientFactory implements FactoryInterface
      * @throws NotFoundExceptionInterface
      * @throws AddressServiceIdentityProviderException
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DvsaAddressServiceClient
     {
         $config = $this->getDvsaAddressServiceConfig($container);

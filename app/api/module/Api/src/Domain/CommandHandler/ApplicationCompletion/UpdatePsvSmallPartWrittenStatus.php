@@ -10,6 +10,7 @@ final class UpdatePsvSmallPartWrittenStatus extends AbstractUpdateStatus
 {
     protected $section = 'PsvSmallPartWritten';
 
+    #[\Override]
     protected function isSectionValid(Application $application): bool
     {
         return $application->isSectionCompleted($this->section);

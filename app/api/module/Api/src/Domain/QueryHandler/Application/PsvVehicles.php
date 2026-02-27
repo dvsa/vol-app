@@ -26,6 +26,7 @@ class PsvVehicles extends AbstractQueryHandler
      * @return \Dvsa\Olcs\Api\Domain\QueryHandler\Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $application Entity\Application\Application */

@@ -16,6 +16,7 @@ class LicenceHolderName extends DynamicBookmark
 
     public const MAX_TRADING_NAME_LINE_LENGTH = 40;
 
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(
@@ -29,6 +30,7 @@ class LicenceHolderName extends DynamicBookmark
         );
     }
 
+    #[\Override]
     public function render()
     {
         $name = $this->data['organisation']['name'];

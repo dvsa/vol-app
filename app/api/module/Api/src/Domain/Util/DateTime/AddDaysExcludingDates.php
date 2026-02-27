@@ -12,6 +12,7 @@ class AddDaysExcludingDates implements DateTimeCalculatorInterface
     {
     }
 
+    #[\Override]
     public function calculateDate(\DateTime $date, int $days): \DateTime
     {
         Logger::debug('AddDaysExcludingDates : Calculating SLA date ' . $days . ' days from ' . $date->format('d-m-Y'));

@@ -34,6 +34,7 @@ final class GrantBusReg extends AbstractCommandHandler
      * @throws BadRequestException
      * @throws ValidationException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var BusRegEntity $busReg */

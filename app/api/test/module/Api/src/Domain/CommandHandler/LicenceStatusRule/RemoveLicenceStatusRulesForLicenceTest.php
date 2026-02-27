@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * RemoveLicenceStatusRulesForLicenceTest.php
  *
@@ -40,7 +42,7 @@ class RemoveLicenceStatusRulesForLicenceTest extends AbstractCommandHandlerTestC
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'licence' => m::mock(Licence::class)->shouldReceive('getId')->getMock()

@@ -19,6 +19,7 @@ class Replacement implements MapperInterface
      *
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data): array
     {
         return ['replacementDetails' => $data];

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Translator;
 
 use Doctrine\ORM\Query;
@@ -21,17 +23,15 @@ class TranslationLoaderTest extends MockeryTestCase
 {
     public function setUp(): void
     {
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
     }
 
     /**
      * test loading translations from the cache
      */
-    public function testLoadTranslationsFromCache()
+    public function testLoadTranslationsFromCache(): void
     {
         $locale = 'en_GB';
         $textDomain = 'default';
@@ -62,7 +62,7 @@ class TranslationLoaderTest extends MockeryTestCase
     /**
      * test loading translations from the database it the cache is empty
      */
-    public function testLoadTranslationsFromDatabase()
+    public function testLoadTranslationsFromDatabase(): void
     {
         $locale = 'en_GB';
         $textDomain = 'default';
@@ -91,7 +91,7 @@ class TranslationLoaderTest extends MockeryTestCase
     /**
      * test loading translations from the database when cache is down (exception on cache load)
      */
-    public function testCacheExceptionsStillLoadTranslationsFromDatabase()
+    public function testCacheExceptionsStillLoadTranslationsFromDatabase(): void
     {
         $locale = 'en_GB';
         $textDomain = 'default';
@@ -120,7 +120,7 @@ class TranslationLoaderTest extends MockeryTestCase
     /**
      * test loading replacements from the cache
      */
-    public function testLoadReplacementsFromCache()
+    public function testLoadReplacementsFromCache(): void
     {
         $replacements = ['replacements'];
 
@@ -140,7 +140,7 @@ class TranslationLoaderTest extends MockeryTestCase
     /**
      * test loading replacements from the cache
      */
-    public function testLoadReplacementsFromDatabase()
+    public function testLoadReplacementsFromDatabase(): void
     {
         $mockCache = m::mock(CacheEncryption::class);
         $mockCache->expects('getCustomItem')
@@ -161,7 +161,7 @@ class TranslationLoaderTest extends MockeryTestCase
     /**
      * test loading replacements from the database when cache is down (exception on cache load)
      */
-    public function testCacheExceptionsStillLoadReplacementsFromDatabase()
+    public function testCacheExceptionsStillLoadReplacementsFromDatabase(): void
     {
         $mockCache = m::mock(CacheEncryption::class);
         $mockCache->expects('getCustomItem')
@@ -179,7 +179,7 @@ class TranslationLoaderTest extends MockeryTestCase
         self::assertSame($this->actualReplacements(), $loader->loadReplacements());
     }
 
-    private function dbTranslations($locale)
+    private function dbTranslations(mixed $locale): array
     {
         return [
             0 => [
@@ -203,7 +203,7 @@ class TranslationLoaderTest extends MockeryTestCase
         ];
     }
 
-    private function actualTranslations()
+    private function actualTranslations(): array
     {
         return [
             'translation_key1' => 'translated_text1',
@@ -211,7 +211,7 @@ class TranslationLoaderTest extends MockeryTestCase
         ];
     }
 
-    private function dbReplacements()
+    private function dbReplacements(): array
     {
         return [
             0 => [
@@ -225,7 +225,7 @@ class TranslationLoaderTest extends MockeryTestCase
         ];
     }
 
-    private function actualReplacements()
+    private function actualReplacements(): array
     {
         return [
             'placeholder1' => 'replacementText1',

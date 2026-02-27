@@ -115,16 +115,16 @@ return [
                  */
                 $string = '<span class="tooltip">';
                 $string .= !empty($data['startDate']) ?
-                        ucfirst($this->translator->translate('start')) . ': ' .
+                        ucfirst((string) $this->translator->translate('start')) . ': ' .
                         $data['startDate'] . '<br />' : '';
                 $string .= !empty($data['reviewDate']) ?
-                        ucfirst($this->translator->translate('review')) . ': ' .
+                        ucfirst((string) $this->translator->translate('review')) . ': ' .
                         $data['reviewDate'] . '<br />' : '';
                 $string .= !empty($data['endDate']) ?
-                        ucfirst($this->translator->translate('end')) . ': ' .
+                        ucfirst((string) $this->translator->translate('end')) . ': ' .
                         $data['endDate'] . '<br />' : '';
                 $string .= !empty($data['fabsReference']) ?
-                        ucfirst($this->translator->translate('fabs-reference')) . ': ' .
+                        ucfirst((string) $this->translator->translate('fabs-reference')) . ': ' .
                         $data['fabsReference'] . '<br />' : '';
                 $string .= '</span>';
 

@@ -67,15 +67,15 @@ class LoginController implements InjectApplicationEventInterface
      * LoginController constructor.
      */
     public function __construct(
-        private ValidatableAdapterInterface $authenticationAdapter,
+        private readonly ValidatableAdapterInterface $authenticationAdapter,
         AuthenticationServiceInterface $authenticationService,
-        private CurrentUser $currentUser,
-        private FlashMessenger $flashMessenger,
+        private readonly CurrentUser $currentUser,
+        private readonly FlashMessenger $flashMessenger,
         FormHelperService $formHelper,
-        private Layout $layout,
+        private readonly Layout $layout,
         Redirect $redirectHelper,
         Url $urlHelper,
-        private AuthChallengeContainer $authChallengeContainer
+        private readonly AuthChallengeContainer $authChallengeContainer
     ) {
         $this->authenticationService = $authenticationService;
         $this->formHelper = $formHelper;
@@ -154,6 +154,7 @@ class LoginController implements InjectApplicationEventInterface
     /**
      * @param EventInterface $event
      */
+    #[\Override]
     public function setEvent(EventInterface $event)
     {
         $this->event = $event;
@@ -162,6 +163,7 @@ class LoginController implements InjectApplicationEventInterface
     /**
      * @return Event|EventInterface
      */
+    #[\Override]
     public function getEvent()
     {
         if (!$this->event) {

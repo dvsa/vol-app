@@ -6,6 +6,7 @@ use Laminas\View\Model\ViewModel;
 
 class IndexController extends AbstractController
 {
+    #[\Override]
     public function indexAction()
     {
         $view = new ViewModel();
@@ -20,6 +21,7 @@ class IndexController extends AbstractController
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

@@ -25,6 +25,7 @@ class CaseCreateConversationController extends AbstractCreateConversationControl
         ]
     ];
 
+    #[\Override]
     public function onDispatch(MvcEvent $e)
     {
         if ($this->getRequest()->isPost()) {

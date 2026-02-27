@@ -12,6 +12,7 @@ class IrhpPermitApplicationViewGenerator implements ViewGeneratorInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTemplateName()
     {
         return 'permits/single-question-bilateral';
@@ -20,6 +21,7 @@ class IrhpPermitApplicationViewGenerator implements ViewGeneratorInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getAdditionalViewVariables(MvcEvent $mvcEvent, array $result)
     {
         $additionalViewData = $result['additionalViewData'];
@@ -52,6 +54,7 @@ class IrhpPermitApplicationViewGenerator implements ViewGeneratorInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function handleRedirectionRequest(Redirect $redirect, $destinationName)
     {
         $mappings = [

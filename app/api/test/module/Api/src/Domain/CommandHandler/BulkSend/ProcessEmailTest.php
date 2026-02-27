@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\BulkSend;
 
 use Dvsa\Olcs\Api\Domain\Command\BulkSend\ProcessEmail as SendEmailCmd;
@@ -38,10 +40,9 @@ class ProcessEmailTest extends AbstractCommandHandlerTestCase
 
     /**
      * test handle command
-     *
-     * @dataProvider dpTestHandleCommand
      */
-    public function testHandleCommand($templateName, $subject)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommand')]
+    public function testHandleCommand(mixed $templateName, mixed $subject): void
     {
         $templateVars = [
             'licenceType' => 'Restricted',
@@ -109,7 +110,7 @@ class ProcessEmailTest extends AbstractCommandHandlerTestCase
         $this->assertSame($subject, $message->getSubject());
     }
 
-    public function dpTestHandleCommand()
+    public static function dpTestHandleCommand(): array
     {
         return [
             ['unknown-template', 'Important information about your vehicle operator licence'],
@@ -121,7 +122,7 @@ class ProcessEmailTest extends AbstractCommandHandlerTestCase
     /**
      * test handle command no emails for organisation
      */
-    public function testHandleCommandNoEmails()
+    public function testHandleCommandNoEmails(): void
     {
         $licenceEntity = m::mock(Licence::class);
         $organisation = m::mock(Organisation::class);

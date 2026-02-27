@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * RevokeTest
  *
@@ -44,7 +46,8 @@ class RevokeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             LicenceEntity::LICENCE_STATUS_REVOKED,
@@ -60,7 +63,7 @@ class RevokeTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandPsv()
+    public function testHandleCommandPsv(): void
     {
         $command = Command::create(['id' => 532]);
 
@@ -155,7 +158,7 @@ class RevokeTest extends AbstractCommandHandlerTestCase
         $this->assertSame(["Licence ID 532 revoked"], $result->getMessages());
     }
 
-    public function testHandleCommandPsvSpecialRestricted()
+    public function testHandleCommandPsvSpecialRestricted(): void
     {
         $command = Command::create(['id' => 532]);
 
@@ -244,7 +247,7 @@ class RevokeTest extends AbstractCommandHandlerTestCase
         $this->assertSame(["Licence ID 532 revoked"], $result->getMessages());
     }
 
-    public function testHandleCommandGoods()
+    public function testHandleCommandGoods(): void
     {
         $command = Command::create(['id' => 532]);
 
@@ -322,7 +325,7 @@ class RevokeTest extends AbstractCommandHandlerTestCase
         $this->assertSame(["Licence ID 532 revoked"], $result->getMessages());
     }
 
-    public function testHandleCommandApplications()
+    public function testHandleCommandApplications(): void
     {
         $command = Command::create(['id' => 532]);
 
@@ -418,7 +421,7 @@ class RevokeTest extends AbstractCommandHandlerTestCase
      *
      * @return Application
      */
-    private function stubApplication($licence, $id, $status, $isVariation = false)
+    private function stubApplication(mixed $licence, mixed $id, mixed $status, bool $isVariation = false): mixed
     {
         $application = new Application($licence, (new RefData())->setId($status), $isVariation);
         $application->setId($id);

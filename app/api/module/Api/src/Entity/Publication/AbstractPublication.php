@@ -36,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractPublication implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractPublication implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -216,7 +216,8 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -239,7 +240,8 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     /**
      * Get the traffic area
      *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea     */
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     */
     public function getTrafficArea()
     {
         return $this->trafficArea;
@@ -262,7 +264,8 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     /**
      * Get the document
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
+     */
     public function getDocument()
     {
         return $this->document;
@@ -285,7 +288,8 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     /**
      * Get the police document
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
+     */
     public function getPoliceDocument()
     {
         return $this->policeDocument;
@@ -308,7 +312,8 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     /**
      * Get the doc template
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\DocTemplate     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\DocTemplate
+     */
     public function getDocTemplate()
     {
         return $this->docTemplate;
@@ -331,7 +336,8 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     /**
      * Get the pub status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getPubStatus()
     {
         return $this->pubStatus;
@@ -354,7 +360,8 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -377,7 +384,8 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -400,7 +408,8 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     /**
      * Get the publication no
      *
-     * @return int     */
+     * @return int
+     */
     public function getPublicationNo()
     {
         return $this->publicationNo;
@@ -423,7 +432,8 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     /**
      * Get the pub type
      *
-     * @return string     */
+     * @return string
+     */
     public function getPubType()
     {
         return $this->pubType;
@@ -448,7 +458,8 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getPubDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -475,7 +486,8 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     /**
      * Get the doc name
      *
-     * @return string     */
+     * @return string
+     */
     public function getDocName()
     {
         return $this->docName;
@@ -498,7 +510,8 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -570,6 +583,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -148,6 +148,7 @@ class IrhpPermitRange extends AbstractIrhpPermitRange implements DeletableInterf
      *
      * @return boolean
      */
+    #[\Override]
     public function canDelete()
     {
         return

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Variation;
 
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
@@ -30,7 +32,8 @@ class UpdateConditionUndertakingTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'TYPE',
@@ -50,7 +53,7 @@ class UpdateConditionUndertakingTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandFailValidation()
+    public function testHandleCommandFailValidation(): void
     {
         $data = [
             'attachedTo' => 'cat_oc',
@@ -62,7 +65,7 @@ class UpdateConditionUndertakingTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandNoDelta()
+    public function testHandleCommandNoDelta(): void
     {
         $data = [
             'conditionUndertaking' => 154,
@@ -99,7 +102,7 @@ class UpdateConditionUndertakingTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['conditionUndertaking' => 154], $result->getIds());
     }
 
-    public function testHandleCommandNoDeltaWithOperatingCentre()
+    public function testHandleCommandNoDeltaWithOperatingCentre(): void
     {
         $data = [
             'conditionUndertaking' => 154,
@@ -140,7 +143,7 @@ class UpdateConditionUndertakingTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['conditionUndertaking' => 154], $result->getIds());
     }
 
-    public function testHandleCommandWithDelta()
+    public function testHandleCommandWithDelta(): void
     {
         $data = [
             'id' => 64,

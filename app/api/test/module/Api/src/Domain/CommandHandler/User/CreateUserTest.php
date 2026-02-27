@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create User Test
  */
@@ -62,7 +64,8 @@ class CreateUserTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ContactDetailsEntity::CONTACT_TYPE_USER
@@ -83,7 +86,7 @@ class CreateUserTest extends AbstractCommandHandlerTestCase
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function testHandleCommandInternalUser()
+    public function testHandleCommandInternalUser(): void
     {
         $userId = 111;
         $licenceNumber = 'LIC123';
@@ -227,7 +230,7 @@ class CreateUserTest extends AbstractCommandHandlerTestCase
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $userId = 111;
         $licenceNumber = 'LIC123';
@@ -370,7 +373,7 @@ class CreateUserTest extends AbstractCommandHandlerTestCase
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function testHandleCommandForTm()
+    public function testHandleCommandForTm(): void
     {
         $userId = 111;
         $applicationId = 3;
@@ -515,7 +518,7 @@ class CreateUserTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandThrowsIncorrectPermissionException()
+    public function testHandleCommandThrowsIncorrectPermissionException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -542,7 +545,7 @@ class CreateUserTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandThrowsUsernameExistsException()
+    public function testHandleCommandThrowsUsernameExistsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -572,10 +575,8 @@ class CreateUserTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider handleCommandThrowsNoOrgExceptionProvider
-     */
-    public function testHandleCommandThrowsNoOrgException($userType)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandThrowsNoOrgExceptionProvider')]
+    public function testHandleCommandThrowsNoOrgException(mixed $userType): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -609,7 +610,7 @@ class CreateUserTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function handleCommandThrowsNoOrgExceptionProvider()
+    public static function handleCommandThrowsNoOrgExceptionProvider(): array
     {
         return [
             [UserEntity::USER_TYPE_OPERATOR],
@@ -618,7 +619,7 @@ class CreateUserTest extends AbstractCommandHandlerTestCase
     }
 
 
-    public function testHandleCommandThrowsExceptionCannotStoreUser()
+    public function testHandleCommandThrowsExceptionCannotStoreUser(): void
     {
         $userId = 111;
         $applicationId = 3;
@@ -718,7 +719,7 @@ class CreateUserTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    private function getMockIdentity()
+    private function getMockIdentity(): m\MockInterface
     {
         $mockUser = m::mock(UserEntity::class)
             ->shouldReceive('isAllowedToPerformActionOnRoles')

@@ -13,6 +13,7 @@ final readonly class PublicHolidayDateProvider implements DateProviderInterface
     {
     }
 
+    #[\Override]
     public function between(\DateTime $startDate, \DateTime $endDate): array
     {
         return $this->repository->fetchBetweenByTa($startDate, $endDate, $this->trafficArea);

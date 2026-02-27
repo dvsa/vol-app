@@ -18,6 +18,7 @@ class SearchOrderFieldset extends Fieldset
      *
      * @return void
      */
+    #[\Override]
     public function init()
     {
         $index = $this->getOption('index');

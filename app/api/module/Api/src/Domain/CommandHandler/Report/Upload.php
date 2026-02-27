@@ -35,7 +35,7 @@ final class Upload extends AbstractCommandHandler implements
     use QueueAwareTrait;
     use UploaderAwareTrait;
 
-    public const ERR_MIME = 'ERR_MIME';
+    public const string ERR_MIME = 'ERR_MIME';
 
     protected $repoServiceName = 'Document';
 
@@ -48,6 +48,7 @@ final class Upload extends AbstractCommandHandler implements
      * @throws ValidationException
      * @throws \Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         // upload the file

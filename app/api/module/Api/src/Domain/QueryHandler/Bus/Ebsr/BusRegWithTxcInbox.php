@@ -32,6 +32,7 @@ class BusRegWithTxcInbox extends AbstractQueryHandler
      * @throws NotFoundException
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var Repository $repo */

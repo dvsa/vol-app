@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\Exception\ResourceNotFoundException;
@@ -29,7 +31,7 @@ class BusRegActionTest extends MockeryTestCase
         parent::setUp();
     }
 
-    public function setupMockBusReg($id, $data)
+    public function setupMockBusReg(mixed $id, mixed $data): void
     {
         $mockAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
@@ -51,17 +53,24 @@ class BusRegActionTest extends MockeryTestCase
         $this->sut->setQueryService($mockQueryService);
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
         /** @var EventManagerInterface|m\Mock $mockEventManager */
         $mockEventManager = m::mock(EventManagerInterface::class);
-        $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'busRegId', [$this->sut, 'onBusRegAction'], 1);
+        $mockEventManager->expects('attach')
+            ->with(
+                RouteParams::EVENT_PARAM . 'busRegId',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onBusRegAction';
+                }),
+                1
+            );
 
         $this->sut->attach($mockEventManager);
     }
 
-    public function testOnBusRegAction()
+    public function testOnBusRegAction(): void
     {
         $id = 69;
 
@@ -124,7 +133,7 @@ class BusRegActionTest extends MockeryTestCase
         $this->sut->onBusRegAction($event);
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
         $mockSidebar = m::mock();
@@ -145,7 +154,7 @@ class BusRegActionTest extends MockeryTestCase
         $this->assertSame($mockQueryService, $this->sut->getQueryService());
     }
 
-    public function testOnBusRegActionNotFound()
+    public function testOnBusRegActionNotFound(): void
     {
         $this->expectException(ResourceNotFoundException::class);
 
@@ -178,20 +187,19 @@ class BusRegActionTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider shouldOpenGrantButtonInModalProvider
      *
      * @param $data
      * @param $expected
      */
-    public function testShouldOpenGrantButtonInModal($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('shouldOpenGrantButtonInModalProvider')]
+    public function testShouldOpenGrantButtonInModal(mixed $data, mixed $expected): void
     {
         $method = new \ReflectionMethod($this->sut, 'shouldOpenGrantButtonInModal');
-        $method->setAccessible(true);
 
         $this->assertEquals($expected, $method->invoke($this->sut, $data));
     }
 
-    public function shouldOpenGrantButtonInModalProvider()
+    public static function shouldOpenGrantButtonInModalProvider(): array
     {
         return [
             // variation

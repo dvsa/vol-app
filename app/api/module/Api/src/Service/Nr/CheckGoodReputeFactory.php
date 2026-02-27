@@ -14,6 +14,7 @@ class CheckGoodReputeFactory implements FactoryInterface
     public const XML_VERSION_MSG = 'No config specified for erru version';
     public const ROOT_ELEMENT = 'CheckGoodRepute_Request';
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CheckGoodRepute
     {
         $config = $container->get('config');

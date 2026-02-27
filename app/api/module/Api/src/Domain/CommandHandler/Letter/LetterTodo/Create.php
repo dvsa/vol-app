@@ -15,12 +15,22 @@ final class Create extends AbstractCommandHandler
 {
     protected $repoServiceName = 'LetterTodo';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var Cmd $command */
-        
+
         $entity = new LetterTodoEntity();
-        
+
         // Set working properties - versioning will be handled by repository
         $entity->setDescription($command->getDescription());
         $entity->setHelpText($command->getHelpText());
+
+        $this->getRepo()->save($entity);
+
+        $this->result->addId('letterTodo', $entity->getId());
+        $this->result->addMessage('Letter Todo created');
+
+        return $this->result;
+    }
+}

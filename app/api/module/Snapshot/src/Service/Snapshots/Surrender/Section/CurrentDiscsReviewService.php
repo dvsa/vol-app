@@ -11,6 +11,7 @@ class CurrentDiscsReviewService extends AbstractReviewService
      *
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(Surrender $surrender)
     {
         $items = [];

@@ -59,6 +59,7 @@ class PrintingController extends AbstractInternalController implements LeftViewP
     /**
      * Index action
      */
+    #[\Override]
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'Printers');
@@ -66,6 +67,7 @@ class PrintingController extends AbstractInternalController implements LeftViewP
         return parent::indexAction();
     }
 
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel(
@@ -100,6 +102,7 @@ class PrintingController extends AbstractInternalController implements LeftViewP
         );
     }
 
+    #[\Override]
     public function deleteAction()
     {
         // validate if we can remove the team

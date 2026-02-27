@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Can Access TxcInbox Test
  *
@@ -34,10 +36,8 @@ class CanUpdateTxcInboxTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValid($canUpdate, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $canUpdate, mixed $expected): void
     {
         $this->setIsGranted(Permission::INTERNAL_USER, false);
 
@@ -50,15 +50,13 @@ class CanUpdateTxcInboxTest extends AbstractValidatorsTestCase
         $this->assertEquals($expected, $this->sut->isValid(111));
     }
 
-    public function testIsValidWithEmptyId()
+    public function testIsValidWithEmptyId(): void
     {
         $this->assertFalse($this->sut->isValid(null));
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValidInternal($canUpdate, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValidInternal(mixed $canUpdate, mixed $expected): void
     {
         $this->setIsGranted(Permission::INTERNAL_USER, $canUpdate);
         $entity = m::mock(TxcInbox::class)->makePartial();
@@ -75,7 +73,7 @@ class CanUpdateTxcInboxTest extends AbstractValidatorsTestCase
         $this->assertEquals($expected, $this->sut->isValid(111));
     }
 
-    public function testIsValidWithOtherUsers()
+    public function testIsValidWithOtherUsers(): void
     {
         $this->auth->shouldReceive('isGranted')->with(Permission::INTERNAL_USER, null)
             ->andReturn(false);
@@ -88,7 +86,7 @@ class CanUpdateTxcInboxTest extends AbstractValidatorsTestCase
         $this->assertFalse($this->sut->isValid(null));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [true, true],

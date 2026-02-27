@@ -34,6 +34,7 @@ final class CreateConditionUndertaking extends AbstractCommandHandler implements
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpApplication;
 
 use Doctrine\ORM\Query;
@@ -25,7 +27,7 @@ class UpdateCheckAnswersTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $irhpApplicationId = 1;
 
@@ -70,7 +72,7 @@ class UpdateCheckAnswersTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleQueryForBilateral()
+    public function testHandleQueryForBilateral(): void
     {
         $irhpApplicationId = 1;
         $irhpPermitApplicationId = 100;
@@ -127,7 +129,7 @@ class UpdateCheckAnswersTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleQueryForBilateralMismatchedIds()
+    public function testHandleQueryForBilateralMismatchedIds(): void
     {
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage('Mismatched IrhpApplication and IrhpPermitApplication');

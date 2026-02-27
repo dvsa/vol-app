@@ -30,6 +30,7 @@ class Statement extends AbstractRepository
      * @param QueryInterface $query
      * @return QueryBuilder|void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $qb->andWhere($qb->expr()->eq($this->alias . '.case', ':byCase'))
@@ -38,6 +39,7 @@ class Statement extends AbstractRepository
         return $qb;
     }
 
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         $this->getQueryBuilder()->modifyQuery($qb)

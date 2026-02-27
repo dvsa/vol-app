@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element;
 
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep;
@@ -57,7 +59,7 @@ class BaseAnswerSaverTest extends MockeryTestCase
         $this->baseAnswerSaver = new BaseAnswerSaver($this->genericAnswerWriter, $genericAnswerFetcher);
     }
 
-    public function testSaveWithoutQuestionType()
+    public function testSaveWithoutQuestionType(): void
     {
         $this->genericAnswerWriter->shouldReceive('write')
             ->with($this->qaContext, $this->qaElementValue, null)
@@ -66,10 +68,8 @@ class BaseAnswerSaverTest extends MockeryTestCase
         $this->baseAnswerSaver->save($this->qaContext, $this->postData);
     }
 
-    /**
-     * @dataProvider dpSaveWithQuestionType
-     */
-    public function testSaveWithQuestionType($questionType)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSaveWithQuestionType')]
+    public function testSaveWithQuestionType(mixed $questionType): void
     {
         $this->genericAnswerWriter->shouldReceive('write')
             ->with($this->qaContext, $this->qaElementValue, $questionType)
@@ -78,7 +78,7 @@ class BaseAnswerSaverTest extends MockeryTestCase
         $this->baseAnswerSaver->save($this->qaContext, $this->postData, $questionType);
     }
 
-    public function dpSaveWithQuestionType()
+    public static function dpSaveWithQuestionType(): array
     {
         return [
             [Question::QUESTION_TYPE_STRING],

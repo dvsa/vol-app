@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Internal;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication;
@@ -16,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class NumberOfPermitsMoroccoQuestionHandlerTest extends MockeryTestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $moroccoPermitsRequired = '12';
 

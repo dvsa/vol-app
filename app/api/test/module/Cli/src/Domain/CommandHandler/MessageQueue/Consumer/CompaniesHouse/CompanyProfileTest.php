@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler\MessageQueue\Consumer\CompaniesHouse;
 
 use Dvsa\Olcs\Api\Domain\Command\CompaniesHouse\Compare;
@@ -23,13 +25,14 @@ class CompanyProfileTest extends AbstractCompaniesHouseConsumerTestCase
         ]
     ];
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new CompanyProfile();
         $this->mockRepo('CompaniesHouseCompany', CompaniesHouseCompany::class);
     }
 
-    public function testHandleCommandNotInsolvent()
+    public function testHandleCommandNotInsolvent(): void
     {
         $this->setupStandardService();
 
@@ -54,7 +57,7 @@ class CompanyProfileTest extends AbstractCompaniesHouseConsumerTestCase
         $this->sut->handleCommand($cmd);
     }
 
-    public function testHandleCommandInsolventProcessed()
+    public function testHandleCommandInsolventProcessed(): void
     {
         $this->setupStandardService();
 
@@ -79,7 +82,7 @@ class CompanyProfileTest extends AbstractCompaniesHouseConsumerTestCase
         $this->sut->handleCommand($cmd);
     }
 
-    public function testHandleCommandInsolventNotProcessed()
+    public function testHandleCommandInsolventNotProcessed(): void
     {
         $this->setupStandardService();
 
@@ -122,7 +125,7 @@ class CompanyProfileTest extends AbstractCompaniesHouseConsumerTestCase
         $this->sut->handleCommand($cmd);
     }
 
-    public function testHandleCommandNoMessages()
+    public function testHandleCommandNoMessages(): void
     {
         $queueService = m::mock(Queue::class);
 
@@ -147,7 +150,7 @@ class CompanyProfileTest extends AbstractCompaniesHouseConsumerTestCase
         $this->assertEquals($messages, $response->getMessages());
     }
 
-    protected function getMockQueueService()
+    protected function getMockQueueService(): mixed
     {
         $queueService = m::mock(Queue::class);
 
@@ -164,7 +167,7 @@ class CompanyProfileTest extends AbstractCompaniesHouseConsumerTestCase
         return $queueService;
     }
 
-    protected function setupStandardService()
+    protected function setupStandardService(): void
     {
         $this->mockedSmServices = [
             Queue::class => $this->getMockQueueService(),

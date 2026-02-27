@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Common;
 
 use DateTime;
@@ -24,7 +26,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class NoOfPermitsUpdaterTest extends MockeryTestCase
 {
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $licenceId = 47;
         $irhpApplicationId = 33;

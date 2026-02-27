@@ -25,16 +25,13 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
     use ControllerTraits\DocumentActionTrait;
     use ControllerTraits\DocumentSearchTrait;
 
-    protected TranslationHelperService $translationHelper;
-    protected DocumentSubCategory $docSubCategoryDataService;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        TranslationHelperService $translationHelper,
-        DocumentSubCategory $docSubCategoryDataService
+        protected TranslationHelperService $translationHelper,
+        protected DocumentSubCategory $docSubCategoryDataService
     ) {
         parent::__construct(
             $scriptFactory,
@@ -42,8 +39,6 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
             $tableFactory,
             $viewHelperManager
         );
-        $this->translationHelper = $translationHelper;
-        $this->docSubCategoryDataService = $docSubCategoryDataService;
 
         $this->showDocsFilter = FilterOptions::SHOW_SELF_ONLY;
     }
@@ -54,6 +49,7 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return \Laminas\Form\FormInterface
      */
+    #[\Override]
     protected function getConfiguredDocumentForm()
     {
         $filters = $this->getDocumentFilters();
@@ -76,6 +72,7 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
      * @see    \Olcs\Controller\Traits\DocumentSearchTrait
      * @return string
      */
+    #[\Override]
     protected function getDocumentTableName()
     {
         return 'documents';
@@ -87,6 +84,7 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
+    #[\Override]
     protected function getDocumentRoute()
     {
         return 'licence/bus-docs';
@@ -98,6 +96,7 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
+    #[\Override]
     protected function getDocumentRouteParams()
     {
         return [
@@ -127,6 +126,7 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     protected function getDocumentView()
     {
         $filters = $this->getDocumentFilters();

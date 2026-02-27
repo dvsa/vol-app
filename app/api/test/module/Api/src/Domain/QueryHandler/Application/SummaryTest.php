@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Application;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,9 +12,7 @@ use Dvsa\Olcs\Transfer\Query\Application\Summary as Qry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Application\Summary
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Application\Summary::class)]
 class SummaryTest extends QueryHandlerTestCase
 {
     public $mockCaseRepo;
@@ -49,7 +49,7 @@ class SummaryTest extends QueryHandlerTestCase
             );
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -117,7 +117,7 @@ class SummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryDigitallySigned()
+    public function testHandleQueryDigitallySigned(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -189,7 +189,7 @@ class SummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryWithDocs()
+    public function testHandleQueryWithDocs(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -267,7 +267,7 @@ class SummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryWithPsv()
+    public function testHandleQueryWithPsv(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -339,7 +339,7 @@ class SummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryWithDocs2()
+    public function testHandleQueryWithDocs2(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -409,7 +409,7 @@ class SummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryNoNeedToSign()
+    public function testHandleQueryNoNeedToSign(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -480,7 +480,7 @@ class SummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryVariation()
+    public function testHandleQueryVariation(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -553,7 +553,7 @@ class SummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryVariationUnchangedFinancialEvidence()
+    public function testHandleQueryVariationUnchangedFinancialEvidence(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -594,7 +594,7 @@ class SummaryTest extends QueryHandlerTestCase
 
         $mockFee = m::mock()->shouldReceive('getLatestPaymentRef')->andReturn('ref')->once()->getMock();
         $this->mockFeeRepo->shouldReceive('fetchLatestPaidFeeByApplicationId')->with(111)->andReturn($mockFee)->once();
-        $this->mockCaseRepo->shouldReceive('fetchOpenCasesForApplication')->with(111)->andReturn([$this->createMock(Entity\Cases\Cases::class), $this->createMock(Entity\Cases\Cases::class)]);
+        $this->mockCaseRepo->shouldReceive('fetchOpenCasesForApplication')->with(111)->andReturn([$this->createStub(Entity\Cases\Cases::class), $this->createStub(Entity\Cases\Cases::class)]);
 
         $this->mockAppRepo->shouldReceive('fetchUsingId')
             ->once()
@@ -624,7 +624,7 @@ class SummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryVariationUpdatedOcWithIncrease()
+    public function testHandleQueryVariationUpdatedOcWithIncrease(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -701,7 +701,7 @@ class SummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryVariationUpdatedOcWithoutIncrease()
+    public function testHandleQueryVariationUpdatedOcWithoutIncrease(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -776,7 +776,7 @@ class SummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryVariationWithNoApplicationData()
+    public function testHandleQueryVariationWithNoApplicationData(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -834,7 +834,7 @@ class SummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryWisthSpecialRestrictedLicence()
+    public function testHandleQueryWisthSpecialRestrictedLicence(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -897,7 +897,7 @@ class SummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryOpenCases()
+    public function testHandleQueryOpenCases(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -937,7 +937,7 @@ class SummaryTest extends QueryHandlerTestCase
         $this->mockAppRepo->shouldReceive('getRefdataReference->getId')
             ->once()
             ->andReturn('apsts_consideration');
-        $this->mockCaseRepo->shouldReceive('fetchOpenCasesForApplication')->with(111)->andReturn([$this->createMock(Entity\Cases\Cases::class), $this->createMock(Entity\Cases\Cases::class)]);
+        $this->mockCaseRepo->shouldReceive('fetchOpenCasesForApplication')->with(111)->andReturn([$this->createStub(Entity\Cases\Cases::class), $this->createStub(Entity\Cases\Cases::class)]);
         $mockFee = m::mock()->shouldReceive('getLatestPaymentRef')->andReturn('ref')->once()->getMock();
         $this->mockFeeRepo->shouldReceive('fetchLatestPaidFeeByApplicationId')->with(111)->andReturn($mockFee)->once();
 
@@ -959,7 +959,7 @@ class SummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryZeroOpenCases()
+    public function testHandleQueryZeroOpenCases(): void
     {
         $query = Qry::create(['id' => 111]);
 

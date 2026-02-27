@@ -14,6 +14,7 @@ use LmcRbacMvc\Identity\IdentityProviderInterface;
 
 class PaymentProcessingFeesControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PaymentProcessingFeesController
     {
         $scriptFactory = $container->get(ScriptFactory::class);

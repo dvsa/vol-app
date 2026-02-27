@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Cases;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Cases\Cases;
@@ -46,7 +48,7 @@ class CasesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQueryLicenceCaseType()
+    public function testHandleQueryLicenceCaseType(): void
     {
         $query = Qry::create(['id' => 24]);
         $licenceId = 77;
@@ -82,7 +84,7 @@ class CasesTest extends QueryHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
 
-    public function testHandleQueryApplicationCaseType()
+    public function testHandleQueryApplicationCaseType(): void
     {
         $query = Qry::create(['id' => 24]);
         $licenceId = 77;
@@ -124,7 +126,7 @@ class CasesTest extends QueryHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
 
-    public function testHandleQueryTmCaseType()
+    public function testHandleQueryTmCaseType(): void
     {
         $query = Qry::create(['id' => 24]);
         $tmId = 2;
@@ -155,7 +157,7 @@ class CasesTest extends QueryHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
 
-    public function testHandleQueryOtherCaseType()
+    public function testHandleQueryOtherCaseType(): void
     {
         $query = Qry::create(['id' => 24]);
         $latestNote = 'test note';
@@ -181,7 +183,7 @@ class CasesTest extends QueryHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
 
-    public function testHandleQueryFilterPublicationLinks()
+    public function testHandleQueryFilterPublicationLinks(): void
     {
         $query = Qry::create(['id' => 24]);
         $latestNote = 'test note';

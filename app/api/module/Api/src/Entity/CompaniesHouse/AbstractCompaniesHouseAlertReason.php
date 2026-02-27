@@ -27,7 +27,7 @@ use Doctrine\Common\Collections\Collection;
  *    }
  * )
  */
-abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -107,7 +107,8 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -130,7 +131,8 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
     /**
      * Get the companies house alert
      *
-     * @return \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert     */
+     * @return \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert
+     */
     public function getCompaniesHouseAlert()
     {
         return $this->companiesHouseAlert;
@@ -153,7 +155,8 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
     /**
      * Get the reason type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getReasonType()
     {
         return $this->reasonType;
@@ -176,7 +179,8 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -185,6 +189,7 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

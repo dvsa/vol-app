@@ -14,6 +14,7 @@ class OperatingCentre extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Licence';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $licence \Dvsa\Olcs\Api\Entity\Licence\Licence */

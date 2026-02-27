@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Reason Repo Test
  *
@@ -20,6 +22,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Reason as Repo;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class ReasonTest extends RepositoryTestCase
 {
     public function setUp(): void
@@ -27,7 +30,8 @@ class ReasonTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testApplyListFilters()
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testApplyListFilters(): void
     {
         $this->setUpSut(Repo::class, true);
 
@@ -58,7 +62,8 @@ class ReasonTest extends RepositoryTestCase
     /**
      * Branch tests where goodsOrPsv contains the string 'NULL'
      */
-    public function testApplyListFiltersNullGoodsOrPsv()
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testApplyListFiltersNullGoodsOrPsv(): void
     {
         $this->setUpSut(Repo::class, true);
 

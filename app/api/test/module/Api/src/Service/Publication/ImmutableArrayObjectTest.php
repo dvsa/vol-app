@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication;
 
 use Dvsa\Olcs\Api\Service\Publication\ImmutableArrayObject;
@@ -10,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class ImmutableArrayObjectTest extends MockeryTestCase
 {
-    public function testOffset()
+    public function testOffset(): void
     {
         $data = [
             888 => '0',

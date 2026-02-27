@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Agreed and Legislation Update Test
  */
@@ -34,7 +36,8 @@ class AgreedAndLegislationUpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'tc_r_dhtru',
@@ -64,7 +67,7 @@ class AgreedAndLegislationUpdateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $agreedByTc = 44;
         $agreedByTcRole = 'tc_r_dhtru';
@@ -116,7 +119,7 @@ class AgreedAndLegislationUpdateTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
 
-    public function testHandleCommandEcmsCaseFalseNoAssignedCaseworkerNoEcmsDate()
+    public function testHandleCommandEcmsCaseFalseNoAssignedCaseworkerNoEcmsDate(): void
     {
         $agreedByTc = 44;
         $agreedByTcRole = 'tc_r_dhtru';
@@ -176,7 +179,7 @@ class AgreedAndLegislationUpdateTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
 
-    public function testHandleCommandEcmsCaseTrueNoAssignedCaseworkerNoEcmsDate()
+    public function testHandleCommandEcmsCaseTrueNoAssignedCaseworkerNoEcmsDate(): void
     {
         $agreedByTc = 44;
         $agreedByTcRole = 'tc_r_dhtru';
@@ -236,7 +239,7 @@ class AgreedAndLegislationUpdateTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
 
-    public function testHandleCommandEcmsCaseTrueWithAssignedCaseworkerWithDate()
+    public function testHandleCommandEcmsCaseTrueWithAssignedCaseworkerWithDate(): void
     {
         $agreedByTc = 44;
         $agreedByTcRole = 'tc_r_dhtru';
@@ -299,7 +302,7 @@ class AgreedAndLegislationUpdateTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
 
-    public function testHandleCommandEcmsCaseFalseWithAssignedCaseworkerWithDate()
+    public function testHandleCommandEcmsCaseFalseWithAssignedCaseworkerWithDate(): void
     {
         $agreedByTc = 44;
         $agreedByTcRole = 'tc_r_dhtru';

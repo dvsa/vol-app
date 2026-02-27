@@ -13,6 +13,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class ExportControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ExportController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

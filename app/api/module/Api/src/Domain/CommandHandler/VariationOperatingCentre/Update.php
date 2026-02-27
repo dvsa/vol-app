@@ -27,6 +27,7 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
     /**
      * @param Cmd $command
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $id = $command->getId();

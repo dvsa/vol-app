@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Text;
 
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep as ApplicationStepEntity;
@@ -90,7 +92,7 @@ class TextGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $this->textFactory->shouldReceive('create')
             ->with($this->answerValue, $this->labelTranslateableText, $this->hintTranslateableText)
@@ -110,7 +112,7 @@ class TextGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGenerateWithLabelOnly()
+    public function testGenerateWithLabelOnly(): void
     {
         $this->textFactory->shouldReceive('create')
             ->with($this->answerValue, $this->labelTranslateableText, null)
@@ -129,7 +131,7 @@ class TextGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGenerateWithHintOnly()
+    public function testGenerateWithHintOnly(): void
     {
         $this->textFactory->shouldReceive('create')
             ->with($this->answerValue, null, $this->hintTranslateableText)

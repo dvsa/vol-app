@@ -14,6 +14,7 @@ class CaseEnableDisableMessagingController extends AbstractEnableDisableMessagin
 {
     protected $navigationId = 'case';
 
+    #[\Override]
     public function getLeftView(): ?ViewModel
     {
         if ($this->getRequest()->isXmlHttpRequest()) {
@@ -26,11 +27,13 @@ class CaseEnableDisableMessagingController extends AbstractEnableDisableMessagin
         return $view;
     }
 
+    #[\Override]
     protected function getRoutePrefix(): string
     {
         return 'case_conversation';
     }
 
+    #[\Override]
     protected function getOrganisationId(): int
     {
         $queryResponse = $this->handleQuery(Cases::create(['id' => $this->params()->fromRoute('case')]));

@@ -22,6 +22,7 @@ class FeesControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return FeesController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FeesController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

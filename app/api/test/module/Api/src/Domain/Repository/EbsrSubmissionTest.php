@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Query\Bus\EbsrSubmissionList;
@@ -13,6 +15,7 @@ use Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission as EbsrSubmissionEntity;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class EbsrSubmissionTest extends RepositoryTestCase
 {
     public function setUp(): void
@@ -20,7 +23,7 @@ class EbsrSubmissionTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchByOrganisation()
+    public function testFetchByOrganisation(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -53,7 +56,7 @@ class EbsrSubmissionTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testBuildDefaultQuery()
+    public function testBuildDefaultQuery(): void
     {
         $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
@@ -75,7 +78,7 @@ class EbsrSubmissionTest extends RepositoryTestCase
     /**
      * tests fetching a list by organisation and status
      */
-    public function testFetchForOrganisationByStatus()
+    public function testFetchForOrganisationByStatus(): void
     {
         $organisation = 3;
         $status = 'status';
@@ -122,7 +125,8 @@ class EbsrSubmissionTest extends RepositoryTestCase
     /**
      * Tests applyListFilters
      */
-    public function testApplyListFilters()
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testApplyListFilters(): void
     {
         $this->setUpSut(Repo::class, true);
 

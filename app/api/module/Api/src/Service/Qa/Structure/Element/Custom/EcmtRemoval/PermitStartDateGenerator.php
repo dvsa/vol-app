@@ -31,6 +31,7 @@ class PermitStartDateGenerator implements ElementGeneratorInterface
      *
      * @return ElementInterface
      */
+    #[\Override]
     public function generate(ElementGeneratorContext $context)
     {
         return $this->dateWithThresholdGenerator->generate($context, self::DATE_THRESHOLD);

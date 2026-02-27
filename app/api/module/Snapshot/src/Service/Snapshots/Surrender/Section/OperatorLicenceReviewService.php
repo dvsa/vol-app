@@ -13,6 +13,7 @@ class OperatorLicenceReviewService extends AbstractReviewService
      *
      * @return array|mixed
      */
+    #[\Override]
     public function getConfigFromData(Surrender $surrender)
     {
 

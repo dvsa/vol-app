@@ -24,6 +24,7 @@ final class ResetToValid extends AbstractCommandHandler implements Transactioned
 {
     protected $repoServiceName = 'Licence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $licence = $this->getRepo()->fetchById($command->getId());

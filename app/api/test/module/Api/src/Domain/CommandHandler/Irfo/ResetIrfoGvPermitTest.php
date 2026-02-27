@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Reset Irfo Gv Permit Test
  */
@@ -28,7 +30,8 @@ class ResetIrfoGvPermitTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrfoGvPermitEntity::STATUS_PENDING
@@ -37,7 +40,7 @@ class ResetIrfoGvPermitTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 11,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Service;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -60,10 +62,8 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->sut->__invoke($sm, null);
     }
 
-    /**
-     * @dataProvider validateWithErrors
-     */
-    public function testValidateWithErrorsInternal(bool $isPsv, bool $isRestricted, array $commandData, array $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('validateWithErrors')]
+    public function testValidateWithErrorsInternal(bool $isPsv, bool $isRestricted, array $commandData, array $expected): void
     {
         $entity = m::mock();
         $entity->allows('isPsv')->andReturn($isPsv);
@@ -87,10 +87,8 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->sut->validate($entity, $command, false);
     }
 
-    /**
-     * @dataProvider validateWithErrorsExternal
-     */
-    public function testValidateWithErrorsExternal($isPsv, $isRestricted, $commandData, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('validateWithErrorsExternal')]
+    public function testValidateWithErrorsExternal(mixed $isPsv, mixed $isRestricted, mixed $commandData, mixed $expected): void
     {
         $entity = m::mock();
         $entity->shouldReceive('isPsv')->andReturn($isPsv);
@@ -120,10 +118,8 @@ class OperatingCentreHelperTest extends MockeryTestCase
         }
     }
 
-    /**
-     * @dataProvider validateWithErrors
-     */
-    public function testValidateUpdateWithErrors($isPsv, $isRestricted, $commandData, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('validateWithErrors')]
+    public function testValidateUpdateWithErrors(mixed $isPsv, mixed $isRestricted, mixed $commandData, mixed $expected): void
     {
         $entity = m::mock();
         $entity->shouldReceive('isPsv')->andReturn($isPsv);
@@ -148,7 +144,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->sut->validate($entity, $command, false, $xoc);
     }
 
-    public function testValidateTrafficAreaWithoutPostcode()
+    public function testValidateTrafficAreaWithoutPostcode(): void
     {
         $commandData = [
             'address' => [
@@ -165,7 +161,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals([], $this->sut->getMessages());
     }
 
-    public function testValidateTrafficAreaWithPostcodeGbWithoutTa()
+    public function testValidateTrafficAreaWithPostcodeGbWithoutTa(): void
     {
         $commandData = [
             'address' => [
@@ -190,7 +186,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals([], $this->sut->getMessages());
     }
 
-    public function testValidateTrafficAreaValidaetSameTrafficAreas()
+    public function testValidateTrafficAreaValidaetSameTrafficAreas(): void
     {
         $commandData = [
             'address' => [
@@ -220,7 +216,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals(['postcode' => [['CODE' => 'MESSAGE']]], $this->sut->getMessages());
     }
 
-    public function testValidateTrafficAreaWithPostcodeGbWithTaWithoutMatchingPostcode()
+    public function testValidateTrafficAreaWithPostcodeGbWithTaWithoutMatchingPostcode(): void
     {
         $commandData = [
             'address' => [
@@ -244,7 +240,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals([], $this->sut->getMessages());
     }
 
-    public function testValidateTrafficAreaWithPostcodeGbWithTaWithMatchingPostcodeWithWrongTa()
+    public function testValidateTrafficAreaWithPostcodeGbWithTaWithMatchingPostcodeWithWrongTa(): void
     {
         $commandData = [
             'address' => [
@@ -283,7 +279,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals($messages, $this->sut->getMessages());
     }
 
-    public function testValidateTrafficAreaWithPostcodeGbWithTaWithMatchingPostcodeWithMatchingTa()
+    public function testValidateTrafficAreaWithPostcodeGbWithTaWithMatchingPostcodeWithMatchingTa(): void
     {
         $commandData = [
             'address' => [
@@ -310,7 +306,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals([], $this->sut->getMessages());
     }
 
-    public function testValidateTrafficAreaWithPostcodeNiWithoutMatchingPostcode()
+    public function testValidateTrafficAreaWithPostcodeNiWithoutMatchingPostcode(): void
     {
         $commandData = [
             'address' => [
@@ -334,7 +330,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals([], $this->sut->getMessages());
     }
 
-    public function testValidateTrafficAreaWithPostcodeNiWithMatchingPostcodeWithNiTa()
+    public function testValidateTrafficAreaWithPostcodeNiWithMatchingPostcodeWithNiTa(): void
     {
         $commandData = [
             'address' => [
@@ -361,7 +357,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals([], $this->sut->getMessages());
     }
 
-    public function testValidateTrafficAreaWithPostcodeNiWithMatchingPostcodeWithoutNiTa()
+    public function testValidateTrafficAreaWithPostcodeNiWithMatchingPostcodeWithoutNiTa(): void
     {
         $commandData = [
             'address' => [
@@ -396,7 +392,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals($messages, $this->sut->getMessages());
     }
 
-    public function testValidateTrafficAreaWithPostcodeNiAndNewAppGb()
+    public function testValidateTrafficAreaWithPostcodeNiAndNewAppGb(): void
     {
         $commandData = [
             'address' => [
@@ -431,7 +427,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals($messages, $this->sut->getMessages());
     }
 
-    public function testSaveDocuments()
+    public function testSaveDocuments(): void
     {
         $entity = m::mock();
 
@@ -456,7 +452,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->assertSame($operatingCentre, $document->getOperatingCentre());
     }
 
-    public function testCreateOperatingCentre()
+    public function testCreateOperatingCentre(): void
     {
         $data = [
             'address' => [
@@ -497,7 +493,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testUpdateOperatingCentreLinkPsv()
+    public function testUpdateOperatingCentreLinkPsv(): void
     {
         $data = [
             'noOfVehiclesRequired' => 10,
@@ -524,7 +520,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals('Y', $loc->getPermission());
     }
 
-    public function testUpdateOperatingCentreLink()
+    public function testUpdateOperatingCentreLink(): void
     {
         $data = [
             'noOfVehiclesRequired' => 10,
@@ -558,7 +554,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals('2015-01-01', $loc->getAdPlacedDate()->format('Y-m-d'));
     }
 
-    public function validateWithErrors()
+    public static function validateWithErrors(): array
     {
         return [
             [
@@ -649,7 +645,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         ];
     }
 
-    public function validateWithErrorsExternal()
+    public static function validateWithErrorsExternal(): array
     {
         return [
             [
@@ -775,7 +771,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         ];
     }
 
-    public function testValidateConfirmations()
+    public function testValidateConfirmations(): void
     {
         $data = [
             'noOfVehiclesRequired' => 10,
@@ -807,7 +803,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals($errors, $this->sut->getMessages());
     }
 
-    public function testValidateTrafficAreaWithAddressServiceNotWorking()
+    public function testValidateTrafficAreaWithAddressServiceNotWorking(): void
     {
         $commandData = [
             'address' => [
@@ -824,7 +820,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->assertNull($this->sut->validateTrafficArea($entity, $command));
     }
 
-    public function testValidateOverriddenTA()
+    public function testValidateOverriddenTA(): void
     {
         $commandData = [
             'address' => [

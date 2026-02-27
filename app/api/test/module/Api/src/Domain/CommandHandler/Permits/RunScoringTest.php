@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitStock;
@@ -34,7 +36,8 @@ class RunScoringTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrhpPermitStockEntity::STATUS_SCORING_PREREQUISITE_FAIL,
@@ -46,7 +49,7 @@ class RunScoringTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $stockId = 47;
         $deviation = 1.5;
@@ -208,7 +211,7 @@ class RunScoringTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testIncorrectStatus()
+    public function testIncorrectStatus(): void
     {
         $stockId = 47;
 
@@ -254,7 +257,7 @@ class RunScoringTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testPrerequisiteFailed()
+    public function testPrerequisiteFailed(): void
     {
         $stockId = 47;
 
@@ -310,7 +313,7 @@ class RunScoringTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandScoringUnexpectedFail()
+    public function testHandleCommandScoringUnexpectedFail(): void
     {
         $stockId = 47;
         $deviation = 1.5;
@@ -479,7 +482,7 @@ class RunScoringTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandScoringLogFail()
+    public function testHandleCommandScoringLogFail(): void
     {
         $stockId = 47;
         $deviation = 1.5;

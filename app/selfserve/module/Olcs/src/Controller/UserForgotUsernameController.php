@@ -30,6 +30,7 @@ class UserForgotUsernameController extends AbstractController
      *
      * @return ViewModel|\Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         /** @var \Common\Form\Form $form */

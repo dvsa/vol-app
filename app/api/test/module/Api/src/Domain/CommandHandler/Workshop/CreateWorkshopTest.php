@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Workshop Test
  *
@@ -20,6 +22,8 @@ use Dvsa\Olcs\Transfer\Command\Workshop\CreateWorkshop as Cmd;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails as ContactDetailsEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Workshop as WorkshopEntity;
+use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
 
 /**
  * Create Workshop Test
@@ -34,11 +38,13 @@ class CreateWorkshopTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('Workshop', Workshop::class);
         $this->mockRepo('Licence', Licence::class);
         $this->mockRepo('ContactDetails', ContactDetails::class);
+        $this->mockedSmServices ['EventHistoryCreator'] = m::mock(EventHistoryCreator::class);
 
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -47,7 +53,7 @@ class CreateWorkshopTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'licence' => 111,
@@ -107,6 +113,16 @@ class CreateWorkshopTest extends AbstractCommandHandlerTestCase
                     $savedWorkshop = $workshop;
                 }
             );
+
+        $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')
+            ->with(m::type(WorkshopEntity::class), EventHistoryTypeEntity::EVENT_CODE_ADD_SAFETY_INSPECTOR)
+            ->once();
+        $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')
+            ->with($contactDetails, EventHistoryTypeEntity::EVENT_CODE_ADD_SAFETY_INSPECTOR, null, $licence)
+            ->once();
+        $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')
+            ->with($contactDetails->getAddress(), EventHistoryTypeEntity::EVENT_CODE_ADD_SAFETY_INSPECTOR, null, $licence)
+            ->once();
 
         $result = $this->sut->handleCommand($command);
 

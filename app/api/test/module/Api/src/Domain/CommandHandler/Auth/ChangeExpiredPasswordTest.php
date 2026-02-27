@@ -18,6 +18,7 @@ use Mockery as m;
 /**
  * @see ChangeExpiredPassword
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class ChangeExpiredPasswordTest extends AbstractCommandHandlerTestCase
 {
     private m\MockInterface $adapter;
@@ -44,10 +45,8 @@ class ChangeExpiredPasswordTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
-    public function testHandleCommand(int $code, array $messages, $isSuccess): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
+    public function testHandleCommand(int $code, array $messages, mixed $isSuccess): void
     {
         $identity = ['identity'];
         $changeResult = new ChangeExpiredPasswordResult($code, $identity, ['aws-messages']);
@@ -60,7 +59,7 @@ class ChangeExpiredPasswordTest extends AbstractCommandHandlerTestCase
         $this->assertSame($messages, $result->getFlag('messages'));
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand(): array
     {
         return [
             [ChangeExpiredPasswordResult::SUCCESS, [0 => ChangeExpiredPassword::MSG_GENERIC_SUCCESS], true],
@@ -86,9 +85,7 @@ class ChangeExpiredPasswordTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($this->command);
     }
 
-    /**
-     * @dataProvider resultsDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('resultsDataProvider')]
     public function testHandleCommandDoesNotUpdateUserLastLoginAtOnNonSuccessResult(int $result): void
     {
         $changeResult = new ChangeExpiredPasswordResult($result, [], []);
@@ -99,7 +96,7 @@ class ChangeExpiredPasswordTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($this->command);
     }
 
-    public function testHandleCommandThrowsExceptionWhenUserCannotBeFound()
+    public function testHandleCommandThrowsExceptionWhenUserCannotBeFound(): void
     {
         $changeResult = new ChangeExpiredPasswordResult(ChangeExpiredPasswordResult::SUCCESS, [], []);
         $this->adapterResult($changeResult);
@@ -112,7 +109,7 @@ class ChangeExpiredPasswordTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($this->command);
     }
 
-    private function adapterResult($changeResult): void
+    private function adapterResult(mixed $changeResult): void
     {
         $this->adapter->expects('changeExpiredPassword')
             ->with($this->newPassword, $this->challengeSession, $this->username)
@@ -142,7 +139,7 @@ class ChangeExpiredPasswordTest extends AbstractCommandHandlerTestCase
         $this->mockUserRepo = $instance;
     }
 
-    public function resultsDataProvider(): array
+    public static function resultsDataProvider(): array
     {
         return [
             'Challenge result' => [ChangeExpiredPasswordResult::SUCCESS_WITH_CHALLENGE],

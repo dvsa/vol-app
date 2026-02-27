@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer;
 
 use Doctrine\ORM\Internal\Hydration\IterableResult;
@@ -51,7 +53,8 @@ class CpidOrganisationExportTest extends AbstractConsumerTestCase
         parent::setUp();
     }
 
-    protected function instantiate()
+    #[\Override]
+    protected function instantiate(): void
     {
         $this->sut = m::mock(
             CpidOrganisationExport::class . '[success, failed]',
@@ -62,10 +65,8 @@ class CpidOrganisationExportTest extends AbstractConsumerTestCase
         )->shouldAllowMockingProtectedMethods();
     }
 
-    /**
-     * @dataProvider dpTestMessageProvider
-     */
-    public function testProcessMessage($shouldThrowException)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestMessageProvider')]
+    public function testProcessMessage(mixed $shouldThrowException): void
     {
         /** @var m\MockInterface $sut */
         if ($shouldThrowException) {
@@ -102,7 +103,7 @@ class CpidOrganisationExportTest extends AbstractConsumerTestCase
         );
     }
 
-    public function dpTestMessageProvider()
+    public static function dpTestMessageProvider(): array
     {
         return [
             [

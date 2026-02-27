@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Set Default Traffic Area And Enforcement Area Test
  *
@@ -43,7 +45,8 @@ class SetDefaultTrafficAreaAndEnforcementAreaTest extends AbstractCommandHandler
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -60,7 +63,7 @@ class SetDefaultTrafficAreaAndEnforcementAreaTest extends AbstractCommandHandler
         parent::initReferences();
     }
 
-    public function testHandleCommandWithEaAndTm()
+    public function testHandleCommandWithEaAndTm(): void
     {
         $command = Cmd::create(['id' => 111, 'operatingCentre' => 222]);
 
@@ -91,7 +94,7 @@ class SetDefaultTrafficAreaAndEnforcementAreaTest extends AbstractCommandHandler
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandNi()
+    public function testHandleCommandNi(): void
     {
         $command = Cmd::create(['id' => 111, 'operatingCentre' => 222]);
 
@@ -139,7 +142,7 @@ class SetDefaultTrafficAreaAndEnforcementAreaTest extends AbstractCommandHandler
         );
     }
 
-    public function testHandleCommandWithMultipleOcs()
+    public function testHandleCommandWithMultipleOcs(): void
     {
         $command = Cmd::create(['id' => 111, 'operatingCentre' => 222]);
 
@@ -173,7 +176,7 @@ class SetDefaultTrafficAreaAndEnforcementAreaTest extends AbstractCommandHandler
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithOperatingCentre()
+    public function testHandleCommandWithOperatingCentre(): void
     {
         $command = Cmd::create(['id' => 111, 'operatingCentre' => 222]);
 
@@ -242,7 +245,7 @@ class SetDefaultTrafficAreaAndEnforcementAreaTest extends AbstractCommandHandler
         );
     }
 
-    public function testHandleCommandWithPostcode()
+    public function testHandleCommandWithPostcode(): void
     {
         $command = Cmd::create(['id' => 111, 'postcode' => 'AB1 1BA']);
 
@@ -302,7 +305,7 @@ class SetDefaultTrafficAreaAndEnforcementAreaTest extends AbstractCommandHandler
         );
     }
 
-    public function testHandleCommandWithNoAddressServiceWorkingSetEa()
+    public function testHandleCommandWithNoAddressServiceWorkingSetEa(): void
     {
         $command = Cmd::create(['id' => 111, 'operatingCentre' => 222]);
 
@@ -343,7 +346,7 @@ class SetDefaultTrafficAreaAndEnforcementAreaTest extends AbstractCommandHandler
         $this->assertEquals($result->toArray(), $expected);
     }
 
-    public function testHandleCommandWithNoAddressServiceWorkingSetTa()
+    public function testHandleCommandWithNoAddressServiceWorkingSetTa(): void
     {
         $command = Cmd::create(['id' => 111, 'operatingCentre' => 222]);
 

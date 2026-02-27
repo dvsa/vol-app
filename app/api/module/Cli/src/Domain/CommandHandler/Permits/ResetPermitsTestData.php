@@ -29,6 +29,7 @@ final class ResetPermitsTestData extends AbstractCommandHandler implements Trans
         return $this->dbConnection;
     }
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         // Step 1: Clear existing permits data
@@ -48,6 +49,7 @@ final class ResetPermitsTestData extends AbstractCommandHandler implements Trans
         return $this->result;
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->setDbConnection($container->get('doctrine.connection.orm_default'));

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Parser;
 
 use Dvsa\Olcs\Api\Service\Document\Parser\RtfParser;
@@ -11,13 +13,13 @@ use Dvsa\Olcs\Api\Service\Document\Parser\RtfParser;
  */
 class RtfParserTest extends \PHPUnit\Framework\TestCase
 {
-    public function testExtension()
+    public function testExtension(): void
     {
         $parser = new RtfParser();
         $this->assertEquals('rtf', $parser->getFileExtension());
     }
 
-    public function testExtractTokens()
+    public function testExtractTokens(): void
     {
         $content = <<<TXT
 Bookmark 1: {\*\bkmkstart bookmark_one}{\*\bkmkend bookmark_one}
@@ -39,7 +41,7 @@ TXT;
         $this->assertEquals($tokens, $parser->extractTokens($content));
     }
 
-    public function testReplace()
+    public function testReplace(): void
     {
         $content = <<<TXT
 Bookmark 1: {\*\bkmkstart bookmark_one}{\*\bkmkend bookmark_one}
@@ -77,7 +79,7 @@ TXT;
         );
     }
 
-    public function testReplaceWhenDataIsPreformatted()
+    public function testReplaceWhenDataIsPreformatted(): void
     {
         $content = "Bookmark 1: {\*\bkmkstart bookmark_one}{\*\bkmkend bookmark_one}";
         $expected = "Bookmark 1: Some Content\nWith newlines";
@@ -97,7 +99,7 @@ TXT;
         );
     }
 
-    public function testRenderImage()
+    public function testRenderImage(): void
     {
         $parser = new RtfParser();
         $result = $parser->renderImage('', 100, 50, 'jpeg');
@@ -107,7 +109,7 @@ TXT;
         );
     }
 
-    public function testGetEntitiesAndQuote()
+    public function testGetEntitiesAndQuote(): void
     {
         $startText = "a1'`~škėąčęėįšųūžĄČĘĖĮŠŲŪŽкийтехтàcôté■\{}";
         $endText = "a1'`~\uc0{\u353}k\uc0{\u279}\uc0{\u261}\uc0{\u269}\uc0{\u281}\uc0{\u279}\uc0{\u303}\uc0{\u353}\uc0"

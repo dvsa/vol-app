@@ -53,6 +53,7 @@ final class UpdateDetails extends AbstractCommandHandler implements Transactione
      * @throws ValidationException
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $tma TransportManagerApplication */

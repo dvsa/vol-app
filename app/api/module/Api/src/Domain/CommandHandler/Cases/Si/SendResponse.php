@@ -21,6 +21,8 @@ final class SendResponse extends AbstractCommandHandler implements UploaderAware
 {
     use UploaderAwareTrait;
 
+    public const string MSG_NO_RESPONSE_REQUIRED = 'The infringements on this case have no requested penalties - no response required';
+
     protected $repoServiceName = 'ErruRequest';
 
     protected $extraRepos = [
@@ -39,6 +41,7 @@ final class SendResponse extends AbstractCommandHandler implements UploaderAware
      * @throws InrClientException
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /**
@@ -46,6 +49,11 @@ final class SendResponse extends AbstractCommandHandler implements UploaderAware
          * @var SendResponseCmd $command
          */
         $erruRequest = $this->getRepo()->fetchUsingId($command);
+
+        //ensures responses can't be sent by accident for cases with no requested penalties
+        if (!$erruRequest->getCase()->hasErruRequestedPenalties()) {
+            throw new \Exception(self::MSG_NO_RESPONSE_REQUIRED);
+        }
 
         /** @var File $xmlFile */
         $xmlFile = $this->getUploader()->download($erruRequest->getResponseDocument()->getIdentifier());

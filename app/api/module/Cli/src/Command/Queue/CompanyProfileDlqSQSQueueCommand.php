@@ -10,6 +10,7 @@ class CompanyProfileDlqSQSQueueCommand extends AbstractSQSCommand
 {
     protected static $defaultName = 'queue:company-profile-dlq';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Processes the Company Profile DLQ (Dead Letter Queue) items.')
@@ -17,11 +18,13 @@ class CompanyProfileDlqSQSQueueCommand extends AbstractSQSCommand
         parent::configure();
     }
 
+    #[\Override]
     protected function getCommandDto()
     {
         return CompanyProfileDlq::create([]);
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

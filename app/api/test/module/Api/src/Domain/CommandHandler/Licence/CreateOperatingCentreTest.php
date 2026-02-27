@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Operating Centre Test
  *
@@ -45,14 +47,15 @@ class CreateOperatingCentreTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
         parent::initReferences();
     }
 
-    public function testHandleCommandWithoutPermission()
+    public function testHandleCommandWithoutPermission(): void
     {
         $data = [];
         $command = Cmd::create($data);
@@ -66,7 +69,7 @@ class CreateOperatingCentreTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'licence' => 111

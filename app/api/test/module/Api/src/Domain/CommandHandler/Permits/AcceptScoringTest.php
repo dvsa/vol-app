@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\Repository\FeeType;
@@ -56,7 +58,8 @@ class AcceptScoringTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrhpInterface::STATUS_AWAITING_FEE,
@@ -69,10 +72,8 @@ class AcceptScoringTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
-    public function testHandleCommand($disableEcmtAllocEmailNone, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
+    public function testHandleCommand(mixed $disableEcmtAllocEmailNone, mixed $expected): void
     {
         $stockId = 47;
 
@@ -431,7 +432,7 @@ class AcceptScoringTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand(): array
     {
         return [
             'unsuccessful email enabled' => [
@@ -493,7 +494,7 @@ class AcceptScoringTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testIncorrectStockStatus()
+    public function testIncorrectStockStatus(): void
     {
         $stockId = 35;
 
@@ -540,7 +541,7 @@ class AcceptScoringTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testPrerequisitesFail()
+    public function testPrerequisitesFail(): void
     {
         $stockId = 35;
 
@@ -597,13 +598,13 @@ class AcceptScoringTest extends AbstractCommandHandlerTestCase
     }
 
     private function getIrhpApplicationMock(
-        $id,
-        $licenceId,
-        $permitsAwarded,
-        $successLevel,
-        $outcomeNotificationType,
-        $checked
-    ) {
+        mixed $id,
+        mixed $licenceId,
+        mixed $permitsAwarded,
+        mixed $successLevel,
+        mixed $outcomeNotificationType,
+        mixed $checked
+    ): m\MockInterface {
         $licence = m::mock(LicenceEntity::class);
         $licence->shouldReceive('getId')
             ->andReturn($licenceId);

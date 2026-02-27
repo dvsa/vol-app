@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -42,24 +42,26 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
     use ModifiedOnTrait;
 
     /**
-     * Primary key
+     * LetterIssueVersion
      *
-     * @var int
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion
      *
      * @ORM\Id
-     * @ORM\Column(type="integer", name="letter_issue_version_id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion", fetch="LAZY")
+     * @ORM\JoinColumn(name="letter_issue_version_id", referencedColumnName="id")
      */
-    protected $letter_issue_version_id = 0;
+    protected $letterIssueVersion;
 
     /**
-     * Primary key
+     * LetterTodoVersion
      *
-     * @var int
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion
      *
      * @ORM\Id
-     * @ORM\Column(type="integer", name="letter_todo_version_id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion", fetch="LAZY")
+     * @ORM\JoinColumn(name="letter_todo_version_id", referencedColumnName="id")
      */
-    protected $letter_todo_version_id = 0;
+    protected $letterTodoVersion;
 
     /**
      * Created by
@@ -109,49 +111,51 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
 
 
     /**
-     * Set the letter_issue_version_id
+     * Set the letter issue version
      *
-     * @param int $letter_issue_version_id new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion $letterIssueVersion new value being set
      *
      * @return LetterIssueTodo
      */
-    public function setLetter_issue_version_id($letter_issue_version_id)
+    public function setLetterIssueVersion($letterIssueVersion)
     {
-        $this->letter_issue_version_id = $letter_issue_version_id;
+        $this->letterIssueVersion = $letterIssueVersion;
 
         return $this;
     }
 
     /**
-     * Get the letter_issue_version_id
+     * Get the letter issue version
      *
-     * @return int     */
-    public function getLetter_issue_version_id()
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion
+     */
+    public function getLetterIssueVersion()
     {
-        return $this->letter_issue_version_id;
+        return $this->letterIssueVersion;
     }
 
     /**
-     * Set the letter_todo_version_id
+     * Set the letter todo version
      *
-     * @param int $letter_todo_version_id new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion $letterTodoVersion new value being set
      *
      * @return LetterIssueTodo
      */
-    public function setLetter_todo_version_id($letter_todo_version_id)
+    public function setLetterTodoVersion($letterTodoVersion)
     {
-        $this->letter_todo_version_id = $letter_todo_version_id;
+        $this->letterTodoVersion = $letterTodoVersion;
 
         return $this;
     }
 
     /**
-     * Get the letter_todo_version_id
+     * Get the letter todo version
      *
-     * @return int     */
-    public function getLetter_todo_version_id()
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion
+     */
+    public function getLetterTodoVersion()
     {
-        return $this->letter_todo_version_id;
+        return $this->letterTodoVersion;
     }
 
     /**
@@ -171,7 +175,8 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -194,7 +199,8 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -217,7 +223,8 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
     /**
      * Get the display order
      *
-     * @return int     */
+     * @return int
+     */
     public function getDisplayOrder()
     {
         return $this->displayOrder;
@@ -226,6 +233,7 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

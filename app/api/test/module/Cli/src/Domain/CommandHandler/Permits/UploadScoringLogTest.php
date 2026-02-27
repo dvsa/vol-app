@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -28,7 +30,7 @@ class UploadScoringLogTest extends AbstractCommandHandlerTestCase
     /**
      * tests handleCommand
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $logContent = 'test';
         $result1 = new Result();

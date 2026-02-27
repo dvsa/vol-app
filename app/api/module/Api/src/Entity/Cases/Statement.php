@@ -43,6 +43,7 @@ class Statement extends AbstractStatement implements OrganisationProviderInterfa
      *
      * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation|\Dvsa\Olcs\Api\Entity\Organisation\Organisation[]|null
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this->getCase()->getRelatedOrganisation();

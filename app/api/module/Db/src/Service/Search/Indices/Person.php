@@ -10,6 +10,7 @@ use Dvsa\Olcs\Db\Service\Search\Indices\Terms\TransportManagerLicenceStatus;
 class Person extends AbstractIndex
 {
     /** @return ComplexTermInterface[] */
+    #[\Override]
     public function getFilters(): array
     {
         if (!isset($this->filters)) {

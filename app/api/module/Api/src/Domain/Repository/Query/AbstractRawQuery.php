@@ -89,6 +89,7 @@ abstract class AbstractRawQuery implements AuthAwareInterface, QueryInterface, F
      *
      * @throws RuntimeException
      */
+    #[\Override]
     public function execute(array $params = [], array $paramTypes = []): Result
     {
         $masqueradedAsSystemUser = $this->identityProvider->getMasqueradedAsSystemUser();
@@ -244,6 +245,7 @@ abstract class AbstractRawQuery implements AuthAwareInterface, QueryInterface, F
 
         return $this->getColumnName($entity, $matches['field']);
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->em = $container->get('doctrine.entitymanager.orm_default');

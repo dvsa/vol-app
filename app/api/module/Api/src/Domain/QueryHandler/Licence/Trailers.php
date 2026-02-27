@@ -22,6 +22,7 @@ class Trailers extends AbstractQueryHandler
 
     protected $extraRepos = ['Trailer'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $licence = $this->getRepo()->fetchUsingId($query);

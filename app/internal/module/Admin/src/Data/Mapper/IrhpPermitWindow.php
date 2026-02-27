@@ -21,6 +21,7 @@ class IrhpPermitWindow implements MapperInterface
      *
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data): array
     {
         $mappedData[self::PERMIT_WINDOW_DETAILS] = $data;

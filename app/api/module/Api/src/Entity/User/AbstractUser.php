@@ -44,7 +44,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractUser implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractUser implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -280,7 +280,8 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -303,7 +304,8 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the team
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\Team     */
+     * @return \Dvsa\Olcs\Api\Entity\User\Team
+     */
     public function getTeam()
     {
         return $this->team;
@@ -326,7 +328,8 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the transport manager
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     */
     public function getTransportManager()
     {
         return $this->transportManager;
@@ -349,7 +352,8 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the local authority
      *
-     * @return \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority     */
+     * @return \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority
+     */
     public function getLocalAuthority()
     {
         return $this->localAuthority;
@@ -372,7 +376,8 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the contact details
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     */
     public function getContactDetails()
     {
         return $this->contactDetails;
@@ -395,7 +400,8 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the partner contact details
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     */
     public function getPartnerContactDetails()
     {
         return $this->partnerContactDetails;
@@ -418,7 +424,8 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -441,7 +448,8 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -464,7 +472,8 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the pid
      *
-     * @return string     */
+     * @return string
+     */
     public function getPid()
     {
         return $this->pid;
@@ -487,7 +496,8 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the login id
      *
-     * @return string     */
+     * @return string
+     */
     public function getLoginId()
     {
         return $this->loginId;
@@ -510,7 +520,8 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the account disabled
      *
-     * @return string     */
+     * @return string
+     */
     public function getAccountDisabled()
     {
         return $this->accountDisabled;
@@ -535,7 +546,8 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getDisabledDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -562,7 +574,8 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the translate to welsh
      *
-     * @return string     */
+     * @return string
+     */
     public function getTranslateToWelsh()
     {
         return $this->translateToWelsh;
@@ -587,7 +600,8 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getLastLoginAt($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -614,7 +628,8 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the terms agreed
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getTermsAgreed()
     {
         return $this->termsAgreed;
@@ -637,7 +652,8 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -835,6 +851,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

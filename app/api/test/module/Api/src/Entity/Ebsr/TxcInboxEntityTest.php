@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Ebsr;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -27,12 +29,12 @@ class TxcInboxEntityTest extends EntityTester
     /**
      * Tests create
      *
-     * @dataProvider validDataProvider
      *
      * @param $localAuthority
      * @param $organisation
      */
-    public function testCreate($localAuthority, $organisation)
+    #[\PHPUnit\Framework\Attributes\DataProvider('validDataProvider')]
+    public function testCreate(mixed $localAuthority, mixed $organisation): void
     {
         $variationNo = 999;
 
@@ -55,7 +57,7 @@ class TxcInboxEntityTest extends EntityTester
      *
      * @return array
      */
-    public function validDataProvider()
+    public static function validDataProvider(): array
     {
         return [
             [new LocalAuthorityEntity(), null],
@@ -63,7 +65,7 @@ class TxcInboxEntityTest extends EntityTester
         ];
     }
 
-    public function testCreateNotFromEbsr()
+    public function testCreateNotFromEbsr(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -76,12 +78,12 @@ class TxcInboxEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider createValidationErrorProvider
      *
      * @param $localAuthority
      * @param $organisation
      */
-    public function testCreateValidationError($localAuthority, $organisation)
+    #[\PHPUnit\Framework\Attributes\DataProvider('createValidationErrorProvider')]
+    public function testCreateValidationError(mixed $localAuthority, mixed $organisation): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -97,7 +99,7 @@ class TxcInboxEntityTest extends EntityTester
      *
      * @return array
      */
-    public function createValidationErrorProvider()
+    public static function createValidationErrorProvider(): array
     {
         return [
             [new LocalAuthorityEntity(), new OrganisationEntity()],
@@ -105,7 +107,7 @@ class TxcInboxEntityTest extends EntityTester
         ];
     }
 
-    public function testGetRelatedOrganisation()
+    public function testGetRelatedOrganisation(): void
     {
         $busReg = m::mock(BusRegEntity::class);
         $busReg->shouldReceive('getRelatedOrganisation')->with()->once()->andReturn('ORG 1');

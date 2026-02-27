@@ -21,6 +21,7 @@ class CanAccessConversationMessagesWithConversationId extends AbstractHandler im
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->isGranted(Permission::CAN_LIST_MESSAGES)

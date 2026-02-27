@@ -20,6 +20,7 @@ class TransportManagerControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return TransportManagerController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransportManagerController
     {
         $scriptFactory = $container->get(ScriptFactory::class);

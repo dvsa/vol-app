@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Cpms Download Report Command Handler Test
  *
@@ -41,7 +43,7 @@ class DownloadReportTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $reference = 'OLCS-1234-FOO';
         $token = 'secrettoken';

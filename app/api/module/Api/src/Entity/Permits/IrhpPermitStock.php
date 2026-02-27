@@ -174,6 +174,7 @@ class IrhpPermitStock extends AbstractIrhpPermitStock implements DeletableInterf
      *
      * @return boolean
      */
+    #[\Override]
     public function canDelete()
     {
         return
@@ -186,6 +187,7 @@ class IrhpPermitStock extends AbstractIrhpPermitStock implements DeletableInterf
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedBundleValues()
     {
         return [

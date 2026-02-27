@@ -35,7 +35,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -177,7 +177,8 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -200,7 +201,8 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     /**
      * Get the serious infringement
      *
-     * @return \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement     */
+     * @return \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement
+     */
     public function getSeriousInfringement()
     {
         return $this->seriousInfringement;
@@ -223,7 +225,8 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     /**
      * Get the si penalty requested type
      *
-     * @return \Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType     */
+     * @return \Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType
+     */
     public function getSiPenaltyRequestedType()
     {
         return $this->siPenaltyRequestedType;
@@ -246,7 +249,8 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -269,7 +273,8 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -292,7 +297,8 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     /**
      * Get the penalty requested identifier
      *
-     * @return int     */
+     * @return int
+     */
     public function getPenaltyRequestedIdentifier()
     {
         return $this->penaltyRequestedIdentifier;
@@ -315,7 +321,8 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     /**
      * Get the duration
      *
-     * @return int     */
+     * @return int
+     */
     public function getDuration()
     {
         return $this->duration;
@@ -338,7 +345,8 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -361,7 +369,8 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -433,6 +442,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

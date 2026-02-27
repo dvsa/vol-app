@@ -27,6 +27,7 @@ final class CreateLightGoodsVehicleCondition extends AbstractCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $applicationId = $command->getApplicationId();

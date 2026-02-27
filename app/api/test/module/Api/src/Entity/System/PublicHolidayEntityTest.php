@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\System;
 
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
@@ -14,7 +16,7 @@ class PublicHolidayEntityTest extends EntityTester
 {
     protected $entityClass = Entity::class;
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $expectDate = new DateTime();
         $isEngland = 'Y';

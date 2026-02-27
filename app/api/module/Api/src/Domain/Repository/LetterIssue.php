@@ -21,6 +21,7 @@ class LetterIssue extends AbstractVersionedRepository
      * @param int $hydrateMode
      * @return array
      */
+    #[\Override]
     public function fetchList(QueryInterface $query, $hydrateMode = Query::HYDRATE_OBJECT)
     {
         $qb = $this->createQueryBuilder();
@@ -40,6 +41,7 @@ class LetterIssue extends AbstractVersionedRepository
      * @param QueryInterface $query
      * @return int
      */
+    #[\Override]
     public function fetchCount(QueryInterface $query)
     {
         $qb = $this->createQueryBuilder();
@@ -53,6 +55,7 @@ class LetterIssue extends AbstractVersionedRepository
      *
      * @return array
      */
+    #[\Override]
     protected function getVersionedFields(): array
     {
         return [
@@ -75,6 +78,7 @@ class LetterIssue extends AbstractVersionedRepository
      *
      * @return string
      */
+    #[\Override]
     protected function getVersionEntityClass(): string
     {
         return LetterIssueVersion::class;
@@ -85,6 +89,7 @@ class LetterIssue extends AbstractVersionedRepository
      *
      * @return string
      */
+    #[\Override]
     protected function getEntityShortName(): string
     {
         return 'LetterIssue';

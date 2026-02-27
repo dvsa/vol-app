@@ -13,6 +13,7 @@ class ProcessPackFailed extends AbstractCommandConsumer
 {
     protected $commandName = Cmd::class;
 
+    #[\Override]
     public function getCommandData(QueueEntity $item): array
     {
         return json_decode($item->getOptions(), true);

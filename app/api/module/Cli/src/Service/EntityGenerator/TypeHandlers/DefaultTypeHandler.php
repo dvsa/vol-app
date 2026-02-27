@@ -11,7 +11,7 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\ColumnMetadata;
  */
 class DefaultTypeHandler extends AbstractTypeHandler
 {
-    private const TYPE_MAPPING = [
+    private const array TYPE_MAPPING = [
         'bigint' => ['int', 'integer'],
         'binary' => ['string', 'string'],
         'blob' => ['string', 'string'],
@@ -30,12 +30,14 @@ class DefaultTypeHandler extends AbstractTypeHandler
         'tinyint' => ['int', 'boolean'], // tinyint(1) is typically boolean
     ];
 
+    #[\Override]
     public function supports(ColumnMetadata $column, array $config = []): bool
     {
         // This is the fallback handler, so it supports everything
         return true;
     }
 
+    #[\Override]
     public function generateAnnotation(ColumnMetadata $column, array $config = []): string
     {
         $type = $this->getDoctrineType($column, $config);
@@ -44,7 +46,7 @@ class DefaultTypeHandler extends AbstractTypeHandler
 
         // Add type
         $options[] = 'type="' . $type . '"';
-        
+
         // Add name
         $options[] = 'name="' . $column->getName() . '"';
 
@@ -65,7 +67,7 @@ class DefaultTypeHandler extends AbstractTypeHandler
             // Convert string default values to proper types for boolean columns
             $default = $column->getDefault();
             $doctrineType = $this->getDoctrineType($column, $config);
-            
+
             if ($doctrineType === 'boolean' && is_string($default)) {
                 // For boolean columns, use numeric values (0 or 1) for compatibility
                 $defaultValue = ($default === '1' || $default === 'true') ? '1' : '0';
@@ -78,7 +80,7 @@ class DefaultTypeHandler extends AbstractTypeHandler
             } else {
                 $defaultValue = $this->generateDefaultValue($default);
             }
-            
+
             $options[] = 'options={"default": ' . $defaultValue . '}';
         }
 
@@ -107,12 +109,14 @@ class DefaultTypeHandler extends AbstractTypeHandler
     /**
      * Override to not remove _id suffix for regular columns
      */
+    #[\Override]
     protected function generatePropertyName(string $columnName): string
     {
         // For regular columns, just convert to camelCase without removing _id
         return lcfirst(str_replace('_', '', ucwords($columnName, '_')));
     }
 
+    #[\Override]
     public function generateProperty(ColumnMetadata $column, array $config = []): array
     {
         $propertyName = $this->generatePropertyName($column->getName());
@@ -131,11 +135,13 @@ class DefaultTypeHandler extends AbstractTypeHandler
         ];
     }
 
+    #[\Override]
     public function getPriority(): int
     {
         return -100; // Lowest priority (fallback)
     }
 
+    #[\Override]
     public function getRequiredImports(): array
     {
         return ['Doctrine\ORM\Mapping as ORM'];
@@ -233,8 +239,8 @@ class DefaultTypeHandler extends AbstractTypeHandler
      */
     private function generateComment(ColumnMetadata $column, array $config): string
     {
-        $comment = $column->getComment();
-        
+        $comment = trim(str_replace(["\t", "\n", "\r"], ' ', (string) $column->getComment()));
+
         if (empty($comment)) {
             $comment = ucfirst(str_replace('_', ' ', $column->getName()));
         }

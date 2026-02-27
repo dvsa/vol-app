@@ -31,7 +31,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractApplicationPathGroup implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractApplicationPathGroup implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -143,7 +143,8 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -166,7 +167,8 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -189,7 +191,8 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -212,7 +215,8 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
     /**
      * Get the name
      *
-     * @return string     */
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -235,7 +239,8 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
     /**
      * Get the is visible in internal
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsVisibleInInternal()
     {
         return $this->isVisibleInInternal;
@@ -258,7 +263,8 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -330,6 +336,7 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

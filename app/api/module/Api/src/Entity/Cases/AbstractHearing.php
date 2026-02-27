@@ -42,7 +42,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractHearing implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractHearing implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -240,7 +240,8 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -263,7 +264,8 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -286,7 +288,8 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
     /**
      * Get the venue
      *
-     * @return \Dvsa\Olcs\Api\Entity\Venue     */
+     * @return \Dvsa\Olcs\Api\Entity\Venue
+     */
     public function getVenue()
     {
         return $this->venue;
@@ -309,7 +312,8 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
     /**
      * Get the presiding tc
      *
-     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc     */
+     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     */
     public function getPresidingTc()
     {
         return $this->presidingTc;
@@ -332,7 +336,8 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
     /**
      * Get the hearing type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getHearingType()
     {
         return $this->hearingType;
@@ -355,7 +360,8 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
     /**
      * Get the outcome
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getOutcome()
     {
         return $this->outcome;
@@ -378,7 +384,8 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -401,7 +408,8 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -424,7 +432,8 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
     /**
      * Get the venue other
      *
-     * @return string     */
+     * @return string
+     */
     public function getVenueOther()
     {
         return $this->venueOther;
@@ -447,7 +456,8 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
     /**
      * Get the presiding staff name
      *
-     * @return string     */
+     * @return string
+     */
     public function getPresidingStaffName()
     {
         return $this->presidingStaffName;
@@ -472,7 +482,8 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getHearingDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -501,7 +512,8 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getAgreedByTcDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -528,7 +540,8 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
     /**
      * Get the witness count
      *
-     * @return int     */
+     * @return int
+     */
     public function getWitnessCount()
     {
         return $this->witnessCount;
@@ -551,7 +564,8 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -574,7 +588,8 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -597,7 +612,8 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
     /**
      * Get the olbs type
      *
-     * @return string     */
+     * @return string
+     */
     public function getOlbsType()
     {
         return $this->olbsType;
@@ -606,6 +622,7 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

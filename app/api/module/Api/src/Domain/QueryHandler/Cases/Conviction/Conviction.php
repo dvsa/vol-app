@@ -17,6 +17,7 @@ class Conviction extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Conviction';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var ConvictionRepository $repo */

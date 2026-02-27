@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Validators;
 
 use Dvsa\Olcs\Api\Domain\Validation\Validators\CanAccessIrhpApplicationWithIrhpApplication;
@@ -24,10 +26,8 @@ class CanAccessIrhpApplicationWithIrhpApplicationTest extends AbstractValidators
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValid($isOwner, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $isOwner, mixed $expected): void
     {
         $this->setIsGranted(Permission::INTERNAL_USER, false);
         $this->auth->shouldReceive('getIdentity')->andReturn(null);
@@ -42,10 +42,10 @@ class CanAccessIrhpApplicationWithIrhpApplicationTest extends AbstractValidators
     }
 
     /**
-     * @dataProvider provider
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testIsValidInternal($isOwner, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValidInternal(mixed $isOwner, mixed $expected): void
     {
         $this->setIsGranted(Permission::INTERNAL_USER, true);
         $entity = m::mock(IrhpApplication::class);
@@ -58,7 +58,7 @@ class CanAccessIrhpApplicationWithIrhpApplicationTest extends AbstractValidators
         $this->assertEquals(true, $this->sut->isValid(111));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [true, true],

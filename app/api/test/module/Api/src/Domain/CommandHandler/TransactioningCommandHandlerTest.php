@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Transactioning Command Handler Test
  *
@@ -40,12 +42,12 @@ class TransactioningCommandHandlerTest extends MockeryTestCase
         $this->sut = new TransactioningCommandHandler($this->wrapped, $this->repo);
     }
 
-    public function testGetWrapped()
+    public function testGetWrapped(): void
     {
         $this->assertSame($this->wrapped, $this->sut->getWrapped());
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = m::mock(CommandInterface::class);
 
@@ -58,7 +60,7 @@ class TransactioningCommandHandlerTest extends MockeryTestCase
         $this->assertEquals(['result'], $this->sut->handleCommand($command));
     }
 
-    public function testHandleCommandException()
+    public function testHandleCommandException(): void
     {
         $this->expectException(\Exception::class);
 
@@ -75,14 +77,14 @@ class TransactioningCommandHandlerTest extends MockeryTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testCheckEnabled()
+    public function testCheckEnabled(): void
     {
         $isEnabled = true;
         $this->wrapped->shouldReceive('checkEnabled')->once()->andReturn($isEnabled);
         $this->assertEquals($isEnabled, $this->sut->checkEnabled());
     }
 
-    public function testCheckEnabledExceptionPassedBack()
+    public function testCheckEnabledExceptionPassedBack(): void
     {
         $this->expectException(DisabledHandlerException::class);
         $this->wrapped->shouldReceive('checkEnabled')->once()->andThrow(DisabledHandlerException::class);

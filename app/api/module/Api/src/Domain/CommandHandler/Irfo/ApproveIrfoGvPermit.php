@@ -21,6 +21,7 @@ final class ApproveIrfoGvPermit extends AbstractCommandHandler
 
     protected $extraRepos = ['Fee'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $irfoGvPermit = $this->getRepo()->fetchUsingId($command, Query::HYDRATE_OBJECT);

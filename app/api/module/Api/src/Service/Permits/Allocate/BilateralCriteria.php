@@ -27,6 +27,7 @@ class BilateralCriteria implements RangeMatchingCriteriaInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function matches(IrhpPermitRange $irhpPermitRange)
     {
         return $irhpPermitRange->getCabotage() == self::CABOTAGE_MAPPINGS[$this->standardOrCabotage] &&

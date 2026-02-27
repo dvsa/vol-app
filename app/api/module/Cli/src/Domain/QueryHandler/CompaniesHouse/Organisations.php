@@ -9,6 +9,7 @@ class Organisations extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Organisation';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->getRepo()->getAllOrganisationsForCompaniesHouse();

@@ -24,6 +24,7 @@ final class UpdateLicenceHistoryStatus extends AbstractUpdateStatus
 
     protected $section = 'LicenceHistory';
 
+    #[\Override]
     protected function isSectionValid(Application $application)
     {
         $licenceTypes = [

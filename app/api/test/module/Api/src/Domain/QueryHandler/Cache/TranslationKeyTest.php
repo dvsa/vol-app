@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Cache;
 
 use Dvsa\Olcs\Api\Service\Translator\TranslationLoader;
@@ -34,7 +36,7 @@ class TranslationKeyTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['uniqueId' => 'en_GB']);
         $this->assertEquals(['messages'], $this->sut->handleQuery($query));

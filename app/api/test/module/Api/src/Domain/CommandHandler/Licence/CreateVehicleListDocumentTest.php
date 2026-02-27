@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Goods Vehicle Test
  *
@@ -43,10 +45,9 @@ class CreateVehicleListDocumentTest extends AbstractCommandHandlerTestCase
      * @param $isNi
      * @param $expectedTempateId
      * @param $expectedTemplateDescription
-     *
-     * @dataProvider dataProviderTestHandleCommandAll
      */
-    public function testHandleCommandAll($isDp, $isNi, $expectedTempateId, $expectedTemplateDescription)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestHandleCommandAll')]
+    public function testHandleCommandAll(mixed $isDp, mixed $isNi, mixed $expectedTempateId, mixed $expectedTemplateDescription): void
     {
         $data = [
             'id' => 111,
@@ -106,7 +107,7 @@ class CreateVehicleListDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dataProviderTestHandleCommandAll()
+    public static function dataProviderTestHandleCommandAll(): array
     {
         return [
             // is DP type, is NI, Expected description, Expected template ID,

@@ -31,6 +31,7 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

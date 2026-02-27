@@ -21,6 +21,7 @@ class PsvLicenceVehicle extends AbstractQueryHandler
 {
     protected $repoServiceName = 'LicenceVehicle';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $licenceVehicle = $this->getRepo()->fetchUsingId($query);

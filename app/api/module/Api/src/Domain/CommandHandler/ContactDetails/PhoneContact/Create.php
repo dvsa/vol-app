@@ -24,6 +24,7 @@ class Create extends AbstractCommandHandler
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(Command\CommandInterface $command)
     {
         $phoneContactRepo = $this->getRepo();

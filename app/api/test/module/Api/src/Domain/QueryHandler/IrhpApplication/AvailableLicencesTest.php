@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpApplication;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\IrhpApplication\AvailableLicences;
@@ -28,10 +30,8 @@ class AvailableLicencesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleQueryProvider
-     */
-    public function testHandleQuery($isMultiStock, $stockId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQueryProvider')]
+    public function testHandleQuery(mixed $isMultiStock, mixed $stockId): void
     {
         $permitTypeId = 777;
         $licenceId = 666;
@@ -96,7 +96,7 @@ class AvailableLicencesTest extends QueryHandlerTestCase
         $this->assertEquals($expectedReturnValues, $this->sut->handleQuery($originalQuery));
     }
 
-    public function dpHandleQueryProvider()
+    public static function dpHandleQueryProvider(): array
     {
         return [
             [true, null],

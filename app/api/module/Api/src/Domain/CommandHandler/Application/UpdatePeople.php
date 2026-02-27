@@ -24,6 +24,7 @@ final class UpdatePeople extends AbstractCommandHandler implements Transactioned
     protected $repoServiceName = 'Application';
     protected $extraRepos = ['Person', 'OrganisationPerson', 'ApplicationOrganisationPerson'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command \Dvsa\Olcs\Transfer\Command\Application\UpdatePeople */

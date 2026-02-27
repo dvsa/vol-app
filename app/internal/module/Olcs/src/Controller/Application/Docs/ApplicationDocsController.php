@@ -28,8 +28,6 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
     use Traits\DocumentSearchTrait;
     use Traits\DocumentActionTrait;
 
-    protected DocumentSubCategory $docSubCategoryDataService;
-    protected TranslationHelperService $translationHelper;
     protected $navigation;
 
     public function __construct(
@@ -41,8 +39,8 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
         OppositionHelperService $oppositionHelper,
         ComplaintsHelperService $complaintsHelper,
         FlashMessengerHelperService $flashMessengerHelper,
-        DocumentSubCategory $docSubCategoryDataService,
-        TranslationHelperService $translationHelper,
+        protected DocumentSubCategory $docSubCategoryDataService,
+        protected TranslationHelperService $translationHelper,
         $navigation
     ) {
         parent::__construct(
@@ -56,8 +54,6 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
             $flashMessengerHelper,
             $navigation
         );
-        $this->docSubCategoryDataService = $docSubCategoryDataService;
-        $this->translationHelper = $translationHelper;
     }
 
     /**
@@ -66,6 +62,7 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
+    #[\Override]
     protected function getDocumentTableName()
     {
         return 'documents';
@@ -77,6 +74,7 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
+    #[\Override]
     protected function getDocumentRoute()
     {
         return 'lva-application/documents';
@@ -88,6 +86,7 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
+    #[\Override]
     protected function getDocumentRouteParams()
     {
         return ['application' => $this->getFromRoute('application')];
@@ -118,6 +117,7 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return ViewModel
      */
+    #[\Override]
     protected function getDocumentView()
     {
         $filters = $this->getDocumentFilters();
@@ -132,6 +132,7 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
      *
      * @return \Laminas\Form\FormInterface
      */
+    #[\Override]
     protected function getConfiguredDocumentForm()
     {
         $filters = $this->getDocumentFilters();

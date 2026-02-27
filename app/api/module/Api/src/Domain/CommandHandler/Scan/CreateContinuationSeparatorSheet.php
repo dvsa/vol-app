@@ -17,6 +17,7 @@ final class CreateContinuationSeparatorSheet extends AbstractCommandHandler
 {
     protected $repoServiceName = 'Scan';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = $this->handleSideEffect(

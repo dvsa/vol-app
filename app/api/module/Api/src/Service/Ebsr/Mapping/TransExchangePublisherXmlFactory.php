@@ -22,6 +22,7 @@ class TransExchangePublisherXmlFactory implements FactoryInterface
      * @param array|null $options
      * @return Recursion
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Recursion
     {
         $publisherResponse = [

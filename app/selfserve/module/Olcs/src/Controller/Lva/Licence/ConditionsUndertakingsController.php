@@ -44,6 +44,7 @@ class ConditionsUndertakingsController extends Lva\AbstractController
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
+    #[\Override]
     public function indexAction()
     {
         $response = $this->handleQuery(

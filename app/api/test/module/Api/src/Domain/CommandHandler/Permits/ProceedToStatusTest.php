@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\Command\Permits\ProceedToStatus as ProceedToStatusCmd;
@@ -22,7 +24,8 @@ class ProceedToStatusTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrhpPermit::STATUS_AWAITING_PRINTING,
@@ -31,7 +34,7 @@ class ProceedToStatusTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $p1Id = 10;
         $p2Id = 11;

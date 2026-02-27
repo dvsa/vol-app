@@ -23,7 +23,7 @@ class PendingListTest extends QueryHandlerTestCase
     /**
      * tests retrieving a list of pending publications (status new or generated)
      */
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $count = 25;
         $query = Qry::create([]);

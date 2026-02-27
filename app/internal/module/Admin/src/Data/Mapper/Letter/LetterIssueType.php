@@ -15,6 +15,7 @@ class LetterIssueType implements MapperInterface
      * @param array $data Data from query
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data): array
     {
         return [

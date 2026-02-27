@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Lva\Adapters;
 
 use Common\Service\Cqrs\Command\CommandService;

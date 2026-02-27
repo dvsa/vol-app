@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\TranslateableTextParameter;
@@ -23,7 +25,7 @@ class TranslateableTextParameterTest extends MockeryTestCase
         $this->formatter = 'formatter';
     }
 
-    public function testGetRepresentationWithFormatter()
+    public function testGetRepresentationWithFormatter(): void
     {
         $translateableTextParameter = new TranslateableTextParameter($this->value, $this->formatter);
 
@@ -38,7 +40,7 @@ class TranslateableTextParameterTest extends MockeryTestCase
         );
     }
 
-    public function testGetRepresentationWithoutFormatter()
+    public function testGetRepresentationWithoutFormatter(): void
     {
         $translateableTextParameter = new TranslateableTextParameter($this->value, null);
 
@@ -52,7 +54,7 @@ class TranslateableTextParameterTest extends MockeryTestCase
         );
     }
 
-    public function testSetValue()
+    public function testSetValue(): void
     {
         $translateableTextParameter = new TranslateableTextParameter($this->value, $this->formatter);
 

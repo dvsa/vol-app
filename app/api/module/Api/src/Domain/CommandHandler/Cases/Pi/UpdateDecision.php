@@ -35,6 +35,7 @@ final class UpdateDecision extends AbstractCommandHandler implements Transaction
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var UpdateDecisionCmd $command */

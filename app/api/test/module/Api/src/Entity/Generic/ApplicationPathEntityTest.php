@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Generic;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,7 +25,7 @@ class ApplicationPathEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testGetAnswerValueByQuestionId()
+    public function testGetAnswerValueByQuestionId(): void
     {
         $questionId = 42;
         $answerValue = 'answer value';
@@ -46,7 +48,7 @@ class ApplicationPathEntityTest extends EntityTester
         );
     }
 
-    public function testGetAnswerValueByQuestionIdNull()
+    public function testGetAnswerValueByQuestionIdNull(): void
     {
         $questionId = 44;
 
@@ -62,10 +64,8 @@ class ApplicationPathEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpGetApplicationStepByQuestionId
-     */
-    public function testGetApplicationStepByQuestionId($applicationSteps, $questionId, $expectedApplicationStep)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetApplicationStepByQuestionId')]
+    public function testGetApplicationStepByQuestionId(mixed $applicationSteps, mixed $questionId, mixed $expectedApplicationStep): void
     {
         $applicationPath = new Entity();
         $applicationPath->setApplicationSteps($applicationSteps);
@@ -76,7 +76,7 @@ class ApplicationPathEntityTest extends EntityTester
         );
     }
 
-    public function dpGetApplicationStepByQuestionId()
+    public static function dpGetApplicationStepByQuestionId(): array
     {
         $applicationStep1 = m::mock(ApplicationStep::class);
         $applicationStep1->shouldReceive('getQuestion->getId')

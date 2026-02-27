@@ -32,7 +32,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -154,7 +154,8 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -177,7 +178,8 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     /**
      * Get the organisation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     */
     public function getOrganisation()
     {
         return $this->organisation;
@@ -200,7 +202,8 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -223,7 +226,8 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -246,7 +250,8 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     /**
      * Get the company or llp no
      *
-     * @return string     */
+     * @return string
+     */
     public function getCompanyOrLlpNo()
     {
         return $this->companyOrLlpNo;
@@ -269,7 +274,8 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     /**
      * Get the is closed
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsClosed()
     {
         return $this->isClosed;
@@ -292,7 +298,8 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -364,6 +371,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

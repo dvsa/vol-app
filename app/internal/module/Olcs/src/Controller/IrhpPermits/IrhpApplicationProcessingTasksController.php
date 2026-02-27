@@ -38,6 +38,7 @@ class IrhpApplicationProcessingTasksController extends AbstractIrhpPermitProcess
      * @see \Olcs\Controller\Traits\TaskActionTrait
      * @return string
      */
+    #[\Override]
     protected function getTaskActionType()
     {
         return 'irhpapplication';
@@ -49,6 +50,7 @@ class IrhpApplicationProcessingTasksController extends AbstractIrhpPermitProcess
      * @see \Olcs\Controller\Traits\TaskActionTrait
      * @return array
      */
+    #[\Override]
     protected function getTaskActionFilters()
     {
         return [

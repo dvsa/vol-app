@@ -36,6 +36,7 @@ final class InForceInterim extends AbstractCommandHandler implements Transaction
     /**
      * @param Cmd $command
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var ApplicationEntity $application */

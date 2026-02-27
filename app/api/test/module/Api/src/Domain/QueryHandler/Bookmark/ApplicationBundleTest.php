@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Application Bundle Test
  *
@@ -32,7 +34,7 @@ class ApplicationBundleTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 111, 'bundle' => ['foo' => ['bar']]]);
 
@@ -49,7 +51,7 @@ class ApplicationBundleTest extends QueryHandlerTestCase
         $this->assertEquals(['id' => 111], $this->sut->handleQuery($query));
     }
 
-    public function testHandleQueryNotFound()
+    public function testHandleQueryNotFound(): void
     {
         $query = Qry::create(['id' => 111, 'bundle' => ['foo' => ['bar']]]);
 
@@ -59,7 +61,7 @@ class ApplicationBundleTest extends QueryHandlerTestCase
         $this->assertEquals(null, $this->sut->handleQuery($query));
     }
 
-    public function testHandleQueryForCase()
+    public function testHandleQueryForCase(): void
     {
         $query = Qry::create(['case' => 111, 'bundle' => ['foo' => ['bar']]]);
 
@@ -78,7 +80,7 @@ class ApplicationBundleTest extends QueryHandlerTestCase
         $this->assertEquals(['id' => 111], $this->sut->handleQuery($query));
     }
 
-    public function testHandleQueryForCaseNotFound()
+    public function testHandleQueryForCaseNotFound(): void
     {
         $query = Qry::create(['case' => 111, 'bundle' => ['foo' => ['bar']]]);
 
@@ -88,7 +90,7 @@ class ApplicationBundleTest extends QueryHandlerTestCase
         $this->assertEquals(null, $this->sut->handleQuery($query));
     }
 
-    public function testHandleQueryNoParams()
+    public function testHandleQueryNoParams(): void
     {
         $query = Qry::create([]);
 

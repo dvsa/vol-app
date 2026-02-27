@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\DataRetention;
 
 use Dvsa\Olcs\Transfer\Command\DataRetention\DelayItems as DelayItemsCommand;
@@ -22,7 +24,7 @@ class DelayItemsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testDelayItemsForMultiple()
+    public function testDelayItemsForMultiple(): void
     {
         $command = DelayItemsCommand::create(
             [

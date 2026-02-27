@@ -17,6 +17,7 @@ class TaskAllocationRule implements MapperInterface
      *
      * @param array $data
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         if (!isset($data['id'])) {

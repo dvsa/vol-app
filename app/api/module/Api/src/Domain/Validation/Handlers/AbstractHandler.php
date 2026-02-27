@@ -23,5 +23,6 @@ abstract class AbstractHandler implements HandlerInterface, FactoryInterface
     /**
      * @inheritdoc
      */
+    #[\Override]
     abstract public function isValid($dto);
 }

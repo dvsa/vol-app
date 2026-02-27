@@ -52,6 +52,7 @@ final class UpdateMyAccount extends AbstractUserCommandHandler implements
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $data = $command->getArrayCopy();
@@ -208,6 +209,7 @@ final class UpdateMyAccount extends AbstractUserCommandHandler implements
         $this->getRepo('Address')->save($addressEntity);
         return $addressEntity;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

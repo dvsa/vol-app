@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Cache;
 
 use Dvsa\Olcs\Api\Domain\Command\Cache\ClearForOrganisation as Cmd;
@@ -28,7 +30,7 @@ class ClearForOrganisationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $orgId = 999;
         $orgName = 'org name';

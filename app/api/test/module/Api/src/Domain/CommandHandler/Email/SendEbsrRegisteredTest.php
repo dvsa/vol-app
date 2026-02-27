@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Send Ebsr Registered Email Test
  *
@@ -14,13 +16,13 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrRegistered;
 
 /**
  * Send Ebsr Registered Email Test
- * @group ebsrEmails
  *
  * @author Craig R <uk@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\Group('ebsrEmails')]
 class SendEbsrRegisteredTest extends SendEbsrRegCancelEmailTestAbstract
 {
     protected $template = 'ebsr-registered';
     protected $sutClass = \Dvsa\Olcs\Api\Domain\CommandHandler\Email\SendEbsrRegistered::class;
-    protected $cmdClass = SendEbsrRegistered::class;
+    protected const CMD_CLASS = SendEbsrRegistered::class;
 }

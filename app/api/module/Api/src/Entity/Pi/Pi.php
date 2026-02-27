@@ -371,6 +371,7 @@ class Pi extends AbstractPi implements CloseableInterface, ReopenableInterface
     /**
      * Close the Pi
      */
+    #[\Override]
     public function close()
     {
         if (!$this->canClose()) {
@@ -383,6 +384,7 @@ class Pi extends AbstractPi implements CloseableInterface, ReopenableInterface
     /**
      * Reopen the Pi
      */
+    #[\Override]
     public function reopen()
     {
         if (!$this->canReopen()) {
@@ -397,6 +399,7 @@ class Pi extends AbstractPi implements CloseableInterface, ReopenableInterface
      *
      * @return bool
      */
+    #[\Override]
     public function canClose()
     {
         //if latest pi hearing is cancelled
@@ -461,6 +464,7 @@ class Pi extends AbstractPi implements CloseableInterface, ReopenableInterface
      *
      * return bool
      */
+    #[\Override]
     public function isClosed()
     {
         return $this->canReopen();
@@ -471,6 +475,7 @@ class Pi extends AbstractPi implements CloseableInterface, ReopenableInterface
      *
      * @return bool
      */
+    #[\Override]
     public function canReopen()
     {
         return (bool) $this->closedDate != null;
@@ -502,6 +507,7 @@ class Pi extends AbstractPi implements CloseableInterface, ReopenableInterface
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedBundleValues()
     {
         return [

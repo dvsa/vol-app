@@ -26,8 +26,6 @@ class BusProcessingTaskController extends AbstractController implements BusRegCo
         Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
     }
 
-    protected TreeRouteStack $router;
-
     protected string $helperClass;
 
     public function __construct(
@@ -35,7 +33,7 @@ class BusProcessingTaskController extends AbstractController implements BusRegCo
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        TreeRouteStack $router,
+        protected TreeRouteStack $router,
         protected SubCategory $subCategoryDataService
     ) {
         parent::__construct(
@@ -44,7 +42,6 @@ class BusProcessingTaskController extends AbstractController implements BusRegCo
             $tableFactory,
             $viewHelperManager
         );
-        $this->router = $router;
     }
 
     /**
@@ -54,6 +51,7 @@ class BusProcessingTaskController extends AbstractController implements BusRegCo
      *
      * @return string
      */
+    #[\Override]
     protected function getTaskActionType()
     {
         return 'busReg';
@@ -66,6 +64,7 @@ class BusProcessingTaskController extends AbstractController implements BusRegCo
      *
      * @return array
      */
+    #[\Override]
     protected function getTaskActionFilters()
     {
         return [

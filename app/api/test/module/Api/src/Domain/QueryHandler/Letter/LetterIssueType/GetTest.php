@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Letter\LetterIssueType;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Letter\LetterIssueType\Get as QueryHandler;
@@ -21,7 +23,7 @@ class GetTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $data = ['id' => 123];
         $query = Qry::create($data);

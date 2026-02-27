@@ -15,6 +15,7 @@ class AnswersSummaryGeneratorFactory implements FactoryInterface
      * @param array|null $options
      * @return AnswersSummaryGenerator
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AnswersSummaryGenerator
     {
         $answersSummaryGenerator = new AnswersSummaryGenerator(

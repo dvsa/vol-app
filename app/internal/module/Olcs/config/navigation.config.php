@@ -1597,6 +1597,13 @@ $nav = [
             'route' => 'letter/preview',
             'use_route_match' => true,
         ],
+        [
+            'id' => 'letter_edit',
+            'label' => 'Edit letter sections',
+            'class' => 'govuk-link--no-visited-state',
+            'route' => 'letter/edit',
+            'use_route_match' => true,
+        ],
     ]
 ];
 

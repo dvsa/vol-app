@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Document Test
  *
@@ -42,7 +44,8 @@ class CreateDocumentSpecificTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -59,7 +62,7 @@ class CreateDocumentSpecificTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'identifier' => 'ABCDEF',
@@ -115,7 +118,7 @@ class CreateDocumentSpecificTest extends AbstractCommandHandlerTestCase
     /**
      * Tests the extra side effect is thrown when document is EBSR pack
      */
-    public function testHandleCommandEbsr()
+    public function testHandleCommandEbsr(): void
     {
         $data = [
             'identifier' => 'ABCDEF',
@@ -169,7 +172,7 @@ class CreateDocumentSpecificTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandInternal()
+    public function testHandleCommandInternal(): void
     {
         $data = [
             'identifier' => 'ABCDEF',
@@ -218,7 +221,7 @@ class CreateDocumentSpecificTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandIsExternalSet()
+    public function testHandleCommandIsExternalSet(): void
     {
         $data = [
             'identifier' => 'ABCDEF',

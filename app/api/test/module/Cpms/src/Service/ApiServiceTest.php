@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cpms\Service;
 
 use Dvsa\Olcs\Cpms\Authenticate\CpmsIdentityProvider;
@@ -77,7 +79,7 @@ class ApiServiceTest extends TestCase
         ]);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $getRequestResponseBody = json_encode(['payment_status' => 'success']);
 
@@ -114,7 +116,7 @@ class ApiServiceTest extends TestCase
         $this->assertEquals(['Bearer LKAJDA01KDJKDK32AJNDK212AJ'], $this->getLastRequest()->getHeader('Authorization'));
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $postRequestResponseBody = json_encode(['status' => 'success']);
 
@@ -141,7 +143,7 @@ class ApiServiceTest extends TestCase
         $this->assertEquals(['Bearer LKAJDA01KDJKDK32AJNDK212AJ'], $this->getLastRequest()->getHeader('Authorization'));
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $postRequestResponseBody = json_encode(['status' => 'success']);
 
@@ -167,7 +169,7 @@ class ApiServiceTest extends TestCase
         $this->assertEquals(['Bearer LKAJDA01KDJKDK32AJNDK212AJ'], $this->getLastRequest()->getHeader('Authorization'));
     }
 
-    public function testGetCpmsAccessTokenSuccessful()
+    public function testGetCpmsAccessTokenSuccessful(): void
     {
         $this->appendToHandler(200, [], $this->accessTokenResponse);
         $this->appendToHandler(200, [], json_encode(['status' => 'successful']));
@@ -183,7 +185,7 @@ class ApiServiceTest extends TestCase
         $this->assertEquals(['status' => 'successful'], $response);
     }
 
-    public function testGetCpmsAccessTokenFailureWithSuccessfulResponse()
+    public function testGetCpmsAccessTokenFailureWithSuccessfulResponse(): void
     {
         $this->appendToHandler(200, [], json_encode(['code' => '105', 'message' => 'failed']));
 
@@ -198,7 +200,7 @@ class ApiServiceTest extends TestCase
         $this->assertEquals(['message' => 'failed', 'code' => 105], $response);
     }
 
-    public function testGetCpmsAccessTokenFailureWithBadResponse()
+    public function testGetCpmsAccessTokenFailureWithBadResponse(): void
     {
 
         $this->appendToHandler(400, [], json_encode(['code' => '105', 'message' => 'cannot process payment']));
@@ -214,7 +216,7 @@ class ApiServiceTest extends TestCase
         $this->assertEquals('cannot process payment', $response);
     }
 
-    public function testGetCpmsAccessTokenFailureWithNonGuzzleException()
+    public function testGetCpmsAccessTokenFailureWithNonGuzzleException(): void
     {
         $mockHttpClient = m::mock(HttpClient::class);
         $mockHttpClient->shouldReceive('getClientOptions')->andReturn($this->getClientOptions());
@@ -236,7 +238,7 @@ class ApiServiceTest extends TestCase
         $this->assertEquals('This is a non-guzzle exception', $response);
     }
 
-    public function testReturnErrorMessageWhenResponse503()
+    public function testReturnErrorMessageWhenResponse503(): void
     {
         $this->appendToHandler(503, [], json_encode(['code' => '105', 'message' => null]));
 
@@ -250,7 +252,7 @@ class ApiServiceTest extends TestCase
         $this->assertStringContainsString("503 Service Unavailable", $response);
     }
 
-    public function testEmptyResponse()
+    public function testEmptyResponse(): void
     {
          $this->appendToHandler(200, [], $this->accessTokenResponse);
          $this->appendToHandler(200, [], '');
@@ -268,7 +270,7 @@ class ApiServiceTest extends TestCase
 
 
 
-    public function testReturnErrorMessageWhenResponseTimeout()
+    public function testReturnErrorMessageWhenResponseTimeout(): void
     {
         $this->mockHandler->append(new RequestException("Error: Request time out", new Request('GET', '/some-uri')));
 

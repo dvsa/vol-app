@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Surrender;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Surrender\PreviousLicenceStatus as QryHandler;
@@ -19,7 +21,7 @@ class PreviousLicenceStatusTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = PreviousLicenceStatusQuery::create(['id' => 1]);
         $this->repoMap['EventHistory']->shouldReceive('fetchPreviousLicenceStatus')

@@ -27,6 +27,7 @@ final class GenerateCheckFkIntegritySql extends AbstractQueryHandler
      * @return array[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $constraintStatement = $this->pdo->prepare(
@@ -130,6 +131,7 @@ final class GenerateCheckFkIntegritySql extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

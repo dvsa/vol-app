@@ -35,7 +35,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -147,7 +147,8 @@ abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -170,7 +171,8 @@ abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, J
     /**
      * Get the irfo fee type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getIrfoFeeType()
     {
         return $this->irfoFeeType;
@@ -193,7 +195,8 @@ abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, J
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -216,7 +219,8 @@ abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, J
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -239,7 +243,8 @@ abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, J
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -262,7 +267,8 @@ abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, J
     /**
      * Get the section code
      *
-     * @return string     */
+     * @return string
+     */
     public function getSectionCode()
     {
         return $this->sectionCode;
@@ -285,7 +291,8 @@ abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, J
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -294,6 +301,7 @@ abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, J
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

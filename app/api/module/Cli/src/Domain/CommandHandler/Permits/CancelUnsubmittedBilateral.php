@@ -29,6 +29,7 @@ class CancelUnsubmittedBilateral extends AbstractCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $openWindows = $this->generateOpenWindows();

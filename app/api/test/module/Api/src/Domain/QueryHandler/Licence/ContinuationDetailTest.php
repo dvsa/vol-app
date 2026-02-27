@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ContinuationDetailTest
  *
@@ -31,7 +33,7 @@ class ContinuationDetailTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Query::create(['id' => 716]);
 
@@ -61,7 +63,7 @@ class ContinuationDetailTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryNoContinuationDetail()
+    public function testHandleQueryNoContinuationDetail(): void
     {
         $query = Query::create(['id' => 716]);
 

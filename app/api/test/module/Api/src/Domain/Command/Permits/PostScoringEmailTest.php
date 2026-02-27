@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Command\Permits;
 
 use Dvsa\Olcs\Api\Domain\Command\Permits\PostScoringEmail;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\Command\Permits\PostScoringEmail;
  */
 class PostScoringEmailTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $sut = PostScoringEmail::create(
             [

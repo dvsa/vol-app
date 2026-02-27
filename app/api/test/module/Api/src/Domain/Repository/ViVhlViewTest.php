@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * VI Vehicle view test
  *
@@ -28,7 +30,7 @@ class ViVhlViewTest extends RepositoryTestCase
         $this->setUpSut(ViVhlViewRepo::class);
     }
 
-    public function testFetchDiscsToPrint()
+    public function testFetchDiscsToPrint(): void
     {
         $mockQb = m::mock(QueryBuilder::class)
             ->shouldReceive('select')
@@ -62,7 +64,7 @@ class ViVhlViewTest extends RepositoryTestCase
         $this->assertEquals(['result'], $this->sut->fetchForExport());
     }
 
-    public function testClearLicenceVehiclesViIndicators()
+    public function testClearLicenceVehiclesViIndicators(): void
     {
         $params = [
             [
@@ -75,7 +77,7 @@ class ViVhlViewTest extends RepositoryTestCase
         $this->sut->clearLicenceVehiclesViIndicators($params);
     }
 
-    public function testClearLicenceVehiclesViIndicatorsException()
+    public function testClearLicenceVehiclesViIndicatorsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\RuntimeException::class);
 

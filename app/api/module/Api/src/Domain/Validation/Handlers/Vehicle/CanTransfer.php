@@ -20,6 +20,7 @@ class CanTransfer extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         // Can access source licence

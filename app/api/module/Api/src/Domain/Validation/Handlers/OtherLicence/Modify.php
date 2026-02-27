@@ -18,6 +18,7 @@ class Modify extends AbstractHandler implements AuthAwareInterface
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         if ($this->isInternalUser()) {

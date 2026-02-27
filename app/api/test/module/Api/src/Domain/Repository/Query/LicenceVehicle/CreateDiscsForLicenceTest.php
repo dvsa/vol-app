@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\LicenceVehicle;
 
 use Dvsa\Olcs\Api\Domain\Repository\Query\LicenceVehicle\CreateDiscsForLicence;
@@ -49,7 +51,7 @@ class CreateDiscsForLicenceTest extends AbstractDbQueryTestCase
         ]
     ];
 
-    public function paramProvider()
+    public static function paramProvider(): array
     {
         return [
             [
@@ -65,12 +67,12 @@ class CreateDiscsForLicenceTest extends AbstractDbQueryTestCase
         ];
     }
 
-    protected function getSut()
+    protected function getSut(): CreateDiscsForLicence
     {
         return new CreateDiscsForLicence();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return 'INSERT INTO goods_disc (licence_vehicle_id, created_on, created_by) '
         . 'SELECT lv.id, NOW(), :currentUserId '

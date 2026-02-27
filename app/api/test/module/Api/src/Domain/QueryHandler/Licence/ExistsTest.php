@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Licence;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Licence\Exists as QueryHandler;
@@ -28,7 +30,7 @@ class ExistsTest extends QueryHandlerTestCase
     /**
      * tests handle query
      */
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $licNo = 'PB2141421';
         $licenceExists = true;

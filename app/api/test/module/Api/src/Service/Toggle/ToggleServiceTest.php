@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Toggle;
 
 use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
@@ -12,7 +14,7 @@ use Qandidate\Toggle\ToggleManager;
  */
 class ToggleServiceTest extends \PHPUnit\Framework\TestCase
 {
-    public function testEnabledAndDisabled()
+    public function testEnabledAndDisabled(): void
     {
         $testFeatures = [
             'feature1' => [

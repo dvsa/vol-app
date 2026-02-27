@@ -22,6 +22,7 @@ final class Create extends AbstractCommandHandler
 {
     protected $repoServiceName = 'Person';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $person Person */

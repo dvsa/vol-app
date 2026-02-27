@@ -27,6 +27,7 @@ final class ValidatingReprintCaller extends AbstractCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $licenceId = $command->getLicence();

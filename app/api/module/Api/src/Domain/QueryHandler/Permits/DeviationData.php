@@ -20,6 +20,7 @@ class DeviationData extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $sourceValues = $query->getSourceValues();

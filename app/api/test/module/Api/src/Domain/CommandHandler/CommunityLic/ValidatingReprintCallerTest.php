@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\CommunityLic;
 
 use Dvsa\Olcs\Api\Domain\Command\CommunityLic\GenerateCoverLetter as GenerateCoverLetterCmd;
@@ -26,7 +28,7 @@ class ValidatingReprintCallerTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $licenceId = 71;
         $userId = 491;
@@ -110,7 +112,7 @@ class ValidatingReprintCallerTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testSomeValidCommunityLicences()
+    public function testSomeValidCommunityLicences(): void
     {
         $licenceId = 42;
         $userId = 612;
@@ -280,7 +282,7 @@ class ValidatingReprintCallerTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testNoValidCommunityLicencesNoReprint()
+    public function testNoValidCommunityLicencesNoReprint(): void
     {
         $licenceId = 67;
         $userId = 155;

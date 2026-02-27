@@ -38,6 +38,7 @@ class RunScoring extends AbstractCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->stockId = $command->getId();

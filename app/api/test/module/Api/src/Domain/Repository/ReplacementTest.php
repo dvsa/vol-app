@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
@@ -20,7 +22,7 @@ class ReplacementTest extends RepositoryTestCase
         $this->setUpSut(ReplacementRepo::class);
     }
 
-    public function testFetchAll()
+    public function testFetchAll(): void
     {
         $hydrationMode = Query::HYDRATE_ARRAY;
         $alias = 'r';

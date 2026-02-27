@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Variation Psv Oc Total Auth Review Service Test
  *
@@ -42,15 +44,13 @@ class VariationPsvOcTotalAuthReviewServiceTest extends MockeryTestCase
         $this->sut = new VariationPsvOcTotalAuthReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider dpGetConfigFromData
-     */
-    public function testGetConfigFromData($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetConfigFromData')]
+    public function testGetConfigFromData(mixed $data, mixed $expected): void
     {
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function dpGetConfigFromData()
+    public static function dpGetConfigFromData(): array
     {
         return [
             'without changes' => [

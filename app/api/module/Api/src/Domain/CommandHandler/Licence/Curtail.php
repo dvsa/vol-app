@@ -25,6 +25,7 @@ final class Curtail extends AbstractCommandHandler implements TransactionedInter
 {
     protected $repoServiceName = 'Licence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command \Dvsa\Olcs\Transfer\Command\Licence\CurtailLicence */

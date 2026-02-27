@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * TxcInboxList Test
  */
@@ -43,7 +45,7 @@ class TxcInboxListTest extends QueryHandlerTestCase
      * @param null $organisationId
      * @return m\Mock
      */
-    private function getCurrentUser($localAuthorityId = null, $organisationId = null)
+    private function getCurrentUser(mixed $localAuthorityId = null, mixed $organisationId = null): m\MockInterface
     {
         $mockUser = m::mock(\Dvsa\Olcs\Api\Entity\User\User::class)->makePartial();
         $mockUser->shouldReceive('getUser')
@@ -73,7 +75,7 @@ class TxcInboxListTest extends QueryHandlerTestCase
         return $mockUser;
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create([]);
 

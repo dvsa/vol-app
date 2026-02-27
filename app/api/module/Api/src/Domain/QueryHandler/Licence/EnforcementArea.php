@@ -20,6 +20,7 @@ class EnforcementArea extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Licence';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $licence = $this->getRepo()->fetchUsingId($query);

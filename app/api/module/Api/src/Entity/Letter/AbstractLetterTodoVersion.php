@@ -32,7 +32,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLetterTodoVersion implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLetterTodoVersion implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -171,7 +171,8 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -194,7 +195,8 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     /**
      * Get the letter todo
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterTodo     */
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterTodo
+     */
     public function getLetterTodo()
     {
         return $this->letterTodo;
@@ -217,7 +219,8 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -240,7 +243,8 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -263,7 +267,8 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -286,7 +291,8 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     /**
      * Get the help text
      *
-     * @return string     */
+     * @return string
+     */
     public function getHelpText()
     {
         return $this->helpText;
@@ -309,7 +315,8 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     /**
      * Get the is locked
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsLocked()
     {
         return $this->isLocked;
@@ -334,7 +341,8 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getPublishFrom($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -361,7 +369,8 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     /**
      * Get the version number
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersionNumber()
     {
         return $this->versionNumber;
@@ -384,7 +393,8 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -393,6 +403,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

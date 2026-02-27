@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractPhoneContact implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractPhoneContact implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -177,7 +177,8 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -200,7 +201,8 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Get the phone contact type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getPhoneContactType()
     {
         return $this->phoneContactType;
@@ -223,7 +225,8 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Get the contact details
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     */
     public function getContactDetails()
     {
         return $this->contactDetails;
@@ -246,7 +249,8 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -269,7 +273,8 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -292,7 +297,8 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Get the phone number
      *
-     * @return string     */
+     * @return string
+     */
     public function getPhoneNumber()
     {
         return $this->phoneNumber;
@@ -315,7 +321,8 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Get the details
      *
-     * @return string     */
+     * @return string
+     */
     public function getDetails()
     {
         return $this->details;
@@ -338,7 +345,8 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -361,7 +369,8 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -384,7 +393,8 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Get the olbs type
      *
-     * @return string     */
+     * @return string
+     */
     public function getOlbsType()
     {
         return $this->olbsType;
@@ -393,6 +403,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

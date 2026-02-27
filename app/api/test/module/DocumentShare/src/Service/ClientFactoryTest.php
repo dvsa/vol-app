@@ -31,15 +31,13 @@ class ClientFactoryTest extends MockeryTestCase
 
         $mockContainer = m::mock(ContainerInterface::class);
         $mockContainer->expects('get')->with('Configuration')->andReturn($config);
-        $mockContainer->expects('get')->with('Logger')->andReturn($this->createMock(Logger::class));
+        $mockContainer->expects('get')->with('Logger')->andReturn($this->createStub(\Dvsa\OlcsTest\SafeLogger::class));
 
         $service = $sut->__invoke($mockContainer, WebDavClient::class);
         $this->assertInstanceOf(WebDavClient::class, $service);
     }
 
-    /**
-     * @dataProvider dpProvideMissingConfig
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpProvideMissingConfig')]
     public function testMissingConfigExceptions(array $config, string $exceptionMessage): void
     {
         $this->expectException(\RuntimeException::class);
@@ -51,7 +49,7 @@ class ClientFactoryTest extends MockeryTestCase
         $sut->__invoke($mockContainer, WebDavClient::class);
     }
 
-    public function dpProvideMissingConfig(): array
+    public static function dpProvideMissingConfig(): array
     {
         $configWebDavMissingHttpOption = [
             'document_share' => [

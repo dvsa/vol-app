@@ -2,8 +2,6 @@
 
 namespace Olcs\Controller\Letter;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
-use Common\FeatureToggle;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -17,7 +15,7 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
  * Letter Generation Controller
  * Handles database-driven letter creation workflow
  */
-class LetterGenerationController extends AbstractInternalController implements ToggleAwareInterface, LeftViewProvider
+class LetterGenerationController extends AbstractInternalController implements LeftViewProvider
 {
     /**
      * Left sidebar view for preview page
@@ -25,20 +23,12 @@ class LetterGenerationController extends AbstractInternalController implements T
     protected ?ViewModel $leftView = null;
 
     /**
-     * Feature toggle configuration
-     */
-    protected $toggleConfig = [
-        'default' => [
-            FeatureToggle::LETTERS_DATABASE_DRIVEN,
-        ],
-    ];
-
-    /**
      * Inline scripts for form handling
      */
     protected $inlineScripts = [
         'createAction' => ['forms/letter-generation'],
         'previewAction' => ['forms/letter-preview'],
+        'editAction' => ['forms/letter-edit'],
     ];
 
     /**
@@ -68,6 +58,7 @@ class LetterGenerationController extends AbstractInternalController implements T
      *
      * @return ViewModel|null
      */
+    #[\Override]
     public function getLeftView(): ?ViewModel
     {
         return $this->leftView;
@@ -114,10 +105,14 @@ class LetterGenerationController extends AbstractInternalController implements T
         // Build accordion data structure with issue types and their issues
         $accordionData = $this->buildAccordionData();
 
+        // Fetch appendices for this letter type
+        $appendicesData = $this->fetchAppendicesForLetterType($templateId);
+
         $view = new ViewModel([
             'templateId' => $templateId,
             'entityContext' => $entityContext,
             'accordionData' => $accordionData,
+            'appendicesData' => $appendicesData,
             'queryParams' => $queryParams,
         ]);
 
@@ -162,10 +157,10 @@ class LetterGenerationController extends AbstractInternalController implements T
 
         $entityContext = $this->extractEntityContext($allParams);
 
-
         $commandData = [
             'letterType' => $letterTypeId,
             'selectedIssues' => $postData['letterIssues'] ?? [],
+            'selectedAppendices' => $postData['letterAppendices'] ?? [],
         ];
 
         if (!empty($entityContext['type'])) {
@@ -175,7 +170,6 @@ class LetterGenerationController extends AbstractInternalController implements T
         $command = \Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Generate::create($commandData);
 
         $response = $this->handleCommand($command);
-
 
         if (!$response->isOk()) {
             $messages = $response->getResult()['messages'] ?? [];
@@ -244,10 +238,24 @@ class LetterGenerationController extends AbstractInternalController implements T
             ];
         }
 
+        // Add editable appendices to sections list
+        $appendicesList = [];
+        foreach ($result['letterInstanceAppendices'] ?? [] as $appendix) {
+            $version = $appendix['letterAppendixVersion'] ?? [];
+            if (($version['appendixType'] ?? 'pdf') === 'editable') {
+                $appendicesList[] = [
+                    'id' => $appendix['id'],
+                    'name' => $version['name'] ?? 'Appendix',
+                    'type' => 'appendix',
+                ];
+            }
+        }
+
         // Set left sidebar BEFORE calling viewBuilder (LeftViewProvider interface)
         $sidebarView = new ViewModel([
             'letterInstance' => $result,
             'sectionsList' => $sectionsList,
+            'appendicesList' => $appendicesList,
         ]);
         $sidebarView->setTemplate('pages/letter/preview-sidebar');
         $this->leftView = $sidebarView;
@@ -256,6 +264,7 @@ class LetterGenerationController extends AbstractInternalController implements T
             'letterInstanceId' => $letterInstanceId,
             'letterInstance' => $result,
             'sectionsList' => $sectionsList,
+            'appendicesList' => $appendicesList,
         ]);
 
         $view->setTemplate('pages/letter/preview');
@@ -310,6 +319,321 @@ class LetterGenerationController extends AbstractInternalController implements T
         $httpResponse->setContent($result['previewHtml'] ?? '');
         $httpResponse->getHeaders()->addHeaderLine('Content-Type', 'text/html; charset=utf-8');
         return $httpResponse;
+    }
+
+    /**
+     * Edit letter sections action
+     *
+     * Query parameters expected:
+     * - id: Letter Instance ID (required)
+     * - sections[]: Selected issue IDs to edit (required)
+     *
+     * @return ViewModel|Response
+     */
+    #[\Override]
+    public function editAction()
+    {
+        $letterInstanceId = $this->params()->fromQuery('id');
+        $selectedSections = $this->params()->fromQuery('sections', []);
+        $selectedAppendices = $this->params()->fromQuery('appendices', []);
+
+        if (!$letterInstanceId) {
+            $this->flashMessengerHelperService->addErrorMessage('Letter instance ID is required');
+            return $this->redirect()->toRoute('dashboard');
+        }
+
+        if (empty($selectedSections) && empty($selectedAppendices)) {
+            $this->flashMessengerHelperService->addErrorMessage('No sections or appendices selected');
+            return $this->redirect()->toUrl('/letter/preview?id=' . urlencode($letterInstanceId));
+        }
+
+        $letterInstance = $this->fetchLetterInstanceById((int) $letterInstanceId);
+
+        if (!$letterInstance) {
+            $this->flashMessengerHelperService->addErrorMessage('Letter not found');
+            return $this->redirect()->toRoute('dashboard');
+        }
+
+        $groupedIssues = [];
+        foreach ($letterInstance['letterInstanceIssues'] ?? [] as $issue) {
+            if (!in_array($issue['id'], $selectedSections)) {
+                continue;
+            }
+
+            $issueVersion = $issue['letterIssueVersion'] ?? [];
+            $issueType = $issueVersion['letterIssueType'] ?? null;
+            $typeName = $issueType['name'] ?? 'Other';
+            $typeId = $issueType['id'] ?? 0;
+
+            if (!isset($groupedIssues[$typeId])) {
+                $groupedIssues[$typeId] = [
+                    'typeName' => $typeName,
+                    'issues' => [],
+                ];
+            }
+
+            $editedContent = $issue['editedContent'] ?? null;
+            $defaultContent = $issueVersion['defaultBodyContent'] ?? null;
+
+            if (!empty($editedContent)) {
+                $effectiveContent = is_string($editedContent)
+                    ? $editedContent
+                    : json_encode($editedContent);
+            } elseif (!empty($defaultContent)) {
+                $effectiveContent = is_string($defaultContent)
+                    ? $defaultContent
+                    : json_encode($defaultContent);
+            } else {
+                $effectiveContent = json_encode(['blocks' => [], 'version' => '2.28.2']);
+            }
+
+            $groupedIssues[$typeId]['issues'][] = [
+                'id' => $issue['id'],
+                'heading' => $issueVersion['heading'] ?? 'Issue',
+                'content' => $effectiveContent,
+                'version' => $issue['version'] ?? 1,
+            ];
+        }
+
+        // Build editable appendix data
+        $groupedAppendices = [];
+        foreach ($letterInstance['letterInstanceAppendices'] ?? [] as $appendix) {
+            if (!in_array($appendix['id'], $selectedAppendices)) {
+                continue;
+            }
+
+            $appendixVersion = $appendix['letterAppendixVersion'] ?? [];
+            if (($appendixVersion['appendixType'] ?? 'pdf') !== 'editable') {
+                continue;
+            }
+
+            $editedContent = $appendix['editedContent'] ?? null;
+            $defaultContent = $appendixVersion['defaultContent'] ?? null;
+
+            if (!empty($editedContent)) {
+                $effectiveContent = is_string($editedContent)
+                    ? $editedContent
+                    : json_encode($editedContent);
+            } elseif (!empty($defaultContent)) {
+                $effectiveContent = is_string($defaultContent)
+                    ? $defaultContent
+                    : json_encode($defaultContent);
+            } else {
+                $effectiveContent = json_encode(['blocks' => [], 'version' => '2.28.2']);
+            }
+
+            $groupedAppendices[] = [
+                'id' => $appendix['id'],
+                'name' => $appendixVersion['name'] ?? 'Appendix',
+                'content' => $effectiveContent,
+                'version' => $appendix['version'] ?? 1,
+            ];
+        }
+
+        $view = new ViewModel([
+            'letterInstanceId' => $letterInstanceId,
+            'letterInstance' => $letterInstance,
+            'groupedIssues' => $groupedIssues,
+            'groupedAppendices' => $groupedAppendices,
+        ]);
+
+        $view->setTemplate('pages/letter/edit');
+
+        // Set navigation for breadcrumbs
+        $this->navigationId = 'letter_edit';
+        $this->setNavigationCurrentLocation();
+
+        $this->placeholder()->setPlaceholder('pageTitle', 'Edit letter sections');
+
+        return $this->viewBuilder()->buildView($view);
+    }
+
+    /**
+     * Save issue content action - AJAX endpoint
+     *
+     * Accepts POST with JSON body: { issueId, editedContent, version }
+     *
+     * @return Response
+     */
+    public function saveIssueContentAction()
+    {
+        if (!$this->getRequest()->isPost()) {
+            return $this->jsonError('Method not allowed', 405);
+        }
+
+        $body = json_decode($this->getRequest()->getContent(), true);
+
+        if (empty($body['issueId']) || !isset($body['editedContent']) || empty($body['version'])) {
+            return $this->jsonError('Missing required fields: issueId, editedContent, version');
+        }
+
+        $command = \Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceIssue\UpdateContent::create([
+            'id' => (int) $body['issueId'],
+            'editedContent' => is_string($body['editedContent'])
+                ? $body['editedContent']
+                : json_encode($body['editedContent']),
+            'version' => (int) $body['version'],
+        ]);
+
+        $response = $this->handleCommand($command);
+
+        if (!$response->isOk()) {
+            $messages = $response->getResult()['messages'] ?? [];
+            $errorMessage = is_array($messages) ? implode(', ', $messages) : $messages;
+            return $this->jsonError('Failed to save: ' . $errorMessage);
+        }
+
+        $result = $response->getResult();
+
+        return $this->jsonSuccess([
+            'issueId' => (int) $body['issueId'],
+            'message' => $result['messages'][0] ?? 'Saved successfully',
+            'version' => ($body['version'] + 1),
+        ]);
+    }
+
+    /**
+     * Save appendix content action - AJAX endpoint
+     *
+     * Accepts POST with JSON body: { appendixId, editedContent, version }
+     *
+     * @return Response
+     */
+    public function saveAppendixContentAction()
+    {
+        if (!$this->getRequest()->isPost()) {
+            return $this->jsonError('Method not allowed', 405);
+        }
+
+        $body = json_decode($this->getRequest()->getContent(), true);
+
+        if (empty($body['appendixId']) || !isset($body['editedContent']) || empty($body['version'])) {
+            return $this->jsonError('Missing required fields: appendixId, editedContent, version');
+        }
+
+        $command = \Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceAppendix\UpdateContent::create([
+            'id' => (int) $body['appendixId'],
+            'editedContent' => is_string($body['editedContent'])
+                ? $body['editedContent']
+                : json_encode($body['editedContent']),
+            'version' => (int) $body['version'],
+        ]);
+
+        $response = $this->handleCommand($command);
+
+        if (!$response->isOk()) {
+            $messages = $response->getResult()['messages'] ?? [];
+            $errorMessage = is_array($messages) ? implode(', ', $messages) : $messages;
+            return $this->jsonError('Failed to save: ' . $errorMessage);
+        }
+
+        $result = $response->getResult();
+
+        return $this->jsonSuccess([
+            'appendixId' => (int) $body['appendixId'],
+            'message' => $result['messages'][0] ?? 'Saved successfully',
+            'version' => ($body['version'] + 1),
+        ]);
+    }
+
+    /**
+     * Prepare to send action - converts letter to PDF and creates Document
+     *
+     * Accepts POST with JSON body: { letterInstanceId, docTemplate }
+     * Returns JSON: { success, documentId, printUrl }
+     *
+     * @return Response
+     */
+    public function prepareToSendAction()
+    {
+        if (!$this->getRequest()->isPost()) {
+            return $this->jsonError('Method not allowed', 405);
+        }
+
+        $body = json_decode($this->getRequest()->getContent(), true);
+
+        if (empty($body['letterInstanceId']) || empty($body['docTemplate'])) {
+            return $this->jsonError('Missing required fields: letterInstanceId, docTemplate');
+        }
+
+        $command = \Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\PrepareToSend::create([
+            'id' => (int) $body['letterInstanceId'],
+            'docTemplate' => (int) $body['docTemplate'],
+        ]);
+
+        $response = $this->handleCommand($command);
+
+        if (!$response->isOk()) {
+            $messages = $response->getResult()['messages'] ?? [];
+            $errorMessage = is_array($messages) ? implode(', ', $messages) : $messages;
+            return $this->jsonError('Failed to prepare letter: ' . $errorMessage);
+        }
+
+        $result = $response->getResult();
+        $documentId = $result['id']['document'] ?? null;
+
+        if (!$documentId) {
+            return $this->jsonError('Document was not created');
+        }
+
+        // Fetch the letter instance to determine entity context for the printAction URL
+        $letterInstance = $this->fetchLetterInstanceById((int) $body['letterInstanceId']);
+
+        // Build the printAction URL for the entity-specific finalise route
+        $printUrl = $this->buildPrintActionUrl($letterInstance, $documentId);
+
+        return $this->jsonSuccess([
+            'documentId' => $documentId,
+            'printUrl' => $printUrl,
+        ]);
+    }
+
+    /**
+     * Build the print action URL for the document finalise controller
+     *
+     * @param array|null $letterInstance Letter instance data
+     * @param int $documentId Document ID
+     * @return string The print action URL
+     */
+    protected function buildPrintActionUrl(?array $letterInstance, int $documentId): string
+    {
+        if (!$letterInstance) {
+            return '/documents/finalise/' . $documentId . '/print';
+        }
+
+        // Determine entity context from the letter instance
+        $entityRouteMap = [
+            'licence' => ['route' => 'licence/documents/finalise', 'param' => 'licence', 'key' => 'licence'],
+            'application' => ['route' => 'lva-application/documents/finalise', 'param' => 'application', 'key' => 'application'],
+            'case' => ['route' => 'case_licence_docs_attachments/finalise', 'param' => 'case', 'key' => 'case'],
+            'busReg' => ['route' => 'licence/bus-docs/finalise', 'param' => 'busRegId', 'key' => 'busReg'],
+            'transportManager' => ['route' => 'transport-manager/documents/finalise', 'param' => 'transportManager', 'key' => 'transportManager'],
+            'irhpApplication' => ['route' => 'licence/irhp-application-docs/finalise', 'param' => 'irhpAppId', 'key' => 'irhpApplication'],
+        ];
+
+        foreach ($entityRouteMap as $entityType => $config) {
+            $entityData = $letterInstance[$config['key']] ?? null;
+            if (!empty($entityData)) {
+                $entityId = is_array($entityData) ? ($entityData['id'] ?? null) : $entityData;
+                if ($entityId) {
+                    try {
+                        return $this->url()->fromRoute(
+                            $config['route'],
+                            [
+                                $config['param'] => $entityId,
+                                'doc' => $documentId,
+                                'action' => 'print',
+                            ]
+                        );
+                    } catch (\Exception $e) {
+                        // Fall through to fallback
+                    }
+                }
+            }
+        }
+
+        // Fallback: construct URL manually
+        return '/documents/finalise/' . $documentId . '/print';
     }
 
     /**
@@ -406,9 +730,7 @@ class LetterGenerationController extends AbstractInternalController implements T
         $result = $response->getResult();
 
         // Filter active issue types only
-        $issueTypes = array_filter($result['results'] ?? [], function ($issueType) {
-            return !empty($issueType['isActive']);
-        });
+        $issueTypes = array_filter($result['results'] ?? [], fn($issueType) => !empty($issueType['isActive']));
 
         return array_values($issueTypes);
     }
@@ -436,6 +758,51 @@ class LetterGenerationController extends AbstractInternalController implements T
         $result = $response->getResult();
 
         return $result['results'] ?? [];
+    }
+
+    /**
+     * Fetch appendices available for a letter type
+     *
+     * @param int $templateId Doc template ID
+     * @return array Array of appendix data
+     */
+    protected function fetchAppendicesForLetterType(int $templateId): array
+    {
+        // Resolve doc template to letter type ID
+        $template = $this->fetchTemplateById($templateId);
+
+        if (!$template || empty($template['letterType']['id'])) {
+            return [];
+        }
+
+        $letterTypeId = (int) $template['letterType']['id'];
+
+        // Fetch the letter type to get its assigned appendices
+        $query = \Dvsa\Olcs\Transfer\Query\Letter\LetterType\Get::create([
+            'id' => $letterTypeId,
+        ]);
+
+        $response = $this->handleQuery($query);
+
+        if (!$response->isOk()) {
+            return [];
+        }
+
+        $result = $response->getResult();
+        $appendices = [];
+
+        foreach ($result['letterTypeAppendices'] ?? [] as $lta) {
+            $version = $lta['letterAppendixVersion'] ?? [];
+            $letterAppendix = $version['letterAppendix'] ?? [];
+            $appendices[] = [
+                'id' => $letterAppendix['id'] ?? null,
+                'name' => $version['name'] ?? 'Appendix',
+                'appendixType' => $version['appendixType'] ?? 'pdf',
+                'isMandatory' => !empty($lta['isMandatory']),
+            ];
+        }
+
+        return $appendices;
     }
 
     /**

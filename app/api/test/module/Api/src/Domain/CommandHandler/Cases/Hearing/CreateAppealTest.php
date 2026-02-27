@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Appeal Test
  *
@@ -34,7 +36,8 @@ class CreateAppealTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'appeal_r_lic_non_pi',
@@ -50,7 +53,7 @@ class CreateAppealTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->references[Cases::class][24]
             ->shouldReceive('hasAppeal')
@@ -125,7 +128,7 @@ class CreateAppealTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($data['dvsaNotified'], $savedAppeal->getDvsaNotified());
     }
 
-    public function testHandleCommandWithoutOptional()
+    public function testHandleCommandWithoutOptional(): void
     {
         $this->references[Cases::class][24]
             ->shouldReceive('hasAppeal')
@@ -189,7 +192,7 @@ class CreateAppealTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($data['dvsaNotified'], $savedAppeal->getDvsaNotified());
     }
 
-    public function testHandleCommandExistingAppeal()
+    public function testHandleCommandExistingAppeal(): void
     {
         $this->references[Cases::class][24]
             ->shouldReceive('hasAppeal')

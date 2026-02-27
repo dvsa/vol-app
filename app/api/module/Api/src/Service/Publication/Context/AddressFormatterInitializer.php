@@ -19,6 +19,7 @@ class AddressFormatterInitializer implements InitializerInterface
      *
      * return mixed
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $instance)
     {
         if ($instance instanceof AddressFormatterAwareInterface) {

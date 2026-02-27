@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\View\Helper;
 
 use Olcs\View\Helper\PiListData;
@@ -11,18 +13,18 @@ use Olcs\View\Helper\PiListData;
 class PiListDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @dataProvider provideInvoke
      * @param $input
      * @param $expected
      */
-    public function testInvoke($input, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideInvoke')]
+    public function testInvoke(mixed $input, mixed $expected): void
     {
         $sut = new PiListData();
 
         $this->assertEquals($expected, $sut($input));
     }
 
-    public function provideInvoke()
+    public static function provideInvoke(): array
     {
         return [
             [null, 'None selected'],

@@ -16,6 +16,7 @@ class RevocationsSla implements MapperInterface
      *
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         if (isset($data['id'])) {

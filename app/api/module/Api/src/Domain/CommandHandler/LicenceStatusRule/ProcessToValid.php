@@ -23,6 +23,7 @@ final class ProcessToValid extends AbstractCommandHandler implements Transaction
 
     protected $extraRepos = ['LicenceVehicle'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         // command not required, unset to remove PMD error

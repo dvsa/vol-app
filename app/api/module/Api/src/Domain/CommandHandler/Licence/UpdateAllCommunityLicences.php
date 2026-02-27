@@ -26,6 +26,7 @@ abstract class UpdateAllCommunityLicences extends AbstractCommandHandler impleme
 
     protected $status; // override this
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $licence Licence */

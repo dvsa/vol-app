@@ -35,6 +35,6 @@ class Version extends AbstractHelper
      */
     public function __invoke()
     {
-        return trim(preg_replace('/\s+/', ' ', $this->version));
+        return trim((string) preg_replace('/\s+/', ' ', $this->version));
     }
 }

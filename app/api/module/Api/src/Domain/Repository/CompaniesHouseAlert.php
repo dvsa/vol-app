@@ -19,6 +19,7 @@ class CompaniesHouseAlert extends AbstractRepository
 
     protected $alias = 'cha';
 
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         parent::applyListJoins($qb);
@@ -46,6 +47,7 @@ class CompaniesHouseAlert extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if (!$query->getIncludeClosed()) {

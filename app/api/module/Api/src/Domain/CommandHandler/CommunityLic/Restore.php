@@ -33,6 +33,7 @@ final class Restore extends AbstractCommandHandler implements TransactionedInter
         'Licence'
     ];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $ids = $command->getCommunityLicenceIds();

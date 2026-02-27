@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Licence;
 
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
@@ -26,7 +28,7 @@ class LicenceVehicleEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testGetActiveDiscWithout()
+    public function testGetActiveDiscWithout(): void
     {
         /** @var Entity $entity */
         $entity = $this->instantiate(Entity::class);
@@ -38,7 +40,7 @@ class LicenceVehicleEntityTest extends EntityTester
         $this->assertNull($entity->getActiveDisc());
     }
 
-    public function testGetActiveDisc()
+    public function testGetActiveDisc(): void
     {
         /** @var Entity $entity */
         $entity = $this->instantiate(Entity::class);
@@ -59,7 +61,7 @@ class LicenceVehicleEntityTest extends EntityTester
         $this->assertSame($goodsDisc2, $entity->getActiveDisc());
     }
 
-    public function testGetActiveDiscCeased()
+    public function testGetActiveDiscCeased(): void
     {
         /** @var Entity $entity */
         $entity = $this->instantiate(Entity::class);
@@ -76,7 +78,7 @@ class LicenceVehicleEntityTest extends EntityTester
         $this->assertNull($entity->getActiveDisc());
     }
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $licence = m::mock(Licence::class);
         $vehicle = m::mock(Vehicle::class);
@@ -87,7 +89,7 @@ class LicenceVehicleEntityTest extends EntityTester
         $this->assertSame($vehicle, $entity->getVehicle());
     }
 
-    public function testMarkAsDuplicate()
+    public function testMarkAsDuplicate(): void
     {
         /** @var Entity $entity */
         $entity = $this->instantiate(Entity::class);
@@ -103,7 +105,7 @@ class LicenceVehicleEntityTest extends EntityTester
         $this->assertNull($entity->getWarningLetterSentDate());
     }
 
-    public function testUpdateDuplicateMarkWithPendingLetter()
+    public function testUpdateDuplicateMarkWithPendingLetter(): void
     {
         /** @var Entity $entity */
         $entity = $this->instantiate(Entity::class);
@@ -115,7 +117,7 @@ class LicenceVehicleEntityTest extends EntityTester
         $this->assertEquals('2015-01-01', $entity->getWarningLetterSeedDate()->format('Y-m-d'));
     }
 
-    public function testUpdateDuplicateMarkWithSentLetter()
+    public function testUpdateDuplicateMarkWithSentLetter(): void
     {
         /** @var Entity $entity */
         $entity = $this->instantiate(Entity::class);
@@ -131,7 +133,7 @@ class LicenceVehicleEntityTest extends EntityTester
         $this->assertNull($entity->getWarningLetterSentDate());
     }
 
-    public function testRemoveDuplicateMark()
+    public function testRemoveDuplicateMark(): void
     {
         /** @var Entity $entity */
         $entity = $this->instantiate(Entity::class);
@@ -145,7 +147,7 @@ class LicenceVehicleEntityTest extends EntityTester
         $this->assertNull($entity->getWarningLetterSentDate());
     }
 
-    public function testGetRelatedOrganisation()
+    public function testGetRelatedOrganisation(): void
     {
         $licence = m::mock(Licence::class);
         $licence->shouldReceive('getRelatedOrganisation')->with()->once()->andReturn('ORG');

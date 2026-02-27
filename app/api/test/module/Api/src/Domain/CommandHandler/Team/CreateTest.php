@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Team Test
  *
@@ -36,7 +38,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             TrafficAreaEntity::class => [
@@ -50,7 +53,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(
             [
@@ -91,7 +94,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(111, $res['id']['team']);
     }
 
-    public function testHandleCommandWithVaidationException()
+    public function testHandleCommandWithVaidationException(): void
     {
         $this->expectException(ValidationException::class);
 

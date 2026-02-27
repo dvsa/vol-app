@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Document Naming Model test
  *
@@ -27,12 +29,12 @@ class NamingModelTest extends MockeryTestCase
      */
     protected $sut;
 
-    public function setUpSut($date, $description, $extension, $category = null, $subCategory = null, $entity = null)
+    public function setUpSut(mixed $date, mixed $description, mixed $extension, mixed $category = null, mixed $subCategory = null, mixed $entity = null): void
     {
         $this->sut = new NamingModel($date, $description, $extension, $category, $subCategory, $entity);
     }
 
-    public function testGetDateWithU()
+    public function testGetDateWithU(): void
     {
         $now = new DateTime();
         $this->sut = new NamingModel($now, 'desc', 'ext');
@@ -44,7 +46,7 @@ class NamingModelTest extends MockeryTestCase
         $this->assertEquals(27, strlen($date));
     }
 
-    public function testGetDate()
+    public function testGetDate(): void
     {
         $now = new DateTime();
         $this->sut = new NamingModel($now, 'desc', 'ext');
@@ -54,7 +56,7 @@ class NamingModelTest extends MockeryTestCase
         $this->assertEquals($expected, $date);
     }
 
-    public function testGetCategory()
+    public function testGetCategory(): void
     {
         $category = new Category();
         $category->setDescription('catdesc');
@@ -64,13 +66,13 @@ class NamingModelTest extends MockeryTestCase
         $this->assertEquals('catdesc', $this->sut->getCategory());
     }
 
-    public function testGetCategoryEmpty()
+    public function testGetCategoryEmpty(): void
     {
         $this->sut = new NamingModel(new DateTime(), 'desc', 'ext');
         $this->assertNull($this->sut->getCategory());
     }
 
-    public function testGetSubCategory()
+    public function testGetSubCategory(): void
     {
         $subCategory = new SubCategory();
         $subCategory->setSubCategoryName('subcatname');
@@ -80,25 +82,25 @@ class NamingModelTest extends MockeryTestCase
         $this->assertEquals('subcatname', $this->sut->getSubCategory());
     }
 
-    public function testGetSubCategoryEmpty()
+    public function testGetSubCategoryEmpty(): void
     {
         $this->sut = new NamingModel(new DateTime(), 'desc', 'ext');
         $this->assertNull($this->sut->getSubCategory());
     }
 
-    public function testDescription()
+    public function testDescription(): void
     {
         $this->sut = new NamingModel(new DateTime(), 'desc', 'ext');
         $this->assertEquals('desc', $this->sut->getDescription());
     }
 
-    public function testExtension()
+    public function testExtension(): void
     {
         $this->sut = new NamingModel(new DateTime(), 'desc', 'ext');
         $this->assertEquals('ext', $this->sut->getExtension());
     }
 
-    public function testGetContext()
+    public function testGetContext(): void
     {
         $organisation = new Organisation();
         $organisation->setId(77);
@@ -108,7 +110,7 @@ class NamingModelTest extends MockeryTestCase
         $this->assertEquals(77, $this->sut->getContext());
     }
 
-    public function testGetContextEmpty()
+    public function testGetContextEmpty(): void
     {
         $this->sut = new NamingModel(new DateTime(), 'desc', 'ext');
         $this->assertEquals('', $this->sut->getContext());

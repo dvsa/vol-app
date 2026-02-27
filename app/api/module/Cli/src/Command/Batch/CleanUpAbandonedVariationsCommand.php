@@ -11,11 +11,13 @@ class CleanUpAbandonedVariationsCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:clean-up-variations';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Clean up abandoned variations.');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

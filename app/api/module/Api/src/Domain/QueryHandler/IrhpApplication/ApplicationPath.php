@@ -29,6 +29,7 @@ class ApplicationPath extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $irhpApplication = $this->getRepo()->fetchUsingId($query);
@@ -50,6 +51,7 @@ class ApplicationPath extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

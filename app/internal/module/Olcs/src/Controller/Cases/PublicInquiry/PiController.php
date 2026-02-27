@@ -139,6 +139,7 @@ class PiController extends AbstractInternalController implements CaseControllerI
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -152,6 +153,7 @@ class PiController extends AbstractInternalController implements CaseControllerI
      *
      * @return array|mixed|\Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function detailsAction()
     {
         return $this->redirectTo([]);
@@ -162,6 +164,7 @@ class PiController extends AbstractInternalController implements CaseControllerI
      *
      * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $pi = $this->getPi();
@@ -173,7 +176,7 @@ class PiController extends AbstractInternalController implements CaseControllerI
 
         //if there's a post, check for possible redirects
         if ($this->getRequest()->isPost()) {
-            $action = strtolower($this->params()->fromPost('action'));
+            $action = strtolower((string) $this->params()->fromPost('action'));
             $id = $this->params()->fromPost('id');
 
             //we need the hearing controller for this, so this code is necessary for compatibility with the table
@@ -322,7 +325,7 @@ class PiController extends AbstractInternalController implements CaseControllerI
         if (empty($data[$element->getName() . 'Target'])) {
             $hint = 'There was no target date found';
         } else {
-            $hint = 'Target date: ' . date('d/m/Y', strtotime($data[$element->getName() . 'Target']));
+            $hint = 'Target date: ' . date('d/m/Y', strtotime((string) $data[$element->getName() . 'Target']));
         }
 
         $element->setOption('hint', $hint);

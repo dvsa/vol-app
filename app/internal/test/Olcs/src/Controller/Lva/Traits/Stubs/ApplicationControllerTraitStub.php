@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Application Controller Trait Stub
  *
@@ -20,12 +22,12 @@ class ApplicationControllerTraitStub extends AbstractController
 {
     use ApplicationControllerTrait;
 
-    public function callPreDispatch()
+    public function callPreDispatch(): mixed
     {
         return $this->preDispatch();
     }
 
-    public function callGetSectionsForView()
+    public function callGetSectionsForView(): array
     {
         return $this->getSectionsForView();
     }

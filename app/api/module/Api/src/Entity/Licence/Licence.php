@@ -351,6 +351,7 @@ class Licence extends AbstractLicence implements ContextProviderInterface, Organ
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedBundleValues()
     {
         return [
@@ -363,6 +364,7 @@ class Licence extends AbstractLicence implements ContextProviderInterface, Organ
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedValues()
     {
         return $this->getCalculatedBundleValues();
@@ -1132,6 +1134,7 @@ class Licence extends AbstractLicence implements ContextProviderInterface, Organ
      *
      * @return string
      */
+    #[\Override]
     public function getContextValue()
     {
         return $this->getLicNo();
@@ -1273,6 +1276,7 @@ class Licence extends AbstractLicence implements ContextProviderInterface, Organ
      *
      * @return Organisation
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this->getOrganisation();
@@ -1491,6 +1495,7 @@ class Licence extends AbstractLicence implements ContextProviderInterface, Organ
      *
      * @return array
      */
+    #[\Override]
     public function serialize(array $bundle = [])
     {
         $result = parent::serialize($bundle);

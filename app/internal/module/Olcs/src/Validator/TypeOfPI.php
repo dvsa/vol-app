@@ -34,6 +34,7 @@ class TypeOfPI extends AbstractValidator
      * @param  string $value
      * @return bool
      */
+    #[\Override]
     public function isValid($value)
     {
         $this->setValue($value);

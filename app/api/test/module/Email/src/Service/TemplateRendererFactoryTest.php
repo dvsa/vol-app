@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Email\Service;
 
 use Dvsa\Olcs\Email\Service\TemplateRenderer;
@@ -23,7 +25,7 @@ class TemplateRendererFactoryTest extends MockeryTestCase
         $this->sut = new TemplateRendererFactory();
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockViewRenderer = m::mock(StrategySelectingViewRenderer::class);
         $sl = m::mock(ContainerInterface::class);

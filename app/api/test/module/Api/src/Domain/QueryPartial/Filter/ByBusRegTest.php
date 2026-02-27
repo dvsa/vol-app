@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Filter By Bus Reg Test
  *
@@ -26,7 +28,7 @@ class ByBusRegTest extends QueryPartialTestCase
         parent::setUp();
     }
 
-    public function testModifyQuery()
+    public function testModifyQuery(): void
     {
         $busRegId = 69;
 

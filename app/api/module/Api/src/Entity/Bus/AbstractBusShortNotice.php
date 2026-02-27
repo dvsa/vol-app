@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractBusShortNotice implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractBusShortNotice implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -311,7 +311,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -334,7 +335,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the bus reg
      *
-     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg     */
+     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     */
     public function getBusReg()
     {
         return $this->busReg;
@@ -357,7 +359,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -380,7 +383,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -403,7 +407,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the bank holiday change
      *
-     * @return string     */
+     * @return string
+     */
     public function getBankHolidayChange()
     {
         return $this->bankHolidayChange;
@@ -426,7 +431,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the unforseen change
      *
-     * @return string     */
+     * @return string
+     */
     public function getUnforseenChange()
     {
         return $this->unforseenChange;
@@ -449,7 +455,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the unforseen detail
      *
-     * @return string     */
+     * @return string
+     */
     public function getUnforseenDetail()
     {
         return $this->unforseenDetail;
@@ -472,7 +479,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the timetable change
      *
-     * @return string     */
+     * @return string
+     */
     public function getTimetableChange()
     {
         return $this->timetableChange;
@@ -495,7 +503,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the timetable detail
      *
-     * @return string     */
+     * @return string
+     */
     public function getTimetableDetail()
     {
         return $this->timetableDetail;
@@ -518,7 +527,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the replacement change
      *
-     * @return string     */
+     * @return string
+     */
     public function getReplacementChange()
     {
         return $this->replacementChange;
@@ -541,7 +551,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the replacement detail
      *
-     * @return string     */
+     * @return string
+     */
     public function getReplacementDetail()
     {
         return $this->replacementDetail;
@@ -564,7 +575,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the holiday change
      *
-     * @return string     */
+     * @return string
+     */
     public function getHolidayChange()
     {
         return $this->holidayChange;
@@ -587,7 +599,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the holiday detail
      *
-     * @return string     */
+     * @return string
+     */
     public function getHolidayDetail()
     {
         return $this->holidayDetail;
@@ -610,7 +623,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the trc change
      *
-     * @return string     */
+     * @return string
+     */
     public function getTrcChange()
     {
         return $this->trcChange;
@@ -633,7 +647,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the trc detail
      *
-     * @return string     */
+     * @return string
+     */
     public function getTrcDetail()
     {
         return $this->trcDetail;
@@ -656,7 +671,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the police change
      *
-     * @return string     */
+     * @return string
+     */
     public function getPoliceChange()
     {
         return $this->policeChange;
@@ -679,7 +695,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the police detail
      *
-     * @return string     */
+     * @return string
+     */
     public function getPoliceDetail()
     {
         return $this->policeDetail;
@@ -702,7 +719,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the special occasion change
      *
-     * @return string     */
+     * @return string
+     */
     public function getSpecialOccasionChange()
     {
         return $this->specialOccasionChange;
@@ -725,7 +743,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the special occasion detail
      *
-     * @return string     */
+     * @return string
+     */
     public function getSpecialOccasionDetail()
     {
         return $this->specialOccasionDetail;
@@ -748,7 +767,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the connection change
      *
-     * @return string     */
+     * @return string
+     */
     public function getConnectionChange()
     {
         return $this->connectionChange;
@@ -771,7 +791,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the connection detail
      *
-     * @return string     */
+     * @return string
+     */
     public function getConnectionDetail()
     {
         return $this->connectionDetail;
@@ -794,7 +815,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the not available change
      *
-     * @return string     */
+     * @return string
+     */
     public function getNotAvailableChange()
     {
         return $this->notAvailableChange;
@@ -817,7 +839,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the not available detail
      *
-     * @return string     */
+     * @return string
+     */
     public function getNotAvailableDetail()
     {
         return $this->notAvailableDetail;
@@ -840,7 +863,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -863,7 +887,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -872,6 +897,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\CandidatePermits;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
@@ -40,7 +42,7 @@ class IrhpCandidatePermitsCreatorTest extends MockeryTestCase
         );
     }
 
-    public function testCreateIfRequiredApsg()
+    public function testCreateIfRequiredApsg(): void
     {
         $requiredEuro5 = 7;
         $requiredEuro6 = 10;
@@ -67,7 +69,7 @@ class IrhpCandidatePermitsCreatorTest extends MockeryTestCase
         $this->irhpCandidatePermitsCreator->createIfRequired($this->irhpApplication);
     }
 
-    public function testCreateIfRequiredApgg()
+    public function testCreateIfRequiredApgg(): void
     {
         $this->irhpApplication->shouldReceive('getCandidatePermitCreationMode')
             ->withNoArgs()

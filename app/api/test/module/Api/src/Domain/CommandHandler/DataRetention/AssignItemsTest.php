@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\DataRetention;
 
 use Dvsa\Olcs\Transfer\Command\DataRetention\AssignItems as AssignItemsCommand;
@@ -23,7 +25,8 @@ class AssignItemsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $user = m::mock(UserEntity::class);
 
@@ -36,7 +39,7 @@ class AssignItemsTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id1 = 100;
         $id2 = 200;
@@ -111,7 +114,7 @@ class AssignItemsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandUserNotAllowed()
+    public function testHandleCommandUserNotAllowed(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('can\'t assign data retention record to this user');

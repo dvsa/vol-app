@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
 
 use DateTime;
@@ -18,7 +20,7 @@ use Mockery as m;
 /**
  * Test the short term permit app successful email
  */
-class SendEcmtShortTermSuccessfulTest extends AbstractPermitTest
+class SendEcmtShortTermSuccessfulTest extends AbstractPermitTestCase
 {
     public $orgEmails;
     public $contactDetails;
@@ -112,10 +114,8 @@ class SendEcmtShortTermSuccessfulTest extends AbstractPermitTest
         $this->organisation->shouldReceive('getAdminEmailAddresses')->once()->andReturn($this->orgEmails);
     }
 
-    /**
-     * @dataProvider dpTranslateToWelshLocaleMappings
-     */
-    public function testHandleCommand($translateToWelsh, $expectedLocale)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTranslateToWelshLocaleMappings')]
+    public function testHandleCommand(mixed $translateToWelsh, mixed $expectedLocale): void
     {
         $this->mockedSmServices['translator']->shouldReceive('getLocale')
             ->withNoArgs()
@@ -174,10 +174,8 @@ class SendEcmtShortTermSuccessfulTest extends AbstractPermitTest
         $this->assertSame($this->subject, $message->getSubject());
     }
 
-    /**
-     * @dataProvider dpTranslateToWelshLocaleMappings
-     */
-    public function testHandleCommandForCreatedByInternalUser($translateToWelsh, $expectedLocale)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTranslateToWelshLocaleMappings')]
+    public function testHandleCommandForCreatedByInternalUser(mixed $translateToWelsh, mixed $expectedLocale): void
     {
         $this->mockedSmServices['translator']->shouldReceive('getLocale')
             ->withNoArgs()
@@ -235,7 +233,7 @@ class SendEcmtShortTermSuccessfulTest extends AbstractPermitTest
         $this->assertSame($this->subject, $message->getSubject());
     }
 
-    public function dpTranslateToWelshLocaleMappings()
+    public static function dpTranslateToWelshLocaleMappings(): array
     {
         return [
             ['Y', 'cy_GB'],

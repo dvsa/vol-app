@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\Criteria;
  */
 class VehiclesSpecified extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         $criteria = Criteria::create();
@@ -28,6 +29,7 @@ class VehiclesSpecified extends DynamicBookmark
         return Qry::create(['id' => $data['licence'], 'bundle' => $bundle]);
     }
 
+    #[\Override]
     public function render()
     {
         if (empty($this->data)) {

@@ -64,6 +64,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      *
      * @return array required previous sections;
      */
+    #[\Override]
     protected function getRequiredSections()
     {
         return ['peopleStatus', 'financialHistoryStatus', 'licenceHistoryStatus'];
@@ -75,6 +76,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      *
      * @return null|string
      */
+    #[\Override]
     protected function getBaseRoute()
     {
         return 'lva-director_change/convictions_penalties';
@@ -85,6 +87,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      *
      * @return string variation type
      */
+    #[\Override]
     protected function getVariationType()
     {
         return RefData::VARIATION_TYPE_DIRECTOR_CHANGE;
@@ -95,6 +98,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      *
      * @return Response
      */
+    #[\Override]
     protected function submit()
     {
         $response = $this->handleCommand(GrantDirectorChange::create(['id' => $this->getIdentifier()]));
@@ -130,6 +134,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      *
      * @return array
      */
+    #[\Override]
     public function getStartRoute()
     {
         $licenceId = $this->getLicenceId($this->getApplicationId());
@@ -143,6 +148,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      *
      * @return array route definition
      */
+    #[\Override]
     protected function getPreviousPageRoute()
     {
         return ['name' => 'lva-director_change/licence_history', 'params' => ['application' => $this->getIdentifier()]];
@@ -156,6 +162,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      *
      * @return mixed]
      */
+    #[\Override]
     protected function getConvictionsPenaltiesForm($data, $params = [])
     {
         $params['variationType'] = $this->getVariationType();
@@ -170,6 +177,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      *
      * @return mixed
      */
+    #[\Override]
     protected function getConvictionsPenaltiesTable($data)
     {
         /**

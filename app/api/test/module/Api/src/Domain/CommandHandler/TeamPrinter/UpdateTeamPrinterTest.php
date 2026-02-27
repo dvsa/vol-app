@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update TeamPrinter Test
  *
@@ -35,7 +37,8 @@ class UpdateTeamPrinterTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             TeamEntity::class => [
@@ -55,7 +58,7 @@ class UpdateTeamPrinterTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(
             [
@@ -104,7 +107,7 @@ class UpdateTeamPrinterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['Printer exception updated successfully'], $res['messages']);
     }
 
-    public function testHandleCommandWithNoUserAndSubCategory()
+    public function testHandleCommandWithNoUserAndSubCategory(): void
     {
         $command = Cmd::create(
             [
@@ -153,7 +156,7 @@ class UpdateTeamPrinterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['Printer exception updated successfully'], $res['messages']);
     }
 
-    public function testHandleCommandWithVaidationException()
+    public function testHandleCommandWithVaidationException(): void
     {
         $this->expectException(ValidationException::class);
 

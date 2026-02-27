@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Restore Test
  *
@@ -43,7 +45,8 @@ class RestoreTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             CommunityLicEntity::STATUS_ACTIVE,
@@ -53,7 +56,7 @@ class RestoreTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    protected function mockDeleteSuspensions($ids)
+    protected function mockDeleteSuspensions(mixed $ids): void
     {
         $mockSuspension = m::mock()
             ->shouldReceive('getId')
@@ -80,7 +83,7 @@ class RestoreTest extends AbstractCommandHandlerTestCase
             ->once();
     }
 
-    protected function mockDeleteWithdrawals($ids)
+    protected function mockDeleteWithdrawals(mixed $ids): void
     {
         $mockWithdrawal = m::mock()
             ->shouldReceive('getId')
@@ -107,10 +110,8 @@ class RestoreTest extends AbstractCommandHandlerTestCase
             ->once();
     }
 
-    /**
-     * @dataProvider statusProvider
-     */
-    public function testHandleCommand($specifiedDate, $status)
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusProvider')]
+    public function testHandleCommand(mixed $specifiedDate, mixed $status): void
     {
         $licenceId = 1;
         $communityLicenceIds = [10];
@@ -206,7 +207,7 @@ class RestoreTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($specifiedDate, $communityLic->getSpecifiedDate());
     }
 
-    public function statusProvider()
+    public static function statusProvider(): array
     {
         return [
             [new DateTime('now'),  CommunityLicEntity::STATUS_ACTIVE],
@@ -214,7 +215,7 @@ class RestoreTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandWithException()
+    public function testHandleCommandWithException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

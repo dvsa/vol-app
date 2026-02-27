@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Publication;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -20,12 +22,12 @@ class PublicationSectionEntityTest extends EntityTester
     protected $entityClass = Entity::class;
 
     /**
-     * @dataProvider dataProviderTestIsSection3
      *
      * @param bool $isSection3
      * @param int  $section
      */
-    public function testIsSection3($isSection3, $section)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestIsSection3')]
+    public function testIsSection3(mixed $isSection3, mixed $section): void
     {
         $sut = new Entity();
         $sut->setId($section);
@@ -33,7 +35,7 @@ class PublicationSectionEntityTest extends EntityTester
         $this->assertSame($isSection3, $sut->isSection3());
     }
 
-    public function dataProviderTestIsSection3()
+    public static function dataProviderTestIsSection3(): array
     {
         for ($i = 1; $i < 35; $i++) {
             $params[$i] = [false, $i];
@@ -50,12 +52,12 @@ class PublicationSectionEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dataProviderTestIsDecision
      *
      * @param bool $isDecisionSection
      * @param int  $section
      */
-    public function testIsDecision($isDecisionSection, $section)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestIsDecision')]
+    public function testIsDecision(mixed $isDecisionSection, mixed $section): void
     {
         $sut = new Entity();
         $sut->setId($section);
@@ -63,7 +65,7 @@ class PublicationSectionEntityTest extends EntityTester
         $this->assertSame($isDecisionSection, $sut->isDecisionSection());
     }
 
-    public function dataProviderTestIsDecision()
+    public static function dataProviderTestIsDecision(): array
     {
         for ($i = 1; $i < 35; $i++) {
             $params[$i] = [false, $i];

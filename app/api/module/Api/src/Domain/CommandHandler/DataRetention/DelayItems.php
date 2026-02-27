@@ -24,6 +24,7 @@ final class DelayItems extends AbstractCommandHandler implements TransactionedIn
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var DataRetention $repo */

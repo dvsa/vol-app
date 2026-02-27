@@ -34,7 +34,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractFeeTransaction implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractFeeTransaction implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -167,7 +167,8 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -190,7 +191,8 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     /**
      * Get the fee
      *
-     * @return \Dvsa\Olcs\Api\Entity\Fee\Fee     */
+     * @return \Dvsa\Olcs\Api\Entity\Fee\Fee
+     */
     public function getFee()
     {
         return $this->fee;
@@ -213,7 +215,8 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     /**
      * Get the transaction
      *
-     * @return \Dvsa\Olcs\Api\Entity\Fee\Transaction     */
+     * @return \Dvsa\Olcs\Api\Entity\Fee\Transaction
+     */
     public function getTransaction()
     {
         return $this->transaction;
@@ -236,7 +239,8 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     /**
      * Get the reversed fee transaction
      *
-     * @return \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction     */
+     * @return \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction
+     */
     public function getReversedFeeTransaction()
     {
         return $this->reversedFeeTransaction;
@@ -259,7 +263,8 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -282,7 +287,8 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -305,7 +311,8 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     /**
      * Get the amount
      *
-     * @return string     */
+     * @return string
+     */
     public function getAmount()
     {
         return $this->amount;
@@ -328,7 +335,8 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -400,6 +408,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

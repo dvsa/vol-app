@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractSeriousInfringement implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSeriousInfringement implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -246,7 +246,8 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -269,7 +270,8 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -292,7 +294,8 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get the member state code
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country
+     */
     public function getMemberStateCode()
     {
         return $this->memberStateCode;
@@ -315,7 +318,8 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get the si category
      *
-     * @return \Dvsa\Olcs\Api\Entity\Si\SiCategory     */
+     * @return \Dvsa\Olcs\Api\Entity\Si\SiCategory
+     */
     public function getSiCategory()
     {
         return $this->siCategory;
@@ -338,7 +342,8 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get the si category type
      *
-     * @return \Dvsa\Olcs\Api\Entity\Si\SiCategoryType     */
+     * @return \Dvsa\Olcs\Api\Entity\Si\SiCategoryType
+     */
     public function getSiCategoryType()
     {
         return $this->siCategoryType;
@@ -361,7 +366,8 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -384,7 +390,8 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -407,7 +414,8 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get the notification number
      *
-     * @return string     */
+     * @return string
+     */
     public function getNotificationNumber()
     {
         return $this->notificationNumber;
@@ -432,7 +440,8 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getCheckDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -461,7 +470,8 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getInfringementDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -488,7 +498,8 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get the reason
      *
-     * @return string     */
+     * @return string
+     */
     public function getReason()
     {
         return $this->reason;
@@ -511,7 +522,8 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -534,7 +546,8 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -557,7 +570,8 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get the olbs type
      *
-     * @return string     */
+     * @return string
+     */
     public function getOlbsType()
     {
         return $this->olbsType;
@@ -755,6 +769,7 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

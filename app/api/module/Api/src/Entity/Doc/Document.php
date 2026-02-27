@@ -146,6 +146,7 @@ class Document extends AbstractDocument implements OrganisationProviderInterface
      *
      * @return void
      */
+    #[\Override]
     public function setCreatedOnBeforePersist()
     {
         parent::setCreatedOnBeforePersist();
@@ -160,6 +161,7 @@ class Document extends AbstractDocument implements OrganisationProviderInterface
      *
      * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation|\Dvsa\Olcs\Api\Entity\Organisation\Organisation[]|null
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         if ($this->getLicence()) {

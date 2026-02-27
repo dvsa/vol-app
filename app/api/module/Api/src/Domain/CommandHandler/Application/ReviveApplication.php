@@ -29,6 +29,7 @@ final class ReviveApplication extends AbstractCommandHandler implements Transact
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Application $licence */

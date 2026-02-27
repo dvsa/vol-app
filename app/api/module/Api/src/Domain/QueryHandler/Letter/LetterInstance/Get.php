@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryByIdHandler;
 class Get extends AbstractQueryByIdHandler
 {
     protected $repoServiceName = 'LetterInstance';
-    
+
     protected $bundle = [
         'letterType',
         'licence',
@@ -20,13 +20,17 @@ class Get extends AbstractQueryByIdHandler
             'letterSectionVersion'
         ],
         'letterInstanceIssues' => [
-            'letterIssueVersion'
+            'letterIssueVersion' => [
+                'letterIssueType'
+            ]
         ],
         'letterInstanceTodos' => [
             'letterTodoVersion'
         ],
         'letterInstanceAppendices' => [
-            'letterAppendixVersion'
+            'letterAppendixVersion' => [
+                'document'
+            ]
         ]
     ];
 }

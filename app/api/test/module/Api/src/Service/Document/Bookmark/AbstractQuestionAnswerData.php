@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 /**
@@ -7,7 +9,8 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
  */
 abstract class AbstractQuestionAnswerData extends SingleValueTestAbstract
 {
-    protected function getData($key, $value)
+    #[\Override]
+    protected function getData(mixed $key, mixed $value): array
     {
         return [
             'questionAnswerData' => [

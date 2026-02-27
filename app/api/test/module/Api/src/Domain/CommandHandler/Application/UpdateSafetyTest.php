@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Safety Test
  *
@@ -39,7 +41,8 @@ class UpdateSafetyTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = ['tach_ext'];
 
@@ -48,7 +51,7 @@ class UpdateSafetyTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithValidationException()
+    public function testHandleCommandWithValidationException(): void
     {
         $data = [
             'id' => 111,
@@ -79,7 +82,7 @@ class UpdateSafetyTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand(): array
     {
         return [
             [
@@ -105,10 +108,8 @@ class UpdateSafetyTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
-    public function testHandleCommand($canHaveTrailer, $totAuthTrailers, $expectedSafetyInsTrailers)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
+    public function testHandleCommand(mixed $canHaveTrailer, mixed $totAuthTrailers, mixed $expectedSafetyInsTrailers): void
     {
         $data = [
             'id' => 111,

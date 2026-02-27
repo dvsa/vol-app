@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Process\Variation;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -33,7 +35,7 @@ class Text3Test extends MockeryTestCase
      *
      * @return PublicationLink
      */
-    private function getPublicationLink($organisationType)
+    private function getPublicationLink(mixed $organisationType): mixed
     {
         $publicationLink = new PublicationLink();
 
@@ -59,7 +61,7 @@ class Text3Test extends MockeryTestCase
      * @param string $foreName
      * @param string $familyName
      */
-    private function addOrganisationPerson(Organisation $organisation, $foreName, $familyName)
+    private function addOrganisationPerson(Organisation $organisation, mixed $foreName, mixed $familyName): void
     {
         $person = new \Dvsa\Olcs\Api\Entity\Person\Person();
         $person->setForename($foreName)->setFamilyName($familyName);
@@ -69,7 +71,7 @@ class Text3Test extends MockeryTestCase
         $organisation->addOrganisationPersons($organisationPerson);
     }
 
-    public function testCorrespondanceAddress()
+    public function testCorrespondanceAddress(): void
     {
         $publicationLink = $this->getPublicationLink(Organisation::ORG_TYPE_LLP);
         $context = new ImmutableArrayObject(
@@ -85,7 +87,7 @@ class Text3Test extends MockeryTestCase
         $this->assertSame($expectedText3, $publicationLink->getText3());
     }
 
-    public function testOperatingCentres()
+    public function testOperatingCentres(): void
     {
         $publicationLink = $this->getPublicationLink(Organisation::ORG_TYPE_LLP);
         $context = new ImmutableArrayObject(
@@ -101,10 +103,8 @@ class Text3Test extends MockeryTestCase
         $this->assertSame($expectedText3, $publicationLink->getText3());
     }
 
-    /**
-     * @dataProvider dpAuthorisationsWhereNoOperatingCentres
-     */
-    public function testAuthorisationsWhereNoOperatingCentres($contextArray)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpAuthorisationsWhereNoOperatingCentres')]
+    public function testAuthorisationsWhereNoOperatingCentres(mixed $contextArray): void
     {
         $authorisationText = "AUTHORISATION_TEXT1\nAUTHORISATION_TEXT2";
 
@@ -119,7 +119,7 @@ class Text3Test extends MockeryTestCase
         );
     }
 
-    public function dpAuthorisationsWhereNoOperatingCentres()
+    public static function dpAuthorisationsWhereNoOperatingCentres(): array
     {
         return [
             [
@@ -151,13 +151,11 @@ class Text3Test extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpAuthorisationsAndOperatingCentresWhereOneOrMoreOperatingCentres
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpAuthorisationsAndOperatingCentresWhereOneOrMoreOperatingCentres')]
     public function testAuthorisationsAndOperatingCentresWhereOneOrMoreOperatingCentres(
-        $operatingCentres,
-        $expectedText
-    ) {
+        mixed $operatingCentres,
+        mixed $expectedText
+    ): void {
         $publicationLink = $this->getPublicationLink(Organisation::ORG_TYPE_LLP);
         $context = new ImmutableArrayObject(
             [
@@ -175,7 +173,7 @@ class Text3Test extends MockeryTestCase
         );
     }
 
-    public function dpAuthorisationsAndOperatingCentresWhereOneOrMoreOperatingCentres()
+    public static function dpAuthorisationsAndOperatingCentresWhereOneOrMoreOperatingCentres(): array
     {
         return [
             [
@@ -189,7 +187,7 @@ class Text3Test extends MockeryTestCase
         ];
     }
 
-    public function testTransportManagers()
+    public function testTransportManagers(): void
     {
         $person1 = new \Dvsa\Olcs\Api\Entity\Person\Person();
         $person1->setForename('John')->setFamilyName('Jones');
@@ -219,7 +217,7 @@ class Text3Test extends MockeryTestCase
         $this->assertSame($expectedText3, $publicationLink->getText3());
     }
 
-    public function testConditionUndertaking()
+    public function testConditionUndertaking(): void
     {
         $publicationLink = $this->getPublicationLink(Organisation::ORG_TYPE_LLP);
         $context = new ImmutableArrayObject(
@@ -235,10 +233,8 @@ class Text3Test extends MockeryTestCase
         $this->assertSame($expectedText3, $publicationLink->getText3());
     }
 
-    /**
-     * @dataProvider dataProviderTestUpgrade
-     */
-    public function testUpgrade($licenceTypeId, $applicationLicenceTypeId, $isUpgrade)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestUpgrade')]
+    public function testUpgrade(mixed $licenceTypeId, mixed $applicationLicenceTypeId, mixed $isUpgrade): void
     {
         $publicationLink = $this->getPublicationLink(Organisation::ORG_TYPE_LLP);
         $publicationLink->getApplication()->getLicenceType()->setId($applicationLicenceTypeId);
@@ -256,7 +252,7 @@ class Text3Test extends MockeryTestCase
         }
     }
 
-    public function dataProviderTestUpgrade()
+    public static function dataProviderTestUpgrade(): array
     {
         return [
             [Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_STANDARD_NATIONAL, true],

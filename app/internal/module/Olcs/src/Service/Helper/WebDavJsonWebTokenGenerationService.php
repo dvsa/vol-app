@@ -14,10 +14,10 @@ class WebDavJsonWebTokenGenerationService
     public const TOKEN_PAYLOAD_KEY_EXPIRES_AT = 'exp';
 
 
-    private int $defaultLifetimeSeconds;
-    private string $privateKey;
+    private readonly int $defaultLifetimeSeconds;
+    private readonly string $privateKey;
 
-    public function __construct(string $privateKey, int $defaultLifetimeSeconds, private string $urlPattern)
+    public function __construct(string $privateKey, int $defaultLifetimeSeconds, private readonly string $urlPattern)
     {
         $this->defaultLifetimeSeconds = $this->parseDefaultLifetimeSeconds($defaultLifetimeSeconds);
         $this->privateKey = $this->parsePrivateKey($privateKey);

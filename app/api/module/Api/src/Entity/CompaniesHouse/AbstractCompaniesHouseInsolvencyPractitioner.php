@@ -29,7 +29,7 @@ use Doctrine\Common\Collections\Collection;
  *    }
  * )
  */
-abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -173,7 +173,8 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -196,7 +197,8 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Get the companies house company
      *
-     * @return \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany     */
+     * @return \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany
+     */
     public function getCompaniesHouseCompany()
     {
         return $this->companiesHouseCompany;
@@ -219,7 +221,8 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Get the name
      *
-     * @return string     */
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -242,7 +245,8 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Get the address line1
      *
-     * @return string     */
+     * @return string
+     */
     public function getAddressLine1()
     {
         return $this->addressLine1;
@@ -265,7 +269,8 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Get the address line2
      *
-     * @return string     */
+     * @return string
+     */
     public function getAddressLine2()
     {
         return $this->addressLine2;
@@ -288,7 +293,8 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Get the country
      *
-     * @return string     */
+     * @return string
+     */
     public function getCountry()
     {
         return $this->country;
@@ -311,7 +317,8 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Get the locality
      *
-     * @return string     */
+     * @return string
+     */
     public function getLocality()
     {
         return $this->locality;
@@ -334,7 +341,8 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Get the postal code
      *
-     * @return string     */
+     * @return string
+     */
     public function getPostalCode()
     {
         return $this->postalCode;
@@ -357,7 +365,8 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Get the region
      *
-     * @return string     */
+     * @return string
+     */
     public function getRegion()
     {
         return $this->region;
@@ -382,7 +391,8 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getAppointedOn($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -409,7 +419,8 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -418,6 +429,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -29,6 +29,7 @@ final class UndoGrant extends AbstractCommandHandler implements TransactionedInt
     /**
      * @param Cmd $command
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

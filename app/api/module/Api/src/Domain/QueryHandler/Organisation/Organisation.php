@@ -11,6 +11,7 @@ class Organisation extends AbstractQueryHandler
 
     protected $extraRepos = ['TrafficArea'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $organisation \Dvsa\Olcs\Api\Entity\Organisation\Organisation */

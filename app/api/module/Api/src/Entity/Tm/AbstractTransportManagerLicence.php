@@ -40,7 +40,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTransportManagerLicence implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTransportManagerLicence implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -264,7 +264,8 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -287,7 +288,8 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the transport manager
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     */
     public function getTransportManager()
     {
         return $this->transportManager;
@@ -310,7 +312,8 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -333,7 +336,8 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the tm type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getTmType()
     {
         return $this->tmType;
@@ -356,7 +360,8 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -379,7 +384,8 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -402,7 +408,8 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the is owner
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsOwner()
     {
         return $this->isOwner;
@@ -425,7 +432,8 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the hours mon
      *
-     * @return string     */
+     * @return string
+     */
     public function getHoursMon()
     {
         return $this->hoursMon;
@@ -448,7 +456,8 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the hours tue
      *
-     * @return string     */
+     * @return string
+     */
     public function getHoursTue()
     {
         return $this->hoursTue;
@@ -471,7 +480,8 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the hours wed
      *
-     * @return string     */
+     * @return string
+     */
     public function getHoursWed()
     {
         return $this->hoursWed;
@@ -494,7 +504,8 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the hours thu
      *
-     * @return string     */
+     * @return string
+     */
     public function getHoursThu()
     {
         return $this->hoursThu;
@@ -517,7 +528,8 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the hours fri
      *
-     * @return string     */
+     * @return string
+     */
     public function getHoursFri()
     {
         return $this->hoursFri;
@@ -540,7 +552,8 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the hours sat
      *
-     * @return string     */
+     * @return string
+     */
     public function getHoursSat()
     {
         return $this->hoursSat;
@@ -563,7 +576,8 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the hours sun
      *
-     * @return string     */
+     * @return string
+     */
     public function getHoursSun()
     {
         return $this->hoursSun;
@@ -586,7 +600,8 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the additional information
      *
-     * @return string     */
+     * @return string
+     */
     public function getAdditionalInformation()
     {
         return $this->additionalInformation;
@@ -611,7 +626,8 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getLastTmLetterDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -638,7 +654,8 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -661,7 +678,8 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -733,6 +751,7 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

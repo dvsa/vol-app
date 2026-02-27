@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Letter;
 
 use Dvsa\Olcs\Api\Domain\QueryHandlerManager;
@@ -42,9 +44,8 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         );
 
         // Initialize Logger properly (Logger is static)
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
     }
 
@@ -53,14 +54,14 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         m::close();
     }
 
-    public function testReplaceGrabsReturnsEmptyStringWhenGivenEmptyString()
+    public function testReplaceGrabsReturnsEmptyStringWhenGivenEmptyString(): void
     {
         $result = $this->service->replaceGrabs('', []);
 
         $this->assertEquals('', $result);
     }
 
-    public function testReplaceGrabsReturnsOriginalJsonWhenNoTokensFound()
+    public function testReplaceGrabsReturnsOriginalJsonWhenNoTokensFound(): void
     {
         $json = json_encode(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Hello World']]]]);
 
@@ -69,7 +70,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertEquals($json, $result);
     }
 
-    public function testReplaceGrabsSuccessfullyReplacesStaticBookmark()
+    public function testReplaceGrabsSuccessfullyReplacesStaticBookmark(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -96,7 +97,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringNotContainsString('[[TODAYS_DATE]]', $decoded['blocks'][0]['data']['text']);
     }
 
-    public function testReplaceGrabsSuccessfullyReplacesDynamicBookmark()
+    public function testReplaceGrabsSuccessfullyReplacesDynamicBookmark(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -138,7 +139,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringNotContainsString('[[OP_NAME]]', $decoded['blocks'][0]['data']['text']);
     }
 
-    public function testReplaceGrabsInjectsTranslatorInterfaceIntoBookmark()
+    public function testReplaceGrabsInjectsTranslatorInterfaceIntoBookmark(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -163,7 +164,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertNotEmpty($result);
     }
 
-    public function testReplaceGrabsHandlesBookmarkCreationException()
+    public function testReplaceGrabsHandlesBookmarkCreationException(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -184,7 +185,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringContainsString('[[UNKNOWN_TOKEN]]', $decoded['blocks'][0]['data']['text']);
     }
 
-    public function testReplaceGrabsHandlesQueryExecutionException()
+    public function testReplaceGrabsHandlesQueryExecutionException(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -220,7 +221,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringContainsString('[[OP_NAME]]', $decoded['blocks'][0]['data']['text']);
     }
 
-    public function testReplaceGrabsHandlesRenderException()
+    public function testReplaceGrabsHandlesRenderException(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -248,7 +249,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringContainsString('[[TEST_TOKEN]]', $decoded['blocks'][0]['data']['text']);
     }
 
-    public function testReplaceGrabsHandlesTopLevelException()
+    public function testReplaceGrabsHandlesTopLevelException(): void
     {
         // Pass invalid JSON to trigger exception in main try/catch
         $invalidJson = 'invalid{json';
@@ -259,7 +260,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertEquals($invalidJson, $result);
     }
 
-    public function testReplaceGrabsHandlesMultipleTokensWithMixedSuccess()
+    public function testReplaceGrabsHandlesMultipleTokensWithMixedSuccess(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -293,7 +294,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringContainsString('[[BAD_TOKEN]]', $decoded['blocks'][0]['data']['text']);
     }
 
-    public function testReplaceGrabsSkipsStaticBookmarksInQueryExecution()
+    public function testReplaceGrabsSkipsStaticBookmarksInQueryExecution(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -318,5 +319,194 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $result = $this->service->replaceGrabs($json, []);
 
         $this->assertNotEmpty($result);
+    }
+
+    // Tests for replaceGrabsInHtml method
+
+    public function testReplaceGrabsInHtmlReturnsEmptyStringWhenGivenEmptyString(): void
+    {
+        $result = $this->service->replaceGrabsInHtml('', []);
+
+        $this->assertEquals('', $result);
+    }
+
+    public function testReplaceGrabsInHtmlReturnsOriginalHtmlWhenNoTokensFound(): void
+    {
+        $html = '<html><body><p>Hello World</p></body></html>';
+
+        $result = $this->service->replaceGrabsInHtml($html, ['licence' => 7]);
+
+        $this->assertEquals($html, $result);
+    }
+
+    public function testReplaceGrabsInHtmlSuccessfullyReplacesStaticBookmark(): void
+    {
+        $html = '<html><body><p>Date: [[TODAYS_DATE]]</p></body></html>';
+
+        $mockBookmark = m::mock(StaticBookmark::class);
+        $mockBookmark->shouldReceive('isStatic')->andReturn(true);
+        $mockBookmark->shouldReceive('render')->andReturn('23rd January 2026');
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('TODAYS_DATE')
+            ->once()
+            ->andReturn($mockBookmark);
+
+        $result = $this->service->replaceGrabsInHtml($html, ['user' => 1]);
+
+        $this->assertStringContainsString('23rd January 2026', $result);
+        $this->assertStringNotContainsString('[[TODAYS_DATE]]', $result);
+    }
+
+    public function testReplaceGrabsInHtmlSuccessfullyReplacesDynamicBookmark(): void
+    {
+        $html = '<div>Operator: [[OP_NAME]]</div>';
+
+        $mockBookmark = m::mock(DynamicBookmark::class, DateHelperAwareInterface::class);
+        $mockBookmark->shouldReceive('setDateHelper')->with($this->mockDateService)->once();
+        $mockBookmark->shouldReceive('isStatic')->andReturn(false);
+
+        $mockQuery = m::mock(QueryInterface::class);
+        $mockBookmark->shouldReceive('validateDataAndGetQuery')
+            ->with(['licence' => 7])
+            ->once()
+            ->andReturn($mockQuery);
+
+        $queryResult = ['organisation' => ['name' => 'Test Company Ltd']];
+        $this->mockQueryHandler->shouldReceive('handleQuery')
+            ->with($mockQuery)
+            ->once()
+            ->andReturn($queryResult);
+
+        $mockBookmark->shouldReceive('setData')->with($queryResult)->once();
+        $mockBookmark->shouldReceive('render')->andReturn('Test Company Ltd');
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('OP_NAME')
+            ->once()
+            ->andReturn($mockBookmark);
+
+        $result = $this->service->replaceGrabsInHtml($html, ['licence' => 7]);
+
+        $this->assertStringContainsString('Test Company Ltd', $result);
+        $this->assertStringNotContainsString('[[OP_NAME]]', $result);
+    }
+
+    public function testReplaceGrabsInHtmlInjectsTranslatorInterfaceIntoBookmark(): void
+    {
+        $html = '<p>[[TEST_TOKEN]]</p>';
+
+        $mockBookmark = m::mock(StaticBookmark::class, TranslatorAwareInterface::class);
+        $mockBookmark->shouldReceive('setTranslator')->with($this->mockTranslator)->once();
+        $mockBookmark->shouldReceive('isStatic')->andReturn(true);
+        $mockBookmark->shouldReceive('render')->andReturn('Translated Value');
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('TEST_TOKEN')
+            ->once()
+            ->andReturn($mockBookmark);
+
+        $result = $this->service->replaceGrabsInHtml($html, []);
+
+        $this->assertStringContainsString('Translated Value', $result);
+    }
+
+    public function testReplaceGrabsInHtmlHandlesBookmarkCreationException(): void
+    {
+        $html = '<p>[[UNKNOWN_TOKEN]]</p>';
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('UNKNOWN_TOKEN')
+            ->once()
+            ->andThrow(new \Exception('Bookmark class not found'));
+
+        $result = $this->service->replaceGrabsInHtml($html, []);
+
+        $this->assertStringContainsString('[[UNKNOWN_TOKEN]]', $result);
+    }
+
+    public function testReplaceGrabsInHtmlHandlesMultipleTokens(): void
+    {
+        $html = '<html>Date: [[TODAYS_DATE]] Name: [[OP_NAME]]</html>';
+
+        $mockDateBookmark = m::mock(StaticBookmark::class);
+        $mockDateBookmark->shouldReceive('isStatic')->andReturn(true);
+        $mockDateBookmark->shouldReceive('render')->andReturn('23rd January 2026');
+
+        $mockNameBookmark = m::mock(DynamicBookmark::class);
+        $mockNameBookmark->shouldReceive('isStatic')->andReturn(false);
+
+        $mockQuery = m::mock(QueryInterface::class);
+        $mockNameBookmark->shouldReceive('validateDataAndGetQuery')
+            ->with(['licence' => 123])
+            ->once()
+            ->andReturn($mockQuery);
+
+        $this->mockQueryHandler->shouldReceive('handleQuery')
+            ->with($mockQuery)
+            ->once()
+            ->andReturn(['name' => 'ACME Ltd']);
+
+        $mockNameBookmark->shouldReceive('setData')->once();
+        $mockNameBookmark->shouldReceive('render')->andReturn('ACME Ltd');
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('TODAYS_DATE')
+            ->once()
+            ->andReturn($mockDateBookmark);
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('OP_NAME')
+            ->once()
+            ->andReturn($mockNameBookmark);
+
+        $result = $this->service->replaceGrabsInHtml($html, ['licence' => 123]);
+
+        $this->assertStringContainsString('23rd January 2026', $result);
+        $this->assertStringContainsString('ACME Ltd', $result);
+        $this->assertStringNotContainsString('[[TODAYS_DATE]]', $result);
+        $this->assertStringNotContainsString('[[OP_NAME]]', $result);
+    }
+
+    public function testReplaceGrabsInHtmlPreservesHtmlStructure(): void
+    {
+        $html = '<div class="header">
+            <h1>Letter</h1>
+            <p>Date: [[TODAYS_DATE]]</p>
+        </div>';
+
+        $mockBookmark = m::mock(StaticBookmark::class);
+        $mockBookmark->shouldReceive('isStatic')->andReturn(true);
+        $mockBookmark->shouldReceive('render')->andReturn('23rd January 2026');
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('TODAYS_DATE')
+            ->once()
+            ->andReturn($mockBookmark);
+
+        $result = $this->service->replaceGrabsInHtml($html, []);
+
+        // HTML structure should be preserved
+        $this->assertStringContainsString('<div class="header">', $result);
+        $this->assertStringContainsString('<h1>Letter</h1>', $result);
+        $this->assertStringContainsString('23rd January 2026', $result);
+    }
+
+    public function testReplaceGrabsInHtmlConvertsNewlinesToBrTags(): void
+    {
+        $html = '<div>Address: [[TA_ADDRESS]]</div>';
+
+        $mockBookmark = m::mock(StaticBookmark::class);
+        $mockBookmark->shouldReceive('isStatic')->andReturn(true);
+        $mockBookmark->shouldReceive('render')->andReturn("Line 1\nLine 2\nLine 3");
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('TA_ADDRESS')
+            ->once()
+            ->andReturn($mockBookmark);
+
+        $result = $this->service->replaceGrabsInHtml($html, []);
+
+        $this->assertStringContainsString('Line 1<br>' . "\n" . 'Line 2<br>' . "\n" . 'Line 3', $result);
     }
 }

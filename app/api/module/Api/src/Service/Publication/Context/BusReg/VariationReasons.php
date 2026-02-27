@@ -13,6 +13,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
  */
 final class VariationReasons extends AbstractContext
 {
+    #[\Override]
     public function provide(PublicationLink $publication, \ArrayObject $context)
     {
         $busReg = $publication->getBusReg();

@@ -23,6 +23,7 @@ class ProhibitionDefect extends AbstractRepository
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $qb->andWhere($qb->expr()->eq($this->alias . '.prohibition', ':byProhibition'))
@@ -33,6 +34,7 @@ class ProhibitionDefect extends AbstractRepository
      *
      * @param QueryBuilder $qb
      */
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         $this->getQueryBuilder()->modifyQuery($qb)

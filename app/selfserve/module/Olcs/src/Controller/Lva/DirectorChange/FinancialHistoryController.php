@@ -63,6 +63,7 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
      *
      * @return array required previous sections or return empty array
      */
+    #[\Override]
     protected function getRequiredSections()
     {
         return ['peopleStatus'];
@@ -73,6 +74,7 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
      *
      * @return string
      */
+    #[\Override]
     protected function getVariationType()
     {
         return RefData::VARIATION_TYPE_DIRECTOR_CHANGE;
@@ -83,6 +85,7 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
      *
      * @return string
      */
+    #[\Override]
     public function getSubmitActionText()
     {
         return 'Continue to Licence History';
@@ -95,6 +98,7 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
      *
      * @return array route definition
      */
+    #[\Override]
     protected function getPreviousPageRoute()
     {
         return ['name' => 'lva-director_change/people', 'params' => ['application' => $this->getIdentifier()]];
@@ -105,6 +109,7 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
      *
      * @return array route definition
      */
+    #[\Override]
     protected function getNextPageRoute()
     {
         return [
@@ -120,6 +125,7 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
      *
      * @return FormInterface
      */
+    #[\Override]
     protected function getFinancialHistoryForm(array $data = [])
     {
         $data['variationType'] = $this->getVariationType();
@@ -132,6 +138,7 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
      *
      * @return array
      */
+    #[\Override]
     public function getStartRoute()
     {
         $licenceId = $this->getLicenceId($this->getApplicationId());

@@ -16,6 +16,7 @@ class PublicationLatestByTaAndTypeBundle extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Publication';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $results = $this->getRepo()->fetchLatestForTrafficAreaAndType($query->getTrafficArea(), $query->getPubType());

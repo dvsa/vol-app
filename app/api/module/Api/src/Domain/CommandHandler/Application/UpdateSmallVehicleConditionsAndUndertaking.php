@@ -15,6 +15,7 @@ final class UpdateSmallVehicleConditionsAndUndertaking extends AbstractUpdateApp
     ];
     protected string $confirmMessage = 'small vehicle conditions updated';
 
+    #[\Override]
     protected function updateApplication(ApplicationEntity $application, Command|CommandInterface $command): void
     {
         $application->setPsvSmallVhlConfirmation($command->getPsvSmallVhlConfirmation());

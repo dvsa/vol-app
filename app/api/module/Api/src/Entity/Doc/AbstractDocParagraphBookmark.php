@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractDocParagraphBookmark implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractDocParagraphBookmark implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -141,7 +141,8 @@ abstract class AbstractDocParagraphBookmark implements BundleSerializableInterfa
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -164,7 +165,8 @@ abstract class AbstractDocParagraphBookmark implements BundleSerializableInterfa
     /**
      * Get the doc bookmark
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\DocBookmark     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\DocBookmark
+     */
     public function getDocBookmark()
     {
         return $this->docBookmark;
@@ -187,7 +189,8 @@ abstract class AbstractDocParagraphBookmark implements BundleSerializableInterfa
     /**
      * Get the doc paragraph
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\DocParagraph     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\DocParagraph
+     */
     public function getDocParagraph()
     {
         return $this->docParagraph;
@@ -210,7 +213,8 @@ abstract class AbstractDocParagraphBookmark implements BundleSerializableInterfa
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -233,7 +237,8 @@ abstract class AbstractDocParagraphBookmark implements BundleSerializableInterfa
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -256,7 +261,8 @@ abstract class AbstractDocParagraphBookmark implements BundleSerializableInterfa
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -265,6 +271,7 @@ abstract class AbstractDocParagraphBookmark implements BundleSerializableInterfa
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

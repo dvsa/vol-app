@@ -13,6 +13,7 @@ use Psr\Container\ContainerInterface;
 
 class LetterIssueControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LetterIssueController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

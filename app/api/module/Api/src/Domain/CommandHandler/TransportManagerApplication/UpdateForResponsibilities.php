@@ -24,6 +24,7 @@ final class UpdateForResponsibilities extends AbstractCommandHandler implements 
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $transportManagerApplication =  $this->updateTransportManagerApplication($command);

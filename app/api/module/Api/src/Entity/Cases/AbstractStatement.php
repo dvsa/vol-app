@@ -43,7 +43,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractStatement implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractStatement implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -270,7 +270,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -293,7 +294,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -316,7 +318,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Get the statement type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getStatementType()
     {
         return $this->statementType;
@@ -339,7 +342,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Get the assigned caseworker
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getAssignedCaseworker()
     {
         return $this->assignedCaseworker;
@@ -362,7 +366,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Get the contact type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getContactType()
     {
         return $this->contactType;
@@ -385,7 +390,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Get the licence type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getLicenceType()
     {
         return $this->licenceType;
@@ -408,7 +414,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Get the requestors contact details
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     */
     public function getRequestorsContactDetails()
     {
         return $this->requestorsContactDetails;
@@ -431,7 +438,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -454,7 +462,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -477,7 +486,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Get the vrm
      *
-     * @return string     */
+     * @return string
+     */
     public function getVrm()
     {
         return $this->vrm;
@@ -502,7 +512,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getStoppedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -531,7 +542,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getRequestedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -558,7 +570,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Get the authorisers decision
      *
-     * @return string     */
+     * @return string
+     */
     public function getAuthorisersDecision()
     {
         return $this->authorisersDecision;
@@ -583,7 +596,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getIssuedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -610,7 +624,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Get the licence no
      *
-     * @return string     */
+     * @return string
+     */
     public function getLicenceNo()
     {
         return $this->licenceNo;
@@ -633,7 +648,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Get the requestors body
      *
-     * @return string     */
+     * @return string
+     */
     public function getRequestorsBody()
     {
         return $this->requestorsBody;
@@ -656,7 +672,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -679,7 +696,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -751,6 +769,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

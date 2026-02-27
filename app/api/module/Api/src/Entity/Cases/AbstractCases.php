@@ -38,7 +38,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractCases implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCases implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -445,7 +445,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -468,7 +469,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the case type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getCaseType()
     {
         return $this->caseType;
@@ -491,7 +493,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
     public function getApplication()
     {
         return $this->application;
@@ -514,7 +517,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the transport manager
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     */
     public function getTransportManager()
     {
         return $this->transportManager;
@@ -537,7 +541,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -560,7 +565,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -583,7 +589,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -606,7 +613,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the ecms no
      *
-     * @return string     */
+     * @return string
+     */
     public function getEcmsNo()
     {
         return $this->ecmsNo;
@@ -631,7 +639,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getOpenDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -660,7 +669,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getClosedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -687,7 +697,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -710,7 +721,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the is impounding
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsImpounding()
     {
         return $this->isImpounding;
@@ -733,7 +745,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the annual test history
      *
-     * @return string     */
+     * @return string
+     */
     public function getAnnualTestHistory()
     {
         return $this->annualTestHistory;
@@ -756,7 +769,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the prohibition note
      *
-     * @return string     */
+     * @return string
+     */
     public function getProhibitionNote()
     {
         return $this->prohibitionNote;
@@ -779,7 +793,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the penalties note
      *
-     * @return string     */
+     * @return string
+     */
     public function getPenaltiesNote()
     {
         return $this->penaltiesNote;
@@ -802,7 +817,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the conviction note
      *
-     * @return string     */
+     * @return string
+     */
     public function getConvictionNote()
     {
         return $this->convictionNote;
@@ -825,7 +841,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -848,7 +865,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -871,7 +889,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the olbs type
      *
-     * @return string     */
+     * @return string
+     */
     public function getOlbsType()
     {
         return $this->olbsType;
@@ -1020,7 +1039,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the appeal
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Appeal     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Appeal
+     */
     public function getAppeal()
     {
         return $this->appeal;
@@ -1358,7 +1378,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the erru request
      *
-     * @return \Dvsa\Olcs\Api\Entity\Si\ErruRequest     */
+     * @return \Dvsa\Olcs\Api\Entity\Si\ErruRequest
+     */
     public function getErruRequest()
     {
         return $this->erruRequest;
@@ -1507,7 +1528,8 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the public inquiry
      *
-     * @return \Dvsa\Olcs\Api\Entity\Pi\Pi     */
+     * @return \Dvsa\Olcs\Api\Entity\Pi\Pi
+     */
     public function getPublicInquiry()
     {
         return $this->publicInquiry;
@@ -1831,6 +1853,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

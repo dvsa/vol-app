@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use DateTime;
@@ -25,7 +27,7 @@ class IrhpPermitWindowTest extends RepositoryTestCase
         $this->setUpSut(IrhpPermitWindow::class);
     }
 
-    public function testFetchOpenWindows()
+    public function testFetchOpenWindows(): void
     {
         $expectedResult = [
             m::mock(IrhpPermitWindowEntity::class),
@@ -96,7 +98,7 @@ class IrhpPermitWindowTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchLastOpenWindowByStockId()
+    public function testFetchLastOpenWindowByStockId(): void
     {
         $expectedResult = m::mock(IrhpPermitWindowEntity::class);
 
@@ -163,7 +165,7 @@ class IrhpPermitWindowTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchWindowsToBeClosed()
+    public function testFetchWindowsToBeClosed(): void
     {
         $now = new \DateTime('2018-10-25 13:21:10');
 
@@ -186,7 +188,7 @@ class IrhpPermitWindowTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchOpenWindowsByCountry()
+    public function testFetchOpenWindowsByCountry(): void
     {
         $now = new \DateTime('2018-10-25 13:21:10');
 
@@ -222,7 +224,7 @@ class IrhpPermitWindowTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchLastOpenWindowByIrhpPermitType()
+    public function testFetchLastOpenWindowByIrhpPermitType(): void
     {
         $now = new \DateTime('2018-10-25 13:21:10');
 
@@ -257,7 +259,7 @@ class IrhpPermitWindowTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchLastOpenWindowByIrhpPermitTypeWhenNoWindowOpen()
+    public function testFetchLastOpenWindowByIrhpPermitTypeWhenNoWindowOpen(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\NotFoundException::class);
         $this->expectExceptionMessage('No window available.');
@@ -281,7 +283,7 @@ class IrhpPermitWindowTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchLastOpenWindowByIrhpPermitTypeWithYear()
+    public function testFetchLastOpenWindowByIrhpPermitTypeWithYear(): void
     {
         $now = new \DateTime('2018-10-25 13:21:10');
 
@@ -319,10 +321,8 @@ class IrhpPermitWindowTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    /**
-     * @dataProvider fetchOpenWindowsByTypeProvider
-     */
-    public function testFetchOpenWindowsByType($isInternal, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('fetchOpenWindowsByTypeProvider')]
+    public function testFetchOpenWindowsByType(mixed $isInternal, mixed $expected): void
     {
         $now = new DateTime('2019-04-08 09:51:10');
 
@@ -344,10 +344,7 @@ class IrhpPermitWindowTest extends RepositoryTestCase
         $this->assertEquals($expected, $this->query);
     }
 
-    /**
-     * @dataProvider fetchOpenWindowsByTypeProvider
-     */
-    public function fetchOpenWindowsByTypeProvider()
+    public static function fetchOpenWindowsByTypeProvider(): array
     {
         return [
             [false, 'BLAH '
@@ -368,10 +365,7 @@ class IrhpPermitWindowTest extends RepositoryTestCase
         ];
     }
 
-    /**
-     * @dataProvider fetchOpenWindowsByTypeYearProvider
-     */
-    public function testFetchOpenWindowsByTypeYear()
+    public function testFetchOpenWindowsByTypeYear(): void
     {
         $now = new DateTime('2019-04-08 09:51:10');
 
@@ -408,7 +402,7 @@ class IrhpPermitWindowTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function fetchOpenWindowsByTypeYearProvider()
+    public static function fetchOpenWindowsByTypeYearProvider(): array
     {
         return [
             [false, 'BLAH '
@@ -429,7 +423,7 @@ class IrhpPermitWindowTest extends RepositoryTestCase
         ];
     }
 
-    public function testFindOverlappingWindowsByType()
+    public function testFindOverlappingWindowsByType(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $this->em->shouldReceive('getRepository->createQueryBuilder')->once()->andReturn($mockQb);

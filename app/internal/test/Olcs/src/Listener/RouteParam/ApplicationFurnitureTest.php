@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\Exception\ResourceNotFoundException;
@@ -49,18 +51,24 @@ class ApplicationFurnitureTest extends TestCase
         $this->sut->__invoke($sl, ApplicationFurniture::class);
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
         $events = m::mock(EventManagerInterface::class);
 
-        $events->shouldReceive('attach')->once()
-            ->with('route.param.application', [$this->sut, 'onApplicationFurniture'], 1)
-            ->andReturn('listener');
+        $events->expects('attach')
+            ->with(
+                'route.param.application',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onApplicationFurniture';
+                }),
+                1
+            );
 
         $this->sut->attach($events);
     }
 
-    public function testOnApplicationFurnitureWithError()
+    public function testOnApplicationFurnitureWithError(): void
     {
         $this->expectException(ResourceNotFoundException::class);
 
@@ -79,7 +87,7 @@ class ApplicationFurnitureTest extends TestCase
         $this->sut->onApplicationFurniture($event);
     }
 
-    public function testOnApplicationFurnitureValid()
+    public function testOnApplicationFurnitureValid(): void
     {
         $routeParam = new RouteParam();
         $routeParam->setValue(111);
@@ -180,7 +188,7 @@ class ApplicationFurnitureTest extends TestCase
         $this->sut->onApplicationFurniture($event);
     }
 
-    public function testOnApplicationFurnitureIsVariationValid()
+    public function testOnApplicationFurnitureIsVariationValid(): void
     {
         $routeParam = new RouteParam();
         $routeParam->setValue(111);
@@ -280,7 +288,7 @@ class ApplicationFurnitureTest extends TestCase
         $this->sut->onApplicationFurniture($event);
     }
 
-    public function testOnApplicationFurnitureNotSubmitted()
+    public function testOnApplicationFurnitureNotSubmitted(): void
     {
         $routeParam = new RouteParam();
         $routeParam->setValue(111);
@@ -376,7 +384,7 @@ class ApplicationFurnitureTest extends TestCase
         $this->sut->onApplicationFurniture($event);
     }
 
-    public function testOnApplicationFurnitureNotSubmittedNoLicNo()
+    public function testOnApplicationFurnitureNotSubmittedNoLicNo(): void
     {
         $routeParam = new RouteParam();
         $routeParam->setValue(111);

@@ -20,6 +20,7 @@ class Modify extends CanAccessLicenceVehicleWithId
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         if ($this->canAccessApplication($dto->getApplication()) === false) {

@@ -13,6 +13,7 @@ final class ConditionUndertaking extends AbstractQueryHandler
 {
     protected $repoServiceName = 'ConditionUndertaking';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->result(

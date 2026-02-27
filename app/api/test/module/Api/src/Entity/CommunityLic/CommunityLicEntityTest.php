@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\CommunityLic;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -26,7 +28,7 @@ class CommunityLicEntityTest extends EntityTester
      */
     protected $entityClass = CommunityLicEntity::class;
 
-    public function testUpdateCommunityLic()
+    public function testUpdateCommunityLic(): void
     {
         $data = [
             'status' => 'status',
@@ -46,7 +48,7 @@ class CommunityLicEntityTest extends EntityTester
         $this->assertEquals(0, $sut->getIssueNo());
     }
 
-    public function testChangeStatusAndExpiryDate()
+    public function testChangeStatusAndExpiryDate(): void
     {
         $sut = m::mock(CommunityLicEntity::class)->makePartial();
         $sut->changeStatusAndExpiryDate('status', '2015-01-01');
@@ -54,7 +56,7 @@ class CommunityLicEntityTest extends EntityTester
         $this->assertEquals('2015-01-01', $sut->getExpiredDate());
     }
 
-    public function testGetCalculatedBundleValues()
+    public function testGetCalculatedBundleValues(): void
     {
         $sut = m::mock(CommunityLicEntity::class)->makePartial()
             ->shouldReceive('getStatus')
@@ -77,7 +79,7 @@ class CommunityLicEntityTest extends EntityTester
         $this->assertEquals($expected, $sut->getCalculatedBundleValues());
     }
 
-    public function testGetFutureSuspension()
+    public function testGetFutureSuspension(): void
     {
         $suspension = new CommunityLicSuspension();
 
@@ -137,7 +139,7 @@ class CommunityLicEntityTest extends EntityTester
         $this->assertEquals($result, $expected);
     }
 
-    public function testGetCurrentSuspension()
+    public function testGetCurrentSuspension(): void
     {
         $suspension = new CommunityLicSuspension();
 
@@ -197,7 +199,7 @@ class CommunityLicEntityTest extends EntityTester
         $this->assertEquals($result, $expected);
     }
 
-    public function testGetCurrentWithdrawal()
+    public function testGetCurrentWithdrawal(): void
     {
         $withdrawal = new CommunityLicWithdrawal();
 
@@ -238,7 +240,7 @@ class CommunityLicEntityTest extends EntityTester
         $this->assertEquals($result, $expected);
     }
 
-    public function testIsActiveTrue()
+    public function testIsActiveTrue(): void
     {
         $sut = m::mock(CommunityLicEntity::class)->makePartial();
         $sut->shouldReceive('getStatus->getId')
@@ -247,10 +249,8 @@ class CommunityLicEntityTest extends EntityTester
         $this->assertTrue($sut->isActive());
     }
 
-    /**
-     * @dataProvider dpTestIsActiveFalse
-     */
-    public function testIsActiveFalse($status)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsActiveFalse')]
+    public function testIsActiveFalse(mixed $status): void
     {
         $sut = m::mock(CommunityLicEntity::class)->makePartial();
         $sut->shouldReceive('getStatus->getId')
@@ -259,7 +259,7 @@ class CommunityLicEntityTest extends EntityTester
         $this->assertFalse($sut->isActive());
     }
 
-    public function dpTestIsActiveFalse()
+    public static function dpTestIsActiveFalse(): array
     {
         return [
             [CommunityLicEntity::STATUS_PENDING],

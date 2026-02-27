@@ -17,6 +17,7 @@ class GetList extends AbstractQueryHandler
 
     protected $bundle = ['document', 'letterType'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $list = $this->getRepo()->fetchList($query, Query::HYDRATE_OBJECT);

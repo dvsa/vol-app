@@ -33,8 +33,9 @@ final class SaveOperator extends AbstractCommandHandler implements Transactioned
 
     protected $extraRepos = ['OrganisationPerson', 'Person'];
 
-    public const ERROR_UNKNOWN_TYPE = 'ERR_ORG_1';
+    public const string ERROR_UNKNOWN_TYPE = 'ERR_ORG_1';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->validateOrganisation($command);

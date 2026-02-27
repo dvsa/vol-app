@@ -17,6 +17,7 @@ abstract class AbstractUpdateApplication extends AbstractCommandHandler implemen
     protected array $sections = [];
     protected string $confirmMessage = '';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $applicationId = $command->getId();

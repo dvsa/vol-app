@@ -23,11 +23,13 @@ use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
  */
 class MessagingConversation extends AbstractMessagingConversation implements LicenceProviderInterface, OrganisationProviderInterface
 {
+    #[\Override]
     public function getRelatedLicence(): Licence
     {
         return $this->task->getLicence();
     }
 
+    #[\Override]
     public function getRelatedOrganisation(): Organisation
     {
         return $this->getRelatedLicence()->getOrganisation();

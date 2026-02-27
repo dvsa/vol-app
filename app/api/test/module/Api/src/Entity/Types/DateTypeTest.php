@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -25,7 +27,7 @@ class DateTypeTest extends MockeryTestCase
         $this->mockPlatform = m::mock(AbstractPlatform::class);
     }
 
-    public function testConvertToPhpValueCovertExc()
+    public function testConvertToPhpValueCovertExc(): void
     {
         $value = '1146711721';
 
@@ -39,10 +41,8 @@ class DateTypeTest extends MockeryTestCase
         $this->sut->convertToPHPValue($value, $this->mockPlatform);
     }
 
-    /**
-     * @dataProvider dpTestConvertToPhpValue
-     */
-    public function testConvertToPhpValue($value, $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestConvertToPhpValue')]
+    public function testConvertToPhpValue(mixed $value, mixed $expect): void
     {
         $this->mockPlatform->shouldReceive('getDateFormatString')->atMost(1)->andReturn('d-m-Y');
 
@@ -51,7 +51,7 @@ class DateTypeTest extends MockeryTestCase
         static::assertEquals($expect, $actual);
     }
 
-    public function dpTestConvertToPhpValue()
+    public static function dpTestConvertToPhpValue(): array
     {
         return [
             [
@@ -70,10 +70,8 @@ class DateTypeTest extends MockeryTestCase
     }
 
 
-    /**
-     * @dataProvider dpTestConvertToDatabaseValue
-     */
-    public function testConvertToDatabaseValue($value, $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestConvertToDatabaseValue')]
+    public function testConvertToDatabaseValue(mixed $value, mixed $expect): void
     {
         /** @var AbstractPlatform | m\MockInterface $mockPlatform */
         $mockPlatform = m::mock(AbstractPlatform::class);
@@ -87,7 +85,7 @@ class DateTypeTest extends MockeryTestCase
         static::assertEquals($expect, $actual);
     }
 
-    public function dpTestConvertToDatabaseValue()
+    public static function dpTestConvertToDatabaseValue(): array
     {
         return [
             [

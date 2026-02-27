@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Irfo;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Irfo\UpdateIrfoPermitStockIssued as Sut;
@@ -26,7 +28,8 @@ class UpdateIrfoPermitStockIssuedTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrfoPermitStockEntity::STATUS_ISSUED
@@ -41,7 +44,7 @@ class UpdateIrfoPermitStockIssuedTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'ids' => array_fill(0, Sut::MAX_IDS_COUNT, 'id'),
@@ -107,7 +110,7 @@ class UpdateIrfoPermitStockIssuedTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function testHandleCommandWithMaxIdsCountExceeded()
+    public function testHandleCommandWithMaxIdsCountExceeded(): void
     {
         $this->expectException(Exception\ValidationException::class);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Permits;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock;
@@ -22,7 +24,7 @@ class IrhpPermitJurisdictionQuotaEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $trafficArea = m::mock(TrafficArea::class);
         $stock = m::mock(IrhpPermitStock::class);
@@ -34,7 +36,7 @@ class IrhpPermitJurisdictionQuotaEntityTest extends EntityTester
         self::assertEquals($stock, $entity->getIrhpPermitStock());
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $quotaNumber = 999;
 
@@ -47,7 +49,7 @@ class IrhpPermitJurisdictionQuotaEntityTest extends EntityTester
     /**
      * Create an entity, optionally passing in customised traffic area and stock
      */
-    private function createEntity($trafficArea = null, $stock = null)
+    private function createEntity(mixed $trafficArea = null, mixed $stock = null): mixed
     {
         if ($trafficArea === null) {
             $trafficArea = m::mock(TrafficArea::class);

@@ -9,6 +9,7 @@ class InterimRefunds extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Fee';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /**

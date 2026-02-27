@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Diagnostics;
 
 use Doctrine\ORM\EntityManager;
@@ -38,7 +40,7 @@ class GenerateCheckFkIntegritySqlTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testQuery()
+    public function testQuery(): void
     {
         $this->expectConstraintsQuery(
             [
@@ -103,7 +105,7 @@ class GenerateCheckFkIntegritySqlTest extends QueryHandlerTestCase
         );
     }
 
-    public function testThatCompoundForeignKeysThrowAnError()
+    public function testThatCompoundForeignKeysThrowAnError(): void
     {
         $this->expectConstraintsQuery(
             [
@@ -132,11 +134,10 @@ class GenerateCheckFkIntegritySqlTest extends QueryHandlerTestCase
     }
 
     /**
-     * @dataProvider provideOddCharactersForConstraintsQuery
-     *
      * @param $constraints
      */
-    public function testThatOddCharactersCauseExceptions($constraints)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideOddCharactersForConstraintsQuery')]
+    public function testThatOddCharactersCauseExceptions(mixed $constraints): void
     {
         $this->expectConstraintsQuery($constraints);
         $this->expectException(RuntimeException::class);
@@ -144,7 +145,7 @@ class GenerateCheckFkIntegritySqlTest extends QueryHandlerTestCase
         $this->sut->handleQuery(GenerateCheckFkIntegritySqlCmd::create([]));
     }
 
-    public function provideOddCharactersForConstraintsQuery()
+    public static function provideOddCharactersForConstraintsQuery(): \Generator
     {
         $identifierKeys = [
             'TABLE_SCHEMA',
@@ -168,7 +169,7 @@ class GenerateCheckFkIntegritySqlTest extends QueryHandlerTestCase
         }
     }
 
-    private function assertSameQueries($expectedQueries, $actualQueries)
+    private function assertSameQueries(mixed $expectedQueries, mixed $actualQueries): void
     {
         $this->assertSame(count($expectedQueries), count($actualQueries), "Incorrect number of queries");
         foreach (array_map(null, $expectedQueries, $actualQueries) as [$expectedQuery, $actualQuery]) {
@@ -176,7 +177,7 @@ class GenerateCheckFkIntegritySqlTest extends QueryHandlerTestCase
         }
     }
 
-    private function assertSameQuery($expectedQuery, $actualQuery)
+    private function assertSameQuery(mixed $expectedQuery, mixed $actualQuery): void
     {
         $this->assertSame(
             $this->normalize($expectedQuery),
@@ -185,15 +186,15 @@ class GenerateCheckFkIntegritySqlTest extends QueryHandlerTestCase
         );
     }
 
-    private function normalize($query)
+    private function normalize(mixed $query): mixed
     {
-        return trim(preg_replace('/(^ *| *$| *\n *)/', ' ', $query));
+        return trim((string) preg_replace('/(^ *| *$| *\n *)/', ' ', (string) $query));
     }
 
     /**
      * @param $constraints
      */
-    protected function expectConstraintsQuery($constraints)
+    protected function expectConstraintsQuery(mixed $constraints): void
     {
         $mockStatement = m::mock(PDOStatement::class);
         $this->mockPdo->shouldReceive('prepare')

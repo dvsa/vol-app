@@ -16,6 +16,7 @@ class UniqueCountriesByLicence extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         if ($query->getIrhpPermitType() != IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL) {

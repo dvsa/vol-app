@@ -23,6 +23,7 @@ final class MoveDocument extends AbstractCommandHandler implements Transactioned
 {
     protected $repoServiceName = 'Document';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $params = [

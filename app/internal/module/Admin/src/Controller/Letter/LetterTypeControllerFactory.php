@@ -14,6 +14,7 @@ use Psr\Container\ContainerInterface;
 
 class LetterTypeControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LetterTypeController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

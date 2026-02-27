@@ -32,6 +32,7 @@ class SiPenaltyImposedDate extends LaminasAbstractValidator
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($value)
     {
         if (isset($value['imposedErrus'])) {

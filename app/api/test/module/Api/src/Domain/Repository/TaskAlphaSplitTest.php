@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
@@ -18,7 +20,7 @@ class TaskAlphaSplitTest extends RepositoryTestCase
         $this->setUpSut(TaskAlphaSplitRepo::class);
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         $this->setUpSut(TaskAlphaSplitRepo::class, true);
 
@@ -30,7 +32,7 @@ class TaskAlphaSplitTest extends RepositoryTestCase
         $this->assertSame('[QUERY]', $this->query);
     }
 
-    public function testApplyListFiltersWithTaskAllocationRule()
+    public function testApplyListFiltersWithTaskAllocationRule(): void
     {
         $this->setUpSut(TaskAlphaSplitRepo::class, true);
 

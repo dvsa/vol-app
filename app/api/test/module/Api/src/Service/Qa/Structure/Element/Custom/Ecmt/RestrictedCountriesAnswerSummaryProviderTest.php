@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Ecmt;
 
 use Dvsa\Olcs\Api\Entity\ContactDetails\Country;
@@ -37,7 +39,7 @@ class RestrictedCountriesAnswerSummaryProviderTest extends MockeryTestCase
         $this->restrictedCountriesAnswerSummaryProvider = new RestrictedCountriesAnswerSummaryProvider();
     }
 
-    public function testGetTemplateName()
+    public function testGetTemplateName(): void
     {
         $this->assertEquals(
             'ecmt-restricted-countries',
@@ -45,7 +47,7 @@ class RestrictedCountriesAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public function testShouldIncludeSlug()
+    public function testShouldIncludeSlug(): void
     {
         $qaEntity = m::mock(QaEntityInterface::class);
 
@@ -54,10 +56,8 @@ class RestrictedCountriesAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
-    public function testGetTemplateVariablesWithCountries($isSnapshot)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
+    public function testGetTemplateVariablesWithCountries(mixed $isSnapshot): void
     {
         $hasRestrictedCountries = true;
         $country1Description = 'Spain';
@@ -99,10 +99,8 @@ class RestrictedCountriesAnswerSummaryProviderTest extends MockeryTestCase
         $this->assertEquals($expectedTemplateVariables, $templateVariables);
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
-    public function testGetTemplateVariablesWithoutCountries($isSnapshot)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
+    public function testGetTemplateVariablesWithoutCountries(mixed $isSnapshot): void
     {
         $hasRestrictedCountries = false;
 
@@ -127,7 +125,7 @@ class RestrictedCountriesAnswerSummaryProviderTest extends MockeryTestCase
         $this->assertEquals($expectedTemplateVariables, $templateVariables);
     }
 
-    public function dpSnapshot()
+    public static function dpSnapshot(): array
     {
         return [
             [true],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -8,9 +10,7 @@ use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Category\GetList as Qry;
 use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 
-/**
- * @covers \Olcs\Service\Data\Category
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\Category::class)]
 class CategoryTest extends AbstractListDataServiceTestCase
 {
     /** @var Category */
@@ -23,7 +23,7 @@ class CategoryTest extends AbstractListDataServiceTestCase
         $this->sut = new Category($this->abstractListDataServiceServices);
     }
 
-    public function testFetchListData()
+    public function testFetchListData(): void
     {
         $results = ['results' => 'results'];
         $params = [
@@ -57,7 +57,7 @@ class CategoryTest extends AbstractListDataServiceTestCase
         $this->assertEquals($results['results'], $this->sut->fetchListData([]));
     }
 
-    public function testSetters()
+    public function testSetters(): void
     {
         static::assertNull($this->sut->getCategoryType());
         static::assertFalse($this->sut->getIsOnlyWithItems());
@@ -69,7 +69,7 @@ class CategoryTest extends AbstractListDataServiceTestCase
         static::assertTrue($this->sut->getIsOnlyWithItems());
     }
 
-    public function testFetchListDataCache()
+    public function testFetchListDataCache(): void
     {
         $data = [
             [
@@ -83,7 +83,7 @@ class CategoryTest extends AbstractListDataServiceTestCase
         static::assertEquals([9999 => 'EXPECTED'], $this->sut->fetchListOptions());
     }
 
-    public function testFetchListDataWithException()
+    public function testFetchListDataWithException(): void
     {
         $this->expectException(DataServiceException::class);
 

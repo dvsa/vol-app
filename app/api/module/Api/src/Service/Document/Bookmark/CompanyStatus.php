@@ -11,6 +11,7 @@ class CompanyStatus extends DynamicBookmark
     /**
      * Get the data required for the bookmark
      */
+    #[\Override]
     public function getQuery(array $data): QueryInterface
     {
         return Qry::create(['id' => $data['licence'], 'bundle' => []]);
@@ -19,6 +20,7 @@ class CompanyStatus extends DynamicBookmark
     /**
      * Renders the data for the bookmark
      */
+    #[\Override]
     public function render(): ?string
     {
         return $this->formatCompanyStatus($this->data['companyStatus']);
@@ -34,6 +36,6 @@ class CompanyStatus extends DynamicBookmark
             'voluntary-arrangement' => 'Voluntary Arrangement',
         ];
 
-        return strtr($companyStatus, $statuses);
+        return strtr($companyStatus ?? '', $statuses);
     }
 }

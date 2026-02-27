@@ -23,6 +23,7 @@ class TransportManagers extends AbstractQueryHandler
     protected $repoServiceName = 'Licence';
     protected $extraRepos = ['TransportManagerLicence'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $licence \Dvsa\Olcs\Api\Entity\Licence\Licence */

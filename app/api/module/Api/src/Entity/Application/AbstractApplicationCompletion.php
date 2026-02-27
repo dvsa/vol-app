@@ -36,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractApplicationCompletion implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractApplicationCompletion implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -409,7 +409,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -432,7 +433,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
     public function getApplication()
     {
         return $this->application;
@@ -455,7 +457,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -478,7 +481,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -501,7 +505,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the type of licence status
      *
-     * @return int     */
+     * @return int
+     */
     public function getTypeOfLicenceStatus()
     {
         return $this->typeOfLicenceStatus;
@@ -524,7 +529,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the business type status
      *
-     * @return int     */
+     * @return int
+     */
     public function getBusinessTypeStatus()
     {
         return $this->businessTypeStatus;
@@ -547,7 +553,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the business details status
      *
-     * @return int     */
+     * @return int
+     */
     public function getBusinessDetailsStatus()
     {
         return $this->businessDetailsStatus;
@@ -570,7 +577,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the addresses status
      *
-     * @return int     */
+     * @return int
+     */
     public function getAddressesStatus()
     {
         return $this->addressesStatus;
@@ -593,7 +601,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the people status
      *
-     * @return int     */
+     * @return int
+     */
     public function getPeopleStatus()
     {
         return $this->peopleStatus;
@@ -616,7 +625,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the taxi phv status
      *
-     * @return int     */
+     * @return int
+     */
     public function getTaxiPhvStatus()
     {
         return $this->taxiPhvStatus;
@@ -639,7 +649,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the operating centres status
      *
-     * @return int     */
+     * @return int
+     */
     public function getOperatingCentresStatus()
     {
         return $this->operatingCentresStatus;
@@ -662,7 +673,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the financial evidence status
      *
-     * @return int     */
+     * @return int
+     */
     public function getFinancialEvidenceStatus()
     {
         return $this->financialEvidenceStatus;
@@ -685,7 +697,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the transport managers status
      *
-     * @return int     */
+     * @return int
+     */
     public function getTransportManagersStatus()
     {
         return $this->transportManagersStatus;
@@ -708,7 +721,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the vehicles status
      *
-     * @return int     */
+     * @return int
+     */
     public function getVehiclesStatus()
     {
         return $this->vehiclesStatus;
@@ -731,7 +745,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the vehicles psv status
      *
-     * @return int     */
+     * @return int
+     */
     public function getVehiclesPsvStatus()
     {
         return $this->vehiclesPsvStatus;
@@ -754,7 +769,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the vehicles size status
      *
-     * @return int     */
+     * @return int
+     */
     public function getVehiclesSizeStatus()
     {
         return $this->vehiclesSizeStatus;
@@ -777,7 +793,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the psv operate small status
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvOperateSmallStatus()
     {
         return $this->psvOperateSmallStatus;
@@ -800,7 +817,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the psv operate large status
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvOperateLargeStatus()
     {
         return $this->psvOperateLargeStatus;
@@ -823,7 +841,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the psv small conditions status
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvSmallConditionsStatus()
     {
         return $this->psvSmallConditionsStatus;
@@ -846,7 +865,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the psv operate novelty status
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvOperateNoveltyStatus()
     {
         return $this->psvOperateNoveltyStatus;
@@ -869,7 +889,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the psv small part written status
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvSmallPartWrittenStatus()
     {
         return $this->psvSmallPartWrittenStatus;
@@ -892,7 +913,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the psv documentary evidence small status
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvDocumentaryEvidenceSmallStatus()
     {
         return $this->psvDocumentaryEvidenceSmallStatus;
@@ -915,7 +937,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the psv documentary evidence large status
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvDocumentaryEvidenceLargeStatus()
     {
         return $this->psvDocumentaryEvidenceLargeStatus;
@@ -938,7 +961,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the psv main occupation undertakings status
      *
-     * @return int     */
+     * @return int
+     */
     public function getPsvMainOccupationUndertakingsStatus()
     {
         return $this->psvMainOccupationUndertakingsStatus;
@@ -961,7 +985,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the vehicles declarations status
      *
-     * @return int     */
+     * @return int
+     */
     public function getVehiclesDeclarationsStatus()
     {
         return $this->vehiclesDeclarationsStatus;
@@ -984,7 +1009,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the discs status
      *
-     * @return int     */
+     * @return int
+     */
     public function getDiscsStatus()
     {
         return $this->discsStatus;
@@ -1007,7 +1033,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the community licences status
      *
-     * @return int     */
+     * @return int
+     */
     public function getCommunityLicencesStatus()
     {
         return $this->communityLicencesStatus;
@@ -1030,7 +1057,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the safety status
      *
-     * @return int     */
+     * @return int
+     */
     public function getSafetyStatus()
     {
         return $this->safetyStatus;
@@ -1053,7 +1081,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the conditions undertakings status
      *
-     * @return int     */
+     * @return int
+     */
     public function getConditionsUndertakingsStatus()
     {
         return $this->conditionsUndertakingsStatus;
@@ -1076,7 +1105,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the financial history status
      *
-     * @return int     */
+     * @return int
+     */
     public function getFinancialHistoryStatus()
     {
         return $this->financialHistoryStatus;
@@ -1099,7 +1129,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the licence history status
      *
-     * @return int     */
+     * @return int
+     */
     public function getLicenceHistoryStatus()
     {
         return $this->licenceHistoryStatus;
@@ -1122,7 +1153,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the convictions penalties status
      *
-     * @return int     */
+     * @return int
+     */
     public function getConvictionsPenaltiesStatus()
     {
         return $this->convictionsPenaltiesStatus;
@@ -1145,7 +1177,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the undertakings status
      *
-     * @return int     */
+     * @return int
+     */
     public function getUndertakingsStatus()
     {
         return $this->undertakingsStatus;
@@ -1168,7 +1201,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the declarations internal status
      *
-     * @return int     */
+     * @return int
+     */
     public function getDeclarationsInternalStatus()
     {
         return $this->declarationsInternalStatus;
@@ -1191,7 +1225,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the last section
      *
-     * @return string     */
+     * @return string
+     */
     public function getLastSection()
     {
         return $this->lastSection;
@@ -1214,7 +1249,8 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -1223,6 +1259,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Query\Bookmark;
 
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\PolicePeopleBundle;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\PolicePeopleBundle;
  */
 class PolicePeopleBundleTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $id = 1;
         $bundle = ['bundle'];

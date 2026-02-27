@@ -521,6 +521,7 @@ class IrfoPsvAuth extends AbstractIrfoPsvAuth implements OrganisationProviderInt
      *
      * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this->getOrganisation();

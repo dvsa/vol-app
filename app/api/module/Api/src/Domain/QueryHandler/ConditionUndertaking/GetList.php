@@ -16,6 +16,7 @@ class GetList extends AbstractQueryHandler
     protected $repoServiceName = 'ConditionUndertaking';
     protected $extraRepos = ['Application'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $query \Dvsa\Olcs\Transfer\Query\ConditionUndertaking\GetList */

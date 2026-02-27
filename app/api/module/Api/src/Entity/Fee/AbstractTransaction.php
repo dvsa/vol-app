@@ -42,7 +42,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTransaction implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTransaction implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -340,7 +340,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -363,7 +364,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getStatus()
     {
         return $this->status;
@@ -386,7 +388,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getType()
     {
         return $this->type;
@@ -409,7 +412,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the payment method
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getPaymentMethod()
     {
         return $this->paymentMethod;
@@ -432,7 +436,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the waive recommender user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getWaiveRecommenderUser()
     {
         return $this->waiveRecommenderUser;
@@ -455,7 +460,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the processed by user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getProcessedByUser()
     {
         return $this->processedByUser;
@@ -478,7 +484,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the receipt document
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
+     */
     public function getReceiptDocument()
     {
         return $this->receiptDocument;
@@ -501,7 +508,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -524,7 +532,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -547,7 +556,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the legacy status
      *
-     * @return int     */
+     * @return int
+     */
     public function getLegacyStatus()
     {
         return $this->legacyStatus;
@@ -570,7 +580,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the legacy method
      *
-     * @return int     */
+     * @return int
+     */
     public function getLegacyMethod()
     {
         return $this->legacyMethod;
@@ -593,7 +604,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the legacy choice
      *
-     * @return int     */
+     * @return int
+     */
     public function getLegacyChoice()
     {
         return $this->legacyChoice;
@@ -616,7 +628,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the legacy guid
      *
-     * @return string     */
+     * @return string
+     */
     public function getLegacyGuid()
     {
         return $this->legacyGuid;
@@ -641,7 +654,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getCompletedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -668,7 +682,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the reference
      *
-     * @return string     */
+     * @return string
+     */
     public function getReference()
     {
         return $this->reference;
@@ -691,7 +706,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the cpms schema
      *
-     * @return string     */
+     * @return string
+     */
     public function getCpmsSchema()
     {
         return $this->cpmsSchema;
@@ -714,7 +730,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the payer name
      *
-     * @return string     */
+     * @return string
+     */
     public function getPayerName()
     {
         return $this->payerName;
@@ -737,7 +754,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the cheque po number
      *
-     * @return string     */
+     * @return string
+     */
     public function getChequePoNumber()
     {
         return $this->chequePoNumber;
@@ -762,7 +780,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getChequePoDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -789,7 +808,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the paying in slip number
      *
-     * @return string     */
+     * @return string
+     */
     public function getPayingInSlipNumber()
     {
         return $this->payingInSlipNumber;
@@ -812,7 +832,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the comment
      *
-     * @return string     */
+     * @return string
+     */
     public function getComment()
     {
         return $this->comment;
@@ -837,7 +858,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getWaiveRecommendationDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -864,7 +886,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the gateway url
      *
-     * @return string     */
+     * @return string
+     */
     public function getGatewayUrl()
     {
         return $this->gatewayUrl;
@@ -887,7 +910,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -910,7 +934,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -933,7 +958,8 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the olbs type
      *
-     * @return string     */
+     * @return string
+     */
     public function getOlbsType()
     {
         return $this->olbsType;
@@ -1005,6 +1031,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

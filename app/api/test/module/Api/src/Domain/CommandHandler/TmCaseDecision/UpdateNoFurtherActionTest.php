@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update NoFurtherAction Test
  */
@@ -28,7 +30,7 @@ class UpdateNoFurtherActionTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 111,
@@ -76,7 +78,7 @@ class UpdateNoFurtherActionTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandThrowsIncorrectActionException()
+    public function testHandleCommandThrowsIncorrectActionException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 

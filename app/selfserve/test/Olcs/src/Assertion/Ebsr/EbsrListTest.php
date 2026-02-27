@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Assertion\Ebsr;
 
 use Common\Rbac\User;
@@ -23,13 +25,11 @@ class EbsrListTest extends MockeryTestCase
         $this->auth = m::mock(AuthorizationService::class);
     }
 
-    /**
-     * @dataProvider getAssertDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getAssertDataProvider')]
     public function testAssert(
-        $userType,
-        $userData,
-        $expected
+        string $userType,
+        array $userData,
+        bool $expected
     ): void {
         $currentUser = m::mock(User::class)->makePartial();
         $currentUser->shouldReceive('getUserType')->andReturn($userType);
@@ -45,7 +45,7 @@ class EbsrListTest extends MockeryTestCase
      *
      * @psalm-return list{list{'local-authority', array<never, never>, true}, list{'operator', array{hasActivePsvLicence: true}, true}, list{'operator', array{hasActivePsvLicence: false}, false}, list{'partner', array<never, never>, false}}
      */
-    public function getAssertDataProvider(): array
+    public static function getAssertDataProvider(): array
     {
         return [
             // local authority

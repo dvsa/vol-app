@@ -76,6 +76,7 @@ class OperatingCentresForInspectionRequest extends AbstractDataService implement
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function fetchListOptions($context, $useGroups = false)
     {
         $data = $this->fetchListData();

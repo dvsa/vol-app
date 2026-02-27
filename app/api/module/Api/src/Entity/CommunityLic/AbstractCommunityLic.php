@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractCommunityLic implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCommunityLic implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -224,7 +224,8 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -247,7 +248,8 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -270,7 +272,8 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Get the status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getStatus()
     {
         return $this->status;
@@ -293,7 +296,8 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -316,7 +320,8 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -341,7 +346,8 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getExpiredDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -370,7 +376,8 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getSpecifiedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -399,7 +406,8 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getLicenceExpiredDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -426,7 +434,8 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Get the issue no
      *
-     * @return int     */
+     * @return int
+     */
     public function getIssueNo()
     {
         return $this->issueNo;
@@ -449,7 +458,8 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Get the serial no
      *
-     * @return int     */
+     * @return int
+     */
     public function getSerialNo()
     {
         return $this->serialNo;
@@ -472,7 +482,8 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Get the serial no prefix
      *
-     * @return string     */
+     * @return string
+     */
     public function getSerialNoPrefix()
     {
         return $this->serialNoPrefix;
@@ -495,7 +506,8 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -518,7 +530,8 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -653,6 +666,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

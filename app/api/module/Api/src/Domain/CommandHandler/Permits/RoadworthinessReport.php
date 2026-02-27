@@ -34,6 +34,7 @@ class RoadworthinessReport extends AbstractCommandHandler implements TranslatorA
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $irhpApplicationRepo = $this->getRepo('IrhpApplication');

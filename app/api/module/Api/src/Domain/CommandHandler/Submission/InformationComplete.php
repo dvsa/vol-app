@@ -22,6 +22,7 @@ final class InformationComplete extends AbstractCommandHandler implements Transa
 {
     protected $repoServiceName = 'Submission';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $submissionEntity = $this->updateSubmission($command);

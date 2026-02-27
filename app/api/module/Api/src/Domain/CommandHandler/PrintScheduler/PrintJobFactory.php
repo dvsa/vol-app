@@ -9,6 +9,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class PrintJobFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PrintJob
     {
         $instance = new PrintJob(

@@ -42,7 +42,7 @@ use Doctrine\Common\Collections\Collection;
  *    }
  * )
  */
-abstract class AbstractEventHistory implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractEventHistory implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -283,7 +283,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -306,7 +307,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the event history type
      *
-     * @return \Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType     */
+     * @return \Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType
+     */
     public function getEventHistoryType()
     {
         return $this->eventHistoryType;
@@ -329,7 +331,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getUser()
     {
         return $this->user;
@@ -352,7 +355,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -375,7 +379,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
     public function getApplication()
     {
         return $this->application;
@@ -398,7 +403,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the transport manager
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     */
     public function getTransportManager()
     {
         return $this->transportManager;
@@ -421,7 +427,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the organisation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     */
     public function getOrganisation()
     {
         return $this->organisation;
@@ -444,7 +451,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -467,7 +475,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the bus reg
      *
-     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg     */
+     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     */
     public function getBusReg()
     {
         return $this->busReg;
@@ -490,7 +499,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the account
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getAccount()
     {
         return $this->account;
@@ -513,7 +523,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the task
      *
-     * @return \Dvsa\Olcs\Api\Entity\Task\Task     */
+     * @return \Dvsa\Olcs\Api\Entity\Task\Task
+     */
     public function getTask()
     {
         return $this->task;
@@ -536,7 +547,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the irhp application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
+     */
     public function getIrhpApplication()
     {
         return $this->irhpApplication;
@@ -559,7 +571,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the change made by
      *
-     * @return string     */
+     * @return string
+     */
     public function getChangeMadeBy()
     {
         return $this->changeMadeBy;
@@ -582,7 +595,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the member of organisation
      *
-     * @return string     */
+     * @return string
+     */
     public function getMemberOfOrganisation()
     {
         return $this->memberOfOrganisation;
@@ -607,7 +621,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEventDatetime($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -634,7 +649,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the entity type
      *
-     * @return string     */
+     * @return string
+     */
     public function getEntityType()
     {
         return $this->entityType;
@@ -657,7 +673,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the entity pk
      *
-     * @return int     */
+     * @return int
+     */
     public function getEntityPk()
     {
         return $this->entityPk;
@@ -680,7 +697,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the entity version
      *
-     * @return int     */
+     * @return int
+     */
     public function getEntityVersion()
     {
         return $this->entityVersion;
@@ -703,7 +721,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the event data
      *
-     * @return string     */
+     * @return string
+     */
     public function getEventData()
     {
         return $this->eventData;
@@ -726,7 +745,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -749,7 +769,8 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get the olbs type
      *
-     * @return string     */
+     * @return string
+     */
     public function getOlbsType()
     {
         return $this->olbsType;
@@ -758,6 +779,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

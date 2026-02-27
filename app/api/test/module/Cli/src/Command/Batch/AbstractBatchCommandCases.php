@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Command\Batch;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -12,6 +14,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Dvsa\Olcs\Api\Domain\CommandHandlerManager;
 use Dvsa\Olcs\Api\Domain\QueryHandlerManager;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 abstract class AbstractBatchCommandCases extends TestCase
 {
     protected $commandTester;
@@ -26,17 +29,17 @@ abstract class AbstractBatchCommandCases extends TestCase
     /**
      * The FQCN of the command to be tested.
      */
-    abstract protected function getCommandClass();
+    abstract protected function getCommandClass(): string;
 
     /**
      * The command name used in the console application.
      */
-    abstract protected function getCommandName();
+    abstract protected function getCommandName(): string;
 
     /**
      * An array of command DTOs that are expected to be handled.
      */
-    abstract protected function getCommandDTOs();
+    abstract protected function getCommandDTOs(): array;
 
     protected function setUp(): void
     {
@@ -47,10 +50,8 @@ abstract class AbstractBatchCommandCases extends TestCase
         $this->sut = new $commandClass($this->mockCommandHandlerManager, $this->mockQueryHandlerManager);
         $this->sut->setName($this->getCommandName());
 
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
 
         $application = new Application();
@@ -59,7 +60,7 @@ abstract class AbstractBatchCommandCases extends TestCase
         $this->commandTester = new CommandTester($application->find($this->getCommandName()));
     }
 
-    public function executeCommand(array $additionalArguments = [])
+    public function executeCommand(array $additionalArguments = []): void
     {
         $defaultArguments = [
             'command' => $this->getCommandName(),
@@ -70,7 +71,7 @@ abstract class AbstractBatchCommandCases extends TestCase
         $this->commandTester->execute($arguments);
     }
 
-    public function testExecuteSuccess()
+    public function testExecuteSuccess(): void
     {
         $dtos = $this->getCommandDTOs();
         $dtoCount = count($dtos);
@@ -91,7 +92,7 @@ abstract class AbstractBatchCommandCases extends TestCase
     }
 
 
-    public function testExecuteHandlesGenericException()
+    public function testExecuteHandlesGenericException(): void
     {
         $this->mockCommandHandlerManager->method('handleCommand')
             ->will($this->throwException(new \Exception('Test exception')));
@@ -101,7 +102,7 @@ abstract class AbstractBatchCommandCases extends TestCase
         $this->assertEquals(Command::FAILURE, $this->commandTester->getStatusCode());
     }
 
-    public function testExecuteHandlesNotFoundException()
+    public function testExecuteHandlesNotFoundException(): void
     {
         $this->mockCommandHandlerManager->method('handleCommand')
             ->will($this->throwException(new \Dvsa\Olcs\Api\Domain\Exception\NotFoundException('Test not found exception')));

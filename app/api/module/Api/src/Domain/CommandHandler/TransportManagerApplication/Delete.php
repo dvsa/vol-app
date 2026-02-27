@@ -23,6 +23,7 @@ final class Delete extends AbstractCommandHandler implements TransactionedInterf
 {
     protected $repoServiceName = 'TransportManagerApplication';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

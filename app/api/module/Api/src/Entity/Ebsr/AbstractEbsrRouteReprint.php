@@ -28,7 +28,7 @@ use Doctrine\Common\Collections\Collection;
  *    }
  * )
  */
-abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -143,7 +143,8 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -166,7 +167,8 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
     /**
      * Get the bus reg
      *
-     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg     */
+     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     */
     public function getBusReg()
     {
         return $this->busReg;
@@ -189,7 +191,8 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
     /**
      * Get the requested user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getRequestedUser()
     {
         return $this->requestedUser;
@@ -212,7 +215,8 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
     /**
      * Get the exception name
      *
-     * @return string     */
+     * @return string
+     */
     public function getExceptionName()
     {
         return $this->exceptionName;
@@ -235,7 +239,8 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
     /**
      * Get the scale
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getScale()
     {
         return $this->scale;
@@ -260,7 +265,8 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getPublishedTimestamp($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -289,7 +295,8 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getRequestedTimestamp($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -316,7 +323,8 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -325,6 +333,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

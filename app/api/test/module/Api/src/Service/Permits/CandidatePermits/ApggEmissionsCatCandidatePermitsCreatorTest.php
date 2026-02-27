@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\CandidatePermits;
 
 use Dvsa\Olcs\Api\Domain\Repository\IrhpCandidatePermit as IrhpCandidatePermitRepository;
@@ -20,6 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class ApggEmissionsCatCandidatePermitsCreatorTest extends MockeryTestCase
 {
     private $irhpPermitApplication;
@@ -55,10 +58,8 @@ class ApggEmissionsCatCandidatePermitsCreatorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpEmissionsCategories
-     */
-    public function testCreateOneOrMoreRequired($emissionsCategoryId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpEmissionsCategories')]
+    public function testCreateOneOrMoreRequired(mixed $emissionsCategoryId): void
     {
         $permitsRequired = 3;
 
@@ -100,10 +101,9 @@ class ApggEmissionsCatCandidatePermitsCreatorTest extends MockeryTestCase
         $this->apggEmissionsCatCandidatePermitsCreator->createIfRequired($this->irhpApplication, $emissionsCategoryId);
     }
 
-    /**
-     * @dataProvider dpEmissionsCategories
-     */
-    public function testZeroRequired($emissionsCategoryId)
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpEmissionsCategories')]
+    public function testZeroRequired(mixed $emissionsCategoryId): void
     {
         $permitsRequired = 0;
 
@@ -114,7 +114,7 @@ class ApggEmissionsCatCandidatePermitsCreatorTest extends MockeryTestCase
         $this->apggEmissionsCatCandidatePermitsCreator->createIfRequired($this->irhpApplication, $emissionsCategoryId);
     }
 
-    public function dpEmissionsCategories()
+    public static function dpEmissionsCategories(): array
     {
         return [
             [RefData::EMISSIONS_CATEGORY_EURO5_REF],

@@ -17,6 +17,7 @@ class TranslationKey extends AbstractQueryHandler implements TranslationLoaderAw
 {
     use TranslationLoaderAwareTrait;
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->translationLoader->getMessagesFromDb(

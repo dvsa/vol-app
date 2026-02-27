@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Allocate;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange;
@@ -15,10 +17,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class EmissionsStandardCriteriaTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpMatches
-     */
-    public function testMatches($rangeEmissionsCategoryId, $criteriaEmissionsCategoryId, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpMatches')]
+    public function testMatches(mixed $rangeEmissionsCategoryId, mixed $criteriaEmissionsCategoryId, mixed $expected): void
     {
         $irhpPermitRange = m::mock(IrhpPermitRange::class);
         $irhpPermitRange->shouldReceive('getEmissionsCategory->getId')
@@ -33,7 +33,7 @@ class EmissionsStandardCriteriaTest extends MockeryTestCase
         );
     }
 
-    public function dpMatches()
+    public static function dpMatches(): array
     {
         return [
             [RefData::EMISSIONS_CATEGORY_EURO5_REF, RefData::EMISSIONS_CATEGORY_EURO5_REF, true],

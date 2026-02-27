@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
 
 use Dvsa\Olcs\Api\Domain\Command\Email\SendEcmtShortTermAppSubmitted as SendEcmtShortTermAppSubmittedCmd;
@@ -13,7 +15,7 @@ use Mockery as m;
 /**
  * Test the short term permit app submitted email
  */
-class SendEcmtShortTermAppSubmittedTest extends AbstractPermitTest
+class SendEcmtShortTermAppSubmittedTest extends AbstractPermitTestCase
 {
     public $orgEmails;
     public $contactDetails;
@@ -27,10 +29,8 @@ class SendEcmtShortTermAppSubmittedTest extends AbstractPermitTest
     protected $permitApplicationRepo = 'IrhpApplication';
     protected $applicationEntityClass = IrhpApplication::class;
 
-    /**
-     * @dataProvider dpTranslateToWelshLocaleMappings
-     */
-    public function testHandleCommand($translateToWelsh, $expectedLocale)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTranslateToWelshLocaleMappings')]
+    public function testHandleCommand(mixed $translateToWelsh, mixed $expectedLocale): void
     {
         $templateVars = [
             'applicationRef' => $this->applicationRef,
@@ -76,10 +76,8 @@ class SendEcmtShortTermAppSubmittedTest extends AbstractPermitTest
         $this->assertSame($this->subject, $message->getSubject());
     }
 
-    /**
-     * @dataProvider dpTranslateToWelshLocaleMappings
-     */
-    public function testHandleCommandForCreatedByInternalUser($translateToWelsh, $expectedLocale)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTranslateToWelshLocaleMappings')]
+    public function testHandleCommandForCreatedByInternalUser(mixed $translateToWelsh, mixed $expectedLocale): void
     {
         $templateVars = [
             'applicationRef' => $this->applicationRef,
@@ -124,7 +122,7 @@ class SendEcmtShortTermAppSubmittedTest extends AbstractPermitTest
         $this->assertSame($this->subject, $message->getSubject());
     }
 
-    public function dpTranslateToWelshLocaleMappings()
+    public static function dpTranslateToWelshLocaleMappings(): array
     {
         return [
             ['Y', 'cy_GB'],

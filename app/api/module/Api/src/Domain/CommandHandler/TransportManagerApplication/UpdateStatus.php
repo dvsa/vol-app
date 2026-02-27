@@ -24,6 +24,7 @@ final class UpdateStatus extends AbstractCommandHandler implements
 {
     protected $repoServiceName = 'TransportManagerApplication';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command \Dvsa\Olcs\Transfer\Command\TransportManagerApplication\UpdateStatus */

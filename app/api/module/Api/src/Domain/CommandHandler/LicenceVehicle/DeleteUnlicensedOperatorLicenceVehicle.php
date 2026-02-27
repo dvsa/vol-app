@@ -30,6 +30,7 @@ final class DeleteUnlicensedOperatorLicenceVehicle extends AbstractCommandHandle
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $licenceVehicle = $this->getRepo('LicenceVehicle')->fetchUsingId($command);

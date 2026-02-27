@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query\Expr;
@@ -16,9 +18,7 @@ use Dvsa\Olcs\Api\Entity\Fee\FeeType as FeeTypeEntity;
 use Dvsa\Olcs\Api\Entity\Fee\Fee as FeeEntity;
 use Doctrine\ORM\Query;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\Fee
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Fee::class)]
 class FeeTest extends RepositoryTestCase
 {
     /** @var   FeeRepo */
@@ -29,7 +29,7 @@ class FeeTest extends RepositoryTestCase
         $this->setUpSut(FeeRepo::class, true);
     }
 
-    private function setupFetchInterimFeesByApplicationId(m\MockInterface $mockQb, $applicationId)
+    private function setupFetchInterimFeesByApplicationId(m\MockInterface $mockQb, mixed $applicationId): void
     {
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('f')->once()->andReturn($mockQb);
         $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
@@ -53,7 +53,7 @@ class FeeTest extends RepositoryTestCase
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('result');
     }
 
-    public function testFetchInterimFeesByApplicationId()
+    public function testFetchInterimFeesByApplicationId(): void
     {
         $mockQb = m::mock(QueryBuilder::class);
 
@@ -62,7 +62,7 @@ class FeeTest extends RepositoryTestCase
         $this->assertSame('result', $this->sut->fetchInterimFeesByApplicationId(33));
     }
 
-    public function testFetchInterimFeesByApplicationIdOutstanding()
+    public function testFetchInterimFeesByApplicationIdOutstanding(): void
     {
         $mockQb = m::mock(QueryBuilder::class);
 
@@ -80,7 +80,7 @@ class FeeTest extends RepositoryTestCase
         $this->assertSame('result', $this->sut->fetchInterimFeesByApplicationId(12, true));
     }
 
-    public function testFetchInterimRefunds()
+    public function testFetchInterimRefunds(): void
     {
         $alias = 'f';
         $startDate = new DateTime();
@@ -135,7 +135,7 @@ class FeeTest extends RepositoryTestCase
         $this->assertSame('result', $this->sut->fetchInterimRefunds($startDate, $endDate, $sort, $order, $trafficAreas));
     }
 
-    public function testFetchInterimFeesByApplicationIdPaid()
+    public function testFetchInterimFeesByApplicationIdPaid(): void
     {
         $mockQb = m::mock(QueryBuilder::class);
 
@@ -153,7 +153,7 @@ class FeeTest extends RepositoryTestCase
         $this->assertSame('result', $this->sut->fetchInterimFeesByApplicationId(12, false, true));
     }
 
-    public function testFetchInterimFeesByApplicationIdOutstandingOrPaid()
+    public function testFetchInterimFeesByApplicationIdOutstandingOrPaid(): void
     {
         $mockQb = m::mock(QueryBuilder::class);
 
@@ -176,7 +176,7 @@ class FeeTest extends RepositoryTestCase
         $this->assertSame('result', $this->sut->fetchInterimFeesByApplicationId(12, true, true));
     }
 
-    public function testFetchOutstandingFeesByOrganisationId()
+    public function testFetchOutstandingFeesByOrganisationId(): void
     {
         $organisationId = 123;
 
@@ -221,7 +221,7 @@ class FeeTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchFeesByIrfoGvPermitId()
+    public function testFetchFeesByIrfoGvPermitId(): void
     {
         $irfoGvPermitId = 123;
 
@@ -264,7 +264,7 @@ class FeeTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchOutstandingFeesByIds()
+    public function testFetchOutstandingFeesByIds(): void
     {
         $ids = [1, 2, 3];
 
@@ -307,9 +307,9 @@ class FeeTest extends RepositoryTestCase
 
     /**
      * @param string $status
-     * @dataProvider statusProvider
      */
-    public function testFetchList($status)
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusProvider')]
+    public function testFetchList(mixed $status): void
     {
         // in practice this query would never return results, but it covers all
         // possible conditions
@@ -413,7 +413,7 @@ class FeeTest extends RepositoryTestCase
         );
     }
 
-    public function statusProvider()
+    public static function statusProvider(): array
     {
         return [
             ['all'],
@@ -422,7 +422,7 @@ class FeeTest extends RepositoryTestCase
         ];
     }
 
-    public function testFetchLatestFeeByTypeStatusesAndApplicationId()
+    public function testFetchLatestFeeByTypeStatusesAndApplicationId(): void
     {
         $feeType = 'APP';
         $feeStatuses = ['lfs_ot', 'lfs_cn'];
@@ -474,7 +474,7 @@ class FeeTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchLatestFeeByTypeStatusesAndApplicationIdNull()
+    public function testFetchLatestFeeByTypeStatusesAndApplicationIdNull(): void
     {
         $feeType = 'APP';
         $feeStatuses = ['lfs_ot', 'lfs_cn'];
@@ -508,7 +508,7 @@ class FeeTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchOutstandingFeesByApplicationId()
+    public function testFetchOutstandingFeesByApplicationId(): void
     {
         $applicationId = 69;
 
@@ -543,7 +543,7 @@ class FeeTest extends RepositoryTestCase
         );
     }
 
-    private function mockWhereOutstandingFee(m\MockInterface $mockQb)
+    private function mockWhereOutstandingFee(m\MockInterface $mockQb): void
     {
         $where = m::mock();
         $mockQb
@@ -566,7 +566,7 @@ class FeeTest extends RepositoryTestCase
             ->shouldReceive('getReference');
     }
 
-    private function mockWhereCurrentLicenceOrApplicationFee(m\MockInterface $mockQb, $organisationId)
+    private function mockWhereCurrentLicenceOrApplicationFee(m\MockInterface $mockQb, mixed $organisationId): void
     {
         $mockQb
             ->shouldReceive('leftJoin')
@@ -608,7 +608,7 @@ class FeeTest extends RepositoryTestCase
             ->shouldReceive('getReference');
     }
 
-    public function testFetchOutstandingGrantFeesByApplicationId()
+    public function testFetchOutstandingGrantFeesByApplicationId(): void
     {
         $mockQb = $this->createMockQb('{QUERY}');
 
@@ -637,7 +637,7 @@ class FeeTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchOutstandingContinuationFeesByLicenceId()
+    public function testFetchOutstandingContinuationFeesByLicenceId(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -667,7 +667,7 @@ class FeeTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchLatestPaidFeeByApplicationId()
+    public function testFetchLatestPaidFeeByApplicationId(): void
     {
         $applicationId = 69;
 
@@ -697,7 +697,7 @@ class FeeTest extends RepositoryTestCase
         $this->assertSame('result', $this->sut->fetchLatestPaidFeeByApplicationId($applicationId));
     }
 
-    public function testFetchFeesByPsvAuthIdAndType()
+    public function testFetchFeesByPsvAuthIdAndType(): void
     {
         $irfoPsvAuthId = 123;
         $feeTypeFeeType = 'fee-type-fee-type';
@@ -753,7 +753,7 @@ class FeeTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchApplicationFeeByPsvAuthId()
+    public function testFetchApplicationFeeByPsvAuthId(): void
     {
         $irfoPsvAuthId = 123;
 
@@ -767,7 +767,7 @@ class FeeTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchApplicationFeeByPsvAuthIdNoFees()
+    public function testFetchApplicationFeeByPsvAuthIdNoFees(): void
     {
         $irfoPsvAuthId = 123;
 
@@ -778,7 +778,7 @@ class FeeTest extends RepositoryTestCase
         $this->assertEmpty($this->sut->fetchApplicationFeeByPsvAuthId($irfoPsvAuthId));
     }
 
-    public function testFetchFeesByIrfoPsvAuthId()
+    public function testFetchFeesByIrfoPsvAuthId(): void
     {
         $irfoPsvAuthId = 123;
 
@@ -821,7 +821,7 @@ class FeeTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchFeesByIrfoPsvAuthIdOutstanding()
+    public function testFetchFeesByIrfoPsvAuthIdOutstanding(): void
     {
         $irfoPsvAuthId = 123;
 
@@ -874,7 +874,7 @@ class FeeTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchFeeByTypeAndApplicationId()
+    public function testFetchFeeByTypeAndApplicationId(): void
     {
         $feeType = 'APP';
         $applicationId = 69;
@@ -933,7 +933,7 @@ class FeeTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchFeesByIds()
+    public function testFetchFeesByIds(): void
     {
         $ids = [1, 2, 3];
 
@@ -964,7 +964,7 @@ class FeeTest extends RepositoryTestCase
         $this->assertSame('result', $this->sut->fetchFeesByIds($ids));
     }
 
-    public function testFetchLatestPaidContinuationFee()
+    public function testFetchLatestPaidContinuationFee(): void
     {
         $licenceId = 1;
 

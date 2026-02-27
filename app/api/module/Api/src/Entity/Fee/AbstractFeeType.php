@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractFeeType implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractFeeType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -298,7 +298,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -321,7 +322,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the irfo fee type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getIrfoFeeType()
     {
         return $this->irfoFeeType;
@@ -344,7 +346,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the fee type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getFeeType()
     {
         return $this->feeType;
@@ -367,7 +370,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the accrual rule
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getAccrualRule()
     {
         return $this->accrualRule;
@@ -390,7 +394,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the traffic area
      *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea     */
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     */
     public function getTrafficArea()
     {
         return $this->trafficArea;
@@ -413,7 +418,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the licence type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getLicenceType()
     {
         return $this->licenceType;
@@ -436,7 +442,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the goods or psv
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getGoodsOrPsv()
     {
         return $this->goodsOrPsv;
@@ -459,7 +466,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -482,7 +490,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -507,7 +516,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEffectiveFrom($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -534,7 +544,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -557,7 +568,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the fixed value
      *
-     * @return string     */
+     * @return string
+     */
     public function getFixedValue()
     {
         return $this->fixedValue;
@@ -580,7 +592,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the annual value
      *
-     * @return string     */
+     * @return string
+     */
     public function getAnnualValue()
     {
         return $this->annualValue;
@@ -603,7 +616,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the five year value
      *
-     * @return string     */
+     * @return string
+     */
     public function getFiveYearValue()
     {
         return $this->fiveYearValue;
@@ -626,7 +640,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the vat code
      *
-     * @return string     */
+     * @return string
+     */
     public function getVatCode()
     {
         return $this->vatCode;
@@ -649,7 +664,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the vat rate
      *
-     * @return string     */
+     * @return string
+     */
     public function getVatRate()
     {
         return $this->vatRate;
@@ -672,7 +688,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the expire fee with licence
      *
-     * @return string     */
+     * @return string
+     */
     public function getExpireFeeWithLicence()
     {
         return $this->expireFeeWithLicence;
@@ -695,7 +712,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the is miscellaneous
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsMiscellaneous()
     {
         return $this->isMiscellaneous;
@@ -718,7 +736,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the cost centre ref
      *
-     * @return string     */
+     * @return string
+     */
     public function getCostCentreRef()
     {
         return $this->costCentreRef;
@@ -741,7 +760,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the product reference
      *
-     * @return string     */
+     * @return string
+     */
     public function getProductReference()
     {
         return $this->productReference;
@@ -764,7 +784,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the is ni
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsNi()
     {
         return $this->isNi;
@@ -787,7 +808,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the is visible in internal
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsVisibleInInternal()
     {
         return $this->isVisibleInInternal;
@@ -810,7 +832,8 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -819,6 +842,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

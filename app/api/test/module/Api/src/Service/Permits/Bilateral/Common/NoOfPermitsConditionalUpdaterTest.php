@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Common;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication;
@@ -39,10 +41,8 @@ class NoOfPermitsConditionalUpdaterTest extends MockeryTestCase
         $this->noOfPermitsConditionalUpdater = new NoOfPermitsConditionalUpdater($this->noOfPermitsUpdater);
     }
 
-    /**
-     * @dataProvider dpUpdateValueChanged
-     */
-    public function testUpdateValueChanged($updatedAnswers)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpUpdateValueChanged')]
+    public function testUpdateValueChanged(mixed $updatedAnswers): void
     {
         $this->noOfPermitsUpdater->shouldReceive('update')
             ->with($this->irhpPermitApplication, $updatedAnswers)
@@ -51,7 +51,7 @@ class NoOfPermitsConditionalUpdaterTest extends MockeryTestCase
         $this->noOfPermitsConditionalUpdater->update($this->irhpPermitApplication, $updatedAnswers);
     }
 
-    public function dpUpdateValueChanged()
+    public static function dpUpdateValueChanged(): array
     {
         return [
             [
@@ -78,7 +78,7 @@ class NoOfPermitsConditionalUpdaterTest extends MockeryTestCase
         ];
     }
 
-    public function testUpdateValueNotChanged()
+    public function testUpdateValueNotChanged(): void
     {
         $this->noOfPermitsUpdater->shouldReceive('update')
             ->never();

@@ -31,7 +31,7 @@ class IrhpPermitPrintRangeType extends AbstractDataService implements ListDataIn
      */
     public function __construct(
         AbstractDataServiceServices $abstractDataServiceServices,
-        private TranslationHelperService $translator
+        private readonly TranslationHelperService $translator
     ) {
         parent::__construct($abstractDataServiceServices);
     }
@@ -86,6 +86,7 @@ class IrhpPermitPrintRangeType extends AbstractDataService implements ListDataIn
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function fetchListOptions($context = null, $useGroups = false)
     {
         $data = $this->fetchListData();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Decision;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Decision\DecisionList as QueryHandler;
@@ -24,7 +26,7 @@ class DecisionListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create([]);
 

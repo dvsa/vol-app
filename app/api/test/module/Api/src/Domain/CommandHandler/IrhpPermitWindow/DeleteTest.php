@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermitWindow;
 
 use Mockery as m;
@@ -28,7 +30,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 1;
 
@@ -61,7 +63,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCantDelete()
+    public function testHandleCantDelete(): void
     {
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('irhp-permit-windows-cannot-delete-past-or-active-windows');
@@ -90,7 +92,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandNotFoundException()
+    public function testHandleCommandNotFoundException(): void
     {
         $id = 1;
 

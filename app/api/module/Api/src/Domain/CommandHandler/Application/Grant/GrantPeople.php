@@ -40,6 +40,7 @@ final class GrantPeople extends AbstractCommandHandler implements TransactionedI
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var ApplicationEntity $application */

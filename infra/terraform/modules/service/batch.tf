@@ -91,6 +91,10 @@ locals {
           value = "olcsreaddb-rds.${var.domain_env}.olcs.${var.domain_name}"
         },
         {
+          name  = "READDB_ID"
+          value = "${var.environment}-aurora-olcsdb-reader"
+        },
+        {
           name  = "PROXY"
           value = "proxy.${var.environment}.olcs.${var.domain_name}:3128"
         },

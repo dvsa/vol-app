@@ -34,7 +34,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractStay implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractStay implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -193,7 +193,8 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -216,7 +217,8 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -239,7 +241,8 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the outcome
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getOutcome()
     {
         return $this->outcome;
@@ -262,7 +265,8 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the stay type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getStayType()
     {
         return $this->stayType;
@@ -285,7 +289,8 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -308,7 +313,8 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -333,7 +339,8 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getRequestDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -362,7 +369,8 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getWithdrawnDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -391,7 +399,8 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getDecisionDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -418,7 +427,8 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the notes
      *
-     * @return string     */
+     * @return string
+     */
     public function getNotes()
     {
         return $this->notes;
@@ -441,7 +451,8 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the dvsa notified
      *
-     * @return string     */
+     * @return string
+     */
     public function getDvsaNotified()
     {
         return $this->dvsaNotified;
@@ -464,7 +475,8 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -473,6 +485,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

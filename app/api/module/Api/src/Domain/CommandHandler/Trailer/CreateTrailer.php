@@ -23,6 +23,7 @@ final class CreateTrailer extends AbstractCommandHandler
 {
     protected $repoServiceName = 'Trailer';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $licence = $this->getRepo()

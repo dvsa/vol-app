@@ -15,7 +15,7 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\MethodGeneratorService;
 class TemplateRenderer
 {
     private readonly string $templatePath;
-    private WeakMap $templateCache;
+    private readonly WeakMap $templateCache;
 
     public function __construct(
         string $templatePath,
@@ -83,7 +83,7 @@ class TemplateRenderer
                 }
 
                 // Handle arrays of strings (like columns)
-                $cleanValues = array_filter(array_map(function($v) {
+                $cleanValues = array_filter(array_map(function ($v) {
                     if (is_array($v)) {
                         // Skip nested arrays
                         return null;
@@ -189,7 +189,7 @@ class TemplateRenderer
     public function generateImports(array $fields, bool $hasCollections, bool $softDeletable): array
     {
         $imports = [
-            'Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface',
+            \Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface::class,
             'JsonSerializable',
             'Doctrine\ORM\Mapping as ORM'
         ];
@@ -202,8 +202,8 @@ class TemplateRenderer
 
         // Add collection imports if needed
         if ($hasCollections) {
-            $imports[] = 'Doctrine\Common\Collections\ArrayCollection';
-            $imports[] = 'Doctrine\Common\Collections\Collection';
+            $imports[] = \Doctrine\Common\Collections\ArrayCollection::class;
+            $imports[] = \Doctrine\Common\Collections\Collection::class;
         }
 
         // Add Gedmo import if needed
@@ -252,8 +252,8 @@ class TemplateRenderer
         $propertyName = $property['name'];
         $type = $property['type'];
 
-        $getterName = 'get' . ucfirst($propertyName);
-        $setterName = 'set' . ucfirst($propertyName);
+        $getterName = 'get' . ucfirst((string) $propertyName);
+        $setterName = 'set' . ucfirst((string) $propertyName);
 
         $methods = [];
 

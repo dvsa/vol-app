@@ -26,6 +26,7 @@ abstract class AbstractLicenceType extends DynamicBookmark
      *
      * @return array The full query array.
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         $queryClass = static::QUERY_CLASS;
@@ -38,6 +39,7 @@ abstract class AbstractLicenceType extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         $goodsOrPsvData = $this->data['goodsOrPsv'];

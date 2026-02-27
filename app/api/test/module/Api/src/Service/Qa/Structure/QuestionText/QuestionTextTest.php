@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\QuestionText;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\FilteredTranslateableText;
@@ -14,17 +16,15 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class QuestionTextTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
     public function testGenerate(
-        $questionFilteredTranslateableText,
-        $questionSummaryTranslateableText,
-        $detailsFilteredTranslateableText,
-        $guidanceFilteredTranslateableText,
-        $additionalGuidanceFilteredTranslateableText,
-        $expectedRepresentation
-    ) {
+        mixed $questionFilteredTranslateableText,
+        mixed $questionSummaryTranslateableText,
+        mixed $detailsFilteredTranslateableText,
+        mixed $guidanceFilteredTranslateableText,
+        mixed $additionalGuidanceFilteredTranslateableText,
+        mixed $expectedRepresentation
+    ): void {
         $questionText = new QuestionText(
             $questionFilteredTranslateableText,
             $questionSummaryTranslateableText,
@@ -39,7 +39,7 @@ class QuestionTextTest extends MockeryTestCase
         );
     }
 
-    public function dpTestGenerate()
+    public static function dpTestGenerate(): array
     {
         $questionRepresentation = ['questionRepresentation'];
         $detailsRepresentation = ['detailsRepresentation'];
@@ -103,7 +103,7 @@ class QuestionTextTest extends MockeryTestCase
         ];
     }
 
-    public function testGetQuestion()
+    public function testGetQuestion(): void
     {
         $questionFilteredTranslateableText = m::mock(FilteredTranslateableText::class);
 
@@ -121,7 +121,7 @@ class QuestionTextTest extends MockeryTestCase
         );
     }
 
-    public function testGetQuestionSummary()
+    public function testGetQuestionSummary(): void
     {
         $questionSummaryFilteredTranslateableText = m::mock(FilteredTranslateableText::class);
 
@@ -139,7 +139,7 @@ class QuestionTextTest extends MockeryTestCase
         );
     }
 
-    public function testGetGuidance()
+    public function testGetGuidance(): void
     {
         $guidanceFilteredTranslateableText = m::mock(FilteredTranslateableText::class);
 
@@ -157,7 +157,7 @@ class QuestionTextTest extends MockeryTestCase
         );
     }
 
-    public function testGetAdditionalGuidance()
+    public function testGetAdditionalGuidance(): void
     {
         $additionalGuidanceFilteredTranslateableText = m::mock(FilteredTranslateableText::class);
 

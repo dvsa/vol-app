@@ -14,16 +14,19 @@ class RegenerateIssueFee extends AbstractRegenerateFee
 {
     protected $feeName = 'Issue fee';
 
+    #[\Override]
     protected function canCreateOrReplaceFee(IrhpApplication $irhpApplication)
     {
         return $irhpApplication->canCreateOrReplaceIssueFee();
     }
 
+    #[\Override]
     protected function getOutstandingFees(IrhpApplication $irhpApplication)
     {
         return $irhpApplication->getOutstandingIssueFees();
     }
 
+    #[\Override]
     protected function getFeeProductRefsAndQuantities(IrhpApplication $irhpApplication)
     {
         return $irhpApplication->getIssueFeeProductRefsAndQuantities();

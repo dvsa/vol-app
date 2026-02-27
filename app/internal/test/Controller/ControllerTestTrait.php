@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Controller;
 
 use Mockery as m;
@@ -18,7 +20,7 @@ trait ControllerTestTrait
     protected $formHelper;
     protected $services = [];
 
-    protected function mockController($className, array $constructorParams = [])
+    protected function mockController(mixed $className, array $constructorParams = []): void
     {
         $this->request = m::mock(\Laminas\Http\Request::class)->makePartial();
 
@@ -38,7 +40,7 @@ trait ControllerTestTrait
             ->andReturn($this->request);
     }
 
-    protected function mockRender()
+    protected function mockRender(): m\MockInterface
     {
         $this->sut->shouldReceive('render')
             ->once()
@@ -62,7 +64,7 @@ trait ControllerTestTrait
         return $this->sut;
     }
 
-    protected function setPost($data = [])
+    protected function setPost(array $data = []): void
     {
         $this->request
             ->shouldReceive('isPost')
@@ -71,7 +73,7 @@ trait ControllerTestTrait
             ->andReturn($data);
     }
 
-    protected function shouldRemoveElements($form, $elements)
+    protected function shouldRemoveElements(mixed $form, mixed $elements): void
     {
         $helper = $this->mockFormHelper;
         foreach ($elements as $e) {
@@ -81,7 +83,7 @@ trait ControllerTestTrait
         }
     }
 
-    protected function createMockForm($formName)
+    protected function createMockForm(mixed $formName): \Mockery\LegacyMockInterface
     {
         $mockForm = m::mock(\Common\Form\Form::class);
 
@@ -98,7 +100,7 @@ trait ControllerTestTrait
         return $mockForm;
     }
 
-    protected function getMockFormHelper()
+    protected function getMockFormHelper(): m\MockInterface
     {
         if ($this->formHelper === null) {
             $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
@@ -113,9 +115,9 @@ trait ControllerTestTrait
      * @param boolean $ok to be returned by $response->isOk()
      * @param int $times call count
      */
-    protected function expectCommand($class, array $expectedDtoData, array $result, $ok = true, $times = 1)
+    protected function expectCommand(mixed $class, array $expectedDtoData, array $result, bool $ok = true, int $times = 1): void
     {
-        return $this->mockCommandOrQueryCall('handleCommand', $class, $expectedDtoData, $result, $ok, $times);
+        $this->mockCommandOrQueryCall('handleCommand', $class, $expectedDtoData, $result, $ok, $times);
     }
 
     /**
@@ -124,9 +126,9 @@ trait ControllerTestTrait
      * @param boolean $ok to be returned by $response->isOk()
      * @param int $times call count
      */
-    protected function expectQuery($class, array $expectedDtoData, array $result, $ok = true, $times = 1)
+    protected function expectQuery(mixed $class, array $expectedDtoData, array $result, bool $ok = true, int $times = 1): void
     {
-        return $this->mockCommandOrQueryCall('handleQuery', $class, $expectedDtoData, $result, $ok, $times);
+        $this->mockCommandOrQueryCall('handleQuery', $class, $expectedDtoData, $result, $ok, $times);
     }
 
     /**
@@ -137,13 +139,13 @@ trait ControllerTestTrait
      * @param int $times call count
      */
     private function mockCommandOrQueryCall(
-        $method,
-        $class,
+        mixed $method,
+        mixed $class,
         array $expectedDtoData,
         array $result,
-        $ok = true,
-        $times = 1
-    ) {
+        bool $ok = true,
+        int $times = 1
+    ): void {
         $response = m::mock()
             ->shouldReceive('isOk')
             ->andReturn($ok)

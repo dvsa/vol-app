@@ -15,6 +15,7 @@ class GetDistinctList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'FeeType';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var FeeType $repo */

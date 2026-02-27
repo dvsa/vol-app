@@ -19,6 +19,7 @@ abstract class DateDelta extends StaticBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         $timestamp = strtotime(static::DELTA . " days");

@@ -19,6 +19,7 @@ final class PrepareContinuations extends AbstractCommandHandler implements Trans
 {
     protected $repoServiceName = 'ContinuationDetail';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $ids = $command->getIds();

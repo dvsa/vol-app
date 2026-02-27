@@ -42,6 +42,7 @@ class IrhpPermitAdminFurniture implements
      */
     protected $navigationService;
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->setQuerySender($container->get('QuerySender'));
@@ -72,11 +73,12 @@ class IrhpPermitAdminFurniture implements
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'stockId',
-            [$this, 'onIrhpPermitAdminFurniture'],
+            $this->onIrhpPermitAdminFurniture(...),
             $priority
         );
     }
@@ -143,8 +145,8 @@ class IrhpPermitAdminFurniture implements
             );
         }
 
-        $validFrom = date('d/m/Y', strtotime($permitStock['validFrom']));
-        $validTo = date('d/m/Y', strtotime($permitStock['validTo']));
+        $validFrom = date('d/m/Y', strtotime((string) $permitStock['validFrom']));
+        $validTo = date('d/m/Y', strtotime((string) $permitStock['validTo']));
         $initialStock = $permitStock['initialStock'];
         $name = $permitStock['irhpPermitType']['name']['description'];
 

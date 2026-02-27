@@ -25,6 +25,7 @@ class Review extends AbstractQueryHandler
      */
     protected $reviewSnapshotService;
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var TransportManagerApplication $tma */
@@ -45,6 +46,7 @@ class Review extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

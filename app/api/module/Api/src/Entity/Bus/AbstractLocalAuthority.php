@@ -32,7 +32,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLocalAuthority implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLocalAuthority implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -182,7 +182,8 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -205,7 +206,8 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * Get the traffic area
      *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea     */
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     */
     public function getTrafficArea()
     {
         return $this->trafficArea;
@@ -228,7 +230,8 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -251,7 +254,8 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -274,7 +278,8 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -297,7 +302,8 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * Get the email address
      *
-     * @return string     */
+     * @return string
+     */
     public function getEmailAddress()
     {
         return $this->emailAddress;
@@ -320,7 +326,8 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * Get the txc name
      *
-     * @return string     */
+     * @return string
+     */
     public function getTxcName()
     {
         return $this->txcName;
@@ -343,7 +350,8 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * Get the naptan code
      *
-     * @return string     */
+     * @return string
+     */
     public function getNaptanCode()
     {
         return $this->naptanCode;
@@ -366,7 +374,8 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -501,6 +510,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

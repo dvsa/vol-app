@@ -27,6 +27,7 @@ final class ReopenCase extends AbstractCommandHandler implements TransactionedIn
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var ReopenCaseCmd $command **/

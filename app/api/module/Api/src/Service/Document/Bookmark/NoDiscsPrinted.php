@@ -11,6 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Base\DynamicBookmark;
  */
 class NoDiscsPrinted extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         /**
@@ -21,6 +22,7 @@ class NoDiscsPrinted extends DynamicBookmark
         return null;
     }
 
+    #[\Override]
     public function render()
     {
         return $this->data['count'];

@@ -24,6 +24,7 @@ class CanAccessCorrelatedDocuments extends AbstractHandler implements CacheAware
     use AuthAwareTrait;
 
     /** @param Documents $dto */
+    #[\Override]
     public function isValid($dto)
     {
         $documentIds = $this->getCache()->getCustomItem(

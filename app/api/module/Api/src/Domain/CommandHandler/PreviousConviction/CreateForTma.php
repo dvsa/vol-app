@@ -27,6 +27,7 @@ final class CreateForTma extends AbstractCommandHandler implements Transactioned
 
     protected $extraRepos = ['TransportManagerApplication'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command CreateForTmaCommand */

@@ -15,6 +15,7 @@ class TrafficAreaInternalList extends AbstractQueryHandler implements CacheAware
 
     protected $repoServiceName = 'TrafficArea';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $repo = $this->getRepo();

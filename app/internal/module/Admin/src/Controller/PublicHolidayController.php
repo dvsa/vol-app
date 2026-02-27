@@ -48,6 +48,7 @@ class PublicHolidayController extends AbstractInternalController
     protected $deleteConfirmMessage = 'Are you sure you want to remove this public holiday?';
     protected $deleteSuccessMessage = 'The public holiday is removed';
 
+    #[\Override]
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'Public holidays');

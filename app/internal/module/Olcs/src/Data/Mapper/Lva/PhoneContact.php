@@ -19,6 +19,7 @@ class PhoneContact implements MapperInterface
      *
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         return [

@@ -24,6 +24,7 @@ abstract class AbstractConversationListController extends AbstractInternalContro
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $formAction = $this->url()->fromRoute(
@@ -54,6 +55,7 @@ abstract class AbstractConversationListController extends AbstractInternalContro
         return $view;
     }
 
+    #[\Override]
     public function modifyListQueryParameters($parameters)
     {
         $filterForm = $this->getForm(ConversationFilter::class);

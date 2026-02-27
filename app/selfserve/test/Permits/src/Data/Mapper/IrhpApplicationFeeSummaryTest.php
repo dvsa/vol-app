@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PermitsTest\Data\Mapper;
 
 use Common\RefData;
@@ -559,10 +561,8 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestMapForDisplayEcmtAnnualAndShortTerm
-     */
-    public function testMapForDisplayEcmtAnnualAndShortTerm($permitTypeId): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestMapForDisplayEcmtAnnualAndShortTerm')]
+    public function testMapForDisplayEcmtAnnualAndShortTerm(int $permitTypeId): void
     {
         $isUnderConsideration = false;
         $isAwaitingFee = false;
@@ -710,7 +710,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
      *
      * @psalm-return list{list{1}, list{2}}
      */
-    public function dpTestMapForDisplayEcmtAnnualAndShortTerm(): array
+    public static function dpTestMapForDisplayEcmtAnnualAndShortTerm(): array
     {
         return [
             [RefData::ECMT_PERMIT_TYPE_ID],

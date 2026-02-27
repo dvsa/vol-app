@@ -34,7 +34,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractDecision implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractDecision implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -184,7 +184,8 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -207,7 +208,8 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Get the goods or psv
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getGoodsOrPsv()
     {
         return $this->goodsOrPsv;
@@ -230,7 +232,8 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -253,7 +256,8 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -276,7 +280,8 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Get the section code
      *
-     * @return string     */
+     * @return string
+     */
     public function getSectionCode()
     {
         return $this->sectionCode;
@@ -299,7 +304,8 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -322,7 +328,8 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Get the is read only
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsReadOnly()
     {
         return $this->isReadOnly;
@@ -345,7 +352,8 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Get the is ni
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsNi()
     {
         return $this->isNi;
@@ -368,7 +376,8 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -503,6 +512,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

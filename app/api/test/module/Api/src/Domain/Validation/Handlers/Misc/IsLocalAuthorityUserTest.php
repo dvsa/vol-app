@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Is Local Authority Test
  *
@@ -33,7 +35,7 @@ class IsLocalAuthorityUserTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsValidLocalAuthorityAdmin()
+    public function testIsValidLocalAuthorityAdmin(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -44,7 +46,7 @@ class IsLocalAuthorityUserTest extends AbstractHandlerTestCase
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsValidLocalAuthority()
+    public function testIsValidLocalAuthority(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -54,7 +56,7 @@ class IsLocalAuthorityUserTest extends AbstractHandlerTestCase
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsValidLocalAuthorityFail()
+    public function testIsValidLocalAuthorityFail(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);

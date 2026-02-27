@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\DocumentShare\Service;
 
 use Dvsa\Olcs\DocumentShare\Data\Object\File as DsFile;
@@ -13,9 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
 use org\bovigo\vfs\vfsStream;
 
-/**
- * @covers \Dvsa\Olcs\DocumentShare\Service\WebDavClient
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\DocumentShare\Service\WebDavClient::class)]
 class WebDavClientTest extends MockeryTestCase
 {
     public const BASE_URI = 'http://testing';
@@ -37,20 +37,20 @@ class WebDavClientTest extends MockeryTestCase
     {
         $this->mockFileSystem = m::mock(FilesystemInterface::class);
 
-        $this->sut = new Client($this->mockFileSystem, $this->createMock(\Laminas\Log\Logger::class));
+        $this->sut = new Client($this->mockFileSystem, $this->createStub(\Dvsa\OlcsTest\SafeLogger::class));
 
         $this->mockFile = m::mock(DsFile::class);
 
         // Mock the logger
         $logWriter = m::mock(\Laminas\Log\Writer\WriterInterface::class);
 
-        $this->logger = m::mock(\Laminas\Log\Logger::class, [])->makePartial();
+        $this->logger = m::mock(\Dvsa\OlcsTest\SafeLogger::class, [])->makePartial();
         $this->logger->addWriter($logWriter);
 
         Logger::setLogger($this->logger);
     }
 
-    public function testReadSuccess()
+    public function testReadSuccess(): void
     {
         $expectContent = 'unit_ABCD1234';
         $testPath = 'test';
@@ -64,7 +64,7 @@ class WebDavClientTest extends MockeryTestCase
         $this->assertEquals($expectContent, file_get_contents($actual->getResource()));
     }
 
-    public function testReadFail()
+    public function testReadFail(): void
     {
         $testPath = 'test';
 
@@ -75,7 +75,7 @@ class WebDavClientTest extends MockeryTestCase
         $this->assertEquals(false, $actual);
     }
 
-    public function testReadFileNotFound()
+    public function testReadFileNotFound(): void
     {
         $testPath = 'test';
 
@@ -85,7 +85,7 @@ class WebDavClientTest extends MockeryTestCase
         $this->assertEquals(false, $actual);
     }
 
-    public function testWriteSuccess()
+    public function testWriteSuccess(): void
     {
         $expectPath = 'unit_Path';
         $expectContent = 'unit_ABCDE123';
@@ -107,7 +107,7 @@ class WebDavClientTest extends MockeryTestCase
         static::assertEquals(true, $actual->isSuccess());
     }
 
-    public function testWriteFail()
+    public function testWriteFail(): void
     {
         $expectPath = 'unit_Path';
         $expectContent = 'unit_ABCDE123';
@@ -129,7 +129,7 @@ class WebDavClientTest extends MockeryTestCase
         static::assertEquals(false, $actual->isSuccess());
     }
 
-    public function testWriteFileAlreadyExists()
+    public function testWriteFileAlreadyExists(): void
     {
         $expectPath = 'unit_Path';
         $expectContent = 'unit_ABCDE123';
@@ -153,7 +153,7 @@ class WebDavClientTest extends MockeryTestCase
         static::assertEquals(false, $actual->isSuccess());
     }
 
-    public function testRemoveSuccess()
+    public function testRemoveSuccess(): void
     {
         $this->mockFileSystem->expects('delete')->with('testFileToUnlink')->andReturn(true);
 
@@ -162,7 +162,7 @@ class WebDavClientTest extends MockeryTestCase
         static::assertEquals(true, $result);
     }
 
-    public function testRemoveFail()
+    public function testRemoveFail(): void
     {
         $this->mockFileSystem->expects('delete')->with('testFileToUnlink')->andReturn(false);
 
@@ -171,7 +171,7 @@ class WebDavClientTest extends MockeryTestCase
         static::assertEquals(false, $result);
     }
 
-    public function testRemoveFileNotFound()
+    public function testRemoveFileNotFound(): void
     {
         $this->mockFileSystem->expects('delete')->with('testFileToUnlink')->andThrow(
             new FileNotFoundException('test')

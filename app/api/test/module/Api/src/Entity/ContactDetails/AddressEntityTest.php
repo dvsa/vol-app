@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\ContactDetails;
 
 use Mockery as m;
@@ -22,7 +24,7 @@ class AddressEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testUpdateAddress()
+    public function testUpdateAddress(): void
     {
         $address = new Address();
         $country = m::mock(Country::class);
@@ -63,7 +65,7 @@ class AddressEntityTest extends EntityTester
         $this->assertNull($address->getCountryCode());
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         $country = new Country();
         $country->setId(9999);
@@ -92,7 +94,7 @@ class AddressEntityTest extends EntityTester
         static::assertNull($sut->toArray()['countryCode']);
     }
 
-    public function testIsEmpty()
+    public function testIsEmpty(): void
     {
         $address = new Address();
 

@@ -33,7 +33,7 @@ class OrganisationEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testHasInforceLicences()
+    public function testHasInforceLicences(): void
     {
         /** @var Entity $organisation */
         $organisation = m::mock(Entity::class)->makePartial();
@@ -60,10 +60,8 @@ class OrganisationEntityTest extends EntityTester
         $this->assertTrue($organisation->hasInforceLicences());
     }
 
-    /**
-     * @dataProvider organisationDataProvider
-     */
-    public function testUpdateOrganisation($isIrfo, $lastName, $expectedName, $allowEmail)
+    #[\PHPUnit\Framework\Attributes\DataProvider('organisationDataProvider')]
+    public function testUpdateOrganisation(mixed $isIrfo, mixed $lastName, mixed $expectedName, mixed $allowEmail): void
     {
         $organisation = new Entity();
 
@@ -86,7 +84,7 @@ class OrganisationEntityTest extends EntityTester
         $this->assertEquals($organisation->getAllowEmail(), $allowEmail);
     }
 
-    public function organisationDataProvider()
+    public static function organisationDataProvider(): array
     {
         return [
             ['Y', 'lname', 'fname lname', 'Y'],
@@ -94,7 +92,7 @@ class OrganisationEntityTest extends EntityTester
         ];
     }
 
-    public function testGetAdminOrganisationUsers()
+    public function testGetAdminOrganisationUsers(): void
     {
         $mockOrgUser1 = m::mock(OrganisationUser::class)
             ->shouldReceive('getUser')
@@ -135,7 +133,7 @@ class OrganisationEntityTest extends EntityTester
         $this->assertEquals($expected, $sut->getAdminOrganisationUsers());
     }
 
-    public function testGetAdminOrganisationUsersWithException()
+    public function testGetAdminOrganisationUsersWithException(): void
     {
         $mockOrgUser1 = m::mock(OrganisationUser::class)
             ->shouldReceive('getUser')
@@ -173,10 +171,8 @@ class OrganisationEntityTest extends EntityTester
         $this->assertEquals(new ArrayCollection(), $sut->getAdminOrganisationUsers());
     }
 
-    /**
-     * @dataProvider dpTestHasAdminEmailAddresses
-     */
-    public function testHasAdminEmailAddresses(array $emailsMap, $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHasAdminEmailAddresses')]
+    public function testHasAdminEmailAddresses(array $emailsMap, mixed $expect): void
     {
         /** @var Entity | m\MockInterface $sut */
         $sut = m::mock(Entity::class)->makePartial();
@@ -196,7 +192,7 @@ class OrganisationEntityTest extends EntityTester
         static::assertEquals($expect, $sut->hasAdminEmailAddresses());
     }
 
-    public function dpTestHasAdminEmailAddresses()
+    public static function dpTestHasAdminEmailAddresses(): array
     {
         return [
             [
@@ -217,7 +213,7 @@ class OrganisationEntityTest extends EntityTester
         ];
     }
 
-    public function dpOrgTypes()
+    public static function dpOrgTypes(): array
     {
         return [
             [Entity::ORG_TYPE_SOLE_TRADER],
@@ -230,11 +226,10 @@ class OrganisationEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dpOrgTypes
-     *
      * @param string $typeId
      */
-    public function testIsSoleTrader($typeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpOrgTypes')]
+    public function testIsSoleTrader(mixed $typeId): void
     {
         $type = new \Dvsa\Olcs\Api\Entity\System\RefData();
         $type->setId($typeId);
@@ -245,11 +240,10 @@ class OrganisationEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dpOrgTypes
-     *
      * @param string $typeId
      */
-    public function testIsPartnership($typeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpOrgTypes')]
+    public function testIsPartnership(mixed $typeId): void
     {
         $type = new \Dvsa\Olcs\Api\Entity\System\RefData();
         $type->setId($typeId);
@@ -259,7 +253,7 @@ class OrganisationEntityTest extends EntityTester
         $this->assertSame($typeId === Entity::ORG_TYPE_PARTNERSHIP, $organisation->isPartnership());
     }
 
-    public function testIsUnlicensed()
+    public function testIsUnlicensed(): void
     {
         /** @var Entity $organisation */
         $organisation = $this->instantiate($this->entityClass);
@@ -274,7 +268,7 @@ class OrganisationEntityTest extends EntityTester
     /**
      * Tests fetching a licence from the organisation using the licNo
      */
-    public function testGetLicenceByLicNo()
+    public function testGetLicenceByLicNo(): void
     {
         $licNo = 'PD8538936';
 
@@ -307,10 +301,8 @@ class OrganisationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpActiveLicences
-     */
-    public function testGetActiveLicences($goodsOrPsv, $status, $expectedAny, $expectedGoods, $expectedPsv)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpActiveLicences')]
+    public function testGetActiveLicences(mixed $goodsOrPsv, mixed $status, mixed $expectedAny, mixed $expectedGoods, mixed $expectedPsv): void
     {
         $licence = m::mock(LicenceEntity::class)->makePartial();
         $licence->setStatus(new RefData($status));
@@ -338,7 +330,7 @@ class OrganisationEntityTest extends EntityTester
         );
     }
 
-    public function dpActiveLicences()
+    public static function dpActiveLicences(): array
     {
         return [
             [null, LicenceEntity::LICENCE_STATUS_VALID, true, false, false],
@@ -362,10 +354,8 @@ class OrganisationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpActiveLicences
-     */
-    public function testHasActiveLicences($goodsOrPsv, $status, $expectedAny, $expectedGoods, $expectedPsv)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpActiveLicences')]
+    public function testHasActiveLicences(mixed $goodsOrPsv, mixed $status, mixed $expectedAny, mixed $expectedGoods, mixed $expectedPsv): void
     {
         $licence = m::mock(LicenceEntity::class)->makePartial();
         $licence->setStatus(new RefData($status));
@@ -393,10 +383,8 @@ class OrganisationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpEligibleIrhpLicences
-     */
-    public function testGetEligibleIrhpLicences($goodsOrPsv, $status, $licenceType, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpEligibleIrhpLicences')]
+    public function testGetEligibleIrhpLicences(mixed $goodsOrPsv, mixed $status, mixed $licenceType, mixed $expected): void
     {
         $licence = m::mock(LicenceEntity::class)->makePartial();
         $licence->setStatus(new RefData($status));
@@ -415,7 +403,7 @@ class OrganisationEntityTest extends EntityTester
         );
     }
 
-    public function dpEligibleIrhpLicences()
+    public static function dpEligibleIrhpLicences(): array
     {
         return [
             [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL, true],
@@ -430,7 +418,7 @@ class OrganisationEntityTest extends EntityTester
         ];
     }
 
-    public function testGetEligibleIrhpLicencesForStock()
+    public function testGetEligibleIrhpLicencesForStock(): void
     {
         $permitAppId = 333;
         $activePermitApp = m::mock(IrhpApplication::class);
@@ -498,7 +486,7 @@ class OrganisationEntityTest extends EntityTester
         self::assertEquals($expectedData, $organisation->getEligibleIrhpLicencesForStock($stock));
     }
 
-    public function testGetDisqualificationNull()
+    public function testGetDisqualificationNull(): void
     {
         /* @var $organisation Entity */
         $organisation = $this->instantiate($this->entityClass);
@@ -507,7 +495,7 @@ class OrganisationEntityTest extends EntityTester
         $this->assertSame(null, $organisation->getDisqualification());
     }
 
-    public function testGetDisqualification()
+    public function testGetDisqualification(): void
     {
         $disqualification = new Disqualification(m::mock(Entity::class));
 
@@ -518,7 +506,7 @@ class OrganisationEntityTest extends EntityTester
         $this->assertSame($disqualification, $organisation->getDisqualification());
     }
 
-    public function testGetDisqualificationStatusNone()
+    public function testGetDisqualificationStatusNone(): void
     {
         /* @var $organisation Entity */
         $organisation = $this->instantiate($this->entityClass);
@@ -527,7 +515,7 @@ class OrganisationEntityTest extends EntityTester
         $this->assertSame(Disqualification::STATUS_NONE, $organisation->getDisqualificationStatus());
     }
 
-    public function testGetDisqualificationStatusActive()
+    public function testGetDisqualificationStatusActive(): void
     {
         $disqualification = new Disqualification(m::mock(Entity::class));
         $disqualification->setIsDisqualified('Y');
@@ -540,10 +528,8 @@ class OrganisationEntityTest extends EntityTester
         $this->assertSame(Disqualification::STATUS_ACTIVE, $organisation->getDisqualificationStatus());
     }
 
-    /**
-     * @dataProvider dpGetLinkedLicences
-     */
-    public function testGetLinkedLicences($status, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetLinkedLicences')]
+    public function testGetLinkedLicences(mixed $status, mixed $expected): void
     {
         $licence = m::mock(LicenceEntity::class)->makePartial();
         $licence->setStatus(new RefData($status));
@@ -558,7 +544,7 @@ class OrganisationEntityTest extends EntityTester
         $this->assertEquals($expected, $organisation->getLinkedLicences()->contains($licence));
     }
 
-    public function dpGetLinkedLicences()
+    public static function dpGetLinkedLicences(): array
     {
         return [
             [LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, false],
@@ -580,7 +566,7 @@ class OrganisationEntityTest extends EntityTester
         ];
     }
 
-    public function testGetContextValue()
+    public function testGetContextValue(): void
     {
         $entity = new Entity();
         $entity->setId(111);
@@ -591,7 +577,7 @@ class OrganisationEntityTest extends EntityTester
     /**
      * Tests we're retrieving admin email addresses correctly
      */
-    public function testGetAdminEmailAddresses()
+    public function testGetAdminEmailAddresses(): void
     {
         $entity = new Entity();
 
@@ -694,9 +680,9 @@ class OrganisationEntityTest extends EntityTester
      *
      * @param int $niFlag
      * @param string $allowedOperatorLocation
-     * @dataProvider allowedOperatorLocationProviderApplications
      */
-    public function testGetAllowedOperatorLocationFromApplications($niFlag, $allowedOperatorLocation)
+    #[\PHPUnit\Framework\Attributes\DataProvider('allowedOperatorLocationProviderApplications')]
+    public function testGetAllowedOperatorLocationFromApplications(mixed $niFlag, mixed $allowedOperatorLocation): void
     {
         $mockOutstandingApplications = new ArrayCollection();
         $mockOutstandingApplications->add(
@@ -720,7 +706,7 @@ class OrganisationEntityTest extends EntityTester
     /**
      * Allowed operator location provider (applications)
      */
-    public function allowedOperatorLocationProviderApplications()
+    public static function allowedOperatorLocationProviderApplications(): array
     {
         return [
             ['N', 'GB'],
@@ -733,9 +719,9 @@ class OrganisationEntityTest extends EntityTester
      *
      * @param string $trafficArea
      * @param string $allowedOperatorLocation
-     * @dataProvider allowedOperatorLocationProviderLicences
      */
-    public function testGetAllowedOperatorLocationFromLicences($trafficArea, $allowedOperatorLocation, $licenceStatus)
+    #[\PHPUnit\Framework\Attributes\DataProvider('allowedOperatorLocationProviderLicences')]
+    public function testGetAllowedOperatorLocationFromLicences(mixed $trafficArea, mixed $allowedOperatorLocation, mixed $licenceStatus): void
     {
         $mockTrafficArea = m::mock()
             ->shouldReceive('getId')
@@ -775,7 +761,7 @@ class OrganisationEntityTest extends EntityTester
     /**
      * Allowed operator location provider (licences)
      */
-    public function allowedOperatorLocationProviderLicences()
+    public static function allowedOperatorLocationProviderLicences(): array
     {
         return [
             ['N', 'NI', LicenceEntity::LICENCE_STATUS_GRANTED],
@@ -787,7 +773,7 @@ class OrganisationEntityTest extends EntityTester
     /**
      * Test get allowed operator location with no licences and no outstanding applications
      */
-    public function testGetAllowedOperatorLocationDefault()
+    public function testGetAllowedOperatorLocationDefault(): void
     {
         $mockOutstandingApplications = new ArrayCollection();
         $mockLicences = new ArrayCollection();
@@ -809,7 +795,7 @@ class OrganisationEntityTest extends EntityTester
     /**
      * When there is one valid licence and no new apps, we can exit early, this is not MLH
      */
-    public function testIsMlhOneValidAndNoNewLicences()
+    public function testIsMlhOneValidAndNoNewLicences(): void
     {
         $organisation = new Entity();
         $mockLicence1 = m::mock(LicenceEntity::class);
@@ -827,7 +813,7 @@ class OrganisationEntityTest extends EntityTester
     /**
      * When there are no valid licences and one new app, we can exit early, this is not MLH
      */
-    public function testIsMlhNoValidAndOneNewLicence()
+    public function testIsMlhNoValidAndOneNewLicence(): void
     {
         $organisation = new Entity();
         $mockLicence1 = m::mock(LicenceEntity::class);
@@ -844,7 +830,7 @@ class OrganisationEntityTest extends EntityTester
     /**
      * There are no new apps and no existing valid licences, this is not MLH
      */
-    public function testIsMlhNoValidNoNewLicences()
+    public function testIsMlhNoValidNoNewLicences(): void
     {
         $organisation = new Entity();
         $organisation->setLicences(new ArrayCollection());
@@ -854,7 +840,7 @@ class OrganisationEntityTest extends EntityTester
     /**
      * When there are two valid licences, we can exit early, this is MLH without needing additional checks
      */
-    public function testIsMlhTwoValidLicences()
+    public function testIsMlhTwoValidLicences(): void
     {
         $organisation = new Entity();
         $mockValidLicence1 = m::mock(LicenceEntity::class);
@@ -876,7 +862,7 @@ class OrganisationEntityTest extends EntityTester
     /**
      * When there are no valid licences and three new apps, the last two are goods, this is MLH
      */
-    public function testIsMlhNoValidOneNewInvalidLicenceTwoNewValidLicences()
+    public function testIsMlhNoValidOneNewInvalidLicenceTwoNewValidLicences(): void
     {
         $organisation = new Entity();
 
@@ -911,7 +897,7 @@ class OrganisationEntityTest extends EntityTester
         $this->assertTrue($organisation->isMlh());
     }
 
-    public function testHasUnlicencedLicences()
+    public function testHasUnlicencedLicences(): void
     {
         $mockLic1 = m::mock(LicenceEntity::class)
             ->shouldReceive('getLicNo')
@@ -943,7 +929,7 @@ class OrganisationEntityTest extends EntityTester
      * The second one will meet the criteria
      * The third licence won't need to be checked at all
      */
-    public function testIsEligibleForPermitsWhenTrue()
+    public function testIsEligibleForPermitsWhenTrue(): void
     {
         $mockLicence1 = m::mock(LicenceEntity::class);
         $mockLicence1->shouldReceive('isEligibleForPermits')->once()->andReturn(false);
@@ -963,7 +949,7 @@ class OrganisationEntityTest extends EntityTester
      * Test whether the organisation is eligible for permits.
      * Use 3 mock licences, all 3 won't meet the criteria hence we return false
      */
-    public function testIsEligibleForPermitsWhenFalse()
+    public function testIsEligibleForPermitsWhenFalse(): void
     {
         $mockLicence1 = m::mock(LicenceEntity::class);
         $mockLicence1->shouldReceive('isEligibleForPermits')->once()->andReturn(false);
@@ -979,10 +965,8 @@ class OrganisationEntityTest extends EntityTester
         $this->assertEquals(false, $entity->isEligibleForPermits());
     }
 
-    /**
-     * @dataProvider dpHasSubmittedLicenceApplication
-     */
-    public function testHasSubmittedLicenceApplication($status, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasSubmittedLicenceApplication')]
+    public function testHasSubmittedLicenceApplication(mixed $status, mixed $expected): void
     {
         if (!is_null($status)) {
             $licence = m::mock(LicenceEntity::class)->makePartial();
@@ -1002,7 +986,7 @@ class OrganisationEntityTest extends EntityTester
         );
     }
 
-    public function dpHasSubmittedLicenceApplication(): array
+    public static function dpHasSubmittedLicenceApplication(): array
     {
         return [
             [null, false],

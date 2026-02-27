@@ -71,21 +71,22 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'transportManager',
-            [$this, 'onTransportManagerMarker'],
+            $this->onTransportManagerMarker(...),
             $priority
         );
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'licence',
-            [$this, 'onLicenceTransportManagerMarker'],
+            $this->onLicenceTransportManagerMarker(...),
             $priority
         );
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'application',
-            [$this, 'onApplicationTransportManagerMarker'],
+            $this->onApplicationTransportManagerMarker(...),
             $priority
         );
     }
@@ -133,7 +134,7 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
         );
 
         $routeName = $this->getApplicationService()->getMvcEvent()->getRouteMatch()->getMatchedRouteName();
-        if (str_starts_with($routeName, 'lva-variation')) {
+        if (str_starts_with((string) $routeName, 'lva-variation')) {
             $this->addTransportManagerFromLicenceData($routeParam->getValue());
             $this->getMarkerService()->addData('page', 'transportManagerVariation');
         } else {
@@ -245,6 +246,7 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransportManagerMarker
     {
         $this->setMarkerService($container->get(\Olcs\Service\Marker\MarkerService::class));

@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener\RouteParam;
 
+use Laminas\EventManager\EventManagerInterface;
 use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -13,25 +16,32 @@ use Olcs\Service\Marker\MarkerService;
 
 class BusRegMarkerTest extends TestCase
 {
-    protected $sut;
+    private BusRegMarker $sut;
     public function setUp(): void
     {
         $this->sut = new BusRegMarker();
         parent::setUp();
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
-        $sut = new BusRegMarker();
+        $this->sut = new BusRegMarker();
 
-        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
-        $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'busRegId', [$sut, 'onBusRegMarker'], 1);
+        $mockEventManager = m::mock(EventManagerInterface::class);
+        $mockEventManager->expects('attach')
+            ->with(
+                RouteParams::EVENT_PARAM . 'busRegId',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onBusRegMarker';
+                }),
+                1
+            );
 
-        $sut->attach($mockEventManager);
+        $this->sut->attach($mockEventManager);
     }
 
-    protected function setupBusRegMarker($id, $busRegData)
+    protected function setupBusRegMarker(mixed $id, mixed $busRegData): void
     {
         $mockAnnotationBuilder = m::mock();
         $mockQueryService  = m::mock();
@@ -57,7 +67,7 @@ class BusRegMarkerTest extends TestCase
         $this->sut->setQueryService($mockQueryService);
     }
 
-    public function testOnBusRegMarker()
+    public function testOnBusRegMarker(): void
     {
         $busRegId = 1;
         $busReg = ['id' => $busRegId];
@@ -77,7 +87,7 @@ class BusRegMarkerTest extends TestCase
         $this->sut->onBusRegMarker($event);
     }
 
-    public function testOnBusRegMarkerQueryError()
+    public function testOnBusRegMarkerQueryError(): void
     {
         $busRegId = 1;
 
@@ -93,7 +103,7 @@ class BusRegMarkerTest extends TestCase
         $this->sut->onBusRegMarker($event);
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockTransferAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();

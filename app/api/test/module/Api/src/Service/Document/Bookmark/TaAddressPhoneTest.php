@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\TaAddressPhone;
  */
 class TaAddressPhoneTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new TaAddressPhone();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -23,9 +23,7 @@ class TaAddressPhoneTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    /**
-     * @dataProvider dpAllTrafficAreas
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpAllTrafficAreas')]
     public function testRenderWithNoPhone(string $trafficAreaId): void
     {
         $bookmark = new TaAddressPhone();
@@ -54,9 +52,7 @@ class TaAddressPhoneTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @dataProvider dpAllTrafficAreas
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpAllTrafficAreas')]
     public function testRenderWithNoMatchingPhone(string $trafficAreaId): void
     {
         $bookmark = new TaAddressPhone();
@@ -92,7 +88,7 @@ class TaAddressPhoneTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function dpAllTrafficAreas(): array
+    public static function dpAllTrafficAreas(): array
     {
         return [
             [TrafficArea::NORTH_EASTERN_TRAFFIC_AREA_CODE],
@@ -107,9 +103,7 @@ class TaAddressPhoneTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider dpRenderWithMatchingPhone
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderWithMatchingPhone')]
     public function testRenderWithMatchingPhone(string $trafficAreaId, string $expectedOutput): void
     {
         $bookmark = new TaAddressPhone();
@@ -145,7 +139,7 @@ class TaAddressPhoneTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function dpRenderWithMatchingPhone(): array
+    public static function dpRenderWithMatchingPhone(): array
     {
         $withPhoneNumber = "TA Address 1\nLine 1\nLine 2\nLine 3\nLine 4\nLS2 4DD\n1234";
         $withoutPhoneNumber = "TA Address 1\nLine 1\nLine 2\nLine 3\nLine 4\nLS2 4DD";

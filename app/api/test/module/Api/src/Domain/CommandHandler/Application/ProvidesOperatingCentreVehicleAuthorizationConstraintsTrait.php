@@ -9,7 +9,7 @@ trait ProvidesOperatingCentreVehicleAuthorizationConstraintsTrait
     /**
      * @return array
      */
-    public function operatingCentreVehicleAuthorisationConstraintsDataProvider(): array
+    public static function operatingCentreVehicleAuthorisationConstraintsDataProvider(): array
     {
         return [
             'no operating centres' => [

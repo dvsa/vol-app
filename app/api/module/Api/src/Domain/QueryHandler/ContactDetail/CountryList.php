@@ -15,6 +15,7 @@ class CountryList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Country';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $repo \Dvsa\Olcs\Api\Domain\Repository\Country */

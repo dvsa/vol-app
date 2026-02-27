@@ -3,6 +3,10 @@
 !.idea/php.xml
 !.idea/.name
 
+# Claude
+/.claude/
+CLAUDE.md
+
 # Logs
 logs
 *.log
@@ -82,3 +86,4 @@ packages/local-refresh/.cache/
 # JetBrains
 .idea
 
+# VOL project config

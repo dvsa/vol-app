@@ -30,6 +30,7 @@ final class Disable extends AbstractCommandHandler implements ToggleRequiredInte
     protected $toggleConfig = [FeatureToggle::MESSAGING];
 
     /** @var CommandInterface|DisableCommand $command */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         $repo = $this->getRepo(OrganisationRepo::class);

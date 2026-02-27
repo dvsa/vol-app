@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -41,7 +43,8 @@ class GrantGoodsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             Licence::LICENCE_STATUS_GRANTED,
@@ -52,7 +55,7 @@ class GrantGoodsTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->setupIsInternalUser(false);
 
@@ -99,7 +102,7 @@ class GrantGoodsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(ApplicationEntity::APPLICATION_STATUS_GRANTED, $application->getStatus()->getId());
     }
 
-    public function testHandleCommandCloseTasks()
+    public function testHandleCommandCloseTasks(): void
     {
         $data = [
             'id' => 111
@@ -156,7 +159,7 @@ class GrantGoodsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandRefund()
+    public function testHandleCommandRefund(): void
     {
         $this->setupIsInternalUser(false);
 

@@ -16,6 +16,7 @@ class IrfoAddress extends DynamicBookmark
      * @param array $data
      * @return Qry|null
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(
@@ -37,6 +38,7 @@ class IrfoAddress extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         if (isset($this->data['irfoContactDetails']['address'])) {

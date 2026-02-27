@@ -19,6 +19,7 @@ class All extends AbstractQueryHandler implements ToggleRequiredInterface
     protected $toggleConfig = [FeatureToggle::MESSAGING];
     protected $extraRepos = [SubjectRepo::class];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query): array
     {
         $subjects = $this->getSubjectRepository()->fetchList($query, Query::HYDRATE_OBJECT);

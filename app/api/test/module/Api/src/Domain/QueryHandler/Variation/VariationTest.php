@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Variation;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Application\Application;
@@ -45,7 +47,7 @@ class VariationTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $applicationId = 111;
         $query = Qry::create(['id' => $applicationId]);
@@ -126,7 +128,7 @@ class VariationTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    protected function getMockFee($amount)
+    protected function getMockFee(mixed $amount): mixed
     {
         $mock = m::mock(FeeEntity::class)->makePartial();
         $mock

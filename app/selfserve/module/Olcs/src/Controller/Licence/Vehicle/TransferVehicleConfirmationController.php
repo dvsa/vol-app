@@ -64,6 +64,7 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function onDispatch(MvcEvent $e)
     {
         try {
@@ -117,6 +118,7 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
      * @throws VehiclesNotFoundWithIdsException
      * @throws VehicleSelectionEmptyException
      */
+    #[\Override]
     public function indexAction()
     {
         $destinationLicence = $this->resolveDestinationLicence();

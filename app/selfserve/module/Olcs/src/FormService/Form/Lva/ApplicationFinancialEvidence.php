@@ -20,16 +20,8 @@ class ApplicationFinancialEvidence extends FinancialEvidence
 {
     use ButtonsAlterations;
 
-    protected FormHelperService $formHelper;
-
-    public function __construct(
-        FormHelperService $formHelper,
-        protected AuthorizationService $authService,
-        protected TranslationHelperService $translator,
-        protected UrlHelperService $urlHelper,
-        protected ValidatorPluginManager $validatorPluginManager
-    ) {
-        $this->formHelper = $formHelper;
+    public function __construct(protected FormHelperService $formHelper, protected AuthorizationService $authService, protected TranslationHelperService $translator, protected UrlHelperService $urlHelper, protected ValidatorPluginManager $validatorPluginManager)
+    {
     }
 
     /**
@@ -39,6 +31,7 @@ class ApplicationFinancialEvidence extends FinancialEvidence
      *
      * @return Form
      */
+    #[\Override]
     protected function alterForm($form): void
     {
         parent::alterForm($form);

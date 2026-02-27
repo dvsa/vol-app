@@ -27,6 +27,7 @@ class PhoneContact extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     public function buildDefaultListQuery(QueryBuilder $qb, QueryInterface $query, $compositeFields = [])
     {
         // add calculated columns to allow ordering by them
@@ -45,6 +46,7 @@ class PhoneContact extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $qb->andWhere($this->alias . '.contactDetails = :CONTACT_DETAILS_ID');

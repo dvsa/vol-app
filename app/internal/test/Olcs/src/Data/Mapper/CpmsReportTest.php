@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -12,7 +14,7 @@ use Laminas\Form\FormInterface;
  */
 class CpmsReportTest extends MockeryTestCase
 {
-    public function testMapFromResult()
+    public function testMapFromResult(): void
     {
         $in = ['foo'];
         $this->assertSame($in, Sut::mapFromResult($in));
@@ -20,17 +22,17 @@ class CpmsReportTest extends MockeryTestCase
 
 
     /**
-    * @dataProvider mapFromFormDataProvider
-    *
-    * @param $inData
-    * @param $expected
-    */
-    public function testMapFromForm($inData, $expected)
+     *
+     * @param $inData
+     * @param $expected
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromFormDataProvider')]
+    public function testMapFromForm(mixed $inData, mixed $expected): void
     {
         $this->assertEquals($expected, Sut::mapFromForm($inData));
     }
 
-    public function mapFromFormDataProvider()
+    public static function mapFromFormDataProvider(): array
     {
         return [
             [
@@ -50,7 +52,7 @@ class CpmsReportTest extends MockeryTestCase
         ];
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $mockForm = m::mock(FormInterface::class);
         $errors = ['field' => 'data'];
