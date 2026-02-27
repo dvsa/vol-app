@@ -129,7 +129,8 @@ function cleanup {
   done
 }
 
-db_instance_id=${READDB_HOST}
+: "${READDB_ID:?READDB_ID is not set}"
+db_instance_id="${READDB_ID}"
 restored_db_instance_id="${ENVIRONMENT}-olcs-rds-nidataextract-temp"
 snapshot_timestamp=$(date +"%Y-%m-%d-%H-%M-%S")
 env_id=$(echo "$db_instance_id"|cut -d- -f1)
