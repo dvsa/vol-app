@@ -290,7 +290,15 @@ fi
 
 log_msg "Running NI_Extract-Anon on: ${db_instance_endpoint}"
 cd /mnt/data/common/scripts/NI_Extract
-EXTRACT_ARGS="-c -h${db_instance_endpoint} -u${READDB_USER} -p${rds_master_pass} -d ${READDB_NAME}"
+
+# Pick DB name (keep old default unless you KNOW the correct one)
+DB_NAME="${READDB_NAME:-OLCS_RDS_OLCSDB}"
+
+# Master username is NOT guaranteed to be READDB_USER.
+# The snapshot restore keeps the original master username.
+# So read it from the restored instance.
+master_user=$(echo "${restore_db}" | /usr/bin/jq -r '.MasterUsername')
+CONN_STR="-h${db_instance_endpoint} -u${master_user} -p${rds_master_pass}"
 
 if [[ "${ENVIRONMENT}" != "PROD" ]]; then
   ./NI_Extract.sh ${EXTRACT_ARGS} \
