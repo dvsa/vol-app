@@ -29,7 +29,7 @@ class AutoGrantTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    protected function initReferences(): void
     {
         $this->refData = [
             RefData::GRANT_AUTHORITY_DELEGATED => m::mock(RefData::class)->makePartial()
