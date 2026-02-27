@@ -11,8 +11,8 @@ export NO_PROXY="${NO_PROXY:-169.254.169.254,169.254.170.2,localhost,127.0.0.1}"
 : "${ENVIRONMENT_NAME:?ENVIRONMENT_NAME is not set}"
 ENVIRONMENT="$ENVIRONMENT_NAME"
 
-: "${AWS_REGION:?AWS_REGION is not set}"
-aws_region="$AWS_REGION"
+aws_region="${AWS_REGION:-$(/usr/local/bin/aws configure get region)}"
+: "${aws_region:?Could not determine AWS region}"
 
 case "${ENVIRONMENT}" in
   "DEV")  DVA_BUCKET="devapp-olcs-pri-integration-dva-s3"; DVA_PREFIX="dev" ;;
