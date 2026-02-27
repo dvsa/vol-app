@@ -24,6 +24,7 @@ final class AutoGrant extends AbstractCommandHandler implements TransactionedInt
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var ApplicationEntity $application */
