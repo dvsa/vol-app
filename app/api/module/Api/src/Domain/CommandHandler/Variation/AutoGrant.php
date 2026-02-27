@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Variation;
+
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
@@ -18,6 +19,7 @@ use Dvsa\Olcs\Transfer\Command\Variation\Grant as VariationGrantCmd;
  *
  * Handles auto-granting of eligible variations.
  */
+
 final class AutoGrant extends AbstractCommandHandler implements TransactionedInterface
 {
     protected $repoServiceName = 'Application';

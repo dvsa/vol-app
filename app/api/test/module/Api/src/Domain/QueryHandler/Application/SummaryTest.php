@@ -952,7 +952,7 @@ class SummaryTest extends QueryHandlerTestCase
                 'reference' => 'ref',
                 'outstandingFee' => true,
                 'canWithdraw' => false,
-                'wasAutoGranted'=>false,
+                'wasAutoGranted' => false,
                 'autoGrantChanges' => []
             ],
             $result->serialize()

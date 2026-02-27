@@ -2152,7 +2152,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
             }
         }
 
-        switch($size) {
+        switch ($size) {
             case self::PSV_VEHICLE_SIZE_SMALL:
                 $this->psvOperateSmallVhl = 'Y';
                 break;
@@ -2202,7 +2202,8 @@ class Application extends AbstractApplication implements ContextProviderInterfac
 
         if ($this->psvLimousines === 'Y') {
             //for small vehicles we don't always ask further questions
-            if ($this->psvWhichVehicleSizes instanceof RefData
+            if (
+                $this->psvWhichVehicleSizes instanceof RefData
                 && $this->psvWhichVehicleSizes->getId() === self::PSV_VEHICLE_SIZE_SMALL
             ) {
                 return true;
@@ -2753,7 +2754,9 @@ class Application extends AbstractApplication implements ContextProviderInterfac
         $hasOtherChanges = false;
         //check only OC removals
         foreach ($variationCompletion as $section => $status) {
-            if ($section === 'undertakings') continue;
+            if ($section === 'undertakings') {
+                continue;
+            }
             if ($status === self::VARIATION_STATUS_UPDATED) {
                 if ($section === 'operating_centres') {
                     $hasOCChanges = true;

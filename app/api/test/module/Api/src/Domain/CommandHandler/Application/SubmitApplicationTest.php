@@ -908,7 +908,6 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
             ->once()
             ->andReturnSelf();
 
-
         $expectedTargetCompletionDate = clone $now;
         $expectedTargetCompletionDate->modify('+8 week');
 
