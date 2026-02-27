@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark\Formatter;
 
 use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
@@ -10,15 +12,13 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Formatter\ContactNumber;
  */
 class ContactNumberTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider dataProvider
-     */
-    public function testFormat($input, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
+    public function testFormat(mixed $input, mixed $expected): void
     {
         $this->assertEquals($expected, ContactNumber::format($input));
     }
 
-    public function dataProvider()
+    public static function dataProvider(): array
     {
         $primary = [
             'phoneContactType' => ['id' => PhoneContact::TYPE_PRIMARY],

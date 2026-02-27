@@ -40,7 +40,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractContactDetails implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractContactDetails implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -220,7 +220,8 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -243,7 +244,8 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the contact type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getContactType()
     {
         return $this->contactType;
@@ -266,7 +268,8 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the address
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Address     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Address
+     */
     public function getAddress()
     {
         return $this->address;
@@ -289,7 +292,8 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the person
      *
-     * @return \Dvsa\Olcs\Api\Entity\Person\Person     */
+     * @return \Dvsa\Olcs\Api\Entity\Person\Person
+     */
     public function getPerson()
     {
         return $this->person;
@@ -312,7 +316,8 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -335,7 +340,8 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -358,7 +364,8 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the email address
      *
-     * @return string     */
+     * @return string
+     */
     public function getEmailAddress()
     {
         return $this->emailAddress;
@@ -381,7 +388,8 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the fao
      *
-     * @return string     */
+     * @return string
+     */
     public function getFao()
     {
         return $this->fao;
@@ -404,7 +412,8 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -427,7 +436,8 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the written permission to engage
      *
-     * @return string     */
+     * @return string
+     */
     public function getWrittenPermissionToEngage()
     {
         return $this->writtenPermissionToEngage;
@@ -450,7 +460,8 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -473,7 +484,8 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -496,7 +508,8 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the olbs type
      *
-     * @return string     */
+     * @return string
+     */
     public function getOlbsType()
     {
         return $this->olbsType;
@@ -568,6 +581,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -16,6 +16,7 @@ class LicenceVehicleLargeLimit extends DynamicBookmark
     public const EMPTY_AUTH = 'Total number (if any)';
     public const NA = 'N/A';
 
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(
@@ -28,6 +29,7 @@ class LicenceVehicleLargeLimit extends DynamicBookmark
         );
     }
 
+    #[\Override]
     public function render()
     {
         if ($this->data['licenceType']['id'] === LicenceEntity::LICENCE_TYPE_RESTRICTED) {

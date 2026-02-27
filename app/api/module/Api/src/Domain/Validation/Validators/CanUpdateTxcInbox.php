@@ -16,6 +16,7 @@ class CanUpdateTxcInbox extends AbstractCanAccessEntity
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($entityIds)
     {
         if (empty($entityIds)) {

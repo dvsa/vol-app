@@ -36,6 +36,7 @@ class LicencePeopleAdapter extends AbstractPeopleAdapter
      *
      * @return void
      */
+    #[\Override]
     public function alterFormForOrganisation(Form $form, $table): void
     {
         if ($this->canModify()) {
@@ -53,6 +54,7 @@ class LicencePeopleAdapter extends AbstractPeopleAdapter
      *
      * @return void
      */
+    #[\Override]
     public function alterAddOrEditFormForOrganisation(Form $form)
     {
         $this->peopleLvaService->lockPersonForm($form, $this->getOrganisationType());
@@ -63,6 +65,7 @@ class LicencePeopleAdapter extends AbstractPeopleAdapter
      *
      * @return bool
      */
+    #[\Override]
     public function canModify(): bool
     {
         return !$this->isExceptionalOrganisation();
@@ -74,6 +77,7 @@ class LicencePeopleAdapter extends AbstractPeopleAdapter
      * @return TableBuilder
      *
      */
+    #[\Override]
     public function createTable(): TableBuilder
     {
         $table = parent::createTable();
@@ -87,6 +91,7 @@ class LicencePeopleAdapter extends AbstractPeopleAdapter
      *
      * @return \Dvsa\Olcs\Transfer\Command\Licence\DeletePeople|DeletePeopleViaVariation
      */
+    #[\Override]
     protected function getDeleteCommand($params): DeletePeopleViaVariation|\Dvsa\Olcs\Transfer\Command\Licence\DeletePeople
     {
         $params['id'] = $this->getLicenceId();

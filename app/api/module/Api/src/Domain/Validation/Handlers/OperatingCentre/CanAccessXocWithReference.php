@@ -20,6 +20,7 @@ class CanAccessXocWithReference extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         [$prefix, $id] = $this->splitTypeAndId($dto->getId());

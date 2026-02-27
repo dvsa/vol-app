@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Vehicle;
 
 use Mockery as m;
@@ -28,7 +30,8 @@ class UpdateSection26Test extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -37,7 +40,7 @@ class UpdateSection26Test extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandY()
+    public function testHandleCommandY(): void
     {
         $data = [
             'ids' => [
@@ -82,7 +85,7 @@ class UpdateSection26Test extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandN()
+    public function testHandleCommandN(): void
     {
         $data = [
             'ids' => [

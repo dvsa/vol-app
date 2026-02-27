@@ -46,6 +46,7 @@ class ImpoundingController extends AbstractInternalController implements CaseCon
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -159,6 +160,7 @@ class ImpoundingController extends AbstractInternalController implements CaseCon
      *
      * @return string
      */
+    #[\Override]
     protected function getDocumentGenerateRoute()
     {
         return 'case_licence_docs_attachments/entity/generate';
@@ -171,6 +173,7 @@ class ImpoundingController extends AbstractInternalController implements CaseCon
      *
      * @return array
      */
+    #[\Override]
     protected function getDocumentGenerateRouteParams()
     {
         return [

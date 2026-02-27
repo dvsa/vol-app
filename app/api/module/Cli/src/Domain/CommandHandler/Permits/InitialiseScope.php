@@ -22,6 +22,7 @@ class InitialiseScope extends ScoringCommandHandler
     *
     * @return Result
     */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $candidatePermitRepo = $this->getRepo();

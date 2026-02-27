@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\Query\Permits\DeviationData as DeviationDataQuery;
@@ -30,7 +32,7 @@ class InitialiseScopeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $stockId = 7;
 
@@ -168,7 +170,7 @@ class InitialiseScopeTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testMeanDeviationOverride()
+    public function testMeanDeviationOverride(): void
     {
         $stockId = 7;
 

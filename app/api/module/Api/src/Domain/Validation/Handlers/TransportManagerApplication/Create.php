@@ -14,6 +14,7 @@ class Create extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canAccessApplication($dto->getApplication()) &&

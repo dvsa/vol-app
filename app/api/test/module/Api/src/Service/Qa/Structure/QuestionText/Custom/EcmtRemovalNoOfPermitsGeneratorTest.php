@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\QuestionText\Custom;
 
 use Dvsa\Olcs\Api\Domain\Repository\FeeType as FeeTypeRepository;
@@ -18,7 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class EcmtRemovalNoOfPermitsGeneratorTest extends MockeryTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $feePerPermit = '18.00';
 

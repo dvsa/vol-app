@@ -22,6 +22,7 @@ class GenericAnswerClearer implements AnswerClearerInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function clear(QaContext $qaContext)
     {
         $answer = null;

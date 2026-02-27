@@ -216,6 +216,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedBundleValues()
     {
         return [
@@ -378,6 +379,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
      *
      * @return mixed|null
      */
+    #[\Override]
     public function getAnswer(ApplicationStep $applicationStep)
     {
         $question = $applicationStep->getQuestion();
@@ -511,6 +513,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
      *
      * @return Organisation
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this->getLicence()->getOrganisation();
@@ -521,6 +524,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
      *
      * @return Licence
      */
+    #[\Override]
     public function getRelatedLicence(): Licence
     {
         return $this->licence;
@@ -557,6 +561,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
     /**
      * @return bool
      */
+    #[\Override]
     public function isNotYetSubmitted()
     {
         return $this->status->getId() === IrhpInterface::STATUS_NOT_YET_SUBMITTED;
@@ -737,6 +742,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
     /**
      * @return bool
      */
+    #[\Override]
     public function isWithdrawn(): bool
     {
         return $this->status->getId() === IrhpInterface::STATUS_WITHDRAWN;
@@ -758,6 +764,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
      *
      * @return void
      */
+    #[\Override]
     public function cancel(RefData $cancelStatus)
     {
         if (!$this->canBeCancelled()) {
@@ -773,6 +780,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
      *
      * @return bool
      */
+    #[\Override]
     public function canBeCancelled()
     {
         return $this->isNotYetSubmitted();
@@ -821,6 +829,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
      *
      * @return bool
      */
+    #[\Override]
     public function canBeWithdrawn(?RefData $reason = null): bool
     {
         if ($reason instanceof RefData && $reason->getId() === WithdrawableInterface::WITHDRAWN_REASON_DECLINED) {
@@ -1087,6 +1096,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
      *
      * @return array
      */
+    #[\Override]
     public function getOutstandingFees(): array
     {
         $feeTypeIds = [
@@ -1233,6 +1243,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
      *
      * @return void
      */
+    #[\Override]
     public function withdraw(RefData $withdrawStatus, RefData $withdrawReason, $checkReasonAgainstStatus): void
     {
         // when withdrawing an application from internal, we need to allow any withdrawal reason to be specified
@@ -1550,6 +1561,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getActiveApplicationPath()
     {
         // get application path active at the time when the application path was locked
@@ -1559,6 +1571,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getContextValue()
     {
         return $this->id;
@@ -1897,6 +1910,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
      *
      * @return string
      */
+    #[\Override]
     public function getCamelCaseEntityName()
     {
         return 'irhpApplication';
@@ -1978,6 +1992,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
      *
      * @return string|null
      */
+    #[\Override]
     public function getAppWithdrawnEmailCommand($withdrawReason)
     {
         $irhpPermitTypeId = $this->irhpPermitType->getId();
@@ -2045,6 +2060,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
      *
      * @param bool $checked
      */
+    #[\Override]
     public function updateChecked($checked)
     {
         $this->checked = $checked;
@@ -2057,6 +2073,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
      *
      * @throws RuntimeException
      */
+    #[\Override]
     public function getSubmissionTaskDescription()
     {
         $mappings = [
@@ -2196,6 +2213,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
      *
      * @return bool
      */
+    #[\Override]
     public function requiresPreAllocationCheck()
     {
         return $this->irhpPermitType->isEcmtShortTerm() || $this->irhpPermitType->isEcmtAnnual();
@@ -2469,6 +2487,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function createAnswer(QuestionText $questionText)
     {
         return Answer::createNewForIrhpApplication($questionText, $this);
@@ -2477,6 +2496,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function onSubmitApplicationStep()
     {
         $this->resetCheckAnswersAndDeclaration();
@@ -2485,6 +2505,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getAdditionalQaViewData(ApplicationStep $applicationStep)
     {
         return [
@@ -2495,6 +2516,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function isApplicationPathEnabled()
     {
         return $this->irhpPermitType->isApplicationPathEnabled();
@@ -2518,6 +2540,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getRepositoryName()
     {
         return 'IrhpApplication';

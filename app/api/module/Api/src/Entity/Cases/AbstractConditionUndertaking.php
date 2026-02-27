@@ -48,7 +48,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractConditionUndertaking implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractConditionUndertaking implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -307,7 +307,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -330,7 +331,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
     public function getApplication()
     {
         return $this->application;
@@ -353,7 +355,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -376,7 +379,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the operating centre
      *
-     * @return \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre     */
+     * @return \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
+     */
     public function getOperatingCentre()
     {
         return $this->operatingCentre;
@@ -399,7 +403,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -422,7 +427,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the lic condition variation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking
+     */
     public function getLicConditionVariation()
     {
         return $this->licConditionVariation;
@@ -445,7 +451,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the condition type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getConditionType()
     {
         return $this->conditionType;
@@ -468,7 +475,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the condition category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getConditionCategory()
     {
         return $this->conditionCategory;
@@ -491,7 +499,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the s4
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\S4     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\S4
+     */
     public function getS4()
     {
         return $this->s4;
@@ -514,7 +523,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the added via
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getAddedVia()
     {
         return $this->addedVia;
@@ -537,7 +547,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the attached to
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getAttachedTo()
     {
         return $this->attachedTo;
@@ -560,7 +571,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the approval user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getApprovalUser()
     {
         return $this->approvalUser;
@@ -583,7 +595,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -606,7 +619,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -629,7 +643,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the action
      *
-     * @return string     */
+     * @return string
+     */
     public function getAction()
     {
         return $this->action;
@@ -652,7 +667,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the is draft
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsDraft()
     {
         return $this->isDraft;
@@ -675,7 +691,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the is fulfilled
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsFulfilled()
     {
         return $this->isFulfilled;
@@ -698,7 +715,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the notes
      *
-     * @return string     */
+     * @return string
+     */
     public function getNotes()
     {
         return $this->notes;
@@ -721,7 +739,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -744,7 +763,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -767,7 +787,8 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get the olbs type
      *
-     * @return string     */
+     * @return string
+     */
     public function getOlbsType()
     {
         return $this->olbsType;
@@ -839,6 +860,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

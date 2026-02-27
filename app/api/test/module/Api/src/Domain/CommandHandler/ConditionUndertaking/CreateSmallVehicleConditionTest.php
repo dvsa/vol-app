@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\ConditionUndertaking;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\ConditionUndertaking\CreateSmallVehicleCondition as CommandHandler;
@@ -18,6 +20,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class CreateSmallVehicleConditionTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
@@ -29,7 +32,7 @@ class CreateSmallVehicleConditionTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $applicationId = 1;
         $licenceId = 2;
@@ -83,7 +86,7 @@ class CreateSmallVehicleConditionTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandLargeVehicles()
+    public function testHandleCommandLargeVehicles(): void
     {
         $applicationId = 1;
 
@@ -109,7 +112,7 @@ class CreateSmallVehicleConditionTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandConditionExists()
+    public function testHandleCommandConditionExists(): void
     {
         $applicationId = 1;
         $licenceId = 2;

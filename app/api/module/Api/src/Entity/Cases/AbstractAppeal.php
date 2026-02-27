@@ -39,7 +39,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -288,7 +288,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -311,7 +312,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -334,7 +336,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Get the reason
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getReason()
     {
         return $this->reason;
@@ -357,7 +360,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Get the outcome
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getOutcome()
     {
         return $this->outcome;
@@ -380,7 +384,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -403,7 +408,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -426,7 +432,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Get the appeal no
      *
-     * @return string     */
+     * @return string
+     */
     public function getAppealNo()
     {
         return $this->appealNo;
@@ -451,7 +458,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getDeadlineDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -480,7 +488,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getAppealDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -507,7 +516,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Get the outline ground
      *
-     * @return string     */
+     * @return string
+     */
     public function getOutlineGround()
     {
         return $this->outlineGround;
@@ -532,7 +542,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getHearingDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -561,7 +572,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getPapersDueDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -590,7 +602,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getPapersDueTcDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -617,7 +630,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Get the comment
      *
-     * @return string     */
+     * @return string
+     */
     public function getComment()
     {
         return $this->comment;
@@ -642,7 +656,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getPapersSentDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -671,7 +686,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getPapersSentTcDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -700,7 +716,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getDecisionDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -729,7 +746,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getWithdrawnDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -756,7 +774,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Get the dvsa notified
      *
-     * @return string     */
+     * @return string
+     */
     public function getDvsaNotified()
     {
         return $this->dvsaNotified;
@@ -779,7 +798,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -802,7 +822,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -825,7 +846,8 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Get the olbs type
      *
-     * @return string     */
+     * @return string
+     */
     public function getOlbsType()
     {
         return $this->olbsType;
@@ -834,6 +856,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

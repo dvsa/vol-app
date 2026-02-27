@@ -23,6 +23,7 @@ class RepositoryServiceManager extends AbstractPluginManager
         CompaniesHouseVsOlcsDiffs::class,
     ];
 
+    #[\Override]
     public function validate($instance)
     {
         if ($instance instanceof RepositoryInterface || $instance instanceof ReadonlyRepositoryInterface) {

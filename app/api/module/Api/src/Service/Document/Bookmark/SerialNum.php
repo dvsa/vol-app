@@ -29,6 +29,7 @@ class SerialNum extends LicenceNumber implements DateHelperAwareInterface
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         return parent::render() . ' ' . $this->getDateHelper()->getDate('d/m/Y H:i:s');

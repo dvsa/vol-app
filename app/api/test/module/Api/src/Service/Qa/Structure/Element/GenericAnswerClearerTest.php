@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element;
 
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
@@ -40,7 +42,7 @@ class GenericAnswerClearerTest extends MockeryTestCase
         );
     }
 
-    public function testClear()
+    public function testClear(): void
     {
         $answer = m::mock(Answer::class);
 
@@ -59,7 +61,7 @@ class GenericAnswerClearerTest extends MockeryTestCase
         $this->genericAnswerClearer->clear($this->qaContext);
     }
 
-    public function testClearDeleteNotRequired()
+    public function testClearDeleteNotRequired(): void
     {
         $this->genericAnswerProvider->shouldReceive('get')
             ->with($this->qaContext)

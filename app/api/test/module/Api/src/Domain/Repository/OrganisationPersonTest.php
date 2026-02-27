@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\AbstractQuery;
@@ -8,9 +10,7 @@ use Dvsa\Olcs\Api\Entity\Person\Person;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\OrganisationPerson as OrganisationPersonRepo;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\OrganisationPerson
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\OrganisationPerson::class)]
 class OrganisationPersonTest extends RepositoryTestCase
 {
     /** @var OrganisationPersonRepo  */
@@ -21,7 +21,7 @@ class OrganisationPersonTest extends RepositoryTestCase
         $this->setUpSut(OrganisationPersonRepo::class);
     }
 
-    public function testFetchByOrgAndPerson()
+    public function testFetchByOrgAndPerson(): void
     {
         /** @var Organisation $organisation */
         $organisation = m::mock(Organisation::class)->makePartial();
@@ -51,7 +51,7 @@ class OrganisationPersonTest extends RepositoryTestCase
         $this->assertEquals('{QUERY} AND m.organisation = 123 AND m.person = 321', $this->query);
     }
 
-    public function testFetchListForOrganisation()
+    public function testFetchListForOrganisation(): void
     {
         $qb = $this->createMockQb('[QUERY]');
 
@@ -73,7 +73,7 @@ class OrganisationPersonTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchCountForOrganisation()
+    public function testFetchCountForOrganisation(): void
     {
         $qb = $this->createMockQb('[QUERY]');
 
@@ -90,7 +90,7 @@ class OrganisationPersonTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForOrganisationAndPerson()
+    public function testFetchListForOrganisationAndPerson(): void
     {
         $qb = $this->createMockQb('[QUERY]');
 
@@ -114,7 +114,7 @@ class OrganisationPersonTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForPerson()
+    public function testFetchListForPerson(): void
     {
         $qb = $this->createMockQb('[QUERY]');
 

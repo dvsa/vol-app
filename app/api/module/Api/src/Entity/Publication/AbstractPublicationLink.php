@@ -46,7 +46,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractPublicationLink implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractPublicationLink implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -294,7 +294,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -317,7 +318,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get the publication
      *
-     * @return \Dvsa\Olcs\Api\Entity\Publication\Publication     */
+     * @return \Dvsa\Olcs\Api\Entity\Publication\Publication
+     */
     public function getPublication()
     {
         return $this->publication;
@@ -340,7 +342,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get the traffic area
      *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea     */
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     */
     public function getTrafficArea()
     {
         return $this->trafficArea;
@@ -363,7 +366,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get the transport manager
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     */
     public function getTransportManager()
     {
         return $this->transportManager;
@@ -386,7 +390,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -409,7 +414,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
     public function getApplication()
     {
         return $this->application;
@@ -432,7 +438,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get the pi
      *
-     * @return \Dvsa\Olcs\Api\Entity\Pi\Pi     */
+     * @return \Dvsa\Olcs\Api\Entity\Pi\Pi
+     */
     public function getPi()
     {
         return $this->pi;
@@ -455,7 +462,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get the bus reg
      *
-     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg     */
+     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     */
     public function getBusReg()
     {
         return $this->busReg;
@@ -478,7 +486,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get the impounding
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Impounding     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Impounding
+     */
     public function getImpounding()
     {
         return $this->impounding;
@@ -501,7 +510,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get the publication section
      *
-     * @return \Dvsa\Olcs\Api\Entity\Publication\PublicationSection     */
+     * @return \Dvsa\Olcs\Api\Entity\Publication\PublicationSection
+     */
     public function getPublicationSection()
     {
         return $this->publicationSection;
@@ -524,7 +534,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -547,7 +558,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -572,7 +584,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getPublishAfterDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -599,7 +612,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get the text1
      *
-     * @return string     */
+     * @return string
+     */
     public function getText1()
     {
         return $this->text1;
@@ -622,7 +636,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get the text2
      *
-     * @return string     */
+     * @return string
+     */
     public function getText2()
     {
         return $this->text2;
@@ -645,7 +660,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get the text3
      *
-     * @return string     */
+     * @return string
+     */
     public function getText3()
     {
         return $this->text3;
@@ -670,7 +686,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getOrigPubDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -697,7 +714,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -720,7 +738,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -743,7 +762,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get the olbs type
      *
-     * @return string     */
+     * @return string
+     */
     public function getOlbsType()
     {
         return $this->olbsType;
@@ -815,6 +835,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

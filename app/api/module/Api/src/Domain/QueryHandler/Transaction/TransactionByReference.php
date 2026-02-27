@@ -21,6 +21,7 @@ class TransactionByReference extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Transaction';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $transaction = $this->getRepo()->fetchByReference($query->getReference());

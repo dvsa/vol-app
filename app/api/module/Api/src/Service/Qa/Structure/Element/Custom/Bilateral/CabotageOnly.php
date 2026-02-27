@@ -21,6 +21,7 @@ class CabotageOnly implements ElementInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getRepresentation()
     {
         return [

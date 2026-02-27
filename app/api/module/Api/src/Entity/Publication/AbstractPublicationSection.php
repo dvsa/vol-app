@@ -31,7 +31,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractPublicationSection implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractPublicationSection implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -142,7 +142,8 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -165,7 +166,8 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -188,7 +190,8 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -211,7 +214,8 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -234,7 +238,8 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
     /**
      * Get the ad section
      *
-     * @return string     */
+     * @return string
+     */
     public function getAdSection()
     {
         return $this->adSection;
@@ -257,7 +262,8 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
     /**
      * Get the np section
      *
-     * @return string     */
+     * @return string
+     */
     public function getNpSection()
     {
         return $this->npSection;
@@ -280,7 +286,8 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -289,6 +296,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

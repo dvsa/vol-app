@@ -18,11 +18,13 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\VehicleBundle as Qry;
  */
 class VehicleRegistration extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(['id' => $data['vehicle'], 'bundle' => []]);
     }
 
+    #[\Override]
     public function render()
     {
         return $this->data['vrm'];

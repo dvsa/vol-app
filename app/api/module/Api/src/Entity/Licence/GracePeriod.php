@@ -47,11 +47,13 @@ class GracePeriod extends AbstractGracePeriod
     /**
      * @deprecated
      */
+    #[\Override]
     protected function getCalculatedValues()
     {
         return ['isActive' => $this->isActive()];
     }
 
+    #[\Override]
     protected function getCalculatedBundleValues()
     {
         return ['isActive' => $this->isActive()];

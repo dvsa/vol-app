@@ -18,6 +18,7 @@ final class DeleteRecipient extends AbstractCommandHandler implements Transactio
 {
     protected $repoServiceName = 'Recipient';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $recipient = $this->getRepo()->fetchUsingId($command);

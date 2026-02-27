@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\User;
 
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\User\CanReadUser as Sut;
@@ -21,10 +23,8 @@ class CanReadUserTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValid($canAccess, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $canAccess, mixed $expected): void
     {
         $dto = m::mock(CommandInterface::class);
         $dto->shouldReceive('getId')->andReturn(76);
@@ -34,7 +34,7 @@ class CanReadUserTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [true, true],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Safety Test
  *
@@ -44,10 +46,8 @@ class SafetyTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider trailersProvider
-     */
-    public function testHandleQuery($canHaveTrailer)
+    #[\PHPUnit\Framework\Attributes\DataProvider('trailersProvider')]
+    public function testHandleQuery(mixed $canHaveTrailer): void
     {
         $licence = m::mock(BundleSerializableInterface::class);
 
@@ -98,7 +98,7 @@ class SafetyTest extends QueryHandlerTestCase
         );
     }
 
-    public function trailersProvider()
+    public static function trailersProvider(): array
     {
         return [
             [true],

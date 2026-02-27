@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Printer test
  *
@@ -27,7 +29,7 @@ class PrinterTest extends RepositoryTestCase
         $this->setUpSut(PrinterRepo::class, true);
     }
 
-    public function testFetchWithTeams()
+    public function testFetchWithTeams(): void
     {
         $id = 1;
 
@@ -60,7 +62,7 @@ class PrinterTest extends RepositoryTestCase
         $this->assertSame(['result'], $this->sut->fetchWithTeams($id));
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         $query = m::mock(QueryInterface::class);
 

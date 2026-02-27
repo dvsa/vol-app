@@ -38,6 +38,7 @@ class AbstractCreateConversationController extends AbstractInternalController im
     protected string $application  = '';
     protected string $licence  = '';
 
+    #[\Override]
     public function getLeftView(): ViewModel
     {
         $view = new ViewModel(['navigationId' => $this->navigationId]);
@@ -46,6 +47,7 @@ class AbstractCreateConversationController extends AbstractInternalController im
         return $view;
     }
 
+    #[\Override]
     public function onDispatch(MvcEvent $e)
     {
         $params = $e->getRouteMatch()->getParams();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\FeeBreakdown;
 
 use DateTime;
@@ -20,7 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class MultilateralFeeBreakdownGeneratorTest extends MockeryTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $applicationFeeType = m::mock(FeeType::class);
 
@@ -135,7 +137,7 @@ class MultilateralFeeBreakdownGeneratorTest extends MockeryTestCase
         );
     }
 
-    private function createIrhpPermitApplicationMock($permitsRequired, $irhpPermitStock, $issueFeeProductReference)
+    private function createIrhpPermitApplicationMock(mixed $permitsRequired, mixed $irhpPermitStock, mixed $issueFeeProductReference): mixed
     {
         $irhpPermitApplication = m::mock(IrhpPermitApplication::class);
         $irhpPermitApplication->shouldReceive('countPermitsRequired')
@@ -148,7 +150,7 @@ class MultilateralFeeBreakdownGeneratorTest extends MockeryTestCase
         return $irhpPermitApplication;
     }
 
-    private function createIrhpPermitStockMock($year)
+    private function createIrhpPermitStockMock(mixed $year): mixed
     {
         $dateTimeZone = new DateTimeZone('+0000');
 

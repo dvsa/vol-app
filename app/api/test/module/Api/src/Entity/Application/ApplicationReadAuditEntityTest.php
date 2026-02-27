@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Application;
 
 use Dvsa\Olcs\Api\Entity;
@@ -22,7 +24,7 @@ class ApplicationReadAuditEntityTest extends EntityTester
      */
     protected $entityClass = Entity\Application\ApplicationReadAudit::class;
 
-    public function testConstrunctor()
+    public function testConstrunctor(): void
     {
         /** @var Entity\User\User $mockUser */
         $mockUser = m::mock(Entity\User\User::class);

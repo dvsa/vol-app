@@ -10,6 +10,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\OppositionBundle as Qry;
  */
 class ApplicantName extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         if (!isset($data['opposition'])) {
@@ -26,6 +27,7 @@ class ApplicantName extends DynamicBookmark
         return Qry::create(['id' => $data['opposition'], 'bundle' => $bundle]);
     }
 
+    #[\Override]
     public function render()
     {
         if (isset($this->data['licence']['organisation'])) {

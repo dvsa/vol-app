@@ -20,18 +20,21 @@ final class SendNewMessageNotificationToOperators extends AbstractEmailHandler i
     protected $subject = 'email.new-message-for-operator.subject';
 
     /** @param LicenceEntity $recordObject */
+    #[\Override]
     protected function getRecipients($recordObject): array
     {
         return $this->organisationRecipients($recordObject->getOrganisation());
     }
 
     /** @param LicenceEntity $recordObject */
+    #[\Override]
     protected function getTranslateToWelsh($recordObject)
     {
         return $recordObject->getTranslateToWelsh();
     }
 
     /** @param LicenceEntity $recordObject */
+    #[\Override]
     protected function createMissingEmailTask($recordObject, Result $result, MissingEmailException $exception): Result
     {
         $taskData = [

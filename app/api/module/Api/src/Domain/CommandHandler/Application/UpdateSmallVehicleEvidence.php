@@ -15,6 +15,7 @@ final class UpdateSmallVehicleEvidence extends AbstractUpdateApplication
     ];
     protected string $confirmMessage = 'small vehicle evidence updated';
 
+    #[\Override]
     protected function updateApplication(ApplicationEntity $application, Command|CommandInterface $command): void
     {
         $application->setSmallVehicleEvidenceUploaded($command->getEvidenceUploadType());

@@ -20,6 +20,7 @@ final class Text2 implements ProcessInterface
      * @param ImmutableArrayObject $context
      * @return PublicationLink
      */
+    #[\Override]
     public function process(PublicationLink $publication, ImmutableArrayObject $context)
     {
         $organisation = $publication->getLicence()->getOrganisation();

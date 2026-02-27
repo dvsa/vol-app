@@ -36,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -193,7 +193,8 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -216,7 +217,8 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
     /**
      * Get the irfo gv permit
      *
-     * @return \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit     */
+     * @return \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit
+     */
     public function getIrfoGvPermit()
     {
         return $this->irfoGvPermit;
@@ -239,7 +241,8 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -262,7 +265,8 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -285,7 +289,8 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
     /**
      * Get the coc a
      *
-     * @return string     */
+     * @return string
+     */
     public function getCocA()
     {
         return $this->cocA;
@@ -308,7 +313,8 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
     /**
      * Get the coc b
      *
-     * @return string     */
+     * @return string
+     */
     public function getCocB()
     {
         return $this->cocB;
@@ -331,7 +337,8 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
     /**
      * Get the coc c
      *
-     * @return string     */
+     * @return string
+     */
     public function getCocC()
     {
         return $this->cocC;
@@ -354,7 +361,8 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
     /**
      * Get the coc d
      *
-     * @return string     */
+     * @return string
+     */
     public function getCocD()
     {
         return $this->cocD;
@@ -377,7 +385,8 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
     /**
      * Get the coc t
      *
-     * @return string     */
+     * @return string
+     */
     public function getCocT()
     {
         return $this->cocT;
@@ -400,7 +409,8 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
     /**
      * Get the vrm
      *
-     * @return string     */
+     * @return string
+     */
     public function getVrm()
     {
         return $this->vrm;
@@ -423,7 +433,8 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -446,7 +457,8 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -455,6 +467,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

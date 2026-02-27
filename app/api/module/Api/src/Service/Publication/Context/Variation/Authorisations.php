@@ -19,6 +19,7 @@ final class Authorisations extends AbstractContext
      *
      * @return ArrayObject
      */
+    #[\Override]
     public function provide(PublicationLink $publicationLink, ArrayObject $context)
     {
         $variation = $publicationLink->getApplication();

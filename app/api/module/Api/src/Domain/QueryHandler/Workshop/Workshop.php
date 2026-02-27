@@ -19,6 +19,7 @@ class Workshop extends AbstractQueryHandler
 
     protected $repoServiceName = 'Workshop';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var WorkshopEntity $workshop */

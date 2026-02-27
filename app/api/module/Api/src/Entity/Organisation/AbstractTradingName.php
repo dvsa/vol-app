@@ -39,7 +39,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTradingName implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTradingName implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -171,7 +171,8 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -194,7 +195,8 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -217,7 +219,8 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
     /**
      * Get the organisation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     */
     public function getOrganisation()
     {
         return $this->organisation;
@@ -240,7 +243,8 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -263,7 +267,8 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -286,7 +291,8 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
     /**
      * Get the name
      *
-     * @return string     */
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -309,7 +315,8 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
     /**
      * Get the vi action
      *
-     * @return string     */
+     * @return string
+     */
     public function getViAction()
     {
         return $this->viAction;
@@ -332,7 +339,8 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -355,7 +363,8 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -364,6 +373,7 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

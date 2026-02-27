@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\Command\Permits\GeneratePermitDocuments;
@@ -25,7 +27,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleWithoutIds()
+    public function testHandleWithoutIds(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
         $this->expectExceptionMessage('Empty list of permits provided.');
@@ -40,7 +42,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleWithoutUser()
+    public function testHandleWithoutUser(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
         $this->expectExceptionMessage('No user provided.');
@@ -55,10 +57,8 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider dpHandleButIssueWithDocs
-     */
-    public function testHandleButIssueWithDocs($permitDocs, $letterDocs, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleButIssueWithDocs')]
+    public function testHandleButIssueWithDocs(mixed $permitDocs, mixed $letterDocs, mixed $expected): void
     {
         $ids = [1, 2, 3];
         $userId = 456;
@@ -119,7 +119,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpHandleButIssueWithDocs()
+    public static function dpHandleButIssueWithDocs(): array
     {
         return [
             'no docs generated' => [
@@ -135,7 +135,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleButIssueWithPermitsPrinting()
+    public function testHandleButIssueWithPermitsPrinting(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\RuntimeException::class);
         $this->expectExceptionMessage('Permits generation failed with error: Permits printing failed.');
@@ -203,7 +203,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleButIssueWithLetterPrinting()
+    public function testHandleButIssueWithLetterPrinting(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\RuntimeException::class);
         $this->expectExceptionMessage('Permits generation failed with error: Letter printing failed.');
@@ -281,7 +281,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $ids = [1, 2, 3];
         $userId = 456;
@@ -393,7 +393,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithoutCoverLetter()
+    public function testHandleCommandWithoutCoverLetter(): void
     {
         $ids = [1, 2, 3];
         $userId = 456;
@@ -471,7 +471,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithOneItemList()
+    public function testHandleCommandWithOneItemList(): void
     {
         $ids = [1];
         $userId = 456;

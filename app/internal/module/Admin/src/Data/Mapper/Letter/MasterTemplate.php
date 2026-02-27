@@ -15,6 +15,7 @@ class MasterTemplate implements MapperInterface
      * @param array $data Data from query
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data): array
     {
         $formData = [
@@ -39,7 +40,7 @@ class MasterTemplate implements MapperInterface
     public static function mapFromForm(array $data): array
     {
         $commandData = $data['masterTemplate'] ?? [];
-        
+
         // Ensure boolean value for isDefault
         if (isset($commandData['isDefault'])) {
             $commandData['isDefault'] = (bool) $commandData['isDefault'];

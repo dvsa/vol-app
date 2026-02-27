@@ -30,6 +30,7 @@ class OpenWindows extends AbstractQueryHandler
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      * @throws \Dvsa\Olcs\Api\Domain\Exception\NotFoundException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $date = new DateTime();

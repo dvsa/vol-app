@@ -21,6 +21,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\Result;
  */
 class VariationOperatingCentre extends AbstractQueryHandler
 {
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $id = $query->getId();

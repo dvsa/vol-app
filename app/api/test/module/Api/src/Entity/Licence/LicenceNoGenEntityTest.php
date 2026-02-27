@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Licence;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -21,23 +23,21 @@ class LicenceNoGenEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
-        $licence = $this->createMock(Licence::class);
+        $licence = $this->createStub(Licence::class);
         $sut = new Entity($licence);
         $this->assertSame($licence, $sut->getLicence());
     }
 
-    /**
-     * @dataProvider dataProviderTestGetCategoryPrefix
-     */
-    public function testGetCategoryPrefix($expected, $goodsOrPsv)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestGetCategoryPrefix')]
+    public function testGetCategoryPrefix(mixed $expected, mixed $goodsOrPsv): void
     {
         $refData = new RefData($goodsOrPsv);
         $this->assertSame($expected, Entity::getCategoryPrefix($refData));
     }
 
-    public function dataProviderTestGetCategoryPrefix()
+    public static function dataProviderTestGetCategoryPrefix(): array
     {
         return [
             ['P', Licence::LICENCE_CATEGORY_PSV],

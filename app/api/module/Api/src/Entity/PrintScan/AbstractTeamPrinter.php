@@ -32,7 +32,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -133,7 +133,8 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -156,7 +157,8 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
     /**
      * Get the team
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\Team     */
+     * @return \Dvsa\Olcs\Api\Entity\User\Team
+     */
     public function getTeam()
     {
         return $this->team;
@@ -179,7 +181,8 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
     /**
      * Get the printer
      *
-     * @return \Dvsa\Olcs\Api\Entity\PrintScan\Printer     */
+     * @return \Dvsa\Olcs\Api\Entity\PrintScan\Printer
+     */
     public function getPrinter()
     {
         return $this->printer;
@@ -202,7 +205,8 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
     /**
      * Get the sub category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory     */
+     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory
+     */
     public function getSubCategory()
     {
         return $this->subCategory;
@@ -225,7 +229,8 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
     /**
      * Get the user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getUser()
     {
         return $this->user;
@@ -248,7 +253,8 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -257,6 +263,7 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

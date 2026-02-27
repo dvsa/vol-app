@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\ConditionUndertaking;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\ConditionUndertaking\Get as QueryHandler;
@@ -23,7 +25,7 @@ class GetTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $data = ['id' => 234];
         $query = Qry::create($data);

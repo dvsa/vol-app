@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Nysiis;
 
 use Dvsa\Olcs\Api\Service\Nysiis\NysiisRestClient;
@@ -13,7 +15,7 @@ class NysiisRestClientFactoryTest extends MockeryTestCase
     /**
      * Tests client created properly
      */
-    public function testInvokeValid()
+    public function testInvokeValid(): void
     {
         $config = [
             'nysiis' => [
@@ -35,10 +37,9 @@ class NysiisRestClientFactoryTest extends MockeryTestCase
      *
      * @param $config
      * @param $errorMsg
-     *
-     * @dataProvider invokeFailProvider
      */
-    public function testInvokeMissingConfig($config, $errorMsg)
+    #[\PHPUnit\Framework\Attributes\DataProvider('invokeFailProvider')]
+    public function testInvokeMissingConfig(mixed $config, mixed $errorMsg): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage($errorMsg);
@@ -58,7 +59,7 @@ class NysiisRestClientFactoryTest extends MockeryTestCase
     /**
      * data provider for testing service creation failures
      */
-    public function invokeFailProvider()
+    public static function invokeFailProvider(): array
     {
         return [
             [['uri' => 'address'], 'Missing nysiis rest client options'],

@@ -16,6 +16,7 @@ class CanReadUser extends AbstractHandler
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canReadUser($dto->getId());

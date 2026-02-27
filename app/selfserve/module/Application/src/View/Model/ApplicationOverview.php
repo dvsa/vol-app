@@ -52,6 +52,7 @@ class ApplicationOverview extends LvaOverview
      * @param mixed ...$args
      * @return ApplicationOverviewSection
      */
+    #[\Override]
     protected function newSectionModel(...$args): LvaOverviewSection
     {
         return new ApplicationOverviewSection(...$args);

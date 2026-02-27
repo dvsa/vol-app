@@ -44,6 +44,7 @@ class ProhibitionController extends AbstractInternalController implements CaseCo
       *
       * @return ViewModel
       **/
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

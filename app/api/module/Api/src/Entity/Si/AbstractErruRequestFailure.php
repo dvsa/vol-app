@@ -35,7 +35,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractErruRequestFailure implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractErruRequestFailure implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -147,7 +147,8 @@ abstract class AbstractErruRequestFailure implements BundleSerializableInterface
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -170,7 +171,8 @@ abstract class AbstractErruRequestFailure implements BundleSerializableInterface
     /**
      * Get the document
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
+     */
     public function getDocument()
     {
         return $this->document;
@@ -193,7 +195,8 @@ abstract class AbstractErruRequestFailure implements BundleSerializableInterface
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -216,7 +219,8 @@ abstract class AbstractErruRequestFailure implements BundleSerializableInterface
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -239,7 +243,8 @@ abstract class AbstractErruRequestFailure implements BundleSerializableInterface
     /**
      * Get the input
      *
-     * @return string     */
+     * @return string
+     */
     public function getInput()
     {
         return $this->input;
@@ -262,7 +267,8 @@ abstract class AbstractErruRequestFailure implements BundleSerializableInterface
     /**
      * Get the errors
      *
-     * @return string     */
+     * @return string
+     */
     public function getErrors()
     {
         return $this->errors;
@@ -285,7 +291,8 @@ abstract class AbstractErruRequestFailure implements BundleSerializableInterface
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -294,6 +301,7 @@ abstract class AbstractErruRequestFailure implements BundleSerializableInterface
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

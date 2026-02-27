@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpApplication;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\IrhpApplication\GetGrantability as GetGrantabilityHandler;
@@ -29,10 +31,8 @@ class GetGrantabilityTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestHandleQuery
-     */
-    public function testHandleQuery($isGrantable, $canBeGranted, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQuery')]
+    public function testHandleQuery(mixed $isGrantable, mixed $canBeGranted, mixed $expected): void
     {
         $query = QryClass::create(['id' => 100011]);
 
@@ -57,7 +57,7 @@ class GetGrantabilityTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpTestHandleQuery()
+    public static function dpTestHandleQuery(): array
     {
         return [
             [

@@ -13,6 +13,7 @@ use Dvsa\Olcs\Api\Entity\Publication\PublicationLink;
  */
 final class PreviousLicencePublicationNo extends AbstractContext
 {
+    #[\Override]
     public function provide(PublicationLink $publicationLink, \ArrayObject $context)
     {
         $params = [

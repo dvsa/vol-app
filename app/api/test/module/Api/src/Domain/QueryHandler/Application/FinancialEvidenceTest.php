@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Financial Evidence Test
  *
@@ -43,7 +45,7 @@ class FinancialEvidenceTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $applicationId = 111;
         $applicationLicenceId = 7;
@@ -165,7 +167,7 @@ class FinancialEvidenceTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $this->sut->handleQuery($query)->serialize());
     }
 
-    protected function getMockOrganisationLicences()
+    protected function getMockOrganisationLicences(): array
     {
         $values = [
             // id, category, vehicle auth
@@ -194,7 +196,7 @@ class FinancialEvidenceTest extends QueryHandlerTestCase
         );
     }
 
-    protected function getOtherNewApplications()
+    protected function getOtherNewApplications(): array
     {
         $values = [
             // vehicle auth

@@ -26,6 +26,7 @@ final class CreateAlert extends DomainAbstractCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

@@ -29,6 +29,7 @@ class ContentWithPartialsViewModel extends ViewModel
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function setVariables($variables, $overwrite = false)
     {
         if (!isset($variables[static::PARTIALS_VARIABLE]) || !is_array($variables[static::PARTIALS_VARIABLE]) || empty($variables[static::PARTIALS_VARIABLE])) {
@@ -40,6 +41,7 @@ class ContentWithPartialsViewModel extends ViewModel
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function setVariable($name, $value)
     {
         if ($name === static::PARTIALS_VARIABLE && !is_array($value) || empty($value)) {

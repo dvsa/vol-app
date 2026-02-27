@@ -15,6 +15,7 @@ use Olcs\Data\Mapper\IrhpApplication;
 
 class IrhpApplicationControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpApplicationController
     {
         $formHelper = $container->get(FormHelperService::class);

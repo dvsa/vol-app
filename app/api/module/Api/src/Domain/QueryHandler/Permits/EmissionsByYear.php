@@ -19,6 +19,7 @@ class EmissionsByYear extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $permitType = $query->getIrhpPermitType();

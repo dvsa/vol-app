@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator\ProcessedData;
 
 use Dvsa\Olcs\Api\Entity\Bus\BusReg as BusRegEntity;
@@ -16,7 +18,7 @@ class VariationNumberTest extends MockeryTestCase
     /**
      * tests isValid returns true for a valid new app
      */
-    public function testValidNewApp()
+    public function testValidNewApp(): void
     {
         $sut = new VariationNumber();
 
@@ -30,7 +32,7 @@ class VariationNumberTest extends MockeryTestCase
     /**
      * tests isValid returns false for invalid new app, checks correct error message
      */
-    public function testInvalidNewApp()
+    public function testInvalidNewApp(): void
     {
         $sut = new VariationNumber();
 
@@ -49,7 +51,7 @@ class VariationNumberTest extends MockeryTestCase
     /**
      * tests isValid returns true for a valid cancellation
      */
-    public function testValidCancellation()
+    public function testValidCancellation(): void
     {
         $sut = new VariationNumber();
         $variationNo = 1;
@@ -67,7 +69,7 @@ class VariationNumberTest extends MockeryTestCase
     /**
      * tests isValid returns false for invalid cancellation, and checks message
      */
-    public function testInvalidCancellation()
+    public function testInvalidCancellation(): void
     {
         $sut = new VariationNumber();
         $expectedVariationNo = 1;
@@ -92,13 +94,13 @@ class VariationNumberTest extends MockeryTestCase
     /**
      * tests isValid returns true for a valid variation
      *
-     * @dataProvider validVariationProvider
      *
      * @param string $txcAppType
      * @param int $variationNoValue
      * @param int $variationNoBusReg
      */
-    public function testValidVariation($txcAppType, $variationNoValue, $variationNoBusReg)
+    #[\PHPUnit\Framework\Attributes\DataProvider('validVariationProvider')]
+    public function testValidVariation(mixed $txcAppType, mixed $variationNoValue, mixed $variationNoBusReg): void
     {
         $sut = new VariationNumber();
 
@@ -123,7 +125,7 @@ class VariationNumberTest extends MockeryTestCase
      *
      * @return array
      */
-    public function validVariationProvider()
+    public static function validVariationProvider(): array
     {
         return [
             [BusRegEntity::TXC_APP_NON_CHARGEABLE, 1, 0],
@@ -136,13 +138,13 @@ class VariationNumberTest extends MockeryTestCase
     /**
      * tests isValid returns false for the correct data, as well as the correct error message
      *
-     * @dataProvider invalidVariationProvider
      *
      * @param string $txcAppType
      * @param int $variationNoValue
      * @param int $variationNoBusReg
      */
-    public function testInvalidVariation($txcAppType, $variationNoValue, $variationNoBusReg)
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidVariationProvider')]
+    public function testInvalidVariation(mixed $txcAppType, mixed $variationNoValue, mixed $variationNoBusReg): void
     {
         $sut = new VariationNumber();
 
@@ -174,7 +176,7 @@ class VariationNumberTest extends MockeryTestCase
      *
      * @return array
      */
-    public function invalidVariationProvider()
+    public static function invalidVariationProvider(): array
     {
         return [
             [BusRegEntity::TXC_APP_NON_CHARGEABLE, 2, 0],
@@ -193,7 +195,7 @@ class VariationNumberTest extends MockeryTestCase
      * @param $variationNo
      * @return array
      */
-    private function getValue($txcAppType, $variationNo)
+    private function getValue(mixed $txcAppType, mixed $variationNo): array
     {
         return [
             'txcAppType' => $txcAppType,

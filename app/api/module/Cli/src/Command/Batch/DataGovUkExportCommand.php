@@ -11,6 +11,7 @@ class DataGovUkExportCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:data-gov-uk-export';
 
+    #[\Override]
     protected function configure()
     {
         $this
@@ -18,6 +19,7 @@ class DataGovUkExportCommand extends AbstractBatchCommand
             ->addOption('report-name', null, InputOption::VALUE_REQUIRED, 'Export report name');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

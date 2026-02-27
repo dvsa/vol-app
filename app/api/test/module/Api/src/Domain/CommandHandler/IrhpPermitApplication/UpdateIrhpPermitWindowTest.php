@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermitApplication;
 
 use Dvsa\Olcs\Api\Domain\Command\IrhpPermitApplication\UpdateIrhpPermitWindow;
@@ -31,7 +33,7 @@ class UpdateIrhpPermitWindowTest extends AbstractCommandHandlerTestCase
     /**
      * Test
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $cmdData = [
             'id' => '3658',

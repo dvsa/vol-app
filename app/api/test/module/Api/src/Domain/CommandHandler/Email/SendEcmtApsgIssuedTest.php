@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
 
 use Dvsa\Olcs\Api\Domain\Command\Email\SendEcmtApsgIssued as SendEcmtApsgIssuedCmd;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
 /**
  * Test the ECMT Annual APSG issued email
  */
-class SendEcmtApsgIssuedTest extends AbstractEcmtAnnualPermitTest
+class SendEcmtApsgIssuedTest extends AbstractEcmtAnnualPermitTestCase
 {
     protected $commandClass = SendEcmtApsgIssuedCmd::class;
     protected $commandHandlerClass = SendEcmtApsgIssuedHandler::class;

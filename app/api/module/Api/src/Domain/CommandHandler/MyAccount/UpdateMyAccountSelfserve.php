@@ -14,6 +14,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
  */
 final class UpdateMyAccountSelfserve extends AbstractCommandHandler
 {
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         return $this->proxyCommand($command, \Dvsa\Olcs\Api\Domain\Command\MyAccount\UpdateMyAccount::class);

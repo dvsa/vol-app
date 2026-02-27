@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Next Item Test
  *
@@ -27,9 +29,8 @@ class NextItemTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
 
         $this->sut = new NextItem();
@@ -38,7 +39,7 @@ class NextItemTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQueryWithItem()
+    public function testHandleQueryWithItem(): void
     {
         $item = m::mock(QueueEntity::class)->makePartial();
 
@@ -54,10 +55,10 @@ class NextItemTest extends QueryHandlerTestCase
     }
 
     /**
-     * @dataProvider exceptionProvider
      * @param $exception
      */
-    public function testHandleQueryNoItem($exception)
+    #[\PHPUnit\Framework\Attributes\DataProvider('exceptionProvider')]
+    public function testHandleQueryNoItem(mixed $exception): void
     {
         $query = Qry::create(['includeTypes' => ['foo'], 'excludeTypes' => ['bar']]);
 
@@ -73,7 +74,7 @@ class NextItemTest extends QueryHandlerTestCase
     /**
      * @return array
      */
-    public function exceptionProvider()
+    public static function exceptionProvider(): array
     {
         return [
             [m::mock(NotFoundException::class)],

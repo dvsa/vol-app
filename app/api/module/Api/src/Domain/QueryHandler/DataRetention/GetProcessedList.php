@@ -24,6 +24,7 @@ class GetProcessedList extends AbstractQueryHandler
      * @return array
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var Query $query */

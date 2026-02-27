@@ -22,7 +22,7 @@ use Doctrine\Common\Collections\Collection;
  * @ORM\MappedSuperclass
  * @ORM\Table(name="bus_service_type")
  */
-abstract class AbstractBusServiceType implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractBusServiceType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -99,7 +99,8 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -122,7 +123,8 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -145,7 +147,8 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
     /**
      * Get the txc name
      *
-     * @return string     */
+     * @return string
+     */
     public function getTxcName()
     {
         return $this->txcName;
@@ -217,6 +220,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

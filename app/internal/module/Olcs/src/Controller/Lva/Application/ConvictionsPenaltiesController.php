@@ -33,7 +33,6 @@ class ConvictionsPenaltiesController extends Lva\AbstractConvictionsPenaltiesCon
 
     protected $lva = 'application';
     protected string $location = 'internal';
-    protected StringHelperService $stringHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -54,13 +53,11 @@ class ConvictionsPenaltiesController extends Lva\AbstractConvictionsPenaltiesCon
         FlashMessengerHelperService $flashMessengerHelper,
         FormServiceManager $formServiceManager,
         TableFactory $tableFactory,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         protected RestrictionHelperService $restrictionHelper,
         ScriptFactory $scriptFactory,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

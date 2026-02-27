@@ -46,10 +46,8 @@ class RefreshTokenTest extends AbstractCommandHandlerTestCase
     private string $token = 'token';
     private string $refreshedToken = 'new_token';
 
-    /**
-     * @test
-     */
-    public function handleCommandIsCallable()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandIsCallable(): void
     {
         // Setup
         $this->setUpSut();
@@ -58,11 +56,9 @@ class RefreshTokenTest extends AbstractCommandHandlerTestCase
         $this->assertIsCallable($this->sut->handleCommand(...));
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandReturnsExpectedResult()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandReturnsExpectedResult(): void
     {
         // Setup
         $this->setUpSut();
@@ -93,6 +89,7 @@ class RefreshTokenTest extends AbstractCommandHandlerTestCase
         $this->assertSame($result->toArray(), $expectedResult);
     }
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();
@@ -107,7 +104,7 @@ class RefreshTokenTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    protected function setUpDefaultServices(ServiceManager $serviceManager)
+    protected function setUpDefaultServices(ServiceManager $serviceManager): void
     {
         $this->adapter();
         $this->authService();
@@ -153,7 +150,7 @@ class RefreshTokenTest extends AbstractCommandHandlerTestCase
     /**
      * @return MockInterface|User
      */
-    protected function userRepository()
+    protected function userRepository(): mixed
     {
         $repositoryServiceManager = $this->repositoryServiceManager();
         if (! $repositoryServiceManager->has('User')) {

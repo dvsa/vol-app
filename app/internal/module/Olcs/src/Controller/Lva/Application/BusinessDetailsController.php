@@ -36,7 +36,6 @@ class BusinessDetailsController extends AbstractBusinessDetailsController implem
 
     protected $lva = 'application';
     protected string $location = 'internal';
-    protected StringHelperService $stringHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -60,14 +59,12 @@ class BusinessDetailsController extends AbstractBusinessDetailsController implem
         FormServiceManager $formServiceManager,
         ScriptFactory $scriptFactory,
         IdentityProviderInterface $identityProvider,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         TableFactory $tableFactory,
         FileUploadHelperService $fileUploadHelper,
         protected RestrictionHelperService $restrictionHelper,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

@@ -235,6 +235,8 @@ return [
             'ComplianceXmlStructure' => \Dvsa\Olcs\Api\Service\Nr\InputFilter\XmlStructureInputFactory::class,
             'SeriousInfringementInput' => \Dvsa\Olcs\Api\Service\Nr\InputFilter\SeriousInfringementInputFactory::class,
             'ComplianceEpisodeXmlMapping' => \Dvsa\Olcs\Api\Service\Nr\Mapping\ComplianceEpisodeXmlFactory::class,
+            ApiSrv\Nr\InputFilter\CgrInputFactory::class => ApiSrv\Nr\InputFilter\CgrInputFactory::class,
+            ApiSrv\Nr\Mapping\CgrResponseXml::class => ApiSrv\Nr\Mapping\CgrResponseXmlFactory::class,
 
             \Dvsa\Olcs\Api\Service\Nr\InrClientInterface::class => Dvsa\Olcs\Api\Service\Nr\InrClientFactory::class,
             \Dvsa\Olcs\Api\Service\Nr\CheckGoodRepute::class => \Dvsa\Olcs\Api\Service\Nr\CheckGoodReputeFactory::class,

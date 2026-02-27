@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermitApplication;
 
 use Dvsa\Olcs\Api\Domain\Command\IrhpPermitApplication\CreateForIrhpApplication;
@@ -34,7 +36,7 @@ class CreateForIrhpApplicationTest extends AbstractCommandHandlerTestCase
     /**
      * Test
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $cmdData = [
             'irhpApplication' => '10000',

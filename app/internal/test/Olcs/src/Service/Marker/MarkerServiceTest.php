@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Marker;
 
 use Psr\Container\ContainerInterface;
@@ -18,7 +20,7 @@ class MarkerServiceTest extends TestCase
         parent::setUp();
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockMarkerPlugin = m::mock(MarkerPluginManager::class);
 
@@ -32,7 +34,7 @@ class MarkerServiceTest extends TestCase
         $this->assertSame($mockMarkerPlugin, $this->sut->getMarkerPluginManager());
     }
 
-    public function testGetMarkers()
+    public function testGetMarkers(): void
     {
         $data = ['DATA'];
 

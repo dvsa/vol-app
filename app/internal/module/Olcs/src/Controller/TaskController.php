@@ -32,7 +32,6 @@ class TaskController extends AbstractController
 
     public const METHOD_ADD = 'Add';
     public const METHOD_EDIT = 'Edit';
-    protected SubCategory $subCategoryDataService;
 
     public function __construct(
         ScriptFactory $scriptFactory,
@@ -40,11 +39,10 @@ class TaskController extends AbstractController
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
         protected FlashMessengerHelperService $flashMessengerHelper,
-        SubCategory $subCategoryDataService,
+        protected SubCategory $subCategoryDataService,
         protected UserListInternalExcludingLimitedReadOnlyUsers $userListInternalExcLtdRdOnlyDataService
     ) {
         parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
-        $this->subCategoryDataService = $subCategoryDataService;
     }
 
 
@@ -98,7 +96,7 @@ class TaskController extends AbstractController
             $form->get('assignment')->get('assignedToUser')->setEmptyOption('please-select');
         }
 
-        $this->formPost($form, [$this, 'processAssignTask']);
+        $this->formPost($form, $this->processAssignTask(...));
 
         if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();
@@ -124,7 +122,7 @@ class TaskController extends AbstractController
     public function closeAction()
     {
         $form = $this->getForm('TaskClose');
-        $this->formPost($form, [$this, 'processCloseTask']);
+        $this->formPost($form, $this->processCloseTask(...));
 
         if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();
@@ -155,7 +153,7 @@ class TaskController extends AbstractController
      */
     public function processCloseTask(array $data)
     {
-        $ids = explode('-', $this->params('task'));
+        $ids = explode('-', (string) $this->params('task'));
 
         $response = $this->handleCommand(CloseTasks::create(['ids' => $ids]));
 
@@ -185,7 +183,7 @@ class TaskController extends AbstractController
 
         $cmd = ReassignTasks::create(
             [
-                'ids' => explode('-', $this->params('task')),
+                'ids' => explode('-', (string) $this->params('task')),
                 'user' => $data['assignment']['assignedToUser'],
                 'team' => $data['assignment']['assignedToTeam']
             ]
@@ -518,7 +516,7 @@ class TaskController extends AbstractController
             $taskType = $this->params('type');
             $taskTypeId = $this->params('typeId');
 
-            $method = 'flattenDataFor' . ucfirst($taskType);
+            $method = 'flattenDataFor' . ucfirst((string) $taskType);
             if (method_exists($this, $method)) {
                 $data = $this->$method($data, $taskTypeId);
             }
@@ -688,7 +686,7 @@ class TaskController extends AbstractController
         }
 
         $taskDetails = $this->getTaskDetails($taskId);
-        $taskType = strtolower($taskDetails['linkType']);
+        $taskType = strtolower((string) $taskDetails['linkType']);
 
         return match ($taskType) {
             'transport manager' => ['tm', $taskDetails['linkId'], $taskDetails['linkDisplay'], null],
@@ -709,7 +707,7 @@ class TaskController extends AbstractController
     {
         [$taskType, $taskTypeId, $linkDisplay, $caseId] = $this->getTaskTypeDetails();
 
-        $method = 'getLinkForTaskFormFor' . ucfirst($taskType);
+        $method = 'getLinkForTaskFormFor' . ucfirst((string) $taskType);
         if (method_exists($this, $method)) {
             return $this->$method($taskTypeId, $linkDisplay, $caseId);
         }

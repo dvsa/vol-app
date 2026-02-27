@@ -9,6 +9,7 @@ class InsolvencyPractitioner extends AbstractQueryHandler
 {
     protected $repoServiceName = 'CompaniesHouseInsolvencyPractitioner';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $companyId = $query->getId();

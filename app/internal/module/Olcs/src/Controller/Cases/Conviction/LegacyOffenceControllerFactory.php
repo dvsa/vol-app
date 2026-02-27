@@ -11,6 +11,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class LegacyOffenceControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LegacyOffenceController
     {
         $translationHelperService = $container->get(TranslationHelperService::class);

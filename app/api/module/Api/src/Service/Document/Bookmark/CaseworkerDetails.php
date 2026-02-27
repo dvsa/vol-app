@@ -23,6 +23,7 @@ class CaseworkerDetails extends DynamicBookmark
      *
      * @return static
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         $bundle = [
@@ -66,6 +67,7 @@ class CaseworkerDetails extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         $userData = $this->data[0];

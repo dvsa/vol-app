@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Traits;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use OlcsTest\Controller\Traits\Stub\FeesActionTraitStub;
 
-/**
- * @covers \Olcs\Controller\Traits\FeesActionTrait
- */
+#[\PHPUnit\Framework\Attributes\CoversTrait(\Olcs\Controller\Traits\FeesActionTrait::class)]
 class FeesActionTraitTest extends MockeryTestCase
 {
     /** @var FeesActionTraitStub | m\MockInterface */
@@ -34,7 +34,7 @@ class FeesActionTraitTest extends MockeryTestCase
             ->shouldReceive('getRequest')->andReturn($this->mockReq);
     }
 
-    public function testGetFeeFilterForm()
+    public function testGetFeeFilterForm(): void
     {
         $filters = ['unit_filters'];
 

@@ -16,6 +16,7 @@ class FStandingCapitalReserves extends DynamicBookmark implements DateHelperAwar
 {
     use DateHelperAwareTrait;
 
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(
@@ -25,6 +26,7 @@ class FStandingCapitalReserves extends DynamicBookmark implements DateHelperAwar
         );
     }
 
+    #[\Override]
     public function render()
     {
         return number_format($this->data, 0);

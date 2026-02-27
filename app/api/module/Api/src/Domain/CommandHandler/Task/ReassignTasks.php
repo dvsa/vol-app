@@ -18,7 +18,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
  */
 final class ReassignTasks extends AbstractCommandHandler implements TransactionedInterface
 {
-    public const ERR_TEAM_INVALID = 'task.edit.team.invalid';
+    public const string ERR_TEAM_INVALID = 'task.edit.team.invalid';
 
     protected $repoServiceName = 'Task';
 
@@ -30,6 +30,7 @@ final class ReassignTasks extends AbstractCommandHandler implements Transactione
      * @return Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Repository\Task $repo */

@@ -96,6 +96,7 @@ class OppositionController extends AbstractInternalController implements CaseCon
      *
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $this->setupOppositionsTable();
@@ -148,6 +149,7 @@ class OppositionController extends AbstractInternalController implements CaseCon
      *
      * @return ViewModel
      */
+    #[\Override]
     public function detailsAction()
     {
         return $this->notFoundAction();

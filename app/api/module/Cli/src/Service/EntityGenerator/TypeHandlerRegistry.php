@@ -19,12 +19,14 @@ class TypeHandlerRegistry implements TypeHandlerRegistryInterface
     /** @var bool */
     private bool $sorted = false;
 
+    #[\Override]
     public function register(TypeHandlerInterface $handler): void
     {
         $this->handlers[] = $handler;
         $this->sorted = false;
     }
 
+    #[\Override]
     public function getHandler(ColumnMetadata $column, array $config = []): ?TypeHandlerInterface
     {
         $this->sortHandlers();
@@ -38,6 +40,7 @@ class TypeHandlerRegistry implements TypeHandlerRegistryInterface
         return null;
     }
 
+    #[\Override]
     public function getHandlers(): array
     {
         $this->sortHandlers();
@@ -53,9 +56,7 @@ class TypeHandlerRegistry implements TypeHandlerRegistryInterface
             return;
         }
 
-        usort($this->handlers, function (TypeHandlerInterface $a, TypeHandlerInterface $b) {
-            return $b->getPriority() <=> $a->getPriority();
-        });
+        usort($this->handlers, fn(TypeHandlerInterface $a, TypeHandlerInterface $b) => $b->getPriority() <=> $a->getPriority());
 
         $this->sorted = true;
     }

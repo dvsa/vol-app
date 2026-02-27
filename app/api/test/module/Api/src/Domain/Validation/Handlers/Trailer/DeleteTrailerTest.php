@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Trailer;
 
 use Dvsa\Olcs\Api\Domain\Validation\Validators\CanAccessTrailer;
@@ -28,7 +30,7 @@ class DeleteTrailerTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsValidInternalUser()
+    public function testIsValidInternalUser(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -41,10 +43,8 @@ class DeleteTrailerTest extends AbstractHandlerTestCase
         $this->assertSame(true, $this->sut->isValid($dto));
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValid($canAccess, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $canAccess, mixed $expected): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -67,7 +67,7 @@ class DeleteTrailerTest extends AbstractHandlerTestCase
     /**
      * @return array
      */
-    public function provider()
+    public static function provider(): array
     {
         return [
             [true, true],

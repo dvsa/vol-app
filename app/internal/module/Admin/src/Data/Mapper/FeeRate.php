@@ -19,6 +19,7 @@ class FeeRate implements MapperInterface
      *
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data): array
     {
         $formData = [];

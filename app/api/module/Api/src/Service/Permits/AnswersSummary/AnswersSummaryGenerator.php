@@ -15,7 +15,7 @@ class AnswersSummaryGenerator
      *
      * @return AnswersSummaryGenerator
      */
-    public function __construct(private readonly AnswersSummaryFactory $answersSummaryFactory, private readonly AnswersSummaryRowsAdderInterface $headerAnswersSummaryRowsAdder, private AnswersSummaryRowsAdderInterface $defaultAnswersSummaryRowsAdder)
+    public function __construct(private readonly AnswersSummaryFactory $answersSummaryFactory, private readonly AnswersSummaryRowsAdderInterface $headerAnswersSummaryRowsAdder, private readonly AnswersSummaryRowsAdderInterface $defaultAnswersSummaryRowsAdder)
     {
     }
 

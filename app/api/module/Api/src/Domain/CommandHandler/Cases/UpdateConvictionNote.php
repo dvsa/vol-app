@@ -27,6 +27,7 @@ final class UpdateConvictionNote extends AbstractCommandHandler implements Trans
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var UpdateConvictionNoteCmd $command **/

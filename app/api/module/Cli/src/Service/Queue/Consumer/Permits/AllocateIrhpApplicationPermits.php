@@ -28,6 +28,7 @@ class AllocateIrhpApplicationPermits extends AbstractCommandConsumer
      *
      * @return array
      */
+    #[\Override]
     public function getCommandData(QueueEntity $item)
     {
         return ['id' => $item->getEntityId()];

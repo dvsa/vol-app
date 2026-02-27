@@ -8,6 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class DigitalContinuationRemindersCommand extends AbstractBatchCommand
 {
+    #[\Override]
     protected function configure()
     {
         $this
@@ -15,6 +16,7 @@ class DigitalContinuationRemindersCommand extends AbstractBatchCommand
             ->setDescription('Generate digital continuation reminders.');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

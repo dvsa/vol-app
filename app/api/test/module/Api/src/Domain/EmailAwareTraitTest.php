@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain;
 
 use Doctrine\ORM\EntityNotFoundException;
@@ -19,7 +21,7 @@ class EmailAwareTraitTest extends m\Adapter\Phpunit\MockeryTestCase
     /**
      * Test organisation recipients when user and contact details present
      */
-    public function testOrganisationRecipients()
+    public function testOrganisationRecipients(): void
     {
         $userEmail = 'user@test.com';
         $orgEmails = ['orgEmail1@test.com'];
@@ -47,10 +49,9 @@ class EmailAwareTraitTest extends m\Adapter\Phpunit\MockeryTestCase
 
     /**
      * Test organisation recipients when there is no user, or when the user has no contact details
-     *
-     * @dataProvider emptyUserProvider
      */
-    public function testOrganisationRecipientsNoUserDetails($user)
+    #[\PHPUnit\Framework\Attributes\DataProvider('emptyUserProvider')]
+    public function testOrganisationRecipientsNoUserDetails(mixed $user): void
     {
         $orgEmail1 = 'orgEmail1@test.com';
         $orgEmail2 = 'orgEmail2@test.com';
@@ -73,7 +74,7 @@ class EmailAwareTraitTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertEquals($expected, $sut->organisationRecipients($organisation, $user));
     }
 
-    public function emptyUserProvider()
+    public static function emptyUserProvider(): array
     {
         $userWithoutEmail = m::mock(User::class);
         $userWithoutEmail->shouldReceive('isInternal')->withNoArgs()->andReturn(false);
@@ -93,7 +94,7 @@ class EmailAwareTraitTest extends m\Adapter\Phpunit\MockeryTestCase
         ];
     }
 
-    public function testOrganisationRecipientsException()
+    public function testOrganisationRecipientsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\MissingEmailException::class);
 
@@ -104,7 +105,7 @@ class EmailAwareTraitTest extends m\Adapter\Phpunit\MockeryTestCase
         $sut->organisationRecipients($organisation, null);
     }
 
-    public function testOrganisationRecipientsEntityNotFoundException()
+    public function testOrganisationRecipientsEntityNotFoundException(): void
     {
         $organisation = m::mock(Organisation::class);
         $organisation->shouldReceive('getAdminEmailAddresses')->once()->withNoArgs()->andReturn(['orgEmail1@test.com']);

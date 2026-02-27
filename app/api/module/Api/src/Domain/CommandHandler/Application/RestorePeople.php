@@ -24,6 +24,7 @@ final class RestorePeople extends AbstractCommandHandler implements Transactione
     protected $repoServiceName = 'Application';
     protected $extraRepos = ['ApplicationOrganisationPerson','Person'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command \Dvsa\Olcs\Transfer\Command\Licence\DeletePeople */

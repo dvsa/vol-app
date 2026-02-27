@@ -21,6 +21,7 @@ class SearchDateRangeFieldset extends Fieldset
 {
     use SearchAwareTrait;
 
+    #[\Override]
     public function init()
     {
         $index = $this->getOption('index');

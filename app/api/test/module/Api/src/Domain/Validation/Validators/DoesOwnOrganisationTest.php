@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Does Own Organisation Test
  *
@@ -31,10 +33,8 @@ class DoesOwnOrganisationTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValidTrue($isOwner, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValidTrue(mixed $isOwner, mixed $expected): void
     {
         $entity = m::mock(Organisation::class);
 
@@ -46,7 +46,7 @@ class DoesOwnOrganisationTest extends AbstractValidatorsTestCase
         $this->assertEquals($expected, $this->sut->isValid(111));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [true, true],

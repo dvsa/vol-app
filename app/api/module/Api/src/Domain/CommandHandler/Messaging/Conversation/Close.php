@@ -33,6 +33,7 @@ final class Close extends AbstractUserCommandHandler implements ToggleRequiredIn
      * Close Command Handler Abstract
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var MessagingConversation $conversation */

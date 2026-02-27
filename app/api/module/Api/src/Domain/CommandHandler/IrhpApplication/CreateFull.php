@@ -45,6 +45,7 @@ class CreateFull extends AbstractCommandHandler implements TransactionedInterfac
      * @throws NotFoundException
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var IrhpApplicationRepo $irhpApplicationRepo */
@@ -171,6 +172,7 @@ class CreateFull extends AbstractCommandHandler implements TransactionedInterfac
             $irhpPermitApplicationRepo->save($irhpPermitApplication);
         }
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

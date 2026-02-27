@@ -16,20 +16,10 @@ use Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManager;
  */
 class LetterPreviewService
 {
-    private const LOGO_TEMPLATE_SLUG = 'otclogo-letters';
+    private const string LOGO_TEMPLATE_SLUG = 'otclogo-letters';
 
-    private SectionRendererPluginManager $rendererManager;
-    private $contentStore;
-    private $docTemplateRepo;
-
-    public function __construct(
-        SectionRendererPluginManager $rendererManager,
-        $contentStore,
-        $docTemplateRepo
-    ) {
-        $this->rendererManager = $rendererManager;
-        $this->contentStore = $contentStore;
-        $this->docTemplateRepo = $docTemplateRepo;
+    public function __construct(private readonly SectionRendererPluginManager $rendererManager, private $contentStore, private $docTemplateRepo, private readonly VolGrabReplacementService $volGrabReplacementService)
+    {
     }
 
     /**
@@ -39,23 +29,27 @@ class LetterPreviewService
      * @param MasterTemplate|null $masterTemplate The master template to use (null for basic rendering)
      * @return string Complete HTML for the letter preview
      */
-    public function renderPreview(LetterInstance $letterInstance, ?MasterTemplate $masterTemplate = null): string
+    public function renderPreview(LetterInstance $letterInstance, ?MasterTemplate $masterTemplate = null, bool $excludePdfAppendices = false): string
     {
         // Render all sections
         $sectionsHtml = $this->renderSections($letterInstance);
         $issuesHtml = $this->renderIssues($letterInstance);
+        $appendicesHtml = $this->renderAppendices($letterInstance, $excludePdfAppendices);
         $closingHtml = ''; // Closing sections would be rendered similarly when implemented
+
+        $context = $this->buildVolGrabContext($letterInstance);
 
         // If no master template, return just the content
         if ($masterTemplate === null) {
-            return $this->renderWithoutTemplate($sectionsHtml, $issuesHtml);
+            $html = $this->renderWithoutTemplate($sectionsHtml, $issuesHtml, $appendicesHtml);
+        } else {
+            // Build placeholder values
+            $placeholders = $this->buildPlaceholders($letterInstance, $sectionsHtml, $issuesHtml, $closingHtml, $appendicesHtml);
+
+            $html = $this->populateTemplate($masterTemplate->getTemplateContent(), $placeholders);
         }
 
-        // Build placeholder values
-        $placeholders = $this->buildPlaceholders($letterInstance, $sectionsHtml, $issuesHtml, $closingHtml);
-
-        // Replace placeholders in template
-        return $this->populateTemplate($masterTemplate->getTemplateContent(), $placeholders);
+        return $this->volGrabReplacementService->replaceGrabsInHtml($html, $context);
     }
 
     /**
@@ -68,9 +62,10 @@ class LetterPreviewService
     {
         $html = '';
         $sectionRenderer = $this->rendererManager->get('content-section');
+        $context = $this->buildVolGrabContext($letterInstance);
 
         foreach ($letterInstance->getLetterInstanceSections() as $section) {
-            $html .= $sectionRenderer->render($section);
+            $html .= $sectionRenderer->render($section, $context);
         }
 
         return $html;
@@ -85,6 +80,7 @@ class LetterPreviewService
     private function renderIssues(LetterInstance $letterInstance): string
     {
         $issueRenderer = $this->rendererManager->get('issue');
+        $context = $this->buildVolGrabContext($letterInstance);
 
         // Group issues by Issue Type
         $issuesByType = [];
@@ -108,11 +104,11 @@ class LetterPreviewService
         foreach ($issuesByType as $typeData) {
             // Issue Type heading
             $html .= '<div class="issue-type-group">';
-            $html .= '<h3 class="issue-type-heading">' . htmlspecialchars($typeData['name']) . '</h3>';
+            $html .= '<h3 class="issue-type-heading">' . htmlspecialchars((string) $typeData['name']) . '</h3>';
 
             // Render each issue under this type
             foreach ($typeData['issues'] as $issue) {
-                $html .= $issueRenderer->render($issue);
+                $html .= $issueRenderer->render($issue, $context);
             }
 
             $html .= '</div>';
@@ -122,13 +118,39 @@ class LetterPreviewService
     }
 
     /**
+     * Render appendix sections
+     *
+     * @param LetterInstance $letterInstance
+     * @return string HTML for all appendices
+     */
+    private function renderAppendices(LetterInstance $letterInstance, bool $excludePdf = false): string
+    {
+        $appendixRenderer = $this->rendererManager->get('appendix');
+        $context = $this->buildVolGrabContext($letterInstance);
+        $html = '';
+
+        foreach ($letterInstance->getLetterInstanceAppendices() as $appendix) {
+            if ($excludePdf && $appendix->isPdf()) {
+                continue;
+            }
+            $html .= $appendixRenderer->render($appendix, $context);
+        }
+
+        if (!empty($html)) {
+            $html = '<div class="appendices"><h2 class="appendices-heading">Appendices</h2>' . $html . '</div>';
+        }
+        return $html;
+    }
+
+    /**
      * Render without a master template (fallback)
      *
      * @param string $sectionsHtml
      * @param string $issuesHtml
+     * @param string $appendicesHtml
      * @return string Basic HTML structure
      */
-    private function renderWithoutTemplate(string $sectionsHtml, string $issuesHtml): string
+    private function renderWithoutTemplate(string $sectionsHtml, string $issuesHtml, string $appendicesHtml = ''): string
     {
         $html = '<div class="letter-content">';
 
@@ -138,6 +160,10 @@ class LetterPreviewService
 
         if (!empty($issuesHtml)) {
             $html .= '<div class="issues">' . $issuesHtml . '</div>';
+        }
+
+        if (!empty($appendicesHtml)) {
+            $html .= $appendicesHtml;
         }
 
         $html .= '</div>';
@@ -158,7 +184,8 @@ class LetterPreviewService
         LetterInstance $letterInstance,
         string $sectionsHtml,
         string $issuesHtml,
-        string $closingHtml
+        string $closingHtml,
+        string $appendicesHtml = ''
     ): array {
         return [
             '{{LOGO_IMAGE}}' => $this->buildLogoImage(),
@@ -174,7 +201,7 @@ class LetterPreviewService
             '{{SIGNATURE_NAME}}' => '', // To be populated from user/config
             '{{SIGNATURE_TITLE}}' => '', // To be populated from user/config
             '{{FOOTER_CONTENT}}' => '',
-            '{{APPENDICES_CONTENT}}' => '',
+            '{{APPENDICES_CONTENT}}' => $appendicesHtml,
         ];
     }
 
@@ -292,13 +319,31 @@ class LetterPreviewService
             }
 
             $content = $file->getContent();
-            $base64 = base64_encode($content);
+            $base64 = base64_encode((string) $content);
 
             return 'data:image/png;base64,' . $base64;
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Log error but don't fail rendering
             return '';
         }
+    }
+
+    /**
+     * Build context array for vol-grab replacement
+     *
+     * @param LetterInstance $letterInstance
+     * @return array Context containing entity IDs for bookmark resolution
+     */
+    private function buildVolGrabContext(LetterInstance $letterInstance): array
+    {
+        return array_filter([
+            'licence' => $letterInstance->getLicence()?->getId(),
+            'application' => $letterInstance->getApplication()?->getId(),
+            'user' => $letterInstance->getCreatedBy()?->getId(),
+            'case' => $letterInstance->getCase()?->getId(),
+            'busRegId' => $letterInstance->getBusReg()?->getId(),
+            'organisation' => $letterInstance->getOrganisation()?->getId(),
+        ]);
     }
 
     /**

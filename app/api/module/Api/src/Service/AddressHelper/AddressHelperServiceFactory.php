@@ -10,6 +10,7 @@ class AddressHelperServiceFactory implements FactoryInterface
 {
     public const ADDRESS_SERVICE_ALIAS = 'AddressService';
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): AddressHelperService
     {
         return new AddressHelperService(

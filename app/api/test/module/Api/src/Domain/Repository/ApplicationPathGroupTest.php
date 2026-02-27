@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository\ApplicationPathGroup;
@@ -13,7 +15,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationPathGroupList;
  */
 class ApplicationPathGroupTest extends RepositoryTestCase
 {
-    public function testFetchListForApplicationPathGroupList()
+    public function testFetchListForApplicationPathGroupList(): void
     {
         $this->setUpSut(ApplicationPathGroup::class, true);
         $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);

@@ -28,6 +28,7 @@ class OlcsEntityListener implements EventSubscriber, AuthAwareInterface, Factory
      *
      * @return array
      */
+    #[\Override]
     public function getSubscribedEvents()
     {
         return [
@@ -121,6 +122,7 @@ class OlcsEntityListener implements EventSubscriber, AuthAwareInterface, Factory
             : null
         );
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->sl = $container;

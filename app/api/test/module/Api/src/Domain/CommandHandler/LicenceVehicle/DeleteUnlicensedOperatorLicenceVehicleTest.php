@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Delete Unlicensed Operator Licence Vehicle Test
  *
@@ -34,7 +36,7 @@ class DeleteUnlicensedOperatorLicenceVehicleTest extends AbstractCommandHandlerT
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 69;
 

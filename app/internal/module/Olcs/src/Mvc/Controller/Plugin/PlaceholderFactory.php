@@ -15,6 +15,7 @@ class PlaceholderFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Placeholder
     {
         return new Placeholder($container->get('ViewHelperManager')->get('placeholder'));

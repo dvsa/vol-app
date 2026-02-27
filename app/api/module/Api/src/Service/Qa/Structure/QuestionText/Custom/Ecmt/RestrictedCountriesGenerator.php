@@ -27,6 +27,7 @@ class RestrictedCountriesGenerator implements QuestionTextGeneratorInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function generate(QaContext $qaContext)
     {
         $translationKeyFragmentMappings = [

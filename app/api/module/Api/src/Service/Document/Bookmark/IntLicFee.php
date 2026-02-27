@@ -12,11 +12,13 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\FeeBundle as Qry;
  */
 class IntLicFee extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(['id' => $data['fee']]);
     }
 
+    #[\Override]
     public function render()
     {
         if (isset($this->data['amount'])) {

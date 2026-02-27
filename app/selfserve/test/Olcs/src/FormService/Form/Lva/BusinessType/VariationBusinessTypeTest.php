@@ -39,10 +39,8 @@ class VariationBusinessTypeTest extends MockeryTestCase
         $this->sut = new VariationBusinessType($this->fh, $this->authService, $this->guidanceHelper, $this->fsm);
     }
 
-    /**
-     * @dataProvider dpGetForm
-     */
-    public function testGetForm($hasInforceLicences, $hasOrganisationSubmittedLicenceApplication): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetForm')]
+    public function testGetForm(bool $hasInforceLicences, bool $hasOrganisationSubmittedLicenceApplication): void
     {
         $mockElement = m::mock(Element::class);
 
@@ -105,7 +103,7 @@ class VariationBusinessTypeTest extends MockeryTestCase
      *
      * @psalm-return list{list{true, true}, list{true, false}, list{false, true}, list{false, false}}
      */
-    public function dpGetForm(): array
+    public static function dpGetForm(): array
     {
         return [
             [

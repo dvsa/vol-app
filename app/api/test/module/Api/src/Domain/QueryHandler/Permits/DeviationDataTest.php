@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
@@ -17,7 +19,7 @@ class DeviationDataTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $sourceValues = [
             [
@@ -55,7 +57,7 @@ class DeviationDataTest extends QueryHandlerTestCase
         $this->assertEquals($expectedDeviationData, $result);
     }
 
-    public function testNoSourceValuesNullMeanDeviation()
+    public function testNoSourceValuesNullMeanDeviation(): void
     {
         $sourceValues = [];
 

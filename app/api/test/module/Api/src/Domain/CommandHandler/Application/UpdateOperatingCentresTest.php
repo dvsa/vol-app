@@ -57,10 +57,8 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
     protected const NO_HGVS = 1;
     protected const TWO_LGVS = 2;
 
-    /**
-     * @test
-     */
-    public function handleCommandIsCallable()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandIsCallable(): void
     {
         // Setup
         $this->setUpSut();
@@ -69,10 +67,8 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->assertIsCallable($this->sut->handleCommand(...));
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
-    public function testHandleCommandPartialMissingTa()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    public function testHandleCommandPartialMissingTa(): void
     {
         $this->setUpLegacy();
         $data = [
@@ -117,10 +113,8 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
-    public function testHandleCommandPsvTooManyCommLic()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    public function testHandleCommandPsvTooManyCommLic(): void
     {
         $this->setUpLegacy();
         $data = [
@@ -189,10 +183,8 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
-    public function testHandleCommandGvInvalid()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    public function testHandleCommandGvInvalid(): void
     {
         $this->setUpLegacy();
         $data = [
@@ -265,10 +257,8 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
-    public function testHandleCommandGvValid()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    public function testHandleCommandGvValid(): void
     {
         $this->setUpLegacy();
         $data = [
@@ -372,10 +362,8 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
-    public function testHandleCommandTrafficAreaValidation()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    public function testHandleCommandTrafficAreaValidation(): void
     {
         $this->setUpLegacy();
         $data = [
@@ -484,10 +472,8 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
-    public function testHandleCommandPsvValid()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    public function testHandleCommandPsvValid(): void
     {
         $this->setUpLegacy();
         $data = [
@@ -592,10 +578,8 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
-    public function testHandleCommandPsvValidVariationWithTa()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    public function testHandleCommandPsvValidVariationWithTa(): void
     {
         $this->setUpLegacy();
         $data = [
@@ -703,11 +687,9 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->assertSame($this->references[EnforcementArea::class]['A111'], $licence->getEnforcementArea());
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandSavesAVariationWithValidVehicleAuthorisations()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandSavesAVariationWithValidVehicleAuthorisations(): void
     {
         // Setup
         $this->setUpSut();
@@ -731,11 +713,9 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @test
-     * @depends handleCommandSavesAVariationWithValidVehicleAuthorisations
-     */
-    public function handleCommandSetsTotAuthVehiclesForGoodsVehicleOperatingCentre()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandSavesAVariationWithValidVehicleAuthorisations')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandSetsTotAuthVehiclesForGoodsVehicleOperatingCentre(): void
     {
         // Setup
         $this->setUpSut();
@@ -759,11 +739,9 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @test
-     * @depends handleCommandSavesAVariationWithValidVehicleAuthorisations
-     */
-    public function handleCommandSetsTotAuthVehiclesForPsvOperatingCentre()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandSavesAVariationWithValidVehicleAuthorisations')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandSetsTotAuthVehiclesForPsvOperatingCentre(): void
     {
         // Setup
         $this->setUpSut();
@@ -787,11 +765,9 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @test
-     * @depends handleCommandSavesAVariationWithValidVehicleAuthorisations
-     */
-    public function handleCommandSetsTotAuthHgvVehiclesForGoodsVehicleOperatingCentre()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandSavesAVariationWithValidVehicleAuthorisations')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandSetsTotAuthHgvVehiclesForGoodsVehicleOperatingCentre(): void
     {
         // Setup
         $this->setUpSut();
@@ -815,11 +791,9 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @test
-     * @depends handleCommandSavesAVariationWithValidVehicleAuthorisations
-     */
-    public function handleCommandSetsTotAuthHgvVehiclesForPsvOperatingCentre()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandSavesAVariationWithValidVehicleAuthorisations')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandSetsTotAuthHgvVehiclesForPsvOperatingCentre(): void
     {
         // Setup
         $this->setUpSut();
@@ -843,11 +817,9 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @test
-     * @depends handleCommandSavesAVariationWithValidVehicleAuthorisations
-     */
-    public function handleCommandSetsTotalAuthLgvVehiclesForGoodsVehicleOperatingCentre()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandSavesAVariationWithValidVehicleAuthorisations')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandSetsTotalAuthLgvVehiclesForGoodsVehicleOperatingCentre(): void
     {
         // Setup
         $this->setUpSut();
@@ -873,11 +845,9 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandDoesNotThrowValidationExceptionWhenCommunityLicencesAreEqualToTheTotalNumberOfVehicles()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandDoesNotThrowValidationExceptionWhenCommunityLicencesAreEqualToTheTotalNumberOfVehicles(): void
     {
         // Setup
         $this->setUpSut();
@@ -901,11 +871,9 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->assertTrue(true, 'Expected no validation exception to be thrown');
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandThrowsValidationExceptionWhenCommunityLicencesAreGreaterThenTheTotalNumberOfVehiclesAndApplicationHasStandardInternationalType()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandThrowsValidationExceptionWhenCommunityLicencesAreGreaterThenTheTotalNumberOfVehiclesAndApplicationHasStandardInternationalType(): void
     {
         // Setup
         $this->setUpSut();
@@ -934,11 +902,9 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->assertTrue(false, 'Expected validation exception to be thrown');
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandThrowsValidationExceptionWhenCommunityLicencesAreGreaterThenTheTotalNumberOfVehiclesAndApplicationIsForPsvLicenceAndHasRestrictedType()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandThrowsValidationExceptionWhenCommunityLicencesAreGreaterThenTheTotalNumberOfVehiclesAndApplicationIsForPsvLicenceAndHasRestrictedType(): void
     {
         // Setup
         $this->setUpSut();
@@ -967,11 +933,9 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->assertTrue(false, 'Expected validation exception to be thrown');
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandThrowsValidationExceptionWithAnyValidationMessagesFromTheUpdateHelper()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandThrowsValidationExceptionWithAnyValidationMessagesFromTheUpdateHelper(): void
     {
         // Setup
         $this->overrideUpdateHelperWithMock();
@@ -993,11 +957,9 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandValidatesPsvsWhenCommandIsNotPartial()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandValidatesPsvsWhenCommandIsNotPartial(): void
     {
         // Setup
         $this->overrideUpdateHelperWithMock();
@@ -1016,11 +978,9 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandValidatesTotAuthHgvVehiclesWhenCommandIsNotPartial()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandValidatesTotAuthHgvVehiclesWhenCommandIsNotPartial(): void
     {
         // Setup
         $this->overrideUpdateHelperWithMock();
@@ -1044,12 +1004,10 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @test
-     * @depends handleCommandValidatesTotAuthHgvVehiclesWhenCommandIsNotPartial
-     * @dataProvider operatingCentreVehicleAuthorisationConstraintsDataProvider
-     */
-    public function handleCommandValidatesTotAuthHgvVehiclesWhenCommandIsNotPartialAgainstCorrectOperatingCentreVehicleConstraints(array $operatingCentresVehicleCapacities, array $expectedVehicleConstraints)
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandValidatesTotAuthHgvVehiclesWhenCommandIsNotPartial')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('operatingCentreVehicleAuthorisationConstraintsDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandValidatesTotAuthHgvVehiclesWhenCommandIsNotPartialAgainstCorrectOperatingCentreVehicleConstraints(array $operatingCentresVehicleCapacities, array $expectedVehicleConstraints): void
     {
         // Setup
         $this->overrideUpdateHelperWithMock();
@@ -1075,11 +1033,9 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandValidatesLgvsWhenCommandIsNotPartialAndApplicationIsForGoods()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandValidatesLgvsWhenCommandIsNotPartialAndApplicationIsForGoods(): void
     {
         // Setup
         $this->overrideUpdateHelperWithMock();
@@ -1102,12 +1058,13 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();
     }
 
-    protected function setUpSut()
+    protected function setUpSut(): void
     {
         $this->sut = new CommandHandler();
 
@@ -1116,7 +1073,7 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    protected function setUpDefaultServices(ServiceManager $serviceManager)
+    protected function setUpDefaultServices(ServiceManager $serviceManager): void
     {
         $serviceManager->setService('TrafficAreaValidator', $this->setUpMockService(\Dvsa\Olcs\Api\Domain\Service\TrafficAreaValidator::class));
         $this->setUpAbstractCommandHandlerServices();
@@ -1143,7 +1100,7 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
     /**
      * @return UpdateOperatingCentreHelper|m\MockInterface
      */
-    protected function updateHelper()
+    protected function updateHelper(): mixed
     {
         if (! $this->serviceManager()->has('UpdateOperatingCentreHelper')) {
             $instance = new UpdateOperatingCentreHelper();
@@ -1179,7 +1136,7 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
     /**
      * @deprecated Use new test format instead
      */
-    protected function setUpLegacy()
+    protected function setUpLegacy(): void
     {
         $this->setUpSut();
         $this->mockRepo('Application', Repository\Application::class);
@@ -1194,7 +1151,8 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
     /**
      * @deprecated Use new test format instead
      */
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 

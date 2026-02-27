@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\ApplicationOperatingCentre;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -42,7 +44,7 @@ class ApplicationOperatingCentreTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -96,7 +98,7 @@ class ApplicationOperatingCentreTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    public function testHandleQueryWithUpdated()
+    public function testHandleQueryWithUpdated(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -157,7 +159,7 @@ class ApplicationOperatingCentreTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    public function testHandleQueryReadOnlyUser()
+    public function testHandleQueryReadOnlyUser(): void
     {
         $this->expectedBundle = [
             'operatingCentre' => [
@@ -227,7 +229,7 @@ class ApplicationOperatingCentreTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    protected function setAuthUser($role = null)
+    protected function setAuthUser(mixed $role = null): void
     {
         if (is_null($role)) {
             $role = new ArrayCollection([]);

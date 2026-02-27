@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Test
  *
@@ -22,6 +24,8 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Repository;
 use LmcRbacMvc\Service\AuthorizationService;
 use Dvsa\Olcs\Api\Entity\User\Permission;
+use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
 
 /**
  * Update Test
@@ -36,6 +40,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('LicenceOperatingCentre', Repository\LicenceOperatingCentre::class);
         $this->mockRepo('Document', Repository\Document::class);
         $this->mockRepo('OperatingCentre', Repository\OperatingCentre::class);
+        $this->mockedSmServices ['EventHistoryCreator'] = m::mock(EventHistoryCreator::class);
 
         $this->mockedSmServices['OperatingCentreHelper'] = m::mock(OperatingCentreHelper::class);
         $this->mockedSmServices[AuthorizationService::class] = m::mock(AuthorizationService::class);
@@ -43,14 +48,15 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 111,
@@ -119,5 +125,88 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         ];
 
         $this->assertEquals($expected, $result->toArray());
+    }
+
+    public function testHandleCommandCreatesEventHistoryWhenVersionChanges(): void
+    {
+        $data = [
+            'id' => 111,
+            'version' => 1,
+            'address' => [
+                'addressLine1' => '123 Street',
+                'version' => 1,
+            ]
+        ];
+
+        $command = Cmd::create($data);
+
+        $addressEntity = m::mock(Address::class);
+        $addressEntity->shouldReceive('getVersion')->andReturn(2);
+
+        $oc = m::mock(OperatingCentre::class)->makePartial();
+        $oc->shouldReceive('getAddress')->andReturn($addressEntity);
+
+        $licence = m::mock(Licence::class)->makePartial();
+
+        $loc = m::mock(LicenceOperatingCentre::class)->makePartial();
+        $loc->setLicence($licence);
+        $loc->setOperatingCentre($oc);
+
+        $this->repoMap['LicenceOperatingCentre']
+            ->shouldReceive('fetchUsingId')
+            ->with($command, Query::HYDRATE_OBJECT, 1)
+            ->andReturn($loc);
+
+        $this->mockedSmServices['OperatingCentreHelper']
+            ->shouldReceive('validate')
+            ->once()
+            ->with($licence, $command, false, $loc);
+
+        $this->mockedSmServices['OperatingCentreHelper']
+            ->shouldReceive('saveDocuments')
+            ->once();
+
+        $this->mockedSmServices['OperatingCentreHelper']
+            ->shouldReceive('updateOperatingCentreLink')
+            ->once();
+
+        $expectedSaveAddressData = [
+            'id' => null,
+            'version' => 1,
+            'addressLine1' => '123 Street',
+            'addressLine2' => null,
+            'addressLine3' => null,
+            'addressLine4' => null,
+            'town' => null,
+            'postcode' => null,
+            'countryCode' => null,
+            'contactType' => null,
+        ];
+
+        $result1 = new Result();
+        $result1->addMessage('SaveAddress');
+
+        $this->expectedSideEffect(
+            SaveAddress::class,
+            $expectedSaveAddressData,
+            $result1
+        );
+
+        $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')
+            ->with($oc->getAddress(), EventHistoryTypeEntity::EVENT_CODE_EDIT_OPERATING_CENTRE, null, $licence)
+            ->once();
+
+        $this->mockedSmServices[AuthorizationService::class]
+                ->shouldReceive('isGranted')
+                ->with(Permission::SELFSERVE_USER, null)
+                ->andReturn(false)
+                ->once();
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertEquals(
+            ['SaveAddress'],
+            $result->getMessages()
+        );
     }
 }

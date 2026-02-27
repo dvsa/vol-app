@@ -35,6 +35,7 @@ class UpdatePeriod extends AbstractCommandHandler implements TransactionedInterf
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $irhpApplicationId = $command->getId();
@@ -89,6 +90,7 @@ class UpdatePeriod extends AbstractCommandHandler implements TransactionedInterf
 
         return $this->result;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

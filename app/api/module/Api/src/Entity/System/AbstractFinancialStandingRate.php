@@ -36,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractFinancialStandingRate implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractFinancialStandingRate implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -178,7 +178,8 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -201,7 +202,8 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     /**
      * Get the licence type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getLicenceType()
     {
         return $this->licenceType;
@@ -224,7 +226,8 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     /**
      * Get the goods or psv
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getGoodsOrPsv()
     {
         return $this->goodsOrPsv;
@@ -247,7 +250,8 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     /**
      * Get the vehicle type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getVehicleType()
     {
         return $this->vehicleType;
@@ -270,7 +274,8 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -293,7 +298,8 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -316,7 +322,8 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     /**
      * Get the additional vehicle rate
      *
-     * @return int     */
+     * @return int
+     */
     public function getAdditionalVehicleRate()
     {
         return $this->additionalVehicleRate;
@@ -339,7 +346,8 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     /**
      * Get the first vehicle rate
      *
-     * @return int     */
+     * @return int
+     */
     public function getFirstVehicleRate()
     {
         return $this->firstVehicleRate;
@@ -364,7 +372,8 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEffectiveFrom($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -391,7 +400,8 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -400,6 +410,7 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

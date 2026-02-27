@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractDisqualification implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractDisqualification implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -195,7 +195,8 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -218,7 +219,8 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Get the organisation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     */
     public function getOrganisation()
     {
         return $this->organisation;
@@ -241,7 +243,8 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Get the person
      *
-     * @return \Dvsa\Olcs\Api\Entity\Person\Person     */
+     * @return \Dvsa\Olcs\Api\Entity\Person\Person
+     */
     public function getPerson()
     {
         return $this->person;
@@ -264,7 +267,8 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -287,7 +291,8 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -310,7 +315,8 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Get the is disqualified
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsDisqualified()
     {
         return $this->isDisqualified;
@@ -335,7 +341,8 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getStartDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -362,7 +369,8 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Get the notes
      *
-     * @return string     */
+     * @return string
+     */
     public function getNotes()
     {
         return $this->notes;
@@ -385,7 +393,8 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Get the period
      *
-     * @return int     */
+     * @return int
+     */
     public function getPeriod()
     {
         return $this->period;
@@ -408,7 +417,8 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -431,7 +441,8 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -454,7 +465,8 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Get the olbs type
      *
-     * @return string     */
+     * @return string
+     */
     public function getOlbsType()
     {
         return $this->olbsType;
@@ -463,6 +475,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

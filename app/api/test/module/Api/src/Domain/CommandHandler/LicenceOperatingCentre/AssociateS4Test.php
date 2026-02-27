@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\LicenceOperatingCentre;
 
 use Dvsa\Olcs\Api\Entity\Application\S4;
@@ -23,7 +25,8 @@ class AssociateS4Test extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             LicenceOperatingCentre::class => [
@@ -39,7 +42,7 @@ class AssociateS4Test extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'licenceOperatingCentres' => [1, 54],

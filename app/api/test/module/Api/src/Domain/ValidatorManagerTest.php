@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain;
 
 use Dvsa\Olcs\Api\Domain\Validation\Validators\ValidatorInterface;

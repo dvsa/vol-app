@@ -41,6 +41,7 @@ class PiHearing extends AbstractCommandHandler implements TransactionedInterface
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /**

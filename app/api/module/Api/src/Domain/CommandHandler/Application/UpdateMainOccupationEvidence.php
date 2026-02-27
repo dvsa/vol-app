@@ -15,6 +15,7 @@ final class UpdateMainOccupationEvidence extends AbstractUpdateApplication
     ];
     protected string $confirmMessage = 'main occupation evidence updated';
 
+    #[\Override]
     protected function updateApplication(ApplicationEntity $application, Command|CommandInterface $command): void
     {
         $application->setOccupationEvidenceUploaded($command->getEvidenceUploadType());

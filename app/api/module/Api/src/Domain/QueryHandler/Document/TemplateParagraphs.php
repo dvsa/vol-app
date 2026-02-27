@@ -20,6 +20,7 @@ class TemplateParagraphs extends AbstractQueryHandler
 {
     protected $repoServiceName = 'DocTemplate';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $entity = $this->getRepo()->fetchUsingId($query);

@@ -14,6 +14,7 @@ class ByDocumentStoreId extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Document';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->getRepo()->fetchByDocumentStoreId($query->getDocumentStoreId());

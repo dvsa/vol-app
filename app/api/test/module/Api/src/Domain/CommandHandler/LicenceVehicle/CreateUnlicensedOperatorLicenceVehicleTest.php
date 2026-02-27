@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\LicenceVehicle;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\LicenceVehicle\CreateUnlicensedOperatorLicenceVehicle as CommandHandler;
@@ -14,9 +16,8 @@ use Mockery as m;
 
 /**
  * Create Unlicensed Operator Licence Vehicle Test
- *
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\LicenceVehicle\CreateUnlicensedOperatorLicenceVehicle
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\LicenceVehicle\CreateUnlicensedOperatorLicenceVehicle::class)]
 class CreateUnlicensedOperatorLicenceVehicleTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
@@ -28,7 +29,7 @@ class CreateUnlicensedOperatorLicenceVehicleTest extends AbstractCommandHandlerT
         parent::setUp();
     }
 
-    public function testHandleCommandGoods()
+    public function testHandleCommandGoods(): void
     {
         $organisationId = 69;
         $licenceVehicleId = 99;
@@ -97,7 +98,7 @@ class CreateUnlicensedOperatorLicenceVehicleTest extends AbstractCommandHandlerT
         );
     }
 
-    public function testHandleCommandPsv()
+    public function testHandleCommandPsv(): void
     {
         $organisationId = 69;
         $licenceVehicleId = 99;

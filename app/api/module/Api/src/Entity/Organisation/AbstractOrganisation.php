@@ -41,7 +41,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractOrganisation implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractOrganisation implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -355,7 +355,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -378,7 +379,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the contact details
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     */
     public function getContactDetails()
     {
         return $this->contactDetails;
@@ -401,7 +403,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the irfo contact details
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     */
     public function getIrfoContactDetails()
     {
         return $this->irfoContactDetails;
@@ -424,7 +427,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getType()
     {
         return $this->type;
@@ -447,7 +451,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the irfo nationality
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country
+     */
     public function getIrfoNationality()
     {
         return $this->irfoNationality;
@@ -470,7 +475,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the lead tc area
      *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea     */
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     */
     public function getLeadTcArea()
     {
         return $this->leadTcArea;
@@ -493,7 +499,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the cpid
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getCpid()
     {
         return $this->cpid;
@@ -516,7 +523,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -539,7 +547,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -562,7 +571,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the company or llp no
      *
-     * @return string     */
+     * @return string
+     */
     public function getCompanyOrLlpNo()
     {
         return $this->companyOrLlpNo;
@@ -585,7 +595,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the name
      *
-     * @return string     */
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -608,7 +619,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the company cert seen
      *
-     * @return string     */
+     * @return string
+     */
     public function getCompanyCertSeen()
     {
         return $this->companyCertSeen;
@@ -631,7 +643,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the is irfo
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsIrfo()
     {
         return $this->isIrfo;
@@ -654,7 +667,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the allow email
      *
-     * @return string     */
+     * @return string
+     */
     public function getAllowEmail()
     {
         return $this->allowEmail;
@@ -677,7 +691,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the confirm share vehicle info
      *
-     * @return string     */
+     * @return string
+     */
     public function getConfirmShareVehicleInfo()
     {
         return $this->confirmShareVehicleInfo;
@@ -700,7 +715,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the confirm share trailer info
      *
-     * @return string     */
+     * @return string
+     */
     public function getConfirmShareTrailerInfo()
     {
         return $this->confirmShareTrailerInfo;
@@ -723,7 +739,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the is unlicensed
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsUnlicensed()
     {
         return $this->isUnlicensed;
@@ -746,7 +763,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the nature of business
      *
-     * @return string     */
+     * @return string
+     */
     public function getNatureOfBusiness()
     {
         return $this->natureOfBusiness;
@@ -769,7 +787,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the is messaging disabled
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsMessagingDisabled()
     {
         return $this->isMessagingDisabled;
@@ -792,7 +811,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the is messaging file upload enabled
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsMessagingFileUploadEnabled()
     {
         return $this->isMessagingFileUploadEnabled;
@@ -815,7 +835,8 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -1265,6 +1286,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

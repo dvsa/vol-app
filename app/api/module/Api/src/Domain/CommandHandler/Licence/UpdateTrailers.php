@@ -22,6 +22,7 @@ final class UpdateTrailers extends AbstractCommandHandler implements Transaction
 {
     protected $repoServiceName = 'Licence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var LicenceEntity $licence */

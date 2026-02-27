@@ -238,6 +238,20 @@ return [
                             ]
                         ],
                     ],
+                    'admin-letter-appendix' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'letter-appendix[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete)',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\Letter\LetterAppendixController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                     'admin-scanning' => [
                         'type' => 'segment',
                         'options' => [
@@ -1025,6 +1039,7 @@ return [
             Admin\Controller\Letter\LetterTypeController::class => Admin\Controller\Letter\LetterTypeControllerFactory::class,
             Admin\Controller\Letter\LetterSectionController::class => Admin\Controller\Letter\LetterSectionControllerFactory::class,
             Admin\Controller\Letter\LetterIssueController::class => Admin\Controller\Letter\LetterIssueControllerFactory::class,
+            Admin\Controller\Letter\LetterAppendixController::class => Admin\Controller\Letter\LetterAppendixControllerFactory::class,
             Admin\Controller\Letter\LetterIssueTypeController::class => Admin\Controller\Letter\LetterIssueTypeControllerFactory::class,
             Admin\Controller\Letter\LetterTestDataController::class => Admin\Controller\Letter\LetterTestDataControllerFactory::class,
             Admin\Controller\FeatureToggleController::class => Admin\Controller\FeatureToggleControllerFactory::class,

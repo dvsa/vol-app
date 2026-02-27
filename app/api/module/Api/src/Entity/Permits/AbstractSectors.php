@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractSectors implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSectors implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -172,7 +172,8 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -195,7 +196,8 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -218,7 +220,8 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -241,7 +244,8 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Get the name
      *
-     * @return string     */
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -264,7 +268,8 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Get the name key
      *
-     * @return string     */
+     * @return string
+     */
     public function getNameKey()
     {
         return $this->nameKey;
@@ -287,7 +292,8 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -310,7 +316,8 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Get the description key
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescriptionKey()
     {
         return $this->descriptionKey;
@@ -333,7 +340,8 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Get the sifting percentage
      *
-     * @return string     */
+     * @return string
+     */
     public function getSiftingPercentage()
     {
         return $this->siftingPercentage;
@@ -356,7 +364,8 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -379,7 +388,8 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Get the display order
      *
-     * @return int     */
+     * @return int
+     */
     public function getDisplayOrder()
     {
         return $this->displayOrder;
@@ -388,6 +398,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

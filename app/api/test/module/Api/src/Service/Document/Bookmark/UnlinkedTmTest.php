@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\UnlinkedTm;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\Document\Bookmark\UnlinkedTm
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\UnlinkedTm::class)]
 class UnlinkedTmTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new UnlinkedTm();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -18,7 +18,7 @@ class UnlinkedTmTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function dpRenderValidDataProvider()
+    public static function dpRenderValidDataProvider(): array
     {
         return [
             [
@@ -86,10 +86,8 @@ class UnlinkedTmTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider dpRenderValidDataProvider
-     */
-    public function testRender($expected, $results)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderValidDataProvider')]
+    public function testRender(mixed $expected, mixed $results): void
     {
         $bookmark = new UnlinkedTm();
         $bookmark->setData($results);

@@ -18,6 +18,7 @@ class PublicationLink implements MapperInterface
      * @param array $data
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         $readOnly = [
@@ -26,7 +27,7 @@ class PublicationLink implements MapperInterface
             'status' => $data['publication']['pubStatus']['description'],
             'section' => $data['publicationSection']['description'],
             'trafficArea' => $data['publication']['trafficArea']['name'],
-            'publicationDate' => date(Module::$dateFormat, strtotime($data['publication']['pubDate']))
+            'publicationDate' => date(Module::$dateFormat, strtotime((string) $data['publication']['pubDate']))
         ];
 
         $textFields = [

@@ -47,6 +47,7 @@ class LetterIssueTypeController extends AbstractInternalController implements Le
         'indexAction' => ['table-actions'],
     ];
 
+    #[\Override]
     public function getLeftView(): ViewModel
     {
         $view = new ViewModel(

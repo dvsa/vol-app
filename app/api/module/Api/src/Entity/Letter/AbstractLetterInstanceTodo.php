@@ -34,7 +34,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -166,7 +166,8 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -189,7 +190,8 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     /**
      * Get the letter instance
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterInstance     */
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterInstance
+     */
     public function getLetterInstance()
     {
         return $this->letterInstance;
@@ -212,7 +214,8 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     /**
      * Get the letter instance issue
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue     */
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue
+     */
     public function getLetterInstanceIssue()
     {
         return $this->letterInstanceIssue;
@@ -235,7 +238,8 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     /**
      * Get the letter todo version
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion     */
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion
+     */
     public function getLetterTodoVersion()
     {
         return $this->letterTodoVersion;
@@ -258,7 +262,8 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -281,7 +286,8 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -304,7 +310,8 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     /**
      * Get the is rendered
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsRendered()
     {
         return $this->isRendered;
@@ -327,7 +334,8 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     /**
      * Get the display order
      *
-     * @return int     */
+     * @return int
+     */
     public function getDisplayOrder()
     {
         return $this->displayOrder;
@@ -350,7 +358,8 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -359,6 +368,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

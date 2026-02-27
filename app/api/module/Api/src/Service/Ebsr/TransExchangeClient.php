@@ -26,8 +26,7 @@ class TransExchangeClient implements TransExchangeClientInterface
         private readonly ParseXmlString $xmlParser,
         private readonly Xsd $xsdValidator,
         private readonly string $correlationId
-    )
-    {
+    ) {
     }
 
     /**
@@ -38,6 +37,7 @@ class TransExchangeClient implements TransExchangeClientInterface
      * @throws TransxchangeException
      * @return array
      */
+    #[\Override]
     public function makeRequest($content)
     {
         Logger::info('TransXchange request', ['data' => $content]);
@@ -65,6 +65,7 @@ class TransExchangeClient implements TransExchangeClientInterface
 
         return $this->xmlFilter->filter($dom);
     }
+    #[\Override]
     public function getCorrelationId(): string
     {
         return $this->correlationId;

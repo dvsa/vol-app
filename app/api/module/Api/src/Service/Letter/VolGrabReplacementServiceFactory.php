@@ -21,6 +21,7 @@ class VolGrabReplacementServiceFactory implements FactoryInterface
      *
      * @return VolGrabReplacementService
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         return new VolGrabReplacementService(

@@ -21,6 +21,7 @@ class DestroyControllerFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DestroyController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

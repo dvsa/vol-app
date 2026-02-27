@@ -31,6 +31,7 @@ class MarkSuccessfulRemainingPermitApplications extends ScoringCommandHandler im
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->profileMessage('mark successful remaining permit applications...');
@@ -73,6 +74,7 @@ class MarkSuccessfulRemainingPermitApplications extends ScoringCommandHandler im
 
         return $this->result;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->successfulCandidatePermitsFacade = $container->get(

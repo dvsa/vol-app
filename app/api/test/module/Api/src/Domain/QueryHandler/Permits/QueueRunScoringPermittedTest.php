@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
@@ -24,10 +26,8 @@ class QueueRunScoringPermittedTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider permittedScenariosProvider
-     */
-    public function testHandleQuery($prerequisiteResult, $prerequisiteMessage)
+    #[\PHPUnit\Framework\Attributes\DataProvider('permittedScenariosProvider')]
+    public function testHandleQuery(mixed $prerequisiteResult, mixed $prerequisiteMessage): void
     {
         $stockId = 28;
 
@@ -67,7 +67,7 @@ class QueueRunScoringPermittedTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryUnpermittedStatus()
+    public function testHandleQueryUnpermittedStatus(): void
     {
         $stockId = 28;
 
@@ -94,7 +94,7 @@ class QueueRunScoringPermittedTest extends QueryHandlerTestCase
         );
     }
 
-    public function permittedScenariosProvider()
+    public static function permittedScenariosProvider(): array
     {
         return [
             [true, 'Prerequisites ok'],

@@ -11,6 +11,7 @@ use Common\RefData;
  */
 class LicenceStatusRuleMarker extends AbstractMarker
 {
+    #[\Override]
     public function canRender()
     {
         $data = $this->getData();
@@ -26,6 +27,7 @@ class LicenceStatusRuleMarker extends AbstractMarker
         return (count($rules) > 0);
     }
 
+    #[\Override]
     public function render()
     {
         $data = $this->getData();

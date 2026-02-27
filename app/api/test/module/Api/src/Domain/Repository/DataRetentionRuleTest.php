@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\DBAL\Driver\PDO\Result;
@@ -19,7 +21,7 @@ class DataRetentionRuleTest extends RepositoryTestCase
         $this->setUpSut(DataRetentionRule::class, true);
     }
 
-    public function testFetchEnabledRules()
+    public function testFetchEnabledRules(): void
     {
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
@@ -58,7 +60,7 @@ class DataRetentionRuleTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchEnabledRulesWithQueryBuilderAndIsReview()
+    public function testFetchEnabledRulesWithQueryBuilderAndIsReview(): void
     {
         $query = RuleList::create(
             ['sort' => 'id', 'order' => 'DESC']
@@ -103,7 +105,7 @@ class DataRetentionRuleTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchAllRules()
+    public function testFetchAllRules(): void
     {
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
@@ -139,7 +141,7 @@ class DataRetentionRuleTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchAllNotDeletedRulesWithQuery()
+    public function testFetchAllNotDeletedRulesWithQuery(): void
     {
         $query = RuleAdmin::create(
             ['sort' => 'id', 'order' => 'DESC']
@@ -178,7 +180,7 @@ class DataRetentionRuleTest extends RepositoryTestCase
         );
     }
 
-    public function testRunProc()
+    public function testRunProc(): void
     {
         //doctrine pdo result is marked final
         $result = true;

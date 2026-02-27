@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository;
 
 /**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\Role
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Role::class)]
 class RoleTest extends RepositoryTestCase
 {
     public const ROLE = 'unit_role';
@@ -20,7 +22,7 @@ class RoleTest extends RepositoryTestCase
         $this->setUpSut(Repository\Role::class);
     }
 
-    public function testFetchByRole()
+    public function testFetchByRole(): void
     {
         $qb = $this->createMockQb('QUERY');
         $qb->shouldReceive('getQuery->getResult')->once()->andReturn(['EXPECT']);
@@ -33,7 +35,7 @@ class RoleTest extends RepositoryTestCase
         static::assertEquals('EXPECT', $actual);
     }
 
-    public function testFetchByRoleNull()
+    public function testFetchByRoleNull(): void
     {
         $qb = $this->createMockQb('QUERY');
         $qb->shouldReceive('getQuery->getResult')->once()->andReturn([]);
@@ -43,7 +45,7 @@ class RoleTest extends RepositoryTestCase
         static::assertNull($this->sut->fetchByRole(self::ROLE));
     }
 
-    public function testFetchOneByRole()
+    public function testFetchOneByRole(): void
     {
         $role = 'foo';
 

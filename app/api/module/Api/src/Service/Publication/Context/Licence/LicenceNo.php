@@ -18,6 +18,7 @@ final class LicenceNo extends AbstractContext
      * @param PublicationLink $publicationLink
      * @param \ArrayObject $context
      */
+    #[\Override]
     public function provide(PublicationLink $publicationLink, \ArrayObject $context)
     {
         $licenceNo = '';

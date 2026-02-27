@@ -12,6 +12,7 @@ class ProcessNtuCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:process-ntu';
 
+    #[\Override]
     protected function configure()
     {
         $this
@@ -19,6 +20,7 @@ class ProcessNtuCommand extends AbstractBatchCommand
         $this->addCommonOptions();
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

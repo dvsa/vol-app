@@ -29,6 +29,7 @@ final readonly class WithContactDetails implements QueryPartialInterface
      * @param QueryBuilder $qb
      * @param array $arguments
      */
+    #[\Override]
     public function modifyQuery(QueryBuilder $qb, array $arguments = [])
     {
         switch (count($arguments)) {

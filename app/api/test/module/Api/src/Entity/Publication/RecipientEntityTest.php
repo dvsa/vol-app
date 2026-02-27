@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Publication;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -25,7 +27,7 @@ class RecipientEntityTest extends EntityTester
         $this->entity = $this->instantiate($this->entityClass);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $isObjector = 'Y';
         $contactName = 'test me';
@@ -42,7 +44,7 @@ class RecipientEntityTest extends EntityTester
         $this->assertEquals($sendNoticesProcs, $this->entity->getSendNoticesProcs());
     }
 
-    public function testUpdateWithInvalidSubscriptionDetails()
+    public function testUpdateWithInvalidSubscriptionDetails(): void
     {
         $this->expectException(Exception\ValidationException::class);
 

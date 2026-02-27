@@ -15,6 +15,7 @@ class LetterTestData implements MapperInterface
      * @param array $data Data from query
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data): array
     {
         $formData = [
@@ -37,7 +38,7 @@ class LetterTestData implements MapperInterface
     public static function mapFromForm(array $data): array
     {
         $commandData = $data['letterTestData'] ?? [];
-        
+
         // Parse JSON string back to array/object
         if (isset($commandData['json']) && is_string($commandData['json'])) {
             $commandData['json'] = json_decode($commandData['json'], true);

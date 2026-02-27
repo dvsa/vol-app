@@ -47,6 +47,7 @@ class IrhpPermitSectorController extends AbstractIrhpPermitAdminController imple
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel(
@@ -66,6 +67,7 @@ class IrhpPermitSectorController extends AbstractIrhpPermitAdminController imple
      *
      * @return Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $this->scriptFactory->loadFile('irhp-permit-total-table');

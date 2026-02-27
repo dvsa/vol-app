@@ -29,6 +29,7 @@ final class DeleteTransportManagerLicence extends AbstractCommandHandler impleme
 
     protected $repoServiceName = 'TransportManagerLicence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $transportManagers = $this->getRepo()->fetchForLicence($command->getLicence());

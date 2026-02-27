@@ -67,6 +67,7 @@ class RevokeController extends AbstractInternalController implements CaseControl
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->redirectToIndex();
@@ -77,6 +78,7 @@ class RevokeController extends AbstractInternalController implements CaseControl
      *
      * @return array
      */
+    #[\Override]
     public function deleteAction()
     {
         return $this->notFoundAction();
@@ -102,6 +104,7 @@ class RevokeController extends AbstractInternalController implements CaseControl
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

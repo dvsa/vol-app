@@ -35,19 +35,16 @@ class ApplicationSchedule41Controller extends Schedule41Controller implements Ap
 
     protected $section = 'operating_centres';
 
-    protected StringHelperService $stringHelper;
-
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         FlashMessengerHelperService $flashMessengerHelper,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         protected $navigation,
         protected RestrictionHelperService $restrictionHelper
     ) {
         parent::__construct($niTextTranslationUtil, $authService, $formHelper, $tableFactory, $flashMessengerHelper);
-        $this->stringHelper = $stringHelper;
     }
 }

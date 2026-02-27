@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -12,7 +14,7 @@ use Laminas\Form\Form;
  */
 class ContinuationTest extends MockeryTestCase
 {
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $errors = [
             'totAuthVehicles' => [['error1']],

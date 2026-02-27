@@ -39,8 +39,8 @@ final class CreateNewUser extends AbstractUserCommandHandler implements Transact
 {
     use QueueAwareTrait;
 
-    public const ERR_EMAIL_REQUIRED = 'ERR_EMAIL_REQUIRED';
-    public const ERR_USERNAME_REQUIRED = 'ERR_USERNAME_REQUIRED';
+    public const string ERR_EMAIL_REQUIRED = 'ERR_EMAIL_REQUIRED';
+    public const string ERR_USERNAME_REQUIRED = 'ERR_USERNAME_REQUIRED';
 
     protected $extraRepos = [
         'Application',
@@ -69,6 +69,7 @@ final class CreateNewUser extends AbstractUserCommandHandler implements Transact
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $username = trim($command->getUsername() ?? '');

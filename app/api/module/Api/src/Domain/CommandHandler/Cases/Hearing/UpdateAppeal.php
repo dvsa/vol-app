@@ -33,6 +33,7 @@ final class UpdateAppeal extends AbstractCommandHandler implements Transactioned
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Command\Batch;
 
 use Dvsa\Olcs\Cli\Command\Batch\CompaniesHouseVsOlcsDiffsExportCommand;
@@ -15,19 +17,20 @@ use Dvsa\Olcs\Email\Domain\Command\ProcessInspectionRequestEmail;
 use Laminas\Mvc\Application;
 use Symfony\Component\Console\Command\Command;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class LastTmLetterCommandTest extends AbstractBatchCommandCases
 {
-    protected function getCommandClass()
+    protected function getCommandClass(): string
     {
         return LastTmLetterCommand::class;
     }
 
-    protected function getCommandName()
+    protected function getCommandName(): string
     {
         return 'batch:last-tm-letter';
     }
 
-    protected function getCommandDTOs()
+    protected function getCommandDTOs(): array
     {
         return [
             LastTmLetter::create([]),

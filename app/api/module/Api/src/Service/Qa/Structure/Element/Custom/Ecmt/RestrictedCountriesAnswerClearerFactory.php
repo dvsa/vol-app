@@ -17,6 +17,7 @@ class RestrictedCountriesAnswerClearerFactory implements FactoryInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): RestrictedCountriesAnswerClearer
     {
         return new RestrictedCountriesAnswerClearer(

@@ -11,7 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 class SearchOrderFieldsetTest extends TestCase
 {
-    public function testSearchAwareTraitByProxy()
+    public function testSearchAwareTraitByProxy(): void
     {
         $service = m::mock(SearchDataService::class);
 
@@ -20,7 +20,7 @@ class SearchOrderFieldsetTest extends TestCase
         $this->assertSame($service, $sut->setSearchService($service)->getSearchService());
     }
 
-    public function testInit()
+    public function testInit(): void
     {
         $orderOptions = [
             [

@@ -35,8 +35,8 @@ final class Create extends AbstractCommandHandler implements ToggleRequiredInter
     use ToggleAwareTrait;
     use AuthAwareTrait;
 
-    public const TASK_DESCRIPTION_ON_EXTERNAL_REPLY = 'New message';
-    public const TASK_DESCRIPTION_ON_INTERNAL_REPLY = 'Awaiting external response';
+    public const string TASK_DESCRIPTION_ON_EXTERNAL_REPLY = 'New message';
+    public const string TASK_DESCRIPTION_ON_INTERNAL_REPLY = 'Awaiting external response';
 
     protected $toggleConfig = [FeatureToggle::MESSAGING];
     protected $extraRepos = [
@@ -51,6 +51,7 @@ final class Create extends AbstractCommandHandler implements ToggleRequiredInter
      * @param CreateMessageCommand $command
      * @throws BadRequestException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         $message = $this->generateAndSaveMessage($command);
@@ -142,9 +143,34 @@ final class Create extends AbstractCommandHandler implements ToggleRequiredInter
     {
         $task = $this->getConversationFromCommand($command)->getTask();
         $task->setDescription($this->getTaskDescription());
-        $task->setActionDate($this->determineActionDate());
+        if ($this->shouldUpdateActionDate($command)) {
+            $task->setActionDate($this->determineActionDate());
+        } else {
+            $existingDate = $task->getActionDate(true); // Pass true to get DateTime
+            $task->setActionDate($existingDate);
+        }
         $this->getTaskRepository()->save($task);
         return $task;
+    }
+
+    private function shouldUpdateActionDate(CreateMessageCommand $command): bool
+    {
+        // Internal users always update the action date (set it 14 days out for operator response)
+        if ($this->isInternalUser()) {
+            return true;
+        }
+
+        // External users: only update the date if the last message was from an internal user
+        if ($this->isExternalUser()) {
+            $conversation = $this->getConversationFromCommand($command);
+            $lastMessage = $this->getMessageRepository()->fetchLastMessageByConversation($conversation->getId());
+            if ($lastMessage === null) {
+                return true;
+            }
+            return $lastMessage->getCreatedBy()->isInternal();
+        }
+
+        return false;
     }
 
     private function getTaskDescription(): string

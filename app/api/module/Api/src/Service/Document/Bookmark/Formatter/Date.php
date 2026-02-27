@@ -9,6 +9,7 @@ namespace Dvsa\Olcs\Api\Service\Document\Bookmark\Formatter;
  */
 class Date implements FormatterInterface
 {
+    #[\Override]
     public static function format(array $data)
     {
         return date("d/m/Y", strtotime((string) reset($data)));

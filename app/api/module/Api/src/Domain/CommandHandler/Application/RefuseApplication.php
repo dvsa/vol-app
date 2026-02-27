@@ -40,6 +40,7 @@ class RefuseApplication extends AbstractCommandHandler implements TransactionedI
 
     public $extraRepos = ['LicenceVehicle'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $application Application */

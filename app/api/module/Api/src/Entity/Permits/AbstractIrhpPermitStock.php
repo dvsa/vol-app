@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -266,7 +266,8 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -289,7 +290,8 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Get the irhp permit type
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType
+     */
     public function getIrhpPermitType()
     {
         return $this->irhpPermitType;
@@ -312,7 +314,8 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Get the application path group
      *
-     * @return \Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup     */
+     * @return \Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup
+     */
     public function getApplicationPathGroup()
     {
         return $this->applicationPathGroup;
@@ -335,7 +338,8 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Get the business process
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getBusinessProcess()
     {
         return $this->businessProcess;
@@ -358,7 +362,8 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Get the country
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country
+     */
     public function getCountry()
     {
         return $this->country;
@@ -381,7 +386,8 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Get the permit category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getPermitCategory()
     {
         return $this->permitCategory;
@@ -404,7 +410,8 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Get the status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getStatus()
     {
         return $this->status;
@@ -427,7 +434,8 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -450,7 +458,8 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -473,7 +482,8 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Get the period name key
      *
-     * @return string     */
+     * @return string
+     */
     public function getPeriodNameKey()
     {
         return $this->periodNameKey;
@@ -498,7 +508,8 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getValidFrom($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -527,7 +538,8 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getValidTo($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -554,7 +566,8 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Get the initial stock
      *
-     * @return int     */
+     * @return int
+     */
     public function getInitialStock()
     {
         return $this->initialStock;
@@ -577,7 +590,8 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Get the hidden ss
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getHiddenSs()
     {
         return $this->hiddenSs;
@@ -600,7 +614,8 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -861,6 +876,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

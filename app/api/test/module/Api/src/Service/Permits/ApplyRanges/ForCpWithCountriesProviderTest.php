@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\ApplyRanges;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -91,7 +93,7 @@ class ForCpWithCountriesProviderTest extends MockeryTestCase
         );
     }
 
-    public function testNoMatchingRanges()
+    public function testNoMatchingRanges(): void
     {
         $matchingRanges = [];
 
@@ -116,7 +118,7 @@ class ForCpWithCountriesProviderTest extends MockeryTestCase
         $this->assertEquals([], $this->result->getMessages());
     }
 
-    public function testOneMatchingRange()
+    public function testOneMatchingRange(): void
     {
         $matchingRanges = [$this->range2];
 
@@ -143,7 +145,7 @@ class ForCpWithCountriesProviderTest extends MockeryTestCase
         );
     }
 
-    public function testMultipleMatchingRanges()
+    public function testMultipleMatchingRanges(): void
     {
         $matchingRanges = [$this->range2, $this->range3];
 

@@ -24,6 +24,7 @@ final class ReprintDisc extends AbstractCommandHandler implements TransactionedI
 {
     protected $repoServiceName = 'LicenceVehicle';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $ids = [];

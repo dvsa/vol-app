@@ -30,6 +30,7 @@ class IsInternalOrSystemUser extends AbstractHandler implements AuthAwareInterfa
      *
      * @return boolean
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->isInternalUser() || $this->isSystemUser();

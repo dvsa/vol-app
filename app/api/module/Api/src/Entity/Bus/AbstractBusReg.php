@@ -46,7 +46,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -776,7 +776,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -799,7 +800,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the parent
      *
-     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg     */
+     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     */
     public function getParent()
     {
         return $this->parent;
@@ -822,7 +824,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getStatus()
     {
         return $this->status;
@@ -845,7 +848,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the revert status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getRevertStatus()
     {
         return $this->revertStatus;
@@ -868,7 +872,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -891,7 +896,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the bus notice period
      *
-     * @return \Dvsa\Olcs\Api\Entity\Bus\BusNoticePeriod     */
+     * @return \Dvsa\Olcs\Api\Entity\Bus\BusNoticePeriod
+     */
     public function getBusNoticePeriod()
     {
         return $this->busNoticePeriod;
@@ -914,7 +920,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the subsidised
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getSubsidised()
     {
         return $this->subsidised;
@@ -937,7 +944,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the withdrawn reason
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getWithdrawnReason()
     {
         return $this->withdrawnReason;
@@ -960,7 +968,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -983,7 +992,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -1008,7 +1018,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getStatusChangeDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1035,7 +1046,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the route no
      *
-     * @return int     */
+     * @return int
+     */
     public function getRouteNo()
     {
         return $this->routeNo;
@@ -1058,7 +1070,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the reg no
      *
-     * @return string     */
+     * @return string
+     */
     public function getRegNo()
     {
         return $this->regNo;
@@ -1081,7 +1094,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the service no
      *
-     * @return string     */
+     * @return string
+     */
     public function getServiceNo()
     {
         return $this->serviceNo;
@@ -1104,7 +1118,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the start point
      *
-     * @return string     */
+     * @return string
+     */
     public function getStartPoint()
     {
         return $this->startPoint;
@@ -1127,7 +1142,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the finish point
      *
-     * @return string     */
+     * @return string
+     */
     public function getFinishPoint()
     {
         return $this->finishPoint;
@@ -1150,7 +1166,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the via
      *
-     * @return string     */
+     * @return string
+     */
     public function getVia()
     {
         return $this->via;
@@ -1173,7 +1190,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the other details
      *
-     * @return string     */
+     * @return string
+     */
     public function getOtherDetails()
     {
         return $this->otherDetails;
@@ -1198,7 +1216,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getReceivedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1227,7 +1246,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEffectiveDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1256,7 +1276,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEndDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1285,7 +1306,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getApplicationCompleteDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1312,7 +1334,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the is short notice
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsShortNotice()
     {
         return $this->isShortNotice;
@@ -1335,7 +1358,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the use all stops
      *
-     * @return string     */
+     * @return string
+     */
     public function getUseAllStops()
     {
         return $this->useAllStops;
@@ -1358,7 +1382,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the has manoeuvre
      *
-     * @return string     */
+     * @return string
+     */
     public function getHasManoeuvre()
     {
         return $this->hasManoeuvre;
@@ -1381,7 +1406,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the manoeuvre detail
      *
-     * @return string     */
+     * @return string
+     */
     public function getManoeuvreDetail()
     {
         return $this->manoeuvreDetail;
@@ -1404,7 +1430,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the need new stop
      *
-     * @return string     */
+     * @return string
+     */
     public function getNeedNewStop()
     {
         return $this->needNewStop;
@@ -1427,7 +1454,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the new stop detail
      *
-     * @return string     */
+     * @return string
+     */
     public function getNewStopDetail()
     {
         return $this->newStopDetail;
@@ -1450,7 +1478,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the has not fixed stop
      *
-     * @return string     */
+     * @return string
+     */
     public function getHasNotFixedStop()
     {
         return $this->hasNotFixedStop;
@@ -1473,7 +1502,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the not fixed stop detail
      *
-     * @return string     */
+     * @return string
+     */
     public function getNotFixedStopDetail()
     {
         return $this->notFixedStopDetail;
@@ -1496,7 +1526,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the subsidy detail
      *
-     * @return string     */
+     * @return string
+     */
     public function getSubsidyDetail()
     {
         return $this->subsidyDetail;
@@ -1519,7 +1550,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the timetable acceptable
      *
-     * @return string     */
+     * @return string
+     */
     public function getTimetableAcceptable()
     {
         return $this->timetableAcceptable;
@@ -1542,7 +1574,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the map supplied
      *
-     * @return string     */
+     * @return string
+     */
     public function getMapSupplied()
     {
         return $this->mapSupplied;
@@ -1565,7 +1598,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the route description
      *
-     * @return string     */
+     * @return string
+     */
     public function getRouteDescription()
     {
         return $this->routeDescription;
@@ -1588,7 +1622,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the copied to la pte
      *
-     * @return string     */
+     * @return string
+     */
     public function getCopiedToLaPte()
     {
         return $this->copiedToLaPte;
@@ -1611,7 +1646,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the la short note
      *
-     * @return string     */
+     * @return string
+     */
     public function getLaShortNote()
     {
         return $this->laShortNote;
@@ -1634,7 +1670,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the application signed
      *
-     * @return string     */
+     * @return string
+     */
     public function getApplicationSigned()
     {
         return $this->applicationSigned;
@@ -1657,7 +1694,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the variation no
      *
-     * @return int     */
+     * @return int
+     */
     public function getVariationNo()
     {
         return $this->variationNo;
@@ -1680,7 +1718,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the op notified la pte
      *
-     * @return string     */
+     * @return string
+     */
     public function getOpNotifiedLaPte()
     {
         return $this->opNotifiedLaPte;
@@ -1703,7 +1742,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the stopping arrangements
      *
-     * @return string     */
+     * @return string
+     */
     public function getStoppingArrangements()
     {
         return $this->stoppingArrangements;
@@ -1726,7 +1766,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the trc condition checked
      *
-     * @return string     */
+     * @return string
+     */
     public function getTrcConditionChecked()
     {
         return $this->trcConditionChecked;
@@ -1749,7 +1790,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the trc notes
      *
-     * @return string     */
+     * @return string
+     */
     public function getTrcNotes()
     {
         return $this->trcNotes;
@@ -1772,7 +1814,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the organisation email
      *
-     * @return string     */
+     * @return string
+     */
     public function getOrganisationEmail()
     {
         return $this->organisationEmail;
@@ -1795,7 +1838,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the is txc app
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsTxcApp()
     {
         return $this->isTxcApp;
@@ -1818,7 +1862,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the ebsr refresh
      *
-     * @return string     */
+     * @return string
+     */
     public function getEbsrRefresh()
     {
         return $this->ebsrRefresh;
@@ -1841,7 +1886,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the txc app type
      *
-     * @return string     */
+     * @return string
+     */
     public function getTxcAppType()
     {
         return $this->txcAppType;
@@ -1864,7 +1910,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the reason cancelled
      *
-     * @return string     */
+     * @return string
+     */
     public function getReasonCancelled()
     {
         return $this->reasonCancelled;
@@ -1887,7 +1934,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the reason refused
      *
-     * @return string     */
+     * @return string
+     */
     public function getReasonRefused()
     {
         return $this->reasonRefused;
@@ -1910,7 +1958,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the reason sn refused
      *
-     * @return string     */
+     * @return string
+     */
     public function getReasonSnRefused()
     {
         return $this->reasonSnRefused;
@@ -1933,7 +1982,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the short notice refused
      *
-     * @return string     */
+     * @return string
+     */
     public function getShortNoticeRefused()
     {
         return $this->shortNoticeRefused;
@@ -1956,7 +2006,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the is quality partnership
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsQualityPartnership()
     {
         return $this->isQualityPartnership;
@@ -1979,7 +2030,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the quality partnership details
      *
-     * @return string     */
+     * @return string
+     */
     public function getQualityPartnershipDetails()
     {
         return $this->qualityPartnershipDetails;
@@ -2002,7 +2054,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the quality partnership facilities used
      *
-     * @return string     */
+     * @return string
+     */
     public function getQualityPartnershipFacilitiesUsed()
     {
         return $this->qualityPartnershipFacilitiesUsed;
@@ -2025,7 +2078,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the is quality contract
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsQualityContract()
     {
         return $this->isQualityContract;
@@ -2048,7 +2102,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the quality contract details
      *
-     * @return string     */
+     * @return string
+     */
     public function getQualityContractDetails()
     {
         return $this->qualityContractDetails;
@@ -2071,7 +2126,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -2094,7 +2150,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -2495,7 +2552,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get the short notice
      *
-     * @return \Dvsa\Olcs\Api\Entity\Bus\BusShortNotice     */
+     * @return \Dvsa\Olcs\Api\Entity\Bus\BusShortNotice
+     */
     public function getShortNotice()
     {
         return $this->shortNotice;
@@ -2882,6 +2940,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -242,6 +242,7 @@ class EbsrSubmission extends AbstractEbsrSubmission implements OrganisationProvi
      *
      * @return Organisation
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this->organisation;
@@ -252,6 +253,7 @@ class EbsrSubmission extends AbstractEbsrSubmission implements OrganisationProvi
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedBundleValues()
     {
         return [

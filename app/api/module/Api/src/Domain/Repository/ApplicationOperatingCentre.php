@@ -27,6 +27,7 @@ class ApplicationOperatingCentre extends AbstractRepository
     protected $alias = 'aoc';
     protected $locRepo;
 
+    #[\Override]
     public function initService(RepositoryServiceManager $serviceManager)
     {
         $this->locRepo = $serviceManager->get('LicenceOperatingCentre');

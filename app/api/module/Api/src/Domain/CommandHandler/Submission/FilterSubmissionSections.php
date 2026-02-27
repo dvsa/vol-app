@@ -24,6 +24,7 @@ final class FilterSubmissionSections extends AbstractCommandHandler implements S
 
     protected $repoServiceName = 'Submission';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Submission $submission */

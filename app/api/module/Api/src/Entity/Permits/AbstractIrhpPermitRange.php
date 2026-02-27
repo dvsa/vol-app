@@ -38,7 +38,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -262,7 +262,8 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -285,7 +286,8 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get the irhp permit stock
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock
+     */
     public function getIrhpPermitStock()
     {
         return $this->irhpPermitStock;
@@ -308,7 +310,8 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get the emissions category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getEmissionsCategory()
     {
         return $this->emissionsCategory;
@@ -331,7 +334,8 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get the journey
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getJourney()
     {
         return $this->journey;
@@ -354,7 +358,8 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -377,7 +382,8 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -400,7 +406,8 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get the prefix
      *
-     * @return string     */
+     * @return string
+     */
     public function getPrefix()
     {
         return $this->prefix;
@@ -423,7 +430,8 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get the from no
      *
-     * @return int     */
+     * @return int
+     */
     public function getFromNo()
     {
         return $this->fromNo;
@@ -446,7 +454,8 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get the to no
      *
-     * @return int     */
+     * @return int
+     */
     public function getToNo()
     {
         return $this->toNo;
@@ -469,7 +478,8 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get the cabotage
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getCabotage()
     {
         return $this->cabotage;
@@ -492,7 +502,8 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get the ss reserve
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getSsReserve()
     {
         return $this->ssReserve;
@@ -515,7 +526,8 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get the lost replacement
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getLostReplacement()
     {
         return $this->lostReplacement;
@@ -538,7 +550,8 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -799,6 +812,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

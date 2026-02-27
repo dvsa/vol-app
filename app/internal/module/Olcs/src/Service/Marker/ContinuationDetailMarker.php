@@ -9,6 +9,7 @@ namespace Olcs\Service\Marker;
  */
 class ContinuationDetailMarker extends AbstractMarker
 {
+    #[\Override]
     public function canRender()
     {
         $data = $this->getData();
@@ -16,6 +17,7 @@ class ContinuationDetailMarker extends AbstractMarker
         return isset($data['continuationDetail']['continuation']) && isset($data['licence']['id']);
     }
 
+    #[\Override]
     public function render()
     {
         $data = $this->getData();

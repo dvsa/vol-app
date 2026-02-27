@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * MoroccoFieldsetPopulator Test
  *
@@ -21,7 +23,7 @@ use Laminas\Form\Fieldset;
  */
 class MoroccoFieldsetPopulatorTest extends TestCase
 {
-    public function testPopulate()
+    public function testPopulate(): void
     {
         $caption = 'fields.caption';
         $value = 'fields.value';

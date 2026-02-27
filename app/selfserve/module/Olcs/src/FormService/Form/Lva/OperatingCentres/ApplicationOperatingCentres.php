@@ -20,15 +20,8 @@ class ApplicationOperatingCentres extends AbstractOperatingCentres
 {
     use ButtonsAlterations;
 
-    protected FormHelperService $formHelper;
-
-    public function __construct(
-        FormHelperService $formHelper,
-        protected AuthorizationService $authService,
-        protected $tableBuilder,
-        protected FormServiceManager $formServiceLocator
-    ) {
-        $this->formHelper = $formHelper;
+    public function __construct(protected FormHelperService $formHelper, protected AuthorizationService $authService, protected $tableBuilder, protected FormServiceManager $formServiceLocator)
+    {
     }
 
     /**
@@ -39,6 +32,7 @@ class ApplicationOperatingCentres extends AbstractOperatingCentres
      *
      * @return void
      */
+    #[\Override]
     protected function alterForm(Form $form, array $params)
     {
         $inputFilter = $form->getInputFilter();

@@ -16,6 +16,7 @@ class GetList extends AbstractQueryHandler
     protected $repoServiceName = 'PreviousConviction';
     protected $extraRepos = ['TransportManager'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var \Dvsa\Olcs\Api\Domain\Repository\PreviousConviction $repo */

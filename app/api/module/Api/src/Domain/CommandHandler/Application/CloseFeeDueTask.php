@@ -18,6 +18,7 @@ final class CloseFeeDueTask extends AbstractCommandHandler implements Transactio
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $application Application */

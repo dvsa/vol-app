@@ -41,7 +41,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractProposeToRevoke implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractProposeToRevoke implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -366,7 +366,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -389,7 +390,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -412,7 +414,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Get the presiding tc
      *
-     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc     */
+     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     */
     public function getPresidingTc()
     {
         return $this->presidingTc;
@@ -435,7 +438,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Get the assigned caseworker
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getAssignedCaseworker()
     {
         return $this->assignedCaseworker;
@@ -458,7 +462,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -481,7 +486,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -504,7 +510,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Get the approval submission presiding tc
      *
-     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc     */
+     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     */
     public function getApprovalSubmissionPresidingTc()
     {
         return $this->approvalSubmissionPresidingTc;
@@ -527,7 +534,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Get the final submission presiding tc
      *
-     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc     */
+     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     */
     public function getFinalSubmissionPresidingTc()
     {
         return $this->finalSubmissionPresidingTc;
@@ -550,7 +558,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Get the action to be taken
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getActionToBeTaken()
     {
         return $this->actionToBeTaken;
@@ -575,7 +584,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getPtrAgreedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -604,7 +614,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getClosedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -631,7 +642,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Get the comment
      *
-     * @return string     */
+     * @return string
+     */
     public function getComment()
     {
         return $this->comment;
@@ -654,7 +666,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -677,7 +690,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Get the is submission required for approval
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsSubmissionRequiredForApproval()
     {
         return $this->isSubmissionRequiredForApproval;
@@ -702,7 +716,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getApprovalSubmissionIssuedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -731,7 +746,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getApprovalSubmissionReturnedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -760,7 +776,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getIorLetterIssuedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -789,7 +806,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getOperatorResponseDueDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -818,7 +836,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getOperatorResponseReceivedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -845,7 +864,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Get the is submission required for action
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsSubmissionRequiredForAction()
     {
         return $this->isSubmissionRequiredForAction;
@@ -870,7 +890,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getFinalSubmissionIssuedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -899,7 +920,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getFinalSubmissionReturnedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -928,7 +950,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getRevocationLetterIssuedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -957,7 +980,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getNfaLetterIssuedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -986,7 +1010,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getWarningLetterIssuedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1015,7 +1040,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getPiAgreedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1044,7 +1070,8 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getOtherActionAgreedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -1183,6 +1210,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

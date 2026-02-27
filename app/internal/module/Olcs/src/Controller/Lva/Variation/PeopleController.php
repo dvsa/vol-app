@@ -36,8 +36,6 @@ class PeopleController extends Lva\AbstractPeopleController implements Variation
     protected $lva = 'variation';
     protected string $location = 'internal';
 
-    protected StringHelperService $stringHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -59,13 +57,11 @@ class PeopleController extends Lva\AbstractPeopleController implements Variation
         ScriptFactory $scriptFactory,
         VariationLvaService $variationLvaService,
         GuidanceHelperService $guidanceHelper,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         VariationPeopleAdapter $lvaAdapter,
         FlashMessengerHelperService $flashMessengerHelper,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

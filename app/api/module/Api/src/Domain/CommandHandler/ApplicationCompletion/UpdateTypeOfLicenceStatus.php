@@ -23,6 +23,7 @@ final class UpdateTypeOfLicenceStatus extends AbstractUpdateStatus
 
     protected $section = 'TypeOfLicence';
 
+    #[\Override]
     protected function isSectionValid(Application $application)
     {
         if (!in_array($application->getNiFlag(), ['Y', 'N'])) {

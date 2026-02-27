@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\LicenceHolderName;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\LicenceHolderName;
  */
 class LicenceHolderNameTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new LicenceHolderName();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -19,7 +21,7 @@ class LicenceHolderNameTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $bookmark = new LicenceHolderName();
         $bookmark->setData(
@@ -36,7 +38,7 @@ class LicenceHolderNameTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testRenderWithTradingNames()
+    public function testRenderWithTradingNames(): void
     {
         $bookmark = new LicenceHolderName();
         $bookmark->setData(
@@ -63,7 +65,7 @@ class LicenceHolderNameTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testRenderWithTradingNamesTruncated()
+    public function testRenderWithTradingNamesTruncated(): void
     {
         $bookmark = new LicenceHolderName();
         $bookmark->setData(

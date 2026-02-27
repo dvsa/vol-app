@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpPermitSector;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -24,7 +26,7 @@ class GetListTest extends QueryHandlerTestCase
     }
 
     // Test Handle Command
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $query = ListQuery::create([ 'irhpPermitStock' => '1']);
 

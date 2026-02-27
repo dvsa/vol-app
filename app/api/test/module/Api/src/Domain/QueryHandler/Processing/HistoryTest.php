@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * History Test
  *
@@ -34,7 +36,7 @@ class HistoryTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $data = [
             'transportManager' => 1
@@ -73,7 +75,7 @@ class HistoryTest extends QueryHandlerTestCase
     /**
      * Test that the organisation gets added when querying an application
      */
-    public function testHandleQueryApplication()
+    public function testHandleQueryApplication(): void
     {
         $data = [
             'application' => 32
@@ -112,7 +114,7 @@ class HistoryTest extends QueryHandlerTestCase
     /**
      * Test that the organisation gets added when querying a licence
      */
-    public function testHandleQueryLicence()
+    public function testHandleQueryLicence(): void
     {
         $data = [
             'licence' => 32
@@ -148,7 +150,7 @@ class HistoryTest extends QueryHandlerTestCase
     /**
      * Test that the organisation gets added when querying a case attached to licence
      */
-    public function testHandleQueryCaseLicence()
+    public function testHandleQueryCaseLicence(): void
     {
         $data = [
             'case' => 32
@@ -187,7 +189,7 @@ class HistoryTest extends QueryHandlerTestCase
     /**
      * Test that the organisation gets added when querying a case attached to transport manager
      */
-    public function testHandleQueryCaseTransportManager()
+    public function testHandleQueryCaseTransportManager(): void
     {
         $data = [
             'case' => 32

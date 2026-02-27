@@ -23,6 +23,7 @@ class Schedule41Reset extends AbstractCommandHandler
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $application ApplicationEntity */

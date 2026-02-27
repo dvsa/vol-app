@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractRecipient implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractRecipient implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -203,7 +203,8 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -226,7 +227,8 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -249,7 +251,8 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -272,7 +275,8 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
     /**
      * Get the send app decision
      *
-     * @return string     */
+     * @return string
+     */
     public function getSendAppDecision()
     {
         return $this->sendAppDecision;
@@ -295,7 +299,8 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
     /**
      * Get the send notices procs
      *
-     * @return string     */
+     * @return string
+     */
     public function getSendNoticesProcs()
     {
         return $this->sendNoticesProcs;
@@ -318,7 +323,8 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
     /**
      * Get the is police
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsPolice()
     {
         return $this->isPolice;
@@ -341,7 +347,8 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
     /**
      * Get the is objector
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsObjector()
     {
         return $this->isObjector;
@@ -364,7 +371,8 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
     /**
      * Get the contact name
      *
-     * @return string     */
+     * @return string
+     */
     public function getContactName()
     {
         return $this->contactName;
@@ -387,7 +395,8 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
     /**
      * Get the email address
      *
-     * @return string     */
+     * @return string
+     */
     public function getEmailAddress()
     {
         return $this->emailAddress;
@@ -410,7 +419,8 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -433,7 +443,8 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -505,6 +516,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -20,6 +20,7 @@ class LetterType extends AbstractRepository
      * @param int $hydrateMode Hydration mode
      * @return array
      */
+    #[\Override]
     public function fetchList(QueryInterface $query, $hydrateMode = Query::HYDRATE_OBJECT)
     {
         $qb = $this->createQueryBuilder();
@@ -47,6 +48,7 @@ class LetterType extends AbstractRepository
      * @param \Dvsa\Olcs\Transfer\Query\QueryInterface $query Query
      * @return void
      */
+    #[\Override]
     protected function applyListFilters($qb, QueryInterface $query)
     {
         parent::applyListFilters($qb, $query);

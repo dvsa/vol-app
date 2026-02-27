@@ -20,6 +20,7 @@ final class SlaExceptionList extends AbstractQueryHandler
      * @param QueryInterface $query Query
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query): array
     {
         /** @var \Dvsa\Olcs\Api\Domain\Repository\SlaException $repo */

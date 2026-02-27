@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cpms\Client;
 
 use Dvsa\Olcs\Cpms\Client\HttpClient;
@@ -39,10 +41,8 @@ class HttpClientTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function testGet()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function testGet(): void
     {
         $queryData = [
             'required_fields' => [
@@ -72,7 +72,7 @@ class HttpClientTest extends TestCase
         $this->assertEquals(['application/json'], $this->getLastRequest()->getHeader('Accept'));
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $requestBody = ['postRequestBodyKeyExample' => 'postRequestBodyValueExample’'];
         $encodedResponseBody = json_encode(['examplePostReponseKey' => 'examplePostResponseValue']);
@@ -93,7 +93,7 @@ class HttpClientTest extends TestCase
         $this->assertEquals($this->getLastRequest()->getBody()->getContents(), '{"postRequestBodyKeyExample":"postRequestBodyValueExample"}');
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $requestBody = ['putRequestBodyKeyExample' => 'putRequestBodyValueExample’'];
         $encodedResponseBody = json_encode(['examplePutReponseKey' => 'examplePutResponseValue']);
@@ -114,7 +114,7 @@ class HttpClientTest extends TestCase
         $this->assertEquals($this->getLastRequest()->getBody()->getContents(), '{"putRequestBodyKeyExample":"putRequestBodyValueExample"}');
     }
 
-    public function testResetHeaders()
+    public function testResetHeaders(): void
     {
         $this->setUp();
         $clientOptions = $this->sut->getClientOptions();
@@ -125,10 +125,8 @@ class HttpClientTest extends TestCase
         $this->assertEquals([], $clientOptions->getHeaders());
     }
 
-    /**
-     * @dataProvider dpTestLogResponseOnSuccess
-     */
-    public function testLogResponseOnSuccess($statusCode)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestLogResponseOnSuccess')]
+    public function testLogResponseOnSuccess(mixed $statusCode): void
     {
         $requestBody = ['postRequestBodyKeyExample' => 'postRequestBodyValueExample'];
         $encodedResponseBody = json_encode(['access_token' => 'someAccessToken']);
@@ -147,7 +145,7 @@ class HttpClientTest extends TestCase
         $this->assertEquals($expectedDebugLogMessage, $this->logger->getHandlers()[0]->getRecords()[1]['message']);
     }
 
-    public function dpTestLogResponseOnSuccess()
+    public static function dpTestLogResponseOnSuccess(): array
     {
         return [
             [
@@ -159,14 +157,14 @@ class HttpClientTest extends TestCase
         ];
     }
 
-    public function testEmptyIfNoResponseBody()
+    public function testEmptyIfNoResponseBody(): void
     {
         $this->appendToHandler();
         $actual = $this->sut->get('/endpoint', []);
         $this->assertEmpty($actual);
     }
 
-    public function testBadlyFormedJsonResponseReturnsAsString()
+    public function testBadlyFormedJsonResponseReturnsAsString(): void
     {
         $badJson = "{'test':'";
         //testing bad json error
@@ -178,10 +176,8 @@ class HttpClientTest extends TestCase
         $this->assertEquals($badJson, $actual);
     }
 
-    /**
-     * @dataProvider dpTestLogResponseOnFailure
-     */
-    public function testLogResponseOnFailure($dpData)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestLogResponseOnFailure')]
+    public function testLogResponseOnFailure(mixed $dpData): void
     {
         $statusCode = $dpData['statusCode'];
         $encodedResponseBody = $dpData['responseBody'];
@@ -218,7 +214,7 @@ class HttpClientTest extends TestCase
         $this->assertEquals($dpData['expectedResponse'], $result);
     }
 
-    public function dpTestLogResponseOnFailure()
+    public static function dpTestLogResponseOnFailure(): array
     {
         return [
             'client_error' => [

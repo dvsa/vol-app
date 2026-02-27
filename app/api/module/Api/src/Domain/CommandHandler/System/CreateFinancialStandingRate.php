@@ -28,6 +28,7 @@ final class CreateFinancialStandingRate extends AbstractCommandHandler
 
     protected $repoServiceName = 'FinancialStandingRate';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->checkInputRules($command);

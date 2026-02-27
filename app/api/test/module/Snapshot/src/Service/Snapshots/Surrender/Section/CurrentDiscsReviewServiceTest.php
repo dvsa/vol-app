@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\Surrender\Section;
 
 use Dvsa\Olcs\Api\Entity\Surrender;
@@ -33,17 +35,16 @@ class CurrentDiscsReviewServiceTest extends MockeryTestCase
      * @param $discsStolen
      * @param $discsStolenInfo
      * @param $expected
-     *
-     * @dataProvider dpTestGetConfigFromData
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetConfigFromData')]
     public function testGetConfigFromData(
-        $destroyedDiscs,
-        $discsLost,
-        $discsLostInfo,
-        $discsStolen,
-        $discsStolenInfo,
-        $expected
-    ) {
+        mixed $destroyedDiscs,
+        mixed $discsLost,
+        mixed $discsLostInfo,
+        mixed $discsStolen,
+        mixed $discsStolenInfo,
+        mixed $expected
+    ): void {
         $mockEntity = m::mock(Surrender::class);
 
         $mockEntity->shouldReceive('getDiscDestroyed')->andReturn($destroyedDiscs);
@@ -55,7 +56,7 @@ class CurrentDiscsReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($mockEntity));
     }
 
-    public function dpTestGetConfigFromData()
+    public static function dpTestGetConfigFromData(): array
     {
         return [
             [
@@ -64,7 +65,7 @@ class CurrentDiscsReviewServiceTest extends MockeryTestCase
                 'discsLostInfo' => null,
                 'discsStolen' => 12,
                 'discsStolenInfo' => 'discs were stolen',
-                'expectedResult' => [
+                'expected' => [
                     'multiItems' => [
                         [
                             [
@@ -93,7 +94,7 @@ class CurrentDiscsReviewServiceTest extends MockeryTestCase
                 'discsLostInfo' => '15 discs were lost',
                 'discsStolen' => null,
                 'discsStolenInfo' => null,
-                'expectedResult' => [
+                'expected' => [
                     'multiItems' => [
                         [
                             [
@@ -122,7 +123,7 @@ class CurrentDiscsReviewServiceTest extends MockeryTestCase
                 'discsLostInfo' => 'lost them',
                 'discsStolen' => 2,
                 'discsStolenInfo' => 'stolen',
-                'expectedResult' => [
+                'expected' => [
                     'multiItems' => [
                         [
                             [

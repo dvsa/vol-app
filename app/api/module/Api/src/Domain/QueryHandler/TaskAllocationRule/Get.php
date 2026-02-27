@@ -21,6 +21,7 @@ class Get extends AbstractQueryHandler
      * @param Qry $query
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query): Result
     {
         $repo = $this->getRepo(Repository\TaskAllocationRule::class);

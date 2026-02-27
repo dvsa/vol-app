@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Bus;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -25,7 +27,7 @@ class SearchViewListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $licId  = 99;
         $status = 'some_status';

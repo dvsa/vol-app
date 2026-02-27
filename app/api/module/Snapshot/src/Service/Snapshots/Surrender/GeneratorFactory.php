@@ -14,6 +14,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class GeneratorFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         return new Generator(

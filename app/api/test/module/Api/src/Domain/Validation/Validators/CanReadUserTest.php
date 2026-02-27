@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Validators;
 
 use Dvsa\Olcs\Api\Domain\Validation\Validators\CanReadUser as Sut;
@@ -24,10 +26,8 @@ class CanReadUserTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValid($canReadUser, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $canReadUser, mixed $expected): void
     {
         $this->setIsGranted(Permission::INTERNAL_USER, false);
 
@@ -43,7 +43,7 @@ class CanReadUserTest extends AbstractValidatorsTestCase
         $this->assertEquals($expected, $this->sut->isValid(111));
     }
 
-    public function testIsValidCanManageUser()
+    public function testIsValidCanManageUser(): void
     {
         $this->setIsGranted(Permission::INTERNAL_USER, false);
 
@@ -52,14 +52,14 @@ class CanReadUserTest extends AbstractValidatorsTestCase
         $this->assertEquals(true, $this->sut->isValid(111));
     }
 
-    public function testIsValidInternal()
+    public function testIsValidInternal(): void
     {
         $this->setIsGranted(Permission::INTERNAL_USER, true);
 
         $this->assertEquals(true, $this->sut->isValid(111));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [true, true],

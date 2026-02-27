@@ -33,6 +33,7 @@ class Category extends AbstractListDataService
      * @return array
      * @throw DataServiceException
      */
+    #[\Override]
     public function fetchListData($context = null)
     {
         $data = (array)$this->getData('categories');

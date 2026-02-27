@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Command\Licence;
 
 use Dvsa\Olcs\Api\Domain\Command\Licence\EnqueueContinuationNotSought;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Domain\Command\Licence\EnqueueContinuationNotSought;
  */
 class EnqueueContinuationNotSoughtTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = EnqueueContinuationNotSought::create(['licences' => 'foo', 'date' => 'bar']);
 

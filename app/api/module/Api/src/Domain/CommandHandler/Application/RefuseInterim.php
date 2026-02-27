@@ -26,6 +26,7 @@ final class RefuseInterim extends AbstractCommandHandler implements Transactione
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var ApplicationEntity $application */

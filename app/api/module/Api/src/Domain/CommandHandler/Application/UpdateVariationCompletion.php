@@ -143,6 +143,7 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
      * @return Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $section = $command->getSection();
@@ -1091,6 +1092,7 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
 
         return $totAuthVehicles < $totDiscs;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

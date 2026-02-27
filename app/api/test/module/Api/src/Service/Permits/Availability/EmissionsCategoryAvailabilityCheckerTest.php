@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Availability;
 
 use Dvsa\Olcs\Api\Entity\System\RefData;
@@ -15,10 +17,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class EmissionsCategoryAvailabilityCheckerTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestHasAvailability
-     */
-    public function testHasAvailability($irhpPermitStockId, $emissionsCategoryId, $availableCount, $expectedReturn)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHasAvailability')]
+    public function testHasAvailability(mixed $irhpPermitStockId, mixed $emissionsCategoryId, mixed $availableCount, mixed $expectedReturn): void
     {
         $emissionsCategoryAvailabilityCounter = m::mock(EmissionsCategoryAvailabilityCounter::class);
         $emissionsCategoryAvailabilityCounter->shouldReceive('getCount')
@@ -35,7 +35,7 @@ class EmissionsCategoryAvailabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    public function dpTestHasAvailability()
+    public static function dpTestHasAvailability(): array
     {
         return [
             [1, RefData::EMISSIONS_CATEGORY_EURO5_REF, 0, false],

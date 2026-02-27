@@ -18,6 +18,7 @@ class IsInternalAdmin extends AbstractHandler implements AuthAwareInterface
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return ($this->isGranted(\Dvsa\Olcs\Api\Entity\User\Permission::INTERNAL_ADMIN));

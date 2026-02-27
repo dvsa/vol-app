@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Fee;
 
 use Doctrine\ORM\Query as DoctrineQuery;
@@ -43,7 +45,7 @@ class FeeTypeListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testTrafficAreaApplication()
+    public function testTrafficAreaApplication(): void
     {
         $query = Qry::create([]);
 
@@ -87,7 +89,7 @@ class FeeTypeListTest extends QueryHandlerTestCase
         static::assertEquals($expected, $result);
     }
 
-    public function testIrfo()
+    public function testIrfo(): void
     {
         $query = Qry::create(['organisation' => self::ORG_ID, 'currentFeeType' => 123]);
 
@@ -176,10 +178,8 @@ class FeeTypeListTest extends QueryHandlerTestCase
         static::assertEquals($expected, $result);
     }
 
-    /**
-     * @dataProvider dataProviderTestFilter
-     */
-    public function testFilter(array $fees, $mockTrafficArea, $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestFilter')]
+    public function testFilter(array $fees, mixed $mockTrafficArea, mixed $expect): void
     {
         $query = Qry::create([]);
 
@@ -226,7 +226,7 @@ class FeeTypeListTest extends QueryHandlerTestCase
         static::assertEquals($expected, $result);
     }
 
-    public function dataProviderTestFilter()
+    public static function dataProviderTestFilter(): array
     {
         $mockTrafficAreaA = m::mock(TrafficArea::class);
 
@@ -256,7 +256,7 @@ class FeeTypeListTest extends QueryHandlerTestCase
                         'effectiveFrom' => '2015-01-01',
                     ],
                 ],
-                'trafficArea' => null,
+                'mockTrafficArea' => null,
                 'expect' => [
                     'result' => [
                         ['id' => 24],
@@ -293,7 +293,7 @@ class FeeTypeListTest extends QueryHandlerTestCase
                         'effectiveFrom' => '2015-01-01',
                     ],
                 ],
-                'trafficArea' => $mockTrafficAreaA,
+                'mockTrafficArea' => $mockTrafficAreaA,
                 'expect' => [
                     'result' => [
                         ['id' => 25],
@@ -330,7 +330,7 @@ class FeeTypeListTest extends QueryHandlerTestCase
                         'effectiveFrom' => '2015-01-01',
                     ],
                 ],
-                'trafficArea' => $mockTrafficAreaA,
+                'mockTrafficArea' => $mockTrafficAreaA,
                 'expect' => [
                     'result' => [
                         ['id' => 25],
@@ -346,12 +346,12 @@ class FeeTypeListTest extends QueryHandlerTestCase
     }
 
     private function getMockFeeType(
-        $id,
-        $effectiveFrom,
-        $trafficArea = null,
-        $irfoFeeRefId = null,
-        $feeRefId = null
-    ) {
+        mixed $id,
+        mixed $effectiveFrom,
+        mixed $trafficArea = null,
+        mixed $irfoFeeRefId = null,
+        mixed $feeRefId = null
+    ): m\MockInterface {
         $irfoFeeTypeRefData = null;
         if ($irfoFeeRefId) {
             $irfoFeeTypeRefData = m::mock(RefData::class)

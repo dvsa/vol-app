@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\MappedSuperclass
  * @ORM\Table(name="legacy_case_action")
  */
-abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -72,7 +72,8 @@ abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, 
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -95,7 +96,8 @@ abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, 
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -118,7 +120,8 @@ abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, 
     /**
      * Get the is driver
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsDriver()
     {
         return $this->isDriver;
@@ -127,6 +130,7 @@ abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, 
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

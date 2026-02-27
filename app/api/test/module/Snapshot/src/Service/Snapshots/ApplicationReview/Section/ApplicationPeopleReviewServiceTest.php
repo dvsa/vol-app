@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Application People Review Service Test
  *
@@ -47,7 +49,7 @@ class ApplicationPeopleReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         // Shows because we are Adding
         $person1 = [

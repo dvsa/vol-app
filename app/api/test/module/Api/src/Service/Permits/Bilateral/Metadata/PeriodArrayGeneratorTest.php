@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Metadata;
 
 use DateTime;
@@ -19,10 +21,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class PeriodArrayGeneratorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpGenerate
-     */
-    public function testGenerate($irhpPermitApplication)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
+    public function testGenerate(mixed $irhpPermitApplication): void
     {
         $behaviour = 'behaviour';
 
@@ -88,7 +88,7 @@ class PeriodArrayGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate(): array
     {
         return [
             [m::mock(IrhpPermitApplication::class)],

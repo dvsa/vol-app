@@ -24,8 +24,6 @@ class ConfirmationController extends AbstractController
     protected $markup = self::OPERATOR_MARKUP;
 
     protected $signature;
-    protected AnnotationBuilder $transferAnnotationBuilder;
-    protected CommandService $commandService;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -38,12 +36,9 @@ class ConfirmationController extends AbstractController
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         protected TranslationHelperService $translationHelper,
-        AnnotationBuilder $transferAnnotationBuilder,
-        CommandService $commandService
+        protected AnnotationBuilder $transferAnnotationBuilder,
+        protected CommandService $commandService
     ) {
-        $this->transferAnnotationBuilder = $transferAnnotationBuilder;
-        $this->commandService = $commandService;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
@@ -52,6 +47,7 @@ class ConfirmationController extends AbstractController
      *
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $translationHelper = $this->translationHelper;

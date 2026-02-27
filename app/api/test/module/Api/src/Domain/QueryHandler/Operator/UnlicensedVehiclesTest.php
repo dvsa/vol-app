@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Unlicensed Operator Vehicles Test
  *
@@ -36,7 +38,7 @@ class UnlicensedVehiclesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $organisationId = 69;
         $licenceId = 7;

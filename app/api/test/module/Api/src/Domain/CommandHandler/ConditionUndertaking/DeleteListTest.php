@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\ConditionUndertaking;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler;
@@ -10,8 +12,8 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 
 /**
  * @author Mat Evans <mat.evans@valtech.co.uk>
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\ConditionUndertaking\DeleteList
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\ConditionUndertaking\DeleteList::class)]
 class DeleteListTest extends AbstractCommandHandlerTestCase
 {
     public const CU_ID = 8001;
@@ -29,7 +31,7 @@ class DeleteListTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'ids' => [self::CU_ID, self::CU2_ID],

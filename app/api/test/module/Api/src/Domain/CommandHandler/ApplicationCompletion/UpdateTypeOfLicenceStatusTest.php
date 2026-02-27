@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Type Of Licence Status Test
  *
@@ -21,6 +23,7 @@ use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion as ApplicationComplet
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class UpdateTypeOfLicenceStatusTest extends AbstractUpdateStatusTestCase
 {
     protected $section = 'TypeOfLicence';
@@ -33,7 +36,8 @@ class UpdateTypeOfLicenceStatusTest extends AbstractUpdateStatusTestCase
         parent::setUp();
     }
 
-    public function initReferences()
+    #[\Override]
+    public function initReferences(): void
     {
         $this->refData = [
             Licence::LICENCE_TYPE_STANDARD_NATIONAL,
@@ -47,21 +51,21 @@ class UpdateTypeOfLicenceStatusTest extends AbstractUpdateStatusTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithChange()
+    public function testHandleCommandWithChange(): void
     {
         $this->applicationCompletion->setTypeOfLicenceStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutChange()
+    public function testHandleCommandWithoutChange(): void
     {
         $this->applicationCompletion->setTypeOfLicenceStatus(ApplicationCompletionEntity::STATUS_INCOMPLETE);
 
         $this->expectStatusUnchanged(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutGoodsOrPsv()
+    public function testHandleCommandWithoutGoodsOrPsv(): void
     {
         $this->applicationCompletion->setTypeOfLicenceStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -70,7 +74,7 @@ class UpdateTypeOfLicenceStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutLicenceType()
+    public function testHandleCommandWithoutLicenceType(): void
     {
         $this->applicationCompletion->setTypeOfLicenceStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -79,7 +83,7 @@ class UpdateTypeOfLicenceStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithInvalidCombo()
+    public function testHandleCommandWithInvalidCombo(): void
     {
         $this->applicationCompletion->setTypeOfLicenceStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -90,7 +94,7 @@ class UpdateTypeOfLicenceStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->applicationCompletion->setTypeOfLicenceStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 

@@ -21,6 +21,7 @@ final class Create extends AbstractCommandHandler
      * @param CommandInterface|CreateCommand $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         $presidingTc = Entity::create(

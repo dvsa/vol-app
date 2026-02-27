@@ -36,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLetterSection implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLetterSection implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -139,7 +139,8 @@ abstract class AbstractLetterSection implements BundleSerializableInterface, Jso
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -162,7 +163,8 @@ abstract class AbstractLetterSection implements BundleSerializableInterface, Jso
     /**
      * Get the current version
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion     */
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion
+     */
     public function getCurrentVersion()
     {
         return $this->currentVersion;
@@ -185,7 +187,8 @@ abstract class AbstractLetterSection implements BundleSerializableInterface, Jso
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -208,7 +211,8 @@ abstract class AbstractLetterSection implements BundleSerializableInterface, Jso
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -231,7 +235,8 @@ abstract class AbstractLetterSection implements BundleSerializableInterface, Jso
     /**
      * Get the section key
      *
-     * @return string     */
+     * @return string
+     */
     public function getSectionKey()
     {
         return $this->sectionKey;
@@ -254,7 +259,8 @@ abstract class AbstractLetterSection implements BundleSerializableInterface, Jso
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -263,6 +269,7 @@ abstract class AbstractLetterSection implements BundleSerializableInterface, Jso
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

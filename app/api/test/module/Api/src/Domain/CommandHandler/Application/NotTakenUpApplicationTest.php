@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * NotTakenUpApplicationTest.php
  *
@@ -48,7 +50,8 @@ class NotTakenUpApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'apsts_ntu',
@@ -57,7 +60,7 @@ class NotTakenUpApplicationTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Command::create(['id' => 532]);
 
@@ -178,7 +181,7 @@ class NotTakenUpApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Snapshot created', 'Application 1 set to not taken up.'], $result->getMessages());
     }
 
-    public function testHandleCommandCloseTasks()
+    public function testHandleCommandCloseTasks(): void
     {
         $command = Command::create(['id' => 532]);
 

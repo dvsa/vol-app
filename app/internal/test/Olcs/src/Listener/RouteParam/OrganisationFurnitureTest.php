@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
+use Laminas\EventManager\EventManagerInterface;
 use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
-use Mockery\Adapter\Phpunit\MockeryTestCase as MockeryTestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Event\RouteParam;
 use Mockery as m;
 use Olcs\Listener\RouteParam\OrganisationFurniture;
@@ -25,7 +28,7 @@ class OrganisationFurnitureTest extends MockeryTestCase
         $this->sut = new OrganisationFurniture();
     }
 
-    public function setupOrganisation($orgData)
+    public function setupOrganisation(mixed $orgData): void
     {
         $mockQuerySender = m::mock(QuerySender::class);
         $this->sut->setQuerySender($mockQuerySender);
@@ -36,16 +39,23 @@ class OrganisationFurnitureTest extends MockeryTestCase
         $mockResponse->shouldReceive('getResult')->with()->once()->andReturn($orgData);
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
-        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
-        $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'organisation', [$this->sut, 'onOrganisation'], 1);
+        $mockEventManager = m::mock(EventManagerInterface::class);
+        $mockEventManager->expects('attach')
+            ->with(
+                RouteParams::EVENT_PARAM . 'organisation',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onOrganisation';
+                }),
+                1
+            );
 
         $this->sut->attach($mockEventManager);
     }
 
-    public function testOnOrganisationNotFound()
+    public function testOnOrganisationNotFound(): void
     {
         $id = 1;
 
@@ -66,7 +76,7 @@ class OrganisationFurnitureTest extends MockeryTestCase
         $this->sut->onOrganisation($event);
     }
 
-    public function testOnOrganisationLicensed()
+    public function testOnOrganisationLicensed(): void
     {
         $id = 1;
         $isMlh = true;
@@ -137,7 +147,7 @@ class OrganisationFurnitureTest extends MockeryTestCase
         $this->sut->onOrganisation($event);
     }
 
-    public function testOnOrganisationUnlicensed()
+    public function testOnOrganisationUnlicensed(): void
     {
         $id = 1;
         $isMlh = true;
@@ -219,7 +229,7 @@ class OrganisationFurnitureTest extends MockeryTestCase
         $this->sut->onOrganisation($event);
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
         $mockQuerySender = m::mock(QuerySender::class);

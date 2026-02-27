@@ -25,6 +25,7 @@ final class CreateTranslateToWelshTask extends AbstractCommandHandler implements
 {
     use AuthAwareTrait;
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $data = [

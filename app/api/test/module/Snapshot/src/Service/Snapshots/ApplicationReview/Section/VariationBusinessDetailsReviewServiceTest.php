@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Variation Business Details Review Service Test
  *
@@ -38,7 +40,7 @@ class VariationBusinessDetailsReviewServiceTest extends MockeryTestCase
         $this->sut = new VariationBusinessDetailsReviewService($abstractReviewServiceServices);
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         $data = [];
 

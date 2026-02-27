@@ -11,16 +11,14 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManager
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManager::class)]
 class SectionRendererPluginManagerTest extends MockeryTestCase
 {
     private SectionRendererPluginManager $sut;
 
     public function setUp(): void
     {
-        $this->sut = new SectionRendererPluginManager($this->createMock(ContainerInterface::class));
+        $this->sut = new SectionRendererPluginManager($this->createStub(ContainerInterface::class));
     }
 
     public function testValidate(): void

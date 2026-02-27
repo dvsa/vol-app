@@ -26,6 +26,7 @@ final class CreateGracePeriod extends AbstractCommandHandler
 
     protected $licenceRepo = null;
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $licence = $this->getRepo()

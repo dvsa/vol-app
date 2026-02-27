@@ -20,6 +20,7 @@ class BusinessDetails extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Organisation';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $organisation = $this->getRepo()->fetchBusinessDetailsUsingId($query);

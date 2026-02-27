@@ -26,8 +26,6 @@ abstract class AbstractDeclarationController extends AbstractController
     use TransportManagerApplicationTrait;
 
     protected $declarationMarkup;
-    protected AnnotationBuilder $transferAnnotationBuilder;
-    protected CommandService $commandService;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -44,12 +42,9 @@ abstract class AbstractDeclarationController extends AbstractController
         protected TranslationHelperService $translationHelper,
         protected FormHelperService $formHelper,
         protected ScriptFactory $scriptFactory,
-        AnnotationBuilder $transferAnnotationBuilder,
-        CommandService $commandService
+        protected AnnotationBuilder $transferAnnotationBuilder,
+        protected CommandService $commandService
     ) {
-        $this->transferAnnotationBuilder = $transferAnnotationBuilder;
-        $this->commandService = $commandService;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
@@ -58,6 +53,7 @@ abstract class AbstractDeclarationController extends AbstractController
      *
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction(): LaminasViewModel
     {
         if ($this->getRequest()->isPost()) {

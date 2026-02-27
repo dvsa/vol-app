@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer\Cpms;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -11,10 +13,8 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\Cpms\ReportDownload
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\Cpms\ReportDownload::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer::class)]
 class ReportDownloadTest extends AbstractConsumerTestCase
 {
     /** @var ReportDownload */
@@ -23,7 +23,8 @@ class ReportDownloadTest extends AbstractConsumerTestCase
     /** @var m\MockInterface */
     protected $qhm;
 
-    protected function instantiate()
+    #[\Override]
+    protected function instantiate(): void
     {
         $this->qhm = m::mock(QueryHandlerManager::class);
 
@@ -33,7 +34,7 @@ class ReportDownloadTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testProcessMessageSuccess()
+    public function testProcessMessageSuccess(): void
     {
         $user = new User('pid', 'type');
         $user->setId(1);
@@ -95,7 +96,7 @@ class ReportDownloadTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testProcessMessageMaxAttemptsExceeded()
+    public function testProcessMessageMaxAttemptsExceeded(): void
     {
         $user = new User('pid', 'type');
         $user->setId(1);
@@ -123,7 +124,7 @@ class ReportDownloadTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testProcessMessageReportNotReady()
+    public function testProcessMessageReportNotReady(): void
     {
         $user = new User('pid', 'type');
         $user->setId(1);
@@ -157,7 +158,7 @@ class ReportDownloadTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testProcessMessageFailureFromStatusCheck()
+    public function testProcessMessageFailureFromStatusCheck(): void
     {
         $user = new User('pid', 'type');
         $user->setId(1);
@@ -192,7 +193,7 @@ class ReportDownloadTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testProcessMessageFailureFromDownload()
+    public function testProcessMessageFailureFromDownload(): void
     {
         $user = new User('pid', 'type');
         $user->setId(1);
@@ -249,7 +250,7 @@ class ReportDownloadTest extends AbstractConsumerTestCase
      * @param array $expectedDtoData
      * @param array $result to be returned by $response->getResult()
      */
-    protected function expectQuery($class, $expectedDtoData, $result)
+    protected function expectQuery(mixed $class, mixed $expectedDtoData, mixed $result): void
     {
         $this->qhm
             ->shouldReceive('handleQuery')
@@ -274,7 +275,7 @@ class ReportDownloadTest extends AbstractConsumerTestCase
      * @param array $expectedDtoData
      * @param string|\Exception $exception
      */
-    protected function expectQueryException($class, $expectedDtoData, $exception, $exceptionMsg = '')
+    protected function expectQueryException(mixed $class, mixed $expectedDtoData, mixed $exception, string $exceptionMsg = ''): void
     {
         if (is_string($exception)) {
             $exception = new $exception($exceptionMsg);

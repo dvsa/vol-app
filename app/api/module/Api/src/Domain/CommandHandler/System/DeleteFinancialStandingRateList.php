@@ -16,6 +16,7 @@ final class DeleteFinancialStandingRateList extends AbstractCommandHandler imple
 {
     protected $repoServiceName = 'FinancialStandingRate';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

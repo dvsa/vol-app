@@ -29,7 +29,6 @@ class ReviveApplicationController extends AbstractReviveApplicationController
 
     protected $lva = 'variation';
     protected string $location = 'internal';
-    protected StringHelperService $stringHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -47,12 +46,10 @@ class ReviveApplicationController extends AbstractReviveApplicationController
         FlashMessengerHelperService $flashMessengerHelper,
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         protected FormServiceManager $formServiceManager,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

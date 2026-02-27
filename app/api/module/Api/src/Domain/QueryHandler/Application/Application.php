@@ -17,7 +17,7 @@ use Psr\Container\NotFoundExceptionInterface;
  */
 class Application extends AbstractQueryHandler
 {
-    private const OPERATING_CENTRES_SECTION = 'operatingCentres';
+    private const string OPERATING_CENTRES_SECTION = 'operatingCentres';
 
     protected $repoServiceName = 'Application';
     protected $extraRepos = ['Note', 'SystemParameter'];
@@ -32,6 +32,7 @@ class Application extends AbstractQueryHandler
      */
     private $feesHelper;
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $application ApplicationEntity */
@@ -94,6 +95,7 @@ class Application extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

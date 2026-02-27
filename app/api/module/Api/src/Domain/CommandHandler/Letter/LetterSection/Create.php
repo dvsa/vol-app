@@ -15,10 +15,11 @@ final class Create extends AbstractCommandHandler
 {
     protected $repoServiceName = 'LetterSection';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var Cmd $command */
-        
+
         $letterSection = new LetterSectionEntity();
 
         // Set all properties - versioning will be handled by repository
@@ -41,7 +42,7 @@ final class Create extends AbstractCommandHandler
 
         $this->result->addId('letterSection', $letterSection->getId());
         $this->result->addMessage("Letter section '{$letterSection->getName()}' created");
-        
+
         return $this->result;
     }
 }

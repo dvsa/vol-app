@@ -39,7 +39,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractVehicle implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractVehicle implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -224,7 +224,8 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -247,7 +248,8 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -270,7 +272,8 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -293,7 +296,8 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get the vrm
      *
-     * @return string     */
+     * @return string
+     */
     public function getVrm()
     {
         return $this->vrm;
@@ -316,7 +320,8 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get the plated weight
      *
-     * @return int     */
+     * @return int
+     */
     public function getPlatedWeight()
     {
         return $this->platedWeight;
@@ -339,7 +344,8 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get the certificate no
      *
-     * @return string     */
+     * @return string
+     */
     public function getCertificateNo()
     {
         return $this->certificateNo;
@@ -362,7 +368,8 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get the vi action
      *
-     * @return string     */
+     * @return string
+     */
     public function getViAction()
     {
         return $this->viAction;
@@ -385,7 +392,8 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get the section26
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getSection26()
     {
         return $this->section26;
@@ -408,7 +416,8 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get the section26 curtail
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getSection26Curtail()
     {
         return $this->section26Curtail;
@@ -431,7 +440,8 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get the section26 revoked
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getSection26Revoked()
     {
         return $this->section26Revoked;
@@ -454,7 +464,8 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get the section26 suspend
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getSection26Suspend()
     {
         return $this->section26Suspend;
@@ -477,7 +488,8 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get the make model
      *
-     * @return string     */
+     * @return string
+     */
     public function getMakeModel()
     {
         return $this->makeModel;
@@ -500,7 +512,8 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -523,7 +536,8 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -595,6 +609,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

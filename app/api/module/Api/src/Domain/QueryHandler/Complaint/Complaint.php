@@ -12,6 +12,7 @@ final class Complaint extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Complaint';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->result(

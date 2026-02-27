@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\TransportManagerLicence;
 
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
@@ -32,10 +34,8 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
-    public function testHandleCommand($ids, $yesNo, $optOutTmLetterValue)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
+    public function testHandleCommand(mixed $ids, mixed $yesNo, mixed $optOutTmLetterValue): void
     {
         $licenceId1 = 111;
 
@@ -96,7 +96,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand(): array
     {
         return [
             [
@@ -127,7 +127,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    private function createTaskParams($desc, $licenceId, $tmId, $urgent)
+    private function createTaskParams(mixed $desc, mixed $licenceId, mixed $tmId, mixed $urgent): array
     {
         return [
             'category' => Category::CATEGORY_APPLICATION,

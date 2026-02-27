@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Pi;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -8,9 +10,8 @@ use Mockery as m;
 
 /**
  * SlaException Entity Unit Tests
- *
- * @covers \Dvsa\Olcs\Api\Entity\Pi\SlaException
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Pi\SlaException::class)]
 class SlaExceptionEntityTest extends EntityTester
 {
     /**
@@ -32,7 +33,7 @@ class SlaExceptionEntityTest extends EntityTester
     /**
      * Test entity creation with constructor
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $slaDescription = 'Test SLA Description';
         $slaExceptionDescription = 'Test Exception Description';
@@ -49,26 +50,26 @@ class SlaExceptionEntityTest extends EntityTester
     /**
      * Test isActive method with various date scenarios
      */
-    public function testIsActiveMethod()
+    public function testIsActiveMethod(): void
     {
         $effectiveFrom = new \DateTime('2024-01-01');
         $entity = new Entity('Test SLA', 'Test Exception', $effectiveFrom);
-        
+
         // Test active when current date is after effective from
         $checkDate = new \DateTime('2024-06-01');
         $this->assertTrue($entity->isActive($checkDate));
-        
+
         // Test inactive when current date is before effective from
         $checkDate = new \DateTime('2023-12-01');
         $this->assertFalse($entity->isActive($checkDate));
-        
+
         // Test with effective to date
         $entity->setEffectiveTo(new \DateTime('2024-12-31'));
-        
+
         // Should be active between dates
         $checkDate = new \DateTime('2024-06-01');
         $this->assertTrue($entity->isActive($checkDate));
-        
+
         // Should be inactive after effective to date
         $checkDate = new \DateTime('2025-01-01');
         $this->assertFalse($entity->isActive($checkDate));
@@ -77,7 +78,7 @@ class SlaExceptionEntityTest extends EntityTester
     /**
      * Test __toString method
      */
-    public function testToString()
+    public function testToString(): void
     {
         $entity = new Entity('Test SLA Description', 'Test Exception Description', new \DateTime());
         $expected = 'Test SLA Description - Test Exception Description';

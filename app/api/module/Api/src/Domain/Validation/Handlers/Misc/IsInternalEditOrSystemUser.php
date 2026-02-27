@@ -25,6 +25,7 @@ class IsInternalEditOrSystemUser extends AbstractHandler implements AuthAwareInt
      *
      * @return boolean
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->isGranted(Permission::INTERNAL_EDIT) || $this->isSystemUser();

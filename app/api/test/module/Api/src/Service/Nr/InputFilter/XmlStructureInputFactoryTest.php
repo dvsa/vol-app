@@ -60,10 +60,9 @@ class XmlStructureInputFactoryTest extends TestCase
      * @param $config
      * @param $exceptionName
      * @param $exceptionMessage
-     *
-     * @dataProvider invokeErrorProvider
      */
-    public function testInvokeMissingConfig($config, $exceptionName, $exceptionMessage): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('invokeErrorProvider')]
+    public function testInvokeMissingConfig(mixed $config, mixed $exceptionName, mixed $exceptionMessage): void
     {
         $this->expectException($exceptionName);
         $this->expectExceptionMessage($exceptionMessage);
@@ -77,7 +76,7 @@ class XmlStructureInputFactoryTest extends TestCase
     /**
      * Data provider for testInvokeMissingConfig
      */
-    public function invokeErrorProvider(): array
+    public static function invokeErrorProvider(): array
     {
         return [
             [

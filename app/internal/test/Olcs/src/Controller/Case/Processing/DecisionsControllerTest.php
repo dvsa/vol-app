@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Case decisions controller tests
  */
@@ -26,14 +28,12 @@ class DecisionsControllerTest extends MockeryTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider indexActionDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('indexActionDataProvider')]
     public function testIndexAction(
-        $id,
-        $data,
-        $expectedRedirRouteName
-    ) {
+        mixed $id,
+        mixed $data,
+        mixed $expectedRedirRouteName
+    ): void {
         $params = m::mock()
             ->shouldReceive('fromRoute')->with('case')->andReturn($id)
             ->getMock();
@@ -69,7 +69,7 @@ class DecisionsControllerTest extends MockeryTestCase
         $this->assertEquals('redirectResponse', $this->sut->indexAction());
     }
 
-    public function indexActionDataProvider()
+    public static function indexActionDataProvider(): array
     {
         return [
             // non-TM

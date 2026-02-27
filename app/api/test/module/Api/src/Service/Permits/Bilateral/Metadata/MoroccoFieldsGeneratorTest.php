@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Metadata;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication;
@@ -31,7 +33,7 @@ class MoroccoFieldsGeneratorTest extends MockeryTestCase
         $this->moroccoFieldsGenerator = new MoroccoFieldsGenerator();
     }
 
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $moroccoPermitsRequired = 17;
 
@@ -60,7 +62,7 @@ class MoroccoFieldsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGenerateNoIrhpPermitApplication()
+    public function testGenerateNoIrhpPermitApplication(): void
     {
         $expected = [
             'name' => 'permitsRequired',
@@ -74,7 +76,7 @@ class MoroccoFieldsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGenerateNonMatchingIrhpPermitApplication()
+    public function testGenerateNonMatchingIrhpPermitApplication(): void
     {
         $irhpPermitApplication = m::mock(IrhpPermitApplication::class);
         $irhpPermitApplication->shouldReceive('getIrhpPermitWindow->getIrhpPermitStock')

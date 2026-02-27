@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Business Details Status Test
  *
@@ -21,6 +23,7 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class UpdateBusinessDetailsStatusTest extends AbstractUpdateStatusTestCase
 {
     /**
@@ -41,7 +44,8 @@ class UpdateBusinessDetailsStatusTest extends AbstractUpdateStatusTestCase
         $this->licence->setOrganisation($this->organisation);
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             Organisation::ORG_TYPE_REGISTERED_COMPANY,
@@ -52,21 +56,21 @@ class UpdateBusinessDetailsStatusTest extends AbstractUpdateStatusTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandNoTypeWithChange()
+    public function testHandleCommandNoTypeWithChange(): void
     {
         $this->applicationCompletion->setBusinessDetailsStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandNoTypeWithoutChange()
+    public function testHandleCommandNoTypeWithoutChange(): void
     {
         $this->applicationCompletion->setBusinessDetailsStatus(ApplicationCompletionEntity::STATUS_INCOMPLETE);
 
         $this->expectStatusUnchanged(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutRequiredName()
+    public function testHandleCommandWithoutRequiredName(): void
     {
         $this->applicationCompletion->setBusinessDetailsStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -75,7 +79,7 @@ class UpdateBusinessDetailsStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutCompanyNo()
+    public function testHandleCommandWithoutCompanyNo(): void
     {
         $this->applicationCompletion->setBusinessDetailsStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -85,7 +89,7 @@ class UpdateBusinessDetailsStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutContactDetails()
+    public function testHandleCommandWithoutContactDetails(): void
     {
         $this->applicationCompletion->setBusinessDetailsStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -96,7 +100,7 @@ class UpdateBusinessDetailsStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->applicationCompletion->setBusinessDetailsStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -110,7 +114,7 @@ class UpdateBusinessDetailsStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
-    public function testHandleCommandPartnership()
+    public function testHandleCommandPartnership(): void
     {
         $this->applicationCompletion->setBusinessDetailsStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -120,7 +124,7 @@ class UpdateBusinessDetailsStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
-    public function testHandleCommandSoleTrader()
+    public function testHandleCommandSoleTrader(): void
     {
         $this->applicationCompletion->setBusinessDetailsStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 

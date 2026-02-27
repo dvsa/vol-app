@@ -20,6 +20,7 @@ class CompanySubsidiary extends AbstractQueryHandler
 {
     protected $repoServiceName = 'CompanySubsidiary';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->result(

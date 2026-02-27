@@ -6,7 +6,7 @@ namespace Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces;
 
 /**
  * Interface for custom type handlers
- * 
+ *
  * Each custom type (YesNo, Encrypted, etc.) implements this interface
  * to provide specific handling for annotation generation and property creation
  */
@@ -33,7 +33,7 @@ interface TypeHandlerInterface
     /**
      * Generate the property declaration for this column
      *
-     * @param ColumnMetadata $column The column metadata  
+     * @param ColumnMetadata $column The column metadata
      * @param array $config Custom configuration from EntityConfig.php
      * @return array Property data [name, type, docBlock, defaultValue]
      */

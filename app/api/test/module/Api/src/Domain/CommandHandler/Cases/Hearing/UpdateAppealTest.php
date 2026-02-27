@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Cases\Hearing;
 
 use Doctrine\ORM\Query;
@@ -10,9 +12,7 @@ use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Cases\Hearing\UpdateAppeal
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Cases\Hearing\UpdateAppeal::class)]
 class UpdateAppealTest extends AbstractCommandHandlerTestCase
 {
     /** @var  UpdateAppeal */
@@ -27,7 +27,8 @@ class UpdateAppealTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'appeal_r_lic_non_pi',
@@ -37,7 +38,7 @@ class UpdateAppealTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 99;
         $version = 2;

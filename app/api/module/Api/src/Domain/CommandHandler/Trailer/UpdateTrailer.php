@@ -21,6 +21,7 @@ final class UpdateTrailer extends AbstractCommandHandler
 {
     protected $repoServiceName = 'Trailer';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $trailer = $this->getRepo()

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Bus;
 
 use Dvsa\Olcs\Api\Domain\Repository\BusRegBrowseView as BusRegBrowseViewRepo;
@@ -21,7 +23,7 @@ class BusRegBrowseExportTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $acceptedDate = '2016-12-05';
         $trafficAreas = ['B', 'C'];
@@ -69,7 +71,7 @@ class BusRegBrowseExportTest extends QueryHandlerTestCase
         $this->assertTrue($result->getHeaders()->has('Content-Length'));
     }
 
-    public function testHandleQueryWithoutResults()
+    public function testHandleQueryWithoutResults(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\NotFoundException::class);
 

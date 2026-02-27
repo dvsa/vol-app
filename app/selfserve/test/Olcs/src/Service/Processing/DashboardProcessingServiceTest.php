@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\View\Model;
 
 use Common\RefData;
@@ -19,11 +21,11 @@ class DashboardProcessingServiceTest extends MockeryTestCase
     /**
      * Test get tables
      *
-     * @dataProvider applicationsProvider
      *
-     * @group externalDashboard
      */
-    public function testGetTables($data, $licences, $variations, $applications): void
+    #[\PHPUnit\Framework\Attributes\Group('externalDashboard')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('applicationsProvider')]
+    public function testGetTables(array $data, array $licences, array $variations, array $applications): void
     {
         $tableService = m::mock(TableFactory::class);
         $tableService->shouldReceive('buildTable')
@@ -54,7 +56,7 @@ class DashboardProcessingServiceTest extends MockeryTestCase
      *
      * @psalm-return array{'empty data': list{array{licences: array<never, never>, applications: array<never, never>, variations: array<never, never>}, array<never, never>, array<never, never>, array<never, never>}, 'sample data': list{array{licences: list{array{id: 1, status: array{id: 'lsts_valid'}, licenceType: array{id: 'type'}, licNo: '123', trafficArea: array{name: 'foo'}}}, applications: list{array{status: array{id: 'apsts_consideration'}, isVariation: false, id: 1, licenceType: array{id: 'type'}, licence: array{licNo: '123'}}}, variations: list{array{status: array{id: 'apsts_consideration'}, isVariation: true, id: 2, licenceType: array{id: 'type'}, licence: array{licNo: '123'}}}}, list{array{id: 1, licenceType: array{id: 'type'}, licNo: '123', status: array{id: 'lsts_valid'}, type: 'type', trafficArea: 'foo'}}, list{array{isVariation: true, id: 2, licNo: '123', status: array{id: 'apsts_consideration'}, licence: array{licNo: '123'}, licenceType: array{id: 'type'}, type: 'type'}}, list{array{isVariation: false, id: 1, licNo: '123', status: array{id: 'apsts_consideration'}, licence: array{licNo: '123'}, licenceType: array{id: 'type'}, type: 'type'}}}}
      */
-    public function applicationsProvider(): array
+    public static function applicationsProvider(): array
     {
         return [
             'empty data' => [

@@ -36,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractOperatingCentre implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractOperatingCentre implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -197,7 +197,8 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -220,7 +221,8 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Get the address
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Address     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Address
+     */
     public function getAddress()
     {
         return $this->address;
@@ -243,7 +245,8 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -266,7 +269,8 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -289,7 +293,8 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -312,7 +317,8 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -636,6 +642,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

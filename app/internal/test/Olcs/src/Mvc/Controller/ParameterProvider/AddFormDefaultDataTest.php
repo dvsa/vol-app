@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Mvc\Controller\ParameterProvider;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -13,7 +15,7 @@ use Laminas\Mvc\Controller\Plugin\Params;
  */
 class AddFormDefaultDataTest extends TestCase
 {
-    public function testProvideParameters()
+    public function testProvideParameters(): void
     {
         $expected = [
             'case' => 21,

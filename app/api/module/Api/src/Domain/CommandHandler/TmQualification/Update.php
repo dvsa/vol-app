@@ -23,6 +23,7 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
 {
     protected $repoServiceName = 'TmQualification';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

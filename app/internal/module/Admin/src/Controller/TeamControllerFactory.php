@@ -16,6 +16,7 @@ use Psr\Container\ContainerInterface;
 
 class TeamControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TeamController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

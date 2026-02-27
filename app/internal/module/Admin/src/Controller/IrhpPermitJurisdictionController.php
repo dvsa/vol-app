@@ -44,6 +44,7 @@ class IrhpPermitJurisdictionController extends AbstractIrhpPermitAdminController
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel(
@@ -62,6 +63,7 @@ class IrhpPermitJurisdictionController extends AbstractIrhpPermitAdminController
      *
      * @return Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $this->scriptFactory->loadFile('irhp-permit-total-table');

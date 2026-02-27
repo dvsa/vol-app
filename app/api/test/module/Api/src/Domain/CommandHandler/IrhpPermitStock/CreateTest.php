@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermitStock;
 
 use Dvsa\Olcs\Api\Domain\Command\IrhpPermitSector\Create as CreateSectorQuotasCmd;
@@ -33,7 +35,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             PermitStockEntity::STATUS_SCORING_NEVER_RUN,
@@ -52,7 +55,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $cmdData = [
             'irhpPermitType' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
@@ -89,7 +92,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandBilateral()
+    public function testHandleCommandBilateral(): void
     {
         $cmdData = [
             'irhpPermitType' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL,
@@ -140,7 +143,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
     /**
      * Tests method on IrhpPermitStockTrait
      */
-    public function testGoodValidityPeriodValidationEcmt()
+    public function testGoodValidityPeriodValidationEcmt(): void
     {
         $cmdData = [
             'initialStock' => 1000,
@@ -156,7 +159,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
     /**
      * Tests method on IrhpPermitStockTrait
      */
-    public function testGoodValidityPeriodValidationRemovals()
+    public function testGoodValidityPeriodValidationRemovals(): void
     {
         $cmdData = [
             'initialStock' => 1000,
@@ -172,7 +175,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
     /**
      * Tests method on IrhpPermitStockTrait
      */
-    public function testBadValidityPeriodValidationEcmt()
+    public function testBadValidityPeriodValidationEcmt(): void
     {
         $cmdData = [
             'initialStock' => 1000,
@@ -189,7 +192,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
     /**
      * Tests method on IrhpPermitStockTrait
      */
-    public function testToBeforeFromValidityPeriodValidationEcmt()
+    public function testToBeforeFromValidityPeriodValidationEcmt(): void
     {
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('Validity Period End Date must be equal to or later than Validity Period Start Date');
@@ -205,7 +208,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->sut->validityPeriodValidation($cmd);
     }
 
-    public function testValidityPeriodEndDateInPast()
+    public function testValidityPeriodEndDateInPast(): void
     {
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('Validity Period End date should be today or in the future');

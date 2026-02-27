@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Submit Application Path test
  */
@@ -23,6 +25,7 @@ use Mockery as m;
 /**
  * Submit Application Path test
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class SubmitApplicationPathTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
@@ -40,7 +43,7 @@ class SubmitApplicationPathTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $irhpApplicationId = 459;
 

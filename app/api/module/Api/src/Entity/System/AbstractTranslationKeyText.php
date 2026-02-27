@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTranslationKeyText implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTranslationKeyText implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -150,7 +150,8 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -173,7 +174,8 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     /**
      * Get the language
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\Language     */
+     * @return \Dvsa\Olcs\Api\Entity\System\Language
+     */
     public function getLanguage()
     {
         return $this->language;
@@ -196,7 +198,8 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     /**
      * Get the translation key
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\TranslationKey     */
+     * @return \Dvsa\Olcs\Api\Entity\System\TranslationKey
+     */
     public function getTranslationKey()
     {
         return $this->translationKey;
@@ -219,7 +222,8 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -242,7 +246,8 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -265,7 +270,8 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     /**
      * Get the translated text
      *
-     * @return string     */
+     * @return string
+     */
     public function getTranslatedText()
     {
         return $this->translatedText;
@@ -288,7 +294,8 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -297,6 +304,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

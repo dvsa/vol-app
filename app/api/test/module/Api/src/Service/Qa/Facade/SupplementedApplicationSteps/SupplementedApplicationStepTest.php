@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Facade\SupplementedApplicationSteps;
 
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep;
@@ -33,7 +35,7 @@ class SupplementedApplicationStepTest extends MockeryTestCase
         );
     }
 
-    public function testGetApplicationStep()
+    public function testGetApplicationStep(): void
     {
         $this->assertSame(
             $this->applicationStep,
@@ -41,7 +43,7 @@ class SupplementedApplicationStepTest extends MockeryTestCase
         );
     }
 
-    public function testGetFormControlStrategy()
+    public function testGetFormControlStrategy(): void
     {
         $this->assertSame(
             $this->formControlStrategy,

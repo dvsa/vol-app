@@ -42,6 +42,7 @@ class ApplicationGoodsOcTotalAuthReviewService extends AbstractReviewService
      * @param array $data
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(array $data = [])
     {
         $multiItems = [];

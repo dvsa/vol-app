@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpApplication;
 
 use Dvsa\Olcs\Api\Domain\Command\Email\SendEcmtApggAppGranted;
@@ -37,7 +39,8 @@ class GrantTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrhpInterface::STATUS_AWAITING_FEE
@@ -46,10 +49,8 @@ class GrantTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
-    public function testHandleCommand($isEcmtShortTerm, $issueFeeProductReference, $expectedEmailCmd)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
+    public function testHandleCommand(mixed $isEcmtShortTerm, mixed $issueFeeProductReference, mixed $expectedEmailCmd): void
     {
         $irhpApplicationId = 55;
 
@@ -159,7 +160,7 @@ class GrantTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($irhpApplicationId, $result->getId('irhpApplication'));
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand(): array
     {
         return [
             [
@@ -175,7 +176,7 @@ class GrantTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandCantGrantFromEntity()
+    public function testHandleCommandCantGrantFromEntity(): void
     {
         $irhpApplicationId = 66;
         $irhpApplication = m::mock(IrhpApplication::class);
@@ -204,7 +205,7 @@ class GrantTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandCantGrantFromService()
+    public function testHandleCommandCantGrantFromService(): void
     {
         $irhpApplicationId = 66;
         $irhpApplication = m::mock(IrhpApplication::class);

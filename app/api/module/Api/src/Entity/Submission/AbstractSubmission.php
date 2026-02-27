@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractSubmission implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSubmission implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -256,7 +256,8 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -279,7 +280,8 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -302,7 +304,8 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Get the submission type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getSubmissionType()
     {
         return $this->submissionType;
@@ -325,7 +328,8 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Get the sender user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getSenderUser()
     {
         return $this->senderUser;
@@ -348,7 +352,8 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Get the recipient user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getRecipientUser()
     {
         return $this->recipientUser;
@@ -371,7 +376,8 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -394,7 +400,8 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -417,7 +424,8 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Get the data snapshot
      *
-     * @return string     */
+     * @return string
+     */
     public function getDataSnapshot()
     {
         return $this->dataSnapshot;
@@ -440,7 +448,8 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Get the urgent
      *
-     * @return string     */
+     * @return string
+     */
     public function getUrgent()
     {
         return $this->urgent;
@@ -465,7 +474,8 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getAssignedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -492,7 +502,8 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Get the tc sla started
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getTcSlaStarted()
     {
         return $this->tcSlaStarted;
@@ -517,7 +528,8 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getInformationCompleteDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -546,7 +558,8 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getClosedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -573,7 +586,8 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -834,6 +848,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

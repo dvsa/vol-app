@@ -18,6 +18,7 @@ class CanAccessIrhpApplicationWithId extends AbstractHandler
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canAccessIrhpApplicationWithId($this->getId($dto));

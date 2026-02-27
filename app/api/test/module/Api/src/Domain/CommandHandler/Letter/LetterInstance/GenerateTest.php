@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Letter\LetterInstance;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterInstance\Generate as CommandHandler;
@@ -39,7 +41,8 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             LetterInstanceEntity::STATUS_DRAFT,
@@ -48,7 +51,7 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithLicence()
+    public function testHandleCommandWithLicence(): void
     {
         $letterTypeId = 123;
         $licenceId = 456;
@@ -107,7 +110,7 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         $this->assertCount(0, $letterInstance->getLetterInstanceIssues());
     }
 
-    public function testHandleCommandWithSelectedIssues()
+    public function testHandleCommandWithSelectedIssues(): void
     {
         $letterTypeId = 123;
         $issueId1 = 789;
@@ -182,7 +185,7 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         $this->assertSame($letterInstance, $issuesArray[1]->getLetterInstance());
     }
 
-    public function testHandleCommandWithApplication()
+    public function testHandleCommandWithApplication(): void
     {
         $letterTypeId = 123;
         $applicationId = 456;
@@ -236,10 +239,11 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         $this->assertSame(999, $result->getId('letterInstance'));
 
         $this->assertSame($application, $letterInstance->getApplication());
+        $this->assertSame($licence, $letterInstance->getLicence());
         $this->assertSame($organisation, $letterInstance->getOrganisation());
     }
 
-    public function testHandleCommandWithCase()
+    public function testHandleCommandWithCase(): void
     {
         $letterTypeId = 123;
         $caseId = 456;
@@ -295,10 +299,11 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         $this->assertSame(999, $result->getId('letterInstance'));
 
         $this->assertSame($case, $letterInstance->getCase());
+        $this->assertSame($licence, $letterInstance->getLicence());
         $this->assertSame($organisation, $letterInstance->getOrganisation());
     }
 
-    public function testHandleCommandWithCaseViaApplication()
+    public function testHandleCommandWithCaseViaApplication(): void
     {
         $letterTypeId = 123;
         $caseId = 456;
@@ -359,6 +364,8 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         $this->assertSame(999, $result->getId('letterInstance'));
 
         $this->assertSame($case, $letterInstance->getCase());
+        $this->assertSame($application, $letterInstance->getApplication());
+        $this->assertSame($licence, $letterInstance->getLicence());
         $this->assertSame($organisation, $letterInstance->getOrganisation());
     }
 }

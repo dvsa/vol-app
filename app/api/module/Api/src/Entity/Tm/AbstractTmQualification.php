@@ -40,7 +40,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTmQualification implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTmQualification implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -182,7 +182,8 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -205,7 +206,8 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
     /**
      * Get the transport manager
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     */
     public function getTransportManager()
     {
         return $this->transportManager;
@@ -228,7 +230,8 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
     /**
      * Get the country code
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country
+     */
     public function getCountryCode()
     {
         return $this->countryCode;
@@ -251,7 +254,8 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
     /**
      * Get the qualification type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getQualificationType()
     {
         return $this->qualificationType;
@@ -274,7 +278,8 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -297,7 +302,8 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -322,7 +328,8 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getIssuedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -349,7 +356,8 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
     /**
      * Get the serial no
      *
-     * @return string     */
+     * @return string
+     */
     public function getSerialNo()
     {
         return $this->serialNo;
@@ -372,7 +380,8 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -395,7 +404,8 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -404,6 +414,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

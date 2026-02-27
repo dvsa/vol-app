@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Checkbox;
 
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
@@ -16,6 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class CheckboxAnswerSaverTest extends MockeryTestCase
 {
     private $fieldsetName;
@@ -48,7 +51,8 @@ class CheckboxAnswerSaverTest extends MockeryTestCase
         $this->checkboxAnswerSaver = new CheckboxAnswerSaver($this->genericAnswerWriter, $this->genericAnswerFetcher);
     }
 
-    public function testSaveChecked()
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testSaveChecked(): void
     {
         $postData = [
             $this->fieldsetName => [
@@ -66,7 +70,8 @@ class CheckboxAnswerSaverTest extends MockeryTestCase
         $this->checkboxAnswerSaver->save($this->qaContext, $postData);
     }
 
-    public function testSaveUnchecked()
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testSaveUnchecked(): void
     {
         $postData = [
             $this->fieldsetName => [

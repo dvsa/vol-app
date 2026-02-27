@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\Mapping;
 
 use Dvsa\Olcs\Api\Service\Ebsr\Mapping\TransExchangeXmlFactory;
@@ -14,7 +16,7 @@ use Psr\Container\ContainerInterface;
  */
 class TransExchangeXmlFactoryTest extends TestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockSl = m::mock(ContainerInterface::class);
 
@@ -28,7 +30,7 @@ class TransExchangeXmlFactoryTest extends TestCase
     /**
      * verify that when parsing xml, routeDescription returns string not array - vol-6809
      */
-    public function testRouteDescriptionReturnsStringWhenParsingXml()
+    public function testRouteDescriptionReturnsStringWhenParsingXml(): void
     {
         $mockSl = m::mock(ContainerInterface::class);
         $sut = new TransExchangeXmlFactory();

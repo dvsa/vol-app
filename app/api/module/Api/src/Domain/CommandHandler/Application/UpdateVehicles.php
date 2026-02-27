@@ -27,6 +27,7 @@ final class UpdateVehicles extends AbstractCommandHandler implements Transaction
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  colors="true"
-  xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         backupGlobals="true"
+         colors="true"
+         executionOrder="random"
+         failOnDeprecation="true"
+         failOnNotice="true"
+         failOnWarning="true"
+         failOnRisky="true"
+         failOnIncomplete="true"
+         failOnSkipped="true"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
+         displayDetailsOnTestsThatTriggerNotices="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         displayDetailsOnIncompleteTests="true"
+         displayDetailsOnSkippedTests="true"
 >
   <php>
     <ini name="date.timezone" value="UTC"/>
-    <ini name="memory_limit" value="4G" />
+    <ini name="memory_limit" value="4G"/>
   </php>
   <testsuites>
     <testsuite name="OLCS Selfserve Application">
       <directory>test</directory>
     </testsuite>
   </testsuites>
-  <listeners>
-    <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener">
-    </listener>
-  </listeners>
 </phpunit>

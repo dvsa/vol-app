@@ -24,6 +24,7 @@ class Modify extends AbstractHandler implements RepositoryManagerAwareInterface
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         $licenceId = $dto->getLicence();

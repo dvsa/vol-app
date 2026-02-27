@@ -20,6 +20,7 @@ class IrhpApplicationProcessingOverviewControllerFactory implements FactoryInter
      * @param  array|null         $options
      * @return IrhpApplicationProcessingOverviewController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpApplicationProcessingOverviewController
     {
         $scriptFactory = $container->get(ScriptFactory::class);

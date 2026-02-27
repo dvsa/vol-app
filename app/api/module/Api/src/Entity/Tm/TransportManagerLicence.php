@@ -193,6 +193,7 @@ class TransportManagerLicence extends AbstractTransportManagerLicence implements
      *
      * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this->getLicence()->getOrganisation();

@@ -36,6 +36,7 @@ final class UpdateTypeOfLicence extends AbstractCommandHandler implements Transa
 
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

@@ -16,6 +16,7 @@ final class Update extends AbstractCommandHandler
 {
     protected $repoServiceName = 'TaskAlphaSplit';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command Cmd */

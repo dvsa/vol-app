@@ -26,6 +26,7 @@ final class CreateSlaException extends AbstractCommandHandler implements Transac
      * @return Result
      * @throws NotFoundException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         $result = new Result();

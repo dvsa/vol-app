@@ -25,6 +25,7 @@ final class InitialLoad extends AbstractCommandHandler
      * @throws DomainException
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $companyNumber = $command->getCompanyNumber();

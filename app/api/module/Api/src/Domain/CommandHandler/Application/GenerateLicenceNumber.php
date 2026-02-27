@@ -27,6 +27,7 @@ final class GenerateLicenceNumber extends AbstractCommandHandler
 
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Application $application */
@@ -84,6 +85,7 @@ final class GenerateLicenceNumber extends AbstractCommandHandler
             $licenceNoGen->getId()
         );
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

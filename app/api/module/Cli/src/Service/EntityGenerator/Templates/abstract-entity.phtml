@@ -72,7 +72,7 @@ if (!empty($indexes) || !empty($uniqueConstraints)): ?>,
 <?php else: ?>)
 <?php endif; ?>
  */
-abstract class <?php echo $className; ?> implements BundleSerializableInterface, JsonSerializable
+abstract class <?php echo $className; ?> implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -162,12 +162,15 @@ abstract class <?php echo $className; ?> implements BundleSerializableInterface,
      * @return \Doctrine\Common\Collections\ArrayCollection
 <?php elseif ($methodGenerator->isRelationshipField($field)): ?>
      * @return \<?php echo $methodGenerator->getTargetEntity($field); ?>
+
 <?php elseif ($methodGenerator->isDateTimeField($field)): ?>
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
      * @return <?php echo $methodGenerator->getPhpTypeFromType($field['property']['type']); ?>
+
 <?php else: ?>
      * @return <?php echo $methodGenerator->getPhpTypeFromType($field['property']['type']); ?>
+
 <?php endif; ?>
      */
 <?php if ($methodGenerator->isDateTimeField($field)): ?>
@@ -236,6 +239,7 @@ abstract class <?php echo $className; ?> implements BundleSerializableInterface,
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

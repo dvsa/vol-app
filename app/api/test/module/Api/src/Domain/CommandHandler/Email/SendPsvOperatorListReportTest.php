@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -36,7 +38,7 @@ class SendPsvOperatorListReportTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(['id' => 101]);
 
@@ -68,7 +70,7 @@ class SendPsvOperatorListReportTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['PSV Operator list sent to: testdummy@dummyemail.com'], $result->getMessages());
     }
 
-    public function testNoEmailThrowException()
+    public function testNoEmailThrowException(): void
     {
         $this->expectException(
             \InvalidArgumentException::class

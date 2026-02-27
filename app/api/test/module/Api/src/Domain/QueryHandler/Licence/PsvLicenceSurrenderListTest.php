@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Licence;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Licence\PsvLicenceSurrenderList;
@@ -25,7 +27,7 @@ class PsvLicenceSurrenderListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $date = new DateTime('now');
         $query = Qry::create(['date' => $date]);

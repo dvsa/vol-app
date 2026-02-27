@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Application;
 
 use Dvsa\Olcs\Api\Entity\Application\Application;
@@ -20,14 +22,14 @@ class PreviousConvictionEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testGetRelatedOrganisationWithApplication()
+    public function testGetRelatedOrganisationWithApplication(): void
     {
         $sut = new Entity();
 
         $this->assertSame(null, $sut->getRelatedOrganisation());
     }
 
-    public function testGetCalculatedValues()
+    public function testGetCalculatedValues(): void
     {
         /** @var Application $mockApp */
         $mockApp = m::mock(Application::class);
@@ -39,7 +41,7 @@ class PreviousConvictionEntityTest extends EntityTester
         static::assertEquals(null, $actual['application']);
     }
 
-    public function testGetRelatedOrganisation()
+    public function testGetRelatedOrganisation(): void
     {
         $sut = new Entity();
 

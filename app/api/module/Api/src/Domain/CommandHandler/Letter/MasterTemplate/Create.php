@@ -15,10 +15,11 @@ final class Create extends AbstractCommandHandler
 {
     protected $repoServiceName = 'MasterTemplate';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var Cmd $command */
-        
+
         $masterTemplate = new MasterTemplateEntity();
         $masterTemplate->setName($command->getName());
         $masterTemplate->setTemplateContent($command->getTemplateContent());
@@ -29,7 +30,7 @@ final class Create extends AbstractCommandHandler
 
         $this->result->addId('masterTemplate', $masterTemplate->getId());
         $this->result->addMessage("Master template '{$masterTemplate->getName()}' created");
-        
+
         return $this->result;
     }
 }

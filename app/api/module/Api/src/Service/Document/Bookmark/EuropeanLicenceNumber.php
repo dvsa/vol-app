@@ -14,11 +14,13 @@ class EuropeanLicenceNumber extends DynamicBookmark
 {
     public const ISSUE_NO_PAD_LENGTH = 5;
 
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(['id' => $data['communityLic'], 'bundle' => ['licence']]);
     }
 
+    #[\Override]
     public function render()
     {
         $issueNo = str_pad((string) $this->data['issueNo'], self::ISSUE_NO_PAD_LENGTH, '0', STR_PAD_LEFT);

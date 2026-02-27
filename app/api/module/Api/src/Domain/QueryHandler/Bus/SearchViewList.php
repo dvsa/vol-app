@@ -26,6 +26,7 @@ class SearchViewList extends AbstractQueryHandler
     /**
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var ListQueryObject $query */

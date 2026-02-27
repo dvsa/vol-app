@@ -19,6 +19,7 @@ class LetterTypeFactory implements FactoryInterface
      * @param array|null $options Options
      * @return LetterType
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         return new LetterType(

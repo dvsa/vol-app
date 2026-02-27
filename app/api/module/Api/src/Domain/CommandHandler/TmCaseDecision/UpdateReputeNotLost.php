@@ -21,6 +21,7 @@ final class UpdateReputeNotLost extends AbstractCommandHandler implements Transa
 {
     protected $repoServiceName = 'TmCaseDecision';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $tmCaseDecision = $this->getRepo()->fetchUsingId($command, Query::HYDRATE_OBJECT, $command->getVersion());

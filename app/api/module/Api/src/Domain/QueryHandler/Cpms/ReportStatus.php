@@ -25,6 +25,7 @@ class ReportStatus extends AbstractQueryHandler implements CpmsAwareInterface
 {
     use CpmsAwareTrait;
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $data = $this->getCpmsService()->getReportStatus($query->getReference());

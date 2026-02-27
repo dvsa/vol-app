@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Lva\Application;
 
 use Common\Controller\Lva\Adapters\ApplicationConditionsUndertakingsAdapter;
@@ -85,7 +87,7 @@ class ConditionsUndertakingsControllerTest extends AbstractLvaControllerTestCase
         $this->sut->shouldReceive('setAdapter');
     }
 
-    public function testIndexActionWithGet()
+    public function testIndexActionWithGet(): void
     {
         $mockForm = m::mock(Form::class);
 

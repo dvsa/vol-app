@@ -6,16 +6,11 @@ use Aws\S3\S3Client;
 
 class S3Processor implements EbsrProcessingInterface
 {
-    private S3Client $s3Client;
-
-    private string $bucketName;
-
-    public function __construct(S3Client $s3Client, string $bucketName)
+    public function __construct(private readonly S3Client $s3Client, private readonly string $bucketName)
     {
-        $this->s3Client = $s3Client;
-        $this->bucketName = $bucketName;
     }
 
+    #[\Override]
     public function process(string $identifier, array $options = []): string
     {
         $result = $this->s3Client->putObject([

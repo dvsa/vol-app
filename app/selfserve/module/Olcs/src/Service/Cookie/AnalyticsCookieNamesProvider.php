@@ -28,6 +28,7 @@ class AnalyticsCookieNamesProvider implements CookieNamesProviderInterface
      *
      * @psalm-return non-empty-list<array{domain: string, name: array-key}>
      */
+    #[\Override]
     public function getNames(Cookie $cookie): array
     {
         $names = [
@@ -38,7 +39,7 @@ class AnalyticsCookieNamesProvider implements CookieNamesProviderInterface
 
         $cookieArray = $cookie->getArrayCopy();
         foreach ($cookieArray as $cookieName => $cookieValue) {
-            if (str_starts_with($cookieName, self::GAT_PREFIX)) {
+            if (str_starts_with((string) $cookieName, self::GAT_PREFIX)) {
                 $names[] = $cookieName;
             }
         }

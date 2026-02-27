@@ -15,6 +15,7 @@ class GetList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $repo \Dvsa\Olcs\Api\Domain\Repository\Application */

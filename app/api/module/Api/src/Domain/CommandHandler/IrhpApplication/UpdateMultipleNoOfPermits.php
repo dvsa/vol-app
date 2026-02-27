@@ -32,6 +32,7 @@ class UpdateMultipleNoOfPermits extends AbstractCommandHandler implements Transa
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $irhpApplicationId = $command->getId();

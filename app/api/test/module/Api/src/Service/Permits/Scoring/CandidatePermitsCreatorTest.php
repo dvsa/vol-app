@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Scoring;
 
 use Dvsa\Olcs\Api\Domain\Repository\IrhpCandidatePermit as IrhpCandidatePermitRepository;
@@ -83,7 +85,7 @@ class CandidatePermitsCreatorTest extends MockeryTestCase
         $this->irhpCandidatePermitFactory = m::mock(IrhpCandidatePermitFactory::class);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $intensityOfUse = 30;
         $applicationScore = 20;
@@ -127,7 +129,7 @@ class CandidatePermitsCreatorTest extends MockeryTestCase
         $candidatePermitsCreator->create($this->irhpPermitApplication, $this->requiredEuro5, $this->requiredEuro6);
     }
 
-    public function testCreateWithAltIouAlgorithm()
+    public function testCreateWithAltIouAlgorithm(): void
     {
         $euro5IntensityOfUse = 30;
         $euro5ApplicationScore = 20;

@@ -13,6 +13,7 @@ final class IrfoGvPermitList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'IrfoGvPermit';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $repo = $this->getRepo();

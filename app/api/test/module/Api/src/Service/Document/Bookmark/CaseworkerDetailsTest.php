@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\CaseworkerDetails;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\Document\Bookmark\CaseworkerDetails
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\CaseworkerDetails::class)]
 class CaseworkerDetailsTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new CaseworkerDetails();
         $query = $bookmark->getQuery(['user' => 123, 'licence' => 456]);
@@ -20,7 +20,7 @@ class CaseworkerDetailsTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(2, $query);
     }
 
-    public function testGetQueryNoLicence()
+    public function testGetQueryNoLicence(): void
     {
         $bookmark = new CaseworkerDetails();
         $query = $bookmark->getQuery(['user' => 123]);
@@ -29,10 +29,8 @@ class CaseworkerDetailsTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $query);
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
-    public function testRender($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
+    public function testRender(mixed $data, mixed $expected): void
     {
         $bookmark = new CaseworkerDetails();
         $bookmark->setData($data);
@@ -40,7 +38,7 @@ class CaseworkerDetailsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public function renderDataProvider()
+    public static function renderDataProvider(): array
     {
         return [
             // testRenderWithContactDetailsAddress

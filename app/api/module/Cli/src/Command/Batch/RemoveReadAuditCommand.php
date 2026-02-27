@@ -10,11 +10,13 @@ class RemoveReadAuditCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:remove-read-audit';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Process deletion of old read audit records');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Availability;
 
 use Dvsa\Olcs\Api\Entity\System\RefData;
@@ -15,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class StockAvailabilityCounterTest extends MockeryTestCase
 {
-    public function testGetCount()
+    public function testGetCount(): void
     {
         $euro5Available = 20;
         $euro6Available = 12;

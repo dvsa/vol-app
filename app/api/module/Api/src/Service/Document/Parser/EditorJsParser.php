@@ -15,13 +15,14 @@ class EditorJsParser implements ParserInterface
      * Regex pattern to match [[TOKEN_NAME]] placeholders
      * Only matches uppercase letters, numbers, and underscores (bookmark token format)
      */
-    private const GRAB_PATTERN = '/\[\[([A-Z0-9_]+)\]\]/';
+    private const string GRAB_PATTERN = '/\[\[([A-Z0-9_]+)\]\]/';
 
     /**
      * Returns the file extension (json)
      *
      * @return string
      */
+    #[\Override]
     public function getFileExtension()
     {
         return 'json';
@@ -34,6 +35,7 @@ class EditorJsParser implements ParserInterface
      *
      * @return array Array of unique token names found
      */
+    #[\Override]
     public function extractTokens($content)
     {
         $tokens = [];
@@ -52,7 +54,7 @@ class EditorJsParser implements ParserInterface
             }
 
             return array_unique($tokens);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return [];
         }
     }
@@ -65,6 +67,7 @@ class EditorJsParser implements ParserInterface
      *
      * @return string Updated EditorJS JSON content
      */
+    #[\Override]
     public function replace($content, $data)
     {
         try {
@@ -80,7 +83,7 @@ class EditorJsParser implements ParserInterface
             }
 
             return json_encode($decoded, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return $content;
         }
     }
@@ -96,7 +99,8 @@ class EditorJsParser implements ParserInterface
      * @return string
      * @throws \RuntimeException
      */
-    public function renderImage($binData, $width, $height, $type)
+    #[\Override]
+    public function renderImage($binData, $width, $height, $type): never
     {
         throw new \RuntimeException(
             'Image rendering not supported for EditorJS. Images are handled via EditorJS block structure.'
@@ -202,7 +206,7 @@ class EditorJsParser implements ParserInterface
             $placeholder = '[[' . $token . ']]';
 
             // Skip if this placeholder isn't in the text
-            if (strpos($text, $placeholder) === false) {
+            if (!str_contains($text, $placeholder)) {
                 continue;
             }
 

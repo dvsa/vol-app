@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -208,7 +208,8 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -231,7 +232,8 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\Category     */
+     * @return \Dvsa\Olcs\Api\Entity\System\Category
+     */
     public function getCategory()
     {
         return $this->category;
@@ -254,7 +256,8 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the sub category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory     */
+     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory
+     */
     public function getSubCategory()
     {
         return $this->subCategory;
@@ -277,7 +280,8 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the letter type
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterType     */
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterType
+     */
     public function getLetterType()
     {
         return $this->letterType;
@@ -300,7 +304,8 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the document
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
+     */
     public function getDocument()
     {
         return $this->document;
@@ -323,7 +328,8 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -346,7 +352,8 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -369,7 +376,8 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -392,7 +400,8 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the is ni
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsNi()
     {
         return $this->isNi;
@@ -415,7 +424,8 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the suppress from op
      *
-     * @return string     */
+     * @return string
+     */
     public function getSuppressFromOp()
     {
         return $this->suppressFromOp;
@@ -438,7 +448,8 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the template slug
      *
-     * @return string     */
+     * @return string
+     */
     public function getTemplateSlug()
     {
         return $this->templateSlug;
@@ -461,7 +472,8 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -533,6 +545,7 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

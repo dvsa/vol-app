@@ -24,6 +24,7 @@ class LicenceSafety extends CommonSafety
      *
      * @return \Laminas\Form\FormInterface
      */
+    #[\Override]
     public function getForm()
     {
         $form = parent::getForm();

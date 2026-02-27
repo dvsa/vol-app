@@ -21,6 +21,7 @@ class InspectionRequest extends AbstractQueryHandler
 {
     protected $repoServiceName = 'InspectionRequest';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var InspectionRequestRepo $repo */

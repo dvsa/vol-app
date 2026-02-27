@@ -34,7 +34,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -194,7 +194,8 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -217,7 +218,8 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
     public function getApplication()
     {
         return $this->application;
@@ -240,7 +242,8 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -263,7 +266,8 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the outcome
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getOutcome()
     {
         return $this->outcome;
@@ -286,7 +290,8 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -309,7 +314,8 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -334,7 +340,8 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getAgreedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -363,7 +370,8 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getReceivedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -390,7 +398,8 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the surrender licence
      *
-     * @return string     */
+     * @return string
+     */
     public function getSurrenderLicence()
     {
         return $this->surrenderLicence;
@@ -413,7 +422,8 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the is true s4
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsTrueS4()
     {
         return $this->isTrueS4;
@@ -436,7 +446,8 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -508,6 +519,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

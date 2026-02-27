@@ -16,6 +16,7 @@ final class PublicationLinkList extends AbstractQueryHandler
 
     protected $extraRepos = ['Application'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $query Query */

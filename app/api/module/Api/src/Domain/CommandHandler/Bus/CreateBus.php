@@ -24,6 +24,7 @@ final class CreateBus extends AbstractCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $bus = $this->createBusRegObject($command);

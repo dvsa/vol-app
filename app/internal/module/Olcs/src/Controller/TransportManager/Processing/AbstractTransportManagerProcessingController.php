@@ -9,6 +9,7 @@ use Olcs\Controller\TransportManager\TransportManagerController;
 abstract class AbstractTransportManagerProcessingController extends TransportManagerController implements
     LeftViewProvider
 {
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

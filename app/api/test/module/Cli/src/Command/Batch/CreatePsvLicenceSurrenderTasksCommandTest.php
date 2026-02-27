@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Command\Batch;
 
 use DateTime;
@@ -8,19 +10,20 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\Query\Licence\PsvLicenceSurrenderList;
 use Dvsa\Olcs\Cli\Command\Batch\CreatePsvLicenceSurrenderTasksCommand;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class CreatePsvLicenceSurrenderTasksCommandTest extends AbstractBatchCommandCases
 {
-    protected function getCommandClass()
+    protected function getCommandClass(): string
     {
         return CreatePsvLicenceSurrenderTasksCommand::class;
     }
 
-    protected function getCommandName()
+    protected function getCommandName(): string
     {
         return 'batch:create-psv-licence-surrender-tasks';
     }
 
-    protected function getCommandDTOs()
+    protected function getCommandDTOs(): array
     {
         return [
             PsvLicenceSurrenderList::create(['date' => new DateTime()]),
@@ -40,7 +43,7 @@ class CreatePsvLicenceSurrenderTasksCommandTest extends AbstractBatchCommandCase
             });
     }
 
-    public function testExecuteWithDryRun()
+    public function testExecuteWithDryRun(): void
     {
         $this->mockQueryHandlerManager->expects($this->once())
             ->method('handleQuery')
@@ -52,7 +55,8 @@ class CreatePsvLicenceSurrenderTasksCommandTest extends AbstractBatchCommandCase
         $this->executeCommand(['--dry-run' => true]);
     }
 
-    public function testExecuteSuccess()
+    #[\Override]
+    public function testExecuteSuccess(): void
     {
         $this->mockQueryHandlerManager->expects($this->once())
             ->method('handleQuery')

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Disc Records Test
  *
@@ -35,7 +37,8 @@ class CreateDiscRecordsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -44,7 +47,7 @@ class CreateDiscRecordsTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 111,
@@ -90,7 +93,7 @@ class CreateDiscRecordsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithLicenceVehicles()
+    public function testHandleCommandWithLicenceVehicles(): void
     {
         $data = [
             'id' => 111,
@@ -154,7 +157,7 @@ class CreateDiscRecordsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(null, $licenceVehicle2->getInterimApplication());
     }
 
-    public function testHandleCommandWithLicenceVehiclesGoods()
+    public function testHandleCommandWithLicenceVehiclesGoods(): void
     {
         $data = [
             'id' => 111,

@@ -36,6 +36,7 @@ class ApplicationController extends AbstractInternalController implements LeftVi
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -62,6 +63,7 @@ class ApplicationController extends AbstractInternalController implements LeftVi
     /**
      * @return Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $this->handleIndexPost();

@@ -45,6 +45,7 @@ final class ContinueLicence extends AbstractCommandHandler implements Transactio
      * @return Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         assert($command instanceof \Dvsa\Olcs\Transfer\Command\Licence\ContinueLicence);
@@ -319,6 +320,7 @@ final class ContinueLicence extends AbstractCommandHandler implements Transactio
             $continuationDetail->getLicence()->getOrganisation()->getId()
         );
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

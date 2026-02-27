@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
  */
 final class CaseSummary extends AbstractSection
 {
-    public const AUTH_PROPERTY_TO_TEMPLATE_ENTRY_MAPPINGS = [
+    public const array AUTH_PROPERTY_TO_TEMPLATE_ENTRY_MAPPINGS = [
         'totAuthVehicles' => [
             [
                 'templateKey' => 'totAuthorisedVehicles',
@@ -52,6 +52,7 @@ final class CaseSummary extends AbstractSection
      *
      * @return array Data array containing information for the submission section
      */
+    #[\Override]
     public function generateSection(CasesEntity $case)
     {
         $licence = $case->getLicence();

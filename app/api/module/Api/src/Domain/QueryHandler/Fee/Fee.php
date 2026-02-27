@@ -23,6 +23,7 @@ class Fee extends AbstractQueryHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var FeeRepository $repo */

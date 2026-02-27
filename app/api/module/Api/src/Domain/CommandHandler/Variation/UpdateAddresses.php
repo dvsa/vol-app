@@ -33,6 +33,7 @@ final class UpdateAddresses extends AbstractCommandHandler implements AuthAwareI
 
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Application $application */

@@ -22,6 +22,7 @@ final class DeleteList extends AbstractCommandHandler implements TransactionedIn
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var \Dvsa\Olcs\Api\Domain\Repository\ConditionUndertaking $repo */

@@ -20,6 +20,7 @@ class CanAccessApplicationOperatingCentreWithId extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canAccessApplicationOperatingCentre($this->getId($dto));

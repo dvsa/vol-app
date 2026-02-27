@@ -26,6 +26,7 @@ final class DeleteTeam extends AbstractCommandHandler implements TransactionedIn
 
     protected $extraRepos = ['User', 'Task'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $team = $this->getRepo()->fetchUsingId($command);

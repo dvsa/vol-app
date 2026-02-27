@@ -32,7 +32,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractMessagingConversation implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractMessagingConversation implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -171,7 +171,8 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -194,7 +195,8 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     /**
      * Get the task
      *
-     * @return \Dvsa\Olcs\Api\Entity\Task\Task     */
+     * @return \Dvsa\Olcs\Api\Entity\Task\Task
+     */
     public function getTask()
     {
         return $this->task;
@@ -217,7 +219,8 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -240,7 +243,8 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -263,7 +267,8 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     /**
      * Get the subject
      *
-     * @return string     */
+     * @return string
+     */
     public function getSubject()
     {
         return $this->subject;
@@ -286,7 +291,8 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     /**
      * Get the is attachments enabled
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsAttachmentsEnabled()
     {
         return $this->isAttachmentsEnabled;
@@ -311,7 +317,8 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getLastReadAt($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -338,7 +345,8 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     /**
      * Get the is closed
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsClosed()
     {
         return $this->isClosed;
@@ -361,7 +369,8 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     /**
      * Get the is archived
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsArchived()
     {
         return $this->isArchived;
@@ -384,7 +393,8 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -393,6 +403,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -35,6 +35,7 @@ class SubmitApplicationStep extends AbstractCommandHandler implements Transactio
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $qaContext = $this->qaContextGenerator->generate(
@@ -61,6 +62,7 @@ class SubmitApplicationStep extends AbstractCommandHandler implements Transactio
 
         return $this->result;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

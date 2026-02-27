@@ -39,7 +39,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -298,7 +298,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -321,7 +322,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the pi
      *
-     * @return \Dvsa\Olcs\Api\Entity\Pi\Pi     */
+     * @return \Dvsa\Olcs\Api\Entity\Pi\Pi
+     */
     public function getPi()
     {
         return $this->pi;
@@ -344,7 +346,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the presiding tc
      *
-     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc     */
+     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     */
     public function getPresidingTc()
     {
         return $this->presidingTc;
@@ -367,7 +370,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the presided by role
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getPresidedByRole()
     {
         return $this->presidedByRole;
@@ -390,7 +394,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the venue
      *
-     * @return \Dvsa\Olcs\Api\Entity\Venue     */
+     * @return \Dvsa\Olcs\Api\Entity\Venue
+     */
     public function getVenue()
     {
         return $this->venue;
@@ -413,7 +418,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -436,7 +442,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -461,7 +468,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getHearingDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -488,7 +496,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the is full day
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsFullDay()
     {
         return $this->isFullDay;
@@ -511,7 +520,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the presiding tc other
      *
-     * @return string     */
+     * @return string
+     */
     public function getPresidingTcOther()
     {
         return $this->presidingTcOther;
@@ -534,7 +544,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the venue other
      *
-     * @return string     */
+     * @return string
+     */
     public function getVenueOther()
     {
         return $this->venueOther;
@@ -557,7 +568,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the witnesses
      *
-     * @return int     */
+     * @return int
+     */
     public function getWitnesses()
     {
         return $this->witnesses;
@@ -580,7 +592,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the drivers
      *
-     * @return int     */
+     * @return int
+     */
     public function getDrivers()
     {
         return $this->drivers;
@@ -603,7 +616,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the is cancelled
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsCancelled()
     {
         return $this->isCancelled;
@@ -626,7 +640,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the cancelled reason
      *
-     * @return string     */
+     * @return string
+     */
     public function getCancelledReason()
     {
         return $this->cancelledReason;
@@ -651,7 +666,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getCancelledDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -678,7 +694,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the is adjourned
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsAdjourned()
     {
         return $this->isAdjourned;
@@ -703,7 +720,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getAdjournedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -730,7 +748,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the adjourned reason
      *
-     * @return string     */
+     * @return string
+     */
     public function getAdjournedReason()
     {
         return $this->adjournedReason;
@@ -753,7 +772,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the details
      *
-     * @return string     */
+     * @return string
+     */
     public function getDetails()
     {
         return $this->details;
@@ -776,7 +796,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -799,7 +820,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -822,7 +844,8 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get the olbs type
      *
-     * @return string     */
+     * @return string
+     */
     public function getOlbsType()
     {
         return $this->olbsType;
@@ -831,6 +854,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

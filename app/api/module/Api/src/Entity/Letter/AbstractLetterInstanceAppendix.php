@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLetterInstanceAppendix implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLetterInstanceAppendix implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -104,6 +104,15 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
     protected $displayOrder = 0;
 
     /**
+     * Caseworker edited EditorJS content
+     *
+     * @var array
+     *
+     * @ORM\Column(type="json", name="edited_content", nullable=true)
+     */
+    protected $editedContent;
+
+    /**
      * Version
      *
      * @var int
@@ -146,7 +155,8 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -169,7 +179,8 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
     /**
      * Get the letter instance
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterInstance     */
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterInstance
+     */
     public function getLetterInstance()
     {
         return $this->letterInstance;
@@ -192,7 +203,8 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
     /**
      * Get the letter appendix version
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion     */
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion
+     */
     public function getLetterAppendixVersion()
     {
         return $this->letterAppendixVersion;
@@ -215,7 +227,8 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -238,7 +251,8 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -261,10 +275,35 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
     /**
      * Get the display order
      *
-     * @return int     */
+     * @return int
+     */
     public function getDisplayOrder()
     {
         return $this->displayOrder;
+    }
+
+    /**
+     * Set the edited content
+     *
+     * @param array $editedContent new value being set
+     *
+     * @return LetterInstanceAppendix
+     */
+    public function setEditedContent($editedContent)
+    {
+        $this->editedContent = $editedContent;
+
+        return $this;
+    }
+
+    /**
+     * Get the edited content
+     *
+     * @return array
+     */
+    public function getEditedContent()
+    {
+        return $this->editedContent;
     }
 
     /**
@@ -284,7 +323,8 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -293,6 +333,7 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

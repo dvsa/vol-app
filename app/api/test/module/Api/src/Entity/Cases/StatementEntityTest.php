@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Cases;
 
 use Dvsa\Olcs\Api\Entity\System\RefData;
@@ -24,7 +26,7 @@ class StatementEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testGetRelatedOrganisation()
+    public function testGetRelatedOrganisation(): void
     {
         $mockCase = m::mock(CasesEntity::class);
         $mockStatementType = m::mock(RefDataEntity::class);

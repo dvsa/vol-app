@@ -36,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -196,7 +196,8 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -219,7 +220,8 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     /**
      * Get the serious infringement
      *
-     * @return \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement     */
+     * @return \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement
+     */
     public function getSeriousInfringement()
     {
         return $this->seriousInfringement;
@@ -242,7 +244,8 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     /**
      * Get the si penalty imposed type
      *
-     * @return \Dvsa\Olcs\Api\Entity\Si\SiPenaltyImposedType     */
+     * @return \Dvsa\Olcs\Api\Entity\Si\SiPenaltyImposedType
+     */
     public function getSiPenaltyImposedType()
     {
         return $this->siPenaltyImposedType;
@@ -265,7 +268,8 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     /**
      * Get the executed
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getExecuted()
     {
         return $this->executed;
@@ -288,7 +292,8 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -311,7 +316,8 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -334,7 +340,8 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     /**
      * Get the penalty imposed identifier
      *
-     * @return int     */
+     * @return int
+     */
     public function getPenaltyImposedIdentifier()
     {
         return $this->penaltyImposedIdentifier;
@@ -359,7 +366,8 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getFinalDecisionDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -388,7 +396,8 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getStartDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -417,7 +426,8 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEndDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -444,7 +454,8 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -467,7 +478,8 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -476,6 +488,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -14,16 +14,19 @@ class RegenerateApplicationFee extends AbstractRegenerateFee
 {
     protected $feeName = 'Application fee';
 
+    #[\Override]
     protected function canCreateOrReplaceFee(IrhpApplication $irhpApplication)
     {
         return $irhpApplication->canCreateOrReplaceApplicationFee();
     }
 
+    #[\Override]
     protected function getOutstandingFees(IrhpApplication $irhpApplication)
     {
         return $irhpApplication->getOutstandingApplicationFees();
     }
 
+    #[\Override]
     protected function getFeeProductRefsAndQuantities(IrhpApplication $irhpApplication)
     {
         return $irhpApplication->getApplicationFeeProductRefsAndQuantities();

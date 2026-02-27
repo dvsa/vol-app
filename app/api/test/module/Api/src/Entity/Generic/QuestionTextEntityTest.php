@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Generic;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -19,7 +21,7 @@ class QuestionTextEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testGetTranslationKeyFromQuestionKey()
+    public function testGetTranslationKeyFromQuestionKey(): void
     {
         $questionKey = '{
             "filter": "htmlEscape",

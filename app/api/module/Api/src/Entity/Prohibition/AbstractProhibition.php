@@ -39,7 +39,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractProhibition implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractProhibition implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -208,7 +208,8 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -231,7 +232,8 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -254,7 +256,8 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     /**
      * Get the prohibition type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getProhibitionType()
     {
         return $this->prohibitionType;
@@ -277,7 +280,8 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -300,7 +304,8 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -325,7 +330,8 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getProhibitionDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -354,7 +360,8 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getClearedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -381,7 +388,8 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     /**
      * Get the is trailer
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsTrailer()
     {
         return $this->isTrailer;
@@ -404,7 +412,8 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     /**
      * Get the vrm
      *
-     * @return string     */
+     * @return string
+     */
     public function getVrm()
     {
         return $this->vrm;
@@ -427,7 +436,8 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     /**
      * Get the imposed at
      *
-     * @return string     */
+     * @return string
+     */
     public function getImposedAt()
     {
         return $this->imposedAt;
@@ -450,7 +460,8 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -473,7 +484,8 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -545,6 +557,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

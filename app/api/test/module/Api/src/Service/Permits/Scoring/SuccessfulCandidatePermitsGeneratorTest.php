@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Scoring;
 
 use Dvsa\Olcs\Api\Entity\System\RefData;
@@ -15,10 +17,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class SuccessfulCandidatePermitsGeneratorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestGenerate
-     */
-    public function testGenerate($euro5PermitsRemaining, $euro6PermitsRemaining, array $expectedSuccessful)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
+    public function testGenerate(mixed $euro5PermitsRemaining, mixed $euro6PermitsRemaining, array $expectedSuccessful): void
     {
         $stockId = 72;
         $quotaRemaining = 13;
@@ -71,7 +71,7 @@ class SuccessfulCandidatePermitsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpTestGenerate()
+    public static function dpTestGenerate(): array
     {
         return [
             'more euro 6 than euro 5 remaining' => [

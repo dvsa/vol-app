@@ -8,6 +8,7 @@ use Dvsa\Olcs\Api\Entity\Application\Application;
 
 class PsvOperateNoveltyReviewService extends AbstractReviewService
 {
+    #[\Override]
     public function getConfigFromData(array $data = []): array
     {
         $multiItems['15f'][] = $this->addSection15f1($data);

@@ -6,6 +6,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\AbstractHandler;
 
 class CanConfirmSurrender extends AbstractHandler
 {
+    #[\Override]
     public function isValid($dto): bool
     {
         return $this->canConfirmSurrender($dto->getId());

@@ -43,6 +43,7 @@ class DiscList extends AbstractDiscList
         ]
     ];
 
+    #[\Override]
     public function render()
     {
         if (empty($this->data)) {
@@ -152,6 +153,7 @@ class DiscList extends AbstractDiscList
         return ($index % $max === $max - 1) ? self::LAST_ROW_HEIGHT : self::ROW_HEIGHT;
     }
 
+    #[\Override]
     protected function getQueryClass(): string
     {
         return Qry::class;

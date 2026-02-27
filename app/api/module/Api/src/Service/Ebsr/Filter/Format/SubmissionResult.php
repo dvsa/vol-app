@@ -39,6 +39,7 @@ class SubmissionResult extends AbstractFilter
      *
      * @return array
      */
+    #[\Override]
     public function filter($value)
     {
         $rawData = DoctrineDebug::export($value['rawData'], self::DOCTRINE_DEBUG_LEVEL);

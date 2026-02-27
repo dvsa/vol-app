@@ -17,6 +17,7 @@ final class Create extends AbstractCommandHandler
 
     protected $extraRepos = ['TaskAllocationRule'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command Cmd */

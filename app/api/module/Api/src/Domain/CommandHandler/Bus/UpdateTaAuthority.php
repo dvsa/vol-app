@@ -29,6 +29,7 @@ final class UpdateTaAuthority extends AbstractCommandHandler implements Transact
      * @return Result
      * @throws \Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var UpdateTaAuthorityCmd $command */

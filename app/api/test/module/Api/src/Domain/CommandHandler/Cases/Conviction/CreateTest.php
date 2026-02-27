@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Conviction Test
  */
@@ -32,7 +34,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'conv_c_cat_1',
@@ -51,7 +54,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'defendantType' => 'def_t_dir',
@@ -124,7 +127,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($data['isDealtWith'], $conv->getIsDealtWith());
     }
 
-    public function testHandleCommandWithoutOptional()
+    public function testHandleCommandWithoutOptional(): void
     {
         $data = [
             'defendantType' => 'def_t_dir',

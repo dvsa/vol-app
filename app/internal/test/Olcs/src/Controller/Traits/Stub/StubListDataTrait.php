@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Traits\Stub;
 
 /**
@@ -11,12 +13,12 @@ class StubListDataTrait
 
     private $handleQueryResponse;
 
-    public function setHandleQueryResponse($response)
+    public function setHandleQueryResponse(mixed $response): void
     {
         $this->handleQueryResponse = $response;
     }
 
-    protected function handleQuery()
+    protected function handleQuery(): mixed
     {
         return $this->handleQueryResponse;
     }

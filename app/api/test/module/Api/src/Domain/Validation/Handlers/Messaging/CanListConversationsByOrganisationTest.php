@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Messaging;
 
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Messaging\CanListConversationsByOrganisation;
@@ -22,10 +24,8 @@ class CanListConversationsByOrganisationTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestIsValid
-     */
-    public function testIsValid($canAccess, $hasPermission, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsValid')]
+    public function testIsValid(mixed $canAccess, mixed $hasPermission, mixed $expected): void
     {
         /** @var QueryInterface $dto */
         $orgId = 1;
@@ -43,7 +43,7 @@ class CanListConversationsByOrganisationTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function dpTestIsValid()
+    public static function dpTestIsValid(): array
     {
         return [
             [true, true, true],

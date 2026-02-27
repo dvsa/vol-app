@@ -32,6 +32,7 @@ class MarkSuccessfulSectorPermitApplications extends ScoringCommandHandler imple
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->profileMessage('mark successful sector permit applications...');
@@ -71,6 +72,7 @@ class MarkSuccessfulSectorPermitApplications extends ScoringCommandHandler imple
         $this->result->addMessage('  ' . $totalSuccessfulCandidatePermits . ' permits have been marked as successful');
         return $this->result;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->successfulCandidatePermitsFacade = $container->get(

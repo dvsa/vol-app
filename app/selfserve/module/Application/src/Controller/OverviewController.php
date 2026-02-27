@@ -43,11 +43,13 @@ class OverviewController extends AbstractOverviewController
         );
     }
 
+    #[\Override]
     protected function getOverviewView($data, $sections, $form)
     {
         return new ApplicationOverview($data, $sections, $form);
     }
 
+    #[\Override]
     protected function isReadyToSubmit($sections)
     {
         foreach ($sections as $section) {
@@ -63,6 +65,7 @@ class OverviewController extends AbstractOverviewController
      *
      * e.g. [ 'section_name' => ['enabled' => true, 'complete' => false] ]
      */
+    #[\Override]
     protected function getSections($data)
     {
         return $this->setEnabledAndCompleteFlagOnSections(

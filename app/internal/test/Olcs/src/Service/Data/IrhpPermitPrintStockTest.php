@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -38,10 +40,8 @@ class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestFetchListOptions
-     */
-    public function testFetchListOptions($country, $results, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestFetchListOptions')]
+    public function testFetchListOptions(mixed $country, mixed $results, mixed $expected): void
     {
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->with(m::type(Qry::class))
@@ -73,7 +73,7 @@ class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
         $this->assertEquals($country, $this->sut->getCountry());
     }
 
-    public function dpTestFetchListOptions()
+    public static function dpTestFetchListOptions(): array
     {
         return [
             'with validity dates' => [
@@ -156,7 +156,7 @@ class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
         ];
     }
 
-    public function testFetchListOptionsWithException()
+    public function testFetchListOptionsWithException(): void
     {
         $this->expectException(DataServiceException::class);
 

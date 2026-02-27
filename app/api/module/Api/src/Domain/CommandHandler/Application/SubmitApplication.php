@@ -49,7 +49,8 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
      *
      * @return Result
      */
-    public function handleCommand(CommandInterface $command) : Result
+    #[\Override]
+    public function handleCommand(CommandInterface $command)
     {
         /* @var $application ApplicationEntity */
         $application = $this->getRepo()->fetchUsingId($command, Query::HYDRATE_OBJECT, $command->getVersion());

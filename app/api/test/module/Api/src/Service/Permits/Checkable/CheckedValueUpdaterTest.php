@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Checkable;
 
 use Dvsa\Olcs\Api\Domain\Repository\Task as TaskRepository;
@@ -14,6 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class CheckedValueUpdaterTest extends MockeryTestCase
 {
     private $checkableApplication;
@@ -31,10 +34,9 @@ class CheckedValueUpdaterTest extends MockeryTestCase
         $this->checkedValueUpdater = new CheckedValueUpdater($this->taskRepo);
     }
 
-    /**
-     * @dataProvider dpCheckNotRequired
-     */
-    public function testCheckNotRequired($checked)
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCheckNotRequired')]
+    public function testCheckNotRequired(mixed $checked): void
     {
         $this->checkableApplication->shouldReceive('requiresPreAllocationCheck')
             ->withNoArgs()
@@ -43,7 +45,7 @@ class CheckedValueUpdaterTest extends MockeryTestCase
         $this->checkedValueUpdater->updateIfRequired($this->checkableApplication, $checked);
     }
 
-    public function dpCheckNotRequired()
+    public static function dpCheckNotRequired(): array
     {
         return [
             [true],
@@ -51,7 +53,7 @@ class CheckedValueUpdaterTest extends MockeryTestCase
         ];
     }
 
-    public function testCheckRequiredNotChecked()
+    public function testCheckRequiredNotChecked(): void
     {
         $checked = false;
 
@@ -65,7 +67,7 @@ class CheckedValueUpdaterTest extends MockeryTestCase
         $this->checkedValueUpdater->updateIfRequired($this->checkableApplication, $checked);
     }
 
-    public function testCheckRequiredAndCheckedTaskFound()
+    public function testCheckRequiredAndCheckedTaskFound(): void
     {
         $checked = true;
 
@@ -95,7 +97,7 @@ class CheckedValueUpdaterTest extends MockeryTestCase
         $this->checkedValueUpdater->updateIfRequired($this->checkableApplication, $checked);
     }
 
-    public function testCheckRequiredAndCheckedTaskNotFound()
+    public function testCheckRequiredAndCheckedTaskNotFound(): void
     {
         $checked = true;
 

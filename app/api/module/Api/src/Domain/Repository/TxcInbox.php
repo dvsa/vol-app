@@ -129,6 +129,7 @@ class TxcInbox extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function buildDefaultListQuery(QueryBuilder $qb, QueryInterface $query, $compositeFields = [])
     {
         parent::buildDefaultListQuery($qb, $query, $compositeFields);
@@ -149,6 +150,7 @@ class TxcInbox extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if (method_exists($query, 'getLocalAuthority') && !empty($query->getLocalAuthority())) {

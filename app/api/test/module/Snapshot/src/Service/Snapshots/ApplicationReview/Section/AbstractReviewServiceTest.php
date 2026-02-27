@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ApplicationReview\Section;
 
 use Mockery as m;
@@ -24,7 +26,7 @@ class AbstractReviewServiceTest extends MockeryTestCase
         $this->sut = new AbstractReviewServiceStub($abstractReviewServiceServices);
     }
 
-    public function testGetHeaderTranslationKey()
+    public function testGetHeaderTranslationKey(): void
     {
         $this->assertEquals(
             'review-section-name',

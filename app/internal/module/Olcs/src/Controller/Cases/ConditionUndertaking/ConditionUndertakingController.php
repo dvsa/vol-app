@@ -79,6 +79,7 @@ class ConditionUndertakingController extends AbstractInternalController implemen
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

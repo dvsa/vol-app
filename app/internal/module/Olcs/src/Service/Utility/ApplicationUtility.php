@@ -24,6 +24,7 @@ class ApplicationUtility implements ApplicationUtilityInterface
      * @param array $data
      * @return array
      */
+    #[\Override]
     public function alterCreateApplicationData(array $data)
     {
         $data['status'] = RefData::APPLICATION_STATUS_UNDER_CONSIDERATION;

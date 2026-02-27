@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
 use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
+use Laminas\EventManager\EventManagerInterface;
 use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Olcs\Event\RouteParam;
@@ -27,7 +30,7 @@ class BusRegFurnitureTest extends MockeryTestCase
         $this->sut = new BusRegFurniture();
     }
 
-    public function setupMockBusReg($data)
+    public function setupMockBusReg(mixed $data): void
     {
         $mockResult = m::mock();
         $mockResult->shouldReceive('isOk')->with()->once()->andReturn(true);
@@ -38,16 +41,23 @@ class BusRegFurnitureTest extends MockeryTestCase
         $this->sut->setQuerySender($mockQuerySender);
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
-        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
-        $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'busRegId', [$this->sut, 'onBusRegFurniture'], 1);
+        $mockEventManager = m::mock(EventManagerInterface::class);
+        $mockEventManager->expects('attach')
+            ->with(
+                RouteParams::EVENT_PARAM . 'busRegId',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onBusRegFurniture';
+                }),
+                1
+            );
 
         $this->sut->attach($mockEventManager);
     }
 
-    public function testOnBusRegFurniture()
+    public function testOnBusRegFurniture(): void
     {
         $id = 69;
 
@@ -158,7 +168,7 @@ class BusRegFurnitureTest extends MockeryTestCase
         $this->sut->onBusRegFurniture($event);
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
         $mockQuerySender = m::mock(QuerySender::class);
@@ -177,7 +187,7 @@ class BusRegFurnitureTest extends MockeryTestCase
         $this->assertSame($mockCommandSender, $this->sut->getCommandSender());
     }
 
-    public function testOnBusRegFurnitureNotFound()
+    public function testOnBusRegFurnitureNotFound(): void
     {
         $this->expectException(ResourceNotFoundException::class);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\QueryBuilder;
@@ -19,7 +21,7 @@ class SectorsTest extends RepositoryTestCase
         $this->setUpSut(Sectors::class);
     }
 
-    public function testFetchQaOptions()
+    public function testFetchQaOptions(): void
     {
         $result = [
             [

@@ -50,7 +50,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTask implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTask implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -328,7 +328,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -351,7 +352,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\Category     */
+     * @return \Dvsa\Olcs\Api\Entity\System\Category
+     */
     public function getCategory()
     {
         return $this->category;
@@ -374,7 +376,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the sub category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory     */
+     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory
+     */
     public function getSubCategory()
     {
         return $this->subCategory;
@@ -397,7 +400,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the assigned to user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getAssignedToUser()
     {
         return $this->assignedToUser;
@@ -420,7 +424,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the assigned to team
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\Team     */
+     * @return \Dvsa\Olcs\Api\Entity\User\Team
+     */
     public function getAssignedToTeam()
     {
         return $this->assignedToTeam;
@@ -443,7 +448,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the assigned by user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getAssignedByUser()
     {
         return $this->assignedByUser;
@@ -466,7 +472,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -489,7 +496,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -512,7 +520,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
     public function getApplication()
     {
         return $this->application;
@@ -535,7 +544,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the bus reg
      *
-     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg     */
+     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     */
     public function getBusReg()
     {
         return $this->busReg;
@@ -558,7 +568,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the transport manager
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     */
     public function getTransportManager()
     {
         return $this->transportManager;
@@ -581,7 +592,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the surrender
      *
-     * @return \Dvsa\Olcs\Api\Entity\Surrender     */
+     * @return \Dvsa\Olcs\Api\Entity\Surrender
+     */
     public function getSurrender()
     {
         return $this->surrender;
@@ -604,7 +616,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the irfo organisation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     */
     public function getIrfoOrganisation()
     {
         return $this->irfoOrganisation;
@@ -627,7 +640,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the submission
      *
-     * @return \Dvsa\Olcs\Api\Entity\Submission\Submission     */
+     * @return \Dvsa\Olcs\Api\Entity\Submission\Submission
+     */
     public function getSubmission()
     {
         return $this->submission;
@@ -650,7 +664,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the irhp application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
+     */
     public function getIrhpApplication()
     {
         return $this->irhpApplication;
@@ -673,7 +688,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -696,7 +712,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -719,7 +736,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the is closed
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsClosed()
     {
         return $this->isClosed;
@@ -742,7 +760,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -767,7 +786,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getActionDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -794,7 +814,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the urgent
      *
-     * @return string     */
+     * @return string
+     */
     public function getUrgent()
     {
         return $this->urgent;
@@ -817,7 +838,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the messaging
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getMessaging()
     {
         return $this->messaging;
@@ -840,7 +862,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -863,7 +886,8 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -872,6 +896,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

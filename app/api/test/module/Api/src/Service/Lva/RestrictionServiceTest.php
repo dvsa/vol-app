@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Lva;
 
 use Dvsa\Olcs\Api\Service\Lva\RestrictionService;
@@ -23,12 +25,12 @@ class RestrictionServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Test isRestrictionSatisfied
      *
-     * @dataProvider dpTestIsRestrictionSatisfied
      *
-     * @group helper_service
-     * @group restriction_helper_service
      */
-    public function testIsRestrictionSatisfied($restrictions, $accessKeys, $expected, $ref = null)
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('restriction_helper_service')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsRestrictionSatisfied')]
+    public function testIsRestrictionSatisfied(mixed $restrictions, mixed $accessKeys, mixed $expected, mixed $ref = null): void
     {
         $this->assertEquals($expected, $this->helper->isRestrictionSatisfied($restrictions, $accessKeys, $ref));
     }
@@ -38,7 +40,7 @@ class RestrictionServiceTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function dpTestIsRestrictionSatisfied()
+    public static function dpTestIsRestrictionSatisfied(): array
     {
         return [
             //  check callable

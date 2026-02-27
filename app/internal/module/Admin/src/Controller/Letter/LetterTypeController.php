@@ -49,6 +49,7 @@ class LetterTypeController extends AbstractInternalController implements LeftVie
         'editAction' => ['forms/letter-type'],
     ];
 
+    #[\Override]
     public function getLeftView(): ViewModel
     {
         $view = new ViewModel(

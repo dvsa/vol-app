@@ -36,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLetterIssue implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLetterIssue implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -139,7 +139,8 @@ abstract class AbstractLetterIssue implements BundleSerializableInterface, JsonS
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -162,7 +163,8 @@ abstract class AbstractLetterIssue implements BundleSerializableInterface, JsonS
     /**
      * Get the current version
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion     */
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion
+     */
     public function getCurrentVersion()
     {
         return $this->currentVersion;
@@ -185,7 +187,8 @@ abstract class AbstractLetterIssue implements BundleSerializableInterface, JsonS
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -208,7 +211,8 @@ abstract class AbstractLetterIssue implements BundleSerializableInterface, JsonS
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -231,7 +235,8 @@ abstract class AbstractLetterIssue implements BundleSerializableInterface, JsonS
     /**
      * Get the issue key
      *
-     * @return string     */
+     * @return string
+     */
     public function getIssueKey()
     {
         return $this->issueKey;
@@ -254,7 +259,8 @@ abstract class AbstractLetterIssue implements BundleSerializableInterface, JsonS
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -263,6 +269,7 @@ abstract class AbstractLetterIssue implements BundleSerializableInterface, JsonS
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

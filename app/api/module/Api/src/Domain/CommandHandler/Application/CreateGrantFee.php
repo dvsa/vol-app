@@ -27,6 +27,7 @@ final class CreateGrantFee extends AbstractCommandHandler implements Transaction
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var ApplicationEntity $application */

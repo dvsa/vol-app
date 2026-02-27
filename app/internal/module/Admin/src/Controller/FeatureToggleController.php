@@ -50,6 +50,7 @@ class FeatureToggleController extends AbstractInternalController implements Left
 
     protected $tableViewTemplate = 'pages/feature-toggle/index';
 
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel(
@@ -63,6 +64,7 @@ class FeatureToggleController extends AbstractInternalController implements Left
         return $view;
     }
 
+    #[\Override]
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'Feature toggles');

@@ -30,7 +30,7 @@ use Doctrine\Common\Collections\Collection;
  *    }
  * )
  */
-abstract class AbstractSubCategoryDescription implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSubCategoryDescription implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -99,7 +99,8 @@ abstract class AbstractSubCategoryDescription implements BundleSerializableInter
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -122,7 +123,8 @@ abstract class AbstractSubCategoryDescription implements BundleSerializableInter
     /**
      * Get the sub category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory     */
+     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory
+     */
     public function getSubCategory()
     {
         return $this->subCategory;
@@ -145,7 +147,8 @@ abstract class AbstractSubCategoryDescription implements BundleSerializableInter
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -154,6 +157,7 @@ abstract class AbstractSubCategoryDescription implements BundleSerializableInter
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

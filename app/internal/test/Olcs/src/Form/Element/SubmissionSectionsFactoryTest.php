@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Form\Element;
 
 use Psr\Container\ContainerInterface;
@@ -11,7 +13,8 @@ use Dvsa\OlcsTest\Controller\ControllerPluginManagerHelper;
 
 class SubmissionSectionsFactoryTest extends MockeryTestCase
 {
-    public function testInvoke()
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testInvoke(): void
     {
         $caseId = 84;
         $transportManagerId = 3;

@@ -42,7 +42,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractFee implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractFee implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -309,7 +309,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -332,7 +333,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the fee type
      *
-     * @return \Dvsa\Olcs\Api\Entity\Fee\FeeType     */
+     * @return \Dvsa\Olcs\Api\Entity\Fee\FeeType
+     */
     public function getFeeType()
     {
         return $this->feeType;
@@ -355,7 +357,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the fee status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getFeeStatus()
     {
         return $this->feeStatus;
@@ -378,7 +381,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the parent fee
      *
-     * @return \Dvsa\Olcs\Api\Entity\Fee\Fee     */
+     * @return \Dvsa\Olcs\Api\Entity\Fee\Fee
+     */
     public function getParentFee()
     {
         return $this->parentFee;
@@ -401,7 +405,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
     public function getApplication()
     {
         return $this->application;
@@ -424,7 +429,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the bus reg
      *
-     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg     */
+     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     */
     public function getBusReg()
     {
         return $this->busReg;
@@ -447,7 +453,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -470,7 +477,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the task
      *
-     * @return \Dvsa\Olcs\Api\Entity\Task\Task     */
+     * @return \Dvsa\Olcs\Api\Entity\Task\Task
+     */
     public function getTask()
     {
         return $this->task;
@@ -493,7 +501,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the irhp application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
+     */
     public function getIrhpApplication()
     {
         return $this->irhpApplication;
@@ -516,7 +525,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the irhp permit application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
+     */
     public function getIrhpPermitApplication()
     {
         return $this->irhpPermitApplication;
@@ -539,7 +549,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the irfo gv permit
      *
-     * @return \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit     */
+     * @return \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit
+     */
     public function getIrfoGvPermit()
     {
         return $this->irfoGvPermit;
@@ -562,7 +573,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the irfo psv auth
      *
-     * @return \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth     */
+     * @return \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth
+     */
     public function getIrfoPsvAuth()
     {
         return $this->irfoPsvAuth;
@@ -585,7 +597,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -608,7 +621,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -631,7 +645,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the net amount
      *
-     * @return string     */
+     * @return string
+     */
     public function getNetAmount()
     {
         return $this->netAmount;
@@ -654,7 +669,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the gross amount
      *
-     * @return string     */
+     * @return string
+     */
     public function getGrossAmount()
     {
         return $this->grossAmount;
@@ -677,7 +693,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the vat amount
      *
-     * @return string     */
+     * @return string
+     */
     public function getVatAmount()
     {
         return $this->vatAmount;
@@ -700,7 +717,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the invoice line no
      *
-     * @return int     */
+     * @return int
+     */
     public function getInvoiceLineNo()
     {
         return $this->invoiceLineNo;
@@ -725,7 +743,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getInvoicedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -752,7 +771,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -775,7 +795,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the irfo fee exempt
      *
-     * @return string     */
+     * @return string
+     */
     public function getIrfoFeeExempt()
     {
         return $this->irfoFeeExempt;
@@ -798,7 +819,8 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -870,6 +892,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

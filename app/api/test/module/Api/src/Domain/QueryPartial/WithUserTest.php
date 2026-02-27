@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryPartial;
 
 use Dvsa\Olcs\Api\Domain\QueryPartial\WithUser;
@@ -23,10 +25,8 @@ class WithUserTest extends QueryPartialTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
-    public function testModifyQuery($expectedDql, $arguments)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
+    public function testModifyQuery(mixed $expectedDql, mixed $arguments): void
     {
         $this->sut->modifyQuery($this->qb, $arguments);
         $this->assertSame(
@@ -35,7 +35,7 @@ class WithUserTest extends QueryPartialTestCase
         );
     }
 
-    public function dataProvider()
+    public static function dataProvider(): array
     {
         return [
             [

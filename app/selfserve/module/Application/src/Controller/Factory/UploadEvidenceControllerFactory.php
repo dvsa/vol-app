@@ -21,6 +21,7 @@ class UploadEvidenceControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return UploadEvidenceController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): UploadEvidenceController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

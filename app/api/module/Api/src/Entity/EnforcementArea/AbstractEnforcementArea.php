@@ -31,7 +31,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractEnforcementArea implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractEnforcementArea implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -132,7 +132,8 @@ abstract class AbstractEnforcementArea implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return string     */
+     * @return string
+     */
     public function getId()
     {
         return $this->id;
@@ -155,7 +156,8 @@ abstract class AbstractEnforcementArea implements BundleSerializableInterface, J
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -178,7 +180,8 @@ abstract class AbstractEnforcementArea implements BundleSerializableInterface, J
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -201,7 +204,8 @@ abstract class AbstractEnforcementArea implements BundleSerializableInterface, J
     /**
      * Get the name
      *
-     * @return string     */
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -224,7 +228,8 @@ abstract class AbstractEnforcementArea implements BundleSerializableInterface, J
     /**
      * Get the email address
      *
-     * @return string     */
+     * @return string
+     */
     public function getEmailAddress()
     {
         return $this->emailAddress;
@@ -247,7 +252,8 @@ abstract class AbstractEnforcementArea implements BundleSerializableInterface, J
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -256,6 +262,7 @@ abstract class AbstractEnforcementArea implements BundleSerializableInterface, J
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

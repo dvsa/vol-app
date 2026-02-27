@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Marker;
 
 use Psr\Container\ContainerInterface;
@@ -23,25 +25,25 @@ class MarkerPluginManagerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->sut = new \Olcs\Service\Marker\MarkerPluginManager($this->createMock(ContainerInterface::class));
+        $this->sut = new \Olcs\Service\Marker\MarkerPluginManager($this->createStub(ContainerInterface::class));
         parent::setUp();
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
-        $sut = new \Olcs\Service\Marker\MarkerPluginManager($this->createMock(ContainerInterface::class));
+        $sut = new \Olcs\Service\Marker\MarkerPluginManager($this->createStub(ContainerInterface::class));
 
         $this->assertInstanceOf(\Olcs\Service\Marker\MarkerPluginManager::class, $sut);
     }
 
-    public function testValidate()
+    public function testValidate(): void
     {
         $mockPlugin = m::mock(MarkerInterface::class);
 
         $this->assertNull($this->sut->validate($mockPlugin));
     }
 
-    public function testValidateInvalid()
+    public function testValidateInvalid(): void
     {
         $this->expectException(InvalidServiceException::class);
 
@@ -51,7 +53,7 @@ class MarkerPluginManagerTest extends TestCase
     /**
      * @todo To be removed as part of OLCS-28149
      */
-    public function testValidatePlugin()
+    public function testValidatePlugin(): void
     {
         $mockPlugin = m::mock(MarkerInterface::class);
 
@@ -61,7 +63,7 @@ class MarkerPluginManagerTest extends TestCase
     /**
      * @todo To be removed as part of OLCS-28149
      */
-    public function testValidatePluginInvalid()
+    public function testValidatePluginInvalid(): void
     {
         $this->expectException(\RuntimeException::class);
 

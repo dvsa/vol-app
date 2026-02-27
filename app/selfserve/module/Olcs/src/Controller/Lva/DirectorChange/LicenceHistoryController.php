@@ -59,6 +59,7 @@ class LicenceHistoryController extends AbstractLicenceHistoryController
      *
      * @return array required previous sections or return empty array
      */
+    #[\Override]
     protected function getRequiredSections()
     {
         return ['peopleStatus', 'financialHistoryStatus'];
@@ -69,6 +70,7 @@ class LicenceHistoryController extends AbstractLicenceHistoryController
      *
      * @return string
      */
+    #[\Override]
     protected function getVariationType()
     {
         return RefData::VARIATION_TYPE_DIRECTOR_CHANGE;
@@ -79,6 +81,7 @@ class LicenceHistoryController extends AbstractLicenceHistoryController
      *
      * @return string
      */
+    #[\Override]
     public function getSubmitActionText()
     {
         return 'Continue to Convictions and Penalties';
@@ -91,6 +94,7 @@ class LicenceHistoryController extends AbstractLicenceHistoryController
      *
      * @return array route definition
      */
+    #[\Override]
     protected function getPreviousPageRoute()
     {
         return ['name' => 'lva-director_change/financial_history', 'params' => ['application' => $this->getIdentifier()]];
@@ -101,6 +105,7 @@ class LicenceHistoryController extends AbstractLicenceHistoryController
      *
      * @return array route definition
      */
+    #[\Override]
     protected function getNextPageRoute()
     {
         return [
@@ -114,6 +119,7 @@ class LicenceHistoryController extends AbstractLicenceHistoryController
      *
      * @return array
      */
+    #[\Override]
     public function getStartRoute()
     {
         $licenceId = $this->getLicenceId($this->getApplicationId());
@@ -125,6 +131,7 @@ class LicenceHistoryController extends AbstractLicenceHistoryController
      *
      * @return null|string
      */
+    #[\Override]
     protected function getBaseRoute()
     {
         return 'lva-director_change/licence_history';

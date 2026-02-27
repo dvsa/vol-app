@@ -19,6 +19,7 @@ abstract class AbstractConsumer extends AbstractCommandConsumer
      *
      * @return array
      */
+    #[\Override]
     public function getCommandData(QueueEntity $item)
     {
         $options = (array) json_decode($item->getOptions());

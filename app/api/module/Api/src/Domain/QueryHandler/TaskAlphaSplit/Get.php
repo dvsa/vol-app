@@ -14,6 +14,7 @@ class Get extends AbstractQueryHandler
 {
     protected $repoServiceName = 'TaskAlphaSplit';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $repo = $this->getRepo();

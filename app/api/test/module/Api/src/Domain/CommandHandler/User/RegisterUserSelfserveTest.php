@@ -55,7 +55,8 @@ class RegisterUserSelfserveTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ContactDetailsEntity::CONTACT_TYPE_USER,
@@ -67,8 +68,8 @@ class RegisterUserSelfserveTest extends AbstractCommandHandlerTestCase
 
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @dataProvider dpHandleCommand
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommandWithOrg(bool $createdByConsultant): void
     {
         $userId = 111;
@@ -192,8 +193,8 @@ class RegisterUserSelfserveTest extends AbstractCommandHandlerTestCase
 
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @dataProvider dpHandleCommand
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommandWithLicence(bool $createdByConsultant): void
     {
         $userId = 111;
@@ -325,7 +326,7 @@ class RegisterUserSelfserveTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(UserEntity::USER_TYPE_OPERATOR, $savedUser->getUserType());
     }
 
-    public function dpHandleCommand(): array
+    public static function dpHandleCommand(): array
     {
         return [
             [true],

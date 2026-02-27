@@ -11,6 +11,7 @@ class ImportUsersFromCsvCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:import-users-from-csv';
 
+    #[\Override]
     protected function configure()
     {
         $this
@@ -19,6 +20,7 @@ class ImportUsersFromCsvCommand extends AbstractBatchCommand
             ->addOption('result-csv-path', null, InputOption::VALUE_OPTIONAL, 'Path to save result csv file', '<csv-path>-res.csv');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

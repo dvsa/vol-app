@@ -25,6 +25,7 @@ final class CreateForTma extends AbstractCommandHandler implements Transactioned
 {
     protected $repoServiceName = 'OtherLicence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command CreateCommand */

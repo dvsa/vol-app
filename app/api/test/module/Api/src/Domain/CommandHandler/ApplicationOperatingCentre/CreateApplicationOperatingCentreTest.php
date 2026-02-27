@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\ApplicationOperatingCentre;
 
 use Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre;
@@ -30,7 +32,8 @@ class CreateApplicationOperatingCentreTest extends AbstractCommandHandlerTestCas
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -43,7 +46,7 @@ class CreateApplicationOperatingCentreTest extends AbstractCommandHandlerTestCas
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $mockApplication = m::mock(ApplicationEntity::class);
         $mockOperatingCentre = m::mock(OperatingCentreEntity::class);

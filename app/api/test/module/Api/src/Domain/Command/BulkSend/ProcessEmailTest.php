@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Process Email send cmd test
  *
@@ -12,7 +14,7 @@ use Dvsa\Olcs\Api\Domain\Command\BulkSend\ProcessEmail;
 
 class ProcessEmailTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = ProcessEmail::create(
             [

@@ -51,6 +51,7 @@ class RemoveVehicleController extends AbstractVehicleController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessenger);
     }
 
+    #[\Override]
     public function indexAction()
     {
         return $this->createView();

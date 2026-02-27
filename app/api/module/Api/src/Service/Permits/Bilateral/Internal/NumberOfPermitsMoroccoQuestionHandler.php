@@ -21,6 +21,7 @@ class NumberOfPermitsMoroccoQuestionHandler implements QuestionHandlerInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function handle(QaContext $qaContext, array $requiredPermits)
     {
         $bilateralRequired = IrhpPermitApplication::DEFAULT_BILATERAL_REQUIRED;

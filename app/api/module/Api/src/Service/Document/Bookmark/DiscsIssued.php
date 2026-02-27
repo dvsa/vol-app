@@ -12,11 +12,13 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\LicencePsvDiscCountNotCeased as Qry;
  */
 class DiscsIssued extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(['id' => $data['licence']]);
     }
 
+    #[\Override]
     public function render()
     {
         return $this->data['notCeasedPsvDiscCount'];

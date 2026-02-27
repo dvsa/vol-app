@@ -40,6 +40,7 @@ class NonPublicInquiryController extends AbstractInternalController implements C
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -111,6 +112,7 @@ class NonPublicInquiryController extends AbstractInternalController implements C
      *
      * @return array
      */
+    #[\Override]
     public function notFoundAction()
     {
         return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);

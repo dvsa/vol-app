@@ -21,6 +21,7 @@ final class ProcessReminder extends AbstractCommandHandler implements Transactio
 
     protected $extraRepos = ['Document'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $continuationDetail = $this->getRepo()->fetchWithLicence($command->getId());

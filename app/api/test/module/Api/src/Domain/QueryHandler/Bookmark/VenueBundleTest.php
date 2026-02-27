@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Venue Bundle Test
  */
@@ -26,7 +28,7 @@ class VenueBundleTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $id = 99;
         $bundle = [];

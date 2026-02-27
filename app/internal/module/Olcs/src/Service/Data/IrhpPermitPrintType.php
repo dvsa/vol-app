@@ -41,6 +41,7 @@ class IrhpPermitPrintType extends AbstractDataService implements ListDataInterfa
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function fetchListOptions($context, $useGroups = false)
     {
         $data = $this->fetchListData();

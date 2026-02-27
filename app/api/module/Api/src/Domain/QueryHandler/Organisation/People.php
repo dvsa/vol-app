@@ -14,6 +14,7 @@ class People extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Organisation';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $organisation \Dvsa\Olcs\Api\Entity\Organisation\Organisation */

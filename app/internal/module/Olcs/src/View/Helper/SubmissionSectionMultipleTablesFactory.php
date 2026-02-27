@@ -16,6 +16,7 @@ class SubmissionSectionMultipleTablesFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SubmissionSectionMultipleTables
     {
         $translator = $container->get(TranslationHelperService::class);

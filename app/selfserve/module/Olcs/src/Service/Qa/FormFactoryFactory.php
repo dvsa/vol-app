@@ -16,6 +16,7 @@ class FormFactoryFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FormFactory
     {
         return new FormFactory($container);

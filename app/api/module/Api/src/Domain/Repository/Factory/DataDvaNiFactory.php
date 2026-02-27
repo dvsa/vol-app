@@ -20,6 +20,7 @@ class DataDvaNiFactory implements FactoryInterface
      * @param array|null $options
      * @return DataDvaNi
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DataDvaNi
     {
         return new DataDvaNi(

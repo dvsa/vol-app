@@ -24,6 +24,7 @@ class RestrictedCountries implements ElementInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getRepresentation()
     {
         $restrictedCountriesRepresentations = [];

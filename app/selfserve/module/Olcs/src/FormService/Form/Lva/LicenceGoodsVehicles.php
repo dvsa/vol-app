@@ -32,6 +32,7 @@ class LicenceGoodsVehicles extends \Common\FormService\Form\Lva\LicenceGoodsVehi
      *
      * @return void
      */
+    #[\Override]
     public function alterForm($form)
     {
         parent::alterForm($form);

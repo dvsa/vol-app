@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Api\Service\Letter\SectionRenderer;
 
 use Dvsa\Olcs\Api\Service\EditorJs\ConverterService;
+use Dvsa\Olcs\Api\Service\Letter\VolGrabReplacementService;
 
 /**
  * Abstract base class for letter section renderers
@@ -14,7 +15,8 @@ use Dvsa\Olcs\Api\Service\EditorJs\ConverterService;
 abstract class AbstractSectionRenderer implements SectionRendererInterface
 {
     public function __construct(
-        protected readonly ConverterService $converterService
+        protected readonly ConverterService $converterService,
+        protected readonly VolGrabReplacementService $volGrabReplacementService
     ) {
     }
 
@@ -22,9 +24,10 @@ abstract class AbstractSectionRenderer implements SectionRendererInterface
      * Convert EditorJS content array to HTML
      *
      * @param array $content EditorJS content as associative array
+     * @param array $context Context for vol-grab replacement (licence, application, etc.)
      * @return string HTML output
      */
-    protected function convertEditorJsToHtml(array $content): string
+    protected function convertEditorJsToHtml(array $content, array $context = []): string
     {
         if (empty($content)) {
             return '';
@@ -34,6 +37,9 @@ abstract class AbstractSectionRenderer implements SectionRendererInterface
         if ($jsonString === false) {
             return '';
         }
+
+        // Replace vol-grab placeholders before HTML conversion
+        $jsonString = $this->volGrabReplacementService->replaceGrabs($jsonString, $context);
 
         return $this->converterService->convertJsonToHtml($jsonString);
     }

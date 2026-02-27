@@ -20,6 +20,7 @@ final readonly class WithIrhpApplication implements QueryPartialInterface
      *
      * @return void
      */
+    #[\Override]
     public function modifyQuery(QueryBuilder $qb, array $arguments = []): void
     {
         $alias = ((isset($arguments[0]) && isset($arguments[1])) ? $arguments[1] : $qb->getRootAliases()[0]);

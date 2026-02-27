@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Reset Fees Test
  *
@@ -20,7 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class ResetFeesTest extends MockeryTestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $fee1 = m::mock(Fee::class);
         $fee2 = m::mock(Fee::class);

@@ -17,11 +17,13 @@ class ResetPermitsTestDataCommand extends AbstractOlcsCommand
 {
     protected static $defaultName = 'batch:permits:reset-test-data';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Reset permits test data for VFT regression testing');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Withdraw BusReg Test
  */
@@ -22,6 +24,7 @@ use Dvsa\Olcs\Api\Domain\Command\Fee\CancelFee as CancelFeeCmd;
 /**
  * Withdraw BusReg Test
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class WithdrawBusRegTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
@@ -32,7 +35,8 @@ class WithdrawBusRegTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             BusRegEntity::STATUS_WITHDRAWN,
@@ -43,12 +47,12 @@ class WithdrawBusRegTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider handleCommandProvider
      *
      * @param $isEbsr
      * @param $hasOutstandingFee
      */
-    public function testHandleCommandWithFee($isEbsr, $hasOutstandingFee)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
+    public function testHandleCommandWithFee(mixed $isEbsr, mixed $hasOutstandingFee): void
     {
         $id = 99;
         $ebsrId = 55;
@@ -99,7 +103,7 @@ class WithdrawBusRegTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    private function getFees($hasOutstandingFees)
+    private function getFees(mixed $hasOutstandingFees): ArrayCollection
     {
         if (!$hasOutstandingFees) {
             return new ArrayCollection();
@@ -131,7 +135,7 @@ class WithdrawBusRegTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider(): array
     {
         return [
             [true, true],

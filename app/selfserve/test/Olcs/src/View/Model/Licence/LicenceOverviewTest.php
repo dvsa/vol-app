@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Licence Overview Test
  *
@@ -19,9 +21,8 @@ class LicenceOverviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test constructor with set variables
-     *
-     * @group licenceOverview
      */
+    #[\PHPUnit\Framework\Attributes\Group('licenceOverview')]
     public function testSetVariables(): void
     {
         $data = [
@@ -95,10 +96,8 @@ class LicenceOverviewTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->returnExpectedInfoBoxLinks(), $overview->getInfoBoxLinks());
     }
 
-    /**
-     * @dataProvider dpAddInfoBoxLinks
-     */
-    public function testAddInfoBoxLinks($additionalLinks, $expectedLinks): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpAddInfoBoxLinks')]
+    public function testAddInfoBoxLinks(array $additionalLinks, array $expectedLinks): void
     {
         $data = [
             'licNo' => 1,
@@ -160,11 +159,11 @@ class LicenceOverviewTest extends \PHPUnit\Framework\TestCase
      *
      * @psalm-return list{array{additionalInfoBoxLinks: array{linkUrl: array{route: 'additional-route', params: array<never, never>, options: array<never, never>, reuseMatchedParams: true}, linkText: 'additional-link-text'}, expectedInfoBoxLinks: list{array{linkUrl: array{route: 'licence-print', params: array<never, never>, options: array<never, never>, reuseMatchedParams: true}, linkText: 'licence.print'}, array{linkUrl: array{route: 'additional-route', params: array<never, never>, options: array<never, never>, reuseMatchedParams: true}, linkText: 'additional-link-text'}}}, array{additionalInfoBoxLinks: array<never, never>, expectedInfoBoxLinks: list{array{linkUrl: array{route: 'licence-print', params: array<never, never>, options: array<never, never>, reuseMatchedParams: true}, linkText: 'licence.print'}}}}
      */
-    public function dpAddInfoBoxLinks(): array
+    public static function dpAddInfoBoxLinks(): array
     {
         return [
             [
-                'additionalInfoBoxLinks' => [
+                'additionalLinks' => [
                     'linkUrl' => [
                         'route' => 'additional-route',
                         'params' => [],
@@ -173,7 +172,7 @@ class LicenceOverviewTest extends \PHPUnit\Framework\TestCase
                     ],
                     'linkText' => 'additional-link-text'
                 ],
-                'expectedInfoBoxLinks' => [
+                'expectedLinks' => [
                     [
                         'linkUrl' => [
                             'route' => 'licence-print',
@@ -198,8 +197,8 @@ class LicenceOverviewTest extends \PHPUnit\Framework\TestCase
 
             ],
             [
-                'additionalInfoBoxLinks' => [],
-                'expectedInfoBoxLinks' => [
+                'additionalLinks' => [],
+                'expectedLinks' => [
                     [
                         'linkUrl' => [
                             'route' => 'licence-print',
@@ -215,10 +214,8 @@ class LicenceOverviewTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    /**
-     * @dataProvider dbSurrenderLink
-     */
-    public function testSetSurrenderLink($data): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dbSurrenderLink')]
+    public function testSetSurrenderLink(array $data): void
     {
         $sut = new LicenceOverview($data['licenceData']);
         $sut->setSurrenderLink($data['surrenderData']);
@@ -231,7 +228,7 @@ class LicenceOverviewTest extends \PHPUnit\Framework\TestCase
      *
      * @psalm-return array{'no-surrender-data': list{array{licenceData: array{licNo: 1, inForceDate: '2014-01-01', expiryDate: '2015-01-01', status: array{id: 'status'}, isExpired: false, isExpiring: true, showExpiryWarning: 'SHOWEXPIRYWARNING', continuationMarker: array{id: 12345}, isLicenceSurrenderAllowed: true}, surrenderData: array<never, never>, expected: list{array{linkUrl: array{route: 'licence-print', params: array<never, never>, options: array<never, never>, reuseMatchedParams: true}, linkText: 'licence.print'}, array{linkUrl: array{route: 'licence/surrender/start/GET', params: array<never, never>, options: array<never, never>, reuseMatchedParams: true}, linkText: 'licence.apply-to-surrender'}}}}, 'surrender-withdrawn': list{array{licenceData: array{licNo: 1, inForceDate: '2014-01-01', expiryDate: '2015-01-01', status: array{id: 'status'}, isExpired: false, isExpiring: true, showExpiryWarning: 'SHOWEXPIRYWARNING', continuationMarker: array{id: 12345}, isLicenceSurrenderAllowed: true}, surrenderData: array{status: array{id: 'surr_sts_withdrawn'}, lastModifiedOn: string}, expected: list{array{linkUrl: array{route: 'licence-print', params: array<never, never>, options: array<never, never>, reuseMatchedParams: true}, linkText: 'licence.print'}, array{linkUrl: array{route: 'licence/surrender/start/GET', params: array<never, never>, options: array<never, never>, reuseMatchedParams: true}, linkText: 'licence.apply-to-surrender'}}}}, 'surrender-data-not-expired': list{array{licenceData: array{licNo: 1, inForceDate: '2014-01-01', expiryDate: '2015-01-01', status: array{id: 'status'}, isExpired: false, isExpiring: true, showExpiryWarning: 'SHOWEXPIRYWARNING', continuationMarker: array{id: 12345}, isLicenceSurrenderAllowed: true}, surrenderData: array{status: array{id: 'surr_sts_start'}, lastModifiedOn: string}, expected: list{array{linkUrl: array{route: 'licence-print', params: array<never, never>, options: array<never, never>, reuseMatchedParams: true}, linkText: 'licence.print'}, array{linkUrl: array{route: 'licence/surrender/information-changed/GET', params: array<never, never>, options: array<never, never>, reuseMatchedParams: true}, linkText: 'licence.continue-surrender-application'}}}}, 'surrender-data-expired': list{array{licenceData: array{licNo: 1, inForceDate: '2014-01-01', expiryDate: '2015-01-01', status: array{id: 'status'}, isExpired: false, isExpiring: true, showExpiryWarning: 'SHOWEXPIRYWARNING', continuationMarker: array{id: 12345}, isLicenceSurrenderAllowed: true}, surrenderData: array{status: array{id: 'surr_sts_start'}, lastModifiedOn: string}, expected: list{array{linkUrl: array{route: 'licence-print', params: array<never, never>, options: array<never, never>, reuseMatchedParams: true}, linkText: 'licence.print'}, array{linkUrl: array{route: 'licence/surrender/information-changed/GET', params: array<never, never>, options: array<never, never>, reuseMatchedParams: true}, linkText: 'licence.apply-to-surrender'}}}}}
      */
-    public function dbSurrenderLink(): array
+    public static function dbSurrenderLink(): array
     {
         return [
 

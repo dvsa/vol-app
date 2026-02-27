@@ -15,6 +15,7 @@ namespace Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc;
  */
 class CanAccessApplicationWithApplication extends CanAccessApplicationWithId
 {
+    #[\Override]
     protected function getId($dto)
     {
         return $dto->getApplication();

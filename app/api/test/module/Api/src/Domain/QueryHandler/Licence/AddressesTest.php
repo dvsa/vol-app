@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Licence;
 
 use Doctrine\ORM\Query;
@@ -31,7 +33,7 @@ class AddressesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         /** @var Entity\Licence\Licence $licence */
         $mockLicenceEntity = m::mock(Entity\Licence\Licence::class);

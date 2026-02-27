@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractOpposer implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractOpposer implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -159,7 +159,8 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -182,7 +183,8 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
     /**
      * Get the contact details
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     */
     public function getContactDetails()
     {
         return $this->contactDetails;
@@ -205,7 +207,8 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
     /**
      * Get the opposer type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getOpposerType()
     {
         return $this->opposerType;
@@ -228,7 +231,8 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -251,7 +255,8 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -274,7 +279,8 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -297,7 +303,8 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -320,7 +327,8 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
     /**
      * Get the olbs type
      *
-     * @return string     */
+     * @return string
+     */
     public function getOlbsType()
     {
         return $this->olbsType;
@@ -329,6 +337,7 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

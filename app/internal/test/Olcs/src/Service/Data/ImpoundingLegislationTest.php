@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Service\Data\Licence as LicenceDataService;
@@ -36,7 +38,7 @@ class ImpoundingLegislationTest extends RefDataTestCase
     /**
      * Tests fetchListOptions when no licence is present
      */
-    public function testFetchListOptionsNoLicence()
+    public function testFetchListOptionsNoLicence(): void
     {
         $this->licenceDataService->shouldReceive('fetchLicenceData')
             ->once()
@@ -48,13 +50,13 @@ class ImpoundingLegislationTest extends RefDataTestCase
     }
 
     /**
-     * @dataProvider provideFetchListOptions
      *
      * @param $niFlag
      * @param $goodsOrPsv
      * @param $expectedList
      */
-    public function testFetchListOptions($niFlag, $goodsOrPsv, $expectedList)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFetchListOptions')]
+    public function testFetchListOptions(mixed $niFlag, mixed $goodsOrPsv, mixed $expectedList): void
     {
         $this->licenceDataService->shouldReceive('fetchLicenceData')
             ->once()
@@ -75,7 +77,7 @@ class ImpoundingLegislationTest extends RefDataTestCase
     /**
      * Tests fetchListOptions when no data is returned
      */
-    public function testFetchListOptionsNoData()
+    public function testFetchListOptionsNoData(): void
     {
         $this->licenceDataService->shouldReceive('fetchLicenceData')
             ->once()
@@ -98,7 +100,7 @@ class ImpoundingLegislationTest extends RefDataTestCase
      *
      * @return array
      */
-    public function provideFetchListOptions()
+    public static function provideFetchListOptions(): array
     {
         return [
             ['Y', 'lcat_psv', 'impound_legislation_psv_gb'],
@@ -110,7 +112,7 @@ class ImpoundingLegislationTest extends RefDataTestCase
     /**
      * @return array
      */
-    protected function getSingleExpected()
+    protected function getSingleExpected(): array
     {
         $expected = [
             'val-1' => 'Value 1',
@@ -124,7 +126,7 @@ class ImpoundingLegislationTest extends RefDataTestCase
     /**
      * @return array
      */
-    protected function getSingleSource()
+    protected function getSingleSource(): array
     {
         $source = [
             0 => ['id' => 'val-1', 'description' => 'Value 1'],

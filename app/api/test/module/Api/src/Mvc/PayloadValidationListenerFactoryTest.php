@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Mvc;
 
 use Dvsa\Olcs\Api\Mvc\PayloadValidationListener;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class PayloadValidationListenerFactoryTest extends MockeryTestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockAb = m::mock(AnnotationBuilder::class);
 

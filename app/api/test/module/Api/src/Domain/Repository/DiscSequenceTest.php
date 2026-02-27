@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Disc Sequence test
  *
@@ -26,7 +28,7 @@ class DiscSequenceTest extends RepositoryTestCase
         $this->setUpSut(DiscSequenceRepo::class);
     }
 
-    public function testFetchDiscPrefixesNi()
+    public function testFetchDiscPrefixesNi(): void
     {
         $mockQb = m::mock(QueryBuilder::class);
         $mockQb->shouldReceive('expr->isNotNull')->with('ta.id')->once()->andReturn('condition1');
@@ -48,7 +50,7 @@ class DiscSequenceTest extends RepositoryTestCase
         $this->sut->fetchDiscPrefixes('Y', null);
     }
 
-    public function testFetchDiscPrefixes()
+    public function testFetchDiscPrefixes(): void
     {
         $mockQb = m::mock(QueryBuilder::class);
         $mockQb->shouldReceive('expr->isNotNull')->with('ta.id')->once()->andReturn('condition1');

@@ -29,6 +29,7 @@ final class Update extends AbstractCommandHandler
      * @throws RuntimeException
      * @throws NotFoundException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         $repo = $this->getRepo(Repository\TaskAllocationRule::class);

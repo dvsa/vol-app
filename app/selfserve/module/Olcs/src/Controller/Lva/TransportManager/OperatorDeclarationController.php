@@ -46,6 +46,7 @@ class OperatorDeclarationController extends AbstractDeclarationController
         );
     }
 
+    #[\Override]
     protected function getSignAsRole(): string
     {
         return RefData::TMA_SIGN_AS_OP;
@@ -56,6 +57,7 @@ class OperatorDeclarationController extends AbstractDeclarationController
      *
      * @return string
      */
+    #[\Override]
     protected function getBackLink(): string
     {
         return $this->url()->fromRoute(
@@ -70,6 +72,7 @@ class OperatorDeclarationController extends AbstractDeclarationController
     /**
      * @return \Common\Service\Cqrs\Response
      */
+    #[\Override]
     protected function handlePhysicalSignatureCommand(): \Common\Service\Cqrs\Response
     {
         $response = $this->handleCommand(
@@ -78,6 +81,7 @@ class OperatorDeclarationController extends AbstractDeclarationController
         return $response;
     }
 
+    #[\Override]
     protected function alterDeclarationForm(Form $form): void
     {
         if ($this->tma['tmDigitalSignature'] === null) {
@@ -90,6 +94,7 @@ class OperatorDeclarationController extends AbstractDeclarationController
     /**
      * @return string
      */
+    #[\Override]
     protected function getSubmitActionLabel(): string
     {
         return 'application.review-declarations.sign-button';

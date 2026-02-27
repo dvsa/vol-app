@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\Application;
 
 use ArrayObject;
@@ -46,10 +48,8 @@ class AuthorisationsTest extends MockeryTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpSetContextWhenTotAuthLgvVehiclesNumeric
-     */
-    public function testSetContextWhenTotAuthLgvVehiclesNumeric($totAuthLgvVehicles, $expectedAuthorisationText)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSetContextWhenTotAuthLgvVehiclesNumeric')]
+    public function testSetContextWhenTotAuthLgvVehiclesNumeric(mixed $totAuthLgvVehicles, mixed $expectedAuthorisationText): void
     {
         $this->application->shouldReceive('getTotAuthLgvVehicles')
             ->withNoArgs()
@@ -63,7 +63,7 @@ class AuthorisationsTest extends MockeryTestCase
         );
     }
 
-    public function dpSetContextWhenTotAuthLgvVehiclesNumeric()
+    public static function dpSetContextWhenTotAuthLgvVehiclesNumeric(): array
     {
         return [
             [0, 'Authorisation: 0 Light goods vehicle(s).'],
@@ -72,7 +72,7 @@ class AuthorisationsTest extends MockeryTestCase
         ];
     }
 
-    public function testDoNothingWhenTotAuthLgvVehiclesNull()
+    public function testDoNothingWhenTotAuthLgvVehiclesNull(): void
     {
         $this->application->shouldReceive('getTotAuthLgvVehicles')
             ->withNoArgs()

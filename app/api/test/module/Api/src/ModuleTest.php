@@ -31,7 +31,7 @@ class ModuleTest extends MockeryTestCase
         $this->sut = m::mock(Module::class)->makePartial()->shouldAllowMockingProtectedMethods();
     }
 
-    public function testOnBootstrap()
+    public function testOnBootstrap(): void
     {
         $loginId = 123;
 
@@ -72,7 +72,7 @@ class ModuleTest extends MockeryTestCase
         $this->sut->onBootstrap($mockEvent);
     }
 
-    public function testLogResponseHttp()
+    public function testLogResponseHttp(): void
     {
         $logWriter = $this->setupLogger();
 
@@ -88,7 +88,7 @@ class ModuleTest extends MockeryTestCase
         $this->assertSame(['status' => 200, 'content' => 'CONTENT'], $logWriter->events[0]['extra']);
     }
 
-    public function testLogResponseHttpEmptyOlcsDownloadHeader()
+    public function testLogResponseHttpEmptyOlcsDownloadHeader(): void
     {
         $logWriter = $this->setupLogger();
 
@@ -102,7 +102,7 @@ class ModuleTest extends MockeryTestCase
         $this->assertNotContains('API Response is empty', current($logWriter->events));
     }
 
-    public function testLogResponseContentLong()
+    public function testLogResponseContentLong(): void
     {
         $logWriter = $this->setupLogger();
 
@@ -120,7 +120,7 @@ class ModuleTest extends MockeryTestCase
         $this->assertSame(str_repeat('X', 1000) . '...', $logWriter->events[0]['extra']['content']);
     }
 
-    public function testInitDoctrineEncrypterType()
+    public function testInitDoctrineEncrypterType(): void
     {
         if (!EncryptedStringType::hasType(EncryptedStringType::TYPE)) {
             EncryptedStringType::addType(EncryptedStringType::TYPE, EncryptedStringType::class);
@@ -143,10 +143,10 @@ class ModuleTest extends MockeryTestCase
      *
      * @return \Laminas\Log\Writer\Mock
      */
-    private function setupLogger()
+    private function setupLogger(): mixed
     {
         $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
         $logger->addWriter($logWriter);
         Logger::setLogger($logger);
 

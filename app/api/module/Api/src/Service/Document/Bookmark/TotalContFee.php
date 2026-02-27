@@ -25,6 +25,7 @@ class TotalContFee extends DynamicBookmark implements DateHelperAwareInterface
      *
      * @return \Dvsa\Olcs\Transfer\Query\QueryInterface
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(
@@ -45,6 +46,7 @@ class TotalContFee extends DynamicBookmark implements DateHelperAwareInterface
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         if (isset($this->data)) {

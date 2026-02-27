@@ -15,6 +15,7 @@ class OpenCases extends AbstractQueryHandler implements ToggleRequiredInterface
     protected $toggleConfig = [FeatureToggle::BACKEND_SURRENDER];
     protected $repoServiceName = 'Cases';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /**

@@ -18,6 +18,7 @@ class CanUpdateTxcInboxRecords extends AbstractHandler
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canUpdateTxcInbox($dto->getIds());

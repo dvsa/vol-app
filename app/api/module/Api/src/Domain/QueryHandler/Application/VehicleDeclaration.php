@@ -14,6 +14,7 @@ class VehicleDeclaration extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $application \Dvsa\Olcs\Api\Entity\Application\Application */

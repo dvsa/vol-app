@@ -19,6 +19,7 @@ final class Create extends AbstractSurrenderCommandHandler
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      * @throws \Dvsa\Olcs\Api\Domain\Exception\ForbiddenException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         try {

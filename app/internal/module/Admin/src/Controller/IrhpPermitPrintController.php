@@ -39,6 +39,7 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel(
@@ -67,6 +68,7 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
      *
      * @return \Laminas\Http\Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         /** @var \Laminas\Http\Request $request */
@@ -127,7 +129,7 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
 
         return $this->index(
             ConfirmListDto::class,
-            new AddFormDefaultData(['ids' => explode(',', $this->params()->fromRoute('id'))]),
+            new AddFormDefaultData(['ids' => explode(',', (string) $this->params()->fromRoute('id'))]),
             $this->tableViewPlaceholderName,
             'admin-irhp-permit-print-confirm',
             $this->tableViewTemplate
@@ -143,6 +145,7 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
      * @return \Common\Service\Table\TableBuilder
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     protected function alterTable($table, $data)
     {
         if ($table->hasColumn('sequenceNumber')) {
@@ -166,7 +169,7 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
     public function printAction()
     {
         return $this->processCommand(
-            new AddFormDefaultData(['ids' => explode(',', $this->params()->fromRoute('id'))]),
+            new AddFormDefaultData(['ids' => explode(',', (string) $this->params()->fromRoute('id'))]),
             PrintPermitsDto::class,
             'Permits submitted for printing'
         );

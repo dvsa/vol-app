@@ -35,6 +35,7 @@ final class CompaniesHouseVsOlcsDiffsExport extends AbstractCommandHandler
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      * @throws \Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->path = (trim($command->getPath()) ?: $this->path);
@@ -130,6 +131,7 @@ final class CompaniesHouseVsOlcsDiffsExport extends AbstractCommandHandler
         fclose($fh);
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');

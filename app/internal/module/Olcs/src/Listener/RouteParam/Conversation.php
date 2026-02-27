@@ -30,11 +30,12 @@ class Conversation implements ListenerAggregateInterface, FactoryInterface
     private SideNavigation $sideNavigation;
 
     /** @param int $priority */
+    #[\Override]
     public function attach(EventManagerInterface $events, $priority = 1): void
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'licence',
-            [$this, 'onConversation'],
+            $this->onConversation(...),
             $priority,
         );
     }
@@ -83,6 +84,7 @@ class Conversation implements ListenerAggregateInterface, FactoryInterface
         return $response->getResult();
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Conversation
     {
         $this->annotationBuilder = $container->get(AnnotationBuilder::class);

@@ -21,6 +21,7 @@ class NoOfPermitsMorocco implements ElementInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getRepresentation()
     {
         return [

@@ -62,6 +62,7 @@ class ContinuationDetail extends AbstractContinuationDetail implements
      *
      * @return Organisation
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this->getLicence()->getOrganisation();
@@ -72,6 +73,7 @@ class ContinuationDetail extends AbstractContinuationDetail implements
      *
      * @return int
      */
+    #[\Override]
     public function getContextValue()
     {
         return $this->getId();

@@ -24,6 +24,7 @@ class SystemInfoMessage extends AbstractSystemInfoMessage
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedBundleValues()
     {
         return [

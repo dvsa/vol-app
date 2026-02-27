@@ -87,6 +87,7 @@ class LicenceStatusRule extends AbstractRepository
      * @param QueryBuilder $qb
      * @inheritdoc
      */
+    #[\Override]
     protected function applyFetchJoins(QueryBuilder $qb)
     {
         $this->getQueryBuilder()->modifyQuery($qb)

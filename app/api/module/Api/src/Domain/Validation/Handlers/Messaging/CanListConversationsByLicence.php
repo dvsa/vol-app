@@ -19,6 +19,7 @@ class CanListConversationsByLicence extends CanListConversations implements Auth
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto)
     {
         if (!$this->canAccessLicence($dto->getLicence())) {

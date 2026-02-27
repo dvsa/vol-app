@@ -34,6 +34,7 @@ final class ResetApplication extends AbstractCommandHandler implements Transacti
      * @throws RuntimeException
      * @throws ValidationException
      */
+    #[\Override]
     public function handleCommand(Cmd|CommandInterface $command): Result
     {
         $result = new Result();
@@ -111,6 +112,7 @@ final class ResetApplication extends AbstractCommandHandler implements Transacti
             Application::ERROR_REQUIRES_CONFIRMATION
         );
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Bus Reg Read Audit Test
  *
@@ -19,19 +21,20 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class BusRegReadAuditTest extends AbstractReadAuditTest
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
+class BusRegReadAuditTest extends AbstractReadAuditTestCase
 {
     public function setUp(): void
     {
         $this->setUpSut(BusRegReadAudit::class, true);
     }
 
-    public function testFetchOneOrMore()
+    public function testFetchOneOrMore(): void
     {
         parent::commonTestFetchOneOrMore('busReg');
     }
 
-    public function testFetchList()
+    public function testFetchList(): void
     {
         parent::commonTestFetchList(
             ReadBusReg::create(['id' => 111]),
@@ -39,7 +42,7 @@ class BusRegReadAuditTest extends AbstractReadAuditTest
         );
     }
 
-    public function testDeleteOlderThan()
+    public function testDeleteOlderThan(): void
     {
         parent::commonTestDeleteOlderThan(BusRegReadAuditEntity::class);
     }

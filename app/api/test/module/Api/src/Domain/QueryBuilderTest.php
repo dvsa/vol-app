@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain;
 
 use Dvsa\Olcs\Api\Domain\QueryBuilder;
@@ -26,7 +28,7 @@ class QueryBuilderTest extends MockeryTestCase
         $this->sut = new QueryBuilder($this->mockQueryPartialSrvMngr);
     }
 
-    public function testCallFailQbNotSet()
+    public function testCallFailQbNotSet(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage(QueryBuilder::ERR_QB_NOT_SET);
@@ -34,7 +36,7 @@ class QueryBuilderTest extends MockeryTestCase
         $this->sut->unit_testMethod('unit_Arg1', 'unit_Arg2');
     }
 
-    public function testCallPass()
+    public function testCallPass(): void
     {
         /** @var  \Doctrine\ORM\QueryBuilder $mockQb */
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);

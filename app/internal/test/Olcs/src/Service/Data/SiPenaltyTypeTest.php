@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -7,11 +9,8 @@ use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 use Dvsa\Olcs\Transfer\Query\Si\SiPenaltyTypeListData as Qry;
 use Mockery as m;
 use Olcs\Service\Data\SiPenaltyType;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/**
- * Class SiPenaltyType Test
- * @package CommonTest\Service
- */
 class SiPenaltyTypeTest extends AbstractDataServiceTestCase
 {
     /** @var SiPenaltyType */
@@ -24,33 +23,28 @@ class SiPenaltyTypeTest extends AbstractDataServiceTestCase
         $this->sut = new SiPenaltyType($this->abstractDataServiceServices);
     }
 
-    public function testFormatData()
+    public function testFormatData(): void
     {
-        $source = $this->getSingleSource();
-        $expected = $this->getSingleExpected();
-
-        $this->assertEquals($expected, $this->sut->formatData($source));
+        $this->assertEquals(self::SINGLE_EXPECTED_WITH_ID, $this->sut->formatData(self::SINGLE_SOURCE));
     }
 
-    /**
-     * @dataProvider provideFetchListOptions
-     */
-    public function testFetchListOptions($input, $expected)
+    #[DataProvider('provideFetchListOptions')]
+    public function testFetchListOptions(mixed $input, mixed $expected): void
     {
         $this->sut->setData('SiPenaltyType', $input);
 
         $this->assertEquals($expected, $this->sut->fetchListOptions(''));
     }
 
-    public function provideFetchListOptions()
+    public static function provideFetchListOptions(): array
     {
         return [
-            [$this->getSingleSource(), $this->getSingleExpected()],
+            [self::SINGLE_SOURCE, self::SINGLE_EXPECTED_WITH_ID],
             [false, []]
         ];
     }
 
-    public function testFetchListData()
+    public function testFetchListData(): void
     {
         $results = ['results' => 'results'];
 
@@ -77,7 +71,7 @@ class SiPenaltyTypeTest extends AbstractDataServiceTestCase
     /**
      * Test fetchListData with exception
      */
-    public function testFetchListDataWithException()
+    public function testFetchListDataWithException(): void
     {
         $this->expectException(DataServiceException::class);
 
@@ -95,23 +89,5 @@ class SiPenaltyTypeTest extends AbstractDataServiceTestCase
         $this->mockHandleQuery($mockResponse);
 
         $this->sut->fetchListData();
-    }
-
-    protected function getSingleExpected()
-    {
-        return [
-            'val-1' => 'val-1 - Value 1',
-            'val-2' => 'val-2 - Value 2',
-            'val-3' => 'val-3 - Value 3',
-        ];
-    }
-
-    protected function getSingleSource()
-    {
-        return [
-            ['id' => 'val-1', 'description' => 'Value 1'],
-            ['id' => 'val-2', 'description' => 'Value 2'],
-            ['id' => 'val-3', 'description' => 'Value 3'],
-        ];
     }
 }

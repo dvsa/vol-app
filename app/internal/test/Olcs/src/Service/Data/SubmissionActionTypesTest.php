@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Service\Data\RefData;
@@ -28,7 +30,7 @@ class SubmissionActionTypesTest extends AbstractDataServiceTestCase
         $this->sut = new SubmissionActionTypes($this->abstractDataServiceServices, $this->refDataService);
     }
 
-    public function testFetchListOptions()
+    public function testFetchListOptions(): void
     {
         $context = '';
         $useGroups = false;
@@ -54,7 +56,7 @@ class SubmissionActionTypesTest extends AbstractDataServiceTestCase
         $this->assertArrayHasKey('option_id1', $result);
     }
 
-    public function testFetchListOptionsAsGroups()
+    public function testFetchListOptionsAsGroups(): void
     {
         $context = '';
         $useGroups = true;
@@ -80,7 +82,7 @@ class SubmissionActionTypesTest extends AbstractDataServiceTestCase
         $this->assertArrayHasKey('option_id1', $result['sub_st_rec_group1']['options']);
     }
 
-    public function testFetchListOptionsNoData()
+    public function testFetchListOptionsNoData(): void
     {
         $context = '';
         $useGroups = false;

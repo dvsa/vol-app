@@ -15,6 +15,7 @@ class SubmissionSectionTableFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SubmissionSectionTable
     {
         $tableBuilder = $container->get('Table');

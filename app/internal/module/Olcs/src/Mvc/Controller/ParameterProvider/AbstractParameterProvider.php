@@ -18,6 +18,7 @@ abstract class AbstractParameterProvider implements ParameterProviderInterface
     /**
      * @param Params $params
      */
+    #[\Override]
     public function setParams(Params $params)
     {
         $this->params = $params;
@@ -26,6 +27,7 @@ abstract class AbstractParameterProvider implements ParameterProviderInterface
     /**
      * @return Params
      */
+    #[\Override]
     public function params()
     {
         return $this->params;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Nr;
 
 use Dvsa\Olcs\Api\Service\Nr\InrClient;
@@ -18,16 +20,15 @@ class InrClientTest extends MockeryTestCase
 {
     public function setUp(): void
     {
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
     }
 
     /**
      * Tests makeRequest
      */
-    public function testMakeRequest()
+    public function testMakeRequest(): void
     {
         $statusCode = 202;
         $requestBody = 'xml';
@@ -51,7 +52,7 @@ class InrClientTest extends MockeryTestCase
         $this->assertEquals($statusCode, $sut->makeRequestReturnStatusCode($requestBody));
     }
 
-    public function testClose()
+    public function testClose(): void
     {
         $mockRestClient = m::mock(RestClient::class);
         $mockRestClient->shouldReceive('getAdapter->close')->once()->withNoArgs();
@@ -60,7 +61,7 @@ class InrClientTest extends MockeryTestCase
         $sut->close();
     }
 
-    public function testGetRestClient()
+    public function testGetRestClient(): void
     {
         $mockRestClient = m::mock(RestClient::class);
         $sut = new InrClient($mockRestClient);

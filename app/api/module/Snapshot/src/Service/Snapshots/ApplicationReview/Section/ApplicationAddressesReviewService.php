@@ -24,6 +24,7 @@ class ApplicationAddressesReviewService extends AbstractReviewService
      * @param array $data
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(array $data = [])
     {
         $phoneContacts = $data['licence']['correspondenceCd']['phoneContacts'];

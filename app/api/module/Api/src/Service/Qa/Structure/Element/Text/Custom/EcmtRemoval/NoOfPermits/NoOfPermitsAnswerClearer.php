@@ -24,6 +24,7 @@ class NoOfPermitsAnswerClearer implements AnswerClearerInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function clear(QaContext $qaContext)
     {
         $irhpPermitApplication = $qaContext->getQaEntity()->getFirstIrhpPermitApplication();

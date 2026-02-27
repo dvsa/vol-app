@@ -14,6 +14,7 @@ final class Update extends AbstractCommandHandler
 {
     protected $repoServiceName = 'LetterIssueType';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var Cmd $command */

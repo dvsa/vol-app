@@ -27,6 +27,7 @@ class VehiclesControllerFactory extends BinaryFeatureToggleAwareControllerFactor
     /**
      * @return array
      */
+    #[\Override]
     protected function getFeatureToggleNames(): array
     {
         return [
@@ -41,6 +42,7 @@ class VehiclesControllerFactory extends BinaryFeatureToggleAwareControllerFactor
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     protected function createServiceWhenEnabled(ContainerInterface $container, $requestedName, array $options = null): Dispatcher
     {
         return (new SwitchBoardControllerFactory())->__invoke($container, $requestedName, $options);
@@ -54,6 +56,7 @@ class VehiclesControllerFactory extends BinaryFeatureToggleAwareControllerFactor
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     protected function createServiceWhenDisabled(ContainerInterface $container, $requestedName, array $options = null): VehiclesController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

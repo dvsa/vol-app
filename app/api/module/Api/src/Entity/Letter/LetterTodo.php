@@ -193,8 +193,6 @@ class LetterTodo extends AbstractLetterTodo
      */
     public function getPublishedVersions()
     {
-        return $this->versions->filter(function (LetterTodoVersion $version) {
-            return $version->isPublished();
-        });
+        return $this->versions->filter(fn(LetterTodoVersion $version) => $version->isPublished());
     }
 }

@@ -29,6 +29,7 @@ class VariationTypeOfLicence extends CommonVariationTypeOfLicence
      * @param array $params
      * @return \Laminas\Form\Form
      */
+    #[\Override]
     protected function alterForm(Form $form, $params = [])
     {
         parent::alterForm($form, $params);
@@ -42,6 +43,7 @@ class VariationTypeOfLicence extends CommonVariationTypeOfLicence
         return $form;
     }
 
+    #[\Override]
     protected function allElementsLocked(Form $form)
     {
         $form->remove('form-actions');

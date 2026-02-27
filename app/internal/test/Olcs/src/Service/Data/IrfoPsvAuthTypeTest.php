@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -7,15 +9,11 @@ use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuthTypeList as Qry;
 use Olcs\Service\Data\IrfoPsvAuthType;
 use Mockery as m;
 use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/**
- * Class IrfoPsvAuthType Test
- * @package CommonTest\Service
- */
 class IrfoPsvAuthTypeTest extends AbstractDataServiceTestCase
 {
-    /** @var IrfoPsvAuthType */
-    private $sut;
+    private IrfoPsvAuthType $sut;
 
     protected function setUp(): void
     {
@@ -24,35 +22,28 @@ class IrfoPsvAuthTypeTest extends AbstractDataServiceTestCase
         $this->sut = new IrfoPsvAuthType($this->abstractDataServiceServices);
     }
 
-    public function testFormatData()
+    public function testFormatData(): void
     {
-        $source = $this->getSingleSource();
-        $expected = $this->getSingleExpected();
-
-        $this->assertEquals($expected, $this->sut->formatData($source));
+        $this->assertEquals(self::SINGLE_EXPECTED, $this->sut->formatData(self::SINGLE_SOURCE));
     }
 
-    /**
-     * @dataProvider provideFetchListOptions
-     * @param $input
-     * @param $expected
-     */
-    public function testFetchListOptions($input, $expected)
+    #[DataProvider('provideFetchListOptions')]
+    public function testFetchListOptions(mixed $input, mixed $expected): void
     {
         $this->sut->setData('IrfoPsvAuthType', $input);
 
         $this->assertEquals($expected, $this->sut->fetchListOptions(''));
     }
 
-    public function provideFetchListOptions()
+    public static function provideFetchListOptions(): array
     {
         return [
-            [$this->getSingleSource(), $this->getSingleExpected()],
+            [self::SINGLE_SOURCE, self::SINGLE_EXPECTED],
             [false, []]
         ];
     }
 
-    public function testFetchListData()
+    public function testFetchListData(): void
     {
         $results = ['results' => 'results'];
 
@@ -79,7 +70,7 @@ class IrfoPsvAuthTypeTest extends AbstractDataServiceTestCase
     /**
      * Test fetchListData with exception
      */
-    public function testFetchListDataWithException()
+    public function testFetchListDataWithException(): void
     {
         $this->expectException(DataServiceException::class);
 
@@ -97,31 +88,5 @@ class IrfoPsvAuthTypeTest extends AbstractDataServiceTestCase
         $this->mockHandleQuery($mockResponse);
 
         $this->sut->fetchListData();
-    }
-
-    /**
-     * @return array
-     */
-    protected function getSingleExpected()
-    {
-        $expected = [
-            'val-1' => 'Value 1',
-            'val-2' => 'Value 2',
-            'val-3' => 'Value 3',
-        ];
-        return $expected;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getSingleSource()
-    {
-        $source = [
-            ['id' => 'val-1', 'description' => 'Value 1'],
-            ['id' => 'val-2', 'description' => 'Value 2'],
-            ['id' => 'val-3', 'description' => 'Value 3'],
-        ];
-        return $source;
     }
 }

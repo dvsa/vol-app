@@ -31,6 +31,7 @@ final class CreateForResponsibilities extends AbstractCommandHandler implements 
 
     protected $extraRepos = ['Application', 'TransportManagerLicence'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

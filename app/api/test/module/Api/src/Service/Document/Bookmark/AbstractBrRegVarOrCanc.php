@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Entity\Bus\BusReg;
@@ -10,15 +12,15 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Base\DynamicBookmark;
  */
 class AbstractBrRegVarOrCanc extends \PHPUnit\Framework\TestCase
 {
-    protected $new;
-    protected $vary;
-    protected $cancel;
+    protected const NEW_TEXT = '';
+    protected const VARY_TEXT = '';
+    protected const CANCEL_TEXT = '';
     protected $bookmarkClass;
 
     /**
      * test getQuery
      */
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = $this->getBookmark();
 
@@ -30,10 +32,8 @@ class AbstractBrRegVarOrCanc extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
-    public function testRender($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
+    public function testRender(mixed $data, mixed $expected): void
     {
         $bookmark = $this->getBookmark();
         $bookmark->setData($data);
@@ -50,7 +50,7 @@ class AbstractBrRegVarOrCanc extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider(): array
     {
         return [
             [
@@ -73,19 +73,19 @@ class AbstractBrRegVarOrCanc extends \PHPUnit\Framework\TestCase
                 [
                     'status' => ['id' => BusReg::STATUS_NEW],
                 ],
-                $this->new
+                static::NEW_TEXT
             ],
             [
                 [
                     'status' => ['id' => BusReg::STATUS_CANCEL],
                 ],
-                $this->cancel
+                static::CANCEL_TEXT
             ],
             [
                 [
                     'status' => ['id' => BusReg::STATUS_VAR],
                 ],
-                $this->vary
+                static::VARY_TEXT
             ],
             [
                 [
@@ -99,7 +99,7 @@ class AbstractBrRegVarOrCanc extends \PHPUnit\Framework\TestCase
     /**
      * @return DynamicBookmark
      */
-    public function getBookmark()
+    public function getBookmark(): mixed
     {
         return new $this->bookmarkClass();
     }

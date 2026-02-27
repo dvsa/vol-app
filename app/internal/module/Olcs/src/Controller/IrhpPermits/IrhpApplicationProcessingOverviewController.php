@@ -34,6 +34,7 @@ class IrhpApplicationProcessingOverviewController extends AbstractIrhpPermitProc
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         $options = [

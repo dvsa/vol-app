@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler\CommunityLic;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -29,7 +31,8 @@ class ActivateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             CommunityLic::STATUS_ACTIVE
@@ -38,7 +41,7 @@ class ActivateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $params = [
             'communityLicenceIds' => [1]

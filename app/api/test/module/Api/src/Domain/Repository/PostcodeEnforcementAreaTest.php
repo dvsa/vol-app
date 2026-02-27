@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -14,7 +16,7 @@ class PostcodeEnforcementAreaTest extends RepositoryTestCase
         $this->setUpSut(PostcodeEnforcementAreaRepo::class);
     }
 
-    public function testFetchByPostcodeId()
+    public function testFetchByPostcodeId(): void
     {
         $postcodeId = 'AB1';
 

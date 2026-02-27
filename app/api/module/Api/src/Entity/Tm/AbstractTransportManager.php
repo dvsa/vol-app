@@ -38,7 +38,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTransportManager implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTransportManager implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -336,7 +336,8 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -359,7 +360,8 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Get the tm status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getTmStatus()
     {
         return $this->tmStatus;
@@ -382,7 +384,8 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Get the tm type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getTmType()
     {
         return $this->tmType;
@@ -405,7 +408,8 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Get the home cd
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     */
     public function getHomeCd()
     {
         return $this->homeCd;
@@ -428,7 +432,8 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Get the work cd
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     */
     public function getWorkCd()
     {
         return $this->workCd;
@@ -451,7 +456,8 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Get the merge to transport manager
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     */
     public function getMergeToTransportManager()
     {
         return $this->mergeToTransportManager;
@@ -474,7 +480,8 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -497,7 +504,8 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -520,7 +528,8 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Get the disqualification tm case id
      *
-     * @return int     */
+     * @return int
+     */
     public function getDisqualificationTmCaseId()
     {
         return $this->disqualificationTmCaseId;
@@ -545,7 +554,8 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getRemovedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -574,7 +584,8 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getLastLicenceDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -601,7 +612,8 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Get the nysiis family name
      *
-     * @return string     */
+     * @return string
+     */
     public function getNysiisFamilyName()
     {
         return $this->nysiisFamilyName;
@@ -624,7 +636,8 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Get the nysiis forename
      *
-     * @return string     */
+     * @return string
+     */
     public function getNysiisForename()
     {
         return $this->nysiisForename;
@@ -647,7 +660,8 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Get the merge details
      *
-     * @return array     */
+     * @return array
+     */
     public function getMergeDetails()
     {
         return $this->mergeDetails;
@@ -670,7 +684,8 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -693,7 +708,8 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -1332,6 +1348,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

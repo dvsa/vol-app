@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document;
 
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\ApplicationBundle;
@@ -12,9 +14,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\Document\DocumentGenerator
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\DocumentGenerator::class)]
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class DocumentGeneratorTest extends MockeryTestCase
 {
     /** @var  DocumentGenerator */
@@ -59,7 +60,8 @@ class DocumentGeneratorTest extends MockeryTestCase
         $this->sut->__invoke($sm, DocumentGenerator::class);
     }
 
-    public function testGenerateFromTemplateWithEmptyQuery()
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testGenerateFromTemplateWithEmptyQuery(): void
     {
         $this->contentStore->shouldReceive('read')
             ->with('x')
@@ -78,7 +80,7 @@ class DocumentGeneratorTest extends MockeryTestCase
         $this->sut->generateFromTemplate('x');
     }
 
-    public function testGenerateFromTemplateWithQuery()
+    public function testGenerateFromTemplateWithQuery(): void
     {
         $query = [
             'a' => m::mock(QueryInterface::class),
@@ -117,7 +119,7 @@ class DocumentGeneratorTest extends MockeryTestCase
         $this->sut->generateFromTemplate('x', ['y' => 1], ['z' => 2]);
     }
 
-    public function testGenerateFromTemplateWithQueryThrowException()
+    public function testGenerateFromTemplateWithQueryThrowException(): void
     {
         $this->expectException(\Exception::class);
 
@@ -136,7 +138,7 @@ class DocumentGeneratorTest extends MockeryTestCase
         $this->sut->generateFromTemplate('x', ['y' => 1], ['z' => 2]);
     }
 
-    public function testGenerateFromTemplateWithQueryFailedQuery()
+    public function testGenerateFromTemplateWithQueryFailedQuery(): void
     {
         $this->expectException('\Exception');
 
@@ -169,7 +171,7 @@ class DocumentGeneratorTest extends MockeryTestCase
         $this->sut->generateFromTemplate('x', ['y' => 1], ['z' => 2]);
     }
 
-    public function testGenerateFromTemplateWithQueryWithLicence()
+    public function testGenerateFromTemplateWithQueryWithLicence(): void
     {
         $query = [
             'a' => m::mock(QueryInterface::class),
@@ -214,7 +216,7 @@ class DocumentGeneratorTest extends MockeryTestCase
         $this->sut->generateFromTemplate('x', ['y' => 1, 'licence' => 111], ['z' => 2]);
     }
 
-    public function testGenerateFromTemplateWithQueryWithApplication()
+    public function testGenerateFromTemplateWithQueryWithApplication(): void
     {
         $query = [
             'a' => m::mock(QueryInterface::class),
@@ -259,7 +261,7 @@ class DocumentGeneratorTest extends MockeryTestCase
         $this->sut->generateFromTemplate('x', ['y' => 1, 'application' => 111], ['z' => 2]);
     }
 
-    public function testGenerateFromTemplateWithQueryWithApplicationWithoutTemplate()
+    public function testGenerateFromTemplateWithQueryWithApplicationWithoutTemplate(): void
     {
         $this->expectException('\Exception');
 
@@ -275,7 +277,7 @@ class DocumentGeneratorTest extends MockeryTestCase
         $this->sut->generateFromTemplate('x', ['y' => 1, 'application' => 111], ['z' => 2]);
     }
 
-    public function testUploadGeneratedContent()
+    public function testUploadGeneratedContent(): void
     {
         $expectFileName = 'fileName';
         $expectBody = 'expect_Body';
@@ -294,7 +296,7 @@ class DocumentGeneratorTest extends MockeryTestCase
         static::assertEquals('EXPECT', $this->sut->uploadGeneratedContent($expectBody, $expectFileName));
     }
 
-    public function testUploadGeneratedContentError()
+    public function testUploadGeneratedContentError(): void
     {
         $this->expectException(\Exception::class);
 
@@ -305,7 +307,7 @@ class DocumentGeneratorTest extends MockeryTestCase
         $this->sut->uploadGeneratedContent('fileName', 'body');
     }
 
-    public function testGenerateFromTemplateWithDocumentId()
+    public function testGenerateFromTemplateWithDocumentId(): void
     {
         $document = m::mock();
         $document->shouldReceive('getIdentifier')->with()->once()->andReturn('IDENTIFIER');
@@ -326,7 +328,7 @@ class DocumentGeneratorTest extends MockeryTestCase
         $this->sut->generateFromTemplate(412, [], []);
     }
 
-    public function testGenerateFromTemplateWithDocumentIdNotFound()
+    public function testGenerateFromTemplateWithDocumentIdNotFound(): void
     {
         $this->expectException('\Exception');
 
@@ -336,7 +338,7 @@ class DocumentGeneratorTest extends MockeryTestCase
         $this->sut->generateFromTemplate(412, [], []);
     }
 
-    public function testDisableBookmarksFlagWithY()
+    public function testDisableBookmarksFlagWithY(): void
     {
         $this->contentStore->shouldReceive('read')
             ->with('myTemplate')
@@ -376,7 +378,7 @@ class DocumentGeneratorTest extends MockeryTestCase
         static::assertEquals('EXPECT', $this->sut->uploadGeneratedContent($expectBody, $expectFileName));
     }
 
-    public function testDisableBookmarksFlagWithN()
+    public function testDisableBookmarksFlagWithN(): void
     {
         $query = [
             'a' => m::mock(QueryInterface::class),

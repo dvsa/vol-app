@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Add Months Rounding Down Test
  *
@@ -19,16 +21,14 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\AddMonthsRoundingDown;
  */
 class AddMonthsRoundingDownTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dateProvider
-     */
-    public function testCalculateDate($date, $months, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dateProvider')]
+    public function testCalculateDate(mixed $date, mixed $months, mixed $expected): void
     {
         $addMonths = new AddMonthsRoundingDown();
         $this->assertEquals($addMonths->calculateDate($date, $months), $expected);
     }
 
-    public function dateProvider()
+    public static function dateProvider(): array
     {
         return [
             [new \DateTime('2015-12-31'), 2, new \DateTime('2016-02-29')],

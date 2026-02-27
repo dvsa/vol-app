@@ -31,7 +31,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractRole implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractRole implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -153,7 +153,8 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -176,7 +177,8 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -199,7 +201,8 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -222,7 +225,8 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the role
      *
-     * @return string     */
+     * @return string
+     */
     public function getRole()
     {
         return $this->role;
@@ -245,7 +249,8 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -268,7 +273,8 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -403,6 +409,7 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

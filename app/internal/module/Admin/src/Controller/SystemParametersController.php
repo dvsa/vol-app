@@ -53,6 +53,7 @@ class SystemParametersController extends AbstractInternalController implements L
 
     protected $tableViewTemplate = 'pages/system-parameters/system-parameters';
 
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel(
@@ -66,6 +67,7 @@ class SystemParametersController extends AbstractInternalController implements L
         return $view;
     }
 
+    #[\Override]
     public function indexAction()
     {
 

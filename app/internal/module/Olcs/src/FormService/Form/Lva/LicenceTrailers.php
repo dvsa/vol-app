@@ -28,6 +28,7 @@ class LicenceTrailers extends CommonLicenceTrailers
      * @param TableBuilder $table
      * @return Form
      */
+    #[\Override]
     protected function alterForm($form, $table)
     {
         parent::alterForm($form, $table);

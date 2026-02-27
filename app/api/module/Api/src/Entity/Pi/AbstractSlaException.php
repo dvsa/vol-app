@@ -31,7 +31,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractSlaException implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSlaException implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -151,7 +151,8 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -174,7 +175,8 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -197,7 +199,8 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -220,7 +223,8 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
     /**
      * Get the sla description
      *
-     * @return string     */
+     * @return string
+     */
     public function getSlaDescription()
     {
         return $this->slaDescription;
@@ -243,7 +247,8 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
     /**
      * Get the sla exception description
      *
-     * @return string     */
+     * @return string
+     */
     public function getSlaExceptionDescription()
     {
         return $this->slaExceptionDescription;
@@ -268,7 +273,8 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEffectiveFrom($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -297,7 +303,8 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEffectiveTo($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -324,7 +331,8 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -333,6 +341,7 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

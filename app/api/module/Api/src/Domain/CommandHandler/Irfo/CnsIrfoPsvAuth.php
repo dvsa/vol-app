@@ -24,6 +24,7 @@ final class CnsIrfoPsvAuth extends AbstractCommandHandler implements Transaction
      * @return Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         // common IRFO PSV Auth update

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Letter\LetterInstance;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Letter\LetterInstance\Get as QueryHandler;
@@ -21,7 +23,7 @@ class GetTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $data = ['id' => 123];
         $query = Qry::create($data);
@@ -37,13 +39,17 @@ class GetTest extends QueryHandlerTestCase
                         'letterSectionVersion'
                     ],
                     'letterInstanceIssues' => [
-                        'letterIssueVersion'
+                        'letterIssueVersion' => [
+                            'letterIssueType'
+                        ]
                     ],
                     'letterInstanceTodos' => [
                         'letterTodoVersion'
                     ],
                     'letterInstanceAppendices' => [
-                        'letterAppendixVersion'
+                        'letterAppendixVersion' => [
+                            'document'
+                        ]
                     ]
                 ]
             )->once()->andReturn(['id' => 123, 'reference' => 'LTR20251202ABC123'])->getMock();

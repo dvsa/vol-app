@@ -8,6 +8,7 @@ use Laminas\View\Helper\Placeholder;
 use Laminas\View\Helper\Placeholder\Container;
 use Laminas\View\HelperPluginManager;
 use LmcRbacMvc\Service\AuthorizationService;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -25,22 +26,28 @@ use Common\RefData;
 
 class TransportManagerTest extends MockeryTestCase
 {
+    private TransportManager $sut;
+
     public function testAttach(): void
     {
-        $sut = new TransportManager();
+        $this->sut = new TransportManager();
 
         /** @var EventManagerInterface $eventManager */
         $eventManager = m::mock(EventManagerInterface::class);
-        $eventManager->shouldReceive('attach')
-            ->with(RouteParams::EVENT_PARAM . 'transportManager', [$sut, 'onTransportManager'], 1)
-            ->once();
+        $eventManager->expects('attach')
+            ->with(
+                RouteParams::EVENT_PARAM . 'transportManager',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onTransportManager';
+                }),
+                1
+            );
 
-        $sut->attach($eventManager);
+        $this->sut->attach($eventManager);
     }
 
-    /**
-     * @dataProvider dpInternalEditProvider
-     */
+    #[DataProvider('dpInternalEditProvider')]
     public function testOnTransportManager(bool $isInternalEdit): void
     {
         $tmId = 1;
@@ -147,9 +154,7 @@ class TransportManagerTest extends MockeryTestCase
         $sut->onTransportManager($event);
     }
 
-    /**
-     * @dataProvider dpInternalEditProvider
-     */
+    #[DataProvider('dpInternalEditProvider')]
     public function testOnTransportManagerNotMerged(bool $isInternalEdit): void
     {
         $tmId = 1;
@@ -244,9 +249,7 @@ class TransportManagerTest extends MockeryTestCase
     }
 
 
-    /**
-     * @dataProvider dpInternalEditProvider
-     */
+    #[DataProvider('dpInternalEditProvider')]
     public function testOnTransportManagerMerged(bool $isInternalEdit): void
     {
         $tmId = 1;
@@ -363,7 +366,7 @@ class TransportManagerTest extends MockeryTestCase
         $sut->setAuthService($mockAuthService);
     }
 
-    public function dpInternalEditProvider(): array
+    public static function dpInternalEditProvider(): array
     {
         return [
             [true],

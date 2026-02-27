@@ -25,6 +25,7 @@ class CreateGoodsVehicleList extends AbstractCommandConsumer
      * @param QueueEntity $item
      * @return array
      */
+    #[\Override]
     public function getCommandData(QueueEntity $item)
     {
         $options = json_decode($item->getOptions(), true);

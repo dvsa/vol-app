@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractCorrespondenceInbox implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCorrespondenceInbox implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -186,7 +186,8 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -209,7 +210,8 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     /**
      * Get the document
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
+     */
     public function getDocument()
     {
         return $this->document;
@@ -232,7 +234,8 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -255,7 +258,8 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -278,7 +282,8 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -301,7 +306,8 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     /**
      * Get the archived
      *
-     * @return string     */
+     * @return string
+     */
     public function getArchived()
     {
         return $this->archived;
@@ -324,7 +330,8 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     /**
      * Get the accessed
      *
-     * @return string     */
+     * @return string
+     */
     public function getAccessed()
     {
         return $this->accessed;
@@ -347,7 +354,8 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     /**
      * Get the email reminder sent
      *
-     * @return string     */
+     * @return string
+     */
     public function getEmailReminderSent()
     {
         return $this->emailReminderSent;
@@ -370,7 +378,8 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     /**
      * Get the printed
      *
-     * @return string     */
+     * @return string
+     */
     public function getPrinted()
     {
         return $this->printed;
@@ -393,7 +402,8 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -416,7 +426,8 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -425,6 +436,7 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

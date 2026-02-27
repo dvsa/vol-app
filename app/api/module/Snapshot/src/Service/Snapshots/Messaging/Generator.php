@@ -24,11 +24,13 @@ class Generator extends AbstractGenerator implements SnapshotGeneratorInterface
         parent::__construct($abstractGeneratorServices);
     }
 
+    #[\Override]
     public function setData($data): void
     {
         $this->conversation = $data['entity'];
     }
 
+    #[\Override]
     public function generate(): string
     {
         $query = $this->messageRepository->getBaseMessageListWithContentQuery(

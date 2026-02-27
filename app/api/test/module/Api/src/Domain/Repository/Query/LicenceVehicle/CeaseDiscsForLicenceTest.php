@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Cease Discs For Licence Test
  *
@@ -62,7 +64,7 @@ class CeaseDiscsForLicenceTest extends AbstractDbQueryTestCase
         ]
     ];
 
-    public function paramProvider()
+    public static function paramProvider(): array
     {
         $today = new DateTime();
 
@@ -78,12 +80,12 @@ class CeaseDiscsForLicenceTest extends AbstractDbQueryTestCase
         ];
     }
 
-    protected function getSut()
+    protected function getSut(): CeaseDiscsForLicence
     {
         return new CeaseDiscsForLicence();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return 'UPDATE goods_disc gd '
         . 'INNER JOIN licence_vehicle lv '

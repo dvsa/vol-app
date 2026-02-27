@@ -44,6 +44,7 @@ class TransportManagerProcessingTaskController extends AbstractTransportManagerP
      * @see    \Olcs\Controller\Traits\TaskActionTrait
      * @return string
      */
+    #[\Override]
     protected function getTaskActionType()
     {
         return 'transportManager';
@@ -55,6 +56,7 @@ class TransportManagerProcessingTaskController extends AbstractTransportManagerP
      * @see    \Olcs\Controller\Traits\TaskActionTrait
      * @return array
      */
+    #[\Override]
     protected function getTaskActionFilters()
     {
         return [

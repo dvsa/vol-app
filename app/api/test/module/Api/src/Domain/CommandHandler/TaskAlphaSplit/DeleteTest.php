@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\TaskAlphaSplit;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\TaskAlphaSplit\Delete as CommandHandler;
@@ -21,12 +23,13 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         parent::initReferences();
     }
 
-    public function testHandleCommandAllParams()
+    public function testHandleCommandAllParams(): void
     {
         $command = Cmd::create(
             [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hearing Test
  *
@@ -31,7 +33,7 @@ class HearingTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $isTm = true;
         $agreedDate = '2015-12-25 00:00:00';

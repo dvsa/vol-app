@@ -35,7 +35,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractReplacement implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractReplacement implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -137,7 +137,8 @@ abstract class AbstractReplacement implements BundleSerializableInterface, JsonS
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -160,7 +161,8 @@ abstract class AbstractReplacement implements BundleSerializableInterface, JsonS
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -183,7 +185,8 @@ abstract class AbstractReplacement implements BundleSerializableInterface, JsonS
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -206,7 +209,8 @@ abstract class AbstractReplacement implements BundleSerializableInterface, JsonS
     /**
      * Get the placeholder
      *
-     * @return string     */
+     * @return string
+     */
     public function getPlaceholder()
     {
         return $this->placeholder;
@@ -229,7 +233,8 @@ abstract class AbstractReplacement implements BundleSerializableInterface, JsonS
     /**
      * Get the replacement text
      *
-     * @return string     */
+     * @return string
+     */
     public function getReplacementText()
     {
         return $this->replacementText;
@@ -252,7 +257,8 @@ abstract class AbstractReplacement implements BundleSerializableInterface, JsonS
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -261,6 +267,7 @@ abstract class AbstractReplacement implements BundleSerializableInterface, JsonS
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

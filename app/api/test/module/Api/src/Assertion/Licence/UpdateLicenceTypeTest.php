@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Assertion\Licence;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -24,10 +26,8 @@ class UpdateLicenceTypeTest extends MockeryTestCase
         $this->auth = m::mock(AuthorizationService::class);
     }
 
-    /**
-     * @dataProvider providerAssert
-     */
-    public function testAssert($isInternal, $licCat, $licTyp, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerAssert')]
+    public function testAssert(mixed $isInternal, mixed $licCat, mixed $licTyp, mixed $expected): void
     {
         $licence = m::mock(Licence::class);
 
@@ -45,7 +45,7 @@ class UpdateLicenceTypeTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->assert($this->auth, $licence));
     }
 
-    public function providerAssert()
+    public static function providerAssert(): array
     {
         return [
             [
@@ -87,7 +87,7 @@ class UpdateLicenceTypeTest extends MockeryTestCase
         ];
     }
 
-    public function assert(AuthorizationService $authorizationService, Licence $context = null)
+    public function assert(AuthorizationService $authorizationService, Licence $context = null): bool
     {
         if ($authorizationService->isGranted(Permission::INTERNAL_USER)) {
             return true;

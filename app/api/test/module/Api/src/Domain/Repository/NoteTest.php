@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Mockery as m;
@@ -19,7 +21,7 @@ class NoteTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchByOrganisation()
+    public function testFetchByOrganisation(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -37,7 +39,7 @@ class NoteTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchByTransportManager()
+    public function testFetchByTransportManager(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -55,7 +57,7 @@ class NoteTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchForOverview()
+    public function testFetchForOverview(): void
     {
         $qb = m::mock(QueryBuilder::class);
         $this->mockCreateQueryBuilder($qb);

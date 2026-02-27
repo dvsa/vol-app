@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cpms\Authenticate;
 
 use Dvsa\Olcs\Cpms\Authenticate\CpmsIdentityProvider;
@@ -8,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class CpmsIdentityProviderFactoryTest extends TestCase
 {
-    public function testCreateCpmsIdentityProvider()
+    public function testCreateCpmsIdentityProvider(): void
     {
         $clientId = 'a-client-id';
         $clientSecret = 'a-client-secret';

@@ -93,8 +93,8 @@ data "aws_ecr_repository" "sservice" {
   name = "vol-app/${each.key}"
 }
 
-data "aws_ecr_repository" "dockerhub_gotenberg" {
-  name = "docker-hub/gotenberg/gotenberg"
+data "aws_ecr_repository" "gotenberg" {
+  name = "vol-app/gotenberg"
 }
 
 data "aws_security_group" "this" {
@@ -281,8 +281,8 @@ module "service" {
 
       enable_autoscaling_policies = true
 
-      version    = "8"
-      repository = data.aws_ecr_repository.dockerhub_gotenberg.repository_url
+      version    = "latest"
+      repository = data.aws_ecr_repository.gotenberg.repository_url
 
       set_custom_port = true
 
@@ -605,7 +605,7 @@ module "service" {
       },
       {
         name     = "ni-compliance",
-        commands = ["/mnt/data/scripts/ni_dvacomplaince.sh"],
+        commands = ["/mnt/data/scripts/ni_dvacompliance.sh"],
         type     = "scripts"
       },
     ]

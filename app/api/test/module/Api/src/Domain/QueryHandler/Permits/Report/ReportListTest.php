@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Permits\Report;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Permits\Report\ReportList;
@@ -9,19 +11,15 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 
 class ReportListTest extends QueryHandlerTestCase
 {
-    /**
-     * @test
-     */
-    public function handleQueryIsCallable()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleQueryIsCallable(): void
     {
         $this->assertIsCallable($this->sut->handleQuery(...));
     }
 
-    /**
-     * @test
-     * @depends handleQueryIsCallable
-     */
-    public function handleQueryReturnsArrayFormat()
+    #[\PHPUnit\Framework\Attributes\Depends('handleQueryIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleQueryReturnsArrayFormat(): void
     {
         $result = $this->sut->handleQuery(Qry::create([]));
 
@@ -30,21 +28,17 @@ class ReportListTest extends QueryHandlerTestCase
         $this->assertArrayHasKey('count', $result);
     }
 
-    /**
-     * @test
-     * @depends handleQueryReturnsArrayFormat
-     */
-    public function handleQueryReturnsListOfAvailableReportsFromPermitReportService()
+    #[\PHPUnit\Framework\Attributes\Depends('handleQueryReturnsArrayFormat')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleQueryReturnsListOfAvailableReportsFromPermitReportService(): void
     {
         $result = $this->sut->handleQuery(Qry::create([]));
         $this->assertEquals(PermitsReportService::REPORT_TYPES, $result['result']);
     }
 
-    /**
-     * @test
-     * @depends handleQueryReturnsListOfAvailableReportsFromPermitReportService
-     */
-    public function handleQueryReturnsValidCountOfAvailableReportsFromPermitReportService()
+    #[\PHPUnit\Framework\Attributes\Depends('handleQueryReturnsListOfAvailableReportsFromPermitReportService')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleQueryReturnsValidCountOfAvailableReportsFromPermitReportService(): void
     {
         $result = $this->sut->handleQuery(Qry::create([]));
         $this->assertEquals(count(PermitsReportService::REPORT_TYPES), $result['count']);

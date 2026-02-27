@@ -43,7 +43,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractSurrender implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSurrender implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -74,7 +74,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     protected $licence;
 
     /**
-     *  STATUS of surrender
+     * STATUS of surrender
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
@@ -84,7 +84,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     protected $status;
 
     /**
-     *  STATUS of licence document
+     * STATUS of licence document
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
@@ -146,7 +146,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     protected $lastModifiedBy;
 
     /**
-     *  NUMBER of discs that have been declared destroyed
+     * NUMBER of discs that have been declared destroyed
      *
      * @var int
      *
@@ -155,7 +155,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     protected $discDestroyed;
 
     /**
-     *  NUMBER of discs that have been declared lost 
+     * NUMBER of discs that have been declared lost
      *
      * @var int
      *
@@ -164,7 +164,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     protected $discLost;
 
     /**
-     *  NUMBER of discs that have been declared stolen
+     * NUMBER of discs that have been declared stolen
      *
      * @var int
      *
@@ -173,7 +173,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     protected $discStolen;
 
     /**
-     *  information relating TO discs lost
+     * information relating TO discs lost
      *
      * @var string
      *
@@ -182,8 +182,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     protected $discLostInfo;
 
     /**
-     *  information relating TO stolen discs
-  
+     * information relating TO stolen discs
      *
      * @var string
      *
@@ -270,7 +269,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -293,7 +293,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -316,7 +317,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getStatus()
     {
         return $this->status;
@@ -339,7 +341,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the licence document status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getLicenceDocumentStatus()
     {
         return $this->licenceDocumentStatus;
@@ -362,7 +365,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the community licence document status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getCommunityLicenceDocumentStatus()
     {
         return $this->communityLicenceDocumentStatus;
@@ -385,7 +389,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the digital signature
      *
-     * @return \Dvsa\Olcs\Api\Entity\DigitalSignature     */
+     * @return \Dvsa\Olcs\Api\Entity\DigitalSignature
+     */
     public function getDigitalSignature()
     {
         return $this->digitalSignature;
@@ -408,7 +413,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the signature type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getSignatureType()
     {
         return $this->signatureType;
@@ -431,7 +437,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -454,7 +461,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -477,7 +485,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the disc destroyed
      *
-     * @return int     */
+     * @return int
+     */
     public function getDiscDestroyed()
     {
         return $this->discDestroyed;
@@ -500,7 +509,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the disc lost
      *
-     * @return int     */
+     * @return int
+     */
     public function getDiscLost()
     {
         return $this->discLost;
@@ -523,7 +533,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the disc stolen
      *
-     * @return int     */
+     * @return int
+     */
     public function getDiscStolen()
     {
         return $this->discStolen;
@@ -546,7 +557,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the disc lost info
      *
-     * @return string     */
+     * @return string
+     */
     public function getDiscLostInfo()
     {
         return $this->discLostInfo;
@@ -569,7 +581,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the disc stolen info
      *
-     * @return string     */
+     * @return string
+     */
     public function getDiscStolenInfo()
     {
         return $this->discStolenInfo;
@@ -592,7 +605,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the licence document info
      *
-     * @return string     */
+     * @return string
+     */
     public function getLicenceDocumentInfo()
     {
         return $this->licenceDocumentInfo;
@@ -615,7 +629,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the community licence document info
      *
-     * @return string     */
+     * @return string
+     */
     public function getCommunityLicenceDocumentInfo()
     {
         return $this->communityLicenceDocumentInfo;
@@ -638,7 +653,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the signature checked
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getSignatureChecked()
     {
         return $this->signatureChecked;
@@ -661,7 +677,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the ecms checked
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getEcmsChecked()
     {
         return $this->ecmsChecked;
@@ -684,7 +701,8 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -693,6 +711,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

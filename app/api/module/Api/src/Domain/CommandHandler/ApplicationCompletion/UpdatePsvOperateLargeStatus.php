@@ -10,6 +10,7 @@ final class UpdatePsvOperateLargeStatus extends AbstractUpdateStatus
 {
     protected $section = 'PsvOperateLarge';
 
+    #[\Override]
     protected function isSectionValid(Application $application): bool
     {
         return $application->isSectionCompleted($this->section);

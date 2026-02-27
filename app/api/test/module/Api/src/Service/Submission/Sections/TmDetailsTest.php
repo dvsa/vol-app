@@ -1,24 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
-/**
- * Class TmDetailsTest
- * @author Shaun Lizzio <shaun@valtech.co.uk>
- */
-class TmDetailsTest extends AbstractSubmissionSectionTest
+use Dvsa\Olcs\Api\Service\Submission\Sections\TmDetails;
+
+class TmDetailsTest extends AbstractSubmissionSectionTestCase
 {
-    protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\TmDetails::class;
+    protected $submissionSection = TmDetails::class;
 
-    /**
-     * Filter provider
-     *
-     * @return array
-     */
-    public function sectionTestProvider()
+    public static function sectionTestProvider(): array
     {
-        $case = $this->getCase();
-
         $expectedResult = [
             'data' => [
                 'overview' => [
@@ -51,6 +44,8 @@ class TmDetailsTest extends AbstractSubmissionSectionTest
                 ]
             ]
         ];
+
+        $case = static::getCase();
 
         return [
             [$case, $expectedResult],

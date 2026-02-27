@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLegacyRecommendationPiReason implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLegacyRecommendationPiReason implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -145,7 +145,8 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -168,7 +169,8 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
     /**
      * Get the legacy recommendation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Legacy\LegacyRecommendation     */
+     * @return \Dvsa\Olcs\Api\Entity\Legacy\LegacyRecommendation
+     */
     public function getLegacyRecommendation()
     {
         return $this->legacyRecommendation;
@@ -191,7 +193,8 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
     /**
      * Get the legacy pi reason
      *
-     * @return \Dvsa\Olcs\Api\Entity\Legacy\LegacyPiReason     */
+     * @return \Dvsa\Olcs\Api\Entity\Legacy\LegacyPiReason
+     */
     public function getLegacyPiReason()
     {
         return $this->legacyPiReason;
@@ -214,7 +217,8 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -237,7 +241,8 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -260,7 +265,8 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
     /**
      * Get the comment
      *
-     * @return string     */
+     * @return string
+     */
     public function getComment()
     {
         return $this->comment;
@@ -283,7 +289,8 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -292,6 +299,7 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

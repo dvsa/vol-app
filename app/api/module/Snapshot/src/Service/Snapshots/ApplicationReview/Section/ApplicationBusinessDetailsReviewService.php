@@ -25,6 +25,7 @@ class ApplicationBusinessDetailsReviewService extends AbstractReviewService
      * @param array $data
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(array $data = [])
     {
         $organisation = $data['licence']['organisation'];

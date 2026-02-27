@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Previous Hearing Bundle Test
  */
@@ -26,7 +28,7 @@ class PreviousHearingTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $pi = 99;
         $hearingDate = '2015-03-06 20:00:00';
@@ -48,7 +50,7 @@ class PreviousHearingTest extends QueryHandlerTestCase
         $this->assertEquals(['foo' => 'bar'], $this->sut->handleQuery($query)->serialize());
     }
 
-    public function testHandleQueryEmpty()
+    public function testHandleQueryEmpty(): void
     {
         $pi = 99;
         $hearingDate = '2015-03-06 20:00:00';

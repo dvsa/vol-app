@@ -21,6 +21,7 @@ class ContinuationSnapshot extends AbstractCommandConsumer
      *
      * @return array
      */
+    #[\Override]
     public function getCommandData(QueueEntity $item)
     {
         return ['id' => $item->getEntityId(), 'user' => $item->getCreatedBy()->getId()];

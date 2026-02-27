@@ -30,6 +30,7 @@ class Complaint extends AbstractRepository
      * @throws Exception\NotFoundException
      * @throws Exception\VersionConflictException
      */
+    #[\Override]
     public function fetchUsingId(QryCmd $query, $hydrateMode = Query::HYDRATE_OBJECT, $version = null)
     {
         $qb = $this->createQueryBuilder();
@@ -60,6 +61,7 @@ class Complaint extends AbstractRepository
      * @param int $id
      * @return \Dvsa\Olcs\Api\Domain\QueryBuilder
      */
+    #[\Override]
     protected function buildDefaultQuery(QueryBuilder $qb, $id)
     {
         return $this->getQueryBuilder()->modifyQuery($qb)
@@ -75,6 +77,7 @@ class Complaint extends AbstractRepository
      * Override to add additional data to the default fetchList() method
      * @param QueryBuilder $qb
      */
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         $this->getQueryBuilder()
@@ -88,6 +91,7 @@ class Complaint extends AbstractRepository
      * @param QueryBuilder $qb
      * @param QueryInterface $query
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if ($query->getCase()) {

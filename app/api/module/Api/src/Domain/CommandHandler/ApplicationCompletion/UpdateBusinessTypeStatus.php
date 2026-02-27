@@ -23,6 +23,7 @@ final class UpdateBusinessTypeStatus extends AbstractUpdateStatus
 
     protected $section = 'BusinessType';
 
+    #[\Override]
     protected function isSectionValid(Application $application)
     {
         return $application->getLicence()->getOrganisation()->getType() !== null;

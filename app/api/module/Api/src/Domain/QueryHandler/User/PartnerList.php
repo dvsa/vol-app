@@ -13,6 +13,7 @@ final class PartnerList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Partner';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $repo = $this->getRepo();

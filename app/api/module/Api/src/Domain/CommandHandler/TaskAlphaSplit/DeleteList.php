@@ -15,6 +15,7 @@ final class DeleteList extends AbstractCommandHandler implements TransactionedIn
 {
     protected $repoServiceName = 'TaskAlphaSplit';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $taskAlphaSplits = $this->getRepo()->fetchByIds($command->getIds());

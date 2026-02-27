@@ -69,6 +69,7 @@ class IrhpPermitPrintCountry extends AbstractDataService implements ListDataInte
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function fetchListOptions($context = null, $useGroups = false)
     {
         $data = $this->fetchListData();

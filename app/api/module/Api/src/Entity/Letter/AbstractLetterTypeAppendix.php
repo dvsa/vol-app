@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -42,24 +42,26 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
     use ModifiedOnTrait;
 
     /**
-     * Primary key
+     * LetterType
      *
-     * @var int
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
      *
      * @ORM\Id
-     * @ORM\Column(type="integer", name="letter_type_id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterType", fetch="LAZY")
+     * @ORM\JoinColumn(name="letter_type_id", referencedColumnName="id")
      */
-    protected $letter_type_id = 0;
+    protected $letterType;
 
     /**
-     * Primary key
+     * LetterAppendixVersion
      *
-     * @var int
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion
      *
      * @ORM\Id
-     * @ORM\Column(type="integer", name="letter_appendix_version_id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion", fetch="LAZY")
+     * @ORM\JoinColumn(name="letter_appendix_version_id", referencedColumnName="id")
      */
-    protected $letter_appendix_version_id = 0;
+    protected $letterAppendixVersion;
 
     /**
      * Created by
@@ -128,49 +130,51 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
 
 
     /**
-     * Set the letter_type_id
+     * Set the letter type
      *
-     * @param int $letter_type_id new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterType $letterType new value being set
      *
      * @return LetterTypeAppendix
      */
-    public function setLetter_type_id($letter_type_id)
+    public function setLetterType($letterType)
     {
-        $this->letter_type_id = $letter_type_id;
+        $this->letterType = $letterType;
 
         return $this;
     }
 
     /**
-     * Get the letter_type_id
+     * Get the letter type
      *
-     * @return int     */
-    public function getLetter_type_id()
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterType
+     */
+    public function getLetterType()
     {
-        return $this->letter_type_id;
+        return $this->letterType;
     }
 
     /**
-     * Set the letter_appendix_version_id
+     * Set the letter appendix version
      *
-     * @param int $letter_appendix_version_id new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion $letterAppendixVersion new value being set
      *
      * @return LetterTypeAppendix
      */
-    public function setLetter_appendix_version_id($letter_appendix_version_id)
+    public function setLetterAppendixVersion($letterAppendixVersion)
     {
-        $this->letter_appendix_version_id = $letter_appendix_version_id;
+        $this->letterAppendixVersion = $letterAppendixVersion;
 
         return $this;
     }
 
     /**
-     * Get the letter_appendix_version_id
+     * Get the letter appendix version
      *
-     * @return int     */
-    public function getLetter_appendix_version_id()
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion
+     */
+    public function getLetterAppendixVersion()
     {
-        return $this->letter_appendix_version_id;
+        return $this->letterAppendixVersion;
     }
 
     /**
@@ -190,7 +194,8 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -213,7 +218,8 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -236,7 +242,8 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
     /**
      * Get the display order
      *
-     * @return int     */
+     * @return int
+     */
     public function getDisplayOrder()
     {
         return $this->displayOrder;
@@ -259,7 +266,8 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
     /**
      * Get the is mandatory
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsMandatory()
     {
         return $this->isMandatory;
@@ -282,7 +290,8 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -291,6 +300,7 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

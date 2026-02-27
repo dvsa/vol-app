@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\Surrender\Section;
 
 use Dvsa\Olcs\Snapshot\Service\Snapshots\Surrender\Section\AbstractReviewServiceServices;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class AbstractReviewServiceServicesTest extends MockeryTestCase
 {
-    public function testGetTranslator()
+    public function testGetTranslator(): void
     {
         $translator = m::mock(TranslatorInterface::class);
 

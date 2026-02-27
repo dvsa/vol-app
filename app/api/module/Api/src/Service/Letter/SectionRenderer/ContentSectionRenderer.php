@@ -18,10 +18,12 @@ class ContentSectionRenderer extends AbstractSectionRenderer
      * Render the section content to HTML
      *
      * @param object $entity
+     * @param array $context Context for vol-grab replacement (licence, application, etc.)
      * @return string HTML output wrapped in <div class="section">
      * @throws \InvalidArgumentException if entity is not supported
      */
-    public function render(object $entity): string
+    #[\Override]
+    public function render(object $entity, array $context = []): string
     {
         if (!$this->supports($entity)) {
             throw new \InvalidArgumentException(
@@ -36,7 +38,7 @@ class ContentSectionRenderer extends AbstractSectionRenderer
             return '';
         }
 
-        $html = $this->convertEditorJsToHtml($content);
+        $html = $this->convertEditorJsToHtml($content, $context);
 
         return $this->wrapInSection($html, 'section');
     }
@@ -47,6 +49,7 @@ class ContentSectionRenderer extends AbstractSectionRenderer
      * @param object $entity
      * @return bool
      */
+    #[\Override]
     public function supports(object $entity): bool
     {
         return $entity instanceof LetterInstanceSection;

@@ -23,6 +23,7 @@ final class CreateTexTask extends AbstractCommandHandler implements AuthAwareInt
 
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $application Application */

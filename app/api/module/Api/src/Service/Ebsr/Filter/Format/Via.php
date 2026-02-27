@@ -17,6 +17,7 @@ class Via extends AbstractFilter
      * @param  mixed $value
      * @return mixed
      */
+    #[\Override]
     public function filter($value)
     {
         if (isset($value['via']) && is_array($value['via'])) {

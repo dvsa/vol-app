@@ -29,6 +29,7 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
 
     protected $extraRepos = ['TransportManagerApplication'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command \Dvsa\Olcs\Transfer\Command\TmEmployment\Update */

@@ -23,6 +23,7 @@ final class UpdateFinancialEvidenceStatus extends AbstractUpdateStatus
 
     protected $section = 'FinancialEvidence';
 
+    #[\Override]
     protected function isSectionValid(Application $application)
     {
         return true;

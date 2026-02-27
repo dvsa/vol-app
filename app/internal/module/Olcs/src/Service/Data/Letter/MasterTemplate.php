@@ -24,6 +24,7 @@ class MasterTemplate extends AbstractListDataService
      * @return array
      * @throw DataServiceException
      */
+    #[\Override]
     public function fetchListData($context = null)
     {
         $data = (array)$this->getData('master-templates');
@@ -45,8 +46,8 @@ class MasterTemplate extends AbstractListDataService
 
         if (!$response->isOk()) {
             $body = $response->getBody();
-            $errorMessage = 'Failed to fetch master templates: ' . 
-                ($body ? $body : 'HTTP ' . $response->getStatusCode());
+            $errorMessage = 'Failed to fetch master templates: ' .
+                ($body ?: 'HTTP ' . $response->getStatusCode());
             throw new DataServiceException($errorMessage);
         }
 
@@ -64,6 +65,7 @@ class MasterTemplate extends AbstractListDataService
      *
      * @return array
      */
+    #[\Override]
     public function formatData(array $data)
     {
         $optionData = [];

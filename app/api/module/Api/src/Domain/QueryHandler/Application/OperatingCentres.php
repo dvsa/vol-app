@@ -48,6 +48,7 @@ class OperatingCentres extends AbstractQueryHandler
      * @return Result
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var ApplicationEntity $application */
@@ -215,6 +216,7 @@ class OperatingCentres extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

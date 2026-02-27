@@ -27,6 +27,7 @@ final class ReopenSubmission extends AbstractCommandHandler implements Transacti
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var ReopenSubmissionCmd $command **/

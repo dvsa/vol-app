@@ -43,15 +43,25 @@
                    unfitStartDate="2015-12-09"
                    unfitEndDate="2016-06-09"/>
         </TransportManagerCertificateDetails>
-        <TransportUndertakings totalManagedUndertakings="1"
-                               totalManagedVehicles="7">
-          <TransportUndertaking transportUndertakingName="International Rescue "
+        <!-- Multiple undertakings -->
+        <TransportUndertakings totalManagedUndertakings="2"
+                               totalManagedVehicles="18">
+          <TransportUndertaking transportUndertakingName="International Rescue"
                                 numberOfVehicles="7"
                                 communityLicenceNumber="CL-IR-000001-001"
                                 communityLicenceStatus="Active">
             <TransportUndertakingAddress address="Tracy Villa"
                                          postCode="SP1"
                                          city="Tracy Island"
+                                         country="UK"/>
+          </TransportUndertaking>
+          <TransportUndertaking transportUndertakingName="New Rescue"
+                                numberOfVehicles="11"
+                                communityLicenceNumber="CL-IR-123456-121"
+                                communityLicenceStatus="Active">
+            <TransportUndertakingAddress address="Quarry House"
+                                         postCode="SP1"
+                                         city="Leeds"
                                          country="UK"/>
           </TransportUndertaking>
         </TransportUndertakings>

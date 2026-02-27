@@ -28,6 +28,7 @@ class UpdateTmNysiisName extends AbstractCommandConsumer
     /**
      * gets command data
      */
+    #[\Override]
     public function getCommandData(QueueEntity $item): array
     {
         return array_merge(

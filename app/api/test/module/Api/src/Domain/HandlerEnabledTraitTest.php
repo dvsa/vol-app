@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain;
 
 use Dvsa\Olcs\Api\Domain\Exception\DisabledHandlerException;
@@ -29,7 +31,7 @@ class HandlerEnabledTraitTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testEnabledWithHandlerFqdn()
+    public function testEnabledWithHandlerFqdn(): void
     {
         $this->mockedSmServices[ToggleService::class]
             ->shouldReceive('isEnabled')
@@ -40,7 +42,7 @@ class HandlerEnabledTraitTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(true, $this->sut->checkEnabled());
     }
 
-    public function testEnabledWithHandlerFqdnException()
+    public function testEnabledWithHandlerFqdnException(): void
     {
         $this->expectException(DisabledHandlerException::class);
 
@@ -53,7 +55,7 @@ class HandlerEnabledTraitTest extends AbstractCommandHandlerTestCase
         $this->sut->checkEnabled();
     }
 
-    public function testEnabledWithToggleConfig()
+    public function testEnabledWithToggleConfig(): void
     {
         $toggles = ['toggle1', 'toggle2'];
         $this->sut->setToggleConfig($toggles);
@@ -73,10 +75,8 @@ class HandlerEnabledTraitTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(true, $this->sut->checkEnabled());
     }
 
-    /**
-     * @dataProvider toggleConfigProvider
-     */
-    public function testEnabledWithToggleConfigException($toggleConfig1, $toggleConfig2, $checkSecondToggle)
+    #[\PHPUnit\Framework\Attributes\DataProvider('toggleConfigProvider')]
+    public function testEnabledWithToggleConfigException(mixed $toggleConfig1, mixed $toggleConfig2, mixed $checkSecondToggle): void
     {
         $this->expectException(DisabledHandlerException::class);
 
@@ -98,7 +98,7 @@ class HandlerEnabledTraitTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(true, $this->sut->checkEnabled());
     }
 
-    public function toggleConfigProvider()
+    public static function toggleConfigProvider(): array
     {
         return [
             [true, false, 1],

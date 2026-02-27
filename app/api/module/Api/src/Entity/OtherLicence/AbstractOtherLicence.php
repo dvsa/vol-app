@@ -39,7 +39,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractOtherLicence implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractOtherLicence implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -274,7 +274,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -297,7 +298,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
     public function getApplication()
     {
         return $this->application;
@@ -320,7 +322,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the transport manager
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     */
     public function getTransportManager()
     {
         return $this->transportManager;
@@ -343,7 +346,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the transport manager licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence     */
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence
+     */
     public function getTransportManagerLicence()
     {
         return $this->transportManagerLicence;
@@ -366,7 +370,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the transport manager application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication     */
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication
+     */
     public function getTransportManagerApplication()
     {
         return $this->transportManagerApplication;
@@ -389,7 +394,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the role
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getRole()
     {
         return $this->role;
@@ -412,7 +418,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the previous licence type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getPreviousLicenceType()
     {
         return $this->previousLicenceType;
@@ -435,7 +442,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -458,7 +466,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -481,7 +490,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the lic no
      *
-     * @return string     */
+     * @return string
+     */
     public function getLicNo()
     {
         return $this->licNo;
@@ -504,7 +514,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the holder name
      *
-     * @return string     */
+     * @return string
+     */
     public function getHolderName()
     {
         return $this->holderName;
@@ -529,7 +540,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getPurchaseDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -556,7 +568,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the will surrender
      *
-     * @return string     */
+     * @return string
+     */
     public function getWillSurrender()
     {
         return $this->willSurrender;
@@ -581,7 +594,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getDisqualificationDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -608,7 +622,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the disqualification length
      *
-     * @return string     */
+     * @return string
+     */
     public function getDisqualificationLength()
     {
         return $this->disqualificationLength;
@@ -631,7 +646,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the additional information
      *
-     * @return string     */
+     * @return string
+     */
     public function getAdditionalInformation()
     {
         return $this->additionalInformation;
@@ -654,7 +670,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the operating centres
      *
-     * @return string     */
+     * @return string
+     */
     public function getOperatingCentres()
     {
         return $this->operatingCentres;
@@ -677,7 +694,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the total auth vehicles
      *
-     * @return int     */
+     * @return int
+     */
     public function getTotalAuthVehicles()
     {
         return $this->totalAuthVehicles;
@@ -700,7 +718,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the hours per week
      *
-     * @return string     */
+     * @return string
+     */
     public function getHoursPerWeek()
     {
         return $this->hoursPerWeek;
@@ -723,7 +742,8 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -732,6 +752,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

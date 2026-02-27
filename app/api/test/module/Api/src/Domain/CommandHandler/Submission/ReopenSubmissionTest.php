@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Reopen Submission Test
  *
@@ -32,7 +34,7 @@ class ReopenSubmissionTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandForClosedSubmission()
+    public function testHandleCommandForClosedSubmission(): void
     {
         $command = Cmd::create(
             [
@@ -71,7 +73,7 @@ class ReopenSubmissionTest extends AbstractCommandHandlerTestCase
     /**
      * An open submission should not be re-openable, hence test for exception
      */
-    public function testHandleCommandForOpenSubmission()
+    public function testHandleCommandForOpenSubmission(): void
     {
         $command = Cmd::create(
             [

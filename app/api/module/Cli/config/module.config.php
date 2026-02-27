@@ -103,33 +103,17 @@ return [
                 );
             },
             // Factories for Doctrine Migrations commands
-            MigrationCommands\CurrentCommand::class => function (ContainerInterface $container) {
-                return new MigrationCommands\CurrentCommand($container->get(DependencyFactory::class));
-            },
-            MigrationCommands\ExecuteCommand::class => function (ContainerInterface $container) {
-                return new MigrationCommands\ExecuteCommand($container->get(DependencyFactory::class));
-            },
-            MigrationCommands\GenerateCommand::class => function (ContainerInterface $container) {
-                return new MigrationCommands\GenerateCommand($container->get(DependencyFactory::class));
-            },
-            MigrationCommands\LatestCommand::class => function (ContainerInterface $container) {
-                return new MigrationCommands\LatestCommand($container->get(DependencyFactory::class));
-            },
-            MigrationCommands\ListCommand::class => function (ContainerInterface $container) {
-                return new MigrationCommands\ListCommand($container->get(DependencyFactory::class));
-            },
-            MigrationCommands\MigrateCommand::class => function (ContainerInterface $container) {
-                return new MigrationCommands\MigrateCommand($container->get(DependencyFactory::class));
-            },
-            MigrationCommands\StatusCommand::class => function (ContainerInterface $container) {
-                return new MigrationCommands\StatusCommand($container->get(DependencyFactory::class));
-            },
-            MigrationCommands\VersionCommand::class => function (ContainerInterface $container) {
-                return new MigrationCommands\VersionCommand($container->get(DependencyFactory::class));
-            },
-            
-            
-            
+            MigrationCommands\CurrentCommand::class => fn(ContainerInterface $container) => new MigrationCommands\CurrentCommand($container->get(DependencyFactory::class)),
+            MigrationCommands\ExecuteCommand::class => fn(ContainerInterface $container) => new MigrationCommands\ExecuteCommand($container->get(DependencyFactory::class)),
+            MigrationCommands\GenerateCommand::class => fn(ContainerInterface $container) => new MigrationCommands\GenerateCommand($container->get(DependencyFactory::class)),
+            MigrationCommands\LatestCommand::class => fn(ContainerInterface $container) => new MigrationCommands\LatestCommand($container->get(DependencyFactory::class)),
+            MigrationCommands\ListCommand::class => fn(ContainerInterface $container) => new MigrationCommands\ListCommand($container->get(DependencyFactory::class)),
+            MigrationCommands\MigrateCommand::class => fn(ContainerInterface $container) => new MigrationCommands\MigrateCommand($container->get(DependencyFactory::class)),
+            MigrationCommands\StatusCommand::class => fn(ContainerInterface $container) => new MigrationCommands\StatusCommand($container->get(DependencyFactory::class)),
+            MigrationCommands\VersionCommand::class => fn(ContainerInterface $container) => new MigrationCommands\VersionCommand($container->get(DependencyFactory::class)),
+
+
+
         ],
     ],
     'service_manager' => [
@@ -144,18 +128,16 @@ return [
             'Queue' => Dvsa\Olcs\Cli\Service\Queue\QueueProcessorFactory::class,
             Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractConsumerServices::class
             => Dvsa\Olcs\Cli\Service\Queue\Consumer\Factory\AbstractConsumerServicesFactory::class,
-            
+
             // Entity Generator Services
-            \Dvsa\Olcs\Cli\Service\EntityGenerator\Adapters\Doctrine3SchemaIntrospector::class => function (ContainerInterface $container) {
-                return new \Dvsa\Olcs\Cli\Service\EntityGenerator\Adapters\Doctrine3SchemaIntrospector(
-                    $container->get('doctrine.connection.orm_default'),
-                    $container->get('config')['entity_generator'] ?? []
-                );
-            },
-            
+            \Dvsa\Olcs\Cli\Service\EntityGenerator\Adapters\Doctrine3SchemaIntrospector::class => fn(ContainerInterface $container) => new \Dvsa\Olcs\Cli\Service\EntityGenerator\Adapters\Doctrine3SchemaIntrospector(
+                $container->get('doctrine.connection.orm_default'),
+                $container->get('config')['entity_generator'] ?? []
+            ),
+
             \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlerRegistry::class => function (ContainerInterface $container) {
                 $registry = new \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlerRegistry();
-                
+
                 // Register type handlers in priority order
                 $registry->register(new \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\PrimaryKeyTypeHandler());
                 $registry->register(new \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\VersionTypeHandler());
@@ -164,46 +146,36 @@ return [
                 $registry->register(new \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\EncryptedStringTypeHandler());
                 $registry->register(new \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\RelationshipTypeHandler());
                 $registry->register(new \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\DefaultTypeHandler());
-                
+
                 return $registry;
             },
-            
-            \Dvsa\Olcs\Cli\Service\EntityGenerator\MethodGeneratorService::class => function (ContainerInterface $container) {
-                return new \Dvsa\Olcs\Cli\Service\EntityGenerator\MethodGeneratorService();
-            },
-            
-            \Dvsa\Olcs\Cli\Service\EntityGenerator\PropertyNameResolver::class => function (ContainerInterface $container) {
-                return new \Dvsa\Olcs\Cli\Service\EntityGenerator\PropertyNameResolver();
-            },
-            
-            \Dvsa\Olcs\Cli\Service\EntityGenerator\TemplateRenderer::class => function (ContainerInterface $container) {
-                return new \Dvsa\Olcs\Cli\Service\EntityGenerator\TemplateRenderer(
-                    __DIR__ . '/../src/Service/EntityGenerator/Templates',
-                    $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\MethodGeneratorService::class)
-                );
-            },
-            
-            \Dvsa\Olcs\Cli\Service\EntityGenerator\EntityGenerator::class => function (ContainerInterface $container) {
-                return new \Dvsa\Olcs\Cli\Service\EntityGenerator\EntityGenerator(
-                    $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlerRegistry::class),
-                    $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\TemplateRenderer::class),
-                    $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\EntityConfigService::class),
-                    $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\InverseRelationshipProcessor::class),
-                    $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\PropertyNameResolver::class)
-                );
-            },
-            
+
+            \Dvsa\Olcs\Cli\Service\EntityGenerator\MethodGeneratorService::class => fn(ContainerInterface $container) => new \Dvsa\Olcs\Cli\Service\EntityGenerator\MethodGeneratorService(),
+
+            \Dvsa\Olcs\Cli\Service\EntityGenerator\PropertyNameResolver::class => fn(ContainerInterface $container) => new \Dvsa\Olcs\Cli\Service\EntityGenerator\PropertyNameResolver(),
+
+            \Dvsa\Olcs\Cli\Service\EntityGenerator\TemplateRenderer::class => fn(ContainerInterface $container) => new \Dvsa\Olcs\Cli\Service\EntityGenerator\TemplateRenderer(
+                __DIR__ . '/../src/Service/EntityGenerator/Templates',
+                $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\MethodGeneratorService::class)
+            ),
+
+            \Dvsa\Olcs\Cli\Service\EntityGenerator\EntityGenerator::class => fn(ContainerInterface $container) => new \Dvsa\Olcs\Cli\Service\EntityGenerator\EntityGenerator(
+                $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlerRegistry::class),
+                $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\TemplateRenderer::class),
+                $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\EntityConfigService::class),
+                $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\InverseRelationshipProcessor::class),
+                $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\PropertyNameResolver::class)
+            ),
+
             \Dvsa\Olcs\Cli\Service\EntityGenerator\EntityConfigService::class => function (ContainerInterface $container) {
                 $configPath = __DIR__ . '/../../../data/db/EntityConfig.php';
                 return new \Dvsa\Olcs\Cli\Service\EntityGenerator\EntityConfigService($configPath);
             },
-            
-            \Dvsa\Olcs\Cli\Service\EntityGenerator\InverseRelationshipProcessor::class => function (ContainerInterface $container) {
-                return new \Dvsa\Olcs\Cli\Service\EntityGenerator\InverseRelationshipProcessor(
-                    $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\EntityConfigService::class),
-                    $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\PropertyNameResolver::class)
-                );
-            },
+
+            \Dvsa\Olcs\Cli\Service\EntityGenerator\InverseRelationshipProcessor::class => fn(ContainerInterface $container) => new \Dvsa\Olcs\Cli\Service\EntityGenerator\InverseRelationshipProcessor(
+                $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\EntityConfigService::class),
+                $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\PropertyNameResolver::class)
+            ),
         ],
     ],
     ConfigAbstractFactory::class => [

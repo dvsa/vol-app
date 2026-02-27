@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create IrfoPsvAuth Test
  */
@@ -38,7 +40,8 @@ class CreateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrfoPsvAuthEntity::STATUS_PENDING,
@@ -70,7 +73,7 @@ class CreateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandApplicationFeeExempt()
+    public function testHandleCommandApplicationFeeExempt(): void
     {
         $data = [
             'organisation' => 11,
@@ -209,7 +212,7 @@ class CreateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($data['irfoPsvAuthNumbers'][0]['name'], $savedIrfoPsvAuthNumber->getName());
     }
 
-    public function testHandleCommandApplicationFeeApplied()
+    public function testHandleCommandApplicationFeeApplied(): void
     {
         $data = [
             'organisation' => 11,

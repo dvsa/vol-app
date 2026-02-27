@@ -17,6 +17,7 @@ class IrfoDetails extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Organisation';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         // get only trading names which are not linked to a licence

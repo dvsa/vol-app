@@ -18,6 +18,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\BusRegBundle as Qry;
  */
 class BrRouteNum extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         if (!isset($data['busRegId'])) {
@@ -27,6 +28,7 @@ class BrRouteNum extends DynamicBookmark
         return Qry::create(['id' => $data['busRegId'], 'bundle' => ['otherServices']]);
     }
 
+    #[\Override]
     public function render()
     {
         if (empty($this->data)) {

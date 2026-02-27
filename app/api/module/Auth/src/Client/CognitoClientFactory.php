@@ -36,6 +36,7 @@ class CognitoClientFactory implements FactoryInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Client
     {
         $config = $container->get('config')[static::CONFIG_NAMESPACE][static::CONFIG_ADAPTERS][static::CONFIG_ADAPTER];

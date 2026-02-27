@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpApplication;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\IrhpApplication\CreateDefaultIrhpPermitApplications;
@@ -25,7 +27,7 @@ class CreateDefaultIrhpPermitApplicationsTest extends AbstractCommandHandlerTest
         parent::setUp();
     }
 
-    public function testHandleCommandMultilateral()
+    public function testHandleCommandMultilateral(): void
     {
         $irhpApplicationId = 5;
         $irhpPermitTypeId = IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL;
@@ -91,7 +93,7 @@ class CreateDefaultIrhpPermitApplicationsTest extends AbstractCommandHandlerTest
         );
     }
 
-    public function testHandleCommandNotMultilateral()
+    public function testHandleCommandNotMultilateral(): void
     {
         $irhpApplicationId = 5;
         $irhpPermitTypeId = IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL;
@@ -116,10 +118,8 @@ class CreateDefaultIrhpPermitApplicationsTest extends AbstractCommandHandlerTest
         );
     }
 
-    /**
-     * @dataProvider dpTestHandleCommandQandAYear
-     */
-    public function testHandleCommandQandAYear($irhpPermitTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommandQandAYear')]
+    public function testHandleCommandQandAYear(mixed $irhpPermitTypeId): void
     {
         $irhpApplicationId = 5;
         $stockId = 22;
@@ -176,10 +176,8 @@ class CreateDefaultIrhpPermitApplicationsTest extends AbstractCommandHandlerTest
         );
     }
 
-    /**
-     * @dataProvider dpTestHandleCommandQandANoYear
-     */
-    public function testHandleCommandQandANoYear($irhpPermitTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommandQandANoYear')]
+    public function testHandleCommandQandANoYear(mixed $irhpPermitTypeId): void
     {
         $irhpApplicationId = 5;
 
@@ -245,17 +243,15 @@ class CreateDefaultIrhpPermitApplicationsTest extends AbstractCommandHandlerTest
         );
     }
 
-    public function dpTestHandleCommandQandAYear()
+    public static function dpTestHandleCommandQandAYear(): array
     {
         return [
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-            ]
+            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],
+            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM],
         ];
     }
 
-    public function dpTestHandleCommandQandANoYear()
+    public static function dpTestHandleCommandQandANoYear(): array
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL]

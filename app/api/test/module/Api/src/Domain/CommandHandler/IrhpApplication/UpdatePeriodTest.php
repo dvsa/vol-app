@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpApplication;
 
 use Dvsa\Olcs\Api\Domain\Command\IrhpPermitApplication\CreateForIrhpApplication;
@@ -69,7 +71,7 @@ class UpdatePeriodTest extends AbstractCommandHandlerTestCase
      * Test creation of IRHP Permit Application - typical first happy path
      *
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->irhpApplicationEntity->shouldReceive('getId')
             ->once()
@@ -137,7 +139,7 @@ class UpdatePeriodTest extends AbstractCommandHandlerTestCase
      * Test creation of IRHP Permit Application - typical first happy path
      *
      */
-    public function testHandleCommandUpdateWindow()
+    public function testHandleCommandUpdateWindow(): void
     {
         $this->repoMap['IrhpApplication']
             ->shouldReceive('fetchById')
@@ -225,7 +227,7 @@ class UpdatePeriodTest extends AbstractCommandHandlerTestCase
      * Test re-selection of same period. No side-effects, return to selfserve with same values
      *
      */
-    public function testHandleCommandSamePeriodExistingIrhpPermitApplication()
+    public function testHandleCommandSamePeriodExistingIrhpPermitApplication(): void
     {
         $this->repoMap['IrhpApplication']
             ->shouldReceive('fetchById')

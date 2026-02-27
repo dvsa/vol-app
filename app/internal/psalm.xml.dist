@@ -3,7 +3,7 @@
   errorLevel="8"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="https://getpsalm.org/schema/config"
-  xsi:schemaLocation="https://getpsalm.org/schema/config vendor-bin/psalm/vendor/vimeo/psalm/config.xsd"
+  xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
   findUnusedBaselineEntry="true"
   findUnusedCode="false"
 >
@@ -15,4 +15,25 @@
         <directory name="vendor" />
     </ignoreFiles>
   </projectFiles>
+  <issueHandlers>
+    <!-- Laminas form/view elements marked @final but intended to be extended -->
+    <InvalidExtendClass>
+      <errorLevel type="suppress">
+        <file name="module/Olcs/src/Form/Element/EditorJs.php"/>
+        <directory name="module/Olcs/src/Form/Element/Permits/"/>
+        <file name="module/Olcs/src/View/Model/ViewModel.php"/>
+      </errorLevel>
+    </InvalidExtendClass>
+    <!-- SlaException entity lives in api package, not available in internal scope -->
+    <UndefinedClass>
+      <errorLevel type="suppress">
+        <file name="module/Olcs/src/Service/Data/SlaException.php"/>
+      </errorLevel>
+    </UndefinedClass>
+    <UndefinedDocblockClass>
+      <errorLevel type="suppress">
+        <file name="module/Olcs/src/Service/Data/SlaException.php"/>
+      </errorLevel>
+    </UndefinedDocblockClass>
+  </issueHandlers>
 </psalm>

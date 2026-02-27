@@ -92,7 +92,7 @@ class GeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGenerateVariation()
+    public function testGenerateVariation(): void
     {
         $expectedData = [
             'sections' => [
@@ -181,7 +181,7 @@ class GeneratorTest extends MockeryTestCase
         $this->assertEquals('markup', $this->sut->generate($this->application, true));
     }
 
-    public function testGenerateApplication()
+    public function testGenerateApplication(): void
     {
         $expectedData = [
             'sections' => [
@@ -283,7 +283,7 @@ class GeneratorTest extends MockeryTestCase
         $this->assertEquals('markup', $this->sut->generate($this->application, true));
     }
 
-    public function testGenerateApplicationWithMappedSection()
+    public function testGenerateApplicationWithMappedSection(): void
     {
         $expectedData = [
             'sections' => [
@@ -385,7 +385,7 @@ class GeneratorTest extends MockeryTestCase
         $this->assertEquals('markup', $this->sut->generate($this->application, true));
     }
 
-    private function mockSignatureSection()
+    private function mockSignatureSection(): void
     {
         $signatureType = m::mock(RefData::class);
         $signatureType->shouldReceive('getId')

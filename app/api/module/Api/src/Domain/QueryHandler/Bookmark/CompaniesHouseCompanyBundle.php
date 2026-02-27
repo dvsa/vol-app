@@ -22,6 +22,7 @@ class CompaniesHouseCompanyBundle extends AbstractQueryHandler
      * @return array
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query): array
     {
         /** @var Licence $licenceEntity */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\Query\Permits\QueueAcceptScoringAndPostScoringReportPermitted;
@@ -24,7 +26,8 @@ class QueueAcceptScoringTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrhpPermitStockEntity::STATUS_ACCEPT_PENDING
@@ -33,7 +36,7 @@ class QueueAcceptScoringTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $stockId = 47;
 
@@ -79,7 +82,7 @@ class QueueAcceptScoringTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandPermittedQueryFailed()
+    public function testHandleCommandPermittedQueryFailed(): void
     {
         $stockId = 47;
 

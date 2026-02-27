@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * WithdrawTest.php
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
@@ -30,7 +32,8 @@ class WithdrawTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = ['lsts_withdrawn'];
 
@@ -39,7 +42,7 @@ class WithdrawTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Command::create(['id' => 532]);
 

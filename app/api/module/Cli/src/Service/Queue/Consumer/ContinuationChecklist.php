@@ -27,6 +27,7 @@ class ContinuationChecklist extends AbstractCommandConsumer
      * @param QueueEntity $item
      * @return array
      */
+    #[\Override]
     public function getCommandData(QueueEntity $item)
     {
         return ['id' => $item->getEntityId(), 'user' => $item->getCreatedBy()->getId()];
@@ -40,6 +41,7 @@ class ContinuationChecklist extends AbstractCommandConsumer
      * @param string $reason
      * @return string
      */
+    #[\Override]
     public function failed(QueueEntity $item, $reason = null)
     {
         $dtoData = [

@@ -30,6 +30,7 @@ class TransportManagersControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return TransportManagersController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransportManagersController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

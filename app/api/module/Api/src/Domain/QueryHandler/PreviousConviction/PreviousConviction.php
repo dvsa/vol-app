@@ -20,6 +20,7 @@ class PreviousConviction extends AbstractQueryHandler
 {
     protected $repoServiceName = 'PreviousConviction';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->result($this->getRepo()->fetchUsingId($query));

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\LicenceVehicle;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\LicenceVehicle\LicenceVehiclesById;
@@ -20,7 +22,7 @@ class LicenceVehiclesByIdTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $data = [
             'ids' => ['1', '2']

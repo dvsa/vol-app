@@ -21,6 +21,7 @@ class Opposition implements MapperInterface
      *
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         $formData['fields'] = $data;

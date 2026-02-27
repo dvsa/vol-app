@@ -53,6 +53,7 @@ final class CreateUser extends AbstractUserCommandHandler implements
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         assert($command instanceof CreateUserCommand);

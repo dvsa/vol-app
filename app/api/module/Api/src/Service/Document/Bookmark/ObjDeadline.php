@@ -9,6 +9,7 @@ namespace Dvsa\Olcs\Api\Service\Document\Bookmark;
  */
 class ObjDeadline extends PublicationFlatAbstract
 {
+    #[\Override]
     public function render()
     {
         $objectionDate = new \DateTime($this->data['pubDate']);

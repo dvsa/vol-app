@@ -11,6 +11,7 @@ use Psr\Container\ContainerInterface;
 
 class EnhancedGeneratorFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         return new EnhancedGenerator(
