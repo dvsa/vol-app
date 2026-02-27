@@ -1,8 +1,10 @@
 #!/bin/bash
 echoerr() { printf '%s\n' "$*" >&2; }
 
-export http_proxy=http://${PROXY}:3128
-export https_proxy=http://${PROXY}:3128
+if [ -n "${PROXY:-}" ]; then
+  export http_proxy="http://${PROXY}:3128"
+  export https_proxy="http://${PROXY}:3128"
+fi
 export NO_PROXY="${NO_PROXY:-169.254.169.254,169.254.170.2,localhost,127.0.0.1}"
 
 : "${READDB_HOST:?READDB_HOST is not set}"
@@ -116,7 +118,7 @@ function cleanup {
             ;;
         "dumpfile" )
             echo "Removing dump file: ${item}"
-            rm -f ${item}
+            rm -f "${item}"
             if [ $? -ne 0 ]; then
               log_err "Unable to remove dump file ${item}"
             fi
@@ -221,7 +223,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 restore_db=$(echo "${aws_cmd_output}" | /usr/bin/jq -r '.DBInstances[]')
-db_instance_endpoint=$(echo $restore_db | /usr/bin/jq -r '.Endpoint.Address')
+db_instance_endpoint=$(echo "${restore_db}" | /usr/bin/jq -r '.Endpoint.Address')
 
 log_msg "RDS instance available at: $db_instance_endpoint"
 
@@ -292,22 +294,27 @@ log_msg "Running NI_Extract-Anon on: ${db_instance_endpoint}"
 cd /mnt/data/common/scripts/NI_Extract
 
 # Pick DB name (keep old default unless you KNOW the correct one)
-DB_NAME="${READDB_NAME:-OLCS_RDS_OLCSDB}"
+: "${READDB_NAME:?READDB_NAME is not set}"
+DB_NAME="$READDB_NAME"
+log_msg "Using DB_NAME=${DB_NAME}"
 
 # Master username is NOT guaranteed to be READDB_USER.
 # The snapshot restore keeps the original master username.
 # So read it from the restored instance.
 master_user=$(echo "${restore_db}" | /usr/bin/jq -r '.MasterUsername')
 CONN_STR="-h${db_instance_endpoint} -u${master_user} -p${rds_master_pass}"
+: "${master_user:?Could not read MasterUsername from restored DB instance}"
 
 if [[ "${ENVIRONMENT}" != "PROD" ]]; then
-  ./NI_Extract.sh ${EXTRACT_ARGS} \
+  ./NI_Extract.sh -c "${CONN_STR}" -d "${DB_NAME}" \
     -A -a /mnt/data/common/scripts/anonymisation_scripts/anon \
     -f /mnt/data/ni_dvacompliance/temp \
     -X /mnt/data/ni_dvacompliance
 else
-  ./NI_Extract.sh ${EXTRACT_ARGS} -X /mnt/data/ni_dvacompliance
+  ./NI_Extract.sh -c "${CONN_STR}" -d "${DB_NAME}" \
+    -X /mnt/data/ni_dvacompliance
 fi
+
 if [ $? -ne 0 ]; then
   log_err "NI EXTRACT failed."
   cleanup
@@ -315,7 +322,7 @@ if [ $? -ne 0 ]; then
 fi
 
 output_file=$(find /mnt/data/ni_dvacompliance -type f -name "*.tar.gz")
-if [ -f ${output_file} ]; then
+if [ -n "${output_file}" ] && [ -f "${output_file}" ]; then
   log_msg "Found VI Extract output: ${output_file}"
   /usr/local/bin/aws s3 cp "${output_file}" "${S3_DEST}"
   if [ $? -ne 0 ]; then

@@ -91,20 +91,20 @@ locals {
           value = "olcsreaddb-rds.${var.domain_env}.olcs.${var.domain_name}"
         },
         {
+          name  = "READDB_NAME"
+          value = "OLCS_RDS_OLCSDB"
+        },
+        {
           name  = "READDB_ID"
           value = "${var.environment}-aurora-olcsdb-reader"
         },
         {
           name  = "PROXY"
-          value = "proxy.${var.environment}.olcs.${var.domain_name}:3128"
+          value = "proxy.${var.environment}.olcs.${var.domain_name}"
         },
         {
           name  = "APP_VERSION"
           value = var.batch.cli_version
-        },
-        {
-          name  = "READDB_HOST"
-          value = "olcsreaddb-rds.${var.environment}.olcs.${var.domain_name}"
         },
       ]
 
