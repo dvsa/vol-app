@@ -60,7 +60,7 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
     {
         /** @var Licence $licenceRepo */
         $licenceRepo = $this->getRepo();
-        $eligibleLicences = $licenceRepo->fetchForLastTmAutoLetter();
+        $eligibleLicences = $licenceRepo->fetchForLastTmAutoLetter($licenceRepo::LETTER_FIRST);
 
         /** @var LicenceEntity $licence */
         foreach ($eligibleLicences as $licence) {
@@ -71,11 +71,9 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
 
             /** @var TmlEntity $removedTm */
             foreach ($removedTms as $removedTm) {
-                $document = $this->generateDocuments($licence, $removedTm);
-                $this->updateLastTmLetterDate($licence);
-            }
-
-            
+                //$document = $this->generateDocuments($licence, $removedTm);
+                $this->updateLastTmFirstEmailDate($licence);
+            }      
         }
 
         return $this->result;
@@ -109,7 +107,6 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
         $message = new Message($email, 'email.last-tm-operator-notification.subject');
         $message->setTranslateToWelsh($translateToWelsh);
         $message->setHighPriority();
-        //$message->setDocs([$this->result->getId('document')]);
 
         $this->sendEmailTemplate(
             $message,
@@ -253,6 +250,18 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
         /** @var TmlEntity $removedTm */
         foreach ($removedTms as $removedTm) {
             $removedTm->setLastTmLetterDate(new DateTime());
+            $tmlRepo->save($removedTm);
+        }
+    }
+
+    private function updateLastTmFirstEmailDate(LicenceEntity $licence)
+    {
+        /** @var TransportManagerLicence $tmlRepo */
+        $tmlRepo = $this->getRepo('TransportManagerLicence');
+        $removedTms = $tmlRepo->fetchRemovedTmForLicence($licence->getId());
+        /** @var TmlEntity $removedTm */
+        foreach ($removedTms as $removedTm) {
+            $removedTm->setLastTmFirstEmailDate(new DateTime());
             $tmlRepo->save($removedTm);
         }
     }

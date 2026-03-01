@@ -203,6 +203,15 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     protected $lastTmLetterDate;
 
     /**
+     * Last tm first email date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="last_tm_first_email_date", nullable=true)
+     */
+    protected $lastTmFirstEmailDate;
+
+    /**
      * Version
      *
      * @var int
@@ -635,6 +644,35 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
         }
 
         return $this->lastTmLetterDate;
+    }
+
+    /**
+     * Set the last tm letter date
+     *
+     * @param \DateTime $lastTmFirstEmailDate new value being set
+     *
+     * @return TransportManagerLicence
+     */
+    public function setLastTmFirstEmailDate($lastTmFirstEmailDate)
+    {
+        $this->lastTmFirstEmailDate = $lastTmFirstEmailDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the last tm letter date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getLastTmFirstEmailDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->lastTmFirstEmailDate);
+        }
+
+        return $this->lastTmFirstEmailDate;
     }
 
     /**
