@@ -61,7 +61,7 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
     {
         /** @var Licence $licenceRepo */
         $licenceRepo = $this->getRepo();
-        $eligibleLicences = $licenceRepo->fetchForLastTmAutoLetter();
+        $eligibleLicences = $licenceRepo->fetchForLastTmAutoLetter($licenceRepo::LETTER_SECOND);
 
         /** @var LicenceEntity $licence */
         foreach ($eligibleLicences as $licence) {

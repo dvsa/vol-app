@@ -31,6 +31,8 @@ use Dvsa\Olcs\Api\Entity\Licence\GracePeriod as GracePeriodEntity;
 class Licence extends AbstractRepository
 {
     protected $entity = Entity::class;
+    public const LETTER_FIRST = 1;
+    public const LETTER_SECOND = 2;
 
     /**
      * Fetches a licence based on the case id
@@ -634,7 +636,13 @@ class Licence extends AbstractRepository
         return $this->getDbQueryManager()->get(InternationalGoodsReport::class)->execute([]);
     }
 
-    public function fetchForLastTmAutoLetter()
+    /**
+     * Fetch licences eligible for Last TM Email and Letter processing.
+     *
+     * @param int $letterType One of self::LETTER_FIRST or self::LETTER_SECOND
+     * @return LicenceEntity[]
+     */
+    public function fetchForLastTmAutoLetter(int $letterType): array
     {
         $this->disableSoftDeleteable(
             [
@@ -688,6 +696,27 @@ class Licence extends AbstractRepository
         $qb->andWhere(
             $qb->expr()->isNull('tml.lastTmLetterDate')
         );
+
+        if ($letterType === self::LETTER_FIRST) {
+           //  Email has not been sent already for that TM
+            $qb->andWhere(
+                $qb->expr()->isNull('tml.lastTmFirstEmailDate')
+            ); 
+        }
+
+        if ($letterType === self::LETTER_SECOND) {
+            // First Email must been sent
+            $qb->andWhere('tml.lastTmFirstEmailDate IS NOT NULL');
+
+            // 28 days after removal
+            $date28DaysAgo = (new \DateTime())
+                ->modify('-28 days')
+                ->setTime(0, 0, 0);
+
+            $qb->andWhere('tml.deletedDate <= :date28DaysAgo');
+            $qb->setParameter('date28DaysAgo', $date28DaysAgo);
+        }
+
 
         //  The licence is not marked for oupOut
         $qb->andWhere(
