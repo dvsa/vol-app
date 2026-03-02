@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.1](https://github.com/dvsa/vol-app/compare/v7.0.0...v7.0.1) (2026-03-02)
+
+
+### Bug Fixes
+
+* update .gitignore trigger ([#1332](https://github.com/dvsa/vol-app/issues/1332)) ([2de69d8](https://github.com/dvsa/vol-app/commit/2de69d81c06fefc2f5183889c189be0369c4c34b))
+
 ## [7.0.0](https://github.com/dvsa/vol-app/compare/v6.10.2...v7.0.0) (2026-02-27)
 
 
