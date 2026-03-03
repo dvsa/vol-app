@@ -26,15 +26,15 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
 
     protected const GB_GV_TEMPLATE = [
         'identifier' => 'GV_loss_of_TM_1st_letter',
-        'id' => 1284
+        'id' => 1285
     ];
     protected const GB_PSV_TEMPLATE = [
-        'identifier' => 'PSV_letter_to_op_regarding_no_TM_specified',
-        'id' => 920
+        'identifier' => 'PSV_loss_of_TM_1st_letter',
+        'id' => 1286
     ];
     protected const NI_GV_TEMPLATE = [
-        'identifier' => 'GV_letter_to_op_regarding_no_TM_specified_NI',
-        'id' => 918
+        'identifier' => 'GV_loss_of_TM_1st_letter_NI',
+        'id' => 1284
     ];
 
     /**
@@ -56,7 +56,7 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      * @throws \Exception
      */
-    public function handleCommand(CommandInterface $command)
+    public function handleCommand(CommandInterface $command): \Dvsa\Olcs\Api\Domain\Command\Result
     {
         /** @var Licence $licenceRepo */
         $licenceRepo = $this->getRepo();
@@ -64,15 +64,15 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
 
         /** @var LicenceEntity $licence */
         foreach ($eligibleLicences as $licence) {
-            
             /** @var TransportManagerLicence $tmlRepo */
             $tmlRepo = $this->getRepo('TransportManagerLicence');
             $removedTms = $tmlRepo->fetchRemovedTmForLicence($licence->getId());
 
             /** @var TmlEntity $removedTm */
             foreach ($removedTms as $removedTm) {
-                //$document = $this->generateDocuments($licence, $removedTm);
+                $document = $this->generateDocuments($licence, $removedTm);
                 $this->updateLastTmFirstEmailDate($licence);
+                $this->sendEmailToOperator($licence);
             }      
         }
 
@@ -80,9 +80,9 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
     }
 
     /**
-     * @return void
+     * Sends an email notification to the operator.
      */
-    private function sendEmailToOperator(LicenceEntity $licence)
+    private function sendEmailToOperator(LicenceEntity $licence): void
     {
         if (
             is_null($contactDetails = $licence->getCorrespondenceCd()) ||
@@ -121,9 +121,9 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
     }
 
     /**
-     * @return array|null
+     * Generates documents for the given licence and TML entity.
      */
-    private function generateDocuments(LicenceEntity $licence, TmlEntity $tml)
+    private function generateDocuments(LicenceEntity $licence, TmlEntity $tml): ?int
     {
         $template = $this->selectTemplate($licence);
 
@@ -202,9 +202,9 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
     }
 
     /**
-     * @return array
+     * Select template based on licence information
      */
-    private function selectTemplate(LicenceEntity $licence)
+    private function selectTemplate(LicenceEntity $licence): array
     {
         $template = self::GB_GV_TEMPLATE;
 
@@ -218,10 +218,9 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
     }
 
     /**
-     * @param $licence LicenceEntity
-     * @return CreateTask
+     * Creates a task side-effect for the given licence.
      */
-    private function createTaskSideEffect($licence)
+    private function createTaskSideEffect($licence): CreateTask
     {
         $params = [
             'category' => Category::CATEGORY_APPLICATION,
@@ -234,27 +233,18 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
 
         $sysParamRepo = $this->getRepo('SystemParameter');
         $assignToUserId = $licence->isNi()
-            ? $sysParamRepo->fetchValue(SystemParameter::LAST_TM_NI_TASK_OWNER)
-            : $sysParamRepo->fetchValue(SystemParameter::LAST_TM_GB_TASK_OWNER);
+            ? $sysParamRepo->fetchValue(SystemParameter::LAST_TM_1st_LETTER_NI_TASK_OWNER)
+            : $sysParamRepo->fetchValue(SystemParameter::LAST_TM_1st_LETTER_GB_TASK_OWNER);
         if ($assignToUserId && $assignToUserId != 0) {
             $params['assignedToUser'] = $assignToUserId;
         }
         return CreateTask::create($params);
     }
 
-    private function updateLastTmLetterDate(LicenceEntity $licence)
-    {
-        /** @var TransportManagerLicence $tmlRepo */
-        $tmlRepo = $this->getRepo('TransportManagerLicence');
-        $removedTms = $tmlRepo->fetchRemovedTmForLicence($licence->getId());
-        /** @var TmlEntity $removedTm */
-        foreach ($removedTms as $removedTm) {
-            $removedTm->setLastTmLetterDate(new DateTime());
-            $tmlRepo->save($removedTm);
-        }
-    }
-
-    private function updateLastTmFirstEmailDate(LicenceEntity $licence)
+    /**
+     * Update the timestamp when first email sent to operator 
+     */
+    private function updateLastTmFirstEmailDate(LicenceEntity $licence): void
     {
         /** @var TransportManagerLicence $tmlRepo */
         $tmlRepo = $this->getRepo('TransportManagerLicence');

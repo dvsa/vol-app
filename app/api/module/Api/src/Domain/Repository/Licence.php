@@ -708,6 +708,22 @@ class Licence extends AbstractRepository
             // First Email must been sent
             $qb->andWhere('tml.lastTmFirstEmailDate IS NOT NULL');
 
+            // Ensure we only consider the latest TM removal for the licence
+            $latestDeletedQb = $this->getEntityManager()
+                ->getRepository(TMLicenceEntity::class)
+                ->createQueryBuilder('t2');
+
+            $latestDeletedQb->select('MAX(t2.deletedDate)')
+                ->where('t2.licence = ' . $this->alias . '.id')
+                ->andWhere('t2.deletedDate IS NOT NULL');
+
+            $qb->andWhere(
+                $qb->expr()->eq(
+                    'tml.deletedDate',
+                    '(' . $latestDeletedQb->getDQL() . ')'
+                )
+            );
+
             // 28 days after removal
             $date28DaysAgo = (new \DateTime())
                 ->modify('-28 days')

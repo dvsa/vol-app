@@ -37,7 +37,7 @@ class TransportManagerLicence extends AbstractRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function fetchRemovedTmForLicence($licenceId)
+    public function fetchRemovedTmForLicence(int $licenceId, bool $isSecondLetter = false) : array
     {
         $this->disableSoftDeleteable(
             [
@@ -51,6 +51,12 @@ class TransportManagerLicence extends AbstractRepository
         $qb->andWhere($qb->expr()->isNull($this->alias . '.lastTmLetterDate'));
 
         $qb->setParameter('licenceId', $licenceId);
+
+        if ($isSecondLetter) {
+
+        } else {
+            $qb->andWhere($qb->expr()->isNull($this->alias . '.lastTmFirstEmailDate'));
+        }
 
         return $qb->getQuery()->getResult();
     }
