@@ -66,10 +66,17 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
 
         /** @var LicenceEntity $licence */
         foreach ($eligibleLicences as $licence) {
-            //$document = $this->generateDocuments($licence);
-            //$this->printAndEmailDocument($document);
-            $this->updateLastTmLetterDate($licence);
-            //$this->sendEmailToOperator($licence);
+            /** @var TransportManagerLicence $tmlRepo */
+            $tmlRepo = $this->getRepo('TransportManagerLicence');
+            $removedTms = $tmlRepo->fetchRemovedTmForLicence($licence->getId(), true);
+            
+             /** @var TmlEntity $removedTm */
+            foreach ($removedTms as $removedTm) {
+                $document = $this->generateDocuments($licence, $removedTm);
+                $this->printAndEmailDocument($document);
+                $this->updateLastTmLetterDate($licence);
+                $this->sendEmailToOperator($licence);
+            }
         }
 
         return $this->result;
@@ -118,7 +125,7 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
     /**
      * @return array|null
      */
-    private function generateDocuments(LicenceEntity $licence)
+    private function generateDocuments(LicenceEntity $licence, TmlEntity $tml): ?int
     {
         $template = $this->selectTemplate($licence);
 
@@ -167,8 +174,10 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
             'template' => $template['identifier'],
             'query' => [
                 'licence' => $licence->getId(),
+                'transportManager' => $tml->getTransportManager()->getId(),
+                'transportManagerLicence' => $tml->getId(),
             ],
-            'description' => 'Last TM letter Licence ' . $licence->getLicNo(),
+            'description' => 'Last TM letter Licence ' . $licence->getLicNo() . ' PTR',
             'licence' => $licence->getId(),
             'category' => Category::CATEGORY_TRANSPORT_MANAGER,
             'subCategory' => Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CORRESPONDENCE,
@@ -301,7 +310,7 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
     {
         /** @var TransportManagerLicence $tmlRepo */
         $tmlRepo = $this->getRepo('TransportManagerLicence');
-        $removedTms = $tmlRepo->fetchRemovedTmForLicence($licence->getId());
+        $removedTms = $tmlRepo->fetchRemovedTmForLicence($licence->getId(), true);
         /** @var TmlEntity $removedTm */
         foreach ($removedTms as $removedTm) {
             $removedTm->setLastTmLetterDate(new DateTime());
