@@ -66,10 +66,10 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
 
         /** @var LicenceEntity $licence */
         foreach ($eligibleLicences as $licence) {
-            $document = $this->generateDocuments($licence);
-            $this->printAndEmailDocument($document);
+            //$document = $this->generateDocuments($licence);
+            //$this->printAndEmailDocument($document);
             $this->updateLastTmLetterDate($licence);
-            $this->sendEmailToOperator($licence);
+            //$this->sendEmailToOperator($licence);
         }
 
         return $this->result;
