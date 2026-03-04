@@ -229,8 +229,6 @@ return [
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\Factory\GenericFactory::class,
             Dvsa\Olcs\Cli\Service\Queue\Consumer\ContinuationChecklist::class
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\Factory\GenericFactory::class,
-            Dvsa\Olcs\Cli\Service\Queue\Consumer\ContinuationChecklistReminderGenerateLetter::class
-                => Dvsa\Olcs\Cli\Service\Queue\Consumer\Factory\GenericFactory::class,
             Dvsa\Olcs\Cli\Service\Queue\Consumer\Tm\Snapshot::class
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\Factory\GenericFactory::class,
             Dvsa\Olcs\Cli\Service\Queue\Consumer\Cpms\ReportDownload::class
@@ -297,8 +295,6 @@ return [
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\CompaniesHouse\Compare::class,
             Queue::TYPE_CONT_CHECKLIST
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\ContinuationChecklist::class,
-            Queue::TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER
-                => Dvsa\Olcs\Cli\Service\Queue\Consumer\ContinuationChecklistReminderGenerateLetter::class,
             Queue::TYPE_TM_SNAPSHOT
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\Tm\Snapshot::class,
             Queue::TYPE_CPMS_REPORT_DOWNLOAD
