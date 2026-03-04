@@ -100,34 +100,38 @@ jobs:
       - name: Build command arguments
         id: build-args
         run: |
-          ARGS=""
+          ARGS=()
 
           # Add cache type specific arguments
           case "${{ inputs.cache_type }}" in
             flush-all)
-              ARGS="--flush-all"
+              ARGS+=("--flush-all")
               if [[ "${{ inputs.force }}" == "true" ]]; then
-                ARGS="$ARGS --force"
+                ARGS+=("--force")
               fi
               ;;
             custom-pattern)
-              ARGS="--pattern=\"${{ inputs.custom_pattern }}\""
+              ARGS+=("--pattern=${{ inputs.custom_pattern }}")
               ;;
             *)
-              ARGS="--namespace=${{ inputs.cache_type }}"
+              ARGS+=("--namespace=${{ inputs.cache_type }}")
               ;;
           esac
 
           # Add dry-run if requested
           if [[ "${{ inputs.dry_run }}" == "true" ]]; then
-            ARGS="$ARGS --dry-run"
+            ARGS+=("--dry-run")
           fi
 
           # Add verbose flag
-          ARGS="$ARGS -v"
+          ARGS+=("-v")
 
-          echo "args=$ARGS" >> $GITHUB_OUTPUT
-          echo "Command arguments: $ARGS"
+          # Convert to JSON array elements for container-overrides
+          JSON_ARGS=$(printf ', "%s"' "${ARGS[@]}")
+          JSON_ARGS="${JSON_ARGS:2}"
+
+          echo "args=$JSON_ARGS" >> $GITHUB_OUTPUT
+          echo "Command arguments: $JSON_ARGS"
 
       - name: Submit AWS Batch job
         id: submit-job
