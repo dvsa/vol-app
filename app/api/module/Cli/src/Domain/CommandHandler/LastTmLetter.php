@@ -68,7 +68,7 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
             /** @var TransportManagerLicence $tmlRepo */
             $tmlRepo = $this->getRepo('TransportManagerLicence');
             $removedTms = $tmlRepo->fetchRemovedTmForLicence($licence->getId(), true);
-            
+
              /** @var TmlEntity $removedTm */
             foreach ($removedTms as $removedTm) {
                 $document = $this->generateDocuments($licence, $removedTm);
@@ -287,9 +287,9 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
     private function createTaskSideEffect($licence)
     {
         $params = [
-            'category' => Category::CATEGORY_APPLICATION,
-            'subCategory' => SubCategory::TM_SUB_CATEGORY_TM1_REMOVAL,
-            'description' => TmlEntity::DESC_TM_REMOVED_LAST_RESPONSE,
+            'category' => Category::CATEGORY_TRANSPORT_MANAGER,
+            'subCategory' => SubCategory::TM_SUB_CATEGORY_GENERAL_TASK,
+            'description' => TmlEntity::DESC_TM_REMOVED_LAST_RESPONSE_PTR,
             'actionDate' => (new DateTime())->add(new \DateInterval('P21D'))->format('Y-m-d'),
             'licence' => $licence->getId(),
             'urgent' => 'Y'
