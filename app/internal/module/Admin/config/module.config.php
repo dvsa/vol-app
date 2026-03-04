@@ -1006,6 +1006,16 @@ return [
                             ]
                         ],
                     ],
+                    'admin-clear-cache' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'clear-cache[/]',
+                            'defaults' => [
+                                'controller' => Admin\Controller\ClearCacheController::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -1080,6 +1090,7 @@ return [
             Admin\Controller\TemplateController::class => Admin\Controller\TemplateControllerFactory::class,
             Admin\Controller\UserManagementController::class => Admin\Controller\UserManagementControllerFactory::class,
             Admin\Controller\DataRetention\RuleAdminController::class => Admin\Controller\DataRetention\RuleAdminControllerFactory::class,
+            Admin\Controller\ClearCacheController::class => Admin\Controller\ClearCacheControllerFactory::class,
             Admin\Controller\IndexController::class => Admin\Controller\IndexControllerFactory::class,
             Admin\Controller\ContinuationChecklistReminderController::class => Admin\Controller\ContinuationChecklistReminderControllerFactory::class,
             Admin\Controller\DiscPrintingController::class => Admin\Controller\DiscPrintingControllerFactory::class,

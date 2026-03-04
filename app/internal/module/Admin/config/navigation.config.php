@@ -388,7 +388,13 @@ return [
                             'class' => 'govuk-link--no-visited-state',
                             'label' => 'Replacements',
                             'route' => 'admin-dashboard/admin-replacements',
-                        ]
+                        ],
+                        [
+                            'id' => 'admin-dashboard/content-management/clear-cache',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'Clear caches',
+                            'route' => 'admin-dashboard/admin-clear-cache',
+                        ],
                     ],
                 ],
                 [

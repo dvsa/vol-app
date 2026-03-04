@@ -1325,6 +1325,7 @@ return [
     Command\Cache\Generate::class => CommandHandler\Cache\Generate::class,
     Command\Cache\ClearForLicence::class => CommandHandler\Cache\ClearForLicence::class,
     Command\Cache\ClearForOrganisation::class => CommandHandler\Cache\ClearForOrganisation::class,
+    TransferCommand\Cache\Clear::class => CommandHandler\Cache\Clear::class,
 
     // DvsaReports
     TransferCommand\DvsaReports\GetRedirect::class => CommandHandler\DvsaReports\GetRedirectFactory::class,
