@@ -647,7 +647,7 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     }
 
     /**
-     * Set the last tm letter date
+     * Set the last tm first email date
      *
      * @param \DateTime $lastTmFirstEmailDate new value being set
      *
@@ -661,7 +661,7 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     }
 
     /**
-     * Get the last tm letter date
+     * Get the last tm first email date
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *

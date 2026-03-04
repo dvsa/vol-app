@@ -21,6 +21,10 @@ class DateTmRemoved extends DynamicBookmark
 
     public function render(): ?string
     {
+        if (empty($this->data['deletedDate'])) {
+            return null;
+        }
+
         if (is_string($this->data['deletedDate'])) {
             $dateTime = new \DateTime($this->data['deletedDate']);
         } else {

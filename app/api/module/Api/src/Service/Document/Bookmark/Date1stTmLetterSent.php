@@ -21,6 +21,10 @@ class Date1stTmLetterSent extends DynamicBookmark
 
     public function render(): ?string
     {
+        if (empty($this->data['lastTmFirstEmailDate'])) {
+            return null;
+        }
+        
         if (is_string($this->data['lastTmFirstEmailDate'])) {
             $dateTime = new \DateTime($this->data['lastTmFirstEmailDate']);
         } else {

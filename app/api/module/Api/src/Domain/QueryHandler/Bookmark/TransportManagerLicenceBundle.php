@@ -3,7 +3,7 @@
 namespace Dvsa\Olcs\Api\Domain\QueryHandler\Bookmark;
 
 /**
- * Transport Manager Bookmark
+ * Transport Manager Licence Bookmark
  *
  * @author Teja Vaddala <teja.vaddala@dvsa.gov.uk>
  */
