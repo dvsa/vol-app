@@ -734,7 +734,6 @@ class Licence extends AbstractRepository
             $qb->setParameter('date28DaysAgo', $date28DaysAgo);
         }
 
-
         //  The licence is not marked for oupOut
         $qb->andWhere(
             $qb->expr()->eq($this->alias . '.optOutTmLetter', 0)
