@@ -10,7 +10,7 @@ class FirstTmLetterCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:first-tm-letter';
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Send first TM letters.');
     }

@@ -8,7 +8,7 @@ use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 /**
  * TransportManager Bundle
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Teja Vaddala <teja.vaddala@dvsa.gov.uk>
  */
 class TransportManagerLicenceBundle extends AbstractQuery
 {
@@ -16,10 +16,7 @@ class TransportManagerLicenceBundle extends AbstractQuery
 
     protected $bundle = [];
 
-    /**
-     * @return mixed
-     */
-    public function getBundle()
+    public function getBundle(): array
     {
         return $this->bundle;
     }
