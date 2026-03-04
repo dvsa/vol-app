@@ -42,7 +42,7 @@ class TransportManagerLicenceTest extends RepositoryTestCase
         $this->assertSame('RESULT', $this->sut->fetchWithContactDetailsByLicence(834));
     }
 
-    public function testFetchRemovedTmForLicence(): void
+    public function testFetchRemovedTmForLicenceFirstLetter(): void
     {
         $qb = $this->createMockQb('[QUERY]');
         $this->mockCreateQueryBuilder($qb);
@@ -51,13 +51,41 @@ class TransportManagerLicenceTest extends RepositoryTestCase
         $qb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULTS']);
 
         $licenceId = 1;
-        $this->sut->fetchRemovedTmForLicence($licenceId);
+        $this->sut->fetchRemovedTmForLicence($licenceId); // default => first letter
 
-        $expectedQuery = '[QUERY] AND tml.licence = [[' . $licenceId . ']] AND tml.deletedDate IS NOT NULL AND tml.lastTmLetterDate IS NULL';
+        $expectedQuery =
+            '[QUERY] AND tml.licence = [[' . $licenceId . ']] ' .
+            'AND tml.deletedDate IS NOT NULL ' .
+            'AND tml.lastTmLetterDate IS NULL ' .
+            'AND tml.lastTmFirstEmailDate IS NULL';
+
         $this->assertEquals($expectedQuery, $this->query);
     }
 
+<<<<<<< HEAD
     public function testFetchForTransportManager(): void
+=======
+    public function testFetchRemovedTmForLicenceSecondLetter(): void
+    {
+        $qb = $this->createMockQb('[QUERY]');
+        $this->mockCreateQueryBuilder($qb);
+
+        $this->em->shouldReceive('getFilters->isEnabled')->with('soft-deleteable')->andReturn(false);
+        $qb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULTS']);
+
+        $licenceId = 1;
+        $this->sut->fetchRemovedTmForLicence($licenceId, true);
+
+        $this->assertStringContainsString('[QUERY] AND tml.licence = [[' . $licenceId . ']]', $this->query);
+        $this->assertStringContainsString('AND tml.deletedDate IS NOT NULL', $this->query);
+        $this->assertStringContainsString('AND tml.lastTmLetterDate IS NULL', $this->query);
+        $this->assertStringContainsString('AND tml.lastTmFirstEmailDate IS NOT NULL', $this->query);
+        $this->assertStringContainsString('AND tml.deletedDate <=', $this->query);
+        $this->assertStringContainsString('ORDER BY tml.deletedDate DESC', $this->query);
+    }
+
+    public function testFetchForTransportManager()
+>>>>>>> ae021187ff (feat: added unit tests)
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tml')->once()->andReturn($mockQb);
