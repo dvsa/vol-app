@@ -965,7 +965,6 @@ return [
     TransferCommand\ContinuationDetail\PrepareContinuations::class =>
         CommandHandler\ContinuationDetail\PrepareContinuations::class,
     Command\ContinuationDetail\Process::class => CommandHandler\ContinuationDetail\Process::class,
-    Command\ContinuationDetail\ProcessReminder::class => CommandHandler\ContinuationDetail\ProcessReminder::class,
     Command\ContinuationDetail\CreateSnapshot::class => CommandHandler\ContinuationDetail\CreateSnapshot::class,
     Command\ContinuationDetail\DigitalSendReminders::class =>
         CommandHandler\ContinuationDetail\DigitalSendReminders::class,
