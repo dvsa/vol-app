@@ -6,7 +6,7 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 
 /**
- * TransportManager Bundle
+ * TransportManagerLicence Bundle
  *
  * @author Teja Vaddala <teja.vaddala@dvsa.gov.uk>
  */
