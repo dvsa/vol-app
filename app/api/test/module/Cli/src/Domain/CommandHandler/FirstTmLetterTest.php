@@ -356,7 +356,6 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
      * Sets up removed TM mocks + expected side effects:
      * - CreateTask
      * - GenerateAndStore
-     * - updateLastTmFirstEmailDate() -> setLastTmFirstEmailDate + save()
      * - optional SendEmail side effect when correspondence email present (tests where user array includes fetchFirstByEmailOrFalse)
      */
     private function caseLicenceWithRemovedTmTest(array $dataProvider, array $eligibleLicences): void

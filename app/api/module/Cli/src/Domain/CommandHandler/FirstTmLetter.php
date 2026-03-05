@@ -71,9 +71,13 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
             /** @var TmlEntity $removedTm */
             foreach ($removedTms as $removedTm) {
                 $document = $this->generateDocuments($licence, $removedTm);
-                $this->updateLastTmFirstEmailDate($licence);
-                $this->sendEmailToOperator($licence);
+                $removedTm->setLastTmFirstEmailDate(new DateTime());
+                $tmlRepo->save($removedTm);
             }      
+
+            if (!empty($removedTms)) {
+                $this->sendEmailToOperator($licence);
+            }
         }
 
         return $this->result;
@@ -239,20 +243,5 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
             $params['assignedToUser'] = $assignToUserId;
         }
         return CreateTask::create($params);
-    }
-
-    /**
-     * Update the timestamp when first email sent to operator 
-     */
-    private function updateLastTmFirstEmailDate(LicenceEntity $licence): void
-    {
-        /** @var TransportManagerLicence $tmlRepo */
-        $tmlRepo = $this->getRepo('TransportManagerLicence');
-        $removedTms = $tmlRepo->fetchRemovedTmForLicence($licence->getId());
-        /** @var TmlEntity $removedTm */
-        foreach ($removedTms as $removedTm) {
-            $removedTm->setLastTmFirstEmailDate(new DateTime());
-            $tmlRepo->save($removedTm);
-        }
     }
 }
