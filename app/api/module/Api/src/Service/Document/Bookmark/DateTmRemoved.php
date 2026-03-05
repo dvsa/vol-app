@@ -28,7 +28,7 @@ class DateTmRemoved extends DynamicBookmark
         if (is_string($this->data['deletedDate'])) {
             $dateTime = new \DateTime($this->data['deletedDate']);
         } else {
-            $dateTime = $this->data['deletedDate'];
+            $dateTime = clone $this->data['deletedDate'];
         }
 
         return $dateTime->format('d/m/Y');
