@@ -1,62 +1,46 @@
 #!/bin/bash
-<<<<<<< HEAD
-echoerr() { printf '%s\n' "$*" >&2; }
-
-if [ -n "${PROXY:-}" ]; then
-  export http_proxy="http://${PROXY}:3128"
-  export https_proxy="http://${PROXY}:3128"
-fi
-export NO_PROXY="${NO_PROXY:-169.254.169.254,169.254.170.2,localhost,127.0.0.1}"
-
-: "${READDB_HOST:?READDB_HOST is not set}"
-: "${ENVIRONMENT_NAME:?ENVIRONMENT_NAME is not set}"
-ENVIRONMENT="$ENVIRONMENT_NAME"
-
-aws_region="${AWS_REGION:-$(/usr/local/bin/aws configure get region)}"
-: "${aws_region:?Could not determine AWS region}"
-=======
 
 set -euo pipefail
 
-die(){ echo "ERROR: $*" >&2; exit 1; }
-
-# Required inputs
-: "${DB_INSTANCE_ID:?DB_INSTANCE_ID is not set}"
-
-# Validate the ID exists in this account/region
-aws rds describe-db-instances \
-  --db-instance-identifier "$DB_INSTANCE_ID" >/dev/null \
-  || die "DB instance '$DB_INSTANCE_ID' not found in account $(aws sts get-caller-identity --query Account --output text) region $AWS_REGION"
-
 echoerr() { printf '%s\n' "$*" >&2; }
 
-: "${READDB_HOST:?READDB_HOST is required (INT read-replica DB instance id)}"
+: "${READDB_HOST:?READDB_HOST is required}"
+: "${READDB_ID:?READDB_ID is required}"
 : "${ENVIRONMENT_NAME:?ENVIRONMENT_NAME is required (DEV|INT|PREP|PROD)}"
 ENVIRONMENT="${ENVIRONMENT_NAME}"
 
+# PROXY is already host:port (includes :3128). Do not append a port here.
 if [ -n "${PROXY:-}" ]; then
   export http_proxy="http://${PROXY}"
   export https_proxy="http://${PROXY}"
 fi
 export NO_PROXY="${NO_PROXY:-169.254.169.254,169.254.170.2,localhost,127.0.0.1}"
 
+# Region: prefer AWS_REGION, else IMDSv2
 ec2_region="${AWS_REGION:-}"
-
-# If AWS_REGION isn't set, use IMDSv2
 if [ -z "$ec2_region" ]; then
   token="$(curl -fsS -X PUT "http://169.254.169.254/latest/api/token" \
     -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" 2>/dev/null || true)"
 
   if [ -n "$token" ]; then
-    az="$(curl -fsS -H "X-aws-ec2-metadata-token: $token" \
-      "http://169.254.169.254/latest/meta-data/placement/availability-zone" 2>/dev/null || true)"
-    [ -n "$az" ] && ec2_region="${az%[a-z]}"
+    ec2_region="$(curl -fsS -H "X-aws-ec2-metadata-token: $token" \
+      "http://169.254.169.254/latest/meta-data/placement/region" 2>/dev/null || true)"
+
+    if [ -z "$ec2_region" ]; then
+      az="$(curl -fsS -H "X-aws-ec2-metadata-token: $token" \
+        "http://169.254.169.254/latest/meta-data/placement/availability-zone" 2>/dev/null || true)"
+      [ -n "$az" ] && ec2_region="${az%[a-z]}"
+    fi
   fi
+fi
+
+if [ -z "$ec2_region" ]; then
+  ec2_region="$(/usr/local/bin/aws configure get region 2>/dev/null || true)"
 fi
 
 : "${ec2_region:?Could not determine AWS region}"
 export AWS_REGION="$ec2_region"
->>>>>>> f8f5441750 (Fix proxy handling; keep IMDSv2 region fallback; add READDB_NAME)
+aws_region="$ec2_region"
 
 case "${ENVIRONMENT}" in
   "DEV")  DVA_BUCKET="devapp-olcs-pri-integration-dva-s3"; DVA_PREFIX="dev" ;;
