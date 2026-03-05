@@ -74,7 +74,11 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
             foreach ($removedTms as $removedTm) {
                 $document = $this->generateDocuments($licence, $removedTm);
                 $this->printAndEmailDocument($document);
-                $this->updateLastTmLetterDate($licence);
+                $removedTm->setLastTmLetterDate(new DateTime());
+                $tmlRepo->save($removedTm);
+            }
+
+            if (!empty($removedTms)) {
                 $this->sendEmailToOperator($licence);
             }
         }
@@ -304,17 +308,5 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
             $params['assignedToUser'] = $assignToUserId;
         }
         return CreateTask::create($params);
-    }
-
-    private function updateLastTmLetterDate(LicenceEntity $licence)
-    {
-        /** @var TransportManagerLicence $tmlRepo */
-        $tmlRepo = $this->getRepo('TransportManagerLicence');
-        $removedTms = $tmlRepo->fetchRemovedTmForLicence($licence->getId(), true);
-        /** @var TmlEntity $removedTm */
-        foreach ($removedTms as $removedTm) {
-            $removedTm->setLastTmLetterDate(new DateTime());
-            $tmlRepo->save($removedTm);
-        }
     }
 }
