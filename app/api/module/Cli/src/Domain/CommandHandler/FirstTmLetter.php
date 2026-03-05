@@ -50,7 +50,7 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
     /**
      * Handle command
      *
-     * @param \Dvsa\Olcs\Cli\Domain\Command\DataGovUkExport $command Command
+     * @param \Dvsa\Olcs\Cli\Domain\Command\FirstTmLetter $command Command
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
