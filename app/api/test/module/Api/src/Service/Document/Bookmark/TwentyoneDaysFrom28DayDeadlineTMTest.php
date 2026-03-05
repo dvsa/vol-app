@@ -1,6 +1,6 @@
 <?php
 
-namespace Dvsa\OlcsTest\Api\Domain\Bookmark;
+namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\TwentyoneDaysFrom28DayDeadlineTM;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
