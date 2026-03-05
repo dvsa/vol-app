@@ -23,11 +23,11 @@ class TwentyoneDaysFrom28DayDeadlineTM extends DynamicBookmark
         if (empty($this->data['deletedDate'])) {
             return null;
         } 
-        
+
         if (is_string($this->data['deletedDate'])) {
             $dateTime = new \DateTime($this->data['deletedDate']);
         } else {
-            $dateTime = $this->data['deletedDate'];
+            $dateTime = clone $this->data['deletedDate'];
         }
 
         $dateTime->add(new \DateInterval('P49D'));

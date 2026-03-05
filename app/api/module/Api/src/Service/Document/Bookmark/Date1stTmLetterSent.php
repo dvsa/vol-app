@@ -28,7 +28,7 @@ class Date1stTmLetterSent extends DynamicBookmark
         if (is_string($this->data['lastTmFirstEmailDate'])) {
             $dateTime = new \DateTime($this->data['lastTmFirstEmailDate']);
         } else {
-            $dateTime = $this->data['lastTmFirstEmailDate'];
+            $dateTime = clone $this->data['lastTmFirstEmailDate'];
         }
 
         return $dateTime->format('d/m/Y');
