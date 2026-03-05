@@ -947,4 +947,10 @@ class LicenceTest extends RepositoryTestCase
         // 28-day condition 
         $this->assertStringContainsString('tml.deletedDate <=', $this->query);
     }
+
+    public function testFetchForLastTmAutoLetterThrowsOnInvalidType(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->sut->fetchForLastTmAutoLetter(999);
+    }
 }
