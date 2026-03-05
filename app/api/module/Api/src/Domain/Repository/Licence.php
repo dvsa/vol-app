@@ -645,6 +645,10 @@ class Licence extends AbstractRepository
      */
     public function fetchForLastTmAutoLetter(int $letterType): array
     {
+        if (!in_array($letterType, [self::LETTER_FIRST, self::LETTER_SECOND], true)) {
+            throw new \InvalidArgumentException(sprintf('Invalid letterType: %s', (string) $letterType));
+        } 
+          
         $this->disableSoftDeleteable(
             [
                 TMLicenceEntity::class
