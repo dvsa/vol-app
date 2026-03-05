@@ -233,8 +233,8 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
 
         $sysParamRepo = $this->getRepo('SystemParameter');
         $assignToUserId = $licence->isNi()
-            ? $sysParamRepo->fetchValue(SystemParameter::LAST_TM_1st_LETTER_NI_TASK_OWNER)
-            : $sysParamRepo->fetchValue(SystemParameter::LAST_TM_1st_LETTER_GB_TASK_OWNER);
+            ? $sysParamRepo->fetchValue(SystemParameter::LAST_TM_1ST_LETTER_NI_TASK_OWNER)
+            : $sysParamRepo->fetchValue(SystemParameter::LAST_TM_1ST_LETTER_GB_TASK_OWNER);
         if ($assignToUserId && $assignToUserId != 0) {
             $params['assignedToUser'] = $assignToUserId;
         }

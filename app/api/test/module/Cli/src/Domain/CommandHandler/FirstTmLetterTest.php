@@ -257,8 +257,8 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
                 ->shouldReceive('fetchValue')
                 ->with(
                     $dataProvider['licence']['isNi']
-                        ? SystemParameter::LAST_TM_1st_LETTER_NI_TASK_OWNER
-                        : SystemParameter::LAST_TM_1st_LETTER_GB_TASK_OWNER
+                        ? SystemParameter::LAST_TM_1ST_LETTER_NI_TASK_OWNER
+                        : SystemParameter::LAST_TM_1ST_LETTER_GB_TASK_OWNER
                 )
                 ->andReturn(1)
                 ->once();
