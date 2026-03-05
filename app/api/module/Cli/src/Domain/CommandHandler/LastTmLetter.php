@@ -123,7 +123,7 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
     }
 
     /**
-     * @return array|null
+     * @return int|null
      */
     private function generateDocuments(LicenceEntity $licence, TmlEntity $tml): ?int
     {
