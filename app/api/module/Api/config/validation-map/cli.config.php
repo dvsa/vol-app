@@ -56,7 +56,6 @@ return [
     QueueCommandHandler\Create::class => IsSystemUser::class,
     QueueCommandHandler\Delete::class => IsSystemUser::class,
     QueryHandler\Queue\NextItem::class => IsSystemUser::class,
-    CommandHandler\ContinuationDetail\ProcessReminder::class => IsSystemUser::class,
     CommandHandler\ContinuationDetail\Process::class => IsSystemUser::class,
     CommandHandler\CompaniesHouse\Compare::class => IsSystemUser::class,
     CommandHandler\CompaniesHouse\InitialLoad::class => IsSystemUser::class,
