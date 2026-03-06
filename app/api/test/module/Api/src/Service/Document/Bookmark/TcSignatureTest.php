@@ -41,7 +41,7 @@ class TcSignatureTest extends \PHPUnit\Framework\TestCase
             ->method('getContent')
             ->willReturn('content');
 
-        $fileStoreMock = $this->createPartialMock(DocumentStoreInterface::class, ['read', 'write', 'remove']);
+        $fileStoreMock = $this->createMock(DocumentStoreInterface::class);
         $fileStoreMock->expects($this->once())
             ->method('read')
             ->with('/templates/Image/' . $image . '.jpg')

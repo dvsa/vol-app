@@ -12,18 +12,21 @@ class WebDavJsonWebTokenGenerationService
     public const TOKEN_PAYLOAD_KEY_DOCUMENT = 'doc';
     public const TOKEN_PAYLOAD_KEY_ISSUED_AT = 'iat';
     public const TOKEN_PAYLOAD_KEY_EXPIRES_AT = 'exp';
+    public const TOKEN_PAYLOAD_KEY_JWT_ID = 'jti';
+    public const TOKEN_PAYLOAD_KEY_DOCUMENT_ID = 'did';
+    public const TOKEN_PAYLOAD_KEY_DOCUMENT_SIZE = 'dsz';
 
 
     private readonly int $defaultLifetimeSeconds;
     private readonly string $privateKey;
 
-    public function __construct(string $privateKey, int $defaultLifetimeSeconds, private readonly string $urlPattern)
+    public function __construct(string $privateKey, int $defaultLifetimeSeconds, private readonly string $urlPattern, private readonly string $internalUrlPattern)
     {
         $this->defaultLifetimeSeconds = $this->parseDefaultLifetimeSeconds($defaultLifetimeSeconds);
         $this->privateKey = $this->parsePrivateKey($privateKey);
     }
 
-    public function generateToken(string $subject, string $document, int $lifetimeSeconds = null): string
+    public function generateToken(string $subject, string $document, int $lifetimeSeconds = null, ?string $jti = null, ?int $documentId = null, ?int $documentSize = null): string
     {
         $payload = [
             static::TOKEN_PAYLOAD_KEY_SUBJECT => $subject,
@@ -32,7 +35,24 @@ class WebDavJsonWebTokenGenerationService
             static::TOKEN_PAYLOAD_KEY_EXPIRES_AT => time() + ($lifetimeSeconds ?? $this->defaultLifetimeSeconds),
         ];
 
+        if ($jti !== null) {
+            $payload[static::TOKEN_PAYLOAD_KEY_JWT_ID] = $jti;
+        }
+
+        if ($documentId !== null) {
+            $payload[static::TOKEN_PAYLOAD_KEY_DOCUMENT_ID] = $documentId;
+        }
+
+        if ($documentSize !== null) {
+            $payload[static::TOKEN_PAYLOAD_KEY_DOCUMENT_SIZE] = $documentSize;
+        }
+
         return JWT::encode($payload, $this->privateKey, static::TOKEN_ALGORITHM);
+    }
+
+    public function getDefaultLifetimeSeconds(): int
+    {
+        return $this->defaultLifetimeSeconds;
     }
 
     protected function parseDefaultLifetimeSeconds(int $defaultLifetimeSeconds): int
@@ -60,12 +80,18 @@ class WebDavJsonWebTokenGenerationService
     }
 
     /**
-     * @param $jwt string JWT token
-     * @param $identifier string Document Identifier string from db
-     * @return string
+     * Build a legacy WebDAV link (IIS-based, toggle OFF path).
      */
-    public function getJwtWebDavLink($jwt, $identifier)
+    public function getJwtWebDavLink(string $jwt, string $identifier): string
     {
         return sprintf($this->urlPattern, $jwt, $identifier);
+    }
+
+    /**
+     * Build an internal WebDAV link (sabre/dav, toggle ON path).
+     */
+    public function getInternalWebDavLink(string $jwt, string $filename): string
+    {
+        return sprintf($this->internalUrlPattern, $jwt, $filename);
     }
 }
