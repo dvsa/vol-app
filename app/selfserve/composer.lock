@@ -4354,16 +4354,16 @@
     },
     {
       "name": "olcs/olcs-common",
-      "version": "v9.11.0",
+      "version": "v9.13.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-common.git",
-        "reference": "80f3e527027047afabb5ebfd8b3baa1e19db51bc"
+        "reference": "3a36ae5703759503ae57bd28ccdfdcc28afbc721"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/80f3e527027047afabb5ebfd8b3baa1e19db51bc",
-        "reference": "80f3e527027047afabb5ebfd8b3baa1e19db51bc",
+        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/3a36ae5703759503ae57bd28ccdfdcc28afbc721",
+        "reference": "3a36ae5703759503ae57bd28ccdfdcc28afbc721",
         "shasum": ""
       },
       "require": {
@@ -4421,9 +4421,9 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "Common library for the OLCS Project",
       "support": {
-        "source": "https://github.com/dvsa/olcs-common/tree/v9.11.0"
+        "source": "https://github.com/dvsa/olcs-common/tree/v9.13.0"
       },
-      "time": "2026-02-25T22:33:42+00:00"
+      "time": "2026-03-06T14:21:33+00:00"
     },
     {
       "name": "olcs/olcs-logging",
