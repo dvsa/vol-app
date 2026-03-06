@@ -1,35 +1,58 @@
 #!/bin/bash
 
-export http_proxy=http://${PROXY}:3128
-export https_proxy=http://${PROXY}:3128
-export NO_PROXY=169.254.169.254
+set -euo pipefail
 
-READDB_HOST=${READDB_HOST}
-ENVIRONMENT=${ENVIRONMENT_NAME}
+echoerr() { printf '%s\n' "$*" >&2; }
 
-token=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
-ec2_instance_id=$(curl -s -H "X-aws-ec2-metadata-token: $token" http://169.254.169.254/latest/meta-data/instance-id)
-ec2_avail_zone=$(curl -s -H "X-aws-ec2-metadata-token: $token" http://169.254.169.254/latest/meta-data/placement/availability-zone)
-ec2_region="`echo \"$ec2_avail_zone\" | sed -e 's:\([0-9][0-9]*\)[a-z]*\$:\\1:'`"
+: "${READDB_HOST:?READDB_HOST is required}"
+: "${READDB_ID:?READDB_ID is required}"
+: "${ENVIRONMENT_NAME:?ENVIRONMENT_NAME is required (DEV|INT|PREP|PROD)}"
+ENVIRONMENT="${ENVIRONMENT_NAME}"
+
+# PROXY is already host:port (includes :3128). Do not append a port here.
+if [ -n "${PROXY:-}" ]; then
+  export http_proxy="http://${PROXY}"
+  export https_proxy="http://${PROXY}"
+fi
+export NO_PROXY="${NO_PROXY:-169.254.169.254,169.254.170.2,localhost,127.0.0.1}"
+
+# Region: prefer AWS_REGION, else IMDSv2
+ec2_region="${AWS_REGION:-}"
+if [ -z "$ec2_region" ]; then
+  token="$(curl -fsS -X PUT "http://169.254.169.254/latest/api/token" \
+    -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" 2>/dev/null || true)"
+
+  if [ -n "$token" ]; then
+    ec2_region="$(curl -fsS -H "X-aws-ec2-metadata-token: $token" \
+      "http://169.254.169.254/latest/meta-data/placement/region" 2>/dev/null || true)"
+
+    if [ -z "$ec2_region" ]; then
+      az="$(curl -fsS -H "X-aws-ec2-metadata-token: $token" \
+        "http://169.254.169.254/latest/meta-data/placement/availability-zone" 2>/dev/null || true)"
+      [ -n "$az" ] && ec2_region="${az%[a-z]}"
+    fi
+  fi
+fi
+
+if [ -z "$ec2_region" ]; then
+  ec2_region="$(/usr/local/bin/aws configure get region 2>/dev/null || true)"
+fi
+
+: "${ec2_region:?Could not determine AWS region}"
+export AWS_REGION="$ec2_region"
+aws_region="$ec2_region"
 
 case "${ENVIRONMENT}" in
-  "DEV")
-    DVA_REPORT_BUCKET="devapp-olcs-pri-integration-dva-s3/dev"
-    ;;
-  "INT")
-    DVA_REPORT_BUCKET="appnduint-olcs-pri-integration-dva-s3"
-    ;;
-  "PREP")
-    DVA_REPORT_BUCKET="apppp-olcs-pri-integration-dva-s3"
-    ;;
-  "PROD")
-    DVA_REPORT_BUCKET="app-olcs-pri-integration-dva-s3"
-    ;;
-  *)
-    echoerr "ERROR: Invalid environment specified"
-    exit 1
-    ;;
+  "DEV")  DVA_BUCKET="devapp-olcs-pri-integration-dva-s3"; DVA_PREFIX="dev" ;;
+  "INT")  DVA_BUCKET="appnduint-olcs-pri-integration-dva-s3"; DVA_PREFIX="" ;;
+  "PREP") DVA_BUCKET="apppp-olcs-pri-integration-dva-s3"; DVA_PREFIX="" ;;
+  "PROD") DVA_BUCKET="app-olcs-pri-integration-dva-s3"; DVA_PREFIX="" ;;
+  *) echoerr "ERROR: Invalid environment specified"; exit 1 ;;
 esac
+
+S3_DEST="s3://${DVA_BUCKET}"
+[[ -n "${DVA_PREFIX}" ]] && S3_DEST="${S3_DEST}/${DVA_PREFIX}"
+S3_DEST="${S3_DEST}/dvacompliance/"
 
 # Debug mode disables the deletion of the temp RDS instance
 mode=""
@@ -107,7 +130,7 @@ function cleanup {
       case $type in
         "snapshot" )
             echo "Deleting DB snapshot: ${item}"
-            aws_cmd "/usr/local/bin/aws rds delete-db-snapshot --db-snapshot-identifier ${item} --region ${ec2_region}"
+            aws_cmd "/usr/local/bin/aws rds delete-db-snapshot --db-snapshot-identifier ${item} --region ${aws_region}"
             if [ $? -ne 0 ]; then
               log_err "Unable to delete DB snapshot: ${item}"
             fi
@@ -115,7 +138,7 @@ function cleanup {
             ;;
         "rds" )
             echo "Deleting RDS instance: ${item}"
-            aws_cmd "/usr/local/bin/aws rds delete-db-instance --skip-final-snapshot --db-instance-identifier ${item} --region ${ec2_region}"
+            aws_cmd "/usr/local/bin/aws rds delete-db-instance --skip-final-snapshot --db-instance-identifier ${item} --region ${aws_region}"
             if [ $? -ne 0 ]; then
               log_err "Unable to delete RDS instance: ${item}"
             fi
@@ -123,7 +146,7 @@ function cleanup {
             ;;
         "dumpfile" )
             echo "Removing dump file: ${item}"
-            rm -f ${item}
+            rm -f "${item}"
             if [ $? -ne 0 ]; then
               log_err "Unable to remove dump file ${item}"
             fi
@@ -134,7 +157,8 @@ function cleanup {
   done
 }
 
-db_instance_id=${READDB_HOST}
+: "${READDB_ID:?READDB_ID is not set}"
+db_instance_id="${READDB_ID}"
 restored_db_instance_id="${ENVIRONMENT}-olcs-rds-nidataextract-temp"
 snapshot_timestamp=$(date +"%Y-%m-%d-%H-%M-%S")
 env_id=$(echo "$db_instance_id"|cut -d- -f1)
@@ -145,7 +169,7 @@ cleanup_items=()
 
 # Ensure readdb instance is available before snapshotting
 
-aws_cmd "/usr/local/bin/aws rds wait db-instance-available --region ${ec2_region} --db-instance-identifier ${db_instance_id}"
+aws_cmd "/usr/local/bin/aws rds wait db-instance-available --region ${aws_region} --db-instance-identifier ${db_instance_id}"
 if [ $? -ne 0 ]; then
   log_err "DB Instance not available in the given time: ${db_instance_id}: ${aws_cmd_output}"
   cleanup
@@ -153,7 +177,7 @@ if [ $? -ne 0 ]; then
 fi
 
 log_msg "Creating snapshot: $snapshot_id"
-aws_cmd "/usr/local/bin/aws rds create-db-snapshot --db-snapshot-identifier $snapshot_id --db-instance-identifier $db_instance_id --region ${ec2_region}"
+aws_cmd "/usr/local/bin/aws rds create-db-snapshot --db-snapshot-identifier $snapshot_id --db-instance-identifier $db_instance_id --region ${aws_region}"
 if [ $? -ne 0 ]; then
   log_err "Unable to create db snapshot: ${db_instance_id}: ${aws_cmd_output}"
   cleanup
@@ -161,7 +185,7 @@ if [ $? -ne 0 ]; then
 fi
 
 sleep 60
-aws_cmd "/usr/local/bin/aws rds wait db-snapshot-completed --db-snapshot-identifier $snapshot_id --region ${ec2_region}"
+aws_cmd "/usr/local/bin/aws rds wait db-snapshot-completed --db-snapshot-identifier $snapshot_id --region ${aws_region}"
 if [ $? -ne 0 ]; then
   log_err "Unable to verify snapshot availability."
   cleanup
@@ -171,7 +195,7 @@ cleanup_items+=("snapshot:$snapshot_id")
 
 ####### Gather subnet/security/param group info from API read replica
 
-aws_cmd "/usr/local/bin/aws rds describe-db-instances --db-instance-identifier ${db_instance_id}  --region ${ec2_region}"
+aws_cmd "/usr/local/bin/aws rds describe-db-instances --db-instance-identifier ${db_instance_id}  --region ${aws_region}"
 if [ $? -ne 0 ]; then
   log_err "Unable to describe DB Instances: ${db_instance_id}: ${aws_cmd_output}"
   cleanup
@@ -206,14 +230,14 @@ rds_master_pass=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
 ####### Create new RDS instance from snapshot
 
 log_msg "Creating new RDS instance: ${restored_db_instance_id} from snapshot ${snapshot_id}"
-aws_cmd "/usr/local/bin/aws rds restore-db-instance-from-db-snapshot --db-instance-identifier ${restored_db_instance_id} --db-snapshot-identifier ${snapshot_id} --region ${ec2_region} --db-subnet-group-name ${subnet_group} --db-instance-class db.m6g.2xlarge"
+aws_cmd "/usr/local/bin/aws rds restore-db-instance-from-db-snapshot --db-instance-identifier ${restored_db_instance_id} --db-snapshot-identifier ${snapshot_id} --region ${aws_region} --db-subnet-group-name ${subnet_group} --db-instance-class db.m6g.2xlarge"
 if [ $? -ne 0 ]; then
   log_err "Unable to restore RDS instance from snapshot: ${restored_db_instance_id}: ${aws_cmd_output}"
   cleanup
   exit 1
 fi
 
-aws_cmd "/usr/local/bin/aws rds wait db-instance-available --region ${ec2_region} --db-instance-identifier ${restored_db_instance_id}"
+aws_cmd "/usr/local/bin/aws rds wait db-instance-available --region ${aws_region} --db-instance-identifier ${restored_db_instance_id}"
 if [ $? -ne 0 ]; then
   log_err "DB Instance not available in the given time: ${restored_db_instance_id}"
   cleanup
@@ -221,14 +245,14 @@ if [ $? -ne 0 ]; then
 fi
 
 sleep 20
-aws_cmd "/usr/local/bin/aws rds describe-db-instances --region ${ec2_region} --db-instance-identifier ${restored_db_instance_id}"
+aws_cmd "/usr/local/bin/aws rds describe-db-instances --region ${aws_region} --db-instance-identifier ${restored_db_instance_id}"
 if [ $? -ne 0 ]; then
   log_err "Unable to describe DB Instance: ${restored_db_instance_id}: ${aws_cmd_output}"
   cleanup
   exit 1
 fi
 restore_db=$(echo "${aws_cmd_output}" | /usr/bin/jq -r '.DBInstances[]')
-db_instance_endpoint=$(echo $restore_db | /usr/bin/jq -r '.Endpoint.Address')
+db_instance_endpoint=$(echo "${restore_db}" | /usr/bin/jq -r '.Endpoint.Address')
 
 log_msg "RDS instance available at: $db_instance_endpoint"
 
@@ -239,7 +263,7 @@ fi
 ####### Apply subnet/security/param group info to new instance and reboot
 
 log_msg "Modifying database."
-aws_cmd "/usr/local/bin/aws rds modify-db-instance --region ${ec2_region} --db-instance-identifier ${restored_db_instance_id} --vpc-security-group-ids ${sec_group} --db-parameter-group-name ${param_group} --master-user-password ${rds_master_pass} --apply-immediately" "" "" "yes"
+aws_cmd "/usr/local/bin/aws rds modify-db-instance --region ${aws_region} --db-instance-identifier ${restored_db_instance_id} --vpc-security-group-ids ${sec_group} --db-parameter-group-name ${param_group} --master-user-password ${rds_master_pass} --apply-immediately" "" "" "yes"
 if [ $? -ne 0 ]; then
   log_err "Unable to modify database: ${restored_db_instance_id}: ${aws_cmd_output}"
   cleanup
@@ -248,7 +272,7 @@ fi
 
 sleep 60
 
-aws_cmd "/usr/local/bin/aws rds wait db-instance-available --region ${ec2_region} --db-instance-identifier ${restored_db_instance_id}"
+aws_cmd "/usr/local/bin/aws rds wait db-instance-available --region ${aws_region} --db-instance-identifier ${restored_db_instance_id}"
 if [ $? -ne 0 ]; then
   log_err "DB Instance not available in the given time after subnet modification: ${restored_db_instance_id}"
   cleanup
@@ -257,7 +281,7 @@ fi
 sleep 20
 
 log_msg "Rebooting RDS instance."
-result=$(/usr/local/bin/aws rds reboot-db-instance --db-instance-identifier ${restored_db_instance_id} --region ${ec2_region})
+result=$(/usr/local/bin/aws rds reboot-db-instance --db-instance-identifier ${restored_db_instance_id} --region ${aws_region})
 if [ $? -ne 0 ]; then
   log_err "Unable to reboot RDS instance: ${restored_db_instance_id}: ${aws_cmd_output}"
   cleanup
@@ -266,7 +290,7 @@ fi
 
 sleep 60
 
-aws_cmd "/usr/local/bin/aws rds wait db-instance-available --region ${ec2_region} --db-instance-identifier ${restored_db_instance_id}"
+aws_cmd "/usr/local/bin/aws rds wait db-instance-available --region ${aws_region} --db-instance-identifier ${restored_db_instance_id}"
 if [ $? -ne 0 ]; then
   log_err "DB Instance not available in the given time after subnet modification: ${restored_db_instance_id}"
   cleanup
@@ -275,7 +299,7 @@ fi
 sleep 20
 
 log_msg "Increasing database volume size."
-aws_cmd "/usr/local/bin/aws rds modify-db-instance --region ${ec2_region} --db-instance-identifier ${restored_db_instance_id} --iops 1000 --allocated-storage 300 --apply-immediately"
+aws_cmd "/usr/local/bin/aws rds modify-db-instance --region ${aws_region} --db-instance-identifier ${restored_db_instance_id} --iops 1000 --allocated-storage 300 --apply-immediately"
 if [ $? -ne 0 ]; then
   log_err "Unable to increase database size: ${restored_db_instance_id}: ${aws_cmd_output}"
   cleanup
@@ -297,11 +321,29 @@ fi
 
 log_msg "Running NI_Extract-Anon on: ${db_instance_endpoint}"
 cd /mnt/data/common/scripts/NI_Extract
-<% if @env != 'prod' -%>
-./NI_Extract.sh -c "-h${db_instance_endpoint} -umaster -p${rds_master_pass}" -d OLCS_RDS_OLCSDB -A -a /mnt/data/common/scripts/anonymisation_scripts/anon -f /mnt/data/ni_dvacompliance/temp -X /mnt/data/ni_dvacompliance
-<% else -%>
-./NI_Extract.sh -c "-h${db_instance_endpoint} -umaster -p${rds_master_pass}" -d OLCS_RDS_OLCSDB -X /mnt/data/ni_dvacompliance
-<% end -%>
+
+# Pick DB name (keep old default unless you KNOW the correct one)
+: "${READDB_NAME:?READDB_NAME is not set}"
+DB_NAME="$READDB_NAME"
+log_msg "Using DB_NAME=${DB_NAME}"
+
+# Master username is NOT guaranteed to be READDB_USER.
+# The snapshot restore keeps the original master username.
+# So read it from the restored instance.
+master_user=$(echo "${restore_db}" | /usr/bin/jq -r '.MasterUsername')
+CONN_STR="-h${db_instance_endpoint} -u${master_user} -p${rds_master_pass}"
+: "${master_user:?Could not read MasterUsername from restored DB instance}"
+
+if [[ "${ENVIRONMENT}" != "PROD" ]]; then
+  ./NI_Extract.sh -c "${CONN_STR}" -d "${DB_NAME}" \
+    -A -a /mnt/data/common/scripts/anonymisation_scripts/anon \
+    -f /mnt/data/ni_dvacompliance/temp \
+    -X /mnt/data/ni_dvacompliance
+else
+  ./NI_Extract.sh -c "${CONN_STR}" -d "${DB_NAME}" \
+    -X /mnt/data/ni_dvacompliance
+fi
+
 if [ $? -ne 0 ]; then
   log_err "NI EXTRACT failed."
   cleanup
@@ -309,9 +351,9 @@ if [ $? -ne 0 ]; then
 fi
 
 output_file=$(find /mnt/data/ni_dvacompliance -type f -name "*.tar.gz")
-if [ -f ${output_file} ]; then
+if [ -n "${output_file}" ] && [ -f "${output_file}" ]; then
   log_msg "Found VI Extract output: ${output_file}"
-  /usr/local/bin/aws s3 cp ${output_file} s3://${DVA_REPORT_BUCKET}/dvacompliance/
+  /usr/local/bin/aws s3 cp "${output_file}" "${S3_DEST}"
   if [ $? -ne 0 ]; then
     log_err "Unable to upload dumpfile to s3 bucket"
     cleanup
