@@ -1,5 +1,19 @@
 # Changelog
 
+## [7.1.0](https://github.com/dvsa/vol-app/compare/v7.0.1...v7.1.0) (2026-03-06)
+
+
+### Features
+
+* bring updated review declaration into vol-app VOL-6979 ([#1341](https://github.com/dvsa/vol-app/issues/1341)) ([6e078fd](https://github.com/dvsa/vol-app/commit/6e078fde07470b75421520d7daffa5eb76a6f2ca))
+* vol 5961 remove operating centres ([#1304](https://github.com/dvsa/vol-app/issues/1304)) ([c06114f](https://github.com/dvsa/vol-app/commit/c06114f13af5a0bdd5599d1b1cc8cdf782377b27))
+* vol 6902 fix ni compliance batch ([#1334](https://github.com/dvsa/vol-app/issues/1334)) ([3118999](https://github.com/dvsa/vol-app/commit/311899934e594036d7cbee4ca52158200d85e490))
+
+
+### Bug Fixes
+
+* output JSON array elements in cache-clear workflow container-overrides ([#1335](https://github.com/dvsa/vol-app/issues/1335)) ([3f03a74](https://github.com/dvsa/vol-app/commit/3f03a742e5f626cce0d54fd4d942d96ac45f45de))
+
 ## [7.0.1](https://github.com/dvsa/vol-app/compare/v7.0.0...v7.0.1) (2026-03-02)
 
 
