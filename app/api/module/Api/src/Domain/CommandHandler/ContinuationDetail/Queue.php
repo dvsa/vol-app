@@ -46,7 +46,6 @@ final class Queue extends AbstractCommandHandler implements AuthAwareInterface, 
                 ]
             );
             $result->merge($this->handleSideEffect($createCmd));
-
         }
 
         $result->addMessage('All letters queued');
