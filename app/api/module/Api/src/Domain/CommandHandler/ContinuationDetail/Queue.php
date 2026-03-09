@@ -47,34 +47,10 @@ final class Queue extends AbstractCommandHandler implements AuthAwareInterface, 
             );
             $result->merge($this->handleSideEffect($createCmd));
 
-            if ($command->getType() === QueueEntity::TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER) {
-                $result->merge($this->generateTask($continuationDetailId));
-            }
         }
 
         $result->addMessage('All letters queued');
 
         return $result;
-    }
-
-    /**
-     * @param $continuationDetailId
-     * @return Result
-     * @throws RuntimeException
-     */
-    private function generateTask($continuationDetailId): Result
-    {
-        /** @var ContinuationDetail $continuationDetail */
-        $continuationDetail = $this->getRepo()->fetchById($continuationDetailId);
-        $user = $this->getCurrentUser();
-        $taskCmd = CreateTask::create([
-            'category' => Category::CATEGORY_LICENSING,
-            'subCategory' => Category::TASK_SUB_CATEGORY_CONTINUATIONS_AND_RENEWALS,
-            'description' => 'Check if checklist has been received',
-            'actionDate' => (new DateTime('+14 days'))->format('Y-m-d'),
-            'licence' => $continuationDetail->getLicence()->getId(),
-            'assignedToUser' => $user->getId(),
-        ]);
-        return $this->handleSideEffect($taskCmd);
     }
 }
