@@ -36,7 +36,6 @@ class Queue extends AbstractQueue
 
     // Message types
     public const TYPE_COMPANIES_HOUSE_COMPARE = 'que_typ_ch_compare';
-    public const TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER = 'que_typ_cont_check_rem_gen_let';
     public const TYPE_CPID_EXPORT_CSV = 'que_typ_cpid_export_csv';
     public const TYPE_CONT_CHECKLIST = 'que_typ_cont_checklist';
     public const TYPE_TM_SNAPSHOT = 'que_typ_tm_snapshot';
@@ -73,7 +72,6 @@ class Queue extends AbstractQueue
 
     protected $types = [
         self::TYPE_COMPANIES_HOUSE_COMPARE,
-        self::TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER,
         self::TYPE_CPID_EXPORT_CSV,
         self::TYPE_CONT_CHECKLIST,
         self::TYPE_TM_SNAPSHOT,
