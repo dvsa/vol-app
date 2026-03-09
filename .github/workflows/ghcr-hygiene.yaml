@@ -20,5 +20,5 @@ jobs:
           package-name: 'vol-app/${{ matrix.project }}'
           package-type: 'container'
           min-versions-to-keep: 20
-          # For safety, if we only want to delete untagged versions for now. This may moved to tagged later.
+          # For safety, if we only want to delete untagged versions for now. This may be moved to tagged later.
           delete-only-untagged-versions: true
