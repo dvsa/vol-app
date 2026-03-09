@@ -9,7 +9,7 @@ CONTEXT=${ENVIRONMENT:-all}
 echo "Liquibase running with context: ${CONTEXT}"
 
 LIQUIBASE_OPTS="--driver=com.mysql.cj.jdbc.Driver \
-  --classpath=/liquibase/changelog/mysql-connector-java-8.0.21/mysql-connector-java-8.0.21.jar \
+  --classpath=/liquibase/changelog/mysql-connector-j-9.6.0/mysql-connector-j-9.6.0.jar \
   --url=jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME} \
   --username=${DB_USER} \
   --password=${DB_PASSWORD} \

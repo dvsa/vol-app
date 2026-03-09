@@ -1,5 +1,38 @@
 # Changelog
 
+## [7.0.1](https://github.com/dvsa/vol-app/compare/v7.0.0...v7.0.1) (2026-03-02)
+
+
+### Bug Fixes
+
+* update .gitignore trigger ([#1332](https://github.com/dvsa/vol-app/issues/1332)) ([2de69d8](https://github.com/dvsa/vol-app/commit/2de69d81c06fefc2f5183889c189be0369c4c34b))
+
+## [7.0.0](https://github.com/dvsa/vol-app/compare/v6.10.2...v7.0.0) (2026-02-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* upgrade to PHP 8.3 and PHPUnit 12, fix all risky/skipped tests and all deprecations ([#1319](https://github.com/dvsa/vol-app/issues/1319))
+
+### Features
+
+* 6903 install jq and add symlinks to cli image ([#1317](https://github.com/dvsa/vol-app/issues/1317)) ([4614e9c](https://github.com/dvsa/vol-app/commit/4614e9c201b5491fd64609b81094b260e6c045c2))
+* add missing fonts to containers and custom Gotenberg image ([#1324](https://github.com/dvsa/vol-app/issues/1324)) ([59afef5](https://github.com/dvsa/vol-app/commit/59afef524e887efe50b361f23c04b702421aa817))
+* bump olcs-common to bring in new accessibility statement ([#1325](https://github.com/dvsa/vol-app/issues/1325)) ([d093432](https://github.com/dvsa/vol-app/commit/d09343222f36049262f055e0bcc87a5eae68e30a))
+* bump up VFT version ([#1328](https://github.com/dvsa/vol-app/issues/1328)) ([f4ce0e3](https://github.com/dvsa/vol-app/commit/f4ce0e3d1b315cdcf510ceb5307221951e32b145))
+* letter edit functionality ([#1309](https://github.com/dvsa/vol-app/issues/1309)) ([d8c8b56](https://github.com/dvsa/vol-app/commit/d8c8b56babb7c0c7e78fbdf17d2c301523b1126c))
+* send letter and Letter Appendix/Attachment work ([#1315](https://github.com/dvsa/vol-app/issues/1315)) ([a18a98b](https://github.com/dvsa/vol-app/commit/a18a98b6b9a2a17244aee5ed9025504e47d7e11d))
+* upgrade to PHP 8.3 and PHPUnit 12, fix all risky/skipped tests and all deprecations ([#1319](https://github.com/dvsa/vol-app/issues/1319)) ([c674493](https://github.com/dvsa/vol-app/commit/c67449347cbfe9af3aa9f9340458047a8d64d3fc))
+* vol5958 addchangehistoryentries ([#1297](https://github.com/dvsa/vol-app/issues/1297)) ([f98a04a](https://github.com/dvsa/vol-app/commit/f98a04ae9fffa1ec65b016b5639548da66118022))
+
+
+### Bug Fixes
+
+* bump common version for appenix categories ([#1318](https://github.com/dvsa/vol-app/issues/1318)) ([a87477a](https://github.com/dvsa/vol-app/commit/a87477ab8a62444986c47d8d56ff64395fe4dca0))
+* ni-compliance script path typo ([#1316](https://github.com/dvsa/vol-app/issues/1316)) ([11ced88](https://github.com/dvsa/vol-app/commit/11ced882a488dd9af32b2b19f398eaf1aad281c7))
+* resolve entity generator issue which caused bad annotations for … ([#1323](https://github.com/dvsa/vol-app/issues/1323)) ([4903b65](https://github.com/dvsa/vol-app/commit/4903b65ee36150a68d696a29788312e0b79b54ca))
+* vol 7006 messaging task date bug ([#1322](https://github.com/dvsa/vol-app/issues/1322)) ([36a6459](https://github.com/dvsa/vol-app/commit/36a6459c00dbe7f85f4bc347f6efaaba7a318401))
+
 ## [6.10.2](https://github.com/dvsa/vol-app/compare/v6.10.1...v6.10.2) (2026-02-03)
 
 
