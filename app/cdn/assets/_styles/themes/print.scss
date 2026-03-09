@@ -8,19 +8,19 @@
 
 $app: print;
 
-@import '../../../node_modules/govuk-frontend/dist/govuk/all';
+@import "../../../node_modules/govuk-frontend/dist/govuk/index";
 
 //govuk frontend toolkit legacy compatibility (main toolkit removed)
-@import '../core/legacy';
+@import "../core/legacy";
 
-@import '../core/config';
-@import '../core/tools';
-@import '../core/typography';
-@import '../core/tables';
+@import "../core/config";
+@import "../core/tools";
+@import "../core/typography";
+@import "../core/tables";
 
-@import '../components/review';
-@import '../components/page-header';
-@import '../components/read-only';
+@import "../components/review";
+@import "../components/page-header";
+@import "../components/read-only";
 
 /**
  * General Styles/Reset
@@ -92,7 +92,7 @@ table {
 
 thead:after,
 tfoot:before {
-  content: '';
+  content: "";
   display: block;
   height: 0.75em;
   color: transparent;
@@ -125,7 +125,6 @@ tfoot:before {
  * Signature Box
  */
 .signature-box {
-
   margin: 30px 0;
   padding: 30px;
   background: $grey-3;
@@ -166,14 +165,12 @@ tfoot:before {
       }
     }
   }
-
 }
 
 /**
  * Printable Styles
  */
 .printable {
-
   padding-top: 60px;
 
   @media print {
@@ -229,5 +226,4 @@ tfoot:before {
   h4 {
     margin: 20px 0 5px;
   }
-
 }
