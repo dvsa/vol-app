@@ -9,7 +9,7 @@ module "s3" {
   count = var.create_bucket ? 1 : 0
 
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "~> 4.0"
+  version = "~> 5.10"
 
   bucket = local.identifier
 
@@ -44,7 +44,7 @@ module "s3" {
 
 module "dynamodb_table" {
   source  = "terraform-aws-modules/dynamodb-table/aws"
-  version = "~> 4.0"
+  version = "~> 5.5"
 
   name     = "${local.identifier}-lock"
   hash_key = "LockID"
@@ -61,7 +61,7 @@ module "dynamodb_state_lock_policy" {
   count = var.create_dynamodb_policy ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "~> 5.28"
+  version = "~> 6.4"
 
   name        = "${local.identifier}-lock-policy"
   description = "Policy to allow access to the Terraform state lock"
@@ -87,7 +87,7 @@ module "s3_state_policy" {
   count = var.create_bucket && var.create_bucket_policy ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "~> 5.28"
+  version = "~> 6.4"
 
   name        = "${local.identifier}-policy"
   description = "Policy to allow access to the Terraform state in S3"
