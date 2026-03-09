@@ -26,5 +26,5 @@ phpcs.xml
 phpstan.neon
 phpunit.xml
 psalm.xml
-# Trigger CD - 2026-03-09
+# Trigger CD - 2026-03-09 second attempt
 
