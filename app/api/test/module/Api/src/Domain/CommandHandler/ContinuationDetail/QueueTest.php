@@ -44,7 +44,7 @@ class QueueTest extends AbstractCommandHandlerTestCase
         $queueParams = [
             'entityId' => 1,
             'type' => $command->getType(),
-            'status' => QueueEntity::TYPE_CONT_CHECKLIST
+            'status' => QueueEntity::STATUS_QUEUED
         ];
         $this->expectedSideEffect(CreateQueueCmd::class, $queueParams, $queueLettersResult);
 
