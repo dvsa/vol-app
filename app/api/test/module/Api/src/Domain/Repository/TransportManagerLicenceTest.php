@@ -62,9 +62,6 @@ class TransportManagerLicenceTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-<<<<<<< HEAD
-    public function testFetchForTransportManager(): void
-=======
     public function testFetchRemovedTmForLicenceSecondLetter(): void
     {
         $qb = $this->createMockQb('[QUERY]');
@@ -85,7 +82,6 @@ class TransportManagerLicenceTest extends RepositoryTestCase
     }
 
     public function testFetchForTransportManager()
->>>>>>> ae021187ff (feat: added unit tests)
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tml')->once()->andReturn($mockQb);
