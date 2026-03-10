@@ -4,152 +4,131 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Service\Nr;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\PersistentCollection;
+use Dvsa\Olcs\Api\Entity\Cases\Cases as CasesEntity;
+use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
+use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Dvsa\Olcs\Api\Entity\Si\ErruRequest as ErruRequestEntity;
+use Dvsa\Olcs\Api\Entity\Si\SeriousInfringement as SiEntity;
+use Dvsa\Olcs\Api\Entity\Si\SiPenalty as SiPenaltyEntity;
+use Dvsa\Olcs\Api\Entity\Tm\TransportManager;
+use Dvsa\Olcs\Api\Service\Nr\CheckGoodRepute;
+use Dvsa\Olcs\Api\Service\Nr\MsiResponse;
+use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Olcs\Logging\Log\Logger;
 use Olcs\XmlTools\Xml\XmlNodeBuilder;
-use PHPUnit\Framework\TestCase;
 
-class ErruXmlXsdValidationTest extends TestCase
+class ErruXmlXsdValidationTest extends MockeryTestCase
 {
     private const XML_NS = 'https://webgate.ec.testa.eu/move-hub/erru/3.5';
+    private const ERRU_VERSION = '3.5';
     private const XSD_DIR = __DIR__ . '/../../../../../../module/Api/data/nr/xsd/3.5/';
 
     public function testMsiResponseXmlValidatesAgainstXsd(): void
     {
         $xmlBuilder = new XmlNodeBuilder('NotifyCheckResult_Response', self::XML_NS, []);
+        $sut = new MsiResponse($xmlBuilder, self::ERRU_VERSION);
 
-        $xmlData = [
-            'Header' => [
-                'name' => 'Header',
-                'attributes' => [
-                    'version' => '3.5',
-                    'technicalId' => 'd0ae5498-339a-49ad-bcaa-65c1f03f6307',
-                    'workflowId' => 'e933f62c-ceae-4833-b022-c4f69e2211ef',
-                    'sentAt' => '2024-01-15T10:30:00Z',
-                    'timeoutValue' => '2024-01-15T10:30:10Z',
-                    'from' => 'UK',
-                    'to' => 'EU',
-                ],
-            ],
-            'Body' => [
-                'name' => 'Body',
-                'attributes' => [
-                    'businessCaseId' => '0ffefb6b-6344-4a60-9a53-4381c32f',
-                    'originatingAuthority' => 'Driver & Vehicle Agency',
-                    'respondingAuthority' => 'Traffic Commissioner',
-                    'statusCode' => 'OK',
-                ],
-                'nodes' => [
-                    [
-                        'name' => 'TransportUndertaking',
-                        'attributes' => [
-                            'transportUndertakingName' => 'Test Transport Ltd',
-                            'communityLicenceNumber' => 'UKGB/OB1234567/00001',
-                            'communityLicenceStatus' => 'Active',
-                            'numberOfVehicles' => '10',
-                        ],
-                        'nodes' => [
-                            [
-                                'name' => 'TransportUndertakingAddress',
-                                'attributes' => [
-                                    'address' => '123 Test Street',
-                                    'postCode' => 'LS1 1AA',
-                                    'city' => 'Leeds',
-                                    'country' => 'UK',
-                                ],
-                            ],
-                        ],
-                    ],
-                    [
-                        'name' => 'PenaltiesImposed',
-                        'nodes' => [
-                            [
-                                'name' => 'PenaltyImposed',
-                                'attributes' => [
-                                    'penaltyRequestedIdentifier' => '1',
-                                    'authorityImposingPenalty' => 'Traffic Commissioner',
-                                    'isImposed' => 'false',
-                                    'penaltyTypeImposed' => '101',
-                                    'reason' => 'Further sanction not required',
-                                ],
-                            ],
-                            [
-                                'name' => 'PenaltyImposed',
-                                'attributes' => [
-                                    'penaltyRequestedIdentifier' => '2',
-                                    'authorityImposingPenalty' => 'Traffic Commissioner',
-                                    'isImposed' => 'true',
-                                    'penaltyTypeImposed' => '301',
-                                    'startDate' => '2024-02-01',
-                                    'endDate' => '2024-08-01',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
-
-        $xmlBuilder->setData($xmlData);
-        $xmlString = $xmlBuilder->buildTemplate();
+        $cases = $this->buildMsiMocks();
+        $xmlString = $sut->create($cases);
 
         $this->assertXmlValidatesAgainstXsd($xmlString, self::XSD_DIR . 'NotifyCheckResult_Response.xsd');
     }
 
     public function testCheckGoodReputeXmlValidatesAgainstXsd(): void
     {
+        Logger::setLogger(m::mock(\Laminas\Log\Logger::class)->shouldIgnoreMissing());
+
         $xmlBuilder = new XmlNodeBuilder('CheckGoodRepute_Request', self::XML_NS, []);
+        $sut = new CheckGoodRepute($xmlBuilder, self::ERRU_VERSION);
 
-        $xmlData = [
-            'Header' => [
-                'name' => 'Header',
-                'attributes' => [
-                    'version' => '3.5',
-                    'technicalId' => 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-                    'workflowId' => 'f9e8d7c6-b5a4-3210-fedc-ba0987654321',
-                    'sentAt' => '2024-01-15T10:30:00Z',
-                    'timeoutValue' => '2024-01-15T10:30:10Z',
-                    'from' => 'UK',
-                    'to' => 'ZZ',
-                ],
-            ],
-            'Body' => [
-                'name' => 'Body',
-                'attributes' => [
-                    'businessCaseId' => 'b1c2d3e4-f5a6-7890-bcde-f12345678901',
-                    'originatingAuthority' => 'Traffic Commissioner',
-                    'requestPurpose' => 'Other',
-                    'requestSource' => 'Other',
-                ],
-                'nodes' => [
-                    [
-                        'name' => 'SearchedTransportManager',
-                        'nodes' => [
-                            [
-                                'name' => 'TransportManagerNameDetails',
-                                'attributes' => [
-                                    'familyName' => 'Smith',
-                                    'firstName' => 'John',
-                                    'dateOfBirth' => '1980-05-15',
-                                    'placeOfBirth' => 'London',
-                                ],
-                            ],
-                            [
-                                'name' => 'TransportManagerCertificateDetails',
-                                'attributes' => [
-                                    'certificateNumber' => 'CPC001',
-                                    'certificateIssueDate' => '2015-06-01',
-                                    'certificateIssueCountry' => 'UK',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
-
-        $xmlBuilder->setData($xmlData);
-        $xmlString = $xmlBuilder->buildTemplate();
+        $transportManager = $this->buildCgrMocks();
+        $xmlString = $sut->create($transportManager);
 
         $this->assertXmlValidatesAgainstXsd($xmlString, self::XSD_DIR . 'CheckGoodRepute_Request.xsd');
+    }
+
+    private function buildMsiMocks(): CasesEntity
+    {
+        $penalty1 = m::mock(SiPenaltyEntity::class)->makePartial();
+        $penalty1->expects('getSiPenaltyType->getId')->andReturn(101);
+        $penalty1->expects('getStartDate')->andReturnNull();
+        $penalty1->expects('getEndDate')->andReturnNull();
+        $penalty1->expects('getImposed')->andReturn('N');
+        $penalty1->expects('getReasonNotImposed')->andReturn('Further sanction not required');
+        $penalty1->expects('getSiPenaltyErruRequested->getPenaltyRequestedIdentifier')->andReturn(1);
+
+        $penalty2 = m::mock(SiPenaltyEntity::class);
+        $penalty2->expects('getSiPenaltyType->getId')->andReturn(301);
+        $penalty2->expects('getStartDate')->andReturn('2024-02-01');
+        $penalty2->expects('getEndDate')->andReturn('2024-08-01');
+        $penalty2->expects('getImposed')->andReturn('Y');
+        $penalty2->expects('getSiPenaltyErruRequested->getPenaltyRequestedIdentifier')->andReturn(2);
+
+        $appliedPenalties = new PersistentCollection(
+            m::mock(EntityManagerInterface::class),
+            SiPenaltyEntity::class,
+            new ArrayCollection([$penalty1, $penalty2])
+        );
+
+        $si = m::mock(SiEntity::class);
+        $si->expects('getAppliedPenalties')->andReturn($appliedPenalties);
+
+        $contactDetails = m::mock(ContactDetails::class);
+        $contactDetails->expects('getAddress->toArray')->andReturn([
+            'addressLine1' => '123 Test Street',
+            'postcode' => 'LS1 1AA',
+            'town' => 'Leeds',
+        ]);
+
+        $licence = m::mock(Licence::class);
+        $licence->expects('getContactAddress')->andReturn($contactDetails);
+
+        $erruRequest = m::mock(ErruRequestEntity::class);
+        $erruRequest->expects('getWorkflowId')->andReturn('e933f62c-ceae-4833-b022-c4f69e2211ef');
+        $erruRequest->expects('getNotificationNumber')->andReturn('0ffefb6b-6344-4a60-9a53-4381c32f');
+        $erruRequest->expects('getOriginatingAuthority')->andReturn('Driver and Vehicle Agency');
+        $erruRequest->expects('getTransportUndertakingName')->andReturn('Test Transport Ltd');
+        $erruRequest->expects('getCommunityLicenceNumber')->andReturn('UKGB/OB1234567/00001');
+        $erruRequest->expects('getTotAuthVehicles')->andReturn(10);
+        $erruRequest->expects('getCommunityLicenceStatus->getDescription')->andReturn('Active');
+
+        $cases = m::mock(CasesEntity::class);
+        $cases->expects('canSendMsiResponse')->andReturnTrue();
+        $cases->expects('getLicence')->andReturn($licence);
+        $cases->expects('getErruRequest')->andReturn($erruRequest);
+        $cases->expects('getSeriousInfringements')->andReturn(new ArrayCollection([$si]));
+
+        return $cases;
+    }
+
+    private function buildCgrMocks(): TransportManager
+    {
+        $person = m::mock(\Dvsa\Olcs\Api\Entity\Person\Person::class);
+        $person->expects('getFamilyName')->andReturn('Smith');
+        $person->expects('getForename')->andReturn('John');
+        $person->expects('getBirthDate')->andReturn('1980-05-15');
+        $person->expects('getBirthPlace')->andReturn('London');
+
+        $qualification = m::mock(\Dvsa\Olcs\Api\Entity\Tm\TmQualification::class);
+        $qualification->expects('getCountryCode->getId')->andReturn('GB');
+        $qualification->expects('getSerialNo')->andReturn('CPC001');
+        $qualification->expects('getIssuedDate')->andReturn('2015-06-01');
+
+        $qualifications = new ArrayCollection([$qualification]);
+
+        $homeCd = m::mock(\Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class);
+        $homeCd->expects('getPerson')->andReturn($person);
+
+        $tm = m::mock(TransportManager::class);
+        $tm->expects('hasReputeCheckAddress')->andReturnTrue();
+        $tm->expects('getMostRecentQualification')->andReturn($qualifications);
+        $tm->expects('getHomeCd')->andReturn($homeCd);
+
+        return $tm;
     }
 
     private function assertXmlValidatesAgainstXsd(string $xml, string $xsdPath): void

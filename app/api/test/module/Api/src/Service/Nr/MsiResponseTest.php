@@ -110,8 +110,8 @@ class MsiResponseTest extends MockeryTestCase
     ): void {
         $siPenaltyTypeId1 = 101;
         $siPenaltyTypeId2 = 102;
-        $penaltyImposedIdentifier1 = 888;
-        $penaltyImposedIdentifier2 = 999;
+        $penaltyRequestedIdentifier1 = 888;
+        $penaltyRequestedIdentifier2 = 999;
         $reasonNotImposed = 'reason not imposed';
         $notificationNumber = 214124;
         $erruOriginatingAuthority = 'originating authority';
@@ -132,7 +132,7 @@ class MsiResponseTest extends MockeryTestCase
         $penalty1->expects('getReasonNotImposed')->withNoArgs()->andReturn($reasonNotImposed);
         $penalty1->expects('getSiPenaltyErruRequested->getPenaltyRequestedIdentifier')
             ->withNoArgs()
-            ->andReturn($penaltyImposedIdentifier1);
+            ->andReturn($penaltyRequestedIdentifier1);
 
         $penalty2 = m::mock(SiPenaltyEntity::class);
         $penalty2->expects('getSiPenaltyType->getId')->withNoArgs()->andReturn($siPenaltyTypeId2);
@@ -142,7 +142,7 @@ class MsiResponseTest extends MockeryTestCase
         $penalty2->shouldReceive('getReasonNotImposed')->never();
         $penalty2->expects('getSiPenaltyErruRequested->getPenaltyRequestedIdentifier')
             ->withNoArgs()
-            ->andReturn($penaltyImposedIdentifier2);
+            ->andReturn($penaltyRequestedIdentifier2);
 
         $appliedPenalties = new PersistentCollection(
             m::mock(EntityManagerInterface::class),
@@ -227,7 +227,7 @@ class MsiResponseTest extends MockeryTestCase
                             'attributes' => [
                                 'authorityImposingPenalty' => $authority,
                                 'penaltyTypeImposed' => $siPenaltyTypeId1,
-                                'penaltyRequestedIdentifier' => $penaltyImposedIdentifier1,
+                                'penaltyRequestedIdentifier' => $penaltyRequestedIdentifier1,
                                 'isImposed' => 'false',
                                 'reason' => $reasonNotImposed,
                             ]
@@ -237,7 +237,7 @@ class MsiResponseTest extends MockeryTestCase
                             'attributes' => [
                                 'authorityImposingPenalty' => $authority,
                                 'penaltyTypeImposed' => $siPenaltyTypeId2,
-                                'penaltyRequestedIdentifier' => $penaltyImposedIdentifier2,
+                                'penaltyRequestedIdentifier' => $penaltyRequestedIdentifier2,
                                 'isImposed' => 'true',
                                 'startDate' => $startDate,
                                 'endDate' => $endDate,
