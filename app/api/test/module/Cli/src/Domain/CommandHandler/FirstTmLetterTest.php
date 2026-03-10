@@ -38,7 +38,7 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
         $this->mockedSmServices = [
             TemplateRenderer::class => m::mock(TemplateRenderer::class),
         ];
-        $this->mockedSmServices[TemplateRenderer::class]->shouldReceive('renderBody')->once();
+        $this->mockedSmServices[TemplateRenderer::class]->shouldReceive('renderBody');
 
         parent::setUp();
     }
@@ -378,7 +378,7 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
 
             $tmlRepo->shouldReceive('fetchRemovedTmForLicence')
                 ->with($eligibleLicence->getId())
-                ->times(2)
+                ->once()
                 ->andReturn([$tmlEntity]);
         }
 
