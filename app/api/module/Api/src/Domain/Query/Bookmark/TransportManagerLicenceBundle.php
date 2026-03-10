@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Domain\Query\Bookmark;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;

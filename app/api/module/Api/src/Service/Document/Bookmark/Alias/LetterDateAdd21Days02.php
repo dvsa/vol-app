@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Service\Document\Bookmark\Alias;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\LetterDateAdd21Days;

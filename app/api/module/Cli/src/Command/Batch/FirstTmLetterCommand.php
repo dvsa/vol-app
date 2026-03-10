@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Cli\Command\Batch;
 
 use Dvsa\Olcs\Cli\Domain\Command\FirstTmLetter;
