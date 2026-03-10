@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 
 class TwentyoneDaysFrom28DayDeadlineTMTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new TwentyoneDaysFrom28DayDeadlineTM();
 
@@ -18,7 +18,7 @@ class TwentyoneDaysFrom28DayDeadlineTMTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(QueryInterface::class, $query);
     }
 
-    public function testRenderReturnsNullWhenDeletedDateMissing()
+    public function testRenderReturnsNullWhenDeletedDateMissing(): void
     {
         $bookmark = new TwentyoneDaysFrom28DayDeadlineTM();
         $bookmark->setData([]);
@@ -26,7 +26,7 @@ class TwentyoneDaysFrom28DayDeadlineTMTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($bookmark->render());
     }
 
-    public function testRenderReturnsNullWhenDeletedDateNull()
+    public function testRenderReturnsNullWhenDeletedDateNull(): void
     {
         $bookmark = new TwentyoneDaysFrom28DayDeadlineTM();
         $bookmark->setData(['deletedDate' => null]);
@@ -34,7 +34,7 @@ class TwentyoneDaysFrom28DayDeadlineTMTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($bookmark->render());
     }
 
-    public function testRenderReturnsNullWhenDeletedDateEmptyString()
+    public function testRenderReturnsNullWhenDeletedDateEmptyString(): void
     {
         $bookmark = new TwentyoneDaysFrom28DayDeadlineTM();
         $bookmark->setData(['deletedDate' => '']);
@@ -42,7 +42,7 @@ class TwentyoneDaysFrom28DayDeadlineTMTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($bookmark->render());
     }
 
-    public function testRenderWhenDeletedDateIsStringAdds49Days()
+    public function testRenderWhenDeletedDateIsStringAdds49Days(): void
     {
         // 2026-03-04 + 49 days = 2026-04-22
         $bookmark = new TwentyoneDaysFrom28DayDeadlineTM();
@@ -53,7 +53,7 @@ class TwentyoneDaysFrom28DayDeadlineTMTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('22/04/2026', $bookmark->render());
     }
 
-    public function testRenderWhenDeletedDateIsDateTimeAdds49Days()
+    public function testRenderWhenDeletedDateIsDateTimeAdds49Days(): void
     {
         // 2026-03-04 + 49 days = 2026-04-22
         $bookmark = new TwentyoneDaysFrom28DayDeadlineTM();

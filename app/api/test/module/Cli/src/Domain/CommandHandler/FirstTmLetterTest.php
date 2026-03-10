@@ -19,6 +19,7 @@ use Dvsa\Olcs\Email\Domain\Command\SendEmail;
 use Dvsa\Olcs\Email\Service\TemplateRenderer;
 use Dvsa\Olcs\Transfer\Command\Task\CreateTask;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Mockery as m;
 
 class FirstTmLetterTest extends AbstractCommandHandlerTestCase
@@ -37,12 +38,12 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
         $this->mockedSmServices = [
             TemplateRenderer::class => m::mock(TemplateRenderer::class),
         ];
-        $this->mockedSmServices[TemplateRenderer::class]->shouldReceive('renderBody');
+        $this->mockedSmServices[TemplateRenderer::class]->shouldReceive('renderBody')->once();
 
         parent::setUp();
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand(): array
     {
         $sideEffectResults = [
             'GenerateAndStore' => [
@@ -70,18 +71,18 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
 
         return [
             'no_licences' => [
-                'data' => [
+                'dataProvider' => [
                     'licence' => [],
                     'sideEffectResults' => $sideEffectResults,
                 ],
-                'expect' => [
+                'expectedResult' => [
                     'id' => [],
                     'messages' => [],
                 ],
             ],
 
             'licence_with_removed_tm_no_correspondence_cd' => [
-                'data' => [
+                'dataProvider' => [
                     'licence' => [
                         'id' => 1,
                         'licNo' => 'AB123',
@@ -97,7 +98,7 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
                     'user' => [],
                     'sideEffectResults' => $sideEffectResults,
                 ],
-                'expect' => [
+                'expectedResult' => [
                     'id' => [
                         'assignedToUser' => 111,
                         'document' => 123,
@@ -107,7 +108,7 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
             ],
 
             'licence_with_removed_tm_correspondence_cd_email_null' => [
-                'data' => [
+                'dataProvider' => [
                     'licence' => [
                         'id' => 1,
                         'licNo' => 'AB123',
@@ -125,7 +126,7 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
                     'user' => [],
                     'sideEffectResults' => $sideEffectResults,
                 ],
-                'expect' => [
+                'expectedResult' => [
                     'id' => [
                         'assignedToUser' => 111,
                         'document' => 123,
@@ -135,7 +136,7 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
             ],
 
             'licence_with_removed_tm_email_not_registered_user' => [
-                'data' => [
+                'dataProvider' => [
                     'licence' => [
                         'id' => 1,
                         'licNo' => 'AB123',
@@ -155,7 +156,7 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
                     ],
                     'sideEffectResults' => $sideEffectResults,
                 ],
-                'expect' => [
+                'expectedResult' => [
                     'id' => [
                         'assignedToUser' => 111,
                         'document' => 123,
@@ -165,7 +166,7 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
             ],
 
             'licence_with_removed_tm_email_registered_user' => [
-                'data' => [
+                'dataProvider' => [
                     'licence' => [
                         'id' => 1,
                         'licNo' => 'AB123',
@@ -185,7 +186,7 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
                     ],
                     'sideEffectResults' => $sideEffectResults,
                 ],
-                'expect' => [
+                'expectedResult' => [
                     'id' => [
                         'assignedToUser' => 111,
                         'document' => 123,
@@ -195,7 +196,7 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
             ],
 
             'licence_ni_template_path' => [
-                'data' => [
+                'dataProvider' => [
                     'licence' => [
                         'id' => 1,
                         'licNo' => 'AB123',
@@ -211,7 +212,7 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
                     'user' => [],
                     'sideEffectResults' => $sideEffectResults,
                 ],
-                'expect' => [
+                'expectedResult' => [
                     'id' => [
                         'assignedToUser' => 111,
                         'document' => 123,
@@ -221,7 +222,7 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
             ],
 
             'licence_psv_template_path' => [
-                'data' => [
+                'dataProvider' => [
                     'licence' => [
                         'id' => 1,
                         'licNo' => 'AB123',
@@ -237,7 +238,7 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
                     'user' => [],
                     'sideEffectResults' => $sideEffectResults,
                 ],
-                'expect' => [
+                'expectedResult' => [
                     'id' => [
                         'assignedToUser' => 111,
                         'document' => 123,
@@ -248,10 +249,8 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
-    public function testHandleCommand($dataProvider, $expectedResult)
+    #[DataProvider('dpHandleCommand')]
+    public function testHandleCommand(mixed $dataProvider, mixed $expectedResult): void
     {
         // SystemParameter selection differs for NI/GB
         if (!empty($dataProvider['licence']) && array_key_exists('isNi', $dataProvider['licence'])) {
@@ -278,7 +277,7 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
         $eligibleLicences = $licence === null ? [] : [$licence];
 
         // NOTE: FirstTmLetter uses LETTER_FIRST
-        $licenceRepo->shouldReceive('fetchForLastTmAutoLetter')->andReturn($eligibleLicences);
+        $licenceRepo->shouldReceive('fetchForLastTmAutoLetter')->once()->andReturn($eligibleLicences);
 
         if (!empty($eligibleLicences)) {
             $this->caseLicenceWithRemovedTmTest($dataProvider, $eligibleLicences);
@@ -379,9 +378,7 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
 
             $tmlRepo->shouldReceive('fetchRemovedTmForLicence')
                 ->with($eligibleLicence->getId())
-                ->andReturn([$tmlEntity]);
-            $tmlRepo->shouldReceive('fetchRemovedTmForLicence')
-                ->with($eligibleLicence->getId())
+                ->times(2)
                 ->andReturn([$tmlEntity]);
         }
 

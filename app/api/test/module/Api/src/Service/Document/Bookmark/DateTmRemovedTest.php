@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 
 class DateTmRemovedTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new DateTmRemoved();
 
@@ -18,7 +18,7 @@ class DateTmRemovedTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(QueryInterface::class, $query);
     }
 
-    public function testRenderWhenDateIsString()
+    public function testRenderWhenDateIsString(): void
     {
         $bookmark = new DateTmRemoved();
         $bookmark->setData([
@@ -28,7 +28,7 @@ class DateTmRemovedTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('04/03/2026', $bookmark->render());
     }
 
-    public function testRenderWhenDateIsDateTime()
+    public function testRenderWhenDateIsDateTime(): void
     {
         $bookmark = new DateTmRemoved();
         $bookmark->setData([
@@ -38,7 +38,7 @@ class DateTmRemovedTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('04/03/2026', $bookmark->render());
     }
 
-    public function testRenderWhenDateIsNull()
+    public function testRenderWhenDateIsNull(): void
     {
         $bookmark = new DateTmRemoved();
 
@@ -49,7 +49,7 @@ class DateTmRemovedTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($bookmark->render());
     }
 
-    public function testRenderWhenDateMissing()
+    public function testRenderWhenDateMissing(): void
     {
         $bookmark = new DateTmRemoved();
 

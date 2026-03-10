@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 
 class TwentyEightDaysFromTmRemovalTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new TwentyEightDaysFromTmRemoval();
 
@@ -18,7 +18,7 @@ class TwentyEightDaysFromTmRemovalTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(QueryInterface::class, $query);
     }
 
-    public function testRenderReturnsNullWhenDeletedDateMissing()
+    public function testRenderReturnsNullWhenDeletedDateMissing(): void
     {
         $bookmark = new TwentyEightDaysFromTmRemoval();
         $bookmark->setData([]);
@@ -26,7 +26,7 @@ class TwentyEightDaysFromTmRemovalTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($bookmark->render());
     }
 
-    public function testRenderReturnsNullWhenDeletedDateEmptyString()
+    public function testRenderReturnsNullWhenDeletedDateEmptyString(): void
     {
         $bookmark = new TwentyEightDaysFromTmRemoval();
         $bookmark->setData(['deletedDate' => '']);
@@ -34,7 +34,7 @@ class TwentyEightDaysFromTmRemovalTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($bookmark->render());
     }
 
-    public function testRenderWhenDeletedDateIsStringAdds28Days()
+    public function testRenderWhenDeletedDateIsStringAdds28Days(): void
     {
         $bookmark = new TwentyEightDaysFromTmRemoval();
         $bookmark->setData([
@@ -44,7 +44,7 @@ class TwentyEightDaysFromTmRemovalTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('01/04/2026', $bookmark->render());
     }
 
-    public function testRenderWhenDeletedDateIsDateTimeAdds28Days()
+    public function testRenderWhenDeletedDateIsDateTimeAdds28Days(): void
     {
         $bookmark = new TwentyEightDaysFromTmRemoval();
         $bookmark->setData([
