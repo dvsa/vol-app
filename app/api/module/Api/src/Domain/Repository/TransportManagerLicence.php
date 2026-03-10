@@ -37,7 +37,7 @@ class TransportManagerLicence extends AbstractRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function fetchRemovedTmForLicence(int $licenceId, bool $isSecondLetter = false) : array
+    public function fetchRemovedTmForLicence(int $licenceId, bool $isSecondLetter = false): array
     {
         $this->disableSoftDeleteable(
             [
