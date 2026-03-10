@@ -36,8 +36,8 @@ class TransportManagerLicence extends AbstractTransportManagerLicence implements
 
     public const DESC_TM_REMOVED = 'Transport manager removed';
     public const DESC_TM_REMOVED_LAST = 'Last transport manager removed';
-    public const DESC_TM_REMOVED_LAST_RESPONSE = "Response received about last TM?";
-    public const DESC_TM_REMOVED_LAST_RESPONSE_PTR = "PTR - Response received about last TM?";
+    public const DESC_TM_REMOVED_LAST_RESPONSE = 'Response received about last TM?';
+    public const DESC_TM_REMOVED_LAST_RESPONSE_PTR = 'PTR - Response received about last TM?';
 
     /**
      * TransportManagerLicence constructor.

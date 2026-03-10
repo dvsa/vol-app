@@ -24,7 +24,7 @@ class TwentyEightDaysFromTmRemoval extends DynamicBookmark
     {
         if (empty($this->data['deletedDate'])) {
             return null;
-        } 
+        }
 
         if (is_string($this->data['deletedDate'])) {
             $dateTime = new \DateTime($this->data['deletedDate']);

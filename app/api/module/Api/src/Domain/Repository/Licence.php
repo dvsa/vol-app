@@ -647,8 +647,8 @@ class Licence extends AbstractRepository
     {
         if (!in_array($letterType, [self::LETTER_FIRST, self::LETTER_SECOND], true)) {
             throw new \InvalidArgumentException(sprintf('Invalid letterType: %s', (string) $letterType));
-        } 
-          
+        }
+
         $this->disableSoftDeleteable(
             [
                 TMLicenceEntity::class
@@ -706,7 +706,7 @@ class Licence extends AbstractRepository
            //  Email has not been sent already for that TM
             $qb->andWhere(
                 $qb->expr()->isNull('tml.lastTmFirstEmailDate')
-            ); 
+            );
         }
 
         if ($letterType === self::LETTER_SECOND) {

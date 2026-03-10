@@ -15,7 +15,6 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
  */
 class Date1stTmLetterSent extends DynamicBookmark
 {
-    
     public function getQuery(array $data): QueryInterface
     {
         return Qry::create(['id' => $data['transportManagerLicence']]);
@@ -26,7 +25,7 @@ class Date1stTmLetterSent extends DynamicBookmark
         if (empty($this->data['lastTmFirstEmailDate'])) {
             return null;
         }
-        
+
         if (is_string($this->data['lastTmFirstEmailDate'])) {
             $dateTime = new \DateTime($this->data['lastTmFirstEmailDate']);
         } else {

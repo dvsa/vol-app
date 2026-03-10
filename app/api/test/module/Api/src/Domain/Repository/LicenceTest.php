@@ -938,12 +938,12 @@ class LicenceTest extends RepositoryTestCase
         // ---------
         $this->assertStringContainsString('tml.lastTmFirstEmailDate IS NOT NULL', $this->query);
 
-        // latest-deleted subquery 
+        // latest-deleted subquery
         $this->assertStringContainsString('SELECT MAX(t2.deletedDate)', $this->query);
         $this->assertStringContainsString('t2.deletedDate IS NOT NULL', $this->query);
         $this->assertStringContainsString('tml.deletedDate = (', $this->query);
 
-        // 28-day condition 
+        // 28-day condition
         $this->assertStringContainsString('tml.deletedDate <=', $this->query);
     }
 

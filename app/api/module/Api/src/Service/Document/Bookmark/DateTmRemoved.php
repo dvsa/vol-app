@@ -14,8 +14,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
  * @author Teja Vaddala <teja.vaddala@dvsa.gov.uk>
  */
 class DateTmRemoved extends DynamicBookmark
-{
-    
+{ 
     public function getQuery(array $data): QueryInterface
     {
         return Qry::create(['id' => $data['transportManagerLicence']]);

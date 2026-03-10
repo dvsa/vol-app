@@ -75,7 +75,7 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
                 $document = $this->generateDocuments($licence, $removedTm);
                 $removedTm->setLastTmFirstEmailDate(new DateTime());
                 $tmlRepo->save($removedTm);
-            }      
+            }
 
             if (!empty($removedTms)) {
                 $this->sendEmailToOperator($licence);
