@@ -122,7 +122,7 @@ class MsiResponseTest extends MockeryTestCase
         $communityLicenceNumber = 'GBUK/OB1234567/00001';
         $totAuthVehicles = 10;
         $communityLicenceStatus = 'Active';
-        $schemaVersion = '3.4';
+        $schemaVersion = '3.5';
 
         $penalty1 = m::mock(SiPenaltyEntity::class)->makePartial();
         $penalty1->expects('getSiPenaltyType->getId')->withNoArgs()->andReturn($siPenaltyTypeId1);
@@ -227,7 +227,7 @@ class MsiResponseTest extends MockeryTestCase
                             'attributes' => [
                                 'authorityImposingPenalty' => $authority,
                                 'penaltyTypeImposed' => $siPenaltyTypeId1,
-                                'penaltyImposedIdentifier' => $penaltyImposedIdentifier1,
+                                'penaltyRequestedIdentifier' => $penaltyImposedIdentifier1,
                                 'isImposed' => 'false',
                                 'reason' => $reasonNotImposed,
                             ]
@@ -237,7 +237,7 @@ class MsiResponseTest extends MockeryTestCase
                             'attributes' => [
                                 'authorityImposingPenalty' => $authority,
                                 'penaltyTypeImposed' => $siPenaltyTypeId2,
-                                'penaltyImposedIdentifier' => $penaltyImposedIdentifier2,
+                                'penaltyRequestedIdentifier' => $penaltyImposedIdentifier2,
                                 'isImposed' => 'true',
                                 'startDate' => $startDate,
                                 'endDate' => $endDate,

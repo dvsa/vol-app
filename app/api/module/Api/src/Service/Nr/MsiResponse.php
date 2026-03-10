@@ -124,7 +124,7 @@ class MsiResponse extends AbstractXmlRequest
                 $newPenalty = [];
                 $newPenalty['authorityImposingPenalty'] = $this->authority;
                 $newPenalty['penaltyTypeImposed'] = $penalty->getSiPenaltyType()->getId();
-                $newPenalty['penaltyImposedIdentifier'] = $penalty->getSiPenaltyErruRequested()->getPenaltyRequestedIdentifier();
+                $newPenalty['penaltyRequestedIdentifier'] = $penalty->getSiPenaltyErruRequested()->getPenaltyRequestedIdentifier();
 
                 if ($penalty->getImposed() === 'N') {
                     $newPenalty['isImposed'] = 'false';

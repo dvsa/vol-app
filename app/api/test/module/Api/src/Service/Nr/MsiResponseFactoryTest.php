@@ -19,7 +19,7 @@ class MsiResponseFactoryTest extends TestCase
             'nr' => [
                 'compliance_episode' => [
                     'xmlNs' => 'xml ns',
-                    'erruVersion' => "3.4",
+                    'erruVersion' => "3.5",
                 ],
             ],
         ];
