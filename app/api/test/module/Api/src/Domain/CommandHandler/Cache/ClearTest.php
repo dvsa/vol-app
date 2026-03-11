@@ -90,6 +90,17 @@ class ClearTest extends AbstractCommandHandlerTestCase
         $this->assertEquals([], $result->getMessages());
     }
 
+    public function testHandleCommandWithDoctrineId(): void
+    {
+        $command = Cmd::create(['cacheIds' => [CacheEncryption::DOCTRINE_IDENTIFIER]]);
+
+        $this->mockedSmServices[CacheEncryption::class]->expects('clearDoctrineItems')->andReturnTrue();
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertEquals(['Doctrine caches cleared'], $result->getMessages());
+    }
+
     public function testHandleCommandWithMixedCacheIds(): void
     {
         $command = Cmd::create(['cacheIds' => [CacheEncryption::CQRS_IDENTIFIER, CacheEncryption::TRANSLATION_KEY_IDENTIFIER]]);

@@ -28,6 +28,9 @@ class Clear extends AbstractCommandHandler implements CacheAwareInterface
                 if ($cacheId === CacheEncryption::CQRS_IDENTIFIER) {
                     $this->cacheService->clearCqrsItems();
                     $this->result->addMessage('CQRS caches cleared');
+                } elseif ($cacheId === CacheEncryption::DOCTRINE_IDENTIFIER) {
+                    $this->cacheService->clearDoctrineItems();
+                    $this->result->addMessage('Doctrine caches cleared');
                 } elseif (isset(CacheEncryption::CUSTOM_CACHE_TYPE[$cacheId])) {
                     $this->cacheService->clearItemsByType($cacheId);
                     $this->result->addMessage(sprintf('Cache type cleared: %s', $cacheId));

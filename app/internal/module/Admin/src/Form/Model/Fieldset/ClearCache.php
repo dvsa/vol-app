@@ -31,6 +31,7 @@ class ClearCache
      *         "user_account": "User account data",
      *         "storage": "Generic storage",
      *         "secretsmanager": "Secrets manager",
+     *         "doctrine": "Doctrine ORM caches",
      *     },
      * })
      */
