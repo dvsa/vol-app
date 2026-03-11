@@ -78,10 +78,10 @@ done
 #global variable to capture output
 aws_cmd_output=
 aws_cmd() {
-  cmd=$1
-  max_retries=$2
-  sleep_between=$3
-  sensitive=$4
+  local cmd="${1:?missing cmd}"
+  local max_retries="${2:-}"
+  local sleep_between="${3:-}"
+  local sensitive="${4:-}"
 
   aws_cmd_output=
   if [ -z "$max_retries" ]; then
