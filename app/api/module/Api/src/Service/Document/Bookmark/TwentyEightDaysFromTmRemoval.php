@@ -15,11 +15,13 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
  */
 class TwentyEightDaysFromTmRemoval extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data): QueryInterface
     {
         return Qry::create(['id' => $data['transportManagerLicence']]);
     }
 
+    #[\Override]
     public function render(): ?string
     {
         if (empty($this->data['deletedDate'])) {

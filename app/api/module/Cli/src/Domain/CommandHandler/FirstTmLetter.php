@@ -58,6 +58,7 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      * @throws \Exception
      */
+     #[\Override]
     public function handleCommand(CommandInterface $command): \Dvsa\Olcs\Api\Domain\Command\Result
     {
         /** @var Licence $licenceRepo */

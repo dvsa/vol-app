@@ -12,11 +12,13 @@ class FirstTmLetterCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:first-tm-letter';
 
+    #[\Override]
     protected function configure(): void
     {
         $this->setDescription('Send first TM letters.');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

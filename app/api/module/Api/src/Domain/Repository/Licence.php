@@ -639,9 +639,6 @@ class Licence extends AbstractRepository
 
     /**
      * Fetch licences eligible for Last TM Email and Letter processing.
-     *
-     * @param int $letterType One of self::LETTER_FIRST or self::LETTER_SECOND
-     * @return LicenceEntity[]
      */
     public function fetchForLastTmAutoLetter(int $letterType): array
     {
