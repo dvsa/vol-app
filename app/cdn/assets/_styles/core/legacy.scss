@@ -18,24 +18,27 @@ $link-hover-colour: $govuk-link-hover-colour;
 $focus-colour: $govuk-focus-colour;
 $text-colour: $govuk-text-colour;
 $button-colour: #00823b;
-$outline: govuk-colour('yellow');
+$outline: govuk-colour("yellow");
 
-$orange: govuk-colour('orange');
-$yellow: govuk-colour('yellow');
+$orange: govuk-colour("orange");
+$yellow: govuk-colour("yellow");
 $yellow-50: #ffdf94;
 $yellow-25: #fff2d3;
 $black: govuk-colour("black");
 $department-for-transport: #006c56;
-$grey-1: govuk-colour("dark-grey");
-$grey-2: govuk-colour("mid-grey");
-$grey-3: govuk-colour("light-grey");
-$grey-4: govuk-colour("light-grey"); //only 3 greys in newer GDS
+// grey-1/2/3/4 use the govuk-frontend v6 suggested replacements for the removed
+// dark-grey/mid-grey/light-grey palette names — see CHANGELOG.md "Changes to colours
+// in the web palette": https://github.com/alphagov/govuk-frontend/blob/v6.0.0/CHANGELOG.md
+$grey-1: govuk-colour("black", $variant: "tint-25"); // was dark-grey
+$grey-2: govuk-colour("black", $variant: "tint-80"); // was mid-grey
+$grey-3: govuk-colour("black", $variant: "tint-95"); // was light-grey
+$grey-4: govuk-colour("black", $variant: "tint-95"); // was light-grey
 $white: govuk-colour("white");
 $red: govuk-colour("red");
 $mellow-red: #df3034;
 $red-25: #efcfd1;
 $red-50: #d9888c;
-$pink: govuk-colour("pink");
+$pink: govuk-colour("magenta"); // "pink" renamed to "magenta" in govuk-frontend v6
 $green: govuk-colour("green");
 $error-colour: govuk-colour("red");
 $govuk-blue: govuk-colour("blue");
@@ -47,31 +50,31 @@ $NTA-Light: $govuk-font-family;
 $NTA-Light-Tabular: $govuk-font-family;
 
 @mixin media($size: false, $max-width: false, $min-width: false, $ignore-for-ie: false) {
-    @if $size == desktop {
-      @media (min-width: 769px){
-        @content;
-      }
-    } @else if $size == tablet {
-      @media (min-width: 641px){
-        @content;
-      }
-    } @else if $size == mobile {
-      @media (max-width: 640px){
-        @content;
-      }
-    } @else if $max-width != false {
-      @media (max-width: $max-width){
-        @content;
-      }
-    } @else if $min-width != false {
-      @media (min-width: $min-width){
-        @content;
-      }
-    } @else {
-      @media (min-width: $size){
-        @content
-      }
+  @if $size == desktop {
+    @media (min-width: 769px) {
+      @content;
     }
+  } @else if $size == tablet {
+    @media (min-width: 641px) {
+      @content;
+    }
+  } @else if $size == mobile {
+    @media (max-width: 640px) {
+      @content;
+    }
+  } @else if $max-width != false {
+    @media (max-width: $max-width) {
+      @content;
+    }
+  } @else if $min-width != false {
+    @media (min-width: $min-width) {
+      @content;
+    }
+  } @else {
+    @media (min-width: $size) {
+      @content;
+    }
+  }
 }
 
 %site-width-container {
@@ -83,14 +86,18 @@ $NTA-Light-Tabular: $govuk-font-family;
     margin: 0 $gutter;
   }
 
-  @include media($min-width: ($site-width + $gutter * 2)) {
+  @include media(
+    $min-width: (
+      $site-width + $gutter * 2,
+    )
+  ) {
     margin: 0 auto;
   }
 }
 
 @mixin opacity($trans) {
   zoom: 1;
-  filter: unquote('alpha(opacity=' + ($trans * 100) + ')'); // IE6 to IE8
+  filter: unquote("alpha(opacity=" + ($trans * 100) + ")"); // IE6 to IE8
   opacity: $trans;
 }
 

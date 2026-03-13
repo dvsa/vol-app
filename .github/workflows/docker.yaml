@@ -132,6 +132,7 @@ jobs:
       - name: Push Docker image
         if: ${{ inputs.push }}
         uses: docker/build-push-action@v6
+        timeout-minutes: 15
         with:
           context: ${{ env.WORKING_DIR }}
           target: production

@@ -75,6 +75,8 @@ class Summary extends AbstractQueryHandler
             $application,
             $bundle,
             [
+                'wasAutoGranted' => $application->getWasAutoGranted(),
+                'autoGrantChanges' => $application->getAutoGrantChangeSummary(),
                 'actions' => $actions,
                 'reference' => $this->getLatestPaymentReference($application->getId()),
                 'outstandingFee' => $application->getLatestOutstandingApplicationFee() !== null,
