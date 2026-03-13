@@ -364,6 +364,12 @@ return [
             ],
             'service_name' => 'INR',
         ],
+        'compliance_episode' => [
+            'erruVersion' => '%erru_version%',
+        ],
+        'cgr' => [
+            'erruVersion' => '%erru_version%',
+        ],
     ],
 
     // CUPS print server
