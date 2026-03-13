@@ -608,6 +608,12 @@ module "service" {
         commands = ["/mnt/data/scripts/ni_dvacompliance.sh"],
         type     = "scripts"
       },
+      {
+        name     = "first-tm-letter",
+        commands = ["batch:first-tm-letter", "-v"],
+        timeout  = 43200,
+        schedule = ["cron(30 13 * * ? *)"],
+      },
     ]
   }
 }

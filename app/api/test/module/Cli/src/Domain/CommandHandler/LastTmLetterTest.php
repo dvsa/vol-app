@@ -473,10 +473,15 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
         $tmlRepo = $this->repoMap['TransportManagerLicence'];
         foreach ($eligibleLicences as $eligibleLicence) {
             $tmlEntity = m::mock(TransportManagerLicence::class);
+            $tmlEntity->shouldReceive('getId')->andReturn(5);
             $tmlEntity->shouldReceive('setLastTmLetterDate');
+            $tm = m::mock(\Dvsa\Olcs\Api\Entity\Tm\TransportManager::class);
+            $tm->shouldReceive('getId')->andReturn(1);
+
+            $tmlEntity->shouldReceive('getTransportManager')->andReturn($tm);
             $tmlRepo
                 ->shouldReceive('fetchRemovedTmForLicence')
-                ->with($eligibleLicence->getId())
+                ->with($eligibleLicence->getId(), true)
                 ->andReturn([$tmlEntity]);
             $tmlRepo->shouldReceive('save');
         }
