@@ -1,5 +1,29 @@
 # Changelog
 
+## [7.1.0](https://github.com/dvsa/vol-app/compare/v7.0.1...v7.1.0) (2026-03-13)
+
+
+### Features
+
+* bring updated review declaration into vol-app VOL-6979 ([#1341](https://github.com/dvsa/vol-app/issues/1341)) ([6e078fd](https://github.com/dvsa/vol-app/commit/6e078fde07470b75421520d7daffa5eb76a6f2ca))
+* upgrade liquibase to 5.0.2, mysql connector to 9.6 VOL-6940 ([#1340](https://github.com/dvsa/vol-app/issues/1340)) ([0d0c939](https://github.com/dvsa/vol-app/commit/0d0c93967b3c645605998f366498a3d28323e2bc))
+* upgrade to govuk frontend v6 VOL-6948 ([#1326](https://github.com/dvsa/vol-app/issues/1326)) ([40b0ca2](https://github.com/dvsa/vol-app/commit/40b0ca2ce74130909d85cf3a7fe4216766c880fd))
+* vol 5961 remove operating centres ([#1304](https://github.com/dvsa/vol-app/issues/1304)) ([c06114f](https://github.com/dvsa/vol-app/commit/c06114f13af5a0bdd5599d1b1cc8cdf782377b27))
+* vol 6562 remove continuation reminder letter queue job ([#1337](https://github.com/dvsa/vol-app/issues/1337)) ([2c696a1](https://github.com/dvsa/vol-app/commit/2c696a1b34f5f7e5525424c856e49df8d25b200b))
+* vol 6902 fix ni compliance batch ([#1334](https://github.com/dvsa/vol-app/issues/1334)) ([3118999](https://github.com/dvsa/vol-app/commit/311899934e594036d7cbee4ca52158200d85e490))
+* vol 6979 update declaration ([#1339](https://github.com/dvsa/vol-app/issues/1339)) ([0123e5a](https://github.com/dvsa/vol-app/commit/0123e5aa575138f898aa98e83175779f6f1cbcca))
+* vol 6979 update declaration ([#1351](https://github.com/dvsa/vol-app/issues/1351)) ([dd46b22](https://github.com/dvsa/vol-app/commit/dd46b228a9f346b0aacc7198f2211619dd17f95b))
+* vol6844 update last TM process ([#1338](https://github.com/dvsa/vol-app/issues/1338)) ([d45d9e6](https://github.com/dvsa/vol-app/commit/d45d9e66f39c9019c936077694fb6d4a4373108c))
+
+
+### Bug Fixes
+
+* add ERRU 3.5 support with SSM-driven version and XSD validation ([#1348](https://github.com/dvsa/vol-app/issues/1348)) ([b4b000b](https://github.com/dvsa/vol-app/commit/b4b000b96b8c21b74d658198bbc65f052c2aaf74))
+* create new tags to rerun cd ([#1344](https://github.com/dvsa/vol-app/issues/1344)) ([0133a1f](https://github.com/dvsa/vol-app/commit/0133a1f5873ee8394e52e54cf65bb85b24f2a2b2))
+* increase timeout and docker image cleanup ([#1346](https://github.com/dvsa/vol-app/issues/1346)) ([8ce3302](https://github.com/dvsa/vol-app/commit/8ce330280d0e503659b58d774427b2cdc496d51c))
+* output JSON array elements in cache-clear workflow container-overrides ([#1335](https://github.com/dvsa/vol-app/issues/1335)) ([3f03a74](https://github.com/dvsa/vol-app/commit/3f03a742e5f626cce0d54fd4d942d96ac45f45de))
+* trigger cd run ([#1347](https://github.com/dvsa/vol-app/issues/1347)) ([d63827a](https://github.com/dvsa/vol-app/commit/d63827a9714e6aed8bc92503674573affcfd54de))
+
 ## [7.0.1](https://github.com/dvsa/vol-app/compare/v7.0.0...v7.0.1) (2026-03-02)
 
 
