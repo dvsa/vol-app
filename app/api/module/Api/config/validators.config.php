@@ -59,5 +59,6 @@ return [
         'canDeleteSurrender' => Validators\CanDeleteSurrender::class,
         'canAccessLicenceForSurrender' => Validators\CanAccessLicenceForSurrender::class,
         'canConfirmSurrender' => Validators\CanConfirmSurrender::class,
+        'isDocumentCreator' => Validators\IsDocumentCreator::class,
     ]
 ];

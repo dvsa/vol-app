@@ -38,4 +38,15 @@ interface DocumentStoreInterface
      * @return mixed
      */
     public function read($path);
+
+    /**
+     * Update (overwrite) an existing file on remote storage
+     *
+     * @param string $path File Path on storage
+     * @param File   $file File
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function update($path, File $file);
 }

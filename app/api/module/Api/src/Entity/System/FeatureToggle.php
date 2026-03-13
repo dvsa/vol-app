@@ -28,6 +28,7 @@ class FeatureToggle extends AbstractFeatureToggle
     public const USE_NEW_ADDRESS_SERVICE = 'use_new_address_service';
     public const TRANSPORT_CONSULTANT_ROLE = 'transport_consultant_role';
     public const LETTERS_DATABASE_DRIVEN = 'letters_database_driven';
+    public const INTERNAL_WEBDAV = 'internal_webdav';
 
     public static function create(/*string*/ $configName, /*string*/ $friendlyName, RefData $status)/*: FeatureToggle */
     {

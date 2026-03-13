@@ -2,6 +2,7 @@
 
 namespace Admin\Controller;
 
+use Common\Auth\Service\RefreshTokenService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -9,6 +10,7 @@ use Psr\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Service\Helper\WebDavJsonWebTokenGenerationService;
+use Olcs\Service\WebDav\WebDavRedisFactory;
 
 class PublicationControllerFactory implements FactoryInterface
 {
@@ -30,12 +32,17 @@ class PublicationControllerFactory implements FactoryInterface
         $webDavJsonWebTokenGenerationService = $container->get(WebDavJsonWebTokenGenerationService::class);
         assert($webDavJsonWebTokenGenerationService instanceof WebDavJsonWebTokenGenerationService);
 
+        $redis = $container->get(WebDavRedisFactory::SERVICE_NAME);
+        $refreshTokenService = $container->get(RefreshTokenService::class);
+
         return new PublicationController(
             $translationHelper,
             $formHelperService,
             $flashMessenger,
             $navigation,
-            $webDavJsonWebTokenGenerationService
+            $webDavJsonWebTokenGenerationService,
+            $redis,
+            $refreshTokenService,
         );
     }
 }

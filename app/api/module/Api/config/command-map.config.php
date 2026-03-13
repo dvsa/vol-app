@@ -491,6 +491,7 @@ return [
     TransferCommand\Document\PrintLetter::class => CommandHandler\Document\PrintLetter::class,
     TransferCommand\Document\PrintLetters::class => CommandHandler\Document\PrintLetters::class,
     Command\Document\RemoveDeletedDocuments::class => CommandHandler\Document\RemoveDeletedDocuments::class,
+    TransferCommand\Document\OverwriteContent::class => CommandHandler\Document\OverwriteContent::class,
 
     // Transfer - DocumentTemplate
     TransferCommand\DocTemplate\Create::class => CommandHandler\DocTemplate\Create::class,

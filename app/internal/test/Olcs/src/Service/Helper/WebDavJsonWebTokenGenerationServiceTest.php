@@ -20,6 +20,7 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
     protected const JWT_PUBLIC_KEY_BASE64 = 'LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUF6SWJZMnJvaHloMUw2STdUcHBZLwowSUpJUU1Md3NLUWtsUjlGWkJ1bm1MWEEyVjRRUGZlUHpsUGd0Z2pDQlVpWUdmdllXdU9KSHF1Ym9YNU5zcXF2CjIwbXpzUHZtbWNVeW1JQ1VyMmNJQkEvaFJ3Sk4xRnFOb1VXT1A1R1EyeEl2VUcyUlp3U3RieDhOMGsvSEpuSmwKUXo3Z1hmbUhBOUdhY2lENHNKVm51KzdrWWZxOE1vU21vcGVVVnI0TUkxdERpQm0wOG82Ym0xYWJaM1JsZlVMdApMNk1wdll1VFdiVDE5YW42ckVaZ1haRGxsdHFKeTR5dzdjME9RVGJOT3ZPNlliNlVhVlRoNmJNdlBPV2lPd1orClN4bTNKN0U5bG55WlYzeVQwWnB5WE03TkZjQmEyVkFHOUtqTjdUdzZaZTNQeUJVaWM1YWNFb2FNZ1gxOFBIdzUKQndJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==';
     protected const JWT_DEFAULT_LIFETIME_1_MINUTE = 60;
     protected const WEBDAV_URI_PATTERN = 'ms-word:ofe|u|https://testhost/documents-dav/%s/olcs/%s';
+    protected const WEBDAV_INTERNAL_URI_PATTERN = 'ms-word:ofe|u|https://testhost/documents-dav/%s/%s';
 
     protected const JWT_SUBJECT = 'user4574';
     protected const JWT_DOCUMENT = '0000000000000_OC00000000X_CoverLetter.rtf';
@@ -37,7 +38,8 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         $this->sut = new WebDavJsonWebTokenGenerationService(
             static::JWT_PRIVATE_KEY_BASE64,
             $defaultLifetimeSeconds,
-            self::WEBDAV_URI_PATTERN
+            self::WEBDAV_URI_PATTERN,
+            self::WEBDAV_INTERNAL_URI_PATTERN
         );
     }
 
@@ -65,7 +67,8 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         $this->sut = new WebDavJsonWebTokenGenerationService(
             $privateKey,
             static::JWT_DEFAULT_LIFETIME_1_MINUTE,
-            self::WEBDAV_URI_PATTERN
+            self::WEBDAV_URI_PATTERN,
+            self::WEBDAV_INTERNAL_URI_PATTERN
         );
     }
 
@@ -90,7 +93,8 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         $this->sut = new WebDavJsonWebTokenGenerationService(
             $privateKey,
             static::JWT_DEFAULT_LIFETIME_1_MINUTE,
-            self::WEBDAV_URI_PATTERN
+            self::WEBDAV_URI_PATTERN,
+            self::WEBDAV_INTERNAL_URI_PATTERN
         );
     }
 
@@ -109,7 +113,8 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         $this->sut = new WebDavJsonWebTokenGenerationService(
             static::JWT_PRIVATE_KEY_BASE64,
             static::JWT_DEFAULT_LIFETIME_1_MINUTE,
-            self::WEBDAV_URI_PATTERN
+            self::WEBDAV_URI_PATTERN,
+            self::WEBDAV_INTERNAL_URI_PATTERN
         );
         $this->assertIsCallable($this->sut->generateToken(...));
     }
@@ -121,7 +126,8 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         $this->sut = new WebDavJsonWebTokenGenerationService(
             static::JWT_PRIVATE_KEY_BASE64,
             static::JWT_DEFAULT_LIFETIME_1_MINUTE,
-            self::WEBDAV_URI_PATTERN
+            self::WEBDAV_URI_PATTERN,
+            self::WEBDAV_INTERNAL_URI_PATTERN
         );
 
         $result = $this->sut->generateToken(static::JWT_SUBJECT, static::JWT_DOCUMENT);
@@ -143,7 +149,8 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         $this->sut = new WebDavJsonWebTokenGenerationService(
             static::JWT_PRIVATE_KEY_TEMP_PATH,
             static::JWT_DEFAULT_LIFETIME_1_MINUTE,
-            self::WEBDAV_URI_PATTERN
+            self::WEBDAV_URI_PATTERN,
+            self::WEBDAV_INTERNAL_URI_PATTERN
         );
 
         $result = $this->sut->generateToken(static::JWT_SUBJECT, static::JWT_DOCUMENT);
@@ -163,7 +170,8 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         $this->sut = new WebDavJsonWebTokenGenerationService(
             static::JWT_PRIVATE_KEY_BASE64,
             static::JWT_DEFAULT_LIFETIME_1_MINUTE,
-            self::WEBDAV_URI_PATTERN
+            self::WEBDAV_URI_PATTERN,
+            self::WEBDAV_INTERNAL_URI_PATTERN
         );
 
         $result = $this->sut->generateToken(static::JWT_SUBJECT, static::JWT_DOCUMENT);
@@ -173,17 +181,65 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         $this->assertObjectHasProperty(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_EXPIRES_AT, $decodedJwt);
     }
 
-    public function testGFetJwtWebDavLink(): void
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function generateTokenIncludesDocumentSizeClaimWhenProvided(): void
     {
         $this->sut = new WebDavJsonWebTokenGenerationService(
             static::JWT_PRIVATE_KEY_BASE64,
             static::JWT_DEFAULT_LIFETIME_1_MINUTE,
-            self::WEBDAV_URI_PATTERN
+            self::WEBDAV_URI_PATTERN,
+            self::WEBDAV_INTERNAL_URI_PATTERN
+        );
+
+        $result = $this->sut->generateToken(static::JWT_SUBJECT, static::JWT_DOCUMENT, null, 'test-jti', 42, 98765);
+        $decodedJwt = JWT::decode($result, new Key(base64_decode((string) static::JWT_PUBLIC_KEY_BASE64, true), WebDavJsonWebTokenGenerationService::TOKEN_ALGORITHM));
+
+        $this->assertObjectHasProperty(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_DOCUMENT_SIZE, $decodedJwt);
+        $this->assertEquals(98765, $decodedJwt->dsz);
+    }
+
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function generateTokenOmitsDocumentSizeClaimWhenNull(): void
+    {
+        $this->sut = new WebDavJsonWebTokenGenerationService(
+            static::JWT_PRIVATE_KEY_BASE64,
+            static::JWT_DEFAULT_LIFETIME_1_MINUTE,
+            self::WEBDAV_URI_PATTERN,
+            self::WEBDAV_INTERNAL_URI_PATTERN
+        );
+
+        $result = $this->sut->generateToken(static::JWT_SUBJECT, static::JWT_DOCUMENT);
+        $decodedJwt = JWT::decode($result, new Key(base64_decode((string) static::JWT_PUBLIC_KEY_BASE64, true), WebDavJsonWebTokenGenerationService::TOKEN_ALGORITHM));
+
+        $this->assertObjectNotHasProperty(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_DOCUMENT_SIZE, $decodedJwt);
+    }
+
+    public function testGetJwtWebDavLink(): void
+    {
+        $this->sut = new WebDavJsonWebTokenGenerationService(
+            static::JWT_PRIVATE_KEY_BASE64,
+            static::JWT_DEFAULT_LIFETIME_1_MINUTE,
+            self::WEBDAV_URI_PATTERN,
+            self::WEBDAV_INTERNAL_URI_PATTERN
         );
 
         $result = $this->sut->getJwtWebDavLink('JWT', 'ID');
 
         $this->assertSame('ms-word:ofe|u|https://testhost/documents-dav/JWT/olcs/ID', $result);
+    }
+
+    public function testGetInternalWebDavLink(): void
+    {
+        $this->sut = new WebDavJsonWebTokenGenerationService(
+            static::JWT_PRIVATE_KEY_BASE64,
+            static::JWT_DEFAULT_LIFETIME_1_MINUTE,
+            self::WEBDAV_URI_PATTERN,
+            self::WEBDAV_INTERNAL_URI_PATTERN
+        );
+
+        $result = $this->sut->getInternalWebDavLink('JWT', '12345.rtf');
+
+        $this->assertSame('ms-word:ofe|u|https://testhost/documents-dav/JWT/12345.rtf', $result);
     }
 
     protected function setUp(): void
