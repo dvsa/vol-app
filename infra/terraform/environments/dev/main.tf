@@ -603,8 +603,14 @@ module "service" {
       },
       {
         name     = "ni-compliance",
-        commands = ["/mnt/data/scripts/ni_dvacompliance.sh"],
+        commands = ["/mnt/data/scripts/niextract/ni_dvacompliance.sh"],
         type     = "scripts"
+      },
+      {
+        name     = "first-tm-letter",
+        commands = ["batch:first-tm-letter", "-v"],
+        timeout  = 43200,
+        schedule = ["cron(30 13 * * ? *)"],
       },
     ]
   }

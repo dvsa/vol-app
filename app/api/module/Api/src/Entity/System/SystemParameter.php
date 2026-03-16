@@ -38,6 +38,8 @@ class SystemParameter extends AbstractSystemParameter
     public const DATA_SEPARATION_TEAMS_EXEMPT = 'DATA_SEPARATION_TEAMS_EXEMPT';
     public const LAST_TM_NI_TASK_OWNER = 'LAST_TM_NI_TASK_OWNER';
     public const LAST_TM_GB_TASK_OWNER = 'LAST_TM_GB_TASK_OWNER';
+    public const LAST_TM_1ST_LETTER_GB_TASK_OWNER = 'LAST_TM_1ST_LETTER_GB_TASK_OWNER';
+    public const LAST_TM_1ST_LETTER_NI_TASK_OWNER = 'LAST_TM_1ST_LETTER_NI_TASK_OWNER';
     public const NEW_OP_EMAIL_GB = 'NEW_OP_EMAIL_GB';
     public const NEW_OP_EMAIL_NI = 'NEW_OP_EMAIL_NI';
 }

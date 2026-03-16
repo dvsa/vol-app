@@ -842,7 +842,7 @@ class LicenceTest extends RepositoryTestCase
         $this->sut->internationalGoodsReport();
     }
 
-    public function testFetchForLastTmAutoLetter(): void
+    public function testFetchForLastTmAutoLetterFirstLetter(): void
     {
         $qb = $this->createMockQb('[QUERY]');
         $this->mockCreateQueryBuilder($qb);
@@ -851,23 +851,19 @@ class LicenceTest extends RepositoryTestCase
         $qb->shouldReceive('getDQL')->times(2);
         $qb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULTS']);
 
-        $this->sut->fetchForLastTmAutoLetter();
+        $this->sut->fetchForLastTmAutoLetter($this->sut::LETTER_FIRST);
 
-        $today = (new DateTime())
-            ->setTime(0, 0, 0, 0)
-            ->format('Y-m-d');
+        $today = (new DateTime())->setTime(0, 0, 0, 0)->format('Y-m-d');
+        $tomorrow = (new DateTime())->add(new \DateInterval('P1D'))->setTime(0, 0, 0, 0)->format('Y-m-d H:i:s');
 
-        $tomorrow = (new DateTime())
-            ->add(new \DateInterval('P1D'))
-            ->setTime(0, 0, 0, 0)
-            ->format('Y-m-d H:i:s');
-
-        $expectedQuery = '[QUERY] DISTINCT ' .
+        $expectedQuery =
+            '[QUERY] DISTINCT ' .
             'AND m.goodsOrPsv IN [[["lcat_gv","lcat_psv"]]] ' .
             'AND m.status IN [[["lsts_suspended","lsts_valid","lsts_curtailed"]]] ' .
             'AND m.licenceType IN [[["ltyp_sn","ltyp_si"]]] ' .
             'AND m.expiryDate >= [[' . $tomorrow . ']] ' .
             'AND tml.lastTmLetterDate IS NULL ' .
+            'AND tml.lastTmFirstEmailDate IS NULL ' .
             'AND m.optOutTmLetter = 0 ' .
             'AND m.totAuthVehicles >= 1 ' .
             'INNER JOIN Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence tml WITH m.id = tml.licence ' .
@@ -882,5 +878,78 @@ class LicenceTest extends RepositoryTestCase
             'AND m.id NOT IN ';
 
         $this->assertEquals($expectedQuery, $this->query);
+    }
+
+    public function testFetchForLastTmAutoLetterSecondLetter(): void
+    {
+        $qb = $this->createMockQb('[QUERY]');
+        $this->mockCreateQueryBuilder($qb);
+
+        $this->em->shouldReceive('getFilters->isEnabled')
+            ->with('soft-deleteable')
+            ->andReturn(false);
+
+        // SECOND letter: latestDeletedQb + graceQb + tmlQb
+        $qb->shouldReceive('getDQL')->times(3);
+
+        $qb->shouldReceive('getQuery->getResult')
+            ->once()
+            ->andReturn(['RESULTS']);
+
+        $this->sut->fetchForLastTmAutoLetter($this->sut::LETTER_SECOND);
+
+        $today = (new DateTime())
+            ->setTime(0, 0, 0, 0)
+            ->format('Y-m-d');
+
+        $tomorrow = (new DateTime())
+            ->add(new \DateInterval('P1D'))
+            ->setTime(0, 0, 0, 0)
+            ->format('Y-m-d H:i:s');
+
+        $this->assertStringContainsString('[QUERY] DISTINCT', $this->query);
+
+        $this->assertStringContainsString('AND m.goodsOrPsv IN [[["lcat_gv","lcat_psv"]]]', $this->query);
+        $this->assertStringContainsString('AND m.status IN [[["lsts_suspended","lsts_valid","lsts_curtailed"]]]', $this->query);
+        $this->assertStringContainsString('AND m.licenceType IN [[["ltyp_sn","ltyp_si"]]]', $this->query);
+        $this->assertStringContainsString('AND m.expiryDate >= [[' . $tomorrow . ']]', $this->query);
+
+        $this->assertStringContainsString('AND tml.lastTmLetterDate IS NULL', $this->query);
+
+        $this->assertStringContainsString('AND m.optOutTmLetter = 0', $this->query);
+        $this->assertStringContainsString('AND m.totAuthVehicles >= 1', $this->query);
+
+        $this->assertStringContainsString(
+            'INNER JOIN Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence tml WITH m.id = tml.licence',
+            $this->query
+        );
+
+        $this->assertStringContainsString('SELECT IDENTITY(gp.licence)', $this->query);
+        $this->assertStringContainsString('gp.startDate <= [[' . $today . ']]', $this->query);
+        $this->assertStringContainsString('gp.endDate >= [[' . $today . ']]', $this->query);
+
+        $this->assertStringContainsString('SELECT IDENTITY(tml2.licence)', $this->query);
+        $this->assertStringContainsString('tml2.deletedDate >= [[' . $tomorrow . ']]', $this->query);
+        $this->assertStringContainsString('OR tml2.deletedDate IS NULL', $this->query);
+        $this->assertStringContainsString('AND tml2.licence = m.id', $this->query);
+
+        // ---------
+        // SECOND letter-specific assertions
+        // ---------
+        $this->assertStringContainsString('tml.lastTmFirstEmailDate IS NOT NULL', $this->query);
+
+        // latest-deleted subquery
+        $this->assertStringContainsString('SELECT MAX(t2.deletedDate)', $this->query);
+        $this->assertStringContainsString('t2.deletedDate IS NOT NULL', $this->query);
+        $this->assertStringContainsString('tml.deletedDate = (', $this->query);
+
+        // 28-day condition
+        $this->assertStringContainsString('tml.deletedDate <=', $this->query);
+    }
+
+    public function testFetchForLastTmAutoLetterThrowsOnInvalidType(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->sut->fetchForLastTmAutoLetter(999);
     }
 }
