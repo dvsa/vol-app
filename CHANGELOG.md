@@ -1,5 +1,13 @@
 # Changelog
 
+## [8.8.0](https://github.com/dvsa/olcs-transfer/compare/v8.7.0...v8.8.0) (2026-03-16)
+
+
+### Features
+
+* letter admin ui fixes and todo addition ([#174](https://github.com/dvsa/olcs-transfer/issues/174)) ([66bb281](https://github.com/dvsa/olcs-transfer/commit/66bb281905b089dae4211a0a0ab231c677fa82d5))
+* removed unused queue type from haystack array ([#172](https://github.com/dvsa/olcs-transfer/issues/172)) ([752a6bc](https://github.com/dvsa/olcs-transfer/commit/752a6bc8258f8bce2800e0f9ec26d3d62b513848))
+
 ## [8.7.0](https://github.com/dvsa/olcs-transfer/compare/v8.6.1...v8.7.0) (2026-03-01)
 
 
