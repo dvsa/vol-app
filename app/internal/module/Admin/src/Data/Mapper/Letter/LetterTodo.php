@@ -14,7 +14,7 @@ class LetterTodo implements MapperInterface
     {
         $currentVersion = $data['currentVersion'] ?? [];
 
-        return [
+        $formData = [
             'letterTodo' => [
                 'id' => $data['id'] ?? null,
                 'todoKey' => $data['todoKey'] ?? null,
@@ -22,6 +22,13 @@ class LetterTodo implements MapperInterface
                 'helpText' => $currentVersion['helpText'] ?? $data['helpText'] ?? null,
             ]
         ];
+
+        // Convert description array to JSON string for EditorJS field
+        if (is_array($formData['letterTodo']['description'])) {
+            $formData['letterTodo']['description'] = json_encode($formData['letterTodo']['description']);
+        }
+
+        return $formData;
     }
 
     public static function mapFromForm(array $data): array

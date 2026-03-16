@@ -34,6 +34,16 @@ class LetterIssue
     public $heading = null;
 
     /**
+     * @Form\Options({"label": "Modal Label"})
+     * @Form\Required(false)
+     * @Form\Type("Text")
+     * @Form\Attributes({"class":"medium"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1, "max":200})
+     */
+    public $modalLabel = null;
+
+    /**
      * @Form\Options({
      *     "label": "Issue Type",
      *     "disable_inarray_validator": false,

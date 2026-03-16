@@ -43,14 +43,29 @@ return [
         [
             'title' => 'Description',
             'name' => 'description',
-            'sort' => 'description',
-            'formatter' => fn($row) => Escape::html($row['description'] ?? ''),
+            'formatter' => function ($row) {
+                $data = $row['currentVersion']['description'] ?? $row['description'] ?? '';
+                if (is_string($data)) {
+                    $data = json_decode($data, true);
+                }
+                if (!is_array($data) || empty($data['blocks'])) {
+                    return Escape::html(is_string($data) ? $data : '');
+                }
+                $text = implode(' ', array_map(
+                    fn($block) => strip_tags($block['data']['text'] ?? ''),
+                    $data['blocks']
+                ));
+                if (strlen($text) > 120) {
+                    $text = substr($text, 0, 120) . '...';
+                }
+                return Escape::html($text);
+            },
         ],
         [
             'title' => 'Help Text',
             'name' => 'helpText',
             'formatter' => function ($row) {
-                $text = $row['helpText'] ?? '';
+                $text = $row['currentVersion']['helpText'] ?? $row['helpText'] ?? '';
                 if (strlen($text) > 80) {
                     $text = substr($text, 0, 80) . '...';
                 }

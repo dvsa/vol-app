@@ -36,6 +36,7 @@ final class Update extends AbstractCommandHandler
         }
 
         $letterIssue->setHeading($command->getHeading());
+        $letterIssue->setModalLabel($command->getModalLabel());
         $letterIssue->setDefaultBodyContent($command->getDefaultBodyContent());
         $letterIssue->setHelpText($command->getHelpText());
         $letterIssue->setMinLength($command->getMinLength());

@@ -23,6 +23,7 @@ final class Update extends AbstractCommandHandler
         $entity = $this->getRepo()->fetchUsingId($command);
 
         // Update working properties - versioning will be handled by repository
+        $entity->setTodoKey($command->getTodoKey());
         $entity->setDescription($command->getDescription());
 
         if ($command->getHelpText() !== null) {

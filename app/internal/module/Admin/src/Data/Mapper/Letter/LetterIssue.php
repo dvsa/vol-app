@@ -27,6 +27,7 @@ class LetterIssue implements MapperInterface
                 'id' => $data['id'] ?? null,
                 'issueKey' => $currentVersion['issueKey'] ?? $data['issueKey'] ?? null,
                 'heading' => $currentVersion['heading'] ?? $data['heading'] ?? null,
+                'modalLabel' => $currentVersion['modalLabel'] ?? $data['modalLabel'] ?? null,
                 'category' => $currentVersion['category']['id'] ?? $data['category']['id'] ?? null,
                 'subCategory' => $currentVersion['subCategory']['id'] ?? $data['subCategory']['id'] ?? null,
                 'goodsOrPsv' => $currentVersion['goodsOrPsv']['id'] ?? $data['goodsOrPsv']['id'] ?? null,
