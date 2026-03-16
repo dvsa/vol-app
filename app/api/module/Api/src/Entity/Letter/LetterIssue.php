@@ -37,6 +37,7 @@ class LetterIssue extends AbstractLetterIssue
     private $category;
     private $subCategory;
     private $heading;
+    private $modalLabel;
     private $defaultBodyContent;
     private $helpText;
     private $minLength;
@@ -126,6 +127,31 @@ class LetterIssue extends AbstractLetterIssue
     public function setHeading($heading)
     {
         $this->heading = $heading;
+        return $this;
+    }
+
+    /**
+     * Proxy getter for modalLabel
+     *
+     * @return string|null
+     */
+    public function getModalLabel()
+    {
+        if ($this->modalLabel !== null) {
+            return $this->modalLabel;
+        }
+        return $this->currentVersion ? $this->currentVersion->getModalLabel() : null;
+    }
+
+    /**
+     * Proxy setter for modalLabel
+     *
+     * @param string|null $modalLabel
+     * @return self
+     */
+    public function setModalLabel($modalLabel)
+    {
+        $this->modalLabel = $modalLabel;
         return $this;
     }
 
@@ -383,6 +409,7 @@ class LetterIssue extends AbstractLetterIssue
         $newVersion->setCategory($currentVersion->getCategory());
         $newVersion->setSubCategory($currentVersion->getSubCategory());
         $newVersion->setHeading($currentVersion->getHeading());
+        $newVersion->setModalLabel($currentVersion->getModalLabel());
         $newVersion->setDefaultBodyContent($currentVersion->getDefaultBodyContent());
         $newVersion->setHelpText($currentVersion->getHelpText());
         $newVersion->setMinLength($currentVersion->getMinLength());

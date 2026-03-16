@@ -84,13 +84,13 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     protected $lastModifiedBy;
 
     /**
-     * To-do description
+     * EditorJS format
      *
-     * @var string
+     * @var array
      *
-     * @ORM\Column(type="string", name="description", length=500, nullable=false)
+     * @ORM\Column(type="json", name="description", nullable=true)
      */
-    protected $description = '';
+    protected $description;
 
     /**
      * Help text for users
@@ -253,7 +253,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     /**
      * Set the description
      *
-     * @param string $description new value being set
+     * @param array $description new value being set
      *
      * @return LetterTodoVersion
      */
@@ -267,7 +267,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     /**
      * Get the description
      *
-     * @return string
+     * @return array
      */
     public function getDescription()
     {

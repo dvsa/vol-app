@@ -439,6 +439,12 @@ return [
                             'label' => 'Letter Appendices',
                             'route' => 'admin-dashboard/admin-letter-appendix',
                         ],
+                        [
+                            'id' => 'admin-dashboard/letter-management/letter-todos',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'Letter Todos',
+                            'route' => 'admin-dashboard/admin-letter-todo',
+                        ],
                     ],
                 ],
                 [
