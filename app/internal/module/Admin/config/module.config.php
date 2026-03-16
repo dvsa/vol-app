@@ -252,6 +252,20 @@ return [
                             ]
                         ],
                     ],
+                    'admin-letter-todo' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'letter-todo[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete)',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\Letter\LetterTodoController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                     'admin-scanning' => [
                         'type' => 'segment',
                         'options' => [
@@ -1042,6 +1056,7 @@ return [
             Admin\Controller\Letter\LetterAppendixController::class => Admin\Controller\Letter\LetterAppendixControllerFactory::class,
             Admin\Controller\Letter\LetterIssueTypeController::class => Admin\Controller\Letter\LetterIssueTypeControllerFactory::class,
             Admin\Controller\Letter\LetterTestDataController::class => Admin\Controller\Letter\LetterTestDataControllerFactory::class,
+            Admin\Controller\Letter\LetterTodoController::class => Admin\Controller\Letter\LetterTodoControllerFactory::class,
             Admin\Controller\FeatureToggleController::class => Admin\Controller\FeatureToggleControllerFactory::class,
             Admin\Controller\FeeRateController::class => Admin\Controller\FeeRateControllerFactory::class,
             Admin\Controller\FinancialStandingRateController::class => Admin\Controller\FinancialStandingRateControllerFactory::class,
