@@ -13,6 +13,7 @@ class LetterTodo
      */
     public $id = null;
 
+    // phpcs:disable Generic.Commenting.Todo.TaskFound
     /**
      * @Form\Options({"label": "Todo Key"})
      * @Form\Required(true)
@@ -21,6 +22,7 @@ class LetterTodo
      * @Form\Filter("Laminas\Filter\StringTrim")
      * @Form\Validator("Laminas\Validator\StringLength", options={"min":1, "max":100})
      */
+    // phpcs:enable Generic.Commenting.Todo.TaskFound
     public $todoKey = null;
 
     /**

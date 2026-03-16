@@ -6,12 +6,14 @@ namespace Admin\Form\Model\Form\Letter;
 
 use Laminas\Form\Annotation as Form;
 
+// phpcs:disable Generic.Commenting.Todo.TaskFound
 /**
  * @Form\Name("letter-todo")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true})
  */
+// phpcs:enable Generic.Commenting.Todo.TaskFound
 class LetterTodo
 {
     /**
