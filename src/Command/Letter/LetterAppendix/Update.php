@@ -64,6 +64,7 @@ final class Update extends AbstractCommand
      * @var string
      * @Transfer\Optional
      * @Transfer\Filter("Laminas\Filter\StringTrim")
+     * @Transfer\Escape(false)
      */
     protected $defaultContent;
 

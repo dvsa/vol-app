@@ -38,6 +38,7 @@ final class Create extends AbstractCommand
     /**
      * @var array
      * @Transfer\Optional
+     * @Transfer\Escape(false)
      */
     protected $defaultContent;
 

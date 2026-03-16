@@ -20,9 +20,9 @@ final class Create extends AbstractCommand
      */
     protected $todoKey;
     /**
-     * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"min":1, "max":255})
+     * @var array
+     * @Transfer\Optional
+     * @Transfer\Escape(false)
      */
     protected $description;
 
@@ -50,7 +50,7 @@ final class Create extends AbstractCommand
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getDescription()
     {

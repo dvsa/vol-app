@@ -35,8 +35,17 @@ final class Update extends AbstractCommand
     protected $heading;
 
     /**
+     * @var string
+     * @Transfer\Optional
+     * @Transfer\Filter("Laminas\Filter\StringTrim")
+     * @Transfer\Validator("Laminas\Validator\StringLength", options={"min":1, "max":200})
+     */
+    protected $modalLabel;
+
+    /**
      * @var array
      * @Transfer\Optional
+     * @Transfer\Escape(false)
      */
     protected $defaultBodyContent;
 
@@ -105,6 +114,14 @@ final class Update extends AbstractCommand
     public function getHeading()
     {
         return $this->heading;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModalLabel()
+    {
+        return $this->modalLabel;
     }
 
     /**

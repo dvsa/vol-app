@@ -40,6 +40,7 @@ final class Update extends AbstractCommand
     /**
      * @var array
      * @Transfer\Optional
+     * @Transfer\Escape(false)
      */
     protected $defaultContent;
 
