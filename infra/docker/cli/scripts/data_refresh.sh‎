@@ -5,8 +5,22 @@ set -euo pipefail
 : "${platformEnv:?platformEnv Jenkins parameter is required}"
 : "${Region:?Region Jenkins parameter is required}"
 
+# Allowed values as per Jenkins options
+VALID_PLATFORM_ENVS=("dev" "reg" "da" "qa" "demo" "prodsupp")
+VALID_REGIONS=("eu-west-1" "eu-west-2")
+
 PLATFORM_ENV="${platformEnv}"
 REGION="${Region}"
+
+if [[ ! " ${VALID_PLATFORM_ENVS[*]} " =~ " ${PLATFORM_ENV} " ]]; then
+  echo "Error: platformEnv '${PLATFORM_ENV}' is not valid. Allowed values: ${VALID_PLATFORM_ENVS[*]}"
+  exit 1
+fi
+
+if [[ ! " ${VALID_REGIONS[*]} " =~ " ${REGION} " ]]; then
+  echo "Error: Region '${REGION}' is not valid. Allowed values: ${VALID_REGIONS[*]}"
+  exit 1
+fi
 
 SLACK_CHAN="#platform_alerts"
 SLACK_FAIL="#FF9FA1"
