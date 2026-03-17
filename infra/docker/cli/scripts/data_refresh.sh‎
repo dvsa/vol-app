@@ -2,24 +2,11 @@
 
 set -euo pipefail
 
-: "${platformEnv:?platformEnv Jenkins parameter is required}"
-: "${Region:?Region Jenkins parameter is required}"
-
 VALID_PLATFORM_ENVS=("dev" "reg" "da" "qa" "demo" "prodsupp")
 VALID_REGIONS=("eu-west-1" "eu-west-2")
 
-PLATFORM_ENV="${platformEnv}"
-REGION="${Region}"
-
-if [[ ! " ${VALID_PLATFORM_ENVS[*]} " =~ " ${PLATFORM_ENV} " ]]; then
-  echo "Error: platformEnv '${PLATFORM_ENV}' is not valid. Allowed values: ${VALID_PLATFORM_ENVS[*]}"
-  exit 1
-fi
-
-if [[ ! " ${VALID_REGIONS[*]} " =~ " ${REGION} " ]]; then
-  echo "Error: Region '${REGION}' is not valid. Allowed values: ${VALID_REGIONS[*]}"
-  exit 1
-fi
+platformEnv="${VALID_PLATFORM_ENVS[0]}"   
+Region="${VALID_REGIONS[0]}"              
 
 SLACK_CHAN="#platform_alerts"
 SLACK_FAIL="#FF9FA1"
@@ -34,44 +21,44 @@ function slack_send() {
 }
 
 function reset_service_password() {
-    local env="$1"
-    echo "Resetting service passwords for OLCSDB in $env..."
+    local platformEnv="$1"
+    echo "Resetting service passwords for OLCSDB in $platformEnv..."
     chmod +x vars/resetServicePassword.sh
-    ./vars/resetServicePassword.sh "$env"
+    ./vars/resetServicePassword.sh "$platformEnv"
 }
 
 function generate_user_pool_csv() {
-    local env="$1"
-    local region="$2"
-    echo "Generating new user pool CSV for $env ($region)..."
-    infra/docker/cli/scripts/generate_user_pool "$env" "$region"
+    local platformEnv="$1"
+    local Region="$2"
+    echo "Generating new user pool CSV for $platformEnv ($Region)..."
+    infra/docker/cli/scripts/generate_user_pool "$platformEnv" "$Region"
 }
 
 function load_user_pool() {
-    local env="$1"
-    local region="$2"
-    echo "Loading users into user pool for $env ($region)..."
-    infra/docker/cli/scripts/load_user_pool "$env" "$region"
+    local platformEnv="$1"
+    local Region="$2"
+    echo "Loading users into user pool for $platformEnv ($Region)..."
+    infra/docker/cli/scripts/load_user_pool "$platformEnv" "$Region"
 }
 
-trap 'slack_send "$SLACK_CHAN" "$SLACK_FAIL" "The $PLATFORM_ENV data refresh pipeline has failed"; rm -rf "$WORK_DIR"; exit 1' ERR
+trap 'slack_send "$SLACK_CHAN" "$SLACK_FAIL" "The $platformEnv data refresh pipeline has failed"; rm -rf "$WORK_DIR"; exit 1' ERR
 
 WORK_DIR=$(mktemp -d)
 
-slack_send "$SLACK_CHAN" "$SLACK_COMPLETED" "Starting ${PLATFORM_ENV} data refresh pipeline"
+slack_send "$SLACK_CHAN" "$SLACK_COMPLETED" "Starting ${platformEnv} data refresh pipeline"
 
-reset_service_password "$PLATFORM_ENV"
+reset_service_password "$platformEnv"
 
-if ! generate_user_pool_csv "$PLATFORM_ENV" "$REGION"; then
+if ! generate_user_pool_csv "$platformEnv" "$Region"; then
     slack_send "$SLACK_CHAN" "$SLACK_FAIL" "GENERATE_NEW_USER_POOL_CSV_PLB FAILED!"
     exit 1
 fi
 
-if ! load_user_pool "$PLATFORM_ENV" "$REGION"; then
+if ! load_user_pool "$platformEnv" "$Region"; then
     slack_send "$SLACK_CHAN" "$SLACK_FAIL" "Load_User_Pool FAILED!"
     exit 1
 fi
 
 rm -rf "$WORK_DIR"
-slack_send "$SLACK_CHAN" "$SLACK_COMPLETED" "The $PLATFORM_ENV data refresh pipeline has now completed successfully"
+slack_send "$SLACK_CHAN" "$SLACK_COMPLETED" "The $platformEnv data refresh pipeline has now completed successfully"
 echo "Successfully refreshed data!"
