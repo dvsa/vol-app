@@ -617,16 +617,6 @@ module "service" {
         commands = ["/mnt/data/scripts/data_refresh.sh"],
         type     = "scripts"
       },
-      {
-        name     = "generate-user-pool",
-        commands = ["/mnt/data/scripts/generate_user_pool_csv.sh"],
-        type     = "scripts"
-      },
-      {
-        name     = "load-user-pool",
-        commands = ["/mnt/data/scripts/load_user_pool.sh"],
-        type     = "scripts"
-      },
     ]
   }
 }
