@@ -31,14 +31,14 @@ function generate_user_pool_csv() {
     local env="$1"
     local region="$2"
     echo "Generating new user pool CSV for $env ($region)..."
-    infra/nonprod/generate_user_pool_csv.sh "$env" "$region"
+    infra/docker/cli/scripts/generate_user_pool_csv.sh "$env" "$region"
 }
 
 function load_user_pool() {
     local env="$1"
     local region="$2"
     echo "Loading users into user pool for $env ($region)..."
-    infra/nonprod/load_user_pool.sh "$env" "$region"
+    infra/docker/cli/scripts/load_user_pool.sh "$env" "$region"
 }
 
 trap 'slack_send "$SLACK_CHAN" "$SLACK_FAIL" "The $PLATFORM_ENV data refresh pipeline has failed"; rm -rf "$WORK_DIR"; exit 1' ERR
