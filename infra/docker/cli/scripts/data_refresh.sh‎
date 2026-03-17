@@ -5,7 +5,6 @@ set -euo pipefail
 : "${platformEnv:?platformEnv Jenkins parameter is required}"
 : "${Region:?Region Jenkins parameter is required}"
 
-# Allowed values as per Jenkins options
 VALID_PLATFORM_ENVS=("dev" "reg" "da" "qa" "demo" "prodsupp")
 VALID_REGIONS=("eu-west-1" "eu-west-2")
 
