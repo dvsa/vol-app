@@ -78,19 +78,29 @@ OLCS.ready(function () {
     // Append a single item to the list
     function appendListItem(id) {
       var label = getLabel(id);
-      var $li = $(
-        '<li data-id="' +
-          id +
-          '">' +
-          '<span class="section-label">' +
-          $("<span>").text(label).html() +
-          "</span>" +
-          '<span class="section-controls">' +
-          '<button type="button" class="btn-up govuk-button govuk-button--secondary" title="Move up">&#9650;</button>' +
-          '<button type="button" class="btn-down govuk-button govuk-button--secondary" title="Move down">&#9660;</button>' +
-          '<button type="button" class="btn-remove govuk-button govuk-button--warning" title="Remove">&#10005;</button>' +
-          "</span>" +
-          "</li>",
+      var $li = $("<li>").attr("data-id", id);
+      $li.append($("<span>").addClass("section-label").text(label));
+      $li.append(
+        $("<span>")
+          .addClass("section-controls")
+          .append(
+            $("<button>")
+              .attr({ type: "button", title: "Move up" })
+              .addClass("btn-up govuk-button govuk-button--secondary")
+              .html("&#9650;"),
+          )
+          .append(
+            $("<button>")
+              .attr({ type: "button", title: "Move down" })
+              .addClass("btn-down govuk-button govuk-button--secondary")
+              .html("&#9660;"),
+          )
+          .append(
+            $("<button>")
+              .attr({ type: "button", title: "Remove" })
+              .addClass("btn-remove govuk-button govuk-button--warning")
+              .html("&#10005;"),
+          ),
       );
       $list.append($li);
     }
