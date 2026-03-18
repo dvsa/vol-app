@@ -18,6 +18,7 @@ final class UpdateContent extends AbstractCommand
      * @var string
      * @Transfer\Filter("Laminas\Filter\StringTrim")
      * @Transfer\Validator("Laminas\Validator\StringLength", options={"min":2})
+     * @Transfer\Escape(false)
      */
     protected $editedContent;
 

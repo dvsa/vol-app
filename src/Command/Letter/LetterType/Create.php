@@ -46,6 +46,13 @@ final class Create extends AbstractCommand
      * @Transfer\Optional
      * @Transfer\ArrayInput
      */
+    protected $sections;
+
+    /**
+     * @var array
+     * @Transfer\Optional
+     * @Transfer\ArrayInput
+     */
     protected $appendices;
 
     /**
@@ -75,8 +82,26 @@ final class Create extends AbstractCommand
     /**
      * @return array
      */
+    public function getSections()
+    {
+        return $this->sections;
+    }
+
+    /**
+     * @return array
+     */
     public function getAppendices()
     {
         return $this->appendices;
+    }
+
+    /**
+     * Filter out null values so optional ArrayInput properties
+     * are not passed to the InputFilter (where null fails is_array check).
+     */
+    #[\Override]
+    public function getArrayCopy()
+    {
+        return array_filter(parent::getArrayCopy(), fn($v) => $v !== null);
     }
 }
