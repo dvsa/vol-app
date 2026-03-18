@@ -57,7 +57,7 @@ final class Generate extends AbstractCommandHandler
         $this->setOptionalRelations($letterInstance, $command);
 
         // Populate instance sections from letter type assembly
-        foreach ($letterType->getLetterTypeSections() as $typeSection) {
+        foreach ($letterType->getLetterTypeSections() ?? [] as $typeSection) {
             $instanceSection = new LetterInstanceSection();
             $instanceSection->setLetterInstance($letterInstance);
             $instanceSection->setLetterSectionVersion($typeSection->getLetterSectionVersion());
