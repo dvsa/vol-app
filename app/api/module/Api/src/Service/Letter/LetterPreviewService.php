@@ -31,20 +31,19 @@ class LetterPreviewService
      */
     public function renderPreview(LetterInstance $letterInstance, ?MasterTemplate $masterTemplate = null, bool $excludePdfAppendices = false): string
     {
-        // Render all sections
-        $sectionsHtml = $this->renderSections($letterInstance);
-        $issuesHtml = $this->renderIssues($letterInstance);
+        // Render assembled content (sections + issues interleaved by display order)
+        $assembledHtml = $this->renderAssembledContent($letterInstance);
         $appendicesHtml = $this->renderAppendices($letterInstance, $excludePdfAppendices);
-        $closingHtml = ''; // Closing sections would be rendered similarly when implemented
 
         $context = $this->buildVolGrabContext($letterInstance);
 
         // If no master template, return just the content
         if ($masterTemplate === null) {
-            $html = $this->renderWithoutTemplate($sectionsHtml, $issuesHtml, $appendicesHtml);
+            $html = $this->renderWithoutTemplate($assembledHtml, '', $appendicesHtml);
         } else {
-            // Build placeholder values
-            $placeholders = $this->buildPlaceholders($letterInstance, $sectionsHtml, $issuesHtml, $closingHtml, $appendicesHtml);
+            // Build placeholder values — assembled content goes into SECTIONS_CONTENT,
+            // ISSUES_CONTENT is empty since issues are now inline within the assembly
+            $placeholders = $this->buildPlaceholders($letterInstance, $assembledHtml, '', '', $appendicesHtml);
 
             $html = $this->populateTemplate($masterTemplate->getTemplateContent(), $placeholders);
         }
@@ -53,19 +52,42 @@ class LetterPreviewService
     }
 
     /**
-     * Render content sections (intro, body sections)
+     * Render assembled content — sections and issues interleaved by display order.
+     *
+     * Iterates through letter instance sections in display order. When a section's
+     * parent LetterSection has the reserved key __ISSUES__, the issues block is rendered
+     * at that position. Otherwise, the section content is rendered normally.
+     *
+     * If no __ISSUES__ meta-section is present in the assembly, issues are appended
+     * after all sections (backwards-compatible fallback).
      *
      * @param LetterInstance $letterInstance
-     * @return string HTML for all content sections
+     * @return string HTML for all assembled content
      */
-    private function renderSections(LetterInstance $letterInstance): string
+    private function renderAssembledContent(LetterInstance $letterInstance): string
     {
         $html = '';
         $sectionRenderer = $this->rendererManager->get('content-section');
         $context = $this->buildVolGrabContext($letterInstance);
+        $issuesRendered = false;
 
         foreach ($letterInstance->getLetterInstanceSections() as $section) {
-            $html .= $sectionRenderer->render($section, $context);
+            $sectionVersion = $section->getLetterSectionVersion();
+            $parentSection = $sectionVersion?->getLetterSection();
+            $sectionKey = $parentSection?->getSectionKey();
+
+            if ($sectionKey === '__ISSUES__') {
+                // Render issues at this position in the assembly
+                $html .= $this->renderIssues($letterInstance);
+                $issuesRendered = true;
+            } else {
+                $html .= $sectionRenderer->render($section, $context);
+            }
+        }
+
+        // Fallback: if no __ISSUES__ meta-section was in the assembly, append issues at the end
+        if (!$issuesRendered && $letterInstance->getLetterInstanceIssues()->count() > 0) {
+            $html .= $this->renderIssues($letterInstance);
         }
 
         return $html;

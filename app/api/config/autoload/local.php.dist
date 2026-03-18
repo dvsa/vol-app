@@ -365,6 +365,12 @@ return [
                 'scope' => '',
             ]
         ],
+        'compliance_episode' => [
+            'erruVersion' => '3.5',
+        ],
+        'cgr' => [
+            'erruVersion' => '3.5',
+        ],
     ],
     'data-gov-uk-export' => [
         's3_uri' => 's3://devapp-vol-content/olcs.local.nonprod.dvsa.aws/data-gov-uk-export/',
