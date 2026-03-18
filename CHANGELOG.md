@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.9.0](https://github.com/dvsa/olcs-transfer/compare/v8.8.0...v8.9.0) (2026-03-18)
+
+
+### Features
+
+* letter type/section assembly UI work ([#175](https://github.com/dvsa/olcs-transfer/issues/175)) ([84c4ffa](https://github.com/dvsa/olcs-transfer/commit/84c4ffa53b464fa3b5d2a76ffd628d6af8fa8ce7))
+
 ## [8.8.0](https://github.com/dvsa/olcs-transfer/compare/v8.7.0...v8.8.0) (2026-03-16)
 
 
