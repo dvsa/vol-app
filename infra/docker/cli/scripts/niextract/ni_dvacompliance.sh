@@ -54,7 +54,7 @@ S3_DEST="s3://${DVA_BUCKET}"
 [[ -n "${DVA_PREFIX}" ]] && S3_DEST="${S3_DEST}/${DVA_PREFIX}"
 S3_DEST="${S3_DEST}/dvacompliance/"
 
-# Debug mode disables the deletion of the temp RDS instance
+# Debug mode disables the deletion of the temp Aurora resources
 mode=""
 while getopts ":hd" opt; do
   case ${opt} in
@@ -129,18 +129,26 @@ function cleanup {
       item=$(echo $i|awk -F: '{print $2}')
       case $type in
         "snapshot" )
-            echo "Deleting DB snapshot: ${item}"
-            aws_cmd "/usr/local/bin/aws rds delete-db-snapshot --db-snapshot-identifier ${item} --region ${aws_region}"
+            echo "Deleting DB cluster snapshot: ${item}"
+            aws_cmd "/usr/local/bin/aws rds delete-db-cluster-snapshot --db-cluster-snapshot-identifier ${item} --region ${aws_region}"
             if [ $? -ne 0 ]; then
-              log_err "Unable to delete DB snapshot: ${item}"
+              log_err "Unable to delete DB cluster snapshot: ${item}"
             fi
             result=${aws_cmd_output}
             ;;
-        "rds" )
-            echo "Deleting RDS instance: ${item}"
+        "aurora-instance" )
+            echo "Deleting Aurora instance: ${item}"
             aws_cmd "/usr/local/bin/aws rds delete-db-instance --skip-final-snapshot --db-instance-identifier ${item} --region ${aws_region}"
             if [ $? -ne 0 ]; then
-              log_err "Unable to delete RDS instance: ${item}"
+              log_err "Unable to delete Aurora instance: ${item}"
+            fi
+            result=${aws_cmd_output}
+            ;;
+        "aurora-cluster" )
+            echo "Deleting Aurora cluster: ${item}"
+            aws_cmd "/usr/local/bin/aws rds delete-db-cluster --skip-final-snapshot --db-cluster-identifier ${item} --region ${aws_region}"
+            if [ $? -ne 0 ]; then
+              log_err "Unable to delete Aurora cluster: ${item}"
             fi
             result=${aws_cmd_output}
             ;;
@@ -159,15 +167,14 @@ function cleanup {
 
 : "${READDB_ID:?READDB_ID is not set}"
 db_instance_id="${READDB_ID}"
-restored_db_instance_id="${ENVIRONMENT}-olcs-rds-nidataextract-temp"
+restored_db_cluster_id="${ENVIRONMENT}-olcs-aurora-nidataextract-temp-cluster"
+restored_db_instance_id="${ENVIRONMENT}-olcs-aurora-nidataextract-temp-instance"
 snapshot_timestamp=$(date +"%Y-%m-%d-%H-%M-%S")
 env_id=$(echo "$db_instance_id"|cut -d- -f1)
-snapshot_id="$env_id-olcs-rds-nidataextract-$snapshot_timestamp"
+snapshot_id="$env_id-olcs-aurora-nidataextract-$snapshot_timestamp"
 cleanup_items=()
 
-####### Create RDS snapsnot from API read replica
-
-# Ensure readdb instance is available before snapshotting
+####### Gather source Aurora instance and cluster info
 
 aws_cmd "/usr/local/bin/aws rds wait db-instance-available --region ${aws_region} --db-instance-identifier ${db_instance_id}"
 if [ $? -ne 0 ]; then
@@ -176,32 +183,51 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-log_msg "Creating snapshot: $snapshot_id"
-aws_cmd "/usr/local/bin/aws rds create-db-snapshot --db-snapshot-identifier $snapshot_id --db-instance-identifier $db_instance_id --region ${aws_region}"
+aws_cmd "/usr/local/bin/aws rds describe-db-instances --db-instance-identifier ${db_instance_id} --region ${aws_region}"
 if [ $? -ne 0 ]; then
-  log_err "Unable to create db snapshot: ${db_instance_id}: ${aws_cmd_output}"
+  log_err "Unable to describe DB Instances: ${db_instance_id}: ${aws_cmd_output}"
+  cleanup
+  exit 1
+fi
+readonly_db_info=$(echo "${aws_cmd_output}" | /usr/bin/jq -r '.DBInstances[]')
+source_cluster_id=$(echo "${readonly_db_info}" | /usr/bin/jq -r '.DBClusterIdentifier')
+if [ -z "${source_cluster_id}" ] || [ "${source_cluster_id}" = "null" ]; then
+  log_err "DB instance ${db_instance_id} is not attached to an Aurora cluster."
+  cleanup
+  exit 1
+fi
+
+aws_cmd "/usr/local/bin/aws rds wait db-cluster-available --region ${aws_region} --db-cluster-identifier ${source_cluster_id}"
+if [ $? -ne 0 ]; then
+  log_err "DB Cluster not available in the given time: ${source_cluster_id}: ${aws_cmd_output}"
+  cleanup
+  exit 1
+fi
+
+aws_cmd "/usr/local/bin/aws rds describe-db-clusters --db-cluster-identifier ${source_cluster_id} --region ${aws_region}"
+if [ $? -ne 0 ]; then
+  log_err "Unable to describe DB Cluster: ${source_cluster_id}: ${aws_cmd_output}"
+  cleanup
+  exit 1
+fi
+readonly_cluster_info=$(echo "${aws_cmd_output}" | /usr/bin/jq -r '.DBClusters[]')
+
+log_msg "Creating cluster snapshot: $snapshot_id"
+aws_cmd "/usr/local/bin/aws rds create-db-cluster-snapshot --db-cluster-snapshot-identifier $snapshot_id --db-cluster-identifier $source_cluster_id --region ${aws_region}"
+if [ $? -ne 0 ]; then
+  log_err "Unable to create DB cluster snapshot: ${source_cluster_id}: ${aws_cmd_output}"
   cleanup
   exit 1
 fi
 
 sleep 60
-aws_cmd "/usr/local/bin/aws rds wait db-snapshot-completed --db-snapshot-identifier $snapshot_id --region ${aws_region}"
+aws_cmd "/usr/local/bin/aws rds wait db-cluster-snapshot-available --db-cluster-snapshot-identifier $snapshot_id --region ${aws_region}"
 if [ $? -ne 0 ]; then
   log_err "Unable to verify snapshot availability."
   cleanup
   exit 1
 fi
 cleanup_items+=("snapshot:$snapshot_id")
-
-####### Gather subnet/security/param group info from API read replica
-
-aws_cmd "/usr/local/bin/aws rds describe-db-instances --db-instance-identifier ${db_instance_id}  --region ${aws_region}"
-if [ $? -ne 0 ]; then
-  log_err "Unable to describe DB Instances: ${db_instance_id}: ${aws_cmd_output}"
-  cleanup
-  exit 1
-fi
-readonly_db_info=$(echo "${aws_cmd_output}" | /usr/bin/jq -r .DBInstances[])
 
 subnet_group=$(echo $readonly_db_info | /usr/bin/jq -r '.DBSubnetGroup.DBSubnetGroupName')
 if [ $? -ne 0 ]; then
@@ -219,20 +245,56 @@ fi
 log_msg "Security group: ${sec_group}"
 param_group=$(echo $readonly_db_info | /usr/bin/jq -r '.DBParameterGroups[0].DBParameterGroupName')
 if [ $? -ne 0 ]; then
-  log_err "Unable to determine db parameter group for new instance."
+  log_err "Unable to determine DB parameter group for new instance."
   cleanup
   exit 1
 fi
 log_msg "DB parameter group: ${param_group}"
+db_instance_class=$(echo "${readonly_db_info}" | /usr/bin/jq -r '.DBInstanceClass')
+if [ $? -ne 0 ] || [ -z "${db_instance_class}" ] || [ "${db_instance_class}" = "null" ]; then
+  log_err "Unable to determine DB instance class for new instance."
+  cleanup
+  exit 1
+fi
+log_msg "DB instance class: ${db_instance_class}"
+cluster_param_group=$(echo "${readonly_cluster_info}" | /usr/bin/jq -r '.DBClusterParameterGroup')
+if [ $? -ne 0 ] || [ -z "${cluster_param_group}" ] || [ "${cluster_param_group}" = "null" ]; then
+  log_err "Unable to determine DB cluster parameter group for new cluster."
+  cleanup
+  exit 1
+fi
+log_msg "DB cluster parameter group: ${cluster_param_group}"
+db_engine=$(echo "${readonly_cluster_info}" | /usr/bin/jq -r '.Engine')
+if [ $? -ne 0 ] || [ -z "${db_engine}" ] || [ "${db_engine}" = "null" ]; then
+  log_err "Unable to determine engine for source cluster."
+  cleanup
+  exit 1
+fi
+log_msg "DB engine: ${db_engine}"
 
 rds_master_pass=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
 
-####### Create new RDS instance from snapshot
+####### Create new Aurora cluster and instance from snapshot
 
-log_msg "Creating new RDS instance: ${restored_db_instance_id} from snapshot ${snapshot_id}"
-aws_cmd "/usr/local/bin/aws rds restore-db-instance-from-db-snapshot --db-instance-identifier ${restored_db_instance_id} --db-snapshot-identifier ${snapshot_id} --region ${aws_region} --db-subnet-group-name ${subnet_group} --db-instance-class db.m6g.2xlarge"
+log_msg "Creating new Aurora cluster: ${restored_db_cluster_id} from snapshot ${snapshot_id}"
+aws_cmd "/usr/local/bin/aws rds restore-db-cluster-from-snapshot --db-cluster-identifier ${restored_db_cluster_id} --snapshot-identifier ${snapshot_id} --engine ${db_engine} --region ${aws_region} --db-subnet-group-name ${subnet_group} --vpc-security-group-ids ${sec_group} --db-cluster-parameter-group-name ${cluster_param_group}"
 if [ $? -ne 0 ]; then
-  log_err "Unable to restore RDS instance from snapshot: ${restored_db_instance_id}: ${aws_cmd_output}"
+  log_err "Unable to restore Aurora cluster from snapshot: ${restored_db_cluster_id}: ${aws_cmd_output}"
+  cleanup
+  exit 1
+fi
+
+aws_cmd "/usr/local/bin/aws rds wait db-cluster-available --region ${aws_region} --db-cluster-identifier ${restored_db_cluster_id}"
+if [ $? -ne 0 ]; then
+  log_err "DB Cluster not available in the given time: ${restored_db_cluster_id}"
+  cleanup
+  exit 1
+fi
+
+log_msg "Creating new Aurora instance: ${restored_db_instance_id} in cluster ${restored_db_cluster_id}"
+aws_cmd "/usr/local/bin/aws rds create-db-instance --db-instance-identifier ${restored_db_instance_id} --db-cluster-identifier ${restored_db_cluster_id} --engine ${db_engine} --db-instance-class ${db_instance_class} --region ${aws_region} --db-parameter-group-name ${param_group}"
+if [ $? -ne 0 ]; then
+  log_err "Unable to create Aurora instance: ${restored_db_instance_id}: ${aws_cmd_output}"
   cleanup
   exit 1
 fi
@@ -252,59 +314,41 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 restore_db=$(echo "${aws_cmd_output}" | /usr/bin/jq -r '.DBInstances[]')
-db_instance_endpoint=$(echo "${restore_db}" | /usr/bin/jq -r '.Endpoint.Address')
+aws_cmd "/usr/local/bin/aws rds describe-db-clusters --region ${aws_region} --db-cluster-identifier ${restored_db_cluster_id}"
+if [ $? -ne 0 ]; then
+  log_err "Unable to describe DB Cluster: ${restored_db_cluster_id}: ${aws_cmd_output}"
+  cleanup
+  exit 1
+fi
+restore_cluster=$(echo "${aws_cmd_output}" | /usr/bin/jq -r '.DBClusters[]')
+db_instance_endpoint=$(echo "${restore_cluster}" | /usr/bin/jq -r '.Endpoint')
 
-log_msg "RDS instance available at: $db_instance_endpoint"
+log_msg "Aurora cluster available at: $db_instance_endpoint"
 
 if [ "$mode" == "" ]; then
-   cleanup_items+=("rds:${restored_db_instance_id}")
+   cleanup_items+=("aurora-instance:${restored_db_instance_id}")
+   cleanup_items+=("aurora-cluster:${restored_db_cluster_id}")
 fi
 
-####### Apply subnet/security/param group info to new instance and reboot
+####### Apply Aurora configuration to new cluster
 
 log_msg "Modifying database."
-aws_cmd "/usr/local/bin/aws rds modify-db-instance --region ${aws_region} --db-instance-identifier ${restored_db_instance_id} --vpc-security-group-ids ${sec_group} --db-parameter-group-name ${param_group} --master-user-password ${rds_master_pass} --apply-immediately" "" "" "yes"
+aws_cmd "/usr/local/bin/aws rds modify-db-cluster --region ${aws_region} --db-cluster-identifier ${restored_db_cluster_id} --vpc-security-group-ids ${sec_group} --db-cluster-parameter-group-name ${cluster_param_group} --master-user-password ${rds_master_pass} --apply-immediately" "" "" "yes"
 if [ $? -ne 0 ]; then
-  log_err "Unable to modify database: ${restored_db_instance_id}: ${aws_cmd_output}"
+  log_err "Unable to modify database cluster: ${restored_db_cluster_id}: ${aws_cmd_output}"
   cleanup
   exit 1
 fi
 
 sleep 60
 
-aws_cmd "/usr/local/bin/aws rds wait db-instance-available --region ${aws_region} --db-instance-identifier ${restored_db_instance_id}"
+aws_cmd "/usr/local/bin/aws rds wait db-cluster-available --region ${aws_region} --db-cluster-identifier ${restored_db_cluster_id}"
 if [ $? -ne 0 ]; then
-  log_err "DB Instance not available in the given time after subnet modification: ${restored_db_instance_id}"
+  log_err "DB Cluster not available in the given time after modification: ${restored_db_cluster_id}"
   cleanup
   exit 1
 fi
 sleep 20
-
-log_msg "Rebooting RDS instance."
-result=$(/usr/local/bin/aws rds reboot-db-instance --db-instance-identifier ${restored_db_instance_id} --region ${aws_region})
-if [ $? -ne 0 ]; then
-  log_err "Unable to reboot RDS instance: ${restored_db_instance_id}: ${aws_cmd_output}"
-  cleanup
-  exit 1
-fi
-
-sleep 60
-
-aws_cmd "/usr/local/bin/aws rds wait db-instance-available --region ${aws_region} --db-instance-identifier ${restored_db_instance_id}"
-if [ $? -ne 0 ]; then
-  log_err "DB Instance not available in the given time after subnet modification: ${restored_db_instance_id}"
-  cleanup
-  exit 1
-fi
-sleep 20
-
-log_msg "Increasing database volume size."
-aws_cmd "/usr/local/bin/aws rds modify-db-instance --region ${aws_region} --db-instance-identifier ${restored_db_instance_id} --iops 1000 --allocated-storage 300 --apply-immediately"
-if [ $? -ne 0 ]; then
-  log_err "Unable to increase database size: ${restored_db_instance_id}: ${aws_cmd_output}"
-  cleanup
-  exit 1
-fi
 
 ####### Run NI DVACOMPLIANCE JOB
 
