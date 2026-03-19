@@ -109,8 +109,8 @@ class DeclarationReviewService extends AbstractReviewService
                 $markupStandard = 'markup-continuation-declaration-goods-ni-standard';
                 $markupOperatingCentres = 'markup-continuation-declaration-goods-ni-operating-centres-not-lgv';
             } elseif ($licence->isStandardNational() || $licence->isStandardInternational()) {
-                $markupKey = 'markup-continuation-declaration-goods-gb';
-                $markupStandard = 'markup-continuation-declaration-goods-gb-standard';
+                $markupKey = 'markup-continuation-declaration-goods-gb-sn';
+                $markupStandard = 'markup-continuation-declaration-goods-gb-sn-standard';
                 $markupOperatingCentres = 'markup-continuation-declaration-goods-gb-operating-centres-not-lgv';
             } else {
                 $markupKey = 'markup-continuation-declaration-goods-gb';
