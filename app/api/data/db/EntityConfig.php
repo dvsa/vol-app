@@ -221,6 +221,9 @@ return array(
         'declaration_confirmation' => array(
             'type' => 'yesno'
         ),
+        'no_tm_confirmation' => array(
+            'type' => 'yesno'
+        ),
         'financial_evidence_uploaded' => array(
             'type' => 'smallint'
         ),

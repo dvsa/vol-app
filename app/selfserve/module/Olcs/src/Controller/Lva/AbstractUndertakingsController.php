@@ -214,6 +214,8 @@ abstract class AbstractUndertakingsController extends AbstractController
             'id' => $this->getIdentifier(),
             'version' => $formData['declarationsAndUndertakings']['version'],
             'declarationConfirmation' => $shouldCompleteSection ? 'Y' : 'N',
+            'noTmConfirmation' => isset($formData['declarationsAndUndertakings']['noTmConfirmation']) ?
+                $formData['declarationsAndUndertakings']['noTmConfirmation'] : 'N',
             'interimRequested' => isset($formData['interim']) ?
                 $formData['interim']['goodsApplicationInterim'] : null,
             'interimReason' => isset($formData['interim']) ?
