@@ -9,7 +9,7 @@ jobs:
   security:
     uses: dvsa/.github/.github/workflows/php-library-security.yml@main
     with:
-      php-versions: '["8.2","8.3"]'
+      php-versions: '["8.3"]'
     secrets:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
@@ -22,5 +22,5 @@ jobs:
   tests:
     uses: dvsa/.github/.github/workflows/php-library-tests.yml@main
     with:
-      php-versions: '["8.2","8.3"]'
+      php-versions: '["8.3"]'
       fail-fast: false

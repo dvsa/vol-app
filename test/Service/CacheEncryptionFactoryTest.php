@@ -29,11 +29,6 @@ class CacheEncryptionFactoryTest extends MockeryTestCase
         $config = [
             'cache-encryption' => [
                 'node_suffix' => 'ssweb',
-                'adapter' => 'openssl',
-                'options' => [
-                    'algo' => 'aes',
-                    'mode' => 'gcm',
-                ],
                 'secrets' => [
                     'node' => 'nonprod/redis-ss',
                     'shared' => 'nonprod/redis-shared',

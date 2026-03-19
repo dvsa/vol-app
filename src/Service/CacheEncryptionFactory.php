@@ -5,7 +5,6 @@ namespace Dvsa\Olcs\Transfer\Service;
 use Psr\Container\ContainerInterface;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Laminas\Crypt\BlockCipher;
 
 class CacheEncryptionFactory implements FactoryInterface
 {
@@ -33,15 +32,8 @@ class CacheEncryptionFactory implements FactoryInterface
         $cache = $container->get('default-cache');
         assert($cache instanceof StorageInterface);
 
-        /** @var BlockCipher $blockCipher */
-        $blockCipher = BlockCipher::factory(
-            $config['cache-encryption']['adapter'],
-            $config['cache-encryption']['options']
-        );
-
         return new CacheEncryption(
             $cache,
-            $blockCipher,
             $config['cache-encryption']['secrets']['node'],
             $config['cache-encryption']['secrets']['shared'],
             $config['cache-encryption']['node_suffix']

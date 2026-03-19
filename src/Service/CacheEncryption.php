@@ -7,47 +7,48 @@ use Dvsa\Olcs\Transfer\Query\SystemParameter\SystemParameter;
 use Dvsa\Olcs\Transfer\Query\SystemParameter\SystemParameterList;
 use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use Laminas\Cache\Storage\StorageInterface;
-use Laminas\Crypt\BlockCipher;
+use ParagonIE\Halite\Symmetric\Crypto;
+use ParagonIE\Halite\Symmetric\EncryptionKey;
+use ParagonIE\HiddenString\HiddenString;
 
 class CacheEncryption
 {
-    public const ERR_NO_KEY_AVAILABLE = 'No encryption key available for this encryption mode';
-    public const ERR_NO_IDS_TO_DELETE = 'Please provide ids for the items being deleted';
+    public const string ERR_NO_KEY_AVAILABLE = 'No encryption key available for this encryption mode';
+    public const string ERR_NO_IDS_TO_DELETE = 'Please provide ids for the items being deleted';
 
-    public const ENCRYPTION_MODE_PUBLIC = 'encryption_public';
-    public const ENCRYPTION_MODE_SHARED = 'encryption_shared';
-    public const ENCRYPTION_MODE_NODE = 'encryption_node';
+    public const string ENCRYPTION_MODE_PUBLIC = 'encryption_public';
+    public const string ENCRYPTION_MODE_SHARED = 'encryption_shared';
+    public const string ENCRYPTION_MODE_NODE = 'encryption_node';
 
-    public const ENCRYPTION_PUBLIC_NODE_SUFFIX = 'public';
-    public const ENCRYPTION_SHARED_NODE_SUFFIX = 'shared';
+    public const string ENCRYPTION_PUBLIC_NODE_SUFFIX = 'public';
+    public const string ENCRYPTION_SHARED_NODE_SUFFIX = 'shared';
 
-    public const TTL_DEFAULT = 3600;
-    public const TTL_2_MINUTES = 120;
-    public const TTL_60_DAYS = 5184000;
-    public const TTL_20_DAYS = 1728000;
-    public const TTL_1_DAY = 86400;
+    public const int TTL_2_MINUTES = 120;
+    public const int TTL_60_DAYS = 5184000;
+    public const int TTL_20_DAYS = 1728000;
+    public const int TTL_1_DAY = 86400;
 
-    public const TRANSLATION_KEY_IDENTIFIER = 'translation_key';
-    public const TRANSLATION_REPLACEMENT_IDENTIFIER = 'translation_replacement';
+    public const string TRANSLATION_KEY_IDENTIFIER = 'translation_key';
+    public const string TRANSLATION_REPLACEMENT_IDENTIFIER = 'translation_replacement';
 
-    public const SYS_PARAM_IDENTIFIER = 'sys_param';
-    public const SYS_PARAM_LIST_IDENTIFIER = 'sys_param_list';
-    public const USER_ACCOUNT_IDENTIFIER = 'user_account';
-    public const GENERIC_STORAGE_IDENTIFIER = 'storage';
+    public const string SYS_PARAM_IDENTIFIER = 'sys_param';
+    public const string SYS_PARAM_LIST_IDENTIFIER = 'sys_param_list';
+    public const string USER_ACCOUNT_IDENTIFIER = 'user_account';
+    public const string GENERIC_STORAGE_IDENTIFIER = 'storage';
 
-    public const SECRETS_MANAGER_IDENTIFIER = 'secretsmanager';
+    public const string SECRETS_MANAGER_IDENTIFIER = 'secretsmanager';
 
     /** @var string[] a list of caches held against a user id */
-    public const USER_CACHES = [
+    public const array USER_CACHES = [
         self::USER_ACCOUNT_IDENTIFIER
     ];
 
-    public const QUERY_MAP = [
+    public const array QUERY_MAP = [
         SystemParameter::class => self::SYS_PARAM_IDENTIFIER,
         SystemParameterList::class => self::SYS_PARAM_LIST_IDENTIFIER,
     ];
 
-    public const CUSTOM_CACHE_TYPE = [
+    public const array CUSTOM_CACHE_TYPE = [
         self::GENERIC_STORAGE_IDENTIFIER => [
             'mode' => self::ENCRYPTION_MODE_SHARED,
             'ttl' => self::TTL_1_DAY,
@@ -79,21 +80,16 @@ class CacheEncryption
 
     ];
 
-    /**
-     * CacheEncryption constructor.
-     *
-     *
-     * @return void
-     */
-    public function __construct(private StorageInterface $cache, private BlockCipher $encryptor, private string $nodeKey, private string $sharedKey, private string $nodeSuffix)
-    {
+    public function __construct(
+        private readonly StorageInterface $cache,
+        private readonly string $nodeKey,
+        private readonly string $sharedKey,
+        private readonly string $nodeSuffix
+    ) {
     }
 
     /**
      * Whether the cache has the requested item
-     *
-     *
-     * @return bool
      */
     public function hasItem(string $cacheIdentifier, string $encryptionMode): bool
     {
@@ -103,8 +99,6 @@ class CacheEncryption
     /**
      * Whether a custom (non-CQRS) cache item exists
      *
-     *
-     * @return bool
      * @throws \Exception
      */
     public function hasCustomItem(string $cacheType, string $uniqueId = ''): bool
@@ -172,9 +166,7 @@ class CacheEncryption
      * Node specific mode: value will be encrypted for a single group of nodes only e.g. ssweb, iuweb or api
      * TTL is specified in seconds - 3600 means a default of one hour
      *
-     *
      * @throws \Exception
-     * @return bool
      */
     public function setItem(string $cacheKey, string $encryptionMode, mixed $value, int $ttl = 3600): bool
     {
@@ -200,7 +192,6 @@ class CacheEncryption
      * @param string $uniqueId  optional suffix to add uniqueness, such as a translation locale or user id
      *
      * @throws \Exception
-     * @return bool
      */
     public function setCustomItem(string $cacheType, mixed $value, $uniqueId = ''): bool
     {
@@ -210,7 +201,6 @@ class CacheEncryption
 
     /**
      * Retrieve an item from the cache
-     *
      *
      * @throws \Exception
      * @return mixed|null
@@ -264,38 +254,29 @@ class CacheEncryption
 
     /**
      * Encrypt a value prior to saving in the cache
-     *
-     *
-     * @return string
      */
-    private function encrypt(string $encryptionKey, mixed $value): string
+    private function encrypt(string $encryptionKey, ?string $value): string
     {
-        $this->encryptor->setKey($encryptionKey);
-        return $this->encryptor->encrypt($value);
+        $key = new EncryptionKey(new HiddenString($encryptionKey));
+        return Crypto::encrypt(new HiddenString((string) $value), $key);
     }
 
     /**
      * Decrypt a value using the specified encryption key
-     *
-     *
-     * @return mixed
      */
-    private function decrypt(string $encryptionKey, ?string $encryptedValue)
+    private function decrypt(string $encryptionKey, ?string $encryptedValue): ?string
     {
         if (is_null($encryptedValue)) {
-            return $encryptedValue;
+            return null;
         }
 
-        $this->encryptor->setKey($encryptionKey);
-        return $this->encryptor->decrypt($encryptedValue);
+        $key = new EncryptionKey(new HiddenString($encryptionKey));
+        return Crypto::decrypt($encryptedValue, $key)->getString();
     }
 
     /**
      * Get (and check validity of) config for a custom cache type
      *
-     * @param $cacheType
-     *
-     * @return array
      * @throws \Exception
      */
     private function getCustomCacheConfig($cacheType): array
@@ -310,9 +291,7 @@ class CacheEncryption
     /**
      * Get the correct encryption key
      *
-     *
      * @throws \Exception
-     * @return string
      */
     private function getEncryptionKey(string $encryptionMode): string
     {
@@ -330,9 +309,6 @@ class CacheEncryption
     /**
      * Get the correct suffix to use
      * (prevents the same data encrypted with a different key from having the same cache identifier)
-     *
-     *
-     * @return string
      */
     private function getSuffix(string $encryptionMode): string
     {
@@ -351,8 +327,6 @@ class CacheEncryption
 
     /**
      * Gets the encryption key for this node
-     *
-     * @return string
      */
     public function getNodeKey(): string
     {
@@ -361,36 +335,23 @@ class CacheEncryption
 
     /**
      * Gets the shared encryption key
-     *
-     * @return string
      */
     public function getSharedKey(): string
     {
         return $this->sharedKey;
     }
 
-    /**
-     * Gets the node suffix
-     *
-     * @return string
-     */
     public function getNodeSuffix(): string
     {
         return $this->nodeSuffix;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCustomCacheIdentifierForCqrs(QueryContainerInterface $queryContainer): ?string
     {
         $dtoClass = $queryContainer->getDtoClassName();
         return self::QUERY_MAP[$dtoClass] ?? null;
     }
 
-    /**
-     * @return string|null
-     */
     public function getQueryFromCustomIdentifier(string $customCacheKey): ?string
     {
         $map = array_flip(self::QUERY_MAP);
