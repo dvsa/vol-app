@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.10.0](https://github.com/dvsa/olcs-transfer/compare/v8.9.0...v8.10.0) (2026-03-19)
+
+
+### Features
+
+* cache encryption wrapper moved from laminas-crypt to paragonie/halite VOL-6097 ([#177](https://github.com/dvsa/olcs-transfer/issues/177)) ([138f250](https://github.com/dvsa/olcs-transfer/commit/138f250a9f322240c1085bb689757e0564a28f77))
+
 ## [8.9.0](https://github.com/dvsa/olcs-transfer/compare/v8.8.0...v8.9.0) (2026-03-18)
 
 
