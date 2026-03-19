@@ -39,7 +39,7 @@ resource "aws_lb_target_group" "this" {
     timeout             = 60
     protocol            = "HTTP"
     port                = 8080
-    path                = "/healthcheck"
+    path                = each.value.health_check_path
     matcher             = "200-499"
   }
 }
@@ -72,7 +72,7 @@ resource "aws_lb_listener_rule" "this" {
   }
 
   listener_arn = each.value.lb_listener_arn
-  priority     = each.key == "pdf-converter" ? 86 : each.value.listener_rule_priority
+  priority     = each.value.listener_rule_priority
 
   action {
     type             = "forward"
@@ -88,34 +88,8 @@ resource "aws_lb_listener_rule" "this" {
     for_each = each.key == "pdf-converter" ? [1] : []
     content {
       source_ip {
-        values = local.api_subnets_cidrs
+        values = concat(local.api_subnets_cidrs, local.batch_subnets_cidrs)
       }
-    }
-  }
-}
-resource "aws_lb_listener_rule" "renderer-batch" {
-  for_each = {
-    for k, v in var.services :
-    k => v
-    if k == "pdf-converter" && v.listener_rule_enable
-  }
-
-  listener_arn = each.value.lb_listener_arn
-  priority     = 87
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.this[each.key].arn
-  }
-
-  condition {
-    host_header {
-      values = each.value.listener_rule_host_header
-    }
-  }
-  condition {
-    source_ip {
-      values = local.batch_subnets_cidrs
     }
   }
 }
