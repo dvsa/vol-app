@@ -284,6 +284,9 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+# Ensure the restored cluster is cleaned up if any later step fails.
+cleanup_items+=("${restored_db_cluster_id}")
+
 aws_cmd "/usr/local/bin/aws rds wait db-cluster-available --region ${aws_region} --db-cluster-identifier ${restored_db_cluster_id}"
 if [ $? -ne 0 ]; then
   log_err "DB Cluster not available in the given time: ${restored_db_cluster_id}"
