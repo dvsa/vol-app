@@ -372,6 +372,15 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     protected $declarationConfirmation = 0;
 
     /**
+     * User confirms they have no TM
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="no_tm_confirmation", nullable=false, options={"default": 0})
+     */
+    protected $noTmConfirmation = 0;
+
+    /**
      * User specifies whether they have uploaded financial evidence or will send by post
      *
      * @var int
@@ -1762,6 +1771,20 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     }
 
     /**
+     * Set the no tm confirmation
+     *
+     * @param string $noTmConfirmation new value being set
+     *
+     * @return Application
+     */
+    public function setNoTmConfirmation($noTmConfirmation)
+    {
+        $this->noTmConfirmation = $noTmConfirmation;
+
+        return $this;
+    }
+
+    /**
      * Get the declaration confirmation
      *
      * @return string
@@ -1769,6 +1792,16 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     public function getDeclarationConfirmation()
     {
         return $this->declarationConfirmation;
+    }
+
+    /**
+     * Get the no tm confirmation
+     *
+     * @return string
+     */
+    public function getNoTmConfirmation()
+    {
+        return $this->noTmConfirmation;
     }
 
     /**
