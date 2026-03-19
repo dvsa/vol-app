@@ -14,6 +14,7 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\AbstractUndertakingsController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use LmcRbacMvc\Service\AuthorizationService;
+use Dvsa\Olcs\Transfer\Query\Licence\TransportManagers;
 
 /**
  * External Variation Undertakings Controller
@@ -93,7 +94,24 @@ class UndertakingsController extends AbstractUndertakingsController
         );
 
         $fieldset->get('summaryDownload')->setAttribute('value', $summaryDownload);
+        
+        if ($applicationData['applicationCompletion']['transportManagersStatus'] === RefData::VARIATION_STATUS_UPDATED) {
 
+            $query = TransportManagers::create([
+                'id' => $applicationData['licence']['id'] 
+            ]);
+
+            $response = $this->handleQuery($query);
+
+            if (!$response->isOk()) {
+                throw new Exception('LicenceTransportManagers query returned non-OK (' . $response->getStatusCode() . ') -- ' . $response->getBody());
+            }
+            
+            if(!empty($response->getResult()['tmLicences'])) {
+                $form->get('declarationsAndUndertakings')->remove('noTmConfirmation');
+            }
+        }
+        
         $form->get('interim')->get('YContent')->get('interimFee')->setValue(
             $translator->translateReplace('selfserve.declaration.interim_fee', [$applicationData['interimFee']])
         );
