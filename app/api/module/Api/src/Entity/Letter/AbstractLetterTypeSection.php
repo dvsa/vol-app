@@ -104,6 +104,15 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
     protected $overrideContent;
 
     /**
+     * JSON filter config for issues meta-section
+     *
+     * @var array
+     *
+     * @ORM\Column(type="json", name="issue_filter", nullable=true)
+     */
+    protected $issueFilter;
+
+    /**
      * Initialise the collections
      */
     public function __construct()
@@ -261,6 +270,30 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
     public function getOverrideContent()
     {
         return $this->overrideContent;
+    }
+
+    /**
+     * Set the issue filter
+     *
+     * @param array $issueFilter new value being set
+     *
+     * @return LetterTypeSection
+     */
+    public function setIssueFilter($issueFilter)
+    {
+        $this->issueFilter = $issueFilter;
+
+        return $this;
+    }
+
+    /**
+     * Get the issue filter
+     *
+     * @return array
+     */
+    public function getIssueFilter()
+    {
+        return $this->issueFilter;
     }
 
     /**

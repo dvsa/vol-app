@@ -15,7 +15,7 @@ final class Create extends AbstractCommandHandler
 {
     protected $repoServiceName = 'LetterType';
 
-    protected $extraRepos = ['MasterTemplate', 'Category', 'SubCategory', 'LetterTestData', 'LetterAppendix'];
+    protected $extraRepos = ['MasterTemplate', 'Category', 'SubCategory', 'LetterTestData', 'LetterSection', 'LetterAppendix'];
 
     #[\Override]
     public function handleCommand(CommandInterface $command): Result
@@ -49,6 +49,21 @@ final class Create extends AbstractCommandHandler
         if ($command->getLetterTestData()) {
             $letterTestData = $this->getRepo('LetterTestData')->fetchById($command->getLetterTestData());
             $letterType->setLetterTestData($letterTestData);
+        }
+
+        // Add sections if provided
+        if ($command->getSections() !== null) {
+            $displayOrder = 0;
+            foreach ($command->getSections() as $sectionId) {
+                $letterSection = $this->getRepo('LetterSection')->fetchById($sectionId);
+                $sectionVersion = $letterSection->getCurrentVersion();
+                if ($sectionVersion) {
+                    $lts = new \Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection();
+                    $lts->setLetterSectionVersion($sectionVersion);
+                    $lts->setDisplayOrder($displayOrder++);
+                    $letterType->addLetterTypeSection($lts);
+                }
+            }
         }
 
         // Add appendices if provided
