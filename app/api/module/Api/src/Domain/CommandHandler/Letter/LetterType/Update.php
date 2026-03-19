@@ -43,10 +43,24 @@ final class Update extends AbstractCommandHandler
 
         // Update sections if provided
         if ($command->getSections() !== null) {
-            $letterType->getLetterTypeSections()->clear();
+            // Clear existing sections (orphanRemoval handles deletion)
+            foreach ($letterType->getLetterTypeSections()->toArray() as $existing) {
+                $letterType->removeLetterTypeSection($existing);
+            }
+
+            // Flush removals so DELETEs execute before INSERTs (composite PK)
+            $this->getRepo()->flushAll();
+
+            $displayOrder = 0;
             foreach ($command->getSections() as $sectionId) {
-                $section = $this->getRepo('LetterSection')->fetchById($sectionId);
-                $letterType->addLetterTypeSection($section);
+                $letterSection = $this->getRepo('LetterSection')->fetchById($sectionId);
+                $sectionVersion = $letterSection->getCurrentVersion();
+                if ($sectionVersion) {
+                    $lts = new \Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection();
+                    $lts->setLetterSectionVersion($sectionVersion);
+                    $lts->setDisplayOrder($displayOrder++);
+                    $letterType->addLetterTypeSection($lts);
+                }
             }
         }
 

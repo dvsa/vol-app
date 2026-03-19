@@ -24,16 +24,6 @@ class LetterIssue
     public $issueKey = null;
 
     /**
-     * @Form\Options({"label": "Heading"})
-     * @Form\Required(true)
-     * @Form\Type("Text")
-     * @Form\Attributes({"class":"long", "required": true})
-     * @Form\Filter("Laminas\Filter\StringTrim")
-     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1, "max":255})
-     */
-    public $heading = null;
-
-    /**
      * @Form\Options({"label": "Modal Label"})
      * @Form\Required(false)
      * @Form\Type("Text")
@@ -42,6 +32,16 @@ class LetterIssue
      * @Form\Validator("Laminas\Validator\StringLength", options={"min":1, "max":200})
      */
     public $modalLabel = null;
+
+    /**
+     * @Form\Options({"label": "Heading"})
+     * @Form\Required(true)
+     * @Form\Type("Text")
+     * @Form\Attributes({"class":"long", "required": true})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1, "max":255})
+     */
+    public $heading = null;
 
     /**
      * @Form\Options({

@@ -8,6 +8,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceAppendix;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue;
+use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Generate as Cmd;
 
 /**
@@ -54,6 +55,15 @@ final class Generate extends AbstractCommandHandler
 
         // Set optional relations (licence, application, case, etc.)
         $this->setOptionalRelations($letterInstance, $command);
+
+        // Populate instance sections from letter type assembly
+        foreach ($letterType->getLetterTypeSections() ?? [] as $typeSection) {
+            $instanceSection = new LetterInstanceSection();
+            $instanceSection->setLetterInstance($letterInstance);
+            $instanceSection->setLetterSectionVersion($typeSection->getLetterSectionVersion());
+            $instanceSection->setDisplayOrder($typeSection->getDisplayOrder());
+            $letterInstance->addLetterInstanceSection($instanceSection);
+        }
 
         // Create instance issues from selected issues
         if (!empty($command->getSelectedIssues())) {

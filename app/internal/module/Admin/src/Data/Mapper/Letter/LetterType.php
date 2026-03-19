@@ -18,6 +18,19 @@ class LetterType implements MapperInterface
     #[\Override]
     public static function mapFromResult(array $data): array
     {
+        // Extract section IDs from letterTypeSections collection (ordered by displayOrder)
+        $sectionIds = [];
+        if (!empty($data['letterTypeSections'])) {
+            // Sort by displayOrder to preserve assembly ordering
+            $sections = $data['letterTypeSections'];
+            usort($sections, fn($a, $b) => ($a['displayOrder'] ?? 0) <=> ($b['displayOrder'] ?? 0));
+            foreach ($sections as $lts) {
+                if (isset($lts['letterSectionVersion']['letterSection']['id'])) {
+                    $sectionIds[] = $lts['letterSectionVersion']['letterSection']['id'];
+                }
+            }
+        }
+
         // Extract appendix IDs from letterTypeAppendices collection
         $appendixIds = [];
         if (!empty($data['letterTypeAppendices'])) {
@@ -38,6 +51,8 @@ class LetterType implements MapperInterface
                 'category' => isset($data['category']['id']) ? $data['category']['id'] : null,
                 'subCategory' => isset($data['subCategory']['id']) ? $data['subCategory']['id'] : null,
                 'letterTestData' => isset($data['letterTestData']['id']) ? $data['letterTestData']['id'] : null,
+                'sections' => $sectionIds,
+                'sectionsOrder' => implode(',', $sectionIds),
                 'appendices' => $appendixIds,
             ]
         ];
@@ -81,6 +96,15 @@ class LetterType implements MapperInterface
         if (empty($commandData['letterTestData'])) {
             unset($commandData['letterTestData']);
         }
+
+        // Use sectionsOrder (from hidden input) for ordered section IDs, fall back to sections multi-select
+        $sectionsOrder = $commandData['sectionsOrder'] ?? '';
+        if (!empty($sectionsOrder)) {
+            $commandData['sections'] = array_filter(explode(',', $sectionsOrder));
+        } else {
+            $commandData['sections'] = array_filter((array)($commandData['sections'] ?? []));
+        }
+        unset($commandData['sectionsOrder']);
 
         // Ensure appendices is always an array (even if empty) so the handler processes removals.
         // When a multi-select has nothing selected, browsers don't submit the field at all.
