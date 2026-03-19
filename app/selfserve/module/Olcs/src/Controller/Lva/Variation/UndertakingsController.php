@@ -106,10 +106,12 @@ class UndertakingsController extends AbstractUndertakingsController
             if (!$response->isOk()) {
                 throw new Exception('LicenceTransportManagers query returned non-OK (' . $response->getStatusCode() . ') -- ' . $response->getBody());
             }
-            
+
             if(!empty($response->getResult()['tmLicences'])) {
                 $form->get('declarationsAndUndertakings')->remove('noTmConfirmation');
             }
+        } else {
+            $form->get('declarationsAndUndertakings')->remove('noTmConfirmation');
         }
         
         $form->get('interim')->get('YContent')->get('interimFee')->setValue(
