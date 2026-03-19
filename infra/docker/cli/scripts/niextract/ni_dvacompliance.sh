@@ -141,6 +141,12 @@ function cleanup {
             aws_cmd "/usr/local/bin/aws rds delete-db-instance --skip-final-snapshot --db-instance-identifier ${item} --region ${aws_region}"
             if [ $? -ne 0 ]; then
               log_err "Unable to delete Aurora instance: ${item}"
+            else
+              echo "Waiting for Aurora instance to be fully deleted: ${item}"
+              aws_cmd "/usr/local/bin/aws rds wait db-instance-deleted --db-instance-identifier ${item} --region ${aws_region}"
+              if [ $? -ne 0 ]; then
+                log_err "Timed out or failed waiting for Aurora instance deletion: ${item}"
+              fi
             fi
             result=${aws_cmd_output}
             ;;
