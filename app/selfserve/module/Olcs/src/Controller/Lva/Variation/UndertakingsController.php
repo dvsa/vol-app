@@ -95,10 +95,12 @@ class UndertakingsController extends AbstractUndertakingsController
 
         $fieldset->get('summaryDownload')->setAttribute('value', $summaryDownload);
         
-        if ($applicationData['applicationCompletion']['transportManagersStatus'] === RefData::VARIATION_STATUS_UPDATED) {
+        $shouldHideNoTmConfirmation = ($applicationData['applicationCompletion']['transportManagersStatus'] ?? null) !== RefData::VARIATION_STATUS_UPDATED;
+
+        if (!$shouldHideNoTmConfirmation) {
 
             $query = TransportManagers::create([
-                'id' => $applicationData['licence']['id'] 
+                'id' => $applicationData['licence']['id'] ?? null
             ]);
 
             $response = $this->handleQuery($query);
@@ -107,11 +109,16 @@ class UndertakingsController extends AbstractUndertakingsController
                 throw new Exception('LicenceTransportManagers query returned non-OK (' . $response->getStatusCode() . ') -- ' . $response->getBody());
             }
 
-            if(!empty($response->getResult()['tmLicences'])) {
-                $form->get('declarationsAndUndertakings')->remove('noTmConfirmation');
+            $shouldHideNoTmConfirmation = !empty($response->getResult()['tmLicences'] ?? []);
+        }
+
+        if ($shouldHideNoTmConfirmation) {
+            $fieldset->remove('noTmConfirmation');
+
+            $fieldsetFilter = $form->getInputFilter()->get('declarationsAndUndertakings');
+            if ($fieldsetFilter->has('noTmConfirmation')) {
+                $fieldsetFilter->get('noTmConfirmation')->setRequired(false);
             }
-        } else {
-            $form->get('declarationsAndUndertakings')->remove('noTmConfirmation');
         }
         
         $form->get('interim')->get('YContent')->get('interimFee')->setValue(
