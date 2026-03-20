@@ -39,19 +39,28 @@ class TransportManagersReviewService extends AbstractReviewService
         $cd = $tm['homeCd'];
         $person = $cd['person'];
 
+        $items = [
+            [
+                'label' => 'review-transport-manager-email',
+                'value' => $cd['emailAddress']
+            ],
+            [
+                'label' => 'review-transport-manager-dob',
+                'value' => $this->formatDate($person['birthDate'])
+            ]
+        ];
+
+        if (!empty($data['noTmConfirmation'])) {
+            $items[] = [
+                'label' => 'review-transport-manager-dob',
+                'value' => $data['noTmConfirmation']
+            ];
+        }
+
         return [
             'header' => $this->formatPersonFullName($person),
             'multiItems' => [
-                [
-                    [
-                        'label' => 'review-transport-manager-email',
-                        'value' => $cd['emailAddress']
-                    ],
-                    [
-                        'label' => 'review-transport-manager-dob',
-                        'value' => $this->formatDate($person['birthDate'])
-                    ]
-                ]
+                $items
             ]
         ];
     }
