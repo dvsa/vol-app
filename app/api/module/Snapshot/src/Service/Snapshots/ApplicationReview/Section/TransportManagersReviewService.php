@@ -52,7 +52,7 @@ class TransportManagersReviewService extends AbstractReviewService
 
         if (!empty($data['noTmConfirmation'])) {
             $items[] = [
-                'label' => 'review-transport-manager-dob',
+                'label' => 'variation.review-notransportmanager.confirm-text',
                 'value' => $data['noTmConfirmation']
             ];
         }
