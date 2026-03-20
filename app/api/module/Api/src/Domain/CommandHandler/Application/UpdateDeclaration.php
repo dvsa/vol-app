@@ -46,10 +46,7 @@ final class UpdateDeclaration extends AbstractCommandHandler implements Transact
         if ($command->getDeclarationConfirmation() === 'Y') {
             $application->setDeclarationConfirmation($command->getDeclarationConfirmation());
         }
-        if ($command->getNoTmConfirmation() === 'Y') {
-            $application->setNoTmConfirmation($command->getNoTmConfirmation());
-        }
-        if ($command->getNoTmConfirmation() === 'N') {
+        if ($command->getNoTmConfirmation() !== null) {
             $application->setNoTmConfirmation($command->getNoTmConfirmation());
         }
         if ($command->getInterimRequested() === 'Y') {
