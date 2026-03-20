@@ -308,6 +308,8 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+cleanup_items+=("${restored_db_instance_id}")
+
 aws_cmd "/usr/local/bin/aws rds wait db-instance-available --region ${aws_region} --db-instance-identifier ${restored_db_instance_id}"
 if [ $? -ne 0 ]; then
   log_err "DB Instance not available in the given time: ${restored_db_instance_id}"
