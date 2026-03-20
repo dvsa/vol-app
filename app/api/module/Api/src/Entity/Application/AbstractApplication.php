@@ -376,9 +376,9 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var string
      *
-     * @ORM\Column(type="yesno", name="no_tm_confirmation", nullable=false, options={"default": 0})
+     * @ORM\Column(type="yesnonull", name="no_tm_confirmation", nullable=true)
      */
-    protected $noTmConfirmation = 0;
+    protected $noTmConfirmation;
 
     /**
      * User specifies whether they have uploaded financial evidence or will send by post
