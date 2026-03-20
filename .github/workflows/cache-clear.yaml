@@ -126,9 +126,8 @@ jobs:
           # Add verbose flag
           ARGS+=("-v")
 
-          # Convert to JSON array elements for container-overrides
-          JSON_ARGS=$(printf ', "%s"' "${ARGS[@]}")
-          JSON_ARGS="${JSON_ARGS:2}"
+          # Build JSON array of args using jq for proper escaping
+          JSON_ARGS=$(printf '%s\n' "${ARGS[@]}" | jq -R . | jq -sc .)
 
           echo "args=$JSON_ARGS" >> $GITHUB_OUTPUT
           echo "Command arguments: $JSON_ARGS"
@@ -142,18 +141,17 @@ jobs:
           echo "Using batch queue: $BATCH_QUEUE"
           echo "Using job definition: $BATCH_JOB_DEF"
 
+          OVERRIDES=$(jq -nc \
+            --argjson args '${{ steps.build-args.outputs.args }}' \
+            '{command: ["/var/www/html/vendor/bin/laminas", "--container=/var/www/html/config/container-cli.php", "batch:cache-clear"] + $args}')
+
+          echo "Container overrides: $OVERRIDES"
+
           JOB_ID=$(aws batch submit-job \
             --job-name "cache-clear-${{ inputs.cache_type }}-${{ github.run_id }}-${{ github.run_attempt }}" \
             --job-queue "$BATCH_QUEUE" \
             --job-definition "$BATCH_JOB_DEF" \
-            --container-overrides "{
-              \"command\": [
-                \"/var/www/html/vendor/bin/laminas\",
-                \"--container=/var/www/html/config/container-cli.php\",
-                \"batch:cache-clear\",
-                ${{ steps.build-args.outputs.args }}
-              ]
-            }" \
+            --container-overrides "$OVERRIDES" \
             --scheduling-priority-override 1 \
             --share-identifier "volapp" \
             --query 'jobId' \
