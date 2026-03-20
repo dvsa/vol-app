@@ -222,7 +222,7 @@ return array(
             'type' => 'yesno'
         ),
         'no_tm_confirmation' => array(
-            'type' => 'yesno'
+            'type' => 'yesnonull'
         ),
         'financial_evidence_uploaded' => array(
             'type' => 'smallint'

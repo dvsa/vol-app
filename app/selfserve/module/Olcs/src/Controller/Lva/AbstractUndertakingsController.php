@@ -215,7 +215,7 @@ abstract class AbstractUndertakingsController extends AbstractController
             'version' => $formData['declarationsAndUndertakings']['version'],
             'declarationConfirmation' => $shouldCompleteSection ? 'Y' : 'N',
             'noTmConfirmation' => isset($formData['declarationsAndUndertakings']['noTmConfirmation']) ?
-                $formData['declarationsAndUndertakings']['noTmConfirmation'] : 'N',
+                $formData['declarationsAndUndertakings']['noTmConfirmation'] : null,
             'interimRequested' => isset($formData['interim']) ?
                 $formData['interim']['goodsApplicationInterim'] : null,
             'interimReason' => isset($formData['interim']) ?
