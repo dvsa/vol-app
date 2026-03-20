@@ -56,19 +56,19 @@ jobs:
           sparse-checkout: ${{ env.WORKING_DIR }}
           fetch-depth: ${{ !inputs.ref && 1 || 0 }}
 
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@v8
         with:
           name: ${{ inputs.app-artefact-name }}
           path: infra/docker/${{ inputs.project }}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
         with:
           platforms: linux/arm64
 
       - name: Extract Docker metadata
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: |
             ${{ env.REGISTRY }}/vol-app/${{ inputs.project }}
@@ -81,7 +81,7 @@ jobs:
 
       - name: Build Docker image
         id: build
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ${{ env.WORKING_DIR }}
           target: production
@@ -94,7 +94,7 @@ jobs:
           cache-to: type=gha,mode=max,scope=${{ inputs.project }}
 
       - name: Scan
-        uses: aquasecurity/trivy-action@v0.33.1
+        uses: aquasecurity/trivy-action@0.35.0
         with:
           image-ref: ${{ steps.build.outputs.imageid }}
           skip-dirs: /var/clamav
@@ -105,20 +105,20 @@ jobs:
 
       - name: Configure AWS credentials
         if: ${{ inputs.push }}
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ env.AWS_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to ECR
         if: ${{ inputs.push }}
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
 
       - name: Login to GHCR
         if: ${{ inputs.push }}
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY_MIRROR }}
           username: ${{ github.actor }}
@@ -131,7 +131,7 @@ jobs:
 
       - name: Push Docker image
         if: ${{ inputs.push }}
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         timeout-minutes: 15
         with:
           context: ${{ env.WORKING_DIR }}
