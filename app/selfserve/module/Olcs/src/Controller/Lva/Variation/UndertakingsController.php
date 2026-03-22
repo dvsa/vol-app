@@ -15,6 +15,7 @@ use Olcs\Controller\Lva\AbstractUndertakingsController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use LmcRbacMvc\Service\AuthorizationService;
 use Dvsa\Olcs\Transfer\Query\Licence\TransportManagers;
+use Exception;
 
 /**
  * External Variation Undertakings Controller
