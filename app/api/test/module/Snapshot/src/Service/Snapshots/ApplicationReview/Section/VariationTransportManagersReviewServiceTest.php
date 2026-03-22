@@ -97,7 +97,7 @@ class VariationTransportManagersReviewServiceTest extends MockeryTestCase
             ->once()
             ->with([$tm2])
             ->andReturn(['foo' => 'bar']);
-            
+
         $this->mockTm->shouldReceive('getConfigFromData')
             ->once()
             ->with([$tm3])
@@ -145,12 +145,11 @@ class VariationTransportManagersReviewServiceTest extends MockeryTestCase
         $tm1Expected = $tm1 + ['noTmConfirmation' => null];
         $tm2Expected = $tm2 + ['noTmConfirmation' => null];
 
-
         $this->mockTm->shouldReceive('getConfigFromData')
             ->once()
             ->with([$tm1Expected, $tm2Expected])
             ->andReturn(['foo' => 'bar']);
-        
+
         $this->mockTm->shouldReceive('getConfigFromData')
             ->once()
             ->with([$tm3])

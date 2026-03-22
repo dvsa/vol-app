@@ -99,7 +99,6 @@ class UndertakingsController extends AbstractUndertakingsController
         $shouldHideNoTmConfirmation = ($applicationData['applicationCompletion']['transportManagersStatus'] ?? null) !== RefData::VARIATION_STATUS_UPDATED;
 
         if (!$shouldHideNoTmConfirmation) {
-
             $query = TransportManagers::create([
                 'id' => $applicationData['licence']['id'] ?? null
             ]);
