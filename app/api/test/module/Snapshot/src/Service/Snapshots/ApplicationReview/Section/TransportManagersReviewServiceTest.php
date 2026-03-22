@@ -110,4 +110,138 @@ class TransportManagersReviewServiceTest extends MockeryTestCase
 
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
+
+    public function testGetConfigFromDataWithNoTmConfirmationFieldYes(): void
+    {
+        $data = [
+            [
+                'noTmConfirmation' => 'Y',
+                'transportManager' => [
+                    'homeCd' => [
+                        'emailAddress' => 'foo@bar.com',
+                        'person' => [
+                            'birthDate' => '1989-08-23',
+                            'forename' => 'foo',
+                            'familyName' => 'bar',
+                            'title' => [
+                                'description' => 'Mr'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $expected = [
+            [
+                'header' => 'Mr foo bar',
+                'multiItems' => [
+                    [
+                        [
+                            'label' => 'review-transport-manager-email',
+                            'value' => 'foo@bar.com'
+                        ],
+                        [
+                            'label' => 'review-transport-manager-dob',
+                            'value' => '23 Aug 1989'
+                        ],
+                        [
+                            'label' => 'variation.review-notransportmanager.confirm-text',
+                            'value' => 'Y'
+                        ],
+                    ]
+                ]
+            ]
+        ];
+
+        $this->assertEquals($expected, $this->sut->getConfigFromData($data));
+    }
+
+    public function testGetConfigFromDataWithNoTmConfirmationFieldNo(): void
+    {
+        $data = [
+            [
+                'noTmConfirmation' => 'N',
+                'transportManager' => [
+                    'homeCd' => [
+                        'emailAddress' => 'foo@bar.com',
+                        'person' => [
+                            'birthDate' => '1989-08-23',
+                            'forename' => 'foo',
+                            'familyName' => 'bar',
+                            'title' => [
+                                'description' => 'Mr'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $expected = [
+            [
+                'header' => 'Mr foo bar',
+                'multiItems' => [
+                    [
+                        [
+                            'label' => 'review-transport-manager-email',
+                            'value' => 'foo@bar.com'
+                        ],
+                        [
+                            'label' => 'review-transport-manager-dob',
+                            'value' => '23 Aug 1989'
+                        ],
+                        [
+                            'label' => 'variation.review-notransportmanager.confirm-text',
+                            'value' => 'N'
+                        ],
+                    ]
+                ]
+            ]
+        ];
+
+        $this->assertEquals($expected, $this->sut->getConfigFromData($data));
+    }
+
+    public function testGetConfigFromDataWithNoTmConfirmationFieldNotShown(): void
+    {
+        $data = [
+            [
+                'noTmConfirmation' => null,
+                'transportManager' => [
+                    'homeCd' => [
+                        'emailAddress' => 'foo@bar.com',
+                        'person' => [
+                            'birthDate' => '1989-08-23',
+                            'forename' => 'foo',
+                            'familyName' => 'bar',
+                            'title' => [
+                                'description' => 'Mr'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $expected = [
+            [
+                'header' => 'Mr foo bar',
+                'multiItems' => [
+                    [
+                        [
+                            'label' => 'review-transport-manager-email',
+                            'value' => 'foo@bar.com'
+                        ],
+                        [
+                            'label' => 'review-transport-manager-dob',
+                            'value' => '23 Aug 1989'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $this->assertEquals($expected, $this->sut->getConfigFromData($data));
+    }
 }
