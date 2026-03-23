@@ -500,11 +500,6 @@ return [
 
     'cache-encryption' => [
         'node_suffix' => 'api',
-        'adapter' => '%cache_encryption_adapter%',
-        'options' => [
-            'algo' => '%cache_encryption_algo%',
-            'mode' => '%cache_encryption_mode%',
-        ],
         'secrets' => [
             'node' => '%cache_encryption_secret_api%',
             'shared' => '%cache_encryption_secret_shared%',
