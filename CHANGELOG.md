@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.11.0](https://github.com/dvsa/olcs-transfer/compare/v8.10.0...v8.11.0) (2026-03-23)
+
+
+### Features
+
+* added new field for no tm confirmation ([#179](https://github.com/dvsa/olcs-transfer/issues/179)) ([3f7f48e](https://github.com/dvsa/olcs-transfer/commit/3f7f48e0b1e2de04908a13439f530484d467aa67))
+
 ## [8.10.0](https://github.com/dvsa/olcs-transfer/compare/v8.9.0...v8.10.0) (2026-03-19)
 
 
