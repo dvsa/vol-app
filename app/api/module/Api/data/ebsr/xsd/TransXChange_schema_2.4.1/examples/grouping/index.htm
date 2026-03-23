@@ -1,0 +1,1005 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head profile="http://www.w3.org/2003/g/data-view">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Dft - TransXChange - Examples 2.4 - Grouping route</title>
+    <meta name="DC.title" content="Examples 2.4 - Grouping route Example for TransXChange"/>
+    <meta name="eGMS.title" content=""/>
+    <meta name="description" content="" />
+    <meta name="language" content="eng" />
+    <meta name="DC.description" content="Examples 2.4 - Grouping route Example for TransXChange, an XML protocol to allow remote journey planning engines to communicate in order to provide multimodal journeys spanning different regions."/>
+    <meta name="keywords" content="" />
+    <meta name="DC.subject" xml:lang="en" scheme="eGMS.IPSV" content=""/>
+    <meta name="Author" content="" />
+    <meta name="DC.creator" content="Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR"/>
+    <meta name="DC.publisher" content="Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR"/>
+    <meta name="DCTERMS.created" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="DCTERMS.issued" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="DCTERMS.modified" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="eGMS.disposalReview" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="DC.format" scheme="DCTERMS.IMT" content="text/html"/>
+    <meta name="DC.type" scheme="eGMS.TES" content=""/>
+    <meta name="DC.type.category" lang="en" content="" />
+    <meta name="DC.type" scheme="DCTERMS.DCMIType" content="Text"/>
+    <meta name="DC.type" scheme="Gov.Body.ContentType" content=""/>
+    <meta name="DC.coverage" content="UK"/>
+    <meta name="DCTERMS.audience" scheme="eGMS.AES" content=""/>
+    <meta name="DC.language" scheme="DCTERMS.ISO639-2" content="eng"/>
+    <meta name="DC.identifier" scheme="ISBN" content="" />
+    <meta name="DC.identifier" scheme="DCTERMS.URI" content=""/>
+    <meta name="eGMS.copyright" content="Crown copyright http://www.dft.gov.uk/terms/copyright" />
+    <meta name="eGMS.accessibility" scheme="eGMS.WCAG10" content="Double-A"/>
+    <link rel="transformation" href="http://www.nationalarchives.gov.uk/metadata/egms-extract/egms-extract.xsl" />
+    <link rel="stylesheet" type="text/css" media="screen, projection" href="../../../../_format/_styles/basic.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="../../../../_format/_styles/screen.css" />
+    <link rel="stylesheet" type="text/css" media="print" href="../../../../_format/_styles/print.css" />
+</head>
+
+<body id="top" class="psx">
+<div id="mainWrapper">
+    <ul id="mainNav">
+        <li><a href="http://www.dft.gov.uk/about/">About DfT</a></li>
+        <li><a href="http://www.dft.gov.uk/pgr/">Policy, guidance and research</a></li>
+        <li><a href="http://www.dft.gov.uk/consultations/">Consultations</a></li>
+        <li><a href="http://www.dft.gov.uk/press/">Press office</a></li>
+        <li><a href="http://www.dft.gov.uk/faqs/">FAQs</a></li>
+        <li><a href="http://www.dft.gov.uk/press/ministers/">Ministers</a></li>
+    </ul>
+
+<div id="wrapper">
+    <div id="widthWrapper" class="clearfix">
+        <div id="pageWrapper">
+            <div id="crumbs">
+                <div>
+                    <a class="first" href="http://www.dft.gov.uk/">DfT home</a>
+                    <img src="../../../../_format/_images/gifs/crumb-arrow.gif" alt=" " width="6" height="11"/>&nbsp;&nbsp;<a href="http://www.dft.gov.uk/public-transportdatastandards/">Public Transport XML Standards index</a>
+                    <img src="../../../../_format/_images/gifs/crumb-arrow.gif" alt=" " width="6" height="11"/>&nbsp;&nbsp;<a href="http://www.dft.gov.uk/transxchange/">TransXChange</a>
+                    <img src="../../../../_format/_images/gifs/crumb-arrow.gif" alt=" " width="6" height="11"/>&nbsp;&nbsp;<a href="#">Examples 2.4 - Grouping route</a>
+                </div>
+            </div><!-- crumbs -->
+
+            <div id="contentWrapper">
+                <div id="content">
+<h1><a name="belowNav" id="belowNav"></a>TransXChange</h1>
+<h2>Examples 2.4 - Grouping route (TXC v2.4)</h2>
+<h3>Summary</h3>
+<p>A linear route  with Custom Grouping of journeys to create additional bed.</p>
+<ul>
+<li><a href="#journeygroupings">Custom Grouping</a> of service journeys (TXC v2.4).</li>
+<li>Override labels for Journey groupings (TXC v2.4).</li>
+<li>Suppression of a Built-in journey Grouping /&nbsp; Matrix bed (TXC v2.4).</li>
+<li>Short working.</li>
+<li>Vehicle journey timing link reuse.</li>
+<li>Overriding of Journey Pattern Timing Link Run Times with different values on the Vehicle Journey Timing links for some journeys.</li>
+<li>Additional Wait times at stop; on arrival, on departure, on first or intermediate
+stops.</li>
+<li>Monday to Sunday Service. <a href="#operatingdays">Day Type Restrictions</a> on certain journeys</li>
+<li><a href="#VariableBayAllocation">Holiday Day Type Exclusions.</a></li>
+<li>Vehicle Journey Footnote. </li>
+<li><a href="#calendar">Operational Calendar</a> (TXC v2.4). Day Assignments</li>
+<li><a href="#datarights">Data Rights</a>.&nbsp; (TXC v2.4)</li>
+<li>Registration Schema.</li>
+</ul>
+
+<table class="grid">
+<tr>
+<th>TransXChange XML Document</th>
+<th>Particulars and Matrix output PDF</th>
+<th>Route Map Output</th>
+</tr>
+<tr>
+<td><a href="Grouping.xml">Grouping.xml </a><br />(One direction only)</td>
+<td><a href="Grouping.pdf">Particulars and Matrix PDF</a></td>
+<td><a href="Grouping-map.pdf">Route Map PDF</a><br /><a href="Grouping-map-nomap.pdf">Route Map PDF</a> (no background)</td>
+</tr>
+</table>
+<br /><br />
+<h3>Route Map</h3>
+<p>
+<img src="Grouping.png" alt="Grouping route image" width="775" height="710" /></p>
+<h3>Timetable </h3>
+<p>This example segregates the journeys in the following table into four&nbsp;
+beds (as coloured white, green , orange, yellow) </p>
+<table class="grid"  >
+<caption>Saffron Crossroads to Weldon Road </caption>
+<tr>
+<th>&#160;</th>
+<th>&#160;</th>
+<th>#1</th>
+<th   >#2</th>
+<th style="background-color: #808000" >#3</th>
+<th>#4</th>
+<th style="background-color: #E55D07" >#5</th>
+<th style="background-color: #E55D07"  >#6</th>
+<th style="background-color: #FFFF00"  >#7</th>
+</tr>
+<tr>
+<td >&#160;</td>
+<td >&#160;</td>
+<td  >E23</td>
+<td  >E23</td>
+<td bgcolor="#808000"  >E23</td>
+<td >E23</td>
+<td bgcolor="#E55D07" >E23</td>
+<td bgcolor="#E55D07"  >E23</td>
+<td bgcolor="#FFFF00"  >E23</td>
+</tr>
+<tr>
+<td ><i>Saffron Crossroads</i><p>&nbsp;</td>
+<td >dep</td>
+<td  >10:00</td>
+<td  >11:00</td>
+<td bgcolor="#808000"  >12:00</td>
+<td >-</td>
+<td bgcolor="#E55D07" >14:10</td>
+<td bgcolor="#E55D07"  >15:10</td>
+<td bgcolor="#FFFF00"  >18:00</td>
+</tr>
+<tr>
+<td rowspan="2" ><i>Glenhills Boulevard</i><p>&nbsp;</td>
+<td >arr</td>
+<td  >10:03</td>
+<td  >11:03</td>
+<td bgcolor="#808000"  >-</td>
+<td >-</td>
+<td bgcolor="#E55D07" >14:18</td>
+<td bgcolor="#E55D07"  >15:18</td>
+<td bgcolor="#FFFF00"  >18:03</td>
+</tr>
+<tr>
+<td >dep</td>
+<td  >10:03</td>
+<td  >11:03</td>
+<td bgcolor="#808000"  >-</td>
+<td >-</td>
+<td bgcolor="#E55D07" >14:28</td>
+<td bgcolor="#E55D07"  >15:28</td>
+<td bgcolor="#FFFF00"  >18:03</td>
+</tr>
+<tr>
+<td ><i>Roehampton Drive</i><p>&nbsp;</td>
+<td >dep</td>
+<td  >10:07</td>
+<td  >-</td>
+<td bgcolor="#808000"  >12:07</td>
+<td >13:07</td>
+<td bgcolor="#E55D07" >14:37</td>
+<td bgcolor="#E55D07"  >15:37</td>
+<td bgcolor="#FFFF00"  >18:07</td>
+</tr>
+<tr>
+<td rowspan="2" ><i>Carleton Drive</i><p>&nbsp;</td>
+<td >arr</td>
+<td  >10:20</td>
+<td  >11:20</td>
+<td bgcolor="#808000"  >-</td>
+<td >13:20</td>
+<td bgcolor="#E55D07" >-</td>
+<td bgcolor="#E55D07"  >-</td>
+<td  bgcolor="#FFFF00">18:20</td>
+</tr>
+<tr>
+<td >dep</td>
+<td  >10:20</td>
+<td  >11:20</td>
+<td bgcolor="#808000"  >-</td>
+<td >13:30</td>
+<td bgcolor="#E55D07" >-</td>
+<td bgcolor="#E55D07"  >-</td>
+<td  bgcolor="#FFFF00">18:20</td>
+</tr>
+<tr>
+<td ><i>Weldon Road&nbsp; </i>
+<p>&nbsp;</td>
+<td >dep</td>
+<td  >10:29</td>
+<td  >11:29</td>
+<td bgcolor="#808000"  >12:29</td>
+<td >13:39</td>
+<td bgcolor="#E55D07" >-</td>
+<td bgcolor="#E55D07"  >-</td>
+<td  bgcolor="#FFFF00">18:29</td>
+</tr>
+</table>
+<p>
+<br /><br />
+</p>
+<ul>
+    <li> Service operates from 01/01/2004 until 13/06/2004</li>
+    <li>Service operates Monday to Sunday</li>
+</ul>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p></table>
+<h3>1. Built-in Bed: Saffron Crossroads to Weldon Road&nbsp; E23 Regular Service</h3><p>The
+    first three journeys and the last&nbsp; one are added to the built in beds
+for Monday to Friday, and Saturday&nbsp; (which are then merged into a single
+bed because they are the same&nbsp; T </p>
+<h5>Outbound, Monday to Saturday</h5>
+<table class="grid"  >
+<tr>
+<th>&#160;</th>
+<th>&#160;</th>
+<th>#1</th>
+<th>#2</th>
+<th>#4</th>
+<th style="background-color: #FFFF00"   >#7</th>
+</tr>
+<tr>
+<td >&#160;</td>
+<td >&#160;</td>
+<td >E23</td>
+<td >E23</td>
+<td >E23</td>
+<td bgcolor="#FFFF00"  >E23</td>
+</tr>
+<tr>
+<td ><i>Saffron Crossroads</i><p>&nbsp;</td>
+<td >dep</td>
+<td >10:00</td>
+<td >11:00</td>
+<td >-</td>
+<td bgcolor="#FFFF00"  >18:00</td>
+</tr>
+<tr>
+<td rowspan="2" ><i>Glenhills Boulevard</i><p>&nbsp;</td>
+<td >arr</td>
+<td >10:03</td>
+<td >11:03</td>
+<td >-</td>
+<td bgcolor="#FFFF00"  >18:03</td>
+</tr>
+<tr>
+<td >dep</td>
+<td >10:03</td>
+<td >11:03</td>
+<td >-</td>
+<td bgcolor="#FFFF00"  >18:03</td>
+</tr>
+<tr>
+<td ><i>Roehampton Drive</i><p>&nbsp;</td>
+<td >dep</td>
+<td >10:07</td>
+<td >-</td>
+<td >13:07</td>
+<td bgcolor="#FFFF00"  >18:07</td>
+</tr>
+<tr>
+<td rowspan="2" ><i>Carleton Drive</i><p>&nbsp;</td>
+<td >arr</td>
+<td >10:20</td>
+<td >11:20</td>
+<td >13:20</td>
+<td  bgcolor="#FFFF00">18:20</td>
+</tr>
+<tr>
+<td >dep</td>
+<td >10:20</td>
+<td >11:20</td>
+<td >13:30</td>
+<td  bgcolor="#FFFF00">18:20</td>
+</tr>
+<tr>
+<td ><i>Weldon Road&nbsp; </i>
+<p>&nbsp;</td>
+<td >dep</td>
+<td >10:29</td>
+<td >11:29</td>
+<td >13:39</td>
+<td  bgcolor="#FFFF00">18:29</td>
+</tr>
+</table>
+    <p>&nbsp;</p>
+<h3>&nbsp;</h3>
+<h3>2. Custom&nbsp; Bed #1 :Saffron Crossroads to Weldon Road&nbsp; Express</h3>
+<p>The express Journey is shown in a custom bed</p>
+
+
+<h4>Outbound, Express</h4>
+
+
+<table class="grid">
+<tr>
+<th>&#160;</th>
+<th>&#160;</th>
+<th>#3</th>
+</tr>
+<tr>
+<td bgcolor="#808000">&#160;</td>
+<td bgcolor="#808000">&#160;</td>
+<td bgcolor="#808000">E23</td>
+</tr>
+<tr>
+<td bgcolor="#808000"><i>Saffron Crossroads</i></td>
+<td bgcolor="#808000">dep</td>
+<td bgcolor="#808000">12:00</td>
+</tr>
+<tr>
+<td bgcolor="#808000"><i>Roehampton Drive</i></td>
+<td bgcolor="#808000">dep</td>
+<td bgcolor="#808000">12:07</td>
+</tr>
+<tr>
+<td bgcolor="#808000"><i>Weldon Road </i></td>
+<td bgcolor="#808000">dep</td>
+<td bgcolor="#808000">12:29</td>
+</tr>
+</table>
+    <p>
+<br />
+</p>
+
+<h3>3. Custom&nbsp;Bed #2.: Saffron Crossroads to Weldon Road , Tuesday &amp; Thursday only</h3>
+<p>The two short working  Journeys #5 #6 are shown in a another custom bed</p>
+<table class="grid">
+<tr>
+<th>&#160;</th>
+<th>&#160;</th>
+<th>#5</th>
+<th>#6</th>
+</tr>
+<tr>
+<td bgcolor="#E55D07">&#160;</td>
+<td bgcolor="#E55D07">&#160;</td>
+<td bgcolor="#E55D07">E23</td>
+<td bgcolor="#E55D07">E23</td>
+</tr>
+<tr>
+<td bgcolor="#E55D07"><i>Saffron Crossroads</i></td>
+<td bgcolor="#E55D07">dep</td>
+<td bgcolor="#E55D07">14:10</td>
+<td bgcolor="#E55D07">15:10</td>
+</tr>
+<tr>
+<td rowspan="2" bgcolor="#E55D07"><i>Glenhills Boulevard</i></td>
+<td bgcolor="#E55D07">arr</td>
+<td bgcolor="#E55D07">14:18</td>
+<td bgcolor="#E55D07">15:18</td>
+</tr>
+<tr>
+<td bgcolor="#E55D07">dep</td>
+<td bgcolor="#E55D07">14:28</td>
+<td bgcolor="#E55D07">15:28</td>
+</tr>
+<tr>
+<td bgcolor="#E55D07"><i>Tweeham, Roehampton Drive</i></td>
+<td bgcolor="#E55D07">dep</td>
+<td bgcolor="#E55D07">14:37</td>
+<td bgcolor="#E55D07">15:37</td>
+</tr>
+</table>
+<p>
+<br />
+&nbsp;Service runs Tuesdays and Thursdays only</p>
+    <p>
+<br />
+</p>
+
+<h3>4. Suppressed Bed</h3>
+<p>The Sunday built in journey grouping , is suppressed completely: this means
+that the last Journey, #7, which is in both the <i><strong>Monday to Friday</strong></i>,
+<i><strong>Saturday</strong></i> and the <i><strong>Sunday</strong></i>
+bed, appears as a <i><strong>Monday</strong></i> to <i><strong>Saturday</strong></i> journey but that there is no
+<i><strong>Sunday</strong></i> bed. </p>
+<p>
+&nbsp;</p>
+<table class="grid"  >
+<tr>
+<th>&#160;</th>
+<th>&#160;</th>
+<th>#7</th>
+</tr>
+<tr>
+<td  >&#160;</td>
+<td >&#160;</td>
+<td bgcolor="#FFFF00"  >E23</td>
+</tr>
+<tr>
+<td  ><i>Saffron Crossroads, Bay Area</i></td>
+<td >dep</td>
+<td bgcolor="#FFFF00"  >18:00</td>
+</tr>
+<tr>
+<td rowspan="2"  ><i>Glenhills Boulevard</i></td>
+<td >arr</td>
+<td bgcolor="#FFFF00"  >18:03</td>
+</tr>
+<tr>
+<td >dep</td>
+<td bgcolor="#FFFF00"  >18:03</td>
+</tr>
+<tr>
+<td  ><i>Roehampton Drive</i></td>
+<td >dep</td>
+<td bgcolor="#FFFF00"  >18:07</td>
+</tr>
+<tr>
+<td rowspan="2"  ><i>Carlton Drive</i></td>
+<td >arr</td>
+<td  bgcolor="#FFFF00">18:20</td>
+</tr>
+<tr>
+<td >dep</td>
+<td  bgcolor="#FFFF00">18:20</td>
+</tr>
+<tr>
+<td  ><i>Weldon Road </i></td>
+<td >dep</td>
+<td  bgcolor="#FFFF00">18:29</td>
+</tr>
+</table>
+<p>
+<br /><br />
+</p>
+<hr>
+<p>&nbsp;</p>
+<p>In this example the last journey overrides the default run times . In additional  wait times are specified for some stops. The following table shows the timetable additionally annotated with the vehicle journey run times ( default values inherited from the journey pattern shown in brackets) and the wait times (additional wait times prefixed by a +). </p>
+<table class="grid">
+<tr>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">JP Run<br />Time (Mins)</font></th>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">VJ run &amp; Wait</font></th>
+<th><font size="1">#1</font></th>
+<th><font size="1">VJ run &amp; Wait</font></th>
+<th><font size="1">#2</font></th>
+<th><font size="1">VJ run &amp; Wait</font></th>
+<th><font size="1">#3</font></th>
+<th><font size="1">VJ run &amp; Wait</font></th>
+<th><font size="1">#4</font></td>
+<th><font size="1">VJ run &amp; Wait</font></th>
+<th><font size="1">#5</font></th>
+<th><font size="1">#6</font></th>
+<th><font size="1">VJ run &amp; Wait</font></th>
+<th><font size="1">#7</font></th>
+</tr>
+<tr>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">E23</font></th>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">E23</font></th>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">E23</font></th>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">E23</font></th>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">E23</font></th>
+<th><font size="1">E23</font></th>
+<th>&nbsp;</th>
+<th><font size="1">E23</font></th>
+</tr>
+<tr>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">start</font></th>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">10:00</font></th>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">11:00</font></th>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">12:00</font></th>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">14:00</font></th>
+<th><font size="1">15:00</font></th>
+<th>&nbsp;</th>
+<th><font size="1">18:00</font></th>
+</tr>
+<tr>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td> <strong><i><font size="1">Saffron Crossroads</font></i></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">dep</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">10:00</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">11:00</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">12:00</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">+w10</font></td>
+<td><font size="1">14:10</font></td>
+<td><font size="1">15:10</font></td>
+<td>&nbsp;</td>
+<td><font size="1">18:00</font></td>
+</tr>
+<tr>
+<td><strong><font size="1">&#160;</font></strong></td>
+<td><strong><font size="1">r3</font></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><font size="1">(r3)</font></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><font size="1">(r3)</font></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><font size="1">(r3)</font></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">sr</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">+r8</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><font size="1">(r3)</font></strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td rowspan="2"> <strong> <i><font size="1">Glenhills Boulevard</font></i></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">arr</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">10:03</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">11:03</font></td>
+<td><font size="1">pass</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">+w10</font></td>
+<td><font size="1">14:08</font></td>
+<td><font size="1">15:08</font></td>
+<td>&nbsp;</td>
+<td><font size="1">18:03</font></td>
+</tr>
+<tr>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">dep</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">10:03</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">11:03</font></td>
+<td><font size="1">pass</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">sr</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">14:28</font></td>
+<td><font size="1">15:28</font></td>
+<td>&nbsp;</td>
+<td><font size="1">18:03</font></td>
+</tr>
+<tr>
+<td><strong><font size="1">&#160;</font></strong></td>
+<td><strong><font size="1">r4</font></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><font size="1">(r4)</font></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><font size="1">(r4)</font></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><font size="1">(r4)</font></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">+r9</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><font size="1">(r4)</font></strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td> <strong> <i><font size="1">Roehampton Drive</font></i></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">dep</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">10:07</font></td>
+<td><font size="1">pass</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">12:07</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">13:07</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">14:37</font></td>
+<td><font size="1">15:37</font></td>
+<td>&nbsp;</td>
+<td><font size="1">18:07</font></td>
+</tr>
+<tr>
+<td><strong><font size="1">&#160;</font></strong></td>
+<td><strong><font size="1">r13</font></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><font size="1">(r13)</font></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><font size="1">(r13)</font></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><font size="1">(r13)</font></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">sr</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><font size="1">(r13)</font></strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td rowspan="2"> <strong> <i><font size="1">Carlton Drive</font></i></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">arr</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">10:20</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">11:20</font></td>
+<td><font size="1">pass</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">13:20</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">-</font></td>
+<td><font size="1">-</font></td>
+<td>&nbsp;</td>
+<td><font size="1">18:20</font></td>
+</tr>
+<tr>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">dep</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">10:20</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">11:20</font></td>
+<td><font size="1">pass</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">+w10</font></td>
+<td><font size="1">13:30</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">-</font></td>
+<td><font size="1">-</font></td>
+<td>&nbsp;</td>
+<td><font size="1">18:20</font></td>
+</tr>
+<tr>
+<td><strong><font size="1">&#160;</font></strong></td>
+<td><strong><font size="1">r9</font></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><font size="1">(r9)</font></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><font size="1">(r9)</font></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><font size="1">(r9)</font></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><font size="1">(r9)</font></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">sr</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><font size="1">(r9)</font></strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td> <strong> <i><font size="1">Weldon Road </font></i></strong></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">dep</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">10:29</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">11:29</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">12:29</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">13:39</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><font size="1">18:29</font></td>
+</tr>
+</table>
+<p>
+<br /><br />
+</p>
+<hr>
+<h2>The XML Representation</h2>
+<p>One way encoding this example would be to have a separate route and journey pattern for each column, thus there would be five routes and five journey patterns, each with a single section. Since however the vehicle travels over the same route in the same order, but just passes by certain stops it is possible also to encode it in a less verbose manner by having a single journey pattern with an stop activity of pass at certain stops.</p>
+<p><a href="../express/express.xml">XML Document </a></p>
+<h4><a name="Registration"></a>Service Registration</h4>
+<ul>
+    <li>The service is not registered</li>
+    <li>There is a single <strong><code>Operator</code></strong>. code &quot;<i>Op_02</i>&quot;,
+    with id <strong><i>01.</i></strong></li>
+</ul>
+<h4><a name="ServicePattern"></a>Service Structure</h4>
+<ul>
+    <li>There is a single<strong> <code>Service</code> </strong>instance <strong> <i>SV1</i></strong>, with one <strong>
+    <code>Line</code></strong> - '<i>1'</i>.</li>
+    <li>There are six&nbsp; on-street <strong><code>StopPoint</code></strong> , all references to existing NaPTAN stops.</li>
+    <li>There is a single <strong><code>RouteSection</code></strong> <strong> <i>rs_1</i></strong> with four <strong>
+    <code>RouteLink</code></strong> instances <strong> <i>rl_1-rl_4</i> </strong>connecting the stops.</li>
+    <li>There is a single <strong><code>JourneyPatternSection</code></strong> JPS1 made up of four <strong>
+    <code>JourneyPatternTimingLink</code></strong> instances, <i><strong>JPTL1-4</strong></i>, with <strong>
+    <code>RunTime</code></strong> values  of <i>3, 4, 13,</i> and<i>9</i> minutes respectively.</li>
+    <li>There is a single <strong><code>JourneyPattern</code> </strong>instances;
+        <ul>
+            <li><strong><i>JP_1</i></strong>, section: <strong> <i>JS_1</i></strong></li>
+        </ul>
+    </li>
+    <li>There are six <strong><code>VehicleJourney</code> </strong>instances, all for <i>
+    <strong>Ln_1</strong> - 'E23'</i>, and using <strong>JP1</strong>. The instances all use the same set of <strong>
+    <code>JourneyPatternTimingLink</code></strong> instances, but define different stop activities (e.g. pass) to specify the different express stopping patterns:
+        <ul>
+            <li><i><strong>VJ_1</strong>,</i> with a departure time of<i> 10:00,</i> stopping at all stops.
+            <strong> <i>VJ_1</i></strong> appears in column #1.
+                <ul>
+                    <li>There is a variable stop allocation the bay in the
+                    Saffron Crossroads,
+                    specified on the <strong><code>From</code></strong> part of the first <strong>
+                    <code>VehicleJourneyTimingLink</code></strong> - see below.</li>
+                </ul>
+            </li>
+            <li><i><strong>VJ_2</strong>,</i> with a departure time of<i> 11:00</i> (column #2), which has a timing links annotated with a <strong>
+            <code>VehicleJourneyStopUsage</code> / Act<code>i</code>vity</strong> of 'pass' for the <i>
+            Roehampton Drive</i> stop to indicate that the bus does not stop there.</li>
+            <li><strong><i>VJ_3</i></strong>,  with a departure time of<i> 12:00</i> (column #3)<i>,</i> which has a <strong>
+            <code>VehicleJourneyStopUsage</code> / <code>Activity</code></strong> of 'pass' for <i>
+            Glenhills Boulevard.</i> and for <i>Carlton Drive.</i></li>
+            <li><strong><i>VJ_4</i></strong>,  with a departure time of<i> 13:07</i> (column #4)<i>,</i> which has a short working: a dummy <strong>
+            <code>StartDeadRun</code></strong> is used to indicate that the service starts at <i>
+            Roehampton Drive.</i>
+                <ul>
+                    <li>There is an extra <strong><code>WaitTime</code></strong> of <i>10 Minutes
+                    </i>on departure from the <i>Carlton Drive</i> stop, specified on the <strong>
+                    <code>From</code></strong> usage of <strong><code>VehicleJourneyTimingLink</code></strong>
+                    <strong><i>VJ4_TL4</i>.</strong></li>
+                </ul>
+            </li>
+            <li><strong><i>VJ_5</i>,</strong>  with a departure time of<i> 14:00</i> (column #5), which has a short working: a dummy <strong>
+            <code>EndDeadRun</code></strong> is used to indicate that the service ends at <i>
+            Roehampton Drive.</i>
+                <ul>
+                    <li>A <strong><code>DynamicDestinationDisplay</code></strong> of <i>
+                    Roehampton Drive.</i> is used to override the default destination of <i>
+                    Weldon Road . </i></li>
+                    <li>Both links of this journey takes longer so has a explicit override values of <i>8.00</i> and <i>9.00</i> minutes for the <strong>
+                    <code>RunTime</code></strong> on the <strong><code>VehicleJourneyTimingLink</code></strong> instances of the Journey.</li>
+                    <li>There is an extra <strong>Wait<code>T</code>ime</strong> of <i>10 Minutes</i> on arrival at the <i>
+                    Glenhills Boulevard</i> stop, specified on the <strong>To</strong> usage of
+                    <strong><code>VehicleJourneyTimingLink</code></strong>
+                    <strong><i>VJ5_TL1</i>.</strong></li>
+                </ul>
+            </li>
+            <li><strong><i>VJ_6</i>,</strong>  with a departure time of<i> 15:00</i> (column #6),
+            Reuses the links from <strong><i>VJ_5.</i></strong></li>
+        </ul>
+    </li>
+</ul>
+
+<h4 id="OperatingDays"><a name="operatingdays"></a>The Operating Days</h4>
+<ul>
+    <li>The <strong><code>Service</code> operating period</strong> for <strong> <i>SV_1</i></strong> starts on<i> 02/01/2002</i> for all vehicle journeys and continues indefinitely</li>
+    <li>The <strong><code>OperatingProfile</code></strong> for the <strong><code>Service</code></strong> <strong> <i>SV_1</i></strong> states values that apply to all journeys unless overridden on a journey pattern or individual vehicle journey.
+        <ul>
+            <li>The <strong><code>RegularDayType</code></strong> specifies journeys of the service run
+            <strong><code>Monday</code></strong> to <strong><code>Sunday</code></strong> every week of the year</li>
+            <li>The <strong><code>BankHolidayOperation</code> / <code>DaysOfNonOperation</code></strong> states journeys of the service do not run <strong>
+            <code>LateSummerBankHolidayNotScotland</code></strong>, <strong><code>MayDay</code></strong>, <strong>
+            <code>EasterMonday</code></strong>, <strong><code>ChristmasDayHoliday</code></strong>, <strong>
+            <code>NewYearsDayHoliday</code></strong>,<br /><strong><code>ChristmasEve</code></strong>, <strong>
+            <code>NewYearsEve.</code></strong></li>
+            <li>The <strong><code>SpecialDaysOperation</code> / <code>DaysOfOperation</code></strong> states that journeys of the service are will run on <i>01/06/2004</i> regardless.
+            <li>The <strong><code>SpecialDaysOperation</code> / <code>DaysOfNonOperation</code></strong> states that all services will not run on  <i>02/06/2004</i>.
+            <li><i>&nbsp;<strong>VJ_</strong></i><strong><i>5</i></strong>, <strong> <i>VJ_6</i></strong>,
+            Have an override profile that say they run only on <strong><code>Tuesdays</code></strong>
+            &amp; <strong><code>Thursdays</code></strong></ul>
+    </li>
+</ul>
+
+<h4 id="OperatingDays0"><a name="journeygroupings"></a>The Journey Groupings</h4>
+<ul>
+    <li>Three <i>Outbound</i> Built in Journey Groupings are included
+<ul>
+    <li><code><strong>MondayToFridayJourneyGrouping </strong></code>with description <i>&nbsp;&quot;E232
+    Regular&quot;</i> and <strong><code>Vias</code></strong><i> &quot;Glenhills Boulevard&quot;, </i>&quot;Market&quot; and
+    &quot;Carlton Drive&quot;.</li>
+    <li><code><strong>SaturdayJourneyGrouping </strong></code>with description <i>&nbsp;&quot;E232
+    Saturday Short Service&quot;</i> and <strong><code>Vias</code></strong><i> &quot;Glenhills
+    Boulevard&quot;
+    only. </i></li>
+    <li><code><strong>SundayJourneyGrouping </strong></code>with<code><strong> Contents / None
+    </strong></code>to suppress the matrix.<i> </i></li>
+</ul>
+    <p>&nbsp;</li>
+    <li>Two <strong><code>CustomJourneyGroupings</code></strong> are added for<ul>
+    <li><strong><i>cusgrp_01 </i></strong>with description <i>&nbsp;&quot;E232 Express&quot;</i> and
+    <strong><code>Vias</code></strong><i> / </i><code><strong>None</strong></code>. It includes
+                    <strong><code>VehicleJourneys </code><i>Vj5</i></strong> and <strong><i>
+    Vj6.</i></strong></li>
+    <li><strong><i>cusgrp_02 </i></strong>with description <i>&nbsp;&quot;E232 Sunday Short&quot;</i>
+    and&nbsp; <strong><code>Vias</code></strong><i> &quot;Glenhills Boulevard&quot;</i>. It includes
+                    <strong><code>VehicleJourney </code><i>Vj3</i></strong> only<strong><i>.</i></strong></li>
+</ul>
+    </li>
+</ul>
+
+<h4 id="OperatingDays1"><a name="datarights"></a>The Data Rights</h4>
+<ul>
+    <li>Two sets of <strong><code>DataRights </code></strong>are specified
+<ul>
+    <li>For the <strong><code>Operator</code></strong>.&nbsp;&nbsp; <strong><i>01. (</i></strong><i>Speedy
+    buses<strong>) </strong></i>there is is a single right <i><strong>dr_01</strong></i> permitting
+    unrestricted use under the given&nbsp; terms and conditions </li>
+    <li>For the <code><strong>Contributor</strong></code>.&nbsp;&nbsp; <strong><i>02 (</i></strong><i>Rival
+    buses</i><strong><i>) </i></strong>there is is a single right <i><strong>dr_02</strong></i>
+    requiring a&nbsp; commercial licences for use of tagged items and use under
+    separate&nbsp; terms and conditions.</li>
+</ul>
+    </li>
+    <li>The <strong><code>DataRights </code></strong>are referenced as follows<ul>
+    <li>The document references <i><strong>dr_01</strong></i>, indicating all of the
+    contents except where specifically excluded are available under the
+    associated terms. </li>
+    <li>
+                    <strong><code>VehicleJourney </code><i>Vj3 </i></strong>reference <i>
+    <strong>dr_02</strong></i> indicating it is owned by&nbsp; <i>Rival buses </i>and
+    subject to different rights.</li>
+</ul>
+    </li>
+</ul>
+
+<h4 id="OperatingDays2"><a name="calendar"></a>The Calendar</h4>
+<ul>
+    <li>A <strong><code>Calendar</code></strong> specifies the <code><strong>DayAssignments</strong></code>
+    for <i>Christmas 2010&nbsp; </i>
+<ul>
+    <li>Three separate&nbsp; <code><strong>DayAssignments </strong></code>specify the
+    service for&nbsp; well known bank holidays <strong><code>ChristmasEve</code></strong>,
+    <strong><code>ChristmasDay</code></strong> and<strong><code> BoxingDay</code></strong> to use
+    the day types&nbsp; <i><strong>day_01</strong></i>, <i><strong>day_02</strong></i>, <i><strong>Day_02</strong></i>
+    respectively. </li>
+    <li>Four&nbsp; <code><strong>DayAssignments </strong></code>specify the service for
+    a special holiday <i>&quot;Slevin Day&quot;</i> as type <i><strong>Day_03</strong></i>.&nbsp;
+    </li>
+</ul>
+    </li>
+</ul>
+    <p>&nbsp;</p>
+    <p><br/>Page last updated: 2013/03/30.</p> >
+                </div><!-- content -->
+            </div><!-- contentWrapper -->
+
+        <div id="leftBar">
+            <h2>TransXChange</h2>
+            <ul class="fade">
+                <li><a href="../../../../index.htm">Index</a></li>
+                <li><a href="../../../../overview.htm">Overview</a></li>
+                <li><a href="../../../../process.htm">Data &#38; Process</a></li>
+                <li><a href="../../../../schema/schemas.htm">Downloads &#38; Schema</a></li>
+                <li><a href="../../../../documentation.htm">Documentation</a></li>
+                <li><a href="../../../../examples.htm">Examples</a></li>
+                <li class="selected"><a href="../index.htm">&#160;&#160;2.4 Route types</a>
+                    <ul>
+
+
+                        <li><a href="../linear/index.htm">Linear</a></li>
+<li><a href="../express/index.htm">Express</a></li>
+<li><a href="../interchange/index.htm">Interchange</a></li>
+<li><a href="../circular/index.htm">Circular</a></li>
+<li><a href="../cloverleaf/index.htm">Cloverleaf</a></li>
+                        <li class="selected">Grouping</li><li><a href="../lollipop/index.htm">Lollipop</a></li>
+<li><a href="../eye/index.htm">Eye</a></li>
+<li><a href="../flexible/index.htm">Flexible</a></li>
+<li><a href="../hailandride/index.htm">Hail &#38; Ride</a></li>
+<li><a href="../large/index.htm">Large</a></li>
+<li><a href="../mergefrequency/index.htm">Merged Frequency</a></li>
+<li><a href="../footnotes/index.htm">Footnotes</a></li>
+<li><a href="../cancellation/index.htm">Cancellation</a></li>
+<li><a href="../delta/index.htm">Delta</a></li>
+                    </ul>
+                </li>
+                <li><a href="../../../../ebsrnews/index.htm">EBSR news</a></li>
+                <li><a href="../../../../realexamples/index.htm">Sample Documents</a></li>
+                <li><a href="../../../../publisher.htm">Publisher</a></li>
+                <li><a href="../../../../gtfs.htm">Other Tools</a></li>
+                <li><a href="../../../../technicalFaq.htm">Technical FAQ</a></li>
+                <li><a href="../../../../versioning.htm">Versioning</a></li>
+                <li><a href="../../../../implementations.htm">Implementations</a></li>
+                <li><a href="../../../../training.htm">Training materials</a></li>
+                <li><a href="../../../../history.htm">History</a></li>
+                <li><a href="../../../../termsOfUse.htm">Terms of Use</a></li>
+                <li><a href="../../../../contact.htm">Contact</a></li>
+                <li><a href="../../../../copyright.htm">Copyright</a></li>
+                <li class="listbreaker">Related UK Standards</li>
+                <li><a href="http://www.dft.gov.uk/public-transportdatastandards/">Standards - main index</a></li>
+                <li><a href="http://www.dft.gov.uk/CycleNetXchange/">CycleNetXchange</a></li>
+                <li><a href="http://www.dft.gov.uk/naptan/">NaPTAN</a></li>
+                <li><a href="http://www.dft.gov.uk/nptg/">National PT Gazetteer (NPTG)</a></li>
+                <li><a href="http://www.dft.gov.uk/journeyweb/">JourneyWeb</a></li>
+                <li class="selected"><a href="http://www.dft.gov.uk/transxchange/">TransXChange</a></li>
+
+          <li><a href="http://www.data.gov.uk/">data.gov.uk</a></li>
+                <li class="listbreaker">Related EU Standards</li>
+                <li><a href="http://www.dft.gov.uk/transmodel/">TransModel</a></li>
+                <li><a href="http://www.siri.org.uk/">SIRI</a></li>
+                <li><a href="http://www.netex.org.uk/">NeTEx</a></li>
+                <li><a href="http://www.ifopt.org.uk/">IFOPT</a></li>
+
+
+            </ul>
+        </div><!-- leftBar -->
+
+        </div><!-- pageWrapper -->
+    </div><!-- widthWrapper -->
+
+<div id="footer">
+    <ul>
+        <li class="first"><a target="_top" href="http://www.dft.gov.uk/accessibility">Accessibility</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/cymraeg">Cymraeg</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/foi/">Freedom of Information</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/about/informationcharter/">Information charter</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/terms/">Terms and conditions</a></li>
+        <li><a target="_top" rel="license" href="http://www.dft.gov.uk/terms/copyright">Crown copyright</a></li>
+    </ul>
+</div><!-- footer -->
+
+
+</div><!-- wrapper -->
+</div><!-- mainWrapper -->
+
+<div id="header">
+    <a href="http://www.dft.gov.uk/">
+    <img id="logo" src="../../../../_format/_images/gifs/logo.gif" alt="Department for Transport - Transport that works for everyone." width="230" height="95" /></a>
+    <div id="topNav">
+        <ul>
+            <li>
+            <img id="utm" src="http://www.dft.gov.uk/__utm.gif" alt="" height="1" /><a target="_top" href="#belowNav">Skip to main content</a></li>
+            <li><a target="_top" href="http://www.dft.gov.uk/results&#63;view&#61;Filter&#38;w&#61;What&#37;27s&#43;new&#38;df&#61;07&#37;2F03&#37;2F09&#38;dt&#61;07&#37;2F04&#37;2F09&#38;pg&#61;1">What's new</a></li>
+                <li><a target="_top" href="http://www.dft.gov.uk/publications/cookies/">Cookies</a></li> <li><a target="_top" href="http://www.dft.gov.uk/contact">Contact us</a></li>
+            <li><a target="_top" href="http://www.dft.gov.uk/help/">Help</a></li>
+            <li><a target="_top" href="http://www.dft.gov.uk/atoz">A to Z index</a></li>
+            <li class="last"><a target="_top" href="http://www.dft.gov.uk/sitemap">Site map</a></li>
+        </ul>
+
+        <script type="text/javascript" src="../../../../_format/_js/clearField.js"></script>
+        <form action="http://search.dft.gov.uk/search" method="get">
+            <label for="searchStringTop" class="accessibility">Search keyword:</label>
+            <!-- Google Mini Search Criteria -->
+            <input type="hidden" name="client" value="default_frontend"/>
+            <input type="hidden" name="proxyreload" value="1"/>
+            <input type="hidden" name="proxystylesheet" value="default_frontend"/>
+            <input type="hidden" name="output" value="xml_no_dtd"/>
+            <input type="text" name="q" id="searchStringTop" value="Enter search term" onclick="doClear(this) " size="20" />
+            <input type="hidden" name="pg" id="page" value="1" />
+            <input type="submit" value="Search" id="search" class="button" />
+        </form>
+    </div><!-- topNav -->
+
+</div><!-- header -->
+
+<script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+<script type="text/javascript">
+    var pageTracker = _gat._getTracker("UA-7447714-1");
+    pageTracker._setLocalGifPath("http://www.dft.gov.uk/__utm.gif")
+    pageTracker._setLocalRemoteServerMode();
+    pageTracker._trackPageview();
+    </script>
+<script src="http://www.dft.gov.uk/_format/_js/gatag.js" type="text/javascript"></script>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+<script src="http://www.dft.gov.uk/_format/_js/dftglobal.js" type="text/javascript"></script>
+<script src="http://www.dft.gov.uk/_format/_js/dftreporting.js" type="text/javascript"></script>
+<script src="http://www.dft.gov.uk/_format/_js/microsite.js" type="text/javascript"></script>
+</body>
+</html>

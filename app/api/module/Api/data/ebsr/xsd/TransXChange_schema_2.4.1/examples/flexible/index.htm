@@ -1,0 +1,294 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head profile="http://www.w3.org/2003/g/data-view">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Dft - TransXChange - Examples 2.4 - Flexible route</title>
+    <meta name="DC.title" content="Examples 2.4 - Flexible route Example for TransXChange"/>
+    <meta name="eGMS.title" content=""/>
+    <meta name="description" content="" />
+    <meta name="language" content="eng" />
+    <meta name="DC.description" content="Examples 2.4 - Flexible route Example for TransXChange, an XML protocol to allow remote journey planning engines to communicate in order to provide multimodal journeys spanning different regions."/>
+    <meta name="keywords" content="" />
+    <meta name="DC.subject" xml:lang="en" scheme="eGMS.IPSV" content=""/>
+    <meta name="Author" content="" />
+    <meta name="DC.creator" content="Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR"/>
+    <meta name="DC.publisher" content="Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR"/>
+    <meta name="DCTERMS.created" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="DCTERMS.issued" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="DCTERMS.modified" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="eGMS.disposalReview" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="DC.format" scheme="DCTERMS.IMT" content="text/html"/>
+    <meta name="DC.type" scheme="eGMS.TES" content=""/>
+    <meta name="DC.type.category" lang="en" content="" />
+    <meta name="DC.type" scheme="DCTERMS.DCMIType" content="Text"/>
+    <meta name="DC.type" scheme="Gov.Body.ContentType" content=""/>
+    <meta name="DC.coverage" content="UK"/>
+    <meta name="DCTERMS.audience" scheme="eGMS.AES" content=""/>
+    <meta name="DC.language" scheme="DCTERMS.ISO639-2" content="eng"/>
+    <meta name="DC.identifier" scheme="ISBN" content="" />
+    <meta name="DC.identifier" scheme="DCTERMS.URI" content=""/>
+    <meta name="eGMS.copyright" content="Crown copyright http://www.dft.gov.uk/terms/copyright" />
+    <meta name="eGMS.accessibility" scheme="eGMS.WCAG10" content="Double-A"/>
+    <link rel="transformation" href="http://www.nationalarchives.gov.uk/metadata/egms-extract/egms-extract.xsl" />
+    <link rel="stylesheet" type="text/css" media="screen, projection" href="../../../../_format/_styles/basic.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="../../../../_format/_styles/screen.css" />
+    <link rel="stylesheet" type="text/css" media="print" href="../../../../_format/_styles/print.css" />
+</head>
+
+<body id="top" class="psx">
+<div id="mainWrapper">
+    <ul id="mainNav">
+        <li><a href="http://www.dft.gov.uk/about/">About DfT</a></li>
+        <li><a href="http://www.dft.gov.uk/pgr/">Policy, guidance and research</a></li>
+        <li><a href="http://www.dft.gov.uk/consultations/">Consultations</a></li>
+        <li><a href="http://www.dft.gov.uk/press/">Press office</a></li>
+        <li><a href="http://www.dft.gov.uk/faqs/">FAQs</a></li>
+        <li><a href="http://www.dft.gov.uk/press/ministers/">Ministers</a></li>
+    </ul>
+
+<div id="wrapper">
+    <div id="widthWrapper" class="clearfix">
+        <div id="pageWrapper">
+            <div id="crumbs">
+                <div>
+                    <a class="first" href="http://www.dft.gov.uk/">DfT home</a>
+                    <img src="../../../../_format/_images/gifs/crumb-arrow.gif" alt=" " width="6" height="11"/>&nbsp;&nbsp;<a href="http://www.dft.gov.uk/public-transportdatastandards/">Public Transport XML Standards index</a>
+                    <img src="../../../../_format/_images/gifs/crumb-arrow.gif" alt=" " width="6" height="11"/>&nbsp;&nbsp;<a href="http://www.dft.gov.uk/transxchange/">TransXChange</a>
+                    <img src="../../../../_format/_images/gifs/crumb-arrow.gif" alt=" " width="6" height="11"/>&nbsp;&nbsp;<a href="#">Examples 2.4 - Flexible route</a>
+                </div>
+            </div><!-- crumbs -->
+
+            <div id="contentWrapper">
+                <div id="content">
+<h1><a name="belowNav" id="belowNav"></a>TransXChange</h1>
+<h2>Examples 2.4 - Flexible route</h2>
+<h3>Summary</h3>
+<p>A flexible service route. </p>
+<ul>
+    <li>Flexible zones for pick up and set down.</li>
+    <li>Fixed stops for pick up and set down.</li>
+    <li>Flexible <a href="#OperatingDays">time bands</a>.</li>
+    <li>Registration Schema.</li>
+</ul>
+<p>Published as: <a href="flexible.pdf">PDF</a> </p>
+<h3>Route Map</h3>
+<p><img src="flexible.png" width="655" height="482" alt="Flexible route image" /></p>
+
+<table class="grid">
+<caption>Timetable</caption>
+<tr>
+<th>&#160;</th>
+<th><strong>#1</strong></th>
+<th><strong>#2</strong></th>
+</tr>
+<tr>
+<td>&#160;</td>
+<td><strong>Monday to Friday, excluding public holdays</strong></td>
+<td><strong>Bank Holiday<br />Mondays</strong></td>
+</tr>
+<tr>
+<td><i>Band 1</i></td>
+<td>09:00 - 18:00</td>
+<td>10:00-12:00</td>
+</tr>
+<tr>
+<td><i>Band 2</i></td>
+<td>&#160;</td>
+<td>16:00:1400</td>
+</tr>
+</table>
+<br /><br />
+<hr>
+<h2>The XML Representation</h2>
+<p><a href="flexible.xml">XML Document </a></p>
+<h4 id="ServicePattern">Service Structure</h4>
+<ul>
+    <li>Here is a single<strong> Serv<code>i</code>ce </strong>instance <i><strong>SV1</strong></i>, with one <strong>Li<code>n</code>e</strong> - '<i>L1' ,</i> with <strong>
+    <code>LineName</code></strong> <i>'H145'</i>.</li>
+    <li>The <strong><code>Registration</code></strong> is for a single <strong><code>Operator</code>. </b</li>
+    </strong>
+    <li>There is a single <strong><code>FlexibleJourneyPattern</code>, <i>jp_1,</i></strong> which references six
+    <strong><code>StopPoint</code></strong> instances<strong>:
+        </strong>
+        <ul>
+            <li>Three <strong><code>Fixed</code></strong> stops: <strong> <i>Washingborough Church, Washingborough Shop, South Heighton.</i></li>
+            </strong>
+            <li>Three<strong> <code>FlexibleZone</code> </strong>stops<strong>: <i>Nettleham, Sudbrook</i>
+            </strong>and<strong> <i>Cherry Willingham.</i> </strong>The<strong><i> Cherry Willingham</i>
+            </strong>stop is also associated with the<strong> <i>Reepham</i> </strong>locality.</li>
+        </ul>
+    </li>
+    <li>There are two single <strong><code>FlexibleVehicleJourney</code> instances,</strong> both based on <strong>
+    <code>JourneyPattern</code> <i>jp_1</i>:
+        </strong>
+        <ul>
+            <li>The first, <strong><i>VJ1</i></strong>, follows <strong><i>jp_1</i></strong> on the default operational days of the service.  It has a single<strong>
+            <code>TimeBand</code> </strong>from<strong> 09:00 </strong>to <strong>18:00 </strong>any changes to the timings on the <strong>
+            <code>JourneyPatternTimingLink</code> </strong>instances<strong>.</li></strong>
+            <li>The second <strong><i>VJ2</i> </strong>runs only on<strong> <code>Bank Holiday Mondays
+            </code>and </strong>has a start time of <strong>10.00. </strong>It has a frequent service of every<strong>
+            </strong><i>10 minutes</i>, and an end time of <i>16:30.</i></li>
+        </ul>
+    </li>
+</ul>
+<strong>
+<h4 id="OperatingDays">The Operating Days</h4>
+</strong>
+<ul>
+    <li>The<strong> <strong>Servi<code>c</code>e </strong><code>OperatingPeriod </code></strong>for<strong> <i>SV_1</i>
+    </strong>starts on <i>02/01/2005</i><strong><i> </i></strong>for all vehicle journeys and
+    continues indefinitely</li>
+    <li>The<strong> </strong>service<strong> <code>OperatingProfile</code> </strong>says it runs <strong>
+    <code>MondayToFriday</code> </strong>except on any bank holidays.<strong>
+        <ul>
+            <li>The</strong> <strong><code>RegularDayType</code> </strong>specifies journeys of the service run<strong>
+            <code>MondayToFriday</code>&nbsp; </strong>every week.</li> <strong>
+            <li>The</strong> <strong>BankHoli<code>d</code>ayOperation / <code>DaysOfNonOperation</code></strong> states journeys of the service do not run on public holidays or early run off days<strong>.</strong> A special public holiday is also defined for<strong>
+            </strong><i>2005/13/0.</i></li>
+        </ul>
+    <strong>
+    <li><code>VehicleJourney</code> <i>Vj2</i> </strong>has an override<strong> <strong>Opera<code>t</code>ingProfile</strong>
+    </strong>which specifies it runs only on <strong><code>BankHolidayMondays</code>.
+        </strong>
+        <ul>
+            <li>The<strong> <code>RegularDayType</code> </strong>specifies journeys of the service run <strong>
+            <code>Holidays</code> </strong>only.</li> <strong>
+            <li>T</strong>h<strong>e <code>BankHolidayOperation</code> / DaysOf<code>O</code>peration s</strong>tates journeys of the service run on<strong>
+            <code>HolidayMondays</code>.</li>
+        </ul>
+    </li>
+</ul>
+<p><br />Page last updated: 2013/04/13</p>
+
+                </div><!-- content -->
+            </div><!-- contentWrapper -->
+
+        <div id="leftBar">
+            <h2>TransXChange</h2>
+            <ul class="fade">
+                <li><a href="../../../../index.htm">Index</a></li>
+                <li><a href="../../../../overview.htm">Overview</a></li>
+                <li><a href="../../../../process.htm">Data &#38; Process</a></li>
+                <li><a href="../../../../schema/schemas.htm">Downloads &#38; Schema</a></li>
+                <li><a href="../../../../documentation.htm">Documentation</a></li>
+                <li><a href="../../../../examples.htm">Examples</a></li>
+                <li class="selected"><a href="../index.htm">&#160;&#160;2.4 Route types</a>
+                    <ul>
+
+
+                        <li><a href="../linear/index.htm">Linear</a></li>
+<li><a href="../express/index.htm">Express</a></li>
+<li><a href="../interchange/index.htm">Interchange</a></li>
+<li><a href="../circular/index.htm">Circular</a></li>
+<li><a href="../cloverleaf/index.htm">Cloverleaf</a></li>
+<li><a href="../grouping/index.htm">Grouping</a></li>
+<li><a href="../lollipop/index.htm">Lollipop</a></li>
+<li><a href="../eye/index.htm">Eye</a></li>
+                        <li class="selected">Flexible</li><li><a href="../hailandride/index.htm">Hail &#38; Ride</a></li>
+<li><a href="../large/index.htm">Large</a></li>
+<li><a href="../mergefrequency/index.htm">Merged Frequency</a></li>
+<li><a href="../footnotes/index.htm">Footnotes</a></li>
+<li><a href="../cancellation/index.htm">Cancellation</a></li>
+<li><a href="../delta/index.htm">Delta</a></li>
+                    </ul>
+                </li>
+                <li><a href="../../../../ebsrnews/index.htm">EBSR news</a></li>
+                <li><a href="../../../../realexamples/index.htm">Sample Documents</a></li>
+                <li><a href="../../../../publisher.htm">Publisher</a></li>
+                <li><a href="../../../../gtfs.htm">Other Tools</a></li>
+                <li><a href="../../../../technicalFaq.htm">Technical FAQ</a></li>
+                <li><a href="../../../../versioning.htm">Versioning</a></li>
+                <li><a href="../../../../implementations.htm">Implementations</a></li>
+                <li><a href="../../../../training.htm">Training materials</a></li>
+                <li><a href="../../../../history.htm">History</a></li>
+                <li><a href="../../../../termsOfUse.htm">Terms of Use</a></li>
+                <li><a href="../../../../contact.htm">Contact</a></li>
+                <li><a href="../../../../copyright.htm">Copyright</a></li>
+                <li class="listbreaker">Related UK Standards</li>
+                <li><a href="http://www.dft.gov.uk/public-transportdatastandards/">Standards - main index</a></li>
+        
+                
+                <li><a href="http://www.dft.gov.uk/naptan/">NaPTAN</a></li>
+                <li><a href="http://www.dft.gov.uk/nptg/">National PT Gazetteer (NPTG)</a></li>
+                <li><a href="http://www.dft.gov.uk/journeyweb/">JourneyWeb</a></li>
+             
+                <li class="selected"><a href="http://www.dft.gov.uk/transxchange/">TransXChange</a></li>   <li><a href="http://www.dft.gov.uk/CycleNetXchange/">CycleNetXchange</a></li>  <li><a href="http://data.gov.uk/nptdr/">data.gov.uk NPTDR</a></li>
+                <li class="listbreaker">Related EU Standards</li>
+                <li><a href="http://www.dft.gov.uk/transmodel/">TransModel</a></li>
+                <li><a href="http://www.siri.org.uk/">SIRI</a></li>
+                <li><a href="http://www.netex.org.uk/">NeTEx</a></li>
+                <li><a href="http://www.ifopt.org.uk/">IFOPT</a></li>
+                
+                
+            </ul>
+        </div><!-- leftBar -->
+
+        </div><!-- pageWrapper -->
+    </div><!-- widthWrapper -->
+
+<div id="footer">
+    <ul>
+        <li class="first"><a target="_top" href="http://www.dft.gov.uk/accessibility">Accessibility</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/cymraeg">Cymraeg</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/foi/">Freedom of Information</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/about/informationcharter/">Information charter</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/terms/">Terms and conditions</a></li>
+        <li><a target="_top" rel="license" href="http://www.dft.gov.uk/terms/copyright">Crown copyright</a></li>
+    </ul>
+</div><!-- footer -->
+
+
+</div><!-- wrapper -->
+</div><!-- mainWrapper -->
+
+<div id="header">
+    <a href="http://www.dft.gov.uk/">
+    <img id="logo" src="../../../../_format/_images/gifs/logo.gif" alt="Department for Transport - Transport that works for everyone." width="230" height="95" /></a>
+    <div id="topNav">
+        <ul>
+            <li>
+            <img id="utm" src="http://www.dft.gov.uk/__utm.gif" alt="" width="1" height="1" /><a target="_top" href="#belowNav">Skip to main content</a></li>
+            <li><a target="_top" href="http://www.dft.gov.uk/results&#63;view&#61;Filter&#38;w&#61;What&#37;27s&#43;new&#38;df&#61;07&#37;2F03&#37;2F09&#38;dt&#61;07&#37;2F04&#37;2F09&#38;pg&#61;1">What's new</a></li>
+                <li><a target="_top" href="http://www.dft.gov.uk/publications/cookies/">Cookies</a></li> <li><a target="_top" href="http://www.dft.gov.uk/contact">Contact us</a></li>
+            <li><a target="_top" href="http://www.dft.gov.uk/help/">Help</a></li>
+            <li><a target="_top" href="http://www.dft.gov.uk/atoz">A to Z index</a></li>
+            <li class="last"><a target="_top" href="http://www.dft.gov.uk/sitemap">Site map</a></li>
+        </ul>
+
+        <script type="text/javascript" src="../../../../_format/_js/clearField.js"></script>
+        <form action="http://search.dft.gov.uk/search" method="get">
+            <label for="searchStringTop" class="accessibility">Search keyword:</label>
+            <!-- Google Mini Search Criteria -->
+            <input type="hidden" name="client" value="default_frontend"/>
+            <input type="hidden" name="proxyreload" value="1"/>
+            <input type="hidden" name="proxystylesheet" value="default_frontend"/>
+            <input type="hidden" name="output" value="xml_no_dtd"/>
+            <input type="text" name="q" id="searchStringTop" value="Enter search term" onclick="doClear(this) " size="20" />
+            <input type="hidden" name="pg" id="page" value="1" />
+            <input type="submit" value="Search" id="search" class="button" />
+        </form>
+    </div><!-- topNav -->
+
+</div><!-- header -->
+
+<script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+            </script>
+<script type="text/javascript">
+    var pageTracker = _gat._getTracker("UA-7447714-1");
+    pageTracker._setLocalGifPath("http://www.dft.gov.uk/__utm.gif")
+    pageTracker._setLocalRemoteServerMode();
+    pageTracker._trackPageview();
+            </script>
+<script src="http://www.dft.gov.uk/_format/_js/gatag.js" type="text/javascript"></script>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+            </script>
+<script src="http://www.dft.gov.uk/_format/_js/dftglobal.js" type="text/javascript"></script>
+<script src="http://www.dft.gov.uk/_format/_js/dftreporting.js" type="text/javascript"></script>
+<script src="http://www.dft.gov.uk/_format/_js/microsite.js" type="text/javascript"></script>
+</body>
+</html>

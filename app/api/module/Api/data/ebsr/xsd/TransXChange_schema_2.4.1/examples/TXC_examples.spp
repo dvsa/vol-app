@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+	<Folder FolderName="XML Files" ExtStr="xml;cml;math;mtx;rdf;smil;svg;wml">
+		<File FilePath="circular\circular.xml" HomeFolder="Yes"/>
+		<File FilePath="cloverleaf\cloverleaf.xml" HomeFolder="Yes"/>
+		<File FilePath="express\express.xml" HomeFolder="Yes"/>
+		<File FilePath="express\express_stopalloc.xml" HomeFolder="Yes"/>
+		<File FilePath="eye\eye.xml" HomeFolder="Yes"/>
+		<File FilePath="eye\eye_cymraeg.xml" HomeFolder="Yes"/>
+		<File FilePath="eye\eye_no_stopseq.xml" HomeFolder="Yes"/>
+		<File FilePath="flexible\flexible.xml" HomeFolder="Yes"/>
+		<File FilePath="hailandride\hailandride.xml" HomeFolder="Yes"/>
+		<File FilePath="interchange\interchange.xml" HomeFolder="Yes"/>
+		<File FilePath="interchange\interchange_multi.xml" HomeFolder="Yes"/>
+		<File FilePath="large\large.xml" HomeFolder="Yes"/>
+		<File FilePath="linear\linear.xml" HomeFolder="Yes"/>
+		<File FilePath="linear\linear_change.xml" HomeFolder="Yes"/>
+		<File FilePath="linear\linear_change_jp.xml" HomeFolder="Yes"/>
+		<File FilePath="linear\linear_change_vj.xml" HomeFolder="Yes"/>
+		<File FilePath="lollipop\lollipop.xml" HomeFolder="Yes"/>
+	</Folder>
+	<Folder FolderName="XSL Files" ExtStr="xsl;xslt"/>
+	<Folder FolderName="XQuery Files" ExtStr="xq;xql;xquery"/>
+	<Folder FolderName="HTML Files" ExtStr="html;htm;xhtml;asp"/>
+	<Folder FolderName="DTD/Schemas" ExtStr="dtd;dcd;xdr;biz;xsd"/>
+	<Folder FolderName="Entities" ExtStr="ent"/>
+</Project>

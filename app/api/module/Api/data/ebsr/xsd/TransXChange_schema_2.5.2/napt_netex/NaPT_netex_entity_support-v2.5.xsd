@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:core="http://www.govtalk.gov.uk/core" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.5" id="NaPT_netex_entity_support">
+	<xsd:annotation>
+		<xsd:appinfo>
+			<Metadata xmlns="http://www.govtalk.gov.uk/CM/gms-xs">
+				<Aggregation>main schema</Aggregation>
+				<Audience>e-service developers</Audience>
+				<Coverage>Europe</Coverage>
+				<Creator>Drafted for version 1.0 CEN TC278 WG3 SG6 Editor Nicholas Knowles, Kizoom. mailto:schemer@netex.org.uk</Creator>
+				<Date>
+					<Created>2010-09-04</Created>
+				</Date>
+				<Date>
+					<Modified>2011-02-05</Modified>
+				</Date>
+				<Date>
+					<Modified>2010-11-05</Modified>
+				</Date>
+				<Description>
+					<p>Nge. This subschema defines data Modification base types.</p>
+				</Description>
+				<Format>
+					<MediaType>text/xml</MediaType>
+					<Syntax>http://www.w3.org/2001/XMLSchema</Syntax>
+					<Description>XML schema, W3C Recommendation 2001</Description>
+				</Format>
+				<Identifier>{http://www.naptan.org.uk/schema/2.5/napt_netex}NaPT_netex_entity_support-v2.5.xsd</Identifier>
+				<Language>[ISO 639-2/B] ENG</Language>
+				<Publisher>Kizoom Software Ltd, 16 High Holborn, London WC1V 6BX</Publisher>
+				<Rights>Unclassified
+ <Copyright>CEN, Crown Copyright 2009-2013</Copyright>
+				</Rights>
+				<Source>
+					<ul>
+						<li>Taken from NeTEAX schema Defines ur types.</li>
+					</ul>
+				</Source>
+				<Status>Version 2.5</Status>
+				<Subject>
+					<Category>Arts, recreation and travel, Tourism, Travel (tourism), Transport,
+Air transport, Airports,
+Ports and maritime transport, Ferries (marine),
+Public transport, Bus services, Coach services, Bus stops and stations,
+Rail transport, Railway stations and track, Train services, Underground trains,
+Business and industry, Transport, Air transport , Ports and maritime transport, Public transport,
+Rail transport, Roads and Road transport
+</Category>
+					<Project>CEN TC278 WG3 SG6</Project>
+				</Subject>
+				<Title>NeTEx Network Exchange - ENTITY base types.</Title>
+				<Type>Standard</Type>
+			</Metadata>
+		</xsd:appinfo>
+		<xsd:documentation>NaPT_netex_entity_SupportUr Object identifier base types for NeTEx ENTITies.</xsd:documentation>
+	</xsd:annotation>
+	<!-- ==== Entity ================================================================ -->
+	<xsd:simpleType name="ObjectIdType">
+		<xsd:annotation>
+			<xsd:documentation>Abstract Type for identifier of a NeTEx Object.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:normalizedString"/>
+	</xsd:simpleType>
+	<!-- ====Entity=================================================================== -->
+	<xsd:simpleType name="TypeOfValueIdType">
+		<xsd:annotation>
+			<xsd:documentation>Type for identifier of a TYPE OF VALUE.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="ObjectIdType"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="DataSourceIdType">
+		<xsd:annotation>
+			<xsd:documentation>Type for identifier of a DATA SOURCE.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="TypeOfValueIdType"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="ValueSetIdType">
+		<xsd:annotation>
+			<xsd:documentation>Type for identifier of a VALUE SET.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="ObjectIdType"/>
+	</xsd:simpleType>
+</xsd:schema>

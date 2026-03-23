@@ -1,0 +1,1039 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head profile="http://www.w3.org/2003/g/data-view">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Dft - TransXChange - Examples 2.4 - Circular route</title>
+    <meta name="DC.title" content="Examples 2.4 - Circular route Example for TransXChange"/>
+    <meta name="eGMS.title" content=""/>
+    <meta name="description" content="" />
+    <meta name="language" content="eng" />
+    <meta name="DC.description" content="Examples 2.4 - Circular route Example for TransXChange, an XML protocol to allow remote journey planning engines to communicate in order to provide multimodal journeys spanning different regions."/>
+    <meta name="keywords" content="" />
+    <meta name="DC.subject" xml:lang="en" scheme="eGMS.IPSV" content=""/>
+    <meta name="Author" content="" />
+    <meta name="DC.creator" content="Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR"/>
+    <meta name="DC.publisher" content="Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR"/>
+    <meta name="DCTERMS.created" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="DCTERMS.issued" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="DCTERMS.modified" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="eGMS.disposalReview" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="DC.format" scheme="DCTERMS.IMT" content="text/html"/>
+    <meta name="DC.type" scheme="eGMS.TES" content=""/>
+    <meta name="DC.type.category" lang="en" content="" />
+    <meta name="DC.type" scheme="DCTERMS.DCMIType" content="Text"/>
+    <meta name="DC.type" scheme="Gov.Body.ContentType" content=""/>
+    <meta name="DC.coverage" content="UK"/>
+    <meta name="DCTERMS.audience" scheme="eGMS.AES" content=""/>
+    <meta name="DC.language" scheme="DCTERMS.ISO639-2" content="eng"/>
+    <meta name="DC.identifier" scheme="ISBN" content="" />
+    <meta name="DC.identifier" scheme="DCTERMS.URI" content=""/>
+    <meta name="eGMS.copyright" content="Crown copyright http://www.dft.gov.uk/terms/copyright" />
+    <meta name="eGMS.accessibility" scheme="eGMS.WCAG10" content="Double-A"/>
+    <link rel="transformation" href="http://www.nationalarchives.gov.uk/metadata/egms-extract/egms-extract.xsl" />
+    <link rel="stylesheet" type="text/css" media="screen, projection" href="../../../../_format/_styles/basic.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="../../../../_format/_styles/screen.css" />
+    <link rel="stylesheet" type="text/css" media="print" href="../../../../_format/_styles/print.css" />
+</head>
+
+<body id="top" class="psx">
+<div id="mainWrapper">
+    <ul id="mainNav">
+        <li><a href="http://www.dft.gov.uk/about/">About DfT</a></li>
+        <li><a href="http://www.dft.gov.uk/pgr/">Policy, guidance and research</a></li>
+        <li><a href="http://www.dft.gov.uk/consultations/">Consultations</a></li>
+        <li><a href="http://www.dft.gov.uk/press/">Press office</a></li>
+        <li><a href="http://www.dft.gov.uk/faqs/">FAQs</a></li>
+        <li><a href="http://www.dft.gov.uk/press/ministers/">Ministers</a></li>
+    </ul>
+
+<div id="wrapper">
+    <div id="widthWrapper" class="clearfix">
+        <div id="pageWrapper">
+            <div id="crumbs">
+                <div>
+                    <a class="first" href="http://www.dft.gov.uk/">DfT home</a>
+                    <img src="../../../../_format/_images/gifs/crumb-arrow.gif" alt=" " width="6" height="11"/>&nbsp;&nbsp;<a href="http://www.dft.gov.uk/public-transportdatastandards/">Public Transport XML Standards index</a>
+                    <img src="../../../../_format/_images/gifs/crumb-arrow.gif" alt=" " width="6" height="11"/>&nbsp;&nbsp;<a href="http://www.dft.gov.uk/transxchange/">TransXChange</a>
+                    <img src="../../../../_format/_images/gifs/crumb-arrow.gif" alt=" " width="6" height="11"/>&nbsp;&nbsp;<a href="#">Examples 2.4 - Circular route</a>
+                </div>
+            </div><!-- crumbs -->
+
+            <div id="contentWrapper">
+                <div id="content">
+<h1><a name="belowNav" id="belowNav"></a>TransXChange</h1>
+<h2>Examples 2.4 - Circular route</h2>
+<h3>Summary</h3>
+<p>A circular route served in a clockwise direction by a single operator. All vehicle journeys have the same timings.
+<ul>
+    <li>Circular route.</li>
+    <li>Reuse of route sections.</li>
+    <li>Multiple Line.</li>
+    <li><a href="#OperationalProfile">Operational Profile</a> for different Weekend service, with fewer journeys and different evening journey times. Overriding of a default profile.</li>
+    <li>Journeys that run past end of day/midnight boundary.</li>
+    <li>Journeys that start after midnight on Saturday but should be shifted to
+    be shown as starting on the Monday to Friday service i.e. be&nbsp;
+    shifted to a different bed and marked with a note that they are in a
+    different day. (TXC v2.4)</li>
+    <li>Partial Traversal of Route / Journey Pattern.</li>
+    <li>Dead runs, Positioning links (Including TXC v2.4 duty crew).</li>
+    <li>Operator Garage.</li>
+    <li>Service level Vias </li>
+    <li>Dynamic Destination Displays.</li>
+    <li><a href="#FareStages">Fare Stages</a>.</li>
+    <li>Operational data: <a href="#ServicePattern">Vehicle Type, Ticket Machine, Duty crew</a>.</li>
+    <li>Operational data Variants for different days (TXC v2.4).</li>
+     <li>Reusable Day Types&nbsp; (TXC v2.4).</li>
+        <li>Vehicle Type Equipment for Accessibility (TXC v2.4)</li>
+        <li>WGS8 coordinates</li>
+    <li>General Schema.</li>
+</ul>
+<p>&nbsp;</p>
+<p>Published as: <a href="circular.pdf">PDF</a> <a href="circular-timetable.pdf">PDF Timetable only</a></p>
+<h3>Route Map</h3>
+<p><img src="circular.png" width="607" height="440" alt="Circular route image" /></p>
+<h2>Journeys</h2>
+<h3>Bus Station - High Street - Hospital - Bus Station.</h3>
+<table class="grid" >
+<tr>
+<th><font size="1">&#160;</font></th>
+<th><font size="1">&#160;</font></th>
+<th><font size="2">Based on Ref to</font></th>
+<th><font size="2">JP1</font></th>
+<th><font size="2">JP1</font></th>
+<th><font size="2">JP1</font></th>
+<th><font size="2">VJ2</font></th>
+<th><font size="2">VJ2</font></th>
+<th><font size="2">JP1</font></th>
+<th><font size="2">JP1</font></th>
+<th><font size="2">JP1</font></th>
+<th><font size="2">JP1</font></th>
+<th><font size="2">JP1</font></th>
+<th><font size="2">JP1</font></th>
+</tr>
+<tr>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">Links based on</font></td>
+<td><font size="1">-&gt;JP1</font></td>
+<td><font size="1">JP1 + start<br />dead<br />run</font></td>
+<td><font size="1">-&gt;JP1</font></td>
+<td><font size="1">-&gt;VJ2</font></td>
+<td><font size="1">-&gt;VJ2</font></td>
+<td><font size="1">P1 + end<br />dead<br />run</font></td>
+<td><font size="1">-&gt;JP1</font></td>
+<td><font size="1">-&gt;JP1</font></td>
+<td><font size="1">-&gt;JP1</font></td>
+<td><font size="1">-&gt;JP1</font></td>
+<td><font size="1">-&gt;JP1</font></td>
+</tr>
+<tr>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">Operational Profile</font></td>
+<td><font size="1">Override</font></td>
+<td><font size="1">-&gt;JP1</font></td>
+<td><font size="1">Override</font></td>
+<td><font size="1">-&gt;VJ2</font></td>
+<td><font size="1">Override</font></td>
+<td><font size="1">-&gt;JP1</font></td>
+<td><font size="1">Override</font></td>
+<td><font size="1">Override</font></td>
+<td><font size="1">Override</font></td>
+<td><font size="1">Override</font></td>
+<td><font size="1">Override</font></td>
+</tr>
+<tr>
+<th rowspan="2" ></th >
+<th rowspan="2"  ></th >
+<th><font size="2">VJ</font></th >
+<th><font size="2">#A</font></th >
+<th><font size="2">#1</font></th >
+<th><font size="2">#2</font></th >
+<th><font size="2">#3</font></th >
+<th><font size="2">#4</font></th >
+<th><font size="2">#5</font></th >
+<th><font size="2">#6</font></th >
+<th><font size="2">#7</font></th >
+<th><font size="2">#8</font></th >
+<th><font size="2">#B</font></th >
+<th><font size="2">#C</font></th >
+</tr>
+<tr>
+<th><strong><i><font size="2">Line</font></i></strong></th >
+<th><font size="2">1 Night</font></th >
+<th><font size="2">1</font></th >
+<th><font size="2">1</font></th >
+<th><font size="2">1</font></th >
+<th><font size="2">1 ++</font></th >
+<th><font size="2">1</font></th >
+<th><font size="2">1 Night</font></th >
+<th><font size="2">1 Night</font></th >
+<th><font size="2">1 Night</font></th >
+<th><font size="2">1 Night</font></th >
+<th><font size="2">1 Night</font></th >
+</tr>
+<tr>
+<td  colspan="2" rowspan="2"><font size="1">Days </font>
+<p><font size="1">Of Week</font></td>
+<td><font size="1">Service</font></td>
+<td bgcolor="#D06318"><i><font size="1">MTWTFSS</font></i></td>
+<td><i><font size="1">MTWTFSS</font></i></td>
+<td><i><font size="1">MTWTFSS</font></i></td>
+<td><font size="1"><i>&nbsp;--</i></font></td>
+<td><i><font size="1">MTWTFSS</font></i></td>
+<td><i><font size="1">MTWTFSS</font></i></td>
+<td><i><font size="1">MTWTFSS</font></i></td>
+<td><i><font size="1">MTWTFSS</font></i></td>
+<td><i><font size="1">MTWTFSS</font></i></td>
+<td bgcolor="#D06318"><i><font size="1">MTWTFSS</font></i></td>
+<td bgcolor="#D06318"><i><font size="1">MTWTFSS</font></i></td>
+</tr>
+<tr>
+<td><font size="1">Vehicle Journey</font></td>
+<td  bgcolor="#D06318"><i><font size="1">MTWTF--</font></i></td>
+<td>
+<p align="center"><font size="1">&quot;</font></td>
+<td><i><font size="1">MTWTF--</font></i></td>
+<td>
+<p align="center"><i><font size="1">(MTWTF--)</font></i></td>
+<td><font size="1"><i>c</i></font></td>
+<td>
+<p align="center"><font size="1">&quot;</font></td>
+<td><i><font size="1">MTWTF--</font></i></td>
+<td><i><font size="1">MTWTF--</font></i></td>
+<td><font size="1"><i>-----SS</i></font></td>
+<td bgcolor="#D06318"><font size="1"><i>-</i></font><i><font size="1">TWTFS-</font></i></td>
+<td bgcolor="#D06318">
+<font size="1"><i>-----F-</i></font></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><font size="1">DayShift</font></td>
+<td bgcolor="#D06318"><font size="1"><i>-1</i></font></td>
+<td><i><font size="1">0</font></i></td>
+<td><i><font size="1">0</font></i></td>
+<td><i><font size="1">0</font></i></td>
+<td><i><font size="1">0</font></i></td>
+<td><i><font size="1">0</font></i></td>
+<td><i><font size="1">0</font></i></td>
+<td><i><font size="1">0</font></i></td>
+<td><i><font size="1">0</font></i></td>
+<td bgcolor="#D06318"><font size="1"><i>+1</i></font></td>
+<td bgcolor="#D06318"><font size="1"><i>+1</i></font></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><font size="1">Actual Days</font></td>
+<td  bgcolor="#D06318"><i><font size="1">MTWT--S</font></i></td>
+<td><i><font size="1">MTWTFSS</font></i></td>
+<td><i><font size="1">MTWTF--</font></i></td>
+<td><i><font size="1">MTWTF--</font></i></td>
+<td><i><font size="1">MTW-F</font></i><font size="1"><i>SS</i></font></td>
+<td><i><font size="1">MTWTFSS</font></i></td>
+<td><i><font size="1">MTWTF--</font></i></td>
+<td><i><font size="1">MTWTF--</font></i></td>
+<td><font size="1"><i>-----SS</i></font></td>
+<td bgcolor="#D06318"><font size="1"><i>-</i></font><i><font size="1">TWTFS-</font></i></td>
+<td  bgcolor="#D06318"><font size="1"><i>------S-</i></font></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><font size="1">Beds</font></td>
+<td bgcolor="#D06318"><font size="1">MF</font></td>
+<td><font size="1">MF, SS</font></td>
+<td><font size="1">MF</font></td>
+<td><font size="1">MF</font></td>
+<td><font size="1">MF, SS</font></td>
+<td><font size="1">MF, SS</font></td>
+<td><font size="1">MF</font></td>
+<td><font size="1">MF</font></td>
+<td><font size="1">SS</font></td>
+<td bgcolor="#D06318"><font size="1">MF</font></td>
+<td bgcolor="#D06318"><font size="1">MF</font></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><font size="1">Dep</font></td>
+<td bgcolor="#D06318"><font size="1">(23:55)</font></td>
+<td><font size="1">(10:29)</font></td>
+<td><font size="1">(11:00)</font></td>
+<td><font size="1">(12:00)</font></td>
+<td><font size="1">(13:00)</font></td>
+<td><font size="1">(14:00)</font></td>
+<td><font size="1">(22:30)</font></td>
+<td><font size="1">(23:30)</font></td>
+<td><font size="1">(23:33)</font></td>
+<td bgcolor="#D06318"><font size="1">(00:00)</font></td>
+<td bgcolor="#D06318"><font size="1">(00:10)</font></td>
+</tr>
+<tr>
+<td rowspan="2" ><font size="1">xL1</font></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><i><font size="1">Bus Station</font></i></strong></td>
+<td  bgcolor="#D06318"><font size="1">23:55**</font></td>
+<td><i><font size="1">-</font></i></td>
+<td><font size="1">11:00</font></td>
+<td><font size="1">12:00</font></td>
+<td><font size="1">13:00</font></td>
+<td><font size="1">14:00</font></td>
+<td><font size="1">22:30</font></td>
+<td><font size="1">23:30</font></td>
+<td><font size="1">23:33</font></td>
+<td bgcolor="#D06318"><font size="1">00:10*</font></td>
+<td  bgcolor="#D06318"><font size="1">00:20*</font></td>
+</tr>
+<tr>
+<td rowspan="2" ><font size="1">xL2</font></td>
+<td><strong><i><font size="1">High St</font></i></strong></td>
+<td bgcolor="#D06318"><font size="1">23:58**</font></td>
+<td><i><font size="1">-</font></i></td>
+<td><font size="1">11:03</font></td>
+<td><font size="1">12:03</font></td>
+<td><font size="1">13:03</font></td>
+<td><font size="1">14:03</font></td>
+<td><font size="1">22:33</font></td>
+<td><font size="1">23:33</font></td>
+<td><font size="1">23:37</font></td>
+<td bgcolor="#D06318"><font size="1">00:13*</font></td>
+<td bgcolor="#D06318"><font size="1">00:23*</font></td>
+</tr>
+<tr>
+<td rowspan="2" td><font size="1">xL3</font></td>
+<td><strong><i><font size="1">Market St</font></i></strong></td>
+<td bgcolor="#D06318"><font size="1">00:02</font></td>
+<td><i><font size="1">-</font></i></td>
+<td><font size="1">11:07</font></td>
+<td><font size="1">12:07</font></td>
+<td><font size="1">13:07</font></td>
+<td><font size="1">14:07</font></td>
+<td><font size="1">22:37</font></td>
+<td><font size="1">23:37</font></td>
+<td><font size="1">23:50</font></td>
+<td bgcolor="#D06318"><font size="1">00:17*</font></td>
+<td bgcolor="#D06318"><font size="1">00:27*</font></td>
+</tr>
+<tr>
+<td rowspan="2" td><font size="1">xL4</font></td>
+<td><strong><i><font size="1">School</font></i></strong></td>
+<td bgcolor="#D06318"><font size="1">00:15</font></td>
+<td><i><font size="1">-</font></i></td>
+<td><font size="1">11:20</font></td>
+<td><font size="1">12:20</font></td>
+<td><font size="1">13:20</font></td>
+<td><font size="1">14:20</font></td>
+<td><font size="1">22:50</font></td>
+<td><font size="1">23:50</font></td>
+<td><font size="1">23:59</font></td>
+<td bgcolor="#D06318"><font size="1">00:30*</font></td>
+<td bgcolor="#D06318"><font size="1">00:40*</font></td>
+</tr>
+<tr>
+<td rowspan="2" td><font size="1">xL5</font></td>
+<td><strong><i><font size="1">Hospital</font></i></strong></td>
+<td bgcolor="#D06318"><font size="1">00:24</font></td>
+<td><font size="1">10:29</font></td>
+<td><font size="1">11:29</font></td>
+<td><font size="1">12:29</font></td>
+<td><font size="1">13:29</font></td>
+<td><font size="1">14:29</font></td>
+<td><font size="1">22:59</font></td>
+<td><font size="1">23:59</font></td>
+<td><font size="1">00:18*</font></td>
+<td bgcolor="#D06318"><font size="1">00:39*</font></td>
+<td bgcolor="#D06318"><font size="1">00:49*</font></td>
+</tr>
+<tr>
+<td rowspan="2" td><font size="1">xL6</font></td>
+<td><strong><i><font size="1">Library</font></i></strong></td>
+<td bgcolor="#D06318"><font size="1">00:43</font></td>
+<td><font size="1">10:48</font></td>
+<td><font size="1">11:48</font></td>
+<td><font size="1">12:48</font></td>
+<td><font size="1">13:48</font></td>
+<td><font size="1">-</font></td>
+<td><font size="1">23:18</font></td>
+<td><font size="1">00:18*</font></td>
+<td><font size="1">00:30*</font></td>
+<td bgcolor="#D06318"><font size="1">00:58*</font></td>
+<td bgcolor="#D06318"><font size="1">01:08*</font></td>
+</tr>
+<tr>
+<td><font size="1">&#160;</font></td>
+<td><strong><i><font size="1">Bus Station</font></i></strong></td>
+<td bgcolor="#D06318"><font size="1">00:55</font></td>
+<td><font size="1">11:00</font></td>
+<td><font size="1">12:00</font></td>
+<td><font size="1">13:00</font></td>
+<td><font size="1">14:00</font></td>
+<td><font size="1">-</font></td>
+<td><font size="1">23:30</font></td>
+<td><font size="1">00:30*</font></td>
+<td><font size="1">00:42:*</font></td>
+<td bgcolor="#D06318"><font size="1">01:10*</font></td>
+<td bgcolor="#D06318"><font size="1">01:20*</font></td>
+</tr>
+<tr>
+<td><font size="1">&#160;</font></td>
+<td></td>
+<td></td>
+<td><font size="1">Sunday to Friday</font></td>
+<td><font size="1">Everyday</font></td>
+<td><font size="1">Monday to Friday</font></td>
+<td><font size="1">Monday to Friday</font></td>
+<td><font size="1">Not Thursday</font></td>
+<td><font size="1">Everyday</font></td>
+<td><font size="1">Monday to Friday</font></td>
+<td><font size="1">Monday to Friday</font></td>
+<td><font size="1">Saturday &amp; Sunday Only</font></td>
+<td><font size="1">Tuesday to Saturday</font></td>
+<td><font size="1">Fridays Only</font></td>
+</tr>
+</table>
+<p>* Next Day</p>
+<p>&nbsp;</p>
+<h2>Timetable - Clockwise, Monday to Friday</h2>
+<h3>Bus Station - High Street - Hospital - Bus Station.</h3>
+<table class="grid" >
+<tr>
+<th rowspan="2" ></th >
+<th rowspan="2" ></th >
+<th ><font size="2">VJ</font></th >
+<th><font size="2">#A</font></th >
+<th><font size="2">#1</font></th >
+<th><font size="2">#2</font></th >
+<th ><font size="2">#3</font></th >
+<th><font size="2">#4</font></th >
+<th><font size="2">#5</font></th >
+<th><font size="2">#6</font></th >
+<th ><font size="2">#7</font></th >
+<th><font size="2">#B</font></th >
+<th ><font size="2">#C</font></th >
+</tr>
+<tr>
+<th ><strong><i><font size="2">Line</font></i></strong></th >
+<th><font size="2">1 Night</font></th >
+<th><font size="2">1</font></th >
+<th><font size="2">1</font></th >
+<th ><font size="2">1</font></th >
+<th><font size="2">1 ++</font></th >
+<th><font size="2">1</font></th >
+<th><font size="2">1 Night</font></th >
+<th ><font size="2">1 Night</font></th >
+<th><font size="2">1 Night</font></th >
+<th ><font size="2">1 Night</font></th >
+</tr>
+<tr>
+<td  colspan="2" rowspan="3"  ><font size="1">Days </font>
+<p><font size="1">Of Week</font></td>
+<td><font size="1">Actual Days</font></td>
+<td bgcolor="#D06318"><i><font size="1">MTWT--S</font></i></td>
+<td>
+<p align="center"><i><font size="1">MTWTFSS</font></i></td>
+<td><i><font size="1">MTWTF--</font></i></td>
+<td>
+<p align="center"><i><font size="1">MTWTF--</font></i></td>
+<td><i><font size="1">MTW-F</font></i><font size="1"><i>SS</i></font></td>
+<td>
+<p align="center"><i><font size="1">MTWTFSS</font></i></td>
+<td><i><font size="1">MTWTF--</font></i></td>
+<td><i><font size="1">MTWTF--</font></i></td>
+<td bgcolor="#D06318"><font size="1"><i>-</i></font><i><font size="1">TWTFS-</font></i></td>
+<td  bgcolor="#D06318">
+<font size="1"><i>------S-</i></font></td>
+</tr>
+<tr>
+<td><font size="1">Days of week</font></td>
+<td bgcolor="#D06318"><i><font size="1">MTWTF--</font></i></td>
+<td><i><font size="1">MTWTFSS</font></i></td>
+<td><i><font size="1">MTWTF--</font></i></td>
+<td><i><font size="1">MTWTF--</font></i></td>
+<td><i><font size="1">MTW-F</font></i><font size="1"><i>SS</i></font></td>
+<td><i><font size="1">MTWTFSS</font></i></td>
+<td><i><font size="1">MTWTF--</font></i></td>
+<td><i><font size="1">MTWTF--</font></i></td>
+<td bgcolor="#D06318"><font size="1"><i>M</i></font><i><font size="1">TWTF--</font></i></td>
+<td bgcolor="#D06318"><font size="1"><i>-----F-</i></font></td>
+</tr>
+<tr>
+<td><font size="1">DayShift</font></td>
+<td bgcolor="#D06318"><font size="1"><i>-1</i></font></td>
+<td><i><font size="1">0</font></i></td>
+<td><i><font size="1">0</font></i></td>
+<td><i><font size="1">0</font></i></td>
+<td><i><font size="1">0</font></i></td>
+<td><i><font size="1">0</font></i></td>
+<td><i><font size="1">0</font></i></td>
+<td><i><font size="1">0</font></i></td>
+<td bgcolor="#D06318"><font size="1"><i>+1</i></font></td>
+<td bgcolor="#D06318"><font size="1"><i>+1</i></font></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><font size="1">Dep</font></td>
+<td bgcolor="#D06318"><font size="1">(23:55))</font></td>
+<td><font size="1">(10:29)</font></td>
+<td><font size="1">(11:00)</font></td>
+<td><font size="1">(12:00)</font></td>
+<td><font size="1">(13:00)</font></td>
+<td><font size="1">(14:00)</font></td>
+<td><font size="1">(22:30)</font></td>
+<td><font size="1">(23:30)</font></td>
+<td bgcolor="#D06318"><font size="1">(00:00)</font></td>
+<td bgcolor="#D06318"><font size="1">(00:10)</font></td>
+</tr>
+<tr>
+<td rowspan="2" td><font size="1">xL1</font></td>
+<td><font size="1">&#160;</font></td>
+<td><strong><i><font size="1">Bus Station</font></i></strong></td>
+<td bgcolor="#D06318"><font size="1">23:55**</font></td>
+<td><i><font size="1">-</font></i></td>
+<td><font size="1">11:00</font></td>
+<td><font size="1">12:00</font></td>
+<td><font size="1">13:00</font></td>
+<td><font size="1">14:00</font></td>
+<td><font size="1">22:30</font></td>
+<td><font size="1">23:30</font></td>
+<td bgcolor="#D06318"><font size="1">00:10*</font></td>
+<td bgcolor="#D06318"><font size="1">00:20*</font></td>
+</tr>
+<tr>
+<td rowspan="2" td><font size="1">xL2</font></td>
+<td><strong><i><font size="1">High St</font></i></strong></td>
+<td bgcolor="#D06318"><font size="1">23:58**</font></td>
+<td><i><font size="1">-</font></i></td>
+<td><font size="1">11:03</font></td>
+<td><font size="1">12:03</font></td>
+<td><font size="1">13:03</font></td>
+<td><font size="1">14:03</font></td>
+<td><font size="1">22:33</font></td>
+<td><font size="1">23:33</font></td>
+<td bgcolor="#D06318"><font size="1">00:13*</font></td>
+<td bgcolor="#D06318"><font size="1">00:23*</font></td>
+</tr>
+<tr>
+<td rowspan="2" td><font size="1">xL3</font></td>
+<td><strong><i><font size="1">Market St</font></i></strong></td>
+<td bgcolor="#D06318"><font size="1">00:02</font></td>
+<td><i><font size="1">-</font></i></td>
+<td><font size="1">11:07</font></td>
+<td><font size="1">12:07</font></td>
+<td><font size="1">13:07</font></td>
+<td><font size="1">14:07</font></td>
+<td><font size="1">22:37</font></td>
+<td><font size="1">23:37</font></td>
+<td bgcolor="#D06318"><font size="1">00:17*</font></td>
+<td bgcolor="#D06318"><font size="1">00:27*</font></td>
+</tr>
+<tr>
+<td rowspan="2" td><font size="1">xL4</font></td>
+<td><strong><i><font size="1">School</font></i></strong></td>
+<td bgcolor="#D06318"><font size="1">00:15</font></td>
+<td><i><font size="1">-</font></i></td>
+<td><font size="1">11:20</font></td>
+<td><font size="1">12:20</font></td>
+<td><font size="1">13:20</font></td>
+<td><font size="1">14:20</font></td>
+<td><font size="1">22:50</font></td>
+<td><font size="1">23:50</font></td>
+<td bgcolor="#D06318"><font size="1">00:30*</font></td>
+<td bgcolor="#D06318"><font size="1">00:40*</font></td>
+</tr>
+<tr>
+<td rowspan="2" td><font size="1">xL5</font></td>
+<td><strong><i><font size="1">Hospital</font></i></strong></td>
+<td bgcolor="#D06318"><font size="1">00:24</font></td>
+<td><font size="1">10:29</font></td>
+<td><font size="1">11:29</font></td>
+<td><font size="1">12:29</font></td>
+<td><font size="1">13:29</font></td>
+<td><font size="1">14:29</font></td>
+<td><font size="1">22:59</font></td>
+<td><font size="1">23:59</font></td>
+<td bgcolor="#D06318"><font size="1">00:39*</font></td>
+<td bgcolor="#D06318"><font size="1">00:49*</font></td>
+</tr>
+<tr>
+<td rowspan="2" ><font size="1">xL6</font></td>
+<td><strong><i><font size="1">Library</font></i></strong></td>
+<td bgcolor="#D06318"><font size="1">00:43</font></td>
+<td><font size="1">10:48</font></td>
+<td><font size="1">11:48</font></td>
+<td><font size="1">12:48</font></td>
+<td><font size="1">13:48</font></td>
+<td><font size="1">-</font></td>
+<td><font size="1">23:18</font></td>
+<td><font size="1">00:18*</font></td>
+<td bgcolor="#D06318"><font size="1">00:58*</font></td>
+<td bgcolor="#D06318"><font size="1">01:08*</font></td>
+</tr>
+<tr>
+<td><font size="1">&#160;</font></td>
+<td  ><strong><i><font size="1">Bus Station</font></i></strong></td>
+<td bgcolor="#D06318"><font size="1">00:55</font></td>
+<td><font size="1">11:00</font></td>
+<td><font size="1">12:00</font></td>
+<td><font size="1">13:00</font></td>
+<td><font size="1">14:00</font></td>
+<td><font size="1">-</font></td>
+<td><font size="1">23:30</font></td>
+<td><font size="1">00:30*</font></td>
+<td bgcolor="#D06318"><font size="1">01:10*</font></td>
+<td bgcolor="#D06318"><font size="1">01:20*</font></td>
+</tr>
+<tr>
+<td><font size="1">&#160;</font></td>
+<td></td>
+<td>&nbsp;</td>
+<td><font size="1">Sunday to Friday</font></td>
+<td><font size="1">&nbsp;</font></td>
+<td>&nbsp;</td>
+<td></td>
+<td><font size="1">Not Thursday</font></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><font size="1">Tuesday to Saturday</font></td>
+<td><font size="1">Fridays Only</font></td>
+</tr>
+</table>
+<br/>
+<h4>Footnotes
+</h4>
+<p>Service runs Monday To Friday</p>
+<p>** Previous Day</p>
+<p>* Next Day</p>
+<p>++ Not Thursday</p>
+<hr>
+<h2>Timetable Clockwise, Saturday &amp; Sunday</h2>
+<h3>Bus Station - High Street - Hospital - Bus Station</h3>
+<table class="grid" >
+<tr>
+<td rowspan="2"></td>
+<td rowspan="2"></td>
+<th><font size="2">VJ</font></th>
+<th><font size="2">#1</font></th>
+<th><font size="2">#4</font></th>
+<th><font size="2">#5</font></th>
+<th><font size="2">#8</font></th>
+</tr>
+<tr>
+<th><strong><i><font size="2">Line</font></i></strong></th>
+<th><font size="2">1</font></th>
+<th><font size="2">1</font></th>
+<th><font size="2">1</font></th>
+<th><font size="2">1 Night</font></th>
+</tr>
+<tr>
+<td colspan="2" rowspan="3"  ><font size="1">Days <br>
+Of <br>
+Week</font></td>
+<td  ><font size="1">Actual Days</font></td>
+<td>
+<p align="center"><i><font size="1">MTWTFSS</font></i></td>
+<td><i><font size="1">MTW-F</font></i><font size="1"><i>SS</i></font></td>
+<td>
+<p align="center"><i><font size="1">MTWTFSS</font></i></td>
+<td><font size="1"><i>-----SS</i></font></td>
+</tr>
+<tr>
+<td><font size="1">Days of Week</font></td>
+<td><i><font size="1">MTWTFSS</font></i></td>
+<td><i><font size="1">MTW-F</font></i><font size="1"><i>SS</i></font></td>
+<td><i><font size="1">MTWTFSS</font></i></td>
+<td><font size="1"><i>-----SS</i></font></td>
+</tr>
+<tr>
+<td><font size="1">DayShift</font></td>
+<td><i><font size="1">0</font></i></td>
+<td><i><font size="1">0</font></i></td>
+<td><i><font size="1">0</font></i></td>
+<td><font size="1"><i>0</i></font></td>
+</tr>
+<tr>
+<td rowspan="2" ><font size="1">xL1</font></td>
+<td><font size="1">&#160;</font></td>
+<td><font size="1">Dep</font></td>
+<td  ><font size="1">(10:29)</font></td>
+<td><font size="1">(13:00)</font></td>
+<td><font size="1">(14:00)</font></td>
+<td><font size="1">(23:30)</font></td>
+</tr>
+<tr>
+<td rowspan="2"><font size="1">xL2</font></td>
+<td><strong><i><font size="1">High St</font></i></strong></td>
+<td><i><font size="1">-</font></i></td>
+<td><font size="1">13:03</font></td>
+<td><font size="1">14:03</font></td>
+<td><font size="1">23:33</font></td>
+</tr>
+<tr>
+<td   rowspan="2"><font size="1">xL3</font></td>
+<td><strong><i><font size="1">Market St</font></i></strong></td>
+<td><i><font size="1">-</font></i></td>
+<td><font size="1">13:07</font></td>
+<td><font size="1">14:07</font></td>
+<td><font size="1">23:37</font></td>
+</tr>
+<tr>
+<td rowspan="2"><font size="1">xL4</font></td>
+<td><strong><i><font size="1">School</font></i></strong></td>
+<td><i><font size="1">-</font></i></td>
+<td><font size="1">13:20</font></td>
+<td><font size="1">14:20</font></td>
+<td><font size="1">23:50</font></td>
+</tr>
+<tr>
+<td   rowspan="2"><font size="1">xL5</font></td>
+<td><strong><i><font size="1">Hospital</font></i></strong></td>
+<td><font size="1">10:29</font></td>
+<td><font size="1">13:29</font></td>
+<td><font size="1">14:29</font></td>
+<td><font size="1">23:59</font></td>
+</tr>
+<tr>
+<td rowspan="2"><font size="1">xL6</font></td>
+<td><strong><i><font size="1">Library</font></i></strong></td>
+<td><font size="1">10:48</font></td>
+<td><font size="1">13:48</font></td>
+<td><font size="1">-</font></td>
+<td><font size="1">00:18*</font></td>
+</tr>
+<tr>
+<td><font size="1">&#160;</font></td>
+<td><strong><i><font size="1">Bus Station</font></i></strong></td>
+<td><font size="1">11:00</font></td>
+<td><font size="1">14:00</font></td>
+<td><font size="1">-</font></td>
+<td><font size="1">00:30*</font></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td  >&nbsp;</td>
+<td><font size="1">Not Thursday</font></td>
+<td>&nbsp;</td>
+<td><font size="1">* next day</font></td>
+</tr>
+</table>
+<br /><br />
+<hr>
+<h2>The XML Representation</h2>
+<p><a href="circular.xml">XML Document </a></p>
+<h4 id="Registration">Service Registration</h4>
+<ul>
+    <li>The service is not registered.</li>
+    <li>There is a single <strong><code>Operator</code></strong>.</li>
+</ul>
+<h4 id="ServicePattern">Service Structure</h4>
+<ul>
+    <li>There is a single <code><strong>Service </strong></code>instance <i><strong>SV1</strong></i>, with two <code><strong>Lines</strong></code> - '<i>1'</i>. and '1 Night'.</li>
+    <li>There is a single <code><strong>RouteSection</strong></code>, <i><strong>RS1</strong>,</i> connecting the six stops. It has six
+    <strong><code>RouteLinks</code></strong> between the six stops;
+        <ul>
+            <li><i>(RL1) Bus Station</i> to <i>High Street</i>,</li>
+            <li><i>(RL2) High Street</i> to <i>School,</i></li>
+            <li><i>(RL3) School</i> to <i>Market Street,</i></li>
+            <li><i>(RL4) Market Street</i> to <i>Hospital,</i>
+            <li><i>(RL5) Hospital</i> to <i>Library,</i>and</li>
+            <li><i>(RL6) Library</i> to <i>Bus Station.</i></li>
+        </ul>
+    </li>
+    <li>There is a single <code><strong>Route</strong></code> <i><strong>R1</strong>,</i> with the one <code><strong>RouteSection</strong></code>, <i>
+    <strong>RS1</strong>.</i></li>
+    <li>There is a single <code><strong>JourneyPattern,</strong></code> <i><strong>JP1</strong></i>, with a single <code><strong>JourneyPatternSection</strong></code> instance <i>
+    <strong>JS1</strong></i>; corresponding to the route section <i><strong>RS1</strong></i>, and containing six <code><strong>JourneyPatternTimingLink </strong></code>instances, <i>
+    <strong>JPTL1</strong></i> - <i><strong>JPTL6</strong>,</i> which project onto the respective <code><strong>RouteLink</strong></code> instances <i>
+    <strong>RL1</strong>-<strong>RL6</strong>.</i>
+        <ul>
+            <li><i><strong>JPTL1</strong></i> has a <strong><code>DynamicDestination</code></strong> heading of <i>Hospital.</i> This will be in effect until the next heading is encountered.</li>
+            <li>The <i><strong>JPTL4</strong>-To</i> usage  has a <strong><code>DynamicDestination</code></strong> heading of <i>BusStation: </i>
+            from this point a different destination will be shown.</li>
+        </ul>
+    </li>
+    <li>There are ten&nbsp; <code><strong>VehicleJourney</strong></code> instances, with different day profile conditions, so different journeys get selected for Monday to Friday and for Saturday and Sunday:
+        <ol>
+            <li><i>VJ1</i> has an initial <code><strong>StartDeadRun</strong></code> run to position the bus at the <i>Hospital</i> stop from the
+            <strong><code>Operator's</code></strong> <strong><code>Garage</code></strong>. It has just two vehicle journey timing links, <i>
+            <strong>VJTL5</strong></i> &amp; <i><strong>VJTL6</strong></i>,
+corresponding to the last two sequential links of the journey pattern, <i><strong>JPTL5</strong></i> &amp; <i>
+            <strong>JPTL6</strong></i>, to visit the last three stops of the route.
+                <ul>
+                    <li>It inherits an <strong><code>OperationalProfile</code> </strong>
+                    from<strong> JP1 </strong>that says it runs <strong><code>MondayToFriday</code>.</strong></li>
+                </ul>
+            </li>
+            <li><i><strong>VJ2</strong></i> has  six vehicle journey timing links, corresponding to all six journey pattern links, starting at <i>Bus Station</i> at 1<i>1:00.</i>
+                <ul>
+                    <li>It has an override<strong> <code>OperationalProfile</code> </strong>that says it runs <strong>
+                    <code>MondayToFriday</code></strong></li>
+                </ul>
+            </li>
+            <li><i><strong>VJ3</strong></i>, <i><strong>VJ4</strong></i> reference VJ<strong><i>2</i></strong> for all their timing links, specifying only a different
+start time. (<i>12:00</i> and 1<i>3:00</i>).
+                <ul>
+                    <li>VJ3 inherits an <strong><code>OperationalProfile</code> </strong>from<strong>
+                    VJ2 </strong>that says it runs <strong><code>MondayToFriday</code></strong></li>
+                    <li>VJ4 has an override OperationalProfile that says it does not  run on <strong>
+                    <code>Thursday</code>, </strong>but otherwise runs Monday to Sunday.</b</li>
+                </ul>
+            </li>
+            <li>VJ<strong><i>5</i></strong> has just three vehicle journey timing links to complete the journey, corresponding to the first three journey pattern timing links, and a final <strong> <code>EndDeadRun</code>
+            </strong>to return the bus to the<strong> <i>Garage</i>. </strong>It has an override RunningBoard showing the short running</li>
+            <li><i><strong>VJ6</strong></i><strong> </strong>follows all six links of<strong> </strong><i><strong>JP1</strong></i><strong>
+            </strong>starting at <strong> <i>Bus Station</i> at </strong> <i>22:30<strong>.</strong></i><strong>
+                </strong>
+                <ul>
+                    <li>It has an<strong> <code>OperationalProfile</code> that says it runs
+                    <code>MondayToFriday</code></li>
+                </ul>
+            </li>
+            </strong>
+            <li><i><strong>VJ7</strong></i><strong> fo</strong>llows all six links of <i><strong>JP1</strong></i><strong>,
+            </strong>starting at<strong> <i>Bus Station</i> </strong>at <i>23:30<strong>,</strong></i><strong>
+            </strong>so its later stages will take place in the next calendar day.
+                <ul>
+                    <li>It has an<strong> <code>OperationalProfile</code> </strong>that says it runs<strong>
+                    <code>MondayToFriday</code></li>
+                </ul>
+            </li>
+            </strong>
+            <li><i><strong>VJ8</strong></i><strong> </strong>follows all six links of <i>J<strong>P</strong>1</i><strong>
+            </strong>starting at<strong> <i>Bus Station</i> at </strong><i>22:30. </i>
+                <ul>
+                    <li>It has an<strong> <code>OperationalProfile</code> </strong>that says it runs<strong>
+                    <code>Saturday</code> </strong>and<strong> <code>Sunday only.</code></strong></li>
+                </ul>
+            </li>
+        </ol>
+    </li>
+    <li>Three of the&nbsp; <code><strong>VehicleJourney</strong></code> instances, are
+    day shifted&nbsp; in a different bed,&nbsp; so that a journey that actually takes
+    place on saturday morning appears as part of the Monday to Friday service
+    (with a footnote) and a journey that actually takes place late on sunday
+    night is grouped as a Monday to Friday service.&nbsp;
+    <ol>
+      <strong>
+            <li><i>VJ_A </i> </strong>follows all six links of <i>J<strong>P</strong>1</i><strong>
+            </strong>for all its timing links starting at <strong> <i>Bus Station</i>
+            </strong>at<strong> </strong> <i><strong>00:10,</strong></i><strong> </strong>.
+                <ul>
+                    <li>It has an <strong><code>OperationalProfile</code>
+                    </strong>that says it runs<strong> Tuesday, Wednesday, Thursday,
+                    Friday </strong>and <strong>Sa<code>t</code>urday. </strong></li>
+                    <li><strong>&nbsp;</strong>A negative <code><strong>Day shift</strong></code><strong>
+                    </strong>causes it to placed in the <strong>
+                    <code>MondayToFriday </code>
+            </strong>
+            &nbsp;bed as the first journey of the day.</li>
+                </ul>
+            </li>
+        <strong>
+            <li><i>VJ_B </i> </strong>follows all six links of <i>J<strong>P</strong>1</i><strong>
+            </strong>for all its timing links starting at <strong> <i>Bus Station</i>
+            </strong>at<strong> </strong> <i><strong>00:20,</strong></i><strong> </strong>.
+                <ul>
+                    <li>It has an <strong><code>OperationalProfile</code>
+                    </strong>that says it runs only on<strong> Sa<code>t</code>urday. </strong></li>
+                    <li><strong>&nbsp;</strong>A negative <code><strong>Day shift</strong></code><strong>
+                    </strong>causes it to placed in the <strong>
+                    <code>MondayToFriday </code>
+            </strong>
+            &nbsp;bed at the beginning of the day.</li>
+                </ul>
+            </li>
+        <strong>
+            <li><i>VJ_C </i> </strong>follows all six links of <i>J<strong>P</strong>1</i><strong>
+            </strong>for all its timing links starting at <strong> <i>Bus Station</i>
+            </strong>at<strong> </strong> <i><strong>23:55,</strong></i><strong> </strong>.
+                <ul>
+                    <li>It has an <strong><code>OperationalProfile</code>
+                    </strong>that says it runs<strong> Sunday, Monday, T uesday,
+                    Wednesday, , </strong>and <strong>Thursday. </strong></li>
+                    <li><strong>&nbsp;</strong>A negative <code><strong>Day shift</strong></code><strong>
+                    </strong>causes it to placed in the <strong>
+                    <code>MondayToFriday </code>
+            </strong>
+            &nbsp;bed as the first journey of the day.</li>
+                </ul>
+            </li>
+    </ol>
+    <strong>
+    </li>
+</ul>
+
+<h4 id="OperationalProfile">Operational Profile</h4>
+</strong>
+<ul>
+    <li>On the <strong><code>JourneyPattern</code>, <code>OperationalProfile</code> /
+    <code>RegularDayType</code>/ <code>DaysOfWeek</code> / <code>MondayToSunday</code>
+    </strong>states that by default that the service runs everyday of the week<strong>.</li>
+    </strong>
+    <li>Some&nbsp; <strong> <code>VehicleJourney</code></strong> instances, override this
+    as described above<strong></li>
+</ul>
+<h4 id="Operational">Operational Details</h4>
+</strong>
+<ul>
+    <li>The<strong> <code>Operator</code></strong> has a <strong><code>Garaged</code> </strong>defined.</li>
+    <li>A default Service <strong>/ <code>TicketMachineServiceCode</code> i</strong>s specified.</li>
+    <li>On the <strong><code>JourneyPattern</code>, <code>Operational</code> </strong>details are specified:
+        <ul>
+            <li>A default<strong> <code>TicketMachine</code> /<code>JourneyCode</code></strong> is specified. The <strong>
+            <code>TicketMachine</code> / <code>Direction</code> </strong>is different
+            from that of the service.</li>
+            <li>A<strong> <code>VehicleType</code> </strong>is specified.</li>
+            <li>A default <strong><code>RunningBoard</code></strong> is specified<strong>.</li>
+        </ul>
+    </li>
+    <li><code>DutyCrew</code> <i>CRW1</i> </strong>runs the first four journeys. A second <strong>
+    <code>DutyCrew</code> <i>CRW2</i> </strong>takes over at <strong> <i>'Bus Station'</i>
+    </strong>to run the final journey<strong> #5.</strong></li>
+    <li><strong>There are different variants for different days of the week.</li>
+</ul>
+
+<h4 id="FareStages">Fare Stages</h4>
+</strong>
+<ul>
+    <li>There are FareStage instances at<strong> '<i>Bus Station', 'Market Street'</i>,
+    </strong>and<strong> '<i>Hospital'.</i></li>
+</ul>
+<p><img src="circular2.png" width="675" height="570" alt="Circular route image" /></p>
+<p><br />Page last updated: 2013/04/13</p>
+
+                </div><!-- content -->
+            </div><!-- contentWrapper -->
+
+        <div id="leftBar">
+            <h2>TransXChange</h2>
+            <ul class="fade">
+                <li><a href="../../../../index.htm">Index</a></li>
+                <li><a href="../../../../overview.htm">Overview</a></li>
+                <li><a href="../../../../process.htm">Data &#38; Process</a></li>
+                <li><a href="../../../../schema/schemas.htm">Downloads &#38; Schema</a></li>
+                <li><a href="../../../../documentation.htm">Documentation</a></li>
+                <li><a href="../../../../examples.htm">Examples</a></li>
+                <li class="selected"><a href="../index.htm">&#160;&#160;2.4 Route types</a>
+                    <ul>
+                        <li><a href="../linear/index.htm">Linear</a></li>
+                        <li><a href="../express/index.htm">Express</a></li>
+                        <li><a href="../interchange/index.htm">Interchange</a></li>
+                        <li class="selected">Circular</li>
+                        <li><a href="../cloverleaf/index.htm">Cloverleaf</a></li>
+                        <li><a href="../grouping/index.htm">Grouping</a></li>
+                        <li><a href="../lollipop/index.htm">Lollipop</a></li>
+                        <li><a href="../eye/index.htm">Eye</a></li>
+                        <li><a href="../flexible/index.htm">Flexible</a></li>
+                        <li><a href="../hailandride/index.htm">Hail &#38; Ride</a></li>
+                        <li><a href="../large/index.htm">Large</a></li>
+                        <li><a href="../mergefrequency/index.htm">Merged Frequency</a></li>
+                        <li><a href="../footnotes/index.htm">Footnotes</a></li>
+                        <li><a href="../cancellation/index.htm">Cancellation</a></li>
+                        <li><a href="../delta/index.htm">Delta</a></li>
+                    </ul>
+                </li>
+                <li><a href="../../../../ebsrnews/index.htm">EBSR news</a></li>
+                <li><a href="../../../../realexamples/index.htm">Sample Documents</a></li>
+                <li><a href="../../../../publisher.htm">Publisher</a></li>
+                <li><a href="../../../../gtfs.htm">Other Tools</a></li>
+                <li><a href="../../../../technicalFaq.htm">Technical FAQ</a></li>
+                <li><a href="../../../../versioning.htm">Versioning</a></li>
+                <li><a href="../../../../implementations.htm">Implementations</a></li>
+                <li><a href="../../../../training.htm">Training materials</a></li>
+                <li><a href="../../../../history.htm">History</a></li>
+                <li><a href="../../../../termsOfUse.htm">Terms of Use</a></li>
+                <li><a href="../../../../contact.htm">Contact</a></li>
+                <li><a href="../../../../copyright.htm">Copyright</a></li>
+                <li class="listbreaker">Related UK Standards</li>
+                <li><a href="http://www.dft.gov.uk/public-transportdatastandards/">Standards - main index</a></li>
+        
+                
+                <li><a href="http://www.dft.gov.uk/naptan/">NaPTAN</a></li>
+                <li><a href="http://www.dft.gov.uk/nptg/">National PT Gazetteer (NPTG)</a></li>
+                <li><a href="http://www.dft.gov.uk/journeyweb/">JourneyWeb</a></li>
+             
+                <li class="selected"><a href="http://www.dft.gov.uk/transxchange/">TransXChange</a></li>   <li><a href="http://www.dft.gov.uk/CycleNetXchange/">CycleNetXchange</a></li>  <li><a href="http://data.gov.uk/nptdr/">data.gov.uk NPTDR</a></li>
+                <li class="listbreaker">Related EU Standards</li>
+                <li><a href="http://www.dft.gov.uk/transmodel/">TransModel</a></li>
+                <li><a href="http://www.siri.org.uk/">SIRI</a></li>
+                <li><a href="http://www.netex.org.uk/">NeTEx</a></li>
+                <li><a href="http://www.ifopt.org.uk/">IFOPT</a></li>
+                
+                
+            </ul>
+        </div><!-- leftBar -->
+
+        </div><!-- pageWrapper -->
+    </div><!-- widthWrapper -->
+
+<div id="footer">
+    <ul>
+        <li class="first"><a target="_top" href="http://www.dft.gov.uk/accessibility">Accessibility</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/cymraeg">Cymraeg</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/foi/">Freedom of Information</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/about/informationcharter/">Information charter</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/terms/">Terms and conditions</a></li>
+        <li><a target="_top" rel="license" href="http://www.dft.gov.uk/terms/copyright">Crown copyright</a></li>
+    </ul>
+</div><!-- footer -->
+
+
+</div><!-- wrapper -->
+</div><!-- mainWrapper -->
+
+<div id="header">
+    <a href="http://www.dft.gov.uk/">
+    <img id="logo" src="../../../../_format/_images/gifs/logo.gif" alt="Department for Transport - Transport that works for everyone." width="230" height="95" /></a>
+    <div id="topNav">
+        <ul>
+            <li>
+            <img id="utm" src="http://www.dft.gov.uk/__utm.gif" alt="" width="1" height="1" /><a target="_top" href="#belowNav">Skip to main content</a></li>
+            <li><a target="_top" href="http://www.dft.gov.uk/results&#63;view&#61;Filter&#38;w&#61;What&#37;27s&#43;new&#38;df&#61;07&#37;2F03&#37;2F09&#38;dt&#61;07&#37;2F04&#37;2F09&#38;pg&#61;1">What's new</a></li>
+                <li><a target="_top" href="http://www.dft.gov.uk/publications/cookies/">Cookies</a></li> <li><a target="_top" href="http://www.dft.gov.uk/contact">Contact us</a></li>
+            <li><a target="_top" href="http://www.dft.gov.uk/help/">Help</a></li>
+            <li><a target="_top" href="http://www.dft.gov.uk/atoz">A to Z index</a></li>
+            <li class="last"><a target="_top" href="http://www.dft.gov.uk/sitemap">Site map</a></li>
+        </ul>
+
+        <script type="text/javascript" src="../../../../_format/_js/clearField.js"></script>
+        <form action="http://search.dft.gov.uk/search" method="get">
+            <label for="searchStringTop" class="accessibility">Search keyword:</label>
+            <!-- Google Mini Search Criteria -->
+            <input type="hidden" name="client" value="default_frontend"/>
+            <input type="hidden" name="proxyreload" value="1"/>
+            <input type="hidden" name="proxystylesheet" value="default_frontend"/>
+            <input type="hidden" name="output" value="xml_no_dtd"/>
+            <input type="text" name="q" id="searchStringTop" value="Enter search term" onclick="doClear(this) " size="20" />
+            <input type="hidden" name="pg" id="page" value="1" />
+            <input type="submit" value="Search" id="search" class="button" />
+        </form>
+    </div><!-- topNav -->
+
+</div><!-- header -->
+
+<script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+    var pageTracker = _gat._getTracker("UA-7447714-1");
+    pageTracker._setLocalGifPath("http://www.dft.gov.uk/__utm.gif")
+    pageTracker._setLocalRemoteServerMode();
+    pageTracker._trackPageview();
+</script>
+<script src="http://www.dft.gov.uk/_format/_js/gatag.js" type="text/javascript"></script>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script src="http://www.dft.gov.uk/_format/_js/dftglobal.js" type="text/javascript"></script>
+<script src="http://www.dft.gov.uk/_format/_js/dftreporting.js" type="text/javascript"></script>
+<script src="http://www.dft.gov.uk/_format/_js/microsite.js" type="text/javascript"></script>
+</body>
+</html>
