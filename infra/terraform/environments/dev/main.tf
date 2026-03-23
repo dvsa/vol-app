@@ -612,6 +612,11 @@ module "service" {
         timeout  = 43200,
         schedule = ["cron(30 13 * * ? *)"],
       },
+      {
+        name     = "data-refresh",
+        commands = ["/mnt/data/scripts/data_refresh.sh"],
+        type     = "scripts"
+      },
     ]
   }
 }
