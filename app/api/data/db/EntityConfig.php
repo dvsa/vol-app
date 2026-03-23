@@ -476,6 +476,7 @@ return array(
         )
     ),
     'operating_centre_opposition' => array(
+        '_owner' => 'opposition',
         'opposition_id' => array(
             'inversedBy' => array(
                 'entity' => 'Opposition',

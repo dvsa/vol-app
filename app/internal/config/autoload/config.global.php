@@ -140,11 +140,6 @@ return [
 
     'cache-encryption' => [
         'node_suffix' => 'iuweb',
-        'adapter' => '%cache_encryption_adapter%',
-        'options' => [
-            'algo' => '%cache_encryption_algo%',
-            'mode' => '%cache_encryption_mode%',
-        ],
         'secrets' => [
             'node' => '%cache_encryption_secret_iu%',
             'shared' => '%cache_encryption_secret_shared%',

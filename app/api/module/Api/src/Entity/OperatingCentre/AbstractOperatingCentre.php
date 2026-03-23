@@ -120,15 +120,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Opposition\Opposition", inversedBy="operatingCentres", fetch="LAZY")
-     * @ORM\JoinTable(name="operating_centre_opposition",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="operating_centre_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="opposition_id", referencedColumnName="id")
-     *     }
-     * )
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Opposition\Opposition", mappedBy="operatingCentres", fetch="LAZY")
      */
     protected $oppositions;
 
