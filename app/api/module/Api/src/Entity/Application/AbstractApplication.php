@@ -2934,7 +2934,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the was auto granted
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getWasAutoGranted()
     {
         return $this->wasAutoGranted;

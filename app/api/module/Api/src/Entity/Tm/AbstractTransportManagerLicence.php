@@ -194,15 +194,6 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     protected $additionalInformation;
 
     /**
-     * Last tm letter date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="last_tm_letter_date", nullable=true)
-     */
-    protected $lastTmLetterDate;
-
-    /**
      * Last tm first email date
      *
      * @var \DateTime
@@ -210,6 +201,15 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
      * @ORM\Column(type="date", name="last_tm_first_email_date", nullable=true)
      */
     protected $lastTmFirstEmailDate;
+
+    /**
+     * Last tm letter date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="last_tm_letter_date", nullable=true)
+     */
+    protected $lastTmLetterDate;
 
     /**
      * Version
@@ -617,6 +617,36 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     }
 
     /**
+     * Set the last tm first email date
+     *
+     * @param \DateTime $lastTmFirstEmailDate new value being set
+     *
+     * @return TransportManagerLicence
+     */
+    public function setLastTmFirstEmailDate($lastTmFirstEmailDate)
+    {
+        $this->lastTmFirstEmailDate = $lastTmFirstEmailDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the last tm first email date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
+     */
+    public function getLastTmFirstEmailDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->lastTmFirstEmailDate);
+        }
+
+        return $this->lastTmFirstEmailDate;
+    }
+
+    /**
      * Set the last tm letter date
      *
      * @param \DateTime $lastTmLetterDate new value being set
@@ -644,35 +674,6 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
         }
 
         return $this->lastTmLetterDate;
-    }
-
-    /**
-     * Set the last tm first email date
-     *
-     * @param \DateTime $lastTmFirstEmailDate new value being set
-     *
-     * @return TransportManagerLicence
-     */
-    public function setLastTmFirstEmailDate($lastTmFirstEmailDate)
-    {
-        $this->lastTmFirstEmailDate = $lastTmFirstEmailDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the last tm first email date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime     */
-    public function getLastTmFirstEmailDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->lastTmFirstEmailDate);
-        }
-
-        return $this->lastTmFirstEmailDate;
     }
 
     /**

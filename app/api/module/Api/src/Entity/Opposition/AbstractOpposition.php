@@ -230,7 +230,15 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre", mappedBy="oppositions", fetch="LAZY")
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre", inversedBy="oppositions", fetch="LAZY")
+     * @ORM\JoinTable(name="operating_centre_opposition",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="opposition_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="operating_centre_id", referencedColumnName="id")
+     *     }
+     * )
      */
     protected $operatingCentres;
 
