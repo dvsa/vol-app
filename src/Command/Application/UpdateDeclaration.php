@@ -42,6 +42,13 @@ final class UpdateDeclaration extends AbstractCommand
      * @Transfer\Filter("Laminas\Filter\StringTrim")
      * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"Y", "N"}})
      */
+    protected $noTmConfirmation;
+
+    /**
+     * @Transfer\Optional
+     * @Transfer\Filter("Laminas\Filter\StringTrim")
+     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"Y", "N"}})
+     */
     protected $interimRequested;
 
     /**
@@ -71,6 +78,11 @@ final class UpdateDeclaration extends AbstractCommand
     public function getDeclarationConfirmation()
     {
         return $this->declarationConfirmation;
+    }
+
+    public function getNoTmConfirmation()
+    {
+        return $this->noTmConfirmation;
     }
 
     public function getInterimRequested()
