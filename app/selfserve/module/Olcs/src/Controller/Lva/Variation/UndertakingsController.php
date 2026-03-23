@@ -95,7 +95,7 @@ class UndertakingsController extends AbstractUndertakingsController
         );
 
         $fieldset->get('summaryDownload')->setAttribute('value', $summaryDownload);
-        
+
         $shouldHideNoTmConfirmation = ($applicationData['applicationCompletion']['transportManagersStatus'] ?? null) !== RefData::VARIATION_STATUS_UPDATED;
 
         if (!$shouldHideNoTmConfirmation) {
@@ -120,7 +120,7 @@ class UndertakingsController extends AbstractUndertakingsController
                 $fieldsetFilter->get('noTmConfirmation')->setRequired(false);
             }
         }
-        
+
         $form->get('interim')->get('YContent')->get('interimFee')->setValue(
             $translator->translateReplace('selfserve.declaration.interim_fee', [$applicationData['interimFee']])
         );
