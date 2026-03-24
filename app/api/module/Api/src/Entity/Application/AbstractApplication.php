@@ -372,7 +372,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     protected $declarationConfirmation = 0;
 
     /**
-     * User confirms they have no TM
+     * noTmConfirmation
      *
      * @var string
      *
@@ -1771,6 +1771,16 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     }
 
     /**
+     * Get the declaration confirmation
+     *
+     * @return string
+     */
+    public function getDeclarationConfirmation()
+    {
+        return $this->declarationConfirmation;
+    }
+
+    /**
      * Set the no tm confirmation
      *
      * @param string $noTmConfirmation new value being set
@@ -1782,16 +1792,6 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
         $this->noTmConfirmation = $noTmConfirmation;
 
         return $this;
-    }
-
-    /**
-     * Get the declaration confirmation
-     *
-     * @return string
-     */
-    public function getDeclarationConfirmation()
-    {
-        return $this->declarationConfirmation;
     }
 
     /**
