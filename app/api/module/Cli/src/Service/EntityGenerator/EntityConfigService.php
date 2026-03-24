@@ -48,7 +48,9 @@ final class EntityConfigService
             $result = [];
 
             foreach ($tableConfig as $column => $config) {
-                $result[$column] = FieldConfig::fromArray($config);
+                if (is_array($config)) {
+                    $result[$column] = FieldConfig::fromArray($config);
+                }
             }
 
             $this->tableConfigCache[$table] = $result;
@@ -160,6 +162,18 @@ final class EntityConfigService
         }
 
         return $inverseRelationships;
+    }
+
+    /**
+     * Get the explicit owning table for a ManyToMany join table, if configured.
+     * Returns the table name that should be the Doctrine owning side,
+     * or null if the default heuristic should be used.
+     */
+    public function getJoinTableOwner(string $table): ?string
+    {
+        $tableConfig = $this->config[$table] ?? [];
+
+        return $tableConfig['_owner'] ?? null;
     }
 
     /**

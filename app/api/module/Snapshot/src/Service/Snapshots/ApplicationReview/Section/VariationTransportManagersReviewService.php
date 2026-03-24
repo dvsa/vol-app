@@ -48,9 +48,10 @@ class VariationTransportManagersReviewService extends AbstractReviewService
         $subSections = [];
 
         if (isset($actions['A'])) {
+            $actionsA = array_map(fn($tm) => $tm + ['noTmConfirmation' => $data['noTmConfirmation'] ?? null], $actions['A']);
             $subSections[] = [
                 'title' => 'review-transport-manager-added-title',
-                'mainItems' => $this->transportManagersReviewService->getConfigFromData($actions['A'])
+                'mainItems' => $this->transportManagersReviewService->getConfigFromData($actionsA)
             ];
         }
 

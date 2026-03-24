@@ -123,10 +123,6 @@ return [
     ],
     'cache-encryption' => [
         'adapter' => 'openssl',
-        'options' => [
-            'algo' => 'aes',
-            'mode' => 'gcm',
-        ],
         'secrets' => [
             'node' => 'ssweb-cache-encryption-key',
             'shared' => 'shared-cache-encryption-key',

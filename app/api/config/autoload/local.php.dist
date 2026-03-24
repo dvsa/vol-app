@@ -218,11 +218,6 @@ return [
     'encryption_key' => null
   ],
   'cache-encryption' => [
-    'adapter' => 'openssl',
-    'options' => [
-      'algo' => 'aes',
-      'mode' => 'gcm',
-    ],
     'secrets' => [
       'node' => 'api-cache-encryption-key',
       'shared' => 'shared-cache-encryption-key',

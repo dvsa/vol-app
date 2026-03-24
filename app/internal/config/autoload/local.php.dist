@@ -126,11 +126,6 @@ return [
     ],
     'cache-encryption' => [
         'node_suffix' => 'iuweb',
-        'adapter' => 'openssl',
-        'options' => [
-            'algo' => 'aes',
-            'mode' => 'gcm',
-        ],
         'secrets' => [
             'node' => 'iuweb-cache-encryption-key',
             'shared' => 'shared-cache-encryption-key',

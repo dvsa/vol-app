@@ -104,7 +104,7 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
     protected $overrideContent;
 
     /**
-     * JSON filter config for issues meta-section
+     * JSON filter config for issues meta-section (e.g. {"goodsOrPsv": "lcat_gv", "category": 1})
      *
      * @var array
      *
