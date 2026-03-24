@@ -141,6 +141,15 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     protected $version = 1;
 
     /**
+     * Is visible in internal
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_visible_in_internal", nullable=false, options={"default": 1})
+     */
+    protected $isVisibleInInternal = 1;
+
+    /**
      * Pis
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -424,6 +433,30 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Set the is visible in internal
+     *
+     * @param bool $isVisibleInInternal new value being set
+     *
+     * @return Reason
+     */
+    public function setIsVisibleInInternal($isVisibleInInternal)
+    {
+        $this->isVisibleInInternal = $isVisibleInInternal;
+
+        return $this;
+    }
+
+    /**
+     * Get the is visible in internal
+     *
+     * @return bool
+     */
+    public function getIsVisibleInInternal()
+    {
+        return $this->isVisibleInInternal;
     }
 
     /**

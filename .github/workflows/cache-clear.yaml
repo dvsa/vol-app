@@ -143,7 +143,7 @@ jobs:
 
           OVERRIDES=$(jq -nc \
             --argjson args '${{ steps.build-args.outputs.args }}' \
-            '{command: ["/var/www/html/vendor/bin/laminas", "--container=/var/www/html/config/container-cli.php", "batch:cache-clear"] + $args}')
+            '{"command": (["/var/www/html/vendor/bin/laminas", "--container=/var/www/html/config/container-cli.php", "batch:cache-clear"] + $args)}')
 
           echo "Container overrides: $OVERRIDES"
 
