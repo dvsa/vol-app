@@ -31,7 +31,7 @@ function generate_user_pool_csv() {
     local platformEnv="$1"
     local Region="$2"
     echo "Generating new user pool CSV for $platformEnv ($Region)..."
-    infra/docker/cli/scripts/data_refresh/generate_user_pool_csv.sh"$platformEnv" "$Region"
+    infra/docker/cli/scripts/data_refresh/generate_user_pool_csv.sh "$platformEnv" "$Region"
 }
 
 function load_user_pool() {
