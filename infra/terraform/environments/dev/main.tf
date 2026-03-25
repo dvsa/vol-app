@@ -613,7 +613,7 @@ module "service" {
         schedule = ["cron(30 13 * * ? *)"],
       },
       {
-        name     = "data-refresh",
+        name     = "data-refresh.sh",
         commands = ["/mnt/data/scripts/data_refresh.sh"],
         type     = "scripts"
       },
