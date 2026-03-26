@@ -125,10 +125,9 @@ return [
         'showApiMessages' => false
     ],
     'cache-encryption' => [
-        'node_suffix' => 'iuweb',
         'secrets' => [
-            'node' => 'iuweb-cache-encryption-key',
-            'shared' => 'shared-cache-encryption-key',
+            'node' => str_pad('iuweb-key-32char', 32, '-'),
+            'shared' => str_pad('shared-key-32char', 32, '-'),
         ],
     ],
     'query_cache' => [
