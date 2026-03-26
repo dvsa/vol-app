@@ -122,10 +122,9 @@ return [
         ],
     ],
     'cache-encryption' => [
-        'adapter' => 'openssl',
         'secrets' => [
-            'node' => 'ssweb-cache-encryption-key',
-            'shared' => 'shared-cache-encryption-key',
+            'node' => str_pad('ssweb-key-32char', 32, '-'),
+            'shared' => str_pad('shared-key-32char', 32, '-'),
         ],
     ],
     'query_cache' => [
