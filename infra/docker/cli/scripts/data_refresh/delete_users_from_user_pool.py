@@ -2,7 +2,6 @@
 
 import sys
 import boto3
-import botocore
 
 # ${userPoolId}" "${params.Region}"
 userPoolId = sys.argv[1]
