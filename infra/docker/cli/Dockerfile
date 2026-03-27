@@ -19,7 +19,7 @@ RUN apk add --no-cache icu-dev libzip-dev cups-client poppler-utils bash \
 
 RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq \
   && python3 -m venv /opt/venv \
-  && /opt/venv/bin/pip install --no-cache-dir awscli \
+  && /opt/venv/bin/pip install --no-cache-dir awscli boto3 \
   && ln -sf /opt/venv/bin/aws /usr/local/bin/aws \
   && /usr/local/bin/aws --version \
   && mysql --version \
