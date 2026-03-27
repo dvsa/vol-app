@@ -21,7 +21,6 @@ RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq \
   && python3 -m venv /opt/venv \
   && /opt/venv/bin/pip install --no-cache-dir awscli boto3 \
   && ln -sf /opt/venv/bin/python3 /usr/bin/python3 \
-  && ln -sf /opt/venv/bin/aws /usr/local/bin/aws \
   && /usr/local/bin/aws --version \
   && mysql --version \
   && jq --version
