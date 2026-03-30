@@ -163,17 +163,6 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
         $createTaskResult = $this->handleSideEffect($this->createTaskSideEffect($licence));
         $this->result->merge($createTaskResult);
 
-        $userRepo = $this->getRepo('User');
-        /** @var User $user */
-        $user = $userRepo->fetchById($createTaskResult->getId('assignedToUser'));
-        $contactDetails = $user->serialize($caseworkerDetailsBundle);
-        $licenceDetails = $licence->serialize($licenceBundle);
-        $caseworkerName = $user->serialize($caseworkerNameBundle);
-        $caseworkerDetails = [
-            $contactDetails,
-            $licenceDetails
-        ];
-
         $generateCommandData = [
             'template' => $template['identifier'],
             'query' => [
@@ -194,11 +183,7 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
                     'documentTemplate' => $template['id'],
                     'allowEmail' => $licence->getOrganisation()->getAllowEmail()
                 ]
-            ]),
-            'knownValues' => [
-                'caseworker_details' => $caseworkerDetails,
-                'caseworker_name' => $caseworkerName
-            ]
+            ])
         ];
 
         $result = $this->handleSideEffect(GenerateAndStore::create($generateCommandData));

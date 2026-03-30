@@ -164,17 +164,6 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
         $createTaskResult = $this->handleSideEffect($this->createTaskSideEffect($licence));
         $this->result->merge($createTaskResult);
 
-        $userRepo = $this->getRepo('User');
-        /** @var User $user */
-        $user = $userRepo->fetchById($createTaskResult->getId('assignedToUser'));
-        $contactDetails = $user->serialize($caseworkerDetailsBundle);
-        $licenceDetails = $licence->serialize($licenceBundle);
-        $caseworkerName = $user->serialize($caseworkerNameBundle);
-        $caseworkerDetails = [
-            $contactDetails,
-            $licenceDetails
-        ];
-
         $generateCommandData = [
             'template' => $template['identifier'],
             'query' => [
@@ -195,11 +184,7 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
                     'documentTemplate' => $template['id'],
                     'allowEmail' => $licence->getOrganisation()->getAllowEmail()
                 ]
-            ]),
-            'knownValues' => [
-                'caseworker_details' => $caseworkerDetails,
-                'caseworker_name' => $caseworkerName
-            ]
+            ])
         ];
 
         $result = $this->handleSideEffect(GenerateAndStore::create($generateCommandData));
@@ -239,12 +224,7 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
         ];
 
         $sysParamRepo = $this->getRepo('SystemParameter');
-        $assignToUserId = $licence->isNi()
-            ? $sysParamRepo->fetchValue(SystemParameter::LAST_TM_1ST_LETTER_NI_TASK_OWNER)
-            : $sysParamRepo->fetchValue(SystemParameter::LAST_TM_1ST_LETTER_GB_TASK_OWNER);
-        if ($assignToUserId && $assignToUserId != 0) {
-            $params['assignedToUser'] = $assignToUserId;
-        }
+        
         return CreateTask::create($params);
     }
 }
