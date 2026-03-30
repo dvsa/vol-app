@@ -87,7 +87,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
         self::APPLICATION_STATUS_REFUSED,
         self::APPLICATION_STATUS_NOT_TAKEN_UP,
         self::APPLICATION_STATUS_CURTAILED,
-        self::APPLICATION_STATUS_CANCELLED
+        self::APPLICATION_STATUS_CANCELLED,
     ];
 
     public const INTERIM_STATUS_REQUESTED = 'int_sts_requested';
@@ -282,14 +282,14 @@ class Application extends AbstractApplication implements ContextProviderInterfac
 
         if (!$goodsOrPsv) {
             $errors['goodsOrPsv'][] = [
-                self::ERROR_OT_REQUIRED => 'Operator type is required'
+                self::ERROR_OT_REQUIRED => 'Operator type is required',
             ];
             // need to throw exception ealier if operator type is empty
             throw new ValidationException($errors);
         }
         if ($niFlag === 'Y' && $goodsOrPsv->getId() === Licence::LICENCE_CATEGORY_PSV) {
             $errors['goodsOrPsv'][] = [
-                self::ERROR_NI_NON_GOODS => 'NI can only apply for goods licences'
+                self::ERROR_NI_NON_GOODS => 'NI can only apply for goods licences',
             ];
         }
 
@@ -298,14 +298,14 @@ class Application extends AbstractApplication implements ContextProviderInterfac
             && $licenceType->getId() === Licence::LICENCE_TYPE_SPECIAL_RESTRICTED
         ) {
             $errors['licenceType'][] = [
-                self::ERROR_GV_NON_SR => 'GV operators cannot apply for special restricted licences'
+                self::ERROR_GV_NON_SR => 'GV operators cannot apply for special restricted licences',
             ];
         }
 
         if ($this->getIsVariation()) {
             if ($this->getGoodsOrPsv() != $goodsOrPsv) {
                 $errors['goodsOrPsv'][] = [
-                    self::ERROR_GV_NON_SR => 'GV operators cannot apply for special restricted licences'
+                    self::ERROR_GV_NON_SR => 'GV operators cannot apply for special restricted licences',
                 ];
             }
 
@@ -318,7 +318,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
 
         if (is_null($vehicleType)) {
             $errors['licenceType'][] = [
-                'Vehicle type must be specified for all licences'
+                'Vehicle type must be specified for all licences',
             ];
         } else {
             if (
@@ -327,17 +327,17 @@ class Application extends AbstractApplication implements ContextProviderInterfac
             ) {
                 $validVehicleTypes = [
                     RefData::APP_VEHICLE_TYPE_MIXED,
-                    RefData::APP_VEHICLE_TYPE_LGV
+                    RefData::APP_VEHICLE_TYPE_LGV,
                 ];
 
                 $vehicleTypeId = $vehicleType->getId();
                 if (!in_array($vehicleTypeId, $validVehicleTypes)) {
                     $errors['licenceType'][] = [
-                        'Vehicle type must be either HGV or LGV when application is for Goods/Standard International'
+                        'Vehicle type must be either HGV or LGV when application is for Goods/Standard International',
                     ];
                 } elseif (($vehicleTypeId == RefData::APP_VEHICLE_TYPE_LGV) && ($lgvDeclarationConfirmation != 1)) {
                     $errors['licenceType'][] = [
-                        'LGV declaration confirmation must be ticked for Goods/Standard International/LGV'
+                        'LGV declaration confirmation must be ticked for Goods/Standard International/LGV',
                     ];
                 }
             } else {
@@ -351,13 +351,13 @@ class Application extends AbstractApplication implements ContextProviderInterfac
                     $mappings[$goodsOrPsv->getId()] != $vehicleType->getId()
                 ) {
                     $errors['licenceType'][] = [
-                        'Provided vehicle type must match the corresponding licence category value'
+                        'Provided vehicle type must match the corresponding licence category value',
                     ];
                 }
 
                 if ($lgvDeclarationConfirmation != 0) {
                     $errors['licenceType'][] = [
-                        'LGV declaration confirmation must only be specified for Goods/Standard International licences'
+                        'LGV declaration confirmation must only be specified for Goods/Standard International licences',
                     ];
                 }
             }
@@ -471,7 +471,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
         $errors = [
             'insolvencyDetails' => [
                 self::ERROR_FINANCIAL_HISTORY_DETAILS_REQUIRED => 'FhAdditionalInfo.api.validation.too_short',
-            ]
+            ],
         ];
         throw new ValidationException($errors);
     }
@@ -652,7 +652,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
 
         $restrictedUpgrades = [
             Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
         ];
 
         return (
@@ -2107,7 +2107,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
             PublicationSectionEntity::SCHEDULE_4_TRUE,
             PublicationSectionEntity::SCHEDULE_1_NI_NEW,
             PublicationSectionEntity::SCHEDULE_1_NI_UNTRUE,
-            PublicationSectionEntity::SCHEDULE_1_NI_TRUE
+            PublicationSectionEntity::SCHEDULE_1_NI_TRUE,
         ];
 
         $publicationLinks = $this->getPublicationLinks()->filter(
@@ -2811,7 +2811,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
                     $address->getAddressLine2(),
                     $address->getAddressLine3(),
                     $address->getTown(),
-                    $address->getPostcode()
+                    $address->getPostcode(),
                 ]);
                 $addressLine = strtoupper(implode(' ', $addressParts));
                 if (!empty($addressLine)) {
@@ -2833,5 +2833,34 @@ class Application extends AbstractApplication implements ContextProviderInterfac
         $summary['messages'] = $messages;
 
         return $summary;
+    }
+
+    public function hasUpdatedTransportManagers(): bool
+    {
+        return !$this->transportManagers->isEmpty();
+    }
+
+    /**
+     * Is the period of grace confirmation question required for this app?
+     */
+    public function showPeriodOfGraceQuestion(): bool
+    {
+        //this only applies to variations
+        if (!$this->isVariation()) {
+            return false;
+        }
+
+        //if licence is restricted (even if the app upgrades it), the app is exempt from the TM confirmation question
+        if ($this->licence->isRestricted() || $this->licence->isSpecialRestricted()) {
+            return false;
+        }
+
+        //if the licence already has a transport manager
+        if ($this->licence->hasTransportManager()) {
+            return false;
+        }
+
+        //other checks passed - now depends on whether the app has TM changes
+        return $this->hasUpdatedTransportManagers();
     }
 }

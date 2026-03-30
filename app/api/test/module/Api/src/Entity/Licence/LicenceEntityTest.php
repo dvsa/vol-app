@@ -30,6 +30,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType;
 use Dvsa\Olcs\Api\Entity\Publication\Publication;
 use Dvsa\Olcs\Api\Entity\Publication\PublicationLink;
 use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence;
 use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
@@ -3428,6 +3429,19 @@ class LicenceEntityTest extends EntityTester
             [RefData::APP_VEHICLE_TYPE_MIXED, 1, true],
             [RefData::APP_VEHICLE_TYPE_LGV, 1, false],
         ];
+    }
+
+    public function testHasTransportManager(): void
+    {
+        $licence = self::instantiate(Entity::class);
+
+        $licence->setTmLicences(new ArrayCollection());
+        $this->assertFalse($licence->hasTransportManager());
+
+        $tmLicence = m::mock(TransportManagerLicence::class);
+        $lmLicences = new ArrayCollection([$tmLicence]);
+        $licence->setTmLicences($lmLicences);
+        $this->assertTrue($licence->hasTransportManager());
     }
 
     /**
