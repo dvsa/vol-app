@@ -64,7 +64,6 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
             ],
             'CreateTask' => [
                 'ids' => [
-                    'assignedToUser' => 111,
                 ],
             ],
         ];
@@ -100,7 +99,6 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
                 'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                     ],
                     'messages' => [],
@@ -128,7 +126,6 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
                 'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                     ],
                     'messages' => [],
@@ -158,7 +155,6 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
                 'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                     ],
                     'messages' => [],
@@ -188,7 +184,6 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
                 'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                     ],
                     'messages' => [],
@@ -214,7 +209,6 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
                 'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                     ],
                     'messages' => [],
@@ -240,7 +234,6 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
                 'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                     ],
                     'messages' => [],
@@ -252,19 +245,6 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
     #[DataProvider('dpHandleCommand')]
     public function testHandleCommand(mixed $dataProvider, mixed $expectedResult): void
     {
-        // SystemParameter selection differs for NI/GB
-        if (!empty($dataProvider['licence']) && array_key_exists('isNi', $dataProvider['licence'])) {
-            $this->repoMap['SystemParameter']
-                ->shouldReceive('fetchValue')
-                ->with(
-                    $dataProvider['licence']['isNi']
-                        ? SystemParameter::LAST_TM_1ST_LETTER_NI_TASK_OWNER
-                        : SystemParameter::LAST_TM_1ST_LETTER_GB_TASK_OWNER
-                )
-                ->andReturn(1)
-                ->once();
-        }
-
         $licenceRepo = $this->repoMap['Licence'];
 
         $licence = empty($dataProvider['licence']) ? null : m::mock(LicenceEntity::class);
@@ -272,6 +252,20 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
         if ($licence !== null) {
             $this->mockLicence($licence, $dataProvider);
             $this->mockCorrespondenceCd($licence, $dataProvider);
+            if (array_key_exists('fetchFirstByEmailOrFalse', $dataProvider['user'])) {
+                $fetchedUser = $dataProvider['user']['fetchFirstByEmailOrFalse'];
+
+                if ($fetchedUser instanceof m\MockInterface) {
+                    $fetchedUser->shouldReceive('getTranslateToWelsh')->once()->andReturn('N');
+                }
+
+                $this->repoMap['User']
+                    ->shouldReceive('fetchFirstByEmailOrFalse')
+                    ->once()
+                    ->andReturn($fetchedUser);
+
+                $this->expectedSideEffect(SendEmail::class, [], new Result());
+            }
         }
 
         $eligibleLicences = $licence === null ? [] : [$licence];
@@ -361,7 +355,6 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
      */
     private function caseLicenceWithRemovedTmTest(array $dataProvider, array $eligibleLicences): void
     {
-        $this->mockUserRepo($dataProvider);
 
         $tmlRepo = $this->repoMap['TransportManagerLicence'];
 
@@ -424,7 +417,7 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
     private function getCreateTaskResult(array $dataProvider): Result
     {
         $result = new Result();
-        $result->addId('assignedToUser', $dataProvider['sideEffectResults']['CreateTask']['ids']['assignedToUser']);
+
         return $result;
     }
 }

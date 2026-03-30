@@ -107,7 +107,6 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
                 'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                         'correspondenceAddress' => '123',
                     ],
@@ -142,7 +141,6 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
                 'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                         'correspondenceAddress' => '123',
                     ],
@@ -178,7 +176,6 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
                 'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                         'correspondenceAddress' => '123',
                     ],
@@ -213,7 +210,6 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
                 'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                         'correspondenceAddress' => '123',
                     ],
@@ -246,7 +242,6 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
                 'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                         'correspondenceAddress' => '123',
                     ],
@@ -304,7 +299,6 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
                 'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                         'correspondenceAddress' => '123',
                     ],
@@ -319,19 +313,26 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand(mixed $dataProvider, mixed $expectedResult): void
     {
-        if (array_key_exists('isNi', $dataProvider['licence'])) {
-            $this->repoMap['SystemParameter']->shouldReceive('fetchValue')
-                ->with($dataProvider['licence']['isNi'] ? SystemParameter::LAST_TM_NI_TASK_OWNER : SystemParameter::LAST_TM_GB_TASK_OWNER)
-                ->andReturn(1)
-                ->once();
-        }
-
         $licenceRepo = $this->repoMap['Licence'];
 
         $licence = empty($dataProvider['licence']) ? null : m::mock(LicenceEntity::class);
 
         if ($licence !== null) {
             $this->mockLicence($licence, $dataProvider);
+            if (array_key_exists('fetchFirstByEmailOrFalse', $dataProvider['user'])) {
+                $fetchedUser = $dataProvider['user']['fetchFirstByEmailOrFalse'];
+
+                if ($fetchedUser instanceof m\MockInterface) {
+                    $fetchedUser->shouldReceive('getTranslateToWelsh')->once()->andReturn('N');
+                }
+
+                $this->repoMap['User']
+                    ->shouldReceive('fetchFirstByEmailOrFalse')
+                    ->once()
+                    ->andReturn($fetchedUser);
+
+                $this->expectedSideEffect(SendEmail::class, [], new Result());
+            }
         }
 
         $eligibleLicences = $licence === null ? [] : [$licence];
@@ -385,7 +386,6 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
     private function getCreateTaskResult(mixed $dataProvider): mixed
     {
         $result = new Result();
-        $result->addId('assignedToUser', $dataProvider['sideEffectResults']['CreateTask']['ids']['assignedToUser']);
 
         return $result;
     }
@@ -468,8 +468,6 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
      */
     private function caseLicenceWithRemovedTmTest(mixed $dataProvider, mixed $eligibleLicences): void
     {
-        $this->mockUserRepo($dataProvider);
-
         $tmlRepo = $this->repoMap['TransportManagerLicence'];
         foreach ($eligibleLicences as $eligibleLicence) {
             $tmlEntity = m::mock(TransportManagerLicence::class);

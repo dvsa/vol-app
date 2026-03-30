@@ -222,8 +222,6 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
             'licence' => $licence->getId(),
             'urgent' => 'Y'
         ];
-
-        $sysParamRepo = $this->getRepo('SystemParameter');
         
         return CreateTask::create($params);
     }
