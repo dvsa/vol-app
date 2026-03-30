@@ -7,7 +7,6 @@ namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler;
 use Dvsa\Olcs\Api\Domain\Command\Document\GenerateAndStore;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\System\Category;
-use Dvsa\Olcs\Api\Entity\System\SystemParameter;
 use Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence;
 use Dvsa\Olcs\Cli\Domain\CommandHandler\LastTmLetter;
 use Dvsa\Olcs\Email\Data\Message;
@@ -35,7 +34,6 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('User', Repository\User::class);
         $this->mockRepo('Document', Repository\Document::class);
         $this->mockRepo('DocTemplate', Repository\DocTemplate::class);
-        $this->mockRepo('SystemParameter', Repository\SystemParameter::class);
         $this->mockRepo('TransportManagerLicence', Repository\TransportManagerLicence::class);
 
         $this->mockedSmServices = [
@@ -319,6 +317,7 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
 
         if ($licence !== null) {
             $this->mockLicence($licence, $dataProvider);
+            
             if (array_key_exists('fetchFirstByEmailOrFalse', $dataProvider['user'])) {
                 $fetchedUser = $dataProvider['user']['fetchFirstByEmailOrFalse'];
 

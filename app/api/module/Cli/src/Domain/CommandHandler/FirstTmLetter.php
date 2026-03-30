@@ -10,7 +10,6 @@ use Dvsa\Olcs\Api\Domain\Repository\Licence;
 use Dvsa\Olcs\Api\Entity\Doc\Document;
 use Dvsa\Olcs\Api\Entity\System\Category;
 use Dvsa\Olcs\Api\Entity\System\SubCategory;
-use Dvsa\Olcs\Api\Entity\System\SystemParameter;
 use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
@@ -47,7 +46,7 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
     /**
      * @var array
      */
-    protected $extraRepos = ['User', 'Document', 'DocTemplate', 'TransportManagerLicence', 'SystemParameter'];
+    protected $extraRepos = ['User', 'Document', 'DocTemplate', 'TransportManagerLicence'];
 
     /**
      * Handle command
@@ -222,7 +221,7 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
             'licence' => $licence->getId(),
             'urgent' => 'Y'
         ];
-        
+
         return CreateTask::create($params);
     }
 }

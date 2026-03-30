@@ -10,7 +10,6 @@ use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\System\Category;
-use Dvsa\Olcs\Api\Entity\System\SystemParameter;
 use Dvsa\Olcs\Api\Entity\Tm\TransportManager;
 use Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence;
 use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
@@ -32,7 +31,6 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('User', Repository\User::class);
         $this->mockRepo('Document', Repository\Document::class);
         $this->mockRepo('DocTemplate', Repository\DocTemplate::class);
-        $this->mockRepo('SystemParameter', Repository\SystemParameter::class);
         $this->mockRepo('TransportManagerLicence', Repository\TransportManagerLicence::class);
 
         $this->mockedSmServices = [
@@ -252,6 +250,7 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
         if ($licence !== null) {
             $this->mockLicence($licence, $dataProvider);
             $this->mockCorrespondenceCd($licence, $dataProvider);
+
             if (array_key_exists('fetchFirstByEmailOrFalse', $dataProvider['user'])) {
                 $fetchedUser = $dataProvider['user']['fetchFirstByEmailOrFalse'];
 
