@@ -1,5 +1,20 @@
 # Changelog
 
+## [7.2.0](https://github.com/dvsa/vol-app/compare/v7.1.0...v7.2.0) (2026-03-31)
+
+
+### Features
+
+* bump up vol functional tests to resolve node warning ([#1374](https://github.com/dvsa/vol-app/issues/1374)) ([2e05328](https://github.com/dvsa/vol-app/commit/2e05328000ff0f11fc1fa761bcdad130cb77ba15))
+* updated si declaration wording ([#1373](https://github.com/dvsa/vol-app/issues/1373)) ([8e88074](https://github.com/dvsa/vol-app/commit/8e88074725efd56026d8062c0500612ae9e5af8d))
+* vol-6844 updatelasttmprocess fix taskallocation ([#1379](https://github.com/dvsa/vol-app/issues/1379)) ([6c509b6](https://github.com/dvsa/vol-app/commit/6c509b62786e2548625de07ea71937ecf86b4257))
+
+
+### Bug Fixes
+
+* local dev keys for cache encryption weren't 32 bytes - this is now enforced by the library ([#1371](https://github.com/dvsa/vol-app/issues/1371)) ([dd92f68](https://github.com/dvsa/vol-app/commit/dd92f6846c02462a9ed6aa6427f6045e16e93e28))
+* move logic for period of grace question check to backend, alter logic VOL-7028 ([#1381](https://github.com/dvsa/vol-app/issues/1381)) ([701bd1e](https://github.com/dvsa/vol-app/commit/701bd1ef64b71c96bca8ccf949196d8eb8090026))
+
 ## [7.1.0](https://github.com/dvsa/vol-app/compare/v7.0.1...v7.1.0) (2026-03-25)
 
 
