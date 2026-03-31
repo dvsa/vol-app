@@ -18,18 +18,15 @@ RUN apk add --no-cache icu-dev libzip-dev cups-client poppler-utils bash \
   && docker-php-ext-install pdo_mysql opcache intl zip
 
 
-RUN apk add --no-cache \
-  python3 py3-pip \
-  mysql-client \
-  groff less bash curl jq unzip
 
-# Install AWS CLI v2 on Alpine (ARM64)
-RUN apk add --no-cache curl unzip \
-&& curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip" \
-&& unzip awscliv2.zip \
-&& ./aws/install \
-&& rm -rf aws awscliv2.zip \
-&& aws --version
+RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq \
+  && python3 -m venv /opt/awscli \
+  && /opt/awscli/bin/pip install --no-cache-dir awscli \
+  && ln -sf /opt/awscli/bin/aws /usr/local/bin/aws \
+  && aws --version
+
+
+
 
 # Install fonts for document rendering.
 # LibreOffice auto-substitutes these when documents request MS fonts:
