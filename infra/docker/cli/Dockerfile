@@ -26,6 +26,9 @@ RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq \
   && aws --version
 
 
+RUN python3 -m venv /opt/venv \
+  && /opt/venv/bin/pip install boto3
+
 
 
 # Install fonts for document rendering.
