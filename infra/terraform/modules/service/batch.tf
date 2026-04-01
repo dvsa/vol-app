@@ -291,7 +291,7 @@ module "cli_iam_policy" {
   })
 }
 module "cli_iam_role" {
-  version = "~> 5.6"
+  version = "~> 6.0"
   source  = "terraform-aws-modules/iam/aws//modules/iam-role"
 
   name = "vol-app-${var.environment}-cli-role"
