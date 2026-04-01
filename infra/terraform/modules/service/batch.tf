@@ -165,7 +165,7 @@ locals {
         },
       ],
 
-      executionRoleArn = module.iam_role_cli.arn
+      executionRoleArn = module.cli_iam_role.arn
       jobRoleArn       = module.ecs_service["api"].tasks_iam_role_arn
 
       logConfiguration = {
