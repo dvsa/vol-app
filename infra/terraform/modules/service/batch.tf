@@ -278,7 +278,8 @@ locals {
 }
 
 module "cli_iam_policy" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "~> 6.4"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
 
   name        = "vol-app-${var.environment}-cli"
   path        = "/"
@@ -290,7 +291,8 @@ module "cli_iam_policy" {
   })
 }
 module "cli_iam_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version = "~> 6.4"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
 
   name = "vol-app-${var.environment}-cli-role"
 
