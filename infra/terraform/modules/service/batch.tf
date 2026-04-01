@@ -354,45 +354,6 @@ module "batch" {
 
   job_definitions = local.jobs
 }
-module "iam_policy_cli" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-policy"
-
-  name        = "vol-app-${var.environment}-cli"
-  path        = "/"
-  description = "Policy for CLI batch jobs"
-
-  policy = <<-EOF
-    {
-      "Version": "2012-10-17",
-      "Statement": [
-        {
-          "Action": [s
-            "ec2:Describe*"
-          ],
-          "Effect": "Allow",
-          "Resource": "*"
-        }
-      ]
-    }
-  EOF
-}
-module "iam_role_cli" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role"
-
-  name = "vol-app-${var.environment}-cli-role"
-
-  trust_policy_permissions = {
-    TrustRoleAndServiceToAssume = {
-      actions = [
-        "sts:AssumeRole",
-      ]
-    }
-  }
-
-  policies = {
-    BatchCliPolicy = iam_policy_cli.arn
-  }
-}
 
 module "eventbridge" {
   source  = "terraform-aws-modules/eventbridge/aws"
