@@ -18,12 +18,16 @@
 |------|--------|---------|
 | <a name="module_acm"></a> [acm](#module\_acm) | terraform-aws-modules/acm/aws | ~> 5.0 |
 | <a name="module_batch"></a> [batch](#module\_batch) | terraform-aws-modules/batch/aws | ~> 2.0 |
+| <a name="module_cli_iam_policy"></a> [cli\_iam\_policy](#module\_cli\_iam\_policy) | terraform-aws-modules/iam/aws//modules/iam-policy | n/a |
+| <a name="module_cli_iam_role"></a> [cli\_iam\_role](#module\_cli\_iam\_role) | terraform-aws-modules/iam/aws//modules/iam-role | n/a |
 | <a name="module_cloudfront"></a> [cloudfront](#module\_cloudfront) | terraform-aws-modules/cloudfront/aws | ~> 3.4 |
 | <a name="module_cloudwatch_log-metric-filter"></a> [cloudwatch\_log-metric-filter](#module\_cloudwatch\_log-metric-filter) | terraform-aws-modules/cloudwatch/aws//modules/log-metric-filter | 5.7.0 |
 | <a name="module_ecs_cluster"></a> [ecs\_cluster](#module\_ecs\_cluster) | terraform-aws-modules/ecs/aws//modules/cluster | ~> 5.10 |
 | <a name="module_ecs_service"></a> [ecs\_service](#module\_ecs\_service) | terraform-aws-modules/ecs/aws//modules/service | ~> 5.10 |
 | <a name="module_eventbridge"></a> [eventbridge](#module\_eventbridge) | terraform-aws-modules/eventbridge/aws | ~> 3.7 |
 | <a name="module_eventbridge_sns"></a> [eventbridge\_sns](#module\_eventbridge\_sns) | terraform-aws-modules/eventbridge/aws | ~> 3.7 |
+| <a name="module_iam_policy_cli"></a> [iam\_policy\_cli](#module\_iam\_policy\_cli) | terraform-aws-modules/iam/aws//modules/iam-policy | n/a |
+| <a name="module_iam_role_cli"></a> [iam\_role\_cli](#module\_iam\_role\_cli) | terraform-aws-modules/iam/aws//modules/iam-role | n/a |
 | <a name="module_log_bucket"></a> [log\_bucket](#module\_log\_bucket) | terraform-aws-modules/s3-bucket/aws | ~> 4.0 |
 | <a name="module_records"></a> [records](#module\_records) | terraform-aws-modules/route53/aws//modules/records | ~> 4.0 |
 | <a name="module_route53_records"></a> [route53\_records](#module\_route53\_records) | terraform-aws-modules/acm/aws | ~> 5.0 |
