@@ -165,7 +165,7 @@ locals {
         },
       ],
 
-      executionRoleArn = module.cli_iam_role.arn
+      executionRoleArn = module.iam_role_cli.arn
       jobRoleArn       = module.ecs_service["api"].tasks_iam_role_arn
 
       logConfiguration = {
@@ -278,8 +278,7 @@ locals {
 }
 
 module "cli_iam_policy" {
-  version = "~> 5.6"
-  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  source = "terraform-aws-modules/iam/aws//modules/iam-policy"
 
   name        = "vol-app-${var.environment}-cli"
   path        = "/"
@@ -291,8 +290,7 @@ module "cli_iam_policy" {
   })
 }
 module "cli_iam_role" {
-  version = "~> 6.0"
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
+  source = "terraform-aws-modules/iam/aws//modules/iam-role"
 
   name = "vol-app-${var.environment}-cli-role"
 
@@ -311,7 +309,7 @@ module "cli_iam_role" {
 
 module "batch" {
   source  = "terraform-aws-modules/batch/aws"
-  version = "~> 3.0"
+  version = "~> 2.0"
 
   instance_iam_role_name        = "vol-app-${var.environment}-batch-instance"
   instance_iam_role_description = "Task execution role for vol-app-${var.environment}-batch"
@@ -338,14 +336,6 @@ module "batch" {
       state    = "ENABLED"
       priority = 1
 
-      compute_environment_order = {
-        first = {
-          order                   = 1
-          compute_environment_key = "fargate"
-        }
-      }
-
-
       # This doesn't offer much value as a tag, but it's here to avoid: https://github.com/hashicorp/terraform-provider-aws/pull/38636.
       # If the PR is merged, we can remove this.
       tags = {
@@ -356,14 +346,6 @@ module "batch" {
       name     = "vol-app-${var.environment}-liquibase"
       state    = "ENABLED"
       priority = 1
-
-      compute_environment_order = {
-        first = {
-          order                   = 1
-          compute_environment_key = "fargate"
-        }
-      }
-
       tags = {
         JobQueue = "vol-app-${var.environment}-liquibase"
       }
@@ -371,6 +353,45 @@ module "batch" {
   }
 
   job_definitions = local.jobs
+}
+module "iam_policy_cli" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-policy"
+
+  name        = "vol-app-${var.environment}-cli"
+  path        = "/"
+  description = "Policy for CLI batch jobs"
+
+  policy = <<-EOF
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Action": [s
+            "ec2:Describe*"
+          ],
+          "Effect": "Allow",
+          "Resource": "*"
+        }
+      ]
+    }
+  EOF
+}
+module "iam_role_cli" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role"
+
+  name = "vol-app-${var.environment}-cli-role"
+
+  trust_policy_permissions = {
+    TrustRoleAndServiceToAssume = {
+      actions = [
+        "sts:AssumeRole",
+      ]
+    }
+  }
+
+  policies = {
+    BatchCliPolicy = iam_policy_cli.arn
+  }
 }
 
 module "eventbridge" {
