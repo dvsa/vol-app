@@ -20,6 +20,7 @@ use Dvsa\Olcs\Api\Entity\Fee\Fee as FeeEntity;
 use Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication;
 use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Dvsa\Olcs\Api\Entity\Publication\PublicationSection as PublicationSectionEntity;
@@ -5710,5 +5711,84 @@ class ApplicationEntityTest extends EntityTester
         $this->assertCount(3, $messages); // 2 OC removals + 1 vehicle reduction message
         $this->assertStringContainsString('1 FIRST STREET TOWN1 T1 1AA', $messages[0]);
         $this->assertStringContainsString('2 SECOND AVENUE TOWN2 T2 2BB', $messages[1]);
+    }
+
+    public function testShowPeriodOfGraceQuestionNotVariation(): void
+    {
+        $application = self::instantiate(Entity::class);
+        $application->setIsVariation(false);
+
+        $licence = m::mock(Licence::class);
+        $licence->expects('isRestricted')->never();
+        $licence->expects('isSpecialRestricted')->never();
+        $licence->expects('hasTransportManager')->never();
+        $application->setLicence($licence);
+
+        $this->assertFalse($application->showPeriodOfGraceQuestion());
+    }
+
+    public function testShowPeriodOfGraceQuestionRestrictedLicence(): void
+    {
+        $application = self::instantiate(Entity::class);
+        $application->setIsVariation(true);
+
+        $licence = m::mock(Licence::class);
+        $licence->expects('isRestricted')->andReturnTrue();
+        $licence->expects('isSpecialRestricted')->never();
+        $licence->expects('hasTransportManager')->never();
+        $application->setLicence($licence);
+
+        $this->assertFalse($application->showPeriodOfGraceQuestion());
+    }
+
+    public function testShowPeriodOfGraceQuestionSpecialRestrictedLicence(): void
+    {
+        $application = self::instantiate(Entity::class);
+        $application->setIsVariation(true);
+
+        $licence = m::mock(Licence::class);
+        $licence->expects('isRestricted')->andReturnFalse();
+        $licence->expects('isSpecialRestricted')->andReturnTrue();
+        $licence->expects('hasTransportManager')->never();
+        $application->setLicence($licence);
+
+        $this->assertFalse($application->showPeriodOfGraceQuestion());
+    }
+
+    public function testShowPeriodOfGraceQuestionLicenceHasTm(): void
+    {
+        $application = self::instantiate(Entity::class);
+        $application->setIsVariation(true);
+
+        $licence = m::mock(Licence::class);
+        $licence->expects('isRestricted')->andReturnFalse();
+        $licence->expects('isSpecialRestricted')->andReturnFalse();
+        $licence->expects('hasTransportManager')->andReturnTrue();
+        $application->setLicence($licence);
+
+        $this->assertFalse($application->showPeriodOfGraceQuestion());
+    }
+
+    /**
+     * tests the method both with a TM on the application (false), and with a TM present (true)
+     */
+    public function testShowPeriodOfGraceQuestionCriteriaMet(): void
+    {
+        $application = self::instantiate(Entity::class);
+        $application->setIsVariation(true);
+
+        $licence = m::mock(Licence::class);
+        $licence->expects('isRestricted')->andReturnFalse()->twice();
+        $licence->expects('isSpecialRestricted')->andReturnFalse()->twice();
+        $licence->expects('hasTransportManager')->andReturnFalse()->twice();
+        $application->setLicence($licence);
+
+        $application->setTransportManagers(new ArrayCollection());
+        $this->assertFalse($application->showPeriodOfGraceQuestion());
+
+        $tmApplication = m::mock(TransportManagerApplication::class);
+        $tmApplications = new ArrayCollection([$tmApplication]);
+        $application->setTransportManagers($tmApplications);
+        $this->assertTrue($application->showPeriodOfGraceQuestion());
     }
 }
