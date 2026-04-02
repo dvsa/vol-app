@@ -297,13 +297,13 @@ module "ecs_service" {
         target_group_arn = aws_lb_target_group.this[each.key].arn
         container_name   = each.key
         container_port   = 8080
-      }
+        }
     },
     each.key == "internal" && contains(["prep", "prod"], var.environment) ? {
       internal_pub = {
-        target_group_arn = aws_lb_target_group.internal-pub[0].arn
-        container_name   = each.key
-        container_port   = 8080
+      target_group_arn = aws_lb_target_group.internal-pub[0].arn
+      container_name   = each.key
+      container_port   = 8080
       }
     } : {}
   )
