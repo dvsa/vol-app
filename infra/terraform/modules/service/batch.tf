@@ -339,7 +339,7 @@ module "batch" {
       priority = 1
 
       compute_environment_order = {
-       first = {
+        first = {
           order                   = 1
           compute_environment_key = "fargate"
         }
@@ -358,7 +358,7 @@ module "batch" {
       priority = 1
 
       compute_environment_order = {
-       first = {
+        first = {
           order                   = 1
           compute_environment_key = "fargate"
         }
