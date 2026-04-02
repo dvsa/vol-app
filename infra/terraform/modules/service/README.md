@@ -17,7 +17,7 @@
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_acm"></a> [acm](#module\_acm) | terraform-aws-modules/acm/aws | ~> 5.0 |
-| <a name="module_batch"></a> [batch](#module\_batch) | terraform-aws-modules/batch/aws | ~> 2.0 |
+| <a name="module_batch"></a> [batch](#module\_batch) | terraform-aws-modules/batch/aws | ~> 3.0 |
 | <a name="module_cli_iam_policy"></a> [cli\_iam\_policy](#module\_cli\_iam\_policy) | terraform-aws-modules/iam/aws//modules/iam-policy | ~> 5.6 |
 | <a name="module_cli_iam_role"></a> [cli\_iam\_role](#module\_cli\_iam\_role) | terraform-aws-modules/iam/aws//modules/iam-role | ~> 6.0 |
 | <a name="module_cloudfront"></a> [cloudfront](#module\_cloudfront) | terraform-aws-modules/cloudfront/aws | ~> 3.4 |
