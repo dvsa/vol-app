@@ -340,8 +340,8 @@ module "batch" {
 
       compute_environment_order = {
        first = {
-          order               = 1
-          compute_environment = "fargate"
+          order                   = 1
+          compute_environment_key = "fargate"
         }
       }
 
@@ -359,8 +359,8 @@ module "batch" {
 
       compute_environment_order = {
        first = {
-          order               = 1
-          compute_environment = "fargate"
+          order                   = 1
+          compute_environment_key = "fargate"
         }
       }
 
