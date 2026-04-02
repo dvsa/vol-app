@@ -338,12 +338,12 @@ module "batch" {
       state    = "ENABLED"
       priority = 1
 
-      compute_environment_order = [
-        {
+      compute_environment_order = {
+       first = {
           order               = 1
           compute_environment = "fargate"
         }
-     ]
+      }
 
 
       # This doesn't offer much value as a tag, but it's here to avoid: https://github.com/hashicorp/terraform-provider-aws/pull/38636.
@@ -357,13 +357,13 @@ module "batch" {
       state    = "ENABLED"
       priority = 1
 
-      compute_environment_order = [
-        {
+      compute_environment_order = {
+       first = {
           order               = 1
           compute_environment = "fargate"
         }
-      ]
-      
+      }
+
       tags = {
         JobQueue = "vol-app-${var.environment}-liquibase"
       }
