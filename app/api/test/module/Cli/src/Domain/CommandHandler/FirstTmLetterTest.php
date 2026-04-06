@@ -327,9 +327,9 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
         $removedTm2->shouldReceive('setLastTmFirstEmailDate')->once();
 
         $tmlRepo->shouldReceive('fetchRemovedTmForLicence')
-        ->with(1)
-        ->once()
-        ->andReturn([$removedTm1, $removedTm2]);
+            ->with(1)
+            ->once()
+            ->andReturn([$removedTm1, $removedTm2]);
 
         $tmlRepo->shouldReceive('save')->with($removedTm1)->once();
         $tmlRepo->shouldReceive('save')->with($removedTm2)->once();
