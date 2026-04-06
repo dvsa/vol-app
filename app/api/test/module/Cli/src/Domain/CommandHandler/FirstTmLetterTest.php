@@ -281,6 +281,78 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedResult, $response->toArray());
     }
 
+    public function testHandleCommandGeneratesOneDocumentAndUpdatesAllRemovedTms(): void
+    {
+        $licenceRepo = $this->repoMap['Licence'];
+        $tmlRepo = $this->repoMap['TransportManagerLicence'];
+
+        $licence = m::mock(LicenceEntity::class);
+
+        $this->mockLicence($licence, [
+            'licence' => [
+                'id' => 1,
+                'licNo' => 'AB123',
+                'isNi' => false,
+                'isPsv' => false,
+                'translateToWelsh' => 'N',
+                'organisation' => [
+                    'allowEmail' => 'Y',
+                    'name' => 'Test Operator Ltd',
+                ],
+                'correspondenceCd' => null,
+            ],
+        ]);
+
+        $this->mockCorrespondenceCd($licence, [
+            'licence' => [
+                'correspondenceCd' => null,
+            ],
+        ]);
+
+        $licenceRepo->shouldReceive('fetchForLastTmAutoLetter')
+            ->once()
+            ->andReturn([$licence]);
+
+        $tm = m::mock(TransportManager::class);
+        $tm->shouldReceive('getId')->andReturn(1);
+
+        $removedTm1 = m::mock(TransportManagerLicence::class);
+        $removedTm1->shouldReceive('getId')->andReturn(10);
+        $removedTm1->shouldReceive('getTransportManager')->andReturn($tm);
+        $removedTm1->shouldReceive('setLastTmFirstEmailDate')->once();
+
+        $removedTm2 = m::mock(TransportManagerLicence::class);
+        $removedTm2->shouldReceive('getId')->andReturn(11);
+        $removedTm2->shouldReceive('getTransportManager')->andReturn($tm);
+        $removedTm2->shouldReceive('setLastTmFirstEmailDate')->once();
+
+        $tmlRepo->shouldReceive('fetchRemovedTmForLicence')
+        ->with(1)
+        ->once()
+        ->andReturn([$removedTm1, $removedTm2]);
+
+        $tmlRepo->shouldReceive('save')->with($removedTm1)->once();
+        $tmlRepo->shouldReceive('save')->with($removedTm2)->once();
+
+        $generateResult = new Result();
+        $generateResult->addId('document', 123);
+        $this->expectedSideEffect(GenerateAndStore::class, [], $generateResult);
+
+        $this->expectedSideEffect(CreateTask::class, [], new Result());
+
+        $response = $this->sut->handleCommand(\Dvsa\Olcs\Cli\Domain\Command\FirstTmLetter::create([]));
+
+        $this->assertEquals(
+            [
+                'id' => [
+                    'document' => 123,
+                ],
+                'messages' => [],
+            ],
+            $response->toArray()
+        );
+    }
+
     private function mockLicence(m\MockInterface $licence, array $dataProvider): void
     {
         $licenceBundle = ['trafficArea'];

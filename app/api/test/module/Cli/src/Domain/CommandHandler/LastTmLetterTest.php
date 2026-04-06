@@ -304,6 +304,61 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                         "Document id '123', queued for print",
                     ]
                 ]
+            ],
+            'multiple_removed_tms_only_one_document' => [
+                'dataProvider' => [
+                    'licence' => [
+                        'id' => 1,
+                        'licNo' => 'AB123',
+                        'isNi' => false,
+                        'isPsv' => false,
+                        'organisation' => [
+                            'allowEmail' => 'Y',
+                            'name' => 'Test Operator Ltd',
+                        ],
+                        'correspondenceCd' => [
+                            'emailAddress' => 'test@email.com'
+                        ]
+                    ],
+                    'user' => [
+                        'fetchFirstByEmailOrFalse' => false
+                    ],
+                    'sideEffectResults' => [
+                        'GenerateAndStore' => [
+                            'ids' => [
+                                'documents' => [
+                                    '123' => [
+                                        'metadata' => json_encode([
+                                            'details' => [
+                                                'category' => Category::CATEGORY_TRANSPORT_MANAGER,
+                                                'documentSubCategory' => Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CORRESPONDENCE,
+                                                'documentTemplate' => 1285,
+                                                'allowEmail' => 'Y',
+                                                'sendToAddress' => 'correspondenceAddress',
+                                            ]
+                                        ]),
+                                    ],
+                                ]
+                            ]
+                        ],
+                        'CreateTask' => [
+                            'ids' => []
+
+                        ],
+                    ],
+                    'multipleRemovedTms' => true,
+                ],
+                'expectedResult' => [
+                    'id' => [
+                        'document' => 123,
+                        '' => 123,
+                    ],
+                    'messages' => [
+                        "Document id '123', queued for print",
+                        "Correspondence record created",
+                        "Email sent"
+                    ]
+                ]
             ]
         ];
     }
@@ -375,7 +430,7 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
         $result = new Result();
 
         foreach ($documents as $id => $data) {
-            $result->addId($data['address'], $id);
+            $result->addId($data['address'] ?? '', $id);
             $result->addId('document', $id);
         }
 
@@ -469,18 +524,46 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
     {
         $tmlRepo = $this->repoMap['TransportManagerLicence'];
         foreach ($eligibleLicences as $eligibleLicence) {
-            $tmlEntity = m::mock(TransportManagerLicence::class);
-            $tmlEntity->shouldReceive('getId')->andReturn(5);
-            $tmlEntity->shouldReceive('setLastTmLetterDate');
-            $tm = m::mock(\Dvsa\Olcs\Api\Entity\Tm\TransportManager::class);
-            $tm->shouldReceive('getId')->andReturn(1);
+            if (!empty($dataProvider['multipleRemovedTms'])) {
+                $tmlEntity1 = m::mock(TransportManagerLicence::class);
+                $tmlEntity1->shouldReceive('getId')->andReturn(5);
+                $tmlEntity1->shouldReceive('setLastTmLetterDate')->once();
 
-            $tmlEntity->shouldReceive('getTransportManager')->andReturn($tm);
-            $tmlRepo
-                ->shouldReceive('fetchRemovedTmForLicence')
-                ->with($eligibleLicence->getId(), true)
-                ->andReturn([$tmlEntity]);
-            $tmlRepo->shouldReceive('save');
+                $tm1 = m::mock(\Dvsa\Olcs\Api\Entity\Tm\TransportManager::class);
+                $tm1->shouldReceive('getId')->andReturn(1);
+                $tmlEntity1->shouldReceive('getTransportManager')->andReturn($tm1);
+
+                $tmlEntity2 = m::mock(TransportManagerLicence::class);
+                $tmlEntity2->shouldReceive('getId')->andReturn(6);
+                $tmlEntity2->shouldReceive('setLastTmLetterDate')->once();
+
+                $tm2 = m::mock(\Dvsa\Olcs\Api\Entity\Tm\TransportManager::class);
+                $tm2->shouldReceive('getId')->andReturn(2);
+                $tmlEntity2->shouldReceive('getTransportManager')->andReturn($tm2);
+
+                $tmlRepo
+                    ->shouldReceive('fetchRemovedTmForLicence')
+                    ->with($eligibleLicence->getId(), true)
+                    ->once()
+                    ->andReturn([$tmlEntity1, $tmlEntity2]);
+
+                $tmlRepo->shouldReceive('save')->with($tmlEntity1)->once();
+                $tmlRepo->shouldReceive('save')->with($tmlEntity2)->once();
+
+            } else {
+                $tmlEntity = m::mock(TransportManagerLicence::class);
+                $tmlEntity->shouldReceive('getId')->andReturn(5);
+                $tmlEntity->shouldReceive('setLastTmLetterDate');
+                $tm = m::mock(\Dvsa\Olcs\Api\Entity\Tm\TransportManager::class);
+                $tm->shouldReceive('getId')->andReturn(1);
+
+                $tmlEntity->shouldReceive('getTransportManager')->andReturn($tm);
+                $tmlRepo
+                    ->shouldReceive('fetchRemovedTmForLicence')
+                    ->with($eligibleLicence->getId(), true)
+                    ->andReturn([$tmlEntity]);
+                $tmlRepo->shouldReceive('save');
+            }
         }
 
         $documentsData = $dataProvider['sideEffectResults']['GenerateAndStore']['ids']['documents'];

@@ -57,7 +57,8 @@ class TransportManagerLicenceTest extends RepositoryTestCase
             '[QUERY] AND tml.licence = [[' . $licenceId . ']] ' .
             'AND tml.deletedDate IS NOT NULL ' .
             'AND tml.lastTmLetterDate IS NULL ' .
-            'AND tml.lastTmFirstEmailDate IS NULL';
+            'AND tml.lastTmFirstEmailDate IS NULL ' .
+            'ORDER BY tml.deletedDate DESC';
 
         $this->assertEquals($expectedQuery, $this->query);
     }
