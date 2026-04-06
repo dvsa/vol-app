@@ -69,7 +69,7 @@ final class FirstTmLetter extends AbstractCommandHandler implements EmailAwareIn
             /** @var TransportManagerLicence $tmlRepo */
             $tmlRepo = $this->getRepo('TransportManagerLicence');
             $removedTms = $tmlRepo->fetchRemovedTmForLicence($licence->getId());
-            
+
             if (empty($removedTms)) {
                 continue;
             }

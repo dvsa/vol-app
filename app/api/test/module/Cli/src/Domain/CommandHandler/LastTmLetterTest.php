@@ -68,8 +68,7 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
             'CreateTask' => [
                 'ids' => [
                     'assignedToUser' => 111
-                ]
-
+                ],
             ]
         ];
 
@@ -549,7 +548,6 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
 
                 $tmlRepo->shouldReceive('save')->with($tmlEntity1)->once();
                 $tmlRepo->shouldReceive('save')->with($tmlEntity2)->once();
-
             } else {
                 $tmlEntity = m::mock(TransportManagerLicence::class);
                 $tmlEntity->shouldReceive('getId')->andReturn(5);
