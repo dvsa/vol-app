@@ -129,6 +129,26 @@ class LetterType
     public $sectionsOrder = null;
 
     /**
+     * @Form\Type("Hidden")
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"sectionsRequired"})
+     */
+    public $sectionsRequired = null;
+
+    /**
+     * @Form\Options({
+     *     "label": "Letter Choices",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Olcs\Service\Data\Letter\LetterChoice",
+     *     "use_groups": false
+     * })
+     * @Form\Type("DynamicSelect")
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"choices","class":"medium chosen-select-large","multiple":"multiple"})
+     */
+    public $choices = null;
+
+    /**
      * @Form\Options({
      *     "label": "Appendices",
      *     "disable_inarray_validator": false,

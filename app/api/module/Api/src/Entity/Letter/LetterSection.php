@@ -16,19 +16,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 class LetterSection extends AbstractLetterSection
 {
     /**
-     * Letter section versions
+     * Letter section variants
      *
      * @var ArrayCollection
      *
      * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion",
+     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant",
      *     mappedBy="letterSection",
      *     cascade={"persist"},
      *     orphanRemoval=false
      * )
-     * @ORM\OrderBy({"versionNumber" = "DESC"})
+     * @ORM\OrderBy({"displayOrder" = "ASC"})
      */
-    protected $versions;
+    protected $variants;
 
     /**
      * Non-persisted working properties for versioned fields
@@ -49,7 +49,7 @@ class LetterSection extends AbstractLetterSection
      */
     public function __construct()
     {
-        $this->versions = new ArrayCollection();
+        $this->variants = new ArrayCollection();
     }
 
     /**
@@ -278,100 +278,107 @@ class LetterSection extends AbstractLetterSection
     }
 
     /**
-     * Get all versions
+     * Get all variants
      *
      * @return ArrayCollection
      */
-    public function getVersions()
+    public function getVariants()
     {
-        return $this->versions;
+        return $this->variants;
     }
 
     /**
-     * Add a version
+     * Add a variant
      *
-     * @param LetterSectionVersion $version
+     * @param LetterSectionVariant $variant
      * @return self
      */
-    public function addVersion(LetterSectionVersion $version)
+    public function addVariant(LetterSectionVariant $variant)
     {
-        if (!$this->versions->contains($version)) {
-            $version->setLetterSection($this);
-            $this->versions->add($version);
+        if (!$this->variants->contains($variant)) {
+            $variant->setLetterSection($this);
+            $this->variants->add($variant);
         }
         return $this;
     }
 
     /**
-     * Remove a version
+     * Remove a variant
      *
-     * @param LetterSectionVersion $version
+     * @param LetterSectionVariant $variant
      * @return self
      */
-    public function removeVersion(LetterSectionVersion $version)
+    public function removeVariant(LetterSectionVariant $variant)
     {
-        $this->versions->removeElement($version);
+        $this->variants->removeElement($variant);
         return $this;
     }
 
     /**
-     * Create a new version based on current version
+     * Get the default variant (all NULL conditions)
+     *
+     * @return LetterSectionVariant|null
+     */
+    public function getDefaultVariant(): ?LetterSectionVariant
+    {
+        foreach ($this->variants as $variant) {
+            if ($variant->isDefault()) {
+                return $variant;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Find the best matching variant for the given context.
+     *
+     * Iterates through non-default variants first (most specific matches).
+     * Falls back to the default variant if no conditioned variant matches.
+     *
+     * @param array $context Keys: goodsOrPsv, isVariation, isNi, selectedChoiceIds
+     * @return LetterSectionVariant|null
+     */
+    public function getVariantForContext(array $context): ?LetterSectionVariant
+    {
+        $default = null;
+
+        foreach ($this->variants as $variant) {
+            if ($variant->isDefault()) {
+                $default = $variant;
+                continue;
+            }
+
+            if ($variant->matchesContext($context)) {
+                return $variant;
+            }
+        }
+
+        return $default;
+    }
+
+    /**
+     * Create a new version on the default variant based on its current version
      *
      * @return LetterSectionVersion
      */
-    public function createNewVersion()
+    public function createNewVersion(): LetterSectionVersion
     {
-        $currentVersion = $this->getCurrentVersion();
-        if (!$currentVersion) {
-            throw new \RuntimeException('No current version to base new version on');
+        $defaultVariant = $this->getDefaultVariant();
+        if (!$defaultVariant) {
+            throw new \RuntimeException('No default variant exists for this section');
         }
 
-        $newVersion = new LetterSectionVersion();
-        $newVersion->setLetterSection($this);
-        $newVersion->setName($currentVersion->getName());
-        $newVersion->setSectionType($currentVersion->getSectionType());
-        $newVersion->setDefaultContent($currentVersion->getDefaultContent());
-        $newVersion->setHelpText($currentVersion->getHelpText());
-        $newVersion->setMinLength($currentVersion->getMinLength());
-        $newVersion->setMaxLength($currentVersion->getMaxLength());
-        $newVersion->setIsLocked(false);
-        $newVersion->setRequiresInput($currentVersion->getRequiresInput());
-        $newVersion->setIsNi($currentVersion->getIsNi());
-        $newVersion->setGoodsOrPsv($currentVersion->getGoodsOrPsv());
-        $newVersion->setVersionNumber($currentVersion->getVersionNumber() + 1);
-
-        $this->addVersion($newVersion);
-
-        return $newVersion;
+        return $defaultVariant->createNewVersion();
     }
 
     /**
-     * Get the latest version (may not be current)
+     * Get the latest version from the default variant
      *
      * @return LetterSectionVersion|null
      */
-    public function getLatestVersion()
+    public function getLatestVersion(): ?LetterSectionVersion
     {
-        if ($this->versions->isEmpty()) {
-            return null;
-        }
-
-        return $this->versions->first();
-    }
-
-    /**
-     * Set a specific version as current
-     *
-     * @param LetterSectionVersion $version
-     * @return self
-     */
-    public function setVersionAsCurrent(LetterSectionVersion $version)
-    {
-        if (!$this->versions->contains($version)) {
-            throw new \InvalidArgumentException('Version does not belong to this section');
-        }
-
-        $this->setCurrentVersion($version);
-        return $this;
+        $defaultVariant = $this->getDefaultVariant();
+        return $defaultVariant?->getLatestVersion();
     }
 }

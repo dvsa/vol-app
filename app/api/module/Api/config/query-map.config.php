@@ -754,4 +754,7 @@ return [
     TransferQuery\Letter\MasterTemplate\GetList::class => QueryHandler\Letter\MasterTemplate\GetList::class,
     TransferQuery\Letter\LetterTestData\Get::class => QueryHandler\Letter\LetterTestData\Get::class,
     TransferQuery\Letter\LetterTestData\GetList::class => QueryHandler\Letter\LetterTestData\GetList::class,
+    TransferQuery\Letter\LetterChoice\Get::class => QueryHandler\Letter\LetterChoice\Get::class,
+    TransferQuery\Letter\LetterChoice\GetList::class => QueryHandler\Letter\LetterChoice\GetList::class,
+    TransferQuery\Letter\LetterSectionVariant\Get::class => QueryHandler\Letter\LetterSectionVariant\Get::class,
 ];

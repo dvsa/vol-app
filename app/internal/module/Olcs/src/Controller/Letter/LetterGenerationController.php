@@ -108,11 +108,15 @@ class LetterGenerationController extends AbstractInternalController implements L
         // Fetch appendices for this letter type
         $appendicesData = $this->fetchAppendicesForLetterType($templateId);
 
+        // Fetch letter choices for this letter type
+        $letterChoicesData = $this->fetchLetterChoicesForLetterType($templateId);
+
         $view = new ViewModel([
             'templateId' => $templateId,
             'entityContext' => $entityContext,
             'accordionData' => $accordionData,
             'appendicesData' => $appendicesData,
+            'letterChoicesData' => $letterChoicesData,
             'queryParams' => $queryParams,
         ]);
 
@@ -163,6 +167,11 @@ class LetterGenerationController extends AbstractInternalController implements L
             'selectedAppendices' => $postData['letterAppendices'] ?? [],
         ];
 
+        // Only include selectedChoices if any were actually selected
+        if (!empty($postData['letterChoices'])) {
+            $commandData['selectedChoices'] = $postData['letterChoices'];
+        }
+
         if (!empty($entityContext['type'])) {
             $commandData[$entityContext['type']] = $entityContext['id'];
         }
@@ -186,11 +195,21 @@ class LetterGenerationController extends AbstractInternalController implements L
 
         $letterInstanceData = $this->fetchLetterInstanceById($letterInstanceId);
 
+        // Extract required section warnings if present
+        $warnings = [];
+        if (!empty($result['flags']['hasRequiredSectionWarnings'])) {
+            $warnings = array_values(array_filter(
+                $result['messages'] ?? [],
+                fn($m) => str_starts_with($m, 'Required section')
+            ));
+        }
+
         return $this->jsonSuccess([
             'letterInstanceId' => $letterInstanceId,
             'message' => $result['messages'][0] ?? 'Letter generated successfully',
             'redirectUrl' => '#',
             'letterInstance' => $letterInstanceData,
+            'warnings' => $warnings,
         ]);
     }
 
@@ -251,6 +270,9 @@ class LetterGenerationController extends AbstractInternalController implements L
             }
         }
 
+        // Check for missing required sections
+        $warnings = $this->checkRequiredSections($result);
+
         // Set left sidebar BEFORE calling viewBuilder (LeftViewProvider interface)
         $sidebarView = new ViewModel([
             'letterInstance' => $result,
@@ -265,6 +287,7 @@ class LetterGenerationController extends AbstractInternalController implements L
             'letterInstance' => $result,
             'sectionsList' => $sectionsList,
             'appendicesList' => $appendicesList,
+            'warnings' => $warnings,
         ]);
 
         $view->setTemplate('pages/letter/preview');
@@ -803,6 +826,107 @@ class LetterGenerationController extends AbstractInternalController implements L
         }
 
         return $appendices;
+    }
+
+    /**
+     * Fetch letter choices linked to a letter type
+     *
+     * @param int $templateId Doc template ID
+     * @return array Letter choices data [{id, label, groupLabel, inputType}]
+     */
+    protected function fetchLetterChoicesForLetterType(int $templateId): array
+    {
+        $template = $this->fetchTemplateById($templateId);
+
+        if (!$template || empty($template['letterType']['id'])) {
+            return [];
+        }
+
+        $letterTypeId = (int) $template['letterType']['id'];
+
+        $query = \Dvsa\Olcs\Transfer\Query\Letter\LetterType\Get::create([
+            'id' => $letterTypeId,
+        ]);
+
+        $response = $this->handleQuery($query);
+
+        if (!$response->isOk()) {
+            return [];
+        }
+
+        $result = $response->getResult();
+        $choices = [];
+
+        foreach ($result['letterTypeChoices'] ?? [] as $ltc) {
+            $letterChoice = $ltc['letterChoice'] ?? [];
+            if (!empty($letterChoice['isActive'])) {
+                $choices[] = [
+                    'id' => $letterChoice['id'] ?? null,
+                    'label' => $letterChoice['label'] ?? '',
+                    'groupLabel' => $letterChoice['groupLabel'] ?? 'Other letter choices',
+                    'inputType' => $letterChoice['inputType'] ?? 'checkbox',
+                ];
+            }
+        }
+
+        return $choices;
+    }
+
+    /**
+     * Check for required sections missing from the letter instance
+     *
+     * Compares the letter type's required sections against the instance's actual sections.
+     *
+     * @param array $letterInstanceData Letter instance query result
+     * @return array Warning strings for each missing required section
+     */
+    protected function checkRequiredSections(array $letterInstanceData): array
+    {
+        $letterTypeId = $letterInstanceData['letterType']['id'] ?? null;
+        if (!$letterTypeId) {
+            return [];
+        }
+
+        $query = \Dvsa\Olcs\Transfer\Query\Letter\LetterType\Get::create([
+            'id' => (int) $letterTypeId,
+        ]);
+
+        $response = $this->handleQuery($query);
+        if (!$response->isOk()) {
+            return [];
+        }
+
+        $letterType = $response->getResult();
+
+        // Build set of section IDs present in the instance
+        $instanceSectionIds = [];
+        foreach ($letterInstanceData['letterInstanceSections'] ?? [] as $instanceSection) {
+            $version = $instanceSection['letterSectionVersion'] ?? [];
+            $variant = $version['letterSectionVariant'] ?? [];
+            $sectionId = $variant['letterSection']['id'] ?? $version['letterSection']['id'] ?? null;
+            if ($sectionId) {
+                $instanceSectionIds[$sectionId] = true;
+            }
+        }
+
+        // Check each required section
+        $warnings = [];
+        foreach ($letterType['letterTypeSections'] ?? [] as $typeSection) {
+            if (empty($typeSection['isRequired'])) {
+                continue;
+            }
+
+            $sectionId = $typeSection['letterSection']['id'] ?? null;
+            $sectionName = $typeSection['letterSection']['name']
+                ?? $typeSection['letterSection']['sectionKey']
+                ?? 'Unknown section';
+
+            if ($sectionId && !isset($instanceSectionIds[$sectionId])) {
+                $warnings[] = $sectionName;
+            }
+        }
+
+        return $warnings;
     }
 
     /**

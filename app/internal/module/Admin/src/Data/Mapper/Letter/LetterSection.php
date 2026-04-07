@@ -10,6 +10,32 @@ use Laminas\Form\FormInterface;
 class LetterSection implements MapperInterface
 {
     /**
+     * Label mappings for variant condition display
+     */
+    private const GOODS_OR_PSV_LABELS = [
+        'lcat_gv' => 'Goods Vehicle',
+        'lcat_psv' => 'PSV',
+    ];
+
+    private const IS_VARIATION_LABELS = [
+        '0' => 'New Application',
+        '1' => 'Variation',
+    ];
+
+    private const IS_NI_LABELS = [
+        '0' => 'GB',
+        '1' => 'NI',
+    ];
+
+    private const ORG_TYPE_LABELS = [
+        'org_t_st' => 'Sole Trader',
+        'org_t_rc' => 'Registered Company (LTD)',
+        'org_t_llp' => 'LLP',
+        'org_t_p' => 'Partnership',
+        'org_t_pa' => 'Other',
+    ];
+
+    /**
      * Map data from a result array into an array suitable for a form
      * For a versioned entity, we get data from the current version
      *

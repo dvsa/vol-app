@@ -1371,4 +1371,10 @@ return [
     TransferCommand\Letter\LetterTestData\Create::class => CommandHandler\Letter\LetterTestData\Create::class,
     TransferCommand\Letter\LetterTestData\Update::class => CommandHandler\Letter\LetterTestData\Update::class,
     TransferCommand\Letter\LetterTestData\Delete::class => CommandHandler\Letter\LetterTestData\Delete::class,
+    TransferCommand\Letter\LetterChoice\Create::class => CommandHandler\Letter\LetterChoice\Create::class,
+    TransferCommand\Letter\LetterChoice\Update::class => CommandHandler\Letter\LetterChoice\Update::class,
+    TransferCommand\Letter\LetterChoice\Delete::class => CommandHandler\Letter\LetterChoice\Delete::class,
+    TransferCommand\Letter\LetterSectionVariant\Create::class => CommandHandler\Letter\LetterSectionVariant\Create::class,
+    TransferCommand\Letter\LetterSectionVariant\Update::class => CommandHandler\Letter\LetterSectionVariant\Update::class,
+    TransferCommand\Letter\LetterSectionVariant\Delete::class => CommandHandler\Letter\LetterSectionVariant\Delete::class,
 ];

@@ -14,7 +14,7 @@ final class Update extends AbstractCommandHandler
 {
     protected $repoServiceName = 'LetterType';
 
-    protected $extraRepos = ['LetterType', 'MasterTemplate', 'LetterSection', 'LetterIssue', 'LetterAppendix'];
+    protected $extraRepos = ['LetterType', 'MasterTemplate', 'LetterSection', 'LetterIssue', 'LetterAppendix', 'LetterChoice'];
 
     #[\Override]
     public function handleCommand(CommandInterface $command): Result
@@ -54,13 +54,10 @@ final class Update extends AbstractCommandHandler
             $displayOrder = 0;
             foreach ($command->getSections() as $sectionId) {
                 $letterSection = $this->getRepo('LetterSection')->fetchById($sectionId);
-                $sectionVersion = $letterSection->getCurrentVersion();
-                if ($sectionVersion) {
-                    $lts = new \Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection();
-                    $lts->setLetterSectionVersion($sectionVersion);
-                    $lts->setDisplayOrder($displayOrder++);
-                    $letterType->addLetterTypeSection($lts);
-                }
+                $lts = new \Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection();
+                $lts->setLetterSection($letterSection);
+                $lts->setDisplayOrder($displayOrder++);
+                $letterType->addLetterTypeSection($lts);
             }
         }
 
@@ -93,6 +90,23 @@ final class Update extends AbstractCommandHandler
                     $lta->setDisplayOrder($displayOrder++);
                     $letterType->addLetterTypeAppendix($lta);
                 }
+            }
+        }
+
+        // Update choices if provided
+        if ($command->getChoices() !== null) {
+            // Clear existing choices
+            foreach ($letterType->getLetterTypeChoices()->toArray() as $existing) {
+                $letterType->removeLetterTypeChoice($existing);
+            }
+
+            $displayOrder = 0;
+            foreach ($command->getChoices() as $choiceId) {
+                $letterChoice = $this->getRepo('LetterChoice')->fetchById($choiceId);
+                $ltc = new \Dvsa\Olcs\Api\Entity\Letter\LetterTypeChoice();
+                $ltc->setLetterChoice($letterChoice);
+                $ltc->setDisplayOrder($displayOrder++);
+                $letterType->addLetterTypeChoice($ltc);
             }
         }
 
