@@ -111,18 +111,21 @@ class DeclarationReviewService extends AbstractReviewService
             } elseif ($licence->isStandardNational() || $licence->isStandardInternational()) {
                 $markupKey = 'markup-continuation-declaration-goods-gb-sn';
                 $markupStandard = 'markup-continuation-declaration-goods-gb-sn-standard';
-                $markupOperatingCentres = 'markup-continuation-declaration-goods-gb-operating-centres-not-lgv';
+                // Operating centres text is hardcoded in the goods-gb-sn template
+                $markupOperatingCentres = null;
             } else {
                 $markupKey = 'markup-continuation-declaration-goods-gb';
                 $markupStandard = 'markup-continuation-declaration-goods-gb-standard';
                 $markupOperatingCentres = 'markup-continuation-declaration-goods-gb-operating-centres-not-lgv';
             }
 
-            if ($licence->isLgv()) {
+            if ($licence->isLgv() && $markupOperatingCentres !== null) {
                 $markupOperatingCentres = 'markup-continuation-declaration-goods-operating-centres-lgv';
             }
 
-            $additional[] = $this->translate($markupOperatingCentres);
+            if ($markupOperatingCentres !== null) {
+                $additional[] = $this->translate($markupOperatingCentres);
+            }
         } else {
             // PSV
             if ($licence->isSpecialRestricted()) {
