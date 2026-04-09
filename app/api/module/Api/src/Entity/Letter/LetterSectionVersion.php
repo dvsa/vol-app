@@ -39,18 +39,28 @@ class LetterSectionVersion extends AbstractLetterSectionVersion
     }
 
     /**
-     * Check if this version is the current version
+     * Check if this version is the current version of its variant
      *
      * @return bool
      */
     public function isCurrent()
     {
-        $section = $this->getLetterSection();
-        if (!$section) {
+        $variant = $this->getLetterSectionVariant();
+        if (!$variant) {
             return false;
         }
 
-        return $section->getCurrentVersion() === $this;
+        return $variant->getCurrentVersion() === $this;
+    }
+
+    /**
+     * Get the letter section (convenience method via variant)
+     *
+     * @return LetterSection|null
+     */
+    public function getLetterSection(): ?LetterSection
+    {
+        return $this->letterSectionVariant?->getLetterSection();
     }
 
     /**

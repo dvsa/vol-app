@@ -445,6 +445,12 @@ return [
                             'label' => 'Letter Todos',
                             'route' => 'admin-dashboard/admin-letter-todo',
                         ],
+                        [
+                            'id' => 'admin-dashboard/letter-management/letter-choices',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'Letter Choices',
+                            'route' => 'admin-dashboard/admin-letter-choice',
+                        ],
                     ],
                 ],
                 [

@@ -12,6 +12,13 @@ class Get extends AbstractQueryByIdHandler
     protected $repoServiceName = 'LetterSection';
 
     protected $bundle = [
-        'currentVersion'
+        'currentVersion',
+        'variants' => [
+            'currentVersion',
+            'versions',
+            'goodsOrPsv',
+            'organisationType',
+            'letterChoice',
+        ],
     ];
 }

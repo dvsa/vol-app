@@ -1364,6 +1364,7 @@ return [
     TransferCommand\Letter\LetterInstance\Generate::class => CommandHandler\Letter\LetterInstance\Generate::class,
     TransferCommand\Letter\LetterInstance\PrepareToSend::class => CommandHandler\Letter\LetterInstance\PrepareToSend::class,
     TransferCommand\Letter\LetterInstanceIssue\UpdateContent::class => CommandHandler\Letter\LetterInstanceIssue\UpdateContent::class,
+    TransferCommand\Letter\LetterInstanceSection\UpdateContent::class => CommandHandler\Letter\LetterInstanceSection\UpdateContent::class,
     TransferCommand\Letter\LetterInstanceAppendix\UpdateContent::class => CommandHandler\Letter\LetterInstanceAppendix\UpdateContent::class,
     TransferCommand\Letter\MasterTemplate\Create::class => CommandHandler\Letter\MasterTemplate\Create::class,
     TransferCommand\Letter\MasterTemplate\Update::class => CommandHandler\Letter\MasterTemplate\Update::class,
@@ -1371,4 +1372,10 @@ return [
     TransferCommand\Letter\LetterTestData\Create::class => CommandHandler\Letter\LetterTestData\Create::class,
     TransferCommand\Letter\LetterTestData\Update::class => CommandHandler\Letter\LetterTestData\Update::class,
     TransferCommand\Letter\LetterTestData\Delete::class => CommandHandler\Letter\LetterTestData\Delete::class,
+    TransferCommand\Letter\LetterChoice\Create::class => CommandHandler\Letter\LetterChoice\Create::class,
+    TransferCommand\Letter\LetterChoice\Update::class => CommandHandler\Letter\LetterChoice\Update::class,
+    TransferCommand\Letter\LetterChoice\Delete::class => CommandHandler\Letter\LetterChoice\Delete::class,
+    TransferCommand\Letter\LetterSectionVariant\Create::class => CommandHandler\Letter\LetterSectionVariant\Create::class,
+    TransferCommand\Letter\LetterSectionVariant\Update::class => CommandHandler\Letter\LetterSectionVariant\Update::class,
+    TransferCommand\Letter\LetterSectionVariant\Delete::class => CommandHandler\Letter\LetterSectionVariant\Delete::class,
 ];

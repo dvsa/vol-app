@@ -28,7 +28,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    indexes={
  *        @ORM\Index(name="ix_letter_type_section_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_letter_type_section_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_type_section_letter_section_version_id", columns={"letter_section_version_id"}),
+ *        @ORM\Index(name="ix_letter_type_section_letter_section_id", columns={"letter_section_id"}),
  *        @ORM\Index(name="IDX_6452411030450394", columns={"letter_type_id"})
  *    }
  * )
@@ -53,15 +53,15 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
     protected $letterType;
 
     /**
-     * LetterSectionVersion
+     * LetterSection
      *
-     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSection
      *
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_section_version_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterSection", fetch="LAZY")
+     * @ORM\JoinColumn(name="letter_section_id", referencedColumnName="id")
      */
-    protected $letterSectionVersion;
+    protected $letterSection;
 
     /**
      * Created by
@@ -113,6 +113,15 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
     protected $issueFilter;
 
     /**
+     * If true, warn caseworker when variant resolution skips this section
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_required", nullable=false, options={"default": 0})
+     */
+    protected $isRequired = 0;
+
+    /**
      * Initialise the collections
      */
     public function __construct()
@@ -153,27 +162,27 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
     }
 
     /**
-     * Set the letter section version
+     * Set the letter section
      *
-     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion $letterSectionVersion new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterSection $letterSection new value being set
      *
      * @return LetterTypeSection
      */
-    public function setLetterSectionVersion($letterSectionVersion)
+    public function setLetterSection($letterSection)
     {
-        $this->letterSectionVersion = $letterSectionVersion;
+        $this->letterSection = $letterSection;
 
         return $this;
     }
 
     /**
-     * Get the letter section version
+     * Get the letter section
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterSection
      */
-    public function getLetterSectionVersion()
+    public function getLetterSection()
     {
-        return $this->letterSectionVersion;
+        return $this->letterSection;
     }
 
     /**
@@ -294,6 +303,30 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
     public function getIssueFilter()
     {
         return $this->issueFilter;
+    }
+
+    /**
+     * Set the is required
+     *
+     * @param bool $isRequired new value being set
+     *
+     * @return LetterTypeSection
+     */
+    public function setIsRequired($isRequired)
+    {
+        $this->isRequired = $isRequired;
+
+        return $this;
+    }
+
+    /**
+     * Get the is required
+     *
+     * @return bool
+     */
+    public function getIsRequired()
+    {
+        return $this->isRequired;
     }
 
     /**

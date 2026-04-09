@@ -17,7 +17,11 @@ class Get extends AbstractQueryByIdHandler
         'application',
         'case',
         'letterInstanceSections' => [
-            'letterSectionVersion'
+            'letterSectionVersion' => [
+                'letterSectionVariant' => [
+                    'letterSection'
+                ]
+            ]
         ],
         'letterInstanceIssues' => [
             'letterIssueVersion' => [

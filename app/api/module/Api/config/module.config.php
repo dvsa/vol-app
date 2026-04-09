@@ -832,7 +832,9 @@ return [
             Repository\LetterInstanceSection::class => RepositoryFactory::class,
             Repository\LetterInstanceIssue::class => RepositoryFactory::class,
             Repository\LetterInstanceTodo::class => RepositoryFactory::class,
-            Repository\LetterInstanceAppendix::class => RepositoryFactory::class
+            Repository\LetterInstanceAppendix::class => RepositoryFactory::class,
+            Repository\LetterChoice::class => RepositoryFactory::class,
+            Repository\LetterSectionVariant::class => RepositoryFactory::class
         ],
         'aliases' => [
             'Conversation' => Repository\Conversation::class,
@@ -875,6 +877,8 @@ return [
             'LetterInstanceIssue' => Repository\LetterInstanceIssue::class,
             'LetterInstanceTodo' => Repository\LetterInstanceTodo::class,
             'LetterInstanceAppendix' => Repository\LetterInstanceAppendix::class,
+            'LetterChoice' => Repository\LetterChoice::class,
+            'LetterSectionVariant' => Repository\LetterSectionVariant::class,
         ],
     ],
     \Dvsa\Olcs\Api\Domain\FormControlServiceManagerFactory::CONFIG_KEY => [

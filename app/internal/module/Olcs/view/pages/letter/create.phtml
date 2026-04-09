@@ -73,6 +73,35 @@
 </div>
 <?php endif; ?>
 
+<?php if (!empty($letterChoicesData)): ?>
+<div class="letter-choices" style="margin-top: 2rem;">
+    <?php
+    // Group choices by groupLabel
+    $groupedChoices = [];
+    foreach ($letterChoicesData as $choice) {
+        $group = $choice['groupLabel'] ?? 'Other letter choices';
+        $groupedChoices[$group][] = $choice;
+    }
+    ?>
+    <?php foreach ($groupedChoices as $groupLabel => $choices): ?>
+        <h3 class="govuk-heading-s"><?= $this->escapeHtml($groupLabel) ?></h3>
+        <div class="govuk-checkboxes govuk-checkboxes--small">
+            <?php foreach ($choices as $choice): ?>
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" name="letterChoices[]"
+                           type="<?= $this->escapeHtmlAttr($choice['inputType'] ?? 'checkbox') ?>"
+                           value="<?= $choice['id'] ?>"
+                           id="letter-choice-<?= $choice['id'] ?>">
+                    <label class="govuk-label govuk-checkboxes__label" for="letter-choice-<?= $choice['id'] ?>">
+                        <?= $this->escapeHtml($choice['label']) ?>
+                    </label>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?>
+
 <div class="govuk-button-group" style="margin-top: 2rem;">
     <button type="button" id="create-letter-btn" class="govuk-button govuk-button--disabled" data-module="govuk-button" disabled>
         Create letter
