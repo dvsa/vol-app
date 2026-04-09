@@ -132,7 +132,6 @@ class LetterType implements MapperInterface
             ? array_filter(explode(',', $sectionsRequired))
             : [];
 
-
         // Ensure appendices and choices are always arrays so the handler processes removals.
         $commandData['appendices'] = array_filter((array)($commandData['appendices'] ?? []));
         $commandData['choices'] = array_filter((array)($commandData['choices'] ?? []));
