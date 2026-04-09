@@ -92,14 +92,13 @@ class LetterSectionVariantEdit
      * @Form\Options({
      *     "label": "Letter Choice",
      *     "disable_inarray_validator": false,
-     *     "empty_option": "None"
+     *     "service_name": "Olcs\Service\Data\Letter\LetterChoice",
+     *     "empty_option": "None",
+     *     "use_groups": false
      * })
-     * @Form\Type("Select")
+     * @Form\Type("DynamicSelect")
      * @Form\Required(false)
      * @Form\Attributes({"id":"letterChoice","class":"medium"})
-     * @Form\Options({
-     *     "value_options": {}
-     * })
      */
     public $letterChoice = null;
 

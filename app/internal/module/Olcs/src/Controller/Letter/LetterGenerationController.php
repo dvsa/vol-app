@@ -248,6 +248,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $result = $response->getResult();
 
         // Build sections list for sidebar
+        // NOTE: despite the name, $sectionsList contains ISSUES (kept for backwards compatibility).
         $sectionsList = [];
         foreach ($result['letterInstanceIssues'] ?? [] as $issue) {
             $sectionsList[] = [
@@ -270,6 +271,38 @@ class LetterGenerationController extends AbstractInternalController implements L
             }
         }
 
+        // Build real letter instance sections list for the sidebar.
+        // Each entry includes id, a display name, and position in assembly
+        // so we can render checkboxes that let caseworkers edit them.
+        $instanceSectionsList = [];
+        foreach ($result['letterInstanceSections'] ?? [] as $instanceSection) {
+            $sectionVersion = $instanceSection['letterSectionVersion'] ?? [];
+            $variant = $sectionVersion['letterSectionVariant'] ?? [];
+            $letterSection = $variant['letterSection'] ?? ($sectionVersion['letterSection'] ?? []);
+
+            // Skip the __ISSUES__ placeholder section -- its content is rendered
+            // from the letter's issues, not editable as a section.
+            if (($letterSection['sectionKey'] ?? null) === '__ISSUES__') {
+                continue;
+            }
+
+            $name = $sectionVersion['name']
+                ?? $letterSection['name']
+                ?? $letterSection['sectionKey']
+                ?? null;
+
+            if (empty($name)) {
+                $name = 'Section #' . ($instanceSection['id'] ?? '');
+            }
+
+            $instanceSectionsList[] = [
+                'id' => $instanceSection['id'] ?? null,
+                'name' => $name,
+                'position' => $instanceSection['positionInAssembly'] ?? 0,
+                'type' => 'section',
+            ];
+        }
+
         // Check for missing required sections
         $warnings = $this->checkRequiredSections($result);
 
@@ -278,6 +311,7 @@ class LetterGenerationController extends AbstractInternalController implements L
             'letterInstance' => $result,
             'sectionsList' => $sectionsList,
             'appendicesList' => $appendicesList,
+            'instanceSectionsList' => $instanceSectionsList,
         ]);
         $sidebarView->setTemplate('pages/letter/preview-sidebar');
         $this->leftView = $sidebarView;
@@ -287,6 +321,7 @@ class LetterGenerationController extends AbstractInternalController implements L
             'letterInstance' => $result,
             'sectionsList' => $sectionsList,
             'appendicesList' => $appendicesList,
+            'instanceSectionsList' => $instanceSectionsList,
             'warnings' => $warnings,
         ]);
 
@@ -359,13 +394,14 @@ class LetterGenerationController extends AbstractInternalController implements L
         $letterInstanceId = $this->params()->fromQuery('id');
         $selectedSections = $this->params()->fromQuery('sections', []);
         $selectedAppendices = $this->params()->fromQuery('appendices', []);
+        $letterSectionIds = $this->params()->fromQuery('letterSections', []);
 
         if (!$letterInstanceId) {
             $this->flashMessengerHelperService->addErrorMessage('Letter instance ID is required');
             return $this->redirect()->toRoute('dashboard');
         }
 
-        if (empty($selectedSections) && empty($selectedAppendices)) {
+        if (empty($selectedSections) && empty($selectedAppendices) && empty($letterSectionIds)) {
             $this->flashMessengerHelperService->addErrorMessage('No sections or appendices selected');
             return $this->redirect()->toUrl('/letter/preview?id=' . urlencode($letterInstanceId));
         }
@@ -453,11 +489,60 @@ class LetterGenerationController extends AbstractInternalController implements L
             ];
         }
 
+        // Build editable letter instance section data
+        $groupedSections = [];
+        foreach ($letterInstance['letterInstanceSections'] ?? [] as $instanceSection) {
+            if (!in_array($instanceSection['id'], $letterSectionIds)) {
+                continue;
+            }
+
+            $sectionVersion = $instanceSection['letterSectionVersion'] ?? [];
+            $variant = $sectionVersion['letterSectionVariant'] ?? [];
+            $letterSection = $variant['letterSection'] ?? ($sectionVersion['letterSection'] ?? []);
+
+            // Skip the __ISSUES__ placeholder section -- not editable
+            if (($letterSection['sectionKey'] ?? null) === '__ISSUES__') {
+                continue;
+            }
+
+            $name = $sectionVersion['name']
+                ?? $letterSection['name']
+                ?? $letterSection['sectionKey']
+                ?? null;
+
+            if (empty($name)) {
+                $name = 'Section #' . ($instanceSection['id'] ?? '');
+            }
+
+            $editedContent = $instanceSection['editedContent'] ?? null;
+            $defaultContent = $sectionVersion['defaultContent'] ?? null;
+
+            if (!empty($editedContent)) {
+                $effectiveContent = is_string($editedContent)
+                    ? $editedContent
+                    : json_encode($editedContent);
+            } elseif (!empty($defaultContent)) {
+                $effectiveContent = is_string($defaultContent)
+                    ? $defaultContent
+                    : json_encode($defaultContent);
+            } else {
+                $effectiveContent = json_encode(['blocks' => [], 'version' => '2.28.2']);
+            }
+
+            $groupedSections[] = [
+                'id' => $instanceSection['id'],
+                'name' => $name,
+                'content' => $effectiveContent,
+                'version' => $instanceSection['version'] ?? 1,
+            ];
+        }
+
         $view = new ViewModel([
             'letterInstanceId' => $letterInstanceId,
             'letterInstance' => $letterInstance,
             'groupedIssues' => $groupedIssues,
             'groupedAppendices' => $groupedAppendices,
+            'groupedSections' => $groupedSections,
         ]);
 
         $view->setTemplate('pages/letter/edit');
@@ -554,6 +639,50 @@ class LetterGenerationController extends AbstractInternalController implements L
 
         return $this->jsonSuccess([
             'appendixId' => (int) $body['appendixId'],
+            'message' => $result['messages'][0] ?? 'Saved successfully',
+            'version' => ($body['version'] + 1),
+        ]);
+    }
+
+    /**
+     * Save section content action - AJAX endpoint
+     *
+     * Accepts POST with JSON body: { sectionId, editedContent, version }
+     *
+     * @return Response
+     */
+    public function saveSectionContentAction()
+    {
+        if (!$this->getRequest()->isPost()) {
+            return $this->jsonError('Method not allowed', 405);
+        }
+
+        $body = json_decode($this->getRequest()->getContent(), true);
+
+        if (empty($body['sectionId']) || !isset($body['editedContent']) || empty($body['version'])) {
+            return $this->jsonError('Missing required fields: sectionId, editedContent, version');
+        }
+
+        $command = \Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceSection\UpdateContent::create([
+            'id' => (int) $body['sectionId'],
+            'editedContent' => is_string($body['editedContent'])
+                ? $body['editedContent']
+                : json_encode($body['editedContent']),
+            'version' => (int) $body['version'],
+        ]);
+
+        $response = $this->handleCommand($command);
+
+        if (!$response->isOk()) {
+            $messages = $response->getResult()['messages'] ?? [];
+            $errorMessage = is_array($messages) ? implode(', ', $messages) : $messages;
+            return $this->jsonError('Failed to save: ' . $errorMessage);
+        }
+
+        $result = $response->getResult();
+
+        return $this->jsonSuccess([
+            'sectionId' => (int) $body['sectionId'],
             'message' => $result['messages'][0] ?? 'Saved successfully',
             'version' => ($body['version'] + 1),
         ]);

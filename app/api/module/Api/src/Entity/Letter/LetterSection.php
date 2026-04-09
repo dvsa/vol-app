@@ -332,10 +332,12 @@ class LetterSection extends AbstractLetterSection
     /**
      * Find the best matching variant for the given context.
      *
-     * Iterates through non-default variants first (most specific matches).
-     * Falls back to the default variant if no conditioned variant matches.
+     * Returns the first non-default variant whose conditions all match the context.
+     * Priority is determined by the variant's displayOrder (ASC) -- admins control
+     * which variant wins when multiple could match by setting display order.
+     * Falls back to the default variant (all NULL conditions) if no conditioned variant matches.
      *
-     * @param array $context Keys: goodsOrPsv, isVariation, isNi, selectedChoiceIds
+     * @param array $context Keys: goodsOrPsv, isVariation, isNi, organisationType, selectedChoiceIds
      * @return LetterSectionVariant|null
      */
     public function getVariantForContext(array $context): ?LetterSectionVariant

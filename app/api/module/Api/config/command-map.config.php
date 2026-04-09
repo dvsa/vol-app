@@ -1364,6 +1364,7 @@ return [
     TransferCommand\Letter\LetterInstance\Generate::class => CommandHandler\Letter\LetterInstance\Generate::class,
     TransferCommand\Letter\LetterInstance\PrepareToSend::class => CommandHandler\Letter\LetterInstance\PrepareToSend::class,
     TransferCommand\Letter\LetterInstanceIssue\UpdateContent::class => CommandHandler\Letter\LetterInstanceIssue\UpdateContent::class,
+    TransferCommand\Letter\LetterInstanceSection\UpdateContent::class => CommandHandler\Letter\LetterInstanceSection\UpdateContent::class,
     TransferCommand\Letter\LetterInstanceAppendix\UpdateContent::class => CommandHandler\Letter\LetterInstanceAppendix\UpdateContent::class,
     TransferCommand\Letter\MasterTemplate\Create::class => CommandHandler\Letter\MasterTemplate\Create::class,
     TransferCommand\Letter\MasterTemplate\Update::class => CommandHandler\Letter\MasterTemplate\Update::class,

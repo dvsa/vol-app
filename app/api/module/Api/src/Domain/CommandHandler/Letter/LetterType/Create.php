@@ -53,12 +53,14 @@ final class Create extends AbstractCommandHandler
 
         // Add sections if provided
         if ($command->getSections() !== null) {
+            $requiredSections = $command->getSectionsRequired() ?? [];
             $displayOrder = 0;
             foreach ($command->getSections() as $sectionId) {
                 $letterSection = $this->getRepo('LetterSection')->fetchById($sectionId);
                 $lts = new \Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection();
                 $lts->setLetterSection($letterSection);
                 $lts->setDisplayOrder($displayOrder++);
+                $lts->setIsRequired(in_array($sectionId, $requiredSections));
                 $letterType->addLetterTypeSection($lts);
             }
         }

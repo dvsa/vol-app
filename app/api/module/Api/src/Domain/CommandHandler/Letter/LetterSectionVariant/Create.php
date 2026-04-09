@@ -40,8 +40,9 @@ final class Create extends AbstractCommandHandler
             $sameChoice = ($existing->getLetterChoice()?->getId() ?? null) === ($command->getLetterChoice() ? (int) $command->getLetterChoice() : null);
 
             if ($sameGoodsOrPsv && $sameIsVariation && $sameIsNi && $sameOrgType && $sameChoice) {
-                $this->result->addMessage('A variant with these exact conditions already exists');
-                return $this->result;
+                throw new \Dvsa\Olcs\Api\Domain\Exception\BadRequestException(
+                    'A variant with these exact conditions already exists'
+                );
             }
         }
 

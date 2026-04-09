@@ -834,7 +834,6 @@ return [
             Repository\LetterInstanceTodo::class => RepositoryFactory::class,
             Repository\LetterInstanceAppendix::class => RepositoryFactory::class,
             Repository\LetterChoice::class => RepositoryFactory::class,
-            Repository\LetterChoiceVersion::class => RepositoryFactory::class,
             Repository\LetterSectionVariant::class => RepositoryFactory::class
         ],
         'aliases' => [
@@ -879,7 +878,6 @@ return [
             'LetterInstanceTodo' => Repository\LetterInstanceTodo::class,
             'LetterInstanceAppendix' => Repository\LetterInstanceAppendix::class,
             'LetterChoice' => Repository\LetterChoice::class,
-            'LetterChoiceVersion' => Repository\LetterChoiceVersion::class,
             'LetterSectionVariant' => Repository\LetterSectionVariant::class,
         ],
     ],

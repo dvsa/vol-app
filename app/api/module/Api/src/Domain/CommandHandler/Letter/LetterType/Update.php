@@ -51,12 +51,14 @@ final class Update extends AbstractCommandHandler
             // Flush removals so DELETEs execute before INSERTs (composite PK)
             $this->getRepo()->flushAll();
 
+            $requiredSections = $command->getSectionsRequired() ?? [];
             $displayOrder = 0;
             foreach ($command->getSections() as $sectionId) {
                 $letterSection = $this->getRepo('LetterSection')->fetchById($sectionId);
                 $lts = new \Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection();
                 $lts->setLetterSection($letterSection);
                 $lts->setDisplayOrder($displayOrder++);
+                $lts->setIsRequired(in_array($sectionId, $requiredSections));
                 $letterType->addLetterTypeSection($lts);
             }
         }

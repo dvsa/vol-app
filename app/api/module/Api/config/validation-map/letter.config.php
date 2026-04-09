@@ -67,6 +67,9 @@ return [
     // Letter Instance Issue
     CommandHandler\Letter\LetterInstanceIssue\UpdateContent::class => IsInternalUser::class,
 
+    // Letter Instance Section
+    CommandHandler\Letter\LetterInstanceSection\UpdateContent::class => IsInternalUser::class,
+
     // Letter Instance Appendix
     CommandHandler\Letter\LetterInstanceAppendix\UpdateContent::class => IsInternalUser::class,
 
