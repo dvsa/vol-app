@@ -14,8 +14,6 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\AbstractUndertakingsController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use LmcRbacMvc\Service\AuthorizationService;
-use Dvsa\Olcs\Transfer\Query\Licence\TransportManagers;
-use Exception;
 
 /**
  * External Variation Undertakings Controller
@@ -96,23 +94,7 @@ class UndertakingsController extends AbstractUndertakingsController
 
         $fieldset->get('summaryDownload')->setAttribute('value', $summaryDownload);
 
-        $shouldHideNoTmConfirmation = ($applicationData['applicationCompletion']['transportManagersStatus'] ?? null) !== RefData::VARIATION_STATUS_UPDATED;
-
-        if (!$shouldHideNoTmConfirmation) {
-            $query = TransportManagers::create([
-                'id' => $applicationData['licence']['id'] ?? null
-            ]);
-
-            $response = $this->handleQuery($query);
-
-            if (!$response->isOk()) {
-                throw new Exception('LicenceTransportManagers query returned non-OK (' . $response->getStatusCode() . ') -- ' . $response->getBody());
-            }
-
-            $shouldHideNoTmConfirmation = !empty($response->getResult()['tmLicences'] ?? []);
-        }
-
-        if ($shouldHideNoTmConfirmation) {
+        if (!$applicationData['showPeriodOfGraceQuestion']) {
             $fieldset->remove('noTmConfirmation');
 
             $fieldsetFilter = $form->getInputFilter()->get('declarationsAndUndertakings');

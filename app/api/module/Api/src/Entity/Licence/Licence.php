@@ -1709,4 +1709,9 @@ class Licence extends AbstractLicence implements ContextProviderInterface, Organ
 
         return null;
     }
+
+    public function hasTransportManager(): bool
+    {
+        return !$this->tmLicences->isEmpty();
+    }
 }
