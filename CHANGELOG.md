@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.12.0](https://github.com/dvsa/olcs-transfer/compare/v8.11.0...v8.12.0) (2026-04-09)
+
+
+### Features
+
+* vol-7114 add DTOs for section variants, letter choices and generation ([#181](https://github.com/dvsa/olcs-transfer/issues/181)) ([b7f8464](https://github.com/dvsa/olcs-transfer/commit/b7f8464ae840a808b975f84a2e304a9c2cfe06b0))
+
 ## [8.11.0](https://github.com/dvsa/olcs-transfer/compare/v8.10.0...v8.11.0) (2026-03-23)
 
 
