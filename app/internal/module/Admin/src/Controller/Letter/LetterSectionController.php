@@ -89,6 +89,7 @@ class LetterSectionController extends AbstractInternalController implements Left
     /**
      * Detail page for a letter section - shows metadata, default content, variants, and version history
      */
+    #[\Override]
     public function detailsAction()
     {
         $id = $this->params('id');
