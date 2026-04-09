@@ -64,6 +64,12 @@ final class Generate extends AbstractCommand
      * @var array
      * @Transfer\Optional
      */
+    protected $selectedChoices;
+
+    /**
+     * @var array
+     * @Transfer\Optional
+     */
     protected $additionalData;
 
     // Getter removed temporarily - will be added back in future tickets
@@ -91,6 +97,14 @@ final class Generate extends AbstractCommand
     // {
     //     return $this->selectedTodos;
     // }
+
+    /**
+     * @return array
+     */
+    public function getSelectedChoices()
+    {
+        return $this->selectedChoices;
+    }
 
     /**
      * @return array

@@ -56,6 +56,18 @@ final class Create extends AbstractCommand
     protected $appendices;
 
     /**
+     * @var array
+     * @Transfer\Optional
+     */
+    protected $choices;
+
+    /**
+     * @var array
+     * @Transfer\Optional
+     */
+    protected $sectionsRequired;
+
+    /**
      * @return string
      */
     public function getName()
@@ -93,6 +105,22 @@ final class Create extends AbstractCommand
     public function getAppendices()
     {
         return $this->appendices;
+    }
+
+    /**
+     * @return array
+     */
+    public function getChoices()
+    {
+        return $this->choices;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSectionsRequired()
+    {
+        return $this->sectionsRequired;
     }
 
     /**
