@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.13.0](https://github.com/dvsa/olcs-transfer/compare/v8.12.0...v8.13.0) (2026-04-09)
+
+
+### Features
+
+* vol 7114 dynamic wording ([#183](https://github.com/dvsa/olcs-transfer/issues/183)) ([027b3d3](https://github.com/dvsa/olcs-transfer/commit/027b3d3874e2e2bd106d6de4d97433a4dc15b7d7))
+
 ## [8.12.0](https://github.com/dvsa/olcs-transfer/compare/v8.11.0...v8.12.0) (2026-04-09)
 
 
