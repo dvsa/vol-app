@@ -7,14 +7,14 @@ module "iam_github_oidc_provider" {
   count = var.create_oidc_provider ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-provider"
-  version = "~> 5.24"
+  version = "~> 6.4"
 }
 
 module "iam_github_oidc_role" {
   count = var.create_oidc_role ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
-  version = "~> 5.24"
+  version = "~> 6.4"
 
   name = local.oidc_role_name
 
@@ -30,7 +30,7 @@ module "iam_github_oidc_readonly_role" {
   count = var.create_oidc_readonly_role ? 1 : 0
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
-  version = "~> 5.24"
+  version = "~> 6.4"
 
   name = local.oidc_readonly_role_name
 
