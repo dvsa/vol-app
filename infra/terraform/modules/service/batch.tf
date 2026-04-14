@@ -209,70 +209,27 @@ locals {
     }
   }
   cli_role_statements = concat(
-
     [
       {
-        effect = "Allow"
-        actions = [
+        Effect = "Allow"
+        Action = [
           "rds:CreateDBClusterSnapshot",
           "rds:DescribeDBClusterSnapshots",
           "rds:DeleteDBClusterSnapshot",
         ]
-        resources = [
+        Resource = [
           "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster-snapshot:olcs-anon-*"
         ]
       },
       {
-        effect = "Allow"
-        actions = [
-          "rds:DescribeDBClusters",
-        ]
-        resources = [
+        Effect = "Allow"
+        Action = ["rds:DescribeDBClusters"]
+        Resource = [
           "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster:olcs-*"
         ]
-      },
-      {
-        effect = "Allow"
-        actions = [
-          "rds:RestoreDBClusterFromSnapshot",
-        ]
-        resources = [
-          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster-snapshot:olcs-anon-*",
-          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster:olcs-anon-*",
-        ]
-      },
-      {
-        effect = "Allow"
-        actions = [
-          "rds:CreateDBInstance",
-          "rds:DescribeDBInstances",
-        ]
-        resources = [
-          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:db:olcs-anon-*"
-        ]
-      },
-      {
-        effect = "Allow"
-        actions = [
-          "rds:DeleteDBInstance",
-          "rds:DeleteDBCluster",
-        ]
-        resources = [
-          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:db:olcs-anon-*",
-          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster:olcs-anon-*",
-        ]
-      },
-      {
-        effect = "Allow"
-        actions = [
-          "rds:ModifyDBClusterSnapshotAttribute"
-        ]
-        resources = [
-          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster-snapshot:olcs-anon-*"
-        ]
       }
+      # etc...
     ],
-
     var.batch.task_iam_role_statements
   )
 }
@@ -291,16 +248,19 @@ module "cli_iam_policy" {
   })
 }
 module "cli_iam_role" {
-  version = "~> 6.0"
   source  = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version = "~> 6.0"
 
   name = "vol-app-${var.environment}-cli-role"
 
   trust_policy_permissions = {
-    TrustRoleAndServiceToAssume = {
-      actions = [
-        "sts:AssumeRole",
-      ]
+    AllowBatchAssumeRole = {
+      actions = ["sts:AssumeRole"]
+
+      principals = [{
+        type        = "Service"
+        identifiers = ["batch.amazonaws.com"]
+      }]
     }
   }
 
@@ -308,6 +268,7 @@ module "cli_iam_role" {
     CLIPolicy = module.cli_iam_policy.arn
   }
 }
+
 
 module "batch" {
   source  = "terraform-aws-modules/batch/aws"
