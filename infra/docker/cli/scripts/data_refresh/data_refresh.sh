@@ -23,7 +23,6 @@ function slack_send() {
 function reset_service_password() {
     local platformEnv="$1"
     echo "Resetting service passwords for OLCSDB in $platformEnv..."
-    chmod +x /mnt/data/scripts/data_refresh/resetServicePassword.sh
     /mnt/data/scripts/data_refresh/resetServicePassword.sh "$platformEnv"
 }
 
