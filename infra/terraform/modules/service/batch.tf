@@ -209,27 +209,70 @@ locals {
     }
   }
   cli_role_statements = concat(
+
     [
       {
-        Effect = "Allow"
-        Action = [
+        effect = "Allow"
+        actions = [
           "rds:CreateDBClusterSnapshot",
           "rds:DescribeDBClusterSnapshots",
           "rds:DeleteDBClusterSnapshot",
         ]
-        Resource = [
+        resources = [
           "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster-snapshot:olcs-anon-*"
         ]
       },
       {
-        Effect = "Allow"
-        Action = ["rds:DescribeDBClusters"]
-        Resource = [
+        effect = "Allow"
+        actions = [
+          "rds:DescribeDBClusters",
+        ]
+        resources = [
           "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster:olcs-*"
         ]
+      },
+      {
+        effect = "Allow"
+        actions = [
+          "rds:RestoreDBClusterFromSnapshot",
+        ]
+        resources = [
+          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster-snapshot:olcs-anon-*",
+          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster:olcs-anon-*",
+        ]
+      },
+      {
+        effect = "Allow"
+        actions = [
+          "rds:CreateDBInstance",
+          "rds:DescribeDBInstances",
+        ]
+        resources = [
+          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:db:olcs-anon-*"
+        ]
+      },
+      {
+        effect = "Allow"
+        actions = [
+          "rds:DeleteDBInstance",
+          "rds:DeleteDBCluster",
+        ]
+        resources = [
+          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:db:olcs-anon-*",
+          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster:olcs-anon-*",
+        ]
+      },
+      {
+        effect = "Allow"
+        actions = [
+          "rds:ModifyDBClusterSnapshotAttribute"
+        ]
+        resources = [
+          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster-snapshot:olcs-anon-*"
+        ]
       }
-      # etc...
     ],
+
     var.batch.task_iam_role_statements
   )
 }
