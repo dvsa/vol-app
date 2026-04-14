@@ -78,6 +78,66 @@ locals {
         "arn:aws:s3:::devapp-vol-content/*"
       ]
     },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:CreateDBClusterSnapshot",
+        "rds:DescribeDBClusterSnapshots",
+        "rds:DeleteDBClusterSnapshot",
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:DescribeDBClusters",
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:RestoreDBClusterFromSnapshot",
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:CreateDBInstance",
+        "rds:DescribeDBInstances",
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:DeleteDBInstance",
+        "rds:DeleteDBCluster",
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:ModifyDBClusterSnapshotAttribute"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*"
+      ]
+    }
   ]
 }
 
