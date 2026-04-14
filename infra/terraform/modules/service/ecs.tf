@@ -288,9 +288,9 @@ module "ecs_service" {
         ] : []
       )
 
-      readonly_root_filesystem = false
+      readonlyRootFilesystem = false
 
-      memory_reservation = 100
+      memoryReservation = 100
     }
   }
   load_balancer = merge(
