@@ -248,6 +248,9 @@ module "ecs_service" {
       memory    = try(var.services[each.key].task_memory_limit, var.services[each.key].memory)
       essential = true
       image     = "${var.services[each.key].repository}:${var.services[each.key].version}"
+
+      cloudwatch_log_group_retention_in_days = var.log_retention_days
+
       port_mappings = [
         {
           name          = "http"

@@ -304,5 +304,5 @@ resource "aws_cloudwatch_log_group" "this" {
   for_each = { for job in var.batch.jobs : job.name => job }
 
   name              = "/aws/batch/vol-app-${var.environment}-${each.value.name}"
-  retention_in_days = 1
+  retention_in_days = var.batch_log_retention_days
 }
