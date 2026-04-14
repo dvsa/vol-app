@@ -212,62 +212,62 @@ locals {
 
     [
       {
-        effect = "Allow"
-        actions = [
+        Effect = "Allow"
+        Action = [
           "rds:CreateDBClusterSnapshot",
           "rds:DescribeDBClusterSnapshots",
           "rds:DeleteDBClusterSnapshot",
         ]
-        resources = [
+        Resource = [
           "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster-snapshot:olcs-anon-*"
         ]
       },
       {
-        effect = "Allow"
-        actions = [
+        Effect = "Allow"
+        Action = [
           "rds:DescribeDBClusters",
         ]
-        resources = [
+        Resource = [
           "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster:olcs-*"
         ]
       },
       {
-        effect = "Allow"
-        actions = [
+        Effect = "Allow"
+        Action = [
           "rds:RestoreDBClusterFromSnapshot",
         ]
-        resources = [
+        Resource = [
           "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster-snapshot:olcs-anon-*",
           "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster:olcs-anon-*",
         ]
       },
       {
-        effect = "Allow"
-        actions = [
+        Effect = "Allow"
+        Action = [
           "rds:CreateDBInstance",
           "rds:DescribeDBInstances",
         ]
-        resources = [
+        Resource = [
           "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:db:olcs-anon-*"
         ]
       },
       {
-        effect = "Allow"
-        actions = [
+        Effect = "Allow"
+        Action = [
           "rds:DeleteDBInstance",
           "rds:DeleteDBCluster",
         ]
-        resources = [
+        Resource = [
           "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:db:olcs-anon-*",
           "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster:olcs-anon-*",
         ]
       },
       {
-        effect = "Allow"
-        actions = [
+        Effect = "Allow"
+        Action = [
           "rds:ModifyDBClusterSnapshotAttribute"
         ]
-        resources = [
+        Resource = [
           "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster-snapshot:olcs-anon-*"
         ]
       }
