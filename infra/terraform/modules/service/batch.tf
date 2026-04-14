@@ -165,7 +165,7 @@ locals {
         },
       ],
 
-      executionRoleArn = module.cli_iam_role.arn
+      executionRoleArn = module.ecs_service["api"].task_exec_iam_role_arn
       jobRoleArn       = module.ecs_service["api"].tasks_iam_role_arn
 
       logConfiguration = {
@@ -207,105 +207,6 @@ locals {
         "SchedulingPriorityOverride" : 1
       })
     }
-  }
-  cli_role_statements = concat(
-
-    [
-      {
-        effect = "Allow"
-        actions = [
-          "rds:CreateDBClusterSnapshot",
-          "rds:DescribeDBClusterSnapshots",
-          "rds:DeleteDBClusterSnapshot",
-        ]
-        resources = [
-          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster-snapshot:olcs-anon-*"
-        ]
-      },
-      {
-        effect = "Allow"
-        actions = [
-          "rds:DescribeDBClusters",
-        ]
-        resources = [
-          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster:olcs-*"
-        ]
-      },
-      {
-        effect = "Allow"
-        actions = [
-          "rds:RestoreDBClusterFromSnapshot",
-        ]
-        resources = [
-          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster-snapshot:olcs-anon-*",
-          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster:olcs-anon-*",
-        ]
-      },
-      {
-        effect = "Allow"
-        actions = [
-          "rds:CreateDBInstance",
-          "rds:DescribeDBInstances",
-        ]
-        resources = [
-          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:db:olcs-anon-*"
-        ]
-      },
-      {
-        effect = "Allow"
-        actions = [
-          "rds:DeleteDBInstance",
-          "rds:DeleteDBCluster",
-        ]
-        resources = [
-          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:db:olcs-anon-*",
-          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster:olcs-anon-*",
-        ]
-      },
-      {
-        effect = "Allow"
-        actions = [
-          "rds:ModifyDBClusterSnapshotAttribute"
-        ]
-        resources = [
-          "arn:aws:rds:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster-snapshot:olcs-anon-*"
-        ]
-      }
-    ],
-
-    var.batch.task_iam_role_statements
-  )
-}
-
-module "cli_iam_policy" {
-  version = "~> 5.6"
-  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-
-  name        = "vol-app-${var.environment}-cli"
-  path        = "/"
-  description = "Policy for CLI batch jobs"
-
-  policy = jsonencode({
-    Version   = "2012-10-17"
-    Statement = local.cli_role_statements
-  })
-}
-module "cli_iam_role" {
-  version = "~> 6.0"
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
-
-  name = "vol-app-${var.environment}-cli-role"
-
-  trust_policy_permissions = {
-    TrustRoleAndServiceToAssume = {
-      actions = [
-        "sts:AssumeRole",
-      ]
-    }
-  }
-
-  policies = {
-    CLIPolicy = module.cli_iam_policy.arn
   }
 }
 
