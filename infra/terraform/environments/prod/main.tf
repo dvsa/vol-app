@@ -179,6 +179,9 @@ module "service" {
 
   elasticache_url = "tcp://cache.app.olcs.dvsacloud.uk:6379"
 
+  log_retention_days       = 3653
+  batch_log_retention_days = 3653
+
   services = {
     "api" = {
       cpu             = 2048

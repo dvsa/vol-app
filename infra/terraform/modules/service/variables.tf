@@ -32,6 +32,19 @@ variable "elasticache_url" {
   type        = string
   description = "The URL of the Elasticache cluster"
 }
+
+variable "log_retention_days" {
+  type        = number
+  description = "CloudWatch Logs retention in days for the ECS service container log groups (api/internal/selfserve/pdf-converter). Must be one of the CloudWatch enum values: 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1096, 1827, 2192, 2557, 2922, 3288, 3653."
+  default     = 14
+}
+
+variable "batch_log_retention_days" {
+  type        = number
+  description = "CloudWatch Logs retention in days for the per-batch-job log groups under /aws/batch/vol-app-<env>-<jobname>. Must be a CloudWatch enum value as above."
+  default     = 1
+}
+
 variable "services" {
   type = map(object({
     version    = string
