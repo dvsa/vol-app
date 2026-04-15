@@ -1,33 +1,23 @@
 <?php
 
-/**
- * Language Link
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
+declare(strict_types=1);
 
 namespace Common\View\Helper;
 
-use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\Helper\AbstractHelper;
 use Common\Preference\Language;
 
-/**
- * Language Link
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class LanguageLink extends AbstractHelper
 {
-    public function __construct(private Language $languagePref)
+    public function __construct(private readonly Language $languagePref)
     {
     }
 
-    public function __invoke()
+    public function __invoke(): string
     {
         if ($this->languagePref->getPreference() === Language::OPTION_CY) {
-            return '<a class="govuk-footer__link" href="?lang=en">English</a>';
+            return '<a class="govuk-footer__link" href="?lang=en" hreflang="en">English</a>';
         }
-        return '<a class="govuk-footer__link" href="?lang=cy">Cymraeg</a>';
+        return '<a class="govuk-footer__link" href="?lang=cy" hreflang="cy">Cymraeg</a>';
     }
 }
