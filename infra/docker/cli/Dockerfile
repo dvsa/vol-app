@@ -18,8 +18,8 @@ RUN apk add --no-cache icu-dev libzip-dev cups-client poppler-utils bash \
   && docker-php-ext-install pdo_mysql opcache intl zip
 
 RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq \
-  && python3 -m venv /opt/venv \
-  && /opt/venv/bin/pip install --no-cache-dir awscli boto3 
+  && python3 -m venv /opt/awscli \
+  && /opt/awscli/bin/pip install --no-cache-dir awscli boto3
   
 # Install fonts for document rendering.
 # LibreOffice auto-substitutes these when documents request MS fonts:
