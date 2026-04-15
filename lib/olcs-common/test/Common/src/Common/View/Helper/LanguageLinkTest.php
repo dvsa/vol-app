@@ -5,18 +5,14 @@ declare(strict_types=1);
 namespace CommonTest\View\Helper;
 
 use Common\Preference\Language;
-use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\View\Helper\LanguageLink;
 
 final class LanguageLinkTest extends MockeryTestCase
 {
-    public $languagePref;
-    /**
-     * @var LanguageLink
-     */
-    protected $viewHelper;
+    private Language&m\MockInterface $languagePref;
+    private LanguageLink $viewHelper;
 
     #[\Override]
     protected function setUp(): void
@@ -25,25 +21,21 @@ final class LanguageLinkTest extends MockeryTestCase
         $this->languagePref = $languagePref;
 
         $this->viewHelper = new LanguageLink($languagePref);
-
-        $sm = new ServiceManager();
     }
 
     public function testInvoke(): void
     {
-        $this->languagePref->shouldReceive('getPreference')
+        $this->languagePref->expects('getPreference')
             ->andReturn(Language::OPTION_CY);
 
-        $this->assertEquals('<a class="govuk-footer__link" href="?lang=en">English</a>', $this->viewHelper->__invoke());
+        $this->assertEquals('<a class="govuk-footer__link" href="?lang=en" hreflang="en">English</a>', $this->viewHelper->__invoke());
     }
 
     public function testInvokeEnglish(): void
     {
-        $this->languagePref->shouldReceive('getPreference')
+        $this->languagePref->expects('getPreference')
             ->andReturn(Language::OPTION_EN);
 
-        $helper = $this->viewHelper;
-
-        $this->assertEquals('<a class="govuk-footer__link" href="?lang=cy">Cymraeg</a>', $helper());
+        $this->assertEquals('<a class="govuk-footer__link" href="?lang=cy" hreflang="cy">Cymraeg</a>', $this->viewHelper->__invoke());
     }
 }
