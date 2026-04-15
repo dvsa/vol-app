@@ -34,18 +34,16 @@
                     <?php echo $this->formElement($form->get('submit')); ?>
                 </div>
                 <div>
-                    <p><?php echo $this->escapeHtml($this->translate('help-sign-in')); ?></p>
+                    <h2 class="govuk-heading-m"><?php echo $this->escapeHtml($this->translate('help-sign-in')); ?></h2>
                     <div class="govuk-inset-text">
                         <ul class="govuk-list">
                             <li>
-                                <a class="govuk-link" href="<?php echo $this->url('user-forgot-username'); ?>"
-                                   aria-label="<?php echo $this->escapeHtml($this->translate('auth.forgot-username.label.audio')); ?>">
+                                <a class="govuk-link" href="<?php echo $this->url('user-forgot-username'); ?>">
                                     <?php echo $this->escapeHtml($this->translate('auth.forgot-username.label')); ?>
                                 </a>
                             </li>
                             <li>
-                                <a class="govuk-link" href="<?php echo $this->url('auth/forgot-password'); ?>"
-                                   aria-label="<?php echo $this->escapeHtml($this->translate('auth.forgot-password.label.audio')); ?>">
+                                <a class="govuk-link" href="<?php echo $this->url('auth/forgot-password'); ?>">
                                     <?php echo $this->escapeHtml($this->translate('auth.forgot-password.label')); ?>
                                 </a>
                             </li>
