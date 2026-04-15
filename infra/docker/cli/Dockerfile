@@ -51,7 +51,7 @@ EXPOSE 8080
 
 FROM cli AS production
 
-#ADD ./api.tar.gz /var/www/html
+ADD ./api.tar.gz /var/www/html
 
 # Add bash scripts
 COPY ./scripts/ /mnt/data/scripts/
