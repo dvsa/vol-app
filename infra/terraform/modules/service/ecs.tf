@@ -248,10 +248,9 @@ module "ecs_service" {
       memory    = try(var.services[each.key].task_memory_limit, var.services[each.key].memory)
       essential = true
       image     = "${var.services[each.key].repository}:${var.services[each.key].version}"
-      port_mappings = [
+      portMappings = [
         {
           name          = "http"
-          hostPort      = 8080
           containerPort = 8080
           protocol      = "tcp"
         }
@@ -289,9 +288,9 @@ module "ecs_service" {
         ] : []
       )
 
-      readonly_root_filesystem = false
+      readonlyRootFilesystem = false
 
-      memory_reservation = 100
+      memoryReservation = 100
     }
   }
   load_balancer = merge(
