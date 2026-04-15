@@ -73,9 +73,9 @@ RUN chown -R root:www-data /var/www/html \
   # Create olcsdump and anondump directory.
 RUN mkdir -p /mnt/data/olcsdump /mnt/data/anondump\
   # Set directory ownership.
-  && chown root:www-data /mnt/data/olcsdump /mnt/data/scripts/data_refresh /mnt/data/anondump \
+  && chown root:www-data /mnt/data/olcsdump /mnt/data/scripts/ /mnt/data/anondump \
   # Set directory permissions.
-  && chmod 775 /mnt/data/olcsdump /mnt/data/scripts/data_refresh /mnt/data/anondump \
+  && chmod 775 /mnt/data/olcsdump /mnt/data/scripts/ /mnt/data/anondump \
   # Ensure scripts are executable.
   && chmod +x /mnt/data/scripts/*.sh
   
