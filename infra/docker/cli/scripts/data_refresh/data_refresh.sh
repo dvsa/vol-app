@@ -5,8 +5,8 @@ set -euo pipefail
 VALID_PLATFORM_ENVS=("dev" "reg" "da" "qa" "demo" "prodsupp")
 VALID_REGIONS=("eu-west-1" "eu-west-2")
 
-platformEnv="${1:-${VALID_PLATFORM_ENVS[0]}}"
-Region="${2:-${VALID_REGIONS[0]}}"          
+platformEnv="${VALID_PLATFORM_ENVS[0]}"   
+Region="${VALID_REGIONS[0]}"             
 
 SLACK_CHAN="#platform_alerts"
 SLACK_FAIL="#FF9FA1"
