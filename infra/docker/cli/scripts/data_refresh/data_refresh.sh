@@ -6,7 +6,7 @@ VALID_PLATFORM_ENVS=("dev" "reg" "da" "qa" "demo" "prodsupp")
 VALID_REGIONS=("eu-west-1" "eu-west-2")
 
 platformEnv="${VALID_PLATFORM_ENVS[0]}"   
-Region="${VALID_REGIONS[0]}"              
+Region="${VALID_REGIONS[0]}"             
 
 SLACK_CHAN="#platform_alerts"
 SLACK_FAIL="#FF9FA1"
@@ -22,23 +22,23 @@ function slack_send() {
 
 function reset_service_password() {
     local platformEnv="$1"
+    local Region="$2"
     echo "Resetting service passwords for OLCSDB in $platformEnv..."
-    chmod +x infra/docker/cli/scripts/data_refresh/resetServicePassword.sh
-    /mnt/data/scripts/resetServicePassword.sh "$platformEnv"
+    /mnt/data/scripts/data_refresh/resetServicePassword.sh "$platformEnv" "$Region"
 }
 
 function generate_user_pool_csv() {
     local platformEnv="$1"
     local Region="$2"
     echo "Generating new user pool CSV for $platformEnv ($Region)..."
-    /mnt/data/scripts/generate_user_pool_csv.sh "$platformEnv" "$Region"
+    /mnt/data/scripts/data_refresh/generate_user_pool_csv.sh "$platformEnv" "$Region"
 }
 
 function load_user_pool() {
     local platformEnv="$1"
     local Region="$2"
     echo "Loading users into user pool for $platformEnv ($Region)..."
-    /mnt/data/scripts/load_user_pool.sh "$platformEnv" "$Region"
+    /mnt/data/scripts/data_refresh/load_user_pool.sh "$platformEnv" "$Region"
 }
 
 trap 'slack_send "$SLACK_CHAN" "$SLACK_FAIL" "The $platformEnv data refresh pipeline has failed"; rm -rf "$WORK_DIR"; exit 1' ERR

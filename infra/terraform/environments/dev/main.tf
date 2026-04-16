@@ -674,7 +674,7 @@ module "service" {
       },
       {
         name     = "data-refresh",
-        commands = ["/mnt/data/scripts/data_refresh/data_refresh.sh"],
+        commands = ["/mnt/data/scripts/data_refresh/data_refresh.sh", "dev", "eu-west-1"],
         type     = "scripts"
       },
     ]
