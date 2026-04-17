@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import discoveryRouter from "./routes/discovery";
 import authorizeRouter from "./routes/authorize";
 import tokenRouter from "./routes/token";
 import userinfoRouter from "./routes/userinfo";
@@ -24,7 +23,6 @@ export function createApp(): express.Application {
 
   // Routes
   app.use(wellKnownRouter);
-  app.use(discoveryRouter);
   app.use(authorizeRouter);
   app.use(tokenRouter);
   app.use(userinfoRouter);

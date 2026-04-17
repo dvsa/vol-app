@@ -1,3 +1,5 @@
+import escapeHtml from "escape-html";
+
 export function renderErrorPage(title: string, errors: string[]): string {
   return `
 <!DOCTYPE html>
@@ -41,9 +43,9 @@ export function renderErrorPage(title: string, errors: string[]): string {
 </head>
 <body>
     <div class="error-container">
-        <h1>${title}</h1>
+        <h1>${escapeHtml(title)}</h1>
         <ul>
-            ${errors.map((error) => `<li>${error}</li>`).join("")}
+            ${errors.map((error) => `<li>${escapeHtml(error)}</li>`).join("")}
         </ul>
         <p>This is a mock service. In permissive mode, these errors would be auto-fixed.</p>
     </div>

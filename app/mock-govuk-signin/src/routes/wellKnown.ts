@@ -62,12 +62,33 @@ router.get("/.well-known/openid-configuration", (req, res) => {
     token_endpoint: `${config.issuerUrl}/token`,
     userinfo_endpoint: `${config.issuerUrl}/userinfo`,
     jwks_uri: `${config.issuerUrl}/jwks`,
+    scopes_supported: ["openid", "email", "phone"],
     response_types_supported: ["code"],
+    response_modes_supported: ["query"],
+    grant_types_supported: ["authorization_code"],
     subject_types_supported: ["public"],
-    id_token_signing_alg_values_supported: ["RS256"],
-    scopes_supported: ["openid", "email", "profile"],
+    id_token_signing_alg_values_supported: [config.jwtAlgorithm],
     token_endpoint_auth_methods_supported: ["client_secret_basic", "client_secret_post"],
-    claims_supported: ["sub", "email", "email_verified", "name", "given_name", "family_name"],
+    claims_supported: [
+      "sub",
+      "iss",
+      "aud",
+      "exp",
+      "iat",
+      "nonce",
+      "email",
+      "email_verified",
+      "phone_number",
+      "phone_number_verified",
+      "https://vocab.account.gov.uk/v1/coreIdentityJWT",
+    ],
+
+    _mock_service: {
+      version: "1.0.0",
+      validation_mode: config.validationMode,
+      environment: config.environment,
+      info_endpoint: `${config.issuerUrl}/mock-info`,
+    },
   };
 
   res.json(discovery);
