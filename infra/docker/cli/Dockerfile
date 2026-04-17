@@ -81,8 +81,8 @@ RUN mkdir -p /mnt/data/olcsdump /mnt/data/anondump\
   # Ensure scripts are executable.
   && chmod +x /mnt/data/scripts/*.sh
   
-RUN chmod +x /mnt/data/scripts/data_refresh/*.py \
-  && ln -s /mnt/data/scripts/data_refresh/*.py /usr/local/bin/
+RUN chmod +x /mnt/data/scripts/*.py \
+  && ln -s /mnt/data/scripts/*.py /usr/local/bin/ 
 
 USER www-data
 
