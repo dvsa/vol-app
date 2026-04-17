@@ -91,6 +91,11 @@ jobs:
           cache-from: type=gha,scope=gotenberg
           cache-to: type=gha,mode=max,scope=gotenberg
 
+      - name: Setup Trivy
+        uses: aquasecurity/setup-trivy@v0.2.6
+        with:
+          version: v0.54.1
+
       - name: Scan image with Trivy
         uses: aquasecurity/trivy-action@v0.33.1
         continue-on-error: true
@@ -100,6 +105,7 @@ jobs:
           output: "trivy-results.sarif"
           severity: "MEDIUM,HIGH,CRITICAL"
           exit-code: "1"
+          skip-setup-trivy: true
 
       - name: Upload Trivy results to GitHub Security
         if: always() && success() || failure()
