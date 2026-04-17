@@ -87,4 +87,3 @@ resource "aws_signer_signing_profile" "this" {
 
   name_prefix = "vol_app_"
 }
-
