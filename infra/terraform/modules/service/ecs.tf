@@ -189,6 +189,8 @@ module "ecs_cluster" {
 
   create_task_exec_iam_role = true
 
+  task_exec_iam_statements = var.services[each.key].task_exec_iam_role_statements
+
   cluster_settings = [
     {
       name  = "containerInsights"
