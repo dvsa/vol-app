@@ -43,6 +43,11 @@ variable "services" {
       actions   = list(string)
       resources = list(string)
     }))
+    task_exec_iam_role_statements = optional(list(object({
+      effect    = string
+      actions   = list(string)
+      resources = list(string)
+    })), [])
     add_cdn_url_to_env          = optional(bool, false)
     set_custom_port             = optional(bool, false)
     enable_autoscaling_policies = optional(bool, true)
@@ -78,11 +83,6 @@ variable "batch" {
       actions   = list(string)
       resources = list(string)
     }))
-    task_exec_iam_role_statements = optional(list(object({
-      effect    = string
-      actions   = list(string)
-      resources = list(string)
-    })), [])
     jobs = list(object({
       name     = string
       type     = optional(string, "default")
