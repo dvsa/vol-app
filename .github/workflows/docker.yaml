@@ -93,11 +93,17 @@ jobs:
           cache-from: type=gha,scope=${{ inputs.project }}
           cache-to: type=gha,mode=max,scope=${{ inputs.project }}
 
+      - name: Setup Trivy
+        uses: aquasecurity/setup-trivy@v0.2.6
+        with:
+          version: v0.69.3
+
       - name: Scan
         uses: aquasecurity/trivy-action@v0.33.1
         with:
           image-ref: ${{ steps.build.outputs.imageid }}
           skip-dirs: /var/clamav
+          skip-setup-trivy: true
         env:
           TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
           TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db:1
