@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { config } from "../config";
-import { UserScenario, CoreIdentity, UserInfo, NamePart } from "../types";
+import { UserScenario, UserInfo, NamePart } from "../types";
 
 export class TokenService {
   private privateKey = config.jwtPrivateKey;
@@ -122,15 +122,8 @@ export class TokenService {
   createUserInfo(scenario: UserScenario, clientId: string, sub: string): UserInfo {
     const coreIdentityJWT = this.generateCoreIdentityJWT(scenario, clientId, sub);
 
-    // Decode the JWT to get the payload
-    const decoded = jwt.decode(coreIdentityJWT) as any;
-
     return {
       "https://vocab.account.gov.uk/v1/coreIdentityJWT": coreIdentityJWT,
-      "https://vocab.account.gov.uk/v1/coreIdentityJWT:decoded": {
-        vot: decoded.vot,
-        vc: decoded.vc,
-      },
     };
   }
 

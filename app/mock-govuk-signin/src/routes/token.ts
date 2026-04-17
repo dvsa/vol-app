@@ -51,13 +51,15 @@ router.post("/token", express.json(), express.urlencoded({ extended: true }), (r
 
   console.log(`🎫 Tokens issued for ${authCode.email}`);
 
-  // Return tokens
+  // Return tokens — echo the requested scope when present (real Sign In echoes
+  // the granted scope; the OAuth code-grant token request doesn't always carry
+  // one, so fall back to the universal minimum).
   res.json({
     access_token: accessToken,
     token_type: "Bearer",
     expires_in: 3600,
     id_token: idToken,
-    scope: "openid email",
+    scope: req.body.scope || "openid",
   });
 });
 

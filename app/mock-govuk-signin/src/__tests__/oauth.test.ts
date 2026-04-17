@@ -78,10 +78,13 @@ describe("OAuth Flow", () => {
       .set("Authorization", `Bearer ${tokenRes.body.access_token}`)
       .expect(200);
 
-    // Userinfo returns coreIdentityJWT
-    expect(userinfoRes.body["https://vocab.account.gov.uk/v1/coreIdentityJWT"]).toBeDefined();
-    expect(userinfoRes.body["https://vocab.account.gov.uk/v1/coreIdentityJWT:decoded"]).toBeDefined();
-    expect(userinfoRes.body["https://vocab.account.gov.uk/v1/coreIdentityJWT:decoded"].vot).toBe("P2");
+    // Userinfo returns the coreIdentityJWT only (consumers decode it themselves;
+    // the real GOV.UK Sign In API does not expose a pre-decoded variant).
+    const userinfoCoreJwt = userinfoRes.body["https://vocab.account.gov.uk/v1/coreIdentityJWT"];
+    expect(userinfoCoreJwt).toBeDefined();
+    expect(userinfoRes.body["https://vocab.account.gov.uk/v1/coreIdentityJWT:decoded"]).toBeUndefined();
+    const userinfoCoreDecoded = jwt.decode(userinfoCoreJwt) as any;
+    expect(userinfoCoreDecoded.vot).toBe("P2");
   });
 
   test("Failed login returns error", async () => {

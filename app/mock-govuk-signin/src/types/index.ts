@@ -43,22 +43,6 @@ export interface NamePart {
   value: string;
 }
 
-export interface CoreIdentity {
-  vot: string;
-  vc: {
-    credentialSubject: {
-      name: Array<{
-        validUntil: string | null;
-        nameParts: NamePart[];
-      }>;
-      birthDate: Array<{
-        value: string;
-      }>;
-    };
-  };
-}
-
 export interface UserInfo {
   "https://vocab.account.gov.uk/v1/coreIdentityJWT": string;
-  "https://vocab.account.gov.uk/v1/coreIdentityJWT:decoded": CoreIdentity;
 }
