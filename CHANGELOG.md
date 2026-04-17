@@ -1,5 +1,39 @@
 # Changelog
 
+## [7.3.0](https://github.com/dvsa/vol-app/compare/v7.2.0...v7.3.0) (2026-04-17)
+
+
+### Features
+
+* 7077 create custom cli job role ([#1386](https://github.com/dvsa/vol-app/issues/1386)) ([b6fe042](https://github.com/dvsa/vol-app/commit/b6fe0424f4d76ab32effa034a8d6bab9c8037a84))
+* added delete entry history for condition and undertaking for licence ([#1401](https://github.com/dvsa/vol-app/issues/1401)) ([30975ab](https://github.com/dvsa/vol-app/commit/30975ab2f005bf2aa686d424eafad84309aa199b))
+* bump functional tests ([#1392](https://github.com/dvsa/vol-app/issues/1392)) ([2ee6fe7](https://github.com/dvsa/vol-app/commit/2ee6fe72028fee23afe28415252c85d05601a31b))
+* bump vol-functional tests to 4.23.0 ([#1402](https://github.com/dvsa/vol-app/issues/1402)) ([f812dbd](https://github.com/dvsa/vol-app/commit/f812dbd8e4e769ee87b15696194b56702d322f39))
+* created new populate_anondb script ([#1382](https://github.com/dvsa/vol-app/issues/1382)) ([cbb08b6](https://github.com/dvsa/vol-app/commit/cbb08b6ce2944602ac1df6f27c5539885bac64f8))
+* edited bookmark snippet to new standard licence conditions ([#1378](https://github.com/dvsa/vol-app/issues/1378)) ([2d33f67](https://github.com/dvsa/vol-app/commit/2d33f67c6b4fc0ba9d61fee87ac00496c7d0886f))
+* vol 6979 si declaration formatting ([#1380](https://github.com/dvsa/vol-app/issues/1380)) ([e481416](https://github.com/dvsa/vol-app/commit/e481416785a6f181cf560bf4a533a9ea777bb93f))
+* vol 7030 update continuation declaration wording ([#1357](https://github.com/dvsa/vol-app/issues/1357)) ([2020ea5](https://github.com/dvsa/vol-app/commit/2020ea5ff87cff572d5e436802e55214d3350d6f))
+* vol 7114 dynamic wording ([#1391](https://github.com/dvsa/vol-app/issues/1391)) ([ee35eae](https://github.com/dvsa/vol-app/commit/ee35eae6363a184447fe4550f195e1716aea1922))
+
+
+### Bug Fixes
+
+* 7077 batch role ([#1395](https://github.com/dvsa/vol-app/issues/1395)) ([13f492f](https://github.com/dvsa/vol-app/commit/13f492fd5e242dad47e29ecfc612a3a87a43735b))
+* 7077 cli Dockerfile aws install ([#1384](https://github.com/dvsa/vol-app/issues/1384)) ([b5549b5](https://github.com/dvsa/vol-app/commit/b5549b5e5a5442af5f9d692f3983370eeebd50b4))
+* casing ([#1399](https://github.com/dvsa/vol-app/issues/1399)) ([0cfd7a4](https://github.com/dvsa/vol-app/commit/0cfd7a4599264407d2c09dd7ecba0e46afb41f80))
+* ecs issue ([71573fe](https://github.com/dvsa/vol-app/commit/71573fe9774d7ef47388ec32b440d0fa0503b12f))
+* new syntax ([71573fe](https://github.com/dvsa/vol-app/commit/71573fe9774d7ef47388ec32b440d0fa0503b12f))
+* readd hostport ([71573fe](https://github.com/dvsa/vol-app/commit/71573fe9774d7ef47388ec32b440d0fa0503b12f))
+* remove duplicate operating centre bullet from gb-sn continuation declaration ([#1390](https://github.com/dvsa/vol-app/issues/1390)) ([9359007](https://github.com/dvsa/vol-app/commit/93590071e1497991b7ac8978c2d0dbd281f0b39e))
+* remove host port ([71573fe](https://github.com/dvsa/vol-app/commit/71573fe9774d7ef47388ec32b440d0fa0503b12f))
+* removing custom role ([71573fe](https://github.com/dvsa/vol-app/commit/71573fe9774d7ef47388ec32b440d0fa0503b12f))
+* syntax ([71573fe](https://github.com/dvsa/vol-app/commit/71573fe9774d7ef47388ec32b440d0fa0503b12f))
+* syntax ([71573fe](https://github.com/dvsa/vol-app/commit/71573fe9774d7ef47388ec32b440d0fa0503b12f))
+* trivy setup bug fix attempt ([#1409](https://github.com/dvsa/vol-app/issues/1409)) ([3809249](https://github.com/dvsa/vol-app/commit/38092495935acdce9fc4a1550f11a147ba809fda))
+* update docker.yaml to avoid trivy setup issue ([#1404](https://github.com/dvsa/vol-app/issues/1404)) ([220d067](https://github.com/dvsa/vol-app/commit/220d0671657511dab0f1d5a4727da10a576cf9c3))
+* updated ecs module syntax  ([#1397](https://github.com/dvsa/vol-app/issues/1397)) ([71573fe](https://github.com/dvsa/vol-app/commit/71573fe9774d7ef47388ec32b440d0fa0503b12f))
+* vol-7060 wrap renderImage output in shppict/picprop ([#1400](https://github.com/dvsa/vol-app/issues/1400)) ([c80fb6d](https://github.com/dvsa/vol-app/commit/c80fb6db1af33f20840c4be8043dd4cf5bc73cae))
+
 ## [7.2.0](https://github.com/dvsa/vol-app/compare/v7.1.0...v7.2.0) (2026-03-31)
 
 
