@@ -407,13 +407,13 @@ jobs:
             repo: vol-qa
     steps:
       - name: Configure AWS credentials for NONPROD
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to NONPROD ECR
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.NONPROD_REGISTRY }}
 
@@ -452,13 +452,13 @@ jobs:
           fi
 
       - name: Configure AWS credentials for PROD
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.ACCOUNT_PROD_TF_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to PROD ECR
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.PROD_REGISTRY }}
 
