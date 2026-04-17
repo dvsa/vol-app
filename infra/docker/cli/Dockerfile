@@ -18,13 +18,15 @@ RUN apk add --no-cache icu-dev libzip-dev cups-client poppler-utils bash \
   && docker-php-ext-install pdo_mysql opcache intl zip
 
 RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq \
-  && python3 -m venv /opt/venv \
-  && /opt/venv/bin/pip install --no-cache-dir awscli \
-  && ln -sf /opt/venv/bin/aws /usr/local/bin/aws \
-  && /usr/local/bin/aws --version \
-  && mysql --version \
-  && jq --version
+  && python3 -m venv /opt/awscli \
+  && /opt/awscli/bin/pip install --no-cache-dir awscli \
+  && ln -sf /opt/awscli/bin/aws /usr/local/bin/aws \
+  && aws --version
 
+
+RUN python3 -m venv /opt/venv \
+  && /opt/venv/bin/pip install boto3
+  
 # Install fonts for document rendering.
 # LibreOffice auto-substitutes these when documents request MS fonts:
 #   Arial/Times New Roman/Courier New → Liberation Sans/Serif/Mono (font-liberation)
@@ -78,6 +80,9 @@ RUN mkdir -p /mnt/data/olcsdump /mnt/data/anondump\
   && chmod 775 /mnt/data/olcsdump /mnt/data/scripts/ /mnt/data/anondump \
   # Ensure scripts are executable.
   && chmod +x /mnt/data/scripts/*.sh
+  
+RUN chmod +x /mnt/data/scripts/*.py \
+  && ln -s /mnt/data/scripts/*.py /usr/local/bin/ 
 
 USER www-data
 

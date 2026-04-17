@@ -212,7 +212,7 @@ locals {
 
 module "batch" {
   source  = "terraform-aws-modules/batch/aws"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   instance_iam_role_name        = "vol-app-${var.environment}-batch-instance"
   instance_iam_role_description = "Task execution role for vol-app-${var.environment}-batch"
@@ -239,6 +239,14 @@ module "batch" {
       state    = "ENABLED"
       priority = 1
 
+      compute_environment_order = {
+        first = {
+          order                   = 1
+          compute_environment_key = "fargate"
+        }
+      }
+
+
       # This doesn't offer much value as a tag, but it's here to avoid: https://github.com/hashicorp/terraform-provider-aws/pull/38636.
       # If the PR is merged, we can remove this.
       tags = {
@@ -249,6 +257,14 @@ module "batch" {
       name     = "vol-app-${var.environment}-liquibase"
       state    = "ENABLED"
       priority = 1
+
+      compute_environment_order = {
+        first = {
+          order                   = 1
+          compute_environment_key = "fargate"
+        }
+      }
+
       tags = {
         JobQueue = "vol-app-${var.environment}-liquibase"
       }

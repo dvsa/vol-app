@@ -12,9 +12,22 @@ OLCS.ready(function () {
   (function () {
     var $select = $("#sections");
     var $hidden = $("#sectionsOrder");
+    var $requiredHidden = $("#sectionsRequired");
 
     if (!$select.length || !$hidden.length) {
       return;
+    }
+
+    // Parse initial required sections (comma-separated IDs)
+    var requiredIds = {};
+    if ($requiredHidden.length && $requiredHidden.val()) {
+      $requiredHidden
+        .val()
+        .split(",")
+        .filter(Boolean)
+        .forEach(function (id) {
+          requiredIds[id] = true;
+        });
     }
 
     // Inject minimal styles
@@ -58,13 +71,14 @@ OLCS.ready(function () {
       return $opt.length ? $opt.text() : "Section #" + id;
     }
 
-    // Update hidden input from ordered list
+    // Update hidden inputs from ordered list
     function syncHidden() {
       orderedIds = [];
       $list.children("li").each(function () {
         orderedIds.push($(this).data("id").toString());
       });
       $hidden.val(orderedIds.join(","));
+      syncRequired();
     }
 
     // Render the full list from orderedIds
@@ -75,10 +89,31 @@ OLCS.ready(function () {
       }
     }
 
+    // Sync required hidden input from checkboxes
+    function syncRequired() {
+      var ids = [];
+      $list.find(".section-required-cb:checked").each(function () {
+        ids.push($(this).closest("li").data("id").toString());
+      });
+      $requiredHidden.val(ids.join(","));
+    }
+
     // Append a single item to the list
     function appendListItem(id) {
       var label = getLabel(id);
+      var isReq = requiredIds[id.toString()] || false;
       var $li = $("<li>").attr("data-id", id);
+      $li.append(
+        $("<label>")
+          .css({ "margin-right": "0.5em", "font-size": "0.85em" })
+          .append(
+            $("<input>")
+              .attr({ type: "checkbox", title: "Required" })
+              .addClass("section-required-cb")
+              .prop("checked", isReq),
+          )
+          .append(" Req"),
+      );
       $li.append($("<span>").addClass("section-label").text(label));
       $li.append(
         $("<span>")
@@ -104,6 +139,11 @@ OLCS.ready(function () {
       );
       $list.append($li);
     }
+
+    // Sync required on checkbox change
+    $list.on("change", ".section-required-cb", function () {
+      syncRequired();
+    });
 
     // Move up
     $list.on("click", ".btn-up", function (e) {

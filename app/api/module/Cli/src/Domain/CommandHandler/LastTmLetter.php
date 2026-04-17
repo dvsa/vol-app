@@ -69,17 +69,22 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
             $tmlRepo = $this->getRepo('TransportManagerLicence');
             $removedTms = $tmlRepo->fetchRemovedTmForLicence($licence->getId(), true);
 
+            if (empty($removedTms)) {
+                continue;
+            }
+
+            $lastRemovedTm = reset($removedTms);
+
+            $document = $this->generateDocuments($licence, $lastRemovedTm);
+            $this->printAndEmailDocument($document);
+
              /** @var TmlEntity $removedTm */
             foreach ($removedTms as $removedTm) {
-                $document = $this->generateDocuments($licence, $removedTm);
-                $this->printAndEmailDocument($document);
                 $removedTm->setLastTmLetterDate(new DateTime());
                 $tmlRepo->save($removedTm);
             }
 
-            if (!empty($removedTms)) {
-                $this->sendEmailToOperator($licence);
-            }
+            $this->sendEmailToOperator($licence);
         }
 
         return $this->result;

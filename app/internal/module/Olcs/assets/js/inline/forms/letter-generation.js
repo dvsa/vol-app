@@ -102,6 +102,24 @@ OLCS.ready(function () {
           $("#preview-subcategory").text(subCategory.subCategoryName || "-");
           $("#preview-template").text(letterType.name || "Letter Template");
 
+          // Show warnings for missing required sections
+          if (response.warnings && response.warnings.length > 0) {
+            var warningHtml =
+              '<div class="govuk-warning-text" style="margin-bottom: 1rem;">' +
+              '<span class="govuk-warning-text__icon" aria-hidden="true">!</span>' +
+              '<strong class="govuk-warning-text__text">' +
+              '<span class="govuk-visually-hidden">Warning</span>' +
+              "Required sections could not be included:" +
+              '<ul class="govuk-list govuk-list--bullet" style="margin-top: 0.5rem;">';
+            response.warnings.forEach(function (w) {
+              warningHtml += "<li>" + $("<span>").text(w).html() + "</li>";
+            });
+            warningHtml +=
+              "</ul>This may indicate the wrong licence or application was selected." +
+              "</strong></div>";
+            $("#letter-preview-modal").prepend(warningHtml);
+          }
+
           // Get the preview modal content and use OLCS.modal.updateBody()
           var $previewModal = $("#letter-preview-modal");
           var newContent = $previewModal.html();

@@ -61,9 +61,9 @@ class TransportManagerLicence extends AbstractRepository
             $qb->orderBy($this->alias . '.deletedDate', 'DESC');
             $qb->andWhere($qb->expr()->lte($this->alias . '.deletedDate', ':date28DaysAgo'));
             $qb->setParameter('date28DaysAgo', $date28DaysAgo);
-            $qb->setMaxResults(1);
         } else {
             $qb->andWhere($qb->expr()->isNull($this->alias . '.lastTmFirstEmailDate'));
+            $qb->orderBy($this->alias . '.deletedDate', 'DESC');
         }
 
         return $qb->getQuery()->getResult();
