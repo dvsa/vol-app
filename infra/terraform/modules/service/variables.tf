@@ -78,11 +78,11 @@ variable "batch" {
       actions   = list(string)
       resources = list(string)
     }))
-    task_exec_iam_role_statements = list(object({
+    task_exec_iam_role_statements = optional(list(object({
       effect    = string
       actions   = list(string)
       resources = list(string)
-    }))
+    })), [])
     jobs = list(object({
       name     = string
       type     = optional(string, "default")
