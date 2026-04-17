@@ -229,6 +229,7 @@ class GrantValidationService implements FactoryInterface
         return $errors;
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->sectionAccessService = $container->get('SectionAccessService');

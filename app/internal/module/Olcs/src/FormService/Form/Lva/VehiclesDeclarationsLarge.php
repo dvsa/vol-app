@@ -15,6 +15,7 @@ class VehiclesDeclarationsLarge extends VehiclesDeclarationsPsvOperateLarge
      * @param \Laminas\Form\Form $form
      * @return \Laminas\Form\Form
      */
+    #[\Override]
     protected function alterForm($form)
     {
         parent::alterForm($form);

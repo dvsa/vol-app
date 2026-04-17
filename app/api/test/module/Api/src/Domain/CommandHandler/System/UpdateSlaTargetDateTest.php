@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\System;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\System\UpdateSlaTargetDate as CommandHandler;
@@ -35,7 +37,8 @@ class UpdateSlaTargetDateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             Entity::class => [
@@ -46,7 +49,7 @@ class UpdateSlaTargetDateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $params = [
             'agreedDate' => '2015-09-10',
@@ -88,7 +91,7 @@ class UpdateSlaTargetDateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($params['notes'], $slaTargetDateEntity->getNotes());
     }
 
-    public function testHandleCommandInvalidEntityType()
+    public function testHandleCommandInvalidEntityType(): void
     {
         $params = [
             'agreedDate' => '2015-09-10',
@@ -107,7 +110,7 @@ class UpdateSlaTargetDateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    private function getSlaTargetDateEntity()
+    private function getSlaTargetDateEntity(): mixed
     {
         $entity = m::mock(SlaTargetDate::class)->makePartial();
 

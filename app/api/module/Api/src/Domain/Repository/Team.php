@@ -54,6 +54,7 @@ class Team extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if (method_exists($query, 'getTrafficAreas')) {

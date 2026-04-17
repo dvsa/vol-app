@@ -18,6 +18,7 @@ class GetList extends AbstractHandler implements AuthAwareInterface
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         if (!empty($dto->getApplication())) {

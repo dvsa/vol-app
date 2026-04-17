@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Fees;
 
 use DateTime;
@@ -21,7 +23,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class EcmtApplicationFeeCommandCreatorTest extends MockeryTestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $licenceId = 7;
         $irhpApplicationId = 53;

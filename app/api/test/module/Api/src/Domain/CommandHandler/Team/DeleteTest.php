@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Delete Team Test
  *
@@ -36,7 +38,8 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             TrafficAreaEntity::class => [
@@ -47,7 +50,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandNeedReassign()
+    public function testHandleCommandNeedReassign(): void
     {
         $command = Cmd::create(['id' => 1]);
 
@@ -86,7 +89,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithValidate()
+    public function testHandleCommandWithValidate(): void
     {
         $command = Cmd::create(['id' => 1, 'validate' => true]);
 
@@ -125,7 +128,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithReassignTasks()
+    public function testHandleCommandWithReassignTasks(): void
     {
         $command = Cmd::create(['id' => 1, 'validate' => false, 'newTeam' => 2]);
 
@@ -191,7 +194,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithVaidationException()
+    public function testHandleCommandWithVaidationException(): void
     {
         $this->expectException(ValidationException::class);
 

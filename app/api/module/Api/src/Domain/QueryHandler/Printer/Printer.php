@@ -20,6 +20,7 @@ class Printer extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Printer';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $printer = $this->getRepo()->fetchUsingId($query);

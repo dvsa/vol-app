@@ -23,6 +23,7 @@ final class UndoCancelAllInterimFees extends AbstractCommandHandler implements T
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $fees = $this->getRepo()->fetchInterimFeesByApplicationId($command->getId());

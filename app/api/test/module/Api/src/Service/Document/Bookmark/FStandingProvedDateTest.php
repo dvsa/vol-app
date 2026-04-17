@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\FStandingProvedDate;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\FStandingProvedDate;
  */
 class FStandingProvedDateTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new FStandingProvedDate();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -19,17 +21,15 @@ class FStandingProvedDateTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    /**
-     * @dataProvider expiryDateProvider
-     */
-    public function testRender($expiredDate, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('expiryDateProvider')]
+    public function testRender(mixed $expiredDate, mixed $expected): void
     {
         $bookmark = new FStandingProvedDate();
         $bookmark->setData(['expiryDate' => $expiredDate]);
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public function expiryDateProvider()
+    public static function expiryDateProvider(): array
     {
         return [
             ['2016-03-31', '29/02/2016'],

@@ -47,6 +47,7 @@ class IrhpValidPermitsController extends AbstractSelfserveController
     /**
      * @return void
      */
+    #[\Override]
     public function mergeTemplateVars()
     {
         // overwrite default page title
@@ -64,6 +65,7 @@ class IrhpValidPermitsController extends AbstractSelfserveController
     /**
      * @return void
      */
+    #[\Override]
     public function retrieveTables()
     {
         if ($this->data[IrhpPermitType::DATA_KEY]['isBilateral']) {

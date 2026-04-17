@@ -22,6 +22,7 @@ class ContactDetailsList extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $repo \Dvsa\Olcs\Api\Domain\Repository\ContactDetails */

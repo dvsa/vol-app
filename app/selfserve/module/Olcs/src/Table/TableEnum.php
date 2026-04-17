@@ -36,6 +36,7 @@ class TableEnum implements DefinesEnumerations
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function getEnumerations(): array
     {
         return [

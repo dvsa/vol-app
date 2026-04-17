@@ -31,6 +31,7 @@ final class RequestReport extends AbstractCommandHandler implements CpmsAwareInt
      * @param Cmd $command
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

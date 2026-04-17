@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
@@ -17,7 +19,7 @@ class BusRegBrowseViewTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchDistinctList()
+    public function testFetchDistinctList(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -35,7 +37,7 @@ class BusRegBrowseViewTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchForExport()
+    public function testFetchForExport(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -64,7 +66,7 @@ class BusRegBrowseViewTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchForExportWithoutStatus()
+    public function testFetchForExportWithoutStatus(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -91,7 +93,7 @@ class BusRegBrowseViewTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchList()
+    public function testFetchList(): void
     {
         $this->setUpSut(Repo::class, true);
         $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);

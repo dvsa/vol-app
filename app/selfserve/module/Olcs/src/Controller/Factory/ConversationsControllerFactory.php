@@ -17,6 +17,7 @@ use Olcs\Controller\ConversationsController;
 
 class ConversationsControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(
         ContainerInterface $container,
         $requestedName,

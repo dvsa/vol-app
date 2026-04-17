@@ -25,6 +25,7 @@ class CreateGoodsDiscs extends AbstractRawQuery
         AND ({lv.application} <> :application OR {lv.application} IS NULL)
         AND {lv.licence} = :licence';
 
+    #[\Override]
     protected function getQueryTemplate()
     {
         // build query in two parts, as Insert part cannot use aliases

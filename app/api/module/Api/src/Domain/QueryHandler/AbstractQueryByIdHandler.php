@@ -14,6 +14,7 @@ class AbstractQueryByIdHandler extends AbstractQueryHandler
     protected $bundle = [];
     protected $values = [];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $recordObject = $this->getRepo()->fetchUsingId($query);

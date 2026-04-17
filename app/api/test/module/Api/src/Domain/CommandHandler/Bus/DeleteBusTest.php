@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Delete Bus Test
  */
@@ -36,7 +38,7 @@ class DeleteBusTest extends AbstractCommandHandlerTestCase
     /**
      * testHandleCommand
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 99;
         $previousId = 98;

@@ -20,6 +20,7 @@ class IrhpAwaitingFeeControllerFactory implements FactoryInterface
      * @return IrhpAwaitingFeeController
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpAwaitingFeeController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

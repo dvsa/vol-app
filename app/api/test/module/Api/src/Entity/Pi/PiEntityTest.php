@@ -222,12 +222,12 @@ class PiEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dateProvider
      *
      * @param string $inputDate
      * @param \DateTime|null $entityDate
      */
-    public function testUpdatePiWithDecision($inputDate, $entityDate): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dateProvider')]
+    public function testUpdatePiWithDecision(mixed $inputDate, mixed $entityDate): void
     {
         $decidedByTc = m::mock(PresidingTcEntity::class);
         $decidedByTcRole = m::mock(RefData::class);
@@ -272,13 +272,13 @@ class PiEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dataProviderTestUpdatePiWithDecisionDecisionBeforeHearing
      *
      * @param $expectException
      * @param $decisionDate
      * @param $hearingDate
      */
-    public function testUpdatePiWithDecisionDecisionBeforeHearing($expectException, $decisionDate, $hearingDate): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestUpdatePiWithDecisionDecisionBeforeHearing')]
+    public function testUpdatePiWithDecisionDecisionBeforeHearing(mixed $expectException, mixed $decisionDate, mixed $hearingDate): void
     {
         $piHearing = m::mock(PiHearingEntity::class);
         $piHearing->shouldReceive('getIsAdjourned')->andReturn('N');
@@ -305,6 +305,9 @@ class PiEntityTest extends EntityTester
             if ($expectException) {
                 $this->fail('ValidationException should have been thrown');
             }
+
+            // Assert the entity was successfully updated when no exception expected
+            $this->assertInstanceOf(Entity::class, $this->entity);
         } catch (ValidationException $e) {
             if (!$expectException) {
                 $this->fail('ValidationException should NOT have been thrown');
@@ -316,7 +319,7 @@ class PiEntityTest extends EntityTester
         }
     }
 
-    public function dataProviderTestUpdatePiWithDecisionDecisionBeforeHearing(): array
+    public static function dataProviderTestUpdatePiWithDecisionDecisionBeforeHearing(): array
     {
         return [
             [false, null, null],
@@ -357,12 +360,12 @@ class PiEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dateProvider
      *
      * @param string $inputDate
      * @param \DateTime|null $entityDate
      */
-    public function testUpdateWrittenOutcomeNone($inputDate, $entityDate): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dateProvider')]
+    public function testUpdateWrittenOutcomeNone(mixed $inputDate, mixed $entityDate): void
     {
         $writtenOutcome = m::mock(RefData::class);
         $callUpLetterDate = $inputDate;
@@ -390,12 +393,12 @@ class PiEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dateProvider
      *
      * @param string $inputDate
      * @param \DateTime|null $entityDate
      */
-    public function testUpdateWrittenOutcomeVerbalDecision($inputDate, $entityDate): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dateProvider')]
+    public function testUpdateWrittenOutcomeVerbalDecision(mixed $inputDate, mixed $entityDate): void
     {
         $writtenOutcome = m::mock(RefData::class);
         $callUpLetterDate = $inputDate;
@@ -429,12 +432,12 @@ class PiEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dateProvider
      *
      * @param string $inputDate
      * @param \DateTime|null $entityDate
      */
-    public function testUpdateWrittenOutcomeDecision($inputDate, $entityDate): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dateProvider')]
+    public function testUpdateWrittenOutcomeDecision(mixed $inputDate, mixed $entityDate): void
     {
         $writtenOutcome = m::mock(RefData::class);
         $callUpLetterDate = $inputDate;
@@ -470,12 +473,12 @@ class PiEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dateProvider
      *
      * @param string $inputDate
      * @param \DateTime|null $entityDate
      */
-    public function testUpdateWrittenOutcomeReason($inputDate, $entityDate): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dateProvider')]
+    public function testUpdateWrittenOutcomeReason(mixed $inputDate, mixed $entityDate): void
     {
         $writtenOutcome = m::mock(RefData::class);
         $callUpLetterDate = $inputDate;
@@ -511,13 +514,13 @@ class PiEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider canCloseWithHearingProvider
      *
      * @param $isCancelled
      * @param $closedDate
      * @param $returnValue
      */
-    public function testCanCloseWithHearing($isCancelled, $closedDate, $returnValue): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('canCloseWithHearingProvider')]
+    public function testCanCloseWithHearing(mixed $isCancelled, mixed $closedDate, mixed $returnValue): void
     {
         $piHearing = m::mock(PiHearingEntity::class);
         $piHearing->shouldReceive('getIsCancelled')->andReturn($isCancelled);
@@ -533,7 +536,7 @@ class PiEntityTest extends EntityTester
         $this->assertEquals($returnValue, $this->entity->canClose());
     }
 
-    public function canCloseWithHearingProvider(): array
+    public static function canCloseWithHearingProvider(): array
     {
         $date = '2015-12-25';
 
@@ -553,18 +556,16 @@ class PiEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->canClose());
     }
 
-    /**
-     * @dataProvider canCloseWithOutcomeProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('canCloseWithOutcomeProvider')]
     public function testCanCloseWithOutcome(
-        $writtenOutcomeId,
-        $tcWrittenReasonDate,
-        $writtenReasonLetterDate,
-        $tcWrittenDecisionDate,
-        $writtenDecisionLetterDate,
-        $decisionLetterSentDate,
-        $closedDate,
-        $returnValue
+        mixed $writtenOutcomeId,
+        mixed $tcWrittenReasonDate,
+        mixed $writtenReasonLetterDate,
+        mixed $tcWrittenDecisionDate,
+        mixed $writtenDecisionLetterDate,
+        mixed $decisionLetterSentDate,
+        mixed $closedDate,
+        mixed $returnValue
     ): void {
         $writtenOutcome = m::mock(RefData::class);
         $writtenOutcome->shouldReceive('getId')->andReturn($writtenOutcomeId);
@@ -582,7 +583,7 @@ class PiEntityTest extends EntityTester
         $this->assertEquals($returnValue, $this->entity->canClose());
     }
 
-    public function canCloseWithOutcomeProvider(): array
+    public static function canCloseWithOutcomeProvider(): array
     {
         $date = '2015-12-25';
 
@@ -604,12 +605,12 @@ class PiEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider canCloseWithMissingGeneralSlaProvider
      *
      * @param $briefToTcDate
      * @param $callUpLetterDate
      */
-    public function testCanCloseWithMissingGeneralSla($briefToTcDate, $callUpLetterDate): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('canCloseWithMissingGeneralSlaProvider')]
+    public function testCanCloseWithMissingGeneralSla(mixed $briefToTcDate, mixed $callUpLetterDate): void
     {
         $this->entity->setPiHearings(new ArrayCollection());
         $this->entity->setCallUpLetterDate($briefToTcDate);
@@ -618,7 +619,7 @@ class PiEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->canClose());
     }
 
-    public function canCloseWithMissingGeneralSlaProvider(): array
+    public static function canCloseWithMissingGeneralSlaProvider(): array
     {
         $date = '2015-12-25';
 
@@ -675,14 +676,14 @@ class PiEntityTest extends EntityTester
 
 
     /**
-     * @dataProvider dpGetHearingDateProvider
      *
      * @param string $hearingDate
      * @param string $isAdjourned
      * @param string $isCancelled
      * @param string|null $returnValue
      */
-    public function testGetHearingDate($hearingDate, $isAdjourned, $isCancelled, $returnValue): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetHearingDateProvider')]
+    public function testGetHearingDate(mixed $hearingDate, mixed $isAdjourned, mixed $isCancelled, mixed $returnValue): void
     {
         $piHearing = m::mock(PiHearingEntity::class);
         $piHearing->shouldReceive('getHearingDate')->andReturn($hearingDate);
@@ -697,7 +698,7 @@ class PiEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function dpGetHearingDateProvider(): array
+    public static function dpGetHearingDateProvider(): array
     {
         $date = '2015-12-25';
 
@@ -733,9 +734,7 @@ class PiEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->getCalculatedBundleValues());
     }
 
-    /**
-     * @dataProvider isTmProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isTmProvider')]
     public function testIsTm(bool $isTm): void
     {
         //test with no case attached
@@ -749,7 +748,7 @@ class PiEntityTest extends EntityTester
         $this->assertEquals($isTm, $this->entity->isTm());
     }
 
-    public function isTmProvider(): array
+    public static function isTmProvider(): array
     {
         return [
             [true],
@@ -762,7 +761,7 @@ class PiEntityTest extends EntityTester
      *
      * @return array
      */
-    public function dateProvider(): array
+    public static function dateProvider(): array
     {
         $date = '2015-12-25';
 

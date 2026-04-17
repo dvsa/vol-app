@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitType;
@@ -17,7 +19,7 @@ class IrhpPermitTypeTest extends RepositoryTestCase
         $this->setUpSut(IrhpPermitType::class);
     }
 
-    public function testFetchAvailableTypes()
+    public function testFetchAvailableTypes(): void
     {
         $now = new DateTime('2018-10-25 13:21:10');
 
@@ -46,7 +48,7 @@ class IrhpPermitTypeTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchReadyToPrint()
+    public function testFetchReadyToPrint(): void
     {
         $qb = $this->createMockQb('BLAH');
 

@@ -29,6 +29,7 @@ final class RefreshSubmissionSections extends AbstractCommandHandler implements 
 
     protected $extraRepos = ['TransportManagerApplication','TransportManagerLicence'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $submissionEntity = $this->refreshSubmission($command);

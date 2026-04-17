@@ -23,6 +23,7 @@ class HeaderAnswersSummaryRowsAdder implements AnswersSummaryRowsAdderInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function addRows(AnswersSummary $answersSummary, QaEntityInterface $entity, $isSnapshot)
     {
         if (!$isSnapshot) {

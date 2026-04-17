@@ -29,6 +29,7 @@ final class CreatePostDeletePeopleGrantTask extends AbstractCommandHandler imple
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Application $application */

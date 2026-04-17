@@ -13,6 +13,7 @@ final class IrfoPermitStockList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'IrfoPermitStock';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $repo = $this->getRepo();

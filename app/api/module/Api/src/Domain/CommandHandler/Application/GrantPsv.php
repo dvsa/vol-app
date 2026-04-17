@@ -33,6 +33,7 @@ final class GrantPsv extends AbstractCommandHandler implements TransactionedInte
 
     protected $extraRepos = ['ConditionUndertaking'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

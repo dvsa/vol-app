@@ -21,6 +21,7 @@ class Update extends AbstractCommandHandler
     protected $repoServiceName = 'IrhpPermitWindow';
     protected $extraRepos = ['IrhpPermitStock'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         /**

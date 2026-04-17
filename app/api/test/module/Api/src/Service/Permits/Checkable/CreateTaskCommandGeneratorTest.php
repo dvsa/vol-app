@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Checkable;
 
 use Dvsa\Olcs\Api\Domain\Command\Task\CreateTask;
@@ -17,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class CreateTaskCommandGeneratorTest extends MockeryTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $submissionTaskDescription = 'submission task description';
         $camelCaseEntityName = 'camelCaseEntityName';

@@ -1,0 +1,9 @@
+SELECT 'DROP PROCEDURE IF EXISTS sp_drop_triggers;' AS '';
+SELECT 'DELIMITER \$\$' AS '';
+SELECT 'CREATE PROCEDURE sp_drop_triggers()' AS '';
+SELECT 'BEGIN' AS '';
+SELECT CONCAT('DROP TRIGGER IF EXISTS ',TRIGGER_NAME,';') AS ''
+FROM information_schema.TRIGGERS
+WHERE TRIGGER_SCHEMA=database();
+SELECT 'END' AS '';
+SELECT '\$\$' AS '';

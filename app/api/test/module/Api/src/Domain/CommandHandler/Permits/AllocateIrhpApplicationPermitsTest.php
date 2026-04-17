@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Permits;
 
 use DateTime;
@@ -51,7 +53,8 @@ class AllocateIrhpApplicationPermitsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrhpInterface::STATUS_VALID
@@ -60,7 +63,7 @@ class AllocateIrhpApplicationPermitsTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandStandard()
+    public function testHandleCommandStandard(): void
     {
         $irhpPermitApplication1PermitsRequired = 3;
         $irhpPermitApplication1 = m::mock(IrhpPermitApplication::class);
@@ -122,7 +125,7 @@ class AllocateIrhpApplicationPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandStandardWithExpiry()
+    public function testHandleCommandStandardWithExpiry(): void
     {
         $expiryDate = m::mock(DateTime::class);
 
@@ -176,7 +179,7 @@ class AllocateIrhpApplicationPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandEmissionsCategories()
+    public function testHandleCommandEmissionsCategories(): void
     {
         $irhpPermitApplication1RequiredEuro5 = 0;
         $irhpPermitApplication1RequiredEuro6 = 3;
@@ -265,7 +268,7 @@ class AllocateIrhpApplicationPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandBilateral()
+    public function testHandleCommandBilateral(): void
     {
         $irhpPermitApplication1StandardRequired = 2;
         $irhpPermitApplication1CabotageRequired = 4;
@@ -436,7 +439,7 @@ class AllocateIrhpApplicationPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandBilateralMoroccoException()
+    public function testHandleCommandBilateralMoroccoException(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unknown permit category: other_permit_cat');
@@ -473,7 +476,7 @@ class AllocateIrhpApplicationPermitsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($this->command);
     }
 
-    public function testHandleCommandCandidatePermits()
+    public function testHandleCommandCandidatePermits(): void
     {
         $irhpPermitApplication1Id = 57;
         $irhpPermitApplication1 = m::mock(IrhpPermitApplication::class);
@@ -523,7 +526,7 @@ class AllocateIrhpApplicationPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandCandidatePermitsWithIssuedEmail()
+    public function testHandleCommandCandidatePermitsWithIssuedEmail(): void
     {
         $irhpPermitApplication1Id = 57;
         $irhpPermitApplication1 = m::mock(IrhpPermitApplication::class);
@@ -580,7 +583,7 @@ class AllocateIrhpApplicationPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandUnknownAllocationMode()
+    public function testHandleCommandUnknownAllocationMode(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unknown allocation mode: unknown-allocation-mode');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Print goods discs
  *
@@ -42,7 +44,7 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandNoDiscsToPrint()
+    public function testHandleCommandNoDiscsToPrint(): void
     {
         $this->expectException(ValidationException::class);
         $this->mockAuthService();
@@ -72,7 +74,7 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandDecreasing()
+    public function testHandleCommandDecreasing(): void
     {
         $this->expectException(ValidationException::class);
         $this->mockAuthService();
@@ -116,7 +118,7 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->mockAuthService();
         $niFlag = 'N';
@@ -197,7 +199,7 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    protected function mockAuthService()
+    protected function mockAuthService(): void
     {
         /** @var User $mockUser */
         $mockUser = m::mock(User::class)->makePartial();

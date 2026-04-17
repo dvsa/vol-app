@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Bus\Ebsr;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Bus\Ebsr\OrganisationUnprocessedList;
@@ -34,7 +36,7 @@ class OrganisationUnprocessedListTest extends QueryHandlerTestCase
     /**
      * Tests a query when organisation exists
      */
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create([]);
 
@@ -85,7 +87,7 @@ class OrganisationUnprocessedListTest extends QueryHandlerTestCase
     /**
      * Tests handleQuery when no organisation exists
      */
-    public function testHandleQueryNoOrganisation()
+    public function testHandleQueryNoOrganisation(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

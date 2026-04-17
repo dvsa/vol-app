@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\CommunityLic;
 
 use Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic;
@@ -21,7 +23,7 @@ class CommunityLicWithdrawalEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testUpdateCommunityLicWithdrawal()
+    public function testUpdateCommunityLicWithdrawal(): void
     {
         /** @var CommunityLic $communityLic */
         $communityLic = new CommunityLic();

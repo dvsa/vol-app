@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Cases\Si;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -23,7 +25,7 @@ class DeleteSiTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 123;
 
@@ -61,7 +63,7 @@ class DeleteSiTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandThrowsErruException()
+    public function testHandleCommandThrowsErruException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

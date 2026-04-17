@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * User data service test
  *
@@ -41,7 +43,7 @@ class UserTest extends AbstractDataServiceTestCase
     /**
      * Test fetchUserListData
      */
-    public function testFetchUserListData()
+    public function testFetchUserListData(): void
     {
         $results = ['results' => 'results'];
         $params = [
@@ -84,7 +86,7 @@ class UserTest extends AbstractDataServiceTestCase
     /**
      * Test fetchUserListData with exception
      */
-    public function testFetchListDataWithException()
+    public function testFetchListDataWithException(): void
     {
         $this->expectException(DataServiceException::class);
 
@@ -107,7 +109,7 @@ class UserTest extends AbstractDataServiceTestCase
     /**
      * Test fetchListOptions
      */
-    public function testFetchListOptions()
+    public function testFetchListOptions(): void
     {
         $this->sut->setData('userlist', $this->users);
 
@@ -117,7 +119,7 @@ class UserTest extends AbstractDataServiceTestCase
     /**
      * Test fetchListOptionsEmpty
      */
-    public function testFetchListOptionsEmpty()
+    public function testFetchListOptionsEmpty(): void
     {
         $this->sut->setData('userlist', false);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element;
 
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep;
@@ -19,7 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class ElementGeneratorContextGeneratorTest extends MockeryTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $elementContainer = 'element-container';
 

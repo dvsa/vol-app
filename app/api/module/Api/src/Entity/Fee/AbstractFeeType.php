@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Fee;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * FeeType Abstract Entity
+ * AbstractFeeType Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -32,41 +37,84 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractFeeType implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractFeeType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
 
     /**
-     * Accrual rule
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * IrfoFeeType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
      * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="accrual_rule", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="irfo_fee_type", referencedColumnName="id", nullable=true)
+     */
+    protected $irfoFeeType;
+
+    /**
+     * FeeType
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="fee_type", referencedColumnName="id")
+     */
+    protected $feeType;
+
+    /**
+     * AccrualRule
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="accrual_rule", referencedColumnName="id")
      */
     protected $accrualRule;
 
     /**
-     * Annual value
+     * Foreign Key to traffic_area
      *
-     * @var float
+     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
      *
-     * @ORM\Column(type="decimal", name="annual_value", precision=10, scale=2, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
+     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=true)
      */
-    protected $annualValue;
+    protected $trafficArea;
 
     /**
-     * Cost centre ref
+     * LicenceType
      *
-     * @var string
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
-     * @ORM\Column(type="string", name="cost_centre_ref", length=50, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="licence_type", referencedColumnName="id", nullable=true)
      */
-    protected $costCentreRef;
+    protected $licenceType;
+
+    /**
+     * GoodsOrPsv
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
+     */
+    protected $goodsOrPsv;
 
     /**
      * Created by
@@ -80,125 +128,6 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     protected $createdBy;
 
     /**
-     * Description
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=false)
-     */
-    protected $description;
-
-    /**
-     * Effective from
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="effective_from", nullable=false)
-     */
-    protected $effectiveFrom;
-
-    /**
-     * Expire fee with licence
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno",
-     *     name="expire_fee_with_licence",
-     *     nullable=false,
-     *     options={"default": 0})
-     */
-    protected $expireFeeWithLicence = 0;
-
-    /**
-     * Fee type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="fee_type", referencedColumnName="id", nullable=false)
-     */
-    protected $feeType;
-
-    /**
-     * Five year value
-     *
-     * @var float
-     *
-     * @ORM\Column(type="decimal", name="five_year_value", precision=10, scale=2, nullable=true)
-     */
-    protected $fiveYearValue;
-
-    /**
-     * Fixed value
-     *
-     * @var float
-     *
-     * @ORM\Column(type="decimal", name="fixed_value", precision=10, scale=2, nullable=true)
-     */
-    protected $fixedValue;
-
-    /**
-     * Goods or psv
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
-     */
-    protected $goodsOrPsv;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Irfo fee type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_fee_type", referencedColumnName="id", nullable=true)
-     */
-    protected $irfoFeeType;
-
-    /**
-     * Is miscellaneous
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_miscellaneous", nullable=false, options={"default": 0})
-     */
-    protected $isMiscellaneous = 0;
-
-    /**
-     * Is ni
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_ni", nullable=false, options={"default": 0})
-     */
-    protected $isNi = 0;
-
-    /**
-     * Is visible in internal
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean",
-     *     name="is_visible_in_internal",
-     *     nullable=false,
-     *     options={"default": 1})
-     */
-    protected $isVisibleInInternal = 1;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -210,36 +139,52 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     protected $lastModifiedBy;
 
     /**
-     * Licence type
+     * Effective from
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \DateTime
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_type", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="datetime", name="effective_from", nullable=false)
      */
-    protected $licenceType;
+    protected $effectiveFrom;
 
     /**
-     * Product reference
+     * Description
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="product_reference", length=30, nullable=true)
+     * @ORM\Column(type="string", name="description", length=255, nullable=false)
      */
-    protected $productReference;
+    protected $description = '';
 
     /**
-     * Traffic area
+     * Fixed value
      *
-     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="decimal", name="fixed_value", nullable=true)
      */
-    protected $trafficArea;
+    protected $fixedValue;
 
     /**
-     * Vat code
+     * Annual value
+     *
+     * @var string
+     *
+     * @ORM\Column(type="decimal", name="annual_value", nullable=true)
+     */
+    protected $annualValue;
+
+    /**
+     * Five year value
+     *
+     * @var string
+     *
+     * @ORM\Column(type="decimal", name="five_year_value", nullable=true)
+     */
+    protected $fiveYearValue;
+
+    /**
+     * DVSA value, rather than HMRC.  S for standard, Z for zero
      *
      * @var string
      *
@@ -248,18 +193,67 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     protected $vatCode;
 
     /**
-     * Vat rate
+     * Percentage vat rate e.g. 20.0
      *
-     * @var float
+     * @var string
      *
-     * @ORM\Column(type="decimal",
-     *     name="vat_rate",
-     *     precision=5,
-     *     scale=2,
-     *     nullable=false,
-     *     options={"default": 0.00})
+     * @ORM\Column(type="decimal", name="vat_rate", nullable=false, options={"default": 0.00})
      */
     protected $vatRate = 0.00;
+
+    /**
+     * Dont allow payment after licence expires
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="expire_fee_with_licence", nullable=false, options={"default": 0})
+     */
+    protected $expireFeeWithLicence = 0;
+
+    /**
+     * Is miscellaneous
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_miscellaneous", nullable=false, options={"default": 0})
+     */
+    protected $isMiscellaneous = 0;
+
+    /**
+     * Cost centre ref
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="cost_centre_ref", length=50, nullable=true)
+     */
+    protected $costCentreRef;
+
+    /**
+     * Product reference for CPMS/Oracle
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="product_reference", length=30, nullable=true)
+     */
+    protected $productReference;
+
+    /**
+     * Is Northern Ireland
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="is_ni", nullable=false, options={"default": 0})
+     */
+    protected $isNi = 0;
+
+    /**
+     * Is visible in internal
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_visible_in_internal", nullable=false, options={"default": 1})
+     */
+    protected $isVisibleInInternal = 1;
 
     /**
      * Version
@@ -272,275 +266,20 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     protected $version = 1;
 
     /**
-     * Set the accrual rule
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $accrualRule entity being set as the value
-     *
-     * @return FeeType
+     * Initialise the collections
      */
-    public function setAccrualRule($accrualRule)
+    public function __construct()
     {
-        $this->accrualRule = $accrualRule;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the accrual rule
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     * Initialise collections
      */
-    public function getAccrualRule()
+    public function initCollections(): void
     {
-        return $this->accrualRule;
     }
 
-    /**
-     * Set the annual value
-     *
-     * @param float $annualValue new value being set
-     *
-     * @return FeeType
-     */
-    public function setAnnualValue($annualValue)
-    {
-        $this->annualValue = $annualValue;
-
-        return $this;
-    }
-
-    /**
-     * Get the annual value
-     *
-     * @return float
-     */
-    public function getAnnualValue()
-    {
-        return $this->annualValue;
-    }
-
-    /**
-     * Set the cost centre ref
-     *
-     * @param string $costCentreRef new value being set
-     *
-     * @return FeeType
-     */
-    public function setCostCentreRef($costCentreRef)
-    {
-        $this->costCentreRef = $costCentreRef;
-
-        return $this;
-    }
-
-    /**
-     * Get the cost centre ref
-     *
-     * @return string
-     */
-    public function getCostCentreRef()
-    {
-        return $this->costCentreRef;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return FeeType
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the description
-     *
-     * @param string $description new value being set
-     *
-     * @return FeeType
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get the description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set the effective from
-     *
-     * @param \DateTime $effectiveFrom new value being set
-     *
-     * @return FeeType
-     */
-    public function setEffectiveFrom($effectiveFrom)
-    {
-        $this->effectiveFrom = $effectiveFrom;
-
-        return $this;
-    }
-
-    /**
-     * Get the effective from
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getEffectiveFrom($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->effectiveFrom);
-        }
-
-        return $this->effectiveFrom;
-    }
-
-    /**
-     * Set the expire fee with licence
-     *
-     * @param string $expireFeeWithLicence new value being set
-     *
-     * @return FeeType
-     */
-    public function setExpireFeeWithLicence($expireFeeWithLicence)
-    {
-        $this->expireFeeWithLicence = $expireFeeWithLicence;
-
-        return $this;
-    }
-
-    /**
-     * Get the expire fee with licence
-     *
-     * @return string
-     */
-    public function getExpireFeeWithLicence()
-    {
-        return $this->expireFeeWithLicence;
-    }
-
-    /**
-     * Set the fee type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $feeType entity being set as the value
-     *
-     * @return FeeType
-     */
-    public function setFeeType($feeType)
-    {
-        $this->feeType = $feeType;
-
-        return $this;
-    }
-
-    /**
-     * Get the fee type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getFeeType()
-    {
-        return $this->feeType;
-    }
-
-    /**
-     * Set the five year value
-     *
-     * @param float $fiveYearValue new value being set
-     *
-     * @return FeeType
-     */
-    public function setFiveYearValue($fiveYearValue)
-    {
-        $this->fiveYearValue = $fiveYearValue;
-
-        return $this;
-    }
-
-    /**
-     * Get the five year value
-     *
-     * @return float
-     */
-    public function getFiveYearValue()
-    {
-        return $this->fiveYearValue;
-    }
-
-    /**
-     * Set the fixed value
-     *
-     * @param float $fixedValue new value being set
-     *
-     * @return FeeType
-     */
-    public function setFixedValue($fixedValue)
-    {
-        $this->fixedValue = $fixedValue;
-
-        return $this;
-    }
-
-    /**
-     * Get the fixed value
-     *
-     * @return float
-     */
-    public function getFixedValue()
-    {
-        return $this->fixedValue;
-    }
-
-    /**
-     * Set the goods or psv
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv entity being set as the value
-     *
-     * @return FeeType
-     */
-    public function setGoodsOrPsv($goodsOrPsv)
-    {
-        $this->goodsOrPsv = $goodsOrPsv;
-
-        return $this;
-    }
-
-    /**
-     * Get the goods or psv
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getGoodsOrPsv()
-    {
-        return $this->goodsOrPsv;
-    }
 
     /**
      * Set the id
@@ -569,7 +308,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Set the irfo fee type
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $irfoFeeType entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $irfoFeeType new value being set
      *
      * @return FeeType
      */
@@ -591,105 +330,81 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the is miscellaneous
+     * Set the fee type
      *
-     * @param boolean $isMiscellaneous new value being set
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $feeType new value being set
      *
      * @return FeeType
      */
-    public function setIsMiscellaneous($isMiscellaneous)
+    public function setFeeType($feeType)
     {
-        $this->isMiscellaneous = $isMiscellaneous;
+        $this->feeType = $feeType;
 
         return $this;
     }
 
     /**
-     * Get the is miscellaneous
+     * Get the fee type
      *
-     * @return boolean
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    public function getIsMiscellaneous()
+    public function getFeeType()
     {
-        return $this->isMiscellaneous;
+        return $this->feeType;
     }
 
     /**
-     * Set the is ni
+     * Set the accrual rule
      *
-     * @param string $isNi new value being set
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $accrualRule new value being set
      *
      * @return FeeType
      */
-    public function setIsNi($isNi)
+    public function setAccrualRule($accrualRule)
     {
-        $this->isNi = $isNi;
+        $this->accrualRule = $accrualRule;
 
         return $this;
     }
 
     /**
-     * Get the is ni
+     * Get the accrual rule
      *
-     * @return string
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    public function getIsNi()
+    public function getAccrualRule()
     {
-        return $this->isNi;
+        return $this->accrualRule;
     }
 
     /**
-     * Set the is visible in internal
+     * Set the traffic area
      *
-     * @param boolean $isVisibleInInternal new value being set
+     * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
      *
      * @return FeeType
      */
-    public function setIsVisibleInInternal($isVisibleInInternal)
+    public function setTrafficArea($trafficArea)
     {
-        $this->isVisibleInInternal = $isVisibleInInternal;
+        $this->trafficArea = $trafficArea;
 
         return $this;
     }
 
     /**
-     * Get the is visible in internal
+     * Get the traffic area
      *
-     * @return boolean
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
      */
-    public function getIsVisibleInInternal()
+    public function getTrafficArea()
     {
-        return $this->isVisibleInInternal;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return FeeType
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
+        return $this->trafficArea;
     }
 
     /**
      * Set the licence type
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $licenceType entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $licenceType new value being set
      *
      * @return FeeType
      */
@@ -711,51 +426,201 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the product reference
+     * Set the goods or psv
      *
-     * @param string $productReference new value being set
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
      * @return FeeType
      */
-    public function setProductReference($productReference)
+    public function setGoodsOrPsv($goodsOrPsv)
     {
-        $this->productReference = $productReference;
+        $this->goodsOrPsv = $goodsOrPsv;
 
         return $this;
     }
 
     /**
-     * Get the product reference
+     * Get the goods or psv
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
+    public function getGoodsOrPsv()
+    {
+        return $this->goodsOrPsv;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return FeeType
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return FeeType
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the effective from
+     *
+     * @param \DateTime $effectiveFrom new value being set
+     *
+     * @return FeeType
+     */
+    public function setEffectiveFrom($effectiveFrom)
+    {
+        $this->effectiveFrom = $effectiveFrom;
+
+        return $this;
+    }
+
+    /**
+     * Get the effective from
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
+     */
+    public function getEffectiveFrom($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->effectiveFrom);
+        }
+
+        return $this->effectiveFrom;
+    }
+
+    /**
+     * Set the description
+     *
+     * @param string $description new value being set
+     *
+     * @return FeeType
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get the description
      *
      * @return string
      */
-    public function getProductReference()
+    public function getDescription()
     {
-        return $this->productReference;
+        return $this->description;
     }
 
     /**
-     * Set the traffic area
+     * Set the fixed value
      *
-     * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea entity being set as the value
+     * @param string $fixedValue new value being set
      *
      * @return FeeType
      */
-    public function setTrafficArea($trafficArea)
+    public function setFixedValue($fixedValue)
     {
-        $this->trafficArea = $trafficArea;
+        $this->fixedValue = $fixedValue;
 
         return $this;
     }
 
     /**
-     * Get the traffic area
+     * Get the fixed value
      *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     * @return string
      */
-    public function getTrafficArea()
+    public function getFixedValue()
     {
-        return $this->trafficArea;
+        return $this->fixedValue;
+    }
+
+    /**
+     * Set the annual value
+     *
+     * @param string $annualValue new value being set
+     *
+     * @return FeeType
+     */
+    public function setAnnualValue($annualValue)
+    {
+        $this->annualValue = $annualValue;
+
+        return $this;
+    }
+
+    /**
+     * Get the annual value
+     *
+     * @return string
+     */
+    public function getAnnualValue()
+    {
+        return $this->annualValue;
+    }
+
+    /**
+     * Set the five year value
+     *
+     * @param string $fiveYearValue new value being set
+     *
+     * @return FeeType
+     */
+    public function setFiveYearValue($fiveYearValue)
+    {
+        $this->fiveYearValue = $fiveYearValue;
+
+        return $this;
+    }
+
+    /**
+     * Get the five year value
+     *
+     * @return string
+     */
+    public function getFiveYearValue()
+    {
+        return $this->fiveYearValue;
     }
 
     /**
@@ -785,7 +650,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Set the vat rate
      *
-     * @param float $vatRate new value being set
+     * @param string $vatRate new value being set
      *
      * @return FeeType
      */
@@ -799,11 +664,155 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Get the vat rate
      *
-     * @return float
+     * @return string
      */
     public function getVatRate()
     {
         return $this->vatRate;
+    }
+
+    /**
+     * Set the expire fee with licence
+     *
+     * @param string $expireFeeWithLicence new value being set
+     *
+     * @return FeeType
+     */
+    public function setExpireFeeWithLicence($expireFeeWithLicence)
+    {
+        $this->expireFeeWithLicence = $expireFeeWithLicence;
+
+        return $this;
+    }
+
+    /**
+     * Get the expire fee with licence
+     *
+     * @return string
+     */
+    public function getExpireFeeWithLicence()
+    {
+        return $this->expireFeeWithLicence;
+    }
+
+    /**
+     * Set the is miscellaneous
+     *
+     * @param bool $isMiscellaneous new value being set
+     *
+     * @return FeeType
+     */
+    public function setIsMiscellaneous($isMiscellaneous)
+    {
+        $this->isMiscellaneous = $isMiscellaneous;
+
+        return $this;
+    }
+
+    /**
+     * Get the is miscellaneous
+     *
+     * @return bool
+     */
+    public function getIsMiscellaneous()
+    {
+        return $this->isMiscellaneous;
+    }
+
+    /**
+     * Set the cost centre ref
+     *
+     * @param string $costCentreRef new value being set
+     *
+     * @return FeeType
+     */
+    public function setCostCentreRef($costCentreRef)
+    {
+        $this->costCentreRef = $costCentreRef;
+
+        return $this;
+    }
+
+    /**
+     * Get the cost centre ref
+     *
+     * @return string
+     */
+    public function getCostCentreRef()
+    {
+        return $this->costCentreRef;
+    }
+
+    /**
+     * Set the product reference
+     *
+     * @param string $productReference new value being set
+     *
+     * @return FeeType
+     */
+    public function setProductReference($productReference)
+    {
+        $this->productReference = $productReference;
+
+        return $this;
+    }
+
+    /**
+     * Get the product reference
+     *
+     * @return string
+     */
+    public function getProductReference()
+    {
+        return $this->productReference;
+    }
+
+    /**
+     * Set the is ni
+     *
+     * @param string $isNi new value being set
+     *
+     * @return FeeType
+     */
+    public function setIsNi($isNi)
+    {
+        $this->isNi = $isNi;
+
+        return $this;
+    }
+
+    /**
+     * Get the is ni
+     *
+     * @return string
+     */
+    public function getIsNi()
+    {
+        return $this->isNi;
+    }
+
+    /**
+     * Set the is visible in internal
+     *
+     * @param bool $isVisibleInInternal new value being set
+     *
+     * @return FeeType
+     */
+    public function setIsVisibleInInternal($isVisibleInInternal)
+    {
+        $this->isVisibleInInternal = $isVisibleInInternal;
+
+        return $this;
+    }
+
+    /**
+     * Get the is visible in internal
+     *
+     * @return bool
+     */
+    public function getIsVisibleInInternal()
+    {
+        return $this->isVisibleInInternal;
     }
 
     /**
@@ -828,5 +837,14 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

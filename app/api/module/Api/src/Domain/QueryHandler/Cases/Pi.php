@@ -33,6 +33,14 @@ final class Pi extends AbstractQueryHandler
         'assignedCaseworker',
         'assignedTo',
         'case',
+        'piSlaExceptions' => [
+            'slaException',
+            'createdBy' => [
+                'contactDetails' => [
+                    'person',
+                ]
+            ]
+        ],
     ];
 
     /**
@@ -42,6 +50,7 @@ final class Pi extends AbstractQueryHandler
      *
      * @return \Dvsa\Olcs\Api\Domain\QueryHandler\Result
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var \Dvsa\Olcs\Api\Domain\Repository\Pi $repo */

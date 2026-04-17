@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Form;
 
 /**
@@ -32,14 +34,14 @@ class MessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         parent::setUp();
     }
 
-    public function testSetMessageString()
+    public function testSetMessageString(): void
     {
         $this->sut->setMessage('Foo');
 
         $this->assertSame('Foo', $this->sut->get('messages')->get('message')->getValue());
     }
 
-    public function testSetMessageArray()
+    public function testSetMessageArray(): void
     {
         $this->sut->setMessage(['Foo', 'Bar']);
 
@@ -47,7 +49,7 @@ class MessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $this->assertSame(['Foo', 'Bar'], $this->sut->get('messages')->get('message')->getTokens());
     }
 
-    public function testSetMessageArrayKeys()
+    public function testSetMessageArrayKeys(): void
     {
         $this->sut->setMessage(['Foo' => 'Foo description', 'Bar' => 'Bar description']);
 
@@ -55,14 +57,14 @@ class MessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $this->assertSame(['Foo', 'Bar'], $this->sut->get('messages')->get('message')->getTokens());
     }
 
-    public function testSetOkButtonLabel()
+    public function testSetOkButtonLabel(): void
     {
         $this->sut->setOkButtonLabel('Foo');
 
         $this->assertSame('Foo', $this->sut->get('form-actions')->get('ok')->getLabel());
     }
 
-    public function testRemoveOkButton()
+    public function testRemoveOkButton(): void
     {
         $this->sut->removeOkButton();
 

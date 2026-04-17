@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Options;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\Element\Options\Option;
@@ -52,7 +54,7 @@ class OptionListTest extends MockeryTestCase
         $this->optionList->add(self::ITEM_2_VALUE, self::ITEM_2_LABEL, self::ITEM_2_HINT);
     }
 
-    public function testGetRepresentation()
+    public function testGetRepresentation(): void
     {
         $option1Representation = [
             'value' => self::ITEM_1_VALUE,
@@ -83,7 +85,7 @@ class OptionListTest extends MockeryTestCase
         );
     }
 
-    public function testGetOptions()
+    public function testGetOptions(): void
     {
         $options = $this->optionList->getOptions();
 

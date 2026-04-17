@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Licence Overview Helper Service Test
  *
@@ -35,13 +37,13 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider getViewDataProvider
      * @param array $licenceData licence overview data
      * @param array $cases
      * @param array $applications organisation applications
      * @param array $expectedViewData
      */
-    public function testGetViewData($licenceData, $expectedViewData)
+    #[\PHPUnit\Framework\Attributes\DataProvider('getViewDataProvider')]
+    public function testGetViewData(mixed $licenceData, mixed $expectedViewData): void
     {
         $this->urlHelperService->shouldReceive('fromRoute')
             ->with(
@@ -63,7 +65,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
         $this->assertEquals($expectedViewData, $this->sut->getViewData($licenceData));
     }
 
-    public function getViewDataProvider()
+    public static function getViewDataProvider(): array
     {
         return [
             'valid goods licence' => [

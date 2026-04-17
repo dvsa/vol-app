@@ -22,6 +22,7 @@ class MultilateralAnswersSummaryRowsAdder implements AnswersSummaryRowsAdderInte
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function addRows(AnswersSummary $answersSummary, QaEntityInterface $irhpApplication, $isSnapshot)
     {
         $irhpPermitApplications = $irhpApplication->getIrhpPermitApplications();

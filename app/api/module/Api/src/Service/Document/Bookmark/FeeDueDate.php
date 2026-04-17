@@ -19,11 +19,13 @@ class FeeDueDate extends DynamicBookmark implements DateHelperAwareInterface
 
     public const TARGET_DAYS = 15;
 
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(['id' => $data['fee']]);
     }
 
+    #[\Override]
     public function render()
     {
         if (is_string($this->data['invoicedDate'])) {

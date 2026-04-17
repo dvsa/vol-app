@@ -20,6 +20,7 @@ class CanAccessUserList extends AbstractHandler implements AuthAwareInterface
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto)
     {
         if ($this->isInternalUser()) {

@@ -26,6 +26,7 @@ final class ProcessDuplicateVehicleWarning extends AbstractCommandHandler implem
 {
     protected $repoServiceName = 'LicenceVehicle';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var LicenceVehicle $licenceVehicle */

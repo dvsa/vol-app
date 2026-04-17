@@ -21,6 +21,7 @@ class UniqueConsultantDetails extends AbstractValidator
         parent::__construct();
     }
 
+    #[\Override]
     public function isValid($value, $context = null)
     {
         $this->setValue($value);

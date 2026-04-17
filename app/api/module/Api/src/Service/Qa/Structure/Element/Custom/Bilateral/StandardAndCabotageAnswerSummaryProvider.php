@@ -32,6 +32,7 @@ class StandardAndCabotageAnswerSummaryProvider implements AnswerSummaryProviderI
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTemplateName()
     {
         return 'bilateral-standard-and-cabotage';
@@ -40,6 +41,7 @@ class StandardAndCabotageAnswerSummaryProvider implements AnswerSummaryProviderI
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTemplateVariables(QaContext $qaContext, ElementInterface $element, $isSnapshot)
     {
         $cabotageSelection = $qaContext->getQaEntity()->getBilateralCabotageSelection();

@@ -113,9 +113,7 @@ class LoginControllerTest extends MockeryTestCase
         self::setupLogger();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionIsCallable(): void
     {
         // Setup
@@ -126,9 +124,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->indexAction(...));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionRedirectsToDashboardWhenUserAlreadyLoggedIn(): void
     {
         // Setup
@@ -142,9 +138,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->sut->indexAction();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionReturnsViewModel(): void
     {
         // Setup
@@ -159,9 +153,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionReturnsViewModelWithLoginForm(): void
     {
         // Setup
@@ -176,9 +168,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->assertInstanceOf(Form::class, $form);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionSetsFormDataWhenHasBeenStoredInSession(): void
     {
         // Setup
@@ -207,9 +197,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->assertEquals($expected, $result->getVariable('form')->getData());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionReturnsViewModelWithFailureReasonWhenAuthenticationFails(): void
     {
         // Setup
@@ -233,9 +221,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->assertArrayHasKey('failureReason', $result->getVariables());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function postActionIsCallable(): void
     {
         // Setup
@@ -246,9 +232,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->postAction(...));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     protected function postActionRedirectsToDashboardWhenUserAlreadyLoggedIn(): void
     {
         // Setup
@@ -262,9 +246,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->sut->postAction($this->postRequest(), new RouteMatch([]), new Response());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function postActionFlashesFormDataWhenFormInvalid(): void
     {
         // Setup
@@ -282,9 +264,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->sut->postAction($this->postRequest(), new RouteMatch([]), new Response());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function postActionSuccessfulAuthRedirectsToDashBoardWhenGotoNotPresent(): void
     {
         // Setup
@@ -303,9 +283,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->sut->postAction($request, new RouteMatch([]), $response);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function postActionSuccessfulAuthRedirectsToGotoWhenPresentAndValid(): void
     {
         // Setup
@@ -329,9 +307,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->sut->postAction($request, new RouteMatch([]), $response);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function postActionSuccessfulOAuthRedirectsToDashboardWhenGotoPresentAndInvalid(): void
     {
         // Setup
@@ -354,9 +330,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->sut->postAction($request, new RouteMatch([]), $response);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function postActionNewPasswordRequiredChallengeStoresChallengeInSession(): void
     {
         // Setup
@@ -387,9 +361,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->sut->postAction($request, new RouteMatch([]), new Response());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function postActionNewPasswordRequiredChallengeRedirectsToExpiredPassword(): void
     {
         // Setup
@@ -414,9 +386,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->sut->postAction($request, new RouteMatch([]), new Response());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function postActionUnsupportedChallengeRedirectsToLoginPage(): void
     {
         // Setup
@@ -437,9 +407,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->sut->postAction($request, new RouteMatch([]), new Response());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function postActionFailedAuthenticationRedirectsToLoginPage(): void
     {
         // Setup
@@ -461,9 +429,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->sut->postAction($request, new RouteMatch([]), new Response());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function postActionFailedAuthenticationFlashesInvalidUsernameOrPasswordByDefault(): void
     {
         // Setup
@@ -487,9 +453,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->sut->postAction($request, new RouteMatch([]), new Response());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function postActionFailedAuthenticationFlashesInvalidUsernameOrPasswordWhenUserNotExists(): void
     {
         // Setup
@@ -511,9 +475,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->sut->postAction($request, new RouteMatch([]), new Response());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function postActionFailedAuthenticationFlashesInvalidUsernameOrPasswordWhenPasswordIncorrect(): void
     {
         // Setup
@@ -535,9 +497,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->sut->postAction($request, new RouteMatch([]), new Response());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function postActionFailedAuthenticationFlashesAccountDisabledWhenAuthenticationResultIsFailureAccountDisabled(): void
     {
         // Setup

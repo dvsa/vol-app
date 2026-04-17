@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * RefuseS4Test.php
  */
@@ -27,7 +29,8 @@ class RefuseS4Test extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             S4Entity::STATUS_REFUSED
@@ -42,7 +45,7 @@ class RefuseS4Test extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 1,

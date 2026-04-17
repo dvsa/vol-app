@@ -36,6 +36,7 @@ final class GrantTransportManager extends AbstractCommandHandler implements Tran
 
     protected $extraRepos = ['TransportManagerLicence', 'OtherLicence'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

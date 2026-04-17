@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer;
 
 use Dvsa\Olcs\Api\Domain\CommandHandlerManager;
@@ -39,14 +41,12 @@ abstract class AbstractConsumerTestCase extends MockeryTestCase
 
         $this->instantiate();
 
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
     }
 
-    protected function instantiate()
+    protected function instantiate(): void
     {
         $consumerClass = $this->consumerClass;
         $this->sut = new $consumerClass($this->abstractConsumerServices);
@@ -56,7 +56,7 @@ abstract class AbstractConsumerTestCase extends MockeryTestCase
      * @param string $class
      * @param array $expectedDtoData
      */
-    protected function expectCommand($class, $expectedDtoData, mixed $result, $validate = true)
+    protected function expectCommand(mixed $class, mixed $expectedDtoData, mixed $result, bool $validate = true): void
     {
         if ($validate) {
             $this->chm
@@ -104,13 +104,13 @@ abstract class AbstractConsumerTestCase extends MockeryTestCase
      * @param int $retryAfter
      */
     protected function expectCommandException(
-        $class,
-        $expectedDtoData,
-        $exceptionClass,
-        $exceptionMsg = '',
-        $retryAfter = 900,
-        $validate = true
-    ) {
+        mixed $class,
+        mixed $expectedDtoData,
+        mixed $exceptionClass,
+        string $exceptionMsg = '',
+        int $retryAfter = 900,
+        bool $validate = true
+    ): void {
         $exception = new $exceptionClass($exceptionMsg);
 
         //it's a pain that we have two ways to set retry after - this deals with those that are set on the exception

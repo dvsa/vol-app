@@ -13,6 +13,7 @@ class CanAccessDocumentsWithIds extends AbstractHandler
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto)
     {
         foreach ($dto->getIds() as $documentId) {

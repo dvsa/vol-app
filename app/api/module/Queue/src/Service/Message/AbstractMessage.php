@@ -44,6 +44,7 @@ abstract class AbstractMessage implements MessageInterface
         return $this->message;
     }
 
+    #[\Override]
     public function processMessageData(): void
     {
         if (empty($this->messageData)) {

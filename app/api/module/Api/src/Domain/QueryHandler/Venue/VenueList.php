@@ -22,6 +22,7 @@ final class VenueList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Venue';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var VenueRepo $repo */

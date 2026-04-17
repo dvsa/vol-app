@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * UpdateGracePeriod.php
  *
@@ -33,7 +35,7 @@ class UpdateGracePeriodTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 1,

@@ -24,6 +24,7 @@ class TransportManagerOtherEmploymentReviewService extends AbstractReviewService
      * @param array $data
      * @return array
      */
+    #[\Override]
     public function getConfig(TransportManagerApplication $tma)
     {
         return [

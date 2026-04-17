@@ -37,6 +37,7 @@ class LicenceSoleTrader extends CommonLicenceSoleTrader
      *
      * @return Form
      */
+    #[\Override]
     public function alterForm($form, array $params)
     {
         $form = parent::alterForm($form, $params);

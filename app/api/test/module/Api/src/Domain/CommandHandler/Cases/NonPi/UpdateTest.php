@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update NonPi Test
  */
@@ -32,7 +34,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'non_pi_type_off_proc',
@@ -50,10 +53,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpWitnessProvider
-     */
-    public function testHandleCommand($inputWitnesses, $outputWitnesses)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpWitnessProvider')]
+    public function testHandleCommand(mixed $inputWitnesses, mixed $outputWitnesses): void
     {
         $id = 150;
         $version = 2;
@@ -143,7 +144,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
     /**
      * expected witness input and output values
      */
-    public function dpWitnessProvider()
+    public static function dpWitnessProvider(): array
     {
         return [
             [4, 4],

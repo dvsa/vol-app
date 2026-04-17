@@ -30,6 +30,7 @@ final class Annul extends AbstractCommandHandler implements TransactionedInterfa
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $ids = $command->getCommunityLicenceIds();

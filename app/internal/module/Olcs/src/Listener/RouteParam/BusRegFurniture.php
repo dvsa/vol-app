@@ -33,11 +33,12 @@ class BusRegFurniture implements
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'busRegId',
-            [$this, 'onBusRegFurniture'],
+            $this->onBusRegFurniture(...),
             $priority
         );
     }
@@ -102,6 +103,7 @@ class BusRegFurniture implements
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusRegFurniture
     {
         $this->setQuerySender($container->get('QuerySender'));

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Application;
 
 use Dvsa\Olcs\Api\Entity\Application\Application;
@@ -20,7 +22,7 @@ class ApplicationTrackingEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $application = m::mock(Application::class);
 
@@ -29,7 +31,7 @@ class ApplicationTrackingEntityTest extends EntityTester
         $this->assertSame($application, $at->getApplication());
     }
 
-    public function testGetCalculatedValues()
+    public function testGetCalculatedValues(): void
     {
         /** @var Application $mockApp */
         $mockApp = m::mock(Application::class);
@@ -38,7 +40,7 @@ class ApplicationTrackingEntityTest extends EntityTester
         static::assertEquals(null, $actual['application']);
     }
 
-    public function testGetValueOptions()
+    public function testGetValueOptions(): void
     {
         $this->assertEquals(
             [
@@ -51,7 +53,7 @@ class ApplicationTrackingEntityTest extends EntityTester
         );
     }
 
-    public function testExchangeStatusArray()
+    public function testExchangeStatusArray(): void
     {
         /** @var Entity|m\MockInterface $sut */
         $sut = m::mock(Entity::class)->makePartial();
@@ -121,7 +123,7 @@ class ApplicationTrackingEntityTest extends EntityTester
         $this->assertEquals(29, $sut->getPsvMainOccupationUndertakingsStatus());
     }
 
-    public function testIsValidEmpty()
+    public function testIsValidEmpty(): void
     {
         $sections = [];
 
@@ -131,7 +133,7 @@ class ApplicationTrackingEntityTest extends EntityTester
         $this->assertTrue($at->isValid($sections));
     }
 
-    public function testIsValid()
+    public function testIsValid(): void
     {
         $sections = [
             'businessType'
@@ -144,7 +146,7 @@ class ApplicationTrackingEntityTest extends EntityTester
         $this->assertFalse($at->isValid($sections));
     }
 
-    public function testIsValidWhenValid()
+    public function testIsValidWhenValid(): void
     {
         $sections = [
             'businessType'

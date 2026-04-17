@@ -21,6 +21,7 @@ class Replacements extends AbstractQueryHandler implements TranslationLoaderAwar
      * @param QueryInterface|ReplacementsQry $query
      * @return mixed
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->translationLoader->getReplacementsFromDb();

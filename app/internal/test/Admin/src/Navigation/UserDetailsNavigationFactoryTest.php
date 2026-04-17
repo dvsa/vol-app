@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Test UserDetailsNavigationFactory
  *
@@ -19,7 +21,7 @@ use Admin\Navigation\UserDetailsNavigationFactory;
  */
 class UserDetailsNavigationFactoryTest extends MockeryTestCase
 {
-    public function testGetName()
+    public function testGetName(): void
     {
         $sut = new UserDetailsNavigationFactory();
 

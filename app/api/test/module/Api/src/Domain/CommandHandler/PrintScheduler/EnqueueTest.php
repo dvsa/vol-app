@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\PrintScheduler;
 
 use Dvsa\Olcs\Api\Domain\Command\PrintScheduler\Enqueue as Cmd;
@@ -29,7 +31,8 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
         ];
@@ -37,10 +40,8 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-    * @dataProvider dpHandleCommandMissingDocumentsParam
-    */
-    public function testHandleCommandMissingDocumentsParam($params)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandMissingDocumentsParam')]
+    public function testHandleCommandMissingDocumentsParam(mixed $params): void
     {
         $command = Cmd::create($params);
 
@@ -49,7 +50,7 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpHandleCommandMissingDocumentsParam()
+    public static function dpHandleCommandMissingDocumentsParam(): array
     {
         return [
             'no params' => [
@@ -64,7 +65,7 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandUserWithNoTeamPrinter()
+    public function testHandleCommandUserWithNoTeamPrinter(): void
     {
         $command = Cmd::create(['documentId' => 200116]);
 
@@ -79,7 +80,7 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandUserWithNoTeam()
+    public function testHandleCommandUserWithNoTeam(): void
     {
         $command = Cmd::create(['documentId' => 200116, 'jobName' => 'JOBNAME']);
 
@@ -114,10 +115,8 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    /**
-    * @dataProvider dpHandleCommand
-    */
-    public function testHandleCommand($cmdData, $expectedData, $expectedMsgs)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
+    public function testHandleCommand(mixed $cmdData, mixed $expectedData, mixed $expectedMsgs): void
     {
         $command = Cmd::create($cmdData);
 
@@ -145,7 +144,7 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand(): array
     {
         return [
             'with list of documents' => [

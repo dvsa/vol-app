@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CancelAllInterimFeesTest
  *
@@ -29,7 +31,8 @@ class CancelAllInterimFeesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
         ];
@@ -54,7 +57,7 @@ class CancelAllInterimFeesTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $fees = [
             $this->references[FeeEntity::class][23],

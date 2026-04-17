@@ -20,6 +20,7 @@ class EventHistory extends AbstractQueryHandler
 {
     protected $repoServiceName = 'EventHistory';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $this->getRepo()->disableSoftDeleteable();

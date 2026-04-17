@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Variation Overview Section Test
  *
@@ -102,10 +104,8 @@ class VariationOverviewSectionTest extends MockeryTestCase
         $this->assertNull($viewModel->getVariable('sectionNumber'));
     }
 
-    /**
-     * @dataProvider dpTestViewForPeople
-     */
-    public function testViewForPeople($data): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestViewForPeople')]
+    public function testViewForPeople(array $data): void
     {
         $sectionDetails = ['status' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION];
         $ref = 'people';
@@ -121,7 +121,7 @@ class VariationOverviewSectionTest extends MockeryTestCase
      *
      * @psalm-return array{'org type from licence': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1, licence: array{organisation: array{type: array{id: 'org_t_llp'}}}}}, 'org type from organisation': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1, organisation: array{type: array{id: 'org_t_llp'}}}}}
      */
-    public function dpTestViewForPeople(): array
+    public static function dpTestViewForPeople(): array
     {
         return [
             'org type from licence' => [
@@ -153,10 +153,8 @@ class VariationOverviewSectionTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestViewForOperatingCentres
-     */
-    public function testViewForOperatingCentres($data, $expected): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestViewForOperatingCentres')]
+    public function testViewForOperatingCentres(array $data, string $expected): void
     {
         $sectionDetails = ['status' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION];
         $ref = 'operating_centres';
@@ -172,7 +170,7 @@ class VariationOverviewSectionTest extends MockeryTestCase
      *
      * @psalm-return array{'vehicleType not set': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1}, expected: 'section.name.operating_centres'}, 'vehicleType set to LGV': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1, vehicleType: array{id: 'app_veh_type_lgv'}}, expected: 'section.name.operating_centres.lgv'}, 'vehicleType set to mixed': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1, vehicleType: array{id: 'app_veh_type_mixed'}}, expected: 'section.name.operating_centres'}}
      */
-    public function dpTestViewForOperatingCentres(): array
+    public static function dpTestViewForOperatingCentres(): array
     {
         return [
             'vehicleType not set' => [

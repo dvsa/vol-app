@@ -17,7 +17,7 @@ use Psr\Container\NotFoundExceptionInterface;
 
 class ByNumber extends AbstractQueryHandler
 {
-    private const MAX_COMPANY_NUMBER_LENGTH = 8;
+    private const int MAX_COMPANY_NUMBER_LENGTH = 8;
 
     /**
      * @var CompaniesHouseClient
@@ -31,6 +31,7 @@ class ByNumber extends AbstractQueryHandler
      * @throws NotFoundException
      * @throws NotFoundException | \Exception
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /**
@@ -67,6 +68,7 @@ class ByNumber extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

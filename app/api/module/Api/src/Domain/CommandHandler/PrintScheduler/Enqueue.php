@@ -29,6 +29,7 @@ final class Enqueue extends AbstractCommandHandler implements \Dvsa\Olcs\Api\Dom
      * @throws BadRequestException
      * @throws ValidationException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command \Dvsa\Olcs\Api\Domain\Command\PrintScheduler\Enqueue */

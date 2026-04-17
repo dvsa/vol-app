@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Vehicle;
 
 use Mockery as m;
@@ -21,7 +23,7 @@ class GoodsDiscEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $licenceVehicle = m::mock(LicenceVehicle::class);
 

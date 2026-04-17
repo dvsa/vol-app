@@ -31,6 +31,7 @@ class ApplicationTypeOfLicence extends CommonLicenceTypeOfLicence
      *
      * @return void
      */
+    #[\Override]
     public function alterForm(Form $form, $params = [])
     {
         parent::alterForm($form, $params);

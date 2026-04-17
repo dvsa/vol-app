@@ -11,6 +11,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class ReportCasesOpenControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ReportCasesOpenController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

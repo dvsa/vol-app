@@ -11,11 +11,13 @@ class WithdrawUnpaidIrhpCommand extends AbstractOlcsCommand
 {
     protected static $defaultName = 'batch:permits:withdraw-unpaid';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Withdraw unpaid IRHP applications.');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

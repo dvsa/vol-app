@@ -11,10 +11,6 @@ use Permits\Data\Mapper\MapperManager;
 
 class SignatureVerificationController extends AbstractSelfserveController
 {
-    protected $toggleConfig = [
-        'default' => FeatureToggle::GOVUK_ACCOUNT
-    ];
-
     /**
      * @param TranslationHelperService $translationHelper
      * @param FormHelperService $formHelper
@@ -30,6 +26,7 @@ class SignatureVerificationController extends AbstractSelfserveController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
     }
 
+    #[\Override]
     public function indexAction(): \Laminas\Http\Response
     {
         $response = $this->handleCommand(ProcessAuthResponse::create([

@@ -20,6 +20,7 @@ use Laminas\View\Model\ViewModel;
  */
 class DeclarationFormController extends AbstractActionController
 {
+    #[\Override]
     public function indexAction()
     {
         $applicationId = $this->params('application');

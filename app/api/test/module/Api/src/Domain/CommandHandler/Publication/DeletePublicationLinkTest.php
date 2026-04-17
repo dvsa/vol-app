@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * DeletePublicationLinkTest.php
  */
@@ -30,7 +32,7 @@ class DeletePublicationLinkTest extends AbstractCommandHandlerTestCase
     /**
      * tests deleting a publication link record
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 34;
         $data = ['id' => $id];
@@ -70,7 +72,7 @@ class DeletePublicationLinkTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandThrowsException()
+    public function testHandleCommandThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 

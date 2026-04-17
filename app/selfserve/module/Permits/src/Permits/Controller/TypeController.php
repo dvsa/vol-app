@@ -68,6 +68,7 @@ class TypeController extends AbstractSelfserveController
      *
      * @return void
      */
+    #[\Override]
     public function retrieveData()
     {
         parent::retrieveData();
@@ -86,6 +87,7 @@ class TypeController extends AbstractSelfserveController
      *
      * @return void
      */
+    #[\Override]
     public function handlePostCommand(array &$config, array $params)
     {
         $yearBasedTypes = [

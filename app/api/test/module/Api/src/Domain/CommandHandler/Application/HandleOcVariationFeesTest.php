@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -24,6 +26,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
@@ -35,7 +38,8 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             Application::APPLIED_VIA_POST,
@@ -44,7 +48,7 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithAddedOcWithoutFeesGoods()
+    public function testHandleCommandWithAddedOcWithoutFeesGoods(): void
     {
         $data = [];
         $command = Cmd::create($data);
@@ -104,7 +108,7 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithAddedOcPsv()
+    public function testHandleCommandWithAddedOcPsv(): void
     {
         $data = [];
         $command = Cmd::create($data);
@@ -155,7 +159,7 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithAddedOcWithFeesGoods()
+    public function testHandleCommandWithAddedOcWithFeesGoods(): void
     {
         $data = [];
         $command = Cmd::create($data);
@@ -204,7 +208,7 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpHandleCommandForGoodsWithIncreasedAuthWithoutFees()
+    public static function dpHandleCommandForGoodsWithIncreasedAuthWithoutFees(): array
     {
         return [
             'HGV auth increased' => [
@@ -225,10 +229,8 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleCommandForGoodsWithIncreasedAuthWithoutFees
-     */
-    public function testHandleCommandForGoodsWithIncreasedAuthWithoutFees($hasHgvAuthorisationIncreased, $hasLgvAuthorisationIncreased, $hasAuthTrailersIncrease)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandForGoodsWithIncreasedAuthWithoutFees')]
+    public function testHandleCommandForGoodsWithIncreasedAuthWithoutFees(mixed $hasHgvAuthorisationIncreased, mixed $hasLgvAuthorisationIncreased, mixed $hasAuthTrailersIncrease): void
     {
         $data = [];
         $command = Cmd::create($data);
@@ -283,7 +285,7 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpHandleCommandForPsvWithUpdatedAuthWithoutFees()
+    public static function dpHandleCommandForPsvWithUpdatedAuthWithoutFees(): array
     {
         return [
             'HGV auth increased' => [
@@ -295,10 +297,8 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleCommandForPsvWithUpdatedAuthWithoutFees
-     */
-    public function testHandleCommandForPsvWithUpdatedAuthWithoutFees($hasHgvAuthorisationIncreased)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandForPsvWithUpdatedAuthWithoutFees')]
+    public function testHandleCommandForPsvWithUpdatedAuthWithoutFees(mixed $hasHgvAuthorisationIncreased): void
     {
         $data = [];
         $command = Cmd::create($data);
@@ -348,7 +348,7 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithUpdatedOcWithIncreasedVehiclesWithoutFees()
+    public function testHandleCommandWithUpdatedOcWithIncreasedVehiclesWithoutFees(): void
     {
         $data = [];
         $command = Cmd::create($data);
@@ -410,7 +410,7 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithUpdatedOcWithIncreasedTrailersWithoutFees()
+    public function testHandleCommandWithUpdatedOcWithIncreasedTrailersWithoutFees(): void
     {
         $data = [];
         $command = Cmd::create($data);
@@ -474,7 +474,7 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithUpdatedOcWithoutIncreaseWithoutFees()
+    public function testHandleCommandWithUpdatedOcWithoutIncreaseWithoutFees(): void
     {
         $data = [];
         $command = Cmd::create($data);
@@ -538,7 +538,7 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithUpdatedOcWithoutIncreaseWithFees()
+    public function testHandleCommandWithUpdatedOcWithoutIncreaseWithFees(): void
     {
         $data = [];
         $command = Cmd::create($data);
@@ -615,7 +615,7 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithAddedOcWithoutFeesInternal()
+    public function testHandleCommandWithAddedOcWithoutFeesInternal(): void
     {
         $data = [];
         $command = Cmd::create($data);
@@ -656,7 +656,7 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandPSVWithIncreasedAuthShouldCreateFee()
+    public function testHandleCommandPSVWithIncreasedAuthShouldCreateFee(): void
     {
         $data = [];
         $command = Cmd::create($data);
@@ -709,7 +709,7 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         $result = $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandPSVWithoutIncreasedAuthShouldNotCreateFee()
+    public function testHandleCommandPSVWithoutIncreasedAuthShouldNotCreateFee(): void
     {
         $data = [];
         $command = Cmd::create($data);

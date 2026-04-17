@@ -22,6 +22,7 @@ final class MaxStockPermits extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $licenceId = $query->getLicence();

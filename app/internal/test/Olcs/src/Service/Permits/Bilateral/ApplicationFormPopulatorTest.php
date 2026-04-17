@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ApplicationFormPopulator Test
  *
@@ -24,7 +26,7 @@ use Laminas\Form\Form;
  */
 class ApplicationFormPopulatorTest extends TestCase
 {
-    public function testPopulate()
+    public function testPopulate(): void
     {
         $country1Data = [
             'country1Key1' => 'country1Value1',

@@ -18,6 +18,7 @@ class CanAccessTmaWithId extends AbstractHandler implements AuthAwareInterface
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canAccessTransportManagerApplication($this->getId($dto));

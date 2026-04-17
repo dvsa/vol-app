@@ -36,6 +36,7 @@ final class Schedule41 extends AbstractCommandHandler implements TransactionedIn
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $licence = $this->getRepo()->getReference(Licence::class, $command->getLicence());

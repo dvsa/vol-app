@@ -20,6 +20,7 @@ class FixedAnswerQuestionHandler implements QuestionHandlerInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function handle(QaContext $qaContext, array $requiredPermits)
     {
         $this->genericAnswerWriter->write($qaContext, $this->answer);

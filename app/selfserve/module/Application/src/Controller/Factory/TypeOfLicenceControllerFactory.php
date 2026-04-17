@@ -25,6 +25,7 @@ class TypeOfLicenceControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return TypeOfLicenceController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TypeOfLicenceController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

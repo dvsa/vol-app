@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\ApplyRanges;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit;
@@ -16,10 +18,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class RangeSubsetGeneratorTest extends MockeryTestCase
 {
-   /**
-     * @dataProvider dpTestGenerate
-     */
-    public function testGenerate($emissionsCategoryId, $ranges, $expectedRanges)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
+    public function testGenerate(mixed $emissionsCategoryId, mixed $ranges, mixed $expectedRanges): void
     {
         $irhpCandidatePermit = m::mock(IrhpCandidatePermit::class);
         $irhpCandidatePermit->shouldReceive('getAssignedEmissionsCategory->getId')
@@ -33,7 +33,7 @@ class RangeSubsetGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpTestGenerate()
+    public static function dpTestGenerate(): array
     {
         $range1 = [
             'entity' => m::mock(IrhpPermitRange::class),

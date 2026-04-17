@@ -17,6 +17,7 @@ class NoOfPermitsMoroccoAnswerSummaryProvider implements AnswerSummaryProviderIn
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTemplateName()
     {
         return 'generic';
@@ -25,6 +26,7 @@ class NoOfPermitsMoroccoAnswerSummaryProvider implements AnswerSummaryProviderIn
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTemplateVariables(QaContext $qaContext, ElementInterface $element, $isSnapshot)
     {
         $irhpPermitApplication = $qaContext->getQaEntity();

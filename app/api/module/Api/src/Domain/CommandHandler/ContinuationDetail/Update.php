@@ -18,6 +18,7 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
 {
     protected $repoServiceName = 'ContinuationDetail';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command Command */

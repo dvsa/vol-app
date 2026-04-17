@@ -58,6 +58,7 @@ class StartController extends AbstractSelfserveController implements ToggleAware
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
     }
 
+    #[\Override]
     public function onDispatch(MvcEvent $e)
     {
         return parent::onDispatch($e);
@@ -68,6 +69,7 @@ class StartController extends AbstractSelfserveController implements ToggleAware
      *
      * @return array|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $licence = $this->data['licence'];

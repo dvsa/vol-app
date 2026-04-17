@@ -14,8 +14,8 @@
 
 return [
     'olcs-doctrine' => [
-        // Default encryption key to use if not overridden in local
-        'encryption_key' => 'ASaoW9TQogBu7TgDHoBKtsDPY5BdjF7WFZbLKHgN'
+        // Encryption key is provided by AWS Secrets Manager in deployed environments
+        'encryption_key' => ''
     ],
     'doctrine' => [
         'configuration' => [
@@ -91,7 +91,9 @@ return [
         'max_schema_errors' => 10, //maximum number of xml schema problems to return (prevents massive error messages)
         'compliance_episode' => [
             'xmlNs' => 'https://webgate.ec.testa.eu/move-hub/erru/',
-            'erruVersion' => "3.4",
+        ],
+        'cgr' => [
+            'xmlNs' => 'https://webgate.ec.testa.eu/move-hub/erru/',
         ],
     ]
 ];

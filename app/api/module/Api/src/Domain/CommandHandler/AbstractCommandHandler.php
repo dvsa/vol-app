@@ -551,6 +551,7 @@ abstract class AbstractCommandHandler implements CommandHandlerInterface, Factor
         }
         return $value === 'Y' ? true : false;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->result = new Result();

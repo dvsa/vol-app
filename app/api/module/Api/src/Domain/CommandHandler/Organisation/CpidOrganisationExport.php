@@ -24,6 +24,7 @@ class CpidOrganisationExport extends AbstractCommandHandler
 {
     protected $repoServiceName = 'Queue';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $dtoData = [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\ContinuationDetail;
 
 use Dvsa\Olcs\Api\Domain\Command\Queue\Create;
@@ -25,7 +27,7 @@ class DigitalSendRemindersTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->repoMap['SystemParameter']
             ->shouldReceive('getDigitalContinuationReminderPeriod')->with()->once()->andReturn(34);

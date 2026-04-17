@@ -14,6 +14,7 @@ class CanDeleteSurrender extends AbstractCanAccessEntity
      */
     private $surrender;
 
+    #[\Override]
     public function isValid($entityId)
     {
         $this->surrender = $this->getRepo('Surrender')->fetchOneByLicenceId($entityId);

@@ -317,7 +317,7 @@ class BusReg extends AbstractBusReg implements ContextProviderInterface, Organis
     public function fromData($data)
     {
         foreach ($data as $key => $value) {
-            $method = 'set' . ucwords($key);
+            $method = 'set' . ucwords((string) $key);
 
             if (method_exists($this, $method)) {
                 $this->{$method}($value);
@@ -450,6 +450,7 @@ class BusReg extends AbstractBusReg implements ContextProviderInterface, Organis
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedValues()
     {
         return [
@@ -468,6 +469,7 @@ class BusReg extends AbstractBusReg implements ContextProviderInterface, Organis
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedBundleValues()
     {
         return [
@@ -1150,6 +1152,7 @@ class BusReg extends AbstractBusReg implements ContextProviderInterface, Organis
      *
      * @return string
      */
+    #[\Override]
     public function getContextValue()
     {
         return $this->getLicence()->getLicNo();
@@ -1287,7 +1290,7 @@ class BusReg extends AbstractBusReg implements ContextProviderInterface, Organis
             $additional[] = $otherService->getServiceNo();
         }
         //strip out any empty string values except 0
-        $additional = array_filter($additional, 'strlen');
+        $additional = array_filter($additional, strlen(...));
 
         if (!empty($additional)) {
             return $this->serviceNo . '(' . implode(',', $additional) . ')';
@@ -1301,6 +1304,7 @@ class BusReg extends AbstractBusReg implements ContextProviderInterface, Organis
      *
      * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation|null
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         if ($this->getLicence()) {

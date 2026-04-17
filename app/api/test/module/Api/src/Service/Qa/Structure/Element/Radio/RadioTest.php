@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Radio;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\Element\Options\OptionList;
@@ -15,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class RadioTest extends MockeryTestCase
 {
-    public function testGetRepresentation()
+    public function testGetRepresentation(): void
     {
         $value = 'permit_app_uc';
 

@@ -18,6 +18,7 @@ abstract class AbstractEmailOnlyCommandHandler extends AbstractCommandHandler im
     /** @var Message */
     private $message;
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Surrender;
 
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
@@ -26,7 +28,7 @@ class ByLicenceTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testQueryHandle()
+    public function testQueryHandle(): void
     {
         $query = ByLicence::create(['id' => 1]);
 

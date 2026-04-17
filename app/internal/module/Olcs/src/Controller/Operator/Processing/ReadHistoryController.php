@@ -25,6 +25,7 @@ class ReadHistoryController extends AbstractInternalController implements Operat
     protected $tableName = 'read-history';
     protected $listDto = ReadOrganisation::class;
 
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

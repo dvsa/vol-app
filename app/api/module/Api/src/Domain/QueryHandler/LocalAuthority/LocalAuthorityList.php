@@ -22,6 +22,7 @@ final class LocalAuthorityList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'LocalAuthority';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var LocalAuthorityRepo $repo */

@@ -34,6 +34,7 @@ class PsvDisc extends AbstractPsvDisc implements \Dvsa\Olcs\Api\Entity\Organisat
         $this->setCeasedDate(new \DateTime());
     }
 
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this->getLicence()->getOrganisation();

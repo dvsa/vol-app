@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\NoDiscsPrinted;
@@ -11,14 +13,14 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\NoDiscsPrinted;
  */
 class NoDiscsPrintedTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQueryIsNull()
+    public function testGetQueryIsNull(): void
     {
         $bookmark = new NoDiscsPrinted();
 
         $this->assertNull($bookmark->getQuery([]));
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $bookmark = new NoDiscsPrinted();
         $bookmark->setData(

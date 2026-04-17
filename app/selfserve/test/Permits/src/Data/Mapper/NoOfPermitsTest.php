@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PermitsTest\Data\Mapper;
 
 use Common\Data\Mapper\Permits\NoOfPermits as CommonNoOfPermitsMapper;

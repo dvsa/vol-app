@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\QueryBuilder;
@@ -19,7 +21,7 @@ class IrhpPermitJurisdictionQuotaTest extends RepositoryTestCase
         $this->setUpSut(IrhpPermitJurisdictionQuota::class);
     }
 
-    public function testFetchByNonZeroQuota()
+    public function testFetchByNonZeroQuota(): void
     {
         $expectedResult = [
             'jurisdictionId' => 8,
@@ -60,7 +62,7 @@ class IrhpPermitJurisdictionQuotaTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchByPermitStockId()
+    public function testFetchByPermitStockId(): void
     {
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);

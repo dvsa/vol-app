@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa;
 
 use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
@@ -57,10 +59,8 @@ class QaContextGeneratorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestGenerate
-     */
-    public function testGenerate($previousApplicationStep, $qaEntityAnswer)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
+    public function testGenerate(mixed $previousApplicationStep, mixed $qaEntityAnswer): void
     {
         $applicationPathId = 44;
 
@@ -105,7 +105,7 @@ class QaContextGeneratorTest extends MockeryTestCase
         $this->assertSame($qaContext, $returnedQaContext);
     }
 
-    public function dpTestGenerate()
+    public static function dpTestGenerate(): array
     {
         return [
             [null, null],
@@ -113,7 +113,7 @@ class QaContextGeneratorTest extends MockeryTestCase
         ];
     }
 
-    public function testExceptionOnApplicationPathNotEnabled()
+    public function testExceptionOnApplicationPathNotEnabled(): void
     {
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage(QaContextGenerator::ERR_QA_NOT_SUPPORTED);
@@ -125,7 +125,7 @@ class QaContextGeneratorTest extends MockeryTestCase
         $this->qaContextGenerator->generate($this->irhpApplicationId, $this->irhpPermitApplicationId, $this->slug);
     }
 
-    public function testExceptionOnAlreadySubmitted()
+    public function testExceptionOnAlreadySubmitted(): void
     {
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage(QaContextGenerator::ERR_ALREADY_SUBMITTED);
@@ -140,7 +140,7 @@ class QaContextGeneratorTest extends MockeryTestCase
         $this->qaContextGenerator->generate($this->irhpApplicationId, $this->irhpPermitApplicationId, $this->slug);
     }
 
-    public function testExceptionOnNotAccessible()
+    public function testExceptionOnNotAccessible(): void
     {
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage(QaContextGenerator::ERR_NOT_ACCESSIBLE);

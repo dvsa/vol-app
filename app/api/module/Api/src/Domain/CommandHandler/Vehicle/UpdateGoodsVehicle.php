@@ -32,6 +32,7 @@ final class UpdateGoodsVehicle extends AbstractCommandHandler implements Transac
 
     protected $repoServiceName = 'LicenceVehicle';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

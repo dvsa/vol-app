@@ -25,6 +25,7 @@ abstract class AbstractReviveFromUnsuccessful extends AbstractCommandHandler imp
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $applicationRepo = $this->getRepo();

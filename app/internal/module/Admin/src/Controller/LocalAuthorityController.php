@@ -36,6 +36,7 @@ class LocalAuthorityController extends AbstractInternalController implements Lef
 
     protected $tableViewTemplate = 'pages/local-authority/index';
 
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel(

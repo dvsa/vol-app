@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\OpName;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\OpName;
  */
 class OpNameTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new OpName();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -19,7 +21,7 @@ class OpNameTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function dpRenderValidDataProvider()
+    public static function dpRenderValidDataProvider(): array
     {
         return [
             [
@@ -47,10 +49,8 @@ class OpNameTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider dpRenderValidDataProvider
-     */
-    public function testRender($expected, $results)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderValidDataProvider')]
+    public function testRender(mixed $expected, mixed $results): void
     {
         $bookmark = new OpName();
         $bookmark->setData($results);

@@ -1,5 +1,5 @@
 # hadolint global ignore=DL3018,SC2086
-FROM ghcr.io/dvsa/dvsa-docker-images/php/8.2/cli:0 AS cli
+FROM ghcr.io/dvsa/dvsa-docker-images/php/8.3/cli:0 AS cli
 
 # hadolint ignore=DL3002
 USER root
@@ -10,14 +10,41 @@ RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
   && docker-php-ext-enable igbinary apcu redis \
   && apk del pcre-dev $PHPIZE_DEPS
 
-# Install icu-dev, intl, pdo_mysql, opcache
-RUN apk add --no-cache icu-dev libzip-dev \
+# Install system packages: icu-dev, libzip-dev, cups-client (provides lpr command for printing)
+# Install PHP extensions: intl, pdo_mysql, opcache, zip
+RUN apk add --no-cache icu-dev libzip-dev cups-client poppler-utils bash \
   && docker-php-ext-configure intl \
   && docker-php-ext-configure zip \
   && docker-php-ext-install pdo_mysql opcache intl zip
 
-# Add extra scirpts for batch jobs
-COPY ./scripts/ /mnt/data/scripts/
+RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq \
+  && python3 -m venv /opt/awscli \
+  && /opt/awscli/bin/pip install --no-cache-dir awscli \
+  && ln -sf /opt/awscli/bin/aws /usr/local/bin/aws \
+  && aws --version
+
+
+RUN python3 -m venv /opt/venv \
+  && /opt/venv/bin/pip install boto3
+  
+# Install fonts for document rendering.
+# LibreOffice auto-substitutes these when documents request MS fonts:
+#   Arial/Times New Roman/Courier New → Liberation Sans/Serif/Mono (font-liberation)
+#   Calibri                           → Carlito                    (font-carlito)
+# Liberation Sans Narrow was explicitly required by document templates.
+# Noto fonts provide broad Unicode coverage for docstore templates.
+# hadolint ignore=DL3019
+RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+  && apk add --no-cache \
+    font-liberation \
+    font-liberation-sans-narrow \
+    font-carlito \
+    font-noto \
+    fontconfig
+
+# Install barcode font for CUPS printing
+COPY 3OF9.TTF /usr/share/fonts/3OF9.TTF
+RUN fc-cache -fv
 
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
@@ -27,6 +54,9 @@ EXPOSE 8080
 FROM cli AS production
 
 ADD ./api.tar.gz /var/www/html
+
+# Add bash scripts
+COPY ./scripts/ /mnt/data/scripts/
 
 # `chown` and `chmod` flags do not work with `ADD` command when adding a tarball.
 # https://github.com/docker/docs/issues/7305
@@ -40,9 +70,19 @@ RUN chown -R root:www-data /var/www/html \
   # Add group (`www-data`) write permissions on the cache directories.
   && find /var/www/html/data/cache -type d -exec chmod 775 {} \; \
   # Ensure Laminas binary is executable for CLI jobs.
-  && chmod +x /var/www/html/vendor/bin/laminas \
-  # Ensure scripts are executable
+  && chmod +x /var/www/html/vendor/bin/laminas
+
+  # Create olcsdump and anondump directory.
+RUN mkdir -p /mnt/data/olcsdump /mnt/data/anondump\
+  # Set directory ownership.
+  && chown root:www-data /mnt/data/olcsdump /mnt/data/scripts/ /mnt/data/anondump \
+  # Set directory permissions.
+  && chmod 775 /mnt/data/olcsdump /mnt/data/scripts/ /mnt/data/anondump \
+  # Ensure scripts are executable.
   && chmod +x /mnt/data/scripts/*.sh
+  
+RUN chmod +x /mnt/data/scripts/*.py \
+  && ln -s /mnt/data/scripts/*.py /usr/local/bin/ 
 
 USER www-data
 

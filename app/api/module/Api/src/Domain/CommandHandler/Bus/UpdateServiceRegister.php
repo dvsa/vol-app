@@ -18,6 +18,7 @@ final class UpdateServiceRegister extends AbstractCommandHandler
 {
     protected $repoServiceName = 'Bus';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $bus = $this->getRepo()->fetchUsingId($command, Query::HYDRATE_OBJECT, $command->getVersion());

@@ -27,6 +27,7 @@ class LicencePsvVehicles extends CommonPsvVehicles
      * @param \Laminas\Form\Form $form
      * @return \Laminas\Form\Form
      */
+    #[\Override]
     protected function alterForm($form)
     {
         $this->showShareInfo = true;

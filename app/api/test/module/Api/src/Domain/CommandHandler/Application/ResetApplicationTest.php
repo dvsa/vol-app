@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Reset Application Test
  *
@@ -42,7 +44,8 @@ class ResetApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             LicenceEntity::LICENCE_CATEGORY_PSV,
@@ -54,7 +57,7 @@ class ResetApplicationTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandRequireConfirmationInvalidValue()
+    public function testHandleCommandRequireConfirmationInvalidValue(): void
     {
         $data = [
             'niFlag' => 'Y',
@@ -83,7 +86,7 @@ class ResetApplicationTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandRequireConfirmation()
+    public function testHandleCommandRequireConfirmation(): void
     {
         $data = [
             'niFlag' => 'N',
@@ -113,10 +116,8 @@ class ResetApplicationTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider providerWithConfirm
-     */
-    public function testHandleCommandRequireConfirmationWithConfirm($receivedDate, $expectedCreateApp, $associatedOperatingCentres)
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerWithConfirm')]
+    public function testHandleCommandRequireConfirmationWithConfirm(mixed $receivedDate, mixed $expectedCreateApp, mixed $associatedOperatingCentres): void
     {
         $data = [
             'niFlag' => 'N',
@@ -187,10 +188,8 @@ class ResetApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function providerWithConfirm()
+    public static function providerWithConfirm(): array
     {
-        $this->initReferences();
-
         return [
             [
                 null,

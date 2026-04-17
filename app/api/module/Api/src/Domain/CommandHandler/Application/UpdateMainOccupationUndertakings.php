@@ -15,6 +15,7 @@ final class UpdateMainOccupationUndertakings extends AbstractUpdateApplication
     ];
     protected string $confirmMessage = 'main occupation undertakings updated';
 
+    #[\Override]
     protected function updateApplication(ApplicationEntity $application, Command|CommandInterface $command): void
     {
         $application->updateMainOccupationUndertakings(

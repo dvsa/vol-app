@@ -18,8 +18,6 @@ class TransportManagerDocumentController extends TransportManagerController impl
     use Traits\DocumentSearchTrait;
     use Traits\ListDataTrait;
 
-    protected DocumentSubCategory $docSubCategoryDataService;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
@@ -28,7 +26,7 @@ class TransportManagerDocumentController extends TransportManagerController impl
         FlashMessengerHelperService $flashMessengerHelper,
         TranslationHelperService $translationHelper,
         $navigation,
-        DocumentSubCategory $docSubCategoryDataService
+        protected DocumentSubCategory $docSubCategoryDataService
     ) {
         parent::__construct(
             $scriptFactory,
@@ -39,7 +37,6 @@ class TransportManagerDocumentController extends TransportManagerController impl
             $translationHelper,
             $navigation
         );
-        $this->docSubCategoryDataService = $docSubCategoryDataService;
     }
 
     /**
@@ -48,6 +45,7 @@ class TransportManagerDocumentController extends TransportManagerController impl
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
+    #[\Override]
     protected function getDocumentTableName()
     {
         return 'documents';
@@ -63,6 +61,7 @@ class TransportManagerDocumentController extends TransportManagerController impl
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         // the action needs to be index. Otherwise the action name will get appended to urls in the TM menu
@@ -75,6 +74,7 @@ class TransportManagerDocumentController extends TransportManagerController impl
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
+    #[\Override]
     protected function getDocumentRoute()
     {
         return 'transport-manager/documents';
@@ -86,6 +86,7 @@ class TransportManagerDocumentController extends TransportManagerController impl
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
+    #[\Override]
     protected function getDocumentRouteParams()
     {
         return ['transportManager' => $this->getFromRoute('transportManager')];
@@ -97,6 +98,7 @@ class TransportManagerDocumentController extends TransportManagerController impl
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     protected function getDocumentView()
     {
         $transportManager = $this->getFromRoute('transportManager');
@@ -113,6 +115,7 @@ class TransportManagerDocumentController extends TransportManagerController impl
      *
      * @return \Laminas\Form\FieldsetInterface
      */
+    #[\Override]
     protected function getConfiguredDocumentForm()
     {
         $transportManager = $this->getFromRoute('transportManager');

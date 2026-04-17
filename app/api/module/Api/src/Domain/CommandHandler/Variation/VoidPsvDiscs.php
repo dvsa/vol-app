@@ -25,6 +25,7 @@ final class VoidPsvDiscs extends AbstractCommandHandler implements Transactioned
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

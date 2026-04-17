@@ -27,6 +27,7 @@ class Update extends AbstractCommandHandler implements TransactionedInterface
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $irhpCandidatePermitRepo \Dvsa\Olcs\Api\Domain\Repository\IrhpCandidatePermit */

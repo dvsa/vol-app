@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update User Selfserve Test
  */
@@ -76,7 +78,8 @@ class UpdateUserSelfserveTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ContactDetailsEntity::CONTACT_TYPE_USER
@@ -171,7 +174,6 @@ class UpdateUserSelfserveTest extends AbstractCommandHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($user, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_OPERATOR);
 
         $this->repoMap['User']->shouldReceive('fetchById')
@@ -233,10 +235,8 @@ class UpdateUserSelfserveTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestHandleCommandWithUpdatedContactDetails
-     */
-    public function testHandleCommandWithUpdatedContactDetails($userType, $canUpdatePerson, $existingEmail, $eventHistoryTimes): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommandWithUpdatedContactDetails')]
+    public function testHandleCommandWithUpdatedContactDetails(mixed $userType, mixed $canUpdatePerson, mixed $existingEmail, mixed $eventHistoryTimes): void
     {
         $userId = 111;
 
@@ -337,7 +337,7 @@ class UpdateUserSelfserveTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpTestHandleCommandWithUpdatedContactDetails(): array
+    public static function dpTestHandleCommandWithUpdatedContactDetails(): array
     {
         return [
             [UserEntity::USER_TYPE_OPERATOR, false, 'test2@test.me', 1],

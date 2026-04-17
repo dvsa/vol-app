@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
@@ -13,19 +15,20 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationReadAuditTest extends AbstractReadAuditTest
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
+class ApplicationReadAuditTest extends AbstractReadAuditTestCase
 {
     public function setUp(): void
     {
         $this->setUpSut(ApplicationReadAudit::class, true);
     }
 
-    public function testFetchOneOrMore()
+    public function testFetchOneOrMore(): void
     {
         parent::commonTestFetchOneOrMore('application');
     }
 
-    public function testFetchList()
+    public function testFetchList(): void
     {
         parent::commonTestFetchList(
             ReadApplication::create(['id' => 111]),
@@ -33,7 +36,7 @@ class ApplicationReadAuditTest extends AbstractReadAuditTest
         );
     }
 
-    public function testDeleteOlderThan()
+    public function testDeleteOlderThan(): void
     {
         parent::commonTestDeleteOlderThan(ApplicationReadAuditEntity::class);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\LocalAuthority;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\LocalAuthority\Update as UpdateHandler;
@@ -21,7 +23,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 999;
         $description = 'lta descr';

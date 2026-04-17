@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\TaskAllocationRule;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -18,7 +20,7 @@ class GetTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Query::create(['id' => 1304]);
 

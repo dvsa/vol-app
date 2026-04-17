@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\ApplicationStep;
@@ -45,10 +47,8 @@ class ApplicationStepTest extends MockeryTestCase
             ->andReturn($this->validatorListRepresentation);
     }
 
-    /**
-     * @dataProvider dpGetRepresentation
-     */
-    public function testGetRepresentation($enabled)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetRepresentation')]
+    public function testGetRepresentation(mixed $enabled): void
     {
         $expectedRepresentation = [
             'type' => self::TYPE,
@@ -76,7 +76,7 @@ class ApplicationStepTest extends MockeryTestCase
         );
     }
 
-    public function dpGetRepresentation()
+    public static function dpGetRepresentation(): array
     {
         return [
             [true],
@@ -84,7 +84,7 @@ class ApplicationStepTest extends MockeryTestCase
         ];
     }
 
-    public function testGetValidatorList()
+    public function testGetValidatorList(): void
     {
         $applicationStep = new ApplicationStep(
             self::TYPE,

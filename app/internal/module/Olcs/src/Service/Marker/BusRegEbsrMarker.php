@@ -9,6 +9,7 @@ namespace Olcs\Service\Marker;
  */
 class BusRegEbsrMarker extends AbstractMarker
 {
+    #[\Override]
     public function canRender()
     {
         $data = $this->getData();
@@ -16,6 +17,7 @@ class BusRegEbsrMarker extends AbstractMarker
         return isset($data['busReg']) && $data['busReg']['isTxcApp'] === 'Y';
     }
 
+    #[\Override]
     public function render()
     {
         $data = $this->getData();

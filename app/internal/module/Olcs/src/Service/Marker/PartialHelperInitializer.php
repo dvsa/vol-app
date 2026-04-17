@@ -13,6 +13,7 @@ class PartialHelperInitializer implements InitializerInterface
      *
      * return mixed
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $instance)
     {
         $instance->setPartialHelper(

@@ -18,6 +18,7 @@ final class Update extends AbstractCommandHandler
 {
     protected $repoServiceName = 'FeatureToggle';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         /**

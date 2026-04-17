@@ -35,6 +35,7 @@ class IrhpApplicationProcessingReadHistoryController extends AbstractInternalCon
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

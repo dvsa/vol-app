@@ -22,6 +22,7 @@ class ContinuationControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return ContinuationController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ContinuationController
     {
         $scriptFactory = $container->get(ScriptFactory::class);

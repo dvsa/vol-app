@@ -12,6 +12,7 @@ class AddFormDefaultData extends AbstractParameterProvider
         $this->config = (array) $config;
     }
 
+    #[\Override]
     public function provideParameters()
     {
         $params = [];

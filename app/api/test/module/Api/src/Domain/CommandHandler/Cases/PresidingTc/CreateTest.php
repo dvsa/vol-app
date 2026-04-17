@@ -27,7 +27,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
     }
 
     /** @SuppressWarnings("unused") */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'name' => 'name',

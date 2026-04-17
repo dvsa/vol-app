@@ -27,6 +27,7 @@ final class UpdateProhibitionNote extends AbstractCommandHandler implements Tran
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var UpdateProhibitionNoteCmd $command **/

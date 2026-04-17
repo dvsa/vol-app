@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Person
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\Person\Create;
  */
 class CreateTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = Create::create(
             [

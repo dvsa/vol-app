@@ -41,6 +41,7 @@ final class RegisterUserSelfserve extends AbstractUserCommandHandler implements
     {
     }
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         assert($command instanceof RegisterUserSelfserveCommand);

@@ -1,3 +1,28 @@
+# Getting api subnets for renderer listener rule conditional
+data "aws_subnet" "api_subnets" {
+  for_each = toset(concat(
+    var.services["api"].subnet_ids,
+  ))
+  id = each.value
+}
+
+data "aws_subnet" "batch_subnets" {
+  for_each = toset(concat(
+    var.batch.subnet_ids
+  ))
+  id = each.value
+}
+
+locals {
+  api_subnets_cidrs = [
+    for s in data.aws_subnet.api_subnets : s.cidr_block
+  ]
+  batch_subnets_cidrs = [
+    for s in data.aws_subnet.batch_subnets : s.cidr_block
+  ]
+}
+
+
 resource "aws_lb_target_group" "this" {
   for_each = var.services
 
@@ -47,7 +72,7 @@ resource "aws_lb_listener_rule" "this" {
   }
 
   listener_arn = each.value.lb_listener_arn
-  priority     = each.value.listener_rule_priority
+  priority     = each.key == "pdf-converter" ? 86 : each.value.listener_rule_priority
 
   action {
     type             = "forward"
@@ -56,7 +81,41 @@ resource "aws_lb_listener_rule" "this" {
 
   condition {
     host_header {
-      values = [each.value.listener_rule_host_header]
+      values = each.value.listener_rule_host_header
+    }
+  }
+  dynamic "condition" {
+    for_each = each.key == "pdf-converter" ? [1] : []
+    content {
+      source_ip {
+        values = local.api_subnets_cidrs
+      }
+    }
+  }
+}
+resource "aws_lb_listener_rule" "renderer-batch" {
+  for_each = {
+    for k, v in var.services :
+    k => v
+    if k == "pdf-converter" && v.listener_rule_enable
+  }
+
+  listener_arn = each.value.lb_listener_arn
+  priority     = 87
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.this[each.key].arn
+  }
+
+  condition {
+    host_header {
+      values = each.value.listener_rule_host_header
+    }
+  }
+  condition {
+    source_ip {
+      values = local.batch_subnets_cidrs
     }
   }
 }
@@ -64,11 +123,11 @@ resource "aws_lb_listener_rule" "this" {
 resource "aws_lb_listener_rule" "proving" {
   for_each = {
     for service, config in var.services : service => config
-    if contains(["prep", "prod"], var.environment)
+    if contains(["prep", "prod"], var.environment) && service != "pdf-converter"
   }
 
   listener_arn = each.value.lb_listener_arn
-  priority     = each.value.listener_rule_priority
+  priority     = 90
 
   action {
     type             = "forward"
@@ -77,7 +136,7 @@ resource "aws_lb_listener_rule" "proving" {
 
   condition {
     host_header {
-      values = [each.value.listener_rule_host_header_proving]
+      values = each.value.listener_rule_host_header_proving
     }
   }
 }
@@ -85,7 +144,7 @@ resource "aws_lb_listener_rule" "proving" {
 resource "aws_lb_listener_rule" "internal-pub-proving" {
   count        = contains(["prep", "prod"], var.environment) ? 1 : 0
   listener_arn = var.services["internal"].iuweb_pub_listener_arn
-  priority     = 9
+  priority     = 15
 
   action {
     type             = "forward"
@@ -95,6 +154,27 @@ resource "aws_lb_listener_rule" "internal-pub-proving" {
   condition {
     host_header {
       values = ["proving-iuweb.*"]
+    }
+  }
+}
+resource "aws_lb_listener_rule" "internal-pub" {
+  for_each = (
+    contains(["prep", "prod"], var.environment) && try(var.services["internal"].listener_rule_enable, false)
+    ) ? {
+    "internal" = var.services["internal"]
+  } : {}
+
+  listener_arn = each.value.iuweb_pub_listener_arn
+  priority     = 16
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.internal-pub[0].arn
+  }
+
+  condition {
+    host_header {
+      values = ["iuweb.*"]
     }
   }
 }
@@ -121,7 +201,7 @@ module "ecs_service" {
   for_each = var.services
 
   source  = "terraform-aws-modules/ecs/aws//modules/service"
-  version = "~> 5.10"
+  version = "< 6.1.0"
 
   name        = "vol-app-${var.environment}-${each.key}-service"
   cluster_arn = module.ecs_cluster[each.key].arn
@@ -137,25 +217,26 @@ module "ecs_service" {
   cpu    = var.services[each.key].cpu
   memory = var.services[each.key].memory
 
+  autoscaling_min_capacity = try(var.services[each.key].autoscaling_min, 1)
+  autoscaling_max_capacity = try(var.services[each.key].autoscaling_max, 10)
   autoscaling_policies = var.services[each.key].enable_autoscaling_policies ? {
-    "cpu" : {
-      "policy_type" : "TargetTrackingScaling",
-      "target_tracking_scaling_policy_configuration" : {
-        "predefined_metric_specification" : {
-          "predefined_metric_type" : "ECSServiceAverageCPUUtilization"
+    "cpu" = {
+      policy_type = "TargetTrackingScaling"
+      target_tracking_scaling_policy_configuration = {
+        predefined_metric_specification = {
+          predefined_metric_type = "ECSServiceAverageCPUUtilization"
         }
       }
-    },
-    "memory" : {
-      "policy_type" : "TargetTrackingScaling",
-      "target_tracking_scaling_policy_configuration" : {
-        "predefined_metric_specification" : {
-          "predefined_metric_type" : "ECSServiceAverageMemoryUtilization"
+    }
+    "memory" = {
+      policy_type = "TargetTrackingScaling"
+      target_tracking_scaling_policy_configuration = {
+        predefined_metric_specification = {
+          predefined_metric_type = "ECSServiceAverageMemoryUtilization"
         }
       }
     }
   } : {}
-
   runtime_platform = {
     operating_system_family = "LINUX",
     cpu_architecture        = "ARM64"
@@ -167,10 +248,9 @@ module "ecs_service" {
       memory    = try(var.services[each.key].task_memory_limit, var.services[each.key].memory)
       essential = true
       image     = "${var.services[each.key].repository}:${var.services[each.key].version}"
-      port_mappings = [
+      portMappings = [
         {
           name          = "http"
-          hostPort      = 8080
           containerPort = 8080
           protocol      = "tcp"
         }
@@ -200,31 +280,34 @@ module "ecs_service" {
             value = module.cloudfront.cloudfront_distribution_domain_name
           }
         ] : [],
-        each.value.add_search_env_info ? local.job_types.search.environment : []
+        each.value.set_custom_port ? [
+          {
+            name  = "API_PORT"
+            value = "8080"
+          }
+        ] : []
       )
 
-      secrets = each.value.add_search_env_info ? local.job_types.search.secrets : []
+      readonlyRootFilesystem = false
 
-      readonly_root_filesystem = false
-
-      memory_reservation = 100
+      memoryReservation = 100
     }
   }
-  load_balancer = concat(
-    [
-      {
+  load_balancer = merge(
+    {
+      primary = {
         target_group_arn = aws_lb_target_group.this[each.key].arn
         container_name   = each.key
         container_port   = 8080
       }
-    ],
-    each.key == "internal" && contains(["prep", "prod"], var.environment) ? [
-      {
+    },
+    each.key == "internal" && contains(["prep", "prod"], var.environment) ? {
+      internal_pub = {
         target_group_arn = aws_lb_target_group.internal-pub[0].arn
         container_name   = each.key
         container_port   = 8080
       }
-    ] : []
+    } : {}
   )
 
   create_security_group = false
@@ -235,4 +318,7 @@ module "ecs_service" {
   wait_for_steady_state = false
   wait_until_stable     = true
   force_new_deployment  = false
+
+
 }
+

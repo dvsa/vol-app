@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * UpdateDeclarationTest
  *
@@ -37,7 +39,8 @@ class UpdateDeclarationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'int_sts_requested',
@@ -47,7 +50,7 @@ class UpdateDeclarationTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandNoInterimParam()
+    public function testHandleCommandNoInterimParam(): void
     {
         // Params
         $command = UpdateDeclarationCmd::create(
@@ -94,7 +97,7 @@ class UpdateDeclarationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('sig_physical_signature', $application->getSignatureType());
     }
 
-    public function testHandleCommandInterimNo()
+    public function testHandleCommandInterimNo(): void
     {
         // Params
         $command = UpdateDeclarationCmd::create(
@@ -144,7 +147,7 @@ class UpdateDeclarationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(null, $application->getInterimReason());
     }
 
-    public function testHandleCommandInterimYesExistingFee()
+    public function testHandleCommandInterimYesExistingFee(): void
     {
         // Params
         $command = UpdateDeclarationCmd::create(
@@ -200,7 +203,7 @@ class UpdateDeclarationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('SOME REASON', $application->getInterimReason());
     }
 
-    public function testHandleCommandInterimYesExistingFeeVar()
+    public function testHandleCommandInterimYesExistingFeeVar(): void
     {
         // Params
         $command = UpdateDeclarationCmd::create(
@@ -266,7 +269,7 @@ class UpdateDeclarationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('SOME REASON', $application->getInterimReason());
     }
 
-    public function testHandleCommandInterimYesNoFee()
+    public function testHandleCommandInterimYesNoFee(): void
     {
         // Params
         $command = UpdateDeclarationCmd::create(
@@ -320,7 +323,162 @@ class UpdateDeclarationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('SOME REASON', $application->getInterimReason());
     }
 
-    protected function getApplication($command)
+    public function testHandleCommandWhenNoTmConfirmationIsNo(): void
+    {
+        // Params
+        $command = UpdateDeclarationCmd::create(
+            [
+                'id' => 627,
+                'version' => 45,
+                'declarationConfirmation' => 'Y',
+                'noTmConfirmation' => 'N',
+                'interimRequested' => 'N',
+                'interimReason' => 'SOME REASON',
+            ]
+        );
+
+        // Mocks
+        $application = $this->getApplication($command);
+
+        // Expectations
+        $this->repoMap['Application']->shouldReceive('fetchUsingId')
+            ->once()
+            ->with($command, Query::HYDRATE_OBJECT, 45)
+            ->andReturn($application)
+            ->shouldReceive('save')
+            ->once()
+            ->with($application);
+
+        $this->expectedSideEffect(
+            CancelAllInterimFeesCommand::class,
+            ['id' => 627],
+            new Result()
+        );
+        $this->expectedSideEffect(
+            UpdateApplicationCompletionCommand::class,
+            ['id' => 627, 'section' => 'undertakings'],
+            new Result()
+        );
+
+        $result = $this->sut->handleCommand($command);
+
+        $expected = [
+            'id' => ['application' => 627],
+            'messages' => ['Update declaration successful']
+        ];
+
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals($expected, $result->toArray());
+        $this->assertEquals('Y', $application->getDeclarationConfirmation());
+        $this->assertEquals('N', $application->getNoTmConfirmation());
+        $this->assertEquals(null, $application->getInterimStatus());
+        $this->assertEquals(null, $application->getInterimReason());
+    }
+
+    public function testHandleCommandWhenNoTmConfirmationIsYes(): void
+    {
+        // Params
+        $command = UpdateDeclarationCmd::create(
+            [
+                'id' => 627,
+                'version' => 45,
+                'declarationConfirmation' => 'Y',
+                'noTmConfirmation' => 'Y',
+                'interimRequested' => 'N',
+                'interimReason' => 'SOME REASON',
+            ]
+        );
+
+        // Mocks
+        $application = $this->getApplication($command);
+
+        // Expectations
+        $this->repoMap['Application']->shouldReceive('fetchUsingId')
+            ->once()
+            ->with($command, Query::HYDRATE_OBJECT, 45)
+            ->andReturn($application)
+            ->shouldReceive('save')
+            ->once()
+            ->with($application);
+
+        $this->expectedSideEffect(
+            CancelAllInterimFeesCommand::class,
+            ['id' => 627],
+            new Result()
+        );
+        $this->expectedSideEffect(
+            UpdateApplicationCompletionCommand::class,
+            ['id' => 627, 'section' => 'undertakings'],
+            new Result()
+        );
+
+        $result = $this->sut->handleCommand($command);
+
+        $expected = [
+            'id' => ['application' => 627],
+            'messages' => ['Update declaration successful']
+        ];
+
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals($expected, $result->toArray());
+        $this->assertEquals('Y', $application->getDeclarationConfirmation());
+        $this->assertEquals('Y', $application->getNoTmConfirmation());
+        $this->assertEquals(null, $application->getInterimStatus());
+        $this->assertEquals(null, $application->getInterimReason());
+    }
+
+    public function testHandleCommandWhenNoTmConfirmationIsNotNeeded(): void
+    {
+        // Params
+        $command = UpdateDeclarationCmd::create(
+            [
+                'id' => 627,
+                'version' => 45,
+                'declarationConfirmation' => 'Y',
+                'interimRequested' => 'N',
+                'interimReason' => 'SOME REASON',
+            ]
+        );
+
+        // Mocks
+        $application = $this->getApplication($command);
+
+        // Expectations
+        $this->repoMap['Application']->shouldReceive('fetchUsingId')
+            ->once()
+            ->with($command, Query::HYDRATE_OBJECT, 45)
+            ->andReturn($application)
+            ->shouldReceive('save')
+            ->once()
+            ->with($application);
+
+        $this->expectedSideEffect(
+            CancelAllInterimFeesCommand::class,
+            ['id' => 627],
+            new Result()
+        );
+        $this->expectedSideEffect(
+            UpdateApplicationCompletionCommand::class,
+            ['id' => 627, 'section' => 'undertakings'],
+            new Result()
+        );
+
+        $result = $this->sut->handleCommand($command);
+
+        $expected = [
+            'id' => ['application' => 627],
+            'messages' => ['Update declaration successful']
+        ];
+
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals($expected, $result->toArray());
+        $this->assertEquals('Y', $application->getDeclarationConfirmation());
+        $this->assertEquals(null, $application->getNoTmConfirmation());
+        $this->assertEquals(null, $application->getInterimStatus());
+        $this->assertEquals(null, $application->getInterimReason());
+    }
+
+    protected function getApplication(mixed $command): mixed
     {
         $application = m::mock(ApplicationEntity::class)->makePartial();
         $application->setId($command->getId());

@@ -21,6 +21,7 @@ class CanCloseConversationWithId extends AbstractHandler implements AuthAwareInt
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->isGranted(Permission::CAN_CLOSE_CONVERSATION)

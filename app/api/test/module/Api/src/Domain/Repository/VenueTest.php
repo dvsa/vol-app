@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * VenueTest
  *
@@ -23,7 +25,7 @@ class VenueTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         $this->setUpSut(Repo::class, true);
 

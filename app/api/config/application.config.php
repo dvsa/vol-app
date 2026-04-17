@@ -30,7 +30,6 @@ return [
         'Dvsa\Olcs\Scanning',
         'Soflomo\Purifier',
         'Olcs\XmlTools',
-        'Dvsa\Olcs\GdsVerify',
         'Dvsa\Olcs\AwsSdk',
         'Dvsa\Olcs\Queue',
         'Dvsa\Olcs\DvsaAddressService',

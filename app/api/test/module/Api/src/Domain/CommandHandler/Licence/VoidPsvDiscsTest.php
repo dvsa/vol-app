@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Void Psv Discs Test
  *
@@ -33,14 +35,15 @@ class VoidPsvDiscsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'ids' => [

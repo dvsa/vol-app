@@ -1,0 +1,14 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.0
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  'snyk:lic:composer:paragonie:hidden-string:MPL-2.0':
+    - '*':
+        reason: >-
+          MPL-2.0 is a weak copyleft license that only requires modifications to
+          the licensed files themselves to remain under MPL-2.0. We consume this
+          library as a dependency without modification, so it is compatible with
+          this project. Introduced as a transitive dependency of paragonie/halite
+          which replaces the abandoned laminas/laminas-crypt package.
+        expires: 2099-12-31T00:00:00.000Z
+patch: {}

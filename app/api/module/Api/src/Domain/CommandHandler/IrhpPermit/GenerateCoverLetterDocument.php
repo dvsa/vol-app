@@ -47,6 +47,7 @@ final class GenerateCoverLetterDocument extends AbstractCommandHandler
      * @return Result
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var IrhpPermitEntity $irhpPermit */

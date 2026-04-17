@@ -20,6 +20,7 @@ final class HearingDate extends AbstractContext
      *
      * @return \ArrayObject
      */
+    #[\Override]
     public function provide(PublicationLink $publication, \ArrayObject $context)
     {
         // use DateTimeFrontEnd as the time needs to be rendered in users local time

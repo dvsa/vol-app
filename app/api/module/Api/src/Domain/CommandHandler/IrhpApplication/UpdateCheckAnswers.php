@@ -25,6 +25,7 @@ final class UpdateCheckAnswers extends AbstractCommandHandler
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\NotFoundException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $repo = $this->getRepo();

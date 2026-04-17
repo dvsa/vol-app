@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Person;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Person Abstract Entity
+ * AbstractPerson Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -29,14 +32,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_person_family_name", columns={"family_name"}),
  *        @ORM\Index(name="ix_person_forename", columns={"forename"}),
  *        @ORM\Index(name="ix_person_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_person_title", columns={"title"})
+ *        @ORM\Index(name="ix_person_title", columns={"title"}),
+ *        @ORM\Index(name="uk_person_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
  *    },
  *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_person_olbs_key_olbs_type", columns={"olbs_key","olbs_type"})
+ *        @ORM\UniqueConstraint(name="uk_person_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
  *    }
  * )
  */
-abstract class AbstractPerson implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractPerson implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -46,22 +50,25 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     use SoftDeletableTrait;
 
     /**
-     * Birth date
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(type="date", name="birth_date", nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $birthDate;
+    protected $id;
 
     /**
-     * Birth place
+     * Title
      *
-     * @var string
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
-     * @ORM\Column(type="string", name="birth_place", length=50, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="title", referencedColumnName="id", nullable=true)
      */
-    protected $birthPlace;
+    protected $title;
 
     /**
      * Created by
@@ -75,35 +82,6 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     protected $createdBy;
 
     /**
-     * Family name
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="family_name", length=35, nullable=true)
-     */
-    protected $familyName;
-
-    /**
-     * Forename
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="forename", length=35, nullable=true)
-     */
-    protected $forename;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -115,22 +93,40 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     protected $lastModifiedBy;
 
     /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Olbs type
+     * Forename
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
+     * @ORM\Column(type="string", name="forename", length=35, nullable=true)
      */
-    protected $olbsType;
+    protected $forename;
+
+    /**
+     * Family name
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="family_name", length=35, nullable=true)
+     */
+    protected $familyName;
+
+    /**
+     * Birth date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="birth_date", nullable=true)
+     */
+    protected $birthDate;
+
+    /**
+     * length 50 to hold legacy data.  Town of birth.
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="birth_place", length=50, nullable=true)
+     */
+    protected $birthPlace;
 
     /**
      * Other name
@@ -140,16 +136,6 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
      * @ORM\Column(type="string", name="other_name", length=35, nullable=true)
      */
     protected $otherName;
-
-    /**
-     * Title
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="title", referencedColumnName="id", nullable=true)
-     */
-    protected $title;
 
     /**
      * Version
@@ -162,57 +148,61 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     protected $version = 1;
 
     /**
-     * Application organisation person
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     */
+    protected $olbsKey;
+
+    /**
+     * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
+     */
+    protected $olbsType;
+
+    /**
+     * ApplicationOrganisationPersons
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson",
-     *     mappedBy="person"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson", mappedBy="person")
      */
     protected $applicationOrganisationPersons;
 
     /**
-     * Contact detail
+     * ContactDetails
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails",
-     *     mappedBy="person"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", mappedBy="person")
      */
     protected $contactDetails;
 
     /**
-     * Disqualification
+     * Disqualifications
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Disqualification",
-     *     mappedBy="person"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Disqualification", mappedBy="person")
      */
     protected $disqualifications;
 
     /**
-     * Organisation person
+     * OrganisationPersons
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Organisation\OrganisationPerson",
-     *     mappedBy="person"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\OrganisationPerson", mappedBy="person")
      */
     protected $organisationPersons;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -220,16 +210,159 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->applicationOrganisationPersons = new ArrayCollection();
         $this->contactDetails = new ArrayCollection();
         $this->disqualifications = new ArrayCollection();
         $this->organisationPersons = new ArrayCollection();
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return Person
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the title
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $title new value being set
+     *
+     * @return Person
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get the title
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Person
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return Person
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the forename
+     *
+     * @param string $forename new value being set
+     *
+     * @return Person
+     */
+    public function setForename($forename)
+    {
+        $this->forename = $forename;
+
+        return $this;
+    }
+
+    /**
+     * Get the forename
+     *
+     * @return string
+     */
+    public function getForename()
+    {
+        return $this->forename;
+    }
+
+    /**
+     * Set the family name
+     *
+     * @param string $familyName new value being set
+     *
+     * @return Person
+     */
+    public function setFamilyName($familyName)
+    {
+        $this->familyName = $familyName;
+
+        return $this;
+    }
+
+    /**
+     * Get the family name
+     *
+     * @return string
+     */
+    public function getFamilyName()
+    {
+        return $this->familyName;
     }
 
     /**
@@ -251,8 +384,7 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
+     * @return \DateTime
      */
     public function getBirthDate($asDateTime = false)
     {
@@ -288,123 +420,51 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     }
 
     /**
-     * Set the created by
+     * Set the other name
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param string $otherName new value being set
      *
      * @return Person
      */
-    public function setCreatedBy($createdBy)
+    public function setOtherName($otherName)
     {
-        $this->createdBy = $createdBy;
+        $this->otherName = $otherName;
 
         return $this;
     }
 
     /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the family name
-     *
-     * @param string $familyName new value being set
-     *
-     * @return Person
-     */
-    public function setFamilyName($familyName)
-    {
-        $this->familyName = $familyName;
-
-        return $this;
-    }
-
-    /**
-     * Get the family name
+     * Get the other name
      *
      * @return string
      */
-    public function getFamilyName()
+    public function getOtherName()
     {
-        return $this->familyName;
+        return $this->otherName;
     }
 
     /**
-     * Set the forename
+     * Set the version
      *
-     * @param string $forename new value being set
+     * @param int $version new value being set
      *
      * @return Person
      */
-    public function setForename($forename)
+    public function setVersion($version)
     {
-        $this->forename = $forename;
+        $this->version = $version;
 
         return $this;
     }
 
     /**
-     * Get the forename
-     *
-     * @return string
-     */
-    public function getForename()
-    {
-        return $this->forename;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return Person
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
+     * Get the version
      *
      * @return int
      */
-    public function getId()
+    public function getVersion()
     {
-        return $this->id;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return Person
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
+        return $this->version;
     }
 
     /**
@@ -456,81 +516,9 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     }
 
     /**
-     * Set the other name
+     * Set the application organisation persons
      *
-     * @param string $otherName new value being set
-     *
-     * @return Person
-     */
-    public function setOtherName($otherName)
-    {
-        $this->otherName = $otherName;
-
-        return $this;
-    }
-
-    /**
-     * Get the other name
-     *
-     * @return string
-     */
-    public function getOtherName()
-    {
-        return $this->otherName;
-    }
-
-    /**
-     * Set the title
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $title entity being set as the value
-     *
-     * @return Person
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get the title
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return Person
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set the application organisation person
-     *
-     * @param ArrayCollection $applicationOrganisationPersons collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $applicationOrganisationPersons collection being set as the value
      *
      * @return Person
      */
@@ -544,7 +532,7 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Get the application organisation persons
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getApplicationOrganisationPersons()
     {
@@ -554,7 +542,7 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Add a application organisation persons
      *
-     * @param ArrayCollection|mixed $applicationOrganisationPersons collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $applicationOrganisationPersons collection being added
      *
      * @return Person
      */
@@ -591,9 +579,9 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     }
 
     /**
-     * Set the contact detail
+     * Set the contact details
      *
-     * @param ArrayCollection $contactDetails collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $contactDetails collection being set as the value
      *
      * @return Person
      */
@@ -607,7 +595,7 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Get the contact details
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getContactDetails()
     {
@@ -617,7 +605,7 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Add a contact details
      *
-     * @param ArrayCollection|mixed $contactDetails collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $contactDetails collection being added
      *
      * @return Person
      */
@@ -654,9 +642,9 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     }
 
     /**
-     * Set the disqualification
+     * Set the disqualifications
      *
-     * @param ArrayCollection $disqualifications collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $disqualifications collection being set as the value
      *
      * @return Person
      */
@@ -670,7 +658,7 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Get the disqualifications
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getDisqualifications()
     {
@@ -680,7 +668,7 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Add a disqualifications
      *
-     * @param ArrayCollection|mixed $disqualifications collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $disqualifications collection being added
      *
      * @return Person
      */
@@ -717,9 +705,9 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     }
 
     /**
-     * Set the organisation person
+     * Set the organisation persons
      *
-     * @param ArrayCollection $organisationPersons collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $organisationPersons collection being set as the value
      *
      * @return Person
      */
@@ -733,7 +721,7 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Get the organisation persons
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getOrganisationPersons()
     {
@@ -743,7 +731,7 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Add a organisation persons
      *
-     * @param ArrayCollection|mixed $organisationPersons collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $organisationPersons collection being added
      *
      * @return Person
      */
@@ -777,5 +765,14 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

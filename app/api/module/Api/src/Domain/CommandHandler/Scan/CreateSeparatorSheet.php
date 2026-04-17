@@ -51,6 +51,7 @@ class CreateSeparatorSheet extends AbstractCommandHandler implements Transaction
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      * @throws ValidationException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $catId = $command->getCategoryId();

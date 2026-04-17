@@ -25,6 +25,7 @@ class CanManageUserInternal extends AbstractHandler implements AuthAwareInterfac
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->isInternalUser() && $this->isGranted(Permission::CAN_MANAGE_USER_INTERNAL);

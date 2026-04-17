@@ -19,6 +19,7 @@ class Meetingvenue extends SingleValueAbstract
      *
      * @return null|string
      */
+    #[\Override]
     public function render()
     {
         return $this->data['venue']['name'] ?? $this->data['venueOther'];

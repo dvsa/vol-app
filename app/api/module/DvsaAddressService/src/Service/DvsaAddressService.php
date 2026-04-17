@@ -22,6 +22,7 @@ class DvsaAddressService implements AddressInterface
      * @throws GuzzleException
      * @throws ServiceException
      */
+    #[\Override]
     public function lookupAddress(string $query): array
     {
         try {

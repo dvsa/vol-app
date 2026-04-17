@@ -26,6 +26,7 @@ final class Update extends CreateUpdateAbstract implements TransactionedInterfac
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command UpdateCommand For traceability */

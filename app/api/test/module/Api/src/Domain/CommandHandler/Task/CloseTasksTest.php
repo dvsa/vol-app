@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Close Tasks Test
  *
@@ -29,14 +31,15 @@ class CloseTasksTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(['ids' => [123, 321]]);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Can Access Application Test
  *
@@ -32,10 +34,8 @@ class CanAccessApplicationTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValid($isOwner, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $isOwner, mixed $expected): void
     {
         $this->setIsGranted(Permission::INTERNAL_USER, false);
         $this->auth->shouldReceive('getIdentity')->andReturn(null);
@@ -49,10 +49,8 @@ class CanAccessApplicationTest extends AbstractValidatorsTestCase
         $this->assertEquals($expected, $this->sut->isValid(111));
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValidInternal($isOwner, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValidInternal(mixed $isOwner, mixed $expected): void
     {
         $this->setIsGranted(Permission::INTERNAL_USER, true);
         $entity = m::mock(Application::class);
@@ -65,7 +63,7 @@ class CanAccessApplicationTest extends AbstractValidatorsTestCase
         $this->assertEquals(true, $this->sut->isValid(111));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [true, true],

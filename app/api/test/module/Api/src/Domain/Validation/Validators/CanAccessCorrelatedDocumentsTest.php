@@ -31,7 +31,7 @@ class CanAccessCorrelatedDocumentsTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    public function testIsValidTrue()
+    public function testIsValidTrue(): void
     {
         $doc = m::mock(Entity\Doc\Document::class);
         $doc->shouldReceive('getCreatedBy->getId')
@@ -57,7 +57,7 @@ class CanAccessCorrelatedDocumentsTest extends AbstractValidatorsTestCase
         $this->assertTrue($this->sut->isValid($query));
     }
 
-    public function testIsValidFalse()
+    public function testIsValidFalse(): void
     {
         $doc = m::mock(Entity\Doc\Document::class);
         $doc->shouldReceive('getCreatedBy->getId')

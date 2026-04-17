@@ -26,6 +26,7 @@ class SubmitForm extends AbstractSurrenderCommandHandler
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = $this->handleSideEffect(\Dvsa\Olcs\Transfer\Command\Surrender\Update::create(

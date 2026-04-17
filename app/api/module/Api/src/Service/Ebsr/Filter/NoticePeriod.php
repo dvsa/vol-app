@@ -20,6 +20,7 @@ class NoticePeriod extends AbstractFilter
      * @throws Exception\RuntimeException If filtering $value is impossible
      * @return mixed
      */
+    #[\Override]
     public function filter($value)
     {
         $value['busNoticePeriod'] = BusNoticePeriod::NOTICE_PERIOD_OTHER;

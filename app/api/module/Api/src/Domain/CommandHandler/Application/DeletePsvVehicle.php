@@ -24,6 +24,7 @@ final class DeletePsvVehicle extends AbstractCommandHandler implements Transacti
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

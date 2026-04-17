@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer\Email;
 
 use Dvsa\Olcs\Api\Domain\Command\Email\SendUserRegistered as SampleEmail;
@@ -11,13 +13,10 @@ use Dvsa\Olcs\Api\Entity\Queue\Queue as QueueEntity;
 use Dvsa\Olcs\Cli\Service\Queue\Consumer\Email\Send;
 use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
-use Laminas\Serializer\Adapter\Json as LaminasJson;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 
-/**
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\Email\Send
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\Email\Send::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer::class)]
 class SendTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Send::class;
@@ -25,10 +24,9 @@ class SendTest extends AbstractConsumerTestCase
     /** @var  Send */
     protected $sut;
 
-    public function testProcessMessageSuccess()
+    public function testProcessMessageSuccess(): void
     {
-        $json = new LaminasJson();
-        $options = $json->serialize(
+        $options = json_encode(
             [
                 'commandClass' => SampleEmail::class,
                 'commandData' => [
@@ -67,10 +65,9 @@ class SendTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testProcessMessageHandlesEmailNotSentException()
+    public function testProcessMessageHandlesEmailNotSentException(): void
     {
-        $json = new LaminasJson();
-        $options = $json->serialize(
+        $options = json_encode(
             [
                 'commandClass' => SampleEmail::class,
                 'commandData' => [
@@ -109,10 +106,9 @@ class SendTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testProcessMessageHandlesLaminasServiceException()
+    public function testProcessMessageHandlesLaminasServiceException(): void
     {
-        $json = new LaminasJson();
-        $options = $json->serialize(
+        $options = json_encode(
             [
                 'commandClass' => SampleEmail::class,
                 'commandData' => [
@@ -150,10 +146,9 @@ class SendTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testProcessMessageHandlesException()
+    public function testProcessMessageHandlesException(): void
     {
-        $json = new LaminasJson();
-        $options = $json->serialize(
+        $options = json_encode(
             [
                 'commandClass' => SampleEmail::class,
                 'commandData' => [
@@ -191,10 +186,9 @@ class SendTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testProcessMessageHandlesMaxAttempts()
+    public function testProcessMessageHandlesMaxAttempts(): void
     {
-        $json = new LaminasJson();
-        $options = $json->serialize(
+        $options = json_encode(
             [
                 'commandClass' => SampleEmail::class,
                 'commandData' => [

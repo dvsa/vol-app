@@ -16,6 +16,7 @@ class CanAccessTransaction extends AbstractCanAccessEntity
      *
      * @return \Dvsa\Olcs\Api\Entity\Fee\Transaction
      */
+    #[\Override]
     protected function getEntity($entityId)
     {
         // is entityId is numeric then assume it is a transaction ID

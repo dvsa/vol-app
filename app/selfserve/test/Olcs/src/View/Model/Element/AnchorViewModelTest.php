@@ -31,10 +31,8 @@ class AnchorViewModelTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
-    public function constructThrowsExceptionIfRouteAndUrlAreProvided()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructThrowsExceptionIfRouteAndUrlAreProvided(): void
     {
         // Expect
         $this->expectException(InvalidArgumentException::class);
@@ -44,10 +42,8 @@ class AnchorViewModelTest extends MockeryTestCase
         $this->setUpSut([static::THE_ROUTE_VARIABLE_KEY => static::A_ROUTE, static::THE_URL_VARIABLE_KEY => static::A_URL]);
     }
 
-    /**
-     * @test
-     */
-    public function constructSetsTemplate()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructSetsTemplate(): void
     {
         // Execute
         $this->setUpSut();
@@ -56,10 +52,8 @@ class AnchorViewModelTest extends MockeryTestCase
         $this->assertEquals(static::ANCHOR_TEMPLATE, $this->sut->getTemplate());
     }
 
-    /**
-     * @test
-     */
-    public function constructAppliesADefaultClass()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructAppliesADefaultClass(): void
     {
         // Execute
         $this->setUpSut();
@@ -68,10 +62,8 @@ class AnchorViewModelTest extends MockeryTestCase
         $this->assertEquals(static::GOVUK_LINK_CLASS, $this->sut->getVariable(static::THE_CLASS_VARIABLE_KEY));
     }
 
-    /**
-     * @test
-     */
-    public function constructOverridesDefaultClassWhenCustomClassIsProvided()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructOverridesDefaultClassWhenCustomClassIsProvided(): void
     {
         // Execute
         $this->setUpSut([static::THE_CLASS_VARIABLE_KEY => static::A_CUSTOM_CLASS]);
@@ -80,9 +72,7 @@ class AnchorViewModelTest extends MockeryTestCase
         $this->assertEquals(static::A_CUSTOM_CLASS, $this->sut->getVariable(static::THE_CLASS_VARIABLE_KEY));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariableisCallable(): void
     {
         // Setup
@@ -92,11 +82,8 @@ class AnchorViewModelTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->setVariable(...));
     }
 
-    /**
-     * @test
-     *
-     * @depends setVariableisCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setVariableisCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariableThrowsExceptionIfRouteIsProvidedWhileUrlIsAlreadySet(): void
     {
         // Setup
@@ -110,11 +97,8 @@ class AnchorViewModelTest extends MockeryTestCase
         $this->sut->setVariable(static::THE_ROUTE_VARIABLE_KEY, static::A_ROUTE);
     }
 
-    /**
-     * @test
-     *
-     * @depends setVariableisCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setVariableisCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariableThrowsExceptionIfUrlIsProvidedWhileRouteIsAlreadySet(): void
     {
         // Setup
@@ -128,9 +112,7 @@ class AnchorViewModelTest extends MockeryTestCase
         $this->sut->setVariable(static::THE_URL_VARIABLE_KEY, static::A_URL);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariablesisCallable(): void
     {
         // Setup
@@ -140,11 +122,8 @@ class AnchorViewModelTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->setVariables(...));
     }
 
-    /**
-     * @test
-     *
-     * @depends setVariablesisCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setVariablesisCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariablesThrowsExceptionIfRouteAndUrlAreProvided(): void
     {
         // Setup
@@ -158,11 +137,8 @@ class AnchorViewModelTest extends MockeryTestCase
         $this->sut->setVariables([static::THE_ROUTE_VARIABLE_KEY => static::A_ROUTE, static::THE_URL_VARIABLE_KEY => static::A_URL]);
     }
 
-    /**
-     * @test
-     *
-     * @depends setVariablesisCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setVariablesisCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariablesOverwritesRouteWhenUrlIsAlreadySet(): void
     {
         // Setup
@@ -175,11 +151,8 @@ class AnchorViewModelTest extends MockeryTestCase
         $this->assertEquals(static::A_ROUTE, $this->sut->getVariable(static::THE_ROUTE_VARIABLE_KEY));
     }
 
-    /**
-     * @test
-     *
-     * @depends setVariablesisCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setVariablesisCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariablesThrowsExceptionIfNotOverwritingAndVariablesContainsRouteWhileUrlIsAlreadySet(): void
     {
         // Setup
@@ -193,11 +166,8 @@ class AnchorViewModelTest extends MockeryTestCase
         $this->sut->setVariables([static::THE_ROUTE_VARIABLE_KEY => static::A_ROUTE]);
     }
 
-    /**
-     * @test
-     *
-     * @depends setVariablesisCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setVariablesisCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariablesOverwritesUrlWhenRouteIsAlreadySet(): void
     {
         // Setup
@@ -210,11 +180,8 @@ class AnchorViewModelTest extends MockeryTestCase
         $this->assertEquals(static::A_URL, $this->sut->getVariable(static::THE_URL_VARIABLE_KEY));
     }
 
-    /**
-     * @test
-     *
-     * @depends setVariablesisCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setVariablesisCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariablesThrowsExceptionIfNotOverwritingAndVariablesContainsUrlWhileRouteIsAlreadySet(): void
     {
         // Setup

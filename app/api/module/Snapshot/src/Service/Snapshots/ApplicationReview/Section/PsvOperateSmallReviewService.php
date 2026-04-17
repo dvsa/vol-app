@@ -6,6 +6,7 @@ namespace Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section;
 
 class PsvOperateSmallReviewService extends AbstractReviewService
 {
+    #[\Override]
     public function getConfigFromData(array $data = []): array
     {
         return [

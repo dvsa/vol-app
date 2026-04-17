@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  *  Submission InformationComplete Test
  *
@@ -33,7 +35,7 @@ class InformationCompleteTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandUnassignedSubmission()
+    public function testHandleCommandUnassignedSubmission(): void
     {
         $id = 2;
         $infoCompleteDate = '2015-01-05';

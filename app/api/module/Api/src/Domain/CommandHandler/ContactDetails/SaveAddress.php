@@ -30,6 +30,7 @@ final class SaveAddress extends AbstractCommandHandler implements TransactionedI
 
     protected $extraRepos = ['ContactDetails'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         // Update Address

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller;
 
 use Common\RefData;

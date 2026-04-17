@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\CommunityLic;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -21,7 +23,7 @@ class CommunityLicSuspensionReasonEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $suspension = m::mock(CommunityLicSuspension::class);
         $type = 'type';

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -74,10 +76,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
      */
     protected $financialStandingHelper;
 
-    /**
-     * @test
-     */
-    public function handleCommandIsCallable()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandIsCallable(): void
     {
         // Setup
         $this->setUpSut();
@@ -86,15 +86,23 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         $this->assertIsCallable($this->sut->handleCommand(...));
     }
 
-    public function handleCommandProvider()
-    {
-        $this->initReferences();
+    private static array $refDataCache = [];
 
+    private static function refData(string $id): RefData
+    {
+        if (!isset(self::$refDataCache[$id])) {
+            self::$refDataCache[$id] = m::mock(RefData::class)->makePartial()->setId($id);
+        }
+        return self::$refDataCache[$id];
+    }
+
+    public static function handleCommandProvider(): array
+    {
         return [
             'Changed Type Of Licence and Vehicle Type' => [
                 'typeOfLicence',
-                $this->getApplicationState1(),
-                $this->getLicenceState2(),
+                self::getApplicationState1(),
+                self::getLicenceState2(),
                 [
                     'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -108,8 +116,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Change Vehicle Type only' => [
                 'typeOfLicence',
-                $this->getApplicationState2(RefData::APP_VEHICLE_TYPE_LGV),
-                $this->getLicenceState2(),
+                self::getApplicationState2(RefData::APP_VEHICLE_TYPE_LGV),
+                self::getLicenceState2(),
                 [
                     'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -123,8 +131,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Change Vehicle Type to something which requires Operating Centre' => [
                 'typeOfLicence',
-                $this->getApplicationState2(RefData::APP_VEHICLE_TYPE_MIXED),
-                $this->getLicenceState2(RefData::APP_VEHICLE_TYPE_LGV),
+                self::getApplicationState2(RefData::APP_VEHICLE_TYPE_MIXED),
+                self::getLicenceState2(RefData::APP_VEHICLE_TYPE_LGV),
                 [
                     'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'OperatingCentres' => UpdateVariationCompletion::STATUS_UPDATED,
@@ -138,8 +146,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Change Vehicle Type to something which can have Trailer' => [
                 'typeOfLicence',
-                $this->getApplicationState2(RefData::APP_VEHICLE_TYPE_MIXED),
-                $this->getLicenceState2(RefData::APP_VEHICLE_TYPE_LGV),
+                self::getApplicationState2(RefData::APP_VEHICLE_TYPE_MIXED),
+                self::getLicenceState2(RefData::APP_VEHICLE_TYPE_LGV),
                 [
                     'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Safety' => UpdateVariationCompletion::STATUS_UNCHANGED,
@@ -153,8 +161,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Unchanged Type Of Licence' => [
                 'typeOfLicence',
-                $this->getApplicationState2(),
-                $this->getLicenceState2(),
+                self::getApplicationState2(),
+                self::getLicenceState2(),
                 [
                     'TypeOfLicence' => UpdateVariationCompletion::STATUS_UPDATED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -168,8 +176,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Transport Managers' => [
                 'transportManagers',
-                $this->getApplicationState1(),
-                $this->getLicenceState2(),
+                self::getApplicationState1(),
+                self::getLicenceState2(),
                 [
                     'TransportManagers' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -183,8 +191,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Unchanged Transport Managers' => [
                 'transportManagers',
-                $this->getApplicationState2(),
-                $this->getLicenceState2(),
+                self::getApplicationState2(),
+                self::getLicenceState2(),
                 [
                     'TransportManagers' => UpdateVariationCompletion::STATUS_UPDATED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -198,8 +206,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Vehicles' => [
                 'vehicles',
-                $this->getApplicationState1(),
-                $this->getLicenceState2(),
+                self::getApplicationState1(),
+                self::getLicenceState2(),
                 [
                     'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -213,8 +221,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Vehicles - totAuthVehicles below activeVehicles count' => [
                 'vehicles',
-                $this->getApplicationState1()->updateTotAuthHgvVehicles(1),
-                $this->getLicenceState2(),
+                self::getApplicationState1()->updateTotAuthHgvVehicles(1),
+                self::getLicenceState2(),
                 [
                     'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 ],
@@ -226,8 +234,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Vehicles - application activeVehicles count below 1' => [
                 'vehicles',
-                $this->getApplicationState1(0),
-                $this->getLicenceState2(),
+                self::getApplicationState1(0),
+                self::getLicenceState2(),
                 [
                     'Vehicles' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
                 ],
@@ -239,8 +247,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Unchanged Vehicles' => [
                 'vehicles',
-                $this->getApplicationState2(),
-                $this->getLicenceState2(),
+                self::getApplicationState2(),
+                self::getLicenceState2(),
                 [
                     'Vehicles' => UpdateVariationCompletion::STATUS_UPDATED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -254,8 +262,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Conditions Undertakings' => [
                 'conditionsUndertakings',
-                $this->getApplicationState1(),
-                $this->getLicenceState2(),
+                self::getApplicationState1(),
+                self::getLicenceState2(),
                 [
                     'ConditionsUndertakings' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -269,8 +277,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Unchanged Conditions Undertakings' => [
                 'conditionsUndertakings',
-                $this->getApplicationState2(),
-                $this->getLicenceState2(),
+                self::getApplicationState2(),
+                self::getLicenceState2(),
                 [
                     'ConditionsUndertakings' => UpdateVariationCompletion::STATUS_UPDATED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -284,8 +292,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Undertakings' => [
                 'undertakings',
-                $this->getApplicationState1(),
-                $this->getLicenceState2(),
+                self::getApplicationState1(),
+                self::getLicenceState2(),
                 [
                     'Undertakings' => UpdateVariationCompletion::STATUS_UNCHANGED
                 ],
@@ -297,8 +305,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Unchanged Undertakings' => [
                 'undertakings',
-                $this->getApplicationState3(),
-                $this->getLicenceState2(),
+                self::getApplicationState3(),
+                self::getLicenceState2(),
                 [
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
                 ],
@@ -310,8 +318,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Business Type' => [
                 'businessType',
-                $this->getApplicationState1(),
-                $this->getLicenceState1(),
+                self::getApplicationState1(),
+                self::getLicenceState1(),
                 [
                     'BusinessType' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -327,8 +335,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Business Details' => [
                 'businessDetails',
-                $this->getApplicationState1(),
-                $this->getLicenceState1(),
+                self::getApplicationState1(),
+                self::getLicenceState1(),
                 [
                     'BusinessDetails' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -344,8 +352,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Business Details - requires attention or updated, mark the section as updated' => [
                 'businessDetails',
-                $this->getApplicationState1(),
-                $this->getLicenceState1(),
+                self::getApplicationState1(),
+                self::getLicenceState1(),
                 [
                     'BusinessDetails' => UpdateVariationCompletion::STATUS_UPDATED,
                 ],
@@ -357,8 +365,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Unchanged Business Details' => [
                 'businessDetails',
-                $this->getApplicationState1(),
-                $this->getLicenceState1(),
+                self::getApplicationState1(),
+                self::getLicenceState1(),
                 [
                     'BusinessDetails' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 ],
@@ -372,8 +380,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Addresses' => [
                 'addresses',
-                $this->getApplicationState1(),
-                $this->getLicenceState1(),
+                self::getApplicationState1(),
+                self::getLicenceState1(),
                 [
                     'Addresses' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -389,8 +397,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Addresses - requires attention or updated, mark the section as updated' => [
                 'addresses',
-                $this->getApplicationState1(),
-                $this->getLicenceState1(),
+                self::getApplicationState1(),
+                self::getLicenceState1(),
                 [
                     'Addresses' => UpdateVariationCompletion::STATUS_UPDATED,
                 ],
@@ -402,8 +410,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Unchanged Addresses' => [
                 'addresses',
-                $this->getApplicationState1(),
-                $this->getLicenceState1(),
+                self::getApplicationState1(),
+                self::getLicenceState1(),
                 [
                     'Addresses' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 ],
@@ -417,8 +425,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed People' => [
                 'people',
-                $this->getApplicationState6('U'),
-                $this->getLicenceState1(),
+                self::getApplicationState6('U'),
+                self::getLicenceState1(),
                 [
                     'People' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -434,8 +442,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed People 1' => [
                 'people',
-                $this->getApplicationState6('D'),
-                $this->getLicenceState1(),
+                self::getApplicationState6('D'),
+                self::getLicenceState1(),
                 [
                     'People' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -449,8 +457,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed People - requires attention or updated, mark the section as updated' => [
                 'people',
-                $this->getApplicationState6('U'),
-                $this->getLicenceState1(),
+                self::getApplicationState6('U'),
+                self::getLicenceState1(),
                 [
                     'People' => UpdateVariationCompletion::STATUS_UPDATED,
                 ],
@@ -462,8 +470,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Unchanged People' => [
                 'people',
-                $this->getApplicationState6(),
-                $this->getLicenceState1(),
+                self::getApplicationState6(),
+                self::getLicenceState1(),
                 [
                     'People' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
                 ],
@@ -475,8 +483,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Financial Evidence' => [
                 'financialEvidence',
-                $this->getApplicationState1(),
-                $this->getLicenceState1(),
+                self::getApplicationState1(),
+                self::getLicenceState1(),
                 [
                     'FinancialEvidence' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -490,8 +498,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Discs' => [
                 'discs',
-                $this->getApplicationState1(),
-                $this->getLicenceState1(),
+                self::getApplicationState1(),
+                self::getLicenceState1(),
                 [
                     'Discs' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -505,8 +513,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Discs - totAuthVehicles less than psvDiscsNotCeasedCount' => [
                 'discs',
-                $this->getApplicationState1()->updateTotAuthHgvVehicles(1),
-                $this->getLicenceState1(),
+                self::getApplicationState1()->updateTotAuthHgvVehicles(1),
+                self::getLicenceState1(),
                 [
                     'Discs' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 ],
@@ -518,8 +526,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Community Licences' => [
                 'communityLicences',
-                $this->getApplicationState1(),
-                $this->getLicenceState1(),
+                self::getApplicationState1(),
+                self::getLicenceState1(),
                 [
                     'CommunityLicences' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -533,8 +541,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Community Licences - totAuthVehicles less than comLic' => [
                 'communityLicences',
-                $this->getApplicationState1()->updateTotAuthHgvVehicles(1),
-                $this->getLicenceState1(),
+                self::getApplicationState1()->updateTotAuthHgvVehicles(1),
+                self::getLicenceState1(),
                 [
                     'CommunityLicences' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 ],
@@ -546,8 +554,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Safety' => [
                 'safety',
-                $this->getApplicationState1(),
-                $this->getLicenceState1(),
+                self::getApplicationState1(),
+                self::getLicenceState1(),
                 [
                     'Safety' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -563,8 +571,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Unchanged Safety' => [
                 'safety',
-                $this->getApplicationState1(),
-                $this->getLicenceState1(),
+                self::getApplicationState1(),
+                self::getLicenceState1(),
                 [
                     'Safety' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 ],
@@ -578,8 +586,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Operating Centres 1' => [
                 'operatingCentres',
-                $this->getApplicationState1(),
-                $this->getLicenceState1(),
+                self::getApplicationState1(),
+                self::getLicenceState1(),
                 [
                     'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
@@ -595,8 +603,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Operating Centres 2' => [
                 'operatingCentres',
-                $this->getApplicationState2(),
-                $this->getLicenceState1(),
+                self::getApplicationState2(),
+                self::getLicenceState1(),
                 [
                     'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
@@ -612,8 +620,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Operating Centres 3' => [
                 'operatingCentres',
-                $this->getApplicationState4(),
-                $this->getLicenceState3(),
+                self::getApplicationState4(),
+                self::getLicenceState3(),
                 [
                     'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
@@ -629,8 +637,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Operating Centres 4' => [
                 'operatingCentres',
-                $this->getApplicationState4(),
-                $this->getLicenceState4(),
+                self::getApplicationState4(),
+                self::getLicenceState4(),
                 [
                     'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
@@ -645,8 +653,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Unchanged Operating Centres' => [
                 'operatingCentres',
-                $this->getApplicationState2(),
-                $this->getLicenceState2(),
+                self::getApplicationState2(),
+                self::getLicenceState2(),
                 [
                     'OperatingCentres' => UpdateVariationCompletion::STATUS_UPDATED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -660,8 +668,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Unchanged Operating Centres - hasActuallyUpdatedOperatingCentres' => [
                 'operatingCentres',
-                $this->getApplicationState2(),
-                $this->getLicenceState1(),
+                self::getApplicationState2(),
+                self::getLicenceState1(),
                 [
                     'OperatingCentres' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 ],
@@ -673,8 +681,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Goods - totAuthVehicles has dropped below the number of vehicles added' => [
                 'operatingCentres',
-                $this->getApplicationState2()->updateTotAuthHgvVehicles(0),
-                $this->getLicenceState1(),
+                self::getApplicationState2()->updateTotAuthHgvVehicles(0),
+                self::getLicenceState1(),
                 [
                     'OperatingCentres' => UpdateVariationCompletion::STATUS_UPDATED,
                     'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
@@ -688,8 +696,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Financial History' => [
                 'financialHistory',
-                $this->getApplicationState1(),
-                $this->getLicenceState1(),
+                self::getApplicationState1(),
+                self::getLicenceState1(),
                 [
                     'FinancialHistory' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -703,8 +711,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Unchanged Financial History' => [
                 'financialHistory',
-                $this->getApplicationState2(),
-                $this->getLicenceState2(),
+                self::getApplicationState2(),
+                self::getLicenceState2(),
                 [
                     'FinancialHistory' => UpdateVariationCompletion::STATUS_UPDATED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -718,8 +726,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Convictions Penalties 1' => [
                 'convictionsPenalties',
-                $this->getApplicationState1(),
-                $this->getLicenceState1(),
+                self::getApplicationState1(),
+                self::getLicenceState1(),
                 [
                     'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -733,8 +741,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Changed Convictions Penalties 2' => [
                 'convictionsPenalties',
-                $this->getApplicationState2(),
-                $this->getLicenceState1(),
+                self::getApplicationState2(),
+                self::getLicenceState1(),
                 [
                     'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -748,8 +756,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Unchanged Convictions Penalties' => [
                 'convictionsPenalties',
-                $this->getApplicationState3(),
-                $this->getLicenceState2(),
+                self::getApplicationState3(),
+                self::getLicenceState2(),
                 [
                     'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UPDATED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -763,8 +771,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Licence Upgrade' => [
                 'typeOfLicence',
-                $this->getApplicationState1(),
-                $this->getLicenceState3(),
+                self::getApplicationState1(),
+                self::getLicenceState3(),
                 [
                     'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
@@ -788,8 +796,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Declarations Internal unchanged' => [
                 'declarationsInternal',
-                $this->getApplicationState3(),
-                $this->getLicenceState2(),
+                self::getApplicationState3(),
+                self::getLicenceState2(),
                 [
                     'DeclarationsInternal' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 ],
@@ -801,8 +809,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ],
             'Declarations Internal authSignature set' => [
                 'declarationsInternal',
-                $this->getApplicationState5(),
-                $this->getLicenceState2(),
+                self::getApplicationState5(),
+                self::getLicenceState2(),
                 [
                     'DeclarationsInternal' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 ],
@@ -815,19 +823,17 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider handleCommandProvider
-     * @depends handleCommandIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
     public function testHandleCommand(
-        $section,
+        mixed $section,
         ApplicationEntity $application,
         LicenceEntity $licence,
         array $previousStatuses = [],
         array $expectedStatuses = [],
-        $expectedDeclarationConfirmation = '',
+        mixed $expectedDeclarationConfirmation = '',
         array $commandData = []
-    ) {
+    ): void {
         $this->setUpLegacy();
         $data = [
             'id' => 111,
@@ -919,11 +925,9 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandMarksOperatingCentresSectionAsRequiringAttentionIfVehicleAuthorizationsAreNotValid()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandMarksOperatingCentresSectionAsRequiringAttentionIfVehicleAuthorizationsAreNotValid(): void
     {
         // Setup
         $this->overrideUpdateHelperWithMock();
@@ -947,11 +951,9 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         $this->assertSame(ApplicationCompletion::STATUS_VARIATION_REQUIRES_ATTENTION, $application->getApplicationCompletion()->getOperatingCentresStatus());
     }
 
-    /**
-     * @test
-     * @depends handleCommandMarksOperatingCentresSectionAsRequiringAttentionIfVehicleAuthorizationsAreNotValid
-     */
-    public function handleCommandDoesNotMarkOperatingCentresSectionAsRequiringAttentionIfVehicleAuthorizationsAreValid()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandMarksOperatingCentresSectionAsRequiringAttentionIfVehicleAuthorizationsAreNotValid')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandDoesNotMarkOperatingCentresSectionAsRequiringAttentionIfVehicleAuthorizationsAreValid(): void
     {
         // Setup
         $this->overrideUpdateHelperWithMock();
@@ -968,11 +970,9 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         $this->assertNotSame(Application::VARIATION_STATUS_REQUIRES_ATTENTION, $application->getApplicationCompletion()->getOperatingCentresStatus());
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandValidatesTotAuthHgvVehiclesForPsvLicences()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandValidatesTotAuthHgvVehiclesForPsvLicences(): void
     {
         // Setup
         $this->overrideUpdateHelperWithMock();
@@ -994,12 +994,10 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($this->commandToUpdateOperatingCentresSectionForApplication($application));
     }
 
-    /**
-     * @test
-     * @depends handleCommandValidatesTotAuthHgvVehiclesForPsvLicences
-     * @dataProvider operatingCentreVehicleAuthorisationConstraintsDataProvider
-     */
-    public function handleCommandValidatesTotAuthHgvVehiclesForPsvLicencesAgainstCorrectOperatingCentreConstraints(array $operatingCentresVehicleCapacities, array $expectedVehicleConstraints)
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandValidatesTotAuthHgvVehiclesForPsvLicences')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('operatingCentreVehicleAuthorisationConstraintsDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandValidatesTotAuthHgvVehiclesForPsvLicencesAgainstCorrectOperatingCentreConstraints(array $operatingCentresVehicleCapacities, array $expectedVehicleConstraints): void
     {
         // Setup
         $this->overrideUpdateHelperWithMock();
@@ -1036,11 +1034,9 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($this->commandToUpdateOperatingCentresSectionForApplication($application));
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandValidatesHgvsForGoodsVehicleLicences()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandValidatesHgvsForGoodsVehicleLicences(): void
     {
         // Setup
         $this->overrideUpdateHelperWithMock();
@@ -1062,12 +1058,10 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($this->commandToUpdateOperatingCentresSectionForApplication($application));
     }
 
-    /**
-     * @test
-     * @depends      handleCommandValidatesHgvsForGoodsVehicleLicences
-     * @dataProvider operatingCentreVehicleAuthorisationConstraintsDataProvider
-     */
-    public function handleCommandValidatesTotAuthHgvVehiclesForGoodsVehicleLicencesAgainstCorrectOperatingCentreConstraints(array $operatingCentresVehicleCapacities, array $expectedVehicleConstraints)
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandValidatesHgvsForGoodsVehicleLicences')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('operatingCentreVehicleAuthorisationConstraintsDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandValidatesTotAuthHgvVehiclesForGoodsVehicleLicencesAgainstCorrectOperatingCentreConstraints(array $operatingCentresVehicleCapacities, array $expectedVehicleConstraints): void
     {
         // Setup
         $this->overrideUpdateHelperWithMock();
@@ -1104,7 +1098,7 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($this->commandToUpdateOperatingCentresSectionForApplication($application));
     }
 
-    private function applyStandardFinancialStandingHelperExpectations($application)
+    private function applyStandardFinancialStandingHelperExpectations(mixed $application): void
     {
         $this->financialStandingHelperService()->shouldReceive('getRequiredFinance')
             ->with($application)
@@ -1114,10 +1108,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ->andReturn(2000);
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
-    public function testMarksFinancialEvidenceSectionAsRequiringAttentionIfApplicationAmountExceedsLicenceAmount()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    public function testMarksFinancialEvidenceSectionAsRequiringAttentionIfApplicationAmountExceedsLicenceAmount(): void
     {
         // Setup
         $this->overrideUpdateHelperWithMock();
@@ -1148,13 +1140,11 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     * @dataProvider dpMarksFinancialEvidenceSectionAsRequiringAttentionIfApplicationAmountDoesntExceedLicenceAmount
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpMarksFinancialEvidenceSectionAsRequiringAttentionIfApplicationAmountDoesntExceedLicenceAmount')]
     public function testMarksFinancialEvidenceSectionAsRequiringAttentionIfApplicationAmountDoesntExceedLicenceAmount(
-        $applicationRequiredFinance
-    ) {
+        mixed $applicationRequiredFinance
+    ): void {
         // Setup
         $this->overrideUpdateHelperWithMock();
         $this->setUpSut();
@@ -1184,7 +1174,7 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpMarksFinancialEvidenceSectionAsRequiringAttentionIfApplicationAmountDoesntExceedLicenceAmount()
+    public static function dpMarksFinancialEvidenceSectionAsRequiringAttentionIfApplicationAmountDoesntExceedLicenceAmount(): array
     {
         return [
             [2000],
@@ -1192,6 +1182,7 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
     }
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();
@@ -1210,7 +1201,7 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         $this->financialStandingHelperService();
     }
 
-    protected function setUpSut()
+    protected function setUpSut(): void
     {
         $this->sut = new UpdateVariationCompletion();
 
@@ -1222,7 +1213,7 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
     /**
      * @return m\MockInterface|UpdateOperatingCentreHelper
      */
-    protected function updateHelper()
+    protected function updateHelper(): mixed
     {
         $sm = $this->serviceManager();
         if (! $sm->has('UpdateOperatingCentreHelper')) {
@@ -1314,7 +1305,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             LicenceEntity::LICENCE_CATEGORY_PSV,
@@ -1330,14 +1322,14 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    private function assertExpectedStatuses(array $expectedStatuses, ApplicationCompletionEntity $ac)
+    private function assertExpectedStatuses(array $expectedStatuses, ApplicationCompletionEntity $ac): void
     {
         foreach ($expectedStatuses as $property => $status) {
             $this->assertEquals($status, $ac->{'get' . $property . 'Status'}());
         }
     }
 
-    private function getConfiguredCompletion(array $statuses = [])
+    private function getConfiguredCompletion(array $statuses = []): mixed
     {
         /** @var ApplicationCompletionEntity $ac */
         $ac = m::mock(ApplicationCompletionEntity::class)->makePartial();
@@ -1352,7 +1344,7 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
     /**
      * @return LicenceEntity
      */
-    private function newLicence()
+    private static function newLicence(): m\MockInterface
     {
         return m::mock(LicenceEntity::class)->makePartial();
     }
@@ -1360,7 +1352,7 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
     /**
      * @return ApplicationEntity
      */
-    private function newApplication()
+    private static function newApplication(): mixed
     {
         /** @var ApplicationEntity $application */
         $application = m::mock(ApplicationEntity::class)->makePartial();
@@ -1369,13 +1361,13 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         return $application;
     }
 
-    private function getApplicationState1($activeVehiclesCount = 3)
+    private static function getApplicationState1(int $activeVehiclesCount = 3): mixed
     {
-        $application = $this->newApplication();
+        $application = self::newApplication();
 
-        $application->setGoodsOrPsv($this->refData[LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE]);
-        $application->setLicenceType($this->refData[LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL]);
-        $application->setVehicleType($this->refData[RefData::APP_VEHICLE_TYPE_HGV]);
+        $application->setGoodsOrPsv(self::refData(LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE));
+        $application->setLicenceType(self::refData(LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL));
+        $application->setVehicleType(self::refData(RefData::APP_VEHICLE_TYPE_HGV));
         $application->setDeclarationConfirmation('Y');
 
         $tmCollection = new ArrayCollection();
@@ -1410,13 +1402,13 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         return $application;
     }
 
-    private function getApplicationState2($vehicleType = RefData::APP_VEHICLE_TYPE_MIXED)
+    private static function getApplicationState2(mixed $vehicleType = RefData::APP_VEHICLE_TYPE_MIXED): mixed
     {
-        $application = $this->newApplication();
+        $application = self::newApplication();
 
-        $application->setGoodsOrPsv($this->refData[LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE]);
-        $application->setLicenceType($this->refData[LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL]);
-        $application->setVehicleType($this->refData[$vehicleType]);
+        $application->setGoodsOrPsv(self::refData(LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE));
+        $application->setLicenceType(self::refData(LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL));
+        $application->setVehicleType(self::refData($vehicleType));
         $application->setDeclarationConfirmation('Y');
 
         $tmCollection = new ArrayCollection();
@@ -1439,9 +1431,9 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         return $application;
     }
 
-    private function getApplicationState3()
+    private static function getApplicationState3(): mixed
     {
-        $application = $this->newApplication();
+        $application = self::newApplication();
 
         $application->setDeclarationConfirmation('N');
 
@@ -1450,12 +1442,12 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         return $application;
     }
 
-    private function getApplicationState4()
+    private static function getApplicationState4(): mixed
     {
-        $application = $this->newApplication();
+        $application = self::newApplication();
 
-        $application->setGoodsOrPsv($this->refData[LicenceEntity::LICENCE_CATEGORY_PSV]);
-        $application->setLicenceType($this->refData[LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL]);
+        $application->setGoodsOrPsv(self::refData(LicenceEntity::LICENCE_CATEGORY_PSV));
+        $application->setLicenceType(self::refData(LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL));
         $application->setDeclarationConfirmation('Y');
 
         $vehicleCollection = new ArrayCollection();
@@ -1468,21 +1460,21 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
 
         return $application;
     }
-    private function getApplicationState5()
+    private static function getApplicationState5(): mixed
     {
-        $application = $this->newApplication();
+        $application = self::newApplication();
 
         $application->setAuthSignature(true);
 
         return $application;
     }
 
-    private function getApplicationState6($action = null)
+    private static function getApplicationState6(mixed $action = null): mixed
     {
-        $application = $this->newApplication();
+        $application = self::newApplication();
 
-        $application->setGoodsOrPsv($this->refData[LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE]);
-        $application->setLicenceType($this->refData[LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL]);
+        $application->setGoodsOrPsv(self::refData(LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE));
+        $application->setLicenceType(self::refData(LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL));
 
         $aop = new ArrayCollection();
 
@@ -1499,11 +1491,11 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         return $application;
     }
 
-    private function getLicenceState1()
+    private static function getLicenceState1(): mixed
     {
-        $licence = $this->newLicence();
+        $licence = self::newLicence();
 
-        $licence->setLicenceType($this->refData[LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL]);
+        $licence->setLicenceType(self::refData(LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL));
 
         $vehicleCollection = new ArrayCollection();
         $vehicleCollection->add(['removalDate' => null]);
@@ -1519,12 +1511,12 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         return $licence;
     }
 
-    private function getLicenceState2($vehicleType = RefData::APP_VEHICLE_TYPE_MIXED)
+    private static function getLicenceState2(mixed $vehicleType = RefData::APP_VEHICLE_TYPE_MIXED): mixed
     {
-        $licence = $this->newLicence();
+        $licence = self::newLicence();
 
-        $licence->setLicenceType($this->refData[LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL]);
-        $licence->setVehicleType($this->refData[$vehicleType]);
+        $licence->setLicenceType(self::refData(LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL));
+        $licence->setVehicleType(self::refData($vehicleType));
 
         $vehicleCollection = new ArrayCollection();
         $licence->setLicenceVehicles($vehicleCollection);
@@ -1536,11 +1528,11 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         return $licence;
     }
 
-    private function getLicenceState3()
+    private static function getLicenceState3(): mixed
     {
-        $licence = $this->newLicence();
+        $licence = self::newLicence();
 
-        $licence->setLicenceType($this->refData[LicenceEntity::LICENCE_TYPE_RESTRICTED]);
+        $licence->setLicenceType(self::refData(LicenceEntity::LICENCE_TYPE_RESTRICTED));
 
         $vehicleCollection = new ArrayCollection();
         $licence->setLicenceVehicles($vehicleCollection);
@@ -1556,11 +1548,11 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         return $licence;
     }
 
-    private function getLicenceState4()
+    private static function getLicenceState4(): mixed
     {
-        $licence = $this->newLicence();
+        $licence = self::newLicence();
 
-        $licence->setLicenceType($this->refData[LicenceEntity::LICENCE_TYPE_RESTRICTED]);
+        $licence->setLicenceType(self::refData(LicenceEntity::LICENCE_TYPE_RESTRICTED));
 
         $vehicleCollection = new ArrayCollection();
         $licence->setLicenceVehicles($vehicleCollection);

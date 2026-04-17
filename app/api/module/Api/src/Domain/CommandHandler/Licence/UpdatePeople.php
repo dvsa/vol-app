@@ -26,6 +26,7 @@ final class UpdatePeople extends AbstractCommandHandler implements Transactioned
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Repository\Person $repo */

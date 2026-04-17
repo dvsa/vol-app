@@ -19,6 +19,7 @@ class CommunityLicenceReviewService extends AbstractReviewService
      *
      * @return mixed
      */
+    #[\Override]
     public function getConfigFromData(Surrender $surrender)
     {
         $items[] =

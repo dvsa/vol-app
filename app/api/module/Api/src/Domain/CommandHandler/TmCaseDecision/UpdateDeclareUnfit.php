@@ -27,6 +27,7 @@ final class UpdateDeclareUnfit extends AbstractCommandHandler implements Transac
 
     protected $extraRepos = ['Task'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Entity $tmCaseDecision */

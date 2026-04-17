@@ -16,6 +16,7 @@ final class RestoreListConditionUndertaking extends AbstractCommandHandler imple
 {
     protected $repoServiceName = 'ConditionUndertaking';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

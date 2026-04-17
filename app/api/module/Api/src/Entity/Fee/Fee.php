@@ -380,6 +380,7 @@ class Fee extends AbstractFee implements OrganisationProviderInterface
     /**
      * @return array
      */
+    #[\Override]
     public function getCalculatedBundleValues()
     {
         return [
@@ -762,6 +763,7 @@ class Fee extends AbstractFee implements OrganisationProviderInterface
      *
      * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation|null
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         if ($this->getApplication()) {

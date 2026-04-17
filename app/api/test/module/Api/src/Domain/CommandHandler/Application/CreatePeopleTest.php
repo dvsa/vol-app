@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CreatePeopleTest
  *
@@ -36,7 +38,8 @@ class CreatePeopleTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'title_mr', 'org_t_llp', 'org_t_p'
@@ -47,7 +50,7 @@ class CreatePeopleTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandNoDelta()
+    public function testHandleCommandNoDelta(): void
     {
         $data = [
             'id' => 52,
@@ -99,7 +102,7 @@ class CreatePeopleTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['organisatonPerson' => 43, 'person' => 753], $result->getIds());
     }
 
-    public function testHandleCommandDelta()
+    public function testHandleCommandDelta(): void
     {
         $data = [
             'id' => 52,

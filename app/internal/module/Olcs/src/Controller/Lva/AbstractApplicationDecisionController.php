@@ -43,6 +43,7 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
      *
      * @return \Common\View\Model\Section|\Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         $helperFlashMsgr = $this->flashMessengerHelper;
@@ -131,6 +132,7 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
      *
      * @return null
      */
+    #[\Override]
     protected function checkForRedirect($lvaId)
     {
         // no-op to avoid LVA predispatch magic kicking in

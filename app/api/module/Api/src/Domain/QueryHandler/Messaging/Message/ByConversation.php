@@ -34,6 +34,7 @@ class ByConversation extends AbstractQueryHandler implements ToggleRequiredInter
     ];
 
     /** @param QueryInterface|ByConversationQuery $query */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $messageRepository = $this->getRepo(Repository\Message::class);

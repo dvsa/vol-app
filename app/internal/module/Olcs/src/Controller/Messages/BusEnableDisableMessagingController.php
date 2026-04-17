@@ -13,6 +13,7 @@ class BusEnableDisableMessagingController extends AbstractEnableDisableMessaging
 {
     protected $navigationId = 'licence_bus';
 
+    #[\Override]
     public function getLeftView(): ?ViewModel
     {
         if ($this->getRequest()->isXmlHttpRequest()) {
@@ -25,11 +26,13 @@ class BusEnableDisableMessagingController extends AbstractEnableDisableMessaging
         return $view;
     }
 
+    #[\Override]
     protected function getRoutePrefix(): string
     {
         return 'licence/bus_conversation';
     }
 
+    #[\Override]
     protected function getOrganisationId(): int
     {
         $queryResponse = $this->handleQuery(Licence::create(['id' => $this->params()->fromRoute('licence')]));

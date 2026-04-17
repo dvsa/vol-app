@@ -30,6 +30,7 @@ class SendEcmtShortTermAutomaticallyWithdrawn extends AbstractEmailHandler
      *
      * @return array
      */
+    #[\Override]
     protected function getTemplateVariables($recordObject): array
     {
         return [
@@ -37,6 +38,7 @@ class SendEcmtShortTermAutomaticallyWithdrawn extends AbstractEmailHandler
             'paymentDeadlineNumDays' => $this->daysToPayIssueFeeProvider->getDays(),
         ];
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->daysToPayIssueFeeProvider = $container->get('PermitsFeesDaysToPayIssueFeeProvider');

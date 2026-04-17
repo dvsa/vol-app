@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Penalty Test
  */
@@ -26,7 +28,7 @@ class PenaltyTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 111]);
 

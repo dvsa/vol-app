@@ -45,6 +45,7 @@ class PublicationLink extends AbstractRepository
      * @param QueryInterface $query
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if (method_exists($query, 'getTransportManager')) {

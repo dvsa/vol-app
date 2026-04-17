@@ -20,6 +20,7 @@ class ModifyList extends CanAccessLicenceVehiclesWithIds
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         if ($this->canAccessApplication($dto->getApplication()) === false) {

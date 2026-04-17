@@ -4,6 +4,7 @@ use Common\Util\LvaRoute;
 use Olcs\Controller\Application\Processing\ApplicationProcessingInspectionRequestController;
 use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController;
 use Olcs\Controller\Application\Processing\ApplicationProcessingPublicationsController;
+use Olcs\Controller\Bus\Docs\BusDocsController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationFeesController;
 use Olcs\Controller\Licence\SurrenderController;
 use Olcs\Controller\Lva\Application\VehiclesDeclarationsController as ApplicationVehiclesDeclarationsController;
@@ -172,6 +173,114 @@ $routes = [
                 'action' => 'entityList'
             ]
         ]
+    ],
+    'letter' => [
+        'type' => 'Literal',
+        'options' => [
+            'route' => '/letter',
+        ],
+        'may_terminate' => false,
+        'child_routes' => [
+            'create' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/create',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'create',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'generate' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/generate',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'generate',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'preview' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/preview',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'preview',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'preview-content' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/preview-content',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'previewContent',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'edit' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/edit',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'edit',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'save-issue-content' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/save-issue-content',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'saveIssueContent',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'prepare-to-send' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/prepare-to-send',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'prepareToSend',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'save-appendix-content' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/save-appendix-content',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'saveAppendixContent',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'save-section-content' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/save-section-content',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'saveSectionContent',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+        ],
     ],
     'template_lists' => [
         'type' => 'segment',
@@ -674,7 +783,7 @@ $routes = [
                 'options' => [
                     'route' => 'bus/:busRegId/docs[/]',
                     'defaults' => [
-                        'controller' => \Olcs\Controller\Bus\Docs\BusDocsController::class,
+                        'controller' => BusDocsController::class,
                         'action' => 'documents',
                     ]
                 ],
@@ -719,7 +828,7 @@ $routes = [
                             'route' => 'delete/:doc[/]',
                             'defaults' => [
                                 'type' => 'busReg',
-                                'controller' => 'BusDocsController',
+                                'controller' => BusDocsController::class,
                                 'action' => 'delete-document'
                             ]
                         ],
@@ -2261,6 +2370,16 @@ $routes = [
                     ],
                 ],
             ],
+            'check-repute' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'check-repute[/]',
+                    'defaults' => [
+                        'controller' => 'TMController',
+                        'action' => 'checkRepute'
+                    ],
+                ],
+            ],
             'remove' => [
                 'type' => 'segment',
                 'options' => [
@@ -3245,5 +3364,35 @@ $routeConfigs = [
 foreach ($routeConfigs as $routeConfig) {
     $routes = \Laminas\Stdlib\ArrayUtils::merge($routes, include $routeConfig);
 }
+
+// Add static assets redirect route for old snapshot hardcoded html asset paths
+$routes['static-assets'] = [
+    'type' => 'segment',
+    'options' => [
+        'route' => '/static/public[/:path]',
+        'constraints' => [
+            'path' => '.*',
+        ],
+        'defaults' => [
+            'controller' => \Olcs\Controller\StaticAssetsController::class,
+            'action' => 'redirect',
+        ],
+    ],
+];
+
+$routes['styles-assets'] = [
+    'type' => 'segment',
+    'options' => [
+        'route' => '/styles/:path',
+        'constraints' => [
+            'path' => '.+',
+        ],
+        'defaults' => [
+            'controller' => \Olcs\Controller\StaticAssetsController::class,
+            'action' => 'redirect',
+            'prefix' => 'styles',
+        ],
+    ],
+];
 
 return $routes;

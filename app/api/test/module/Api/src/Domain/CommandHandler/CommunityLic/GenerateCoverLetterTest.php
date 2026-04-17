@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\CommunityLic;
 
 use Dvsa\Olcs\Api\Domain\Command\CommunityLic\GenerateCoverLetter as GenerateCoverLetterCmd;
@@ -15,9 +17,7 @@ use Dvsa\Olcs\Api\Entity\System\SubCategory;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\CommunityLic\GenerateCoverLetter
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\CommunityLic\GenerateCoverLetter::class)]
 class GenerateCoverLetterTest extends AbstractCommandHandlerTestCase
 {
     /** @var GenerateCoverLetter */
@@ -32,10 +32,8 @@ class GenerateCoverLetterTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommandForGoods
-     */
-    public function testHandleCommandForGoods($isNi, $expectedTemplate)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandForGoods')]
+    public function testHandleCommandForGoods(mixed $isNi, mixed $expectedTemplate): void
     {
         $licenceId = 100;
         $userId = 200;
@@ -111,7 +109,7 @@ class GenerateCoverLetterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpHandleCommandForGoods()
+    public static function dpHandleCommandForGoods(): array
     {
         return [
             'GB' => [
@@ -125,7 +123,7 @@ class GenerateCoverLetterTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandForPsv()
+    public function testHandleCommandForPsv(): void
     {
         $licenceId = 100;
         $userId = 200;

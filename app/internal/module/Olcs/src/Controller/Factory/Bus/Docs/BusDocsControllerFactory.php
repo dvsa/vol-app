@@ -21,6 +21,7 @@ class BusDocsControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return BusDocsController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusDocsController
     {
         $scriptFactory = $container->get(ScriptFactory::class);

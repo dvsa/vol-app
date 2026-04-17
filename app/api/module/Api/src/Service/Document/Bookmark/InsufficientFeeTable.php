@@ -15,11 +15,13 @@ class InsufficientFeeTable extends DynamicBookmark
     public const RTF_BOLD_START = '{\b ';
     public const RTF_BOLD_END = '}';
 
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(['id' => $data['fee']]);
     }
 
+    #[\Override]
     public function render()
     {
         if (empty($this->data)) {

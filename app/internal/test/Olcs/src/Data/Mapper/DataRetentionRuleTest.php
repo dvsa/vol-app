@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -12,7 +14,7 @@ use Mockery as m;
  */
 class DataRetentionRuleTest extends MockeryTestCase
 {
-    public function testMapFromResult()
+    public function testMapFromResult(): void
     {
         $data = [
             'id' => 1,
@@ -58,7 +60,7 @@ class DataRetentionRuleTest extends MockeryTestCase
         $this->assertEquals($mappedData, Sut::mapFromResult($data));
     }
 
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
 
         $formData = [
@@ -105,7 +107,7 @@ class DataRetentionRuleTest extends MockeryTestCase
         $this->assertEquals($mappedData, Sut::mapFromForm($formData));
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         /** @var FormInterface $form  */
         $form = m::mock(FormInterface::class);

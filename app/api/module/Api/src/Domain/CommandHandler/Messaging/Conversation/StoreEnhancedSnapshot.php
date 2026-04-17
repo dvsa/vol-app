@@ -22,6 +22,7 @@ final class StoreEnhancedSnapshot extends AbstractCreateSnapshotHandler
     /**
      * @inheritDoc
      */
+    #[\Override]
     protected function getDocumentDescription($entity): string
     {
         return $this->documentDescription;

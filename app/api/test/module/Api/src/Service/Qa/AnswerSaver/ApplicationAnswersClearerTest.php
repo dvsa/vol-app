@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\AnswerSaver;
 
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep;
@@ -38,7 +40,7 @@ class ApplicationAnswersClearerTest extends MockeryTestCase
         );
     }
 
-    public function testClear()
+    public function testClear(): void
     {
         $qaEntity = m::mock(QaEntityInterface::class);
 
@@ -100,7 +102,7 @@ class ApplicationAnswersClearerTest extends MockeryTestCase
         $this->applicationAnswersClearer->clear($qaEntity);
     }
 
-    public function testClearAfterApplicationStep()
+    public function testClearAfterApplicationStep(): void
     {
         $qaEntity = m::mock(QaEntityInterface::class);
 
@@ -186,7 +188,7 @@ class ApplicationAnswersClearerTest extends MockeryTestCase
         $this->applicationAnswersClearer->clearAfterApplicationStep($qaContext2);
     }
 
-    public function testClearAfterApplicationStepException()
+    public function testClearAfterApplicationStepException(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('application step with id 5 was not found in application steps');

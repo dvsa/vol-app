@@ -13,9 +13,7 @@ use Laminas\Http\Response\Stream;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Document\Download
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Document\Download::class)]
 class DownloadTest extends QueryHandlerTestCase
 {
     /** @var  m\MockInterface */
@@ -38,9 +36,7 @@ class DownloadTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestHandleQuery
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQuery')]
     public function testHandleQuery(bool $isInternalUser, string $documentDescription, ?string $chosenFilename): void
     {
         $this->setupIsInternalUser($isInternalUser);
@@ -75,7 +71,7 @@ class DownloadTest extends QueryHandlerTestCase
         static::assertEquals($download, $actual);
     }
 
-    public function dpTestHandleQuery(): array
+    public static function dpTestHandleQuery(): array
     {
         return [
             [false, 'description', null],

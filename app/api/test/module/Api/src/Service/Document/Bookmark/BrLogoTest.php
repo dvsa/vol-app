@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\BrLogo;
@@ -12,7 +14,7 @@ use Dvsa\Olcs\DocumentShare\Service\DocumentStoreInterface;
  */
 class BrLogoTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new BrLogo();
 
@@ -23,10 +25,8 @@ class BrLogoTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_null($bookmark->getQuery([])));
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
-    public function testRender($data, $image)
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
+    public function testRender(mixed $data, mixed $image): void
     {
         $bookmark = new BrLogo();
         $bookmark->setData($data);
@@ -63,7 +63,7 @@ class BrLogoTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function renderDataProvider()
+    public static function renderDataProvider(): array
     {
         return [
             [

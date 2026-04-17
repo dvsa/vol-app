@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Delete Printer Test
  *
@@ -31,7 +33,7 @@ class DeletePrinterTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(
             [
@@ -65,7 +67,7 @@ class DeletePrinterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('Printer deleted successfully', $res['messages'][0]);
     }
 
-    public function testHandleCommandValidateOnly()
+    public function testHandleCommandValidateOnly(): void
     {
         $command = Cmd::create(
             [
@@ -92,7 +94,7 @@ class DeletePrinterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('Ready to remove', $res['messages'][0]);
     }
 
-    public function testHandleCommandWithException()
+    public function testHandleCommandWithException(): void
     {
         $this->expectException(ValidationException::class);
 

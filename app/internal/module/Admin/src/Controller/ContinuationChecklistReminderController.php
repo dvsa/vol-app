@@ -9,7 +9,6 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\ResponseHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Dvsa\Olcs\Transfer\Command\ContinuationDetail\Queue as QueueCmd;
 use Dvsa\Olcs\Transfer\Query\ContinuationDetail\ChecklistReminders as ChecklistRemindersQry;
 use Laminas\View\Helper\Placeholder;
 use Laminas\View\Model\ViewModel;
@@ -18,20 +17,16 @@ class ContinuationChecklistReminderController extends AbstractController
 {
     use CrudActionTrait;
 
-    public const TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER = 'que_typ_cont_check_rem_gen_let';
-    protected FlashMessengerHelperService $flashMessengerHelper;
-
     public function __construct(
         Placeholder $placeholder,
         protected DateHelperService $dateHelper,
-        FlashMessengerHelperService $flashMessengerHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper,
         protected ScriptFactory $scriptFactory,
         protected FormHelperService $formHelper,
         protected ResponseHelperService $responseHelper,
         protected TableFactory $tableFactory
     ) {
         parent::__construct($placeholder);
-        $this->flashMessengerHelper = $flashMessengerHelper;
     }
 
     /**
@@ -39,6 +34,7 @@ class ContinuationChecklistReminderController extends AbstractController
      *
      * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         /** @var \Laminas\Http\Request $request */
@@ -53,11 +49,11 @@ class ContinuationChecklistReminderController extends AbstractController
         }
 
         $nowDate = $this->dateHelper->getDate('Y-m');
-        [$year, $month] = explode('-', $nowDate);
+        [$year, $month] = explode('-', (string) $nowDate);
 
         $filterForm = $this->getChecklistReminderFilterForm($month, $year);
         if ($filterForm->isValid()) {
-            [$year, $month] = explode('-', $filterForm->getData()['filters']['date']);
+            [$year, $month] = explode('-', (string) $filterForm->getData()['filters']['date']);
         }
 
         $response = $this->handleQuery(
@@ -127,42 +123,13 @@ class ContinuationChecklistReminderController extends AbstractController
     }
 
     /**
-     * Generate Continuation checklist reminder letters
-     *
-     * @return \Laminas\Http\Response
-     */
-    public function generateLettersAction()
-    {
-        $continuationDetailIds = explode(',', $this->params('child_id'));
-
-        $response = $this->handleCommand(
-            QueueCmd::create(
-                [
-                    'ids' => $continuationDetailIds,
-                    'type' => self::TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER
-                ]
-            )
-        );
-        $flashMessenger = $this->flashMessengerHelper;
-        if ($response->isClientError() || $response->isServerError()) {
-            $flashMessenger->addErrorMessage('The checklist reminder letters could not be generated, please try again');
-        }
-
-        if ($response->isOk()) {
-            $flashMessenger->addSuccessMessage('The checklist reminder letters have been generated.');
-        }
-
-        return $this->redirect()->toRouteAjax(null, ['action' => null, 'child_id' => null], [], true);
-    }
-
-    /**
      * Export table as CSV action
      *
      * @return \Laminas\Http\Response
      */
     public function exportAction()
     {
-        $continuationDetailIds = explode(',', $this->params('child_id'));
+        $continuationDetailIds = explode(',', (string) $this->params('child_id'));
 
         $response = $this->handleQuery(
             ChecklistRemindersQry::create(['ids' => $continuationDetailIds])

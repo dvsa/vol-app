@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Interim Test
  *
@@ -32,10 +34,8 @@ class InterimTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider handlerQueryProvider
-     */
-    public function testHandleQuery($status, $isInterimRequested, $isInterimInforce, $canSetStatus, $canUpdatedInterim)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handlerQueryProvider')]
+    public function testHandleQuery(mixed $status, mixed $isInterimRequested, mixed $isInterimInforce, mixed $canSetStatus, mixed $canUpdatedInterim): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -44,6 +44,8 @@ class InterimTest extends QueryHandlerTestCase
 
         /** @var ApplicationEntity $application */
         $application = m::mock(ApplicationEntity::class)->makePartial();
+        $application->shouldReceive('getFees')
+            ->andReturn([]);
         $application->setInterimStatus($statusObj);
 
         $this->repoMap['Application']->shouldReceive('fetchUsingId')
@@ -60,7 +62,7 @@ class InterimTest extends QueryHandlerTestCase
         $this->assertEquals($canUpdatedInterim, $data['canUpdateInterim']);
     }
 
-    public function handlerQueryProvider()
+    public static function handlerQueryProvider(): array
     {
         return [
             [

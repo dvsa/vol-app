@@ -4,26 +4,20 @@ namespace Dvsa\Olcs\Api\Entity\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType;
-use phpseclib\Crypt;
-use phpseclib\Crypt\Base;
+use phpseclib3\Crypt\AES;
 
-/**
- * Class EncryptedStringType
- */
 class EncryptedStringType extends StringType
 {
     public const TYPE = 'encrypted_string';
 
-    /**
-     * @var Crypt\Base
-     */
-    private $encrypter;
+    private ?AES $encrypter = null;
 
     /**
      * Get the name of this type
      *
      * @return string
      */
+    #[\Override]
     public function getName()
     {
         return self::TYPE;
@@ -37,6 +31,7 @@ class EncryptedStringType extends StringType
      *
      * @return bool|string
      */
+    #[\Override]
     public function convertToPhpValue($value, AbstractPlatform $platform)
     {
         return $this->getEncrypter()->decrypt(base64_decode($value));
@@ -50,6 +45,7 @@ class EncryptedStringType extends StringType
      *
      * @return string
      */
+    #[\Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         return base64_encode($this->getEncrypter()->encrypt($value));
@@ -57,22 +53,15 @@ class EncryptedStringType extends StringType
 
     /**
      * Set the Encrypter to use
-     *
-     * @param Base|null $ciper Cipher to use for encryption
-     *
-     * @return void
      */
-    public function setEncrypter(?Base $ciper)
+    public function setEncrypter(?AES $cipher): self
     {
-        $this->encrypter = $ciper;
+        $this->encrypter = $cipher;
+
+        return $this;
     }
 
-    /**
-     * Get the Encrypter
-     *
-     * @return Crypt\Base
-     */
-    public function getEncrypter()
+    public function getEncrypter(): AES
     {
         if ($this->encrypter === null) {
             throw new \RuntimeException('An encrypter must be set to allow encrypting data');

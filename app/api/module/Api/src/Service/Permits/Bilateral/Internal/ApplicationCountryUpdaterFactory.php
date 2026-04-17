@@ -15,6 +15,7 @@ class ApplicationCountryUpdaterFactory implements FactoryInterface
      * @param array|null $options
      * @return ApplicationCountryUpdater
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationCountryUpdater
     {
         return new ApplicationCountryUpdater(

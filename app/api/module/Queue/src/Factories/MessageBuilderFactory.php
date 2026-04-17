@@ -16,6 +16,7 @@ class MessageBuilderFactory implements FactoryInterface
      * @param array|null $options
      * @return MessageBuilder
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): MessageBuilder
     {
         return new MessageBuilder();

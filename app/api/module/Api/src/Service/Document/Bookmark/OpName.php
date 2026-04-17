@@ -26,6 +26,7 @@ class OpName extends DynamicBookmark
      *
      * @return array The query array.
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         $bundle = [
@@ -41,6 +42,7 @@ class OpName extends DynamicBookmark
      *
      * @return string The operator's address.
      */
+    #[\Override]
     public function render()
     {
         $organisation = $this->data['organisation'];

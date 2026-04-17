@@ -218,6 +218,7 @@ class IrfoGvPermit extends AbstractIrfoGvPermit implements OrganisationProviderI
      *
      * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this->getOrganisation();

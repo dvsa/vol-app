@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Qa;
 
 use Mockery as m;
@@ -10,10 +12,8 @@ use RuntimeException;
 
 class CookieStateTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpIsValid
-     */
-    public function testIsValid($isValid): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValid')]
+    public function testIsValid(bool $isValid): void
     {
         $sut = new CookieState($isValid, m::mock(Preferences::class));
 
@@ -28,7 +28,7 @@ class CookieStateTest extends MockeryTestCase
      *
      * @psalm-return list{list{true}, list{false}}
      */
-    public function dpIsValid(): array
+    public static function dpIsValid(): array
     {
         return [
             [true],

@@ -26,6 +26,7 @@ final class WithRefdata implements QueryPartialInterface
      * @param QueryBuilder $qb
      * @param array $arguments
      */
+    #[\Override]
     public function modifyQuery(QueryBuilder $qb, array $arguments = [])
     {
         $entity = ((isset($arguments[0]) && isset($arguments[1])) ? $arguments[0] : $qb->getRootEntities()[0]);

@@ -25,6 +25,7 @@ final class Suspend extends AbstractCommandHandler implements TransactionedInter
 {
     protected $repoServiceName = 'Licence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $licence Licence */

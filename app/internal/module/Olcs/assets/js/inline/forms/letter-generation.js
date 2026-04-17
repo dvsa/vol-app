@@ -1,0 +1,277 @@
+OLCS.ready(function () {
+  "use strict";
+
+  // Handle individual section toggles
+  $("body").on("click", ".letter-section__header", function (e) {
+    e.preventDefault();
+    var $section = $(this).closest(".letter-section");
+    var $content = $section.find(".letter-section__content");
+    var $button = $(this).find(".letter-section__toggle");
+
+    if ($content.is(":visible")) {
+      $content.hide();
+      $button.text("Show");
+      $section.removeClass("letter-section--expanded");
+    } else {
+      $content.show();
+      $button.text("Hide");
+      $section.addClass("letter-section--expanded");
+    }
+  });
+
+  // Handle "Show All Sections" / "Hide All Sections" toggle
+  $("body").on("click", "#toggle-all-sections", function (e) {
+    e.preventDefault();
+    var $allSections = $(".letter-section");
+    var $allContent = $(".letter-section__content");
+    var allVisible =
+      $allContent.filter(":visible").length === $allContent.length;
+
+    if (allVisible) {
+      $allContent.hide();
+      $(".letter-section__toggle").text("Show");
+      $allSections.removeClass("letter-section--expanded");
+      $(this).text("Show All Sections");
+    } else {
+      $allContent.show();
+      $(".letter-section__toggle").text("Hide");
+      $allSections.addClass("letter-section--expanded");
+      $(this).text("Hide All Sections");
+    }
+  });
+
+  // Function to update button state based on checkbox selection
+  function updateCreateButtonState() {
+    var $issueCheckboxes = $('input[name="letterIssues[]"]:checked');
+    var $appendixCheckboxes = $('input[name="letterAppendices[]"]:checked');
+    var $createBtn = $("#create-letter-btn");
+
+    if ($issueCheckboxes.length > 0 || $appendixCheckboxes.length > 0) {
+      $createBtn.prop("disabled", false).removeClass("govuk-button--disabled");
+    } else {
+      $createBtn.prop("disabled", true).addClass("govuk-button--disabled");
+    }
+  }
+
+  // Create letter button click - submit form via AJAX
+  $("body").on("click", "#create-letter-btn", function (e) {
+    e.preventDefault();
+
+    var $form = $("#letter-create-form");
+    var $allCheckboxes = $('input[name="letterIssues[]"]');
+    var $issueCheckboxes = $('input[name="letterIssues[]"]:checked');
+    var $appendixCheckboxes = $('input[name="letterAppendices[]"]:checked');
+    var $errorDiv = $("#validation-error");
+    var $button = $(this);
+
+    // Validate at least one issue or appendix is selected
+    if ($issueCheckboxes.length === 0 && $appendixCheckboxes.length === 0) {
+      $errorDiv.show();
+      $errorDiv[0].scrollIntoView({ behavior: "smooth", block: "nearest" });
+      return false;
+    }
+
+    // Hide error
+    $errorDiv.hide();
+
+    // Disable button and show loading state
+    $button.prop("disabled", true).text("Creating letter...");
+
+    // Get the generate URL from the form's data attribute
+    var generateUrl = $form.data("generate-url");
+
+    // Submit form data
+    $.ajax({
+      url: generateUrl,
+      type: "POST",
+      data: $form.serialize(),
+      dataType: "json",
+      success: function (response) {
+        if (response.success) {
+          // Update preview link with letterInstanceId
+          var previewUrl = "/letter/preview?id=" + response.letterInstanceId;
+          $("#preview-link").attr("href", previewUrl);
+
+          // Update category/subcategory/template labels from letterInstance data
+          var letterInstance = response.letterInstance || {};
+          var letterType = letterInstance.letterType || {};
+          var category = letterType.category || {};
+          var subCategory = letterType.subCategory || {};
+
+          $("#preview-category").text(category.description || "Letter");
+          $("#preview-subcategory").text(subCategory.subCategoryName || "-");
+          $("#preview-template").text(letterType.name || "Letter Template");
+
+          // Show warnings for missing required sections
+          if (response.warnings && response.warnings.length > 0) {
+            var warningHtml =
+              '<div class="govuk-warning-text" style="margin-bottom: 1rem;">' +
+              '<span class="govuk-warning-text__icon" aria-hidden="true">!</span>' +
+              '<strong class="govuk-warning-text__text">' +
+              '<span class="govuk-visually-hidden">Warning</span>' +
+              "Required sections could not be included:" +
+              '<ul class="govuk-list govuk-list--bullet" style="margin-top: 0.5rem;">';
+            response.warnings.forEach(function (w) {
+              warningHtml += "<li>" + $("<span>").text(w).html() + "</li>";
+            });
+            warningHtml +=
+              "</ul>This may indicate the wrong licence or application was selected." +
+              "</strong></div>";
+            $("#letter-preview-modal").prepend(warningHtml);
+          }
+
+          // Get the preview modal content and use OLCS.modal.updateBody()
+          var $previewModal = $("#letter-preview-modal");
+          var newContent = $previewModal.html();
+
+          if (
+            typeof OLCS !== "undefined" &&
+            OLCS.modal &&
+            OLCS.modal.updateBody
+          ) {
+            OLCS.modal.updateBody(newContent);
+
+            // Update modal title
+            $(".modal__title").text("Preview or edit letter");
+
+            // Re-initialize GOV.UK Frontend components after modal update
+            setTimeout(function () {
+              if (window.GOVUKFrontend) {
+                var modalContent = document.querySelector(".modal__content");
+                if (modalContent) {
+                  window.GOVUKFrontend.initAll({ scope: modalContent });
+                }
+              }
+            }, 100);
+          } else {
+            // Fallback if modal not available - show preview div directly
+            $form.hide();
+            $("#toggle-all-sections").hide();
+            $previewModal.show();
+          }
+        } else {
+          // Show error message
+          $errorDiv
+            .find("span:last")
+            .text(response.message || "Failed to create letter");
+          $errorDiv.show();
+          $button.prop("disabled", false).text("Create letter");
+        }
+      },
+      error: function (xhr, status, error) {
+        var errorMessage = "An error occurred while creating the letter";
+
+        try {
+          var response = JSON.parse(xhr.responseText);
+          if (response.message) {
+            errorMessage = response.message;
+          }
+        } catch (e) {
+          // Use default error message
+        }
+
+        $errorDiv.find("span:last").text(errorMessage);
+        $errorDiv.show();
+        $button.prop("disabled", false).text("Create letter");
+      },
+    });
+  });
+
+  // Update button state and hide messages when checkbox changes
+  $("body").on(
+    "change",
+    'input[name="letterIssues[]"], input[name="letterAppendices[]"]',
+    function () {
+      updateCreateButtonState();
+      var $issueCheckboxes = $('input[name="letterIssues[]"]:checked');
+      var $appendixCheckboxes = $('input[name="letterAppendices[]"]:checked');
+      if ($issueCheckboxes.length > 0 || $appendixCheckboxes.length > 0) {
+        $("#validation-error").hide();
+      }
+      $("#placeholder-message").hide();
+    },
+  );
+
+  // Cancel button - close modal (on create form)
+  $("body").on("click", "#cancel-letter-btn", function (e) {
+    e.preventDefault();
+    if (typeof OLCS !== "undefined" && OLCS.modal && OLCS.modal.hide) {
+      OLCS.modal.hide();
+    }
+  });
+
+  // Cancel button - close modal (on preview modal)
+  $("body").on("click", "#cancel-preview-btn", function (e) {
+    e.preventDefault();
+    if (typeof OLCS !== "undefined" && OLCS.modal && OLCS.modal.hide) {
+      OLCS.modal.hide();
+    }
+  });
+
+  // Back button - reload the page to go back to issue selection
+  // Note: In a future enhancement, this could preserve state and go back without reload
+  $("body").on("click", "#back-to-issues-btn", function (e) {
+    e.preventDefault();
+    window.location.reload();
+  });
+
+  // Prepare to send button - converts letter to PDF and loads send modal
+  $("body").on("click", "#prepare-to-send-btn", function (e) {
+    e.preventDefault();
+    var $btn = $(this);
+    $btn.prop("disabled", true).text("Preparing...");
+
+    // Get letterInstanceId from the preview link (set during generateAction success)
+    var previewHref = $("#preview-link").attr("href") || "";
+    var match = previewHref.match(/[?&]id=(\d+)/);
+    var letterInstanceId = match ? match[1] : null;
+
+    // Get docTemplate ID from the hidden input
+    var docTemplateId = $('input[name="letterType"]').val();
+
+    if (!letterInstanceId || !docTemplateId) {
+      $btn.prop("disabled", false).text("Prepare to send");
+      return;
+    }
+
+    $.ajax({
+      url: "/letter/prepare-to-send",
+      type: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({
+        letterInstanceId: letterInstanceId,
+        docTemplate: docTemplateId,
+      }),
+      success: function (response) {
+        if (response.success && response.printUrl) {
+          // Load the existing printAction into the modal
+          if (
+            typeof OLCS !== "undefined" &&
+            OLCS.modal &&
+            OLCS.modal.updateBody
+          ) {
+            OLCS.modal.updateBody("<p>Loading...</p>");
+          }
+          $.get(response.printUrl, function (html) {
+            if (
+              typeof OLCS !== "undefined" &&
+              OLCS.modal &&
+              OLCS.modal.updateBody
+            ) {
+              OLCS.modal.updateBody(html);
+              $(".modal__title").text("Send letter");
+            }
+          });
+        } else {
+          $btn.prop("disabled", false).text("Prepare to send");
+        }
+      },
+      error: function () {
+        $btn.prop("disabled", false).text("Prepare to send");
+      },
+    });
+  });
+
+  // Set initial button state on page load
+  updateCreateButtonState();
+});

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PermitsTest\View\Helper;
 
 use Common\RefData;
@@ -130,10 +132,9 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
 
     /**
      * Tests answer rendered as expected for string/custom
-     *
-     * @dataProvider dpInvokeOther
      */
-    public function testInvokeOther($questionType): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpInvokeOther')]
+    public function testInvokeOther(string $questionType): void
     {
         $input = [
             'question' => 'qanda.question',
@@ -166,10 +167,9 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
 
     /**
      * Tests answer rendered as expected for string/custom
-     *
-     * @dataProvider dpInvokeOther
      */
-    public function testInvokeOtherNoEscape($questionType): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpInvokeOther')]
+    public function testInvokeOtherNoEscape(string $questionType): void
     {
         $input = [
             'question' => 'qanda.question',
@@ -201,7 +201,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
      *
      * @psalm-return list{list{'question_type_string'}, list{'question_type_custom'}}
      */
-    public function dpInvokeOther(): array
+    public static function dpInvokeOther(): array
     {
         return [
             [RefData::QUESTION_TYPE_STRING],

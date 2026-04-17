@@ -21,6 +21,7 @@ class Stay extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $qb->andWhere($qb->expr()->eq($this->alias . '.case', ':byCase'))
@@ -34,6 +35,7 @@ class Stay extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         $this->getQueryBuilder()->modifyQuery($qb)

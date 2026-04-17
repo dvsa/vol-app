@@ -19,6 +19,7 @@ class BrRegStatus extends DynamicBookmark
      *
      * @return Qry
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(['id' => $data['busRegId'], 'bundle' => ['status']]);
@@ -29,6 +30,7 @@ class BrRegStatus extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         if (!isset($this->data['status']['description'])) {

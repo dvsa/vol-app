@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpApplication;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\IrhpApplication\BilateralCountryAccessible;
@@ -21,10 +23,8 @@ class BilateralCountryAccessibleTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleQuery
-     */
-    public function testHandleQuery($requestedCountry, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]
+    public function testHandleQuery(mixed $requestedCountry, mixed $expected): void
     {
         $irhpApplicationId = 462;
 
@@ -57,7 +57,7 @@ class BilateralCountryAccessibleTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function dpHandleQuery()
+    public static function dpHandleQuery(): array
     {
         return [
             'country accessible' => [
@@ -71,7 +71,7 @@ class BilateralCountryAccessibleTest extends QueryHandlerTestCase
         ];
     }
 
-    private function createMockCountry($countryId)
+    private function createMockCountry(mixed $countryId): mixed
     {
         $country = m::mock(Country::class);
         $country->shouldReceive('getId')

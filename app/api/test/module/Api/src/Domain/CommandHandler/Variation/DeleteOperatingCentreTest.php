@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Variation;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -35,7 +37,8 @@ class DeleteOperatingCentreTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -51,7 +54,7 @@ class DeleteOperatingCentreTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandAppInvalid()
+    public function testHandleCommandAppInvalid(): void
     {
         $data = [
             'id' => 'A22',
@@ -73,7 +76,7 @@ class DeleteOperatingCentreTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandLicInvalid()
+    public function testHandleCommandLicInvalid(): void
     {
         $data = [
             'id' => 'L22',
@@ -105,7 +108,7 @@ class DeleteOperatingCentreTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandAppValid()
+    public function testHandleCommandAppValid(): void
     {
         $applicationId = 111;
         $data = [
@@ -151,7 +154,7 @@ class DeleteOperatingCentreTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandAppCannotDelete()
+    public function testHandleCommandAppCannotDelete(): void
     {
         $data = [
             'id' => 'A22',
@@ -175,7 +178,7 @@ class DeleteOperatingCentreTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandLicValid()
+    public function testHandleCommandLicValid(): void
     {
         $applicationId = 111;
         $data = [
@@ -228,7 +231,7 @@ class DeleteOperatingCentreTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandCannotDelete()
+    public function testHandleCommandCannotDelete(): void
     {
         $data = [
             'id' => 'L22',

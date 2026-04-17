@@ -21,6 +21,7 @@ final class CreateNoFurtherAction extends AbstractCommandHandler implements Tran
 {
     protected $repoServiceName = 'TmCaseDecision';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         // create and save a record

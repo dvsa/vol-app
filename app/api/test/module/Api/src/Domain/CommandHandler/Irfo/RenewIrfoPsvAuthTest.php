@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Renew IrfoPsvAuth Test
  */
@@ -27,7 +29,8 @@ class RenewIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrfoPsvAuthEntity::STATUS_RENEW
@@ -36,7 +39,7 @@ class RenewIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'ids' => array_fill(0, Sut::MAX_IDS_COUNT, 'id')
@@ -90,7 +93,7 @@ class RenewIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function testHandleCommandWithMaxIdsCountExceeded()
+    public function testHandleCommandWithMaxIdsCountExceeded(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

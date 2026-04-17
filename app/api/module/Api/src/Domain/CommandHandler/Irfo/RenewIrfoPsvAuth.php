@@ -18,10 +18,11 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
  */
 final class RenewIrfoPsvAuth extends AbstractCommandHandler implements TransactionedInterface
 {
-    public const MAX_IDS_COUNT = 100;
+    public const int MAX_IDS_COUNT = 100;
 
     protected $repoServiceName = 'IrfoPsvAuth';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $ids = $command->getIds();

@@ -15,6 +15,7 @@ final class Delete extends AbstractCommandHandler implements TransactionedInterf
 {
     protected $repoServiceName = 'TaskAlphaSplit';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $taskAlphaSplit = $this->getRepo()->fetchUsingId($command);

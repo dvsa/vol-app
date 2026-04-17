@@ -44,6 +44,7 @@ final class CreateGoodsVehicle extends AbstractCommandHandler implements AuthAwa
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->repo = $this->getRepo('Licence');

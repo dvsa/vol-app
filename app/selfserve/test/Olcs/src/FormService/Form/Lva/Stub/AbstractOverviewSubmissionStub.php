@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva\Stub;
 
 use Olcs\FormService\Form\Lva\AbstractOverviewSubmission;
@@ -9,12 +11,14 @@ use Olcs\FormService\Form\Lva\AbstractOverviewSubmission;
  */
 class AbstractOverviewSubmissionStub extends AbstractOverviewSubmission
 {
-    public function alterForm(\Laminas\Form\FormInterface $form, array $data, array $params)
+    #[\Override]
+    public function alterForm(\Laminas\Form\FormInterface $form, array $data, array $params): void
     {
         parent::alterForm($form, $data, $params);
     }
 
-    public function hasSectionsWithStatus($status)
+    #[\Override]
+    public function hasSectionsWithStatus($status): bool
     {
         return parent::hasSectionsWithStatus($status);
     }

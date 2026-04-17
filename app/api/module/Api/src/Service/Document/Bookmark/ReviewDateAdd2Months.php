@@ -13,11 +13,13 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\AddMonthsRoundingDown;
  */
 class ReviewDateAdd2Months extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(['id' => $data['licence']]);
     }
 
+    #[\Override]
     public function render()
     {
         if (isset($this->data['reviewDate'])) {

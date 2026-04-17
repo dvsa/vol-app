@@ -26,6 +26,7 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->redirectToGenerate();

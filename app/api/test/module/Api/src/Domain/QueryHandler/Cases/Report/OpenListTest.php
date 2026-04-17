@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Cases\Report;
 
-use Dvsa\OlcsTest\Api\Domain\QueryHandler\AbstractListQueryHandlerTest;
+use Dvsa\OlcsTest\Api\Domain\QueryHandler\AbstractListQueryHandlerTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Cases\Report\OpenList
- */
-class OpenListTest extends AbstractListQueryHandlerTest
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Cases\Report\OpenList::class)]
+class OpenListTest extends AbstractListQueryHandlerTestCase
 {
     protected $sutClass = \Dvsa\Olcs\Api\Domain\QueryHandler\Cases\Report\OpenList::class;
     protected $repoClass = \Dvsa\Olcs\Api\Domain\Repository\Cases::class;

@@ -34,11 +34,12 @@ class SubmissionsFurniture implements
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'case',
-            [$this, 'onSubmission'],
+            $this->onSubmission(...),
             $priority
         );
     }
@@ -150,6 +151,7 @@ class SubmissionsFurniture implements
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SubmissionsFurniture
     {
         $this->setQuerySender($container->get('QuerySender'));

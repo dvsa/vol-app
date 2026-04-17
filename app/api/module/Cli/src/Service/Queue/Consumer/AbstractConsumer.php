@@ -64,6 +64,7 @@ abstract class AbstractConsumer implements MessageConsumerInterface
      *
      * @return string
      */
+    #[\Override]
     public function failed(QueueEntity $item, $reason = null)
     {
         $command = FailedCmd::create(

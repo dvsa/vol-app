@@ -46,6 +46,7 @@ class BusRegBrowseExport extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var BusRegBrowseView $repo */

@@ -14,6 +14,7 @@ use Dvsa\Olcs\Api\Entity\Bus\BusReg;
 use Dvsa\Olcs\Api\Entity\Cases\Cases as CasesEntity;
 use Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking;
 use Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic as CommunityLicEntity;
+use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\IrhpInterface;
 use Dvsa\Olcs\Api\Entity\Licence\LicenceNoGen as LicenceNoGenEntity;
 use Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre;
@@ -350,6 +351,7 @@ class Licence extends AbstractLicence implements ContextProviderInterface, Organ
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedBundleValues()
     {
         return [
@@ -362,6 +364,7 @@ class Licence extends AbstractLicence implements ContextProviderInterface, Organ
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedValues()
     {
         return $this->getCalculatedBundleValues();
@@ -1131,6 +1134,7 @@ class Licence extends AbstractLicence implements ContextProviderInterface, Organ
      *
      * @return string
      */
+    #[\Override]
     public function getContextValue()
     {
         return $this->getLicNo();
@@ -1272,6 +1276,7 @@ class Licence extends AbstractLicence implements ContextProviderInterface, Organ
      *
      * @return Organisation
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this->getOrganisation();
@@ -1490,6 +1495,7 @@ class Licence extends AbstractLicence implements ContextProviderInterface, Organ
      *
      * @return array
      */
+    #[\Override]
     public function serialize(array $bundle = [])
     {
         $result = parent::serialize($bundle);
@@ -1682,5 +1688,30 @@ class Licence extends AbstractLicence implements ContextProviderInterface, Organ
         }
 
         return false;
+    }
+
+    /**
+     * Attempts to return a licence contact address based on what we hold
+     */
+    public function getContactAddress(): ?ContactDetails
+    {
+        if ($this->correspondenceCd instanceof ContactDetails) {
+            return $this->correspondenceCd;
+        }
+
+        if ($this->establishmentCd instanceof ContactDetails) {
+            return $this->establishmentCd;
+        }
+
+        if ($this->transportConsultantCd instanceof ContactDetails) {
+            return $this->transportConsultantCd;
+        }
+
+        return null;
+    }
+
+    public function hasTransportManager(): bool
+    {
+        return !$this->tmLicences->isEmpty();
     }
 }

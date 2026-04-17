@@ -27,6 +27,7 @@ class Approve extends AbstractSurrenderCommandHandler
      * @throws RuntimeException
      * @throws \Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->licenceEntity = $this->getRepo('Licence')->fetchById($command->getId());

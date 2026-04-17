@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark\Base;
 
 use Dvsa\Olcs\Api\Service\Document\Parser\ParserInterface;
@@ -14,7 +16,7 @@ use org\bovigo\vfs\vfsStream;
  */
 class AbstractBookmarkTest extends MockeryTestCase
 {
-    public function testGetSet()
+    public function testGetSet(): void
     {
         $sut = new AbstractBookmarkStub();
 
@@ -31,7 +33,7 @@ class AbstractBookmarkTest extends MockeryTestCase
         static::assertSame($mockParser, $sut->getParser());
     }
 
-    public function testGetSnipped()
+    public function testGetSnipped(): void
     {
         $expectContent = 'unit_FileContent';
         $expectExt = 'ut';

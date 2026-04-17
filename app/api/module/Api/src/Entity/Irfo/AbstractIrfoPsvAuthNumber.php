@@ -1,22 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Irfo;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * IrfoPsvAuthNumber Abstract Entity
+ * AbstractIrfoPsvAuthNumber Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -29,14 +34,35 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to irfo_psv_auth
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth", fetch="LAZY")
+     * @ORM\JoinColumn(name="irfo_psv_auth_id", referencedColumnName="id")
+     */
+    protected $irfoPsvAuth;
 
     /**
      * Created by
@@ -48,31 +74,6 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Irfo psv auth
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth",
-     *     fetch="LAZY",
-     *     inversedBy="irfoPsvAuthNumbers"
-     * )
-     * @ORM\JoinColumn(name="irfo_psv_auth_id", referencedColumnName="id", nullable=false)
-     */
-    protected $irfoPsvAuth;
 
     /**
      * Last modified by
@@ -92,7 +93,7 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      *
      * @ORM\Column(type="string", name="name", length=70, nullable=false)
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * Version
@@ -105,28 +106,20 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
     protected $version = 1;
 
     /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return IrfoPsvAuthNumber
+     * Initialise the collections
      */
-    public function setCreatedBy($createdBy)
+    public function __construct()
     {
-        $this->createdBy = $createdBy;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * Initialise collections
      */
-    public function getCreatedBy()
+    public function initCollections(): void
     {
-        return $this->createdBy;
     }
+
 
     /**
      * Set the id
@@ -155,7 +148,7 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
     /**
      * Set the irfo psv auth
      *
-     * @param \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth $irfoPsvAuth entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth $irfoPsvAuth new value being set
      *
      * @return IrfoPsvAuthNumber
      */
@@ -177,9 +170,33 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
     }
 
     /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return IrfoPsvAuthNumber
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return IrfoPsvAuthNumber
      */
@@ -246,5 +263,14 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

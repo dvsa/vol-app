@@ -22,6 +22,7 @@ final class UpdateGracePeriod extends AbstractCommandHandler
 {
     protected $repoServiceName = 'GracePeriod';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $gracePeriod = $this->getRepo()

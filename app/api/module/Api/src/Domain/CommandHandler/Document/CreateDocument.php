@@ -33,6 +33,7 @@ final class CreateDocument extends AbstractCommandHandler implements AuthAwareIn
      * @param Cmd $command
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $params = $command->getArrayCopy();

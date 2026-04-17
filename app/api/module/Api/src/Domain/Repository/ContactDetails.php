@@ -57,6 +57,7 @@ class ContactDetails extends AbstractRepository
      * @param QueryBuilder $qb
      * @param QueryInterface $query
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if ($query->getContactType()) {

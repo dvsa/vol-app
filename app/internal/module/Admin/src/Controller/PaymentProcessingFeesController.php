@@ -28,29 +28,19 @@ class PaymentProcessingFeesController extends LaminasAbstractActionController im
 
     protected ScriptFactory $scriptFactory;
     protected TableFactory $tableFactory;
-    protected FormHelperService $formHelper;
-    protected UrlHelperService $urlHelper;
-    protected IdentityProviderInterface $identityProvider;
-    protected TranslationHelperService $translationHelper;
-    protected DateHelperService $dateHelper;
 
 
     public function __construct(
         ScriptFactory $scriptFactory,
         TableFactory $tableFactory,
-        FormHelperService $formHelper,
-        UrlHelperService $urlHelper,
-        IdentityProviderInterface $identityProvider,
-        TranslationHelperService $translationHelper,
-        DateHelperService $dateHelper
+        protected FormHelperService $formHelper,
+        protected UrlHelperService $urlHelper,
+        protected IdentityProviderInterface $identityProvider,
+        protected TranslationHelperService $translationHelper,
+        protected DateHelperService $dateHelper
     ) {
         $this->scriptFactory = $scriptFactory;
         $this->tableFactory = $tableFactory;
-        $this->formHelper = $formHelper;
-        $this->urlHelper = $urlHelper;
-        $this->identityProvider = $identityProvider;
-        $this->translationHelper = $translationHelper;
-        $this->dateHelper = $dateHelper;
     }
 
     /**
@@ -87,6 +77,7 @@ class PaymentProcessingFeesController extends LaminasAbstractActionController im
      * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return string
      */
+    #[\Override]
     protected function getFeesRoute()
     {
         return 'admin-dashboard/admin-payment-processing/misc-fees';
@@ -98,6 +89,7 @@ class PaymentProcessingFeesController extends LaminasAbstractActionController im
      * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return array
      */
+    #[\Override]
     protected function getFeesRouteParams()
     {
         return [];
@@ -109,6 +101,7 @@ class PaymentProcessingFeesController extends LaminasAbstractActionController im
      * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return array
      */
+    #[\Override]
     protected function getFeesTableParams()
     {
         return [
@@ -122,6 +115,7 @@ class PaymentProcessingFeesController extends LaminasAbstractActionController im
      *
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->feesAction();
@@ -130,11 +124,13 @@ class PaymentProcessingFeesController extends LaminasAbstractActionController im
     /**
      * @inheritdoc
      */
+    #[\Override]
     protected function renderLayout($view, $pageTitle = null, $pageSubTitle = null)
     {
         return $this->renderView($view, 'Payment processing', $pageSubTitle);
     }
 
+    #[\Override]
     public function getLeftView()
     {
         $status = $this->params()->fromQuery('status');

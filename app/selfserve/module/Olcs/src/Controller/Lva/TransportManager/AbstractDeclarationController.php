@@ -26,8 +26,6 @@ abstract class AbstractDeclarationController extends AbstractController
     use TransportManagerApplicationTrait;
 
     protected $declarationMarkup;
-    protected AnnotationBuilder $transferAnnotationBuilder;
-    protected CommandService $commandService;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -44,12 +42,9 @@ abstract class AbstractDeclarationController extends AbstractController
         protected TranslationHelperService $translationHelper,
         protected FormHelperService $formHelper,
         protected ScriptFactory $scriptFactory,
-        AnnotationBuilder $transferAnnotationBuilder,
-        CommandService $commandService
+        protected AnnotationBuilder $transferAnnotationBuilder,
+        protected CommandService $commandService
     ) {
-        $this->transferAnnotationBuilder = $transferAnnotationBuilder;
-        $this->commandService = $commandService;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
@@ -58,6 +53,7 @@ abstract class AbstractDeclarationController extends AbstractController
      *
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction(): LaminasViewModel
     {
         if ($this->getRequest()->isPost()) {
@@ -131,16 +127,6 @@ abstract class AbstractDeclarationController extends AbstractController
     protected function digitalSignatureAction(): \Laminas\Http\Response
     {
         $role = $this->getSignAsRole();
-        // this will be either RefData::TMA_SIGN_AS_TM || RefData::TMA_SIGN_AS_TM_OP
-        // isOwner will disambiguate later.
-        $routeParams = ['lva' => $this->lva, 'role' => $role, 'applicationId' => $this->tma['application']['id'], 'transportManagerApplicationId' => $this->tma['id']];
-        $featureEnabled = $this->handleQuery(IsEnabledQry::create(['ids' => [FeatureToggle::GOVUK_ACCOUNT]]))->getResult()['isEnabled'];
-        if (!$featureEnabled) {
-            return $this->redirect()->toRoute(
-                'verify/transport-manager',
-                $routeParams
-            );
-        }
 
         $returnUrl = $this->url()->fromRoute(
             'lva-' . $this->lva . '/transport_manager_confirmation',

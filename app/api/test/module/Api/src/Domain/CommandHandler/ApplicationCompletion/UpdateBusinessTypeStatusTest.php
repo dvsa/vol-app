@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Business Type Status Test
  *
@@ -40,7 +42,8 @@ class UpdateBusinessTypeStatusTest extends AbstractUpdateStatusTestCase
         $this->licence->setOrganisation($this->organisation);
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             Organisation::ORG_TYPE_REGISTERED_COMPANY
@@ -49,21 +52,21 @@ class UpdateBusinessTypeStatusTest extends AbstractUpdateStatusTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandNoTypeWithChange()
+    public function testHandleCommandNoTypeWithChange(): void
     {
         $this->applicationCompletion->setBusinessTypeStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandNoTypeWithoutChange()
+    public function testHandleCommandNoTypeWithoutChange(): void
     {
         $this->applicationCompletion->setBusinessTypeStatus(ApplicationCompletionEntity::STATUS_INCOMPLETE);
 
         $this->expectStatusUnchanged(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->applicationCompletion->setBusinessTypeStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 

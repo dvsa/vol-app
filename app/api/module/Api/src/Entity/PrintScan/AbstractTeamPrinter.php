@@ -1,20 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\PrintScan;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * TeamPrinter Abstract Entity
+ * AbstractTeamPrinter Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
@@ -27,40 +32,46 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use SoftDeletableTrait;
 
     /**
-     * Identifier - Id
+     * Primary key.  Auto incremented if numeric.
      *
      * @var int
      *
      * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
+     * @ORM\Column(type="integer", name="id", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
 
     /**
-     * Printer
+     * Foreign Key to team
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\Team
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\Team", fetch="LAZY")
+     * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
+     */
+    protected $team;
+
+    /**
+     * Foreign Key to printer
      *
      * @var \Dvsa\Olcs\Api\Entity\PrintScan\Printer
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\PrintScan\Printer",
-     *     fetch="LAZY",
-     *     inversedBy="teamPrinters"
-     * )
-     * @ORM\JoinColumn(name="printer_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\PrintScan\Printer", fetch="LAZY")
+     * @ORM\JoinColumn(name="printer_id", referencedColumnName="id")
      */
     protected $printer;
 
     /**
-     * Sub category
+     * Optional field to enable different printers to be used for different categories of document. The default document setting is where this field is NULL
      *
      * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
      *
@@ -70,21 +81,7 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
     protected $subCategory;
 
     /**
-     * Team
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\Team
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\User\Team",
-     *     fetch="LAZY",
-     *     inversedBy="teamPrinters"
-     * )
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="id", nullable=false)
-     */
-    protected $team;
-
-    /**
-     * User
+     * Optional field to enable different printers to be used for different users within a team. The settings for the team are where this field is NULL. The settings for individual users are where this field is populated
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
@@ -102,6 +99,22 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
      * @ORM\Version
      */
     protected $version = 1;
+
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
 
     /**
      * Set the id
@@ -128,9 +141,33 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
     }
 
     /**
+     * Set the team
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\Team $team new value being set
+     *
+     * @return TeamPrinter
+     */
+    public function setTeam($team)
+    {
+        $this->team = $team;
+
+        return $this;
+    }
+
+    /**
+     * Get the team
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\Team
+     */
+    public function getTeam()
+    {
+        return $this->team;
+    }
+
+    /**
      * Set the printer
      *
-     * @param \Dvsa\Olcs\Api\Entity\PrintScan\Printer $printer entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\PrintScan\Printer $printer new value being set
      *
      * @return TeamPrinter
      */
@@ -154,7 +191,7 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
     /**
      * Set the sub category
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\SubCategory $subCategory entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\SubCategory $subCategory new value being set
      *
      * @return TeamPrinter
      */
@@ -176,33 +213,9 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Set the team
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\Team $team entity being set as the value
-     *
-     * @return TeamPrinter
-     */
-    public function setTeam($team)
-    {
-        $this->team = $team;
-
-        return $this;
-    }
-
-    /**
-     * Get the team
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\Team
-     */
-    public function getTeam()
-    {
-        return $this->team;
-    }
-
-    /**
      * Set the user
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $user entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
      * @return TeamPrinter
      */
@@ -245,5 +258,14 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

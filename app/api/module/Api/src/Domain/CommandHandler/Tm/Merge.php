@@ -29,6 +29,7 @@ final class Merge extends AbstractCommandHandler implements TransactionedInterfa
      */
     protected $changes = [];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $donorTm TransportManager */

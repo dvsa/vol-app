@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ProcessToValidTest
  *
@@ -32,7 +34,8 @@ class ProcessToValidTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT,
@@ -55,7 +58,7 @@ class ProcessToValidTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function dataProviderHandleCommandOtherStatus()
+    public static function dataProviderHandleCommandOtherStatus(): array
     {
         return [
             [Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT],
@@ -72,10 +75,8 @@ class ProcessToValidTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderHandleCommandOtherStatus
-     */
-    public function testHandleCommandOtherStatus($status)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderHandleCommandOtherStatus')]
+    public function testHandleCommandOtherStatus(mixed $status): void
     {
         $command = Command::create([]);
 
@@ -93,7 +94,7 @@ class ProcessToValidTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dataProviderHandleCommand()
+    public static function dataProviderHandleCommand(): array
     {
         return [
             [Licence::LICENCE_STATUS_CURTAILED],
@@ -101,10 +102,8 @@ class ProcessToValidTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderHandleCommand
-     */
-    public function testHandleCommand($status)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderHandleCommand')]
+    public function testHandleCommand(mixed $status): void
     {
         $command = Command::create([]);
 
@@ -143,7 +142,7 @@ class ProcessToValidTest extends AbstractCommandHandlerTestCase
      *
      * @return LicenceStatusRule
      */
-    protected function createLicenceStatusRule($licenceStatus)
+    protected function createLicenceStatusRule(mixed $licenceStatus): mixed
     {
         $licence = new \Dvsa\Olcs\Api\Entity\Licence\Licence(
             m::mock(\Dvsa\Olcs\Api\Entity\Organisation\Organisation::class),

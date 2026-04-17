@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Misc;
 
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsInternalPermits;
@@ -25,7 +27,7 @@ class IsInternalPermitsTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsValidInternalPermits()
+    public function testIsValidInternalPermits(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -35,7 +37,7 @@ class IsInternalPermitsTest extends AbstractHandlerTestCase
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsValidInternalPermitsFail()
+    public function testIsValidInternalPermitsFail(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);

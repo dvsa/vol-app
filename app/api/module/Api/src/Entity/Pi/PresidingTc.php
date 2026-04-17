@@ -40,6 +40,7 @@ class PresidingTc extends AbstractPresidingTc implements DeletableInterface
      *
      * @return boolean
      */
+    #[\Override]
     public function canDelete()
     {
         return true;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Document;
 
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
@@ -24,7 +26,7 @@ class CanAccessDocumentsWithIdsTest extends AbstractHandlerTestCase
     /**
      * Valid if all documents can be accessed
      */
-    public function testIsValid()
+    public function testIsValid(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -40,7 +42,7 @@ class CanAccessDocumentsWithIdsTest extends AbstractHandlerTestCase
     /**
      * Invalid if any of the documents cannot be accessed
      */
-    public function testIsValidFailsIfOneIsInvalid()
+    public function testIsValidFailsIfOneIsInvalid(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Schedule41ResetTest.php
  *
@@ -38,12 +40,13 @@ class Schedule41ResetTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 510,
@@ -108,7 +111,7 @@ class Schedule41ResetTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandPublished()
+    public function testHandleCommandPublished(): void
     {
         $data = [
             'id' => 510,
@@ -167,7 +170,7 @@ class Schedule41ResetTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandGenerated()
+    public function testHandleCommandGenerated(): void
     {
         $data = [
             'id' => 510,

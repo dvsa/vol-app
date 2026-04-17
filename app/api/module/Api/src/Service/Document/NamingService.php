@@ -79,6 +79,7 @@ class NamingService implements FactoryInterface
         // Only allow alpha-num plus "_()"
         return preg_replace('/[^a-zA-Z0-9_\(\)\-\&]/', '', $input);
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');

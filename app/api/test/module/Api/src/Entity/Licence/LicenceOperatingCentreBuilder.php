@@ -47,7 +47,7 @@ class LicenceOperatingCentreBuilder implements BuilderInterface
      * @param int|null $id
      * @return self
      */
-    public static function forLicence(Licence $licence, int $id = null): self
+    public static function forLicence(Licence $licence, ?int $id = null): self
     {
         return new static($licence, $id);
     }

@@ -90,9 +90,7 @@ class ErruRequestEntityTest extends EntityTester
         $this->assertEquals($document, $entity->getResponseDocument());
     }
 
-    /**
-     * @dataProvider canModifyProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('canModifyProvider')]
     public function testCanModify(string $msiStatus, bool $isNew): void
     {
         $msiType = m::mock(RefData::class);
@@ -107,7 +105,7 @@ class ErruRequestEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function canModifyProvider(): array
+    public static function canModifyProvider(): array
     {
         return [
             [Entity::FAILED_CASE_TYPE, false],

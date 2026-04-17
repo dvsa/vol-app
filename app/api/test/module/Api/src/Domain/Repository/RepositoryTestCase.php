@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\EntityManager;
@@ -46,7 +48,7 @@ class RepositoryTestCase extends MockeryTestCase
     protected $query = '';
     protected $qb;
 
-    public function setUpSut($class = null, $mockSut = false)
+    public function setUpSut(mixed $class = null, bool $mockSut = false): void
     {
         $this->em = m::mock(EntityManager::class);
         $this->queryBuilder = m::mock(QueryBuilderInterface::class);
@@ -64,7 +66,7 @@ class RepositoryTestCase extends MockeryTestCase
         $this->qb = null;
     }
 
-    protected function mockCreateQueryBuilder($mock)
+    protected function mockCreateQueryBuilder(mixed $mock): void
     {
         $this->em->shouldReceive('getRepository->createQueryBuilder')
             ->andReturn($mock);
@@ -73,7 +75,7 @@ class RepositoryTestCase extends MockeryTestCase
     /**
      * @return m\MockInterface
      */
-    protected function createMockQb($query = '')
+    protected function createMockQb(string $query = ''): mixed
     {
         $this->query = $query;
 
@@ -175,14 +177,14 @@ class RepositoryTestCase extends MockeryTestCase
         return $this->qb;
     }
 
-    public function mockOrderBy($sort, $order)
+    public function mockOrderBy(mixed $sort, mixed $order): mixed
     {
         $this->query .= ' ORDER BY ' . $sort . ' ' . $order;
 
         return $this->qb;
     }
 
-    public function mockGroupBy($field)
+    public function mockGroupBy(mixed $field): mixed
     {
         $fields = func_get_args();
         if (func_num_args() === 1 && is_array($field)) {
@@ -194,14 +196,14 @@ class RepositoryTestCase extends MockeryTestCase
         return $this->qb;
     }
 
-    public function mockSetMaxResults($maxResults)
+    public function mockSetMaxResults(mixed $maxResults): mixed
     {
         $this->query .= ' LIMIT ' . $maxResults;
 
         return $this->qb;
     }
 
-    public function mockSetParameter($name, $value)
+    public function mockSetParameter(mixed $name, mixed $value): mixed
     {
         $value = $this->formatValue($value);
 
@@ -210,14 +212,14 @@ class RepositoryTestCase extends MockeryTestCase
         return $this->qb;
     }
 
-    public function mockDistinct()
+    public function mockDistinct(): mixed
     {
         $this->query .= ' DISTINCT';
 
         return $this->qb;
     }
 
-    public function mockAddSelect($select)
+    public function mockAddSelect(mixed $select): mixed
     {
         $selects = func_get_args();
         if (func_num_args() === 1 && is_array($select)) {
@@ -229,20 +231,20 @@ class RepositoryTestCase extends MockeryTestCase
         return $this->qb;
     }
 
-    public function mockAndWhere($where)
+    public function mockAndWhere(mixed $where): mixed
     {
         $this->query .= ' AND ' . $where;
         return $this->qb;
     }
 
-    public function mockOrWhere($where)
+    public function mockOrWhere(mixed $where): mixed
     {
         $this->query .= ' OR ' . $where;
 
         return $this->qb;
     }
 
-    public function mockInnerJoin($field, $alias, $type = null, $condition = null)
+    public function mockInnerJoin(mixed $field, mixed $alias, mixed $type = null, mixed $condition = null): mixed
     {
         $this->query .= ' INNER JOIN ' . $field . ' ' . $alias;
 
@@ -254,7 +256,7 @@ class RepositoryTestCase extends MockeryTestCase
         return $this->qb;
     }
 
-    public function mockLeftJoin($field, $alias, $type = null, $condition = null)
+    public function mockLeftJoin(mixed $field, mixed $alias, mixed $type = null, mixed $condition = null): mixed
     {
         $this->query .= ' LEFT JOIN ' . $field . ' ' . $alias;
 
@@ -266,49 +268,49 @@ class RepositoryTestCase extends MockeryTestCase
         return $this->qb;
     }
 
-    public function mockExprEq($field, $value)
+    public function mockExprEq(mixed $field, mixed $value): mixed
     {
         $value = $this->formatValue($value);
 
         return $field . ' = ' . $value;
     }
 
-    public function mockExprNeq($field, $value)
+    public function mockExprNeq(mixed $field, mixed $value): mixed
     {
         $value = $this->formatValue($value);
 
         return $field . ' != ' . $value;
     }
 
-    public function mockExprLte($field, $value)
+    public function mockExprLte(mixed $field, mixed $value): mixed
     {
         $value = $this->formatValue($value);
 
         return $field . ' <= ' . $value;
     }
 
-    public function mockExprLt($field, $value)
+    public function mockExprLt(mixed $field, mixed $value): mixed
     {
         $value = $this->formatValue($value);
 
         return $field . ' < ' . $value;
     }
 
-    public function mockExprGte($field, $value)
+    public function mockExprGte(mixed $field, mixed $value): mixed
     {
         $value = $this->formatValue($value);
 
         return $field . ' >= ' . $value;
     }
 
-    public function mockExprGt($field, $value)
+    public function mockExprGt(mixed $field, mixed $value): mixed
     {
         $value = $this->formatValue($value);
 
         return $field . ' > ' . $value;
     }
 
-    public function mockExprBetween($field, $from, $to)
+    public function mockExprBetween(mixed $field, mixed $from, mixed $to): mixed
     {
         $from = $this->formatValue($from);
         $to = $this->formatValue($to);
@@ -316,53 +318,53 @@ class RepositoryTestCase extends MockeryTestCase
         return $field . ' BETWEEN ' . $from . ' AND ' . $to;
     }
 
-    public function mockExprIn($field, $value)
+    public function mockExprIn(mixed $field, mixed $value): mixed
     {
         $value = $this->formatValue($value);
 
         return $field . ' IN ' . $value;
     }
 
-    public function mockExprNotIn($field, $value)
+    public function mockExprNotIn(mixed $field, mixed $value): mixed
     {
         $value = $this->formatValue($value);
 
         return $field . ' NOT IN ' . $value;
     }
 
-    public function mockExprIsNull($field)
+    public function mockExprIsNull(mixed $field): mixed
     {
         return $field . ' IS NULL';
     }
 
-    public function mockExprIsNotNull($field)
+    public function mockExprIsNotNull(mixed $field): mixed
     {
         return $field . ' IS NOT NULL';
     }
 
-    public function mockExprLike($field, $value)
+    public function mockExprLike(mixed $field, mixed $value): mixed
     {
         $value = $this->formatValue($value);
 
         return $field . ' LIKE ' . $value;
     }
 
-    public function mockOrX()
+    public function mockOrX(): mixed
     {
         return '(' . implode(' OR ', func_get_args()) . ')';
     }
 
-    public function mockAndX()
+    public function mockAndX(): mixed
     {
         return '(' . implode(' AND ', func_get_args()) . ')';
     }
 
-    public function mockCount($countable)
+    public function mockCount(mixed $countable): mixed
     {
         return sprintf('COUNT(%s)', $countable);
     }
 
-    protected function formatValue($value)
+    protected function formatValue(mixed $value): mixed
     {
         if (is_array($value)) {
             $value = json_encode($value);
@@ -387,7 +389,7 @@ class RepositoryTestCase extends MockeryTestCase
         return $value;
     }
 
-    protected function expectQueryWithData($queryName, $data = [], $types = [], $queryResponse = null)
+    protected function expectQueryWithData(mixed $queryName, array $data = [], array $types = [], mixed $queryResponse = null): void
     {
         $query = m::mock();
         if (!$types) {

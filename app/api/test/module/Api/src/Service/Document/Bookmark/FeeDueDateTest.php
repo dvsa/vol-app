@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\FeeDueDate;
@@ -11,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class FeeDueDateTest extends MockeryTestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new FeeDueDate();
         $query = $bookmark->getQuery(['fee' => 123]);
@@ -19,10 +21,8 @@ class FeeDueDateTest extends MockeryTestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    /**
-     * @dataProvider dpTestRender
-     */
-    public function testRender($invoicedDate, $atCalculate)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestRender')]
+    public function testRender(mixed $invoicedDate, mixed $atCalculate): void
     {
         $dateTime = new \DateTime('2001-02-03');
 
@@ -42,7 +42,7 @@ class FeeDueDateTest extends MockeryTestCase
         $this->assertEquals('03/02/2001', $bookmark->render());
     }
 
-    public function dpTestRender()
+    public static function dpTestRender(): array
     {
         return [
             [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\AnswersSummary;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication;
@@ -53,10 +55,8 @@ class IpaAnswersSummaryGeneratorTest extends MockeryTestCase
         $this->answersSummaryGenerator->registerCustomRowsAdder(3, m::mock(AnswersSummaryRowsAdderInterface::class));
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
-    public function testGenerateWithDefaultRowsAdder($isSnapshot)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
+    public function testGenerateWithDefaultRowsAdder(mixed $isSnapshot): void
     {
         $this->irhpPermitApplication->shouldReceive('getIrhpApplication->getIrhpPermitType->getId')
             ->withNoArgs()
@@ -72,10 +72,8 @@ class IpaAnswersSummaryGeneratorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
-    public function testGenerateWithCustomRowsAdder($isSnapshot)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
+    public function testGenerateWithCustomRowsAdder(mixed $isSnapshot): void
     {
         $this->irhpPermitApplication->shouldReceive('getIrhpApplication->getIrhpPermitType->getId')
             ->withNoArgs()
@@ -94,7 +92,7 @@ class IpaAnswersSummaryGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpSnapshot()
+    public static function dpSnapshot(): array
     {
         return [
             [true],

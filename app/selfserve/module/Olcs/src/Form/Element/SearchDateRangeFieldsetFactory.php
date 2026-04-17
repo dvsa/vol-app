@@ -16,6 +16,7 @@ class SearchDateRangeFieldsetFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchDateRangeFieldset
     {
         $fs = new SearchDateRangeFieldset($options['name'], $options);

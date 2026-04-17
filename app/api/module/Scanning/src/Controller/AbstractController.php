@@ -28,6 +28,7 @@ abstract class AbstractController extends AbstractRestfulController
      *
      * @return JsonModel
      */
+    #[\Override]
     public function create($data)
     {
         return $this->respondError(405, 'Method Not Allowed');
@@ -40,6 +41,7 @@ abstract class AbstractController extends AbstractRestfulController
      *
      * @return JsonModel
      */
+    #[\Override]
     public function delete($id)
     {
         return $this->respondError(405, 'Method Not Allowed');
@@ -52,6 +54,7 @@ abstract class AbstractController extends AbstractRestfulController
      *
      * @return JsonModel
      */
+    #[\Override]
     public function deleteList($data = null)
     {
         return $this->respondError(405, 'Method Not Allowed');
@@ -64,6 +67,7 @@ abstract class AbstractController extends AbstractRestfulController
      *
      * @return JsonModel
      */
+    #[\Override]
     public function get($id)
     {
         return $this->respondError(405, 'Method Not Allowed');
@@ -74,6 +78,7 @@ abstract class AbstractController extends AbstractRestfulController
      *
      * @return JsonModel
      */
+    #[\Override]
     public function getList()
     {
         return $this->respondError(405, 'Method Not Allowed');
@@ -89,6 +94,7 @@ abstract class AbstractController extends AbstractRestfulController
      *
      * @return JsonModel
      */
+    #[\Override]
     public function head($id = null)
     {
         return $this->respondError(405, 'Method Not Allowed');
@@ -99,6 +105,7 @@ abstract class AbstractController extends AbstractRestfulController
      *
      * @return JsonModel
      */
+    #[\Override]
     public function options()
     {
         return $this->respondError(405, 'Method Not Allowed');
@@ -112,6 +119,7 @@ abstract class AbstractController extends AbstractRestfulController
      *
      * @return JsonModel
      */
+    #[\Override]
     public function patch($id, $data)
     {
         return $this->respondError(405, 'Method Not Allowed');
@@ -124,6 +132,7 @@ abstract class AbstractController extends AbstractRestfulController
      *
      * @return JsonModel
      */
+    #[\Override]
     public function replaceList($data = null)
     {
         return $this->respondError(405, 'Method Not Allowed');
@@ -136,6 +145,7 @@ abstract class AbstractController extends AbstractRestfulController
      *
      * @return JsonModel
      */
+    #[\Override]
     public function patchList($data)
     {
         return $this->respondError(405, 'Method Not Allowed');
@@ -149,6 +159,7 @@ abstract class AbstractController extends AbstractRestfulController
      *
      * @return JsonModel
      */
+    #[\Override]
     public function update($id, $data)
     {
         return $this->respondError(405, 'Method Not Allowed');
@@ -159,6 +170,7 @@ abstract class AbstractController extends AbstractRestfulController
      *
      * @return JsonModel
      */
+    #[\Override]
     public function notFoundAction()
     {
         return $this->respondError(404, 'Page Not Found');

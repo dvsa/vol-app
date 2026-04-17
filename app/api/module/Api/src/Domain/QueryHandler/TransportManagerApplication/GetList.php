@@ -22,6 +22,7 @@ class GetList extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $query \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList */

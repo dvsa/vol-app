@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ComplaintTest
  *
@@ -29,7 +31,7 @@ class ComplaintTest extends RepositoryTestCase
         $this->setUpSut(ComplaintRepo::class);
     }
 
-    public function testFetchById()
+    public function testFetchById(): void
     {
         $command = m::mock(QueryInterface::class);
         $command->shouldReceive('getId')->andReturn(111);
@@ -69,7 +71,7 @@ class ComplaintTest extends RepositoryTestCase
         $this->sut->fetchUsingId($command, Query::HYDRATE_OBJECT, 1);
     }
 
-    public function testApplyListJoins()
+    public function testApplyListJoins(): void
     {
         // mock SUT to allow testing the protected method
         $sut = m::mock(ComplaintRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
@@ -85,7 +87,7 @@ class ComplaintTest extends RepositoryTestCase
         $sut->applyListJoins($mockQb);
     }
 
-    public function testApplyFiltersCase()
+    public function testApplyFiltersCase(): void
     {
         // mock SUT to allow testing the protected method
         $sut = m::mock(ComplaintRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
@@ -105,7 +107,7 @@ class ComplaintTest extends RepositoryTestCase
         $sut->applyListFilters($qb, $query);
     }
 
-    public function testApplyFiltersCompliance()
+    public function testApplyFiltersCompliance(): void
     {
         // mock SUT to allow testing the protected method
         $sut = m::mock(ComplaintRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
@@ -125,7 +127,7 @@ class ComplaintTest extends RepositoryTestCase
         $sut->applyListFilters($qb, $query);
     }
 
-    public function testApplyFiltersLicence()
+    public function testApplyFiltersLicence(): void
     {
         // mock SUT to allow testing the protected method
         $sut = m::mock(ComplaintRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
@@ -149,7 +151,7 @@ class ComplaintTest extends RepositoryTestCase
         $sut->applyListFilters($qb, $query);
     }
 
-    public function testApplyFiltersApplication()
+    public function testApplyFiltersApplication(): void
     {
         // mock SUT to allow testing the protected method
         $sut = m::mock(ComplaintRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();

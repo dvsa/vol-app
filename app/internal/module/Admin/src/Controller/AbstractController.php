@@ -30,6 +30,7 @@ abstract class AbstractController extends LaminasAbstractActionController implem
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

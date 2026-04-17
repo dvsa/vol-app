@@ -21,6 +21,7 @@ class IrhpCandidatePermitSelectionControllerFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpCandidatePermitSelectionController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

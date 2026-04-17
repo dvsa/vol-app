@@ -25,6 +25,7 @@ class PeopleReviewService extends AbstractReviewService
      * @param bool $showPosition
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(array $data = [], $showPosition = false)
     {
         $item = [

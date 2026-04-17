@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva;
 
 use Laminas\Form\ElementInterface;
@@ -28,7 +30,7 @@ class VariationTest extends MockeryTestCase
         $this->sut = new Variation($this->formHelper, m::mock(AuthorizationService::class));
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
         $form = m::mock(Form::class);
         $formActions = m::mock(Fieldset::class);

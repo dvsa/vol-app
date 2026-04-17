@@ -27,6 +27,7 @@ class LicenceAddresses extends CommonAddress
      *
      * @return Form
      */
+    #[\Override]
     protected function alterForm(Form $form, array $params)
     {
         parent::alterForm($form, $params);

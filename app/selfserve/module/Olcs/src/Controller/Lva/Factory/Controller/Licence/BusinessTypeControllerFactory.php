@@ -25,6 +25,7 @@ class BusinessTypeControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return BusinessTypeController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusinessTypeController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

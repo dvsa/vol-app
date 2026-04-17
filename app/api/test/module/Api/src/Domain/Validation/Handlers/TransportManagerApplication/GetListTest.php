@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\TransportManagerApplication;
 
 use Dvsa\Olcs\Api\Domain\Validation\Validators\CanAccessApplication;
@@ -22,7 +24,7 @@ class GetListTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsValidApplication()
+    public function testIsValidApplication(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -36,7 +38,7 @@ class GetListTest extends AbstractHandlerTestCase
         $this->assertSame(true, $this->sut->isValid($dto));
     }
 
-    public function testIsValidApplicationFailed()
+    public function testIsValidApplicationFailed(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -50,7 +52,7 @@ class GetListTest extends AbstractHandlerTestCase
         $this->assertSame(false, $this->sut->isValid($dto));
     }
 
-    public function testIsValidUser()
+    public function testIsValidUser(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -63,7 +65,7 @@ class GetListTest extends AbstractHandlerTestCase
         $this->assertSame(true, $this->sut->isValid($dto));
     }
 
-    public function testIsValidUserFalse()
+    public function testIsValidUserFalse(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -76,7 +78,7 @@ class GetListTest extends AbstractHandlerTestCase
         $this->assertSame(false, $this->sut->isValid($dto));
     }
 
-    public function testIsValidInternalUser()
+    public function testIsValidInternalUser(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -88,7 +90,7 @@ class GetListTest extends AbstractHandlerTestCase
         $this->assertSame(true, $this->sut->isValid($dto));
     }
 
-    public function testIsValidInternalUserFalse()
+    public function testIsValidInternalUserFalse(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);

@@ -1590,6 +1590,20 @@ $nav = [
                 ]
             ]
         ],
+        [
+            'id' => 'letter_preview',
+            'label' => 'Preview and edit letter',
+            'class' => 'govuk-link--no-visited-state',
+            'route' => 'letter/preview',
+            'use_route_match' => true,
+        ],
+        [
+            'id' => 'letter_edit',
+            'label' => 'Edit letter sections',
+            'class' => 'govuk-link--no-visited-state',
+            'route' => 'letter/edit',
+            'use_route_match' => true,
+        ],
     ]
 ];
 

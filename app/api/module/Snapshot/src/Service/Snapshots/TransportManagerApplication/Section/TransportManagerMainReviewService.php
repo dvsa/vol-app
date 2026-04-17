@@ -19,6 +19,7 @@ class TransportManagerMainReviewService extends AbstractReviewService
      *
      * @return array
      */
+    #[\Override]
     public function getConfig(TransportManagerApplication $tma)
     {
         $tm = $tma->getTransportManager();

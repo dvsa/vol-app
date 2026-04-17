@@ -22,6 +22,7 @@ class OperatingCentresReviewService extends AbstractReviewService
      *
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(ContinuationDetail $continuationDetail)
     {
         $licence = $continuationDetail->getLicence();

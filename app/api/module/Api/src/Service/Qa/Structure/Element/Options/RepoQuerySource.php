@@ -19,6 +19,7 @@ class RepoQuerySource implements SourceInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function populateOptionList(OptionList $optionList, array $options)
     {
         $methodName = $options['method'];

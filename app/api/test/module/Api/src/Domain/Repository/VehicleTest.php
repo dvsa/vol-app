@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Mockery as m;
@@ -16,7 +18,7 @@ class VehicleTest extends RepositoryTestCase
         $this->setUpSut(\Dvsa\Olcs\Api\Domain\Repository\Vehicle::class);
     }
 
-    public function testFetchByVrm()
+    public function testFetchByVrm(): void
     {
         $qb = $this->createMockQb('BLAH');
 

@@ -21,6 +21,7 @@ class TeamPrinterExceptionsList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'TeamPrinter';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $repo = $this->getRepo();

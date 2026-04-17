@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpPermit;
 
 use Doctrine\ORM\Query;
@@ -31,7 +33,7 @@ class GetListByLicenceTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = GetListByLicenceQuery::create(
             [
@@ -274,7 +276,7 @@ class GetListByLicenceTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function testHandleQueryWithEmptyList()
+    public function testHandleQueryWithEmptyList(): void
     {
         $query = GetListByLicenceQuery::create(
             [

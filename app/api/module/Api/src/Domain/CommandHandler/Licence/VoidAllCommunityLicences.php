@@ -25,6 +25,7 @@ final class VoidAllCommunityLicences extends AbstractCommandHandler implements T
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $licenceId = $command->getId();

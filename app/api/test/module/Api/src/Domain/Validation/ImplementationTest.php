@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Implementation Test
  *
@@ -58,10 +60,10 @@ class ImplementationTest extends MockeryTestCase
             }
         }
 
-        $this->validationManager = new ValidationHandlerManager($this->createMock(ContainerInterface::class), $validationHandlers);
+        $this->validationManager = new ValidationHandlerManager($this->createStub(ContainerInterface::class), $validationHandlers);
     }
 
-    public function testAllImplemented()
+    public function testAllImplemented(): void
     {
         foreach ($this->handlers as $handler) {
             $this->assertTrue($this->validationManager->has($handler), $handler);

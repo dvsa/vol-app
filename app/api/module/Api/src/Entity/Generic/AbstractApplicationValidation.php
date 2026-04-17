@@ -1,87 +1,76 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Generic;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * ApplicationValidation Abstract Entity
+ * AbstractApplicationValidation Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="application_validation",
  *    indexes={
  *        @ORM\Index(name="fk_application_validation_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_application_validation_last_modified_by_user_id",
-     *     columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_application_validation_application_step_id",
-     *     columns={"application_step_id"}),
+ *        @ORM\Index(name="fk_application_validation_last_modified_by_user_id", columns={"last_modified_by"}),
+ *        @ORM\Index(name="ix_application_validation_application_step_id", columns={"application_step_id"}),
  *        @ORM\Index(name="ix_application_validation_question_id", columns={"question_id"})
  *    }
  * )
  */
-abstract class AbstractApplicationValidation implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractApplicationValidation implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
 
     /**
-     * Application step
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationStep",
-     *     fetch="LAZY",
-     *     inversedBy="applicationValidations"
-     * )
-     * @ORM\JoinColumn(name="application_step_id", referencedColumnName="id", nullable=true)
-     */
-    protected $applicationStep;
-
-    /**
-     * Created by
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
-     */
-    protected $createdBy;
-
-    /**
-     * Error translation key
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="error_translation_key", length=255, nullable=true)
-     */
-    protected $errorTranslationKey;
-
-    /**
-     * Identifier - Id
+     * Primary key.  Auto incremented if numeric.
      *
      * @var int
      *
      * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
+     * @ORM\Column(type="integer", name="id", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
+
+    /**
+     * Question
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Generic\Question
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Generic\Question", fetch="LAZY")
+     * @ORM\JoinColumn(name="question_id", referencedColumnName="id", nullable=true)
+     */
+    protected $question;
+
+    /**
+     * ApplicationStep
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationStep", fetch="LAZY")
+     * @ORM\JoinColumn(name="application_step_id", referencedColumnName="id", nullable=true)
+     */
+    protected $applicationStep;
 
     /**
      * Last modified by
@@ -95,27 +84,15 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     protected $lastModifiedBy;
 
     /**
-     * Parameters
+     * Created by
      *
-     * @var string
+     * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\Column(type="string", name="parameters", length=1024, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
+     * @Gedmo\Blameable(on="create")
      */
-    protected $parameters;
-
-    /**
-     * Question
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Generic\Question
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Generic\Question",
-     *     fetch="LAZY",
-     *     inversedBy="applicationValidations"
-     * )
-     * @ORM\JoinColumn(name="question_id", referencedColumnName="id", nullable=true)
-     */
-    protected $question;
+    protected $createdBy;
 
     /**
      * Rule
@@ -125,6 +102,33 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      * @ORM\Column(type="string", name="rule", length=255, nullable=true)
      */
     protected $rule;
+
+    /**
+     * Parameters
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="parameters", length=1024, nullable=true)
+     */
+    protected $parameters;
+
+    /**
+     * Weight
+     *
+     * @var string
+     *
+     * @ORM\Column(type="decimal", name="weight", nullable=true)
+     */
+    protected $weight;
+
+    /**
+     * Error translation key
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="error_translation_key", length=255, nullable=true)
+     */
+    protected $errorTranslationKey;
 
     /**
      * Version
@@ -137,85 +141,20 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     protected $version = 1;
 
     /**
-     * Weight
-     *
-     * @var float
-     *
-     * @ORM\Column(type="decimal", name="weight", precision=10, scale=2, nullable=true)
+     * Initialise the collections
      */
-    protected $weight;
-
-    /**
-     * Set the application step
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep $applicationStep entity being set as the value
-     *
-     * @return ApplicationValidation
-     */
-    public function setApplicationStep($applicationStep)
+    public function __construct()
     {
-        $this->applicationStep = $applicationStep;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the application step
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep
+     * Initialise collections
      */
-    public function getApplicationStep()
+    public function initCollections(): void
     {
-        return $this->applicationStep;
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return ApplicationValidation
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the error translation key
-     *
-     * @param string $errorTranslationKey new value being set
-     *
-     * @return ApplicationValidation
-     */
-    public function setErrorTranslationKey($errorTranslationKey)
-    {
-        $this->errorTranslationKey = $errorTranslationKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the error translation key
-     *
-     * @return string
-     */
-    public function getErrorTranslationKey()
-    {
-        return $this->errorTranslationKey;
-    }
 
     /**
      * Set the id
@@ -242,9 +181,57 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     }
 
     /**
+     * Set the question
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Generic\Question $question new value being set
+     *
+     * @return ApplicationValidation
+     */
+    public function setQuestion($question)
+    {
+        $this->question = $question;
+
+        return $this;
+    }
+
+    /**
+     * Get the question
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Generic\Question
+     */
+    public function getQuestion()
+    {
+        return $this->question;
+    }
+
+    /**
+     * Set the application step
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep $applicationStep new value being set
+     *
+     * @return ApplicationValidation
+     */
+    public function setApplicationStep($applicationStep)
+    {
+        $this->applicationStep = $applicationStep;
+
+        return $this;
+    }
+
+    /**
+     * Get the application step
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep
+     */
+    public function getApplicationStep()
+    {
+        return $this->applicationStep;
+    }
+
+    /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return ApplicationValidation
      */
@@ -266,51 +253,27 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     }
 
     /**
-     * Set the parameters
+     * Set the created by
      *
-     * @param string $parameters new value being set
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return ApplicationValidation
      */
-    public function setParameters($parameters)
+    public function setCreatedBy($createdBy)
     {
-        $this->parameters = $parameters;
+        $this->createdBy = $createdBy;
 
         return $this;
     }
 
     /**
-     * Get the parameters
+     * Get the created by
      *
-     * @return string
+     * @return \Dvsa\Olcs\Api\Entity\User\User
      */
-    public function getParameters()
+    public function getCreatedBy()
     {
-        return $this->parameters;
-    }
-
-    /**
-     * Set the question
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Generic\Question $question entity being set as the value
-     *
-     * @return ApplicationValidation
-     */
-    public function setQuestion($question)
-    {
-        $this->question = $question;
-
-        return $this;
-    }
-
-    /**
-     * Get the question
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Generic\Question
-     */
-    public function getQuestion()
-    {
-        return $this->question;
+        return $this->createdBy;
     }
 
     /**
@@ -338,6 +301,78 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     }
 
     /**
+     * Set the parameters
+     *
+     * @param string $parameters new value being set
+     *
+     * @return ApplicationValidation
+     */
+    public function setParameters($parameters)
+    {
+        $this->parameters = $parameters;
+
+        return $this;
+    }
+
+    /**
+     * Get the parameters
+     *
+     * @return string
+     */
+    public function getParameters()
+    {
+        return $this->parameters;
+    }
+
+    /**
+     * Set the weight
+     *
+     * @param string $weight new value being set
+     *
+     * @return ApplicationValidation
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
+
+        return $this;
+    }
+
+    /**
+     * Get the weight
+     *
+     * @return string
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
+    /**
+     * Set the error translation key
+     *
+     * @param string $errorTranslationKey new value being set
+     *
+     * @return ApplicationValidation
+     */
+    public function setErrorTranslationKey($errorTranslationKey)
+    {
+        $this->errorTranslationKey = $errorTranslationKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the error translation key
+     *
+     * @return string
+     */
+    public function getErrorTranslationKey()
+    {
+        return $this->errorTranslationKey;
+    }
+
+    /**
      * Set the version
      *
      * @param int $version new value being set
@@ -362,26 +397,11 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     }
 
     /**
-     * Set the weight
-     *
-     * @param float $weight new value being set
-     *
-     * @return ApplicationValidation
+     * Get bundle data
      */
-    public function setWeight($weight)
+    #[\Override]
+    public function __toString(): string
     {
-        $this->weight = $weight;
-
-        return $this;
-    }
-
-    /**
-     * Get the weight
-     *
-     * @return float
-     */
-    public function getWeight()
-    {
-        return $this->weight;
+        return (string) $this->getId();
     }
 }

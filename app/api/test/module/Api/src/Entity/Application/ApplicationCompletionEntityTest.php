@@ -9,10 +9,8 @@ use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion as Entity;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion
- * @covers \Dvsa\Olcs\Api\Entity\Application\AbstractApplicationCompletion
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\AbstractApplicationCompletion::class)]
 class ApplicationCompletionEntityTest extends EntityTester
 {
     /**
@@ -22,7 +20,7 @@ class ApplicationCompletionEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $application = m::mock(Application::class);
 
@@ -31,12 +29,8 @@ class ApplicationCompletionEntityTest extends EntityTester
         $this->assertSame($application, $ac->getApplication());
     }
 
-    /**
-     * @dataProvider dpVariationSectionUpdated
-     *
-     * test variation section updated (use the two sections likely to be tested in the real world as examples)
-     */
-    public function testVariationSectionUpdated($status, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpVariationSectionUpdated')]
+    public function testVariationSectionUpdated(mixed $status, mixed $expected): void
     {
         $entity = $this->instantiate(Entity::class);
 
@@ -47,7 +41,7 @@ class ApplicationCompletionEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->variationSectionUpdated('typeOfLicence'));
     }
 
-    public function dpVariationSectionUpdated()
+    public static function dpVariationSectionUpdated(): array
     {
         return [
             [Entity::STATUS_NOT_STARTED, false],
@@ -56,7 +50,7 @@ class ApplicationCompletionEntityTest extends EntityTester
         ];
     }
 
-    public function testGetCalculatedValues()
+    public function testGetCalculatedValues(): void
     {
         /** @var Application $mockApp */
         $mockApp = m::mock(Application::class);
@@ -65,7 +59,7 @@ class ApplicationCompletionEntityTest extends EntityTester
         static::assertEquals(null, $actual['application']);
     }
 
-    public function testIsCompleteEmpty()
+    public function testIsCompleteEmpty(): void
     {
         $required = [];
 
@@ -75,7 +69,7 @@ class ApplicationCompletionEntityTest extends EntityTester
         $this->assertTrue($ac->isComplete($required));
     }
 
-    public function testIsComplete()
+    public function testIsComplete(): void
     {
         $required = [
             'businessType'
@@ -88,7 +82,7 @@ class ApplicationCompletionEntityTest extends EntityTester
         $this->assertFalse($ac->isComplete($required));
     }
 
-    public function testIsCompleteWhenComplete()
+    public function testIsCompleteWhenComplete(): void
     {
         $required = [
             'businessType'
@@ -101,7 +95,7 @@ class ApplicationCompletionEntityTest extends EntityTester
         $this->assertTrue($ac->isComplete($required));
     }
 
-    public function testClearVehiclesSizeSectionsForApplication()
+    public function testClearVehiclesSizeSectionsForApplication(): void
     {
         $entity = $this->instantiate(Entity::class);
         $this->assertNotSame(Entity::STATUS_NOT_STARTED, $entity->getPsvOperateLargeStatus());

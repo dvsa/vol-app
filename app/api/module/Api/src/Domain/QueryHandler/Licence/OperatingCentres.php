@@ -25,6 +25,7 @@ class OperatingCentres extends AbstractQueryHandler
 
     protected $extraRepos = ['LicenceOperatingCentre', 'TrafficArea', 'Document'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var \Dvsa\Olcs\Api\Entity\Licence\Licence $licence */

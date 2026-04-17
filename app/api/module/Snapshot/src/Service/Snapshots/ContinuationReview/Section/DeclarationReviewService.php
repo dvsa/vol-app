@@ -22,6 +22,7 @@ class DeclarationReviewService extends AbstractReviewService
      *
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(ContinuationDetail $continuationDetail)
     {
 
@@ -107,17 +108,24 @@ class DeclarationReviewService extends AbstractReviewService
                 $markupKey = 'markup-continuation-declaration-goods-ni';
                 $markupStandard = 'markup-continuation-declaration-goods-ni-standard';
                 $markupOperatingCentres = 'markup-continuation-declaration-goods-ni-operating-centres-not-lgv';
+            } elseif ($licence->isStandardNational() || $licence->isStandardInternational()) {
+                $markupKey = 'markup-continuation-declaration-goods-gb-sn';
+                $markupStandard = 'markup-continuation-declaration-goods-gb-sn-standard';
+                // Operating centres text is hardcoded in the goods-gb-sn template
+                $markupOperatingCentres = null;
             } else {
                 $markupKey = 'markup-continuation-declaration-goods-gb';
                 $markupStandard = 'markup-continuation-declaration-goods-gb-standard';
                 $markupOperatingCentres = 'markup-continuation-declaration-goods-gb-operating-centres-not-lgv';
             }
 
-            if ($licence->isLgv()) {
+            if ($licence->isLgv() && $markupOperatingCentres !== null) {
                 $markupOperatingCentres = 'markup-continuation-declaration-goods-operating-centres-lgv';
             }
 
-            $additional[] = $this->translate($markupOperatingCentres);
+            if ($markupOperatingCentres !== null) {
+                $additional[] = $this->translate($markupOperatingCentres);
+            }
         } else {
             // PSV
             if ($licence->isSpecialRestricted()) {

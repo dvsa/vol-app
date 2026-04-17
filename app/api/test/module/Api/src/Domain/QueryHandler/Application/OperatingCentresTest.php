@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Operating Centres Test
  *
@@ -47,7 +49,7 @@ class OperatingCentresTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQueryNewApp()
+    public function testHandleQueryNewApp(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -118,7 +120,7 @@ class OperatingCentresTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    public function testHandleQueryVariationWithTaPsv()
+    public function testHandleQueryVariationWithTaPsv(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -208,7 +210,7 @@ class OperatingCentresTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    public function testHandleQueryVariationWithTaGoods()
+    public function testHandleQueryVariationWithTaGoods(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -303,7 +305,7 @@ class OperatingCentresTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    public function testHandleQueryVariationWithTaGoodsUnderConsideration()
+    public function testHandleQueryVariationWithTaGoodsUnderConsideration(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -399,7 +401,7 @@ class OperatingCentresTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    public function testHandleQueryVariationWithTaGoodsUnderConsiderationWithoutActiveS4()
+    public function testHandleQueryVariationWithTaGoodsUnderConsiderationWithoutActiveS4(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -486,7 +488,7 @@ class OperatingCentresTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    public function testHandleQueryReadOnlyUser()
+    public function testHandleQueryReadOnlyUser(): void
     {
 
         $query = Qry::create(['id' => 111]);
@@ -555,7 +557,7 @@ class OperatingCentresTest extends QueryHandlerTestCase
     /**
      * @return Licence
      */
-    protected function makeMockLicence()
+    protected function makeMockLicence(): mixed
     {
         /** @var Licence $licence */
         $licence = m::mock(Licence::class)->makePartial();
@@ -578,7 +580,7 @@ class OperatingCentresTest extends QueryHandlerTestCase
      *
      * @return m\Mock
      */
-    protected function makeMockApplication($bundle, $licence, $status)
+    protected function makeMockApplication(mixed $bundle, mixed $licence, mixed $status): mixed
     {
         $application = m::mock(Application::class)->makePartial();
         $application->shouldReceive('serialize')->with($bundle)->andReturn(['foo' => 'bar']);

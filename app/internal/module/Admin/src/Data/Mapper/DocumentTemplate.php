@@ -27,15 +27,17 @@ class DocumentTemplate implements MapperInterface
      *
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data): array
     {
         $formData = [];
         $formData['fields'] = $data;
         if (!empty($data)) {
             $formData['fields']['category'] = $data['category']['id'];
-            $formData['fields']['subCategory'] = $data['subCategory']['id'];
+            $formData['fields']['subCategory'] = $data['subCategory']['id'] ?? null;
+            $formData['fields']['letterType'] = $data['letterType']['id'] ?? null;
 
-            $pathParts = pathinfo($data['document']['identifier']);
+            $pathParts = pathinfo((string) $data['document']['identifier']);
             $formData['fields']['templateFolder'] =
                 array_key_exists(ltrim($pathParts['dirname'], '/'), self::TEMPLATE_PATH_PREFIXES)
                     ? self::TEMPLATE_PATH_PREFIXES[ltrim($pathParts['dirname'], '/')]

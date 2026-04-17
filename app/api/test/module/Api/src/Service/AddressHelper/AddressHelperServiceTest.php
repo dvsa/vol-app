@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\AddressHelper;
 
 use Dvsa\Olcs\Api\Service\AddressHelper\AddressHelperService;
@@ -8,6 +10,7 @@ use Dvsa\Olcs\Api\Entity;
 use Dvsa\Olcs\DvsaAddressService\Service\AddressInterface;
 use PHPUnit\Framework\TestCase;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class AddressHelperServiceTest extends TestCase
 {
     private $addressServiceMock;
@@ -28,7 +31,7 @@ class AddressHelperServiceTest extends TestCase
         );
     }
 
-    public function testLookupAddress()
+    public function testLookupAddress(): void
     {
         $query = 'AB12 3CD';
         $expectedResult = []; // Assume this is populated with expected Address objects
@@ -40,7 +43,7 @@ class AddressHelperServiceTest extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function testFetchTrafficAreaByPostcodeOrUprnValid()
+    public function testFetchTrafficAreaByPostcodeOrUprnValid(): void
     {
         $query = 'AB12 3CD';
         $expectedTrafficArea = $this->createMock(Entity\TrafficArea\TrafficArea::class);
@@ -56,7 +59,7 @@ class AddressHelperServiceTest extends TestCase
         $this->assertEquals($expectedTrafficArea, $result);
     }
 
-    public function testFetchTrafficAreaByPostcodeOrUprnInvalid()
+    public function testFetchTrafficAreaByPostcodeOrUprnInvalid(): void
     {
         $query = 'Invalid';
         $this->addressServiceMock->method('lookupAddress')->willReturn([]);
@@ -66,7 +69,7 @@ class AddressHelperServiceTest extends TestCase
         $this->assertNull($result);
     }
 
-    public function testFetchEnforcementAreaByPostcodeValid()
+    public function testFetchEnforcementAreaByPostcodeValid(): void
     {
         $postcode = 'AB1 2CD';
         $expectedEnforcementArea = $this->createMock(Entity\EnforcementArea\EnforcementArea::class);
@@ -79,7 +82,7 @@ class AddressHelperServiceTest extends TestCase
         $this->assertEquals($expectedEnforcementArea, $result);
     }
 
-    public function testFetchEnforcementAreaByPostcodeInvalid()
+    public function testFetchEnforcementAreaByPostcodeInvalid(): void
     {
         $postcode = 'Invalid';
         $this->postcodeEnforcementAreaRepositoryMock->method('fetchByPostcodeId')->willReturn(null);

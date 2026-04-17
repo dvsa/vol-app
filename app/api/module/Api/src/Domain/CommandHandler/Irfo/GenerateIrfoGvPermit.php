@@ -22,6 +22,7 @@ final class GenerateIrfoGvPermit extends AbstractCommandHandler
 {
     protected $repoServiceName = 'IrfoGvPermit';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $irfoGvPermit = $this->getRepo()->fetchUsingId($command, Query::HYDRATE_OBJECT);

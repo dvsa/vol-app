@@ -16,9 +16,7 @@ use Dvsa\Olcs\Transfer\Query\Cases\ByLicence;
 use Dvsa\Olcs\Transfer\Query\Cases\ByTransportManager;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\Cases
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Cases::class)]
 class CasesTest extends RepositoryTestCase
 {
     /** @var  Repository\Cases | m\MockInterface */
@@ -42,7 +40,7 @@ class CasesTest extends RepositoryTestCase
      *
      * @return m\MockInterface
      */
-    public function getMockRepo($qb): m\MockInterface
+    public function getMockRepo(mixed $qb): m\MockInterface
     {
         $repo = m::mock(EntityRepository::class);
         $repo->shouldReceive('createQueryBuilder')
@@ -340,7 +338,7 @@ class CasesTest extends RepositoryTestCase
         $qb->shouldReceive('getQuery')->andReturn(
             m::mock()->shouldReceive('execute')
                 ->shouldReceive('getResult')
-                ->andReturn([$this->createMock(CasesEntity::class), $this->createMock(CasesEntity::class)])
+                ->andReturn([$this->createStub(CasesEntity::class), $this->createStub(CasesEntity::class)])
                 ->getMock()
         );
         $result = $this->sut->fetchOpenCasesForApplication(1);

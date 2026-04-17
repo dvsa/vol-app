@@ -10,6 +10,7 @@ final class UpdateOperatingSmallVehiclesStatus extends AbstractUpdateStatus
 {
     protected $section = 'OperatingSmallVehicles';
 
+    #[\Override]
     protected function isSectionValid(Application $application): bool
     {
         return $application->getPsvOperateSmallVhl() !== null;

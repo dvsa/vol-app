@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * PendingList Test
  *
@@ -32,7 +34,7 @@ class PublishedListTest extends QueryHandlerTestCase
     /**
      * tests retrieving a list of published publications (status published)
      */
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $count = 25;
         $query = Qry::create(

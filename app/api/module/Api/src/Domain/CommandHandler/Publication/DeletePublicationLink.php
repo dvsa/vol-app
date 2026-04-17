@@ -20,6 +20,7 @@ final class DeletePublicationLink extends AbstractCommandHandler implements Tran
 {
     protected $repoServiceName = 'PublicationLink';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var PublicationLinkEntity $publicationLink */

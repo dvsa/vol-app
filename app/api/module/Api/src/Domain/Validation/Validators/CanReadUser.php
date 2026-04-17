@@ -16,6 +16,7 @@ class CanReadUser extends AbstractDoesOwnEntity
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($entityId)
     {
         if ($this->isInternalUser()) {

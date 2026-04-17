@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Helper;
 
 use Dvsa\Olcs\Api\Service\Helper\FormatAddress;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class AddressFormatterAwareTraitTest extends MockeryTestCase
 {
-    public function testGetSet()
+    public function testGetSet(): void
     {
         /** @var FormatAddress $mockFormatter */
         $mockFormatter = m::mock(FormatAddress::class);

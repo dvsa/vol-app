@@ -89,6 +89,7 @@ class CancelIrhpApplicationController extends AbstractSelfserveController
     /**
      * @return void
      */
+    #[\Override]
     public function mergeTemplateVars()
     {
         if (isset($this->queryParams['fromBilateralCabotage'])) {

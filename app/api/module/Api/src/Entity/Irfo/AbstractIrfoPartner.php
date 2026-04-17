@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Irfo;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * IrfoPartner Abstract Entity
+ * AbstractIrfoPartner Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -23,20 +28,42 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    indexes={
  *        @ORM\Index(name="ix_irfo_partner_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_irfo_partner_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_irfo_partner_organisation_id", columns={"organisation_id"})
+ *        @ORM\Index(name="ix_irfo_partner_organisation_id", columns={"organisation_id"}),
+ *        @ORM\Index(name="uk_irfo_partner_olbs_key", columns={"olbs_key"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_irfo_partner_olbs_key", columns={"olbs_key"})
  *    }
  * )
  */
-abstract class AbstractIrfoPartner implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrfoPartner implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to organisation
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
+     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=true)
+     */
+    protected $organisation;
 
     /**
      * Created by
@@ -48,17 +75,6 @@ abstract class AbstractIrfoPartner implements BundleSerializableInterface, JsonS
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
 
     /**
      * Last modified by
@@ -78,30 +94,7 @@ abstract class AbstractIrfoPartner implements BundleSerializableInterface, JsonS
      *
      * @ORM\Column(type="string", name="name", length=70, nullable=false)
      */
-    protected $name;
-
-    /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Organisation
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation",
-     *     fetch="LAZY",
-     *     inversedBy="irfoPartners"
-     * )
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=true)
-     */
-    protected $organisation;
+    protected $name = '';
 
     /**
      * Version
@@ -114,28 +107,29 @@ abstract class AbstractIrfoPartner implements BundleSerializableInterface, JsonS
     protected $version = 1;
 
     /**
-     * Set the created by
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @var int
      *
-     * @return IrfoPartner
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
+    protected $olbsKey;
 
-        return $this;
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
     }
 
     /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * Initialise collections
      */
-    public function getCreatedBy()
+    public function initCollections(): void
     {
-        return $this->createdBy;
     }
+
 
     /**
      * Set the id
@@ -162,9 +156,57 @@ abstract class AbstractIrfoPartner implements BundleSerializableInterface, JsonS
     }
 
     /**
+     * Set the organisation
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
+     *
+     * @return IrfoPartner
+     */
+    public function setOrganisation($organisation)
+    {
+        $this->organisation = $organisation;
+
+        return $this;
+    }
+
+    /**
+     * Get the organisation
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     */
+    public function getOrganisation()
+    {
+        return $this->organisation;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return IrfoPartner
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return IrfoPartner
      */
@@ -210,6 +252,30 @@ abstract class AbstractIrfoPartner implements BundleSerializableInterface, JsonS
     }
 
     /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return IrfoPartner
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
      * Set the olbs key
      *
      * @param int $olbsKey new value being set
@@ -234,50 +300,11 @@ abstract class AbstractIrfoPartner implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Set the organisation
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation entity being set as the value
-     *
-     * @return IrfoPartner
+     * Get bundle data
      */
-    public function setOrganisation($organisation)
+    #[\Override]
+    public function __toString(): string
     {
-        $this->organisation = $organisation;
-
-        return $this;
-    }
-
-    /**
-     * Get the organisation
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     */
-    public function getOrganisation()
-    {
-        return $this->organisation;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return IrfoPartner
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
+        return (string) $this->getId();
     }
 }

@@ -15,6 +15,7 @@ class PreferencesSetCookieGeneratorFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PreferencesSetCookieGenerator
     {
         return new PreferencesSetCookieGenerator(

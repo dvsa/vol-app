@@ -83,6 +83,7 @@ class IrhpApplicationCountryConfirmationController extends AbstractSelfserveCont
      *
      * @return void
      */
+    #[\Override]
     public function retrieveData()
     {
         parent::retrieveData();
@@ -116,6 +117,7 @@ class IrhpApplicationCountryConfirmationController extends AbstractSelfserveCont
      *
      * @return void
      */
+    #[\Override]
     public function mergeTemplateVars()
     {
         $this->templateVarsConfig['default']['backUriOptions'] = [
@@ -131,6 +133,7 @@ class IrhpApplicationCountryConfirmationController extends AbstractSelfserveCont
      * Extend method to handle the cancel button if pressed, and replace any submitted post data with the filtered
      * version of that data
      */
+    #[\Override]
     public function handlePost()
     {
         if (isset($this->postParams['Submit']['CancelButton'])) {

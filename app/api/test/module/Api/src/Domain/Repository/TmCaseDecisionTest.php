@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * TmCaseDecision Repo test
  */
@@ -25,24 +27,22 @@ class TmCaseDecisionTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function dpFetchLatestUsingCaseDataProvider()
+    public static function dpFetchLatestUsingCaseDataProvider(): array
     {
         return [
             'Decision exists' => [
-                'exepected' => 'result',
+                'expected' => 'result',
                 'mockResult' => [0 => 'result']
             ],
             'Decision does not exist' => [
-                'exepected' => false ,
+                'expected' => false ,
                 'mockResult' => []
             ],
         ];
     }
 
-    /**
-     * @dataProvider dpFetchLatestUsingCaseDataProvider
-     */
-    public function testFetchLatestUsingCase($expected, $mockResult)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFetchLatestUsingCaseDataProvider')]
+    public function testFetchLatestUsingCase(mixed $expected, mixed $mockResult): void
     {
         $case = 24;
 

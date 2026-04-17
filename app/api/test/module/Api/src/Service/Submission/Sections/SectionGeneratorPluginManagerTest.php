@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
 use Dvsa\Olcs\Api\Service\Submission\Sections\SectionGeneratorInterface;
@@ -19,17 +21,17 @@ class SectionGeneratorPluginManagerTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->sut = new SectionGeneratorPluginManager($this->createMock(ContainerInterface::class));
+        $this->sut = new SectionGeneratorPluginManager($this->createStub(ContainerInterface::class));
     }
 
-    public function testValidate()
+    public function testValidate(): void
     {
         $plugin = m::mock(SectionGeneratorInterface::class);
 
         $this->assertNull($this->sut->validate($plugin));
     }
 
-    public function testValidateInvalid()
+    public function testValidateInvalid(): void
     {
         $this->expectException(InvalidServiceException::class);
 

@@ -21,6 +21,7 @@ final class DeleteTrailer extends AbstractCommandHandler
 {
     protected $repoServiceName = 'Trailer';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

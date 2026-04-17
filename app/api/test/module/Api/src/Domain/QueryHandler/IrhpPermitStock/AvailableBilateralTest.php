@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpPermitStock;
 
 use DateTime;
@@ -21,7 +23,7 @@ class AvailableBilateralTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $countryId = 'NO';
 

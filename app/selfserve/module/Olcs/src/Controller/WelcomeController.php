@@ -48,6 +48,7 @@ class WelcomeController extends AbstractSelfserveController
     /**
      * @return Response|void
      */
+    #[\Override]
     public function checkConditionalDisplay()
     {
         if (isset($this->postParams['form-actions']['signOut'])) {
@@ -59,6 +60,7 @@ class WelcomeController extends AbstractSelfserveController
         }
     }
 
+    #[\Override]
     public function alterForm($form)
     {
         // inject link into terms agreed label

@@ -26,6 +26,7 @@ class EcmtRemovalNoOfPermitsGenerator implements QuestionTextGeneratorInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function generate(QaContext $qaContext)
     {
         $feePerPermit = $qaContext->getQaEntity()->getFeePerPermit(

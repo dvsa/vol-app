@@ -24,7 +24,7 @@ final class EndIrhpApplicationsAndPermits extends AbstractCommand
     use PermitAppWithdrawReason;
     use EndIrhpApplicationsAndPermitsContext;
 
-    public const CONTEXT_SURRENDER = 'context_surrender';
-    public const CONTEXT_REVOKE = 'context_revoke';
-    public const CONTEXT_CNS = 'context_cns';
+    public const string CONTEXT_SURRENDER = 'context_surrender';
+    public const string CONTEXT_REVOKE = 'context_revoke';
+    public const string CONTEXT_CNS = 'context_cns';
 }

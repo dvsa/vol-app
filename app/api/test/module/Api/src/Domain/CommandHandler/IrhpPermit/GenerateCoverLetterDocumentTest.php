@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermit;
 
 use Doctrine\ORM\Query;
@@ -32,10 +34,8 @@ class GenerateCoverLetterDocumentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-    * @dataProvider dpHandleCommand
-    */
-    public function testHandleCommand($irhpPermitTypeId, $expectedTemplate, $expectedDescription, $expectedMessages)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
+    public function testHandleCommand(mixed $irhpPermitTypeId, mixed $expectedTemplate, mixed $expectedDescription, mixed $expectedMessages): void
     {
         $irhpPermitId = 1;
         $permitNo = 123;
@@ -106,7 +106,7 @@ class GenerateCoverLetterDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand(): array
     {
         return [
             'ECMT Annual' => [
@@ -152,7 +152,7 @@ class GenerateCoverLetterDocumentTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandForUndefinedTemplate()
+    public function testHandleCommandForUndefinedTemplate(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\RuntimeException::class);
         $this->expectExceptionMessage('Cover letter template not defined for IRHP Permit Type (id: undefined)');

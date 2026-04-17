@@ -33,9 +33,7 @@ class TransportManagersControllerTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function isInitializedIsCallable(): void
     {
         // Setup
@@ -45,11 +43,8 @@ class TransportManagersControllerTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->isInitialized(...));
     }
 
-    /**
-     * @test
-     *
-     * @depends isInitializedIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('isInitializedIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function isInitializedReturnsFalseBeforeCreateServiceIsCalled(): void
     {
         // Setup

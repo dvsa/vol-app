@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\AnswerSaver;
 
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
@@ -95,10 +97,8 @@ class GenericAnswerWriterTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpForceQuestionType
-     */
-    public function testSaveAnswerAlreadyExists($questionType, $forcedType, $expectedType)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpForceQuestionType')]
+    public function testSaveAnswerAlreadyExists(mixed $questionType, mixed $forcedType, mixed $expectedType): void
     {
         $this->answer->shouldReceive('setValue')
             ->with($expectedType, $this->answerValue)
@@ -125,10 +125,8 @@ class GenericAnswerWriterTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpForceQuestionType
-     */
-    public function testSaveAnswerRequiresCreation($questionType, $forcedType, $expectedType)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpForceQuestionType')]
+    public function testSaveAnswerRequiresCreation(mixed $questionType, mixed $forcedType, mixed $expectedType): void
     {
         $questionText = m::mock(QuestionText::class);
 
@@ -164,7 +162,7 @@ class GenericAnswerWriterTest extends MockeryTestCase
         );
     }
 
-    public function dpForceQuestionType()
+    public static function dpForceQuestionType(): array
     {
         return [
             [Question::QUESTION_TYPE_INTEGER, null, Question::QUESTION_TYPE_INTEGER],

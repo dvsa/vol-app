@@ -28,6 +28,7 @@ final class UpdateUnlicensed extends AbstractCommandHandler
 
     protected $extraRepos = ['Licence', 'ContactDetails'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

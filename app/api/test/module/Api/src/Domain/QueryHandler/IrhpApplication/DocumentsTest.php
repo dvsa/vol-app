@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpApplication;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -24,7 +26,7 @@ class DocumentsTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $irhpApplicationId = 20;
         $categoryId = 4;

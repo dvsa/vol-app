@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\Filter;
 
 use Dvsa\Olcs\Api\Entity\Bus\BusReg as BusRegEntity;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  */
 class InjectIsTxcAppTest extends TestCase
 {
-    public function testFilter()
+    public function testFilter(): void
     {
         $sut = new InjectIsTxcApp();
         $return = $sut->filter([]);
@@ -21,11 +23,11 @@ class InjectIsTxcAppTest extends TestCase
     }
 
     /**
-     * @dataProvider provideEbsrRefresh
      * @param $appType
      * @param $expected
      */
-    public function testFilterInjectsEbsrRefresh($appType, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideEbsrRefresh')]
+    public function testFilterInjectsEbsrRefresh(mixed $appType, mixed $expected): void
     {
         $sut = new InjectIsTxcApp();
         $return = $sut->filter(['txcAppType' => $appType]);
@@ -33,7 +35,7 @@ class InjectIsTxcAppTest extends TestCase
         $this->assertEquals($expected, $return['ebsrRefresh']);
     }
 
-    public function provideEbsrRefresh()
+    public static function provideEbsrRefresh(): array
     {
         return [
             [BusRegEntity::TXC_APP_NON_CHARGEABLE, 'Y'],

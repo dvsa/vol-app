@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Taxi Phv Status Test
  *
@@ -33,7 +35,7 @@ class UpdateTaxiPhvStatusTest extends AbstractUpdateStatusTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWithChange()
+    public function testHandleCommandWithChange(): void
     {
         $this->applicationCompletion->setTaxiPhvStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
         $this->licence->setPrivateHireLicences(new ArrayCollection(['foo']));
@@ -41,7 +43,7 @@ class UpdateTaxiPhvStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutChange()
+    public function testHandleCommandWithoutChange(): void
     {
         $this->applicationCompletion->setTaxiPhvStatus(ApplicationCompletionEntity::STATUS_INCOMPLETE);
         $this->licence->setPrivateHireLicences(new ArrayCollection());
@@ -49,7 +51,7 @@ class UpdateTaxiPhvStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusUnchanged(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandNoTrafficArea()
+    public function testHandleCommandNoTrafficArea(): void
     {
         $this->applicationCompletion->setTaxiPhvStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -58,7 +60,7 @@ class UpdateTaxiPhvStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandNoPhl()
+    public function testHandleCommandNoPhl(): void
     {
         $this->applicationCompletion->setTaxiPhvStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -68,7 +70,7 @@ class UpdateTaxiPhvStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->applicationCompletion->setTaxiPhvStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 

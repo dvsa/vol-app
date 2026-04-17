@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * VI O/C view test
  *
@@ -28,7 +30,7 @@ class ViOcViewTest extends RepositoryTestCase
         $this->setUpSut(ViOcViewRepo::class);
     }
 
-    public function testFetchDiscsToPrint()
+    public function testFetchDiscsToPrint(): void
     {
         $mockQb = m::mock(QueryBuilder::class)
             ->shouldReceive('select')
@@ -58,7 +60,7 @@ class ViOcViewTest extends RepositoryTestCase
         $this->assertEquals(['result'], $this->sut->fetchForExport());
     }
 
-    public function testClearOcViIndicators()
+    public function testClearOcViIndicators(): void
     {
         $params = [['ocId' => 1]];
 
@@ -66,7 +68,7 @@ class ViOcViewTest extends RepositoryTestCase
         $this->sut->clearOcViIndicators($params);
     }
 
-    public function testClearOcViIndicatorsException()
+    public function testClearOcViIndicatorsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\RuntimeException::class);
 

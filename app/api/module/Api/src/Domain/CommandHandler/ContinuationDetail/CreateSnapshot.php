@@ -17,7 +17,7 @@ use Psr\Container\ContainerInterface;
  */
 final class CreateSnapshot extends AbstractCommandHandler
 {
-    public const SNAPSHOT_DESCRIPTION = 'Digital continuation snapshot';
+    public const string SNAPSHOT_DESCRIPTION = 'Digital continuation snapshot';
 
     protected $repoServiceName = 'ContinuationDetail';
 
@@ -33,6 +33,7 @@ final class CreateSnapshot extends AbstractCommandHandler
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var ContinuationDetail $continuationDetail */
@@ -68,6 +69,7 @@ final class CreateSnapshot extends AbstractCommandHandler
 
         return $this->handleSideEffect(Upload::create($data));
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

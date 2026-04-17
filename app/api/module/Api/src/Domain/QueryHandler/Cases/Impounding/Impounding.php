@@ -12,6 +12,7 @@ final class Impounding extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Impounding';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->result(

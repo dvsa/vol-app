@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpApplication;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\IrhpApplication\ById as IrhpApplicationByIdHandler;
@@ -37,7 +39,7 @@ class ByIdTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $canViewCandidatePermits = true;
         $canSelectCandidatePermits = false;
@@ -107,7 +109,7 @@ class ByIdTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryWithException()
+    public function testHandleQueryWithException(): void
     {
         $canViewCandidatePermits = true;
         $canSelectCandidatePermits = false;

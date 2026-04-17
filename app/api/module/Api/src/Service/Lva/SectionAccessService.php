@@ -155,6 +155,7 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
 
         return $this->restrictionService->isRestrictionSatisfied($restrictions, $access, $section);
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->restrictionService = $container->get('RestrictionService');

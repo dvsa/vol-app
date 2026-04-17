@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Financial History Test
  *
@@ -32,7 +34,7 @@ class FinancialHistoryTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 111]);
 

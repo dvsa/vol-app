@@ -25,6 +25,7 @@ class BilateralIpaAnswersSummaryRowsAdder implements AnswersSummaryRowsAdderInte
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function addRows(AnswersSummary $answersSummary, QaEntityInterface $irhpPermitApplication, $isSnapshot)
     {
         $answersSummary->addRow(

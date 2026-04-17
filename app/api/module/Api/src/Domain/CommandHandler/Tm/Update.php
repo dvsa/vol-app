@@ -40,6 +40,7 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
      * @throws RuntimeException
      * @throws NotFoundException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Lva;
 
 use Doctrine\ORM\Query;
@@ -58,7 +60,7 @@ class AbstractCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
                 return parent::updateApplicationCompetition($appId, $hasChanged);
             }
 
-            public function handleCommand(CommandInterface $command)
+            public function handleCommand(CommandInterface $command): void
             {
             }
         };
@@ -73,7 +75,7 @@ class AbstractCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $data = [
             'name' => 'unit_OrgName',
@@ -118,7 +120,7 @@ class AbstractCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $data = [
             'name' => 'unit_OrgName',
@@ -159,7 +161,7 @@ class AbstractCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         static::assertTrue($actual->getFlag('hasChanged'));
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $expectIds = [111, 222];
         $data = [
@@ -194,7 +196,7 @@ class AbstractCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testCreateTask()
+    public function testCreateTask(): void
     {
         $expectDesc = 'unit_Desc';
 
@@ -227,7 +229,7 @@ class AbstractCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testUpdateAppCompetition()
+    public function testUpdateAppCompetition(): void
     {
         $expectHasChanged = 'unit_HasChanged';
 

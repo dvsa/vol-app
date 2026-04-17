@@ -32,6 +32,7 @@ class BusRegOtherService extends AbstractBusRegOtherService
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedValues()
     {
         return [

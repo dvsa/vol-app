@@ -10,6 +10,7 @@ class AbstractFactory implements AbstractFactoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function canCreate(ContainerInterface $container, $requestedName)
     {
         return in_array(AbstractContext::class, class_parents($requestedName), true);
@@ -18,6 +19,7 @@ class AbstractFactory implements AbstractFactoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         return new $requestedName($container->get('QueryHandlerManager'));

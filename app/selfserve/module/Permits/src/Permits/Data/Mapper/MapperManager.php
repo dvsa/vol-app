@@ -20,6 +20,7 @@ class MapperManager extends AbstractPluginManager
      * @param  mixed $plugin
      * @throws \RuntimeException if invalid
      */
+    #[\Override]
     public function validate($plugin)
     {
         if ($plugin instanceof MapperInterface) {

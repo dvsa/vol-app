@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Controller;
 
 use Mockery as m;
@@ -10,7 +12,7 @@ class ControllerPluginManagerHelper
      * @param $class
      * @return m\MockInterface
      */
-    public function getMockPlugin($class)
+    public function getMockPlugin(mixed $class): m\MockInterface
     {
         if (!str_contains($class, '\\')) {
             $class = 'Laminas\Mvc\Controller\Plugin\\' . $class;
@@ -25,7 +27,7 @@ class ControllerPluginManagerHelper
      * @param $plugins
      * @return m\MockInterface|\Laminas\Mvc\Controller\PluginManager
      */
-    public function getMockPluginManager($plugins)
+    public function getMockPluginManager(mixed $plugins): m\MockInterface
     {
         $mockPluginManager = m::mock(\Laminas\Mvc\Controller\PluginManager::class);
         $mockPluginManager->shouldReceive('setController');

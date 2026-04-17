@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpApplication;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\IrhpApplication\UpdateFull as CreateHandler;
@@ -38,7 +40,7 @@ class UpdateFullTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandBilateral()
+    public function testHandleCommandBilateral(): void
     {
         $permitTypeId = IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL;
         $licenceId = 2;
@@ -148,7 +150,7 @@ class UpdateFullTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandMultilateral()
+    public function testHandleCommandMultilateral(): void
     {
         $permitTypeId = IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL;
         $licenceId = 2;
@@ -245,10 +247,8 @@ class UpdateFullTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider dpTestHandleCommandQandA
-     */
-    public function testHandleCommandQandA($irhpPermitTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommandQandA')]
+    public function testHandleCommandQandA(mixed $irhpPermitTypeId): void
     {
         $licenceId = 2;
 
@@ -326,10 +326,8 @@ class UpdateFullTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider dpTestHandleCommandQandA
-     */
-    public function testHandleCommandQandAWithDeclaration($irhpPermitTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommandQandA')]
+    public function testHandleCommandQandAWithDeclaration(mixed $irhpPermitTypeId): void
     {
         $licenceId = 2;
 
@@ -421,7 +419,7 @@ class UpdateFullTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpTestHandleCommandQandA()
+    public static function dpTestHandleCommandQandA(): array
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM],
@@ -429,7 +427,7 @@ class UpdateFullTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandUnsupportedNoneQandAPermitType()
+    public function testHandleCommandUnsupportedNoneQandAPermitType(): void
     {
         $id = 44;
         $permitTypeId = 'unsupported';

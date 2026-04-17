@@ -26,6 +26,7 @@ final class Create extends AbstractCommandHandler implements TransactionedInterf
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         //  create person

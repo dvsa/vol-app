@@ -44,6 +44,7 @@ final class CreateApplication extends AbstractCommandHandler implements AuthAwar
 
     protected $extraRepos = ['Sla'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

@@ -39,8 +39,6 @@ class BusinessTypeController extends Lva\AbstractBusinessTypeController implemen
     protected $lva = 'application';
     protected string $location = 'internal';
 
-    protected StringHelperService $stringHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -68,13 +66,11 @@ class BusinessTypeController extends Lva\AbstractBusinessTypeController implemen
         TranslationHelperService $translationHelper,
         AnnotationBuilder $transferAnnotationBuilder,
         QueryService $queryService,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         GenericBusinessTypeAdapter $lvaAdapter,
         protected RestrictionHelperService $restrictionHelper,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

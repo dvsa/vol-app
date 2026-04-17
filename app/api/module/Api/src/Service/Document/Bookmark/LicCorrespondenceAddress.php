@@ -7,6 +7,7 @@ namespace Dvsa\Olcs\Api\Service\Document\Bookmark;
  */
 class LicCorrespondenceAddress extends LicenceHolderAddress
 {
+    #[\Override]
     public function render()
     {
         if (isset($this->data['correspondenceCd']['address'])) {

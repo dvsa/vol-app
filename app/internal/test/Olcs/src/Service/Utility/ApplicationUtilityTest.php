@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Application Utility test
  *
@@ -25,7 +27,7 @@ class ApplicationUtilityTest extends \PHPUnit\Framework\TestCase
         $this->sut = new ApplicationUtility();
     }
 
-    public function testAlterCreateApplicationData()
+    public function testAlterCreateApplicationData(): void
     {
         $data = [
             'foo' => 'bar',

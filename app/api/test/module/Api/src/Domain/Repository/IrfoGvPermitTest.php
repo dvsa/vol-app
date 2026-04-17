@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * IrfoGvPermit Repo test
  */
@@ -19,7 +21,7 @@ class IrfoGvPermitTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchByOrganisation()
+    public function testFetchByOrganisation(): void
     {
         $qb = $this->createMockQb('BLAH');
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Permits;
 
 use DateTime;
@@ -53,7 +55,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         parent::setUp();
     }
 
-    public function testCreateNew()
+    public function testCreateNew(): void
     {
         $irhpPermitWindow = m::mock(IrhpPermitWindow::class);
         $licence = m::mock(Licence::class);
@@ -68,7 +70,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertNull($irhpPermitApplication->getIrhpApplication());
     }
 
-    public function testCreateNewForIrhpApplication()
+    public function testCreateNewForIrhpApplication(): void
     {
         $irhpApplication = m::mock(IrhpApplication::class);
         $irhpPermitWindow = m::mock(IrhpPermitWindow::class);
@@ -83,10 +85,8 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertNull($irhpPermitApplication->getLicence());
     }
 
-    /**
-     * @dataProvider dpEmissionsCategoriesAndNull
-     */
-    public function testGetPermitIntensityOfUse($emissionsCategoryId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpEmissionsCategoriesAndNull')]
+    public function testGetPermitIntensityOfUse(mixed $emissionsCategoryId): void
     {
         $intensityOfUse = 0.75;
 
@@ -105,10 +105,8 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpEmissionsCategoriesAndNull
-     */
-    public function testGetPermitApplicationScore($emissionsCategoryId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpEmissionsCategoriesAndNull')]
+    public function testGetPermitApplicationScore(mixed $emissionsCategoryId): void
     {
         $applicationScore = 1.25;
 
@@ -127,7 +125,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpEmissionsCategoriesAndNull()
+    public static function dpEmissionsCategoriesAndNull(): array
     {
         return [
             [RefData::EMISSIONS_CATEGORY_EURO5_REF],
@@ -136,7 +134,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    public function testGetCalculatedBundleValues()
+    public function testGetCalculatedBundleValues(): void
     {
         $serializationParameters = [
             'licence' => [
@@ -202,10 +200,8 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpCountValidPermits
-     */
-    public function testCountValidPermits($statusId, $count)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCountValidPermits')]
+    public function testCountValidPermits(mixed $statusId, mixed $count): void
     {
         $irhpPermitRange = m::mock(IrhpPermitRange::class);
         $irhpPermitApplication = m::mock(Entity::class);
@@ -239,7 +235,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertEquals($count, $this->sut->countValidPermits());
     }
 
-    public function dpCountValidPermits()
+    public static function dpCountValidPermits(): array
     {
         return [
             [IrhpPermit::STATUS_PENDING, 1],
@@ -252,10 +248,8 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestCountPermitsAwardedForAllocationModeEmissionsCategories
-     */
-    public function testCountPermitsAwardedForAllocationModeEmissionsCategories($emissionsCategoryId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCountPermitsAwardedForAllocationModeEmissionsCategories')]
+    public function testCountPermitsAwardedForAllocationModeEmissionsCategories(mixed $emissionsCategoryId): void
     {
         $permitsAwarded = 14;
 
@@ -277,7 +271,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpTestCountPermitsAwardedForAllocationModeEmissionsCategories()
+    public static function dpTestCountPermitsAwardedForAllocationModeEmissionsCategories(): array
     {
         return [
             [null],
@@ -286,14 +280,12 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestCountPermitsAwardedForAllocationModeCandidatePermits
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCountPermitsAwardedForAllocationModeCandidatePermits')]
     public function testCountPermitsAwardedForAllocationModeCandidatePermits(
-        $emissionsCategoryId,
-        $wantedOnly,
-        $expectedWantedOnly
-    ) {
+        mixed $emissionsCategoryId,
+        mixed $wantedOnly,
+        mixed $expectedWantedOnly
+    ): void {
         $successfulIrhpCandidatePermits = [
             m::mock(IrhpCandidatePermit::class),
             m::mock(IrhpCandidatePermit::class),
@@ -320,7 +312,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpTestCountPermitsAwardedForAllocationModeCandidatePermits()
+    public static function dpTestCountPermitsAwardedForAllocationModeCandidatePermits(): array
     {
         return [
             [null, null, false],
@@ -335,7 +327,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    public function testGetSuccessfulIrhpCandidatePermitsNoEmissionsCategory()
+    public function testGetSuccessfulIrhpCandidatePermitsNoEmissionsCategory(): void
     {
         $irhpCandidatePermits = $this->getPermitsAwardedMocks();
         foreach ($irhpCandidatePermits as $irhpCandidatePermit) {
@@ -350,7 +342,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertEquals(3, $successfulIrhpCandidatePermits->count());
     }
 
-    public function testGetSuccessfulIrhpCandidatePermitsNoEmissionsCategoryWantedOnly()
+    public function testGetSuccessfulIrhpCandidatePermitsNoEmissionsCategoryWantedOnly(): void
     {
         $irhpCandidatePermits = $this->getPermitsAwardedMocks();
         foreach ($irhpCandidatePermits as $irhpCandidatePermit) {
@@ -363,7 +355,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertEquals(1, $successfulIrhpCandidatePermits->count());
     }
 
-    public function testGetSuccessfulIrhpCandidatePermitsEuro5EmissionsCategory()
+    public function testGetSuccessfulIrhpCandidatePermitsEuro5EmissionsCategory(): void
     {
         $irhpCandidatePermits = $this->getPermitsAwardedMocks();
         foreach ($irhpCandidatePermits as $irhpCandidatePermit) {
@@ -379,7 +371,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertEquals(2, $successfulIrhpCandidatePermits->count());
     }
 
-    public function testGetSuccessfulIrhpCandidatePermitsEuro5EmissionsCategoryWantedOnly()
+    public function testGetSuccessfulIrhpCandidatePermitsEuro5EmissionsCategoryWantedOnly(): void
     {
         $irhpCandidatePermits = $this->getPermitsAwardedMocks();
         foreach ($irhpCandidatePermits as $irhpCandidatePermit) {
@@ -395,7 +387,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertEquals(1, $successfulIrhpCandidatePermits->count());
     }
 
-    public function testGetSuccessfulIrhpCandidatePermitsEuro6EmissionsCategory()
+    public function testGetSuccessfulIrhpCandidatePermitsEuro6EmissionsCategory(): void
     {
         $irhpCandidatePermits = $this->getPermitsAwardedMocks();
         foreach ($irhpCandidatePermits as $irhpCandidatePermit) {
@@ -410,7 +402,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertEquals(1, $successfulIrhpCandidatePermits->count());
     }
 
-    public function testGetSuccessfulIrhpCandidatePermitsEuro6EmissionsCategoryWantedOnly()
+    public function testGetSuccessfulIrhpCandidatePermitsEuro6EmissionsCategoryWantedOnly(): void
     {
         $irhpCandidatePermits = $this->getPermitsAwardedMocks();
         foreach ($irhpCandidatePermits as $irhpCandidatePermit) {
@@ -425,7 +417,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertEquals(0, $successfulIrhpCandidatePermits->count());
     }
 
-    private function getPermitsAwardedMocks()
+    private function getPermitsAwardedMocks(): array
     {
         $euro5EmissionsCategory = new RefData(RefData::EMISSIONS_CATEGORY_EURO5_REF);
         $euro6EmissionsCategory = new RefData(RefData::EMISSIONS_CATEGORY_EURO6_REF);
@@ -479,7 +471,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    public function testUpdatePermitsRequired()
+    public function testUpdatePermitsRequired(): void
     {
         $irhpApplication = m::mock(IrhpApplication::class);
         $irhpApplication->shouldReceive('canBeUpdated')
@@ -499,7 +491,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertEquals(4, $irhpPermitApplication->getPermitsRequired());
     }
 
-    public function testUpdatePermitsRequiredCannotBeUpdated()
+    public function testUpdatePermitsRequiredCannotBeUpdated(): void
     {
         $irhpApplication = m::mock(IrhpApplication::class);
         $irhpApplication->shouldReceive('canBeUpdated')
@@ -519,7 +511,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertEquals(44, $irhpPermitApplication->getPermitsRequired());
     }
 
-    public function testHasPermitsRequired()
+    public function testHasPermitsRequired(): void
     {
         $this->assertFalse($this->sut->hasPermitsRequired());
 
@@ -527,7 +519,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertTrue($this->sut->hasPermitsRequired());
     }
 
-    public function testGetIssueFeeProductReferenceBilateral()
+    public function testGetIssueFeeProductReferenceBilateral(): void
     {
         $irhpPermitApplication = m::mock(Entity::class)->makePartial();
         $irhpPermitApplication->shouldReceive('getIrhpApplication->getIrhpPermitType->getId')
@@ -539,10 +531,8 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpGetIssueFeeProductReferenceMultilateral
-     */
-    public function testGetIssueFeeProductReferenceMultilateral($dateTimeInput, $expectedFormattedDateTime)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetIssueFeeProductReferenceMultilateral')]
+    public function testGetIssueFeeProductReferenceMultilateral(mixed $dateTimeInput, mixed $expectedFormattedDateTime): void
     {
         $tieredProductReference = 'TIERED_PRODUCT_REFERENCE';
 
@@ -596,7 +586,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpGetIssueFeeProductReferenceMultilateral()
+    public static function dpGetIssueFeeProductReferenceMultilateral(): array
     {
         $dateTime = new DateTime('2029-04-21 13:40:15');
 
@@ -606,7 +596,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    public function testClearPermitsRequired()
+    public function testClearPermitsRequired(): void
     {
         $entity = m::mock(Entity::class)->makePartial();
         $entity->setPermitsRequired(5);
@@ -615,7 +605,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertNull($entity->getPermitsRequired());
     }
 
-    public function testUpdateEmissionsCategoryPermitsRequired()
+    public function testUpdateEmissionsCategoryPermitsRequired(): void
     {
         $euro5Required = 7;
         $euro6Required = 3;
@@ -627,7 +617,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertEquals($euro6Required, $entity->getRequiredEuro6());
     }
 
-    public function testClearEmissionsCategoryPermitsRequired()
+    public function testClearEmissionsCategoryPermitsRequired(): void
     {
         $entity = m::mock(Entity::class)->makePartial();
         $entity->updateEmissionsCategoryPermitsRequired(7, 5);
@@ -637,10 +627,8 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertNull($entity->getRequiredEuro6());
     }
 
-    /**
-     * @dataProvider dpTestGetTotalEmissionsCategoryPermitsRequired
-     */
-    public function testGetTotalEmissionsCategoryPermitsRequired($requiredEuro5, $requiredEuro6, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetTotalEmissionsCategoryPermitsRequired')]
+    public function testGetTotalEmissionsCategoryPermitsRequired(mixed $requiredEuro5, mixed $requiredEuro6, mixed $expected): void
     {
         $entity = m::mock(Entity::class)->makePartial();
         $entity->setRequiredEuro5($requiredEuro5);
@@ -652,7 +640,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpTestGetTotalEmissionsCategoryPermitsRequired()
+    public static function dpTestGetTotalEmissionsCategoryPermitsRequired(): array
     {
         return [
             [null, null, 0],
@@ -662,10 +650,8 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestGetRequiredPermitsByEmissionsCategory
-     */
-    public function testGetRequiredPermitsByEmissionsCategory($emissionsCategoryId, $expectedRequiredPermits)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetRequiredPermitsByEmissionsCategory')]
+    public function testGetRequiredPermitsByEmissionsCategory(mixed $emissionsCategoryId, mixed $expectedRequiredPermits): void
     {
         $entity = m::mock(Entity::class)->makePartial();
         $entity->setRequiredEuro5(10);
@@ -677,7 +663,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpTestGetRequiredPermitsByEmissionsCategory()
+    public static function dpTestGetRequiredPermitsByEmissionsCategory(): array
     {
         return [
             [RefData::EMISSIONS_CATEGORY_EURO5_REF, 10],
@@ -685,7 +671,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    public function testGetRequiredPermitsByEmissionsCategoryException()
+    public function testGetRequiredPermitsByEmissionsCategoryException(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unsupported emissions category for getRequiredPermitsByEmissionsCategory');
@@ -694,7 +680,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $entity->getRequiredPermitsByEmissionsCategory(RefData::EMISSIONS_CATEGORY_NA_REF);
     }
 
-    public function testGetRangesWithCandidatePermitCounts()
+    public function testGetRangesWithCandidatePermitCounts(): void
     {
         $irhpPermitRange1Id = 43;
         $irhpPermitRange1 = m::mock(IrhpPermitRange::class);
@@ -768,7 +754,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function testGenerateIssueDateForEcmtRemoval()
+    public function testGenerateIssueDateForEcmtRemoval(): void
     {
         $issueDateAsString = '2020-05-15';
 
@@ -789,7 +775,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function testGenerateIssueDateForEcmtShortTerm()
+    public function testGenerateIssueDateForEcmtShortTerm(): void
     {
         $issueDateAsString = '2020-05-15';
 
@@ -813,7 +799,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function testGenerateIssueDateForOther()
+    public function testGenerateIssueDateForOther(): void
     {
         $currentDateAsString = (new DateTime())->format('Y-m-d');
 
@@ -835,7 +821,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function testGenerateExpiryDate()
+    public function testGenerateExpiryDate(): void
     {
         $issueDate = m::mock(DateTime::class);
         $expiryDate = m::mock(DateTime::class);
@@ -859,7 +845,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function testGetAnswerValueByQuestionId()
+    public function testGetAnswerValueByQuestionId(): void
     {
         $questionId = 47;
         $answerValue = 'answer value';
@@ -881,10 +867,8 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpTestIsNotYetSubmitted
-     */
-    public function testIsNotYetSubmitted($isNotYetSubmitted)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsNotYetSubmitted')]
+    public function testIsNotYetSubmitted(mixed $isNotYetSubmitted): void
     {
         $irhpApplication = m::mock(IrhpApplication::class);
         $irhpApplication->shouldReceive('isNotYetSubmitted')
@@ -900,7 +884,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpTestIsNotYetSubmitted()
+    public static function dpTestIsNotYetSubmitted(): array
     {
         return [
             [true],
@@ -908,7 +892,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    public function testGetApplicationPathLockedOn()
+    public function testGetApplicationPathLockedOn(): void
     {
         $applicationPathLockedOn = m::mock(DateTime::class);
 
@@ -926,7 +910,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function testGetActiveApplicationPath()
+    public function testGetActiveApplicationPath(): void
     {
         $applicationPathLockedOn = m::mock(DateTime::class);
         $applicationPath = m::mock(ApplicationPath::class);
@@ -945,10 +929,8 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpGetAnswerWithStandardAnswer
-     */
-    public function testGetAnswerWithStandardAnswer($isCustom, $formControlType)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetAnswerWithStandardAnswer')]
+    public function testGetAnswerWithStandardAnswer(mixed $isCustom, mixed $formControlType): void
     {
         $answerValue = 'answer value';
 
@@ -981,7 +963,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function getAnswerUnsupportedCustomType()
+    public function getAnswerUnsupportedCustomType(): void
     {
         $this->expectExpection(RuntimeException::class);
         $this->expectExceptionMessage('Unable to retrieve answer status for form control type FORM_CONTROL_OTHER');
@@ -1009,7 +991,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $entity->getAnswer($applicationStep);
     }
 
-    public function dpGetAnswerWithStandardAnswer()
+    public static function dpGetAnswerWithStandardAnswer(): array
     {
         return [
             [false, Question::FORM_CONTROL_BILATERAL_CABOTAGE_ONLY],
@@ -1017,10 +999,8 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpResetCheckAnswers
-     */
-    public function testResetCheckAnswers($canBeUpdated, $expectedValue)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpResetCheckAnswers')]
+    public function testResetCheckAnswers(mixed $canBeUpdated, mixed $expectedValue): void
     {
         $irhpApplication = m::mock(IrhpApplication::class);
         $irhpApplication->shouldReceive('canBeUpdated')
@@ -1037,7 +1017,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpResetCheckAnswers()
+    public static function dpResetCheckAnswers(): array
     {
         return [
             [true, false],
@@ -1045,7 +1025,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    public function testGetCamelCaseEntityName()
+    public function testGetCamelCaseEntityName(): void
     {
         $this->assertEquals(
             'irhpPermitApplication',
@@ -1053,7 +1033,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function testOnSubmitApplicationStep()
+    public function testOnSubmitApplicationStep(): void
     {
         $entity = m::mock(Entity::class)->makePartial();
         $entity->shouldReceive('resetCheckAnswers')
@@ -1063,7 +1043,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $entity->onSubmitApplicationStep();
     }
 
-    public function testGetAdditionalQaViewData()
+    public function testGetAdditionalQaViewData(): void
     {
         $entity = m::mock(Entity::class)->makePartial();
 
@@ -1103,10 +1083,8 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpIsApplicationPathEnabled
-     */
-    public function testIsApplicationPathEnabled($isIrhpPermitApplicationPathEnabled)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsApplicationPathEnabled')]
+    public function testIsApplicationPathEnabled(mixed $isIrhpPermitApplicationPathEnabled): void
     {
         $irhpApplication = m::mock(IrhpApplication::class);
         $irhpApplication->shouldReceive('getIrhpPermitType->isIrhpPermitApplicationPathEnabled')
@@ -1121,7 +1099,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpIsApplicationPathEnabled()
+    public static function dpIsApplicationPathEnabled(): array
     {
         return [
             [true],
@@ -1129,10 +1107,8 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetBilateralCabotageSelection
-     */
-    public function testGetBilateralCabotageSelection($cabotageOnlyAnswer, $standardAndCabotageAnswer, $expectedAnswer)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetBilateralCabotageSelection')]
+    public function testGetBilateralCabotageSelection(mixed $cabotageOnlyAnswer, mixed $standardAndCabotageAnswer, mixed $expectedAnswer): void
     {
         $irhpApplication = m::mock(IrhpApplication::class);
         $irhpApplication->shouldReceive('isBilateral')
@@ -1155,7 +1131,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpGetBilateralCabotageSelection()
+    public static function dpGetBilateralCabotageSelection(): array
     {
         return [
             ['cabotage_only_answer', null, 'cabotage_only_answer'],
@@ -1164,7 +1140,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    public function testGetBilateralCabotageSelectionNotBilateral()
+    public function testGetBilateralCabotageSelectionNotBilateral(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('getBilateralCabotageSelection is applicable only to bilateral applications');
@@ -1179,7 +1155,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->sut->getBilateralCabotageSelection();
     }
 
-    public function testGetBilateralPermitUsageSelection()
+    public function testGetBilateralPermitUsageSelection(): void
     {
         $permitUsageAnswer = 'permit_usage_answer';
 
@@ -1201,7 +1177,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function testGetBilateralPermitUsageSelectionNotBilateral()
+    public function testGetBilateralPermitUsageSelectionNotBilateral(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('getBilateralPermitUsageSelection is applicable only to bilateral applications');
@@ -1216,10 +1192,8 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->sut->getBilateralPermitUsageSelection();
     }
 
-    /**
-     * @dataProvider dpUpdateAndGetBilateralRequired
-     */
-    public function testUpdateAndGetBilateralRequired($standardRequired, $cabotageRequired, $moroccoRequired)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpUpdateAndGetBilateralRequired')]
+    public function testUpdateAndGetBilateralRequired(mixed $standardRequired, mixed $cabotageRequired, mixed $moroccoRequired): void
     {
         $irhpApplication = m::mock(IrhpApplication::class);
         $irhpApplication->shouldReceive('isBilateral')
@@ -1241,7 +1215,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertEquals($required, $this->sut->getBilateralRequired());
     }
 
-    public function dpUpdateAndGetBilateralRequired()
+    public static function dpUpdateAndGetBilateralRequired(): array
     {
         return [
             ['43', '57', null],
@@ -1251,7 +1225,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    public function testUpdateBilateralRequiredBadKeys()
+    public function testUpdateBilateralRequiredBadKeys(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unexpected or missing array keys passed to updateBilateralRequired');
@@ -1274,7 +1248,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->sut->updateBilateralRequired($required);
     }
 
-    public function testUpdateBilateralRequiredNotBilateral()
+    public function testUpdateBilateralRequiredNotBilateral(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('updateBilateralRequired is applicable only to bilateral applications');
@@ -1289,7 +1263,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->sut->updateBilateralRequired([]);
     }
 
-    public function testupdateBilateralRequiredCannotBeUpdated()
+    public function testupdateBilateralRequiredCannotBeUpdated(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('updateBilateralRequired called when application in unexpected state');
@@ -1307,7 +1281,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->sut->updateBilateralRequired([]);
     }
 
-    public function testClearBilateralRequired()
+    public function testClearBilateralRequired(): void
     {
         $irhpApplication = m::mock(IrhpApplication::class);
         $irhpApplication->shouldReceive('isBilateral')
@@ -1337,10 +1311,8 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getBilateralRequired());
     }
 
-    /**
-     * @dataProvider dpGetFilteredBilateralRequired
-     */
-    public function testGetFilteredBilateralRequired($bilateralRequired, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetFilteredBilateralRequired')]
+    public function testGetFilteredBilateralRequired(mixed $bilateralRequired, mixed $expected): void
     {
         $entity = m::mock(Entity::class)->makePartial();
 
@@ -1354,7 +1326,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpGetFilteredBilateralRequired()
+    public static function dpGetFilteredBilateralRequired(): array
     {
         return [
             [
@@ -1409,7 +1381,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    public function testGetBilateralFeeProductRefsAndQuantitiesStandardOnly()
+    public function testGetBilateralFeeProductRefsAndQuantitiesStandardOnly(): void
     {
         $irhpPermitStock = m::mock(IrhpPermitStock::class);
 
@@ -1451,7 +1423,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function testGetBilateralFeeProductRefsAndQuantitiesCabotageOnly()
+    public function testGetBilateralFeeProductRefsAndQuantitiesCabotageOnly(): void
     {
         $irhpPermitStock = m::mock(IrhpPermitStock::class);
 
@@ -1493,7 +1465,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function testGetBilateralFeeProductRefsAndQuantitiesStandardAndCabotage()
+    public function testGetBilateralFeeProductRefsAndQuantitiesStandardAndCabotage(): void
     {
         $irhpPermitStock = m::mock(IrhpPermitStock::class);
 
@@ -1539,7 +1511,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function testGetBilateralFeeProductRefsAndQuantitiesMoroccoOnly()
+    public function testGetBilateralFeeProductRefsAndQuantitiesMoroccoOnly(): void
     {
         $irhpPermitStock = m::mock(IrhpPermitStock::class);
 
@@ -1582,7 +1554,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
     }
 
 
-    public function testGetBilateralFeeProductRefsAndQuantitiesNotBilateral()
+    public function testGetBilateralFeeProductRefsAndQuantitiesNotBilateral(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('getBilateralFeeProductRefsAndQuantities is applicable only to bilateral applications');
@@ -1597,15 +1569,13 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->sut->getBilateralFeeProductRefsAndQuantities();
     }
 
-    /**
-     * @dataProvider dpGetBilateralFeeProductReferencesNotMorocco
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetBilateralFeeProductReferencesNotMorocco')]
     public function testGetBilateralFeeProductReferencesNotMorocco(
-        $countryId,
-        $permitUsage,
-        $standardOrCabotage,
-        $expected
-    ) {
+        mixed $countryId,
+        mixed $permitUsage,
+        mixed $standardOrCabotage,
+        mixed $expected
+    ): void {
         $entity = m::mock(Entity::class)->makePartial();
         $entity->shouldReceive('getBilateralPermitUsageSelection')
             ->withNoArgs()
@@ -1632,7 +1602,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpGetBilateralFeeProductReferencesNotMorocco()
+    public static function dpGetBilateralFeeProductReferencesNotMorocco(): array
     {
         return [
             [
@@ -1748,15 +1718,13 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetBilateralFeeProductReferencesNotMoroccoNotFound
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetBilateralFeeProductReferencesNotMoroccoNotFound')]
     public function testGetBilateralFeeProductReferencesNotMoroccoNotFound(
-        $countryId,
-        $permitUsage,
-        $standardOrCabotage,
-        $expectedMessage
-    ) {
+        mixed $countryId,
+        mixed $permitUsage,
+        mixed $standardOrCabotage,
+        mixed $expectedMessage
+    ): void {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage($expectedMessage);
 
@@ -1783,7 +1751,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $entity->getBilateralFeeProductReferences($irhpPermitStock, $standardOrCabotage);
     }
 
-    public function dpGetBilateralFeeProductReferencesNotMoroccoNotFound()
+    public static function dpGetBilateralFeeProductReferencesNotMoroccoNotFound(): array
     {
         return [
             [
@@ -1915,10 +1883,8 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetBilateralFeeProductReferencesMorocco
-     */
-    public function testGetBilateralFeeProductReferencesMorocco($permitCategoryId, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetBilateralFeeProductReferencesMorocco')]
+    public function testGetBilateralFeeProductReferencesMorocco(mixed $permitCategoryId, mixed $expected): void
     {
         $irhpPermitStock = m::mock(IrhpPermitStock::class);
         $irhpPermitStock->shouldReceive('isMorocco')
@@ -1941,7 +1907,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpGetBilateralFeeProductReferencesMorocco()
+    public static function dpGetBilateralFeeProductReferencesMorocco(): array
     {
         return [
             [
@@ -1963,7 +1929,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    public function testGetBilateralFeeProductReferencesMoroccoNotFound()
+    public function testGetBilateralFeeProductReferencesMoroccoNotFound(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No bilateral morocco fee configuration found: permit_category_other');
@@ -1986,7 +1952,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->sut->getBilateralFeeProductReferences($irhpPermitStock, Entity::BILATERAL_MOROCCO_REQUIRED);
     }
 
-    public function testGetBilateralFeeProductReferencesNotBilateral()
+    public function testGetBilateralFeeProductReferencesNotBilateral(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('getBilateralFeeProductReferences is applicable only to bilateral applications');
@@ -2003,7 +1969,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->sut->getBilateralFeeProductReferences($irhpPermitStock, Entity::BILATERAL_STANDARD_REQUIRED);
     }
 
-    public function testGetBilateralFeePerPermit()
+    public function testGetBilateralFeePerPermit(): void
     {
         $irhpApplication = m::mock(IrhpApplication::class);
         $irhpApplication->shouldReceive('isBilateral')
@@ -2030,7 +1996,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function testGetBilateralFeePerPermitNotBilateral()
+    public function testGetBilateralFeePerPermitNotBilateral(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('getBilateralFeePerPermit is applicable only to bilateral applications');
@@ -2047,7 +2013,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->sut->getBilateralFeePerPermit($feeTypes);
     }
 
-    public function testGetOutstandingFees()
+    public function testGetOutstandingFees(): void
     {
         $fee1 = m::mock(Fee::class);
         $fee1->shouldReceive('isOutstanding')
@@ -2075,10 +2041,8 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertContains($fee3, $outstandingFees);
     }
 
-    /**
-     * @dataProvider dpIsAssociatedWithBilateralCabotageOnlyApplicationPathGroup
-     */
-    public function testIsAssociatedWithBilateralCabotageOnlyApplicationPathGroup($isBilateralCabotageOnly, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsAssociatedWithBilateralCabotageOnlyApplicationPathGroup')]
+    public function testIsAssociatedWithBilateralCabotageOnlyApplicationPathGroup(mixed $isBilateralCabotageOnly, mixed $expected): void
     {
         $entity = m::mock(Entity::class)->makePartial();
         $entity->shouldReceive('getIrhpPermitWindow->getIrhpPermitStock->getApplicationPathGroup->isBilateralCabotageOnly')
@@ -2091,7 +2055,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpIsAssociatedWithBilateralCabotageOnlyApplicationPathGroup()
+    public static function dpIsAssociatedWithBilateralCabotageOnlyApplicationPathGroup(): array
     {
         return [
             [true, true],
@@ -2099,7 +2063,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         ];
     }
 
-    public function testupdateCheckAnswers()
+    public function testupdateCheckAnswers(): void
     {
         $irhpApplication = m::mock(IrhpApplication::class);
         $irhpApplication->shouldReceive('isBilateral')
@@ -2116,7 +2080,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->assertTrue($this->sut->getCheckedAnswers());
     }
 
-    public function testupdateCheckAnswersNotBilateral()
+    public function testupdateCheckAnswersNotBilateral(): void
     {
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage(Entity::ERR_CANT_CHECK_ANSWERS);
@@ -2131,7 +2095,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->sut->updateCheckAnswers();
     }
 
-    public function testupdateCheckAnswersNotUpdatableBilateral()
+    public function testupdateCheckAnswersNotUpdatableBilateral(): void
     {
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage(Entity::ERR_CANT_CHECK_ANSWERS);
@@ -2149,7 +2113,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $this->sut->updateCheckAnswers();
     }
 
-    public function testCountPermitsRequiredBilateral()
+    public function testCountPermitsRequiredBilateral(): void
     {
         $irhpApplication = m::mock(IrhpApplication::class);
         $irhpApplication->shouldReceive('isBilateral')
@@ -2174,7 +2138,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         );
     }
 
-    public function testCountPermitsRequiredNotBilateral()
+    public function testCountPermitsRequiredNotBilateral(): void
     {
         $permitsRequired = 13;
 

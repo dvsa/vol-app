@@ -26,6 +26,7 @@ final class Schedule41 extends AbstractCommandHandler implements AuthAwareInterf
 
     protected $extraRepos = ['LicenceOperatingCentre', 'ConditionUndertaking'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $application ApplicationEntity */

@@ -43,6 +43,7 @@ class PublicationController extends AbstractInternalController implements LeftVi
      *
      * @return TableBuilder
      */
+    #[\Override]
     protected function alterTable($table, $data): TableBuilder
     {
         $data = $this->getPublicationLinkData($data);
@@ -88,6 +89,7 @@ class PublicationController extends AbstractInternalController implements LeftVi
         );
     }
 
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel(

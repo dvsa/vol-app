@@ -21,6 +21,7 @@ class ByOrganisation extends AbstractConversationQueryHandler implements ToggleR
     protected $extraRepos = [ConversationRepo::class, MessageRepo::class];
 
     /** @param GetConversationsByOrganisationQuery|QueryInterface $query */
+    #[\Override]
     public function handleQuery(QueryInterface $query): array
     {
         $conversationRepo = $this->getRepo(ConversationRepo::class);

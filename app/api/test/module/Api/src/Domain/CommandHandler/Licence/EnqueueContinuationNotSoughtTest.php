@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Licence;
 
 use Dvsa\Olcs\Api\Domain\Repository\Queue as QueueRepo;
@@ -24,7 +26,8 @@ class EnqueueContinuationNotSoughtTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             QueueEntity::STATUS_QUEUED,
@@ -36,7 +39,7 @@ class EnqueueContinuationNotSoughtTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'licences' => ['foo'],

@@ -18,6 +18,7 @@ class Prohibition extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Prohibition';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var Query $query */

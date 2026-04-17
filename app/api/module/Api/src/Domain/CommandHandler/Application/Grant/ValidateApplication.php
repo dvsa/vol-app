@@ -37,6 +37,7 @@ final class ValidateApplication extends AbstractCommandHandler implements Transa
      * @return Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

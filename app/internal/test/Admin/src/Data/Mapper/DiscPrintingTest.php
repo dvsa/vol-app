@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AdminTest\Data\Mapper;
 
 use Mockery as m;
@@ -12,7 +14,7 @@ use Laminas\Form\Form;
  */
 class DiscPrintingTest extends MockeryTestCase
 {
-    public function testMapFromResultForPrefixes()
+    public function testMapFromResultForPrefixes(): void
     {
         $prefixes = [
             1 => 'AB',
@@ -31,15 +33,13 @@ class DiscPrintingTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResultForPrefixes($prefixes));
     }
 
-    /**
-     * @dataProvider fromFormProvider
-     */
-    public function testMapFromForm($params, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('fromFormProvider')]
+    public function testMapFromForm(mixed $params, mixed $expected): void
     {
         $this->assertEquals($expected, Sut::mapFromForm($params));
     }
 
-    public function fromFormProvider()
+    public static function fromFormProvider(): array
     {
         return [
             [
@@ -146,7 +146,7 @@ class DiscPrintingTest extends MockeryTestCase
         ];
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $errors = [
             'startNumber' => ['err_decr' => 'abc'],

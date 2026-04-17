@@ -26,6 +26,7 @@ abstract class AbstractBrRegVarOrCanc extends SingleValueAbstract
      * @return string
      * @throws \Exception
      */
+    #[\Override]
     public function render()
     {
         if (!empty($this->data['status']['id'])) {

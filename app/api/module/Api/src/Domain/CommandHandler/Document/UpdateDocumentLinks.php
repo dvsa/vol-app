@@ -30,6 +30,7 @@ final class UpdateDocumentLinks extends AbstractCommandHandler implements Transa
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $document = $this->getRepo()->fetchUsingId($command);

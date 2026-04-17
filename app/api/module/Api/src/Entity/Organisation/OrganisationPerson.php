@@ -26,6 +26,7 @@ class OrganisationPerson extends AbstractOrganisationPerson implements Organisat
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this->getOrganisation();

@@ -18,6 +18,7 @@ class Note extends AbstractRepository
      * @param QueryBuilder $qb
      * @param NoteDTO $query
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         /** @var \Dvsa\Olcs\Transfer\Query\Processing\NoteList $query */

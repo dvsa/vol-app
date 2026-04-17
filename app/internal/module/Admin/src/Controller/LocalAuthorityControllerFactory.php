@@ -11,6 +11,7 @@ use Psr\Container\ContainerInterface;
 
 class LocalAuthorityControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LocalAuthorityController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

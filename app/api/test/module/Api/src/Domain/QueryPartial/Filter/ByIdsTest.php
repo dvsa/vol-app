@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Filter By Ids Test
  *
@@ -26,7 +28,7 @@ class ByIdsTest extends QueryPartialTestCase
         parent::setUp();
     }
 
-    public function testModifyQuery()
+    public function testModifyQuery(): void
     {
         $ids = [111, 222];
 

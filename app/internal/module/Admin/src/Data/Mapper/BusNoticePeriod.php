@@ -16,6 +16,7 @@ class BusNoticePeriod implements MapperInterface
      *
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data): array
     {
         return ['busNoticePeriod' => $data];

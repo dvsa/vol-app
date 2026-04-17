@@ -57,6 +57,7 @@ class PiHearing extends AbstractRepository
      * @param QueryInterface $query
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if ($query instanceof ReportListQry) {

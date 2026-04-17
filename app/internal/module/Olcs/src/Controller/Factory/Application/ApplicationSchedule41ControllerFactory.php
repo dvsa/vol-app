@@ -21,6 +21,7 @@ class ApplicationSchedule41ControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return ApplicationSchedule41Controller
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationSchedule41Controller
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

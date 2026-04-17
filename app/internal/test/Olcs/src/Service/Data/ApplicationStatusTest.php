@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -9,9 +11,7 @@ use Olcs\Service\Data\ApplicationStatus;
 use Dvsa\Olcs\Transfer\Query\DataService\ApplicationStatus as Qry;
 use Laminas\Http\Response;
 
-/**
- * @covers \Olcs\Service\Data\ApplicationStatus
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\ApplicationStatus::class)]
 class ApplicationStatusTest extends AbstractListDataServiceTestCase
 {
     public const ORG_ID = 9999;
@@ -31,14 +31,14 @@ class ApplicationStatusTest extends AbstractListDataServiceTestCase
         $this->mockResp = m::mock(Response::class);
     }
 
-    public function testSetters()
+    public function testSetters(): void
     {
         $this->sut->setOrgId('unit_Org');
 
         static::assertEquals('unit_Org', $this->sut->getOrgId());
     }
 
-    public function testFetchListData()
+    public function testFetchListData(): void
     {
         $results = ['results' => ['unit_Results']];
 
@@ -66,7 +66,7 @@ class ApplicationStatusTest extends AbstractListDataServiceTestCase
         static::assertEquals($results['results'], $this->sut->fetchListData()); //ensure data is cached
     }
 
-    public function testFetchListDataWithException()
+    public function testFetchListDataWithException(): void
     {
         $this->expectException(DataServiceException::class);
 

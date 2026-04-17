@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Variation Controller Trait Test
  *
@@ -41,15 +43,13 @@ class VariationControllerTraitTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpGetSectionsForView
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetSectionsForView')]
     public function testGetSectionsForView(
-        $goodsOrPsv,
-        $vehicleTypeId,
-        $communityLicencesTranslationKey,
-        $operatingCentresTranslationKey
-    ) {
+        mixed $goodsOrPsv,
+        mixed $vehicleTypeId,
+        mixed $communityLicencesTranslationKey,
+        mixed $operatingCentresTranslationKey
+    ): void {
         // Params
         $id = 3;
         $accessibleSections = [
@@ -137,7 +137,7 @@ class VariationControllerTraitTest extends MockeryTestCase
         $this->assertEquals($expected, $response);
     }
 
-    public function dpGetSectionsForView()
+    public static function dpGetSectionsForView(): array
     {
         return [
             [
@@ -155,7 +155,7 @@ class VariationControllerTraitTest extends MockeryTestCase
         ];
     }
 
-    public function testGetSectionsForViewValidStatus()
+    public function testGetSectionsForViewValidStatus(): void
     {
         // Params
         $id = 3;
@@ -208,7 +208,7 @@ class VariationControllerTraitTest extends MockeryTestCase
      *
      * @param array $applicationData
      */
-    protected function setupGetApplicationData($applicationData)
+    protected function setupGetApplicationData(mixed $applicationData): void
     {
         $mockResponse = m::mock();
         $mockResponse->shouldReceive('isNotFound')->andReturn(false);

@@ -33,6 +33,7 @@ class FinancialHistory extends CommonFinancialHistory
      *
      * @return \Laminas\Form\Form
      */
+    #[\Override]
     protected function alterForm(Form $form, array $data = [])
     {
         parent::alterForm($form, $data);

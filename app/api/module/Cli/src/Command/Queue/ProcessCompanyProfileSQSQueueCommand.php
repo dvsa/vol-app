@@ -10,6 +10,7 @@ class ProcessCompanyProfileSQSQueueCommand extends AbstractSQSCommand
 {
     protected static $defaultName = 'queue:process-company-profile';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Processes the Company Profile queue items.')
@@ -17,11 +18,13 @@ class ProcessCompanyProfileSQSQueueCommand extends AbstractSQSCommand
         parent::configure();
     }
 
+    #[\Override]
     protected function getCommandDto()
     {
         return CompanyProfile::create([]);
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

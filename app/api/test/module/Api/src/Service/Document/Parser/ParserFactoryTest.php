@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Parser;
 
 use Dvsa\Olcs\Api\Service\Document\Parser\ParserFactory;
@@ -11,10 +13,8 @@ use Dvsa\Olcs\Api\Service\Document\Parser\ParserFactory;
  */
 class ParserFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider typeProvider
-     */
-    public function testGetParser($type, $class)
+    #[\PHPUnit\Framework\Attributes\DataProvider('typeProvider')]
+    public function testGetParser(mixed $type, mixed $class): void
     {
         $factory = new ParserFactory();
         $parser = $factory->getParser($type);
@@ -22,7 +22,7 @@ class ParserFactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf($class, $parser);
     }
 
-    public function testGetParserWithUnknownType()
+    public function testGetParserWithUnknownType(): void
     {
         $factory = new ParserFactory();
 
@@ -36,7 +36,7 @@ class ParserFactoryTest extends \PHPUnit\Framework\TestCase
         $this->fail('Expected exception not found');
     }
 
-    public function typeProvider()
+    public static function typeProvider(): array
     {
         return [
             ['application/rtf', \Dvsa\Olcs\Api\Service\Document\Parser\RtfParser::class],

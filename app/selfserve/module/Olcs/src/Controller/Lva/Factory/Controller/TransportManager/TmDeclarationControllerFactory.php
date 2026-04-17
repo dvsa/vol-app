@@ -21,6 +21,7 @@ class TmDeclarationControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return TmDeclarationController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TmDeclarationController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

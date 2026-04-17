@@ -23,6 +23,7 @@ final class DeleteList extends AbstractCommandHandler implements TransactionedIn
 {
     protected $repoServiceName = 'TmEmployment';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\System\InfoMessage;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\System\InfoMessage\Create as Handler;
@@ -21,7 +23,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function test()
+    public function test(): void
     {
         $id = 99999;
         $startDate = (new \DateTime())->setTime(0, 0, 0);

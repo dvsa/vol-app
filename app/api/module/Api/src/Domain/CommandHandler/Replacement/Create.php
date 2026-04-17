@@ -22,6 +22,7 @@ final class Create extends AbstractCommandHandler
      * @param CommandInterface|CreateReplacementCmd $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         $replacement = ReplacementEntity::create(

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Permits;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock;
@@ -22,7 +24,7 @@ class IrhpPermitSectorQuotaEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $sector = m::mock(Sectors::class);
         $stock = m::mock(IrhpPermitStock::class);
@@ -33,7 +35,7 @@ class IrhpPermitSectorQuotaEntityTest extends EntityTester
         self::assertEquals($stock, $entity->getIrhpPermitStock());
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $quotaNumber = 999;
 
@@ -46,7 +48,7 @@ class IrhpPermitSectorQuotaEntityTest extends EntityTester
     /**
      * Create an entity, optionally passing in customised sector and stock
      */
-    private function createEntity($sector = null, $stock = null)
+    private function createEntity(mixed $sector = null, mixed $stock = null): mixed
     {
         if ($sector === null) {
             $sector = m::mock(Sectors::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\Variation;
 
 use Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking;
@@ -31,10 +33,8 @@ class ConditionUndertakingTest extends MockeryTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dataProviderTestProvideOnlyRecievedOrGrantSections
-     */
-    public function testProvideOnlyRecievedOrGrantSections($publicationSectionId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestProvideOnlyRecievedOrGrantSections')]
+    public function testProvideOnlyRecievedOrGrantSections(mixed $publicationSectionId): void
     {
         $publicationLink = $this->getPublicationLink();
         $context = new \ArrayObject();
@@ -56,7 +56,7 @@ class ConditionUndertakingTest extends MockeryTestCase
         }
     }
 
-    public function dataProviderTestProvideOnlyRecievedOrGrantSections()
+    public static function dataProviderTestProvideOnlyRecievedOrGrantSections(): array
     {
         return [
             [PublicationSection::VAR_GRANTED_SECTION],
@@ -68,7 +68,7 @@ class ConditionUndertakingTest extends MockeryTestCase
         ];
     }
 
-    public function testProvideAttachedToLicence()
+    public function testProvideAttachedToLicence(): void
     {
         $publicationLink = $this->getPublicationLink();
         $context = new \ArrayObject();
@@ -108,7 +108,7 @@ class ConditionUndertakingTest extends MockeryTestCase
         );
     }
 
-    public function testProvideAttachedToOperatingCentre()
+    public function testProvideAttachedToOperatingCentre(): void
     {
         $publicationLink = $this->getPublicationLink();
         $context = new \ArrayObject();
@@ -168,7 +168,7 @@ class ConditionUndertakingTest extends MockeryTestCase
     /**
      * @return PublicationLink
      */
-    private function getPublicationLink()
+    private function getPublicationLink(): mixed
     {
         $publicationLink = new PublicationLink();
 
@@ -197,11 +197,11 @@ class ConditionUndertakingTest extends MockeryTestCase
      * @param string $ocAddress
      */
     private function getConditionUndertaking(
-        $isCondition,
-        $action,
-        $notes,
-        $ocAddress = null
-    ) {
+        mixed $isCondition,
+        mixed $action,
+        mixed $notes,
+        mixed $ocAddress = null
+    ): ConditionUndertaking {
         if ($isCondition) {
             $conditionType = new RefData(ConditionUndertaking::TYPE_CONDITION);
             $conditionType->setDescription('CONDITION');

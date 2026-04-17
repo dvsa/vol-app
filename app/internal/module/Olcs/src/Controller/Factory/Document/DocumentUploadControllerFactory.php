@@ -22,6 +22,7 @@ class DocumentUploadControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return DocumentUploadController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DocumentUploadController
     {
         $scriptFactory = $container->get(ScriptFactory::class);

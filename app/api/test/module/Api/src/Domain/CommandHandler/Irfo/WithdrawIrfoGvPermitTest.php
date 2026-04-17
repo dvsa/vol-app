@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Withdraw Irfo Gv Permit Test
  */
@@ -29,7 +31,8 @@ class WithdrawIrfoGvPermitTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrfoGvPermitEntity::STATUS_WITHDRAWN,
@@ -41,7 +44,7 @@ class WithdrawIrfoGvPermitTest extends AbstractCommandHandlerTestCase
     /**
      * testHandleCommand
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 99;
 

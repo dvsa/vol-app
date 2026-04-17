@@ -14,6 +14,7 @@ class ProviderFactory implements FactoryInterface
 {
     public const MSG_ERROR = 'Failed to retrieve access token for %s: %s';
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Provider
     {
         $providerConfig = [

@@ -12,6 +12,7 @@ class CaseConversationMessagesController extends AbstractConversationMessagesCon
     protected $topNavigationId = 'case';
     protected $listVars = ['case', 'conversation'];
 
+    #[\Override]
     protected function getConversationViewRoute(): string
     {
         return 'case_conversation/view';

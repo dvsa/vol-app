@@ -31,6 +31,7 @@ class MotExpiryDateGenerator implements ElementGeneratorInterface
      *
      * @return ElementInterface
      */
+    #[\Override]
     public function generate(ElementGeneratorContext $context)
     {
         $irhpApplication = $context->getQaEntity();

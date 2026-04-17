@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Task Allocation Rule Test
  *
@@ -32,14 +34,14 @@ class TaskAllocationRuleTest extends RepositoryTestCase
     /**
      * Test fetch by parameters
      *
-     * @dataProvider fetchByParametersDataProvider
      * @param int $category
      * @param string $operatorType
      * @param string $trafficArea
      * @param bool $isMlh
      * @param string $query
      */
-    public function testFetchByParameters($category, $subCategory, $operatorType, $trafficArea, $isMlh, $query)
+    #[\PHPUnit\Framework\Attributes\DataProvider('fetchByParametersDataProvider')]
+    public function testFetchByParameters(mixed $category, mixed $subCategory, mixed $operatorType, mixed $trafficArea, mixed $isMlh, mixed $query): void
     {
         $qb = $this->createMockQb('[QUERY]');
         $qb->shouldReceive('getQuery->getResult')
@@ -73,7 +75,7 @@ class TaskAllocationRuleTest extends RepositoryTestCase
      *
      * @return array
      */
-    public function fetchByParametersDataProvider(): array
+    public static function fetchByParametersDataProvider(): array
     {
         return [
             // category, operatorType, trafficArea, isMlh, query
@@ -82,7 +84,7 @@ class TaskAllocationRuleTest extends RepositoryTestCase
                 222,
                 'gv',
                 'B',
-                1,
+                true,
                 '[QUERY] AND m.category = [[111]] AND m.subCategory = [[222]] AND m.goodsOrPsv = [[gv]] AND m.trafficArea = [[B]] ' .
                 'AND m.isMlh = [[true]]'
             ],
@@ -125,10 +127,8 @@ class TaskAllocationRuleTest extends RepositoryTestCase
         ];
     }
 
-    /**
-     * @dataProvider fetchByParametersAttemptsLookupWithoutSubCategoryWhenCallReturnsNoResultsDataProvider
-     */
-    public function testFetchByParametersAttemptsLookupWithoutSubCategoryWhenCallReturnsNoResults(array $returnValues, bool $expectSubsequentCall)
+    #[\PHPUnit\Framework\Attributes\DataProvider('fetchByParametersAttemptsLookupWithoutSubCategoryWhenCallReturnsNoResultsDataProvider')]
+    public function testFetchByParametersAttemptsLookupWithoutSubCategoryWhenCallReturnsNoResults(array $returnValues, bool $expectSubsequentCall): void
     {
         $qb = $this->createMockQb('[QUERY]');
         $qb->shouldReceive('getQuery->getResult')
@@ -153,7 +153,7 @@ class TaskAllocationRuleTest extends RepositoryTestCase
         );
     }
 
-    public function fetchByParametersAttemptsLookupWithoutSubCategoryWhenCallReturnsNoResultsDataProvider(): array
+    public static function fetchByParametersAttemptsLookupWithoutSubCategoryWhenCallReturnsNoResultsDataProvider(): array
     {
         return [
             'Subcategory returns result' => [
@@ -175,7 +175,7 @@ class TaskAllocationRuleTest extends RepositoryTestCase
     /**
      * Test build default list query
      */
-    public function testBuildDefaultListQuery()
+    public function testBuildDefaultListQuery(): void
     {
         $qb = $this->createMockQb('[QUERY]');
         $query = m::mock(QueryInterface::class);

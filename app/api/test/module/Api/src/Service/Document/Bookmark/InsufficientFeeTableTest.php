@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\InsufficientFeeTable;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class InsufficientFeeTableTest extends MockeryTestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new InsufficientFeeTable();
         $query = $bookmark->getQuery(['fee' => 123]);
@@ -22,7 +24,7 @@ class InsufficientFeeTableTest extends MockeryTestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $bookmark = m::mock(InsufficientFeeTable::class)
             ->makePartial();
@@ -96,7 +98,7 @@ class InsufficientFeeTableTest extends MockeryTestCase
         $this->assertEquals('foobarbazcake', $bookmark->render());
     }
 
-    public function testRenderWithEmptyData()
+    public function testRenderWithEmptyData(): void
     {
         $bookmark = m::mock(InsufficientFeeTable::class)->makePartial();
         $bookmark->setData([]);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * BilateralNoOfPermitsCombinedTotalValidator Test
  *
@@ -18,10 +20,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  */
 class BilateralNoOfPermitsCombinedTotalValidatorTest extends TestCase
 {
-    /**
-     * @dataProvider dpValidateNonZeroValuePresent
-     */
-    public function testValidateNonZeroValuePresent($context, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValidateNonZeroValuePresent')]
+    public function testValidateNonZeroValuePresent(mixed $context, mixed $expected): void
     {
         $this->assertEquals(
             $expected,
@@ -29,7 +29,7 @@ class BilateralNoOfPermitsCombinedTotalValidatorTest extends TestCase
         );
     }
 
-    public function dpValidateNonZeroValuePresent()
+    public static function dpValidateNonZeroValuePresent(): array
     {
         return [
             'incorrectly named field contains valid value' => [

@@ -37,6 +37,7 @@ class ReplacementsController extends AbstractInternalController implements LeftV
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel(

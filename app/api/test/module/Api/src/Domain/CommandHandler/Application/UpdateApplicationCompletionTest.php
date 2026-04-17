@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Application Completion Test
  *
@@ -42,7 +44,7 @@ class UpdateApplicationCompletionTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(['id' => 111, 'section' => 'typeOfLicence']);
 
@@ -91,7 +93,7 @@ class UpdateApplicationCompletionTest extends AbstractCommandHandlerTestCase
         $this->assertTrue(in_array('Tol updated', $messages));
     }
 
-    public function testHandleCommandIsVariation()
+    public function testHandleCommandIsVariation(): void
     {
         $command = Cmd::create(['id' => 111, 'section' => 'section1']);
 
@@ -114,14 +116,14 @@ class UpdateApplicationCompletionTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider dpTestHandleCommandResetSignature
      *
      * @param $expectResetSignature
      * @param $section
      * @param $isSelfserve
      * @param $applicationStatus
      */
-    public function testHandleCommandResetSignature($expectResetSignature, $section, $isSelfserve, $applicationStatus)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommandResetSignature')]
+    public function testHandleCommandResetSignature(mixed $expectResetSignature, mixed $section, mixed $isSelfserve, mixed $applicationStatus): void
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
             ->with(Permission::SELFSERVE_USER, null)
@@ -171,7 +173,7 @@ class UpdateApplicationCompletionTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function dpTestHandleCommandResetSignature()
+    public static function dpTestHandleCommandResetSignature(): array
     {
         return [
             [true, 'typeOfLicence', true, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED],
@@ -193,7 +195,7 @@ class UpdateApplicationCompletionTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandResetSignatureNoExisting()
+    public function testHandleCommandResetSignatureNoExisting(): void
     {
         $section = 'typeOfLicence';
         $applicationStatus = ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED;

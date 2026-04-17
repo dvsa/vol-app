@@ -38,6 +38,7 @@ final class Snapshot extends AbstractCommandHandler implements TransactionedInte
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var TransportManagerApplication $tma */
@@ -91,6 +92,7 @@ final class Snapshot extends AbstractCommandHandler implements TransactionedInte
         };
         return $status;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

@@ -27,6 +27,7 @@ class Documents extends AbstractQueryHandler implements ToggleRequiredInterface,
     protected $extraRepos = [ConversationRepo::class, Document::class];
 
     /** @param DocumentsQuery|QueryInterface $query */
+    #[\Override]
     public function handleQuery(QueryInterface $query): array
     {
         $documentIds = $this->getCache()->getCustomItem(CacheEncryption::GENERIC_STORAGE_IDENTIFIER, $query->getCorrelationId()) ?: [];

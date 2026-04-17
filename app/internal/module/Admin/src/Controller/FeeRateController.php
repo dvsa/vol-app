@@ -40,6 +40,7 @@ class FeeRateController extends AbstractInternalController implements LeftViewPr
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel(

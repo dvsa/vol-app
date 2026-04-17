@@ -129,11 +129,13 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
         'lva-licence-trailers' => LicenceTrailers::class,
     ];
 
+    #[\Override]
     public function canCreate($container, $requestedName): bool
     {
         return in_array($requestedName, self::FORM_SERVICE_CLASS_ALIASES);
     }
 
+    #[\Override]
     public function __invoke($container, $requestedName, array $options = null)
     {
         /** @var FormServiceManager $formServiceLocator */

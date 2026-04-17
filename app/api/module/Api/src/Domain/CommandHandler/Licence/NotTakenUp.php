@@ -23,6 +23,7 @@ final class NotTakenUp extends AbstractCommandHandler implements TransactionedIn
 {
     protected $repoServiceName = 'Licence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Licence $licence */

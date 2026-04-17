@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
@@ -17,7 +19,7 @@ class SurrenderTest extends RepositoryTestCase
         $this->setUpSut(Surrender::class);
     }
 
-    public function testFetchByLicenceId()
+    public function testFetchByLicenceId(): void
     {
         $licenceId = 1;
 

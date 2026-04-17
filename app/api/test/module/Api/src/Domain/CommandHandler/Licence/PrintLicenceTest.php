@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Licence;
 
 use Dvsa\Olcs\Api\Domain\Command\Document\GenerateAndStore;
@@ -14,9 +16,7 @@ use Dvsa\Olcs\Transfer\Command\Licence\PrintLicence as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Licence\PrintLicence
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Licence\PrintLicence::class)]
 class PrintLicenceTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
@@ -27,7 +27,7 @@ class PrintLicenceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandFailNull()
+    public function testHandleCommandFailNull(): void
     {
         $command = Cmd::create(['id' => 111]);
 
@@ -36,10 +36,8 @@ class PrintLicenceTest extends AbstractCommandHandlerTestCase
         static::assertNull($this->sut->handleCommand($command));
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
-    public function testHandleCommand($command, $isGoods, $vehicleType, $isSpecialRestricted, $niFlag, array $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
+    public function testHandleCommand(mixed $command, mixed $isGoods, mixed $vehicleType, mixed $isSpecialRestricted, mixed $niFlag, array $expect): void
     {
         /** @var LicenceEntity | m\MockInterface $licence */
         $licence = m::mock(LicenceEntity::class)->makePartial();
@@ -90,13 +88,13 @@ class PrintLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dataProvider()
+    public static function dataProvider(): array
     {
         $command = Cmd::create(['id' => 111]);
 
         return [
             'GB goods mixed fleet' => [
-                'cmd' => $command,
+                'command' => $command,
                 'isGoods' => true,
                 'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
                 'isSpecialRestricted' => false,
@@ -107,7 +105,7 @@ class PrintLicenceTest extends AbstractCommandHandlerTestCase
                 ],
             ],
             'GB goods lgv' => [
-                'cmd' => $command,
+                'command' => $command,
                 'isGoods' => true,
                 'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
                 'isSpecialRestricted' => false,
@@ -118,7 +116,7 @@ class PrintLicenceTest extends AbstractCommandHandlerTestCase
                 ],
             ],
             'GB psv' => [
-                'cmd' => $command,
+                'command' => $command,
                 'isGoods' => false,
                 'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
                 'isSpecialRestricted' => false,
@@ -129,7 +127,7 @@ class PrintLicenceTest extends AbstractCommandHandlerTestCase
                 ],
             ],
             'GB psv special restricted' => [
-                'cmd' => $command,
+                'command' => $command,
                 'isGoods' => false,
                 'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
                 'isSpecialRestricted' => true,
@@ -140,7 +138,7 @@ class PrintLicenceTest extends AbstractCommandHandlerTestCase
                 ],
             ],
             'NI goods mixed fleet' => [
-                'cmd' => $command,
+                'command' => $command,
                 'isGoods' => true,
                 'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
                 'isSpecialRestricted' => false,
@@ -151,7 +149,7 @@ class PrintLicenceTest extends AbstractCommandHandlerTestCase
                 ],
             ],
             'NI goods lgv' => [
-                'cmd' => $command,
+                'command' => $command,
                 'isGoods' => true,
                 'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
                 'isSpecialRestricted' => false,
@@ -162,7 +160,7 @@ class PrintLicenceTest extends AbstractCommandHandlerTestCase
                 ],
             ],
             'NI psv' => [
-                'cmd' => $command,
+                'command' => $command,
                 'isGoods' => false,
                 'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
                 'isSpecialRestricted' => false,
@@ -173,7 +171,7 @@ class PrintLicenceTest extends AbstractCommandHandlerTestCase
                 ],
             ],
             'NI psv special restricted' => [
-                'cmd' => $command,
+                'command' => $command,
                 'isGoods' => false,
                 'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
                 'isSpecialRestricted' => true,
@@ -186,7 +184,7 @@ class PrintLicenceTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandDispatchFalse()
+    public function testHandleCommandDispatchFalse(): void
     {
         $command = Cmd::create(['id' => 111, 'dispatch' => false]);
 

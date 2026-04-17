@@ -17,6 +17,7 @@ class Task implements MapperInterface
      *
      * @return void
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
     }

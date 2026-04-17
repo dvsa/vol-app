@@ -118,6 +118,7 @@ class PsvDisc extends AbstractRepository
         }
     }
 
+    #[\Override]
     protected function applyListFilters(\Doctrine\ORM\QueryBuilder $qb, \Dvsa\Olcs\Transfer\Query\QueryInterface $query)
     {
         if (method_exists($query, 'getIncludeCeased')) {

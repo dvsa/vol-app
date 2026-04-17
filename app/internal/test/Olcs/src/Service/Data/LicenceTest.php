@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -36,7 +38,7 @@ class LicenceTest extends AbstractDataServiceTestCase
     /**
      * Test fetchLicenceListData
      */
-    public function testFetchLicenceListData()
+    public function testFetchLicenceListData(): void
     {
         $results = ['results' => 'results'];
         $params = [
@@ -78,7 +80,7 @@ class LicenceTest extends AbstractDataServiceTestCase
     /**
      * Test fetchLicenceListData
      */
-    public function testFetchLicenceListDataResponseNotOk()
+    public function testFetchLicenceListDataResponseNotOk(): void
     {
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->with(m::type(Qry::class))
@@ -100,7 +102,7 @@ class LicenceTest extends AbstractDataServiceTestCase
         $this->assertEquals([], $this->sut->fetchLicenceListData());
     }
 
-    public function testFetchListOption()
+    public function testFetchListOption(): void
     {
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->with(m::type(Qry::class))
@@ -121,7 +123,7 @@ class LicenceTest extends AbstractDataServiceTestCase
         $this->assertEquals([123 => 'AB123'], $this->sut->fetchListOptions('context'));
     }
 
-    public function testFetchListOptionNoResults()
+    public function testFetchListOptionNoResults(): void
     {
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->with(m::type(Qry::class))

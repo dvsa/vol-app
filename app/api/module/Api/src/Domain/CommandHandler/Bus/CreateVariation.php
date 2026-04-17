@@ -20,6 +20,7 @@ final class CreateVariation extends AbstractCommandHandler
 {
     protected $repoServiceName = 'Bus';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var CreateVariationCmd $command */

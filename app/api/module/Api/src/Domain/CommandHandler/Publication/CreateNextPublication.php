@@ -20,6 +20,7 @@ final class CreateNextPublication extends AbstractCommandHandler implements Tran
 {
     protected $repoServiceName = 'Publication';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /**

@@ -21,6 +21,7 @@ class TaxiPhv extends AbstractQueryHandler
     protected $repoServiceName = 'Application';
     protected $extraRepos = ['TrafficArea', 'Licence'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $application Dvsa\Olcs\Api\Entity\Application\Application */

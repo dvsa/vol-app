@@ -22,6 +22,7 @@ final class FlagUrgentTasks extends AbstractCommandHandler implements Transactio
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $updatedTaskCount = $this->getRepo()->flagUrgentsTasks();

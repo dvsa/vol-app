@@ -41,6 +41,7 @@ class Get extends AbstractQueryHandler
      *
      * @return \Dvsa\Olcs\Api\Domain\QueryHandler\Result
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var ContinuationDetailEntity $continuationDetail */
@@ -145,6 +146,7 @@ class Get extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

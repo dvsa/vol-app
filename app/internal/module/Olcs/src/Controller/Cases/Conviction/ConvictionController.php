@@ -38,6 +38,7 @@ class ConvictionController extends AbstractInternalController implements CaseCon
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
 
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

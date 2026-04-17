@@ -8,6 +8,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Transfer\Command\Tm\CheckRepute;
 use Laminas\Mvc\MvcEvent;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\AbstractController;
@@ -446,6 +447,26 @@ class TransportManagerController extends AbstractController implements Transport
         return $this->renderView($view, 'transport-manager-confirmation-remove-disqualification');
     }
 
+    public function checkReputeAction()
+    {
+        $params = ['id' => $this->params()->fromRoute('transportManager')];
+        $command = CheckRepute::create($params);
+        $response = $this->handleCommand($command);
+
+        if ($response->isOk()) {
+            $this->flashMessengerHelper->addSuccessMessage('Repute check has been started');
+        } else {
+            $this->flashMessengerHelper->addErrorMessage('Error sending repute check');
+        }
+
+        return $this->redirectToRouteAjax(
+            'transport-manager/details',
+            [
+                'transportManager' => $this->params()->fromRoute('transportManager')
+            ]
+        );
+    }
+
     /**
      * Sets the navigation to that specified in the controller. Useful for when a controller is
      * 100% represented by a single navigation object.
@@ -463,12 +484,13 @@ class TransportManagerController extends AbstractController implements Transport
     /**
      * @codeCoverageIgnore this is part of the event system.
      */
+    #[\Override]
     protected function attachDefaultListeners()
     {
         parent::attachDefaultListeners();
 
         if (! empty($this->navigationId)) {
-            $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, [$this, 'setNavigationCurrentLocation'], 6);
+            $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, $this->setNavigationCurrentLocation(...), 6);
         }
     }
 }

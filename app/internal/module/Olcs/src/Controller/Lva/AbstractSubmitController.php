@@ -42,6 +42,7 @@ abstract class AbstractSubmitController extends AbstractApplicationDecisionContr
      *
      * @return \Common\Form\Form
      */
+    #[\Override]
     protected function getForm()
     {
         $request  = $this->getRequest();
@@ -61,6 +62,7 @@ abstract class AbstractSubmitController extends AbstractApplicationDecisionContr
      *
      * @return \Common\Service\Cqrs\Response
      */
+    #[\Override]
     protected function processDecision($id, $data)
     {
         return $this->handleCommand(

@@ -37,6 +37,7 @@ final class Revoke extends AbstractCommandHandler implements TransactionedInterf
 {
     protected $repoServiceName = 'Licence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Licence $licence */

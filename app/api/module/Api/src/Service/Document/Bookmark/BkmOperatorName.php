@@ -16,6 +16,7 @@ class BkmOperatorName extends DynamicBookmark
      * @param array $data
      * @return Qry|null
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(
@@ -33,6 +34,7 @@ class BkmOperatorName extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         return !empty($this->data['organisation']['name']) ? $this->data['organisation']['name'] : '';

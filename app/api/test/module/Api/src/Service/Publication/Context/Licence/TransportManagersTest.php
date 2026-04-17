@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\Licence;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class TransportManagersTest extends MockeryTestCase
 {
-    public function testProvideEmpty()
+    public function testProvideEmpty(): void
     {
         $publicationLink = m::mock(PublicationLink::class);
         $publicationLink->shouldReceive('getLicence->getTmLicences')
@@ -28,12 +30,9 @@ class TransportManagersTest extends MockeryTestCase
         $this->assertEquals([], $context->getArrayCopy());
     }
 
-    /**
-     * @group publicationFilter
-     *
-     * Test the application transport managers filter
-     */
-    public function testProvide()
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the application transport managers filter')]
+    public function testProvide(): void
     {
         $tma1 = $this->setupTransportManagerApplication();
         $tma2 = $this->setupTransportManagerApplication();
@@ -59,7 +58,7 @@ class TransportManagersTest extends MockeryTestCase
      *
      * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
      */
-    private function setupTransportManagerApplication()
+    private function setupTransportManagerApplication(): mixed
     {
         $tm = new \Dvsa\Olcs\Api\Entity\Tm\TransportManager();
 

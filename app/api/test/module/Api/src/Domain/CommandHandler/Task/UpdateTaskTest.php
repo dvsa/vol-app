@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Task;
 
 use Doctrine\ORM\Query;
@@ -14,9 +16,7 @@ use Dvsa\Olcs\Transfer\Command\Task\UpdateTask as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Task\UpdateTask
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Task\UpdateTask::class)]
 class UpdateTaskTest extends AbstractCommandHandlerTestCase
 {
     public const TASK_ID = 999;
@@ -53,7 +53,8 @@ class UpdateTaskTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -78,7 +79,7 @@ class UpdateTaskTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 123,
@@ -120,7 +121,7 @@ class UpdateTaskTest extends AbstractCommandHandlerTestCase
         $this->assertSame($this->mockTeam, $task->getAssignedToTeam());
     }
 
-    public function testHandleCommandUnassignedUser()
+    public function testHandleCommandUnassignedUser(): void
     {
         $data = [
             'id' => 123,
@@ -164,7 +165,7 @@ class UpdateTaskTest extends AbstractCommandHandlerTestCase
         $this->assertSame($this->mockTeam, $task->getAssignedToTeam());
     }
 
-    public function testHandleCommandTeamFromUser()
+    public function testHandleCommandTeamFromUser(): void
     {
         $command = Cmd::create(
             [
@@ -195,7 +196,7 @@ class UpdateTaskTest extends AbstractCommandHandlerTestCase
         static::assertSame($this->mockTeam2, $task->getAssignedToTeam());
     }
 
-    public function testHandleCommandFailTeamInvalid()
+    public function testHandleCommandFailTeamInvalid(): void
     {
         $this->expectException(ValidationException::class);
 

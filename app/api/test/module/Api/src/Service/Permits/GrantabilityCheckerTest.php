@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
@@ -41,10 +43,8 @@ class GrantabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTrueFalse
-     */
-    public function testIsGrantableEmissionsCategories($isGrantable)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTrueFalse')]
+    public function testIsGrantableEmissionsCategories(mixed $isGrantable): void
     {
         $this->irhpApplication->shouldReceive('getAllocationMode')
             ->withNoArgs()
@@ -64,10 +64,8 @@ class GrantabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTrueFalse
-     */
-    public function testIsGrantableCandidatePermits($isGrantable)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTrueFalse')]
+    public function testIsGrantableCandidatePermits(mixed $isGrantable): void
     {
         $this->irhpApplication->shouldReceive('getAllocationMode')
             ->withNoArgs()
@@ -87,7 +85,7 @@ class GrantabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    public function dpTrueFalse()
+    public static function dpTrueFalse(): array
     {
         return [
             [true],
@@ -95,10 +93,8 @@ class GrantabilityCheckerTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpExceptionUnsupportedBusinessProcess
-     */
-    public function testExceptionUnsupportedBusinessProcess($businessProcess)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpExceptionUnsupportedBusinessProcess')]
+    public function testExceptionUnsupportedBusinessProcess(mixed $businessProcess): void
     {
         $this->irhpApplication->shouldReceive('getBusinessProcess')
             ->withNoArgs()
@@ -110,7 +106,7 @@ class GrantabilityCheckerTest extends MockeryTestCase
         $this->grantabilityChecker->isGrantable($this->irhpApplication);
     }
 
-    public function dpExceptionUnsupportedBusinessProcess()
+    public static function dpExceptionUnsupportedBusinessProcess(): array
     {
         return [
             [RefData::BUSINESS_PROCESS_AG],
@@ -119,10 +115,8 @@ class GrantabilityCheckerTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpExceptionUnsupportedAllocationMode
-     */
-    public function testExceptionUnsupportedAllocationMode($allocationMode)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpExceptionUnsupportedAllocationMode')]
+    public function testExceptionUnsupportedAllocationMode(mixed $allocationMode): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to grant application due to unsupported allocation mode');
@@ -137,7 +131,7 @@ class GrantabilityCheckerTest extends MockeryTestCase
         $this->grantabilityChecker->isGrantable($this->irhpApplication);
     }
 
-    public function dpExceptionUnsupportedAllocationMode()
+    public static function dpExceptionUnsupportedAllocationMode(): array
     {
         return [
             [IrhpPermitStock::ALLOCATION_MODE_STANDARD],

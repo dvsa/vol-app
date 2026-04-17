@@ -22,6 +22,7 @@ class TransportManager extends AbstractQueryHandler
 
     protected $extraRepos = ['Note'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $repo Dvsa\Olcs\Api\Domain\Repository\TransportManager */

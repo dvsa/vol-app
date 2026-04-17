@@ -25,6 +25,7 @@ final class StoreSnapshot extends AbstractCreateSnapshotHandler
     /**
      * @inheritDoc
      */
+    #[\Override]
     protected function getDocumentDescription($entity): string
     {
         /** @var IrhpApplication $entity */

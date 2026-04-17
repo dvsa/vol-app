@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Bus;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,9 +17,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * LocalAuthority Abstract Entity
+ * AbstractLocalAuthority Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -29,7 +32,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLocalAuthority implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLocalAuthority implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -38,17 +41,25 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     use ModifiedOnTrait;
 
     /**
-     * Bus reg
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var int
      *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg",
-     *     mappedBy="localAuthoritys",
-     *     fetch="LAZY"
-     * )
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $busRegs;
+    protected $id;
+
+    /**
+     * Foreign Key to traffic_area
+     *
+     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
+     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=true)
+     */
+    protected $trafficArea;
 
     /**
      * Created by
@@ -62,35 +73,6 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     protected $createdBy;
 
     /**
-     * Description
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=false)
-     */
-    protected $description;
-
-    /**
-     * Email address
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="email_address", length=255, nullable=true)
-     */
-    protected $emailAddress;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -102,32 +84,40 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     protected $lastModifiedBy;
 
     /**
-     * Naptan code
+     * Description
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="naptan_code", length=3, nullable=true)
+     * @ORM\Column(type="string", name="description", length=255, nullable=false)
      */
-    protected $naptanCode;
+    protected $description = '';
 
     /**
-     * Traffic area
+     * Email address
      *
-     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="string", name="email_address", length=255, nullable=true)
      */
-    protected $trafficArea;
+    protected $emailAddress;
 
     /**
-     * Txc name
+     * Authorities name in TransXChange.
      *
      * @var string
      *
      * @ORM\Column(type="string", name="txc_name", length=255, nullable=true)
      */
     protected $txcName;
+
+    /**
+     * GB National Public Transport Access Nodes code for authority
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="naptan_code", length=3, nullable=true)
+     */
+    protected $naptanCode;
 
     /**
      * Version
@@ -140,7 +130,16 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     protected $version = 1;
 
     /**
-     * User
+     * BusRegs
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", mappedBy="localAuthoritys", fetch="LAZY")
+     */
+    protected $busRegs;
+
+    /**
+     * Users
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -150,8 +149,6 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -159,83 +156,67 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->busRegs = new ArrayCollection();
         $this->users = new ArrayCollection();
     }
 
+
     /**
-     * Set the bus reg
+     * Set the id
      *
-     * @param ArrayCollection $busRegs collection being set as the value
+     * @param int $id new value being set
      *
      * @return LocalAuthority
      */
-    public function setBusRegs($busRegs)
+    public function setId($id)
     {
-        $this->busRegs = $busRegs;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get the bus regs
+     * Get the id
      *
-     * @return ArrayCollection
+     * @return int
      */
-    public function getBusRegs()
+    public function getId()
     {
-        return $this->busRegs;
+        return $this->id;
     }
 
     /**
-     * Add a bus regs
+     * Set the traffic area
      *
-     * @param ArrayCollection|mixed $busRegs collection being added
+     * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
      *
      * @return LocalAuthority
      */
-    public function addBusRegs($busRegs)
+    public function setTrafficArea($trafficArea)
     {
-        if ($busRegs instanceof ArrayCollection) {
-            $this->busRegs = new ArrayCollection(
-                array_merge(
-                    $this->busRegs->toArray(),
-                    $busRegs->toArray()
-                )
-            );
-        } elseif (!$this->busRegs->contains($busRegs)) {
-            $this->busRegs->add($busRegs);
-        }
+        $this->trafficArea = $trafficArea;
 
         return $this;
     }
 
     /**
-     * Remove a bus regs
+     * Get the traffic area
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being removed
-     *
-     * @return LocalAuthority
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
      */
-    public function removeBusRegs($busRegs)
+    public function getTrafficArea()
     {
-        if ($this->busRegs->contains($busRegs)) {
-            $this->busRegs->removeElement($busRegs);
-        }
-
-        return $this;
+        return $this->trafficArea;
     }
 
     /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return LocalAuthority
      */
@@ -254,6 +235,30 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return LocalAuthority
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -305,51 +310,27 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the id
+     * Set the txc name
      *
-     * @param int $id new value being set
+     * @param string $txcName new value being set
      *
      * @return LocalAuthority
      */
-    public function setId($id)
+    public function setTxcName($txcName)
     {
-        $this->id = $id;
+        $this->txcName = $txcName;
 
         return $this;
     }
 
     /**
-     * Get the id
+     * Get the txc name
      *
-     * @return int
+     * @return string
      */
-    public function getId()
+    public function getTxcName()
     {
-        return $this->id;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return LocalAuthority
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
+        return $this->txcName;
     }
 
     /**
@@ -377,54 +358,6 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the traffic area
-     *
-     * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea entity being set as the value
-     *
-     * @return LocalAuthority
-     */
-    public function setTrafficArea($trafficArea)
-    {
-        $this->trafficArea = $trafficArea;
-
-        return $this;
-    }
-
-    /**
-     * Get the traffic area
-     *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     */
-    public function getTrafficArea()
-    {
-        return $this->trafficArea;
-    }
-
-    /**
-     * Set the txc name
-     *
-     * @param string $txcName new value being set
-     *
-     * @return LocalAuthority
-     */
-    public function setTxcName($txcName)
-    {
-        $this->txcName = $txcName;
-
-        return $this;
-    }
-
-    /**
-     * Get the txc name
-     *
-     * @return string
-     */
-    public function getTxcName()
-    {
-        return $this->txcName;
-    }
-
-    /**
      * Set the version
      *
      * @param int $version new value being set
@@ -449,9 +382,72 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the user
+     * Set the bus regs
      *
-     * @param ArrayCollection $users collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being set as the value
+     *
+     * @return LocalAuthority
+     */
+    public function setBusRegs($busRegs)
+    {
+        $this->busRegs = $busRegs;
+
+        return $this;
+    }
+
+    /**
+     * Get the bus regs
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getBusRegs()
+    {
+        return $this->busRegs;
+    }
+
+    /**
+     * Add a bus regs
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $busRegs collection being added
+     *
+     * @return LocalAuthority
+     */
+    public function addBusRegs($busRegs)
+    {
+        if ($busRegs instanceof ArrayCollection) {
+            $this->busRegs = new ArrayCollection(
+                array_merge(
+                    $this->busRegs->toArray(),
+                    $busRegs->toArray()
+                )
+            );
+        } elseif (!$this->busRegs->contains($busRegs)) {
+            $this->busRegs->add($busRegs);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove a bus regs
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being removed
+     *
+     * @return LocalAuthority
+     */
+    public function removeBusRegs($busRegs)
+    {
+        if ($this->busRegs->contains($busRegs)) {
+            $this->busRegs->removeElement($busRegs);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the users
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $users collection being set as the value
      *
      * @return LocalAuthority
      */
@@ -465,7 +461,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * Get the users
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getUsers()
     {
@@ -475,7 +471,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * Add a users
      *
-     * @param ArrayCollection|mixed $users collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $users collection being added
      *
      * @return LocalAuthority
      */
@@ -509,5 +505,14 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

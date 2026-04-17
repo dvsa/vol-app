@@ -25,6 +25,7 @@ final class UpdateActionConfirmation extends AbstractCommandHandler implements T
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var DataRetention $repo */

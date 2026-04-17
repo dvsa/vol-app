@@ -24,6 +24,7 @@ final class CreateForTml extends AbstractCommandHandler implements Transactioned
 {
     protected $repoServiceName = 'OtherLicence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $otherLicence = new OtherLicence();

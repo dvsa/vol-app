@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -13,17 +15,17 @@ use Laminas\Form\FormInterface;
 class IrfoGvPermitTest extends MockeryTestCase
 {
     /**
-    * @dataProvider mapFromResultDataProvider
-    *
-    * @param $inData
-    * @param $expected
-    */
-    public function testMapFromResult($inData, $expected)
+     *
+     * @param $inData
+     * @param $expected
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromResultDataProvider')]
+    public function testMapFromResult(mixed $inData, mixed $expected): void
     {
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public function mapFromResultDataProvider()
+    public static function mapFromResultDataProvider(): array
     {
         $now = new \DateTime();
 
@@ -67,7 +69,7 @@ class IrfoGvPermitTest extends MockeryTestCase
         ];
     }
 
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $inData = ['fields' => ['field' => 'data']];
         $expected = ['field' => 'data'];
@@ -75,7 +77,7 @@ class IrfoGvPermitTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($inData));
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $mockForm = m::mock(FormInterface::class);
         $errors = ['field' => 'data'];

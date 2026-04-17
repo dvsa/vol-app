@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\FeeType;
 
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
@@ -20,7 +22,7 @@ class GetDistinctListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $query = ListQuery::create([]);
 

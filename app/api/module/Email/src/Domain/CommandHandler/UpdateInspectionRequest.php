@@ -29,6 +29,7 @@ final class UpdateInspectionRequest extends AbstractCommandHandler
     /**
      * @param Cmd $command
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $id = $command->getId();

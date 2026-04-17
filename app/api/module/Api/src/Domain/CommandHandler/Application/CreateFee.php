@@ -37,6 +37,7 @@ final class CreateFee extends AbstractCommandHandler implements TransactionedInt
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

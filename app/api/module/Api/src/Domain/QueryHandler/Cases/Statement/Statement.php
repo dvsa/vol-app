@@ -21,6 +21,7 @@ final class Statement extends AbstractQueryHandler
      * @return Result
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var StatementEntity $statement */

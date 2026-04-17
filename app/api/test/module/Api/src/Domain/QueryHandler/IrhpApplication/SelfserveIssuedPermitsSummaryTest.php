@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpApplication;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\IrhpApplication\SelfserveIssuedPermitsSummary;
@@ -18,7 +20,7 @@ class SelfserveIssuedPermitsSummaryTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $organisationId = 8;
 

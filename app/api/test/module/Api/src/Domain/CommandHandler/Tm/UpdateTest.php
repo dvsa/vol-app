@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Tm;
 
 use Dvsa\Olcs\Api\Domain\Command\ContactDetails\SaveAddress;
@@ -25,24 +27,21 @@ use Mockery\MockInterface;
 use Dvsa\OlcsTest\MocksServicesTrait;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\MocksAbstractCommandHandlerServicesTrait;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class UpdateTest extends AbstractCommandHandlerTestCase
 {
     use MocksServicesTrait;
     use MocksAbstractCommandHandlerServicesTrait;
 
-    /**
-     * @test
-     */
-    public function handleCommandIsCallable()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandIsCallable(): void
     {
         $this->assertIsCallable($this->sut->handleCommand(...));
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     * @test
-     */
-    public function handleCommand()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommand(): void
     {
         $id = 1;
         $data = [
@@ -195,11 +194,9 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($res['id']['person'], $data['personId']);
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandUpdatesHomeAddress()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandUpdatesHomeAddress(): void
     {
         // Setup
         $serviceLocator = $this->setUpServiceLocator();
@@ -213,11 +210,9 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $sut->handleCommand($command);
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandCreatesHomeAddress()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandCreatesHomeAddress(): void
     {
         // Setup
         $this->setUpServiceLocator();
@@ -232,11 +227,9 @@ class UpdateTest extends AbstractCommandHandlerTestCase
     }
 
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandUpdatesHomeAddressWhenHomeAddressIdProvided()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandUpdatesHomeAddressWhenHomeAddressIdProvided(): void
     {
         // Setup
         $this->setUpServiceManager();
@@ -252,11 +245,9 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $sut->handleCommand($command);
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandDoesNotCreateHomeContactDetails()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandDoesNotCreateHomeContactDetails(): void
     {
         // Setup
         $this->setUpServiceLocator();
@@ -270,11 +261,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $sut->handleCommand($command);
     }
 
-    /**
-     * @test
-     * depends handleCommand_CreatesHomeAddress
-     */
-    public function handleCommandCreatesHomeAddressWhenNoHomeAddressIdProvided()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandCreatesHomeAddressWhenNoHomeAddressIdProvided(): void
     {
         // Setup
         $this->setUpServiceLocator();
@@ -294,11 +282,9 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $sut->handleCommand($command);
     }
 
-    /**
-     * @test
-     * @depends handleCommandUpdatesHomeAddress
-     */
-    public function handleCommandReportsNoUpdatesToHomeAddressWhenNoChangeRequired()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandUpdatesHomeAddress')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandReportsNoUpdatesToHomeAddressWhenNoChangeRequired(): void
     {
         // Setup
         $this->setUpServiceLocator();
@@ -315,11 +301,9 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->assertNotContains('Home address updated', $result->getMessages());
     }
 
-    /**
-     * @test
-     * @depends handleCommandCreatesHomeAddress
-     */
-    public function handleCommandReportsNoUpdatesToHomeContactDetailsWhenVersionIsUnchanged()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandCreatesHomeAddress')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandReportsNoUpdatesToHomeContactDetailsWhenVersionIsUnchanged(): void
     {
         // Setup
         $this->setUpServiceManager();
@@ -353,12 +337,12 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function setUpSut()
+    protected function setUpSut(): mixed
     {
         return $this->sut->__invoke($this->serviceManager, Update::class);
     }
 
-    protected function setUpDefaultServices(ServiceManager $serviceManager)
+    protected function setUpDefaultServices(ServiceManager $serviceManager): void
     {
         $this->repositoryServiceManager();
         $this->contactDetailsRepository();
@@ -407,7 +391,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         return $repositoryServiceManager->get('TransportManager');
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             TransportManagerEntity::TRANSPORT_MANAGER_STATUS_CURRENT,

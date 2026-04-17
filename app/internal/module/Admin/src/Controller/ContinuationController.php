@@ -34,18 +34,15 @@ class ContinuationController extends AbstractController
 
     protected $detailRoute = 'admin-dashboard/admin-continuation/detail';
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
-
     public function __construct(
         Placeholder $placeholder,
-        FlashMessengerHelperService $flashMessengerHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper,
         protected ScriptFactory $scriptFactory,
         protected TranslationHelperService $translationHelper,
         protected TableFactory $tableFactory,
         protected FormHelperService $formHelper
     ) {
         parent::__construct($placeholder);
-        $this->flashMessengerHelper = $flashMessengerHelper;
     }
 
     /**
@@ -53,6 +50,7 @@ class ContinuationController extends AbstractController
      *
      * @return \Laminas\Http\Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         /** @var \Laminas\Http\Request $request */
@@ -68,7 +66,7 @@ class ContinuationController extends AbstractController
         if ($request->isPost() && $form->isValid()) {
             $data = $form->getData();
 
-            [$year, $month] = explode('-', $data['details']['date']);
+            [$year, $month] = explode('-', (string) $data['details']['date']);
 
             if ($data['details']['type'] === self::CONTINUATION_TYPE_IRFO) {
                 // redirect to irfo psv auth continuation page
@@ -189,7 +187,7 @@ class ContinuationController extends AbstractController
                 return $this->redirect()->toRoute(null, ['action' => null, 'child_id' => null], [], true);
             }
 
-            $ids = explode(',', $this->params('child_id'));
+            $ids = explode(',', (string) $this->params('child_id'));
 
             $response = $this->handleCommand(
                 PrepareCmd::create(

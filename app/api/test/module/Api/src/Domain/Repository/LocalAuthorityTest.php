@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Local Authority test
  *
@@ -31,7 +33,7 @@ class LocalAuthorityTest extends RepositoryTestCase
     /**
      * Tests fetchByTxcName
      */
-    public function testFetchByTxcName()
+    public function testFetchByTxcName(): void
     {
         $mockResult = ['result'];
         $txcNames = ['name1', 'name2'];
@@ -62,7 +64,7 @@ class LocalAuthorityTest extends RepositoryTestCase
     /**
      * Tests fetchByNaptan
      */
-    public function testFetchByNaptan()
+    public function testFetchByNaptan(): void
     {
         $mockResult = ['result'];
         $naptan = ['naptan1', 'naptan2'];
@@ -97,7 +99,7 @@ class LocalAuthorityTest extends RepositoryTestCase
      * @param $mockResult
      * @return QueryBuilder
      */
-    public function getQueryBuilder($expr, $mockResult)
+    public function getQueryBuilder(mixed $expr, mixed $mockResult): mixed
     {
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);

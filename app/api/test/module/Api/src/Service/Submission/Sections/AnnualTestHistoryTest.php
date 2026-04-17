@@ -1,22 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\Submission\Sections\AnnualTestHistory
- */
-class AnnualTestHistoryTest extends AbstractSubmissionSectionTest
-{
-    protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\AnnualTestHistory::class;
+use Dvsa\Olcs\Api\Service\Submission\Sections\AnnualTestHistory;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-    /**
-     * Filter provider
-     *
-     * @return array
-     */
-    public function sectionTestProvider()
+#[CoversClass(AnnualTestHistory::class)]
+class AnnualTestHistoryTest extends AbstractSubmissionSectionTestCase
+{
+    protected $submissionSection = AnnualTestHistory::class;
+
+    public static function sectionTestProvider(): array
     {
-        $case = $this->getCase();
+        $case = static::getCase();
 
         $expectedResult = ['data' => ['text' => 'ath']];
 

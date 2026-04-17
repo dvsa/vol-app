@@ -24,6 +24,7 @@ class OperatingCentresControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return OperatingCentresController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OperatingCentresController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

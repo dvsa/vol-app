@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Fee;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,9 +17,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * FeeTransaction Abstract Entity
+ * AbstractFeeTransaction Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -31,7 +34,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractFeeTransaction implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractFeeTransaction implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -40,13 +43,45 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     use ModifiedOnTrait;
 
     /**
-     * Amount
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var float
+     * @var int
      *
-     * @ORM\Column(type="decimal", name="amount", precision=10, scale=2, nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $amount;
+    protected $id;
+
+    /**
+     * Foreign Key to fee
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Fee\Fee
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Fee\Fee", fetch="LAZY", cascade={"persist"})
+     * @ORM\JoinColumn(name="fee_id", referencedColumnName="id")
+     */
+    protected $fee;
+
+    /**
+     * Foreign Key to payment
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Fee\Transaction
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Fee\Transaction", fetch="LAZY", cascade={"persist"})
+     * @ORM\JoinColumn(name="txn_id", referencedColumnName="id")
+     */
+    protected $transaction;
+
+    /**
+     * ReversedFeeTxn
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Fee\FeeTransaction", fetch="LAZY")
+     * @ORM\JoinColumn(name="reversed_fee_txn_id", referencedColumnName="id", nullable=true)
+     */
+    protected $reversedFeeTransaction;
 
     /**
      * Created by
@@ -60,32 +95,6 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     protected $createdBy;
 
     /**
-     * Fee
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Fee\Fee
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Fee\Fee",
-     *     fetch="LAZY",
-     *     cascade={"persist"},
-     *     inversedBy="feeTransactions"
-     * )
-     * @ORM\JoinColumn(name="fee_id", referencedColumnName="id", nullable=false)
-     */
-    protected $fee;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -97,33 +106,13 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     protected $lastModifiedBy;
 
     /**
-     * Reversed fee transaction
+     * Amount
      *
-     * @var \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction
+     * @var string
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Fee\FeeTransaction",
-     *     fetch="LAZY",
-     *     inversedBy="reversingFeeTransactions"
-     * )
-     * @ORM\JoinColumn(name="reversed_fee_txn_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="decimal", name="amount", nullable=true)
      */
-    protected $reversedFeeTransaction;
-
-    /**
-     * Transaction
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Fee\Transaction
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Fee\Transaction",
-     *     fetch="LAZY",
-     *     cascade={"persist"},
-     *     inversedBy="feeTransactions"
-     * )
-     * @ORM\JoinColumn(name="txn_id", referencedColumnName="id", nullable=false)
-     */
-    protected $transaction;
+    protected $amount;
 
     /**
      * Version
@@ -136,21 +125,16 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     protected $version = 1;
 
     /**
-     * Reversing fee transaction
+     * ReversingFeeTransactions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Fee\FeeTransaction",
-     *     mappedBy="reversedFeeTransaction"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Fee\FeeTransaction", mappedBy="reversedFeeTransaction")
      */
     protected $reversingFeeTransactions;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -158,86 +142,13 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->reversingFeeTransactions = new ArrayCollection();
     }
 
-    /**
-     * Set the amount
-     *
-     * @param float $amount new value being set
-     *
-     * @return FeeTransaction
-     */
-    public function setAmount($amount)
-    {
-        $this->amount = $amount;
-
-        return $this;
-    }
-
-    /**
-     * Get the amount
-     *
-     * @return float
-     */
-    public function getAmount()
-    {
-        return $this->amount;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return FeeTransaction
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the fee
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Fee\Fee $fee entity being set as the value
-     *
-     * @return FeeTransaction
-     */
-    public function setFee($fee)
-    {
-        $this->fee = $fee;
-
-        return $this;
-    }
-
-    /**
-     * Get the fee
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Fee\Fee
-     */
-    public function getFee()
-    {
-        return $this->fee;
-    }
 
     /**
      * Set the id
@@ -264,33 +175,57 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the last modified by
+     * Set the fee
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Fee\Fee $fee new value being set
      *
      * @return FeeTransaction
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setFee($fee)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->fee = $fee;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the fee
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * @return \Dvsa\Olcs\Api\Entity\Fee\Fee
      */
-    public function getLastModifiedBy()
+    public function getFee()
     {
-        return $this->lastModifiedBy;
+        return $this->fee;
+    }
+
+    /**
+     * Set the transaction
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Fee\Transaction $transaction new value being set
+     *
+     * @return FeeTransaction
+     */
+    public function setTransaction($transaction)
+    {
+        $this->transaction = $transaction;
+
+        return $this;
+    }
+
+    /**
+     * Get the transaction
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Fee\Transaction
+     */
+    public function getTransaction()
+    {
+        return $this->transaction;
     }
 
     /**
      * Set the reversed fee transaction
      *
-     * @param \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction $reversedFeeTransaction entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction $reversedFeeTransaction new value being set
      *
      * @return FeeTransaction
      */
@@ -312,27 +247,75 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the transaction
+     * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\Fee\Transaction $transaction entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return FeeTransaction
      */
-    public function setTransaction($transaction)
+    public function setCreatedBy($createdBy)
     {
-        $this->transaction = $transaction;
+        $this->createdBy = $createdBy;
 
         return $this;
     }
 
     /**
-     * Get the transaction
+     * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\Fee\Transaction
+     * @return \Dvsa\Olcs\Api\Entity\User\User
      */
-    public function getTransaction()
+    public function getCreatedBy()
     {
-        return $this->transaction;
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return FeeTransaction
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the amount
+     *
+     * @param string $amount new value being set
+     *
+     * @return FeeTransaction
+     */
+    public function setAmount($amount)
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
+    /**
+     * Get the amount
+     *
+     * @return string
+     */
+    public function getAmount()
+    {
+        return $this->amount;
     }
 
     /**
@@ -360,9 +343,9 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the reversing fee transaction
+     * Set the reversing fee transactions
      *
-     * @param ArrayCollection $reversingFeeTransactions collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $reversingFeeTransactions collection being set as the value
      *
      * @return FeeTransaction
      */
@@ -376,7 +359,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     /**
      * Get the reversing fee transactions
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getReversingFeeTransactions()
     {
@@ -386,7 +369,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     /**
      * Add a reversing fee transactions
      *
-     * @param ArrayCollection|mixed $reversingFeeTransactions collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $reversingFeeTransactions collection being added
      *
      * @return FeeTransaction
      */
@@ -420,5 +403,14 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

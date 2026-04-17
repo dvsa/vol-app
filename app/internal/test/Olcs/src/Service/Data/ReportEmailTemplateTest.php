@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -25,10 +27,8 @@ class ReportEmailTemplateTest extends AbstractDataServiceTestCase
         $this->sut = new ReportEmailTemplate($this->abstractDataServiceServices);
     }
 
-    /**
-     * @dataProvider dpTestFetchListOptions
-     */
-    public function testFetchListOptions($results, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestFetchListOptions')]
+    public function testFetchListOptions(mixed $results, mixed $expected): void
     {
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->once()
@@ -55,7 +55,7 @@ class ReportEmailTemplateTest extends AbstractDataServiceTestCase
         $this->assertEquals($expected, $this->sut->fetchListOptions());
     }
 
-    public function dpTestFetchListOptions()
+    public static function dpTestFetchListOptions(): array
     {
         return [
             'with data' => [
@@ -83,7 +83,7 @@ class ReportEmailTemplateTest extends AbstractDataServiceTestCase
         ];
     }
 
-    public function testFetchListOptionsWithException()
+    public function testFetchListOptionsWithException(): void
     {
         $this->expectException(DataServiceException::class);
 

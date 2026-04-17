@@ -21,6 +21,7 @@ final class BusServiceTypeList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'BusServiceType';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return [

@@ -19,7 +19,7 @@ class AllTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
         $mockResult = m::mock(\Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface::class);

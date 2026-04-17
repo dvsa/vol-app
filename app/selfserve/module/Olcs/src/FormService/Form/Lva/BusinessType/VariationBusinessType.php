@@ -38,6 +38,7 @@ class VariationBusinessType extends CommonVariationBusinessType
      *
      * @return void
      */
+    #[\Override]
     public function alterForm(Form $form, $params)
     {
         parent::alterForm($form, $params);

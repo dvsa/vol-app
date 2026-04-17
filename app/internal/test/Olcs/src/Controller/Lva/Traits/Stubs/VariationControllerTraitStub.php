@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Variation Controller Trait Stub
  *
@@ -26,43 +28,41 @@ class VariationControllerTraitStub extends AbstractController
     protected $applicationId;
     protected $accessibleSections = [];
 
-    protected StringHelperService $stringHelper;
-
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        StringHelperService $stringHelper
+        protected StringHelperService $stringHelper
     ) {
         parent::__construct($niTextTranslationUtil, $authService);
-        $this->stringHelper = $stringHelper;
     }
 
-    public function setAccessibleSections($accessibleSections)
+    public function setAccessibleSections(mixed $accessibleSections): void
     {
         $this->accessibleSections = $accessibleSections;
     }
 
-    public function getAccessibleSections($keysOnly = true)
+    #[\Override]
+    public function getAccessibleSections($keysOnly = true): array
     {
         return $this->accessibleSections;
     }
 
-    public function setApplicationId($id)
+    public function setApplicationId(mixed $id): void
     {
         $this->applicationId = $id;
     }
 
-    public function getApplicationId()
+    public function getApplicationId(): mixed
     {
         return $this->applicationId;
     }
 
-    public function callGetSectionsForView()
+    public function callGetSectionsForView(): array
     {
         return $this->getSectionsForView();
     }
 
-    public function isPsv()
+    public function isPsv(): bool
     {
         return true;
     }

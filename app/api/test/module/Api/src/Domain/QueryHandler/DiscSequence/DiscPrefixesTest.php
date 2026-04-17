@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Disc Prefixes Test
  *
@@ -30,16 +32,14 @@ class DiscPrefixesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider emptyParamsProvider
-     */
-    public function testHandleQueryEmpty($params)
+    #[\PHPUnit\Framework\Attributes\DataProvider('emptyParamsProvider')]
+    public function testHandleQueryEmpty(mixed $params): void
     {
         $query = Qry::create($params);
         $this->assertEquals(['result' => [], 'count' => 0], $this->sut->handleQuery($query));
     }
 
-    public function emptyParamsProvider()
+    public static function emptyParamsProvider(): array
     {
         return [
             [['niFlag' => 'N', 'licenceType' => 'ltyp_r']],
@@ -47,7 +47,7 @@ class DiscPrefixesTest extends QueryHandlerTestCase
         ];
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $niFlag = 'N';
         $operatorType = 'lcat_gv';

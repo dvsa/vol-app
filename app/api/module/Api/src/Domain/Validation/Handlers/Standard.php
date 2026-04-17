@@ -20,6 +20,7 @@ class Standard extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         // Log the fact that we are missing a validation handler

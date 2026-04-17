@@ -17,6 +17,7 @@ class Applicationtype extends DynamicBookmark
      *
      * @return Bookmark\ApplicationBundle|null
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         $bundle = ['licenceType'];
@@ -35,6 +36,7 @@ class Applicationtype extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         return $this->data['licenceType']['description'];

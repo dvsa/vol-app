@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\View\Helper;
 
 use Dvsa\Olcs\Api\Entity\Generic\Question;
@@ -27,7 +29,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->sut->setView($this->view);
     }
 
-    public function testInvokeBoolean()
+    public function testInvokeBoolean(): void
     {
         $input = [
             'question' => 'qanda.question',
@@ -67,7 +69,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
         self::assertEquals($expected, $this->sut->__invoke($input));
     }
 
-    public function testInvokeBooleanNoEscape()
+    public function testInvokeBooleanNoEscape(): void
     {
         $input = [
             'question' => 'qanda.question',
@@ -99,7 +101,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
         self::assertEquals($expected, $this->sut->__invoke($input));
     }
 
-    public function testInvokeInteger()
+    public function testInvokeInteger(): void
     {
         $input = [
             'question' => 'qanda.question',
@@ -117,7 +119,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
     /**
      * Tests a single answer is converted to an array containing one answer and is still processed correctly
      */
-    public function testInvokeWithAnswerNotArray()
+    public function testInvokeWithAnswerNotArray(): void
     {
         $input = [
             'question' => 'qanda.question',
@@ -130,10 +132,9 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
 
     /**
      * Tests answer rendered as expected for string/custom
-     *
-     * @dataProvider dpInvokeOther
      */
-    public function testInvokeOther($questionType)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpInvokeOther')]
+    public function testInvokeOther(mixed $questionType): void
     {
         $input = [
             'question' => 'qanda.question',
@@ -166,10 +167,9 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
 
     /**
      * Tests answer rendered as expected for string/custom
-     *
-     * @dataProvider dpInvokeOther
      */
-    public function testInvokeOtherNoEscape($questionType)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpInvokeOther')]
+    public function testInvokeOtherNoEscape(mixed $questionType): void
     {
         $input = [
             'question' => 'qanda.question',
@@ -196,7 +196,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
         self::assertEquals($expected, $this->sut->__invoke($input));
     }
 
-    public function dpInvokeOther()
+    public static function dpInvokeOther(): array
     {
         return [
             [Question::QUESTION_TYPE_STRING],

@@ -17,6 +17,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
  */
 final class CreateSurrenderPsvLicenceTasks extends AbstractCommandHandler
 {
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $licenceIds = $command->getIds();

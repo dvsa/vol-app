@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Application Goods Oc Total Auth Review Service Test
  *
@@ -36,7 +38,7 @@ class ApplicationGoodsOcTotalAuthReviewServiceTest extends MockeryTestCase
         $this->sut = new ApplicationGoodsOcTotalAuthReviewService($abstractReviewServiceServices);
     }
 
-    public function testGetConfigFromDataWithHgv()
+    public function testGetConfigFromDataWithHgv(): void
     {
         $data = [
             'totAuthVehicles' => 25,
@@ -66,7 +68,7 @@ class ApplicationGoodsOcTotalAuthReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function testGetConfigFromDataWithMixedAndNullLgvAuth()
+    public function testGetConfigFromDataWithMixedAndNullLgvAuth(): void
     {
         $data = [
             'totAuthHgvVehicles' => 50,
@@ -102,10 +104,8 @@ class ApplicationGoodsOcTotalAuthReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    /**
-     * @dataProvider dpGetConfigFromDataWithMixedAndNumericLgvAuth
-     */
-    public function testGetConfigFromDataWithMixedAndNumericLgvAuth($totAuthLgvVehicles)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetConfigFromDataWithMixedAndNumericLgvAuth')]
+    public function testGetConfigFromDataWithMixedAndNumericLgvAuth(mixed $totAuthLgvVehicles): void
     {
         $data = [
             'totAuthHgvVehicles' => 50,
@@ -144,7 +144,7 @@ class ApplicationGoodsOcTotalAuthReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function dpGetConfigFromDataWithMixedAndNumericLgvAuth()
+    public static function dpGetConfigFromDataWithMixedAndNumericLgvAuth(): array
     {
         return [
             [0],
@@ -152,7 +152,7 @@ class ApplicationGoodsOcTotalAuthReviewServiceTest extends MockeryTestCase
         ];
     }
 
-    public function testGetConfigFromDataWithLgv()
+    public function testGetConfigFromDataWithLgv(): void
     {
         $data = [
             'totAuthLgvVehicles' => 25,

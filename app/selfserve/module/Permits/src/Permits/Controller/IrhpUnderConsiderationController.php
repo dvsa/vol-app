@@ -55,6 +55,7 @@ class IrhpUnderConsiderationController extends AbstractSelfserveController
      *
      * @return void
      */
+    #[\Override]
     public function retrieveData()
     {
         parent::retrieveData();

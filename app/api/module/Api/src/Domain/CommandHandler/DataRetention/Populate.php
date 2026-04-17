@@ -32,6 +32,7 @@ final class Populate extends AbstractCommandHandler implements AuthAwareInterfac
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var DataRetentionRule $repo */
@@ -81,6 +82,7 @@ final class Populate extends AbstractCommandHandler implements AuthAwareInterfac
 
         return $this->result;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

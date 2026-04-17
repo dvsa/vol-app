@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Service\Utils;
 
 use Dvsa\Olcs\Cli\Service\Utils\ExportToCsv;
@@ -28,7 +30,7 @@ class ExportToCsvTest extends MockeryTestCase
         $this->fileName = $this->tmpPath . '/unitFileName.tmp';
     }
 
-    public function testOk()
+    public function testOk(): void
     {
         //  call & check
         ExportToCsv::createFile($this->fileName);
@@ -47,7 +49,7 @@ class ExportToCsvTest extends MockeryTestCase
         );
     }
 
-    public function testExceptionCreateDir()
+    public function testExceptionCreateDir(): void
     {
         //  create file with dir name
         $fh = fopen($this->tmpPath, 'w');
@@ -60,7 +62,7 @@ class ExportToCsvTest extends MockeryTestCase
         ExportToCsv::createFile($this->fileName);
     }
 
-    public function testExceptionCreateFile()
+    public function testExceptionCreateFile(): void
     {
         //  create file with dir name
         /** @noinspection MkdirRaceConditionInspection */

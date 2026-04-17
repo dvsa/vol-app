@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator\ProcessedData;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -17,13 +19,13 @@ class LocalAuthorityMissingTest extends MockeryTestCase
     /**
      * tests whether missing local authorities not required are correctly identified
      *
-     * @dataProvider isValidProvider
      *
      * @param ArrayCollection $la
      * @param ArrayCollection $naptan
      * @param $valid
      */
-    public function testIsValid($la, $naptan, $valid)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
+    public function testIsValid(mixed $la, mixed $naptan, mixed $valid): void
     {
         $sut = new LocalAuthorityMissing();
 
@@ -40,7 +42,7 @@ class LocalAuthorityMissingTest extends MockeryTestCase
      *
      * @return array
      */
-    public function isValidProvider()
+    public static function isValidProvider(): array
     {
         $la1 = m::mock(LaEntity::class)->makePartial();
         $la1->setId(1);

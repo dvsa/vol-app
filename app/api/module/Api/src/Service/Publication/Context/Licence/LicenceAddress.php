@@ -18,6 +18,7 @@ final class LicenceAddress extends AbstractContext implements AddressFormatterAw
 {
     use AddressFormatterAwareTrait;
 
+    #[\Override]
     public function provide(PublicationLink $publicationLink, \ArrayObject $context)
     {
         $licence = $publicationLink->getLicence();

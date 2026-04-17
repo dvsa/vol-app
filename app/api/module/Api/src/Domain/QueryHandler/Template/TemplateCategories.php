@@ -21,6 +21,7 @@ class TemplateCategories extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $categories = $this->getRepo()->fetchDistinctCategories();

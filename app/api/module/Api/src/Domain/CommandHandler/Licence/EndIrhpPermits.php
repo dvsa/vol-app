@@ -39,6 +39,7 @@ class EndIrhpPermits extends AbstractCommandHandler implements TransactionedInte
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $licenceId = $command->getId();

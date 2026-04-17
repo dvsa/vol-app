@@ -28,6 +28,7 @@ class StayController extends AbstractInternalController implements CaseControlle
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -109,6 +110,7 @@ class StayController extends AbstractInternalController implements CaseControlle
      *
      * @return array|mixed|\Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->redirectTo([]);

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Bus\Ebsr;
 
+use Dvsa\Olcs\Api\Domain\Command\Task\CreateTask;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Bus\Ebsr\AbstractProcessPack;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Bus\Ebsr\ProcessPackTransaction;
 use Dvsa\Olcs\Api\Entity\Bus\BusServiceType as BusServiceTypeEntity;
 use Dvsa\Olcs\Api\Entity\Bus\LocalAuthority as LocalAuthorityEntity;
@@ -13,6 +15,7 @@ use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\Doc\Document as DocumentEntity;
 use Dvsa\Olcs\Api\Entity\Bus\BusNoticePeriod as BusNoticePeriodEntity;
 use Dvsa\Olcs\Api\Entity\Bus\BusReg as BusRegEntity;
+use Dvsa\Olcs\Api\Entity\Task\Task as TaskEntity;
 use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea as TrafficAreaEntity;
 use Dvsa\Olcs\Api\Entity\System\Category as CategoryEntity;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -51,10 +54,9 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @param $busShortNotice
      * @param $shortNoticeSetTimes
-     *
-     * @dataProvider handleDataRefreshProvider
      */
-    public function testHandleCommandDataRefresh($busShortNotice, $shortNoticeSetTimes): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleDataRefreshProvider')]
+    public function testHandleCommandDataRefresh(mixed $busShortNotice, mixed $shortNoticeSetTimes): void
     {
         $filePath = 'vfs://root';
         $xmlName = $filePath . '/xml-file-name.xml';
@@ -128,17 +130,20 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
 
         $xmlDocContext = ['xml_filename' => $xmlName];
 
+        $parsedSchemaVersion = '2.1';
         $parsedLicenceNumber = 'OB1234567';
         $parsedVariationNumber = 666;
         $parsedRouteNumber = '12345';
         $parsedOrganisationEmail = 'foo@bar.com';
         $existingRegNo = 'OB1234567/12345';
+        $newRegNo = 'OB1234567/12346';
 
         $otherServiceNumber1 = '123';
         $otherServiceNumber2 = '456';
         $mainServiceNumber = 'BUS001';
 
         $parsedEbsrData = [
+            'txcSchemaVersion'  => $parsedSchemaVersion,
             'licNo' => $parsedLicenceNumber,
             'variationNo' => $parsedVariationNumber,
             'routeNo' => $parsedRouteNumber,
@@ -196,6 +201,10 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
             ->with(m::type(BusRegEntity::class))
             ->once()
             ->andReturnSelf();
+        $ebsrSubmission->shouldReceive('setTxcVersion')
+            ->once()
+            ->with($parsedEbsrData['txcSchemaVersion'])
+            ->andReturnSelf();
 
         $this->ebsrSubmissionRepo($command, $ebsrSubmission, 3);
 
@@ -214,12 +223,13 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $variationBusReg->shouldReceive('addOtherServiceNumber')->once()->with($otherServiceNumber1);
         $variationBusReg->shouldReceive('addOtherServiceNumber')->once()->with($otherServiceNumber2);
         $variationBusReg->shouldReceive('getId')->times(5)->andReturn($variationBusRegId);
-        $variationBusReg->shouldReceive('getLicence->getId')->times(3)->andReturn($licenceId);
+        $variationBusReg->shouldReceive('getLicence->getId')->times(4)->andReturn($licenceId);
         $variationBusReg->shouldReceive('getIsShortNotice')->once()->andReturn('Y');
         $variationBusReg->shouldReceive('getShortNotice->fromData')->once()->with($busShortNotice);
         $variationBusReg->shouldReceive('setEbsrSubmissions')->once()->with(m::type(ArrayCollection::class));
-        $variationBusReg->shouldReceive('isEbsrRefresh')->once()->andReturn(true);
+        $variationBusReg->shouldReceive('isEbsrRefresh')->twice()->withNoArgs()->andReturnTrue();
         $variationBusReg->shouldReceive('getStatus->getId')->once()->andReturn($busRegStatus);
+        $variationBusReg->expects('getRegNo')->withNoArgs()->andReturn($newRegNo);
 
         $previousBusRegNoExclusions = m::mock(BusRegEntity::class);
         $previousBusReg = m::mock(BusRegEntity::class);
@@ -276,7 +286,12 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
             new Result()
         );
 
-        $this->successSideEffects($variationBusRegId, $licenceId, $documentId, false);
+        $expectedTaskDesc = sprintf(
+            AbstractProcessPack::TASK_DESCRIPTION,
+            AbstractProcessPack::TASK_DESC_REFRESH,
+            $newRegNo
+        );
+        $this->successSideEffects($variationBusRegId, $licenceId, $documentId, false, $expectedTaskDesc);
 
         $this->sut->setConfig($this->config);
 
@@ -286,7 +301,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
     /**
      * @return array
      */
-    public function handleDataRefreshProvider(): array
+    public static function handleDataRefreshProvider(): array
     {
         return [
             [['short notice section'], 1],
@@ -297,15 +312,14 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
 
     /**
      * Tests successful creation of a variation application through EBSR
-     *
-     * @param $txcAppType
-     * @param $busRegStatus
-     * @param $fee
-     *
-     * @dataProvider handleVariationProvider
      */
-    public function testHandleCommandVariation($txcAppType, $busRegStatus, $fee): void
-    {
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleVariationProvider')]
+    public function testHandleCommandVariation(
+        string $txcAppType,
+        string $busRegStatus,
+        string $taskString,
+        bool $fee
+    ): void {
         $filePath = 'vfs://root';
         $xmlName = $filePath . '/xml-file-name.xml';
         $xmlDocument = "<xml></xml>";
@@ -377,11 +391,13 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
 
         $xmlDocContext = ['xml_filename' => $xmlName];
 
+        $parsedSchemaVersion = '2.1';
         $parsedLicenceNumber = 'OB1234567';
         $parsedVariationNumber = 666;
         $parsedRouteNumber = '12345';
         $parsedOrganisationEmail = 'foo@bar.com';
         $existingRegNo = 'OB1234567/12345';
+        $newRegNo = 'OB1234567/12346';
 
         $otherServiceNumber1 = '123';
         $otherServiceNumber2 = '456';
@@ -390,6 +406,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $busShortNotice = ['bus short notice'];
 
         $parsedEbsrData = [
+            'txcSchemaVersion'  => $parsedSchemaVersion,
             'licNo' => $parsedLicenceNumber,
             'variationNo' => $parsedVariationNumber,
             'routeNo' => $parsedRouteNumber,
@@ -448,6 +465,11 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
             ->once()
             ->andReturnSelf();
 
+        $ebsrSubmission->shouldReceive('setTxcVersion')
+            ->once()
+            ->with($parsedEbsrData['txcSchemaVersion'])
+            ->andReturnSelf();
+
         $this->ebsrSubmissionRepo($command, $ebsrSubmission, 3);
 
         $this->mockInput(XmlStructureInputFactory::class, $xmlName, $xmlDocContext, $xmlDocument);
@@ -464,12 +486,13 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $variationBusReg->shouldReceive('addOtherServiceNumber')->once()->with($otherServiceNumber1);
         $variationBusReg->shouldReceive('addOtherServiceNumber')->once()->with($otherServiceNumber2);
         $variationBusReg->shouldReceive('getId')->times(5)->andReturn($variationBusRegId);
-        $variationBusReg->shouldReceive('getLicence->getId')->times(3)->andReturn($licenceId);
+        $variationBusReg->shouldReceive('getLicence->getId')->times(4)->withNoArgs()->andReturn($licenceId);
         $variationBusReg->shouldReceive('getIsShortNotice')->once()->andReturn('Y');
         $variationBusReg->shouldReceive('getShortNotice->fromData')->once()->with($busShortNotice);
         $variationBusReg->shouldReceive('setEbsrSubmissions')->once()->with(m::type(ArrayCollection::class));
-        $variationBusReg->shouldReceive('isEbsrRefresh')->once()->andReturn(false);
-        $variationBusReg->shouldReceive('getStatus->getId')->once()->andReturn($busRegStatus);
+        $variationBusReg->shouldReceive('isEbsrRefresh')->twice()->andReturnFalse();
+        $variationBusReg->shouldReceive('getStatus->getId')->twice()->andReturn($busRegStatus);
+        $variationBusReg->expects()->getRegNo()->withNoArgs()->andReturn($newRegNo);
 
         $previousBusRegNoExclusions = m::mock(BusRegEntity::class);
         $previousBusReg = m::mock(BusRegEntity::class);
@@ -521,21 +544,19 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
 
         $this->expectedEmailQueueSideEffect(SendEbsrReceivedCmd::class, ['id' => $ebsrSubId], $ebsrSubId, new Result());
 
-        $this->successSideEffects($variationBusRegId, $licenceId, $documentId, $fee);
+        $expectedTaskDesc = sprintf(AbstractProcessPack::TASK_DESCRIPTION, $taskString, $newRegNo);
+        $this->successSideEffects($variationBusRegId, $licenceId, $documentId, $fee, $expectedTaskDesc);
 
         $this->sut->setConfig($this->config);
 
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @return array
-     */
-    public function handleVariationProvider(): array
+    public static function handleVariationProvider(): array
     {
         return [
-            [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_CANCEL, false],
-            [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_VAR, true]
+            [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_CANCEL, AbstractProcessPack::TASK_DESC_CANCEL, false],
+            [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_VAR, AbstractProcessPack::TASK_DESC_VAR, true],
         ];
     }
 
@@ -583,18 +604,20 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
 
         $xmlDocContext = ['xml_filename' => $xmlName];
 
+        $parsedSchemaVersion = '2.1';
         $parsedLicenceNumber = 'OB1234567';
         $parsedVariationNumber = 666;
         $parsedRouteNumber = '12345';
         $parsedOrganisationEmail = 'foo@bar.com';
-        $existingRegNo = 'OB1234567/12345';
+        $newRegNo = 'OB1234567/12345';
 
         $parsedEbsrData = [
+            'txcSchemaVersion'  => $parsedSchemaVersion,
             'licNo' => $parsedLicenceNumber,
             'variationNo' => $parsedVariationNumber,
             'routeNo' => $parsedRouteNumber,
             'organisationEmail' => $parsedOrganisationEmail,
-            'existingRegNo' => $existingRegNo,
+            'existingRegNo' => $newRegNo,
             'subsidised' => 'bs_in_part',
             'busNoticePeriod' => 1,
             'txcAppType' => BusRegEntity::TXC_APP_NEW,
@@ -620,7 +643,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $ebsrSubmission->shouldReceive('setLicenceNo')->with($parsedLicenceNumber)->once()->andReturnSelf();
         $ebsrSubmission->shouldReceive('setVariationNo')->with($parsedVariationNumber)->once()->andReturnSelf();
         $ebsrSubmission->shouldReceive('setRegistrationNo')->with($parsedRouteNumber)->once()->andReturnSelf();
-        $ebsrSubmission->shouldReceive('isDataRefresh')->once()->andReturn(false);
+        $ebsrSubmission->shouldReceive('isDataRefresh')->twice()->andReturnFalse();
         $ebsrSubmission->shouldReceive('setOrganisationEmailAddress')
             ->with($parsedOrganisationEmail)
             ->once()
@@ -628,6 +651,11 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $ebsrSubmission->shouldReceive('setBusReg')
             ->with(m::type(BusRegEntity::class))
             ->once()
+            ->andReturnSelf();
+
+        $ebsrSubmission->shouldReceive('setTxcVersion')
+            ->once()
+            ->with($parsedEbsrData['txcSchemaVersion'])
             ->andReturnSelf();
 
         $this->ebsrSubmissionRepo($command, $ebsrSubmission, 3);
@@ -656,9 +684,9 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $licence = m::mock(LicenceEntity::class);
         $licence->shouldReceive('getLicNo')->twice()->andReturn($parsedLicenceNumber);
         $licence->shouldReceive('getLatestBusRouteNo')->once()->andReturn(12345);
-        $licence->shouldReceive('getId')->once()->andReturn($licenceId);
-        $licence->shouldReceive('getLatestBusVariation')->once()->with($existingRegNo)->andReturnNull();
-        $licence->expects('getLatestBusVariation')->with($existingRegNo, [])->andReturnNull();
+        $licence->shouldReceive('getId')->twice()->withNoArgs()->andReturn($licenceId);
+        $licence->shouldReceive('getLatestBusVariation')->once()->with($newRegNo)->andReturnNull();
+        $licence->expects('getLatestBusVariation')->with($newRegNo, [])->andReturnNull();
 
         $this->repoMap['Licence']->shouldReceive('fetchByLicNoWithoutAdditionalData')
             ->once()
@@ -701,12 +729,12 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
 
         $this->expectedEmailQueueSideEffect(SendEbsrReceivedCmd::class, ['id' => $ebsrSubId], $ebsrSubId, new Result());
 
-        $this->successSideEffects(
-            $savedBusRegId,
-            $licenceId,
-            $documentId,
-            true
+        $expectedTaskDesc = sprintf(
+            AbstractProcessPack::TASK_DESCRIPTION,
+            AbstractProcessPack::TASK_DESC_NEW,
+            $newRegNo
         );
+        $this->successSideEffects($savedBusRegId, $licenceId, $documentId, true, $expectedTaskDesc);
 
         $this->sut->handleCommand($command);
     }
@@ -899,6 +927,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
 
         $xmlDocContext = ['xml_filename' => $xmlName];
 
+        $parsedSchemaVersion = '2.1';
         $parsedLicenceNumber = 'OB1234567';
         $parsedVariationNumber = 666;
         $parsedRouteNumber = '12345';
@@ -906,6 +935,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $existingRegNo = 'OB1234567/12345';
 
         $parsedEbsrData = [
+            'txcSchemaVersion'  => $parsedSchemaVersion,
             'licNo' => $parsedLicenceNumber,
             'variationNo' => $parsedVariationNumber,
             'routeNo' => $parsedRouteNumber,
@@ -932,6 +962,11 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $ebsrSubmission->shouldReceive('setOrganisationEmailAddress')
             ->with($parsedOrganisationEmail)
             ->once()
+            ->andReturnSelf();
+
+        $ebsrSubmission->shouldReceive('setTxcVersion')
+            ->once()
+            ->with($parsedEbsrData['txcSchemaVersion'])
             ->andReturnSelf();
 
         $this->ebsrSubmissionRepo($command, $ebsrSubmission, 2);
@@ -1020,6 +1055,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
 
         $xmlDocContext = ['xml_filename' => $xmlName];
 
+        $parsedSchemaVersion = '2.1';
         $parsedLicenceNumber = 'OB1234567';
         $parsedVariationNumber = 666;
         $parsedRouteNumber = '12345';
@@ -1027,6 +1063,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $existingRegNo = 'OB1234567/12345';
 
         $parsedEbsrData = [
+            'txcSchemaVersion'  => $parsedSchemaVersion,
             'licNo' => $parsedLicenceNumber,
             'variationNo' => $parsedVariationNumber,
             'routeNo' => $parsedRouteNumber,
@@ -1053,6 +1090,11 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $ebsrSubmission->shouldReceive('setOrganisationEmailAddress')
             ->with($parsedOrganisationEmail)
             ->once()
+            ->andReturnSelf();
+
+        $ebsrSubmission->shouldReceive('setTxcVersion')
+            ->once()
+            ->with($parsedEbsrData['txcSchemaVersion'])
             ->andReturnSelf();
 
         $this->ebsrSubmissionRepo($command, $ebsrSubmission, 2);
@@ -1116,7 +1158,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @return m\MockInterface
      */
-    private function failedEbsrSubmission($ebsrSubId, $organisation, $document): m\MockInterface
+    private function failedEbsrSubmission(mixed $ebsrSubId, mixed $organisation, mixed $document): m\MockInterface
     {
         $ebsrSubmission = m::mock(EbsrSubmissionEntity::class);
 
@@ -1144,7 +1186,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      * @param $ebsrSubmission
      * @param $timesSaved
      */
-    private function ebsrSubmissionRepo($command, $ebsrSubmission, $timesSaved): void
+    private function ebsrSubmissionRepo(mixed $command, mixed $ebsrSubmission, mixed $timesSaved): void
     {
         $this->repoMap['EbsrSubmission']->shouldReceive('fetchUsingId')
             ->once()
@@ -1164,7 +1206,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @return m\MockInterface
      */
-    private function basicDocument($docIdentifier, $documentDescription): m\MockInterface
+    private function basicDocument(mixed $docIdentifier, mixed $documentDescription): m\MockInterface
     {
         $document = m::mock(DocumentEntity::class);
         $document->shouldReceive('getIdentifier')->once()->andReturn($docIdentifier);
@@ -1179,7 +1221,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      * @param $docIdentifier
      * @param $xmlName
      */
-    private function fileProcessor($docIdentifier, $xmlName): void
+    private function fileProcessor(mixed $docIdentifier, mixed $xmlName): void
     {
         $this->mockedSmServices[FileProcessorInterface::class]
             ->shouldReceive('setSubDirPath')
@@ -1202,7 +1244,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @return ArrayCollection
      */
-    private function trafficAreas($parsedTrafficAreas, $trafficArea1, $trafficArea2, $trafficArea3): ArrayCollection
+    private function trafficAreas(mixed $parsedTrafficAreas, mixed $trafficArea1, mixed $trafficArea2, mixed $trafficArea3): ArrayCollection
     {
         $trafficAreas = [
             0 => $trafficArea1
@@ -1226,7 +1268,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @return ArrayCollection
      */
-    private function localAuthorities($parsedLocalAuthorities, $firstTa, $secondTa): ArrayCollection
+    private function localAuthorities(mixed $parsedLocalAuthorities, mixed $firstTa, mixed $secondTa): ArrayCollection
     {
         $localAuthority1 = m::mock(LocalAuthorityEntity::class);
         $localAuthority1->shouldReceive('getTrafficArea')->andReturn($firstTa);
@@ -1253,7 +1295,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @return ArrayCollection
      */
-    private function busServiceTypes($busServiceTypes): ArrayCollection
+    private function busServiceTypes(mixed $busServiceTypes): ArrayCollection
     {
         $busServiceTypeKeys = array_keys($busServiceTypes);
 
@@ -1280,7 +1322,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @return ArrayCollection
      */
-    private function naptan($naptanCodes): ArrayCollection
+    private function naptan(mixed $naptanCodes): ArrayCollection
     {
         $naptanAuthority1 = m::mock(LocalAuthorityEntity::class);
         $naptanAuthority2 = m::mock(LocalAuthorityEntity::class);
@@ -1306,7 +1348,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      * @param $context
      * @param $outputValue
      */
-    private function mockInput($inputName, $inputValue, $context, $outputValue): void
+    private function mockInput(mixed $inputName, mixed $inputValue, mixed $context, mixed $outputValue): void
     {
         $this->mockedSmServices[$inputName]
             ->shouldReceive('setValue')
@@ -1332,7 +1374,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      * @param $context
      * @param $messages
      */
-    private function mockInputFailure($inputName, $inputValue, $context, $messages): void
+    private function mockInputFailure(mixed $inputName, mixed $inputValue, mixed $context, mixed $messages): void
     {
         $this->mockedSmServices[$inputName]
             ->shouldReceive('setValue')
@@ -1356,20 +1398,39 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
 
     /**
      * Common assertions to mock side effects when submission is successful
-     *
-     * @param $savedBusRegId
-     * @param $licenceId
-     * @param $documentId
      */
-    private function successSideEffects($savedBusRegId, $licenceId, $documentId, $fee): void
-    {
+    private function successSideEffects(
+        int $savedBusRegId,
+        int $licenceId,
+        int $documentId,
+        bool $fee,
+        string $expectedTaskDesc
+    ): void {
         $this->documentLinkSideEffect($documentId, $savedBusRegId, $licenceId);
         $this->requestMapSideEffect($savedBusRegId);
         $this->txcInboxSideEffect($savedBusRegId);
+        $this->taskSideEffect($savedBusRegId, $licenceId, $expectedTaskDesc);
 
         if ($fee) {
             $this->busFeeSideEffect($savedBusRegId);
         }
+    }
+
+    /**
+     * Common assertions for task creation side effect
+     */
+    private function taskSideEffect(int $busRegId, int $licenceId, string $expectedTaskDesc): void
+    {
+        $taskData = [
+            'category' => TaskEntity::CATEGORY_BUS,
+            'subCategory' => TaskEntity::SUBCATEGORY_EBSR,
+            'description' => $expectedTaskDesc,
+            'actionDate' => date('Y-m-d'),
+            'busReg' => $busRegId,
+            'licence' => $licenceId,
+        ];
+
+        $this->expectedSideEffect(CreateTask::class, $taskData, new Result());
     }
 
     /**
@@ -1381,7 +1442,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      * @param $filename
      * @param $description
      */
-    private function supportingDocSideEffect($docPath, $busRegId, $licenceId, $filename, $description): void
+    private function supportingDocSideEffect(mixed $docPath, mixed $busRegId, mixed $licenceId, mixed $filename, mixed $description): void
     {
         $documentData = [
             'content' => base64_encode(file_get_contents($docPath)),
@@ -1403,7 +1464,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      * @param $savedBusRegId
      * @param $licenceId
      */
-    private function documentLinkSideEffect($documentId, $savedBusRegId, $licenceId): void
+    private function documentLinkSideEffect(mixed $documentId, mixed $savedBusRegId, mixed $licenceId): void
     {
         $documentLinkData = [
             'id' => $documentId,
@@ -1419,12 +1480,11 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @param $savedBusRegId
      */
-    private function requestMapSideEffect($savedBusRegId): void
+    private function requestMapSideEffect(mixed $savedBusRegId): void
     {
         $requestMapData = [
             'id' => $savedBusRegId,
-            'scale' => 'auto',
-            'fromNewEbsr' => true
+            'scale' => 'auto'
         ];
 
         $this->expectedSideEffect(RequestMapQueueCmd::class, $requestMapData, new Result());
@@ -1435,7 +1495,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @param $savedBusRegId
      */
-    private function busFeeSideEffect($savedBusRegId): void
+    private function busFeeSideEffect(mixed $savedBusRegId): void
     {
         $this->expectedSideEffect(CreateBusFeeCmd::class, ['id' => $savedBusRegId], new Result());
     }
@@ -1445,7 +1505,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @param $savedBusRegId
      */
-    private function txcInboxSideEffect($savedBusRegId): void
+    private function txcInboxSideEffect(mixed $savedBusRegId): void
     {
         $this->expectedSideEffect(CreateTxcInboxCmd::class, ['id' => $savedBusRegId], new Result());
     }

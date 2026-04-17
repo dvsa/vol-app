@@ -34,10 +34,8 @@ class JWTIdentityProviderTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
-    public function getIdentityThrowsBadRequestExceptionWhenHeaderIncorrect()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function getIdentityThrowsBadRequestExceptionWhenHeaderIncorrect(): void
     {
         // Setup
         $this->setUpSut();
@@ -56,10 +54,8 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->sut->getIdentity();
     }
 
-    /**
-     * @test
-     */
-    public function getIdentityThrowsInvalidTokenExceptionWhenTokenIncorrect()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function getIdentityThrowsInvalidTokenExceptionWhenTokenIncorrect(): void
     {
         // Setup
         $this->setUpSut();
@@ -82,10 +78,8 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->sut->getIdentity();
     }
 
-    /**
-     * @test
-     */
-    public function getIdentityReturnsAnonUserWhenTokenExpired()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function getIdentityReturnsAnonUserWhenTokenExpired(): void
     {
         // Setup
         $this->setUpSut();
@@ -106,10 +100,8 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->assertSame('anon', $identity->getUser()->getLoginId());
     }
 
-    /**
-     * @test
-     */
-    public function getIdentityReturnsAnonUserWhenHeaderMissing()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function getIdentityReturnsAnonUserWhenHeaderMissing(): void
     {
         // Setup
         $this->setUpSut();
@@ -121,10 +113,8 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->assertSame('anon', $identity->getUser()->getLoginId());
     }
 
-    /**
-     * @test
-     */
-    public function getIdentityReturnsAnonUserWhenNoUserFound()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function getIdentityReturnsAnonUserWhenNoUserFound(): void
     {
         // Setup
         $this->setUpSut();
@@ -146,10 +136,8 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->assertSame('anon', $identity->getUser()->getLoginId());
     }
 
-    /**
-     * @test
-     */
-    public function getIdentityReturnsExpectedUserWhenUserExists()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function getIdentityReturnsExpectedUserWhenUserExists(): void
     {
         // Setup
         $this->setUpSut();
@@ -175,10 +163,8 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->assertSame(UserEntity::USER_TYPE_OPERATOR, $identity->getUser()->getUserType());
     }
 
-    /**
-     * @test
-     */
-    public function getIdentityReturnsSystemUserWhenConsoleRequest()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function getIdentityReturnsSystemUserWhenConsoleRequest(): void
     {
         // Setup
         $sut = new JWTIdentityProvider($this->userRepository(), new CliRequest(), $this->client());
@@ -208,7 +194,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         );
     }
 
-    protected function setUpDefaultServices(ServiceManager $serviceManager)
+    protected function setUpDefaultServices(ServiceManager $serviceManager): void
     {
         $this->userRepository();
         $this->request();
@@ -218,7 +204,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
     /**
      * @return MockInterface|User
      */
-    protected function userRepository()
+    protected function userRepository(): mixed
     {
         if (!$this->serviceManager->has(User::class)) {
             $instance = $this->setUpMockService(User::class);
@@ -231,7 +217,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
     /**
      * @return Request
      */
-    protected function request()
+    protected function request(): mixed
     {
         if (!$this->serviceManager->has(Request::class)) {
             $instance = new Request();
@@ -244,7 +230,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
     /**
      * @return MockInterface|Client
      */
-    protected function client()
+    protected function client(): mixed
     {
         if (!$this->serviceManager->has(Client::class)) {
             $instance = $this->setUpMockService(Client::class);

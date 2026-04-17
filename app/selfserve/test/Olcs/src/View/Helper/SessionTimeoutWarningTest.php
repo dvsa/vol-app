@@ -16,17 +16,15 @@ class SessionTimeoutWarningTest extends MockeryTestCase
      * Stores ini_get('session.gc_maxlifetime').
      */
     private int $sessionGcMaxLifeTime;
-    private const SECONDS_BEFORE_TIMEOUT_WARNING = 60;
-    private const TIMEOUT_REDIRECT_URL = 'some-url';
+    private const int SECONDS_BEFORE_TIMEOUT_WARNING = 60;
+    private const string TIMEOUT_REDIRECT_URL = 'some-url';
 
     public function setUp(): void
     {
         $this->sessionGcMaxLifeTime = (int) ini_get('session.gc_maxlifetime');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function generateHeadMetaTagsConfigSetToDisabledRendersNothing(): void
     {
         $headMeta = m::mock(HeadMeta::class);
@@ -35,9 +33,7 @@ class SessionTimeoutWarningTest extends MockeryTestCase
         $this->assertEquals('', $sut->generateHeadMetaTags());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function generateHeadMetaTagsConfigSetToEnabledRendersMetaTags(): void
     {
         $indent = 999;

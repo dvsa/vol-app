@@ -30,6 +30,7 @@ final class Enable extends AbstractCommandHandler implements ToggleRequiredInter
     protected $toggleConfig = [FeatureToggle::MESSAGING];
 
     /** @var CommandInterface|EnableCommand $command */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         $repo = $this->getRepo(OrganisationRepo::class);

@@ -128,11 +128,12 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'application',
-            [$this, 'onApplication'],
+            $this->onApplication(...),
             $priority
         );
     }
@@ -389,6 +390,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Application
     {
         $this->setAnnotationBuilder($container->get('TransferAnnotationBuilder'));

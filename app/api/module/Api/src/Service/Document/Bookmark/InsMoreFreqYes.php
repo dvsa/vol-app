@@ -12,11 +12,13 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\LicenceBundle as Qry;
  */
 class InsMoreFreqYes extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(['id' => $data['licence']]);
     }
 
+    #[\Override]
     public function render()
     {
         if ($this->data['safetyInsVaries']) {

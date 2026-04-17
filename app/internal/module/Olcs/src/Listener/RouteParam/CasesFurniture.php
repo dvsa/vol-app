@@ -34,11 +34,12 @@ class CasesFurniture implements
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'case',
-            [$this, 'onCase'],
+            $this->onCase(...),
             $priority
         );
     }
@@ -148,6 +149,7 @@ class CasesFurniture implements
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CasesFurniture
     {
         $this->setQuerySender($container->get('QuerySender'));

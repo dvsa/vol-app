@@ -43,6 +43,7 @@ class AddDuplicateVehicleController extends AbstractVehicleController
     /**
      * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         // Redirect to add action if VRM is not in session.

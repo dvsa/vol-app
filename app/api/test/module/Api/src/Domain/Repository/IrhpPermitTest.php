@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\DBAL\Types\Types;
@@ -31,7 +33,7 @@ class IrhpPermitTest extends RepositoryTestCase
         $this->setUpSut(IrhpPermit::class);
     }
 
-    public function testGetPermitCountWithoutEmissionsCategoryId()
+    public function testGetPermitCountWithoutEmissionsCategoryId(): void
     {
         $permitCount = 744;
         $stockId = 5;
@@ -77,10 +79,8 @@ class IrhpPermitTest extends RepositoryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestGetPermitCountWithEmissionsCategoryId
-     */
-    public function testGetPermitCountWithEmissionsCategoryId($emissionsCategoryId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetPermitCountWithEmissionsCategoryId')]
+    public function testGetPermitCountWithEmissionsCategoryId(mixed $emissionsCategoryId): void
     {
         $permitCount = 744;
         $stockId = 5;
@@ -134,7 +134,7 @@ class IrhpPermitTest extends RepositoryTestCase
         );
     }
 
-    public function dpTestGetPermitCountWithEmissionsCategoryId()
+    public static function dpTestGetPermitCountWithEmissionsCategoryId(): array
     {
         return [
             [RefData::EMISSIONS_CATEGORY_EURO5_REF],
@@ -142,7 +142,7 @@ class IrhpPermitTest extends RepositoryTestCase
         ];
     }
 
-    public function testGetPermitCountByRange()
+    public function testGetPermitCountByRange(): void
     {
         $permitCount = 200;
         $rangeId = 3;
@@ -176,7 +176,7 @@ class IrhpPermitTest extends RepositoryTestCase
         );
     }
 
-    public function testGetEcmtAnnualPermitCountByLicenceAndStockEndYear()
+    public function testGetEcmtAnnualPermitCountByLicenceAndStockEndYear(): void
     {
         $licenceId = 47;
         $stockEndYear = 2023;
@@ -243,7 +243,7 @@ class IrhpPermitTest extends RepositoryTestCase
         );
     }
 
-    public function testGetAssignedPermitNumbersByRange()
+    public function testGetAssignedPermitNumbersByRange(): void
     {
         $rangeId = 45;
 
@@ -285,7 +285,7 @@ class IrhpPermitTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchListForReadyToPrint()
+    public function testFetchListForReadyToPrint(): void
     {
         $this->setUpSut(IrhpPermit::class, true);
         $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
@@ -313,7 +313,7 @@ class IrhpPermitTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForReadyToPrintWithStock()
+    public function testFetchListForReadyToPrintWithStock(): void
     {
         $this->setUpSut(IrhpPermit::class, true);
         $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
@@ -344,10 +344,8 @@ class IrhpPermitTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    /**
-     * @dataProvider dpFetchListForReadyToPrintWithStockAndRangeType
-     */
-    public function testFetchListForReadyToPrintWithStockAndRangeType($irhpPermitRangeType, $expectedJourney, $expectedCabotage)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFetchListForReadyToPrintWithStockAndRangeType')]
+    public function testFetchListForReadyToPrintWithStockAndRangeType(mixed $irhpPermitRangeType, mixed $expectedJourney, mixed $expectedCabotage): void
     {
         $this->setUpSut(IrhpPermit::class, true);
         $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
@@ -385,7 +383,7 @@ class IrhpPermitTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function dpFetchListForReadyToPrintWithStockAndRangeType()
+    public static function dpFetchListForReadyToPrintWithStockAndRangeType(): array
     {
         return [
             [
@@ -411,7 +409,7 @@ class IrhpPermitTest extends RepositoryTestCase
         ];
     }
 
-    public function testFetchListForReadyToPrintConfirm()
+    public function testFetchListForReadyToPrintConfirm(): void
     {
         $this->setUpSut(IrhpPermit::class, true);
         $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
@@ -434,7 +432,7 @@ class IrhpPermitTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchByNumberAndRange()
+    public function testFetchByNumberAndRange(): void
     {
         $permitNumber = 1500;
         $rangeId = 7;
@@ -476,10 +474,8 @@ class IrhpPermitTest extends RepositoryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpFetchListByLicence
-     */
-    public function testFetchListByLicence($status, $validOnly, $expectedStatuses)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFetchListByLicence')]
+    public function testFetchListByLicence(mixed $status, mixed $validOnly, mixed $expectedStatuses): void
     {
         $this->setUpSut(IrhpPermit::class, true);
         $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
@@ -520,7 +516,7 @@ class IrhpPermitTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function dpFetchListByLicence()
+    public static function dpFetchListByLicence(): array
     {
         return [
             'valid only' => [null, true, IrhpPermitEntity::$validStatuses],
@@ -529,7 +525,7 @@ class IrhpPermitTest extends RepositoryTestCase
         ];
     }
 
-    public function testGetLivePermitCountsGroupedByStock()
+    public function testGetLivePermitCountsGroupedByStock(): void
     {
         $licenceId = 47;
 
@@ -585,7 +581,7 @@ class IrhpPermitTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchListByIrhpId()
+    public function testFetchListByIrhpId(): void
     {
         $this->setUpSut(IrhpPermit::class, true);
         $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
@@ -607,7 +603,7 @@ class IrhpPermitTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testMarkAsExpired()
+    public function testMarkAsExpired(): void
     {
         $this->expectQueryWithData(ExpireIrhpPermitsQuery::class, []);
         $this->sut->markAsExpired();

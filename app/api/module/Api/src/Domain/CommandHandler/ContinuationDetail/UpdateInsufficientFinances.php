@@ -23,6 +23,7 @@ final class UpdateInsufficientFinances extends AbstractCommandHandler implements
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command Command */

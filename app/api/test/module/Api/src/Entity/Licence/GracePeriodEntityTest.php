@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Licence;
 
 use Mockery as m;
@@ -20,7 +22,7 @@ class GracePeriodEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testIsActiveWhenActive()
+    public function testIsActiveWhenActive(): void
     {
         $gracePeriod = m::mock(Entity::class)->makePartial();
         $gracePeriod->shouldReceive('getStartDate')
@@ -34,7 +36,7 @@ class GracePeriodEntityTest extends EntityTester
         $this->assertEquals(['isActive' => true], $gracePeriod->getCalculatedBundleValues());
     }
 
-    public function testIsNotActiveWhenNotActive()
+    public function testIsNotActiveWhenNotActive(): void
     {
         $gracePeriod = m::mock(Entity::class)->makePartial();
         $gracePeriod->shouldReceive('getStartDate')

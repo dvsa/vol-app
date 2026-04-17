@@ -21,6 +21,7 @@ class TransportManagersReviewService extends AbstractReviewService
      * @param array $data
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(array $data = [])
     {
         $mainItems = [];
@@ -38,19 +39,28 @@ class TransportManagersReviewService extends AbstractReviewService
         $cd = $tm['homeCd'];
         $person = $cd['person'];
 
+        $items = [
+            [
+                'label' => 'review-transport-manager-email',
+                'value' => $cd['emailAddress']
+            ],
+            [
+                'label' => 'review-transport-manager-dob',
+                'value' => $this->formatDate($person['birthDate'])
+            ]
+        ];
+
+        if (!empty($data['noTmConfirmation'])) {
+            $items[] = [
+                'label' => 'variation.review-notransportmanager.confirm-text',
+                'value' => $data['noTmConfirmation']
+            ];
+        }
+
         return [
             'header' => $this->formatPersonFullName($person),
             'multiItems' => [
-                [
-                    [
-                        'label' => 'review-transport-manager-email',
-                        'value' => $cd['emailAddress']
-                    ],
-                    [
-                        'label' => 'review-transport-manager-dob',
-                        'value' => $this->formatDate($person['birthDate'])
-                    ]
-                ]
+                $items
             ]
         ];
     }

@@ -9,6 +9,7 @@ namespace Dvsa\Olcs\Api\Service\Document\Bookmark;
  */
 class TaNameUppercase extends TaName
 {
+    #[\Override]
     public function render()
     {
         return strtoupper(parent::render());

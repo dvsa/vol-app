@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Ecmt;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\Element\Custom\Ecmt\RestrictedCountries;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class RestrictedCountriesTest extends MockeryTestCase
 {
-    public function testGetRepresentation()
+    public function testGetRepresentation(): void
     {
         $yesNo = 'yesNo';
         $questionKey = 'question.key';

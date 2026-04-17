@@ -26,6 +26,7 @@ final class Update extends AbstractCommandHandler
      * @return Result
      * @throws ValidationException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         // This shared method is defined in IrhpPermitStockTrait - and can throw a ValidationException

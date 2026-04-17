@@ -11,6 +11,7 @@ use Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking;
  */
 class ConditionsUndertakings implements FormatterInterface
 {
+    #[\Override]
     public static function format(array $data)
     {
         $rows = [

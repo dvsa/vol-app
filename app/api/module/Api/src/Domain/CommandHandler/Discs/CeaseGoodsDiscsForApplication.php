@@ -23,6 +23,7 @@ final class CeaseGoodsDiscsForApplication extends AbstractCommandHandler impleme
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var \Dvsa\Olcs\Api\Domain\Command\Discs\CeaseGoodsDiscsForApplication $command */

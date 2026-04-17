@@ -170,6 +170,7 @@ class CommunityLic extends AbstractCommunityLic
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedBundleValues()
     {
         return [

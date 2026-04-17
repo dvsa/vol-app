@@ -55,6 +55,7 @@ class AddVehicleSearchController extends AbstractVehicleController
     /**
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $vehicleData = $this->session->getVehicleData();
@@ -109,6 +110,7 @@ class AddVehicleSearchController extends AbstractVehicleController
     /**
      * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function confirmationAction()
     {
         // Redirect to add action if vehicleData is not in session.

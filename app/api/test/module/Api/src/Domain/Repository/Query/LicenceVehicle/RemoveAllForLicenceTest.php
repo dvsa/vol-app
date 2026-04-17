@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Cease Discs For Licence Test
  *
@@ -42,7 +44,7 @@ class RemoveAllForLicenceTest extends AbstractDbQueryTestCase
         ]
     ];
 
-    public function paramProvider()
+    public static function paramProvider(): array
     {
         $today = new DateTime();
 
@@ -58,12 +60,12 @@ class RemoveAllForLicenceTest extends AbstractDbQueryTestCase
         ];
     }
 
-    protected function getSut()
+    protected function getSut(): RemoveAllForLicence
     {
         return new RemoveAllForLicence();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return 'UPDATE licence_vehicle lv '
         . 'SET lv.removal_date = :removalDate, '

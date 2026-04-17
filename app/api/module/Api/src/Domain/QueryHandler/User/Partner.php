@@ -16,6 +16,7 @@ class Partner extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Partner';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->result(

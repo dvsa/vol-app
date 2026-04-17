@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Generate Batch Test
  *
@@ -37,28 +39,24 @@ class GenerateBatchTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('Application', Repository\Application::class);
         $this->mockRepo('SystemParameter', Repository\SystemParameter::class);
 
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
 
         parent::setUp();
     }
 
-    /**
-     * @dataProvider licenceDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceDataProvider')]
     public function testHandleCommand(
-        $ukLicenceDisabled,
-        $isBatchReprint,
-        $systemParam,
-        $isPsv,
-        $niFlag,
-        $template,
-        $subCategory,
-        $isLgv
-    ) {
+        mixed $ukLicenceDisabled,
+        mixed $isBatchReprint,
+        mixed $systemParam,
+        mixed $isPsv,
+        mixed $niFlag,
+        mixed $template,
+        mixed $subCategory,
+        mixed $isLgv
+    ): void {
         $licenceId = 1;
         $identifier = null;
         $communityLicenceIds = [10];
@@ -140,19 +138,17 @@ class GenerateBatchTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider licenceDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceDataProvider')]
     public function testHandleCommandApplication(
-        $ukLicenceDisabled,
-        $isBatchReprint,
-        $systemParam,
-        $isPsv,
-        $niFlag,
-        $template,
-        $subCategory,
-        $isLgv
-    ) {
+        mixed $ukLicenceDisabled,
+        mixed $isBatchReprint,
+        mixed $systemParam,
+        mixed $isPsv,
+        mixed $niFlag,
+        mixed $template,
+        mixed $subCategory,
+        mixed $isLgv
+    ): void {
         $licenceId = 1;
         $identifier = 2;
         $communityLicenceIds = [10];
@@ -241,7 +237,7 @@ class GenerateBatchTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function licenceDataProvider()
+    public static function licenceDataProvider(): array
     {
         return [
             'reprint of PSV with new template switched off' => [

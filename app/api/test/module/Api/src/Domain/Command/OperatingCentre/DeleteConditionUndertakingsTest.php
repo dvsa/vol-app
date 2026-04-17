@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Delete Condition/Undertakings Command Test
  *
@@ -22,7 +24,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class DeleteConditionUndertakingsTest extends MockeryTestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $oc = m::mock(OperatingCentreEntity::class);
         $licence = m::mock(LicenceEntity::class);

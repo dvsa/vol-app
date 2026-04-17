@@ -17,6 +17,7 @@ class SiDates extends AbstractFilter
      * @param  array $value
      * @return array
      */
+    #[\Override]
     public function filter($value)
     {
         foreach ($value['imposedErrus'] as $key => $dates) {

@@ -18,6 +18,7 @@ class TransportManagers extends AbstractQueryHandler
     protected $repoServiceName = 'Application';
     protected $extraRepos = ['TransportManagerApplication', 'TransportManagerLicence'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $application \Dvsa\Olcs\Api\Entity\Application\Application */

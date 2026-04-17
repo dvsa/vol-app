@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Mockery as m;
@@ -24,7 +26,7 @@ class AbstractPublicInquiryDataTest extends MockeryTestCase
             ->shouldAllowMockingProtectedMethods();
     }
 
-    public function testFetchListOptionsLicGoodsOrPsvIsNullAndAppIdIsNull()
+    public function testFetchListOptionsLicGoodsOrPsvIsNullAndAppIdIsNull(): void
     {
         $this->sut->shouldReceive('getLicenceContext')
             ->once()
@@ -72,7 +74,7 @@ class AbstractPublicInquiryDataTest extends MockeryTestCase
         static::assertEquals([], $actual);
     }
 
-    public function testFetchListOptionsEmptyLicenceId()
+    public function testFetchListOptionsEmptyLicenceId(): void
     {
         $expectPubInqData = ['DATA'];
         $ctx = [
@@ -105,7 +107,7 @@ class AbstractPublicInquiryDataTest extends MockeryTestCase
         static::assertEquals('EXPECT', $actual);
     }
 
-    public function testFetchListOptionsEmptyLicenceIdUseGroup()
+    public function testFetchListOptionsEmptyLicenceIdUseGroup(): void
     {
         $expectPubInqData = ['DATA'];
 

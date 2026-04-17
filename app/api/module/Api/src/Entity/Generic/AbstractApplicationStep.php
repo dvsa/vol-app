@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Generic;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,23 +17,23 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * ApplicationStep Abstract Entity
+ * AbstractApplicationStep Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="application_step",
  *    indexes={
  *        @ORM\Index(name="fk_application_step_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_application_step_last_modified_by_user_id",
-     *     columns={"last_modified_by"}),
+ *        @ORM\Index(name="fk_application_step_last_modified_by_user_id", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_application_step_application_path_id", columns={"application_path_id"}),
  *        @ORM\Index(name="ix_application_step_question_id", columns={"question_id"})
  *    }
  * )
  */
-abstract class AbstractApplicationStep implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractApplicationStep implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -40,27 +42,35 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     use ModifiedOnTrait;
 
     /**
-     * Application path
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * ApplicationPath
      *
      * @var \Dvsa\Olcs\Api\Entity\Generic\ApplicationPath
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationPath",
-     *     fetch="LAZY",
-     *     inversedBy="applicationSteps"
-     * )
-     * @ORM\JoinColumn(name="application_path_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationPath", fetch="LAZY")
+     * @ORM\JoinColumn(name="application_path_id", referencedColumnName="id")
      */
     protected $applicationPath;
 
     /**
-     * Break on failure
+     * Question
      *
-     * @var boolean
+     * @var \Dvsa\Olcs\Api\Entity\Generic\Question
      *
-     * @ORM\Column(type="boolean", name="break_on_failure", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Generic\Question", fetch="LAZY")
+     * @ORM\JoinColumn(name="question_id", referencedColumnName="id")
      */
-    protected $breakOnFailure;
+    protected $question;
 
     /**
      * Created by
@@ -74,38 +84,6 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     protected $createdBy;
 
     /**
-     * Enabled after submission
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean",
-     *     name="enabled_after_submission",
-     *     nullable=true,
-     *     options={"default": 0})
-     */
-    protected $enabledAfterSubmission = 0;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Ignore question validation
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="ignore_question_validation", nullable=true)
-     */
-    protected $ignoreQuestionValidation;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -117,23 +95,49 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     protected $lastModifiedBy;
 
     /**
+     * Weight
+     *
+     * @var string
+     *
+     * @ORM\Column(type="decimal", name="weight", nullable=true)
+     */
+    protected $weight;
+
+    /**
      * Only on yes
      *
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(type="boolean", name="only_on_yes", nullable=true)
      */
     protected $onlyOnYes;
 
     /**
-     * Question
+     * Ignore question validation
      *
-     * @var \Dvsa\Olcs\Api\Entity\Generic\Question
+     * @var bool
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Generic\Question", fetch="LAZY")
-     * @ORM\JoinColumn(name="question_id", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="boolean", name="ignore_question_validation", nullable=true)
      */
-    protected $question;
+    protected $ignoreQuestionValidation;
+
+    /**
+     * Break on failure
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="break_on_failure", nullable=true)
+     */
+    protected $breakOnFailure;
+
+    /**
+     * Enabled after submission
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="enabled_after_submission", nullable=true, options={"default": 0})
+     */
+    protected $enabledAfterSubmission = 0;
 
     /**
      * Version
@@ -146,30 +150,16 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     protected $version = 1;
 
     /**
-     * Weight
-     *
-     * @var float
-     *
-     * @ORM\Column(type="decimal", name="weight", precision=10, scale=2, nullable=true)
-     */
-    protected $weight;
-
-    /**
-     * Application validation
+     * ApplicationValidations
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationValidation",
-     *     mappedBy="applicationStep"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationValidation", mappedBy="applicationStep")
      */
     protected $applicationValidations;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -177,110 +167,13 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->applicationValidations = new ArrayCollection();
     }
 
-    /**
-     * Set the application path
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Generic\ApplicationPath $applicationPath entity being set as the value
-     *
-     * @return ApplicationStep
-     */
-    public function setApplicationPath($applicationPath)
-    {
-        $this->applicationPath = $applicationPath;
-
-        return $this;
-    }
-
-    /**
-     * Get the application path
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Generic\ApplicationPath
-     */
-    public function getApplicationPath()
-    {
-        return $this->applicationPath;
-    }
-
-    /**
-     * Set the break on failure
-     *
-     * @param boolean $breakOnFailure new value being set
-     *
-     * @return ApplicationStep
-     */
-    public function setBreakOnFailure($breakOnFailure)
-    {
-        $this->breakOnFailure = $breakOnFailure;
-
-        return $this;
-    }
-
-    /**
-     * Get the break on failure
-     *
-     * @return boolean
-     */
-    public function getBreakOnFailure()
-    {
-        return $this->breakOnFailure;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return ApplicationStep
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the enabled after submission
-     *
-     * @param boolean $enabledAfterSubmission new value being set
-     *
-     * @return ApplicationStep
-     */
-    public function setEnabledAfterSubmission($enabledAfterSubmission)
-    {
-        $this->enabledAfterSubmission = $enabledAfterSubmission;
-
-        return $this;
-    }
-
-    /**
-     * Get the enabled after submission
-     *
-     * @return boolean
-     */
-    public function getEnabledAfterSubmission()
-    {
-        return $this->enabledAfterSubmission;
-    }
 
     /**
      * Set the id
@@ -307,33 +200,81 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     }
 
     /**
-     * Set the ignore question validation
+     * Set the application path
      *
-     * @param boolean $ignoreQuestionValidation new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Generic\ApplicationPath $applicationPath new value being set
      *
      * @return ApplicationStep
      */
-    public function setIgnoreQuestionValidation($ignoreQuestionValidation)
+    public function setApplicationPath($applicationPath)
     {
-        $this->ignoreQuestionValidation = $ignoreQuestionValidation;
+        $this->applicationPath = $applicationPath;
 
         return $this;
     }
 
     /**
-     * Get the ignore question validation
+     * Get the application path
      *
-     * @return boolean
+     * @return \Dvsa\Olcs\Api\Entity\Generic\ApplicationPath
      */
-    public function getIgnoreQuestionValidation()
+    public function getApplicationPath()
     {
-        return $this->ignoreQuestionValidation;
+        return $this->applicationPath;
+    }
+
+    /**
+     * Set the question
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Generic\Question $question new value being set
+     *
+     * @return ApplicationStep
+     */
+    public function setQuestion($question)
+    {
+        $this->question = $question;
+
+        return $this;
+    }
+
+    /**
+     * Get the question
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Generic\Question
+     */
+    public function getQuestion()
+    {
+        return $this->question;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return ApplicationStep
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
     }
 
     /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return ApplicationStep
      */
@@ -355,9 +296,33 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     }
 
     /**
+     * Set the weight
+     *
+     * @param string $weight new value being set
+     *
+     * @return ApplicationStep
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
+
+        return $this;
+    }
+
+    /**
+     * Get the weight
+     *
+     * @return string
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
+    /**
      * Set the only on yes
      *
-     * @param boolean $onlyOnYes new value being set
+     * @param bool $onlyOnYes new value being set
      *
      * @return ApplicationStep
      */
@@ -371,7 +336,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Get the only on yes
      *
-     * @return boolean
+     * @return bool
      */
     public function getOnlyOnYes()
     {
@@ -379,27 +344,75 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     }
 
     /**
-     * Set the question
+     * Set the ignore question validation
      *
-     * @param \Dvsa\Olcs\Api\Entity\Generic\Question $question entity being set as the value
+     * @param bool $ignoreQuestionValidation new value being set
      *
      * @return ApplicationStep
      */
-    public function setQuestion($question)
+    public function setIgnoreQuestionValidation($ignoreQuestionValidation)
     {
-        $this->question = $question;
+        $this->ignoreQuestionValidation = $ignoreQuestionValidation;
 
         return $this;
     }
 
     /**
-     * Get the question
+     * Get the ignore question validation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Generic\Question
+     * @return bool
      */
-    public function getQuestion()
+    public function getIgnoreQuestionValidation()
     {
-        return $this->question;
+        return $this->ignoreQuestionValidation;
+    }
+
+    /**
+     * Set the break on failure
+     *
+     * @param bool $breakOnFailure new value being set
+     *
+     * @return ApplicationStep
+     */
+    public function setBreakOnFailure($breakOnFailure)
+    {
+        $this->breakOnFailure = $breakOnFailure;
+
+        return $this;
+    }
+
+    /**
+     * Get the break on failure
+     *
+     * @return bool
+     */
+    public function getBreakOnFailure()
+    {
+        return $this->breakOnFailure;
+    }
+
+    /**
+     * Set the enabled after submission
+     *
+     * @param bool $enabledAfterSubmission new value being set
+     *
+     * @return ApplicationStep
+     */
+    public function setEnabledAfterSubmission($enabledAfterSubmission)
+    {
+        $this->enabledAfterSubmission = $enabledAfterSubmission;
+
+        return $this;
+    }
+
+    /**
+     * Get the enabled after submission
+     *
+     * @return bool
+     */
+    public function getEnabledAfterSubmission()
+    {
+        return $this->enabledAfterSubmission;
     }
 
     /**
@@ -427,33 +440,9 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     }
 
     /**
-     * Set the weight
+     * Set the application validations
      *
-     * @param float $weight new value being set
-     *
-     * @return ApplicationStep
-     */
-    public function setWeight($weight)
-    {
-        $this->weight = $weight;
-
-        return $this;
-    }
-
-    /**
-     * Get the weight
-     *
-     * @return float
-     */
-    public function getWeight()
-    {
-        return $this->weight;
-    }
-
-    /**
-     * Set the application validation
-     *
-     * @param ArrayCollection $applicationValidations collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $applicationValidations collection being set as the value
      *
      * @return ApplicationStep
      */
@@ -467,7 +456,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Get the application validations
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getApplicationValidations()
     {
@@ -477,7 +466,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Add a application validations
      *
-     * @param ArrayCollection|mixed $applicationValidations collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $applicationValidations collection being added
      *
      * @return ApplicationStep
      */
@@ -511,5 +500,14 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

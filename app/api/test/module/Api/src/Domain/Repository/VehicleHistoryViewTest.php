@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * VehicleHistoryView test
  *
@@ -25,7 +27,7 @@ class VehicleHistoryViewTest extends RepositoryTestCase
         $this->setUpSut(VehicleHistoryViewRepo::class);
     }
 
-    public function testFetchByVrm()
+    public function testFetchByVrm(): void
     {
         $qb = $this->createMockQb('BLAH');
 

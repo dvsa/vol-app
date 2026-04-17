@@ -23,6 +23,7 @@ final class CloseAlerts extends GenericAbstractCommandHandler implements Transac
 {
     protected $repoServiceName = 'CompaniesHouseAlert';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

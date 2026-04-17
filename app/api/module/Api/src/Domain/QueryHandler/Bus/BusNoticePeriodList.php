@@ -21,6 +21,7 @@ class BusNoticePeriodList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'BusNoticePeriod';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return [

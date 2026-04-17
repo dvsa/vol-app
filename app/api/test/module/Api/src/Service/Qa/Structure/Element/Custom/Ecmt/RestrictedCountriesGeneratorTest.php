@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Ecmt;
 
 use Dvsa\Olcs\Api\Domain\Repository\Country as CountryRepository;
@@ -26,7 +28,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class RestrictedCountriesGeneratorTest extends MockeryTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $yesNoValue = 1;
 

@@ -30,6 +30,7 @@ final class Create extends AbstractCommandHandler implements TransactionedInterf
 
     protected $extraRepos = ['TransportManagerApplication'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command CreateCommand */

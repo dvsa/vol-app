@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Pi;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Reason Abstract Entity
+ * AbstractReason Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -31,7 +34,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractReason implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractReason implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -39,6 +42,26 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
+
+    /**
+     * Primary key
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     */
+    protected $id = 0;
+
+    /**
+     * GoodsOrPsv
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
+     */
+    protected $goodsOrPsv;
 
     /**
      * Created by
@@ -52,63 +75,6 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     protected $createdBy;
 
     /**
-     * Description
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=400, nullable=false)
-     */
-    protected $description;
-
-    /**
-     * Goods or psv
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
-     */
-    protected $goodsOrPsv;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is ni
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_ni", nullable=false)
-     */
-    protected $isNi;
-
-    /**
-     * Is propose to revoke
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_propose_to_revoke", nullable=false)
-     */
-    protected $isProposeToRevoke;
-
-    /**
-     * Is read only
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_read_only", nullable=false)
-     */
-    protected $isReadOnly;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -120,48 +86,49 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     protected $lastModifiedBy;
 
     /**
-     * Pi
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Pi\Pi", mappedBy="reasons", fetch="LAZY")
-     */
-    protected $pis;
-
-    /**
-     * Propose to revoke
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke",
-     *     mappedBy="reasons",
-     *     fetch="LAZY"
-     * )
-     */
-    protected $proposeToRevokes;
-
-    /**
      * Section code
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="section_code", length=50, nullable=false)
+     * @ORM\Column(type="string", name="section_code", length=100, nullable=false)
      */
-    protected $sectionCode;
+    protected $sectionCode = '';
 
     /**
-     * Submission action
+     * Description
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var string
      *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Submission\SubmissionAction",
-     *     mappedBy="reasons",
-     *     fetch="LAZY"
-     * )
+     * @ORM\Column(type="string", name="description", length=400, nullable=false)
      */
-    protected $submissionActions;
+    protected $description = '';
+
+    /**
+     * isReadOnly
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="is_read_only", nullable=false)
+     */
+    protected $isReadOnly = 0;
+
+    /**
+     * Northern Ireland or not
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="is_ni", nullable=false)
+     */
+    protected $isNi = 0;
+
+    /**
+     * Used in Propose to Revoke
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="is_propose_to_revoke", nullable=false)
+     */
+    protected $isProposeToRevoke = 0;
 
     /**
      * Version
@@ -174,9 +141,43 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     protected $version = 1;
 
     /**
-     * Initialise the collections
+     * Is visible in internal
      *
-     * @return void
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_visible_in_internal", nullable=false, options={"default": 1})
+     */
+    protected $isVisibleInInternal = 1;
+
+    /**
+     * Pis
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Pi\Pi", mappedBy="reasons", fetch="LAZY")
+     */
+    protected $pis;
+
+    /**
+     * ProposeToRevokes
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke", mappedBy="reasons", fetch="LAZY")
+     */
+    protected $proposeToRevokes;
+
+    /**
+     * SubmissionActions
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Submission\SubmissionAction", mappedBy="reasons", fetch="LAZY")
+     */
+    protected $submissionActions;
+
+    /**
+     * Initialise the collections
      */
     public function __construct()
     {
@@ -184,21 +185,68 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->pis = new ArrayCollection();
         $this->proposeToRevokes = new ArrayCollection();
         $this->submissionActions = new ArrayCollection();
     }
 
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return Reason
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the goods or psv
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
+     *
+     * @return Reason
+     */
+    public function setGoodsOrPsv($goodsOrPsv)
+    {
+        $this->goodsOrPsv = $goodsOrPsv;
+
+        return $this;
+    }
+
+    /**
+     * Get the goods or psv
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
+    public function getGoodsOrPsv()
+    {
+        return $this->goodsOrPsv;
+    }
+
     /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return Reason
      */
@@ -217,6 +265,54 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return Reason
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the section code
+     *
+     * @param string $sectionCode new value being set
+     *
+     * @return Reason
+     */
+    public function setSectionCode($sectionCode)
+    {
+        $this->sectionCode = $sectionCode;
+
+        return $this;
+    }
+
+    /**
+     * Get the section code
+     *
+     * @return string
+     */
+    public function getSectionCode()
+    {
+        return $this->sectionCode;
     }
 
     /**
@@ -244,51 +340,27 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     }
 
     /**
-     * Set the goods or psv
+     * Set the is read only
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv entity being set as the value
+     * @param string $isReadOnly new value being set
      *
      * @return Reason
      */
-    public function setGoodsOrPsv($goodsOrPsv)
+    public function setIsReadOnly($isReadOnly)
     {
-        $this->goodsOrPsv = $goodsOrPsv;
+        $this->isReadOnly = $isReadOnly;
 
         return $this;
     }
 
     /**
-     * Get the goods or psv
+     * Get the is read only
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     * @return string
      */
-    public function getGoodsOrPsv()
+    public function getIsReadOnly()
     {
-        return $this->goodsOrPsv;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return Reason
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
+        return $this->isReadOnly;
     }
 
     /**
@@ -340,57 +412,57 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     }
 
     /**
-     * Set the is read only
+     * Set the version
      *
-     * @param string $isReadOnly new value being set
+     * @param int $version new value being set
      *
      * @return Reason
      */
-    public function setIsReadOnly($isReadOnly)
+    public function setVersion($version)
     {
-        $this->isReadOnly = $isReadOnly;
+        $this->version = $version;
 
         return $this;
     }
 
     /**
-     * Get the is read only
+     * Get the version
      *
-     * @return string
+     * @return int
      */
-    public function getIsReadOnly()
+    public function getVersion()
     {
-        return $this->isReadOnly;
+        return $this->version;
     }
 
     /**
-     * Set the last modified by
+     * Set the is visible in internal
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param bool $isVisibleInInternal new value being set
      *
      * @return Reason
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setIsVisibleInInternal($isVisibleInInternal)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->isVisibleInInternal = $isVisibleInInternal;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the is visible in internal
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * @return bool
      */
-    public function getLastModifiedBy()
+    public function getIsVisibleInInternal()
     {
-        return $this->lastModifiedBy;
+        return $this->isVisibleInInternal;
     }
 
     /**
-     * Set the pi
+     * Set the pis
      *
-     * @param ArrayCollection $pis collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $pis collection being set as the value
      *
      * @return Reason
      */
@@ -404,7 +476,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     /**
      * Get the pis
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getPis()
     {
@@ -414,7 +486,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     /**
      * Add a pis
      *
-     * @param ArrayCollection|mixed $pis collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $pis collection being added
      *
      * @return Reason
      */
@@ -451,9 +523,9 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     }
 
     /**
-     * Set the propose to revoke
+     * Set the propose to revokes
      *
-     * @param ArrayCollection $proposeToRevokes collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $proposeToRevokes collection being set as the value
      *
      * @return Reason
      */
@@ -467,7 +539,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     /**
      * Get the propose to revokes
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getProposeToRevokes()
     {
@@ -477,7 +549,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     /**
      * Add a propose to revokes
      *
-     * @param ArrayCollection|mixed $proposeToRevokes collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $proposeToRevokes collection being added
      *
      * @return Reason
      */
@@ -514,33 +586,9 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     }
 
     /**
-     * Set the section code
+     * Set the submission actions
      *
-     * @param string $sectionCode new value being set
-     *
-     * @return Reason
-     */
-    public function setSectionCode($sectionCode)
-    {
-        $this->sectionCode = $sectionCode;
-
-        return $this;
-    }
-
-    /**
-     * Get the section code
-     *
-     * @return string
-     */
-    public function getSectionCode()
-    {
-        return $this->sectionCode;
-    }
-
-    /**
-     * Set the submission action
-     *
-     * @param ArrayCollection $submissionActions collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $submissionActions collection being set as the value
      *
      * @return Reason
      */
@@ -554,7 +602,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     /**
      * Get the submission actions
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getSubmissionActions()
     {
@@ -564,7 +612,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     /**
      * Add a submission actions
      *
-     * @param ArrayCollection|mixed $submissionActions collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $submissionActions collection being added
      *
      * @return Reason
      */
@@ -601,26 +649,11 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     }
 
     /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return Reason
+     * Get bundle data
      */
-    public function setVersion($version)
+    #[\Override]
+    public function __toString(): string
     {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
+        return (string) $this->getId();
     }
 }

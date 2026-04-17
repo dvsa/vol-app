@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator;
 
 use Dvsa\Olcs\Api\Entity\Bus\BusReg as BusRegEntity;
@@ -14,13 +16,13 @@ use PHPUnit\Framework\TestCase as TestCase;
 class ApplicationTypeTest extends TestCase
 {
     /**
-     * @dataProvider provideIsValid
      * @param $input
      * @param $context
      * @param $valid
      * @param string $error
      */
-    public function testIsValid($input, $context, $valid, $error = '')
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIsValid')]
+    public function testIsValid(mixed $input, mixed $context, mixed $valid, string $error = ''): void
     {
         $sut = new ApplicationType();
         $this->assertEquals($valid, $sut->isValid($input, $context));
@@ -35,7 +37,7 @@ class ApplicationTypeTest extends TestCase
      *
      * @return array
      */
-    public function provideIsValid()
+    public static function provideIsValid(): array
     {
         return [
             [

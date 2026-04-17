@@ -80,6 +80,7 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
      * @param MvcEvent $e
      * @return array|mixed|\Laminas\Http\PhpEnvironment\Response|\Laminas\Http\Response
      */
+    #[\Override]
     public function onDispatch(MvcEvent $e)
     {
         $this->licenceId = (int)$this->params('licence');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Audit;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Audit\ReadCase;
@@ -47,7 +49,7 @@ class ReadCaseTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWhenExists()
+    public function testHandleCommandWhenExists(): void
     {
         $this->repoMap['CasesReadAudit']->shouldReceive('fetchOneOrMore')
             ->once()
@@ -66,7 +68,7 @@ class ReadCaseTest extends AbstractCommandHandlerTestCase
         static::assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $entity = m::mock(Cases::class);
 

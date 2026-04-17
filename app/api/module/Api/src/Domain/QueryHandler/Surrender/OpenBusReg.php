@@ -21,6 +21,7 @@ class OpenBusReg extends AbstractQueryHandler implements ToggleRequiredInterface
     /**
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var Repository $repo */

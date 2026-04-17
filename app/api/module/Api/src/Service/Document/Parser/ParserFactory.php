@@ -13,6 +13,7 @@ class ParserFactory
     {
         return match ($mime) {
             'text/rtf', 'application/rtf', 'application/x-rtf' => new RtfParser(),
+            'application/json', 'text/json' => new EditorJsParser(),
             default => throw new \RuntimeException('No parser found for mime type: ' . $mime),
         };
     }

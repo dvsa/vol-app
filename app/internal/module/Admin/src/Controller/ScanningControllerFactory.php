@@ -13,6 +13,7 @@ use Psr\Container\ContainerInterface;
 
 class ScanningControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ScanningController
     {
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application\Grant;
 
 use Dvsa\Olcs\Api\Domain\Command\Application\Grant\ProcessApplicationOperatingCentres as ProcessAocCmd;
@@ -33,7 +35,8 @@ class ProcessApplicationOperatingCentresTest extends AbstractCommandHandlerTestC
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -42,7 +45,7 @@ class ProcessApplicationOperatingCentresTest extends AbstractCommandHandlerTestC
         parent::initReferences();
     }
 
-    public function testHandleCommandAdd()
+    public function testHandleCommandAdd(): void
     {
         $data = [
             'id' => 111
@@ -105,7 +108,7 @@ class ProcessApplicationOperatingCentresTest extends AbstractCommandHandlerTestC
         $this->assertFalse($aoc->getIsInterim());
     }
 
-    public function testHandleCommandUpdate()
+    public function testHandleCommandUpdate(): void
     {
         $data = [
             'id' => 111
@@ -171,7 +174,7 @@ class ProcessApplicationOperatingCentresTest extends AbstractCommandHandlerTestC
         $this->assertFalse($aoc->getIsInterim());
     }
 
-    public function testHandleCommandUpdateNoLoc()
+    public function testHandleCommandUpdateNoLoc(): void
     {
         $data = [
             'id' => 111
@@ -225,7 +228,7 @@ class ProcessApplicationOperatingCentresTest extends AbstractCommandHandlerTestC
         $this->assertFalse($aoc->getIsInterim());
     }
 
-    public function testHandleCommandDelete()
+    public function testHandleCommandDelete(): void
     {
         $data = [
             'id' => 111
@@ -297,7 +300,7 @@ class ProcessApplicationOperatingCentresTest extends AbstractCommandHandlerTestC
         $this->assertFalse($aoc->getIsInterim());
     }
 
-    public function testHandleCommandDeleteNoLoc()
+    public function testHandleCommandDeleteNoLoc(): void
     {
         $data = [
             'id' => 111

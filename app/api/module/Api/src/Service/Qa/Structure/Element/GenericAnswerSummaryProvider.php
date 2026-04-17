@@ -16,6 +16,7 @@ class GenericAnswerSummaryProvider implements AnswerSummaryProviderInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTemplateName()
     {
         return 'generic';
@@ -24,6 +25,7 @@ class GenericAnswerSummaryProvider implements AnswerSummaryProviderInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTemplateVariables(QaContext $qaContext, ElementInterface $element, $isSnapshot)
     {
         return ['answer' => $qaContext->getAnswerValue()];

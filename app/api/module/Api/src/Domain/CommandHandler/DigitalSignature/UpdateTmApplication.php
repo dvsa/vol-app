@@ -19,6 +19,7 @@ final class UpdateTmApplication extends AbstractCommandHandler implements Transa
 {
     protected $repoServiceName = 'TransportManagerApplication';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         assert($command instanceof UpdateTmApplicationCmd);

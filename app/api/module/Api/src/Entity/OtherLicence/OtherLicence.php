@@ -314,6 +314,7 @@ class OtherLicence extends AbstractOtherLicence implements \Dvsa\Olcs\Api\Entity
      *
      * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation|null|array
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         if ($this->getApplication()) {

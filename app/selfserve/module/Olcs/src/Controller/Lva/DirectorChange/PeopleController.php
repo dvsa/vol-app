@@ -41,6 +41,7 @@ class PeopleController extends AbstractController
      *
      * @return array required previous sections;
      */
+    #[\Override]
     protected function getRequiredSections()
     {
         return [];
@@ -53,6 +54,7 @@ class PeopleController extends AbstractController
      *
      * @return string
      */
+    #[\Override]
     protected function getVariationType()
     {
         return RefData::VARIATION_TYPE_DIRECTOR_CHANGE;
@@ -63,6 +65,7 @@ class PeopleController extends AbstractController
      *
      * @return array
      */
+    #[\Override]
     public function getStartRoute()
     {
         $licenceId = $this->getLicenceId($this->getApplicationId());
@@ -76,6 +79,7 @@ class PeopleController extends AbstractController
      *
      * @return array route definition
      */
+    #[\Override]
     protected function getPreviousPageRoute()
     {
         return $this->getStartRoute();
@@ -86,6 +90,7 @@ class PeopleController extends AbstractController
      *
      * @return array route definition
      */
+    #[\Override]
     protected function getNextPageRoute()
     {
         return [
@@ -99,6 +104,7 @@ class PeopleController extends AbstractController
      *
      * @return string
      */
+    #[\Override]
     public function getSubmitActionText()
     {
         return 'continue.finance.history.button';
@@ -109,6 +115,7 @@ class PeopleController extends AbstractController
      *
      * @return array|Response|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $adapter = $this->getVariationPeopleAdapter();

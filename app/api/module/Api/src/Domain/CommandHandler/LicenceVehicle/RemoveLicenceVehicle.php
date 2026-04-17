@@ -27,6 +27,7 @@ final class RemoveLicenceVehicle extends AbstractCommandHandler implements Trans
      * @param Cmd $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->getRepo()->removeAllForLicence($command->getLicence());

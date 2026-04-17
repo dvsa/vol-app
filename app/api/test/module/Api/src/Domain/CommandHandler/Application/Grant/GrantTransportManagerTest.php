@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Grant Transport Manager Test
  *
@@ -42,7 +44,8 @@ class GrantTransportManagerTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -51,7 +54,7 @@ class GrantTransportManagerTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandRestricted()
+    public function testHandleCommandRestricted(): void
     {
         $data = [
             'id' => 111
@@ -96,7 +99,7 @@ class GrantTransportManagerTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandAdd()
+    public function testHandleCommandAdd(): void
     {
         $data = [
             'id' => 111
@@ -177,7 +180,7 @@ class GrantTransportManagerTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandDelete()
+    public function testHandleCommandDelete(): void
     {
         $data = [
             'id' => 111

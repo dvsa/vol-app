@@ -20,6 +20,7 @@ class GovUkAccountServiceFactory implements FactoryInterface
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): GovUkAccountService
     {
         $config = $container->get('config')['govuk_account'];

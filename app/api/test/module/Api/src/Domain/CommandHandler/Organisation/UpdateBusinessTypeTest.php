@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Business Type Test
  *
@@ -43,7 +45,8 @@ class UpdateBusinessTypeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             OrganisationEntity::ORG_TYPE_REGISTERED_COMPANY,
@@ -53,7 +56,7 @@ class UpdateBusinessTypeTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWhenCanChangeWithoutValue()
+    public function testHandleCommandWhenCanChangeWithoutValue(): void
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
             ->once()
@@ -85,7 +88,7 @@ class UpdateBusinessTypeTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWhenCanChangeWithoutChange()
+    public function testHandleCommandWhenCanChangeWithoutChange(): void
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
             ->once()
@@ -133,7 +136,7 @@ class UpdateBusinessTypeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWhenCantChangeWithChange1()
+    public function testHandleCommandWhenCantChangeWithChange1(): void
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
             ->once()
@@ -163,7 +166,7 @@ class UpdateBusinessTypeTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWhenCantChangeWithChange2()
+    public function testHandleCommandWhenCantChangeWithChange2(): void
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
             ->once()
@@ -193,7 +196,7 @@ class UpdateBusinessTypeTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWhenCantChangeWithChange3()
+    public function testHandleCommandWhenCantChangeWithChange3(): void
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
             ->once()
@@ -226,7 +229,7 @@ class UpdateBusinessTypeTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWhenCantChangeWithoutChangeWithoutApplication1()
+    public function testHandleCommandWhenCantChangeWithoutChangeWithoutApplication1(): void
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
             ->once()
@@ -264,7 +267,7 @@ class UpdateBusinessTypeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWhenCantChangeWithoutChangeWithoutApplication2()
+    public function testHandleCommandWhenCantChangeWithoutChangeWithoutApplication2(): void
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
             ->once()
@@ -301,7 +304,7 @@ class UpdateBusinessTypeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWhenCantChangeWithoutChangeWithApplication()
+    public function testHandleCommandWhenCantChangeWithoutChangeWithApplication(): void
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
             ->once()
@@ -349,7 +352,7 @@ class UpdateBusinessTypeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWhenCanChangeWithChange()
+    public function testHandleCommandWhenCanChangeWithChange(): void
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
             ->once()
@@ -404,7 +407,7 @@ class UpdateBusinessTypeTest extends AbstractCommandHandlerTestCase
         $this->assertSame($this->refData[OrganisationEntity::ORG_TYPE_SOLE_TRADER], $organisation->getType());
     }
 
-    public function testHandleCommandWhenCanChangeWithChangeLicence()
+    public function testHandleCommandWhenCanChangeWithChangeLicence(): void
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
             ->with(Permission::INTERNAL_USER, null)

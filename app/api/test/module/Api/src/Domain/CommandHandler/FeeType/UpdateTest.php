@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\FeeType;
 
 use Dvsa\Olcs\Api\Entity\Fee\FeeType;
@@ -24,7 +26,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $cmdData = [
             'id' => 12111,

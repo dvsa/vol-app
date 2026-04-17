@@ -23,6 +23,7 @@ class DataRetentionReviewController extends AbstractInternalController implement
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel(

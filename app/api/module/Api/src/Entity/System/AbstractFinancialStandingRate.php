@@ -1,30 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\System;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * FinancialStandingRate Abstract Entity
+ * AbstractFinancialStandingRate Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
  * @ORM\Table(name="financial_standing_rate",
  *    indexes={
- *        @ORM\Index(name="fk_financial_standing_rate_vehicle_type_ref_data_id",
-     *     columns={"vehicle_type"}),
+ *        @ORM\Index(name="fk_financial_standing_rate_vehicle_type_ref_data_id", columns={"vehicle_type"}),
  *        @ORM\Index(name="ix_financial_standing_rate_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_financial_standing_rate_goods_or_psv", columns={"goods_or_psv"}),
  *        @ORM\Index(name="ix_financial_standing_rate_last_modified_by", columns={"last_modified_by"}),
@@ -32,23 +36,55 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractFinancialStandingRate implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractFinancialStandingRate implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
 
     /**
-     * Additional vehicle rate
+     * Primary key.  Auto incremented if numeric.
      *
      * @var int
      *
-     * @ORM\Column(type="integer", name="additional_vehicle_rate", nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $additionalVehicleRate;
+    protected $id;
+
+    /**
+     * e.g. Special Restricted
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="licence_type", referencedColumnName="id")
+     */
+    protected $licenceType;
+
+    /**
+     * Goods or PSV
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id")
+     */
+    protected $goodsOrPsv;
+
+    /**
+     * VehicleType
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="vehicle_type", referencedColumnName="id", nullable=true)
+     */
+    protected $vehicleType;
 
     /**
      * Created by
@@ -62,45 +98,6 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     protected $createdBy;
 
     /**
-     * Effective from
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="effective_from", nullable=false)
-     */
-    protected $effectiveFrom;
-
-    /**
-     * First vehicle rate
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="first_vehicle_rate", nullable=true)
-     */
-    protected $firstVehicleRate;
-
-    /**
-     * Goods or psv
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=false)
-     */
-    protected $goodsOrPsv;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -112,24 +109,31 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     protected $lastModifiedBy;
 
     /**
-     * Licence type
+     * Additional vehicle rate
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_type", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="integer", name="additional_vehicle_rate", nullable=true)
      */
-    protected $licenceType;
+    protected $additionalVehicleRate;
 
     /**
-     * Vehicle type
+     * First vehicle rate
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="vehicle_type", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="integer", name="first_vehicle_rate", nullable=true)
      */
-    protected $vehicleType;
+    protected $firstVehicleRate;
+
+    /**
+     * Effective from
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="effective_from", nullable=false)
+     */
+    protected $effectiveFrom;
 
     /**
      * Version
@@ -140,6 +144,166 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
      * @ORM\Version
      */
     protected $version = 1;
+
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return FinancialStandingRate
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the licence type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $licenceType new value being set
+     *
+     * @return FinancialStandingRate
+     */
+    public function setLicenceType($licenceType)
+    {
+        $this->licenceType = $licenceType;
+
+        return $this;
+    }
+
+    /**
+     * Get the licence type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
+    public function getLicenceType()
+    {
+        return $this->licenceType;
+    }
+
+    /**
+     * Set the goods or psv
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
+     *
+     * @return FinancialStandingRate
+     */
+    public function setGoodsOrPsv($goodsOrPsv)
+    {
+        $this->goodsOrPsv = $goodsOrPsv;
+
+        return $this;
+    }
+
+    /**
+     * Get the goods or psv
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
+    public function getGoodsOrPsv()
+    {
+        return $this->goodsOrPsv;
+    }
+
+    /**
+     * Set the vehicle type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $vehicleType new value being set
+     *
+     * @return FinancialStandingRate
+     */
+    public function setVehicleType($vehicleType)
+    {
+        $this->vehicleType = $vehicleType;
+
+        return $this;
+    }
+
+    /**
+     * Get the vehicle type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
+    public function getVehicleType()
+    {
+        return $this->vehicleType;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return FinancialStandingRate
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return FinancialStandingRate
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
 
     /**
      * Set the additional vehicle rate
@@ -163,61 +327,6 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     public function getAdditionalVehicleRate()
     {
         return $this->additionalVehicleRate;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return FinancialStandingRate
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the effective from
-     *
-     * @param \DateTime $effectiveFrom new value being set
-     *
-     * @return FinancialStandingRate
-     */
-    public function setEffectiveFrom($effectiveFrom)
-    {
-        $this->effectiveFrom = $effectiveFrom;
-
-        return $this;
-    }
-
-    /**
-     * Get the effective from
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getEffectiveFrom($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->effectiveFrom);
-        }
-
-        return $this->effectiveFrom;
     }
 
     /**
@@ -245,123 +354,33 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     }
 
     /**
-     * Set the goods or psv
+     * Set the effective from
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv entity being set as the value
+     * @param \DateTime $effectiveFrom new value being set
      *
      * @return FinancialStandingRate
      */
-    public function setGoodsOrPsv($goodsOrPsv)
+    public function setEffectiveFrom($effectiveFrom)
     {
-        $this->goodsOrPsv = $goodsOrPsv;
+        $this->effectiveFrom = $effectiveFrom;
 
         return $this;
     }
 
     /**
-     * Get the goods or psv
+     * Get the effective from
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
      */
-    public function getGoodsOrPsv()
+    public function getEffectiveFrom($asDateTime = false)
     {
-        return $this->goodsOrPsv;
-    }
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->effectiveFrom);
+        }
 
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return FinancialStandingRate
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return FinancialStandingRate
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the licence type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $licenceType entity being set as the value
-     *
-     * @return FinancialStandingRate
-     */
-    public function setLicenceType($licenceType)
-    {
-        $this->licenceType = $licenceType;
-
-        return $this;
-    }
-
-    /**
-     * Get the licence type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getLicenceType()
-    {
-        return $this->licenceType;
-    }
-
-    /**
-     * Set the vehicle type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $vehicleType entity being set as the value
-     *
-     * @return FinancialStandingRate
-     */
-    public function setVehicleType($vehicleType)
-    {
-        $this->vehicleType = $vehicleType;
-
-        return $this;
-    }
-
-    /**
-     * Get the vehicle type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getVehicleType()
-    {
-        return $this->vehicleType;
+        return $this->effectiveFrom;
     }
 
     /**
@@ -386,5 +405,14 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

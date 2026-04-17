@@ -20,6 +20,7 @@ use Olcs\FormService\Form\Lva\FinancialEvidence;
 /**
  * @covers Olcs\FormService\Form\Lva\FinancialEvidence
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class FinancialEvidenceTest extends MockeryTestCase
 {
     /** @var  FinancialEvidence */
@@ -62,7 +63,7 @@ class FinancialEvidenceTest extends MockeryTestCase
         );
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         $this->translator
             ->shouldReceive('translateReplace')

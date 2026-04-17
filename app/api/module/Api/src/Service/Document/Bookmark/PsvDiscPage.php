@@ -36,6 +36,7 @@ class PsvDiscPage extends AbstractDiscList
         ]
     ];
 
+    #[\Override]
     public function render()
     {
         if (empty($this->data)) {
@@ -101,6 +102,7 @@ class PsvDiscPage extends AbstractDiscList
         return $this->renderSnippets($discGroups);
     }
 
+    #[\Override]
     protected function getQueryClass(): string
     {
         return Qry::class;

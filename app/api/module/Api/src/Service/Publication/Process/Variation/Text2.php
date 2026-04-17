@@ -18,6 +18,7 @@ final class Text2 implements ProcessInterface
      * @param PublicationLink $publicationLink
      * @param ImmutableArrayObject $context
      */
+    #[\Override]
     public function process(PublicationLink $publicationLink, ImmutableArrayObject $context)
     {
         $text[] = Formatter\OrganisationName::format($publicationLink->getLicence()->getOrganisation());

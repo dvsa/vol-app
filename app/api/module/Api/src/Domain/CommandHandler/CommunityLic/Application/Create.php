@@ -33,6 +33,7 @@ final class Create extends AbstractCommandHandler implements TransactionedInterf
 
     protected $extraRepos = ['Licence', 'Application'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

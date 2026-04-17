@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -8,18 +10,18 @@ use Olcs\Data\Mapper\Submission as Sut;
 class SubmissionTest extends MockeryTestCase
 {
     /**
-     * @dataProvider assignedDateDataProvider
      *
      * @param $expected
      * @param $inData
      */
-    public function testReadOnlyFields($expected, $inData)
+    #[\PHPUnit\Framework\Attributes\DataProvider('assignedDateDataProvider')]
+    public function testReadOnlyFields(mixed $expected, mixed $inData): void
     {
         $actual = Sut::mapFromResult($inData);
         $this->assertEquals($expected, $actual['readOnlyFields']);
     }
 
-    public function testDefaultDateSet()
+    public function testDefaultDateSet(): void
     {
 
         $inData = [
@@ -30,7 +32,7 @@ class SubmissionTest extends MockeryTestCase
         $this->assertEquals((new \DateTime('now'))->format('Y-m-d'), $actual['fields']['assignedDate']);
     }
 
-    public function assignedDateDataProvider()
+    public static function assignedDateDataProvider(): array
     {
 
         return [

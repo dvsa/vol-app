@@ -29,6 +29,7 @@ class FStandingCapitalReserves extends AbstractQueryHandler
      *  - any new applications where the status is Under consideration or Granted; PLUS
      *  - any licences where the status is 'Valid' or 'Suspended' or 'Curtailed'
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->helper->getFinanceCalculationForOrganisation($query->getOrganisation());
@@ -42,6 +43,7 @@ class FStandingCapitalReserves extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

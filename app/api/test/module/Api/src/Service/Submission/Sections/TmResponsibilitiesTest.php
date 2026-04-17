@@ -1,11 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\Submission\Sections\TmResponsibilities
- */
-class TmResponsibilitiesTest extends AbstractSubmissionSectionTest
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Submission\Sections\TmResponsibilities::class)]
+class TmResponsibilitiesTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\TmResponsibilities::class;
 
@@ -14,9 +14,9 @@ class TmResponsibilitiesTest extends AbstractSubmissionSectionTest
      *
      * @return array
      */
-    public function sectionTestProvider()
+    public static function sectionTestProvider(): array
     {
-        $case = $this->getCase();
+        $case = static::getCase();
 
         $expectedResult = [
             'data' => [

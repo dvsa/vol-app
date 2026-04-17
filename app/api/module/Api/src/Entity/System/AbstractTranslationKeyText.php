@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\System;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * TranslationKeyText Abstract Entity
+ * AbstractTranslationKeyText Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -23,23 +28,53 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    indexes={
  *        @ORM\Index(name="fk_translation_key_text_languages1_idx", columns={"language_id"}),
  *        @ORM\Index(name="fk_translation_key_text_users_created_by", columns={"created_by"}),
- *        @ORM\Index(name="fk_translation_key_text_users_last_modified_by",
-     *     columns={"last_modified_by"}),
- *        @ORM\Index(name="translation_key_text_translation_key_id_fk",
-     *     columns={"translation_key_id"})
+ *        @ORM\Index(name="fk_translation_key_text_users_last_modified_by", columns={"last_modified_by"}),
+ *        @ORM\Index(name="one_transText_per_lang", columns={"language_id", "translation_key_id"}),
+ *        @ORM\Index(name="translation_key_text_translation_key_id_fk", columns={"translation_key_id"})
  *    },
  *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="one_transText_per_lang", columns={"language_id","translation_key_id"})
+ *        @ORM\UniqueConstraint(name="one_transText_per_lang", columns={"language_id", "translation_key_id"})
  *    }
  * )
  */
-abstract class AbstractTranslationKeyText implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTranslationKeyText implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Language
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\Language
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\Language", fetch="LAZY")
+     * @ORM\JoinColumn(name="language_id", referencedColumnName="id")
+     */
+    protected $language;
+
+    /**
+     * TranslationKey
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\TranslationKey
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\TranslationKey", fetch="LAZY")
+     * @ORM\JoinColumn(name="translation_key_id", referencedColumnName="id", nullable=true)
+     */
+    protected $translationKey;
 
     /**
      * Created by
@@ -51,27 +86,6 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Language
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\Language
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\Language", fetch="LAZY")
-     * @ORM\JoinColumn(name="language_id", referencedColumnName="id", nullable=false)
-     */
-    protected $language;
 
     /**
      * Last modified by
@@ -89,23 +103,9 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      *
      * @var string
      *
-     * @ORM\Column(type="text", name="translated_text", length=65535, nullable=true)
+     * @ORM\Column(type="text", name="translated_text", nullable=true)
      */
     protected $translatedText;
-
-    /**
-     * Translation key
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\TranslationKey
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\System\TranslationKey",
-     *     fetch="LAZY",
-     *     inversedBy="translationKeyTexts"
-     * )
-     * @ORM\JoinColumn(name="translation_key_id", referencedColumnName="id", nullable=true)
-     */
-    protected $translationKey;
 
     /**
      * Version
@@ -118,28 +118,20 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     protected $version = 1;
 
     /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return TranslationKeyText
+     * Initialise the collections
      */
-    public function setCreatedBy($createdBy)
+    public function __construct()
     {
-        $this->createdBy = $createdBy;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * Initialise collections
      */
-    public function getCreatedBy()
+    public function initCollections(): void
     {
-        return $this->createdBy;
     }
+
 
     /**
      * Set the id
@@ -168,7 +160,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     /**
      * Set the language
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\Language $language entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\Language $language new value being set
      *
      * @return TranslationKeyText
      */
@@ -190,9 +182,57 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     }
 
     /**
+     * Set the translation key
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\TranslationKey $translationKey new value being set
+     *
+     * @return TranslationKeyText
+     */
+    public function setTranslationKey($translationKey)
+    {
+        $this->translationKey = $translationKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the translation key
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\TranslationKey
+     */
+    public function getTranslationKey()
+    {
+        return $this->translationKey;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return TranslationKeyText
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return TranslationKeyText
      */
@@ -238,30 +278,6 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     }
 
     /**
-     * Set the translation key
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\TranslationKey $translationKey entity being set as the value
-     *
-     * @return TranslationKeyText
-     */
-    public function setTranslationKey($translationKey)
-    {
-        $this->translationKey = $translationKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the translation key
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\TranslationKey
-     */
-    public function getTranslationKey()
-    {
-        return $this->translationKey;
-    }
-
-    /**
      * Set the version
      *
      * @param int $version new value being set
@@ -283,5 +299,14 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create TmQualification Test
  *
@@ -40,7 +42,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'qtype'
@@ -58,7 +61,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->mockAuthService();
 
@@ -104,7 +107,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    protected function mockAuthService()
+    protected function mockAuthService(): void
     {
         /** @var Team $mockTeam */
         $mockTeam = m::mock(Team::class)->makePartial();

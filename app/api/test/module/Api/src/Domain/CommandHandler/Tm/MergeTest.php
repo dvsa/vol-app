@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Tm;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Tm\Merge as CommandHandler;
@@ -33,7 +35,8 @@ class MergeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             TransportManagerEntity::TRANSPORT_MANAGER_STATUS_REMOVED,
@@ -41,7 +44,7 @@ class MergeTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandDonorSameAsRecipient()
+    public function testHandleCommandDonorSameAsRecipient(): void
     {
         $data = [
             'id' => 3,
@@ -63,7 +66,7 @@ class MergeTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function testHandleCommandDonorAndRecipientHaveUsers()
+    public function testHandleCommandDonorAndRecipientHaveUsers(): void
     {
         $data = [
             'id' => 3,
@@ -91,7 +94,7 @@ class MergeTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function testHandleCommandDonorAlreadyMerged()
+    public function testHandleCommandDonorAlreadyMerged(): void
     {
         $data = [
             'id' => 3,
@@ -117,7 +120,7 @@ class MergeTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function testHandleCommandLva()
+    public function testHandleCommandLva(): void
     {
         $data = [
             'id' => 3,
@@ -182,7 +185,7 @@ class MergeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandCases()
+    public function testHandleCommandCases(): void
     {
         $data = [
             'id' => 3,
@@ -251,7 +254,7 @@ class MergeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandDocuments()
+    public function testHandleCommandDocuments(): void
     {
         $data = [
             'id' => 3,
@@ -300,7 +303,7 @@ class MergeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandTasks()
+    public function testHandleCommandTasks(): void
     {
         $data = [
             'id' => 3,
@@ -354,7 +357,7 @@ class MergeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandNotes()
+    public function testHandleCommandNotes(): void
     {
         $data = [
             'id' => 3,
@@ -403,7 +406,7 @@ class MergeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandEventHistory()
+    public function testHandleCommandEventHistory(): void
     {
         $data = [
             'id' => 3,
@@ -452,7 +455,7 @@ class MergeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandUserAccount()
+    public function testHandleCommandUserAccount(): void
     {
         $data = [
             'id' => 3,
@@ -501,7 +504,7 @@ class MergeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandRecipientAlreadyRemoved()
+    public function testHandleCommandRecipientAlreadyRemoved(): void
     {
         $data = [
             'id' => 3,

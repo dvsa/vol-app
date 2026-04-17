@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Filesystem;
 
 use Dvsa\Olcs\Api\Filesystem\Filesystem;
@@ -15,7 +17,7 @@ use Symfony\Component\Lock\Store\FlockStore;
  */
 class FilesystemTest extends m\Adapter\Phpunit\MockeryTestCase
 {
-    public function testCreateTmpDir()
+    public function testCreateTmpDir(): void
     {
         vfsStream::setup('tmp');
         $sut = new Filesystem();
@@ -25,7 +27,7 @@ class FilesystemTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertTrue(is_dir($dir));
     }
 
-    public function testCreateTmpDirCleanup()
+    public function testCreateTmpDirCleanup(): void
     {
         if (!function_exists('Dvsa\Olcs\Api\Filesystem\register_shutdown_function')) {
             eval(
@@ -41,7 +43,7 @@ class FilesystemTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertFalse(is_dir($dir));
     }
 
-    public function testCreateTmpFile()
+    public function testCreateTmpFile(): void
     {
         vfsStream::setup('tmp');
         $sut = new Filesystem();
@@ -51,7 +53,7 @@ class FilesystemTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertTrue(file_exists($dir));
     }
 
-    public function testCreateTmpFileCleanup()
+    public function testCreateTmpFileCleanup(): void
     {
         if (!function_exists('Dvsa\Olcs\Api\Filesystem\register_shutdown_function')) {
             eval(
@@ -67,7 +69,7 @@ class FilesystemTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertFalse(file_exists($dir));
     }
 
-    public function testCreateTmpFileWithLock()
+    public function testCreateTmpFileWithLock(): void
     {
         vfsStream::setup('tmp');
 

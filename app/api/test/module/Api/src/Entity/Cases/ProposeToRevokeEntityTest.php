@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Cases;
 
 use Dvsa\Olcs\Api\Entity\User\User;
@@ -26,7 +28,7 @@ class ProposeToRevokeEntityTest extends EntityTester
     /**
      * Test constructor
      */
-    public function testConstructorWithoutAssignedCaseWorker()
+    public function testConstructorWithoutAssignedCaseWorker(): void
     {
         /** @var CasesEntity $mockCase */
         $mockCase = m::mock(CasesEntity::class);
@@ -43,7 +45,7 @@ class ProposeToRevokeEntityTest extends EntityTester
         $this->assertSame(null, $entity->getAssignedCaseworker());
     }
 
-    public function testConstructorWithAssignedCaseworker()
+    public function testConstructorWithAssignedCaseworker(): void
     {
         /** @var CasesEntity $mockCase */
         $mockCase = m::mock(CasesEntity::class);
@@ -62,7 +64,7 @@ class ProposeToRevokeEntityTest extends EntityTester
         $this->assertSame($assignedCaseWorker, $entity->getAssignedCaseworker());
     }
 
-    public function testUpdateWithoutAssignedCaseworker()
+    public function testUpdateWithoutAssignedCaseworker(): void
     {
         /** @var CasesEntity $mockCase */
         $mockCase = m::mock(CasesEntity::class);
@@ -89,7 +91,7 @@ class ProposeToRevokeEntityTest extends EntityTester
         $this->assertSame(null, $entity->getAssignedCaseworker());
     }
 
-    public function testUpdateWithAssignedCaseworker()
+    public function testUpdateWithAssignedCaseworker(): void
     {
         /** @var CasesEntity $mockCase */
         $mockCase = m::mock(CasesEntity::class);

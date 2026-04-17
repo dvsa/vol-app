@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Legacy;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * LegacyRecommendation Abstract Entity
+ * AbstractLegacyRecommendation Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -30,23 +35,24 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLegacyRecommendation implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLegacyRecommendation implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
 
     /**
-     * Action
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var \Dvsa\Olcs\Api\Entity\Legacy\LegacyCaseAction
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Legacy\LegacyCaseAction", fetch="LAZY")
-     * @ORM\JoinColumn(name="action_id", referencedColumnName="id", nullable=false)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $action;
+    protected $id;
 
     /**
      * Case
@@ -54,18 +60,39 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      *
      * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
     protected $case;
 
     /**
-     * Comment
+     * Action
      *
-     * @var string
+     * @var \Dvsa\Olcs\Api\Entity\Legacy\LegacyCaseAction
      *
-     * @ORM\Column(type="string", name="comment", length=4000, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Legacy\LegacyCaseAction", fetch="LAZY")
+     * @ORM\JoinColumn(name="action_id", referencedColumnName="id")
      */
-    protected $comment;
+    protected $action;
+
+    /**
+     * FromUser
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\User
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="from_user_id", referencedColumnName="id", nullable=true)
+     */
+    protected $fromUser;
+
+    /**
+     * ToUser
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\User
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="to_user_id", referencedColumnName="id", nullable=true)
+     */
+    protected $toUser;
 
     /**
      * Created by
@@ -79,36 +106,6 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     protected $createdBy;
 
     /**
-     * Effective date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="effective_date", nullable=true)
-     */
-    protected $effectiveDate;
-
-    /**
-     * From user
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="from_user_id", referencedColumnName="id", nullable=true)
-     */
-    protected $fromUser;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -120,11 +117,47 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     protected $lastModifiedBy;
 
     /**
+     * Rec date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="rec_date", nullable=false)
+     */
+    protected $recDate;
+
+    /**
+     * Pi reason
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="pi_reason", length=255, nullable=true)
+     */
+    protected $piReason;
+
+    /**
+     * Comment
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="comment", length=4000, nullable=true)
+     */
+    protected $comment;
+
+    /**
+     * Effective date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="effective_date", nullable=true)
+     */
+    protected $effectiveDate;
+
+    /**
      * Notes
      *
      * @var string
      *
-     * @ORM\Column(type="text", name="notes", length=65535, nullable=true)
+     * @ORM\Column(type="text", name="notes", nullable=true)
      */
     protected $notes;
 
@@ -138,24 +171,6 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     protected $piDecision;
 
     /**
-     * Pi reason
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="pi_reason", length=255, nullable=true)
-     */
-    protected $piReason;
-
-    /**
-     * Rec date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="rec_date", nullable=false)
-     */
-    protected $recDate;
-
-    /**
      * Request
      *
      * @var string
@@ -165,7 +180,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     protected $request;
 
     /**
-     * Revoke lic
+     * revokeLic
      *
      * @var string
      *
@@ -174,23 +189,13 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     protected $revokeLic;
 
     /**
-     * Status
+     * status
      *
      * @var string
      *
      * @ORM\Column(type="yesnonull", name="status", nullable=true)
      */
     protected $status;
-
-    /**
-     * To user
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="to_user_id", referencedColumnName="id", nullable=true)
-     */
-    protected $toUser;
 
     /**
      * Total points
@@ -212,9 +217,73 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     protected $version = 1;
 
     /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return LegacyRecommendation
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the case
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
+     *
+     * @return LegacyRecommendation
+     */
+    public function setCase($case)
+    {
+        $this->case = $case;
+
+        return $this;
+    }
+
+    /**
+     * Get the case
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
+    public function getCase()
+    {
+        return $this->case;
+    }
+
+    /**
      * Set the action
      *
-     * @param \Dvsa\Olcs\Api\Entity\Legacy\LegacyCaseAction $action entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Legacy\LegacyCaseAction $action new value being set
      *
      * @return LegacyRecommendation
      */
@@ -236,27 +305,153 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     }
 
     /**
-     * Set the case
+     * Set the from user
      *
-     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $fromUser new value being set
      *
      * @return LegacyRecommendation
      */
-    public function setCase($case)
+    public function setFromUser($fromUser)
     {
-        $this->case = $case;
+        $this->fromUser = $fromUser;
 
         return $this;
     }
 
     /**
-     * Get the case
+     * Get the from user
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     * @return \Dvsa\Olcs\Api\Entity\User\User
      */
-    public function getCase()
+    public function getFromUser()
     {
-        return $this->case;
+        return $this->fromUser;
+    }
+
+    /**
+     * Set the to user
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $toUser new value being set
+     *
+     * @return LegacyRecommendation
+     */
+    public function setToUser($toUser)
+    {
+        $this->toUser = $toUser;
+
+        return $this;
+    }
+
+    /**
+     * Get the to user
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getToUser()
+    {
+        return $this->toUser;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return LegacyRecommendation
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return LegacyRecommendation
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the rec date
+     *
+     * @param \DateTime $recDate new value being set
+     *
+     * @return LegacyRecommendation
+     */
+    public function setRecDate($recDate)
+    {
+        $this->recDate = $recDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the rec date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
+     */
+    public function getRecDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->recDate);
+        }
+
+        return $this->recDate;
+    }
+
+    /**
+     * Set the pi reason
+     *
+     * @param string $piReason new value being set
+     *
+     * @return LegacyRecommendation
+     */
+    public function setPiReason($piReason)
+    {
+        $this->piReason = $piReason;
+
+        return $this;
+    }
+
+    /**
+     * Get the pi reason
+     *
+     * @return string
+     */
+    public function getPiReason()
+    {
+        return $this->piReason;
     }
 
     /**
@@ -284,30 +479,6 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     }
 
     /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return LegacyRecommendation
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
      * Set the effective date
      *
      * @param \DateTime $effectiveDate new value being set
@@ -326,8 +497,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
+     * @return \DateTime
      */
     public function getEffectiveDate($asDateTime = false)
     {
@@ -336,78 +506,6 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
         }
 
         return $this->effectiveDate;
-    }
-
-    /**
-     * Set the from user
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $fromUser entity being set as the value
-     *
-     * @return LegacyRecommendation
-     */
-    public function setFromUser($fromUser)
-    {
-        $this->fromUser = $fromUser;
-
-        return $this;
-    }
-
-    /**
-     * Get the from user
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getFromUser()
-    {
-        return $this->fromUser;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return LegacyRecommendation
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return LegacyRecommendation
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
     }
 
     /**
@@ -456,61 +554,6 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     public function getPiDecision()
     {
         return $this->piDecision;
-    }
-
-    /**
-     * Set the pi reason
-     *
-     * @param string $piReason new value being set
-     *
-     * @return LegacyRecommendation
-     */
-    public function setPiReason($piReason)
-    {
-        $this->piReason = $piReason;
-
-        return $this;
-    }
-
-    /**
-     * Get the pi reason
-     *
-     * @return string
-     */
-    public function getPiReason()
-    {
-        return $this->piReason;
-    }
-
-    /**
-     * Set the rec date
-     *
-     * @param \DateTime $recDate new value being set
-     *
-     * @return LegacyRecommendation
-     */
-    public function setRecDate($recDate)
-    {
-        $this->recDate = $recDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the rec date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getRecDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->recDate);
-        }
-
-        return $this->recDate;
     }
 
     /**
@@ -586,30 +629,6 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     }
 
     /**
-     * Set the to user
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $toUser entity being set as the value
-     *
-     * @return LegacyRecommendation
-     */
-    public function setToUser($toUser)
-    {
-        $this->toUser = $toUser;
-
-        return $this;
-    }
-
-    /**
-     * Get the to user
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getToUser()
-    {
-        return $this->toUser;
-    }
-
-    /**
      * Set the total points
      *
      * @param int $totalPoints new value being set
@@ -655,5 +674,14 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

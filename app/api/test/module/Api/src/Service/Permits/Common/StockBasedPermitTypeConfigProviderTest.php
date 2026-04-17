@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Common;
 
 use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitStock as IrhpPermitStockRepository;
@@ -19,7 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class StockBasedPermitTypeConfigProviderTest extends MockeryTestCase
 {
-    public function testGetPermitTypeConfig()
+    public function testGetPermitTypeConfig(): void
     {
         $irhpPermitStockId = 42;
         $excludedRestrictedCountryIds = [Country::ID_AUSTRIA];

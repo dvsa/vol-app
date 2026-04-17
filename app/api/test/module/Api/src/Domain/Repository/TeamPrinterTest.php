@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * TeamPrinter repo test
  *
@@ -21,7 +23,7 @@ use Dvsa\Olcs\Api\Domain\Repository\TeamPrinter as TeamPrinterRepo;
  */
 class TeamPrinterTest extends RepositoryTestCase
 {
-    public function testFetchByDetails()
+    public function testFetchByDetails(): void
     {
         $this->setUpSut(TeamPrinterRepo::class);
 
@@ -62,7 +64,7 @@ class TeamPrinterTest extends RepositoryTestCase
         $this->assertSame(['result'], $this->sut->fetchByDetails($command));
     }
 
-    public function testFetchByDetailsNoUserAndSubCategory()
+    public function testFetchByDetailsNoUserAndSubCategory(): void
     {
         $this->setUpSut(TeamPrinterRepo::class);
 
@@ -101,7 +103,7 @@ class TeamPrinterTest extends RepositoryTestCase
         $this->assertSame(['result'], $this->sut->fetchByDetails($command));
     }
 
-    public function testApplyListJoins()
+    public function testApplyListJoins(): void
     {
         $this->setUpSut(TeamPrinterRepo::class, true);
 
@@ -119,7 +121,7 @@ class TeamPrinterTest extends RepositoryTestCase
         $this->sut->applyListJoins($mockQb);
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         $this->setUpSut(TeamPrinterRepo::class, true);
 

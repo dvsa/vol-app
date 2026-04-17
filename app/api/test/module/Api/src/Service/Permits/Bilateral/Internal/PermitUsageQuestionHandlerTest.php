@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Internal;
 
 use Dvsa\Olcs\Api\Service\Permits\Bilateral\Common\PermitUsageUpdater;
@@ -16,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class PermitUsageQuestionHandlerTest extends MockeryTestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $requiredPermits = [
             'requiredPermitsKey1' => 'requiredPermitsValue1',

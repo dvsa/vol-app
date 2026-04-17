@@ -11,6 +11,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class TemplateControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TemplateController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

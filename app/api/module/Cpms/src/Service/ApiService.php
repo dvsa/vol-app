@@ -21,7 +21,6 @@ class ApiService
     public const SCOPE_CHEQUE = 'CHEQUE';
     public const SCOPE_REFUND = 'REFUND';
     public const SCOPE_QUERY_TXN = 'QUERY_TXN';
-    public const SCOPE_STORED_CARD = 'STORED_CARD';
     public const SCOPE_CHARGE_BACK = 'CHARGE_BACK';
     public const SCOPE_CASH = 'CASH';
     public const SCOPE_POSTAL_ORDER = 'POSTAL_ORDER';

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Opposition;
 
 use Dvsa\Olcs\Api\Entity as Entities;
@@ -20,7 +22,7 @@ class OppositionEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         /** @var Entities\Cases\Cases $mockCase */
         $mockCase = m::mock(Entities\Cases\Cases::class);

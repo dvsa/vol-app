@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\BulkSend;
 
 use Dvsa\Olcs\Api\Domain\Command\BulkSend\ProcessEmail;
@@ -25,7 +27,7 @@ class EmailTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $documentIdentifier = 'documentIdentifier';
 

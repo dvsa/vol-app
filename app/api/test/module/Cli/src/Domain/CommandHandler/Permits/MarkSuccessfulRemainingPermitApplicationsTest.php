@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -34,7 +36,7 @@ class MarkSuccessfulRemainingPermitApplicationsTest extends AbstractCommandHandl
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $permitCount = 79;
         $successfulCount = 67;
@@ -105,7 +107,7 @@ class MarkSuccessfulRemainingPermitApplicationsTest extends AbstractCommandHandl
         $this->assertEquals($expectedMessages, $result->getMessages());
     }
 
-    public function testHandleCommandZeroRemainingQuota()
+    public function testHandleCommandZeroRemainingQuota(): void
     {
         $stockId = 8;
 

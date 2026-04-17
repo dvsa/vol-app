@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ByPermitNumber test
  */
@@ -10,7 +12,7 @@ use Dvsa\Olcs\Api\Domain\Query\IrhpPermitRange\ByPermitNumber;
 
 class ByPermitNumberTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $permitStock = 1001;
         $permitNumber = 2;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * DeleteListTest
  *
@@ -28,7 +30,7 @@ class DeleteListTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Command::create(['ids' => [4323, 12373]]);
 

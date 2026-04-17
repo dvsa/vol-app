@@ -25,6 +25,7 @@ class Address implements AddressInterface
      * @deprecated Use \Dvsa\Olcs\DvsaAddressService\Service\DvsaAddressService::lookupAddress instead
      *
      */
+    #[\Override]
     public function lookupAddress(string $query): array
     {
         $this->client->setUri('address/' . urlencode($query));

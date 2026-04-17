@@ -20,6 +20,7 @@ class TeamPrinter extends AbstractQueryHandler
 {
     protected $repoServiceName = 'TeamPrinter';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $team = $this->getRepo()->fetchUsingId($query);

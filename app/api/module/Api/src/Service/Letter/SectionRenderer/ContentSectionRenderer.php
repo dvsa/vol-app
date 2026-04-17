@@ -1,0 +1,57 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Dvsa\Olcs\Api\Service\Letter\SectionRenderer;
+
+use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection;
+
+/**
+ * Renderer for LetterInstanceSection entities
+ *
+ * Handles content sections that contain EditorJS JSON in
+ * edited_content or default_content fields.
+ */
+class ContentSectionRenderer extends AbstractSectionRenderer
+{
+    /**
+     * Render the section content to HTML
+     *
+     * @param object $entity
+     * @param array $context Context for vol-grab replacement (licence, application, etc.)
+     * @return string HTML output wrapped in <div class="section">
+     * @throws \InvalidArgumentException if entity is not supported
+     */
+    #[\Override]
+    public function render(object $entity, array $context = []): string
+    {
+        if (!$this->supports($entity)) {
+            throw new \InvalidArgumentException(
+                'ContentSectionRenderer only supports LetterInstanceSection entities'
+            );
+        }
+
+        /** @var LetterInstanceSection $entity */
+        $content = $entity->getEffectiveContent();
+
+        if (empty($content)) {
+            return '';
+        }
+
+        $html = $this->convertEditorJsToHtml($content, $context);
+
+        return $this->wrapInSection($html, 'section');
+    }
+
+    /**
+     * Check if this renderer supports the given entity
+     *
+     * @param object $entity
+     * @return bool
+     */
+    #[\Override]
+    public function supports(object $entity): bool
+    {
+        return $entity instanceof LetterInstanceSection;
+    }
+}

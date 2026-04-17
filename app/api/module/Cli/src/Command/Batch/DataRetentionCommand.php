@@ -13,6 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class DataRetentionCommand extends AbstractBatchCommand
 {
+    #[\Override]
     protected function configure()
     {
         $this
@@ -25,6 +26,7 @@ class DataRetentionCommand extends AbstractBatchCommand
             ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'Limit for delete and precheck.', 0);
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

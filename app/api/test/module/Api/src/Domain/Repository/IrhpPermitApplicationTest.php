@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
@@ -25,7 +27,7 @@ class IrhpPermitApplicationTest extends RepositoryTestCase
         $this->setUpSut(IrhpPermitApplication::class);
     }
 
-    public function testGetByIrhpApplicationWithStockInfo()
+    public function testGetByIrhpApplicationWithStockInfo(): void
     {
         $irhpApplicationId = 7;
 
@@ -82,15 +84,13 @@ class IrhpPermitApplicationTest extends RepositoryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestGetRequiredPermitCountWhereApplicationAwaitingPayment
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetRequiredPermitCountWhereApplicationAwaitingPayment')]
     public function testGetRequiredPermitCountWhereApplicationAwaitingPayment(
-        $emissionsCategoryId,
-        $fieldName,
-        $queryReturnValue,
-        $expectedResult
-    ) {
+        mixed $emissionsCategoryId,
+        mixed $fieldName,
+        mixed $queryReturnValue,
+        mixed $expectedResult
+    ): void {
         $stockId = 47;
 
         $queryBuilder = m::mock(QueryBuilder::class);
@@ -138,7 +138,7 @@ class IrhpPermitApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function dpTestGetRequiredPermitCountWhereApplicationAwaitingPayment()
+    public static function dpTestGetRequiredPermitCountWhereApplicationAwaitingPayment(): array
     {
         return [
             [RefData::EMISSIONS_CATEGORY_EURO5_REF, 'requiredEuro5', 33, 33],
@@ -148,7 +148,7 @@ class IrhpPermitApplicationTest extends RepositoryTestCase
         ];
     }
 
-    public function testGetRequiredPermitCountWhereApplicationAwaitingPaymentBadEmissionsCategoryId()
+    public function testGetRequiredPermitCountWhereApplicationAwaitingPaymentBadEmissionsCategoryId(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Emissions category id bad_ref_data is not supported');

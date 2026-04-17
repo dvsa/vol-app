@@ -25,6 +25,7 @@ abstract class AbstractReadAudit extends AbstractRepository implements ReadAudit
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function deleteOlderThan($oldestDate)
     {
         $query = $this->getEntityManager()->createQuery(
@@ -39,6 +40,7 @@ abstract class AbstractReadAudit extends AbstractRepository implements ReadAudit
     /**
      * Returns one or more record for specified user, object and date
      */
+    #[\Override]
     public function fetchOneOrMore($userId, $entityId, \DateTime $date)
     {
         $qb = $this->createQueryBuilder();
@@ -63,6 +65,7 @@ abstract class AbstractReadAudit extends AbstractRepository implements ReadAudit
      * @param QueryBuilder $qb
      * @inheritdoc
      */
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         $qb->innerJoin($this->alias . '.user', 'u');
@@ -75,6 +78,7 @@ abstract class AbstractReadAudit extends AbstractRepository implements ReadAudit
      * @param QueryBuilder $qb
      * @param QueryInterface $query
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $qb->andWhere($qb->expr()->eq($this->alias . '.' . $this->entityProperty, ':byEntity'))

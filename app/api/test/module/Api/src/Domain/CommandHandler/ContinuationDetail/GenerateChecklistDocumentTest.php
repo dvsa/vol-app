@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\ContinuationDetail;
 
 use Dvsa\Olcs\Api\Domain\Command\ContinuationDetail\GenerateChecklistDocument as Command;
@@ -30,7 +32,8 @@ class GenerateChecklistDocumentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ContinuationDetail::STATUS_PRINTING,
@@ -61,10 +64,8 @@ class GenerateChecklistDocumentTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dataProviderTemplates
-     */
-    public function testHandleCommand($expectedTemplate, $goodsOrPsv, $licenceType, $vehicleType, $trafficArea)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTemplates')]
+    public function testHandleCommand(mixed $expectedTemplate, mixed $goodsOrPsv, mixed $licenceType, mixed $vehicleType, mixed $trafficArea): void
     {
         $command = Command::create(['id' => 54, 'user' => 65]);
 
@@ -120,7 +121,7 @@ class GenerateChecklistDocumentTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dataProviderTemplates()
+    public static function dataProviderTemplates(): array
     {
         return [
             [

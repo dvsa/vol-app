@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
@@ -8,9 +10,7 @@ use Dvsa\Olcs\Transfer\Query\Task\TaskList;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\TaskSearchView
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\TaskSearchView::class)]
 class TaskSearchViewTest extends RepositoryTestCase
 {
     public function setUp(): void
@@ -18,7 +18,7 @@ class TaskSearchViewTest extends RepositoryTestCase
         $this->setUpSut(TaskSearchViewRepo::class, true);
     }
 
-    public function testFetchList()
+    public function testFetchList(): void
     {
         $mockQb = $this->createMockQb('{QUERY}');
         $this->mockCreateQueryBuilder($mockQb);
@@ -72,7 +72,7 @@ class TaskSearchViewTest extends RepositoryTestCase
         $this->assertEquals($expected, $this->query);
     }
 
-    public function testFetchListWithFlagShowTasks()
+    public function testFetchListWithFlagShowTasks(): void
     {
         $mockQb = $this->createMockQb('{QUERY}');
         $this->mockCreateQueryBuilder($mockQb);
@@ -107,7 +107,7 @@ class TaskSearchViewTest extends RepositoryTestCase
         $this->assertEquals($expected, $this->query);
     }
 
-    public function testFetchListAlt()
+    public function testFetchListAlt(): void
     {
         $mockQb = $this->createMockQb('{QUERY}');
         $this->mockCreateQueryBuilder($mockQb);
@@ -149,7 +149,7 @@ class TaskSearchViewTest extends RepositoryTestCase
         $this->assertEquals($expected, $this->query);
     }
 
-    public function testFetchNoFilters()
+    public function testFetchNoFilters(): void
     {
         $mockQb = $this->createMockQb('{QUERY}');
         $this->mockCreateQueryBuilder($mockQb);

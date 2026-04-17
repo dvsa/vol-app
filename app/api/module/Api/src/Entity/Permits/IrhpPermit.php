@@ -172,6 +172,7 @@ class IrhpPermit extends AbstractIrhpPermit
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedBundleValues()
     {
         return [

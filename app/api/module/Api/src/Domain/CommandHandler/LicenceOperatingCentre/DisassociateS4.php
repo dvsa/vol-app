@@ -25,6 +25,7 @@ final class DisassociateS4 extends AbstractCommandHandler implements Transaction
 {
     protected $repoServiceName = 'LicenceOperatingCentre';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         foreach ($command->getLicenceOperatingCentres() as $loc) {

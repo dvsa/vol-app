@@ -18,6 +18,7 @@ class VehicleRow extends DynamicBookmark
      */
     public const PREFORMATTED = true;
 
+    #[\Override]
     public function getQuery(array $data)
     {
         $bundle = [
@@ -28,6 +29,7 @@ class VehicleRow extends DynamicBookmark
         return Qry::create(['id' => $data['licence'], 'bundle' => $bundle]);
     }
 
+    #[\Override]
     public function render()
     {
         if (!isset($this->data['licenceVehicles'])) {

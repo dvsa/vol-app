@@ -36,6 +36,7 @@ final class CreateGoodsVehicle extends AbstractCommandHandler implements Transac
      * @return Result
      * @throws ValidationException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var \Dvsa\Olcs\Api\Entity\Licence\Licence $licence */

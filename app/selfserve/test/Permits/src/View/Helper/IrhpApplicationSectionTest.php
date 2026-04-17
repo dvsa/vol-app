@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PermitsTest\View\Helper;
 
 use Common\RefData;
@@ -38,10 +40,8 @@ class IrhpApplicationSectionTest extends MockeryTestCase
         $this->assertEquals($expected, $response);
     }
 
-    /**
-     * @dataProvider dpTestInvokeWithData
-     */
-    public function testInvokeWithData($application, $questionAnswer, $expected): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestInvokeWithData')]
+    public function testInvokeWithData(array $application, array $questionAnswer, array $expected): void
     {
         $sut = new IrhpApplicationSection();
 
@@ -59,7 +59,7 @@ class IrhpApplicationSectionTest extends MockeryTestCase
      *
      * @psalm-return array{'application path enabled - with q&a data': array{application: array{id: 100, irhpPermitType: array{isApplicationPathEnabled: true}}, questionAnswer: list{array{slug: 'qa', questionShort: 'qa-question-short', status: 'section_sts_com'}, array{slug: 'custom-check-answers', questionShort: 'check-answers-question-short', status: 'section_sts_nys'}, array{slug: 'custom-declaration', questionShort: 'declaration-question-short', status: 'section_sts_csy'}}, expected: list{array{template: 'partials/overview_section', variables: array{enabled: true, status: 'Completed', statusColour: 'green', name: 'qa-question-short', route: 'permits/application/question', routeParams: array{id: 100, slug: 'qa'}}}, array{template: 'partials/overview_section', variables: array{enabled: true, status: 'Not started yet', statusColour: 'grey', name: 'check-answers-question-short', route: 'permits/application/check-answers', routeParams: array{id: 100}}}, array{template: 'partials/overview_section', variables: array{enabled: false, status: 'Can't start yet', statusColour: 'grey', name: 'declaration-question-short', route: 'permits/application/declaration', routeParams: array{id: 100}}}}}}
      */
-    public function dpTestInvokeWithData(): array
+    public static function dpTestInvokeWithData(): array
     {
         return [
             'application path enabled - with q&a data' => [

@@ -27,6 +27,7 @@ class Addresses extends CommonAddresses
      *
      * @return void
      */
+    #[\Override]
     protected function alterForm(\Laminas\Form\Form $form, array $params)
     {
         $form->get('form-actions')->get('save')->setLabel('internal.save.button');

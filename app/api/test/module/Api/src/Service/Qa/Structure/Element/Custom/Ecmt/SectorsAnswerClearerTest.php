@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Ecmt;
 
 use Dvsa\Olcs\Api\Domain\Repository\IrhpApplication as IrhpApplicationRepository;
@@ -16,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class SectorsAnswerClearerTest extends MockeryTestCase
 {
-    public function testSave()
+    public function testSave(): void
     {
         $irhpApplication = m::mock(IrhpApplicationEntity::class);
         $irhpApplication->shouldReceive('clearSectors')

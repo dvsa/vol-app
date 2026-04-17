@@ -21,6 +21,7 @@ class SubmitControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return SubmitController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SubmitController
     {
 

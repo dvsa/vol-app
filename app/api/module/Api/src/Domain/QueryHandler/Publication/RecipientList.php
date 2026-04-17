@@ -13,6 +13,7 @@ final class RecipientList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Recipient';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $repo = $this->getRepo();

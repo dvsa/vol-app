@@ -48,6 +48,7 @@ class PrintLetter extends AbstractCommandHandler implements TransactionedInterfa
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->busReg = $this->getRepo()->fetchUsingId($command);

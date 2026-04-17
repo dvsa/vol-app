@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Marker;
 
 use Psr\Container\ContainerInterface;
@@ -42,7 +44,7 @@ class PartialHelperInitializerTest extends MockeryTestCase
         $this->sut = new PartialHelperInitializer();
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $this->assertSame(
             $this->instance,

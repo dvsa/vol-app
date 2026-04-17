@@ -12,6 +12,7 @@ final class Opposition extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Opposition';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->result(

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create DeclareUnfit Test
  */
@@ -54,7 +56,8 @@ class CreateDeclareUnfitTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             TmCaseDecisionEntity::DECISION_DECLARE_UNFIT,
@@ -71,7 +74,7 @@ class CreateDeclareUnfitTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'case' => 11,

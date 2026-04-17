@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\DBAL\Connection;
@@ -8,9 +10,7 @@ use Dvsa\Olcs\Api\Domain\Repository\CompaniesHouseVsOlcsDiffs;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\CompaniesHouseVsOlcsDiffs
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\CompaniesHouseVsOlcsDiffs::class)]
 class CompaniesHouseVsOlcsDiffsTest extends MockeryTestCase
 {
     /** @var  m\MockInterface */
@@ -32,7 +32,7 @@ class CompaniesHouseVsOlcsDiffsTest extends MockeryTestCase
         $this->sut = new CompaniesHouseVsOlcsDiffs($this->mockConn);
     }
 
-    public function testFetchOfficerDiffs()
+    public function testFetchOfficerDiffs(): void
     {
         $this->mockConn
             ->shouldReceive('executeQuery')
@@ -44,7 +44,7 @@ class CompaniesHouseVsOlcsDiffsTest extends MockeryTestCase
         static::assertSame($this->mockStmt, $this->sut->fetchOfficerDiffs());
     }
 
-    public function testFetchAddressDiffs()
+    public function testFetchAddressDiffs(): void
     {
         $this->mockConn
             ->shouldReceive('executeQuery')
@@ -55,7 +55,7 @@ class CompaniesHouseVsOlcsDiffsTest extends MockeryTestCase
         static::assertSame($this->mockStmt, $this->sut->fetchAddressDiffs());
     }
 
-    public function testFetchNameDiffs()
+    public function testFetchNameDiffs(): void
     {
         $this->mockConn
             ->shouldReceive('executeQuery')
@@ -66,7 +66,7 @@ class CompaniesHouseVsOlcsDiffsTest extends MockeryTestCase
         static::assertSame($this->mockStmt, $this->sut->fetchNameDiffs());
     }
 
-    public function testFetchWithNotActiveStatus()
+    public function testFetchWithNotActiveStatus(): void
     {
         $this->mockConn
             ->shouldReceive('executeQuery')

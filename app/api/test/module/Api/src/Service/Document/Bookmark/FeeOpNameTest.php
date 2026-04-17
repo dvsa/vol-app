@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\FeeOpName;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class FeeOpNameTest extends MockeryTestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new FeeOpName();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -20,7 +22,7 @@ class FeeOpNameTest extends MockeryTestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $bookmark = new FeeOpName();
         $bookmark->setData(

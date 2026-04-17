@@ -23,6 +23,7 @@ class UploadEvidence extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var Entity\Application\Application $application */
@@ -59,7 +60,7 @@ class UploadEvidence extends AbstractQueryHandler
             ],
             'operatingCentres' => $this->resultList(
                 $aocsRequireUpload,
-                ['operatingCentre' => ['address', 'adDocuments']]
+                ['operatingCentre' => ['address', 'adDocuments' => ['application']]]
             ),
             'supportingEvidence' => $this->resultList($supportingEvidenceDocuments)
         ];

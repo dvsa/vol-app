@@ -19,6 +19,7 @@ class Police implements \Dvsa\Olcs\Api\Service\Publication\Process\ProcessInterf
      * @param PublicationLink $publicationLink
      * @param ImmutableArrayObject $context
      */
+    #[\Override]
     public function process(PublicationLink $publicationLink, ImmutableArrayObject $context)
     {
         // remove any existing

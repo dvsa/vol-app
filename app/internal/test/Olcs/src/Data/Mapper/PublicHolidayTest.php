@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -13,7 +15,7 @@ class PublicHolidayTest extends MockeryTestCase
 {
     public const ID = 9999;
 
-    public function testMapFromResult()
+    public function testMapFromResult(): void
     {
         $data = [
             'id' => self::ID,
@@ -36,7 +38,7 @@ class PublicHolidayTest extends MockeryTestCase
         );
     }
 
-    public function testMapFromResultIsEmpty()
+    public function testMapFromResultIsEmpty(): void
     {
         static::assertEquals(
             [
@@ -46,7 +48,7 @@ class PublicHolidayTest extends MockeryTestCase
         );
     }
 
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $data = [
             PublicHoliday::FIELDS => [
@@ -69,7 +71,7 @@ class PublicHolidayTest extends MockeryTestCase
         );
     }
 
-    public function testMapFromError()
+    public function testMapFromError(): void
     {
         $errors = [
             'messages' => [

@@ -24,6 +24,7 @@ final class RefuseS4 extends AbstractCommandHandler
 {
     protected $repoServiceName = 'S4';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $s4 S4 */

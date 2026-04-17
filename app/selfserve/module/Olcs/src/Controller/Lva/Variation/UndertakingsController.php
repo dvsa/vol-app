@@ -94,6 +94,15 @@ class UndertakingsController extends AbstractUndertakingsController
 
         $fieldset->get('summaryDownload')->setAttribute('value', $summaryDownload);
 
+        if (!$applicationData['showPeriodOfGraceQuestion']) {
+            $fieldset->remove('noTmConfirmation');
+
+            $fieldsetFilter = $form->getInputFilter()->get('declarationsAndUndertakings');
+            if ($fieldsetFilter->has('noTmConfirmation')) {
+                $fieldsetFilter->get('noTmConfirmation')->setRequired(false);
+            }
+        }
+
         $form->get('interim')->get('YContent')->get('interimFee')->setValue(
             $translator->translateReplace('selfserve.declaration.interim_fee', [$applicationData['interimFee']])
         );

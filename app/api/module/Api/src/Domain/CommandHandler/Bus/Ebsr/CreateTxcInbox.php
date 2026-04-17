@@ -31,6 +31,7 @@ final class CreateTxcInbox extends AbstractCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /**

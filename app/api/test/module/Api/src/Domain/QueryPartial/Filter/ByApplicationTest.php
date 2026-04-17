@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Filter By Application Test
  *
@@ -26,7 +28,7 @@ class ByApplicationTest extends QueryPartialTestCase
         parent::setUp();
     }
 
-    public function testModifyQuery()
+    public function testModifyQuery(): void
     {
         $applicationId = 69;
 

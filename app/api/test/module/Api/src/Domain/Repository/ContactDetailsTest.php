@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ContactDetails Repo test
  */
@@ -22,7 +24,7 @@ class ContactDetailsTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testPopulateRefDataReference()
+    public function testPopulateRefDataReference(): void
     {
         $data = [
             'address' => ['countryCode' => 'GB'],
@@ -68,7 +70,7 @@ class ContactDetailsTest extends RepositoryTestCase
         );
     }
 
-    public function testApplyListFiltersLicence()
+    public function testApplyListFiltersLicence(): void
     {
         $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
 

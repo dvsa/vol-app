@@ -15,6 +15,7 @@ final class ConditionUndertakingList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'ConditionUndertaking';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var ConditionUndertakingRepo $repo */

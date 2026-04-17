@@ -24,6 +24,7 @@ final class CreateSubmission extends AbstractCommandHandler implements AuthAware
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var CreateSubmissionCmd $command */

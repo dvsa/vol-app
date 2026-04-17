@@ -174,6 +174,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      *
      * @return array|mixed
      */
+    #[\Override]
     public function onDispatch(MvcEvent $e)
     {
         $params = $this->params();

@@ -15,6 +15,7 @@ final class UpdateVehicleOperatingSmall extends AbstractUpdateApplication
     ];
     protected string $confirmMessage = 'vehicle operating small updated';
 
+    #[\Override]
     protected function updateApplication(ApplicationEntity $application, Command|CommandInterface $command): void
     {
         $application->setPsvOperateSmallVhl($command->getPsvOperateSmallVhl());

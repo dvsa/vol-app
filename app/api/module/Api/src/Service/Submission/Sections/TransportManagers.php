@@ -37,6 +37,7 @@ final class TransportManagers extends AbstractSection
      *
      * @return array
      */
+    #[\Override]
     public function generateSection(CasesEntity $case)
     {
         $caseLicence = $case->getLicence();

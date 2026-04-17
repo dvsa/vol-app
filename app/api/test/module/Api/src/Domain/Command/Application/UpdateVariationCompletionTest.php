@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * UpdateVariationCompletion
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\UpdateVariationCompletion;
  */
 class UpdateVariationCompletionTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = UpdateVariationCompletion::create(
             [

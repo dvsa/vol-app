@@ -27,7 +27,7 @@ class Create extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandThrowsExceptionWhenNeitherLicenceOrApplicationDefined()
+    public function testHandleCommandThrowsExceptionWhenNeitherLicenceOrApplicationDefined(): void
     {
         $command = CreateConversationCommand::create($commandParameters = []);
 
@@ -37,7 +37,7 @@ class Create extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithApplicationResolvesLicence()
+    public function testHandleCommandWithApplicationResolvesLicence(): void
     {
         $command = CreateConversationCommand::create($commandParameters = [
             'application' => '1',
@@ -120,7 +120,7 @@ class Create extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = CreateConversationCommand::create($commandParameters = [
             'licence' => '1',

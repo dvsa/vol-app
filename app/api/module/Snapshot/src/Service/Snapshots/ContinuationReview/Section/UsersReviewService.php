@@ -16,6 +16,7 @@ class UsersReviewService extends AbstractReviewService
      *
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(ContinuationDetail $continuationDetail)
     {
         $organisationUsers = $continuationDetail->getLicence()->getOrganisation()->getOrganisationUsers();

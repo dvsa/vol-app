@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\TradingNames;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\TradingNames;
  */
 class TradingNamesTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new TradingNames();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -25,7 +27,7 @@ class TradingNamesTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testRenderWithNoTradingNames()
+    public function testRenderWithNoTradingNames(): void
     {
         $bookmark = new TradingNames();
         $bookmark->setData(
@@ -40,7 +42,7 @@ class TradingNamesTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testRenderWithTradingNames()
+    public function testRenderWithTradingNames(): void
     {
         $bookmark = new TradingNames();
         $bookmark->setData(

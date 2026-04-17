@@ -18,6 +18,7 @@ final class CloseTexTask extends AbstractCommandHandler implements Transactioned
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $application Application */

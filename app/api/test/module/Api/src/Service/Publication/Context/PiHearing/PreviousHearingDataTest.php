@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\PiHearing;
 
 use Dvsa\Olcs\Api\Entity\Publication\PublicationLink;
@@ -13,12 +15,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class PreviousHearingDataTest extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the previous hearing date filter
-     */
-    public function testProvide()
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the previous hearing date filter')]
+    public function testProvide(): void
     {
         $pi = 99;
         $hearingDate = '2014-03-16 14:30:00';

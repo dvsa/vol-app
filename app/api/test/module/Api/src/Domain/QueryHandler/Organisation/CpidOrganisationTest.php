@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CpidOrganisationTest.php
  *
@@ -30,7 +32,7 @@ class CpidOrganisationTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['cpid' => 1]);
 

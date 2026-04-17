@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Admin Cancel BusReg Test
  */
@@ -28,7 +30,8 @@ class AdminCancelBusRegTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             BusRegEntity::STATUS_ADMIN
@@ -40,7 +43,7 @@ class AdminCancelBusRegTest extends AbstractCommandHandlerTestCase
     /**
      * testHandleCommand
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 99;
 

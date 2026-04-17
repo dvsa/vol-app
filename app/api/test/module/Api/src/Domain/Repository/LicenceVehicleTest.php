@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,9 +25,7 @@ use Hamcrest\Core\IsEqual;
 use Hamcrest\Core\IsIdentical;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\LicenceVehicle
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\LicenceVehicle::class)]
 class LicenceVehicleTest extends RepositoryTestCase
 {
     /** @var  LicenceVehicleRepo */
@@ -36,7 +36,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->setUpSut(LicenceVehicleRepo::class);
     }
 
-    public function testCreatePaginatedVehiclesDataForApplicationQuery()
+    public function testCreatePaginatedVehiclesDataForApplicationQuery(): void
     {
         $data = [
             'disc' => 'Y',
@@ -76,7 +76,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testCreatePaginatedVehiclesDataForApplicationQueryAlternative()
+    public function testCreatePaginatedVehiclesDataForApplicationQueryAlternative(): void
     {
         $data = [
             'disc' => 'N',
@@ -113,7 +113,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testCreatePaginatedVehiclesDataForVariationQuery()
+    public function testCreatePaginatedVehiclesDataForVariationQuery(): void
     {
         $data = [
             'disc' => 'Y',
@@ -153,7 +153,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testCreatePaginatedVehiclesDataForVariationQueryAlternative()
+    public function testCreatePaginatedVehiclesDataForVariationQueryAlternative(): void
     {
         $data = [
             'disc' => 'N',
@@ -190,7 +190,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testCreatePaginatedVehiclesDataForLicenceQuery()
+    public function testCreatePaginatedVehiclesDataForLicenceQuery(): void
     {
         $data = [
             'disc' => 'Y',
@@ -229,7 +229,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testCreatePaginatedVehiclesDataForLicenceQueryAlternative()
+    public function testCreatePaginatedVehiclesDataForLicenceQueryAlternative(): void
     {
         $data = [
             'disc' => 'N',
@@ -265,7 +265,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testCreatePaginatedVehiclesDataForLicenceQueryIgnoreDisc()
+    public function testCreatePaginatedVehiclesDataForLicenceQueryIgnoreDisc(): void
     {
         $data = [
             'includeRemoved' => true,
@@ -302,7 +302,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testCreatePaginatedVehiclesDataForLicenceQueryPsv()
+    public function testCreatePaginatedVehiclesDataForLicenceQueryPsv(): void
     {
         $data = [
             'includeRemoved' => false,
@@ -331,7 +331,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testCreatePaginatedVehiclesDataForApplicationQueryPsv()
+    public function testCreatePaginatedVehiclesDataForApplicationQueryPsv(): void
     {
         $data = [
             'includeRemoved' => false,
@@ -360,7 +360,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testGetAllPsvVehiclesIncludeRemoved()
+    public function testGetAllPsvVehiclesIncludeRemoved(): void
     {
         /** @var ApplicationEntity $entity */
         $entity = m::mock(ApplicationEntity::class)->makePartial();
@@ -396,7 +396,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertFalse($collection->contains($unmatched1));
     }
 
-    public function testGetAllPsvVehiclesDontIncludeRemoved()
+    public function testGetAllPsvVehiclesDontIncludeRemoved(): void
     {
         /** @var ApplicationEntity $entity */
         $entity = m::mock(ApplicationEntity::class)->makePartial();
@@ -432,7 +432,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertFalse($collection->contains($unmatched2));
     }
 
-    public function testGetAllPsvVehiclesIncludeRemovedLicence()
+    public function testGetAllPsvVehiclesIncludeRemovedLicence(): void
     {
         /** @var LicenceEntity $entity */
         $entity = m::mock(LicenceEntity::class)->makePartial();
@@ -464,7 +464,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertFalse($collection->contains($unmatched1));
     }
 
-    public function testFetchByVehicleId()
+    public function testFetchByVehicleId(): void
     {
         $mockQb = m::mock(QueryBuilder::class);
         $this->em
@@ -495,7 +495,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertSame('result', $this->sut->fetchByVehicleId(1));
     }
 
-    public function testFetchDuplicates()
+    public function testFetchDuplicates(): void
     {
         /** @var Licence $licence */
         $licence = m::mock(Licence::class)->makePartial();
@@ -527,7 +527,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchQueuedForWarning()
+    public function testFetchQueuedForWarning(): void
     {
         $now = new DateTime();
         $expectedDate = $now->sub(new \DateInterval('P28D'))->format(\DateTime::W3C);
@@ -552,7 +552,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         );
     }
 
-    public function testClearSpecifiedDateAndInterimApp()
+    public function testClearSpecifiedDateAndInterimApp(): void
     {
         $application = m::mock(\Dvsa\Olcs\Api\Entity\Application\Application::class);
         $application->shouldReceive('getId')->with()->once()->andReturn(12);
@@ -566,7 +566,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->sut->clearSpecifiedDateAndInterimApp($application);
     }
 
-    public function testRemoveAllForLicence()
+    public function testRemoveAllForLicence(): void
     {
         $licenceId = 123;
 
@@ -575,7 +575,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->sut->removeAllForLicence($licenceId);
     }
 
-    public function testMarkDuplicateVehiclesForApplication()
+    public function testMarkDuplicateVehiclesForApplication(): void
     {
         $licenceVehicle = m::mock();
         $licenceVehicle->shouldReceive('getVehicle->getVrm')->times(3)->andReturn('vrm1', 'vrm2', 'vrm3');
@@ -597,7 +597,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertSame(22, $this->sut->markDuplicateVehiclesForApplication($application));
     }
 
-    public function testClearVehicleSection26()
+    public function testClearVehicleSection26(): void
     {
         $licenceId = 123;
         $stmt = m::mock();
@@ -608,7 +608,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertSame(1702, $this->sut->clearVehicleSection26($licenceId));
     }
 
-    public function testFetchAllVehiclesCount()
+    public function testFetchAllVehiclesCount(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($mockQb);
@@ -622,7 +622,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertSame(2, $this->sut->fetchAllVehiclesCount(1));
     }
 
-    public function testFetchActiveVehiclesCount()
+    public function testFetchActiveVehiclesCount(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($mockQb);
@@ -637,7 +637,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertSame(1, $this->sut->fetchActiveVehicleCount(1));
     }
 
-    public function testFetchForExport()
+    public function testFetchForExport(): void
     {
         $mockQbS =  m::mock(QueryBuilder::class)
             ->shouldReceive('select')->once()->with('MAX(gds.id) as maxId')->andReturnSelf()
@@ -667,7 +667,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchPsvVehiclesByLicenceId()
+    public function testFetchPsvVehiclesByLicenceId(): void
     {
         $licenceId = 1;
         $includeRemoved = false;
@@ -693,7 +693,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertSame('result', $this->sut->fetchPsvVehiclesByLicenceId($licenceId, $includeRemoved));
     }
 
-    public function testFetchForRemoval()
+    public function testFetchForRemoval(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($mockQb);
@@ -722,10 +722,8 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertSame('result', $this->sut->fetchForRemoval());
     }
 
-    /**
-     * @test
-     */
-    public function createPaginatedVehiclesDataForLicenceQueryIsCallable()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function createPaginatedVehiclesDataForLicenceQueryIsCallable(): void
     {
         // Setup
         $serviceManager = $this->setUpServiceManager();
@@ -735,11 +733,9 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertIsCallable([$sut, 'createPaginatedVehiclesDataForLicenceQuery']);
     }
 
-    /**
-     * @test
-     * @depends createPaginatedVehiclesDataForLicenceQueryIsCallable
-     */
-    public function createPaginatedVehiclesDataForLicenceQueryWhenQueryImplementsNotCorrectInterfaceDoesNotFilterByVehicleId()
+    #[\PHPUnit\Framework\Attributes\Depends('createPaginatedVehiclesDataForLicenceQueryIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function createPaginatedVehiclesDataForLicenceQueryWhenQueryImplementsNotCorrectInterfaceDoesNotFilterByVehicleId(): void
     {
         // Setup
         $serviceManager = $this->setUpServiceManager();
@@ -755,11 +751,9 @@ class LicenceVehicleTest extends RepositoryTestCase
         $sut->createPaginatedVehiclesDataForLicenceQuery($query, 1);
     }
 
-    /**
-     * @test
-     * @depends createPaginatedVehiclesDataForLicenceQueryIsCallable
-     */
-    public function createPaginatedVehiclesDataForLicenceQueryFiltersByVehicleIdAddsQueryCondition()
+    #[\PHPUnit\Framework\Attributes\Depends('createPaginatedVehiclesDataForLicenceQueryIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function createPaginatedVehiclesDataForLicenceQueryFiltersByVehicleIdAddsQueryCondition(): void
     {
         // Setup
         $serviceManager = $this->setUpServiceManager();
@@ -780,7 +774,7 @@ class LicenceVehicleTest extends RepositoryTestCase
     /**
      * @return array
      */
-    public function vehiclesIdsDataProvider(): array
+    public static function vehiclesIdsDataProvider(): array
     {
         return [
             'integer array of vehicle ids' => [[1, 2, 3, 4]],
@@ -789,12 +783,10 @@ class LicenceVehicleTest extends RepositoryTestCase
         ];
     }
 
-    /**
-     * @test
-     * @depends createPaginatedVehiclesDataForLicenceQueryIsCallable
-     * @dataProvider vehiclesIdsDataProvider
-     */
-    public function createPaginatedVehiclesDataForLicenceQueryFiltersByVehicleIdSetsAParameterForVehicleIds(array $vehicleIds)
+    #[\PHPUnit\Framework\Attributes\Depends('createPaginatedVehiclesDataForLicenceQueryIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('vehiclesIdsDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function createPaginatedVehiclesDataForLicenceQueryFiltersByVehicleIdSetsAParameterForVehicleIds(array $vehicleIds): void
     {
         // Setup
         $serviceManager = $this->setUpServiceManager();
@@ -814,11 +806,9 @@ class LicenceVehicleTest extends RepositoryTestCase
         $sut->createPaginatedVehiclesDataForLicenceQuery($query, 1);
     }
 
-    /**
-     * @test
-     * @depends createPaginatedVehiclesDataForLicenceQueryIsCallable
-     */
-    public function createPaginatedVehiclesDataForLicenceQueryFiltersByRemovedVehiclesAddsQueryCondition()
+    #[\PHPUnit\Framework\Attributes\Depends('createPaginatedVehiclesDataForLicenceQueryIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function createPaginatedVehiclesDataForLicenceQueryFiltersByRemovedVehiclesAddsQueryCondition(): void
     {
         // Setup
         $serviceManager = $this->setUpServiceManager();

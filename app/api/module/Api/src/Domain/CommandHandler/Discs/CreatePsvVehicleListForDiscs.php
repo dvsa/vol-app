@@ -24,6 +24,7 @@ final class CreatePsvVehicleListForDiscs extends AbstractCommandHandler implemen
 {
     protected $repoServiceName = 'Licence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $dtoData = [

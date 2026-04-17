@@ -32,6 +32,7 @@ final class PostSubmitTasks extends AbstractCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $id = $command->getId();
@@ -55,6 +56,7 @@ final class PostSubmitTasks extends AbstractCommandHandler
 
         return $this->result;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

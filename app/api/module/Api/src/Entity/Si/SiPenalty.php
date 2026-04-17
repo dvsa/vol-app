@@ -13,10 +13,11 @@ use Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested as SiPenaltyErruRequestedEnti
  * @ORM\Entity
  * @ORM\Table(name="si_penalty",
  *    indexes={
- *        @ORM\Index(name="ix_si_penalty_serious_infringement_id", columns={"serious_infringement_id"}),
- *        @ORM\Index(name="ix_si_penalty_si_penalty_type_id", columns={"si_penalty_type_id"}),
+ *        @ORM\Index(name="fk_si_penalty_si_penalty_requested_id_si_penalty_requested_id", columns={"si_penalty_erru_requested_id"}),
  *        @ORM\Index(name="ix_si_penalty_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_si_penalty_last_modified_by", columns={"last_modified_by"})
+ *        @ORM\Index(name="ix_si_penalty_last_modified_by", columns={"last_modified_by"}),
+ *        @ORM\Index(name="ix_si_penalty_serious_infringement_id", columns={"serious_infringement_id"}),
+ *        @ORM\Index(name="ix_si_penalty_si_penalty_type_id", columns={"si_penalty_type_id"})
  *    }
  * )
  */
@@ -31,6 +32,8 @@ class SiPenalty extends AbstractSiPenalty
         \DateTime $endDate = null,
         string $reasonNotImposed = null
     ) {
+        parent::__construct();
+
         $this->seriousInfringement = $seriousInfringement;
         $this->update($siPenaltyType, $requestedErru, $imposed, $startDate, $endDate, $reasonNotImposed);
     }
@@ -45,7 +48,7 @@ class SiPenalty extends AbstractSiPenalty
     ) {
         $this->siPenaltyType = $siPenaltyType;
         $this->imposed = $imposed;
-        $this->erruPenaltyRequested = $requestedErru;
+        $this->siPenaltyErruRequested = $requestedErru;
 
         if ($startDate !== null) {
             $this->startDate = $startDate;

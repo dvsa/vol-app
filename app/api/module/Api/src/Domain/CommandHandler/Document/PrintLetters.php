@@ -7,6 +7,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 
 class PrintLetters extends AbstractCommandHandler
 {
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $method = $command->getMethod();

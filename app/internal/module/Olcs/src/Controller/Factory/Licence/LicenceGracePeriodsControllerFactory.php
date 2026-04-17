@@ -20,6 +20,7 @@ class LicenceGracePeriodsControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return LicenceGracePeriodsController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceGracePeriodsController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

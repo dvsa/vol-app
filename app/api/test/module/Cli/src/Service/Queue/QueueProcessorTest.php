@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Queue Processor Test
  *
@@ -36,9 +38,8 @@ class QueueProcessorTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
 
         $this->mockQueryHandlerManager = m::mock(QueryHandlerManager::class);
@@ -48,7 +49,7 @@ class QueueProcessorTest extends MockeryTestCase
         $this->sut = new QueueProcessor($this->mockQueryHandlerManager, $this->mockMsm);
     }
 
-    public function testProcessNextItemWithoutItem()
+    public function testProcessNextItemWithoutItem(): void
     {
         $includeTypes = ['foo'];
         $excludeTypes = ['bar'];
@@ -64,7 +65,7 @@ class QueueProcessorTest extends MockeryTestCase
         $this->assertNull($this->sut->processNextItem($includeTypes, $excludeTypes));
     }
 
-    public function testProcessNextItem()
+    public function testProcessNextItem(): void
     {
         $includeTypes = ['foo'];
         $excludeTypes = ['bar'];
@@ -92,7 +93,7 @@ class QueueProcessorTest extends MockeryTestCase
         $this->assertEquals('foo', $this->sut->processNextItem($includeTypes, $excludeTypes));
     }
 
-    public function testProcessMessageHandlesException()
+    public function testProcessMessageHandlesException(): void
     {
         $includeTypes = ['foo'];
         $excludeTypes = ['bar'];
@@ -125,7 +126,7 @@ class QueueProcessorTest extends MockeryTestCase
         $this->assertEquals('error message', $this->sut->processNextItem($includeTypes, $excludeTypes));
     }
 
-    public function testProcessMessageHandlesOrmException()
+    public function testProcessMessageHandlesOrmException(): void
     {
         $includeTypes = ['foo'];
         $excludeTypes = ['bar'];
@@ -155,7 +156,7 @@ class QueueProcessorTest extends MockeryTestCase
         $this->sut->processNextItem($includeTypes, $excludeTypes);
     }
 
-    public function testProcessMessageHandlesDbalException()
+    public function testProcessMessageHandlesDbalException(): void
     {
         $includeTypes = ['foo'];
         $excludeTypes = ['bar'];
@@ -190,7 +191,7 @@ class QueueProcessorTest extends MockeryTestCase
      * @param array $expectedDtoData
      * @param array $result to be returned by $response->getResult()
      */
-    private function expectQuery($class, $expectedDtoData, $result)
+    private function expectQuery(mixed $class, mixed $expectedDtoData, mixed $result): void
     {
         $this->mockQueryHandlerManager
             ->shouldReceive('handleQuery')

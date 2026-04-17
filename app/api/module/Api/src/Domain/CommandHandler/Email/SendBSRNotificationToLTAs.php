@@ -29,6 +29,7 @@ final class SendBSRNotificationToLTAs extends AbstractEmailHandler implements Em
      * @return array
      * @throws MissingEmailException
      */
+    #[\Override]
     protected function getRecipients($recordObject): array
     {
         $recipients = [];
@@ -68,6 +69,7 @@ final class SendBSRNotificationToLTAs extends AbstractEmailHandler implements Em
      * @param MissingEmailException $exception
      * @return Result
      */
+    #[\Override]
     protected function createMissingEmailTask($recordObject, Result $result, MissingEmailException $exception): Result
     {
         $taskDescription = sprintf(
@@ -123,6 +125,7 @@ final class SendBSRNotificationToLTAs extends AbstractEmailHandler implements Em
         ];
     }
 
+    #[\Override]
     protected function getTranslateToWelsh($recordObject)
     {
         return 'N';

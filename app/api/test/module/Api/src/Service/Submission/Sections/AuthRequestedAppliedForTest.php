@@ -1,23 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
+
+use Dvsa\Olcs\Api\Service\Submission\Sections\AuthRequestedAppliedFor;
 
 /**
  * Class AuthRequestedAppliedForTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class AuthRequestedAppliedForTest extends AbstractSubmissionSectionTest
+class AuthRequestedAppliedForTest extends AbstractSubmissionSectionTestCase
 {
-    protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\AuthRequestedAppliedFor::class;
+    protected $submissionSection = AuthRequestedAppliedFor::class;
 
-    /**
-     * Filter provider
-     *
-     * @return array
-     */
-    public function sectionTestProvider()
+    public static function sectionTestProvider(): array
     {
-        $case = $this->getCase();
+        $case = static::getCase();
 
         $expectedResult = [
             'data' => [

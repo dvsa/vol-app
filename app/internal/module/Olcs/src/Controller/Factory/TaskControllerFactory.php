@@ -22,6 +22,7 @@ class TaskControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return TaskController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TaskController
     {
         $scriptFactory = $container->get(ScriptFactory::class);

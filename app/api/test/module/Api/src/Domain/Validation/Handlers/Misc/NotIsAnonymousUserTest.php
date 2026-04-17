@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Misc;
 
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
@@ -27,11 +29,11 @@ class NotIsAnonymousUserTest extends AbstractHandlerTestCase
     /**
      * Tests whether the user is not anonymous
      *
-     * @dataProvider isAnonymousUserProvider
      *
      * @param bool $isAnonymous whether the user is anonymous
      */
-    public function testNotIsAnonymousUser($isAnonymous)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isAnonymousUserProvider')]
+    public function testNotIsAnonymousUser(mixed $isAnonymous): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -49,7 +51,7 @@ class NotIsAnonymousUserTest extends AbstractHandlerTestCase
      *
      * @return array
      */
-    public function isAnonymousUserProvider()
+    public static function isAnonymousUserProvider(): array
     {
         return[
             [true],

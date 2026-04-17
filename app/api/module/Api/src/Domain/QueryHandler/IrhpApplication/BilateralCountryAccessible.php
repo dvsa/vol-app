@@ -21,6 +21,7 @@ final class BilateralCountryAccessible extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $countryId = $query->getCountry();

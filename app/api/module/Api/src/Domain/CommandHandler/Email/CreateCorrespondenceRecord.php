@@ -32,6 +32,7 @@ final class CreateCorrespondenceRecord extends AbstractCommandHandler implements
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

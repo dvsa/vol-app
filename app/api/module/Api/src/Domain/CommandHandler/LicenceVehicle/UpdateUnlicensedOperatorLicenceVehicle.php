@@ -30,6 +30,7 @@ final class UpdateUnlicensedOperatorLicenceVehicle extends AbstractCommandHandle
     /**
      * @param Cmd $command
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var LicenceVehicle $licenceVehicle */

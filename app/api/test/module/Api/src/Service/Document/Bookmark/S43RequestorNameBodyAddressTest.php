@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Class
  *
@@ -18,7 +20,7 @@ use PHPUnit\Framework\TestCase as TestCase;
  */
 class S43RequestorNameBodyAddressTest extends TestCase
 {
-    public function testAlias()
+    public function testAlias(): void
     {
         $sut = new BookmarkNs\S43RequestorNameBodyAddress();
 

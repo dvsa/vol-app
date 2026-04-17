@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Send Ebsr Cancelled Email Test
  *
@@ -34,7 +36,7 @@ abstract class SendEbsrEmailTestAbstract extends AbstractCommandHandlerTestCase
 {
     protected $template = null;
     protected $sutClass = null;
-    protected $cmdClass = null;
+    protected const CMD_CLASS = null;
 
     protected $ebsrSubmissionId = 1234;
     protected $pdfType = null;
@@ -61,11 +63,10 @@ abstract class SendEbsrEmailTestAbstract extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider handleCommandProvider
-     *
      * @param string $orgEmail
      */
-    public function testHandleCommand($orgEmail, $adminEmail, $expectedToAddress, $extraCc, $cmdClass)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
+    public function testHandleCommand(mixed $orgEmail, mixed $adminEmail, mixed $expectedToAddress, mixed $extraCc, mixed $cmdClass): void
     {
         $regNo = 5678;
         $laDescription1 = 'la description 1';
@@ -184,11 +185,11 @@ abstract class SendEbsrEmailTestAbstract extends AbstractCommandHandlerTestCase
         $this->assertSame('email.' . $this->template . '.subject', $message->getSubject());
     }
 
-    public function handleCommandProvider()
+    public static function handleCommandProvider(): array
     {
         return [
-            ['test@test.com', 'foo@bar.com', 'test@test.com', ['foo@bar.com'], $this->cmdClass],
-            ['',  'foo@bar.com', 'foo@bar.com', [], $this->cmdClass]
+            ['test@test.com', 'foo@bar.com', 'test@test.com', ['foo@bar.com'], static::CMD_CLASS],
+            ['',  'foo@bar.com', 'foo@bar.com', [], static::CMD_CLASS]
         ];
     }
 }

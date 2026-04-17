@@ -21,6 +21,7 @@ class FixIsUnlicenced extends AbstractCommandHandler implements TransactionedInt
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $count = $this->getRepo()->fixIsUnlicenced();

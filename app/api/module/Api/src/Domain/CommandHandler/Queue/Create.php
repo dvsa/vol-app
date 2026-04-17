@@ -23,6 +23,7 @@ final class Create extends AbstractCommandHandler
 {
     protected $repoServiceName = 'Queue';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /**

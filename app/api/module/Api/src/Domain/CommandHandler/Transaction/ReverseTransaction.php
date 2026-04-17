@@ -53,6 +53,7 @@ final class ReverseTransaction extends AbstractCommandHandler implements
      * @throws RuntimeException
      * @throws ValidationException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $originalTransaction = $this->getRepo()->fetchUsingId($command);

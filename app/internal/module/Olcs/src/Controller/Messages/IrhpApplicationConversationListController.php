@@ -14,6 +14,7 @@ class IrhpApplicationConversationListController extends AbstractConversationList
     protected $listVars = ['licence'];
     protected $listDto = ConversationsByLicenceQuery::class;
 
+    #[\Override]
     public function getLeftView(): ViewModel
     {
         $view = new ViewModel(['navigationId' => 'irhp_conversations']);

@@ -36,20 +36,16 @@ class AbstractController extends LaminasAbstractActionController
     use FlashMessengerTrait;
 
     protected ScriptFactory $scriptFactory;
-    protected FormHelperService $formHelper;
     protected TableFactory $tableFactory;
-    protected HelperPluginManager $viewHelperManager;
 
     public function __construct(
         ScriptFactory $scriptFactory,
-        FormHelperService $formHelper,
+        protected FormHelperService $formHelper,
         TableFactory $tableFactory,
-        HelperPluginManager $viewHelperManager
+        protected HelperPluginManager $viewHelperManager
     ) {
         $this->scriptFactory = $scriptFactory;
-        $this->formHelper = $formHelper;
         $this->tableFactory = $tableFactory;
-        $this->viewHelperManager = $viewHelperManager;
     }
 
     /**

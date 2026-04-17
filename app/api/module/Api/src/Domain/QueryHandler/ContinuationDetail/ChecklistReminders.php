@@ -21,6 +21,7 @@ class ChecklistReminders extends AbstractQueryHandler
      * @return array
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleQuery(Query\QueryInterface $query)
     {
         /** @var ContinuationDetail $repo */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Licence;
 
 use Dvsa\Olcs\Api\Domain\Repository\Query\Licence\InternationalGoodsReport as InternationalGoodsReportQry;
@@ -154,7 +156,7 @@ class InternationalGoodsReportTest extends AbstractDbQueryTestCase
         ]
     ];
 
-    public function paramProvider()
+    public static function paramProvider(): array
     {
         return [
             [
@@ -187,12 +189,12 @@ class InternationalGoodsReportTest extends AbstractDbQueryTestCase
         ];
     }
 
-    protected function getSut()
+    protected function getSut(): InternationalGoodsReportQry
     {
         return new InternationalGoodsReportQry();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return 'SELECT o.id AS organisationId, o.name AS organisationName, l.lic_no AS licenceNo, ' .
             'rsts.description AS licenceStatus, rd2.description AS licenceType, l.in_force_date AS licenceStart, ' .

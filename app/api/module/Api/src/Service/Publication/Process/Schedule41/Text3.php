@@ -20,6 +20,7 @@ final class Text3 implements ProcessInterface
      * @param PublicationLink      $publicationLink
      * @param ImmutableArrayObject $context
      */
+    #[\Override]
     public function process(PublicationLink $publicationLink, ImmutableArrayObject $context)
     {
         $this->addCorrespondanceText($context);

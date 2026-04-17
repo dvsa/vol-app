@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create ConditionUndertaking Test
  *
@@ -43,7 +45,8 @@ class CreateConditionUndertakingTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'cat_oc',
@@ -64,7 +67,7 @@ class CreateConditionUndertakingTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandAttachedToOc()
+    public function testHandleCommandAttachedToOc(): void
     {
         $command = Cmd::create(
             [
@@ -139,7 +142,7 @@ class CreateConditionUndertakingTest extends AbstractCommandHandlerTestCase
         $this->assertContains('ConditionUndertaking created', $result->getMessages());
     }
 
-    public function testHandleCommandAttachedToLicence()
+    public function testHandleCommandAttachedToLicence(): void
     {
         $command = Cmd::create(
             [

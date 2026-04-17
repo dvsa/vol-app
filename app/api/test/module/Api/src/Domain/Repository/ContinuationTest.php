@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Continuation test
  *
@@ -24,7 +26,7 @@ class ContinuationTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchWithTa()
+    public function testFetchWithTa(): void
     {
         $qb = m::mock(QueryBuilder::class);
 
@@ -38,7 +40,7 @@ class ContinuationTest extends RepositoryTestCase
         $this->assertEquals($this->sut->fetchWithTa(1), ['result']);
     }
 
-    public function testFetchContinuation()
+    public function testFetchContinuation(): void
     {
         $qb = m::mock(QueryBuilder::class);
 

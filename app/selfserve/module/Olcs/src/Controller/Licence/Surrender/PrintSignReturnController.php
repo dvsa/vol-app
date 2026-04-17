@@ -42,6 +42,7 @@ class PrintSignReturnController extends AbstractSurrenderController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
     }
 
+    #[\Override]
     public function indexAction()
     {
         return $this->createView();
@@ -98,6 +99,7 @@ class PrintSignReturnController extends AbstractSurrenderController
      * @return array
      *
      */
+    #[\Override]
     protected function getViewVariables(): array
     {
 

@@ -21,6 +21,7 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
      *
      * @return array Form data
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         $correspondenceCd = self::getFromDataIfSet($data['licences'][0], 'correspondenceCd');

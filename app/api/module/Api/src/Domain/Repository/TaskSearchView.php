@@ -34,6 +34,7 @@ class TaskSearchView extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $assignedToUser = $query->getAssignedToUser();

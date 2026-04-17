@@ -32,6 +32,7 @@ class SubmissionSectionsFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SubmissionSections
     {
         $formElementManager = $container->get('FormElementManager');

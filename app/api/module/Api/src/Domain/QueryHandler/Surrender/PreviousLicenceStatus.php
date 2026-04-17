@@ -9,6 +9,7 @@ class PreviousLicenceStatus extends AbstractQueryHandler
 {
     protected $repoServiceName = 'EventHistory';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->getRepo()->fetchPreviousLicenceStatus($query->getId());

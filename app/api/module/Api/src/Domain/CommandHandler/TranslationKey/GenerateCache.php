@@ -19,8 +19,9 @@ final class GenerateCache extends AbstractCommandHandler implements TranslatorAw
 {
     use TranslatorAwareTrait;
 
-    public const UPDATE_MSG = 'Translation key cache updated for %s';
+    public const string UPDATE_MSG = 'Translation key cache updated for %s';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         foreach (array_keys(Language::SUPPORTED_LANGUAGES) as $locale) {

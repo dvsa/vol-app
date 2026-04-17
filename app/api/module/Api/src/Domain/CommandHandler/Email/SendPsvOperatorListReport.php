@@ -18,8 +18,8 @@ final class SendPsvOperatorListReport extends AbstractCommandHandler implements 
 {
     use \Dvsa\Olcs\Api\Domain\EmailAwareTrait;
 
-    public const EMAIL_TEMPLATE = 'report-psv-operator-list';
-    public const EMAIL_SUBJECT = 'email.notification.subject';
+    public const string EMAIL_TEMPLATE = 'report-psv-operator-list';
+    public const string EMAIL_SUBJECT = 'email.notification.subject';
 
     /**
      * @var string
@@ -33,6 +33,7 @@ final class SendPsvOperatorListReport extends AbstractCommandHandler implements 
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var SystemParameterRepo $systemParametersRepo */

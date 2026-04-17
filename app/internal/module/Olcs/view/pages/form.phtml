@@ -1,3 +1,9 @@
 <?php
     echo $this->formErrors($form);
     echo $this->form($form);
+
+    // Add hidden fields for entity context if available (for letter generation flow)
+    if (isset($entityContext) && !empty($entityContext['type']) && !empty($entityContext['id'])): ?>
+        <input type="hidden" id="entity-context-type" value="<?= $this->escapeHtmlAttr($entityContext['type']) ?>">
+        <input type="hidden" id="entity-context-id" value="<?= $this->escapeHtmlAttr($entityContext['id']) ?>">
+    <?php endif;

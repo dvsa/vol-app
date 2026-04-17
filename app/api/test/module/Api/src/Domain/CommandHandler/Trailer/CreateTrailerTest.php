@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CreateTrailerTest.php
  *
@@ -37,7 +39,8 @@ class CreateTrailerTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             Licence::class => [
@@ -48,10 +51,8 @@ class CreateTrailerTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpIsLongerSemiTrailer
-     */
-    public function testHandleCommand($isLongerSemiTrailer, $expectedIsLongerSemiTrailer)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsLongerSemiTrailer')]
+    public function testHandleCommand(mixed $isLongerSemiTrailer, mixed $expectedIsLongerSemiTrailer): void
     {
         $data = [
             'trailerNo' => 'A1000',
@@ -89,7 +90,7 @@ class CreateTrailerTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpIsLongerSemiTrailer()
+    public static function dpIsLongerSemiTrailer(): array
     {
         return [
             ['Y', true],

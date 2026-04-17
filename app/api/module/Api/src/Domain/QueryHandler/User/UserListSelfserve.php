@@ -28,6 +28,7 @@ class UserListSelfserve extends AbstractQueryHandler
      * @return \Dvsa\Olcs\Api\Domain\QueryHandler\Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\BadRequestException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $repo = $this->getRepo();

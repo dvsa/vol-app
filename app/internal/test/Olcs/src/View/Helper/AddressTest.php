@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\View\Helper;
 
 use Common\Service\Table\Formatter\Address;
@@ -20,7 +22,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->addressFormatter = m::mock(Address::class);
         $this->sut = new AddressHelper($this->addressFormatter);
     }
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $address =  [
             'addressLine1' => 'Unit 9',

@@ -24,6 +24,7 @@ class MultilateralFeeBreakdownGenerator implements FeeBreakdownGeneratorInterfac
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function generate(IrhpApplication $irhpApplication)
     {
         $this->irhpApplication = $irhpApplication;

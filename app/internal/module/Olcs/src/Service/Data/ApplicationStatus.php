@@ -22,6 +22,7 @@ class ApplicationStatus extends AbstractListDataService
      * @return array
      * @throw DataServiceException
      */
+    #[\Override]
     public function fetchListData($context = null)
     {
         $key = 'application-status-' . $this->getOrgId();

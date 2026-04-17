@@ -30,7 +30,7 @@ use Dvsa\Olcs\Transfer\Command\CommunityLic\Stop as Cmd;
  */
 final class Stop extends AbstractCommandHandler implements TransactionedInterface
 {
-    public const STOP_TYPE_WITHDRAWN = 'withdrawal';
+    public const string STOP_TYPE_WITHDRAWN = 'withdrawal';
 
     protected $repoServiceName = 'CommunityLic';
 
@@ -51,6 +51,7 @@ final class Stop extends AbstractCommandHandler implements TransactionedInterfac
      * @throws ValidationException
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $ids = $command->getCommunityLicenceIds();

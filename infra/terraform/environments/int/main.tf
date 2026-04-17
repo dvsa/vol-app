@@ -1,9 +1,9 @@
 locals {
   service_names = ["api", "selfserve", "internal", "cli"]
 
-  legacy_service_names = ["API", "IUWEB", "SSWEB"]
+  legacy_service_names = ["API", "IUWEB", "SSWEB", "RENDERER"]
 
-  supporting_service_names = ["search", "liquibase"]
+  supporting_service_names = ["liquibase"]
 
   task_iam_role_statements = [
     {
@@ -75,6 +75,7 @@ locals {
       ]
       resources = [
         "arn:aws:s3:::devapp-olcs-pri-olcs-autotest-s3/*",
+        "arn:aws:s3:::devapp-vol-content/*"
       ]
     },
   ]
@@ -92,14 +93,14 @@ data "aws_ecr_repository" "sservice" {
   name = "vol-app/${each.key}"
 }
 
+data "aws_ecr_repository" "gotenberg" {
+  name = "vol-app/gotenberg"
+}
+
 data "aws_security_group" "this" {
   for_each = toset(local.legacy_service_names)
 
   name = "DEV/APP/QA-OLCS-PRI-${each.key}-SG"
-}
-
-data "aws_security_group" "search" {
-  name = "DEV/APP/QA-OLCS-PRI-SEARCHDATAV6-SG"
 }
 
 data "aws_subnets" "this" {
@@ -126,16 +127,22 @@ data "aws_cognito_user_pools" "this" {
 }
 
 data "aws_lb" "this" {
-  for_each = toset(local.legacy_service_names)
+  for_each = setsubtract(local.legacy_service_names, ["RENDERER"])
 
   name = "DEVAPPQA-OLCS-PRI-${(each.key == "API" ? "SVCS" : each.key)}-ALB"
 }
 
 data "aws_lb_listener" "this" {
-  for_each = toset(local.legacy_service_names)
+  for_each = setsubtract(local.legacy_service_names, ["RENDERER"])
 
   load_balancer_arn = data.aws_lb.this[each.key].arn
   port              = each.key == "API" ? 80 : 443
+}
+
+data "aws_lb_listener" "renderer" {
+
+  load_balancer_arn = data.aws_lb.this["API"].arn
+  port              = 443
 }
 
 data "aws_vpc" "this" {
@@ -165,8 +172,9 @@ module "service" {
 
   services = {
     "api" = {
-      cpu    = 2048
-      memory = 4096
+      cpu             = 2048
+      memory          = 4096
+      autoscaling_min = 1
 
       version    = var.api_image_tag
       repository = data.aws_ecr_repository.this["api"].repository_url
@@ -181,12 +189,13 @@ module "service" {
 
       lb_listener_arn           = data.aws_lb_listener.this["API"].arn
       lb_arn                    = data.aws_lb.this["API"].arn
-      listener_rule_host_header = "api.*"
+      listener_rule_host_header = ["api.*"]
     }
 
     "internal" = {
-      cpu    = 2048
-      memory = 4096
+      cpu             = 2048
+      memory          = 4096
+      autoscaling_min = 1
 
       version    = var.internal_image_tag
       repository = data.aws_ecr_repository.this["internal"].repository_url
@@ -222,12 +231,13 @@ module "service" {
 
       lb_listener_arn           = data.aws_lb_listener.this["IUWEB"].arn
       lb_arn                    = data.aws_lb.this["IUWEB"].arn
-      listener_rule_host_header = "iuweb.*"
+      listener_rule_host_header = ["iuweb.*"]
     }
 
     "selfserve" = {
-      cpu    = 2048
-      memory = 4096
+      cpu             = 2048
+      memory          = 4096
+      autoscaling_min = 1
 
       version    = var.selfserve_image_tag
       repository = data.aws_ecr_repository.this["selfserve"].repository_url
@@ -263,37 +273,33 @@ module "service" {
 
       lb_listener_arn           = data.aws_lb_listener.this["SSWEB"].arn
       lb_arn                    = data.aws_lb.this["SSWEB"].arn
-      listener_rule_host_header = "ssweb.*"
+      listener_rule_host_header = ["ssweb.*"]
     },
-    "search" = {
-      cpu    = 4096
-      memory = 12288
+    "pdf-converter" = {
+      cpu    = 1024
+      memory = 2048
 
-      enable_autoscaling_policies = false
+      enable_autoscaling_policies = true
 
-      version    = var.search_image_tag
-      repository = data.aws_ecr_repository.sservice["search"].repository_url
+      version    = "latest"
+      repository = data.aws_ecr_repository.gotenberg.repository_url
 
-      listener_rule_enable = false
-      add_search_env_info  = true
+      set_custom_port = true
 
-      task_iam_role_statements = [
-        {
-          effect = "Allow"
-          actions = [
-            "secretsmanager:GetSecretValue"
-          ]
-          resources = [
-            data.aws_secretsmanager_secret.this["api"].arn
-          ]
-        }
-      ]
+      listener_rule_enable = true
 
-      subnet_ids = data.aws_subnets.this["API"].ids
+      task_iam_role_statements = []
+
+      subnet_ids = data.aws_subnets.this["RENDERER"].ids
 
       security_group_ids = [
-        data.aws_security_group.search.id
+        data.aws_security_group.this["RENDERER"].id
       ]
+
+      lb_listener_arn           = data.aws_lb_listener.renderer.arn
+      lb_arn                    = data.aws_lb.this["API"].arn
+      listener_rule_host_header = ["renderer.*"]
+      listener_rule_priority    = 5
     }
   }
   batch = {
@@ -301,7 +307,6 @@ module "service" {
     cli_version = var.cli_image_tag
 
     cli_repository       = data.aws_ecr_repository.this["cli"].repository_url
-    search_repository    = data.aws_ecr_repository.sservice["search"].repository_url
     liquibase_repository = data.aws_ecr_repository.sservice["liquibase"].repository_url
     api_secret_file      = data.aws_secretsmanager_secret.this["api"].arn
 
@@ -315,6 +320,11 @@ module "service" {
 
     jobs = [
       {
+        name     = "cache-clear",
+        commands = ["batch:cache-clear", "--flush-all", "--force"],
+        timeout  = 300,
+      },
+      {
         name     = "ch-vs-olcs-diffs",
         commands = ["batch:ch-vs-olcs-diffs"],
       },
@@ -322,47 +332,51 @@ module "service" {
         name     = "clean-up-variations",
         commands = ["batch:clean-up-variations"],
         timeout  = 43200,
-        schedule = "cron(00 13 * * ? *)",
+        schedule = ["cron(00 13 * * ? *)"],
       },
       {
         name     = "cns",
         commands = ["batch:cns"],
         timeout  = 43200,
-        schedule = "cron(30 13 ? * 1 *)",
+        schedule = ["cron(30 13 ? * 1 *)"],
       },
       {
         name     = "create-psv-licence-surrender-task",
         commands = ["batch:create-psv-licence-surrender-task"],
         timeout  = 43200,
-        schedule = "cron(00 13 * * ? *)",
+        schedule = ["cron(30 18 7 * ? *)"],
       },
       {
         name     = "psv-operator-list-export",
-        commands = ["batch:data-gov-uk-export", "-v", "--report-name=psv-operator-list", "--path=/tmp/"],
+        commands = ["batch:data-gov-uk-export", "--report-name", "psv-operator-list"],
         timeout  = 43200,
-        schedule = "cron(00 13 ? * 1 *)",
+        schedule = ["cron(00 13 ? * 1 *)"],
       },
       {
         name     = "international-goods-export",
-        commands = ["batch:data-gov-uk-export", "-v", "--report-name=international-goods", "--path=/tmp/"],
+        commands = ["batch:data-gov-uk-export", "--report-name", "international-goods"],
         timeout  = 43200,
-        schedule = "cron(00 13 ? * 1 *)",
+        schedule = ["cron(00 13 ? * 1 *)"],
       },
       {
         name     = "data-retention-populate",
         commands = ["batch:data-retention", "--populate"],
+        timeout  = 7200
       },
       {
         name     = "data-retention-precheck",
         commands = ["batch:data-retention", "--precheck"],
+        timeout  = 7200
       },
       {
         name     = "data-retention-delete",
         commands = ["batch:data-retention", "--delete"],
+        timeout  = 7200
       },
       {
         name     = "data-retention-postcheck",
         commands = ["batch:data-retention", "--postcheck"],
+        timeout  = 7200
       },
       {
         name     = "database-maintenance",
@@ -372,31 +386,37 @@ module "service" {
         name     = "digital-continuation-reminders",
         commands = ["batch:digital-continuation-reminders"],
         timeout  = 43200,
-        schedule = "cron(00 13 * * ? *)",
+        schedule = ["cron(00 13 * * ? *)"],
       },
       {
         name     = "duplicate-vehicle-warning",
         commands = ["batch:duplicate-vehicle-warning"],
         timeout  = 43200,
-        schedule = "cron(30 13 ? * 2-6 *)",
+        schedule = ["cron(30 13 ? * 2-6 *)"],
+      },
+      {
+        name     = "duplicate-vehicle-removal",
+        commands = ["batch:duplicate-vehicle-removal"],
+        timeout  = 43200,
+        schedule = ["cron(30 21 * * ? *)"],
       },
       {
         name     = "enqueue-ch-compare",
         commands = ["batch:enqueue-ch-compare"],
         timeout  = 1800,
-        schedule = "cron(0 13 ? * 3 *)",
+        schedule = ["cron(0 13 ? * 3 *)"],
       },
       {
         name     = "expire-bus-registration",
         commands = ["batch:expire-bus-registration"],
         timeout  = 43200,
-        schedule = "cron(05 13 * * ? *)",
+        schedule = ["cron(05 13 * * ? *)"],
       },
       {
         name     = "flag-urgent-tasks",
         commands = ["batch:flag-urgent-tasks"],
         timeout  = 1800,
-        schedule = "cron(0 8-17 * * ? *)",
+        schedule = ["cron(0 6-20 * * ? *)"],
       },
       {
         name     = "import-users-from-csv",
@@ -406,25 +426,25 @@ module "service" {
         name     = "inspection-request-email",
         commands = ["batch:inspection-request-email"],
         timeout  = 1800,
-        schedule = "cron(0 13 * * ? *)",
+        schedule = ["cron(0 13 * * ? *)"],
       },
       {
         name     = "interim-end-date-enforcement",
         commands = ["batch:interim-end-date-enforcement"],
         timeout  = 43200,
-        schedule = "cron(00 13 * * ? *)",
+        schedule = ["cron(00 13 * * ? *)"],
       },
       {
         name     = "last-tm-letter",
-        commands = ["batch:last-tm-letter"],
+        commands = ["batch:last-tm-letter", "-v"],
         timeout  = 43200,
-        schedule = "cron(30 13 * * ? *)",
+        schedule = ["cron(30 13 * * ? *)"],
       },
       {
         name     = "licence-status-rules",
         commands = ["batch:licence-status-rules"],
         timeout  = 1800,
-        schedule = "cron(0 8-17 * * ? *)",
+        schedule = ["cron(0 6-20 * * ? *)"],
       },
       {
         name     = "process-cl",
@@ -434,25 +454,25 @@ module "service" {
         name     = "process-inbox",
         commands = ["batch:process-inbox"],
         timeout  = 43200,
-        schedule = "cron(45 13 * * ? *)",
+        schedule = ["cron(45 13 * * ? *)"],
       },
       {
         name     = "process-ntu",
         commands = ["batch:process-ntu"],
         timeout  = 43200,
-        schedule = "cron(0 18 ? * 2-6 *)",
+        schedule = ["cron(0 18 ? * 2-6 *)"],
       },
       {
         name     = "remove-read-audit",
         commands = ["batch:remove-read-audit"],
         timeout  = 43200,
-        schedule = "cron(0 13 ? * 1 *)",
+        schedule = ["cron(0 13 ? * 1 *)"],
       },
       {
         name     = "resolve-payments",
         commands = ["batch:resolve-payments"],
         timeout  = 150,
-        schedule = "cron(0/5 8-17 * * ? *)",
+        schedule = ["cron(0/5 6-20 * * ? *)"],
       },
       {
         name     = "system-parameter",
@@ -464,98 +484,103 @@ module "service" {
       },
       {
         name     = "close-expired-windows",
-        commands = ["permits:close-expired-windows"],
+        commands = ["permits:close-expired-windows", "-v"],
         timeout  = 43200,
-        schedule = "cron(45 13 * * ? *)",
+        schedule = ["cron(45 13 * * ? *)"],
       },
       {
         name     = "mark-expired-permits",
-        commands = ["permits:mark-expired-permits"],
+        commands = ["permits:mark-expired-permits", "-v"],
         timeout  = 43200,
-        schedule = "cron(15 13 * * ? *)",
+        schedule = ["cron(15 13 * * ? *)"],
+      },
+      {
+        name     = "permits-reset-test-data",
+        commands = ["permits:reset-test-data"],
+        timeout  = 1800
       },
       {
         name     = "process-queue-general",
         commands = ["queue:process-queue", "--exclude", "que_typ_ch_compare,que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing,que_typ_print,que_typ_disc_printing_print,que_typ_create_com_lic,que_typ_remove_deleted_docs,que_typ_permit_generate,que_typ_permit_print,que_typ_run_ecmt_scoring,que_typ_accept_ecmt_scoring,que_typ_irhp_permits_allocate", "--queue-duration", "110", ],
         timeout  = 120,
-        schedule = "cron(0/2 8-17 * * ? *)",
+        schedule = ["cron(0/2 6-20 * * ? *)"],
       },
       {
         name     = "process-queue-community-licences",
         commands = ["queue:process-queue", "--type", "que_typ_create_com_lic"],
         timeout  = 90,
-        schedule = "cron(0/2 8-17 * * ? *)",
+        schedule = ["cron(0/2 6-20 * * ? *)"],
       },
       {
         name     = "process-queue-disc-generation",
         commands = ["queue:process-queue", "--type", "que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing"],
         timeout  = 90,
-        schedule = "cron(0/2 8-17 * * ? *)",
+        schedule = ["cron(0/2 6-20 * * ? *)"],
       },
       {
         name     = "process-queue-disc-print",
         commands = ["queue:process-queue", "--type", "que_typ_disc_printing_print", "--queue-duration", "840"],
         timeout  = 850,
-        schedule = "cron(0/15 8-17 * * ? *)",
+        schedule = ["cron(0/15 6-20 * * ? *)"],
       },
       {
         name     = "process-queue-ecmt-accept",
         commands = ["queue:process-queue", "--type", "que_typ_accept_ecmt_scoring"],
         timeout  = 90,
-        schedule = "cron(0/2 8-17 * * ? *)",
+        schedule = ["cron(0/2 6-20 * * ? *)"],
       },
       {
         name     = "process-queue-irhp-allocate",
-        commands = ["queue:process-queue", "--type", "que_typ_run_ecmt_scoring"],
+        commands = ["queue:process-queue", "--type", "que_typ_irhp_permits_allocate"],
         timeout  = 90,
-        schedule = "cron(0/2 8-17 * * ? *)",
+        schedule = ["cron(0/2 6-20 * * ? *)"],
       },
       {
         name     = "process-queue-permit-generation",
         commands = ["queue:process-queue", "--type", "que_typ_permit_generate"],
         timeout  = 90,
-        schedule = "cron(0/2 8-17 * * ? *)",
+        schedule = ["cron(0/2 6-20 * * ? *)"],
       },
       {
         name     = "process-queue-permit-print",
         commands = ["queue:process-queue", "--type", "que_typ_permit_print", "--queue-duration", "840"],
         timeout  = 850,
-        schedule = "cron(0/15 8-17 * * ? *)",
+        schedule = ["cron(0/15 6-20 * * ? *)"],
       },
       {
         name     = "process-queue-print",
         commands = ["queue:process-queue", "--type", "que_typ_print"],
         timeout  = 90,
-        schedule = "cron(0/2 8-17 * * ? *)",
+        schedule = ["cron(0/2 6-20 * * ? *)"],
       },
       {
         name     = "process-company-profile",
-        commands = ["queue:process-company-profile"],
+        commands = ["queue:process-company-profile", "-v"],
         timeout  = 150,
-        schedule = "cron(0/5 8-17 * * ? *)",
+        schedule = ["cron(0/5 6-20 * * ? *)"],
       },
       {
         name     = "company-profile-dlq",
-        commands = ["queue:company-profile-dlq"],
+        commands = ["queue:company-profile-dlq", "-v"],
         timeout  = 900,
-        schedule = "cron(0/30 8-17 * * ? *)",
+        schedule = ["cron(0/30 6-20 * * ? *)"],
       },
       {
         name     = "process-insolvency",
-        commands = ["queue:process-insolvency"],
+        commands = ["queue:process-insolvency", "-v"],
         timeout  = 900,
-        schedule = "cron(0/30 8-17 * * ? *)",
+        schedule = ["cron(0/30 6-20 * * ? *)"],
       },
       {
         name     = "process-insolvency-dlq",
-        commands = ["queue:process-insolvency-dlq"],
+        commands = ["queue:process-insolvency-dlq", "-v"],
         timeout  = 900,
-        schedule = "cron(0/30 8-17 * * ? *)",
+        schedule = ["cron(0/30 6-20 * * ? *)"],
       },
       {
         name     = "transxchange-consumer",
-        commands = ["queue:transxchange-consumer"],
-        schedule = "cron(0/2 8-17 * * ? *)",
+        commands = ["queue:transxchange-consumer", "-v"],
+        schedule = ["cron(0/2 6-20 * * ? *)"],
         timeout  = 90,
       },
       {
@@ -564,8 +589,30 @@ module "service" {
         queue = "liquibase"
       },
       {
-        name = "search",
-        type = "search"
+        name     = "sas-mi-extract",
+        commands = ["/mnt/data/scripts/sas_mi_extract.sh"],
+        type     = "scripts"
+      },
+      {
+        name     = "import-anondb",
+        commands = ["/mnt/data/scripts/import_anondb.sh"],
+        type     = "scripts"
+      },
+      {
+        name     = "populate-anondb",
+        commands = ["/mnt/data/scripts/populate_anondb.sh"],
+        type     = "scripts"
+      },
+      {
+        name     = "ni-compliance",
+        commands = ["/mnt/data/scripts/ni_dvacompliance.sh"],
+        type     = "scripts"
+      },
+      {
+        name     = "first-tm-letter",
+        commands = ["batch:first-tm-letter", "-v"],
+        timeout  = 43200,
+        schedule = ["cron(30 13 * * ? *)"],
       },
     ]
   }

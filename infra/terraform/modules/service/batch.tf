@@ -1,12 +1,14 @@
 data "aws_caller_identity" "current" {}
 
 data "aws_secretsmanager_secret" "application_api" {
-  name = "${local.account_prefix}APP${var.legacy_environment}-BASE-SM-APPLICATION-API"
+  name = "${local.account_prefix}${local.env_prefix}-BASE-SM-APPLICATION-API"
 }
 
 locals {
 
-  account_prefix = var.legacy_environment == "DEV" || var.legacy_environment == "QA" ? "DEV" : ""
+  account_prefix = contains(["DEV", "QA"], var.legacy_environment) ? "DEV" : ""
+  env_prefix     = var.legacy_environment == "APP" ? "APP" : "APP${var.legacy_environment}"
+
   default_retry_policy = {
     attempts = 1
     evaluate_on_exit = {
@@ -68,44 +70,6 @@ locals {
       ]
     }
 
-    search = {
-      image = "${var.batch.search_repository}:latest"
-
-      environment = [
-        {
-          name  = "ELASTIC_HOST"
-          value = "searchv6.${var.domain_env}.olcs.${var.domain_name}"
-        },
-        {
-          name  = "DB_HOST"
-          value = "olcsreaddb-rds.${var.domain_env}.olcs.${var.domain_name}"
-        },
-        {
-          name  = "DB_NAME"
-          value = "OLCS_RDS_OLCSDB"
-        },
-        {
-          name  = "DB_USER"
-          value = "olcssearch"
-        },
-        {
-          name  = "DB_PORT"
-          value = "3306"
-        },
-        {
-          name  = "LS_JAVA_OPTS" #java memory limit
-          value = "-Xms8g -Xmx8g"
-        }
-      ]
-
-      secrets = [
-        {
-          name      = "DB_PASSWORD"
-          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_search_rds_password::"
-        },
-      ]
-    }
-
     scripts = {
       image = "${var.batch.cli_repository}:${var.batch.cli_version}"
 
@@ -125,6 +89,14 @@ locals {
         {
           name  = "READDB_HOST"
           value = "olcsreaddb-rds.${var.domain_env}.olcs.${var.domain_name}"
+        },
+        {
+          name  = "READDB_ID"
+          value = "${var.environment}-aurora-olcsdb-reader"
+        },
+        {
+          name  = "READDB_NAME"
+          value = "OLCS_RDS_OLCSDB"
         },
         {
           name  = "PROXY"
@@ -212,25 +184,35 @@ locals {
   } }
 
   schedules = {
-    for job in var.batch.jobs : "${var.environment}-${job.name}" => {
-      description         = "Schedule for ${module.batch.job_definitions[job.name].name}"
-      schedule_expression = job.schedule
+    for pair in flatten([
+      for job in var.batch.jobs : [
+        for idx, jobschedule in try(job.schedule, []) : {
+          job_name = job.name
+          schedule = jobschedule
+          index    = idx
+        }
+
+        if length(try(job.schedule, [])) > 0
+      ]
+    ]) :
+    "${var.environment}-${pair.job_name}-${pair.index}" => {
+      description         = "Schedule for ${module.batch.job_definitions[pair.job_name].name}"
+      schedule_expression = pair.schedule
       arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
       input = jsonencode({
-        "JobName" : module.batch.job_definitions[job.name].name,
-        "JobQueue" : lookup(module.batch.job_queues, job.queue, module.batch.job_queues.default).arn,
-        "JobDefinition" : module.batch.job_definitions[job.name].arn,
+        "JobName" : module.batch.job_definitions[pair.job_name].name,
+        "JobQueue" : lookup(module.batch.job_queues, lookup(var.batch.jobs[{ for i, j in var.batch.jobs : j.name => i }[pair.job_name]], "queue", "default"), module.batch.job_queues.default).arn,
+        "JobDefinition" : module.batch.job_definitions[pair.job_name].arn,
         "ShareIdentifier" : "volapp",
         "SchedulingPriorityOverride" : 1
       })
     }
-    if job.schedule != ""
   }
 }
 
 module "batch" {
   source  = "terraform-aws-modules/batch/aws"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   instance_iam_role_name        = "vol-app-${var.environment}-batch-instance"
   instance_iam_role_description = "Task execution role for vol-app-${var.environment}-batch"
@@ -257,6 +239,14 @@ module "batch" {
       state    = "ENABLED"
       priority = 1
 
+      compute_environment_order = {
+        first = {
+          order                   = 1
+          compute_environment_key = "fargate"
+        }
+      }
+
+
       # This doesn't offer much value as a tag, but it's here to avoid: https://github.com/hashicorp/terraform-provider-aws/pull/38636.
       # If the PR is merged, we can remove this.
       tags = {
@@ -267,6 +257,14 @@ module "batch" {
       name     = "vol-app-${var.environment}-liquibase"
       state    = "ENABLED"
       priority = 1
+
+      compute_environment_order = {
+        first = {
+          order                   = 1
+          compute_environment_key = "fargate"
+        }
+      }
+
       tags = {
         JobQueue = "vol-app-${var.environment}-liquibase"
       }

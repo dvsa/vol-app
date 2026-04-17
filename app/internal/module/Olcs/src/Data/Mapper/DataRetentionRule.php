@@ -18,6 +18,7 @@ class DataRetentionRule implements MapperInterface
      *
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         $mappedData['id'] = $data['id'];

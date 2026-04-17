@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure;
 
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep as ApplicationStepEntity;
@@ -19,7 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class ValidatorListGeneratorTest extends MockeryTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $applicationValidation1 = m::mock(ApplicationValidationEntity::class);
         $applicationValidation2 = m::mock(ApplicationValidationEntity::class);

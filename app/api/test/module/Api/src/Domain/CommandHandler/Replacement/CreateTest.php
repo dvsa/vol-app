@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Replacement;
 
 use Dvsa\Olcs\Transfer\Service\CacheEncryption;
@@ -25,7 +27,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $cmdData = [
             'placeholder' => '{{sometext}}',

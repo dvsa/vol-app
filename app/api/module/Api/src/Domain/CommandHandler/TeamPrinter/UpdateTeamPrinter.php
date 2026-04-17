@@ -28,6 +28,7 @@ final class UpdateTeamPrinter extends AbstractCommandHandler
 {
     protected $repoServiceName = 'TeamPrinter';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->checkIfPrinterExceptionExists($command);

@@ -18,6 +18,7 @@ class UserForgotUsernameControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return UserForgotUsernameController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): UserForgotUsernameController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

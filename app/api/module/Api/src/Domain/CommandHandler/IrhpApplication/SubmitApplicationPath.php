@@ -36,6 +36,7 @@ class SubmitApplicationPath extends AbstractCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $irhpApplication = $this->getRepo()->fetchUsingId($command);
@@ -62,6 +63,7 @@ class SubmitApplicationPath extends AbstractCommandHandler
 
         return $this->result;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

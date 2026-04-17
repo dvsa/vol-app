@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CpidOrganisationExportTest.php
  *
@@ -32,7 +34,7 @@ class CpidOrganisationExportTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'cpid' => null

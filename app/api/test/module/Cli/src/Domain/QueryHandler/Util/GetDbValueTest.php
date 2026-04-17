@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\QueryHandler\Util;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Result;
@@ -33,7 +35,7 @@ class GetDbValueTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         /** @var Licence $licence */
         $licence = m::mock(Licence::class);
@@ -64,7 +66,7 @@ class GetDbValueTest extends QueryHandlerTestCase
         $this->assertInstanceOf(Result::class, $this->sut->handleQuery($query));
     }
 
-    public function testHandleQueryMissingParameters()
+    public function testHandleQueryMissingParameters(): void
     {
         $parameters = [];
         $query = Qry::create($parameters);
@@ -72,7 +74,7 @@ class GetDbValueTest extends QueryHandlerTestCase
         $this->sut->handleQuery($query);
     }
 
-    public function testHandleQueryInvalidEntity()
+    public function testHandleQueryInvalidEntity(): void
     {
         $parameters = [
             'entityName' => 'SomethingThatDoesNotExist',
@@ -86,7 +88,7 @@ class GetDbValueTest extends QueryHandlerTestCase
         $this->sut->handleQuery($query);
     }
 
-    public function testHandleQueryInvalidPropertyName()
+    public function testHandleQueryInvalidPropertyName(): void
     {
         $parameters = [
             'entityName' => 'Application\Application',
@@ -100,7 +102,7 @@ class GetDbValueTest extends QueryHandlerTestCase
         $this->sut->handleQuery($query);
     }
 
-    public function testHandleQueryInvalidFilterProperty()
+    public function testHandleQueryInvalidFilterProperty(): void
     {
         $parameters = [
             'entityName' => 'Application\Application',

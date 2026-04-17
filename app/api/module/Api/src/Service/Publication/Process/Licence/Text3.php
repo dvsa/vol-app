@@ -12,6 +12,7 @@ use Dvsa\Olcs\Api\Service\Publication\ImmutableArrayObject;
  */
 final class Text3 extends \Dvsa\Olcs\Api\Service\Publication\Process\AbstractText
 {
+    #[\Override]
     public function process(PublicationLink $publicationLink, ImmutableArrayObject $context)
     {
         $this->clear();

@@ -32,8 +32,6 @@ class AddressesController extends Lva\AbstractAddressesController
     protected $lva = 'licence';
     protected string $location = 'external';
 
-    protected LicenceLvaAdapter $lvaAdapter;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -50,7 +48,7 @@ class AddressesController extends Lva\AbstractAddressesController
         FlashMessengerHelperService $flashMessengerHelper,
         FormServiceManager $formServiceManager,
         ScriptFactory $scriptFactory,
-        LicenceLvaAdapter $lvaAdapter
+        protected LicenceLvaAdapter $lvaAdapter
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -60,6 +58,5 @@ class AddressesController extends Lva\AbstractAddressesController
             $formServiceManager,
             $scriptFactory
         );
-        $this->lvaAdapter = $lvaAdapter;
     }
 }

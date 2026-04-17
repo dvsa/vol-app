@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\System;
 
 use Dvsa\Olcs\Api\Entity as Entities;
@@ -22,10 +24,8 @@ class SlaTargetDateEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider dpTestConstruct
-     */
-    public function testConstruct($entity, $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestConstruct')]
+    public function testConstruct(mixed $entity, mixed $expect): void
     {
         $agreedDate = new \DateTime('2011-10-09');
         $underDelegation = 'unit_UnderDeleg';
@@ -46,7 +46,7 @@ class SlaTargetDateEntityTest extends EntityTester
         static::assertEquals($underDelegation, $sut->getUnderDelegation());
     }
 
-    public function dpTestConstruct()
+    public static function dpTestConstruct(): array
     {
         return [
             [
@@ -64,7 +64,7 @@ class SlaTargetDateEntityTest extends EntityTester
         ];
     }
 
-    public function testConstructExceptionNotFound()
+    public function testConstructExceptionNotFound(): void
     {
         $this->expectException(NotFoundException::class);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Read Application Test
  *
@@ -30,7 +32,7 @@ class ReadApplicationTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 111]);
 

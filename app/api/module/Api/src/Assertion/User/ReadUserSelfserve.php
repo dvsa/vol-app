@@ -18,6 +18,7 @@ class ReadUserSelfserve implements AssertionInterface
      * @param User $context
      * @return bool
      */
+    #[\Override]
     public function assert(AuthorizationService $authorizationService, User $context = null)
     {
         $currentUser = $authorizationService->getIdentity()->getUser();

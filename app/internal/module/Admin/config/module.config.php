@@ -154,6 +154,133 @@ return [
                             ]
                         ],
                     ],
+                    'admin-master-template' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'master-template[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete)',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\Letter\MasterTemplateController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'admin-letter-type' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'letter-type[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete)',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\Letter\LetterTypeController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'admin-letter-section' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'letter-section[/:action][/:id][/variant/:variant][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete|version-history|details|EditContent|AddVariant|EditVariant|DeleteVariant)',
+                                'id' => '[0-9]+',
+                                'variant' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\Letter\LetterSectionController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'admin-letter-issue' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'letter-issue[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete)',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\Letter\LetterIssueController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'admin-letter-issue-type' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'letter-issue-type[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete)',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\Letter\LetterIssueTypeController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'admin-letter-test-data' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'letter-test-data[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete)',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\Letter\LetterTestDataController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'admin-letter-appendix' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'letter-appendix[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete)',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\Letter\LetterAppendixController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'admin-letter-todo' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'letter-todo[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete)',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\Letter\LetterTodoController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'admin-letter-choice' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'letter-choice[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete)',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\Letter\LetterChoiceController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                     'admin-scanning' => [
                         'type' => 'segment',
                         'options' => [
@@ -937,6 +1064,15 @@ return [
             Admin\Controller\DataRetentionController::class => Admin\Controller\DataRetentionControllerFactory::class,
             Admin\Controller\DocumentTemplateController::class => Admin\Controller\DocumentTemplateControllerFactory::class,
             Admin\Controller\EditableTranslationsController::class => Admin\Controller\EditableTranslationsControllerFactory::class,
+            Admin\Controller\Letter\MasterTemplateController::class => Admin\Controller\Letter\MasterTemplateControllerFactory::class,
+            Admin\Controller\Letter\LetterTypeController::class => Admin\Controller\Letter\LetterTypeControllerFactory::class,
+            Admin\Controller\Letter\LetterSectionController::class => Admin\Controller\Letter\LetterSectionControllerFactory::class,
+            Admin\Controller\Letter\LetterIssueController::class => Admin\Controller\Letter\LetterIssueControllerFactory::class,
+            Admin\Controller\Letter\LetterAppendixController::class => Admin\Controller\Letter\LetterAppendixControllerFactory::class,
+            Admin\Controller\Letter\LetterIssueTypeController::class => Admin\Controller\Letter\LetterIssueTypeControllerFactory::class,
+            Admin\Controller\Letter\LetterTestDataController::class => Admin\Controller\Letter\LetterTestDataControllerFactory::class,
+            Admin\Controller\Letter\LetterTodoController::class => Admin\Controller\Letter\LetterTodoControllerFactory::class,
+            Admin\Controller\Letter\LetterChoiceController::class => Admin\Controller\Letter\LetterChoiceControllerFactory::class,
             Admin\Controller\FeatureToggleController::class => Admin\Controller\FeatureToggleControllerFactory::class,
             Admin\Controller\FeeRateController::class => Admin\Controller\FeeRateControllerFactory::class,
             Admin\Controller\FinancialStandingRateController::class => Admin\Controller\FinancialStandingRateControllerFactory::class,

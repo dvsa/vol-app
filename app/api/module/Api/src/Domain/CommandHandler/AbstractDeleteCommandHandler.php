@@ -27,6 +27,7 @@ abstract class AbstractDeleteCommandHandler extends AbstractCommandHandler imple
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         // would be better as an interface check but BC...

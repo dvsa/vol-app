@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler;
 
 use Aws\S3\S3Client;
@@ -23,9 +25,7 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 
-/**
- * @covers \Dvsa\Olcs\Cli\Domain\CommandHandler\DataGovUkExport
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Domain\CommandHandler\DataGovUkExport::class)]
 class DataGovUkExportTest extends AbstractCommandHandlerTestCase
 {
     /**
@@ -89,7 +89,8 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->categoryReferences = [
             Category::CATEGORY_REPORT => m::mock(Category::class),
@@ -102,7 +103,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testInvalidReportException()
+    public function testInvalidReportException(): void
     {
         $cmd = Cmd::create(
             [
@@ -119,7 +120,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($cmd);
     }
 
-    public function testInternationalGoods()
+    public function testInternationalGoods(): void
     {
         $fileName = 'international_goods';
 
@@ -203,7 +204,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testPsvOperatorListOk()
+    public function testPsvOperatorListOk(): void
     {
         $fileName = 'psv-operator-list.csv';
 
@@ -316,7 +317,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
         static::assertStringStartsWith($expectMsg, $actualMsg);
     }
 
-    public function testOperatorLicenceOk()
+    public function testOperatorLicenceOk(): void
     {
         $cmd = Cmd::create(
             [
@@ -377,7 +378,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testBugRegOnlyOk()
+    public function testBugRegOnlyOk(): void
     {
         $cmd = Cmd::create(
             [
@@ -428,7 +429,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testBugVariationOk()
+    public function testBugVariationOk(): void
     {
         $cmd = Cmd::create(
             [
@@ -473,7 +474,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testTrafficAreaNotFound()
+    public function testTrafficAreaNotFound(): void
     {
         $this->repoMap['TrafficArea']
             ->shouldReceive('fetchAll')
@@ -490,7 +491,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    private function mockTrafficAreaRepo()
+    private function mockTrafficAreaRepo(): void
     {
         $this->repoMap['TrafficArea']
             ->shouldReceive('fetchAll')

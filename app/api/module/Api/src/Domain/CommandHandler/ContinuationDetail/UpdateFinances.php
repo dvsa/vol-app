@@ -23,6 +23,7 @@ final class UpdateFinances extends AbstractCommandHandler implements Transaction
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command Command */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Transport Manager Test
  *
@@ -46,7 +48,7 @@ class TransportManagerTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $latestNote = 'test note';
         $tmId = 1;

@@ -16,6 +16,7 @@ class RoleList extends AbstractQueryHandler implements ToggleAwareInterface
 
     protected $repoServiceName = 'Role';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $repo = $this->getRepo();

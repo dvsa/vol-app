@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Tm;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Tm\Unmerge as CommandHandler;
@@ -35,7 +37,8 @@ class UnmergeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             TransportManagerEntity::TRANSPORT_MANAGER_STATUS_CURRENT,
@@ -43,7 +46,7 @@ class UnmergeTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandNotMerged()
+    public function testHandleCommandNotMerged(): void
     {
         $data = [
             'id' => 3,
@@ -61,7 +64,7 @@ class UnmergeTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 3,
@@ -148,7 +151,7 @@ class UnmergeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandUnknownEntity()
+    public function testHandleCommandUnknownEntity(): void
     {
         $data = [
             'id' => 3,

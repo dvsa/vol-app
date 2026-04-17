@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * FormatAddressTest
  */
@@ -15,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class FormatAddressTest extends MockeryTestCase
 {
-    public function testFormat()
+    public function testFormat(): void
     {
         $sut = new FormatAddress();
 

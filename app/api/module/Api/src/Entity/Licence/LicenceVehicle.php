@@ -89,6 +89,7 @@ class LicenceVehicle extends AbstractLicenceVehicle implements OrganisationProvi
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this->getLicence()->getRelatedOrganisation();

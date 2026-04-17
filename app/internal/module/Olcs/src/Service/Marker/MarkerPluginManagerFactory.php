@@ -14,6 +14,7 @@ class MarkerPluginManagerFactory extends AbstractPluginManagerFactory
 {
     public const CONFIG_KEY = 'marker_plugins';
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): MarkerPluginManager
     {
         $config = $container->get('Config');

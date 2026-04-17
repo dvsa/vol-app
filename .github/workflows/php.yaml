@@ -20,6 +20,9 @@ on:
         type: number
         required: false
         default: 7
+      version:
+        type: string
+        required: false
 
 jobs:
   warm-cache:
@@ -29,7 +32,7 @@ jobs:
       run:
         working-directory: app/${{ inputs.project }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || null }}
           sparse-checkout: app/${{ inputs.project }}
@@ -37,14 +40,14 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: "8.3"
           coverage: none
           extensions: intl, pdo_mysql, redis, mbstring
       - name: Get composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
       - name: Cache Composer packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles(format('**/app/{0}/composer.lock', inputs.project)) }}
@@ -61,21 +64,21 @@ jobs:
       run:
         working-directory: app/${{ inputs.project }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || null }}
           sparse-checkout: app/${{ inputs.project }}
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: "8.3"
           coverage: none
           extensions: intl, pdo_mysql, redis, mbstring
       - name: Get composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
       - name: Cache Composer packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles(format('**/app/{0}/composer.lock', inputs.project)) }}
@@ -85,91 +88,82 @@ jobs:
       - name: Test
         run: vendor/bin/phpunit
 
-  # static-analysis:
-  #   name: ${{ matrix.task.description }}
-  #   needs:
-  #     - warm-cache
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       task:
-  #         - description: PHPStan
-  #           command: phpstan analyze --no-progress
-  #           tools: phpstan
-  #         - description: PHP CodeSniffer
-  #           command: phpcs -q
-  #           tools: phpcs
-  #         - description: Psalm
-  #           command: psalm --no-progress --output-format=github
-  #           tools: psalm
-  #   # Remove once: https://dvsa.atlassian.net/browse/VOL-4787 & https://dvsa.atlassian.net/browse/VOL-4788 are resolved.
-  #   continue-on-error: true
-  #   defaults:
-  #     run:
-  #       working-directory: app/${{ inputs.project }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #       with:
-  #         ref: ${{ inputs.ref || null }}
-  #         sparse-checkout: app/${{ inputs.project }}
-  #     - name: Setup PHP
-  #       uses: shivammathur/setup-php@v2
-  #       with:
-  #         php-version: "8.2"
-  #         coverage: none
-  #         extensions: intl, pdo_mysql, redis, mbstring
-  #         tools: ${{ matrix.task.tools }}
-  #     - name: Get composer cache directory
-  #       id: composer-cache
-  #       run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-  #     - name: Cache Composer packages
-  #       uses: actions/cache@v4
-  #       with:
-  #         path: ${{ steps.composer-cache.outputs.dir }}
-  #         key: ${{ runner.os }}-composer-${{ hashFiles(format('**/app/{0}/composer.lock', inputs.project)) }}
-  #         restore-keys: ${{ runner.os }}-composer-
-  #     - name: Install Composer dependencies
-  #       run: composer install --no-progress --no-interaction
-  #     - name: Execute ${{ matrix.task.description }}
-  #       run: ${{ matrix.task.command }}
-
-  package:
-    name: Package
+  static-analysis:
+    name: Static analysis
     needs:
-      - test
-      #- static-analysis
+      - warm-cache
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: app/${{ inputs.project }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || null }}
           sparse-checkout: app/${{ inputs.project }}
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: "8.3"
           coverage: none
           extensions: intl, pdo_mysql, redis, mbstring
       - name: Get composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
       - name: Cache Composer packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles(format('**/app/{0}/composer.lock', inputs.project)) }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+      - name: PHPStan
+        run: composer run-script phpstan
+      - name: PHP CodeSniffer
+        run: composer run-script phpcs
+      - name: Psalm
+        run: composer run-script psalm
+
+  package:
+    name: Package
+    needs:
+      - test
+      - static-analysis
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app/${{ inputs.project }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref || null }}
+          sparse-checkout: app/${{ inputs.project }}
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          coverage: none
+          extensions: intl, pdo_mysql, redis, mbstring
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - name: Cache Composer packages
+        uses: actions/cache@v5
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles(format('**/app/{0}/composer.lock', inputs.project)) }}
           restore-keys: ${{ runner.os }}-composer-
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist --no-dev --optimize-autoloader
+      - name: Write version file
+        if: ${{ inputs.version }}
+        run: echo "${{ inputs.version }}" > config/version
       - name: Archive
         run: tar -czf ${{ inputs.project }}.tar.gz *
       - name: Upload artefact
         if: ${{ inputs.should-upload-artefact }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ inputs.artefact-name }}
           path: app/${{ inputs.project }}/${{ inputs.project }}.tar.gz

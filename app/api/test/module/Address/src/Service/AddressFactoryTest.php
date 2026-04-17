@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Address\Service;
 
 use Dvsa\Olcs\Address\Service\Address;
@@ -20,7 +22,7 @@ class AddressFactoryTest extends MockeryTestCase
         $this->sut = new AddressFactory();
     }
 
-    public function testInvokeWithoutConfig()
+    public function testInvokeWithoutConfig(): void
     {
         $this->expectException(\RuntimeException::class);
 
@@ -34,7 +36,7 @@ class AddressFactoryTest extends MockeryTestCase
         $this->sut->__invoke($sm, Address::class);
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $config = [
             'address' => [

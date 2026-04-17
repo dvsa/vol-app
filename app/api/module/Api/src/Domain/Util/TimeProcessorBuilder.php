@@ -19,6 +19,7 @@ class TimeProcessorBuilder implements TimeProcessorBuilderInterface
     {
     }
 
+    #[\Override]
     public function build(Sla $sla, ?TrafficArea $trafficArea): DateTimeCalculatorInterface
     {
         $dateTimeProcessor = new AddDays();

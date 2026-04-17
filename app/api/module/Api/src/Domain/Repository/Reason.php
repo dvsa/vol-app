@@ -13,6 +13,7 @@ class Reason extends AbstractRepository
 {
     protected $entity = Entity::class;
 
+    #[\Override]
     protected function applyListFilters(\Doctrine\ORM\QueryBuilder $qb, \Dvsa\Olcs\Transfer\Query\QueryInterface $query)
     {
         if (method_exists($query, 'getIsNi') && !empty($query->getIsNi())) {
@@ -35,5 +36,8 @@ class Reason extends AbstractRepository
             $qb->andWhere($qb->expr()->eq('m.isProposeToRevoke', ':isProposeToRevoke'))
                 ->setParameter('isProposeToRevoke', $query->getIsProposeToRevoke() === 'Y');
         }
+
+        $qb->andWhere($qb->expr()->eq('m.isVisibleInInternal', ':isVisibleInInternal'))
+            ->setParameter('isVisibleInInternal', true);
     }
 }

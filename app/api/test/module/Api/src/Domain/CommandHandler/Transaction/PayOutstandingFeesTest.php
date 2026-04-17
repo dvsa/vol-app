@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Pay Outstanding Fees Test
  *
@@ -101,7 +103,8 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             PaymentEntity::STATUS_OUTSTANDING,
@@ -133,7 +136,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithOrgId()
+    public function testHandleCommandWithOrgId(): void
     {
         // set up data
         $organisationId = 69;
@@ -222,7 +225,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(PaymentEntity::STATUS_OUTSTANDING, $savedPayment->getStatus()->getId());
     }
 
-    public function testHandleCommandNoOp()
+    public function testHandleCommandNoOp(): void
     {
         // set up data
         $organisationId = 69;
@@ -263,7 +266,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandDisableCardPayments()
+    public function testHandleCommandDisableCardPayments(): void
     {
         // set up data
         $organisationId = 69;
@@ -296,7 +299,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testResolvePaidFees()
+    public function testResolvePaidFees(): void
     {
         $result = new Result();
 
@@ -338,7 +341,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->sut->resolvePaidFees($fees, $result);
     }
 
-    public function testResolvePaidFeesOutstandingPaymentUnpaid()
+    public function testResolvePaidFeesOutstandingPaymentUnpaid(): void
     {
         $result = new Result();
 
@@ -380,7 +383,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->sut->resolvePaidFees($fees, $result);
     }
 
-    public function testHandleCommandWithFeeIds()
+    public function testHandleCommandWithFeeIds(): void
     {
         // set up data
         $feeIds = [99, 100, 101];
@@ -465,10 +468,9 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
 
     /**
      * Test handle command for various application types (licence app, irhp)
-     *
-     * @dataProvider dpHandleForApplication
      */
-    public function testHandleCommandWithApplicationId($applicationType, $feeServiceMethod)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleForApplication')]
+    public function testHandleCommandWithApplicationId(mixed $applicationType, mixed $feeServiceMethod): void
     {
         // set up data
         $cpmsRedirectUrl = 'https://olcs-selfserve/foo';
@@ -565,7 +567,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(PaymentEntity::STATUS_OUTSTANDING, $savedPayment->getStatus()->getId());
     }
 
-    public function dpHandleForApplication()
+    public static function dpHandleForApplication(): array
     {
         return [
             'licence application' => [
@@ -579,7 +581,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandCashPaymentWithOverpayment()
+    public function testHandleCommandCashPaymentWithOverpayment(): void
     {
         // set up data
         $feeIds = [99];
@@ -756,7 +758,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(PaymentEntity::TYPE_PAYMENT, $savedTransaction->getType()->getId());
     }
 
-    public function testHandleCommandChequePayment()
+    public function testHandleCommandChequePayment(): void
     {
         // set up data
         $feeIds = [99];
@@ -888,7 +890,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('2015-06-10', $savedTransaction->getChequePoDate()->format('Y-m-d'));
     }
 
-    public function testHandleCommandPoPayment()
+    public function testHandleCommandPoPayment(): void
     {
         // set up data
         $feeIds = [99];
@@ -1018,7 +1020,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('23456', $savedTransaction->getChequePoNumber());
     }
 
-    public function testHandleCommandAmountMismatch()
+    public function testHandleCommandAmountMismatch(): void
     {
         // set up data
         $feeIds = [99];
@@ -1069,7 +1071,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function testHandleCommandAllocationError()
+    public function testHandleCommandAllocationError(): void
     {
         // set up data
         $feeIds = [99];
@@ -1130,7 +1132,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function testHandleCommandCpmsResponseException()
+    public function testHandleCommandCpmsResponseException(): void
     {
         // set up data
         $feeIds = [99];
@@ -1195,10 +1197,8 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider feeDataProvider
-     */
-    public function testHandleCommandChequePaymentInsufficientFee($type, $orgId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('feeDataProvider')]
+    public function testHandleCommandChequePaymentInsufficientFee(mixed $type, mixed $orgId): void
     {
         // set up data
         $feeIds = [99];
@@ -1407,7 +1407,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('2015-06-10', $savedTransaction->getChequePoDate()->format('Y-m-d'));
     }
 
-    public function feeDataProvider()
+    public static function feeDataProvider(): array
     {
         return [
             [
@@ -1421,7 +1421,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandCancelPendingWaive()
+    public function testHandleCommandCancelPendingWaive(): void
     {
         // set up data
         $feeIds = [99];
@@ -1539,7 +1539,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(PaymentEntity::STATUS_OUTSTANDING, $savedPayment->getStatus()->getId());
     }
 
-    public function testHandleCommandInvalidPaymentMethod()
+    public function testHandleCommandInvalidPaymentMethod(): void
     {
         $feeIds = [1, 2];
 
@@ -1605,7 +1605,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
      * @param string $amount
      * @return FeeEntity
      */
-    private function getStubFee($id, $amount, $typeId = null)
+    private function getStubFee(mixed $id, mixed $amount, mixed $typeId = null): mixed
     {
         $status = new RefData();
         $feeType = new FeeTypeEntity();
@@ -1617,7 +1617,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         return $fee;
     }
 
-    public function testHandleCommandWithPendingFees()
+    public function testHandleCommandWithPendingFees(): void
     {
         // set up data
         $feeIds = [99];
@@ -1716,7 +1716,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithCompletedFees()
+    public function testHandleCommandWithCompletedFees(): void
     {
         // set up data
         $feeIds = [99];
@@ -1776,7 +1776,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithFeeIdsResolveOnly()
+    public function testHandleCommandWithFeeIdsResolveOnly(): void
     {
         // set up data
         $feeIds = [99, 100, 101];

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
 use Dvsa\Olcs\Api\Domain\QueryHandlerManager;
@@ -23,7 +25,7 @@ class AbstractFactoryTest extends MockeryTestCase
         $this->mockSl = m::mock(ContainerInterface::class);
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $reqName = AbstractSectionStub::class;
 

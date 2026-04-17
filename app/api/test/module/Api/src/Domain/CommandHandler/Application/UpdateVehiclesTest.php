@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Vehicles Test
  *
@@ -34,7 +36,8 @@ class UpdateVehiclesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
         $this->references = [];
@@ -42,7 +45,7 @@ class UpdateVehiclesTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithoutPartialWithoutVehicles()
+    public function testHandleCommandWithoutPartialWithoutVehicles(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -67,7 +70,7 @@ class UpdateVehiclesTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithVehicles()
+    public function testHandleCommandWithVehicles(): void
     {
         $data = [
             'id' => 111,
@@ -115,7 +118,7 @@ class UpdateVehiclesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('Y', $application->getHasEnteredReg());
     }
 
-    public function testHandleCommandWithoutVehiclesWithPartial()
+    public function testHandleCommandWithoutVehiclesWithPartial(): void
     {
         $data = [
             'id' => 111,

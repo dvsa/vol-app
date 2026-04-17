@@ -25,6 +25,7 @@ final class DeleteLicenceVehicle extends AbstractCommandHandler implements Trans
 {
     protected $repoServiceName = 'LicenceVehicle';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

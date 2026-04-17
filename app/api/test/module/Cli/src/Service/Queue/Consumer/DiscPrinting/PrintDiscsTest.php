@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * PrintDiscsList Test
  *
@@ -21,7 +23,7 @@ class PrintDiscsTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Sut::class;
 
-    public function testGetCommandData()
+    public function testGetCommandData(): void
     {
         $item = new QueueEntity();
         $item->setOptions(

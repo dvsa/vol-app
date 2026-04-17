@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\IrhpStartDate;
@@ -13,7 +15,8 @@ class IrhpStartDateTest extends SingleValueTestAbstract
 {
     public const SUT_CLASS_NAME = IrhpStartDate::class;
 
-    public function testRender()
+    #[\Override]
+    public function testRender(): void
     {
         $sutClassName = static::SUT_CLASS_NAME;
 
@@ -31,7 +34,7 @@ class IrhpStartDateTest extends SingleValueTestAbstract
         $this->assertEquals($valueExpected, $bookmark->render());
     }
 
-    public function testRenderNow()
+    public function testRenderNow(): void
     {
         $sutClassName = static::SUT_CLASS_NAME;
 

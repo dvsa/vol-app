@@ -21,6 +21,7 @@ class Delete extends Update
      * @param $dto
      * @return mixed
      */
+    #[\Override]
     public function getIds($dto)
     {
         return $dto->getIds();

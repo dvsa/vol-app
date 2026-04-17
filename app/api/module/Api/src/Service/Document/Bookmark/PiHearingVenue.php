@@ -12,6 +12,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\PiHearingBundle as Qry;
  */
 class PiHearingVenue extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         if (!isset($data['hearing'])) {
@@ -21,6 +22,7 @@ class PiHearingVenue extends DynamicBookmark
         return Qry::create(['id' => $data['hearing'], 'bundle' => ['venue']]);
     }
 
+    #[\Override]
     public function render()
     {
         if (!empty($this->data['venue'])) {

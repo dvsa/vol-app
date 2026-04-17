@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * UserWitnName data service test
  *
@@ -33,7 +35,7 @@ class UserWithNameTest extends AbstractDataServiceTestCase
     /**
      * Test fetchListOptions
      */
-    public function testFetchListOptions()
+    public function testFetchListOptions(): void
     {
         $users = [
             [
@@ -63,7 +65,7 @@ class UserWithNameTest extends AbstractDataServiceTestCase
     /**
      * Test fetchListOptions with empty data
      */
-    public function testFetchListOptionsEmpty()
+    public function testFetchListOptionsEmpty(): void
     {
         $this->sut->setData('userlist', 'foo');
 

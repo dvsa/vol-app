@@ -21,6 +21,7 @@ class CompaniesHouseVsOlcsDiffsFactory implements FactoryInterface
      * @param array|null $options
      * @return CompaniesHouseVsOlcsDiffs
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CompaniesHouseVsOlcsDiffs
     {
         return new CompaniesHouseVsOlcsDiffs(

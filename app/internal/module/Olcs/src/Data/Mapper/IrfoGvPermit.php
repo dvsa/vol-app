@@ -16,6 +16,7 @@ class IrfoGvPermit implements MapperInterface
      *
      * @param array $data
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         if (!empty($data['now'])) {

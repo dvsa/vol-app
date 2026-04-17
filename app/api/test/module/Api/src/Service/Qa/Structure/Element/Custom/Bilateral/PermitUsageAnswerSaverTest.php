@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Bilateral;
 
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep;
@@ -17,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class PermitUsageAnswerSaverTest extends MockeryTestCase
 {
-    public function testSave()
+    public function testSave(): void
     {
         $postData = [
             'key1' => 'value1',

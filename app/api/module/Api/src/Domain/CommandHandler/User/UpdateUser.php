@@ -49,9 +49,9 @@ final class UpdateUser extends AbstractUserCommandHandler implements
     use CacheAwareTrait;
     use ConfigAwareTrait;
 
-    public const ADMIN_ROLE_ERROR = 'error-always-one-operator-admin';
-    public const RESET_PASSWORD_BY_POST = 'post';
-    public const RESET_PASSWORD_BY_EMAIL = 'email';
+    public const string ADMIN_ROLE_ERROR = 'error-always-one-operator-admin';
+    public const string RESET_PASSWORD_BY_POST = 'post';
+    public const string RESET_PASSWORD_BY_EMAIL = 'email';
 
     protected $extraRepos = ['Application', 'ContactDetails', 'Licence', 'EventHistory', 'EventHistoryType'];
 
@@ -74,6 +74,7 @@ final class UpdateUser extends AbstractUserCommandHandler implements
      * @throws RuntimeException
      * @throws Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         assert($command instanceof UpdateUserCommand, 'Expected $command to be instance of ' . UpdateUserCommand::class);
@@ -315,6 +316,7 @@ final class UpdateUser extends AbstractUserCommandHandler implements
             $this->authAdapter->enableUser($newUser->getLoginId());
         }
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

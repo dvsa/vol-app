@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api;
 
+use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Types\Type;
 use Dvsa\Olcs\Api\Entity\Types\EncryptedStringType;
 use Dvsa\Olcs\Api\Module;
 use Laminas\EventManager\Event;
@@ -12,7 +16,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
-use phpseclib\Crypt\Base;
+use phpseclib3\Crypt\AES;
 
 /**
  * Tests the Api Module php
@@ -27,7 +31,7 @@ class ModuleTest extends MockeryTestCase
         $this->sut = m::mock(Module::class)->makePartial()->shouldAllowMockingProtectedMethods();
     }
 
-    public function testOnBootstrap()
+    public function testOnBootstrap(): void
     {
         $loginId = 123;
 
@@ -68,7 +72,7 @@ class ModuleTest extends MockeryTestCase
         $this->sut->onBootstrap($mockEvent);
     }
 
-    public function testLogResponseHttp()
+    public function testLogResponseHttp(): void
     {
         $logWriter = $this->setupLogger();
 
@@ -84,7 +88,7 @@ class ModuleTest extends MockeryTestCase
         $this->assertSame(['status' => 200, 'content' => 'CONTENT'], $logWriter->events[0]['extra']);
     }
 
-    public function testLogResponseHttpEmptyOlcsDownloadHeader()
+    public function testLogResponseHttpEmptyOlcsDownloadHeader(): void
     {
         $logWriter = $this->setupLogger();
 
@@ -98,7 +102,7 @@ class ModuleTest extends MockeryTestCase
         $this->assertNotContains('API Response is empty', current($logWriter->events));
     }
 
-    public function testLogResponseContentLong()
+    public function testLogResponseContentLong(): void
     {
         $logWriter = $this->setupLogger();
 
@@ -116,18 +120,22 @@ class ModuleTest extends MockeryTestCase
         $this->assertSame(str_repeat('X', 1000) . '...', $logWriter->events[0]['extra']['content']);
     }
 
-    public function testInitDoctrineEncrypterType()
+    public function testInitDoctrineEncrypterType(): void
     {
         if (!EncryptedStringType::hasType(EncryptedStringType::TYPE)) {
             EncryptedStringType::addType(EncryptedStringType::TYPE, EncryptedStringType::class);
         }
-        $this->sut->initDoctrineEncrypterType(['olcs-doctrine' => ['encryption_key' => 'key']]);
 
-        /** @var Base $ciper */
-        $ciper = \Doctrine\DBAL\Types\Type::getType('encrypted_string')->getEncrypter();
+        $platform = m::mock(MySQLPlatform::class);
+        $testData = '{"firstname":"STEVE","surname":"FOX","dateofbirth":"1969-06-09"}';
+        $this->sut->initDoctrineEncrypterType(['olcs-doctrine' => ['encryption_key' => '32byte32byte32byte32byte32byte32']]);
 
-        $this->assertInstanceOf(Base::class, $ciper);
-        $this->assertSame('key', $ciper->key);
+        $doctrineEncryptedString = Type::getType('encrypted_string');
+
+        $encryptedValue = $doctrineEncryptedString->convertToDatabaseValue($testData, $platform);
+        $decryptedValue = $doctrineEncryptedString->convertToPhpValue($encryptedValue, $platform);
+
+        $this->assertEquals($decryptedValue, $testData);
     }
 
     /**
@@ -135,10 +143,10 @@ class ModuleTest extends MockeryTestCase
      *
      * @return \Laminas\Log\Writer\Mock
      */
-    private function setupLogger()
+    private function setupLogger(): mixed
     {
         $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
         $logger->addWriter($logWriter);
         Logger::setLogger($logger);
 

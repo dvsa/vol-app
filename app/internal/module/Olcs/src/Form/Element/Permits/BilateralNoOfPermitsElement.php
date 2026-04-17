@@ -11,6 +11,7 @@ class BilateralNoOfPermitsElement extends Text implements InputProviderInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getInputSpecification()
     {
         return [

@@ -37,6 +37,7 @@ class GetEventHistoryDetails extends AbstractRawQuery
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getQueryTemplate()
     {
         return str_replace('{historyTable}', $this->historyTable, parent::getQueryTemplate());
@@ -45,6 +46,7 @@ class GetEventHistoryDetails extends AbstractRawQuery
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getParamTypes()
     {
         return [

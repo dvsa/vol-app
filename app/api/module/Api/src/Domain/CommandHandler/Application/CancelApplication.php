@@ -25,6 +25,7 @@ class CancelApplication extends AbstractCommandHandler implements TransactionedI
 
     public $extraRepos = ['Licence'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $application Application */

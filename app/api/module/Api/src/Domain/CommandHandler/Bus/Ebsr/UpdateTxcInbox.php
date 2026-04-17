@@ -35,6 +35,7 @@ final class UpdateTxcInbox extends AbstractCommandHandler implements Transaction
      * @return Result
      * @throws \Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var UpdateTxcInboxCmd $command */

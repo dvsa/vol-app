@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CancelIrfoGvPermitFeesTest
  */
@@ -28,7 +30,8 @@ class CancelIrfoGvPermitFeesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             FeeEntity::class => [
@@ -41,7 +44,7 @@ class CancelIrfoGvPermitFeesTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $fees = [
             $this->references[FeeEntity::class][23],

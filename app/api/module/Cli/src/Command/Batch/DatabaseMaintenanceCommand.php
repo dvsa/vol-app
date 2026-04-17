@@ -9,6 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class DatabaseMaintenanceCommand extends AbstractBatchCommand
 {
+    #[\Override]
     protected function configure()
     {
         $this
@@ -16,6 +17,7 @@ class DatabaseMaintenanceCommand extends AbstractBatchCommand
             ->setDescription('Perform database management tasks, e.g., changing is_irfo flags');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

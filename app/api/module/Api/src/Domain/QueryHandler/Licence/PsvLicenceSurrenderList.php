@@ -28,6 +28,7 @@ class PsvLicenceSurrenderList extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var LicenceRepo $licenceRepo */

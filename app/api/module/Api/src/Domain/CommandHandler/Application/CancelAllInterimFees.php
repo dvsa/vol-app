@@ -23,6 +23,7 @@ final class CancelAllInterimFees extends AbstractCommandHandler implements Trans
 {
     protected $repoServiceName = 'Fee';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

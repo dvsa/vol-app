@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Publication;
 
 use Dvsa\Olcs\Api\Entity\System\RefData;
@@ -27,7 +29,7 @@ class PublicationEntityTest extends EntityTester
     /**
      * Test creating a publication
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $trafficArea = m::mock(TrafficAreaEntity::class);
         $pubStatus = m::mock(RefData::class);
@@ -50,7 +52,7 @@ class PublicationEntityTest extends EntityTester
      * Test updating published documents. Checks police document has been set, and that main document has been set as
      * read only
      */
-    public function testUpdatePublishedDocuments()
+    public function testUpdatePublishedDocuments(): void
     {
         $policeDocument = m::mock(DocumentEntity::class);
 
@@ -63,7 +65,7 @@ class PublicationEntityTest extends EntityTester
     /**
      * Tests getting the next publication date
      */
-    public function testGetNextPublicationDate()
+    public function testGetNextPublicationDate(): void
     {
         $pubDate = '2015-12-11';
         $newPubDate  = '2015-12-18'; // +7 days
@@ -76,10 +78,8 @@ class PublicationEntityTest extends EntityTester
 
     /**
      * Check exception is thrown if no pub date is set when generating the future date
-     *
-     * @dataProvider notGeneratedStatusProvider
      */
-    public function testGetNextPublicationDateThrowsException()
+    public function testGetNextPublicationDateThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\RuntimeException::class);
 
@@ -90,7 +90,7 @@ class PublicationEntityTest extends EntityTester
     /**
      * Tests publish
      */
-    public function testPublish()
+    public function testPublish(): void
     {
         $entity = $this->instantiate(Entity::class);
         $entity->setPubStatus(new RefData(Entity::PUB_GENERATED_STATUS));
@@ -101,10 +101,10 @@ class PublicationEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider notGeneratedStatusProvider
      * @param string $pubStatus
      */
-    public function testPublishThrowsException($pubStatus)
+    #[\PHPUnit\Framework\Attributes\DataProvider('notGeneratedStatusProvider')]
+    public function testPublishThrowsException(mixed $pubStatus): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -120,7 +120,7 @@ class PublicationEntityTest extends EntityTester
      *
      * @return array
      */
-    public function notGeneratedStatusProvider()
+    public static function notGeneratedStatusProvider(): array
     {
         return [
             [Entity::PUB_NEW_STATUS],
@@ -131,7 +131,7 @@ class PublicationEntityTest extends EntityTester
     /**
      * Tests generate
      */
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $entity = $this->instantiate(Entity::class);
         $entity->setPubStatus(new RefData(Entity::PUB_NEW_STATUS));
@@ -143,10 +143,10 @@ class PublicationEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider notNewStatusProvider
      * @param string $pubStatus
      */
-    public function testGenerateThrowsException($pubStatus)
+    #[\PHPUnit\Framework\Attributes\DataProvider('notNewStatusProvider')]
+    public function testGenerateThrowsException(mixed $pubStatus): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -163,7 +163,7 @@ class PublicationEntityTest extends EntityTester
      *
      * @return array
      */
-    public function notNewStatusProvider()
+    public static function notNewStatusProvider(): array
     {
         return [
             [Entity::PUB_GENERATED_STATUS],
@@ -174,11 +174,11 @@ class PublicationEntityTest extends EntityTester
     /**
      * Test that isNew function only returns new if the status is new
      *
-     * @dataProvider isNewPublicationStatusProvider
      * @param $pubStatus
      * @param $isNew
      */
-    public function testIsNew($pubStatus, $isNew)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isNewPublicationStatusProvider')]
+    public function testIsNew(mixed $pubStatus, mixed $isNew): void
     {
         $entity = $this->instantiate(Entity::class);
         $entity->setPubStatus(new RefData($pubStatus));
@@ -191,7 +191,7 @@ class PublicationEntityTest extends EntityTester
      *
      * @return array
      */
-    public function isNewPublicationStatusProvider()
+    public static function isNewPublicationStatusProvider(): array
     {
         return [
             [Entity::PUB_NEW_STATUS, true],

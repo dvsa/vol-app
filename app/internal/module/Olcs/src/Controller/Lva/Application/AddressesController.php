@@ -20,7 +20,6 @@ class AddressesController extends AbstractAddressesController implements Applica
 
     protected $lva = 'application';
     protected string $location = 'internal';
-    protected StringHelperService $stringHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -40,12 +39,10 @@ class AddressesController extends AbstractAddressesController implements Applica
         FlashMessengerHelperService $flashMessengerHelper,
         FormServiceManager $formServiceManager,
         ScriptFactory $scriptFactory,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         protected RestrictionHelperService $restrictionHelper,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct($niTextTranslationUtil, $authService, $formHelper, $flashMessengerHelper, $formServiceManager, $scriptFactory);
     }
 }

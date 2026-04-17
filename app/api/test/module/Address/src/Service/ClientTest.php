@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Client Test
  *
@@ -19,7 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class ClientTest extends MockeryTestCase
 {
-    public function testSetUri()
+    public function testSetUri(): void
     {
         $sut = new Client('/foo/bar/');
         $sut->setUri('/cake/');

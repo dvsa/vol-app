@@ -19,6 +19,7 @@ class IrhpPermitReportingController extends AbstractIrhpPermitAdminController im
     /**
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel(
@@ -40,6 +41,7 @@ class IrhpPermitReportingController extends AbstractIrhpPermitAdminController im
      *
      * @return array
      */
+    #[\Override]
     protected function modifyListQueryParameters($parameters)
     {
         $parameters['category'] = Category::CATEGORY_PERMITS;

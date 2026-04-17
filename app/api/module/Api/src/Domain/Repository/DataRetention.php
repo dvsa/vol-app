@@ -25,6 +25,7 @@ class DataRetention extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if ($query instanceof RecordsQry) {
@@ -74,6 +75,7 @@ class DataRetention extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         $this->getQueryBuilder()

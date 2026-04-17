@@ -26,6 +26,7 @@ class Postcheck extends AbstractQueryHandler
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var \PDOStatement $stmt */
@@ -44,6 +45,7 @@ class Postcheck extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

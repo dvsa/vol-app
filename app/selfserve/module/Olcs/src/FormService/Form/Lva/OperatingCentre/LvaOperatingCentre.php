@@ -34,6 +34,7 @@ class LvaOperatingCentre extends CommonOperatingCentre
      *
      * @return void
      */
+    #[\Override]
     public function alterForm(Form $form, array $params)
     {
         $isNi = $this->isNi($params);

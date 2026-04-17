@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Diagnostics;
 
 use Doctrine\ORM\EntityManager;
@@ -31,7 +33,7 @@ class CheckFkIntegrityTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testQuery()
+    public function testQuery(): void
     {
         $this->queryHandler
             ->shouldReceive('handleQuery')

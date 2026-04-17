@@ -67,7 +67,17 @@ return [
             'title' => 'Identifier',
             'name' => 'filename',
             'sort' => 'filename',
-            'formatter' => fn($row) => Escape::html(ltrim($row['filename'], '/')),
+            'formatter' => fn($row) => Escape::html(ltrim((string) $row['filename'], '/')),
+        ],
+        [
+            'title' => 'Type',
+            'name' => 'letterType',
+            'formatter' => function ($row) {
+                if (!empty($row['letterType'])) {
+                    return '<span class="govuk-tag">New</span>';
+                }
+                return '<span class="govuk-tag govuk-tag--grey">Legacy</span>';
+            }
         ],
         [
             'title' => 'Edited date',

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Ecmt;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication as IrhpApplicationEntity;
@@ -26,7 +28,7 @@ class NoOfPermitsAnswerSummaryProviderTest extends MockeryTestCase
         $this->noOfPermitsAnswerSummaryProvider = new NoOfPermitsAnswerSummaryProvider();
     }
 
-    public function testGetTemplateName()
+    public function testGetTemplateName(): void
     {
         $this->assertEquals(
             'ecmt-no-of-permits',
@@ -34,7 +36,7 @@ class NoOfPermitsAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public function testShouldIncludeSlug()
+    public function testShouldIncludeSlug(): void
     {
         $qaEntity = m::mock(QaEntityInterface::class);
 
@@ -43,10 +45,8 @@ class NoOfPermitsAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
-    public function testGetTemplateVariables($isSnapshot)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
+    public function testGetTemplateVariables(mixed $isSnapshot): void
     {
         $periodNameKey = 'period.name.key';
         $validityYear = 2025;
@@ -108,7 +108,7 @@ class NoOfPermitsAnswerSummaryProviderTest extends MockeryTestCase
         $this->assertEquals($expectedTemplateVariables, $templateVariables);
     }
 
-    public function dpSnapshot()
+    public static function dpSnapshot(): array
     {
         return [
             [true],

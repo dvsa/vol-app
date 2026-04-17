@@ -17,6 +17,7 @@ class CanAccessIrhpApplicationWithIrhpApplication extends CanAccessIrhpApplicati
      *
      * @return int
      */
+    #[\Override]
     protected function getId($dto)
     {
         return $dto->getIrhpApplication();

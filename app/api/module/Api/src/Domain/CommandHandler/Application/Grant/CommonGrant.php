@@ -32,6 +32,7 @@ final class CommonGrant extends AbstractCommandHandler implements TransactionedI
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

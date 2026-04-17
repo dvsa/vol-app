@@ -14,6 +14,7 @@ final class HearingList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'PiHearing';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var PiHearingRepo $repo */

@@ -36,8 +36,6 @@ class SafetyController extends Lva\AbstractSafetyController
         LicenceControllerTrait::alterFormForLva as licenceAlterFormForLva;
     }
 
-    protected LicenceLvaAdapter $lvaAdapter;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -58,7 +56,7 @@ class SafetyController extends Lva\AbstractSafetyController
         TableFactory $tableFactory,
         ScriptFactory $scriptFactory,
         TranslationHelperService $translationHelper,
-        LicenceLvaAdapter $lvaAdapter
+        protected LicenceLvaAdapter $lvaAdapter
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -70,7 +68,6 @@ class SafetyController extends Lva\AbstractSafetyController
             $scriptFactory,
             $translationHelper
         );
-        $this->lvaAdapter = $lvaAdapter;
     }
 
     protected $lva = 'licence';
@@ -84,6 +81,7 @@ class SafetyController extends Lva\AbstractSafetyController
      *
      * @return void
      */
+    #[\Override]
     protected function alterFormForLva(Form $form, $data = null)
     {
         $this->licenceAlterFormForLva($form);

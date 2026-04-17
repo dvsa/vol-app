@@ -18,6 +18,7 @@ class ApplicationOperatingCentre extends AbstractQueryHandler
 {
     protected $repoServiceName = 'ApplicationOperatingCentre';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var ApplicationOperatingCentreEntity $aoc */
@@ -31,7 +32,9 @@ class ApplicationOperatingCentre extends AbstractQueryHandler
                     'address' => [
                         'countryCode'
                     ],
-                    'adDocuments',
+                    'adDocuments' => [
+                        'application'
+                    ],
                 ],
             ];
         $data = [

@@ -14,6 +14,7 @@ class CanAccessPreviousConvictionWithId extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canAccessPreviousConviction($this->getId($dto));

@@ -22,6 +22,7 @@ abstract class AbstractReadAudit extends AbstractCommandHandler implements AuthA
 
     protected $entityRepo;
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $existsMessage = 'Audit record exists';

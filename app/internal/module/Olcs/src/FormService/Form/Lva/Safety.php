@@ -24,6 +24,7 @@ class Safety extends CommonSafety
      *
      * @return \Laminas\Form\Form
      */
+    #[\Override]
     public function getForm()
     {
         $form = parent::getForm();

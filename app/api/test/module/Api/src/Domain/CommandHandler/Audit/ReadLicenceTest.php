@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Audit;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Audit\ReadLicence;
@@ -47,7 +49,7 @@ class ReadLicenceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWhenExists()
+    public function testHandleCommandWhenExists(): void
     {
         $this->repoMap['LicenceReadAudit']->shouldReceive('fetchOneOrMore')
             ->once()
@@ -66,7 +68,7 @@ class ReadLicenceTest extends AbstractCommandHandlerTestCase
         static::assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $entity = m::mock(Licence::class);
 
@@ -99,7 +101,7 @@ class ReadLicenceTest extends AbstractCommandHandlerTestCase
         static::assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithIntegrityException()
+    public function testHandleCommandWithIntegrityException(): void
     {
         $entity = m::mock(Licence::class);
 
@@ -128,7 +130,7 @@ class ReadLicenceTest extends AbstractCommandHandlerTestCase
         static::assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithPreviousException()
+    public function testHandleCommandWithPreviousException(): void
     {
         $entity = m::mock(Licence::class);
 
@@ -159,7 +161,7 @@ class ReadLicenceTest extends AbstractCommandHandlerTestCase
         static::assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithDifferentException()
+    public function testHandleCommandWithDifferentException(): void
     {
         $this->expectException(\Exception::class);
 

@@ -26,6 +26,7 @@ final class DeleteSi extends AbstractDeleteCommandHandler
      * @return Result
      * @throws Exception\ValidationException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var SeriousInfringement $si */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * DeletePeopleTest
  *
@@ -36,7 +38,8 @@ class DeletePeopleTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'title_mr', 'org_t_rc', 'org_t_st'
@@ -51,7 +54,7 @@ class DeletePeopleTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandNotDelta()
+    public function testHandleCommandNotDelta(): void
     {
         $data = [
             'id' => 52,
@@ -106,7 +109,7 @@ class DeletePeopleTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandDelta()
+    public function testHandleCommandDelta(): void
     {
         $data = [
             'id' => 52,
@@ -175,7 +178,7 @@ class DeletePeopleTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandDeltaAlreadyDeleted()
+    public function testHandleCommandDeltaAlreadyDeleted(): void
     {
         $data = [
             'id' => 52,

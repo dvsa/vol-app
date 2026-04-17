@@ -42,6 +42,7 @@ class ForgotPassword extends AbstractCommandHandler implements ConfigAwareInterf
      * @return Result
      * @throws ClientException|RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         assert($command instanceof ForgotPasswordCmd);

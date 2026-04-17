@@ -22,6 +22,7 @@ abstract class AbstractSendTmEmail extends AbstractCommandHandler implements \Dv
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $tma \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication */

@@ -32,6 +32,7 @@ class Summary extends AbstractQueryHandler
      * @return \Dvsa\Olcs\Api\Domain\QueryHandler\Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var Entity\Application\Application $application */
@@ -74,6 +75,8 @@ class Summary extends AbstractQueryHandler
             $application,
             $bundle,
             [
+                'wasAutoGranted' => $application->getWasAutoGranted(),
+                'autoGrantChanges' => $application->getAutoGrantChangeSummary(),
                 'actions' => $actions,
                 'reference' => $this->getLatestPaymentReference($application->getId()),
                 'outstandingFee' => $application->getLatestOutstandingApplicationFee() !== null,

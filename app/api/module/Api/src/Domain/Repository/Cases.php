@@ -65,6 +65,7 @@ class Cases extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $expr = $qb->expr();
@@ -126,6 +127,7 @@ class Cases extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         if ($this->query instanceof TransferQry\Cases\Report\OpenList) {
@@ -172,6 +174,7 @@ class Cases extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     public function buildDefaultListQuery(
         \Doctrine\ORM\QueryBuilder $qb,
         \Dvsa\Olcs\Transfer\Query\QueryInterface $query,

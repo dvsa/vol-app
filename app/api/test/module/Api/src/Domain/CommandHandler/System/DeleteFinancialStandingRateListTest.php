@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\System;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\System\DeleteFinancialStandingRateList as CommandHandler;
@@ -24,7 +26,7 @@ class DeleteFinancialStandingRateListTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'ids' => [69, 99]

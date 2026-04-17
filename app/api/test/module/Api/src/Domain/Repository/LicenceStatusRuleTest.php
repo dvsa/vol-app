@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LicenceStatusRuleTest
  *
@@ -28,7 +30,7 @@ class LicenceStatusRuleTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchRevokeCurtailSuspend()
+    public function testFetchRevokeCurtailSuspend(): void
     {
         $mockQb = m::mock(QueryBuilder::class);
         $date = new \DateTime();
@@ -54,7 +56,7 @@ class LicenceStatusRuleTest extends RepositoryTestCase
         $this->assertSame('RESULT', $this->sut->fetchRevokeCurtailSuspend($date));
     }
 
-    public function testFetchToValid()
+    public function testFetchToValid(): void
     {
         $mockQb = m::mock(QueryBuilder::class);
         $date = new \DateTime();
@@ -82,7 +84,7 @@ class LicenceStatusRuleTest extends RepositoryTestCase
         $this->assertSame('RESULT', $this->sut->fetchToValid($date));
     }
 
-    public function testApplyListJoins()
+    public function testApplyListJoins(): void
     {
         $this->setUpSut(Repo::class, true);
 

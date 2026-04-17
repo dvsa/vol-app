@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Db\Service\Search;
 
 use Dvsa\Olcs\Db\Service\Search\Indices\Person;
@@ -12,7 +14,7 @@ use Mockery as m;
  */
 class QueryTemplateTest extends m\Adapter\Phpunit\MockeryTestCase
 {
-    public function testQueryTemplateMissing()
+    public function testQueryTemplateMissing(): void
     {
         $this->expectException(\RuntimeException::class);
         $sut = new QueryTemplate('foo.json', 'bar');
@@ -20,27 +22,29 @@ class QueryTemplateTest extends m\Adapter\Phpunit\MockeryTestCase
         unset($sut);
     }
 
-    /**
-     * @dataProvider queryTemplateDataProvider
-     */
-    public function testQueryTemplate($query, $filters, $filterTypes, $dates, $searchTypes, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('queryTemplateDataProvider')]
+    public function testQueryTemplate(mixed $query, mixed $filters, mixed $filterTypes, mixed $dates, mixed $searchTypes, mixed $expected): void
     {
+        if ($searchTypes === true) {
+            $transportManagerLicenceStatus = m::mock(TransportManagerLicenceStatus::class);
+            $transportManagerLicenceStatus->shouldReceive('applySearch')->once()->andReturnUsing(
+                function (&$params) {
+                    $params['apple'] = 'banana';
+                }
+            );
+
+            $personSearchType = m::mock(Person::class);
+            $personSearchType->shouldReceive('getFilters')->andReturn([$transportManagerLicenceStatus]);
+
+            $searchTypes = [$personSearchType];
+        }
+
         $sut = new QueryTemplate(__DIR__ . '/mock-query-template.json', $query, $filters, $filterTypes, $dates, $searchTypes);
         $this->assertEquals($expected, $sut->getParam('query'));
     }
 
-    public function queryTemplateDataProvider()
+    public static function queryTemplateDataProvider(): array
     {
-        $transportManagerLicenceStatus = $this->createMock(TransportManagerLicenceStatus::class);
-        $transportManagerLicenceStatus->expects($this->once())->method('applySearch')->willReturnCallback(
-            function (&$params) {
-                $params['apple'] = 'banana';
-            }
-        );
-
-        $personSearchType = $this->createMock(Person::class);
-        $personSearchType->method('getFilters')->willReturn([$transportManagerLicenceStatus]);
-
         return [
             // simple query
             [
@@ -255,7 +259,7 @@ class QueryTemplateTest extends m\Adapter\Phpunit\MockeryTestCase
                     'field_6' => 'COMPLEX',
                 ],
                 [],
-                [$personSearchType],
+                true,
                 [
                     'bool' => [
                         'must' => [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * IrfoPsvAuth Repo test
  */
@@ -25,7 +27,7 @@ class IrfoPsvAuthTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchById()
+    public function testFetchById(): void
     {
         $id = 24;
         $mockResult = [0 => 'result'];
@@ -75,7 +77,7 @@ class IrfoPsvAuthTest extends RepositoryTestCase
         $this->assertEquals($result, $mockResult[0]);
     }
 
-    public function testFetchByOrganisation()
+    public function testFetchByOrganisation(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -93,7 +95,7 @@ class IrfoPsvAuthTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchList()
+    public function testFetchList(): void
     {
         $orgId = 12;
 
@@ -116,7 +118,7 @@ class IrfoPsvAuthTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForContinuation()
+    public function testFetchListForContinuation(): void
     {
         $year = 2016;
         $month = 12;

@@ -26,6 +26,7 @@ class TransportManagerDetailsResponsibilityControllerFactory implements FactoryI
      * @param  array|null         $options
      * @return TransportManagerDetailsResponsibilityController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransportManagerDetailsResponsibilityController
     {
         $scriptFactory = $container->get(ScriptFactory::class);

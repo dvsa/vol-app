@@ -16,6 +16,7 @@ class PsvOperatingCentreReviewService extends AbstractReviewService
      *
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(array $data = [])
     {
         return [

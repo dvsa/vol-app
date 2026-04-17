@@ -79,9 +79,10 @@ class RouteParams implements EventManagerAwareInterface, ListenerAggregateInterf
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function attach(EventManagerInterface $events, $priority = 1)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 20);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, $this->onDispatch(...), 20);
     }
 
     public function onDispatch(MvcEvent $e)

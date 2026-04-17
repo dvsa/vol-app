@@ -11,6 +11,7 @@ class CookieListenerFactory implements FactoryInterface
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         return new CookieListener(

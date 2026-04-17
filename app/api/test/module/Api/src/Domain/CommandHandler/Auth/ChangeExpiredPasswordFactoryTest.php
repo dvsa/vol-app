@@ -30,9 +30,7 @@ class ChangeExpiredPasswordFactoryTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -42,10 +40,8 @@ class ChangeExpiredPasswordFactoryTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->__invoke(...));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeReturnsAnInstanceOfChangeExpiredPasswordCommandHandler(): void
     {
         // Setup
@@ -94,7 +90,7 @@ class ChangeExpiredPasswordFactoryTest extends MockeryTestCase
         return $this->serviceManager->get(ValidatableAdapterInterface::class);
     }
 
-    private function repositoryServiceManager()
+    private function repositoryServiceManager(): mixed
     {
         if (!$this->serviceManager->has('RepositoryServiceManager')) {
             $instance = $this->setUpMockService(RepositoryServiceManager::class);

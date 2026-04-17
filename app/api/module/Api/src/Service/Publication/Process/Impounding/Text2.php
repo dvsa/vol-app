@@ -23,6 +23,7 @@ final class Text2 extends AbstractText
      * @param ImmutableArrayObject $context
      * @return PublicationLink
      */
+    #[\Override]
     public function process(PublicationLink $publicationLink, ImmutableArrayObject $context)
     {
         $this->addTextLine(

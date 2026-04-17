@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ContinuationReview\Section;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -38,7 +40,7 @@ class SafetyReviewServiceTest extends MockeryTestCase
         $this->sut = new SafetyReviewService($abstractReviewServiceServices);
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         $continuationDetail = new ContinuationDetail();
 
@@ -125,7 +127,7 @@ class SafetyReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($continuationDetail));
     }
 
-    public function testGetSummaryFromData()
+    public function testGetSummaryFromData(): void
     {
         $continuationDetail = new ContinuationDetail();
 
@@ -209,7 +211,7 @@ class SafetyReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getSummaryFromData($continuationDetail));
     }
 
-    public function testGetSummaryFromDataNoTrailers()
+    public function testGetSummaryFromDataNoTrailers(): void
     {
         $continuationDetail = new ContinuationDetail();
 
@@ -284,7 +286,7 @@ class SafetyReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getSummaryFromData($continuationDetail));
     }
 
-    public function testGetSummaryHeader()
+    public function testGetSummaryHeader(): void
     {
         $this->assertEquals(
             'continuations.safety-details.label',

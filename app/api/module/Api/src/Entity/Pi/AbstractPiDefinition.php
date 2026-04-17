@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Pi;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * PiDefinition Abstract Entity
+ * AbstractPiDefinition Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -27,13 +32,34 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractPiDefinition implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractPiDefinition implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * GoodsOrPsv
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
+     */
+    protected $goodsOrPsv;
 
     /**
      * Created by
@@ -47,45 +73,6 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
     protected $createdBy;
 
     /**
-     * Description
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=false)
-     */
-    protected $description;
-
-    /**
-     * Goods or psv
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
-     */
-    protected $goodsOrPsv;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is ni
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_ni", nullable=false)
-     */
-    protected $isNi;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -97,22 +84,40 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
     protected $lastModifiedBy;
 
     /**
-     * Pi definition category
+     * Eamples, Good Repute, Withdrawn, Formal Warning
      *
      * @var string
      *
      * @ORM\Column(type="string", name="pi_definition_category", length=32, nullable=false)
      */
-    protected $piDefinitionCategory;
+    protected $piDefinitionCategory = '';
 
     /**
-     * Section code
+     * Section of related legislation
      *
      * @var string
      *
      * @ORM\Column(type="string", name="section_code", length=20, nullable=false)
      */
-    protected $sectionCode;
+    protected $sectionCode = '';
+
+    /**
+     * Description
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="description", length=255, nullable=false)
+     */
+    protected $description = '';
+
+    /**
+     * isNi
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="is_ni", nullable=false)
+     */
+    protected $isNi = 0;
 
     /**
      * Version
@@ -125,76 +130,29 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
     protected $version = 1;
 
     /**
-     * Set the created by
+     * Is visible in internal
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @var bool
      *
-     * @return PiDefinition
+     * @ORM\Column(type="boolean", name="is_visible_in_internal", nullable=false, options={"default": 1})
      */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
+    protected $isVisibleInInternal = 1;
 
-        return $this;
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
     }
 
     /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * Initialise collections
      */
-    public function getCreatedBy()
+    public function initCollections(): void
     {
-        return $this->createdBy;
     }
 
-    /**
-     * Set the description
-     *
-     * @param string $description new value being set
-     *
-     * @return PiDefinition
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get the description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set the goods or psv
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv entity being set as the value
-     *
-     * @return PiDefinition
-     */
-    public function setGoodsOrPsv($goodsOrPsv)
-    {
-        $this->goodsOrPsv = $goodsOrPsv;
-
-        return $this;
-    }
-
-    /**
-     * Get the goods or psv
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getGoodsOrPsv()
-    {
-        return $this->goodsOrPsv;
-    }
 
     /**
      * Set the id
@@ -221,33 +179,57 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
     }
 
     /**
-     * Set the is ni
+     * Set the goods or psv
      *
-     * @param string $isNi new value being set
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
      * @return PiDefinition
      */
-    public function setIsNi($isNi)
+    public function setGoodsOrPsv($goodsOrPsv)
     {
-        $this->isNi = $isNi;
+        $this->goodsOrPsv = $goodsOrPsv;
 
         return $this;
     }
 
     /**
-     * Get the is ni
+     * Get the goods or psv
      *
-     * @return string
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    public function getIsNi()
+    public function getGoodsOrPsv()
     {
-        return $this->isNi;
+        return $this->goodsOrPsv;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return PiDefinition
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
     }
 
     /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return PiDefinition
      */
@@ -317,6 +299,54 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
     }
 
     /**
+     * Set the description
+     *
+     * @param string $description new value being set
+     *
+     * @return PiDefinition
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get the description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set the is ni
+     *
+     * @param string $isNi new value being set
+     *
+     * @return PiDefinition
+     */
+    public function setIsNi($isNi)
+    {
+        $this->isNi = $isNi;
+
+        return $this;
+    }
+
+    /**
+     * Get the is ni
+     *
+     * @return string
+     */
+    public function getIsNi()
+    {
+        return $this->isNi;
+    }
+
+    /**
      * Set the version
      *
      * @param int $version new value being set
@@ -338,5 +368,38 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Set the is visible in internal
+     *
+     * @param bool $isVisibleInInternal new value being set
+     *
+     * @return PiDefinition
+     */
+    public function setIsVisibleInInternal($isVisibleInInternal)
+    {
+        $this->isVisibleInInternal = $isVisibleInInternal;
+
+        return $this;
+    }
+
+    /**
+     * Get the is visible in internal
+     *
+     * @return bool
+     */
+    public function getIsVisibleInInternal()
+    {
+        return $this->isVisibleInInternal;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

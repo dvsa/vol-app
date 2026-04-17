@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Domain\Query as DomainQry;
@@ -16,10 +18,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class AbstractStandardConditionsTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestGetQuery
-     */
-    public function testGetQuery($service, $expectClass)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetQuery')]
+    public function testGetQuery(mixed $service, mixed $expectClass): void
     {
         eval(
             'namespace test\\' . $service . ';' .
@@ -43,28 +43,26 @@ class AbstractStandardConditionsTest extends MockeryTestCase
         }
     }
 
-    public function dpTestGetQuery()
+    public static function dpTestGetQuery(): array
     {
         return [
             [
-                'SERVICE' => 'application',
+                'service' => 'application',
                 'expectClass' => DomainQry\Bookmark\ApplicationBundle::class,
             ],
             [
-                'SERVICE' => 'licence',
+                'service' => 'licence',
                 'expectClass' => DomainQry\Bookmark\LicenceBundle::class,
             ],
             [
-                'SERVICE' => 'invalid',
+                'service' => 'invalid',
                 'expectClass' => null,
             ],
         ];
     }
 
-    /**
-     * @dataProvider dbTestRender
-     */
-    public function testRender($licType, $vehType, $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dbTestRender')]
+    public function testRender(mixed $licType, mixed $vehType, mixed $expect): void
     {
         /** @var m\MockInterface|AbstractStandardConditionsStub $sut */
         $sut = m::mock(AbstractStandardConditionsStub::class . '[getSnippet]');
@@ -88,7 +86,7 @@ class AbstractStandardConditionsTest extends MockeryTestCase
         $sut->render();
     }
 
-    public function dbTestRender()
+    public static function dbTestRender(): array
     {
         return [
             [

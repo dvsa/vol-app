@@ -15,6 +15,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 final class ProcessPackTransaction extends AbstractProcessPack implements
     TransactionedInterface
 {
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var EbsrSubmissionEntity $ebsrSub */

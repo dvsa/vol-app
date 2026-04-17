@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Lva\Licence;
 
 use Common\Controller\Lva\Adapters\LicenceLvaAdapter;

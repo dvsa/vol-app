@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler\Permits;
 
 use DateTime;
@@ -34,7 +36,7 @@ class CancelUnsubmittedBilateralTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $openNorwayWindowId = 6;
         $openFranceWindowId = 8;

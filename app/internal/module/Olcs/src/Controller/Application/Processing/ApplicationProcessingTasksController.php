@@ -65,6 +65,7 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
      * @see    \Olcs\Controller\Traits\TaskActionTrait
      * @return string
      */
+    #[\Override]
     protected function getTaskActionType()
     {
         return 'application';
@@ -76,6 +77,7 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
      * @see    \Olcs\Controller\Traits\TaskActionTrait
      * @return array
      */
+    #[\Override]
     protected function getTaskActionFilters()
     {
         $appId = $this->params('application');

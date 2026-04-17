@@ -17,6 +17,7 @@ class UnlicensedCasesOperatorController extends OperatorController
      *
      * @return null
      */
+    #[\Override]
     public function getLeftView()
     {
         return null;

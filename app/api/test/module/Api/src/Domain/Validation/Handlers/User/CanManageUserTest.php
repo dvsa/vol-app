@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\User;
 
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\User\CanManageUser as Sut;
@@ -20,10 +22,8 @@ class CanManageUserTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValid($canAccess, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $canAccess, mixed $expected): void
     {
         $dto = \Dvsa\Olcs\Transfer\Command\User\UpdateUserSelfserve::create(['id' => 76]);
 
@@ -32,10 +32,8 @@ class CanManageUserTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValidWithoutId($canAccess, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValidWithoutId(mixed $canAccess, mixed $expected): void
     {
         /** @var CommandInterface $dto */
         $dto = \Dvsa\Olcs\Transfer\Command\User\CreateUserSelfserve::create([]);
@@ -45,7 +43,7 @@ class CanManageUserTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [true, true],

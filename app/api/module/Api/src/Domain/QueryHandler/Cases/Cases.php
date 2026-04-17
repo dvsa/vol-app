@@ -17,6 +17,7 @@ final class Cases extends AbstractQueryHandler
 
     protected $extraRepos = ['Note'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var CasesEntity $case */

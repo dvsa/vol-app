@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Fee Type repository test
  *
@@ -39,7 +41,7 @@ class FeeTypeTest extends RepositoryTestCase
         $this->setUpSut(Repo::class, true);
     }
 
-    public function testFetchLatestForOverpayment()
+    public function testFetchLatestForOverpayment(): void
     {
         $qb = $this->createMockQb('QUERY');
 
@@ -60,7 +62,7 @@ class FeeTypeTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForApplication()
+    public function testFetchListForApplication(): void
     {
         $applicationId = 99;
 
@@ -116,7 +118,7 @@ class FeeTypeTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForLicence()
+    public function testFetchListForLicence(): void
     {
         $licenceId = 99;
 
@@ -170,7 +172,7 @@ class FeeTypeTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForOrganisation()
+    public function testFetchListForOrganisation(): void
     {
         $now = new DateTime();
         $expectedDate = $now->format(DateTime::W3C);
@@ -213,7 +215,7 @@ class FeeTypeTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForBusReg()
+    public function testFetchListForBusReg(): void
     {
         $now = new DateTime();
         $expectedDate = $now->format(DateTime::W3C);
@@ -261,7 +263,7 @@ class FeeTypeTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListMiscellaneous()
+    public function testFetchListMiscellaneous(): void
     {
         $now = new DateTime();
         $expectedDate = $now->format(DateTime::W3C);
@@ -301,7 +303,7 @@ class FeeTypeTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForGoodsOrPsv()
+    public function testFetchListForGoodsOrPsv(): void
     {
         $qb = $this->createMockQb('QUERY');
 
@@ -341,7 +343,7 @@ class FeeTypeTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForFeeType()
+    public function testFetchListForFeeType(): void
     {
         $qb = $this->createMockQb('QUERY');
 
@@ -381,7 +383,7 @@ class FeeTypeTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testGetLatestIrfoFeeTypeForGvPermits()
+    public function testGetLatestIrfoFeeTypeForGvPermits(): void
     {
         $organisation = new Organisation();
         $irfoGvPermitType = new IrfoGvPermitType();
@@ -397,7 +399,7 @@ class FeeTypeTest extends RepositoryTestCase
         $this->assertEquals($this->sut->getLatestIrfoFeeType($irfoEntity, $feeTypeFeeType), ['foo']);
     }
 
-    public function testGetLatestIrfoFeeTypeForPsvAuth()
+    public function testGetLatestIrfoFeeTypeForPsvAuth(): void
     {
         $organisation = new Organisation();
         $irfoPsvAuthType = new IrfoPsvAuthType();
@@ -413,7 +415,7 @@ class FeeTypeTest extends RepositoryTestCase
         $this->assertEquals($this->sut->getLatestIrfoFeeType($irfoEntity, $feeTypeFeeType), ['foo']);
     }
 
-    public function testGetLatestIrfoFeeTypeForUnknownEntity()
+    public function testGetLatestIrfoFeeTypeForUnknownEntity(): void
     {
         $this->expectException(NotFoundException::class);
 
@@ -425,7 +427,7 @@ class FeeTypeTest extends RepositoryTestCase
         $this->sut->getLatestIrfoFeeType($irfoEntity, $feeTypeFeeType);
     }
 
-    public function testFetchDistinctFeeTypesVisibleInInternal()
+    public function testFetchDistinctFeeTypesVisibleInInternal(): void
     {
         $qb = m::mock(QueryBuilder::class);
         $repo = m::mock(FeeType::class)->shouldAllowMockingProtectedMethods();

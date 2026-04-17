@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
@@ -23,7 +25,7 @@ class PhoneContactTest extends RepositoryTestCase
         $this->setUpSut(Repository\PhoneContact::class, true);
     }
 
-    public function testBuildDefaultListQuery()
+    public function testBuildDefaultListQuery(): void
     {
         $mockQry = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
 
@@ -42,7 +44,7 @@ class PhoneContactTest extends RepositoryTestCase
         $this->assertEquals($expected, $this->query);
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         /** @var QueryBuilder $mockQb */
         $mockQb = m::mock(QueryBuilder::class)

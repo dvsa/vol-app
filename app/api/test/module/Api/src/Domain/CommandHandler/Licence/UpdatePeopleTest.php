@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Licence;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Licence\UpdatePeople;
@@ -9,9 +11,7 @@ use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Licence\UpdatePeople
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Licence\UpdatePeople::class)]
 class UpdatePeopleTest extends AbstractCommandHandlerTestCase
 {
     public const PERSON_ID = 7001;
@@ -37,7 +37,8 @@ class UpdatePeopleTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'title_mr', 'org_t_llp', 'org_t_p'
@@ -48,7 +49,7 @@ class UpdatePeopleTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 52,

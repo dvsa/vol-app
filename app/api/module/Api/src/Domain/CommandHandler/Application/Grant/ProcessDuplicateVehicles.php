@@ -24,6 +24,7 @@ final class ProcessDuplicateVehicles extends AbstractCommandHandler implements T
 
     protected $extraRepos = ['LicenceVehicle'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $application  Entity\Application\Application */

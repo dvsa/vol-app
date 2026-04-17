@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\ApplyRanges;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class UnrestrictedWithLowestStartNumberProviderTest extends MockeryTestCase
 {
-    public function testGetRanges()
+    public function testGetRanges(): void
     {
         $range1 = $this->createMockRange(['HU', 'IT'], 200);
         $range2 = $this->createMockRange([], 400);
@@ -31,7 +33,7 @@ class UnrestrictedWithLowestStartNumberProviderTest extends MockeryTestCase
         );
     }
 
-    public function testGetRangesNullOnNoUnrestrictedRanges()
+    public function testGetRangesNullOnNoUnrestrictedRanges(): void
     {
         $range1 = $this->createMockRange(['HU', 'IT'], 200);
         $range2 = $this->createMockRange(['IT'], 400);
@@ -47,7 +49,7 @@ class UnrestrictedWithLowestStartNumberProviderTest extends MockeryTestCase
         );
     }
 
-    private function createMockRange($countryIds, $fromNo)
+    private function createMockRange(mixed $countryIds, mixed $fromNo): array
     {
         $rangeEntity = m::mock(IrhpPermitRange::class);
         $rangeEntity->shouldReceive('getFromNo')

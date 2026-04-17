@@ -21,6 +21,7 @@ class RuleAdmin extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var DataRetentionRule $repo */

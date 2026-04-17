@@ -14,6 +14,7 @@ class AnswerWriterFactory implements FactoryInterface
      * @param array|null $options
      * @return AnswerWriter
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AnswerWriter
     {
         return new AnswerWriter(

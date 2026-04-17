@@ -59,6 +59,7 @@ class SiController extends AbstractInternalController implements CaseControllerI
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -120,6 +121,7 @@ class SiController extends AbstractInternalController implements CaseControllerI
      *
      * @return Response
      */
+    #[\Override]
     public function indexAction()
     {
         $case = $this->handleQuery(CaseDto::create(['id' => $this->params()->fromRoute('case')]))->getResult();

@@ -15,6 +15,7 @@ final class UpdateWrittenExplanation extends AbstractUpdateApplication
     ];
     protected string $confirmMessage = 'vehicle small part written updated';
 
+    #[\Override]
     protected function updateApplication(ApplicationEntity $application, Command|CommandInterface $command): void
     {
         $application->updateWrittenEvidence(

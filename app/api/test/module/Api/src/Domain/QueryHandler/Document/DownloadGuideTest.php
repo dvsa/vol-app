@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Document;
 
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
@@ -12,9 +14,7 @@ use Dvsa\Olcs\Api\Domain\Repository\DocTemplate as DocTemplateRepo;
 use Laminas\Http\Response\Stream;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Document\DownloadGuide
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Document\DownloadGuide::class)]
 class DownloadGuideTest extends QueryHandlerTestCase
 {
     /** @var  m\MockInterface */
@@ -31,7 +31,7 @@ class DownloadGuideTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQueryTryingToGetIntoParent()
+    public function testHandleQueryTryingToGetIntoParent(): void
     {
         $this->expectException(NotFoundException::class);
 
@@ -47,7 +47,7 @@ class DownloadGuideTest extends QueryHandlerTestCase
         $this->sut->handleQuery($query);
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $fileName = 'unit_file1.pdf';
         $file = m::mock(Stream::class);
@@ -70,7 +70,7 @@ class DownloadGuideTest extends QueryHandlerTestCase
         static::assertEquals($file, $actual);
     }
 
-    public function testHandleQueryIsSlug()
+    public function testHandleQueryIsSlug(): void
     {
         $templateSlug = 'some-template-slug';
         $fileName = 'someFile.txt';

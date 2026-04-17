@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
@@ -13,7 +15,8 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class LicenceReadAuditTest extends AbstractReadAuditTest
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
+class LicenceReadAuditTest extends AbstractReadAuditTestCase
 {
     /** @var LicenceReadAudit|m\MockInterface */
     protected $sut;
@@ -23,12 +26,12 @@ class LicenceReadAuditTest extends AbstractReadAuditTest
         $this->setUpSut(LicenceReadAudit::class, true);
     }
 
-    public function testFetchOneOrMore()
+    public function testFetchOneOrMore(): void
     {
         parent::commonTestFetchOneOrMore('licence');
     }
 
-    public function testFetchList()
+    public function testFetchList(): void
     {
         parent::commonTestFetchList(
             ReadLicence::create(['id' => 111]),
@@ -36,7 +39,7 @@ class LicenceReadAuditTest extends AbstractReadAuditTest
         );
     }
 
-    public function testDeleteOlderThan()
+    public function testDeleteOlderThan(): void
     {
         parent::commonTestDeleteOlderThan(LicenceReadAuditEntity::class);
     }

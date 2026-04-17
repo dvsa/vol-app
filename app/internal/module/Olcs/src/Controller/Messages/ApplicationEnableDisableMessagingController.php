@@ -14,6 +14,7 @@ class ApplicationEnableDisableMessagingController extends AbstractEnableDisableM
 {
     protected $navigationId = 'application';
 
+    #[\Override]
     public function getLeftView(): ?ViewModel
     {
         if ($this->getRequest()->isXmlHttpRequest()) {
@@ -26,11 +27,13 @@ class ApplicationEnableDisableMessagingController extends AbstractEnableDisableM
         return $view;
     }
 
+    #[\Override]
     protected function getRoutePrefix(): string
     {
         return 'lva-application/conversation';
     }
 
+    #[\Override]
     protected function getOrganisationId(): int
     {
         $queryResponse = $this->handleQuery(Application::create(['id' => $this->params()->fromRoute('application')]));

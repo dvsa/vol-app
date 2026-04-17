@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Generate And Store Test
  *
@@ -39,7 +41,8 @@ class GenerateAndStoreTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             Entity\Licence\Licence::class => [
@@ -58,7 +61,7 @@ class GenerateAndStoreTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithDispatch()
+    public function testHandleCommandWithDispatch(): void
     {
         $data = [
             'template' => 'foo',
@@ -145,7 +148,7 @@ class GenerateAndStoreTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'template' => 'foo',

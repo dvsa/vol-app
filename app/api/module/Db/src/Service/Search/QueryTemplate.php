@@ -89,7 +89,7 @@ class QueryTemplate extends Query
                     break;
 
                 case self::FILTER_TYPE_FIXED:
-                    $fields = explode('|', $field);
+                    $fields = explode('|', (string) $field);
                     foreach ($fields as $subField) {
                         $this->_params['query']['bool']['must']['bool']['must']['bool']['should'][] = [
                             'terms' => [
@@ -142,14 +142,14 @@ class QueryTemplate extends Query
         }
 
         foreach ($dates as $fieldName => $value) {
-            $lcFieldName = strtolower($fieldName);
+            $lcFieldName = strtolower((string) $fieldName);
 
             if (str_ends_with($lcFieldName, 'from_and_to')) {
                 /* from_and_to allows a single date field to be used as a terms filter whilst keeping the
                  * individual Day/Month/Year input fields. The 'from_and_to' is identified and a single date is
                  * added as a query match rather than a range (for efficiency)
                  */
-                $fieldName = substr($fieldName, 0, -12);
+                $fieldName = substr((string) $fieldName, 0, -12);
 
                 $this->_params['query']['bool']['filter'][] = [
                     'term' => [
@@ -159,7 +159,7 @@ class QueryTemplate extends Query
             } elseif (str_ends_with($lcFieldName, 'from')) {
                 $criteria = [];
 
-                $fieldName = substr($fieldName, 0, -5);
+                $fieldName = substr((string) $fieldName, 0, -5);
                 $criteria['from'] = $value;
 
                 // Let's now look for the to field.

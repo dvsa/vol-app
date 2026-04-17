@@ -6,6 +6,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\AbstractHandler;
 
 class CanAccessLicenceForSurrender extends AbstractHandler
 {
+    #[\Override]
     public function isValid($dto): bool
     {
         return $this->canAccessLicenceForSurrender($dto->getId());

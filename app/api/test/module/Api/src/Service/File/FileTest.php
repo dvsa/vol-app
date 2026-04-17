@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\File;
 
 use Dvsa\Olcs\Api\Service\File\File;
 use org\bovigo\vfs\vfsStream;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\File\File
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\File\File::class)]
 class FileTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  File */
@@ -18,7 +18,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $this->sut = new File();
     }
 
-    public function testGetSet()
+    public function testGetSet(): void
     {
         $identifier = 'unit_Identifier';
         static::assertEquals($this->sut, $this->sut->setIdentifier($identifier));
@@ -42,7 +42,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
         static::assertEquals(13, $this->sut->getSize());
     }
 
-    public function testSetContentFromFileData()
+    public function testSetContentFromFileData(): void
     {
         $content = 'test content inside test file';
 

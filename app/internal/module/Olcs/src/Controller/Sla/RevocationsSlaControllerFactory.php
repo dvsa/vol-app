@@ -11,6 +11,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class RevocationsSlaControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): RevocationsSlaController
     {
         $translationHelperService = $container->get(TranslationHelperService::class);

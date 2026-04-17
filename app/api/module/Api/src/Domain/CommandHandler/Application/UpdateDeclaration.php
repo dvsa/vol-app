@@ -35,6 +35,7 @@ final class UpdateDeclaration extends AbstractCommandHandler implements Transact
      */
     protected $feeRepo;
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();
@@ -44,6 +45,9 @@ final class UpdateDeclaration extends AbstractCommandHandler implements Transact
         $application = $repo->fetchUsingId($command, Query::HYDRATE_OBJECT, $command->getVersion());
         if ($command->getDeclarationConfirmation() === 'Y') {
             $application->setDeclarationConfirmation($command->getDeclarationConfirmation());
+        }
+        if ($command->getNoTmConfirmation() !== null) {
+            $application->setNoTmConfirmation($command->getNoTmConfirmation());
         }
         if ($command->getInterimRequested() === 'Y') {
             $application->setInterimStatus(
@@ -153,6 +157,7 @@ final class UpdateDeclaration extends AbstractCommandHandler implements Transact
 
         return false;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

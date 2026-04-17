@@ -42,6 +42,7 @@ class SubCategory extends AbstractSubCategory
 
     public const TM_SUB_CATEGORY_DECLARED_UNFIT = 105;
     public const TM_SUB_CATEGORY_TM1_REMOVAL = 191;
+    public const TM_SUB_CATEGORY_GENERAL_TASK = 103;
 
     public const REPORT_SUB_CATEGORY_PSV = 192;
     public const REPORT_SUB_CATEGORY_GV = 193;

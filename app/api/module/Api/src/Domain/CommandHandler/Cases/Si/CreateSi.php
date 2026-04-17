@@ -25,6 +25,7 @@ final class CreateSi extends AbstractCommandHandler
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $case = $this->getRepo()->getReference(CaseEntity::class, $command->getCase());

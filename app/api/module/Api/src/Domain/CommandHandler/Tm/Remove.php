@@ -27,6 +27,7 @@ final class Remove extends AbstractCommandHandler implements TransactionedInterf
 
     protected $repoServiceName = 'TransportManager';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var TransportManager $transportManager */

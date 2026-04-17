@@ -40,6 +40,7 @@ class VariationOverview extends LvaOverview
      * @param mixed ...$args
      * @return VariationOverviewSection
      */
+    #[\Override]
     protected function newSectionModel(...$args): LvaOverviewSection
     {
         return new VariationOverviewSection(...$args);

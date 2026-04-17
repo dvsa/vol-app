@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Permits;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,28 +17,26 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * IrhpPermitApplication Abstract Entity
+ * AbstractIrhpPermitApplication Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="irhp_permit_application",
  *    indexes={
  *        @ORM\Index(name="fk_irhp_permit_application_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_irhp_permit_application_irhp_application1",
-     *     columns={"irhp_application_id"}),
- *        @ORM\Index(name="fk_irhp_permit_application_last_modified_by_user_id",
-     *     columns={"last_modified_by"}),
+ *        @ORM\Index(name="fk_irhp_permit_application_irhp_application1", columns={"irhp_application_id"}),
+ *        @ORM\Index(name="fk_irhp_permit_application_last_modified_by_user_id", columns={"last_modified_by"}),
  *        @ORM\Index(name="fk_irhp_permit_application_sectors_id1_idx", columns={"sectors_id"}),
- *        @ORM\Index(name="fk_irhp_permit_applications_irhp_permit_windows1_idx",
-     *     columns={"irhp_permit_window_id"}),
+ *        @ORM\Index(name="fk_irhp_permit_applications_irhp_permit_windows1_idx", columns={"irhp_permit_window_id"}),
  *        @ORM\Index(name="fk_irhp_permit_applications_licence1_idx", columns={"licence_id"}),
  *        @ORM\Index(name="irhp_permit_type_ref_data_status_id_fk", columns={"status"})
  *    }
  * )
  */
-abstract class AbstractIrhpPermitApplication implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrhpPermitApplication implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -45,13 +45,65 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     use ModifiedOnTrait;
 
     /**
-     * Checked answers
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var boolean
+     * @var int
      *
-     * @ORM\Column(type="boolean", name="checked_answers", nullable=false, options={"default": 0})
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $checkedAnswers = 0;
+    protected $id;
+
+    /**
+     * IrhpPermitWindow
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow", fetch="LAZY")
+     * @ORM\JoinColumn(name="irhp_permit_window_id", referencedColumnName="id")
+     */
+    protected $irhpPermitWindow;
+
+    /**
+     * Licence
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
+     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=true)
+     */
+    protected $licence;
+
+    /**
+     * IrhpApplication
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpApplication", fetch="LAZY")
+     * @ORM\JoinColumn(name="irhp_application_id", referencedColumnName="id", nullable=true)
+     */
+    protected $irhpApplication;
+
+    /**
+     * Sectors
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Permits\Sectors
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\Sectors", fetch="LAZY")
+     * @ORM\JoinColumn(name="sectors_id", referencedColumnName="id", nullable=true)
+     */
+    protected $sectors;
+
+    /**
+     * Status
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=true)
+     */
+    protected $status;
 
     /**
      * Created by
@@ -65,41 +117,6 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Irhp application
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpApplication",
-     *     fetch="LAZY",
-     *     inversedBy="irhpPermitApplications"
-     * )
-     * @ORM\JoinColumn(name="irhp_application_id", referencedColumnName="id", nullable=true)
-     */
-    protected $irhpApplication;
-
-    /**
-     * Irhp permit window
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_permit_window_id", referencedColumnName="id", nullable=false)
-     */
-    protected $irhpPermitWindow;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -111,14 +128,22 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     protected $lastModifiedBy;
 
     /**
-     * Licence
+     * Start date
      *
-     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     * @var \DateTime
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="datetime", name="start_date", nullable=true)
      */
-    protected $licence;
+    protected $startDate;
+
+    /**
+     * Checked answers
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="checked_answers", nullable=false, options={"default": 0})
+     */
+    protected $checkedAnswers = 0;
 
     /**
      * Permits required
@@ -128,24 +153,6 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      * @ORM\Column(type="integer", name="permits_required", nullable=true)
      */
     protected $permitsRequired;
-
-    /**
-     * Properties
-     *
-     * @var string
-     *
-     * @ORM\Column(type="text", name="properties", length=0, nullable=true)
-     */
-    protected $properties;
-
-    /**
-     * Required cabotage
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="required_cabotage", nullable=true)
-     */
-    protected $requiredCabotage;
 
     /**
      * Required euro5
@@ -175,33 +182,22 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     protected $requiredStandard;
 
     /**
-     * Sectors
+     * Required cabotage
      *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\Sectors
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\Sectors", fetch="LAZY")
-     * @ORM\JoinColumn(name="sectors_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="integer", name="required_cabotage", nullable=true)
      */
-    protected $sectors;
+    protected $requiredCabotage;
 
     /**
-     * Start date
+     * Properties
      *
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(type="datetime", name="start_date", nullable=true)
+     * @ORM\Column(type="text", name="properties", nullable=true)
      */
-    protected $startDate;
-
-    /**
-     * Status
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=true)
-     */
-    protected $status;
+    protected $properties;
 
     /**
      * Version
@@ -214,20 +210,16 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     protected $version = 1;
 
     /**
-     * Answer
+     * Answers
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Generic\Answer",
-     *     mappedBy="irhpPermitApplication",
-     *     indexBy="question_text_id"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Generic\Answer", mappedBy="irhpPermitApplication", indexBy="question_text_id")
      */
     protected $answers;
 
     /**
-     * Fee
+     * Fees
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -236,45 +228,34 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     protected $fees;
 
     /**
-     * Irhp candidate permit
+     * IrhpCandidatePermits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit",
-     *     mappedBy="irhpPermitApplication"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit", mappedBy="irhpPermitApplication")
      */
     protected $irhpCandidatePermits;
 
     /**
-     * Irhp permit
+     * IrhpPermits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermit",
-     *     mappedBy="irhpPermitApplication"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermit", mappedBy="irhpPermitApplication")
      */
     protected $irhpPermits;
 
     /**
-     * Irhp permit request
+     * IrhpPermitRequests
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRequest",
-     *     mappedBy="irhpPermitApplication"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRequest", mappedBy="irhpPermitApplication")
      */
     protected $irhpPermitRequests;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -282,11 +263,9 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->answers = new ArrayCollection();
         $this->fees = new ArrayCollection();
@@ -295,53 +274,6 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
         $this->irhpPermitRequests = new ArrayCollection();
     }
 
-    /**
-     * Set the checked answers
-     *
-     * @param boolean $checkedAnswers new value being set
-     *
-     * @return IrhpPermitApplication
-     */
-    public function setCheckedAnswers($checkedAnswers)
-    {
-        $this->checkedAnswers = $checkedAnswers;
-
-        return $this;
-    }
-
-    /**
-     * Get the checked answers
-     *
-     * @return boolean
-     */
-    public function getCheckedAnswers()
-    {
-        return $this->checkedAnswers;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return IrhpPermitApplication
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
 
     /**
      * Set the id
@@ -368,33 +300,9 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     }
 
     /**
-     * Set the irhp application
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication $irhpApplication entity being set as the value
-     *
-     * @return IrhpPermitApplication
-     */
-    public function setIrhpApplication($irhpApplication)
-    {
-        $this->irhpApplication = $irhpApplication;
-
-        return $this;
-    }
-
-    /**
-     * Get the irhp application
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
-     */
-    public function getIrhpApplication()
-    {
-        return $this->irhpApplication;
-    }
-
-    /**
      * Set the irhp permit window
      *
-     * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow $irhpPermitWindow entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow $irhpPermitWindow new value being set
      *
      * @return IrhpPermitApplication
      */
@@ -416,9 +324,129 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     }
 
     /**
+     * Set the licence
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
+     *
+     * @return IrhpPermitApplication
+     */
+    public function setLicence($licence)
+    {
+        $this->licence = $licence;
+
+        return $this;
+    }
+
+    /**
+     * Get the licence
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
+    public function getLicence()
+    {
+        return $this->licence;
+    }
+
+    /**
+     * Set the irhp application
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication $irhpApplication new value being set
+     *
+     * @return IrhpPermitApplication
+     */
+    public function setIrhpApplication($irhpApplication)
+    {
+        $this->irhpApplication = $irhpApplication;
+
+        return $this;
+    }
+
+    /**
+     * Get the irhp application
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
+     */
+    public function getIrhpApplication()
+    {
+        return $this->irhpApplication;
+    }
+
+    /**
+     * Set the sectors
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Permits\Sectors $sectors new value being set
+     *
+     * @return IrhpPermitApplication
+     */
+    public function setSectors($sectors)
+    {
+        $this->sectors = $sectors;
+
+        return $this;
+    }
+
+    /**
+     * Get the sectors
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Permits\Sectors
+     */
+    public function getSectors()
+    {
+        return $this->sectors;
+    }
+
+    /**
+     * Set the status
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
+     *
+     * @return IrhpPermitApplication
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get the status
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return IrhpPermitApplication
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return IrhpPermitApplication
      */
@@ -440,27 +468,57 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     }
 
     /**
-     * Set the licence
+     * Set the start date
      *
-     * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence entity being set as the value
+     * @param \DateTime $startDate new value being set
      *
      * @return IrhpPermitApplication
      */
-    public function setLicence($licence)
+    public function setStartDate($startDate)
     {
-        $this->licence = $licence;
+        $this->startDate = $startDate;
 
         return $this;
     }
 
     /**
-     * Get the licence
+     * Get the start date
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
      */
-    public function getLicence()
+    public function getStartDate($asDateTime = false)
     {
-        return $this->licence;
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->startDate);
+        }
+
+        return $this->startDate;
+    }
+
+    /**
+     * Set the checked answers
+     *
+     * @param bool $checkedAnswers new value being set
+     *
+     * @return IrhpPermitApplication
+     */
+    public function setCheckedAnswers($checkedAnswers)
+    {
+        $this->checkedAnswers = $checkedAnswers;
+
+        return $this;
+    }
+
+    /**
+     * Get the checked answers
+     *
+     * @return bool
+     */
+    public function getCheckedAnswers()
+    {
+        return $this->checkedAnswers;
     }
 
     /**
@@ -485,54 +543,6 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     public function getPermitsRequired()
     {
         return $this->permitsRequired;
-    }
-
-    /**
-     * Set the properties
-     *
-     * @param string $properties new value being set
-     *
-     * @return IrhpPermitApplication
-     */
-    public function setProperties($properties)
-    {
-        $this->properties = $properties;
-
-        return $this;
-    }
-
-    /**
-     * Get the properties
-     *
-     * @return string
-     */
-    public function getProperties()
-    {
-        return $this->properties;
-    }
-
-    /**
-     * Set the required cabotage
-     *
-     * @param int $requiredCabotage new value being set
-     *
-     * @return IrhpPermitApplication
-     */
-    public function setRequiredCabotage($requiredCabotage)
-    {
-        $this->requiredCabotage = $requiredCabotage;
-
-        return $this;
-    }
-
-    /**
-     * Get the required cabotage
-     *
-     * @return int
-     */
-    public function getRequiredCabotage()
-    {
-        return $this->requiredCabotage;
     }
 
     /**
@@ -608,82 +618,51 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     }
 
     /**
-     * Set the sectors
+     * Set the required cabotage
      *
-     * @param \Dvsa\Olcs\Api\Entity\Permits\Sectors $sectors entity being set as the value
+     * @param int $requiredCabotage new value being set
      *
      * @return IrhpPermitApplication
      */
-    public function setSectors($sectors)
+    public function setRequiredCabotage($requiredCabotage)
     {
-        $this->sectors = $sectors;
+        $this->requiredCabotage = $requiredCabotage;
 
         return $this;
     }
 
     /**
-     * Get the sectors
+     * Get the required cabotage
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\Sectors
+     * @return int
      */
-    public function getSectors()
+    public function getRequiredCabotage()
     {
-        return $this->sectors;
+        return $this->requiredCabotage;
     }
 
     /**
-     * Set the start date
+     * Set the properties
      *
-     * @param \DateTime $startDate new value being set
+     * @param string $properties new value being set
      *
      * @return IrhpPermitApplication
      */
-    public function setStartDate($startDate)
+    public function setProperties($properties)
     {
-        $this->startDate = $startDate;
+        $this->properties = $properties;
 
         return $this;
     }
 
     /**
-     * Get the start date
+     * Get the properties
      *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
+     * @return string
      */
-    public function getStartDate($asDateTime = false)
+    public function getProperties()
     {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->startDate);
-        }
-
-        return $this->startDate;
-    }
-
-    /**
-     * Set the status
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status entity being set as the value
-     *
-     * @return IrhpPermitApplication
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get the status
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getStatus()
-    {
-        return $this->status;
+        return $this->properties;
     }
 
     /**
@@ -711,9 +690,9 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     }
 
     /**
-     * Set the answer
+     * Set the answers
      *
-     * @param ArrayCollection $answers collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $answers collection being set as the value
      *
      * @return IrhpPermitApplication
      */
@@ -727,7 +706,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the answers
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getAnswers()
     {
@@ -737,7 +716,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Add a answers
      *
-     * @param ArrayCollection|mixed $answers collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $answers collection being added
      *
      * @return IrhpPermitApplication
      */
@@ -774,9 +753,9 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     }
 
     /**
-     * Set the fee
+     * Set the fees
      *
-     * @param ArrayCollection $fees collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $fees collection being set as the value
      *
      * @return IrhpPermitApplication
      */
@@ -790,7 +769,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the fees
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getFees()
     {
@@ -800,7 +779,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Add a fees
      *
-     * @param ArrayCollection|mixed $fees collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $fees collection being added
      *
      * @return IrhpPermitApplication
      */
@@ -837,9 +816,9 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     }
 
     /**
-     * Set the irhp candidate permit
+     * Set the irhp candidate permits
      *
-     * @param ArrayCollection $irhpCandidatePermits collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $irhpCandidatePermits collection being set as the value
      *
      * @return IrhpPermitApplication
      */
@@ -853,7 +832,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the irhp candidate permits
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getIrhpCandidatePermits()
     {
@@ -863,7 +842,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Add a irhp candidate permits
      *
-     * @param ArrayCollection|mixed $irhpCandidatePermits collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpCandidatePermits collection being added
      *
      * @return IrhpPermitApplication
      */
@@ -900,9 +879,9 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     }
 
     /**
-     * Set the irhp permit
+     * Set the irhp permits
      *
-     * @param ArrayCollection $irhpPermits collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermits collection being set as the value
      *
      * @return IrhpPermitApplication
      */
@@ -916,7 +895,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the irhp permits
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getIrhpPermits()
     {
@@ -926,7 +905,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Add a irhp permits
      *
-     * @param ArrayCollection|mixed $irhpPermits collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermits collection being added
      *
      * @return IrhpPermitApplication
      */
@@ -963,9 +942,9 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     }
 
     /**
-     * Set the irhp permit request
+     * Set the irhp permit requests
      *
-     * @param ArrayCollection $irhpPermitRequests collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRequests collection being set as the value
      *
      * @return IrhpPermitApplication
      */
@@ -979,7 +958,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the irhp permit requests
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getIrhpPermitRequests()
     {
@@ -989,7 +968,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Add a irhp permit requests
      *
-     * @param ArrayCollection|mixed $irhpPermitRequests collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitRequests collection being added
      *
      * @return IrhpPermitApplication
      */
@@ -1023,5 +1002,14 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

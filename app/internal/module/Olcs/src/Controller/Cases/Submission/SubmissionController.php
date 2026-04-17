@@ -206,6 +206,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
      *
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function addAction()
     {
         $defaultDataProvider = new AddFormDefaultData($this->defaultData);
@@ -256,6 +257,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
      *
      * @return array|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function editAction()
     {
         $paramProvider = new GenericItem($this->itemParams);
@@ -318,6 +320,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
      *
      * @return ViewModel
      */
+    #[\Override]
     public function detailsAction()
     {
         $paramProvider = new GenericItem($this->itemParams);
@@ -453,7 +456,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
         $request = $this->getRequest();
 
         $params['submission'] = $this->params()->fromRoute('submission');
-        $formAction = strtolower($this->params()->fromPost('formAction'));
+        $formAction = strtolower((string) $this->params()->fromPost('formAction'));
 
         if (!$request->isPost()) {
             return $this->redirect()->toRoute(
@@ -639,9 +642,9 @@ class SubmissionController extends AbstractInternalController implements Submiss
                     $this->processFiles(
                         $attachmentsForm,
                         'attachments',
-                        [$this, 'processSectionFileUpload'],
-                        [$this, 'deleteSubmissionAttachment'],
-                        [$this, 'loadFiles']
+                        $this->processSectionFileUpload(...),
+                        $this->deleteSubmissionAttachment(...),
+                        $this->loadFiles(...)
                     );
 
                     $selectedSectionsArray[$sectionId]['attachmentsForm'] = $attachmentsForm;

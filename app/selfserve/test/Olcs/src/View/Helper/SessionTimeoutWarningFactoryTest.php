@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\View\Helper\SessionTimeoutWarning;
 
 use Psr\Container\ContainerInterface;
@@ -12,10 +14,9 @@ use Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarningFactoryConfigInp
 class SessionTimeoutWarningFactoryTest extends MockeryTestCase
 {
     /**
-     * @test
-     *
      * @throws \Exception
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function testInvoke(): void
     {
         $container = m::mock(ContainerInterface::class);
@@ -44,11 +45,8 @@ class SessionTimeoutWarningFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(SessionTimeoutWarning::class, $service);
     }
 
-    /**
-     * @test
-     *
-     * @depends testInvoke
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testInvoke')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function testInvokeWithInvalidConfigurationThrowsException(): void
     {
         $container = m::mock(ContainerInterface::class);

@@ -40,6 +40,7 @@ class WithdrawApplication extends AbstractCommandHandler implements Transactione
 
     public $extraRepos = ['LicenceVehicle'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $application Application */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query;
 
 use Doctrine\DBAL\Connection;
@@ -40,8 +42,8 @@ abstract class BaseAbstractDbQueryTestCase extends MockeryTestCase
 
     protected $mockUserRepo;
 
-    abstract protected function getSut();
-    abstract protected function getExpectedQuery();
+    abstract protected function getSut(): mixed;
+    abstract protected function getExpectedQuery(): string;
 
     public function setUp(): void
     {
@@ -80,7 +82,7 @@ abstract class BaseAbstractDbQueryTestCase extends MockeryTestCase
         $this->assertSame($sut, $this->sut);
     }
 
-    public function getClassMetadata($entity)
+    public function getClassMetadata(mixed $entity): mixed
     {
         if (empty($this->metaMap[$entity])) {
             $this->metaMap[$entity] = m::mock();

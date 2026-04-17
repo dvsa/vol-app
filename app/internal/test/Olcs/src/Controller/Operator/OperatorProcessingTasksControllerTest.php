@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Operator tasks controller tests
  */
@@ -28,9 +30,9 @@ class OperatorProcessingTasksControllerTest extends MockeryTestCase
 
     /**
      * Test the index action
-     * @group task
      */
-    public function testIndexActionWithDefaultParams()
+    #[\PHPUnit\Framework\Attributes\Group('task')]
+    public function testIndexActionWithDefaultParams(): void
     {
         $organisationId  = 69;
         $filters = ['filter' => 'value'];
@@ -86,9 +88,9 @@ class OperatorProcessingTasksControllerTest extends MockeryTestCase
 
     /**
      * Test the index action
-     * @group task
      */
-    public function testIndexActionWithRedir()
+    #[\PHPUnit\Framework\Attributes\Group('task')]
+    public function testIndexActionWithRedir(): void
     {
         $this->sut->shouldReceive('processTasksActions')->once()->with('organisation')->andReturn('redir');
 

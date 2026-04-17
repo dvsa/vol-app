@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
 
 use Dvsa\Olcs\Api\Domain\Command\Email\SendFailedOrganisationsList as Cmd;
@@ -16,7 +18,7 @@ class SendFailedOrganisationsListTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $emailAddress = 'toemail@example.com';
         $command = Cmd::create([

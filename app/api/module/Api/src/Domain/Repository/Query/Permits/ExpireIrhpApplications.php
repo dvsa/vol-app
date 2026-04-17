@@ -41,6 +41,7 @@ class ExpireIrhpApplications extends AbstractRawQuery
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getParams()
     {
         return [
@@ -54,6 +55,7 @@ class ExpireIrhpApplications extends AbstractRawQuery
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getParamTypes()
     {
         return [

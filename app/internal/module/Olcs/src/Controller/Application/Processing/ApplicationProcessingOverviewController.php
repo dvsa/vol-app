@@ -20,6 +20,7 @@ class ApplicationProcessingOverviewController extends AbstractApplicationProcess
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         $options = [

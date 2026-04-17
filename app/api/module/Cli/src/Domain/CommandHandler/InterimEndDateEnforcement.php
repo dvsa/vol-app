@@ -20,6 +20,7 @@ final class InterimEndDateEnforcement extends AbstractCommandHandler
 
     private EventHistoryCreator $eventHistoryCreator;
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->eventHistoryCreator = $container->get(EventHistoryCreator::class);
@@ -30,6 +31,7 @@ final class InterimEndDateEnforcement extends AbstractCommandHandler
     /**
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): \Dvsa\Olcs\Api\Domain\Command\Result
     {
         Logger::debug('Handling InterimEndDateEnforcementCommand');

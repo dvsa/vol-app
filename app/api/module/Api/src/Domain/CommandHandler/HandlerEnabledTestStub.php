@@ -20,6 +20,7 @@ class HandlerEnabledTestStub extends AbstractCommandHandler implements ToggleReq
 
     protected $toggleConfig = [];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         return new Result();

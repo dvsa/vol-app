@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class VehiclesSpecifiedTest extends MockeryTestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new VehiclesSpecified();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -22,7 +24,7 @@ class VehiclesSpecifiedTest extends MockeryTestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderWithNoVehiclesSpecified()
+    public function testRenderWithNoVehiclesSpecified(): void
     {
         $bookmark = new VehiclesSpecified();
         $bookmark->setData([]);
@@ -33,7 +35,7 @@ class VehiclesSpecifiedTest extends MockeryTestCase
         );
     }
 
-    public function testRenderWithGoodsVehiclesSpecified()
+    public function testRenderWithGoodsVehiclesSpecified(): void
     {
         $bookmark = m::mock(\Dvsa\Olcs\Api\Service\Document\Bookmark\VehiclesSpecified::class)
             ->makePartial()
@@ -145,7 +147,7 @@ class VehiclesSpecifiedTest extends MockeryTestCase
         );
     }
 
-    public function testRenderWithPsvVehiclesSpecified()
+    public function testRenderWithPsvVehiclesSpecified(): void
     {
         $bookmark = m::mock(\Dvsa\Olcs\Api\Service\Document\Bookmark\VehiclesSpecified::class)
             ->makePartial()

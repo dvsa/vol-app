@@ -23,6 +23,7 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
     /**
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         /* @var $systemParameter \Dvsa\Olcs\Api\Entity\System\SystemParameter */

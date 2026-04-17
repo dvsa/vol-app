@@ -25,8 +25,6 @@ class LicenceController extends AbstractController implements LicenceControllerI
 
     protected $lva;
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
@@ -35,10 +33,9 @@ class LicenceController extends AbstractController implements LicenceControllerI
         protected OppositionHelperService $oppositionHelper,
         protected ComplaintsHelperService $complaintsHelper,
         protected $navigation,
-        FlashMessengerHelperService $flashMessengerHelper
+        protected FlashMessengerHelperService $flashMessengerHelper
     ) {
         parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
-        $this->flashMessengerHelper = $flashMessengerHelper;
     }
 
     /**

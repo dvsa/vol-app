@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Task Test
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\Task\CreateTask;
  */
 class CreateTaskTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $data = [
             'foo' => 'bar',

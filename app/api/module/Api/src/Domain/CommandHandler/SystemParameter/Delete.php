@@ -24,6 +24,7 @@ final class Delete extends AbstractDeleteCommandHandler implements CacheAwareInt
 
     protected $repoServiceName = 'SystemParameter';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->clearSystemParamCache($command->getId());

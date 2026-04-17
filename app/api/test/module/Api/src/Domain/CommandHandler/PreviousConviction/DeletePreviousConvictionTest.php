@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Delete Previous Conviction Test
  *
@@ -31,7 +33,7 @@ class DeletePreviousConvictionTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'ids' => [1,2,3]

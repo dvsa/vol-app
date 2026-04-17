@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\TrafficArea;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -43,7 +45,6 @@ class TrafficAreaEntityTest extends EntityTester
     /**
      * Test getPublicationRecipients
      *
-     * @dataProvider publicationRecipientsProvider
      *
      * @param $pubType
      * @param $isPolice
@@ -51,15 +52,16 @@ class TrafficAreaEntityTest extends EntityTester
      * @param $nonPoliceTimes
      * @param $expectedRecipients
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('publicationRecipientsProvider')]
     public function testGetPublicationRecipients(
-        $pubType,
-        $isPolice,
-        $adPoliceTimes,
-        $adNonPoliceTimes,
-        $npPoliceTimes,
-        $npNonPoliceTimes,
-        $expectedRecipients
-    ) {
+        mixed $pubType,
+        mixed $isPolice,
+        mixed $adPoliceTimes,
+        mixed $adNonPoliceTimes,
+        mixed $npPoliceTimes,
+        mixed $npNonPoliceTimes,
+        mixed $expectedRecipients
+    ): void {
         $entity = new Entity();
 
         $recipient1 = m::mock(RecipientEntity::class);
@@ -140,7 +142,7 @@ class TrafficAreaEntityTest extends EntityTester
      *
      * @return array
      */
-    public function publicationRecipientsProvider()
+    public static function publicationRecipientsProvider(): array
     {
         $adPoliceRecipients = [
             self::PUB_RECIPIENT_EMAIL2 => self::PUB_RECIPIENT_NAME2,

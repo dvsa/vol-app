@@ -23,6 +23,7 @@ class VehiclesDeclarationsControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return VehiclesDeclarationsController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): VehiclesDeclarationsController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

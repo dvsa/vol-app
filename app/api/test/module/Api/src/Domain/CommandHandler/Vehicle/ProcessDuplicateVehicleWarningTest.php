@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Process Duplicate Vehicle Warning Test
  *
@@ -38,7 +40,7 @@ class ProcessDuplicateVehicleWarningTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(['id' => 111]);
 

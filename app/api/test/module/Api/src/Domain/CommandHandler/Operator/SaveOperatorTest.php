@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Save Operator Test
  *
@@ -45,7 +47,8 @@ class SaveOperatorTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             self::NATURE_OF_BUSINESS,
@@ -66,10 +69,8 @@ class SaveOperatorTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider organisationProvider
-     */
-    public function testHandleCommandOrganisationNotValid($commandDetails, $expectedErrors)
+    #[\PHPUnit\Framework\Attributes\DataProvider('organisationProvider')]
+    public function testHandleCommandOrganisationNotValid(mixed $commandDetails, mixed $expectedErrors): void
     {
         $data = [
             'businessType' => $commandDetails['businessType'],
@@ -89,7 +90,7 @@ class SaveOperatorTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function organisationProvider()
+    public static function organisationProvider(): array
     {
         return [
             [
@@ -164,7 +165,7 @@ class SaveOperatorTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandCreateRcOrLlp()
+    public function testHandleCommandCreateRcOrLlp(): void
     {
         $data = [
             'businessType' => OrganisationEntity::ORG_TYPE_REGISTERED_COMPANY,
@@ -219,7 +220,7 @@ class SaveOperatorTest extends AbstractCommandHandlerTestCase
         static::assertEquals('Organisation created successfully', $result->getMessages()[0]);
     }
 
-    public function testHandleCommandUpdatePartnershipOrOther()
+    public function testHandleCommandUpdatePartnershipOrOther(): void
     {
         $data = [
             'businessType' => OrganisationEntity::ORG_TYPE_PARTNERSHIP,
@@ -254,7 +255,7 @@ class SaveOperatorTest extends AbstractCommandHandlerTestCase
         static::assertEquals('Organisation updated successfully', $result->getMessages()[0]);
     }
 
-    public function testHandleCommandUpdateSoleTrader()
+    public function testHandleCommandUpdateSoleTrader(): void
     {
         $data = [
             'businessType' => OrganisationEntity::ORG_TYPE_SOLE_TRADER,
@@ -300,7 +301,7 @@ class SaveOperatorTest extends AbstractCommandHandlerTestCase
         static::assertEquals('Organisation updated successfully', $result->getMessages()[0]);
     }
 
-    public function testHandleCommandCreateSoleTrader()
+    public function testHandleCommandCreateSoleTrader(): void
     {
         $data = [
             'businessType' => OrganisationEntity::ORG_TYPE_SOLE_TRADER,
@@ -346,7 +347,7 @@ class SaveOperatorTest extends AbstractCommandHandlerTestCase
         static::assertEquals('Organisation updated successfully', $result->getMessages()[0]);
     }
 
-    public function testHandleCommandUpdateIrfo()
+    public function testHandleCommandUpdateIrfo(): void
     {
         $data = [
             'businessType' => OrganisationEntity::ORG_TYPE_IRFO,
@@ -377,7 +378,7 @@ class SaveOperatorTest extends AbstractCommandHandlerTestCase
         static::assertEquals('Organisation updated successfully', $result->getMessages()[0]);
     }
 
-    public function testHandleCommandUpdateFromRcToSoleTrader()
+    public function testHandleCommandUpdateFromRcToSoleTrader(): void
     {
         $data = [
             'businessType' => OrganisationEntity::ORG_TYPE_SOLE_TRADER,

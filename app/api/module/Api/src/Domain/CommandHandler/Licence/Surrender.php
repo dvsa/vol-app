@@ -39,6 +39,7 @@ final class Surrender extends AbstractCommandHandler implements TransactionedInt
     /**
      * @see Dvsa\Olcs\Api\Domain\CommandHandler\Licence\ProcessContinuationNotSought::createDiscsCommand()
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $licence Licence */

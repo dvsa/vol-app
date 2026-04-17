@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository;
@@ -7,8 +9,8 @@ use Mockery as m;
 
 /**
  * @author Mat Evans <mat.evans@valtech.co.uk>
- * @covers \Dvsa\Olcs\Api\Domain\Repository\TransportManagerLicence
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\TransportManagerLicence::class)]
 class TransportManagerLicenceTest extends RepositoryTestCase
 {
     /** @var  Repository\TransportManagerLicence */
@@ -19,7 +21,7 @@ class TransportManagerLicenceTest extends RepositoryTestCase
         $this->setUpSut(Repository\TransportManagerLicence::class, true);
     }
 
-    public function testFetchWithContactDetailsByLicence()
+    public function testFetchWithContactDetailsByLicence(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
 
@@ -40,7 +42,7 @@ class TransportManagerLicenceTest extends RepositoryTestCase
         $this->assertSame('RESULT', $this->sut->fetchWithContactDetailsByLicence(834));
     }
 
-    public function testFetchRemovedTmForLicence()
+    public function testFetchRemovedTmForLicenceFirstLetter(): void
     {
         $qb = $this->createMockQb('[QUERY]');
         $this->mockCreateQueryBuilder($qb);
@@ -49,10 +51,35 @@ class TransportManagerLicenceTest extends RepositoryTestCase
         $qb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULTS']);
 
         $licenceId = 1;
-        $this->sut->fetchRemovedTmForLicence($licenceId);
+        $this->sut->fetchRemovedTmForLicence($licenceId); // default => first letter
 
-        $expectedQuery = '[QUERY] AND tml.licence = [[' . $licenceId . ']] AND tml.deletedDate IS NOT NULL AND tml.lastTmLetterDate IS NULL';
+        $expectedQuery =
+            '[QUERY] AND tml.licence = [[' . $licenceId . ']] ' .
+            'AND tml.deletedDate IS NOT NULL ' .
+            'AND tml.lastTmLetterDate IS NULL ' .
+            'AND tml.lastTmFirstEmailDate IS NULL ' .
+            'ORDER BY tml.deletedDate DESC';
+
         $this->assertEquals($expectedQuery, $this->query);
+    }
+
+    public function testFetchRemovedTmForLicenceSecondLetter(): void
+    {
+        $qb = $this->createMockQb('[QUERY]');
+        $this->mockCreateQueryBuilder($qb);
+
+        $this->em->shouldReceive('getFilters->isEnabled')->with('soft-deleteable')->andReturn(false);
+        $qb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULTS']);
+
+        $licenceId = 1;
+        $this->sut->fetchRemovedTmForLicence($licenceId, true);
+
+        $this->assertStringContainsString('[QUERY] AND tml.licence = [[' . $licenceId . ']]', $this->query);
+        $this->assertStringContainsString('AND tml.deletedDate IS NOT NULL', $this->query);
+        $this->assertStringContainsString('AND tml.lastTmLetterDate IS NULL', $this->query);
+        $this->assertStringContainsString('AND tml.lastTmFirstEmailDate IS NOT NULL', $this->query);
+        $this->assertStringContainsString('AND tml.deletedDate <=', $this->query);
+        $this->assertStringContainsString('ORDER BY tml.deletedDate DESC', $this->query);
     }
 
     public function testFetchForTransportManager()
@@ -80,7 +107,7 @@ class TransportManagerLicenceTest extends RepositoryTestCase
         $this->assertEquals(['RESULT'], $this->sut->fetchForTransportManager(1, $statuses));
     }
 
-    public function testFetchForResponsibilities()
+    public function testFetchForResponsibilities(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tml')->once()->andReturn($mockQb);
@@ -98,7 +125,7 @@ class TransportManagerLicenceTest extends RepositoryTestCase
         $this->assertEquals(['RESULT'], $this->sut->fetchForResponsibilities(1));
     }
 
-    public function testFetchByTmAndLicence()
+    public function testFetchByTmAndLicence(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
 
@@ -119,7 +146,7 @@ class TransportManagerLicenceTest extends RepositoryTestCase
     /**
      * Mock SUT so that can just test the protected method
      */
-    public function testApplyListFiltersLicence()
+    public function testApplyListFiltersLicence(): void
     {
         $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $mockDqb->shouldReceive('expr->eq')->with('tml.licence', ':licence')->once()
@@ -134,7 +161,7 @@ class TransportManagerLicenceTest extends RepositoryTestCase
     /**
      * Mock SUT so that can just test the protected method
      */
-    public function testApplyListFiltersTransportManager()
+    public function testApplyListFiltersTransportManager(): void
     {
         $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $mockDqb->shouldReceive('expr->eq')->with('tml.transportManager', ':transportManager')->once()
@@ -146,7 +173,7 @@ class TransportManagerLicenceTest extends RepositoryTestCase
         $this->sut->applyListFilters($mockDqb, $query);
     }
 
-    public function testFetchByLicence()
+    public function testFetchByLicence(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tml')->once()->andReturn($mockQb);

@@ -32,6 +32,7 @@ class LocalAuthorityMissing extends AbstractValidator
      * @param  mixed $value
      * @return bool
      */
+    #[\Override]
     public function isValid($value, $context = [])
     {
         /**

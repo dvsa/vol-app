@@ -16,6 +16,7 @@ class Revoke implements MapperInterface
      *
      * @param array $data
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         $formData['fields'] = $data;

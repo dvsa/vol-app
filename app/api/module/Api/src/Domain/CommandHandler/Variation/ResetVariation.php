@@ -30,6 +30,7 @@ final class ResetVariation extends AbstractCommandHandler implements Transaction
      * @throws RequiresConfirmationException
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(Cmd|CommandInterface $command): Result
     {
         $application = $this->applicationRepo->fetchUsingId($command);
@@ -86,6 +87,7 @@ final class ResetVariation extends AbstractCommandHandler implements Transaction
         );
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

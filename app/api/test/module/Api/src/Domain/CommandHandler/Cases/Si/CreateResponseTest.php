@@ -37,6 +37,10 @@ class CreateResponseTest extends AbstractCommandHandlerTestCase
             AuthorizationService::class => m::mock(AuthorizationService::class)
         ];
 
+        $this->refData = [
+            ErruRequestEntity::SENT_CASE_TYPE
+        ];
+
         parent::setUp();
     }
 
@@ -83,9 +87,10 @@ class CreateResponseTest extends AbstractCommandHandlerTestCase
         $erruRequest->expects('getId')->withNoArgs()->andReturn($erruRequestId);
 
         $case = m::mock(CasesEntity::class);
-        $case->shouldReceive('getId')->withNoArgs()->times(2)->andReturn($caseId);
+        $case->expects('getId')->withNoArgs()->andReturn($caseId);
         $case->expects('getErruRequest')->withNoArgs()->andReturn($erruRequest);
         $case->shouldReceive('getLicence->getId')->once()->andReturn($licenceId);
+        $case->expects('hasErruRequestedPenalties')->withNoArgs()->andReturnTrue();
 
         $this->repoMap['Cases']->expects('fetchById')->with($caseId)->andReturn($case);
         $this->repoMap['ErruRequest']->expects('save')->with(m::type(ErruRequestEntity::class));
@@ -120,8 +125,48 @@ class CreateResponseTest extends AbstractCommandHandlerTestCase
         $result = $this->sut->handleCommand($command);
         $messages = $result->getMessages();
         $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals($caseId, $result->getId('case'));
+        $this->assertEquals($erruRequestId, $result->getId('erruRequest'));
+        $this->assertEquals($documentId, $result->getId('document'));
         $this->assertContains(CreateResponse::MSG_RESPONSE_CREATED, $messages);
+        $this->assertNotContains(CreateResponse::MSG_RESPONSE_NOT_REQUIRED, $messages);
         $this->assertContains($msiSentMessage, $messages);
         $this->assertContains($documentMessage, $messages);
+    }
+
+    /**
+     * No response is sent when there are no requested penalties
+     */
+    public function testHandleCommandNoRequestedPenalties(): void
+    {
+        $caseId = 333;
+        $erruRequestId = 777;
+        $command = CreateErruResponseCmd::create(['case' => $caseId]);
+
+        $erruRequest = m::mock(ErruRequestEntity::class);
+        $erruRequest->expects('getId')->withNoArgs()->andReturn($erruRequestId);
+        $erruRequest->expects('setMsiType')
+            ->with($this->refData[ErruRequestEntity::SENT_CASE_TYPE])
+            ->andReturnSelf();
+
+        $case = m::mock(CasesEntity::class);
+        $case->expects('getErruRequest')->withNoArgs()->andReturn($erruRequest);
+        $case->expects('hasErruRequestedPenalties')->withNoArgs()->andReturnFalse();
+
+        $this->repoMap['Cases']->expects('fetchById')->with($caseId)->andReturn($case);
+        $this->repoMap['ErruRequest']->expects('save')->with(m::type(ErruRequestEntity::class));
+
+        //no attempt to create msi response
+        $this->mockedSmServices[MsiResponseService::class]
+            ->expects('create')
+            ->never();
+
+        $result = $this->sut->handleCommand($command);
+        $messages = $result->getMessages();
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertEquals($caseId, $result->getId('case'));
+        $this->assertEquals($erruRequestId, $result->getId('erruRequest'));
+        $this->assertContains(CreateResponse::MSG_RESPONSE_NOT_REQUIRED, $messages);
+        $this->assertNotContains(CreateResponse::MSG_RESPONSE_CREATED, $messages);
     }
 }

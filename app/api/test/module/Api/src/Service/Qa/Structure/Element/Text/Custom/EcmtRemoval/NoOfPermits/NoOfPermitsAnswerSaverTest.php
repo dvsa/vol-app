@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Text\Custom\EcmtRemoval\NoOfPermits;
 
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep as ApplicationStepEntity;
@@ -19,7 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class NoOfPermitsAnswerSaverTest extends MockeryTestCase
 {
-    public function testSave()
+    public function testSave(): void
     {
         $permitsRequired = 48;
 

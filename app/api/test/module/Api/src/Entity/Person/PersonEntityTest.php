@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Person;
 
 use Common\Data\Object\Bundle\Application;
@@ -27,10 +29,8 @@ class PersonEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider birthDateProvider
-     */
-    public function testUpdatePerson($birthDate, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('birthDateProvider')]
+    public function testUpdatePerson(mixed $birthDate, mixed $expected): void
     {
         $entity = new Entity();
         $title = m::mock(RefData::class);
@@ -44,7 +44,7 @@ class PersonEntityTest extends EntityTester
         $this->assertEquals('bplace', $entity->getBirthPlace());
     }
 
-    public function birthDateProvider()
+    public static function birthDateProvider(): array
     {
         return [
             ['2015-01-01', new \DateTime('2015-01-01')],
@@ -52,7 +52,7 @@ class PersonEntityTest extends EntityTester
         ];
     }
 
-    public function testGetContactDetail()
+    public function testGetContactDetail(): void
     {
         $contactDetails = new \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails(new RefData());
 
@@ -62,7 +62,7 @@ class PersonEntityTest extends EntityTester
         $this->assertSame($contactDetails, $person->getContactDetail());
     }
 
-    public function testGetCalculatedValues()
+    public function testGetCalculatedValues(): void
     {
         $person = m::mock(Entity::class)->makePartial()->shouldAllowMockingProtectedMethods();
         $person->shouldReceive('getDisqualificationStatus')->with()->once()->andReturn('STATUS');
@@ -70,7 +70,7 @@ class PersonEntityTest extends EntityTester
         $this->assertSame(['disqualificationStatus' => 'STATUS'], $person->getCalculatedBundleValues());
     }
 
-    public function testGetFullName()
+    public function testGetFullName(): void
     {
         $person = new Entity();
         $person->setForename('Foo');
@@ -79,7 +79,7 @@ class PersonEntityTest extends EntityTester
         $this->assertSame('Foo Bar', $person->getFullName());
     }
 
-    public function testGetDisqualificationNull()
+    public function testGetDisqualificationNull(): void
     {
         /* @var $organisation Entity */
         $person = $this->instantiate($this->entityClass);
@@ -88,7 +88,7 @@ class PersonEntityTest extends EntityTester
         $this->assertSame(null, $person->getDisqualification());
     }
 
-    public function testGetDisqualification()
+    public function testGetDisqualification(): void
     {
         $disqualification = new Disqualification(m::mock(Organisation::class));
 
@@ -99,7 +99,7 @@ class PersonEntityTest extends EntityTester
         $this->assertSame($disqualification, $person->getDisqualification());
     }
 
-    public function testGetDisqualificationStatusNone()
+    public function testGetDisqualificationStatusNone(): void
     {
         /* @var $person Entity */
         $person = $this->instantiate($this->entityClass);
@@ -108,7 +108,7 @@ class PersonEntityTest extends EntityTester
         $this->assertSame(Disqualification::STATUS_NONE, $person->getDisqualificationStatus());
     }
 
-    public function testGetDisqualificationStatusActive()
+    public function testGetDisqualificationStatusActive(): void
     {
         $disqualification = new Disqualification(m::mock(Organisation::class));
         $disqualification->setIsDisqualified('Y');
@@ -121,7 +121,7 @@ class PersonEntityTest extends EntityTester
         $this->assertSame(Disqualification::STATUS_ACTIVE, $person->getDisqualificationStatus());
     }
 
-    public function testGetRelatedOrganisation()
+    public function testGetRelatedOrganisation(): void
     {
         $person = $this->instantiate($this->entityClass);
         $op = new OrganisationPerson();

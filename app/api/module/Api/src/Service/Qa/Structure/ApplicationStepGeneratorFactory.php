@@ -15,6 +15,7 @@ class ApplicationStepGeneratorFactory implements FactoryInterface
      * @param array|null $options
      * @return ApplicationStepGenerator
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationStepGenerator
     {
         return new ApplicationStepGenerator(

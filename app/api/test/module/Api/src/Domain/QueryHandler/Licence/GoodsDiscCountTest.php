@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Licence;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Licence\GoodsDiscCount as QryHandler;
@@ -17,7 +19,7 @@ class GoodsDiscCountTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = GoodsDiscCount::create(['id' => 1]);
 

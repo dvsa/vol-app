@@ -65,6 +65,7 @@ class TxcInbox extends AbstractTxcInbox implements OrganisationProviderInterface
      *
      * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this->getBusReg()->getRelatedOrganisation();

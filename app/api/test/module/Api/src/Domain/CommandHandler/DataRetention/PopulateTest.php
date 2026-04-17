@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\DataRetention;
 
 use Doctrine\DBAL\Driver\Connection;
@@ -33,7 +35,7 @@ class PopulateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $dataRetentionRules = [
             (new \Dvsa\Olcs\Api\Entity\DataRetentionRule())->setId(2)->setPopulateProcedure('proc2'),
@@ -70,7 +72,7 @@ class PopulateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWhenProcedureReturnsFalse()
+    public function testHandleCommandWhenProcedureReturnsFalse(): void
     {
         $dataRetentionRules = [
             (new \Dvsa\Olcs\Api\Entity\DataRetentionRule())->setId(2)->setPopulateProcedure('proc2'),
@@ -108,7 +110,7 @@ class PopulateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWhenProcedureThrowsException()
+    public function testHandleCommandWhenProcedureThrowsException(): void
     {
         $dataRetentionRules = [
             (new \Dvsa\Olcs\Api\Entity\DataRetentionRule())->setId(2)->setPopulateProcedure('proc2'),

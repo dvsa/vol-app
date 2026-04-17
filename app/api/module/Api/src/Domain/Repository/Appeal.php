@@ -64,6 +64,7 @@ class Appeal extends AbstractRepository
      * @param QueryBuilder $qb
      * @param QueryInterface $query
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $qb->andWhere($qb->expr()->eq($this->alias . '.case', ':byCase'))
@@ -75,6 +76,7 @@ class Appeal extends AbstractRepository
      * @param QueryBuilder $qb
      * @param QueryInterface $query
      */
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         $this->getQueryBuilder()->modifyQuery($qb)

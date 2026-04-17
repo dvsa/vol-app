@@ -25,6 +25,7 @@ class RadioGenerator implements ElementGeneratorInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function generate(ElementGeneratorContext $context)
     {
         $applicationStepEntity = $context->getApplicationStepEntity();

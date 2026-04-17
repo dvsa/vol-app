@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity;
 
 use Dvsa\Olcs\Api\Service\GovUkAccount\Data\Attributes;
@@ -58,9 +60,7 @@ class DigitalSignatureEntityTest extends EntityTester
         $this->assertSame(['foo' => 'bar'], $sut->getAttributesArray());
     }
 
-    /**
-     * @dataProvider dpTestGetSignatureName
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetSignatureName')]
     public function testGetSignatureName(string $expected, array $attributes): void
     {
         $sut = new Entity();
@@ -68,7 +68,7 @@ class DigitalSignatureEntityTest extends EntityTester
         $this->assertSame($expected, $sut->getSignatureName());
     }
 
-    public function dpTestGetSignatureName(): array
+    public static function dpTestGetSignatureName(): array
     {
         return [
             [
@@ -113,9 +113,7 @@ class DigitalSignatureEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestGetDateOfBirth
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetDateOfBirth')]
     public function testGetDateOfBirth(?string $expected, array $attributes): void
     {
         $sut = new Entity();
@@ -123,7 +121,7 @@ class DigitalSignatureEntityTest extends EntityTester
         $this->assertSame($expected, $sut->getDateOfBirth());
     }
 
-    public function dpTestGetDateOfBirth()
+    public static function dpTestGetDateOfBirth(): array
     {
         return [
             [null, []],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\User;
 
 use DateTimeImmutable;
@@ -28,7 +30,7 @@ class OperatorAdminForOrganisationHasLoggedInTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function dpHandleQuery_OrganisationHasOperatorAdminsWhoHaveLoggedIn(): array
+    public static function dpHandleQuery_OrganisationHasOperatorAdminsWhoHaveLoggedIn(): array
     {
         return [
             'HasLoggedIn' => [
@@ -42,9 +44,7 @@ class OperatorAdminForOrganisationHasLoggedInTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleQuery_OrganisationHasOperatorAdminsWhoHaveLoggedIn
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery_OrganisationHasOperatorAdminsWhoHaveLoggedIn')]
     public function testHandleQuery_OrganisationHasOperatorAdminsWhoHaveLoggedIn(int $fetchCountResult, bool $expectedOperatorAdminHasLoggedIn): void
     {
         $organisationId = 1;
@@ -61,7 +61,7 @@ class OperatorAdminForOrganisationHasLoggedInTest extends QueryHandlerTestCase
         $this->assertEquals($expectedOperatorAdminHasLoggedIn, $result['operatorAdminHasLoggedIn']);
     }
 
-    public function dpHandleQuery_UsesLastLoggedInFromFromQueryIfProvided(): array
+    public static function dpHandleQuery_UsesLastLoggedInFromFromQueryIfProvided(): array
     {
         return [
             'LastLoggedInFrom not specified' => [
@@ -75,16 +75,12 @@ class OperatorAdminForOrganisationHasLoggedInTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleQuery_UsesLastLoggedInFromFromQueryIfProvided
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery_UsesLastLoggedInFromFromQueryIfProvided')]
     public function testHandleQuery_UsesLastLoggedInFromFromQueryIfProvided(string $expectedLastLoggedInFrom, Query $query): void
     {
         $repo = $this->repoMap[Repository\User::class];
         $repo->shouldReceive('fetchCount')
-            ->withArgs(function (ListDto $dto) use ($expectedLastLoggedInFrom) {
-                return $dto->getLastLoggedInFrom() === $expectedLastLoggedInFrom;
-            })
+            ->withArgs(fn(ListDto $dto) => $dto->getLastLoggedInFrom() === $expectedLastLoggedInFrom)
             ->andReturn(0);
 
         $result = $this->sut->handleQuery($query);
@@ -122,19 +118,19 @@ class OperatorAdminForOrganisationHasLoggedInTest extends QueryHandlerTestCase
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
         $instance = new class () extends \stdClass implements QueryInterface {
-            public function exchangeArray(array $array)
+            public function exchangeArray(array $array): void
             {
                 // phpcs:ignore Generic.Commenting.Todo.TaskFound
                 // TODO: Implement exchangeArray() method.
             }
 
-            public function getArrayCopy()
+            public function getArrayCopy(): void
             {
                 // phpcs:ignore Generic.Commenting.Todo.TaskFound
                 // TODO: Implement getArrayCopy() method.
             }
 
-            public static function create(array $data)
+            public static function create(array $data): void
             {
                 // phpcs:ignore Generic.Commenting.Todo.TaskFound
                 // TODO: Implement create() method.

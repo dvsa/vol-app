@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\ReviewDateAdd2Months;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\ReviewDateAdd2Months;
  */
 class ReviewDateAdd2MonthsTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new ReviewDateAdd2Months();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -19,7 +21,7 @@ class ReviewDateAdd2MonthsTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderWithNoReviewDate()
+    public function testRenderWithNoReviewDate(): void
     {
         $bookmark = new ReviewDateAdd2Months();
         $bookmark->setData(
@@ -34,7 +36,7 @@ class ReviewDateAdd2MonthsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testRenderWithReviewDate()
+    public function testRenderWithReviewDate(): void
     {
         $bookmark = new ReviewDateAdd2Months();
         $bookmark->setData(

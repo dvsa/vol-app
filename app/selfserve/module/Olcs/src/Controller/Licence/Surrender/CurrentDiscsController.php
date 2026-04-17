@@ -40,6 +40,7 @@ class CurrentDiscsController extends AbstractSurrenderController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
     }
 
+    #[\Override]
     public function indexAction()
     {
         $this->skip();
@@ -116,6 +117,7 @@ class CurrentDiscsController extends AbstractSurrenderController
      * @return array
      *
      */
+    #[\Override]
     protected function getViewVariables(): array
     {
         $numberOfDiscs = $this->getNumberOfDiscs();

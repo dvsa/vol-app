@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * By Id Test
  *
@@ -24,7 +26,7 @@ class ByIdTest extends QueryPartialTestCase
         parent::setUp();
     }
 
-    public function testModifyQuery()
+    public function testModifyQuery(): void
     {
         $id = 111;
 

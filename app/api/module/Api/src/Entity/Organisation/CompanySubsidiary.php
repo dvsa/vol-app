@@ -33,11 +33,13 @@ class CompanySubsidiary extends AbstractCompanySubsidiary implements Organisatio
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this->getLicence()->getOrganisation();
     }
 
+    #[\Override]
     protected function getCalculatedValues()
     {
         return ['licence' => null];

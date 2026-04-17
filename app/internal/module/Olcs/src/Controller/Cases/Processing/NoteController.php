@@ -47,6 +47,7 @@ class NoteController extends AbstractInternalController implements CaseControlle
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

@@ -23,6 +23,7 @@ final class UpdatePreviousConviction extends AbstractCommandHandler implements T
 {
     protected $repoServiceName = 'PreviousConviction';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $conviction = $this->getRepo()

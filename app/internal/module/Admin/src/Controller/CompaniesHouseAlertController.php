@@ -72,6 +72,7 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
      *
      * @return \Laminas\Http\Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'Companies House alerts');
@@ -96,6 +97,7 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
      *
      * @return ViewModel
      */
+    #[\Override]
     public function closeAction()
     {
         Logger::debug(__FILE__);
@@ -110,7 +112,7 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
             return $this->viewBuilder()->buildView($confirm);
         }
 
-        $dtoData = ['ids' => explode(',', $this->params()->fromRoute('id'))];
+        $dtoData = ['ids' => explode(',', (string) $this->params()->fromRoute('id'))];
         $response = $this->handleCommand(CloseDto::create($dtoData));
 
         if ($response->isServerError() || $response->isClientError()) {

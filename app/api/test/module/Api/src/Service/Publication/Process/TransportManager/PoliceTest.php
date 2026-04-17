@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Process\TransportManager;
 
 use Dvsa\Olcs\Api\Entity\Person\Person;
@@ -17,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class PoliceTest extends MockeryTestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         $sut = new Police();
 

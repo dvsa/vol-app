@@ -34,6 +34,7 @@ final class UpdateSubmission extends AbstractCommandHandler implements Submissio
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      * @throws \Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $submissionEntity = $this->updateSubmission($command);

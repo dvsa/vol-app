@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler\MessageQueue\Consumer\CompaniesHouse;
 
 use Dvsa\Olcs\Api\Domain\CommandHandlerManager;
@@ -13,7 +15,7 @@ use Psr\Container\ContainerInterface;
 
 abstract class AbstractCompaniesHouseConsumerTestCase extends AbstractCommandHandlerTestCase
 {
-    protected function setupService()
+    protected function setupService(): void
     {
         $this->repoManager = m::mock(RepositoryServiceManager::class);
         $this->queryHandler = m::mock(QueryHandlerManager::class);

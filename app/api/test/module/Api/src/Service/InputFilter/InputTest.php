@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\InputFilter;
 
 use Dvsa\Olcs\Api\Service\InputFilter\Input;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  */
 class InputTest extends TestCase
 {
-    public function testGetValue()
+    public function testGetValue(): void
     {
         $value = 'raw';
         $filtered = 'filtered';
@@ -30,7 +32,7 @@ class InputTest extends TestCase
         $sut->getValue();
     }
 
-    public function testSetValueResetsFilter()
+    public function testSetValueResetsFilter(): void
     {
         $value = 'raw';
         $value2 = 'raw2';

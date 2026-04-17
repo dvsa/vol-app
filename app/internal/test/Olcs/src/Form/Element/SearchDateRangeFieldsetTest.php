@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * SearchDateRangeFieldset Test
  *
@@ -19,7 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  */
 class SearchDateRangeFieldsetTest extends TestCase
 {
-    public function testSearchAwareTraitByProxy()
+    public function testSearchAwareTraitByProxy(): void
     {
         $service = m::mock(\Common\Service\Data\Search\Search::class);
 
@@ -28,7 +30,7 @@ class SearchDateRangeFieldsetTest extends TestCase
         $this->assertSame($service, $sut->setSearchService($service)->getSearchService());
     }
 
-    public function initTest()
+    public function initTest(): void
     {
         $filter = m::mock('stdClass');
         $filter->shouldReceive('getKey')->twice()->andReturn('Key');

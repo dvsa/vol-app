@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * TmQualification test
  *
@@ -25,7 +27,7 @@ class TmQualificationTest extends RepositoryTestCase
         $this->setUpSut(TmQualificationRepo::class);
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         $sut = m::mock(TmQualificationRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
@@ -43,7 +45,7 @@ class TmQualificationTest extends RepositoryTestCase
         $sut->applyListFilters($mockQb, $mockQuery);
     }
 
-    public function testApplyListJoins()
+    public function testApplyListJoins(): void
     {
         $sut = m::mock(TmQualificationRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
 

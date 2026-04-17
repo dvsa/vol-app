@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Facade\SupplementedApplicationSteps;
 
 use Dvsa\Olcs\Api\Domain\FormControlServiceManager;
@@ -20,7 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class SupplementedApplicationStepsProviderTest extends MockeryTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
         $applicationStep1 = m::mock(ApplicationStep::class);
         $applicationStep2 = m::mock(ApplicationStep::class);

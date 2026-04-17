@@ -25,6 +25,7 @@ class SendEcmtShortTermUnsuccessful extends AbstractEmailHandler
      *
      * @return array
      */
+    #[\Override]
     protected function getTemplateVariables($recordObject): array
     {
         return [

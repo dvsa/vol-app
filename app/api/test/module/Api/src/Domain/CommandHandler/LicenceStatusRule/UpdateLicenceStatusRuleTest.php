@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * UpdateLicenceStatusRuleTest.php
  *
@@ -37,7 +39,7 @@ class UpdateLicenceStatusRuleTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'licence' => 1,

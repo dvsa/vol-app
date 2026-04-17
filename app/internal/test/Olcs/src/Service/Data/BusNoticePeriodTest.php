@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -7,15 +9,11 @@ use Dvsa\Olcs\Transfer\Query\Bus\BusNoticePeriodList as Qry;
 use Olcs\Service\Data\BusNoticePeriod;
 use Mockery as m;
 use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/**
- * Class BusNoticePeriod Test
- * @package CommonTest\Service
- */
 class BusNoticePeriodTest extends AbstractDataServiceTestCase
 {
-    /** @var BusNoticePeriod */
-    private $sut;
+    private BusNoticePeriod $sut;
 
     protected function setUp(): void
     {
@@ -24,35 +22,33 @@ class BusNoticePeriodTest extends AbstractDataServiceTestCase
         $this->sut = new BusNoticePeriod($this->abstractDataServiceServices);
     }
 
-    public function testFormatData()
+    public function testFormatData(): void
     {
-        $source = $this->getSingleSource();
-        $expected = $this->getSingleExpected();
-
-        $this->assertEquals($expected, $this->sut->formatData($source));
+        $this->assertEquals(
+            self::SINGLE_EXPECTED,
+            $this->sut->formatData(
+                [
+                    ['id' => 'val-1', 'noticeArea' => 'Value 1'],
+                    ['id' => 'val-2', 'noticeArea' => 'Value 2'],
+                    ['id' => 'val-3', 'noticeArea' => 'Value 3'],
+                ],
+            )
+        );
     }
 
     /**
-     * @dataProvider provideFetchListOptions
      * @param $input
      * @param $expected
      */
-    public function testFetchListOptions($input, $expected)
+    #[DataProvider('provideFetchListOptions')]
+    public function testFetchListOptions(mixed $input, mixed $expected): void
     {
         $this->sut->setData('BusNoticePeriod', $input);
 
         $this->assertEquals($expected, $this->sut->fetchListOptions(''));
     }
 
-    public function provideFetchListOptions()
-    {
-        return [
-            [$this->getSingleSource(), $this->getSingleExpected()],
-            [false, []]
-        ];
-    }
-
-    public function testFetchListData()
+    public function testFetchListData(): void
     {
         $results = ['results' => 'results'];
 
@@ -79,7 +75,7 @@ class BusNoticePeriodTest extends AbstractDataServiceTestCase
     /**
      * Test fetchListData with exception
      */
-    public function testFetchListDataWithException()
+    public function testFetchListDataWithException(): void
     {
         $this->expectException(DataServiceException::class);
 
@@ -99,29 +95,18 @@ class BusNoticePeriodTest extends AbstractDataServiceTestCase
         $this->sut->fetchListData();
     }
 
-    /**
-     * @return array
-     */
-    protected function getSingleExpected()
+    public static function provideFetchListOptions(): array
     {
-        $expected = [
-            'val-1' => 'Value 1',
-            'val-2' => 'Value 2',
-            'val-3' => 'Value 3',
+        return [
+            [
+                [
+                    ['id' => 'val-1', 'noticeArea' => 'Value 1'],
+                    ['id' => 'val-2', 'noticeArea' => 'Value 2'],
+                    ['id' => 'val-3', 'noticeArea' => 'Value 3'],
+                ],
+                self::SINGLE_EXPECTED,
+            ],
+            [false, []]
         ];
-        return $expected;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getSingleSource()
-    {
-        $source = [
-            ['id' => 'val-1', 'noticeArea' => 'Value 1'],
-            ['id' => 'val-2', 'noticeArea' => 'Value 2'],
-            ['id' => 'val-3', 'noticeArea' => 'Value 3'],
-        ];
-        return $source;
     }
 }

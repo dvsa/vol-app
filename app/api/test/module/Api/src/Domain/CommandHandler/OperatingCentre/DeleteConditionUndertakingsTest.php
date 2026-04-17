@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Delete Condition/Undertakings Test
  *
@@ -34,7 +36,8 @@ class DeleteConditionUndertakingsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -57,7 +60,7 @@ class DeleteConditionUndertakingsTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandApplicationWrongStatus()
+    public function testHandleCommandApplicationWrongStatus(): void
     {
         $oc = $this->mapReference(OperatingCentre::class, 1);
         $application = $this->mapReference(Application::class, 11);
@@ -81,7 +84,7 @@ class DeleteConditionUndertakingsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandApplication()
+    public function testHandleCommandApplication(): void
     {
         $oc = $this->mapReference(OperatingCentre::class, 1);
         $application = $this->mapReference(Application::class, 11);
@@ -134,7 +137,7 @@ class DeleteConditionUndertakingsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandLicence()
+    public function testHandleCommandLicence(): void
     {
         $oc = $this->mapReference(OperatingCentre::class, 1);
         $licence = $this->mapReference(Licence::class, 22);

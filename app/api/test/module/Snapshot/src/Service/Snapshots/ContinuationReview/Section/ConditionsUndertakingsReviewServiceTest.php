@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ContinuationReview\Section;
 
 use Dvsa\Olcs\Snapshot\Service\Snapshots\ContinuationReview\Section\AbstractReviewServiceServices;
@@ -32,10 +34,8 @@ class ConditionsUndertakingsReviewServiceTest extends MockeryTestCase
         $this->sut = new ConditionsUndertakingsReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider licenceProvider
-     */
-    public function testGetConfigFromData($isPsv, $isRestricted, $variables)
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceProvider')]
+    public function testGetConfigFromData(mixed $isPsv, mixed $isRestricted, mixed $variables): void
     {
         $continuationDetail = new ContinuationDetail();
 
@@ -66,7 +66,7 @@ class ConditionsUndertakingsReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($continuationDetail));
     }
 
-    public function licenceProvider()
+    public static function licenceProvider(): array
     {
         return [
             'isPsvRestricted' => [

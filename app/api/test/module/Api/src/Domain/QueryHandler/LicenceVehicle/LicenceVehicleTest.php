@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LicenceVehicle Test
  *
@@ -38,7 +40,7 @@ class LicenceVehicleTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $data = [];
         $query = Qry::create($data);

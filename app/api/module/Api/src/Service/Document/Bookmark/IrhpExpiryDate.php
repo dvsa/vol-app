@@ -28,6 +28,7 @@ class IrhpExpiryDate extends SingleValueAbstract
      *
      * @return string
      */
+    #[\Override]
     protected function getValue()
     {
         return $this->data['expiryDate'] ?? $this->data['irhpPermitRange']['irhpPermitStock']['validTo'] ?? null;

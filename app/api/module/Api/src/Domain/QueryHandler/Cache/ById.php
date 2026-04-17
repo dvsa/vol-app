@@ -48,6 +48,7 @@ class ById extends AbstractQueryHandler implements CacheAwareInterface
      * @return mixed
      * @throws \Exception
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $cacheId = $query->getId();

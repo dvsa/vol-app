@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ContinuationReview\Section;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -34,7 +36,7 @@ class UsersReviewServiceTest extends MockeryTestCase
         $this->sut = new UsersReviewService($abstractReviewServiceServices);
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         $continuationDetail = new ContinuationDetail();
         $organisationUsers = new ArrayCollection();
@@ -77,7 +79,7 @@ class UsersReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($continuationDetail));
     }
 
-    public function testGetConfigWithEmptyData()
+    public function testGetConfigWithEmptyData(): void
     {
         $continuationDetail = new ContinuationDetail();
         $organisationUsers = new ArrayCollection();
@@ -106,7 +108,7 @@ class UsersReviewServiceTest extends MockeryTestCase
     /**
      * @return m\LegacyMockInterface|m\MockInterface
      */
-    public function aMockOrganisationUser($name, $emailAddress)
+    public function aMockOrganisationUser(mixed $name, mixed $emailAddress): m\MockInterface
     {
         $mockPerson = m::mock()
             ->shouldReceive('getFullName')

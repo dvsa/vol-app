@@ -20,6 +20,7 @@ class Team extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Team';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $team = $this->getRepo()->fetchUsingId($query);

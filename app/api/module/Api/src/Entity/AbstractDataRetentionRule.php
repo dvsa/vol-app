@@ -1,22 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * DataRetentionRule Abstract Entity
+ * AbstractDataRetentionRule Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -25,27 +30,36 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    indexes={
  *        @ORM\Index(name="fk_data_retention_rule_action_type_ref_data_id", columns={"action_type"}),
  *        @ORM\Index(name="fk_data_retention_rule_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_data_retention_rule_last_modified_by_user_id",
-     *     columns={"last_modified_by"})
+ *        @ORM\Index(name="fk_data_retention_rule_last_modified_by_user_id", columns={"last_modified_by"})
  *    }
  * )
  */
-abstract class AbstractDataRetentionRule implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractDataRetentionRule implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
 
     /**
-     * Action type
+     * Primary key
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     */
+    protected $id = 0;
+
+    /**
+     * ActionType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
      * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="action_type", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="action_type", referencedColumnName="id")
      */
     protected $actionType;
 
@@ -61,53 +75,6 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     protected $createdBy;
 
     /**
-     * Custom procedure
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="custom_procedure", length=64, nullable=true)
-     */
-    protected $customProcedure;
-
-    /**
-     * Description
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=false)
-     */
-    protected $description;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is custom rule
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_custom_rule", nullable=false, options={"default": 0})
-     */
-    protected $isCustomRule = 0;
-
-    /**
-     * Is enabled
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_enabled", nullable=false, options={"default": 0})
-     */
-    protected $isEnabled = 0;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -119,7 +86,25 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     protected $lastModifiedBy;
 
     /**
-     * Max data set
+     * Description
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="description", length=255, nullable=false)
+     */
+    protected $description = '';
+
+    /**
+     * Primary Record Retention Period (in MONTHS) following record closure
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="retention_period", nullable=false)
+     */
+    protected $retentionPeriod = 0;
+
+    /**
+     * max rows of population dataset.
      *
      * @var int
      *
@@ -128,27 +113,85 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     protected $maxDataSet;
 
     /**
-     * Populate procedure
+     * Is enabled
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_enabled", nullable=false, options={"default": 0})
+     */
+    protected $isEnabled = 0;
+
+    /**
+     * Is custom rule
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_custom_rule", nullable=false, options={"default": 0})
+     */
+    protected $isCustomRule = 0;
+
+    /**
+     * procedure to populate rule data set
      *
      * @var string
      *
      * @ORM\Column(type="string", name="populate_procedure", length=64, nullable=false)
      */
-    protected $populateProcedure;
+    protected $populateProcedure = '';
 
     /**
-     * Retention period
+     * Custom procedure
      *
-     * @var int
+     * @var string
      *
-     * @ORM\Column(type="integer", name="retention_period", nullable=false)
+     * @ORM\Column(type="string", name="custom_procedure", length=64, nullable=true)
      */
-    protected $retentionPeriod;
+    protected $customProcedure;
+
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return DataRetentionRule
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set the action type
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $actionType entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $actionType new value being set
      *
      * @return DataRetentionRule
      */
@@ -172,7 +215,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return DataRetentionRule
      */
@@ -194,27 +237,27 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     }
 
     /**
-     * Set the custom procedure
+     * Set the last modified by
      *
-     * @param string $customProcedure new value being set
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return DataRetentionRule
      */
-    public function setCustomProcedure($customProcedure)
+    public function setLastModifiedBy($lastModifiedBy)
     {
-        $this->customProcedure = $customProcedure;
+        $this->lastModifiedBy = $lastModifiedBy;
 
         return $this;
     }
 
     /**
-     * Get the custom procedure
+     * Get the last modified by
      *
-     * @return string
+     * @return \Dvsa\Olcs\Api\Entity\User\User
      */
-    public function getCustomProcedure()
+    public function getLastModifiedBy()
     {
-        return $this->customProcedure;
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -242,99 +285,27 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     }
 
     /**
-     * Set the id
+     * Set the retention period
      *
-     * @param int $id new value being set
+     * @param int $retentionPeriod new value being set
      *
      * @return DataRetentionRule
      */
-    public function setId($id)
+    public function setRetentionPeriod($retentionPeriod)
     {
-        $this->id = $id;
+        $this->retentionPeriod = $retentionPeriod;
 
         return $this;
     }
 
     /**
-     * Get the id
+     * Get the retention period
      *
      * @return int
      */
-    public function getId()
+    public function getRetentionPeriod()
     {
-        return $this->id;
-    }
-
-    /**
-     * Set the is custom rule
-     *
-     * @param boolean $isCustomRule new value being set
-     *
-     * @return DataRetentionRule
-     */
-    public function setIsCustomRule($isCustomRule)
-    {
-        $this->isCustomRule = $isCustomRule;
-
-        return $this;
-    }
-
-    /**
-     * Get the is custom rule
-     *
-     * @return boolean
-     */
-    public function getIsCustomRule()
-    {
-        return $this->isCustomRule;
-    }
-
-    /**
-     * Set the is enabled
-     *
-     * @param boolean $isEnabled new value being set
-     *
-     * @return DataRetentionRule
-     */
-    public function setIsEnabled($isEnabled)
-    {
-        $this->isEnabled = $isEnabled;
-
-        return $this;
-    }
-
-    /**
-     * Get the is enabled
-     *
-     * @return boolean
-     */
-    public function getIsEnabled()
-    {
-        return $this->isEnabled;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return DataRetentionRule
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
+        return $this->retentionPeriod;
     }
 
     /**
@@ -362,6 +333,54 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     }
 
     /**
+     * Set the is enabled
+     *
+     * @param bool $isEnabled new value being set
+     *
+     * @return DataRetentionRule
+     */
+    public function setIsEnabled($isEnabled)
+    {
+        $this->isEnabled = $isEnabled;
+
+        return $this;
+    }
+
+    /**
+     * Get the is enabled
+     *
+     * @return bool
+     */
+    public function getIsEnabled()
+    {
+        return $this->isEnabled;
+    }
+
+    /**
+     * Set the is custom rule
+     *
+     * @param bool $isCustomRule new value being set
+     *
+     * @return DataRetentionRule
+     */
+    public function setIsCustomRule($isCustomRule)
+    {
+        $this->isCustomRule = $isCustomRule;
+
+        return $this;
+    }
+
+    /**
+     * Get the is custom rule
+     *
+     * @return bool
+     */
+    public function getIsCustomRule()
+    {
+        return $this->isCustomRule;
+    }
+
+    /**
      * Set the populate procedure
      *
      * @param string $populateProcedure new value being set
@@ -386,26 +405,35 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     }
 
     /**
-     * Set the retention period
+     * Set the custom procedure
      *
-     * @param int $retentionPeriod new value being set
+     * @param string $customProcedure new value being set
      *
      * @return DataRetentionRule
      */
-    public function setRetentionPeriod($retentionPeriod)
+    public function setCustomProcedure($customProcedure)
     {
-        $this->retentionPeriod = $retentionPeriod;
+        $this->customProcedure = $customProcedure;
 
         return $this;
     }
 
     /**
-     * Get the retention period
+     * Get the custom procedure
      *
-     * @return int
+     * @return string
      */
-    public function getRetentionPeriod()
+    public function getCustomProcedure()
     {
-        return $this->retentionPeriod;
+        return $this->customProcedure;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Application;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -20,7 +22,7 @@ class S4EntityTest extends EntityTester
      */
     protected $entityClass = Entity\Application\S4::class;
 
-    public function testConstrunctor()
+    public function testConstrunctor(): void
     {
         /** @var Entity\Application\Application $mockApp */
         $mockApp = m::mock(Entity\Application\Application::class);

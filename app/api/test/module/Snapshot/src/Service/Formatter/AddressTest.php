@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Formatter;
 
 use Dvsa\Olcs\Api\Entity\ContactDetails\Address as AddressEntity;
@@ -10,10 +12,8 @@ use Dvsa\Olcs\Snapshot\Service\Formatter\Address;
  */
 class AddressTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider provider
-     */
-    public function testFormat($data, $column, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testFormat(mixed $data, mixed $column, mixed $expected): void
     {
         $this->assertEquals($expected, Address::format($data, $column));
     }
@@ -23,7 +23,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function provider()
+    public static function provider(): array
     {
         $address = new AddressEntity();
         $address->setAddressLine1('foo');

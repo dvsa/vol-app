@@ -24,6 +24,7 @@ final class DeleteGoodsVehicle extends AbstractCommandHandler implements Transac
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

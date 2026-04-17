@@ -40,6 +40,7 @@ class Bus extends AbstractCommandHandler implements TransactionedInterface, Publ
      * @return Result
      * @throws \Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

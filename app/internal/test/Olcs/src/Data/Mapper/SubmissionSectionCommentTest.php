@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -13,17 +15,17 @@ use Laminas\Form\FormInterface;
 class SubmissionSectionCommentTest extends MockeryTestCase
 {
     /**
-     * @dataProvider mapFromResultDataProvider
      *
      * @param $inData
      * @param $expected
      */
-    public function testMapFromResult($inData, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromResultDataProvider')]
+    public function testMapFromResult(mixed $inData, mixed $expected): void
     {
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public function mapFromResultDataProvider()
+    public static function mapFromResultDataProvider(): array
     {
         return [
             // add
@@ -65,17 +67,17 @@ class SubmissionSectionCommentTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider mapFromFormDataProvider
      *
      * @param $inData
      * @param $expected
      */
-    public function testMapFromForm($inData, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromFormDataProvider')]
+    public function testMapFromForm(mixed $inData, mixed $expected): void
     {
         $this->assertEquals($expected, Sut::mapFromForm($inData));
     }
 
-    public function mapFromFormDataProvider()
+    public static function mapFromFormDataProvider(): array
     {
         return [
             [
@@ -92,7 +94,7 @@ class SubmissionSectionCommentTest extends MockeryTestCase
         ];
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $mockForm = m::mock(FormInterface::class);
         $errors = ['field' => 'data'];

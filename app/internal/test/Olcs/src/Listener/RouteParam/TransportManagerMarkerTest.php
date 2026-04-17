@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener\RouteParam;
 
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
+use PHPUnit\Framework\Attributes\Group;
 use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Laminas\EventManager\EventManagerInterface;
@@ -43,33 +46,48 @@ class TransportManagerMarkerTest extends MockeryTestCase
 
     /**
      * Test attach
-     *
-     * @group transportManagerMarker
      */
-    public function testAttach()
+    #[Group('transportManagerMarker')]
+    public function testAttach(): void
     {
         /** @var EventManagerInterface $mockEventManager */
-        $mockEventManager = m::mock(EventManagerInterface::class)
-            ->shouldReceive('attach')
-            ->with(RouteParams::EVENT_PARAM . 'transportManager', [$this->sut, 'onTransportManagerMarker'], 1)
-            ->once()
-            ->shouldReceive('attach')
-            ->with(RouteParams::EVENT_PARAM . 'licence', [$this->sut, 'onLicenceTransportManagerMarker'], 1)
-            ->once()
-            ->shouldReceive('attach')
-            ->with(RouteParams::EVENT_PARAM . 'application', [$this->sut, 'onApplicationTransportManagerMarker'], 1)
-            ->once()
-            ->getMock();
+        $mockEventManager = m::mock(EventManagerInterface::class);
+        $mockEventManager->expects('attach')
+            ->with(
+                RouteParams::EVENT_PARAM . 'transportManager',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onTransportManagerMarker';
+                }),
+                1
+            );
+        $mockEventManager->expects('attach')
+            ->with(
+                RouteParams::EVENT_PARAM . 'licence',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onLicenceTransportManagerMarker';
+                }),
+                1
+            );
+        $mockEventManager->expects('attach')
+            ->with(
+                RouteParams::EVENT_PARAM . 'application',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onApplicationTransportManagerMarker';
+                }),
+                1
+            );
 
         $this->sut->attach($mockEventManager);
     }
 
     /**
      * Test create service
-     *
-     * @group transportManagerMarker
      */
-    public function testInvoke()
+    #[Group('transportManagerMarker')]
+    public function testInvoke(): void
     {
         $mockSl = m::mock(ContainerInterface::class);
 
@@ -95,7 +113,7 @@ class TransportManagerMarkerTest extends MockeryTestCase
         $this->assertInstanceOf(TransportManagerMarker::class, $obj);
     }
 
-    protected function mockQuery($expectedDtoParams, $result = false, $extra = null)
+    protected function mockQuery(mixed $expectedDtoParams, mixed $result = false, mixed $extra = null): void
     {
         $mockResponse = m::mock();
 
@@ -124,10 +142,9 @@ class TransportManagerMarkerTest extends MockeryTestCase
 
     /**
      * Test on transport manager marker
-     *
-     * @group transportManagerMarker
      */
-    public function testOnTransportManagerMarker()
+    #[Group('transportManagerMarker')]
+    public function testOnTransportManagerMarker(): void
     {
         $this->mockQuery(['id' => 12], 'TM');
         $this->mockMarkerService->shouldReceive('addData')
@@ -160,10 +177,9 @@ class TransportManagerMarkerTest extends MockeryTestCase
 
     /**
      * Test on licence transport manager marker
-     *
-     * @group transportManagerMarker
      */
-    public function testOnLicenceTransportManagerMarker()
+    #[Group('transportManagerMarker')]
+    public function testOnLicenceTransportManagerMarker(): void
     {
         $this->mockQuery(['licence' => 18, 'transportManager' => null], 'TMLs');
         $this->mockMarkerService->shouldReceive('addData')->with('transportManagerLicences', 'TMLs')->once();
@@ -177,7 +193,7 @@ class TransportManagerMarkerTest extends MockeryTestCase
         $this->sut->onLicenceTransportManagerMarker($event);
     }
 
-    public function testOnLicenceTransportManagerMarkerQueryError()
+    public function testOnLicenceTransportManagerMarkerQueryError(): void
     {
         $this->mockQuery(['licence' => 18, 'transportManager' => null], false);
 
@@ -193,10 +209,9 @@ class TransportManagerMarkerTest extends MockeryTestCase
 
     /**
      * Test on application transport manager marker
-     *
-     * @group transportManagerMarker
      */
-    public function testOnApplicationTransportManagerMarker()
+    #[Group('transportManagerMarker')]
+    public function testOnApplicationTransportManagerMarker(): void
     {
         $mockApplicationService = m::mock()
             ->shouldReceive('getMvcEvent')
@@ -241,10 +256,9 @@ class TransportManagerMarkerTest extends MockeryTestCase
 
     /**
      * Test on application transport manager marker
-     *
-     * @group transportManagerMarker
      */
-    public function testOnApplicationTransportManagerMarkerWithVariationRoute()
+    #[Group('transportManagerMarker')]
+    public function testOnApplicationTransportManagerMarkerWithVariationRoute(): void
     {
         $mockApplicationService = m::mock()
             ->shouldReceive('getMvcEvent')
@@ -291,7 +305,7 @@ class TransportManagerMarkerTest extends MockeryTestCase
         $this->sut->onApplicationTransportManagerMarker($event);
     }
 
-    public function testOnApplicationTransportManagerMarkerWithVariationRouteNoSiRequired()
+    public function testOnApplicationTransportManagerMarkerWithVariationRouteNoSiRequired(): void
     {
         $mockApplicationService = m::mock()
             ->shouldReceive('getMvcEvent')
@@ -337,10 +351,8 @@ class TransportManagerMarkerTest extends MockeryTestCase
         $this->sut->onApplicationTransportManagerMarker($event);
     }
 
-    /**
-     * @group transportManagerMarker
-     */
-    public function testOnApplicationTransportManagerMarkerQueryError()
+    #[Group('transportManagerMarker')]
+    public function testOnApplicationTransportManagerMarkerQueryError(): void
     {
         $this->mockQuery(
             [
@@ -363,10 +375,8 @@ class TransportManagerMarkerTest extends MockeryTestCase
         $this->sut->onApplicationTransportManagerMarker($event);
     }
 
-    /**
-     * @group transportManagerMarker
-     */
-    public function testOnApplicationTransportManagerMarkerWithVariationRouteQueryError()
+    #[Group('transportManagerMarker')]
+    public function testOnApplicationTransportManagerMarkerWithVariationRouteQueryError(): void
     {
         $mockApplicationService = m::mock()
             ->shouldReceive('getMvcEvent')

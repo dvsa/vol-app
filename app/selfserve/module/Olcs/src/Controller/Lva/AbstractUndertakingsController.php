@@ -59,6 +59,7 @@ abstract class AbstractUndertakingsController extends AbstractController
      *
      * @return \Common\View\Model\Section|\Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         if ($this->isButtonPressed('change')) {
@@ -168,14 +169,6 @@ abstract class AbstractUndertakingsController extends AbstractController
                 true
             );
         } elseif ($this->isButtonPressed('sign')) {
-            $featureEnabled = $this->handleQuery(IsEnabledQry::create(['ids' => [FeatureToggle::GOVUK_ACCOUNT]]))->getResult()['isEnabled'];
-            if (!$featureEnabled) {
-                return $this->redirect()->toRoute(
-                    'verify/initiate-request',
-                    [$this->getIdentifierIndex() => $this->getIdentifier()]
-                );
-            }
-
             $returnUrl = $this->url()->fromRoute(
                 'lva-application/undertakings',
                 [
@@ -221,6 +214,8 @@ abstract class AbstractUndertakingsController extends AbstractController
             'id' => $this->getIdentifier(),
             'version' => $formData['declarationsAndUndertakings']['version'],
             'declarationConfirmation' => $shouldCompleteSection ? 'Y' : 'N',
+            'noTmConfirmation' => isset($formData['declarationsAndUndertakings']['noTmConfirmation']) ?
+                $formData['declarationsAndUndertakings']['noTmConfirmation'] : null,
             'interimRequested' => isset($formData['interim']) ?
                 $formData['interim']['goodsApplicationInterim'] : null,
             'interimReason' => isset($formData['interim']) ?

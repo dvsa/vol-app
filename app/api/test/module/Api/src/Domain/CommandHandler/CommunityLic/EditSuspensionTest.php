@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\CommunityLic;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -33,7 +35,8 @@ class EditSuspensionTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             CommunityLicEntity::STATUS_ACTIVE,
@@ -55,7 +58,7 @@ class EditSuspensionTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandActiveToday()
+    public function testHandleCommandActiveToday(): void
     {
         $startDate = (new \DateTime())->format('Y-m-d');
         $data = [
@@ -91,7 +94,7 @@ class EditSuspensionTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($result->getMessages(), ['The community licence has been suspended']);
     }
 
-    protected function mockUpdateSuspensionAndReasons($command, $mockCommunityLicence, $startDate)
+    protected function mockUpdateSuspensionAndReasons(mixed $command, mixed $mockCommunityLicence, mixed $startDate): void
     {
         $mockCommunityLicSuspension = m::mock(CommunityLicSuspensionEntity::class)
             ->shouldReceive('updateCommunityLicSuspension')
@@ -125,7 +128,7 @@ class EditSuspensionTest extends AbstractCommandHandlerTestCase
             ->getMock();
     }
 
-    public function testHandleCommandActiveInFuture()
+    public function testHandleCommandActiveInFuture(): void
     {
         $startDate = '3015-01-01';
         $data = [
@@ -157,7 +160,7 @@ class EditSuspensionTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($result->getMessages(), ['The community licence suspension details have been updated']);
     }
 
-    public function testHandleCommandSuspendedNotToday()
+    public function testHandleCommandSuspendedNotToday(): void
     {
         $startDate = '3015-01-01';
         $data = [
@@ -189,7 +192,7 @@ class EditSuspensionTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($result->getMessages(), ['The community licence suspension details have been updated']);
     }
 
-    public function testHandleCommandSuspendedToday()
+    public function testHandleCommandSuspendedToday(): void
     {
         $endDate = (new \DateTime())->format('Y-m-d');
         $data = [

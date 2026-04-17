@@ -35,6 +35,7 @@ abstract class AbstractStandardConditions extends DynamicBookmark
      *
      * @return null|QueryInterface
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         if (static::SERVICE === 'licence') {
@@ -50,6 +51,7 @@ abstract class AbstractStandardConditions extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         $type = '';

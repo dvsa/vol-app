@@ -21,6 +21,7 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
      * @see    \Olcs\Controller\Traits\TaskActionTrait
      * @return string
      */
+    #[\Override]
     protected function getTaskActionType()
     {
         return 'licence';
@@ -32,6 +33,7 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
      * @see    \Olcs\Controller\Traits\TaskActionTrait
      * @return array
      */
+    #[\Override]
     protected function getTaskActionFilters()
     {
         return [

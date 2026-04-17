@@ -25,6 +25,7 @@ final class UpdateSafety extends AbstractCommandHandler implements Transactioned
 {
     protected $repoServiceName = 'Licence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

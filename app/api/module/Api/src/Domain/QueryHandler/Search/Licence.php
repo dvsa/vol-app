@@ -16,6 +16,7 @@ class Licence extends AbstractQueryHandler
 
     protected $extraRepos = ['Organisation'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var LicenceEntity $licence */

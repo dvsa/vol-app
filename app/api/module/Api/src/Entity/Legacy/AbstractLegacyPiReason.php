@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Legacy;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * LegacyPiReason Abstract Entity
+ * AbstractLegacyPiReason Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -26,13 +31,23 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLegacyPiReason implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLegacyPiReason implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
+
+    /**
+     * Primary key
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     */
+    protected $id = 0;
 
     /**
      * Created by
@@ -46,62 +61,6 @@ abstract class AbstractLegacyPiReason implements BundleSerializableInterface, Js
     protected $createdBy;
 
     /**
-     * Description
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=false)
-     */
-    protected $description;
-
-    /**
-     * Goods or psv
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="goods_or_psv", length=3, nullable=false)
-     */
-    protected $goodsOrPsv;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is decision
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_decision", nullable=false)
-     */
-    protected $isDecision;
-
-    /**
-     * Is ni
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_ni", nullable=false)
-     */
-    protected $isNi;
-
-    /**
-     * Is read only
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_read_only", nullable=false)
-     */
-    protected $isReadOnly;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -113,13 +72,58 @@ abstract class AbstractLegacyPiReason implements BundleSerializableInterface, Js
     protected $lastModifiedBy;
 
     /**
+     * GV or PSV
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="goods_or_psv", length=3, nullable=false)
+     */
+    protected $goodsOrPsv = '';
+
+    /**
      * Section code
      *
      * @var string
      *
      * @ORM\Column(type="string", name="section_code", length=50, nullable=false)
      */
-    protected $sectionCode;
+    protected $sectionCode = '';
+
+    /**
+     * Description
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="description", length=255, nullable=false)
+     */
+    protected $description = '';
+
+    /**
+     * Is read only
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_read_only", nullable=false)
+     */
+    protected $isReadOnly = 0;
+
+    /**
+     * Northern Ireland or not
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_ni", nullable=false)
+     */
+    protected $isNi = 0;
+
+    /**
+     * Is decision
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_decision", nullable=false)
+     */
+    protected $isDecision = 0;
 
     /**
      * Version
@@ -132,9 +136,49 @@ abstract class AbstractLegacyPiReason implements BundleSerializableInterface, Js
     protected $version = 1;
 
     /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return LegacyPiReason
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return LegacyPiReason
      */
@@ -156,27 +200,27 @@ abstract class AbstractLegacyPiReason implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the description
+     * Set the last modified by
      *
-     * @param string $description new value being set
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return LegacyPiReason
      */
-    public function setDescription($description)
+    public function setLastModifiedBy($lastModifiedBy)
     {
-        $this->description = $description;
+        $this->lastModifiedBy = $lastModifiedBy;
 
         return $this;
     }
 
     /**
-     * Get the description
+     * Get the last modified by
      *
-     * @return string
+     * @return \Dvsa\Olcs\Api\Entity\User\User
      */
-    public function getDescription()
+    public function getLastModifiedBy()
     {
-        return $this->description;
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -204,126 +248,6 @@ abstract class AbstractLegacyPiReason implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return LegacyPiReason
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the is decision
-     *
-     * @param boolean $isDecision new value being set
-     *
-     * @return LegacyPiReason
-     */
-    public function setIsDecision($isDecision)
-    {
-        $this->isDecision = $isDecision;
-
-        return $this;
-    }
-
-    /**
-     * Get the is decision
-     *
-     * @return boolean
-     */
-    public function getIsDecision()
-    {
-        return $this->isDecision;
-    }
-
-    /**
-     * Set the is ni
-     *
-     * @param boolean $isNi new value being set
-     *
-     * @return LegacyPiReason
-     */
-    public function setIsNi($isNi)
-    {
-        $this->isNi = $isNi;
-
-        return $this;
-    }
-
-    /**
-     * Get the is ni
-     *
-     * @return boolean
-     */
-    public function getIsNi()
-    {
-        return $this->isNi;
-    }
-
-    /**
-     * Set the is read only
-     *
-     * @param boolean $isReadOnly new value being set
-     *
-     * @return LegacyPiReason
-     */
-    public function setIsReadOnly($isReadOnly)
-    {
-        $this->isReadOnly = $isReadOnly;
-
-        return $this;
-    }
-
-    /**
-     * Get the is read only
-     *
-     * @return boolean
-     */
-    public function getIsReadOnly()
-    {
-        return $this->isReadOnly;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return LegacyPiReason
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
      * Set the section code
      *
      * @param string $sectionCode new value being set
@@ -348,6 +272,102 @@ abstract class AbstractLegacyPiReason implements BundleSerializableInterface, Js
     }
 
     /**
+     * Set the description
+     *
+     * @param string $description new value being set
+     *
+     * @return LegacyPiReason
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get the description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set the is read only
+     *
+     * @param bool $isReadOnly new value being set
+     *
+     * @return LegacyPiReason
+     */
+    public function setIsReadOnly($isReadOnly)
+    {
+        $this->isReadOnly = $isReadOnly;
+
+        return $this;
+    }
+
+    /**
+     * Get the is read only
+     *
+     * @return bool
+     */
+    public function getIsReadOnly()
+    {
+        return $this->isReadOnly;
+    }
+
+    /**
+     * Set the is ni
+     *
+     * @param bool $isNi new value being set
+     *
+     * @return LegacyPiReason
+     */
+    public function setIsNi($isNi)
+    {
+        $this->isNi = $isNi;
+
+        return $this;
+    }
+
+    /**
+     * Get the is ni
+     *
+     * @return bool
+     */
+    public function getIsNi()
+    {
+        return $this->isNi;
+    }
+
+    /**
+     * Set the is decision
+     *
+     * @param bool $isDecision new value being set
+     *
+     * @return LegacyPiReason
+     */
+    public function setIsDecision($isDecision)
+    {
+        $this->isDecision = $isDecision;
+
+        return $this;
+    }
+
+    /**
+     * Get the is decision
+     *
+     * @return bool
+     */
+    public function getIsDecision()
+    {
+        return $this->isDecision;
+    }
+
+    /**
      * Set the version
      *
      * @param int $version new value being set
@@ -369,5 +389,14 @@ abstract class AbstractLegacyPiReason implements BundleSerializableInterface, Js
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

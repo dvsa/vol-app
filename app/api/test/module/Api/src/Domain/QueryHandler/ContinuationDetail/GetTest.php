@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\ContinuationDetail;
 
 use Doctrine\ORM\Query;
@@ -33,7 +35,7 @@ class GetTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    private function mockContinuationDetail($data = [])
+    private function mockContinuationDetail(array $data = []): mixed
     {
         $defaultData = [
             'getOtherFinancesAmount' => 0
@@ -97,7 +99,7 @@ class GetTest extends QueryHandlerTestCase
         return $continuationDetail;
     }
 
-    private function mockDigitalSignature()
+    private function mockDigitalSignature(): m\MockInterface
     {
         return m::mock()->shouldReceive('getSignatureName')->with()->once()->andReturn('NAME')
             ->shouldReceive('getCreatedOn')->with()->once()->andReturn('DATE')
@@ -105,7 +107,7 @@ class GetTest extends QueryHandlerTestCase
             ->getMock();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 123]);
 
@@ -192,7 +194,7 @@ class GetTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryNoTransaction()
+    public function testHandleQueryNoTransaction(): void
     {
         $query = Qry::create(['id' => 123]);
 
@@ -268,7 +270,7 @@ class GetTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryWithSignature()
+    public function testHandleQueryWithSignature(): void
     {
         $query = Qry::create(['id' => 123]);
 
@@ -362,7 +364,7 @@ class GetTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryWithSignatureContinuationFeeNotPaid()
+    public function testHandleQueryWithSignatureContinuationFeeNotPaid(): void
     {
         $query = Qry::create(['id' => 123]);
 

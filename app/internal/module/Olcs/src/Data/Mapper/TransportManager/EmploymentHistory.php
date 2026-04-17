@@ -17,6 +17,7 @@ class EmploymentHistory implements MapperInterface
      *
      * @param array $data
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         $formData = ['transportManager' => $data['transportManager']];

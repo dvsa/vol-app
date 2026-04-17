@@ -20,6 +20,7 @@ class CpidOrganisation extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Organisation';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $result = $this->getRepo()->fetchByStatusPaginated($query);

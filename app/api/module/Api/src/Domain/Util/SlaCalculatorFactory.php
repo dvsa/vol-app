@@ -21,6 +21,7 @@ final class SlaCalculatorFactory implements FactoryInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SlaCalculator
     {
         return new SlaCalculator($container->get(TimeProcessorBuilderInterface::class));

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Mockery as m;
@@ -23,7 +25,8 @@ class UndoCancelAllInterimFeesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             FeeEntity::STATUS_OUTSTANDING => m::mock(FeeEntity::class)
@@ -58,7 +61,7 @@ class UndoCancelAllInterimFeesTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $fees = [
             $this->references[FeeEntity::class][23],

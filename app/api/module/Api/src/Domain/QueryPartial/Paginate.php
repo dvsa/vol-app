@@ -17,9 +17,10 @@ final class Paginate implements QueryPartialInterface
      *
      * @return void
      */
+    #[\Override]
     public function modifyQuery(QueryBuilder $qb, array $arguments = [])
     {
-        [$page, $limit] = array_map('intval', $arguments);
+        [$page, $limit] = array_map(intval(...), $arguments);
 
         if ($limit > 0) {
             $qb->setFirstResult(max($page - 1, 0) * $limit);

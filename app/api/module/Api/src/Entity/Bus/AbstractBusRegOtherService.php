@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Bus;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * BusRegOtherService Abstract Entity
+ * AbstractBusRegOtherService Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -23,32 +28,40 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    indexes={
  *        @ORM\Index(name="ix_bus_reg_other_service_bus_reg_id", columns={"bus_reg_id"}),
  *        @ORM\Index(name="ix_bus_reg_other_service_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_bus_reg_other_service_last_modified_by", columns={"last_modified_by"})
+ *        @ORM\Index(name="ix_bus_reg_other_service_last_modified_by", columns={"last_modified_by"}),
+ *        @ORM\Index(name="uk_bus_reg_other_service_olbs_key", columns={"olbs_key"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_bus_reg_other_service_olbs_key", columns={"olbs_key"})
  *    }
  * )
  */
-abstract class AbstractBusRegOtherService implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractBusRegOtherService implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
 
     /**
-     * Bus reg
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to bus_reg
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg",
-     *     fetch="LAZY",
-     *     inversedBy="otherServices"
-     * )
-     * @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", fetch="LAZY")
+     * @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id")
      */
     protected $busReg;
 
@@ -64,17 +77,6 @@ abstract class AbstractBusRegOtherService implements BundleSerializableInterface
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -84,15 +86,6 @@ abstract class AbstractBusRegOtherService implements BundleSerializableInterface
      * @Gedmo\Blameable(on="update")
      */
     protected $lastModifiedBy;
-
-    /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
 
     /**
      * Service no
@@ -114,52 +107,29 @@ abstract class AbstractBusRegOtherService implements BundleSerializableInterface
     protected $version = 1;
 
     /**
-     * Set the bus reg
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg entity being set as the value
+     * @var int
      *
-     * @return BusRegOtherService
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
-    public function setBusReg($busReg)
-    {
-        $this->busReg = $busReg;
+    protected $olbsKey;
 
-        return $this;
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
     }
 
     /**
-     * Get the bus reg
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     * Initialise collections
      */
-    public function getBusReg()
+    public function initCollections(): void
     {
-        return $this->busReg;
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return BusRegOtherService
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
 
     /**
      * Set the id
@@ -186,9 +156,57 @@ abstract class AbstractBusRegOtherService implements BundleSerializableInterface
     }
 
     /**
+     * Set the bus reg
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
+     *
+     * @return BusRegOtherService
+     */
+    public function setBusReg($busReg)
+    {
+        $this->busReg = $busReg;
+
+        return $this;
+    }
+
+    /**
+     * Get the bus reg
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     */
+    public function getBusReg()
+    {
+        return $this->busReg;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return BusRegOtherService
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return BusRegOtherService
      */
@@ -207,30 +225,6 @@ abstract class AbstractBusRegOtherService implements BundleSerializableInterface
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return BusRegOtherService
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
     }
 
     /**
@@ -279,5 +273,38 @@ abstract class AbstractBusRegOtherService implements BundleSerializableInterface
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Set the olbs key
+     *
+     * @param int $olbsKey new value being set
+     *
+     * @return BusRegOtherService
+     */
+    public function setOlbsKey($olbsKey)
+    {
+        $this->olbsKey = $olbsKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the olbs key
+     *
+     * @return int
+     */
+    public function getOlbsKey()
+    {
+        return $this->olbsKey;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

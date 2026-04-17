@@ -25,6 +25,7 @@ final class ConfirmPrinting extends AbstractCommandHandler implements Transactio
 
     protected $extraRepos = ['DiscSequence', 'Queue'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

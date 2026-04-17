@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Bilateral;
 
 use Dvsa\Olcs\Api\Service\Qa\QaContext;
@@ -21,7 +23,7 @@ class PermitUsageAnswerSummaryProviderTest extends MockeryTestCase
         $this->sut = new PermitUsageAnswerSummaryProvider();
     }
 
-    public function testGetTemplateName()
+    public function testGetTemplateName(): void
     {
         $this->assertEquals(
             'generic',
@@ -29,10 +31,8 @@ class PermitUsageAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpShouldIncludeSlug
-     */
-    public function testShouldIncludeSlug($permitUsageList, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpShouldIncludeSlug')]
+    public function testShouldIncludeSlug(mixed $permitUsageList, mixed $expected): void
     {
         $qaEntity = m::mock(QaEntityInterface::class);
         $qaEntity->shouldReceive('getIrhpPermitWindow->getIrhpPermitStock->getPermitUsageList')
@@ -45,7 +45,7 @@ class PermitUsageAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public function dpShouldIncludeSlug()
+    public static function dpShouldIncludeSlug(): array
     {
         $emptyList = [];
         $oneRecord = [['id' => 1]];
@@ -58,10 +58,8 @@ class PermitUsageAnswerSummaryProviderTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpGetTemplateVariables
-     */
-    public function testGetTemplateVariables($isSnapshot)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetTemplateVariables')]
+    public function testGetTemplateVariables(mixed $isSnapshot): void
     {
         $answer = 'answer';
 
@@ -80,7 +78,7 @@ class PermitUsageAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public function dpGetTemplateVariables()
+    public static function dpGetTemplateVariables(): array
     {
         return [
             [true],

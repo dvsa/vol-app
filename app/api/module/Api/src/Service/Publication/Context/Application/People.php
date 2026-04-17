@@ -19,6 +19,7 @@ final class People extends AbstractContext
      *
      * @return \ArrayObject
      */
+    #[\Override]
     public function provide(PublicationLink $publicationLink, \ArrayObject $context)
     {
         $people = [];

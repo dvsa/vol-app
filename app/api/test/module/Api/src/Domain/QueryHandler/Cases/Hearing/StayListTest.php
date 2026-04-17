@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * StayList Test
  *
@@ -29,7 +31,7 @@ class StayListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create([]);
 

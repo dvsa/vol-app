@@ -24,6 +24,7 @@ class Delete extends AbstractHandler implements AuthAwareInterface
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto)
     {
         $userId = $this->getUser() ? $this->getUser()->getId() : null;

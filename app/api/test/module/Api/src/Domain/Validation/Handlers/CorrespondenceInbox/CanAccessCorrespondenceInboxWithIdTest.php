@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Can Access Xoc With Reference Test
  *
@@ -31,12 +33,12 @@ class CanAccessCorrespondenceInboxWithIdTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider provider
      *
      * @param $canAccess
      * @param $expected
      */
-    public function testIsValid($canAccess, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $canAccess, mixed $expected): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -47,7 +49,7 @@ class CanAccessCorrespondenceInboxWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [true, true],

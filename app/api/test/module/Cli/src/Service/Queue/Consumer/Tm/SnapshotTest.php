@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Snapshot Test
  *
@@ -22,7 +24,7 @@ class SnapshotTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Sut::class;
 
-    public function testGetCommandData()
+    public function testGetCommandData(): void
     {
         $user = new User('pid', 'type');
         $user->setId(1);

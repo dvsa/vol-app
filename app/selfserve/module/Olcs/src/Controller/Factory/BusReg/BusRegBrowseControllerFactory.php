@@ -19,6 +19,7 @@ class BusRegBrowseControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return BusRegBrowseController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusRegBrowseController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

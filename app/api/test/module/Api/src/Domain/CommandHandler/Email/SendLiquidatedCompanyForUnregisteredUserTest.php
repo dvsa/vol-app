@@ -30,7 +30,7 @@ class SendLiquidatedCompanyForUnregisteredUserTest extends AbstractCommandHandle
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $emailAddress = 'toemail@example.com';
         $command = Cmd::create([

@@ -44,6 +44,7 @@ class Declaration extends AbstractQueryHandler
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $application ApplicationEntity */
@@ -83,7 +84,8 @@ class Declaration extends AbstractQueryHandler
                     (bool)$this->getRepo('SystemParameter')->fetchValue(SystemParameter::DISABLE_GDS_VERIFY_SIGNATURES),
                 'declarations' => $this->getDeclarations($application),
                 'signature' => $signatureDetails,
-                'interimFee' => $interimFeeAmount
+                'interimFee' => $interimFeeAmount,
+                'showPeriodOfGraceQuestion' => $application->showPeriodOfGraceQuestion(),
             ]
         );
     }
@@ -155,6 +157,7 @@ class Declaration extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

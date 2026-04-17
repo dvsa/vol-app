@@ -15,6 +15,7 @@ final class IrfoCountryList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'IrfoCountry';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $repo = $this->getRepo();

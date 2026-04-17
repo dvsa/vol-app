@@ -43,6 +43,7 @@ final class CreateTask extends AbstractCommandHandler
      * @throws ORMException
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         $task = $this->createTaskObject($command);

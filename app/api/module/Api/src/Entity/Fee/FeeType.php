@@ -94,6 +94,7 @@ class FeeType extends AbstractFeeType
         return $this->getFeeType()->getId() === self::FEE_TYPE_ADJUSTMENT;
     }
 
+    #[\Override]
     public function getCalculatedBundleValues()
     {
         return [

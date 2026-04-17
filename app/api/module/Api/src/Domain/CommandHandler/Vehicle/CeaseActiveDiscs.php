@@ -25,6 +25,7 @@ final class CeaseActiveDiscs extends AbstractCommandHandler implements Transacti
 
     protected $extraRepos = ['GoodsDisc'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $discs = 0;

@@ -19,6 +19,7 @@ class TextBlock extends DynamicBookmark
      *
      * @return null|Qry
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         // TextBlocks are used as fallbacks when there isn't a more
@@ -44,6 +45,7 @@ class TextBlock extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         /**

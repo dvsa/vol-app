@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Validators;
 
 use Dvsa\Olcs\Api\Domain\Validation\Validators\CanAccessTransaction;
@@ -24,7 +26,7 @@ class CanAccessTransactionTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    public function testIsValidId()
+    public function testIsValidId(): void
     {
         $this->setIsGranted(Permission::INTERNAL_USER, false);
         $this->auth->shouldReceive('getIdentity')->andReturn(null);
@@ -38,7 +40,7 @@ class CanAccessTransactionTest extends AbstractValidatorsTestCase
         $this->assertEquals(true, $this->sut->isValid(111));
     }
 
-    public function testIsValidReference()
+    public function testIsValidReference(): void
     {
         $this->setIsGranted(Permission::INTERNAL_USER, false);
         $this->auth->shouldReceive('getIdentity')->andReturn(null);

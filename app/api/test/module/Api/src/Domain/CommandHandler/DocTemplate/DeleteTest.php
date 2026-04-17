@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\DocTemplate;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\DocTemplate\Delete;
@@ -31,7 +33,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $docTemplateId = 123;
         $command = Cmd::create(['id' => $docTemplateId]);
@@ -75,7 +77,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandEmptyIdentifier()
+    public function testHandleCommandEmptyIdentifier(): void
     {
         $docTemplateId = 123;
         $command = Cmd::create(['id' => $docTemplateId]);

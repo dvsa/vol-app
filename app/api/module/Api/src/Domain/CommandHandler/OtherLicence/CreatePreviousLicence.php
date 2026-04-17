@@ -25,6 +25,7 @@ final class CreatePreviousLicence extends AbstractCommandHandler implements Tran
 
     protected $extraRepos = ['TransportManagerApplication'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command \Dvsa\Olcs\Transfer\Command\OtherLicence\CreatePreviousLicence */

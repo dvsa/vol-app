@@ -72,4 +72,6 @@ if (!$pi) {
     endif;
 
     echo $this->render('sections/cases/pages/pi-sla', array('pi' => $pi, 'readonly' => $readonly));
+
+    echo $this->render('sections/cases/pages/pi-sla-exceptions', array('pi' => $pi ,'readonly' => $readonly));
 }

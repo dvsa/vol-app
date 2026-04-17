@@ -23,6 +23,7 @@ final class RemindUsernameSelfserve extends AbstractCommandHandler implements Tr
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

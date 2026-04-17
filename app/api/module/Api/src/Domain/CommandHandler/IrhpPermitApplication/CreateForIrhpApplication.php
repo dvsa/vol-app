@@ -21,6 +21,7 @@ final class CreateForIrhpApplication extends AbstractCommandHandler
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         $irhpPermitWindow =  $this->getRepo('IrhpPermitWindow')->fetchById($command->getIrhpPermitWindow());

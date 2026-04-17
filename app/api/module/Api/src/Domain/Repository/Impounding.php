@@ -23,6 +23,7 @@ class Impounding extends AbstractRepository
      * @param int $id
      * @return \Dvsa\Olcs\Api\Domain\QueryBuilder
      */
+    #[\Override]
     protected function buildDefaultQuery(QueryBuilder $qb, $id)
     {
         return $this->getQueryBuilder()->modifyQuery($qb)
@@ -38,6 +39,7 @@ class Impounding extends AbstractRepository
      * @param QueryBuilder $qb
      * @param QueryInterface $query
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $qb->andWhere($qb->expr()->eq($this->alias . '.case', ':byCase'))
@@ -49,6 +51,7 @@ class Impounding extends AbstractRepository
      * @param QueryBuilder $qb
      * @param QueryInterface $query
      */
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         $this->getQueryBuilder()->modifyQuery($qb)

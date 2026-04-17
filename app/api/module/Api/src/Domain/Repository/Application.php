@@ -122,6 +122,7 @@ class Application extends AbstractRepository
      *
      * @return \Dvsa\Olcs\Api\Domain\QueryBuilder
      */
+    #[\Override]
     protected function buildDefaultQuery(QueryBuilder $qb, $id)
     {
         return $this->getQueryBuilder()->modifyQuery($qb)->withRefdata()->with('licence')->byId($id);
@@ -226,6 +227,7 @@ class Application extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         $this->getQueryBuilder()
@@ -240,6 +242,7 @@ class Application extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, TransferQry\QueryInterface $query)
     {
         if (method_exists($query, 'getOrganisation') && is_numeric($query->getOrganisation())) {

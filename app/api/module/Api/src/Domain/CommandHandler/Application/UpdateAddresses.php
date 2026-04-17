@@ -35,6 +35,7 @@ final class UpdateAddresses extends AbstractCommandHandler implements Transactio
      * @return void
      * @throws ValidationException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var \Dvsa\Olcs\Api\Entity\Application\Application $application */
@@ -96,6 +97,7 @@ final class UpdateAddresses extends AbstractCommandHandler implements Transactio
         return !empty($address['postcode']) || !empty($address['town']) || !empty($address['addressLine1'])
             || !empty($address['addressLine2']) || !empty($address['addressLine3']) || !empty($address['addressLine4']);
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

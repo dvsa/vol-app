@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryPartial;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,10 +31,8 @@ class WithRefDataTest extends QueryPartialTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
-    public function testModifyQuery($expectedDql, $arguments, $entity = 'foo')
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
+    public function testModifyQuery(mixed $expectedDql, mixed $arguments, string $entity = 'foo'): void
     {
         $entityMetadata = m::mock();
         $entityMetadata->associationMappings = [
@@ -49,7 +49,7 @@ class WithRefDataTest extends QueryPartialTestCase
         );
     }
 
-    public function dataProvider()
+    public static function dataProvider(): array
     {
         return [
             [

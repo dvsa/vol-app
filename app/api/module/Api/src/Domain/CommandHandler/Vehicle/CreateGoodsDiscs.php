@@ -25,6 +25,7 @@ final class CreateGoodsDiscs extends AbstractCommandHandler implements Transacti
 {
     protected $repoServiceName = 'GoodsDisc';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

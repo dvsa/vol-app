@@ -32,6 +32,7 @@ final class UpdateEnvironmentalComplaint extends AbstractCommandHandler implemen
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $complaint = $this->getRepo()->fetchUsingId($command, Query::HYDRATE_OBJECT, $command->getVersion());

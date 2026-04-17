@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Team Test
  *
@@ -35,7 +37,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             TrafficAreaEntity::class => [
@@ -46,7 +49,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(
             [
@@ -117,7 +120,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['Team updated successfully'], $res['messages']);
     }
 
-    public function testHandleCommandWithVaidationException()
+    public function testHandleCommandWithVaidationException(): void
     {
         $this->expectException(ValidationException::class);
 

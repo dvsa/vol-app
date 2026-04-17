@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update candidate permit selection test
  */
@@ -47,7 +49,7 @@ class UpdateCandidatePermitSelectionTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $issueFeeProductReference = 'ISSUE_FEE_PRODUCT_REFERENCE';
         $licenceId = 70;
@@ -193,7 +195,7 @@ class UpdateCandidatePermitSelectionTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandCantSelectCandidatePermits()
+    public function testHandleCommandCantSelectCandidatePermits(): void
     {
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage(Sut::ERR_CANT_SELECT_CANDIDATE_PERMITS);
@@ -212,7 +214,7 @@ class UpdateCandidatePermitSelectionTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandNoPermitsWanted()
+    public function testHandleCommandNoPermitsWanted(): void
     {
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage(Sut::ERR_NO_PERMITS_WANTED);

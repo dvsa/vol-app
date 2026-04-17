@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Complete Transaction Test
  *
@@ -53,7 +55,7 @@ class CompleteTransactionTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         // set up data
         $paymentId = 69;
@@ -148,7 +150,7 @@ class CompleteTransactionTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandIrhpApplicationCanBeSubmitted()
+    public function testHandleCommandIrhpApplicationCanBeSubmitted(): void
     {
         // set up data
         $paymentId = 69;
@@ -248,7 +250,7 @@ class CompleteTransactionTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandIrhpApplicationIsAwaitingFee()
+    public function testHandleCommandIrhpApplicationIsAwaitingFee(): void
     {
         // set up data
         $paymentId = 69;
@@ -350,7 +352,7 @@ class CompleteTransactionTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandInvalidPaymentStatus()
+    public function testHandleCommandInvalidPaymentStatus(): void
     {
         // set up data
         $paymentId = 69;

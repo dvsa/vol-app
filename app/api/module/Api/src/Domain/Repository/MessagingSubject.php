@@ -13,6 +13,7 @@ class MessagingSubject extends AbstractRepository
     /**
     * Apply filters
     */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if (method_exists($query, 'getOnlyActive') && $query->getOnlyActive()) {

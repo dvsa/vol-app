@@ -77,6 +77,7 @@ class IrhpPermitAppCheckAnswersController extends AbstractSelfserveController
     /**
      * @return void
      */
+    #[\Override]
     public function mergeTemplateVars()
     {
         $backUri = IrhpApplicationSection::ROUTE_IPA_QUESTION;
@@ -98,6 +99,7 @@ class IrhpPermitAppCheckAnswersController extends AbstractSelfserveController
     /**
      * @return void
      */
+    #[\Override]
     public function retrieveData()
     {
         parent::retrieveData();

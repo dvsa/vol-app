@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Other Licence Test
  *
@@ -34,7 +36,8 @@ class CreateOtherLicenceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             OtherLicenceEntity::TYPE_CURRENT
@@ -49,7 +52,7 @@ class CreateOtherLicenceTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
 
         $data = [

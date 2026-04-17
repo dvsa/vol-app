@@ -21,6 +21,7 @@ final class UpdateConvictionsPenaltiesStatus extends AbstractUpdateStatus
 
     protected $section = 'ConvictionsPenalties';
 
+    #[\Override]
     protected function isSectionValid(Application $application)
     {
         if (!in_array($application->getPrevConviction(), ['Y', 'N'])) {

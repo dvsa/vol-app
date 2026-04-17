@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Unlicensed Cases Test
  *
@@ -49,7 +51,7 @@ class UnlicensedCasesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $organisationId = 69;
         $licenceId = 7;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Template;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -22,7 +24,7 @@ class TemplateEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testGetDecodedTestData()
+    public function testGetDecodedTestData(): void
     {
         $decodedJson = [
             'Dataset 1' => [
@@ -44,10 +46,8 @@ class TemplateEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpTestGetComputedCategoryName
-     */
-    public function testGetComputedCategoryName($categoryName, $linkedCategoryEntity, $expectedCategoryName)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetComputedCategoryName')]
+    public function testGetComputedCategoryName(mixed $categoryName, mixed $linkedCategoryEntity, mixed $expectedCategoryName): void
     {
         $template = m::mock(Entity::class)->makePartial();
         $template->setCategoryName($categoryName);
@@ -56,7 +56,7 @@ class TemplateEntityTest extends EntityTester
         $this->assertEquals($expectedCategoryName, $template->getComputedCategoryName());
     }
 
-    public function dpTestGetComputedCategoryName()
+    public static function dpTestGetComputedCategoryName(): array
     {
         $categoryName = 'Category name';
         $linkedCategoryName = 'Linked category name';
@@ -72,7 +72,7 @@ class TemplateEntityTest extends EntityTester
         ];
     }
 
-    public function testGetComputedCategoryNameException()
+    public function testGetComputedCategoryNameException(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Invalid template data - category name and category id are both null');

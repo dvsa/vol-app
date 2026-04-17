@@ -17,6 +17,7 @@ class Single extends AbstractQueryHandler
 {
     protected $repoServiceName = 'NonPi';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var NonPiRepository $repo */

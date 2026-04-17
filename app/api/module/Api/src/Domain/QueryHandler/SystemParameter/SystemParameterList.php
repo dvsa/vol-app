@@ -21,6 +21,7 @@ class SystemParameterList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'SystemParameter';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $repo = $this->getRepo();

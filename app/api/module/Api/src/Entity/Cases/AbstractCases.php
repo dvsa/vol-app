@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Cases;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Cases Abstract Entity
+ * AbstractCases Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -30,12 +33,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_cases_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_cases_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_cases_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_cases_olbs_key_olbs_type", columns={"olbs_key","olbs_type"}),
+ *        @ORM\Index(name="ix_cases_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"}),
  *        @ORM\Index(name="ix_cases_transport_manager_id", columns={"transport_manager_id"})
  *    }
  * )
  */
-abstract class AbstractCases implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCases implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -45,76 +48,55 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     use SoftDeletableTrait;
 
     /**
-     * Annual test history
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="string", name="annual_test_history", length=4000, nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $annualTestHistory;
+    protected $id;
 
     /**
-     * Application
+     * Created from App.lic or TM
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="case_type", referencedColumnName="id")
+     */
+    protected $caseType;
+
+    /**
+     * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Application\Application",
-     *     fetch="LAZY",
-     *     inversedBy="cases"
-     * )
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
      * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=true)
      */
     protected $application;
 
     /**
-     * Case type
+     * Foreign Key to transport_manager
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_type", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
+     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
      */
-    protected $caseType;
+    protected $transportManager;
 
     /**
-     * Category
+     * Foreign Key to licence
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\System\RefData",
-     *     inversedBy="cases",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinTable(name="case_category",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="case_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     *     }
-     * )
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
+     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=true)
      */
-    protected $categorys;
-
-    /**
-     * Closed date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="closed_date", nullable=true)
-     */
-    protected $closedDate;
-
-    /**
-     * Conviction note
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="conviction_note", length=4000, nullable=true)
-     */
-    protected $convictionNote;
+    protected $licence;
 
     /**
      * Created by
@@ -128,44 +110,6 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     protected $createdBy;
 
     /**
-     * Description
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=1024, nullable=true)
-     */
-    protected $description;
-
-    /**
-     * Ecms no
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="ecms_no", length=45, nullable=true)
-     */
-    protected $ecmsNo;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is impounding
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_impounding", nullable=false, options={"default": 0})
-     */
-    protected $isImpounding = 0;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -177,39 +121,16 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     protected $lastModifiedBy;
 
     /**
-     * Licence
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence",
-     *     fetch="LAZY",
-     *     inversedBy="cases"
-     * )
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=true)
-     */
-    protected $licence;
-
-    /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Olbs type
+     * Ecms no
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
+     * @ORM\Column(type="string", name="ecms_no", length=45, nullable=true)
      */
-    protected $olbsType;
+    protected $ecmsNo;
 
     /**
-     * Open date
+     * Date case opened
      *
      * @var \DateTime
      *
@@ -218,25 +139,49 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     protected $openDate;
 
     /**
-     * Outcome
+     * Date case closed
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \DateTime
      *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\System\RefData",
-     *     inversedBy="casess",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinTable(name="case_outcome",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="cases_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="outcome_id", referencedColumnName="id")
-     *     }
-     * )
+     * @ORM\Column(type="datetime", name="closed_date", nullable=true)
      */
-    protected $outcomes;
+    protected $closedDate;
+
+    /**
+     * Short summary note in old system
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="description", length=1024, nullable=true)
+     */
+    protected $description;
+
+    /**
+     * Case involves an impounding
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="is_impounding", nullable=false, options={"default": 0})
+     */
+    protected $isImpounding = 0;
+
+    /**
+     * Annual test history
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="annual_test_history", length=4000, nullable=true)
+     */
+    protected $annualTestHistory;
+
+    /**
+     * Notes on any prohibitions linked to the case
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="prohibition_note", length=4000, nullable=true)
+     */
+    protected $prohibitionNote;
 
     /**
      * Penalties note
@@ -248,27 +193,13 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     protected $penaltiesNote;
 
     /**
-     * Prohibition note
+     * Notes on any convictions linked to the case
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="prohibition_note", length=4000, nullable=true)
+     * @ORM\Column(type="string", name="conviction_note", length=4000, nullable=true)
      */
-    protected $prohibitionNote;
-
-    /**
-     * Transport manager
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager",
-     *     fetch="LAZY",
-     *     inversedBy="cases"
-     * )
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
-     */
-    protected $transportManager;
+    protected $convictionNote;
 
     /**
      * Version
@@ -281,16 +212,68 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     protected $version = 1;
 
     /**
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     */
+    protected $olbsKey;
+
+    /**
+     * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
+     */
+    protected $olbsType;
+
+    /**
+     * Categorys
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="cases", fetch="LAZY")
+     * @ORM\JoinTable(name="case_category",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="case_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     *     }
+     * )
+     */
+    protected $categorys;
+
+    /**
+     * Outcomes
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="cases", fetch="LAZY")
+     * @ORM\JoinTable(name="case_outcome",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="cases_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="outcome_id", referencedColumnName="id")
+     *     }
+     * )
+     */
+    protected $outcomes;
+
+    /**
      * Appeal
      *
-     * @var \Dvsa\Olcs\Api\Entity\Cases\Appeal
+     * @var \Dvsa\Olcs\Api\Entity\Appeal
      *
      * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Appeal", mappedBy="case")
      */
     protected $appeal;
 
     /**
-     * Read audit
+     * ReadAudits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -299,7 +282,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     protected $readAudits;
 
     /**
-     * Complaint
+     * Complaints
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -308,7 +291,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     protected $complaints;
 
     /**
-     * Condition undertaking
+     * ConditionUndertakings
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -317,7 +300,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     protected $conditionUndertakings;
 
     /**
-     * Conviction
+     * Convictions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -326,7 +309,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     protected $convictions;
 
     /**
-     * Document
+     * Documents
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -335,20 +318,16 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     protected $documents;
 
     /**
-     * Erru request
+     * ErruRequest
      *
-     * @var \Dvsa\Olcs\Api\Entity\Si\ErruRequest
+     * @var \Dvsa\Olcs\Api\Entity\ErruRequest
      *
-     * @ORM\OneToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Si\ErruRequest",
-     *     mappedBy="case",
-     *     cascade={"persist"}
-     * )
+     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\ErruRequest", mappedBy="case", cascade={"persist"})
      */
     protected $erruRequest;
 
     /**
-     * Legacy offence
+     * LegacyOffences
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -357,7 +336,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     protected $legacyOffences;
 
     /**
-     * Opposition
+     * Oppositions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -366,16 +345,16 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     protected $oppositions;
 
     /**
-     * Public inquiry
+     * PublicInquiry
      *
-     * @var \Dvsa\Olcs\Api\Entity\Pi\Pi
+     * @var \Dvsa\Olcs\Api\Entity\Pi
      *
      * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\Pi", mappedBy="case")
      */
     protected $publicInquiry;
 
     /**
-     * Prohibition
+     * Prohibitions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -384,20 +363,16 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     protected $prohibitions;
 
     /**
-     * Serious infringement
+     * SeriousInfringements
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Si\SeriousInfringement",
-     *     mappedBy="case",
-     *     cascade={"persist"}
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Si\SeriousInfringement", mappedBy="case", cascade={"persist"})
      */
     protected $seriousInfringements;
 
     /**
-     * Statement
+     * Statements
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -406,7 +381,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     protected $statements;
 
     /**
-     * Stay
+     * Stays
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -415,7 +390,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     protected $stays;
 
     /**
-     * Tm decision
+     * TmDecisions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -425,8 +400,6 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -434,11 +407,9 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->categorys = new ArrayCollection();
         $this->outcomes = new ArrayCollection();
@@ -456,58 +427,35 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
         $this->tmDecisions = new ArrayCollection();
     }
 
+
     /**
-     * Set the annual test history
+     * Set the id
      *
-     * @param string $annualTestHistory new value being set
+     * @param int $id new value being set
      *
      * @return Cases
      */
-    public function setAnnualTestHistory($annualTestHistory)
+    public function setId($id)
     {
-        $this->annualTestHistory = $annualTestHistory;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get the annual test history
+     * Get the id
      *
-     * @return string
+     * @return int
      */
-    public function getAnnualTestHistory()
+    public function getId()
     {
-        return $this->annualTestHistory;
-    }
-
-    /**
-     * Set the application
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Application\Application $application entity being set as the value
-     *
-     * @return Cases
-     */
-    public function setApplication($application)
-    {
-        $this->application = $application;
-
-        return $this;
-    }
-
-    /**
-     * Get the application
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application
-     */
-    public function getApplication()
-    {
-        return $this->application;
+        return $this->id;
     }
 
     /**
      * Set the case type
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $caseType entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $caseType new value being set
      *
      * @return Cases
      */
@@ -529,127 +477,81 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the category
+     * Set the application
      *
-     * @param ArrayCollection $categorys collection being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
      * @return Cases
      */
-    public function setCategorys($categorys)
+    public function setApplication($application)
     {
-        $this->categorys = $categorys;
+        $this->application = $application;
 
         return $this;
     }
 
     /**
-     * Get the categorys
+     * Get the application
      *
-     * @return ArrayCollection
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
      */
-    public function getCategorys()
+    public function getApplication()
     {
-        return $this->categorys;
+        return $this->application;
     }
 
     /**
-     * Add a categorys
+     * Set the transport manager
      *
-     * @param ArrayCollection|mixed $categorys collection being added
+     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
      *
      * @return Cases
      */
-    public function addCategorys($categorys)
+    public function setTransportManager($transportManager)
     {
-        if ($categorys instanceof ArrayCollection) {
-            $this->categorys = new ArrayCollection(
-                array_merge(
-                    $this->categorys->toArray(),
-                    $categorys->toArray()
-                )
-            );
-        } elseif (!$this->categorys->contains($categorys)) {
-            $this->categorys->add($categorys);
-        }
+        $this->transportManager = $transportManager;
 
         return $this;
     }
 
     /**
-     * Remove a categorys
+     * Get the transport manager
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $categorys collection being removed
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     */
+    public function getTransportManager()
+    {
+        return $this->transportManager;
+    }
+
+    /**
+     * Set the licence
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
      * @return Cases
      */
-    public function removeCategorys($categorys)
+    public function setLicence($licence)
     {
-        if ($this->categorys->contains($categorys)) {
-            $this->categorys->removeElement($categorys);
-        }
+        $this->licence = $licence;
 
         return $this;
     }
 
     /**
-     * Set the closed date
+     * Get the licence
      *
-     * @param \DateTime $closedDate new value being set
-     *
-     * @return Cases
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
-    public function setClosedDate($closedDate)
+    public function getLicence()
     {
-        $this->closedDate = $closedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the closed date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getClosedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->closedDate);
-        }
-
-        return $this->closedDate;
-    }
-
-    /**
-     * Set the conviction note
-     *
-     * @param string $convictionNote new value being set
-     *
-     * @return Cases
-     */
-    public function setConvictionNote($convictionNote)
-    {
-        $this->convictionNote = $convictionNote;
-
-        return $this;
-    }
-
-    /**
-     * Get the conviction note
-     *
-     * @return string
-     */
-    public function getConvictionNote()
-    {
-        return $this->convictionNote;
+        return $this->licence;
     }
 
     /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return Cases
      */
@@ -671,27 +573,27 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the description
+     * Set the last modified by
      *
-     * @param string $description new value being set
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return Cases
      */
-    public function setDescription($description)
+    public function setLastModifiedBy($lastModifiedBy)
     {
-        $this->description = $description;
+        $this->lastModifiedBy = $lastModifiedBy;
 
         return $this;
     }
 
     /**
-     * Get the description
+     * Get the last modified by
      *
-     * @return string
+     * @return \Dvsa\Olcs\Api\Entity\User\User
      */
-    public function getDescription()
+    public function getLastModifiedBy()
     {
-        return $this->description;
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -719,27 +621,87 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the id
+     * Set the open date
      *
-     * @param int $id new value being set
+     * @param \DateTime $openDate new value being set
      *
      * @return Cases
      */
-    public function setId($id)
+    public function setOpenDate($openDate)
     {
-        $this->id = $id;
+        $this->openDate = $openDate;
 
         return $this;
     }
 
     /**
-     * Get the id
+     * Get the open date
      *
-     * @return int
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
      */
-    public function getId()
+    public function getOpenDate($asDateTime = false)
     {
-        return $this->id;
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->openDate);
+        }
+
+        return $this->openDate;
+    }
+
+    /**
+     * Set the closed date
+     *
+     * @param \DateTime $closedDate new value being set
+     *
+     * @return Cases
+     */
+    public function setClosedDate($closedDate)
+    {
+        $this->closedDate = $closedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the closed date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
+     */
+    public function getClosedDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->closedDate);
+        }
+
+        return $this->closedDate;
+    }
+
+    /**
+     * Set the description
+     *
+     * @param string $description new value being set
+     *
+     * @return Cases
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get the description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**
@@ -767,51 +729,123 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the last modified by
+     * Set the annual test history
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param string $annualTestHistory new value being set
      *
      * @return Cases
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setAnnualTestHistory($annualTestHistory)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->annualTestHistory = $annualTestHistory;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the annual test history
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * @return string
      */
-    public function getLastModifiedBy()
+    public function getAnnualTestHistory()
     {
-        return $this->lastModifiedBy;
+        return $this->annualTestHistory;
     }
 
     /**
-     * Set the licence
+     * Set the prohibition note
      *
-     * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence entity being set as the value
+     * @param string $prohibitionNote new value being set
      *
      * @return Cases
      */
-    public function setLicence($licence)
+    public function setProhibitionNote($prohibitionNote)
     {
-        $this->licence = $licence;
+        $this->prohibitionNote = $prohibitionNote;
 
         return $this;
     }
 
     /**
-     * Get the licence
+     * Get the prohibition note
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     * @return string
      */
-    public function getLicence()
+    public function getProhibitionNote()
     {
-        return $this->licence;
+        return $this->prohibitionNote;
+    }
+
+    /**
+     * Set the penalties note
+     *
+     * @param string $penaltiesNote new value being set
+     *
+     * @return Cases
+     */
+    public function setPenaltiesNote($penaltiesNote)
+    {
+        $this->penaltiesNote = $penaltiesNote;
+
+        return $this;
+    }
+
+    /**
+     * Get the penalties note
+     *
+     * @return string
+     */
+    public function getPenaltiesNote()
+    {
+        return $this->penaltiesNote;
+    }
+
+    /**
+     * Set the conviction note
+     *
+     * @param string $convictionNote new value being set
+     *
+     * @return Cases
+     */
+    public function setConvictionNote($convictionNote)
+    {
+        $this->convictionNote = $convictionNote;
+
+        return $this;
+    }
+
+    /**
+     * Get the conviction note
+     *
+     * @return string
+     */
+    public function getConvictionNote()
+    {
+        return $this->convictionNote;
+    }
+
+    /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return Cases
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int
+     */
+    public function getVersion()
+    {
+        return $this->version;
     }
 
     /**
@@ -863,40 +897,72 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the open date
+     * Set the categorys
      *
-     * @param \DateTime $openDate new value being set
+     * @param \Doctrine\Common\Collections\ArrayCollection $categorys collection being set as the value
      *
      * @return Cases
      */
-    public function setOpenDate($openDate)
+    public function setCategorys($categorys)
     {
-        $this->openDate = $openDate;
+        $this->categorys = $categorys;
 
         return $this;
     }
 
     /**
-     * Get the open date
+     * Get the categorys
      *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getOpenDate($asDateTime = false)
+    public function getCategorys()
     {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->openDate);
-        }
-
-        return $this->openDate;
+        return $this->categorys;
     }
 
     /**
-     * Set the outcome
+     * Add a categorys
      *
-     * @param ArrayCollection $outcomes collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $categorys collection being added
+     *
+     * @return Cases
+     */
+    public function addCategorys($categorys)
+    {
+        if ($categorys instanceof ArrayCollection) {
+            $this->categorys = new ArrayCollection(
+                array_merge(
+                    $this->categorys->toArray(),
+                    $categorys->toArray()
+                )
+            );
+        } elseif (!$this->categorys->contains($categorys)) {
+            $this->categorys->add($categorys);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove a categorys
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $categorys collection being removed
+     *
+     * @return Cases
+     */
+    public function removeCategorys($categorys)
+    {
+        if ($this->categorys->contains($categorys)) {
+            $this->categorys->removeElement($categorys);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the outcomes
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $outcomes collection being set as the value
      *
      * @return Cases
      */
@@ -910,7 +976,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the outcomes
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getOutcomes()
     {
@@ -920,7 +986,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Add a outcomes
      *
-     * @param ArrayCollection|mixed $outcomes collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $outcomes collection being added
      *
      * @return Cases
      */
@@ -957,102 +1023,6 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the penalties note
-     *
-     * @param string $penaltiesNote new value being set
-     *
-     * @return Cases
-     */
-    public function setPenaltiesNote($penaltiesNote)
-    {
-        $this->penaltiesNote = $penaltiesNote;
-
-        return $this;
-    }
-
-    /**
-     * Get the penalties note
-     *
-     * @return string
-     */
-    public function getPenaltiesNote()
-    {
-        return $this->penaltiesNote;
-    }
-
-    /**
-     * Set the prohibition note
-     *
-     * @param string $prohibitionNote new value being set
-     *
-     * @return Cases
-     */
-    public function setProhibitionNote($prohibitionNote)
-    {
-        $this->prohibitionNote = $prohibitionNote;
-
-        return $this;
-    }
-
-    /**
-     * Get the prohibition note
-     *
-     * @return string
-     */
-    public function getProhibitionNote()
-    {
-        return $this->prohibitionNote;
-    }
-
-    /**
-     * Set the transport manager
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager entity being set as the value
-     *
-     * @return Cases
-     */
-    public function setTransportManager($transportManager)
-    {
-        $this->transportManager = $transportManager;
-
-        return $this;
-    }
-
-    /**
-     * Get the transport manager
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     */
-    public function getTransportManager()
-    {
-        return $this->transportManager;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return Cases
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
      * Set the appeal
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Appeal $appeal entity being set as the value
@@ -1077,9 +1047,9 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the read audit
+     * Set the read audits
      *
-     * @param ArrayCollection $readAudits collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $readAudits collection being set as the value
      *
      * @return Cases
      */
@@ -1093,7 +1063,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the read audits
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getReadAudits()
     {
@@ -1103,7 +1073,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Add a read audits
      *
-     * @param ArrayCollection|mixed $readAudits collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $readAudits collection being added
      *
      * @return Cases
      */
@@ -1140,9 +1110,9 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the complaint
+     * Set the complaints
      *
-     * @param ArrayCollection $complaints collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $complaints collection being set as the value
      *
      * @return Cases
      */
@@ -1156,7 +1126,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the complaints
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getComplaints()
     {
@@ -1166,7 +1136,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Add a complaints
      *
-     * @param ArrayCollection|mixed $complaints collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $complaints collection being added
      *
      * @return Cases
      */
@@ -1203,9 +1173,9 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the condition undertaking
+     * Set the condition undertakings
      *
-     * @param ArrayCollection $conditionUndertakings collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $conditionUndertakings collection being set as the value
      *
      * @return Cases
      */
@@ -1219,7 +1189,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the condition undertakings
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getConditionUndertakings()
     {
@@ -1229,7 +1199,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Add a condition undertakings
      *
-     * @param ArrayCollection|mixed $conditionUndertakings collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $conditionUndertakings collection being added
      *
      * @return Cases
      */
@@ -1266,9 +1236,9 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the conviction
+     * Set the convictions
      *
-     * @param ArrayCollection $convictions collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $convictions collection being set as the value
      *
      * @return Cases
      */
@@ -1282,7 +1252,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the convictions
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getConvictions()
     {
@@ -1292,7 +1262,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Add a convictions
      *
-     * @param ArrayCollection|mixed $convictions collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $convictions collection being added
      *
      * @return Cases
      */
@@ -1329,9 +1299,9 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the document
+     * Set the documents
      *
-     * @param ArrayCollection $documents collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being set as the value
      *
      * @return Cases
      */
@@ -1345,7 +1315,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the documents
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getDocuments()
     {
@@ -1355,7 +1325,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Add a documents
      *
-     * @param ArrayCollection|mixed $documents collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $documents collection being added
      *
      * @return Cases
      */
@@ -1416,9 +1386,9 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the legacy offence
+     * Set the legacy offences
      *
-     * @param ArrayCollection $legacyOffences collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $legacyOffences collection being set as the value
      *
      * @return Cases
      */
@@ -1432,7 +1402,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the legacy offences
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getLegacyOffences()
     {
@@ -1442,7 +1412,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Add a legacy offences
      *
-     * @param ArrayCollection|mixed $legacyOffences collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $legacyOffences collection being added
      *
      * @return Cases
      */
@@ -1479,9 +1449,9 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the opposition
+     * Set the oppositions
      *
-     * @param ArrayCollection $oppositions collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $oppositions collection being set as the value
      *
      * @return Cases
      */
@@ -1495,7 +1465,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the oppositions
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getOppositions()
     {
@@ -1505,7 +1475,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Add a oppositions
      *
-     * @param ArrayCollection|mixed $oppositions collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $oppositions collection being added
      *
      * @return Cases
      */
@@ -1566,9 +1536,9 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the prohibition
+     * Set the prohibitions
      *
-     * @param ArrayCollection $prohibitions collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $prohibitions collection being set as the value
      *
      * @return Cases
      */
@@ -1582,7 +1552,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the prohibitions
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getProhibitions()
     {
@@ -1592,7 +1562,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Add a prohibitions
      *
-     * @param ArrayCollection|mixed $prohibitions collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $prohibitions collection being added
      *
      * @return Cases
      */
@@ -1629,9 +1599,9 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the serious infringement
+     * Set the serious infringements
      *
-     * @param ArrayCollection $seriousInfringements collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $seriousInfringements collection being set as the value
      *
      * @return Cases
      */
@@ -1645,7 +1615,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the serious infringements
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getSeriousInfringements()
     {
@@ -1655,7 +1625,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Add a serious infringements
      *
-     * @param ArrayCollection|mixed $seriousInfringements collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $seriousInfringements collection being added
      *
      * @return Cases
      */
@@ -1692,9 +1662,9 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the statement
+     * Set the statements
      *
-     * @param ArrayCollection $statements collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $statements collection being set as the value
      *
      * @return Cases
      */
@@ -1708,7 +1678,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the statements
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getStatements()
     {
@@ -1718,7 +1688,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Add a statements
      *
-     * @param ArrayCollection|mixed $statements collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $statements collection being added
      *
      * @return Cases
      */
@@ -1755,9 +1725,9 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the stay
+     * Set the stays
      *
-     * @param ArrayCollection $stays collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $stays collection being set as the value
      *
      * @return Cases
      */
@@ -1771,7 +1741,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the stays
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getStays()
     {
@@ -1781,7 +1751,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Add a stays
      *
-     * @param ArrayCollection|mixed $stays collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $stays collection being added
      *
      * @return Cases
      */
@@ -1818,9 +1788,9 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the tm decision
+     * Set the tm decisions
      *
-     * @param ArrayCollection $tmDecisions collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $tmDecisions collection being set as the value
      *
      * @return Cases
      */
@@ -1834,7 +1804,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the tm decisions
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getTmDecisions()
     {
@@ -1844,7 +1814,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Add a tm decisions
      *
-     * @param ArrayCollection|mixed $tmDecisions collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $tmDecisions collection being added
      *
      * @return Cases
      */
@@ -1878,5 +1848,14 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

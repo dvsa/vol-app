@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\StatementNameBodyAddress;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\StatementNameBodyAddress;
  */
 class StatementNameBodyAddressTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $id = '123';
 
@@ -20,7 +22,7 @@ class StatementNameBodyAddressTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testGetQueryNull()
+    public function testGetQueryNull(): void
     {
         $sut = new StatementNameBodyAddress();
         $actual = $sut->getQuery(['statement' => null]);
@@ -28,7 +30,7 @@ class StatementNameBodyAddressTest extends \PHPUnit\Framework\TestCase
         static::assertNull($actual);
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $bookmark = new StatementNameBodyAddress();
 

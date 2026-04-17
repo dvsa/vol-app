@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -16,7 +18,7 @@ class IrhpPermitApplicationTest extends MockeryTestCase
         $this->sut = new \Olcs\Data\Mapper\IrhpPermitApplication();
     }
 
-    public function testMapSectors()
+    public function testMapSectors(): void
     {
         $data = [
             'count' => 3,

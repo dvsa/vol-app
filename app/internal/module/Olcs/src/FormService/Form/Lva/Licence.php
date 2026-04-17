@@ -21,6 +21,7 @@ class Licence extends CommonLicence
         parent::__construct($formHelper, $authService);
     }
 
+    #[\Override]
     public function alterForm($form): void
     {
         parent::alterForm($form);

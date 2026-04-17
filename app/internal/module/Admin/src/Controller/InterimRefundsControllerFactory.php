@@ -12,6 +12,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class InterimRefundsControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): InterimRefundsController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

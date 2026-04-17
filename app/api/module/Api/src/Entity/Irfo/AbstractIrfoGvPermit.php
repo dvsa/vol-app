@@ -1,29 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Irfo;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * IrfoGvPermit Abstract Entity
+ * AbstractIrfoGvPermit Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="irfo_gv_permit",
  *    indexes={
  *        @ORM\Index(name="ix_irfo_gv_permit_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_irfo_gv_permit_irfo_gv_permit_type_id",
-     *     columns={"irfo_gv_permit_type_id"}),
+ *        @ORM\Index(name="ix_irfo_gv_permit_irfo_gv_permit_type_id", columns={"irfo_gv_permit_type_id"}),
  *        @ORM\Index(name="ix_irfo_gv_permit_irfo_permit_status", columns={"irfo_permit_status"}),
  *        @ORM\Index(name="ix_irfo_gv_permit_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_irfo_gv_permit_organisation_id", columns={"organisation_id"}),
@@ -31,13 +35,64 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to organisation
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
+     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
+     */
+    protected $organisation;
+
+    /**
+     * Foreign Key to irfo_gv_permit_type
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermitType
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermitType", fetch="LAZY")
+     * @ORM\JoinColumn(name="irfo_gv_permit_type_id", referencedColumnName="id")
+     */
+    protected $irfoGvPermitType;
+
+    /**
+     * IrfoPermitStatus
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="irfo_permit_status", referencedColumnName="id")
+     */
+    protected $irfoPermitStatus;
+
+    /**
+     * WithdrawnReason
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="withdrawn_reason", referencedColumnName="id", nullable=true)
+     */
+    protected $withdrawnReason;
 
     /**
      * Created by
@@ -49,6 +104,26 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
+
+    /**
+     * Last modified by
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\User
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
+     * @Gedmo\Blameable(on="update")
+     */
+    protected $lastModifiedBy;
+
+    /**
+     * Irfo fee id
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="irfo_fee_id", length=10, nullable=true)
+     */
+    protected $irfoFeeId;
 
     /**
      * Exemption details
@@ -69,15 +144,13 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     protected $expiryDate;
 
     /**
-     * Identifier - Id
+     * isFeeExempt
      *
-     * @var int
+     * @var string
      *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(type="yesno", name="is_fee_exempt", nullable=false, options={"default": 0})
      */
-    protected $id;
+    protected $isFeeExempt = 0;
 
     /**
      * In force date
@@ -87,55 +160,6 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      * @ORM\Column(type="date", name="in_force_date", nullable=true)
      */
     protected $inForceDate;
-
-    /**
-     * Irfo fee id
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="irfo_fee_id", length=10, nullable=true)
-     */
-    protected $irfoFeeId;
-
-    /**
-     * Irfo gv permit type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermitType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermitType", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_gv_permit_type_id", referencedColumnName="id", nullable=false)
-     */
-    protected $irfoGvPermitType;
-
-    /**
-     * Irfo permit status
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_permit_status", referencedColumnName="id", nullable=false)
-     */
-    protected $irfoPermitStatus;
-
-    /**
-     * Is fee exempt
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_fee_exempt", nullable=false, options={"default": 0})
-     */
-    protected $isFeeExempt = 0;
-
-    /**
-     * Last modified by
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
-     */
-    protected $lastModifiedBy;
 
     /**
      * No of copies
@@ -156,23 +180,22 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     protected $note;
 
     /**
-     * Organisation
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=false)
-     */
-    protected $organisation;
-
-    /**
-     * Permit printed
+     * permitPrinted
      *
      * @var string
      *
      * @ORM\Column(type="yesno", name="permit_printed", nullable=false, options={"default": 0})
      */
     protected $permitPrinted = 0;
+
+    /**
+     * Year required
+     *
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="year_required", nullable=true)
+     */
+    protected $yearRequired;
 
     /**
      * Version
@@ -185,28 +208,145 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     protected $version = 1;
 
     /**
-     * Withdrawn reason
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="withdrawn_reason", referencedColumnName="id", nullable=true)
+     * Initialise the collections
      */
-    protected $withdrawnReason;
+    public function __construct()
+    {
+        $this->initCollections();
+    }
 
     /**
-     * Year required
-     *
-     * @var int
-     *
-     * @ORM\Column(type="smallint", name="year_required", nullable=true)
+     * Initialise collections
      */
-    protected $yearRequired;
+    public function initCollections(): void
+    {
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return IrfoGvPermit
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the organisation
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
+     *
+     * @return IrfoGvPermit
+     */
+    public function setOrganisation($organisation)
+    {
+        $this->organisation = $organisation;
+
+        return $this;
+    }
+
+    /**
+     * Get the organisation
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     */
+    public function getOrganisation()
+    {
+        return $this->organisation;
+    }
+
+    /**
+     * Set the irfo gv permit type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermitType $irfoGvPermitType new value being set
+     *
+     * @return IrfoGvPermit
+     */
+    public function setIrfoGvPermitType($irfoGvPermitType)
+    {
+        $this->irfoGvPermitType = $irfoGvPermitType;
+
+        return $this;
+    }
+
+    /**
+     * Get the irfo gv permit type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermitType
+     */
+    public function getIrfoGvPermitType()
+    {
+        return $this->irfoGvPermitType;
+    }
+
+    /**
+     * Set the irfo permit status
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $irfoPermitStatus new value being set
+     *
+     * @return IrfoGvPermit
+     */
+    public function setIrfoPermitStatus($irfoPermitStatus)
+    {
+        $this->irfoPermitStatus = $irfoPermitStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get the irfo permit status
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
+    public function getIrfoPermitStatus()
+    {
+        return $this->irfoPermitStatus;
+    }
+
+    /**
+     * Set the withdrawn reason
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $withdrawnReason new value being set
+     *
+     * @return IrfoGvPermit
+     */
+    public function setWithdrawnReason($withdrawnReason)
+    {
+        $this->withdrawnReason = $withdrawnReason;
+
+        return $this;
+    }
+
+    /**
+     * Get the withdrawn reason
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
+    public function getWithdrawnReason()
+    {
+        return $this->withdrawnReason;
+    }
 
     /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return IrfoGvPermit
      */
@@ -225,6 +365,54 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return IrfoGvPermit
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the irfo fee id
+     *
+     * @param string $irfoFeeId new value being set
+     *
+     * @return IrfoGvPermit
+     */
+    public function setIrfoFeeId($irfoFeeId)
+    {
+        $this->irfoFeeId = $irfoFeeId;
+
+        return $this;
+    }
+
+    /**
+     * Get the irfo fee id
+     *
+     * @return string
+     */
+    public function getIrfoFeeId()
+    {
+        return $this->irfoFeeId;
     }
 
     /**
@@ -270,8 +458,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
+     * @return \DateTime
      */
     public function getExpiryDate($asDateTime = false)
     {
@@ -280,133 +467,6 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
         }
 
         return $this->expiryDate;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return IrfoGvPermit
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the in force date
-     *
-     * @param \DateTime $inForceDate new value being set
-     *
-     * @return IrfoGvPermit
-     */
-    public function setInForceDate($inForceDate)
-    {
-        $this->inForceDate = $inForceDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the in force date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getInForceDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->inForceDate);
-        }
-
-        return $this->inForceDate;
-    }
-
-    /**
-     * Set the irfo fee id
-     *
-     * @param string $irfoFeeId new value being set
-     *
-     * @return IrfoGvPermit
-     */
-    public function setIrfoFeeId($irfoFeeId)
-    {
-        $this->irfoFeeId = $irfoFeeId;
-
-        return $this;
-    }
-
-    /**
-     * Get the irfo fee id
-     *
-     * @return string
-     */
-    public function getIrfoFeeId()
-    {
-        return $this->irfoFeeId;
-    }
-
-    /**
-     * Set the irfo gv permit type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermitType $irfoGvPermitType entity being set as the value
-     *
-     * @return IrfoGvPermit
-     */
-    public function setIrfoGvPermitType($irfoGvPermitType)
-    {
-        $this->irfoGvPermitType = $irfoGvPermitType;
-
-        return $this;
-    }
-
-    /**
-     * Get the irfo gv permit type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermitType
-     */
-    public function getIrfoGvPermitType()
-    {
-        return $this->irfoGvPermitType;
-    }
-
-    /**
-     * Set the irfo permit status
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $irfoPermitStatus entity being set as the value
-     *
-     * @return IrfoGvPermit
-     */
-    public function setIrfoPermitStatus($irfoPermitStatus)
-    {
-        $this->irfoPermitStatus = $irfoPermitStatus;
-
-        return $this;
-    }
-
-    /**
-     * Get the irfo permit status
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getIrfoPermitStatus()
-    {
-        return $this->irfoPermitStatus;
     }
 
     /**
@@ -434,27 +494,33 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     }
 
     /**
-     * Set the last modified by
+     * Set the in force date
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \DateTime $inForceDate new value being set
      *
      * @return IrfoGvPermit
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setInForceDate($inForceDate)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->inForceDate = $inForceDate;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the in force date
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
      */
-    public function getLastModifiedBy()
+    public function getInForceDate($asDateTime = false)
     {
-        return $this->lastModifiedBy;
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->inForceDate);
+        }
+
+        return $this->inForceDate;
     }
 
     /**
@@ -506,30 +572,6 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     }
 
     /**
-     * Set the organisation
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation entity being set as the value
-     *
-     * @return IrfoGvPermit
-     */
-    public function setOrganisation($organisation)
-    {
-        $this->organisation = $organisation;
-
-        return $this;
-    }
-
-    /**
-     * Get the organisation
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     */
-    public function getOrganisation()
-    {
-        return $this->organisation;
-    }
-
-    /**
      * Set the permit printed
      *
      * @param string $permitPrinted new value being set
@@ -551,6 +593,30 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     public function getPermitPrinted()
     {
         return $this->permitPrinted;
+    }
+
+    /**
+     * Set the year required
+     *
+     * @param int $yearRequired new value being set
+     *
+     * @return IrfoGvPermit
+     */
+    public function setYearRequired($yearRequired)
+    {
+        $this->yearRequired = $yearRequired;
+
+        return $this;
+    }
+
+    /**
+     * Get the year required
+     *
+     * @return int
+     */
+    public function getYearRequired()
+    {
+        return $this->yearRequired;
     }
 
     /**
@@ -578,50 +644,11 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     }
 
     /**
-     * Set the withdrawn reason
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $withdrawnReason entity being set as the value
-     *
-     * @return IrfoGvPermit
+     * Get bundle data
      */
-    public function setWithdrawnReason($withdrawnReason)
+    #[\Override]
+    public function __toString(): string
     {
-        $this->withdrawnReason = $withdrawnReason;
-
-        return $this;
-    }
-
-    /**
-     * Get the withdrawn reason
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getWithdrawnReason()
-    {
-        return $this->withdrawnReason;
-    }
-
-    /**
-     * Set the year required
-     *
-     * @param int $yearRequired new value being set
-     *
-     * @return IrfoGvPermit
-     */
-    public function setYearRequired($yearRequired)
-    {
-        $this->yearRequired = $yearRequired;
-
-        return $this;
-    }
-
-    /**
-     * Get the year required
-     *
-     * @return int
-     */
-    public function getYearRequired()
-    {
-        return $this->yearRequired;
+        return (string) $this->getId();
     }
 }

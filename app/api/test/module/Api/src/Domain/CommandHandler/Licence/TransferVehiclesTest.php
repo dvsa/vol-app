@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Transfer Vehicles Test
  *
@@ -43,7 +45,8 @@ class TransferVehiclesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -52,7 +55,7 @@ class TransferVehiclesTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWillExceed()
+    public function testHandleCommandWillExceed(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -84,7 +87,7 @@ class TransferVehiclesTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithOverlappingSingle()
+    public function testHandleCommandWithOverlappingSingle(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -132,7 +135,7 @@ class TransferVehiclesTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithOverlappingMultiple()
+    public function testHandleCommandWithOverlappingMultiple(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -189,7 +192,7 @@ class TransferVehiclesTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 111,

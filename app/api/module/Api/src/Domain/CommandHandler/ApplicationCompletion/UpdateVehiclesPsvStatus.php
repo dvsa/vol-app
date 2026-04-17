@@ -26,6 +26,7 @@ final class UpdateVehiclesPsvStatus extends AbstractUpdateStatus
 
     protected $section = 'VehiclesPsv';
 
+    #[\Override]
     protected function isSectionValid(Application $application)
     {
         if ($application->getHasEnteredReg() === 'N') {

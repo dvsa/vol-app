@@ -23,6 +23,7 @@ class GenerateReport extends AbstractCommandHandler
      * @throws \InvalidArgumentException
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         $availableReports = PermitsReportService::COMMAND_MAP;

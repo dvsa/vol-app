@@ -17,6 +17,7 @@ final class Text2 extends \Dvsa\Olcs\Api\Service\Publication\Process\AbstractTex
      * @param PublicationLink $publicationLink
      * @param ImmutableArrayObject $context
      */
+    #[\Override]
     public function process(PublicationLink $publicationLink, ImmutableArrayObject $context)
     {
         $this->clear();

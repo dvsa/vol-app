@@ -3,6 +3,10 @@
 !.idea/php.xml
 !.idea/.name
 
+# Claude
+/.claude/
+CLAUDE.md
+
 # Logs
 logs
 *.log
@@ -78,3 +82,8 @@ compose-custom.yaml
 
 # Local refresh cache
 packages/local-refresh/.cache/
+
+# JetBrains
+.idea
+
+# VOL project config

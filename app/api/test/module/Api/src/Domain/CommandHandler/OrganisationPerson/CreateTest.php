@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\OrganisationPerson;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -12,8 +14,8 @@ use Mockery as m;
 
 /**
  * @author Mat Evans <mat.evans@valtech.co.uk>
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\OrganisationPerson\Create
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\OrganisationPerson\Create::class)]
 class CreateTest extends AbstractCommandHandlerTestCase
 {
     public const ORG_ID = 9001;
@@ -39,7 +41,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'TITLE',
@@ -55,7 +58,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = TransferCmd\OrganisationPerson\Create::create(
             [

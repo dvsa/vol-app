@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Controller;
 
 use Laminas\Mvc\MvcEvent;
@@ -17,7 +19,7 @@ class ControllerRouteMatchHelper
      * @param array $routerConfig
      * @return \Laminas\Mvc\MvcEvent
      */
-    public function getMockRouteMatch($params = [], $routerConfig = [])
+    public function getMockRouteMatch(array $params = [], array $routerConfig = []): MvcEvent
     {
         $routeMatch = new RouteMatch($params);
         $event      = new MvcEvent();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PermitsTest\Data\Mapper;
 
 use Common\Form\Form;
@@ -21,10 +23,8 @@ class AvailableStocksTest extends TestCase
         $this->sut = new AvailableStocks();
     }
 
-    /**
-     * @dataProvider dpTestExceptionNotSupported
-     */
-    public function testExceptionNotSupported($typeId): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestExceptionNotSupported')]
+    public function testExceptionNotSupported(int $typeId): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('This mapper does not support permit type ' . $typeId);
@@ -44,7 +44,7 @@ class AvailableStocksTest extends TestCase
      *
      * @psalm-return list{list{1}, list{3}, list{4}, list{5}}
      */
-    public function dpTestExceptionNotSupported(): array
+    public static function dpTestExceptionNotSupported(): array
     {
         return [
             [RefData::ECMT_PERMIT_TYPE_ID],

@@ -180,6 +180,7 @@ class AvailableBilateralStocks implements MapperInterface
      * @param $data
      * @return array
      */
+    #[\Override]
     public static function mapFromResult($data)
     {
         return $data['fields'];

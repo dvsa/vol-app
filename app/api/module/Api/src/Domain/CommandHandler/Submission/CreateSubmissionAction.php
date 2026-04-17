@@ -26,6 +26,7 @@ final class CreateSubmissionAction extends AbstractCommandHandler implements Edi
 
     protected $repoServiceName = 'SubmissionAction';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $submissionAction = $this->createSubmissionAction($command);

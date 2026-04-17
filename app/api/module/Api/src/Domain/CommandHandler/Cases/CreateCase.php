@@ -30,6 +30,7 @@ final class CreateCase extends AbstractCommandHandler implements TransactionedIn
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var CreateCaseCmd $command */

@@ -24,9 +24,6 @@ class OperatorDocsController extends OperatorController
     use Traits\DocumentSearchTrait;
     use Traits\DocumentActionTrait;
 
-    protected DocumentSubCategory $docSubCategoryDataService;
-    protected TranslationHelperService $translationHelper;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
@@ -39,8 +36,8 @@ class OperatorDocsController extends OperatorController
         Licence $licenceDataService,
         QueryService $queryService,
         Navigation $navigation,
-        DocumentSubCategory $docSubCategoryDataService,
-        TranslationHelperService $translationHelper
+        protected DocumentSubCategory $docSubCategoryDataService,
+        protected TranslationHelperService $translationHelper
     ) {
         parent::__construct(
             $scriptFactory,
@@ -55,8 +52,6 @@ class OperatorDocsController extends OperatorController
             $queryService,
             $navigation
         );
-        $this->docSubCategoryDataService = $docSubCategoryDataService;
-        $this->translationHelper = $translationHelper;
     }
 
     /**
@@ -65,6 +60,7 @@ class OperatorDocsController extends OperatorController
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
+    #[\Override]
     protected function getDocumentTableName()
     {
         return 'documents';
@@ -76,6 +72,7 @@ class OperatorDocsController extends OperatorController
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
+    #[\Override]
     protected function getDocumentRoute()
     {
         return 'operator/documents';
@@ -87,6 +84,7 @@ class OperatorDocsController extends OperatorController
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
+    #[\Override]
     protected function getDocumentRouteParams()
     {
         return ['organisation' => $this->getFromRoute('organisation')];
@@ -98,6 +96,7 @@ class OperatorDocsController extends OperatorController
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return ViewModel
      */
+    #[\Override]
     protected function getDocumentView()
     {
         $filters = $this->mapDocumentFilters(['irfoOrganisation' => $this->getFromRoute('organisation')]);
@@ -115,6 +114,7 @@ class OperatorDocsController extends OperatorController
      *
      * @return \Laminas\Form\FieldsetInterface
      */
+    #[\Override]
     protected function getConfiguredDocumentForm()
     {
         $filters = $this->mapDocumentFilters(['irfoOrganisation' => $this->getFromRoute('organisation')]);

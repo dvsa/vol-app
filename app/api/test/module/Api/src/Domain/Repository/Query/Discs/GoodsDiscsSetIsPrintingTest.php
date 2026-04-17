@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Goods Discs Set Is Printing Test
  *
@@ -41,7 +43,7 @@ class GoodsDiscsSetIsPrintingTest extends AbstractDbQueryTestCase
         ],
     ];
 
-    public function paramProvider()
+    public static function paramProvider(): array
     {
         return [
             [
@@ -53,12 +55,12 @@ class GoodsDiscsSetIsPrintingTest extends AbstractDbQueryTestCase
         ];
     }
 
-    protected function getSut()
+    protected function getSut(): GoodsDiscsSetIsPrinting
     {
         return new GoodsDiscsSetIsPrinting();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return 'UPDATE goods_disc gd '
         . 'SET gd.is_printing = :isPrinting, '

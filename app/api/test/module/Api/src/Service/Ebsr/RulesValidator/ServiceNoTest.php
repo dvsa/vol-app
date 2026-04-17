@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator;
 
 use Dvsa\Olcs\Api\Service\Ebsr\RulesValidator\ServiceNo;
@@ -14,10 +16,9 @@ class ServiceNoTest extends \PHPUnit\Framework\TestCase
      *
      * @param mixed $serviceNo service number
      * @param bool  $isValid   whether it's valid
-     *
-     * @dataProvider isValidProvider
      */
-    public function testIsValid(mixed $serviceNo, $isValid)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
+    public function testIsValid(mixed $serviceNo, mixed $isValid): void
     {
         $value = ['lineNames' => [$serviceNo]];
 
@@ -30,7 +31,7 @@ class ServiceNoTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function isValidProvider()
+    public static function isValidProvider(): array
     {
         return [
             ['', false],

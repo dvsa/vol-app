@@ -23,6 +23,7 @@ final class CreateLicenceStatusRule extends AbstractCommandHandler implements Tr
 
     protected $extraRepos = ['Licence'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $licence = $this->getRepo()

@@ -20,6 +20,7 @@ class Trailer extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Trailer';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->result($this->getRepo()->fetchUsingId($query));

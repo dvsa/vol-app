@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Conditions Undertakings Review Service Test
  *
@@ -36,12 +38,12 @@ class ConditionsUndertakingsReviewServiceTest extends MockeryTestCase
         $this->sut = new ConditionsUndertakingsReviewService($abstractReviewServiceServices);
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         $this->assertEmpty($this->sut->getConfigFromData([]));
     }
 
-    public function testFormatLicencesSubSection()
+    public function testFormatLicencesSubSection(): void
     {
         // Params
         $list = [
@@ -73,7 +75,7 @@ class ConditionsUndertakingsReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testFormatOcSubSection()
+    public function testFormatOcSubSection(): void
     {
         // Params
         $list = [
@@ -137,7 +139,7 @@ class ConditionsUndertakingsReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testFormatConditionsList()
+    public function testFormatConditionsList(): void
     {
         // Params
         $conditions = [
@@ -149,7 +151,7 @@ class ConditionsUndertakingsReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->formatConditionsList($conditions));
     }
 
-    public function testSplitUpConditionsAndUndertakingsWithEmptyLists()
+    public function testSplitUpConditionsAndUndertakingsWithEmptyLists(): void
     {
         // Params
         $data = [
@@ -168,7 +170,7 @@ class ConditionsUndertakingsReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expectedOcUnds, $ocUnds);
     }
 
-    public function testSplitUpConditionsAndUndertakings()
+    public function testSplitUpConditionsAndUndertakings(): void
     {
         // Params
         $data = [
@@ -648,7 +650,7 @@ class ConditionsUndertakingsReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expectedOcUnds, $ocUnds);
     }
 
-    public function testSplitUpConditionsAndUndertakingsWithoutAction()
+    public function testSplitUpConditionsAndUndertakingsWithoutAction(): void
     {
         // Params
         $data = [

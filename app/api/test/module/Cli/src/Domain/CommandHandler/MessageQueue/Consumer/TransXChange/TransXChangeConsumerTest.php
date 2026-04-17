@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler\MessageQueue\Consumer\TransXChange;
 
 use Aws\S3\S3Client;
@@ -10,7 +12,6 @@ use Dvsa\Olcs\Api\Domain\CommandHandlerManager;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\QueryHandlerManager;
 use Dvsa\Olcs\Api\Domain\Repository\EbsrSubmission;
-use Dvsa\Olcs\Api\Domain\Repository\TransactionManagerInterface;
 use Dvsa\Olcs\Api\Domain\RepositoryServiceManager;
 use Dvsa\Olcs\Api\Entity\Bus\BusReg as BusRegEntity;
 use Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission as EbsrSubmissionEntity;
@@ -35,10 +36,9 @@ use Olcs\XmlTools\Xml\Specification\SpecificationInterface;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
 
-/**
- * @runTestsInSeparateProcesses
- * @preserveGlobalState disabled
- */
+#[\PHPUnit\Framework\Attributes\PreserveGlobalState(false)]
+#[\PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses]
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
 {
     protected array $config = [
@@ -80,15 +80,14 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
      */
     private m\MockInterface $s3Client;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new TransXChangeConsumer();
         $this->mockRepo('EbsrSubmission', EbsrSubmission::class);
 
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
     }
 
@@ -123,7 +122,9 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
         );
 
         $this->mockedSmServices[Queue::class]
-            ->shouldReceive('fetchMessages')
+            ->expects('fetchMessages')
+            ->with('QUEUE_URI', 10, 60)
+            ->twice()
             ->andReturn($messages);
 
         $this->mockedSmServices[Queue::class]
@@ -132,8 +133,6 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
 
         $busRegistration = m::mock(BusRegEntity::class);
         $busRegistration->shouldReceive('getId')->andReturn(1);
-
-        $busRegistration->shouldReceive('isEbsrRefresh')->andReturn(true);
         $busRegistration->shouldReceive('getRegNo')->andReturn(1);
 
         $licence = m::mock(LicenceEntity::class);
@@ -141,8 +140,8 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
         $busRegistration->shouldReceive('getLicence')->andReturn($licence);
 
         $createdBy = m::mock(UserEntity::class);
-        $createdBy->shouldReceive('getId')->andReturn(1);
-        $busRegistration->shouldReceive('getCreatedBy')->andReturn($createdBy);
+        $createdBy->expects('getId')->times(20)->andReturn(1);
+        $busRegistration->expects('getCreatedBy')->times(20)->andReturn($createdBy);
 
         $ebsrSubmission = m::mock(EbsrSubmissionEntity::class);
         $ebsrSubmission->shouldReceive('getBusReg')->andReturn($busRegistration);
@@ -156,13 +155,6 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
             [],
             new Result(),
             20 /* All types of requests are uploaded. Each request has 1 document. */
-        );
-
-        $this->expectedSideEffect(
-            CreateTaskCmd::class,
-            [],
-            new Result(),
-            20 /* All types of requests get a task created. */
         );
 
         $this->expectedSideEffect(
@@ -207,8 +199,6 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
 
         $busRegistration = m::mock(BusRegEntity::class);
         $busRegistration->shouldReceive('getId')->andReturn(1);
-
-        $busRegistration->shouldReceive('isEbsrRefresh')->andReturn(true);
         $busRegistration->shouldReceive('getRegNo')->andReturn(1);
 
         $licence = m::mock(LicenceEntity::class);
@@ -234,13 +224,6 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
         );
 
         $this->expectedSideEffect(
-            CreateTaskCmd::class,
-            [],
-            new Result(),
-            20 /* All types of requests get a task created. */
-        );
-
-        $this->expectedSideEffect(
             UpdateTxcInboxPdfCmd::class,
             [],
             new Result(),
@@ -251,6 +234,9 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
+    /**
+     * @@doesNotPerformAssertions
+     */
     public function testMessageVisibilityResetIfNoMatchedEbsrSubmission(): void
     {
         $this->setupMocks();
@@ -258,8 +244,8 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
         $messages = [$this->createQueueMessage('Timetable', 'ExampleTimetable.xml')];
 
         $this->mockedSmServices[Queue::class]
-            ->shouldReceive('fetchMessages')
-            ->once()
+            ->expects('fetchMessages')
+            ->with('QUEUE_URI', 10, 60)
             ->andReturn($messages);
 
         $this->mockedSmServices[Queue::class]
@@ -274,6 +260,9 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
+    /**
+     * @@doesNotPerformAssertions
+     */
     public function testMessageVisibilityResetIfNoMatchedBusRegistration(): void
     {
         $this->setupMocks();
@@ -281,13 +270,12 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
         $messages = [$this->createQueueMessage('Timetable', 'ExampleTimetable.xml')];
 
         $this->mockedSmServices[Queue::class]
-            ->shouldReceive('fetchMessages')
-            ->once()
+            ->expects('fetchMessages')
+            ->with('QUEUE_URI', 10, 60)
             ->andReturn($messages);
 
         $this->mockedSmServices[Queue::class]
-            ->shouldReceive('changeMessageVisibility')
-            ->once();
+            ->expects('changeMessageVisibility');
 
         $ebsrSubmission = m::mock(EbsrSubmissionEntity::class);
         $ebsrSubmission->shouldReceive('getBusReg')->andReturn(null);
@@ -307,15 +295,11 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
         $messages = [$this->createQueueMessage('Timetable', 'ExampleTimetable.xml')];
 
         $this->mockedSmServices[Queue::class]
-            ->shouldReceive('fetchMessages')
-            ->once()
+            ->expects('fetchMessages')
+            ->with('QUEUE_URI', 10, 60)
             ->andReturn($messages);
 
-        $this->mockedSmServices[Queue::class]
-            ->shouldReceive('changeMessageVisibility')
-            ->once();
-
-        $this->repoMap['EbsrSubmission']->shouldReceive('fetchById')->andThrow(RuntimeException::class);
+        $this->repoMap['EbsrSubmission']->expects('fetchById')->andThrow(RuntimeException::class);
 
         $command = TransXChangeConsumerCmd::create([]);
 
@@ -329,40 +313,34 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
     {
         $this->setupMocks();
 
-        $this->xmlFilter->shouldReceive('filter')->andReturn([
+        $this->xmlFilter->expects('filter')->andReturn([
             'error' => 'Something went wrong.'
         ]);
 
         $messages = [$this->createQueueMessage('Timetable', 'ExampleTimetable.xml')];
 
         $busRegistration = m::mock(BusRegEntity::class);
-        $busRegistration->shouldReceive('getId')->andReturn(1);
-
-        $busRegistration->shouldReceive('isEbsrRefresh')->andReturn(true);
-        $busRegistration->shouldReceive('getRegNo')->andReturn(1);
+        $busRegistration->expects('getId')->andReturn(999);
+        $busRegistration->expects('getRegNo')->andReturn('123456789/999');
 
         $licence = m::mock(LicenceEntity::class);
-        $licence->shouldReceive('getId')->andReturn(1);
-        $busRegistration->shouldReceive('getLicence')->andReturn($licence);
-
-        $createdBy = m::mock(UserEntity::class);
-        $createdBy->shouldReceive('getId')->andReturn(1);
-        $busRegistration->shouldReceive('getCreatedBy')->andReturn($createdBy);
+        $licence->expects('getId')->withNoArgs()->andReturn(888);
+        $busRegistration->expects('getLicence')->withNoArgs()->andReturn($licence);
 
         $ebsrSubmission = m::mock(EbsrSubmissionEntity::class);
-        $ebsrSubmission->shouldReceive('getBusReg')->andReturn($busRegistration);
+        $ebsrSubmission->expects('getBusReg')->withNoArgs()->andReturn($busRegistration);
 
         $this->repoMap['EbsrSubmission']
-            ->shouldReceive('fetchById')
+            ->expects('fetchById')
             ->andReturn($ebsrSubmission);
 
         $this->mockedSmServices[Queue::class]
-            ->shouldReceive('fetchMessages')
-            ->once()
+            ->expects('fetchMessages')
+            ->with('QUEUE_URI', 10, 60)
             ->andReturn($messages);
 
         $this->mockedSmServices[Queue::class]
-            ->shouldReceive('deleteMessage');
+            ->expects('deleteMessage');
 
         $this->expectedSideEffect(
             CreateTaskCmd::class,
@@ -435,7 +413,6 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
         $this->queryHandler = m::mock(QueryHandlerManager::class);
         $this->commandHandler = m::mock(CommandHandlerManager::class);
         $this->identityProvider = m::mock(IdentityProviderInterface::class);
-        $this->mockTransationMngr = m::mock(TransactionManagerInterface::class);
 
         foreach ($this->repoMap as $alias => $service) {
             $this->repoManager
@@ -445,12 +422,11 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
         }
 
         $sm = m::mock(ContainerInterface::class);
-        $sm->shouldReceive('get')->with('RepositoryServiceManager')->andReturn($this->repoManager);
-        $sm->shouldReceive('get')->with('TransactionManager')->andReturn($this->mockTransationMngr);
-        $sm->shouldReceive('get')->with('QueryHandlerManager')->andReturn($this->queryHandler);
-        $sm->shouldReceive('get')->with('CommandHandlerManager')->andReturn($this->commandHandler);
-        $sm->shouldReceive('get')->with(IdentityProviderInterface::class)->andReturn($this->identityProvider);
-        $sm->shouldReceive('get')->with('TransExchangePublisherXmlMapping')->andReturn($transXChangeXmlMapping);
+        $sm->expects('get')->with('RepositoryServiceManager')->times(2)->andReturn($this->repoManager);
+        $sm->expects('get')->with('QueryHandlerManager')->andReturn($this->queryHandler);
+        $sm->expects('get')->with('CommandHandlerManager')->andReturn($this->commandHandler);
+        $sm->expects('get')->with(IdentityProviderInterface::class)->andReturn($this->identityProvider);
+        $sm->expects('get')->with('TransExchangePublisherXmlMapping')->andReturn($transXChangeXmlMapping);
 
         foreach ($this->mockedSmServices as $serviceName => $service) {
             $sm->shouldReceive('get')->with($serviceName)->andReturn($service);

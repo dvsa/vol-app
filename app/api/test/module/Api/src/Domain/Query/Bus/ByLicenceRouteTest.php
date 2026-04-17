@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Query\Bus;
 
 use Dvsa\Olcs\Api\Domain\Query\Bus\ByLicenceRoute;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bus\ByLicenceRoute;
  */
 class ByLicenceRouteTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $licence = 1;
         $routeNo = 2;

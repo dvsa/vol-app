@@ -28,6 +28,7 @@ final class Create extends AbstractCommandHandler implements TransactionedInterf
      * @throws ValidationException
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         // This shared method is defined in IrhpPermitStockTrait - and can throw a ValidationException

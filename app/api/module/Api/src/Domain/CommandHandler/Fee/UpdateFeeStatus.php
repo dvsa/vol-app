@@ -18,6 +18,7 @@ class UpdateFeeStatus extends AbstractCommandHandler implements AuthAwareInterfa
      * @param CommandInterface $command
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $status = $command->getStatus();

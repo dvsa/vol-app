@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Cases\Si\Applied;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Cases\Si\Applied\Update as UpdatePenalty;
@@ -24,7 +26,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             SiPenaltyTypeEntity::class => [
@@ -38,7 +41,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $siPenaltyType = 999;
         $erruRequested = 888;
@@ -84,7 +87,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandThrowsExceptionWhenCaseClosed()
+    public function testHandleCommandThrowsExceptionWhenCaseClosed(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

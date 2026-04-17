@@ -17,6 +17,7 @@ class AvailableLicences extends AbstractQueryHandler
 {
     protected $repoServiceName = 'IrhpApplication';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /**

@@ -21,6 +21,7 @@ class MaxStockPermitsByApplication extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $irhpApplication = $this->getRepo()->fetchById($query->getId());

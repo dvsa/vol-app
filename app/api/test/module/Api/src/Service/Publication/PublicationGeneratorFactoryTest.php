@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication;
 
 use Dvsa\Olcs\Api\Service\Publication\Context\PluginManager as ContextPluginManager;
@@ -15,7 +17,7 @@ use Psr\Container\ContainerInterface;
  */
 class PublicationGeneratorFactoryTest extends MockeryTestCase
 {
-    public function testCanCreateServiceWithName()
+    public function testCanCreateServiceWithName(): void
     {
         /** @var  \Laminas\ServiceManager\ServiceLocatorInterface $mockSl */
         $mockSl = m::mock(ContainerInterface::class)

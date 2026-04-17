@@ -27,6 +27,7 @@ final class CreatePeople extends AbstractCommandHandler implements Transactioned
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $licence LicenceEntity */

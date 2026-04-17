@@ -16,6 +16,7 @@ use Psr\Container\ContainerInterface;
 
 class OperatorRegistrationControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OperatorRegistrationController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

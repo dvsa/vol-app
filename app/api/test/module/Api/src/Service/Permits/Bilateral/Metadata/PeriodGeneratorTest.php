@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Metadata;
 
 use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitStock as IrhpPermitStockRepository;
@@ -51,10 +53,8 @@ class PeriodGeneratorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpGenerate
-     */
-    public function testGenerate($irhpPermitApplication)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
+    public function testGenerate(mixed $irhpPermitApplication): void
     {
         $fieldsResponse = [
             'fieldsResponseKey1' => 'fieldsResponseValue1',
@@ -87,7 +87,7 @@ class PeriodGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate(): array
     {
         return [
             [m::mock(IrhpPermitApplication::class)],
@@ -95,7 +95,7 @@ class PeriodGeneratorTest extends MockeryTestCase
         ];
     }
 
-    public function testGenerateException()
+    public function testGenerateException(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No fields generator found for behaviour name unknownBehaviour');

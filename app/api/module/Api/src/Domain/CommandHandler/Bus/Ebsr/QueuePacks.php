@@ -34,6 +34,7 @@ final class QueuePacks extends AbstractCommandHandler implements AuthAwareInterf
      * @return Result
      * @throws ValidationException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

@@ -45,6 +45,7 @@ class ReportUploadController extends AbstractInternalController implements LeftV
      *
      * @return Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         /** @var \Laminas\Http\Request $request */

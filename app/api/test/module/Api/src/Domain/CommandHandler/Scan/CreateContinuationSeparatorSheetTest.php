@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Scan;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Scan\CreateContinuationSeparatorSheet as CommandHandler;
@@ -22,7 +24,8 @@ class CreateContinuationSeparatorSheetTest extends AbstractCommandHandlerTestCas
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
         ];
@@ -36,7 +39,7 @@ class CreateContinuationSeparatorSheetTest extends AbstractCommandHandlerTestCas
         parent::initReferences();
     }
 
-    public function testHandle()
+    public function testHandle(): void
     {
         $command = Cmd::create(
             [

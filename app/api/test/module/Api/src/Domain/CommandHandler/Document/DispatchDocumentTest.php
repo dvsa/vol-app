@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Document;
 
 use Dvsa\Olcs\Api\Domain\Command\Document\CreateDocumentSpecific;
@@ -22,9 +24,8 @@ use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Dispatch Document Test
- *
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Document\DispatchDocument
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Document\DispatchDocument::class)]
 class DispatchDocumentTest extends AbstractCommandHandlerTestCase
 {
     public const DOC_ID = 9001;
@@ -76,7 +77,7 @@ class DispatchDocumentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandNoLicence()
+    public function testHandleCommandNoLicence(): void
     {
         $this->expectException(BadRequestException::class);
 
@@ -86,7 +87,7 @@ class DispatchDocumentTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandNoDescription()
+    public function testHandleCommandNoDescription(): void
     {
         $this->expectException(BadRequestException::class);
 
@@ -98,7 +99,7 @@ class DispatchDocumentTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandEmailNoPrint()
+    public function testHandleCommandEmailNoPrint(): void
     {
         $data = [
             'licence' => self::LIC_ID,
@@ -145,7 +146,7 @@ class DispatchDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandEnforcePrintNoEmail()
+    public function testHandleCommandEnforcePrintNoEmail(): void
     {
         $data = [
             'licence' => self::LIC_ID,
@@ -194,7 +195,7 @@ class DispatchDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandEmailAndEnforcePrint()
+    public function testHandleCommandEmailAndEnforcePrint(): void
     {
         $data = [
             'licence' => self::LIC_ID,
@@ -252,7 +253,7 @@ class DispatchDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandPrint()
+    public function testHandleCommandPrint(): void
     {
         $data = [
             'licence' => self::LIC_ID,
@@ -299,7 +300,7 @@ class DispatchDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandPrintWelsh()
+    public function testHandleCommandPrintWelsh(): void
     {
         $data = [
             'licence' => self::LIC_ID,

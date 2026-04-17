@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Traits;
 
 use Mockery;
@@ -9,7 +11,7 @@ use Mockery;
  */
 trait MockeryTestCaseTrait
 {
-    protected function assertPostConditions()
+    protected function assertPostConditions(): void
     {
         $this->addMockeryExpectationsToAssertionCount();
         $this->closeMockery();
@@ -17,7 +19,7 @@ trait MockeryTestCaseTrait
         parent::assertPostConditions();
     }
 
-    protected function addMockeryExpectationsToAssertionCount()
+    protected function addMockeryExpectationsToAssertionCount(): void
     {
         $container = Mockery::getContainer();
         if ($container != null) {
@@ -26,7 +28,7 @@ trait MockeryTestCaseTrait
         }
     }
 
-    protected function closeMockery()
+    protected function closeMockery(): void
     {
         Mockery::close();
     }

@@ -23,6 +23,7 @@ final class CreateReplacement extends AbstractCommandHandler
      * @return Result
      * @throws ValidationException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         $oldPermit = $this->getRepo()->fetchById($command->getReplaces());

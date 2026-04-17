@@ -13,9 +13,7 @@ use Dvsa\Olcs\Transfer\Query\CompaniesHouse\AlertList as Qry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\CompaniesHouse\AlertList
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\CompaniesHouse\AlertList::class)]
 class AlertListTest extends QueryHandlerTestCase
 {
     public function setUp(): void

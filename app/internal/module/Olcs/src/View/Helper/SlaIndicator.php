@@ -77,8 +77,8 @@ class SlaIndicator extends AbstractHelper
      */
     private function doHasTargetBeenMet($date = null, $targetDate = null)
     {
-        $dateTime = \DateTime::createFromFormat('Y-m-d', date('Y-m-d', strtotime($date)));
-        $targetDateTime = \DateTime::createFromFormat('Y-m-d', date('Y-m-d', strtotime($targetDate)));
+        $dateTime = \DateTime::createFromFormat('Y-m-d', date('Y-m-d', strtotime((string) $date)));
+        $targetDateTime = \DateTime::createFromFormat('Y-m-d', date('Y-m-d', strtotime((string) $targetDate)));
 
         if ($dateTime <= $targetDateTime) {
             return true;

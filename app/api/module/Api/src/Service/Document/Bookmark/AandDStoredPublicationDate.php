@@ -21,6 +21,7 @@ class AandDStoredPublicationDate extends AbstractAandDStoredPublication
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         if (!isset($this->data['publicationLinks'])) {

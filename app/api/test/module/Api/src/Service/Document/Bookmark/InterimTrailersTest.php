@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\InterimTrailers;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\InterimTrailers;
  */
 class InterimTrailersTest extends \PHPUnit\Framework\TestCase
 {
-    public function testRenderWithNoValueAppliesDefault()
+    public function testRenderWithNoValueAppliesDefault(): void
     {
         $bookmark = new InterimTrailers();
         $bookmark->setData(

@@ -21,6 +21,7 @@ final class CreateRecipient extends AbstractCommandHandler implements Transactio
 {
     protected $repoServiceName = 'Recipient';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         // create and save a record

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Command\System;
 
 use Dvsa\Olcs\Api\Domain\Command\System\GenerateSlaTargetDate;
 
 class GenerateSlaTargetDateTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $data = [
             'pi' => 10,

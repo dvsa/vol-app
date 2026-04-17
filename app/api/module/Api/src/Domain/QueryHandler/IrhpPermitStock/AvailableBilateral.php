@@ -23,6 +23,7 @@ class AvailableBilateral extends AbstractQueryHandler
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $stocks = $this->getRepo()->fetchOpenBilateralStocksByCountry($query->getCountry(), new DateTime());

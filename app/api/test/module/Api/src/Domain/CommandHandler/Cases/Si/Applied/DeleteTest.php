@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Cases\Si\Applied;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Cases\Si\Applied\Delete as DeletePenalty;
@@ -22,7 +24,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $penaltyId = 111;
 
@@ -56,7 +58,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandThrowsExceptionWhenNotOpenErruCase()
+    public function testHandleCommandThrowsExceptionWhenNotOpenErruCase(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

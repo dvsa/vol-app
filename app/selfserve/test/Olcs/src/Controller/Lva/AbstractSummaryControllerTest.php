@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Lva;
 
+use Laminas\View\Model\ViewModel;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
@@ -28,12 +31,12 @@ class AbstractSummaryControllerTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider indexActionProvider
      *
      * @param $niFlag
      * @param $isNi
      */
-    public function testIndexAction($niFlag, $isNi): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('indexActionProvider')]
+    public function testIndexAction(?string $niFlag, bool $isNi): void
     {
         $applicationData = [
             'id' => 712,
@@ -53,7 +56,9 @@ class AbstractSummaryControllerTest extends MockeryTestCase
                 'description' => 'In-Force'
             ],
             'niFlag' => $niFlag,
-            'canWithdraw' => false
+            'canWithdraw' => false,
+            'wasAutoGranted' => false,
+            'autoGrantChanges' => []
         ];
         $this->sut
             ->shouldReceive('getIdentifier')->with()->once()->andReturn(712)
@@ -81,6 +86,8 @@ class AbstractSummaryControllerTest extends MockeryTestCase
                             'interimStatus' => 'In-Force',
                             'interimStart' => '2016-01-01',
                             'isNi' => $isNi,
+                            'wasAutoGranted' => false,
+                            'autoGrantChanges' => []
                         ],
                         $view->getVariables()
                     );
@@ -97,7 +104,7 @@ class AbstractSummaryControllerTest extends MockeryTestCase
      *
      * @psalm-return list{list{'Y', true}, list{'N', false}, list{null, false}}
      */
-    public function indexActionProvider(): array
+    public static function indexActionProvider(): array
     {
         return [
             ['Y', true],
@@ -106,10 +113,8 @@ class AbstractSummaryControllerTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderImportantText
-     */
-    public function testImportantText($isVariation, $goodsOrPsv, $licenceType, $expected): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderImportantText')]
+    public function testImportantText(bool $isVariation, string $goodsOrPsv, string $licenceType, string $expected): void
     {
         $applicationData = [
             'id' => 712,
@@ -147,7 +152,7 @@ class AbstractSummaryControllerTest extends MockeryTestCase
      *
      * @psalm-return list{list{true, 'lcat_gv', 'XX', 'application-summary-important-goods-var'}, list{false, 'lcat_gv', 'XX', 'application-summary-important-goods-app'}, list{true, 'lcat_psv', 'XX', 'application-summary-important-psv-var'}, list{false, 'lcat_psv', 'XX', 'application-summary-important-psv-app'}, list{false, 'lcat_psv', 'ltyp_sr', 'application-summary-important-psv-app-sr'}}
      */
-    public function dataProviderImportantText(): array
+    public static function dataProviderImportantText(): array
     {
         return [
             // isVariation, goodsOrPsv, licence type, expected
@@ -162,5 +167,47 @@ class AbstractSummaryControllerTest extends MockeryTestCase
                 'application-summary-important-psv-app-sr'
             ],
         ];
+    }
+
+    public function testRenderSummaryWithAutoGrantChanges(): void
+    {
+        $params = [
+            'autoGrantChanges' => [
+                'messages' => [
+                    'Operating centre at TEST ADDRESS removed',
+                    'Vehicles reduced by 5 to 10'
+                ],
+                'vehicleReduction' => 5,
+                'newTotal' => 10
+            ],
+            'wasAutoGranted' => true,
+            'application' => 123,
+            'licence' => 'ABC123',
+            'status' => 'Granted',
+            'submittedDate' => '2024-01-01',
+            'lva' => 'variation'
+        ];
+
+        $sut = m::mock(\Olcs\Controller\Lva\AbstractSummaryController::class)
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+
+        $sut->shouldReceive('render')
+            ->once()
+            ->andReturnUsing(function ($view) use ($params) {
+                $this->assertInstanceOf(ViewModel::class, $view);
+                $this->assertEquals('pages/auto-grant-success', $view->getTemplate());
+
+                $variables = $view->getVariables();
+                $this->assertArrayHasKey('changes', $variables);
+                $this->assertCount(2, $variables['changes']);
+                $this->assertEquals($params['autoGrantChanges']['messages'], $variables['changes']);
+
+                return 'RENDERED';
+            });
+
+        $result = $sut->renderSummary($params);
+
+        $this->assertEquals('RENDERED', $result);
     }
 }

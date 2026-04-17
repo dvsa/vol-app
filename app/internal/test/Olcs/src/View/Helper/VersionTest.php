@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\View\Helper;
 
 use Olcs\View\Helper\Version;
@@ -7,11 +9,11 @@ use Olcs\View\Helper\Version;
 /**
  * Class VersionTest
  * @package OlcsTest\View\Helper
- * @covers \OLCS\View\Helper\Version
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\OLCS\View\Helper\Version::class)]
 class VersionTest extends \PHPUnit\Framework\TestCase
 {
-    public function testVersionViewHelper()
+    public function testVersionViewHelper(): void
     {
         $versionHelper = new Version();
         $versionHelper->setVersion(1);

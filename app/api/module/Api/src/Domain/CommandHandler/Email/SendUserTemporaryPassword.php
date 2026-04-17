@@ -24,6 +24,7 @@ final class SendUserTemporaryPassword extends AbstractCommandHandler implements
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $user \Dvsa\Olcs\Api\Entity\User\User */

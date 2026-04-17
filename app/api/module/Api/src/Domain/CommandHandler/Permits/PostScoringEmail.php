@@ -31,6 +31,7 @@ final class PostScoringEmail extends AbstractCommandHandler implements UploaderA
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $file = $this->uploader->download(

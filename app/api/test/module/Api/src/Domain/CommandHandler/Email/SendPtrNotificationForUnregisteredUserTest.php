@@ -30,7 +30,7 @@ class SendPtrNotificationForUnregisteredUserTest extends AbstractCommandHandlerT
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $emailAddress = 'testMail@example.com';
         $command = Cmd::create([

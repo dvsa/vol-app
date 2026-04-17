@@ -34,6 +34,7 @@ final class CreatePsvVehicle extends AbstractCommandHandler implements Transacti
     /**
      * @param Cmd $command
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var LicenceEntity $licence */

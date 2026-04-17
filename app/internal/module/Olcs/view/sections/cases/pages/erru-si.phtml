@@ -22,6 +22,11 @@ if (!$case['isErru']) {
     } else {
         switch ($case['erruRequest']['msiType']['id']) {
             case RefData::ERRU_RESPONSE_SENT:
+                if (!$case['hasErruRequestedPenalties']) {
+                    $header['header'] .= ' not required (there were no requested penalties)';
+                    break;
+                }
+
                 $erruResponseSent = new \DateTime($case['erruRequest']['responseTime']);
                 $header['header'] .= ' sent ' . $this->dateTime($erruResponseSent, 'jS F Y');
                 break;

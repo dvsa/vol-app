@@ -20,6 +20,7 @@ class AvailableCountries extends AbstractQueryHandler
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return [

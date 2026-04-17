@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Entity\Application\Application;
@@ -12,7 +14,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\DateFrom;
  */
 class DateFromTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new DateFrom();
         $query = $bookmark->getQuery(['communityLic' => 123, 'application' => 456]);
@@ -21,10 +23,8 @@ class DateFromTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query[1]);
     }
 
-    /**
-     * @dataProvider specifiedDateProvider
-     */
-    public function testRender($specifiedDate)
+    #[\PHPUnit\Framework\Attributes\DataProvider('specifiedDateProvider')]
+    public function testRender(mixed $specifiedDate): void
     {
         $bookmark = new DateFrom();
         $bookmark->setData(
@@ -44,7 +44,7 @@ class DateFromTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function specifiedDateProvider()
+    public static function specifiedDateProvider(): array
     {
         return [
             [new \DateTime('2014-02-03 11:12:34')],
@@ -52,10 +52,8 @@ class DateFromTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider interimStartDateProvider
-     */
-    public function testRenderWithInterim($interimStartDate)
+    #[\PHPUnit\Framework\Attributes\DataProvider('interimStartDateProvider')]
+    public function testRenderWithInterim(mixed $interimStartDate): void
     {
         $bookmark = new DateFrom();
         $bookmark->setData(
@@ -78,7 +76,7 @@ class DateFromTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function interimStartDateProvider()
+    public static function interimStartDateProvider(): array
     {
         return [
             [new \DateTime('2011-01-01 10:10:10')],

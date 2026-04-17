@@ -44,6 +44,7 @@ class ProhibitionDefectController extends AbstractInternalController implements
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -112,6 +113,7 @@ class ProhibitionDefectController extends AbstractInternalController implements
      *
      * @return array
      */
+    #[\Override]
     public function indexAction()
     {
         $prohibition = $this->params()->fromRoute('prohibition');

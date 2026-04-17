@@ -34,6 +34,7 @@ final class GrantConditionUndertaking extends AbstractCommandHandler implements
 
     protected $extraRepos = ['ConditionUndertaking'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

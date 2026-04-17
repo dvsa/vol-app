@@ -22,6 +22,7 @@ final class UpdateForTma extends AbstractCommandHandler
 {
     protected $repoServiceName = 'OtherLicence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command \Dvsa\Olcs\Transfer\Command\OtherLicence\UpdateForTma */

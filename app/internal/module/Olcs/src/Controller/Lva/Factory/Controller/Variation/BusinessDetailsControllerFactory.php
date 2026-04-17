@@ -24,6 +24,7 @@ class BusinessDetailsControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return BusinessDetailsController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusinessDetailsController
     {
 

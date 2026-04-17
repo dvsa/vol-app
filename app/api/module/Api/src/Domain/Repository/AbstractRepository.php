@@ -27,6 +27,7 @@ abstract class AbstractRepository extends AbstractReadonlyRepository implements 
      * @throws Exception\RuntimeException
      * @throws \Exception
      */
+    #[\Override]
     public function save($entity)
     {
         if (!($entity instanceof $this->entity)) {
@@ -96,6 +97,7 @@ abstract class AbstractRepository extends AbstractReadonlyRepository implements 
      * @throws Exception\RuntimeException
      * @throws \Exception
      */
+    #[\Override]
     public function delete($entity)
     {
         if (!($entity instanceof $this->entity)) {

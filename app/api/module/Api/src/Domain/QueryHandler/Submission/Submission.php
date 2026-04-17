@@ -20,6 +20,7 @@ final class Submission extends AbstractQueryHandler
      *
      * @return \Dvsa\Olcs\Api\Domain\QueryHandler\Result
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var \Dvsa\Olcs\Api\Domain\Repository\Submission $repo */

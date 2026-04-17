@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * EbsrSubmissionListList Test
  */
@@ -42,7 +44,7 @@ class EbsrSubmissionListTest extends QueryHandlerTestCase
      * @param null $organisationId
      * @return m\Mock
      */
-    private function getCurrentUser($localAuthorityId = null, $organisationId = null)
+    private function getCurrentUser(mixed $localAuthorityId = null, mixed $organisationId = null): m\MockInterface
     {
         $mockUser = m::mock(\Dvsa\Olcs\Api\Entity\User\User::class)->makePartial();
         $mockUser->shouldReceive('getUser')
@@ -75,12 +77,12 @@ class EbsrSubmissionListTest extends QueryHandlerTestCase
     /**
      * test handle query
      *
-     * @dataProvider queryStatusProvider
      *
      * @param string $status         initial search status
      * @param array  $mappedStatuses array of mapped statuses expected
      */
-    public function testHandleQuery($status, $mappedStatuses)
+    #[\PHPUnit\Framework\Attributes\DataProvider('queryStatusProvider')]
+    public function testHandleQuery(mixed $status, mixed $mappedStatuses): void
     {
         $query = Qry::create(['status' => $status]);
 
@@ -117,7 +119,7 @@ class EbsrSubmissionListTest extends QueryHandlerTestCase
      *
      * @return array
      */
-    public function queryStatusProvider()
+    public static function queryStatusProvider(): array
     {
         return [
             [

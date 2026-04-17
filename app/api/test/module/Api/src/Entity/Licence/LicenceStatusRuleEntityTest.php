@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Licence;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -20,10 +22,8 @@ class LicenceStatusRuleEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider dataProviderTestIsQueued
-     */
-    public function testIsQueued($startDate, $startProcessingDate, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestIsQueued')]
+    public function testIsQueued(mixed $startDate, mixed $startProcessingDate, mixed $expected): void
     {
         $sut = new Entity(
             m::mock(\Dvsa\Olcs\Api\Entity\Licence\Licence::class),
@@ -36,7 +36,7 @@ class LicenceStatusRuleEntityTest extends EntityTester
         $this->assertSame($expected, $sut->isQueued());
     }
 
-    public function dataProviderTestIsQueued()
+    public static function dataProviderTestIsQueued(): array
     {
         return [
             // startDate, startProcessingDate, expected

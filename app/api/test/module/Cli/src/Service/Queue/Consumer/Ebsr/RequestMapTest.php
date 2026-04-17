@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer\Ebsr;
 
 use Dvsa\Olcs\Api\Domain\Command\Bus\Ebsr\ProcessRequestMap as ProcessRequestMapCmd;
@@ -13,12 +15,10 @@ use Dvsa\Olcs\Api\Entity\Task\Task as TaskEntity;
 use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\Olcs\Cli\Service\Queue\Consumer\Ebsr\RequestMap;
 use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
-use Laminas\Serializer\Adapter\Json as LaminasJson;
 
-/**
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\Ebsr\RequestMap
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\Ebsr\RequestMap::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer::class)]
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class RequestMapTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = RequestMap::class;
@@ -26,7 +26,7 @@ class RequestMapTest extends AbstractConsumerTestCase
     /** @var  RequestMap */
     protected $sut;
 
-    public function testGetCommandData()
+    public function testGetCommandData(): void
     {
         $user = new User('pid', 'type');
         $user->setId(1);
@@ -42,7 +42,7 @@ class RequestMapTest extends AbstractConsumerTestCase
     /**
      * Tests task is created when map request fails
      */
-    public function testFailed()
+    public function testFailed(): void
     {
         $busRegId = 123;
         $regNo = '456/789';
@@ -51,8 +51,6 @@ class RequestMapTest extends AbstractConsumerTestCase
 
         $user = new User('pid', 'type');
         $user->setId($userId);
-
-        $json = new LaminasJson();
 
         $options = [
             'id' => $busRegId,
@@ -63,7 +61,7 @@ class RequestMapTest extends AbstractConsumerTestCase
 
         $item = new QueueEntity();
         $item->setId($busRegId);
-        $item->setOptions($json->serialize($options));
+        $item->setOptions(json_encode($options));
         $item->setCreatedBy($user);
 
         $taskData = [

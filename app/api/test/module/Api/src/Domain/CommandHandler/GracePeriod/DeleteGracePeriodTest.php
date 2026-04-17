@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * DeleteGracePeriodTest.php
  *
@@ -33,7 +35,7 @@ class DeleteGracePeriodTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'ids' => [1,2,3]

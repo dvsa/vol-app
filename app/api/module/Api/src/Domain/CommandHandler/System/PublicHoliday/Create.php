@@ -21,6 +21,7 @@ class Create extends AbstractCommandHandler
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(Command\CommandInterface $command)
     {
         $entity = new PublicHoliday(

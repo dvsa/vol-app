@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
@@ -20,7 +22,7 @@ class TranslationKeyTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         $this->setUpSut(Repo::class, true);
 
@@ -60,7 +62,7 @@ class TranslationKeyTest extends RepositoryTestCase
         $this->sut->applyListFilters($qb, $query);
     }
 
-    public function testApplyListFiltersNullSearch()
+    public function testApplyListFiltersNullSearch(): void
     {
         $this->setUpSut(Repo::class, true);
 
@@ -75,7 +77,7 @@ class TranslationKeyTest extends RepositoryTestCase
         $this->sut->applyListFilters($qb, $query);
     }
 
-    public function testApplyListFiltersNotGetList()
+    public function testApplyListFiltersNotGetList(): void
     {
         $this->setUpSut(Repo::class, true);
 

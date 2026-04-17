@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\System;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\System\UpdateFinancialStandingRate as CommandHandler;
@@ -26,10 +28,8 @@ class UpdateFinancialStandingRateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
-    public function testHandleCommand($goodsOrPsv, $licenceType, $vehicleType)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
+    public function testHandleCommand(mixed $goodsOrPsv, mixed $licenceType, mixed $vehicleType): void
     {
         $id = 69;
         $version = 2;
@@ -103,7 +103,7 @@ class UpdateFinancialStandingRateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['Financial Standing Rate updated'], $response->getMessages());
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand(): array
     {
         return [
             [
@@ -144,7 +144,7 @@ class UpdateFinancialStandingRateTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandDuplicateDetected()
+    public function testHandleCommandDuplicateDetected(): void
     {
         $id = 69;
         $version = 2;
@@ -194,15 +194,13 @@ class UpdateFinancialStandingRateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider dpHandleCommandInputRulesViolation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandInputRulesViolation')]
     public function testHandleCommandInputRulesViolation(
-        $goodsOrPsv,
-        $licenceType,
-        $vehicleType,
-        $expectedMessage
-    ) {
+        mixed $goodsOrPsv,
+        mixed $licenceType,
+        mixed $vehicleType,
+        mixed $expectedMessage
+    ): void {
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage($expectedMessage);
 
@@ -235,7 +233,7 @@ class UpdateFinancialStandingRateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpHandleCommandInputRulesViolation()
+    public static function dpHandleCommandInputRulesViolation(): array
     {
         return [
             [

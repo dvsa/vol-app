@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Licence;
 
 use Doctrine\ORM\Query;
@@ -39,7 +41,8 @@ class ProcessContinuationNotSoughtTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             LicenceEntity::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT,
@@ -50,7 +53,7 @@ class ProcessContinuationNotSoughtTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandGoods()
+    public function testHandleCommandGoods(): void
     {
         $licenceId = 69;
         $version = 2;
@@ -169,7 +172,7 @@ class ProcessContinuationNotSoughtTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandPsv()
+    public function testHandleCommandPsv(): void
     {
         $licenceId = 69;
         $version = 2;

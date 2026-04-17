@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * External Controller Trait Stub
  *
@@ -22,7 +24,7 @@ class ExternalControllerTraitStub extends AbstractActionController
 
     protected $lva = 'licence';
 
-    public function callRender($title, $form = null, $variables = []): \Laminas\View\Model\ViewModel
+    public function callRender(string|\Laminas\View\Model\ViewModel $title, ?\Common\Form\Form $form = null, array $variables = []): \Laminas\View\Model\ViewModel
     {
         return $this->render($title, $form, $variables);
     }

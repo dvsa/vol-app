@@ -20,6 +20,7 @@ class EmissionsStandardCriteria implements RangeMatchingCriteriaInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function matches(IrhpPermitRange $irhpPermitRange)
     {
         return $irhpPermitRange->getEmissionsCategory()->getId() == $this->emissionsCategoryId;

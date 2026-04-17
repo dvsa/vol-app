@@ -17,6 +17,7 @@ class ByTransportManager extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Cases';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $repo = $this->getRepo();

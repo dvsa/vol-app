@@ -24,7 +24,7 @@ class LicenceBusinessDetailsTest extends MockeryTestCase
         $this->sut = new LicenceBusinessDetails($this->formHelper, $this->fsm);
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
         $mockForm = m::mock();
 

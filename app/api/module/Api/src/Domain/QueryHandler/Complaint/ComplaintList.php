@@ -13,6 +13,7 @@ final class ComplaintList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Complaint';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var \Dvsa\Olcs\Api\Domain\Repository\Complaint $repo */

@@ -26,6 +26,7 @@ class CanCreateDocument extends AbstractHandler implements AuthAwareInterface
 
     private $allowedExtensions = [];
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');
@@ -44,6 +45,7 @@ class CanCreateDocument extends AbstractHandler implements AuthAwareInterface
      * @return bool
      * @throws \Dvsa\Olcs\Api\Domain\Exception\ValidationException
      */
+    #[\Override]
     public function isValid($dto)
     {
         if ($this->validateExtension($dto->getFilename()) === false) {

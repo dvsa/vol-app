@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Irfo;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,9 +17,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * IrfoPsvAuth Abstract Entity
+ * AbstractIrfoPsvAuth Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -33,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -42,76 +45,65 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     use ModifiedOnTrait;
 
     /**
-     * Application sent date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="application_sent_date", nullable=true)
-     */
-    protected $applicationSentDate;
-
-    /**
-     * Copies issued
+     * Primary key.  Auto incremented if numeric.
      *
      * @var int
      *
-     * @ORM\Column(type="smallint", name="copies_issued", nullable=false, options={"default": 0})
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $copiesIssued = 0;
+    protected $id;
 
     /**
-     * Copies issued total
+     * Foreign Key to organisation
      *
-     * @var int
+     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      *
-     * @ORM\Column(type="smallint",
-     *     name="copies_issued_total",
-     *     nullable=false,
-     *     options={"default": 0})
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
+     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
      */
-    protected $copiesIssuedTotal = 0;
+    protected $organisation;
 
     /**
-     * Copies required
+     * Foreign Key to irfo_psv_auth_type
      *
-     * @var int
+     * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType
      *
-     * @ORM\Column(type="smallint", name="copies_required", nullable=false, options={"default": 0})
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType", fetch="LAZY")
+     * @ORM\JoinColumn(name="irfo_psv_auth_type_id", referencedColumnName="id")
      */
-    protected $copiesRequired = 0;
+    protected $irfoPsvAuthType;
 
     /**
-     * Copies required total
+     * Status
      *
-     * @var int
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
-     * @ORM\Column(type="smallint",
-     *     name="copies_required_total",
-     *     nullable=false,
-     *     options={"default": 0})
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="status", referencedColumnName="id")
      */
-    protected $copiesRequiredTotal = 0;
+    protected $status;
 
     /**
-     * Country
+     * JourneyFrequency
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country",
-     *     inversedBy="irfoPsvAuths",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinTable(name="irfo_psv_auth_country",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="irfo_psv_auth_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="country_id", referencedColumnName="id")
-     *     }
-     * )
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="journey_frequency", referencedColumnName="id", nullable=true)
      */
-    protected $countrys;
+    protected $journeyFrequency;
+
+    /**
+     * WithdrawnReason
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="withdrawn_reason", referencedColumnName="id", nullable=true)
+     */
+    protected $withdrawnReason;
 
     /**
      * Created by
@@ -123,6 +115,17 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
+
+    /**
+     * Last modified by
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\User
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
+     * @Gedmo\Blameable(on="update")
+     */
+    protected $lastModifiedBy;
 
     /**
      * Exemption details
@@ -143,15 +146,22 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     protected $expiryDate;
 
     /**
-     * Identifier - Id
+     * isFeeExemptApplication
      *
-     * @var int
+     * @var string
      *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(type="yesno", name="is_fee_exempt_application", nullable=false, options={"default": 0})
      */
-    protected $id;
+    protected $isFeeExemptApplication = 0;
+
+    /**
+     * isFeeExemptAnnual
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="is_fee_exempt_annual", nullable=false, options={"default": 0})
+     */
+    protected $isFeeExemptAnnual = 0;
 
     /**
      * In force date
@@ -178,51 +188,43 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @ORM\Column(type="string", name="irfo_file_no", length=10, nullable=false)
      */
-    protected $irfoFileNo;
+    protected $irfoFileNo = '';
 
     /**
-     * Irfo psv auth type
+     * Copies issued
      *
-     * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_psv_auth_type_id", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="smallint", name="copies_issued", nullable=false, options={"default": 0})
      */
-    protected $irfoPsvAuthType;
+    protected $copiesIssued = 0;
 
     /**
-     * Is fee exempt annual
+     * Copies required
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="yesno",
-     *     name="is_fee_exempt_annual",
-     *     nullable=false,
-     *     options={"default": 0})
+     * @ORM\Column(type="smallint", name="copies_required", nullable=false, options={"default": 0})
      */
-    protected $isFeeExemptAnnual = 0;
+    protected $copiesRequired = 0;
 
     /**
-     * Is fee exempt application
+     * Copies required total
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="yesno",
-     *     name="is_fee_exempt_application",
-     *     nullable=false,
-     *     options={"default": 0})
+     * @ORM\Column(type="smallint", name="copies_required_total", nullable=false, options={"default": 0})
      */
-    protected $isFeeExemptApplication = 0;
+    protected $copiesRequiredTotal = 0;
 
     /**
-     * Journey frequency
+     * Copies issued total
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="journey_frequency", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="smallint", name="copies_issued_total", nullable=false, options={"default": 0})
      */
-    protected $journeyFrequency;
+    protected $copiesIssuedTotal = 0;
 
     /**
      * Last date copies req
@@ -232,27 +234,6 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      * @ORM\Column(type="datetime", name="last_date_copies_req", nullable=true)
      */
     protected $lastDateCopiesReq;
-
-    /**
-     * Last modified by
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
-     */
-    protected $lastModifiedBy;
-
-    /**
-     * Organisation
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=false)
-     */
-    protected $organisation;
 
     /**
      * Renewal date
@@ -270,7 +251,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @ORM\Column(type="string", name="service_route_from", length=30, nullable=false)
      */
-    protected $serviceRouteFrom;
+    protected $serviceRouteFrom = '';
 
     /**
      * Service route to
@@ -279,26 +260,25 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @ORM\Column(type="string", name="service_route_to", length=30, nullable=false)
      */
-    protected $serviceRouteTo;
+    protected $serviceRouteTo = '';
 
     /**
-     * Status
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=false)
-     */
-    protected $status;
-
-    /**
-     * Validity period
+     * Years valid for.  Some negative numbers in legacy hence signed.
      *
      * @var int
      *
      * @ORM\Column(type="smallint", name="validity_period", nullable=false)
      */
-    protected $validityPeriod;
+    protected $validityPeriod = 0;
+
+    /**
+     * Authorisation must be reviewed within x days of this date for approval.  sla related.
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="application_sent_date", nullable=true)
+     */
+    protected $applicationSentDate;
 
     /**
      * Version
@@ -311,32 +291,33 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     protected $version = 1;
 
     /**
-     * Withdrawn reason
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="withdrawn_reason", referencedColumnName="id", nullable=true)
-     */
-    protected $withdrawnReason;
-
-    /**
-     * Irfo psv auth number
+     * Countrys
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthNumber",
-     *     mappedBy="irfoPsvAuth",
-     *     cascade={"persist"}
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", inversedBy="irfoPsvAuths", fetch="LAZY")
+     * @ORM\JoinTable(name="irfo_psv_auth_country",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="irfo_psv_auth_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     *     }
      * )
+     */
+    protected $countrys;
+
+    /**
+     * IrfoPsvAuthNumbers
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthNumber", mappedBy="irfoPsvAuth", cascade={"persist"})
      */
     protected $irfoPsvAuthNumbers;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -344,210 +325,163 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->countrys = new ArrayCollection();
         $this->irfoPsvAuthNumbers = new ArrayCollection();
     }
 
+
     /**
-     * Set the application sent date
+     * Set the id
      *
-     * @param \DateTime $applicationSentDate new value being set
+     * @param int $id new value being set
      *
      * @return IrfoPsvAuth
      */
-    public function setApplicationSentDate($applicationSentDate)
+    public function setId($id)
     {
-        $this->applicationSentDate = $applicationSentDate;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get the application sent date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getApplicationSentDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->applicationSentDate);
-        }
-
-        return $this->applicationSentDate;
-    }
-
-    /**
-     * Set the copies issued
-     *
-     * @param int $copiesIssued new value being set
-     *
-     * @return IrfoPsvAuth
-     */
-    public function setCopiesIssued($copiesIssued)
-    {
-        $this->copiesIssued = $copiesIssued;
-
-        return $this;
-    }
-
-    /**
-     * Get the copies issued
+     * Get the id
      *
      * @return int
      */
-    public function getCopiesIssued()
+    public function getId()
     {
-        return $this->copiesIssued;
+        return $this->id;
     }
 
     /**
-     * Set the copies issued total
+     * Set the organisation
      *
-     * @param int $copiesIssuedTotal new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
      * @return IrfoPsvAuth
      */
-    public function setCopiesIssuedTotal($copiesIssuedTotal)
+    public function setOrganisation($organisation)
     {
-        $this->copiesIssuedTotal = $copiesIssuedTotal;
+        $this->organisation = $organisation;
 
         return $this;
     }
 
     /**
-     * Get the copies issued total
+     * Get the organisation
      *
-     * @return int
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      */
-    public function getCopiesIssuedTotal()
+    public function getOrganisation()
     {
-        return $this->copiesIssuedTotal;
+        return $this->organisation;
     }
 
     /**
-     * Set the copies required
+     * Set the irfo psv auth type
      *
-     * @param int $copiesRequired new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType $irfoPsvAuthType new value being set
      *
      * @return IrfoPsvAuth
      */
-    public function setCopiesRequired($copiesRequired)
+    public function setIrfoPsvAuthType($irfoPsvAuthType)
     {
-        $this->copiesRequired = $copiesRequired;
+        $this->irfoPsvAuthType = $irfoPsvAuthType;
 
         return $this;
     }
 
     /**
-     * Get the copies required
+     * Get the irfo psv auth type
      *
-     * @return int
+     * @return \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType
      */
-    public function getCopiesRequired()
+    public function getIrfoPsvAuthType()
     {
-        return $this->copiesRequired;
+        return $this->irfoPsvAuthType;
     }
 
     /**
-     * Set the copies required total
+     * Set the status
      *
-     * @param int $copiesRequiredTotal new value being set
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
      * @return IrfoPsvAuth
      */
-    public function setCopiesRequiredTotal($copiesRequiredTotal)
+    public function setStatus($status)
     {
-        $this->copiesRequiredTotal = $copiesRequiredTotal;
+        $this->status = $status;
 
         return $this;
     }
 
     /**
-     * Get the copies required total
+     * Get the status
      *
-     * @return int
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    public function getCopiesRequiredTotal()
+    public function getStatus()
     {
-        return $this->copiesRequiredTotal;
+        return $this->status;
     }
 
     /**
-     * Set the country
+     * Set the journey frequency
      *
-     * @param ArrayCollection $countrys collection being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $journeyFrequency new value being set
      *
      * @return IrfoPsvAuth
      */
-    public function setCountrys($countrys)
+    public function setJourneyFrequency($journeyFrequency)
     {
-        $this->countrys = $countrys;
+        $this->journeyFrequency = $journeyFrequency;
 
         return $this;
     }
 
     /**
-     * Get the countrys
+     * Get the journey frequency
      *
-     * @return ArrayCollection
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    public function getCountrys()
+    public function getJourneyFrequency()
     {
-        return $this->countrys;
+        return $this->journeyFrequency;
     }
 
     /**
-     * Add a countrys
+     * Set the withdrawn reason
      *
-     * @param ArrayCollection|mixed $countrys collection being added
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $withdrawnReason new value being set
      *
      * @return IrfoPsvAuth
      */
-    public function addCountrys($countrys)
+    public function setWithdrawnReason($withdrawnReason)
     {
-        if ($countrys instanceof ArrayCollection) {
-            $this->countrys = new ArrayCollection(
-                array_merge(
-                    $this->countrys->toArray(),
-                    $countrys->toArray()
-                )
-            );
-        } elseif (!$this->countrys->contains($countrys)) {
-            $this->countrys->add($countrys);
-        }
+        $this->withdrawnReason = $withdrawnReason;
 
         return $this;
     }
 
     /**
-     * Remove a countrys
+     * Get the withdrawn reason
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $countrys collection being removed
-     *
-     * @return IrfoPsvAuth
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    public function removeCountrys($countrys)
+    public function getWithdrawnReason()
     {
-        if ($this->countrys->contains($countrys)) {
-            $this->countrys->removeElement($countrys);
-        }
-
-        return $this;
+        return $this->withdrawnReason;
     }
 
     /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return IrfoPsvAuth
      */
@@ -566,6 +500,30 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return IrfoPsvAuth
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -611,8 +569,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
+     * @return \DateTime
      */
     public function getExpiryDate($asDateTime = false)
     {
@@ -624,27 +581,51 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Set the id
+     * Set the is fee exempt application
      *
-     * @param int $id new value being set
+     * @param string $isFeeExemptApplication new value being set
      *
      * @return IrfoPsvAuth
      */
-    public function setId($id)
+    public function setIsFeeExemptApplication($isFeeExemptApplication)
     {
-        $this->id = $id;
+        $this->isFeeExemptApplication = $isFeeExemptApplication;
 
         return $this;
     }
 
     /**
-     * Get the id
+     * Get the is fee exempt application
      *
-     * @return int
+     * @return string
      */
-    public function getId()
+    public function getIsFeeExemptApplication()
     {
-        return $this->id;
+        return $this->isFeeExemptApplication;
+    }
+
+    /**
+     * Set the is fee exempt annual
+     *
+     * @param string $isFeeExemptAnnual new value being set
+     *
+     * @return IrfoPsvAuth
+     */
+    public function setIsFeeExemptAnnual($isFeeExemptAnnual)
+    {
+        $this->isFeeExemptAnnual = $isFeeExemptAnnual;
+
+        return $this;
+    }
+
+    /**
+     * Get the is fee exempt annual
+     *
+     * @return string
+     */
+    public function getIsFeeExemptAnnual()
+    {
+        return $this->isFeeExemptAnnual;
     }
 
     /**
@@ -666,8 +647,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
+     * @return \DateTime
      */
     public function getInForceDate($asDateTime = false)
     {
@@ -727,99 +707,99 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Set the irfo psv auth type
+     * Set the copies issued
      *
-     * @param \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType $irfoPsvAuthType entity being set as the value
+     * @param int $copiesIssued new value being set
      *
      * @return IrfoPsvAuth
      */
-    public function setIrfoPsvAuthType($irfoPsvAuthType)
+    public function setCopiesIssued($copiesIssued)
     {
-        $this->irfoPsvAuthType = $irfoPsvAuthType;
+        $this->copiesIssued = $copiesIssued;
 
         return $this;
     }
 
     /**
-     * Get the irfo psv auth type
+     * Get the copies issued
      *
-     * @return \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType
+     * @return int
      */
-    public function getIrfoPsvAuthType()
+    public function getCopiesIssued()
     {
-        return $this->irfoPsvAuthType;
+        return $this->copiesIssued;
     }
 
     /**
-     * Set the is fee exempt annual
+     * Set the copies required
      *
-     * @param string $isFeeExemptAnnual new value being set
+     * @param int $copiesRequired new value being set
      *
      * @return IrfoPsvAuth
      */
-    public function setIsFeeExemptAnnual($isFeeExemptAnnual)
+    public function setCopiesRequired($copiesRequired)
     {
-        $this->isFeeExemptAnnual = $isFeeExemptAnnual;
+        $this->copiesRequired = $copiesRequired;
 
         return $this;
     }
 
     /**
-     * Get the is fee exempt annual
+     * Get the copies required
      *
-     * @return string
+     * @return int
      */
-    public function getIsFeeExemptAnnual()
+    public function getCopiesRequired()
     {
-        return $this->isFeeExemptAnnual;
+        return $this->copiesRequired;
     }
 
     /**
-     * Set the is fee exempt application
+     * Set the copies required total
      *
-     * @param string $isFeeExemptApplication new value being set
+     * @param int $copiesRequiredTotal new value being set
      *
      * @return IrfoPsvAuth
      */
-    public function setIsFeeExemptApplication($isFeeExemptApplication)
+    public function setCopiesRequiredTotal($copiesRequiredTotal)
     {
-        $this->isFeeExemptApplication = $isFeeExemptApplication;
+        $this->copiesRequiredTotal = $copiesRequiredTotal;
 
         return $this;
     }
 
     /**
-     * Get the is fee exempt application
+     * Get the copies required total
      *
-     * @return string
+     * @return int
      */
-    public function getIsFeeExemptApplication()
+    public function getCopiesRequiredTotal()
     {
-        return $this->isFeeExemptApplication;
+        return $this->copiesRequiredTotal;
     }
 
     /**
-     * Set the journey frequency
+     * Set the copies issued total
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $journeyFrequency entity being set as the value
+     * @param int $copiesIssuedTotal new value being set
      *
      * @return IrfoPsvAuth
      */
-    public function setJourneyFrequency($journeyFrequency)
+    public function setCopiesIssuedTotal($copiesIssuedTotal)
     {
-        $this->journeyFrequency = $journeyFrequency;
+        $this->copiesIssuedTotal = $copiesIssuedTotal;
 
         return $this;
     }
 
     /**
-     * Get the journey frequency
+     * Get the copies issued total
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     * @return int
      */
-    public function getJourneyFrequency()
+    public function getCopiesIssuedTotal()
     {
-        return $this->journeyFrequency;
+        return $this->copiesIssuedTotal;
     }
 
     /**
@@ -841,8 +821,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
+     * @return \DateTime
      */
     public function getLastDateCopiesReq($asDateTime = false)
     {
@@ -851,54 +830,6 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
         }
 
         return $this->lastDateCopiesReq;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return IrfoPsvAuth
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the organisation
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation entity being set as the value
-     *
-     * @return IrfoPsvAuth
-     */
-    public function setOrganisation($organisation)
-    {
-        $this->organisation = $organisation;
-
-        return $this;
-    }
-
-    /**
-     * Get the organisation
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     */
-    public function getOrganisation()
-    {
-        return $this->organisation;
     }
 
     /**
@@ -920,8 +851,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
+     * @return \DateTime
      */
     public function getRenewalDate($asDateTime = false)
     {
@@ -981,30 +911,6 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Set the status
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status entity being set as the value
-     *
-     * @return IrfoPsvAuth
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get the status
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
      * Set the validity period
      *
      * @param int $validityPeriod new value being set
@@ -1026,6 +932,36 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     public function getValidityPeriod()
     {
         return $this->validityPeriod;
+    }
+
+    /**
+     * Set the application sent date
+     *
+     * @param \DateTime $applicationSentDate new value being set
+     *
+     * @return IrfoPsvAuth
+     */
+    public function setApplicationSentDate($applicationSentDate)
+    {
+        $this->applicationSentDate = $applicationSentDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the application sent date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
+     */
+    public function getApplicationSentDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->applicationSentDate);
+        }
+
+        return $this->applicationSentDate;
     }
 
     /**
@@ -1053,33 +989,72 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Set the withdrawn reason
+     * Set the countrys
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $withdrawnReason entity being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $countrys collection being set as the value
      *
      * @return IrfoPsvAuth
      */
-    public function setWithdrawnReason($withdrawnReason)
+    public function setCountrys($countrys)
     {
-        $this->withdrawnReason = $withdrawnReason;
+        $this->countrys = $countrys;
 
         return $this;
     }
 
     /**
-     * Get the withdrawn reason
+     * Get the countrys
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getWithdrawnReason()
+    public function getCountrys()
     {
-        return $this->withdrawnReason;
+        return $this->countrys;
     }
 
     /**
-     * Set the irfo psv auth number
+     * Add a countrys
      *
-     * @param ArrayCollection $irfoPsvAuthNumbers collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $countrys collection being added
+     *
+     * @return IrfoPsvAuth
+     */
+    public function addCountrys($countrys)
+    {
+        if ($countrys instanceof ArrayCollection) {
+            $this->countrys = new ArrayCollection(
+                array_merge(
+                    $this->countrys->toArray(),
+                    $countrys->toArray()
+                )
+            );
+        } elseif (!$this->countrys->contains($countrys)) {
+            $this->countrys->add($countrys);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove a countrys
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $countrys collection being removed
+     *
+     * @return IrfoPsvAuth
+     */
+    public function removeCountrys($countrys)
+    {
+        if ($this->countrys->contains($countrys)) {
+            $this->countrys->removeElement($countrys);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the irfo psv auth numbers
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $irfoPsvAuthNumbers collection being set as the value
      *
      * @return IrfoPsvAuth
      */
@@ -1093,7 +1068,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the irfo psv auth numbers
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getIrfoPsvAuthNumbers()
     {
@@ -1103,7 +1078,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Add a irfo psv auth numbers
      *
-     * @param ArrayCollection|mixed $irfoPsvAuthNumbers collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irfoPsvAuthNumbers collection being added
      *
      * @return IrfoPsvAuth
      */
@@ -1137,5 +1112,14 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

@@ -18,6 +18,7 @@ class SplitScreenController extends AbstractActionController
     {
     }
 
+    #[\Override]
     public function indexAction()
     {
         $view = new ViewModel();

@@ -25,6 +25,7 @@ class Snapshot extends AbstractCommandConsumer
      * @param QueueEntity $item
      * @return array
      */
+    #[\Override]
     public function getCommandData(QueueEntity $item)
     {
         return ['id' => $item->getEntityId(), 'user' => $item->getCreatedBy()->getId()];

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer;
 
 use Doctrine\ORM\Exception\ORMException;
@@ -45,7 +47,8 @@ class RefundInterimFeesTest extends AbstractConsumerTestCase
         parent::setUp();
     }
 
-    protected function instantiate()
+    #[\Override]
+    protected function instantiate(): void
     {
         $this->feeRepo = m::mock(FeeRepo::class);
         $this->feeRepo->shouldReceive('fetchById')
@@ -58,7 +61,7 @@ class RefundInterimFeesTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testGetCommandData()
+    public function testGetCommandData(): void
     {
         $this->setupFee(true);
         $this->assertSame(
@@ -69,7 +72,7 @@ class RefundInterimFeesTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testProcessMessageCanRefund()
+    public function testProcessMessageCanRefund(): void
     {
         $this->setupFee(true);
 
@@ -109,7 +112,7 @@ class RefundInterimFeesTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testProcessMessageCanNotRefund()
+    public function testProcessMessageCanNotRefund(): void
     {
         $this->setupFee(false);
 
@@ -141,7 +144,7 @@ class RefundInterimFeesTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testProcessMessageException()
+    public function testProcessMessageException(): void
     {
         $this->setupFee(true);
 
@@ -179,7 +182,7 @@ class RefundInterimFeesTest extends AbstractConsumerTestCase
         $this->sut->processMessage($this->item);
     }
 
-    public function testProcessMessageFailed()
+    public function testProcessMessageFailed(): void
     {
         $this->setupFee(true);
 
@@ -217,7 +220,7 @@ class RefundInterimFeesTest extends AbstractConsumerTestCase
         $this->sut->processMessage($this->item);
     }
 
-    protected function setupFee(bool $canRefund)
+    protected function setupFee(bool $canRefund): void
     {
         $this->fee->shouldReceive('canRefund')
             ->withNoArgs()

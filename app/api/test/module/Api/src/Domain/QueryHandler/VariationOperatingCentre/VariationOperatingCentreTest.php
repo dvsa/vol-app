@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Variation Operating Centre Test
  *
@@ -42,7 +44,7 @@ class VariationOperatingCentreTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 'A111']);
 
@@ -68,7 +70,7 @@ class VariationOperatingCentreTest extends QueryHandlerTestCase
         $this->assertEquals($response, $this->sut->handleQuery($query));
     }
 
-    public function testHandleQueryAddedOperatingCentre()
+    public function testHandleQueryAddedOperatingCentre(): void
     {
         $query = Qry::create(['id' => 'A111']);
 
@@ -94,7 +96,7 @@ class VariationOperatingCentreTest extends QueryHandlerTestCase
         $this->assertEquals($response, $this->sut->handleQuery($query));
     }
 
-    public function testHandleQueryLicence()
+    public function testHandleQueryLicence(): void
     {
         $query = Qry::create(['id' => 'L111']);
 
@@ -119,7 +121,7 @@ class VariationOperatingCentreTest extends QueryHandlerTestCase
         $this->assertEquals($response, $this->sut->handleQuery($query));
     }
 
-    public function testHandleQueryNeither()
+    public function testHandleQueryNeither(): void
     {
         $this->expectException(\Exception::class);
 

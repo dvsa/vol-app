@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Previous Convictions Test
  *
@@ -33,7 +35,7 @@ class UpdatePreviousConvictionsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'prevConviction' => 'N',

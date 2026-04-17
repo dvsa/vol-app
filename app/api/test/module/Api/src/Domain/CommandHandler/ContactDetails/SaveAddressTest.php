@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Save Address Test
  *
@@ -35,7 +37,8 @@ class SaveAddressTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ContactDetailsEntity::CONTACT_TYPE_REGISTERED_ADDRESS
@@ -50,7 +53,7 @@ class SaveAddressTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandUpdateWithoutChange()
+    public function testHandleCommandUpdateWithoutChange(): void
     {
         /** @var AddressEntity $address */
         $address = m::mock(AddressEntity::class)->makePartial();
@@ -92,10 +95,8 @@ class SaveAddressTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider countryProvider
-     */
-    public function testHandleCommandUpdateWithChange($countryCode)
+    #[\PHPUnit\Framework\Attributes\DataProvider('countryProvider')]
+    public function testHandleCommandUpdateWithChange(mixed $countryCode): void
     {
         if ($countryCode === '') {
             $expectedCountryCode = null;
@@ -144,7 +145,7 @@ class SaveAddressTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function countryProvider()
+    public static function countryProvider(): array
     {
         return [
             [''],
@@ -152,7 +153,7 @@ class SaveAddressTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandCreate()
+    public function testHandleCommandCreate(): void
     {
         $data = [
             'addressLine1' => 'address 1',
@@ -214,7 +215,7 @@ class SaveAddressTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandCreateNoContactDetailsType()
+    public function testHandleCommandCreateNoContactDetailsType(): void
     {
         $data = [
             'addressLine1' => 'address 1',

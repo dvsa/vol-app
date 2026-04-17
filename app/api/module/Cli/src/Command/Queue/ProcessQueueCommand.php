@@ -32,6 +32,7 @@ class ProcessQueueCommand extends AbstractOlcsCommand
      *
      * @return void
      */
+    #[\Override]
     protected function configure()
     {
         $this
@@ -49,6 +50,7 @@ class ProcessQueueCommand extends AbstractOlcsCommand
      * @param OutputInterface $output
      * @return int
      */
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

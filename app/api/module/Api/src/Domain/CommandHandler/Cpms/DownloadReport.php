@@ -30,6 +30,7 @@ final class DownloadReport extends AbstractCommandHandler implements CpmsAwareIn
      * @param Cmd $command
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

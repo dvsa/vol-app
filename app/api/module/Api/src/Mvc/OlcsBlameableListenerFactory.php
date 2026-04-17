@@ -20,6 +20,7 @@ class OlcsBlameableListenerFactory implements FactoryInterface
      * @param array|null $options
      * @return OlcsBlameableListener
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OlcsBlameableListener
     {
         return new OlcsBlameableListener($container);

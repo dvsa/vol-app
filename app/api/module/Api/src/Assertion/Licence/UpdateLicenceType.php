@@ -12,6 +12,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence;
  */
 class UpdateLicenceType implements AssertionInterface
 {
+    #[\Override]
     public function assert(AuthorizationService $authorizationService, Licence $context = null)
     {
         if ($authorizationService->isGranted(Permission::INTERNAL_USER)) {

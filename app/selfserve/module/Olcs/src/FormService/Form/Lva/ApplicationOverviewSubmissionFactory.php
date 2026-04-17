@@ -16,6 +16,7 @@ class ApplicationOverviewSubmissionFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationOverviewSubmission
     {
         // Creates an instance of the ConcreteClass with the $formHelper dependency from the container

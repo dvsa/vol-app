@@ -24,6 +24,7 @@ final class UpdatePenaltiesNote extends AbstractCommandHandler implements Transa
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $case CasesEntity */

@@ -33,6 +33,7 @@ final class DeleteBus extends AbstractCommandHandler implements TransactionedInt
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command DeleteCommand For traceability */

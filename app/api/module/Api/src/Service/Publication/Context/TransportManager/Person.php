@@ -22,6 +22,7 @@ final class Person extends AbstractContext
      * @param \ArrayObject $context
      * @return \ArrayObject
      */
+    #[\Override]
     public function provide(PublicationLink $publicationLink, \ArrayObject $context)
     {
         /**

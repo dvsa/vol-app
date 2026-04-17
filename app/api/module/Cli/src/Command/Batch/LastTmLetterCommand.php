@@ -10,11 +10,13 @@ class LastTmLetterCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:last-tm-letter';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Send Last TM letters.');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

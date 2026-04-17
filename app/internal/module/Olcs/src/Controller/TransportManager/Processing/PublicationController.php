@@ -34,6 +34,7 @@ class PublicationController extends AbstractInternalController implements
 
     protected $inlineScripts = ['indexAction' => ['table-actions']];
 
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -42,6 +43,7 @@ class PublicationController extends AbstractInternalController implements
         return $view;
     }
 
+    #[\Override]
     public function editAction()
     {
         $publicationLink = $this->getPublicationLink();

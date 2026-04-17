@@ -15,6 +15,7 @@ class ApplicationConversationMessagesController extends AbstractConversationMess
     protected $topNavigationId = 'application';
     protected $listVars = ['lva-application', 'conversation'];
 
+    #[\Override]
     protected function getConversationViewRoute(): string
     {
         return 'lva-application/conversation/view';

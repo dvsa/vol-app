@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element;
 
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
@@ -32,7 +34,7 @@ class NamedAnswerFetcherTest extends MockeryTestCase
         $this->namedAnswerFetcher = new NamedAnswerFetcher();
     }
 
-    public function testFetch()
+    public function testFetch(): void
     {
         $elementName = 'elementName';
         $answerValue = '123';
@@ -51,7 +53,7 @@ class NamedAnswerFetcherTest extends MockeryTestCase
         );
     }
 
-    public function testFetchExceptionWhenNoData()
+    public function testFetchExceptionWhenNoData(): void
     {
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage(NamedAnswerFetcher::ERR_NO_ANSWER);

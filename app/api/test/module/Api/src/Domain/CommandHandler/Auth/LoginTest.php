@@ -19,6 +19,7 @@ use Dvsa\OlcsTest\MocksServicesTrait;
  * Class LoginTest
  * @see Login
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class LoginTest extends AbstractCommandHandlerTestCase
 {
     use MocksServicesTrait;
@@ -36,20 +37,16 @@ class LoginTest extends AbstractCommandHandlerTestCase
      */
     private $mockAdapter;
 
-    /**
-     * @test
-     */
-    public function handleCommandIsCallable()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandIsCallable(): void
     {
         // Assert
         $this->assertIsCallable($this->sut->handleCommand(...));
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandAdapterSetsUsernameAndPasswordFromCommand()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandAdapterSetsUsernameAndPasswordFromCommand(): void
     {
         // Expectations
         $this->authenticationAdapter()->expects('setIdentity')->withArgs([$testUsername = 'testUsername']);
@@ -64,11 +61,9 @@ class LoginTest extends AbstractCommandHandlerTestCase
     }
 
 
-    /**
-     * @test
-     * @depends handleCommandAdapterSetsUsernameAndPasswordFromCommand
-     */
-    public function handleCommandUpdatesUserLastLoginAtWhenAuthenticationIsSuccessful()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandAdapterSetsUsernameAndPasswordFromCommand')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandUpdatesUserLastLoginAtWhenAuthenticationIsSuccessful(): void
     {
         // Expectations
         $user = m::mock(User::class)->shouldIgnoreMissing()->byDefault();
@@ -83,11 +78,9 @@ class LoginTest extends AbstractCommandHandlerTestCase
             ->expects('fetchByLoginId')
             ->withArgs(['testUsername'])
             ->andReturns([$user]);
-        $user->expects('setLastLoginAt');
         $this->userRepository()
-            ->expects('save')
-            ->withArgs([$user])
-            ->andReturns(true);
+            ->expects('updateLastLogin')
+            ->withArgs([$user, m::type(\DateTime::class), $user]);
 
         // Execute
         $result = $this->sut->handleCommand(\Dvsa\Olcs\Transfer\Command\Auth\Login::create([
@@ -104,11 +97,9 @@ class LoginTest extends AbstractCommandHandlerTestCase
         $this->assertNotNull($result->getFlag('messages'));
     }
 
-    /**
-     * @test
-     * @depends handleCommandUpdatesUserLastLoginAtWhenAuthenticationIsSuccessful
-     */
-    public function handleCommandDoesNotUpdateLastLoginAtWhenAuthenticationIsNotSuccessful()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandUpdatesUserLastLoginAtWhenAuthenticationIsSuccessful')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandDoesNotUpdateLastLoginAtWhenAuthenticationIsNotSuccessful(): void
     {
         // Expectations
         $user = m::mock(User::class);
@@ -150,11 +141,9 @@ class LoginTest extends AbstractCommandHandlerTestCase
         $this->assertNotNull($result->getFlag('messages'));
     }
 
-    /**
-     * @test
-     * @depends handleCommandDoesNotUpdateLastLoginAtWhenAuthenticationIsNotSuccessful
-     */
-    public function handleCommandReturnsResultWithExpectedFlags()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandDoesNotUpdateLastLoginAtWhenAuthenticationIsNotSuccessful')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandReturnsResultWithExpectedFlags(): void
     {
         // Execute
         $result = $this->sut->handleCommand(\Dvsa\Olcs\Transfer\Command\Auth\Login::create([
@@ -171,12 +160,10 @@ class LoginTest extends AbstractCommandHandlerTestCase
         $this->assertNotNull($result->getFlag('messages'));
     }
 
-    /**
-     * @test
-     * @depends handleCommandAdapterSetsUsernameAndPasswordFromCommand
-     * @dataProvider returnsExpectedResultWhenUserCannotAccessRealmProvider
-     */
-    public function handleCommandReturnsExpectedResultWhenUserCannotAccessRealm(bool $isInternal, string $realm)
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandAdapterSetsUsernameAndPasswordFromCommand')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('returnsExpectedResultWhenUserCannotAccessRealmProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandReturnsExpectedResultWhenUserCannotAccessRealm(bool $isInternal, string $realm): void
     {
         // Expectations
         $user = m::mock(User::class);
@@ -211,7 +198,7 @@ class LoginTest extends AbstractCommandHandlerTestCase
         $this->assertEquals([$expectedMessage], $result->getFlag('messages'));
     }
 
-    public function returnsExpectedResultWhenUserCannotAccessRealmProvider()
+    public static function returnsExpectedResultWhenUserCannotAccessRealmProvider(): array
     {
         return [
             'Internal user accessing selfserve' => [true, 'selfserve'],
@@ -219,11 +206,9 @@ class LoginTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @test
-     * @depends handleCommandAdapterSetsUsernameAndPasswordFromCommand
-     */
-    public function handleCommandReturnsExpectedResultWhenUserIsSelfServeWithMonitoredRolesAndHasNoOrg()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandAdapterSetsUsernameAndPasswordFromCommand')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandReturnsExpectedResultWhenUserIsSelfServeWithMonitoredRolesAndHasNoOrg(): void
     {
         // Expectations
         $user = m::mock(User::class);
@@ -262,11 +247,9 @@ class LoginTest extends AbstractCommandHandlerTestCase
         $this->assertEquals([$expectedMessage], $result->getFlag('messages'));
     }
 
-    /**
-     * @test
-     * @depends handleCommandAdapterSetsUsernameAndPasswordFromCommand
-     */
-    public function handleCommandReturnsExpectedResultWhenUserIsSelfServeWithoutMonitoredRolesAndHasNoOrg()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandAdapterSetsUsernameAndPasswordFromCommand')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandReturnsExpectedResultWhenUserIsSelfServeWithoutMonitoredRolesAndHasNoOrg(): void
     {
         // Expectations
         $user = m::mock(User::class);
@@ -281,11 +264,13 @@ class LoginTest extends AbstractCommandHandlerTestCase
             ->andReturn(null);
         $user->expects('isDisabled')
             ->andReturn(false);
-        $user->expects('setLastLoginAt');
         $this->userRepository()
             ->expects('fetchByLoginId')
             ->withArgs(['testUsername'])
             ->andReturns([$user]);
+        $this->userRepository()
+            ->expects('updateLastLogin')
+            ->withArgs([$user, m::type(\DateTime::class), $user]);
 
         // Execute
         $result = $this->sut->handleCommand(\Dvsa\Olcs\Transfer\Command\Auth\Login::create([
@@ -301,10 +286,8 @@ class LoginTest extends AbstractCommandHandlerTestCase
         $this->assertNotEmpty($result->getFlag('identity'));
     }
 
-    /**
-     * @test
-     */
-    public function handleCommandUserNotFoundInDatabaseReturnsNotFoundResult()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandUserNotFoundInDatabaseReturnsNotFoundResult(): void
     {
         // Expectations
         $this->userRepository()
@@ -329,10 +312,8 @@ class LoginTest extends AbstractCommandHandlerTestCase
         $this->assertEquals([$expectedMessage], $result->getFlag('messages'));
     }
 
-    /**
-     * @test
-     */
-    public function handleCommandUserSoftDeletedInDatabaseReturnsNotFoundResult()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandUserSoftDeletedInDatabaseReturnsNotFoundResult(): void
     {
         // Expectations
         $user = m::mock(User::class);
@@ -362,10 +343,8 @@ class LoginTest extends AbstractCommandHandlerTestCase
         $this->assertEquals([$expectedMessage], $result->getFlag('messages'));
     }
 
-    /**
-     * @test
-     */
-    public function handleCommandUserDisabledInDatabaseReturnsDisabledResult()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandUserDisabledInDatabaseReturnsDisabledResult(): void
     {
         // Expectations
         $user = m::mock(User::class);
@@ -410,7 +389,7 @@ class LoginTest extends AbstractCommandHandlerTestCase
         $this->sut = new Login($this->authenticationService(), $this->authenticationAdapter());
     }
 
-    protected function setUpDefaultServices(ServiceManager $serviceManager)
+    protected function setUpDefaultServices(ServiceManager $serviceManager): void
     {
         $this->userRepository();
         $this->authenticationService();

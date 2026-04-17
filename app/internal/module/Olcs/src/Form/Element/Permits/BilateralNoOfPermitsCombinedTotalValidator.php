@@ -13,7 +13,7 @@ class BilateralNoOfPermitsCombinedTotalValidator
     public static function validateNonZeroValuePresent(mixed $value, $context)
     {
         foreach ($context as $name => $value) {
-            if ((str_contains($name, 'journey')) && is_string($value)) {
+            if ((str_contains((string) $name, 'journey')) && is_string($value)) {
                 $trimmedValue = trim($value);
                 if (ctype_digit($trimmedValue)) {
                     if (intval($trimmedValue) > 0) {

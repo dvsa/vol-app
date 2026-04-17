@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermitWindow;
 
 use Dvsa\Olcs\Api\Domain\Command\IrhpPermitWindow\Close as CloseCmd;
@@ -28,7 +30,7 @@ class CloseTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $windowId = 1;
         $irhpApp1Id = 14;
@@ -96,7 +98,7 @@ class CloseTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleWindowOpen()
+    public function testHandleWindowOpen(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
         $this->expectExceptionMessage('Window which has not ended cannot be closed');

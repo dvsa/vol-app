@@ -14,6 +14,7 @@ class BkmOperatorAddress4 extends StaticBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         // full address rendered by BkmOperatorAddress1

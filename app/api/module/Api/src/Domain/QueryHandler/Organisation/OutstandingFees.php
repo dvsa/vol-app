@@ -22,6 +22,7 @@ class OutstandingFees extends AbstractQueryHandler
 
     protected $extraRepos = ['Fee', 'SystemParameter'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $organisation = $this->getRepo()->fetchUsingId($query);

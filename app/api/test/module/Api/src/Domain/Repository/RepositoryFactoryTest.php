@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\EntityManager;
@@ -22,7 +24,7 @@ class RepositoryFactoryTest extends MockeryTestCase
         $this->sut = new RepositoryFactory();
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $container = m::mock(ContainerInterface::class);
 
@@ -41,7 +43,7 @@ class RepositoryFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(Application::class, $service);
     }
 
-    public function testInvokeWithFqcn()
+    public function testInvokeWithFqcn(): void
     {
         $container = m::mock(ContainerInterface::class);
 

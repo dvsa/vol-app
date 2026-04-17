@@ -20,6 +20,7 @@ class TransportManagerResponsibilityReviewService extends AbstractReviewService
      *
      * @return array
      */
+    #[\Override]
     public function getConfig(TransportManagerApplication $tma)
     {
         return [

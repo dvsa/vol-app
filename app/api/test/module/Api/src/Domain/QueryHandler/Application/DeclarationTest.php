@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Application;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Application\Declaration;
@@ -17,13 +19,7 @@ use Dvsa\Olcs\Transfer\Query\Application\Declaration as Qry;
 use Dvsa\Olcs\Api\Service\FeesHelperService;
 use Dvsa\Olcs\Api\Service\Lva\SectionAccessService;
 use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 
-/**
- * DeclarationTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 class DeclarationTest extends QueryHandlerTestCase
 {
     public function setUp(): void
@@ -42,7 +38,7 @@ class DeclarationTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -83,6 +79,7 @@ class DeclarationTest extends QueryHandlerTestCase
         $mockApplication->shouldReceive('canHaveInterimLicence')->with()->once()->andReturn(true);
         $mockApplication->shouldReceive('isLicenceUpgrade')->with()->once()->andReturn('yyy');
         $mockApplication->shouldReceive('isGoods')->with()->once()->andReturn(true);
+        $mockApplication->expects('showPeriodOfGraceQuestion')->andReturnFalse();
 
         $this->mockedSmServices['FeesHelperService']
             ->shouldReceive('getTotalOutstandingFeeAmountForApplication')
@@ -115,13 +112,14 @@ class DeclarationTest extends QueryHandlerTestCase
             'disableSignatures' => true,
             'declarations' => 'markup',
             'signature' => [],
-            'interimFee' => 123.45
+            'interimFee' => 123.45,
+            'showPeriodOfGraceQuestion' => false,
         ];
 
         $this->assertEquals($expected, $this->sut->handleQuery($query)->serialize());
     }
 
-    public function testHandleQueryWithSignature()
+    public function testHandleQueryWithSignature(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -160,6 +158,7 @@ class DeclarationTest extends QueryHandlerTestCase
         $mockApplication->shouldReceive('canHaveInterimLicence')->with()->once()->andReturn(true);
         $mockApplication->shouldReceive('isLicenceUpgrade')->with()->once()->andReturn('yyy');
         $mockApplication->shouldReceive('isGoods')->with()->once()->andReturn(true);
+        $mockApplication->expects('showPeriodOfGraceQuestion')->andReturnTrue();
 
         $this->mockedSmServices['FeesHelperService']
             ->shouldReceive('getTotalOutstandingFeeAmountForApplication')
@@ -196,13 +195,14 @@ class DeclarationTest extends QueryHandlerTestCase
                 'date' => 'CREATED_ON',
                 'dob' => 'DOB',
             ],
-            'interimFee' => 123.45
+            'interimFee' => 123.45,
+            'showPeriodOfGraceQuestion' => true,
         ];
 
         $this->assertEquals($expected, $this->sut->handleQuery($query)->serialize());
     }
 
-    public function testHandleQueryInterimFeeNotExist()
+    public function testHandleQueryInterimFeeNotExist(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -284,6 +284,7 @@ class DeclarationTest extends QueryHandlerTestCase
         $mockApplication->shouldReceive('canHaveInterimLicence')->with()->once()->andReturn(true);
         $mockApplication->shouldReceive('isLicenceUpgrade')->with()->once()->andReturn('yyy');
         $mockApplication->shouldReceive('isGoods')->with()->once()->andReturn(true);
+        $mockApplication->expects('showPeriodOfGraceQuestion')->andReturnTrue();
 
         $this->mockedSmServices['FeesHelperService']
             ->shouldReceive('getTotalOutstandingFeeAmountForApplication')
@@ -316,13 +317,14 @@ class DeclarationTest extends QueryHandlerTestCase
             'disableSignatures' => true,
             'declarations' => 'markup',
             'signature' => [],
-            'interimFee' => 123.45
+            'interimFee' => 123.45,
+            'showPeriodOfGraceQuestion' => true,
         ];
 
         $this->assertEquals($expected, $this->sut->handleQuery($query)->serialize());
     }
 
-    public function testHandleQueryInterimFeeNotExistAndNotApplicable()
+    public function testHandleQueryInterimFeeNotExistAndNotApplicable(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -410,6 +412,7 @@ class DeclarationTest extends QueryHandlerTestCase
         $mockApplication->shouldReceive('canHaveInterimLicence')->with()->once()->andReturn(true);
         $mockApplication->shouldReceive('isLicenceUpgrade')->with()->once()->andReturn('yyy');
         $mockApplication->shouldReceive('isGoods')->with()->once()->andReturn(true);
+        $mockApplication->expects('showPeriodOfGraceQuestion')->andReturnTrue();
 
         $this->mockedSmServices['FeesHelperService']
             ->shouldReceive('getTotalOutstandingFeeAmountForApplication')
@@ -442,13 +445,14 @@ class DeclarationTest extends QueryHandlerTestCase
             'disableSignatures' => true,
             'declarations' => 'markup',
             'signature' => [],
-            'interimFee' => null
+            'interimFee' => null,
+            'showPeriodOfGraceQuestion' => true,
         ];
 
         $this->assertEquals($expected, $this->sut->handleQuery($query)->serialize());
     }
 
-    public function testHandleQueryInterimFeeTypeNotExist()
+    public function testHandleQueryInterimFeeTypeNotExist(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -521,6 +525,7 @@ class DeclarationTest extends QueryHandlerTestCase
         $mockApplication->shouldReceive('canHaveInterimLicence')->with()->once()->andReturn(true);
         $mockApplication->shouldReceive('isLicenceUpgrade')->with()->once()->andReturn('yyy');
         $mockApplication->shouldReceive('isGoods')->with()->once()->andReturn(true);
+        $mockApplication->expects('showPeriodOfGraceQuestion')->andReturnTrue();
 
         $this->mockedSmServices['FeesHelperService']
             ->shouldReceive('getTotalOutstandingFeeAmountForApplication')
@@ -553,7 +558,8 @@ class DeclarationTest extends QueryHandlerTestCase
             'disableSignatures' => true,
             'declarations' => 'markup',
             'signature' => [],
-            'interimFee' => null
+            'interimFee' => null,
+            'showPeriodOfGraceQuestion' => true,
         ];
 
         $this->assertEquals($expected, $this->sut->handleQuery($query)->serialize());

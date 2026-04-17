@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\CompaniesHouse;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -14,9 +16,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 /**
- * CompaniesHouseCompany Abstract Entity
+ * AbstractCompaniesHouseCompany Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -26,7 +29,7 @@ use Doctrine\Common\Collections\Collection;
  *    }
  * )
  */
-abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -35,22 +38,24 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     use ModifiedOnTrait;
 
     /**
-     * Address line1
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="string", name="address_line_1", length=100, nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $addressLine1;
+    protected $id;
 
     /**
-     * Address line2
+     * Company number
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="address_line_2", length=100, nullable=true)
+     * @ORM\Column(type="string", name="company_number", length=8, nullable=false)
      */
-    protected $addressLine2;
+    protected $companyNumber = '';
 
     /**
      * Company name
@@ -62,15 +67,6 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     protected $companyName;
 
     /**
-     * Company number
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="company_number", length=8, nullable=false)
-     */
-    protected $companyNumber;
-
-    /**
      * Company status
      *
      * @var string
@@ -80,6 +76,24 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     protected $companyStatus;
 
     /**
+     * Address line 1
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="address_line_1", length=100, nullable=true)
+     */
+    protected $addressLine1;
+
+    /**
+     * Address line 2
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="address_line_2", length=100, nullable=true)
+     */
+    protected $addressLine2;
+
+    /**
      * Country
      *
      * @var string
@@ -87,29 +101,6 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      * @ORM\Column(type="string", name="country", length=32, nullable=true)
      */
     protected $country;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Insolvency processed
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean",
-     *     name="insolvency_processed",
-     *     nullable=true,
-     *     options={"default": 0})
-     */
-    protected $insolvencyProcessed = 0;
 
     /**
      * Locality
@@ -157,6 +148,15 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     protected $region;
 
     /**
+     * Insolvency processed
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="insolvency_processed", nullable=true, options={"default": 0})
+     */
+    protected $insolvencyProcessed = 0;
+
+    /**
      * Version
      *
      * @var int
@@ -167,35 +167,25 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     protected $version = 1;
 
     /**
-     * Insolvency practitioner
+     * InsolvencyPractitioners
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseInsolvencyPractitioner",
-     *     mappedBy="companiesHouseCompany",
-     *     cascade={"persist"}
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseInsolvencyPractitioner", mappedBy="companiesHouseCompany", cascade={"persist"})
      */
     protected $insolvencyPractitioners;
 
     /**
-     * Officer
+     * Officers
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseOfficer",
-     *     mappedBy="companiesHouseCompany",
-     *     cascade={"persist"}
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseOfficer", mappedBy="companiesHouseCompany", cascade={"persist"})
      */
     protected $officers;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -203,14 +193,109 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->insolvencyPractitioners = new ArrayCollection();
         $this->officers = new ArrayCollection();
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return CompaniesHouseCompany
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the company number
+     *
+     * @param string $companyNumber new value being set
+     *
+     * @return CompaniesHouseCompany
+     */
+    public function setCompanyNumber($companyNumber)
+    {
+        $this->companyNumber = $companyNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get the company number
+     *
+     * @return string
+     */
+    public function getCompanyNumber()
+    {
+        return $this->companyNumber;
+    }
+
+    /**
+     * Set the company name
+     *
+     * @param string $companyName new value being set
+     *
+     * @return CompaniesHouseCompany
+     */
+    public function setCompanyName($companyName)
+    {
+        $this->companyName = $companyName;
+
+        return $this;
+    }
+
+    /**
+     * Get the company name
+     *
+     * @return string
+     */
+    public function getCompanyName()
+    {
+        return $this->companyName;
+    }
+
+    /**
+     * Set the company status
+     *
+     * @param string $companyStatus new value being set
+     *
+     * @return CompaniesHouseCompany
+     */
+    public function setCompanyStatus($companyStatus)
+    {
+        $this->companyStatus = $companyStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get the company status
+     *
+     * @return string
+     */
+    public function getCompanyStatus()
+    {
+        return $this->companyStatus;
     }
 
     /**
@@ -262,78 +347,6 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     }
 
     /**
-     * Set the company name
-     *
-     * @param string $companyName new value being set
-     *
-     * @return CompaniesHouseCompany
-     */
-    public function setCompanyName($companyName)
-    {
-        $this->companyName = $companyName;
-
-        return $this;
-    }
-
-    /**
-     * Get the company name
-     *
-     * @return string
-     */
-    public function getCompanyName()
-    {
-        return $this->companyName;
-    }
-
-    /**
-     * Set the company number
-     *
-     * @param string $companyNumber new value being set
-     *
-     * @return CompaniesHouseCompany
-     */
-    public function setCompanyNumber($companyNumber)
-    {
-        $this->companyNumber = $companyNumber;
-
-        return $this;
-    }
-
-    /**
-     * Get the company number
-     *
-     * @return string
-     */
-    public function getCompanyNumber()
-    {
-        return $this->companyNumber;
-    }
-
-    /**
-     * Set the company status
-     *
-     * @param string $companyStatus new value being set
-     *
-     * @return CompaniesHouseCompany
-     */
-    public function setCompanyStatus($companyStatus)
-    {
-        $this->companyStatus = $companyStatus;
-
-        return $this;
-    }
-
-    /**
-     * Get the company status
-     *
-     * @return string
-     */
-    public function getCompanyStatus()
-    {
-        return $this->companyStatus;
-    }
-
-    /**
      * Set the country
      *
      * @param string $country new value being set
@@ -355,54 +368,6 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     public function getCountry()
     {
         return $this->country;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return CompaniesHouseCompany
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the insolvency processed
-     *
-     * @param boolean $insolvencyProcessed new value being set
-     *
-     * @return CompaniesHouseCompany
-     */
-    public function setInsolvencyProcessed($insolvencyProcessed)
-    {
-        $this->insolvencyProcessed = $insolvencyProcessed;
-
-        return $this;
-    }
-
-    /**
-     * Get the insolvency processed
-     *
-     * @return boolean
-     */
-    public function getInsolvencyProcessed()
-    {
-        return $this->insolvencyProcessed;
     }
 
     /**
@@ -526,6 +491,30 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     }
 
     /**
+     * Set the insolvency processed
+     *
+     * @param bool $insolvencyProcessed new value being set
+     *
+     * @return CompaniesHouseCompany
+     */
+    public function setInsolvencyProcessed($insolvencyProcessed)
+    {
+        $this->insolvencyProcessed = $insolvencyProcessed;
+
+        return $this;
+    }
+
+    /**
+     * Get the insolvency processed
+     *
+     * @return bool
+     */
+    public function getInsolvencyProcessed()
+    {
+        return $this->insolvencyProcessed;
+    }
+
+    /**
      * Set the version
      *
      * @param int $version new value being set
@@ -550,9 +539,9 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     }
 
     /**
-     * Set the insolvency practitioner
+     * Set the insolvency practitioners
      *
-     * @param ArrayCollection $insolvencyPractitioners collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $insolvencyPractitioners collection being set as the value
      *
      * @return CompaniesHouseCompany
      */
@@ -566,7 +555,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Get the insolvency practitioners
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getInsolvencyPractitioners()
     {
@@ -576,7 +565,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Add a insolvency practitioners
      *
-     * @param ArrayCollection|mixed $insolvencyPractitioners collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $insolvencyPractitioners collection being added
      *
      * @return CompaniesHouseCompany
      */
@@ -613,9 +602,9 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     }
 
     /**
-     * Set the officer
+     * Set the officers
      *
-     * @param ArrayCollection $officers collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $officers collection being set as the value
      *
      * @return CompaniesHouseCompany
      */
@@ -629,7 +618,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Get the officers
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getOfficers()
     {
@@ -639,7 +628,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Add a officers
      *
-     * @param ArrayCollection|mixed $officers collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $officers collection being added
      *
      * @return CompaniesHouseCompany
      */
@@ -673,5 +662,14 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

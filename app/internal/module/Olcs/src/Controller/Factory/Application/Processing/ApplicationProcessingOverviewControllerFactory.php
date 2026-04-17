@@ -22,6 +22,7 @@ class ApplicationProcessingOverviewControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return ApplicationProcessingOverviewController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationProcessingOverviewController
     {
         $scriptFactory = $container->get(ScriptFactory::class);

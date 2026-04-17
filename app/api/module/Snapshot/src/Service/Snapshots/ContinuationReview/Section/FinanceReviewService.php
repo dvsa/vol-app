@@ -35,6 +35,7 @@ class FinanceReviewService extends AbstractReviewService
      *
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(ContinuationDetail $continuationDetail)
     {
         $financesRequiredAmount = $this->getFinancesRequiredAmount($continuationDetail);

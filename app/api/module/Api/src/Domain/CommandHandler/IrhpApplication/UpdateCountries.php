@@ -37,6 +37,7 @@ class UpdateCountries extends AbstractCommandHandler implements TransactionedInt
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $countries = $command->getCountries();
@@ -125,6 +126,7 @@ class UpdateCountries extends AbstractCommandHandler implements TransactionedInt
 
         return $this->result;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

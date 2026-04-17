@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Grant IrfoPsvAuth Test
  */
@@ -40,7 +42,8 @@ class GrantIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrfoPsvAuthEntity::STATUS_PENDING,
@@ -73,7 +76,7 @@ class GrantIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandAnnualFeeExempt()
+    public function testHandleCommandAnnualFeeExempt(): void
     {
         $data = [
             'id' => 42,
@@ -171,7 +174,7 @@ class GrantIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
     /**
      * Tests granting whilst creating annual fee that is NOT exempt
      */
-    public function testHandleCommandAnnualFeeNotExempt()
+    public function testHandleCommandAnnualFeeNotExempt(): void
     {
         $data = [
             'id' => 42,
@@ -270,7 +273,7 @@ class GrantIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
     /**
      * Tests attempt to grant when application fee still outstanding
      */
-    public function testHandleCommandAnnualFeeOutstanding()
+    public function testHandleCommandAnnualFeeOutstanding(): void
     {
         $this->expectException(BadRequestException::class);
 
@@ -316,7 +319,7 @@ class GrantIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    private function generatePsvAuth($data)
+    private function generatePsvAuth(mixed $data): mixed
     {
         /** @var IrfoPsvAuthEntity $irfoPsvAuth */
         $irfoPsvAuth = m::mock(IrfoPsvAuthEntity::class)->makePartial();

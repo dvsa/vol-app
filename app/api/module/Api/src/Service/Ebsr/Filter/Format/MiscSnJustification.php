@@ -20,6 +20,7 @@ class MiscSnJustification extends AbstractFilter
      * @param array $value
      * @return array
      */
+    #[\Override]
     public function filter($value)
     {
         //if the field isn't set, we don't need to do anything

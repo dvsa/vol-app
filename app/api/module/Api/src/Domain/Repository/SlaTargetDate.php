@@ -40,6 +40,7 @@ class SlaTargetDate extends AbstractRepository
      * @param QueryInterface $query Query
      * @return QueryBuilder|void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $entityType = $query->getEntityType();

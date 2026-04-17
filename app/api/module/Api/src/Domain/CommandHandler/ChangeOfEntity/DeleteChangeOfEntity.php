@@ -21,6 +21,7 @@ final class DeleteChangeOfEntity extends AbstractCommandHandler
 {
     protected $repoServiceName = 'ChangeOfEntity';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $changeOfEntity ChangeOfEntityEntity */

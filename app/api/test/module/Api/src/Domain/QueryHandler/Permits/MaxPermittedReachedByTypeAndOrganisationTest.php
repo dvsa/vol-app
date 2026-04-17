@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Permits;
 
 use DateTime;
@@ -39,16 +41,14 @@ class MaxPermittedReachedByTypeAndOrganisationTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleQueryEcmtAnnual
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQueryEcmtAnnual')]
     public function testHandleQueryEcmtAnnual(
-        $stock1Licence1Count,
-        $stock1Licence2Count,
-        $stock2Licence1Count,
-        $stock2Licence2Count,
-        $expectedMaxPermittedReached
-    ) {
+        mixed $stock1Licence1Count,
+        mixed $stock1Licence2Count,
+        mixed $stock2Licence1Count,
+        mixed $stock2Licence2Count,
+        mixed $expectedMaxPermittedReached
+    ): void {
         $irhpPermitTypeId = IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT;
 
         $currentDateTime = m::mock(DateTime::class);
@@ -120,7 +120,7 @@ class MaxPermittedReachedByTypeAndOrganisationTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function dpHandleQueryEcmtAnnual()
+    public static function dpHandleQueryEcmtAnnual(): array
     {
         return [
             'nothing available across all windows and licences' => [0, 0, 0, 0, true],
@@ -129,10 +129,8 @@ class MaxPermittedReachedByTypeAndOrganisationTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleQueryNotEcmtAnnual
-     */
-    public function testHandleQueryNotEcmtAnnual($irhpPermitTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQueryNotEcmtAnnual')]
+    public function testHandleQueryNotEcmtAnnual(mixed $irhpPermitTypeId): void
     {
         $expectedResult = [
             'maxPermittedReached' => false
@@ -150,7 +148,7 @@ class MaxPermittedReachedByTypeAndOrganisationTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function dpHandleQueryNotEcmtAnnual()
+    public static function dpHandleQueryNotEcmtAnnual(): array
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM],

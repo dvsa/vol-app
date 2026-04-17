@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\DocTemplate;
 
 use Dvsa\Olcs\Api\Domain\Command as DomainCmd;
@@ -11,6 +13,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Category as CategoryRepo;
 use Dvsa\Olcs\Api\Domain\Repository\SubCategory as SubCategoryRepo;
 use Dvsa\Olcs\Api\Domain\Repository\DocTemplate as DocTemplateRepo;
 use Dvsa\Olcs\Api\Domain\Repository\User as UserRepo;
+use Dvsa\Olcs\Api\Domain\Repository\LetterType as LetterTypeRepo;
 use Dvsa\Olcs\Api\Entity;
 use Dvsa\Olcs\Api\Entity\Doc\DocTemplate as DocTemplateEntity;
 use Dvsa\Olcs\Api\Entity\Doc\Document as DocumentEntity;
@@ -22,9 +25,8 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\DocTemplate\Update
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\DocTemplate\Update::class)]
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class UpdateTest extends AbstractCommandHandlerTestCase
 {
     public const BODY = 'expect_body';
@@ -45,6 +47,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('Category', CategoryRepo::class);
         $this->mockRepo('SubCategory', SubCategoryRepo::class);
         $this->mockRepo('User', UserRepo::class);
+        $this->mockRepo('LetterType', LetterTypeRepo::class);
 
         $this->mockUploader = m::mock(ContentStoreFileUploader::class);
 
@@ -57,7 +60,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             Entity\System\Category::class => [
@@ -72,12 +76,15 @@ class UpdateTest extends AbstractCommandHandlerTestCase
             Entity\User\User::class => [
                 291 => m::mock(Entity\User\User::class)
             ],
+            Entity\Letter\LetterType::class => [
+                33 => m::mock(Entity\Letter\LetterType::class)
+            ],
         ];
 
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 111,
@@ -88,7 +95,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
             'templateFolder' => 'root',
             'description' => 'description',
             'suppressFromOp' => 'N',
-            'isNi' => 'N'
+            'isNi' => 'N',
+            'letterType' => 33
         ];
 
         $command = TransferCmd\DocTemplate\Update::create($data);
@@ -108,8 +116,13 @@ class UpdateTest extends AbstractCommandHandlerTestCase
                 m::type(Entity\System\SubCategory::class),
                 $command->getDescription(),
                 $command->getIsNi(),
-                $command->getSuppressFromOp()
+                $command->getSuppressFromOp(),
+                m::type(Entity\Letter\LetterType::class)
             )
+            ->once();
+
+        $docTemplate->shouldReceive('setLetterType')
+            ->with(m::type(Entity\Letter\LetterType::class))
             ->once();
 
         $document = m::mock(DocumentEntity::class)->makePartial();
@@ -193,7 +206,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandNoContent()
+    public function testHandleCommandNoContent(): void
     {
         $data = [
             'content' => null,

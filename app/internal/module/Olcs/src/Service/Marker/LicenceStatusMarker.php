@@ -11,6 +11,7 @@ use Common\RefData;
  */
 class LicenceStatusMarker extends AbstractMarker
 {
+    #[\Override]
     public function canRender()
     {
         $data = $this->getData();
@@ -28,6 +29,7 @@ class LicenceStatusMarker extends AbstractMarker
         return in_array($data['licence']['status']['id'], $statuses);
     }
 
+    #[\Override]
     public function render()
     {
         $startDateTime = null;
@@ -91,7 +93,7 @@ class LicenceStatusMarker extends AbstractMarker
         if (count($rules) > 0) {
             usort(
                 $rules,
-                fn($a, $b) => strtotime($b['startDate']) - strtotime($a['startDate'])
+                fn($a, $b) => strtotime((string) $b['startDate']) - strtotime((string) $a['startDate'])
             );
             return $rules[0];
         }

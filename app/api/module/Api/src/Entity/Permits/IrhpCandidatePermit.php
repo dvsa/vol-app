@@ -165,6 +165,7 @@ class IrhpCandidatePermit extends AbstractIrhpCandidatePermit implements Deletab
     /**
      * @return bool
      */
+    #[\Override]
     public function canDelete()
     {
         return $this->isApplicationUnderConsideration();

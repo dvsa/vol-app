@@ -27,6 +27,7 @@ abstract class AbstractUpdateStatus extends AbstractCommandHandler
 
     protected $section;
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Application $application */

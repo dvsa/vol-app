@@ -26,6 +26,7 @@ final class Overview extends AbstractCommandHandler implements TransactionedInte
 {
     protected $repoServiceName = 'Licence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var LicenceEntity $licence */

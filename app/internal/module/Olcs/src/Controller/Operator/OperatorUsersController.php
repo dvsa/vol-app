@@ -31,6 +31,7 @@ class OperatorUsersController extends AbstractInternalController implements
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -38,6 +39,7 @@ class OperatorUsersController extends AbstractInternalController implements
         return $view;
     }
 
+    #[\Override]
     public function deleteAction()
     {
         //we need to check the user isn't the last operator admin
@@ -64,6 +66,7 @@ class OperatorUsersController extends AbstractInternalController implements
      *
      * @return array
      */
+    #[\Override]
     protected function modifyListQueryParameters($parameters)
     {
         $parameters['roles'] = [

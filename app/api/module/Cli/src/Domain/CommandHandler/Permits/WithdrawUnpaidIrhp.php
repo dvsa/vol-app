@@ -31,6 +31,7 @@ final class WithdrawUnpaidIrhp extends AbstractCommandHandler implements Transac
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $irhpApplications = $this->getRepo()->fetchAllAwaitingFee();
@@ -53,6 +54,7 @@ final class WithdrawUnpaidIrhp extends AbstractCommandHandler implements Transac
 
         return $this->result;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->daysToPayIssueFeeProvider = $container->get('PermitsFeesDaysToPayIssueFeeProvider');

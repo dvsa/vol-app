@@ -16,6 +16,7 @@ class AbstractDataSource implements DataSourceInterface
     protected $defaultParamData = [];
     protected $extraQueryData = [];
 
+    #[\Override]
     public function queryFromParams(array $inputParams): QueryInterface
     {
         //if we have defaults then set them here, these will be overwritten later if the parameter exists

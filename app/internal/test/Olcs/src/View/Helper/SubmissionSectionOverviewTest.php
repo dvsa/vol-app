@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\View\Helper;
 
 use Olcs\View\Helper\SubmissionSectionOverview;
@@ -13,11 +15,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 class SubmissionSectionOverviewTest extends TestCase
 {
     /**
-     * @dataProvider provideInvoke
      * @param $input
      * @param $expected
      */
-    public function testInvoke($input, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideInvoke')]
+    public function testInvoke(mixed $input, mixed $expected): void
     {
         $sut = new SubmissionSectionOverview();
 
@@ -41,11 +43,11 @@ class SubmissionSectionOverviewTest extends TestCase
     }
 
     /**
-     * @dataProvider provideInvokeNotPluggable
      * @param $input
      * @param $expected
      */
-    public function testInvokeNotPluggable($input, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideInvokeNotPluggable')]
+    public function testInvokeNotPluggable(mixed $input, mixed $expected): void
     {
         $sut = new SubmissionSectionOverview();
 
@@ -64,7 +66,7 @@ class SubmissionSectionOverviewTest extends TestCase
         );
     }
 
-    public function provideInvoke()
+    public static function provideInvoke(): array
     {
         return [
             [['submissionSection' => '', 'data' => []], ''],
@@ -77,7 +79,7 @@ class SubmissionSectionOverviewTest extends TestCase
         ];
     }
 
-    public function provideInvokeNotPluggable()
+    public static function provideInvokeNotPluggable(): array
     {
         return [
             [['submissionSection' => 'rubbish', 'data' => []], ''],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * UpdateStatusTest
  *
@@ -20,6 +22,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class UpdateStatusTest extends AbstractCommandHandlerTestCase
 {
     protected $loggedInUser;
@@ -32,14 +35,15 @@ class UpdateStatusTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = ['status1',TmaEntity::STATUS_INCOMPLETE];
 
         parent::initReferences();
     }
 
-    public function testHandleCommandWithVersion()
+    public function testHandleCommandWithVersion(): void
     {
         $command = Command::create(['id' => 863, 'version' => 234, 'status' => 'status1']);
 
@@ -56,7 +60,7 @@ class UpdateStatusTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithoutVersion()
+    public function testHandleCommandWithoutVersion(): void
     {
         $command = Command::create(['id' => 863, 'status' => 'status1']);
 
@@ -73,7 +77,7 @@ class UpdateStatusTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandStatusIncomplete()
+    public function testHandleCommandStatusIncomplete(): void
     {
         $command = Command::create(
             [

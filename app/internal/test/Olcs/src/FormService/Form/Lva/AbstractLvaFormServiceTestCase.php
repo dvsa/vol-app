@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva;
 
 use Laminas\Form\ElementInterface;
@@ -32,7 +34,7 @@ abstract class AbstractLvaFormServiceTestCase extends MockeryTestCase
         $this->sut = $reflector->newInstanceArgs($this->classArgs);
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         // Mocks
         $mockForm = m::mock(\Common\Form\Form::class);

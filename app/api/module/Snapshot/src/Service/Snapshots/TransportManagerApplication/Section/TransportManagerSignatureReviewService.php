@@ -25,6 +25,7 @@ class TransportManagerSignatureReviewService extends AbstractReviewService
      *
      * @return array
      */
+    #[\Override]
     public function getConfig(TransportManagerApplication $tma): array
     {
         $partial = $this->getPartial($tma);

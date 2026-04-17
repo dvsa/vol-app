@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CreateTest
  *
@@ -48,7 +50,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = ['tmap_st_incomplete', 'tm_s_cur'];
 
@@ -61,7 +64,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandAlreadyTmLoggedInUser()
+    public function testHandleCommandAlreadyTmLoggedInUser(): void
     {
         $command = Command::create(['application' => 863, 'user' => 234, 'action' => 'D']);
 
@@ -104,7 +107,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandSetDob()
+    public function testHandleCommandSetDob(): void
     {
         $command = Command::create(['application' => 863, 'user' => 234, 'action' => 'D', 'dob' => '2015-11-26']);
 
@@ -143,7 +146,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandCreateTm()
+    public function testHandleCommandCreateTm(): void
     {
         $command = Command::create(['application' => 863, 'user' => 234, 'action' => 'D']);
 
@@ -208,7 +211,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithException()
+    public function testHandleCommandWithException(): void
     {
         $this->expectException(
             ValidationException::class

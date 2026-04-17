@@ -53,6 +53,7 @@ class OverviewController extends AbstractOverviewController
      *
      * @return VariationOverview
      */
+    #[\Override]
     protected function getOverviewView($data, $sections, $form)
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'application.apply-to-change-licence.title');
@@ -67,6 +68,7 @@ class OverviewController extends AbstractOverviewController
      *
      * @return bool
      */
+    #[\Override]
     protected function isReadyToSubmit($sections, $shouldIgnoreUndertakings = false)
     {
         $updated = 0;
@@ -91,6 +93,7 @@ class OverviewController extends AbstractOverviewController
      *
      * @return array e.g. [ 'section_name' => ['status' => 2] ]
      */
+    #[\Override]
     protected function getSections($data)
     {
         $sections = $this->getVariationSections($data);

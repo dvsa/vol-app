@@ -27,6 +27,7 @@ final class Update extends AbstractCommandHandler
     protected $createCmdClass = CreateTranslationKeyTextCmd::class;
     protected $updateCmdClass = UpdateTranslationKeyTextCmd::class;
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         /**

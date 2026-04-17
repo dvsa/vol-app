@@ -127,6 +127,7 @@ class IrhpPermit extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if ($query instanceof ReadyToPrint) {
@@ -215,6 +216,7 @@ class IrhpPermit extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         $this->getQueryBuilder()->modifyQuery($qb)

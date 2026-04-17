@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\File;
 
 use Dvsa\Olcs\Api\Service\File\ContentStoreFileUploader;
@@ -13,9 +15,7 @@ use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\File\ContentStoreFileUploader
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\File\ContentStoreFileUploader::class)]
 class ContentStoreFileUploaderTest extends MockeryTestCase
 {
     public const IDENTIFIER = 'unit_Identifier';
@@ -44,12 +44,12 @@ class ContentStoreFileUploaderTest extends MockeryTestCase
             );
 
         $sm->setService('ContentStore', $this->mockContentStoreCli);
-        $sm->setService('Logger', $this->createMock(Logger::class));
+        $sm->setService('Logger', $this->createStub(\Dvsa\OlcsTest\SafeLogger::class));
 
         static::assertSame($this->sut, $this->sut->__invoke($sm, null));
     }
 
-    public function testDownload()
+    public function testDownload(): void
     {
         $returnedFile = m::mock(DsFile::class);
         $this->mockContentStoreCli->shouldReceive('read')
@@ -60,7 +60,7 @@ class ContentStoreFileUploaderTest extends MockeryTestCase
         static::assertEquals($returnedFile, $this->sut->download(self::IDENTIFIER));
     }
 
-    public function testRemove()
+    public function testRemove(): void
     {
         $this->mockContentStoreCli->shouldReceive('remove')
             ->once()
@@ -70,7 +70,7 @@ class ContentStoreFileUploaderTest extends MockeryTestCase
         static::assertTrue($this->sut->remove(self::IDENTIFIER));
     }
 
-    public function testUpload()
+    public function testUpload(): void
     {
         $expectContent = 'unit_content';
 
@@ -94,7 +94,7 @@ class ContentStoreFileUploaderTest extends MockeryTestCase
         static::assertEquals(self::IDENTIFIER, $actual->getIdentifier());
     }
 
-    public function testUploadFail()
+    public function testUploadFail(): void
     {
         $respBody = 'unit_RespBody';
 
@@ -114,7 +114,7 @@ class ContentStoreFileUploaderTest extends MockeryTestCase
         $this->sut->upload(self::IDENTIFIER, new DsFile());
     }
 
-    public function testUploadFailMime()
+    public function testUploadFailMime(): void
     {
         $this->expectException(MimeNotAllowedException::class);
 

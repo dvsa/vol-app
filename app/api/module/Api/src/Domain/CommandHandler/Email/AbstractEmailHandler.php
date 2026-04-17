@@ -57,6 +57,7 @@ abstract class AbstractEmailHandler extends AbstractCommandHandler implements Em
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      * @throws \Dvsa\Olcs\Email\Exception\EmailNotSentException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /**

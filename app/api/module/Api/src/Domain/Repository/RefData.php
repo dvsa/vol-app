@@ -21,6 +21,7 @@ class RefData extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $qb->andWhere($qb->expr()->eq($this->alias . '.refDataCategoryId', ':category'))
@@ -44,6 +45,7 @@ class RefData extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         $this->getQueryBuilder()->modifyQuery($qb)->with('parent', 'p');

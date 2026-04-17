@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Internal / Common Licence People Adapter Test
  *
@@ -79,12 +81,12 @@ class LicencePeopleAdapterTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider dpTestCanModify
      *
      * @param $isExceptionalOrg
      * @param $expect
      */
-    public function testCanModify($isExceptionalOrg, $expect): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCanModify')]
+    public function testCanModify(bool $isExceptionalOrg, bool $expect): void
     {
         $this->sut->shouldReceive('isExceptionalOrganisation')->andReturn($isExceptionalOrg);
 
@@ -96,7 +98,7 @@ class LicencePeopleAdapterTest extends MockeryTestCase
      *
      * @psalm-return list{array{isExceptionalOrg: true, expect: false}, array{isExceptionalOrg: false, expect: true}}
      */
-    public function dpTestCanModify(): array
+    public static function dpTestCanModify(): array
     {
         return [
             [

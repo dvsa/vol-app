@@ -31,6 +31,7 @@ final class SetDefaultTrafficAreaAndEnforcementArea extends AbstractCommandHandl
      * @param Cmd $command
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): \Dvsa\Olcs\Api\Domain\Command\Result
     {
         /** @var Application $application */

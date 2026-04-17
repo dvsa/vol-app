@@ -26,6 +26,7 @@ final class CreatePostAddPeopleGrantTask extends AbstractCommandHandler implemen
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Application $application */

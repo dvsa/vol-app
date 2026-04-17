@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Template;
 
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
@@ -16,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class DatabaseTemplateFetcherTest extends MockeryTestCase
 {
-    public function testFetch()
+    public function testFetch(): void
     {
         $localeComponent = 'en_GB';
         $formatComponent = 'plain';
@@ -38,7 +40,7 @@ class DatabaseTemplateFetcherTest extends MockeryTestCase
         );
     }
 
-    public function testIncorrectComponentCountException()
+    public function testIncorrectComponentCountException(): void
     {
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage('Incorrect number of path components');

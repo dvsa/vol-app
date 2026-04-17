@@ -44,8 +44,8 @@ return [
             'name' => 'lastModifiedOn',
             'sort' => 'lastModifiedOn',
             'formatter' => fn($row, $column) => empty($row['lastModifiedOn'])
-                ? date('d/m/Y', strtotime($row['createdOn']))
-                : date('d/m/Y', strtotime($row['lastModifiedOn']))
+                ? date('d/m/Y', strtotime((string) $row['createdOn']))
+                : date('d/m/Y', strtotime((string) $row['lastModifiedOn']))
         ],
         [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common

@@ -359,6 +359,7 @@ class OperatingCentreHelper implements FactoryInterface
             $this->addMessage('permission', self::ERR_OC_PERMISSION);
         }
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->addressHelperService = $container->get(AddressHelperService::class);

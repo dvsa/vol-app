@@ -4,6 +4,10 @@
   "description": "VOL application local refresh",
   "license": "MIT",
   "devDependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.0.0",
+    "@aws-sdk/client-ssm": "^3.0.0",
+    "@aws-sdk/client-sts": "^3.0.0",
+    "@aws-sdk/credential-providers": "^3.0.0",
     "@tsconfig/recommended": "^1.0.7",
     "@types/cli-progress": "^3.11.6",
     "@types/flat-cache": "^2.0.2",
@@ -14,6 +18,7 @@
     "commander": "^12.1.0",
     "dedent": "^1.5.3",
     "flat-cache": "^6.1.0",
+    "php-parser": "^3.2.5",
     "prompts": "^2.4.2",
     "shelljs": "^0.8.5",
     "ts-node": "^10.9.2",

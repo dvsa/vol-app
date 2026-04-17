@@ -25,6 +25,7 @@ final class DeleteTaxiPhv extends AbstractCommandHandler implements Transactione
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $application = $this->getRepo()->fetchUsingId($command);

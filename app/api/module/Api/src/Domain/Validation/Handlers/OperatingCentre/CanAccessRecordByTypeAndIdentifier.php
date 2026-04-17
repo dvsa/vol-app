@@ -20,6 +20,7 @@ class CanAccessRecordByTypeAndIdentifier extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         if ($dto->getType() === 'licence') {

@@ -39,7 +39,7 @@ class Create extends AbstractCommandHandler implements
 
     protected $repoServiceName = 'DocTemplate';
 
-    protected $extraRepos = ['Category', 'SubCategory', 'Document', 'User'];
+    protected $extraRepos = ['Category', 'SubCategory', 'Document', 'User', 'LetterType'];
 
     /**
      * Execute command
@@ -49,6 +49,7 @@ class Create extends AbstractCommandHandler implements
      * @return Result
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         //Generate path identifier for docstore
@@ -89,6 +90,14 @@ class Create extends AbstractCommandHandler implements
      */
     protected function createDocTemplateEntity(TransferCmd\DocTemplate\Create $command)
     {
+        $letterType = null;
+        if ($command->getLetterType()) {
+            $letterType = $this->getRepo('LetterType')->getReference(
+                \Dvsa\Olcs\Api\Entity\Letter\LetterType::class,
+                $command->getLetterType()
+            );
+        }
+
         return DocTemplate::createNew(
             $this->getRepo('Category')->getReference(Category::class, $command->getCategory()),
             $this->getRepo('SubCategory')->getReference(SubCategory::class, $command->getSubCategory()),
@@ -97,6 +106,7 @@ class Create extends AbstractCommandHandler implements
             $command->getIsNi(),
             $command->getSuppressFromOp(),
             $command->getTemplateSlug(),
+            $letterType,
             $this->getRepo('User')->getReference(User::class, $this->getCurrentUser())
         );
     }

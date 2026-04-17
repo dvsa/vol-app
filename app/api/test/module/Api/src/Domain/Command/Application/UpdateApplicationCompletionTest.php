@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Application Completion Test
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\UpdateApplicationCompletion;
  */
 class UpdateApplicationCompletionTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = UpdateApplicationCompletion::create(['id' => 111, 'foo' => 'bar', 'section' => 'foo_section']);
 

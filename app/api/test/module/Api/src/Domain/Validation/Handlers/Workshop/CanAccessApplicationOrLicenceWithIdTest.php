@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Can Access Application or Licence With Id test
  *
@@ -33,7 +35,7 @@ class CanAccessApplicationOrLicenceWithIdTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsValidNoContext()
+    public function testIsValidNoContext(): void
     {
         $data = [
             'application' => null,
@@ -45,7 +47,7 @@ class CanAccessApplicationOrLicenceWithIdTest extends AbstractHandlerTestCase
         $this->assertFalse($this->sut->isValid($dto));
     }
 
-    public function testIsValidWithAppContextNoAccess()
+    public function testIsValidWithAppContextNoAccess(): void
     {
         $data = [
             'id' => 111,
@@ -59,7 +61,7 @@ class CanAccessApplicationOrLicenceWithIdTest extends AbstractHandlerTestCase
         $this->assertFalse($this->sut->isValid($dto));
     }
 
-    public function testIsValidWithLicContextNoAccess()
+    public function testIsValidWithLicContextNoAccess(): void
     {
         $data = [
             'id' => 111,
@@ -73,7 +75,7 @@ class CanAccessApplicationOrLicenceWithIdTest extends AbstractHandlerTestCase
         $this->assertFalse($this->sut->isValid($dto));
     }
 
-    public function testIsValidWithLicContextHasAccess()
+    public function testIsValidWithLicContextHasAccess(): void
     {
         $data = [
             'id' => 111,

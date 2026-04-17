@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\LicenceVehicle;
 
 use Dvsa\Olcs\Api\Domain\Repository\Query\LicenceVehicle\ClearVehicleSection26;
@@ -49,7 +51,7 @@ class ClearVehicleSection26Test extends AbstractDbQueryTestCase
         ]
     ];
 
-    public function paramProvider()
+    public static function paramProvider(): array
     {
         return [
             [
@@ -65,12 +67,12 @@ class ClearVehicleSection26Test extends AbstractDbQueryTestCase
         ];
     }
 
-    protected function getSut()
+    protected function getSut(): ClearVehicleSection26
     {
         return new ClearVehicleSection26();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return 'UPDATE vehicle v '
         . 'INNER JOIN licence_vehicle lv '

@@ -15,6 +15,7 @@ class TemplateVarsGeneratorFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TemplateVarsGenerator
     {
         return new TemplateVarsGenerator(

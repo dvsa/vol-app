@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ContinuationReview\Section;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -38,7 +40,7 @@ class PeopleReviewServiceTest extends MockeryTestCase
         $this->sut = new PeopleReviewService($abstractReviewServiceServices);
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         $continuationDetail = new ContinuationDetail();
 
@@ -135,7 +137,7 @@ class PeopleReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($continuationDetail));
     }
 
-    public function testGetConfigFromDataNoPersons()
+    public function testGetConfigFromDataNoPersons(): void
     {
         $continuationDetail = new ContinuationDetail();
 

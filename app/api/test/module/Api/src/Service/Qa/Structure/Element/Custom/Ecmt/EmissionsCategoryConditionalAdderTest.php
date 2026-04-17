@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Ecmt;
 
 use Dvsa\Olcs\Api\Entity\System\RefData;
@@ -44,7 +46,7 @@ class EmissionsCategoryConditionalAdderTest extends MockeryTestCase
         );
     }
 
-    public function testAddWhenRangesExistAndFreePermits()
+    public function testAddWhenRangesExistAndFreePermits(): void
     {
         $permitsRemaining = 3;
 
@@ -72,7 +74,7 @@ class EmissionsCategoryConditionalAdderTest extends MockeryTestCase
         );
     }
 
-    public function testNoAddWhenNoFreePermitsInRanges()
+    public function testNoAddWhenNoFreePermitsInRanges(): void
     {
         $this->emissionsCategoryAvailabilityCounter->shouldReceive('getCount')
             ->with(self::STOCK_ID, self::EMISSIONS_CATEGORY_ID)

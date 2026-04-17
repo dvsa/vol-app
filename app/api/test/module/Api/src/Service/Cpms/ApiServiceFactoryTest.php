@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Cpms;
 
 use Dvsa\Olcs\Api\Service\Cpms\ApiServiceFactory;
@@ -11,7 +13,7 @@ use Psr\Container\ContainerInterface;
 
 class ApiServiceFactoryTest extends TestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $config = [
             'cpms_api' => [

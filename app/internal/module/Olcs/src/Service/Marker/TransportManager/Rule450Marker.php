@@ -9,6 +9,7 @@ namespace Olcs\Service\Marker\TransportManager;
  */
 class Rule450Marker extends \Olcs\Service\Marker\AbstractMarker
 {
+    #[\Override]
     public function canRender()
     {
         $data = $this->getData();
@@ -16,6 +17,7 @@ class Rule450Marker extends \Olcs\Service\Marker\AbstractMarker
         return count($this->getTransportManagerRequiringMarkers($data)) > 0;
     }
 
+    #[\Override]
     public function render()
     {
         $data = $this->getData();

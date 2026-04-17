@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Cases;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -25,7 +27,7 @@ class CasesReadAuditEntityTest extends EntityTester
     /**
      * Test constructor
      */
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $mockUser = m::mock(UserEntity::class);
         $mockCase = m::mock(CasesEntity::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Db\Controller;
 
 use Dvsa\Olcs\Db\Controller\SearchController;
@@ -19,7 +21,7 @@ class SearchControllerTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->mockSearchService = m::mock(Search::class);
         $this->sut = new SearchController($this->mockSearchService);
     }
-    public function testGetList()
+    public function testGetList(): void
     {
         $mockParams = m::mock(Params::class);
         $mockParams->expects('__invoke')->twice()->andReturnSelf();

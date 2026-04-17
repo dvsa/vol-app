@@ -20,7 +20,7 @@ final class CreateSubmissionSectionComment extends AbstractCommandHandler implem
 {
     use EditorJsConversionTrait;
 
-    public const ERR_COMMENT_EXISTS = 'Comment already exists';
+    public const string ERR_COMMENT_EXISTS = 'Comment already exists';
 
     protected $repoServiceName = 'SubmissionSectionComment';
 
@@ -32,6 +32,7 @@ final class CreateSubmissionSectionComment extends AbstractCommandHandler implem
      * @return Result
      * @throws ValidationException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var \Dvsa\Olcs\Api\Domain\Repository\SubmissionSectionComment $repo */

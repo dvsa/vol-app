@@ -14,6 +14,7 @@ final class EnvironmentalComplaintList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Complaint';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var Complaint $repo */

@@ -12,6 +12,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class IrhpApplicationProcessingHistoryControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpApplicationProcessingHistoryController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

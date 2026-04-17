@@ -23,6 +23,7 @@ final class DeletePrinter extends AbstractCommandHandler
 {
     protected $repoServiceName = 'Printer';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $printer = $this->getRepo()->fetchWithTeams($command->getId());

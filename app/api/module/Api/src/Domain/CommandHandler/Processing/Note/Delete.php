@@ -22,6 +22,7 @@ final class Delete extends AbstractCommandHandler implements TransactionedInterf
      * @param DeleteCommand $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

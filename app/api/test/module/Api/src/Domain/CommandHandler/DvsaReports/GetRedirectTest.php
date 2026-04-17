@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\DvsaReports;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -57,7 +59,7 @@ class GetRedirectTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $cmdData = [
             'olNumbers' => ['OL123456', 'OM456789'],
@@ -83,7 +85,6 @@ class GetRedirectTest extends AbstractCommandHandlerTestCase
         $user->setOrganisationUsers(new ArrayCollection([$orgUser]));
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($user, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_OPERATOR);
 
         $this->mockedSmServices[AuthorizationService::class]

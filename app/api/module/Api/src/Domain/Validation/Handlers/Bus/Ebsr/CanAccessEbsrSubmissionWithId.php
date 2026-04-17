@@ -18,6 +18,7 @@ class CanAccessEbsrSubmissionWithId extends AbstractHandler
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canAccessEbsrSubmission($dto->getId());

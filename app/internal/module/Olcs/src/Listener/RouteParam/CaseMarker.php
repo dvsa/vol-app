@@ -59,11 +59,12 @@ class CaseMarker implements ListenerAggregateInterface, FactoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'case',
-            [$this, 'onCase'],
+            $this->onCase(...),
             $priority
         );
     }
@@ -109,6 +110,7 @@ class CaseMarker implements ListenerAggregateInterface, FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CaseMarker
     {
         $this->setMarkerService($container->get(\Olcs\Service\Marker\MarkerService::class));

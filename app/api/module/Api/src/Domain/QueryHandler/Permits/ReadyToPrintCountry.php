@@ -19,6 +19,7 @@ class ReadyToPrintCountry extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return ['results' => $this->getRepo()->fetchReadyToPrint($query->getIrhpPermitType())];

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\DataRetention;
 
 use Dvsa\Olcs\Api\Domain\Command\Queue\Create;
@@ -26,7 +28,7 @@ class DeleteEntitiesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(['limit' => 9]);
 
@@ -47,7 +49,7 @@ class DeleteEntitiesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandThrowException()
+    public function testHandleCommandThrowException(): void
     {
         $command = Cmd::create(['limit' => 9]);
         $exception = new \Exception('error');
@@ -61,7 +63,7 @@ class DeleteEntitiesTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandQueueDeleteDocuments()
+    public function testHandleCommandQueueDeleteDocuments(): void
     {
         $command = Cmd::create(['limit' => 9]);
 
@@ -88,7 +90,7 @@ class DeleteEntitiesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandSystemParamLimit()
+    public function testHandleCommandSystemParamLimit(): void
     {
         $command = Cmd::create([]);
 
@@ -110,7 +112,7 @@ class DeleteEntitiesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandDisabled()
+    public function testHandleCommandDisabled(): void
     {
         $command = Cmd::create([]);
 

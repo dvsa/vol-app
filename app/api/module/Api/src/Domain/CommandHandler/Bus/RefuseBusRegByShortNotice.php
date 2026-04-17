@@ -31,6 +31,7 @@ final class RefuseBusRegByShortNotice extends AbstractCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var BusRegEntity $busReg */

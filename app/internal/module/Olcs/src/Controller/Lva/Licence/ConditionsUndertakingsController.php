@@ -68,6 +68,7 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
      *
      * @return array
      */
+    #[\Override]
     protected function getRenderVariables()
     {
         return ['title' => null];

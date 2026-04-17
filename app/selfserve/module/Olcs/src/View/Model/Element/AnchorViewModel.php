@@ -31,6 +31,7 @@ class AnchorViewModel extends ViewModel
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function setVariable($name, $value)
     {
         $currentVariables = $this->getVariables();
@@ -49,6 +50,7 @@ class AnchorViewModel extends ViewModel
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function setVariables($variables, $overwrite = false)
     {
         if (isset($variables[static::URL_VARIABLE]) && isset($variables[static::ROUTE_VARIABLE])) {

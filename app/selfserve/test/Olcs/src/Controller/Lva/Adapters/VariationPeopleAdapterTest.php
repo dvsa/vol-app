@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Lva\Adapters;
 
 use Common\RefData;
@@ -12,9 +14,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\VariationPeopleAdapter;
 
 /**
- * @covers \Olcs\Controller\Lva\Adapters\VariationPeopleAdapter
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Controller\Lva\Adapters\VariationPeopleAdapter::class)]
 class VariationPeopleAdapterTest extends MockeryTestCase
 {
     public const APP_ID = 999;
@@ -51,10 +53,8 @@ class VariationPeopleAdapterTest extends MockeryTestCase
         $this->mockResp->shouldReceive('isOk')->andReturn(true);
     }
 
-    /**
-     * @dataProvider dpTestCanModify
-     */
-    public function testCanModify($isExceptionalOrg, $expect): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCanModify')]
+    public function testCanModify(bool $isExceptionalOrg, bool $expect): void
     {
         $this->sut->shouldReceive('isExceptionalOrganisation')->andReturn($isExceptionalOrg);
 
@@ -66,7 +66,7 @@ class VariationPeopleAdapterTest extends MockeryTestCase
      *
      * @psalm-return list{array{isExceptionalOrg: true, expect: false}, array{isExceptionalOrg: false, expect: true}}
      */
-    public function dpTestCanModify(): array
+    public static function dpTestCanModify(): array
     {
         return [
             [
@@ -80,10 +80,8 @@ class VariationPeopleAdapterTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestGetTableConfig
-     */
-    public function testGetTableConfig($useDeltas, $expect): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetTableConfig')]
+    public function testGetTableConfig(bool $useDeltas, string $expect): void
     {
         $this->mockTbl->shouldReceive('prepareTable')
             ->once()
@@ -101,7 +99,7 @@ class VariationPeopleAdapterTest extends MockeryTestCase
      *
      * @psalm-return list{array{useDeltas: false, expect: 'lva-people'}, array{useDeltas: true, expect: 'lva-variation-people'}}
      */
-    public function dpTestGetTableConfig(): array
+    public static function dpTestGetTableConfig(): array
     {
         return [
             [

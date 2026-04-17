@@ -6,10 +6,6 @@ on:
       - main
       - prerelease
 
-concurrency:
-  group: ${{ github.workflow }}
-  cancel-in-progress: false
-
 permissions:
   contents: read
 
@@ -25,7 +21,7 @@ jobs:
       release_created: ${{ steps.release.outputs.release_created }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.ref_name }}
           fetch-depth: 0
@@ -71,61 +67,55 @@ jobs:
       should-build-and-push-cli-docker: ${{ needs.release-please.outputs.release_created || steps.changed-cli-docker-files.outputs.any_modified == 'true' || steps.changed-api-files.outputs.any_modified == 'true' || null }}
       should-build-and-push-selfserve-docker: ${{ needs.release-please.outputs.release_created || steps.changed-selfserve-docker-files.outputs.any_modified == 'true' || steps.changed-selfserve-files.outputs.any_modified == 'true' || null }}
       should-build-and-push-internal-docker: ${{ needs.release-please.outputs.release_created || steps.changed-internal-docker-files.outputs.any_modified == 'true' || steps.changed-internal-files.outputs.any_modified == 'true' || null }}
-      should-build-and-push-search-docker: ${{ needs.release-please.outputs.release_created || steps.changed-search-docker-files.outputs.any_modified == 'true' || steps.changed-search-files.outputs.any_modified == 'true' || null }}
       # Terraform account
       should-apply-account-terraform: ${{ needs.release-please.outputs.release_created || steps.changed-accounts-terraform-files.outputs.any_modified == 'true' || null }}
       # Terraform environment
       should-apply-environment-terraform: ${{ needs.release-please.outputs.release_created || steps.changed-environments-terraform-files.outputs.any_modified == 'true' || null }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-api-files
         with:
           files: |
             app/api/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-selfserve-files
         with:
           files: |
             app/selfserve/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-internal-files
         with:
           files: |
             app/internal/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-assets-files
         with:
           files: |
             app/cdn/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-api-docker-files
         with:
           files: |
             infra/docker/api/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-cli-docker-files
         with:
           files: |
             infra/docker/cli/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-selfserve-docker-files
         with:
           files: |
             infra/docker/selfserve/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-internal-docker-files
         with:
           files: |
             infra/docker/internal/**
-      - uses: tj-actions/changed-files@v45
-        id: changed-search-docker-files
-        with:
-          files: |
-            infra/docker/search/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-accounts-terraform-files
         with:
           files: |
@@ -133,7 +123,7 @@ jobs:
             infra/terraform/modules/**
           files_ignore: |
             infra/terraform/modules/service/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-environments-terraform-files
         with:
           files: |
@@ -143,7 +133,7 @@ jobs:
             infra/terraform/modules/account/**
             infra/terraform/modules/github/**
             infra/terraform/modules/remote-state/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-website-files
         with:
           files: |
@@ -176,35 +166,30 @@ jobs:
       selfserve: ${{ steps.selfserve-version.outputs.version }}
       internal: ${{ steps.internal-version.outputs.version }}
       assets: ${{ steps.assets-version.outputs.version }}
-      search: ${{ steps.search-version.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - id: api-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
           project-path: app/api infra/docker/api
       - id: cli-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
           project-path: app/api infra/docker/cli
       - id: selfserve-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
           project-path: app/selfserve infra/docker/selfserve
       - id: internal-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
           project-path: app/internal infra/docker/internal
       - id: assets-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
           project-path: app/cdn
-      - id: search-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
-        with:
-          project-path: infra/docker/search
       - name: Add to summary
         run: |
           echo "#### App versions:" >> $GITHUB_STEP_SUMMARY
@@ -213,7 +198,6 @@ jobs:
           echo "**Selfserve**: \`${{ steps.selfserve-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Assets**: \`${{ steps.assets-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Search**: \`${{ steps.search-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
 
   cdn-nonprod:
     name: CDN
@@ -257,12 +241,13 @@ jobs:
       should-upload-artefact: true
       artefact-name: ${{ matrix.project}}
       retention-days: 1
+      version: ${{ needs.get-version.outputs[matrix.project] }}
     permissions:
       contents: read
 
   docker:
     name: Docker
-    if: ${{ always() && !cancelled() && !failure() && (needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-and-push-search-docker) }}
+    if: ${{ always() && !cancelled() && !failure() && (needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-and-push-docker) }}
     concurrency:
       group: docker-${{ matrix.project }}-${{ needs.get-version.outputs[matrix.project] }}
     needs:
@@ -277,13 +262,11 @@ jobs:
           - cli
           - selfserve
           - internal
-          - search
         exclude:
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-api-docker && 'ignored' || 'api' }}
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-cli-docker && 'ignored' || 'cli' }}
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-selfserve-docker && 'ignored' || 'selfserve' }}
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-internal-docker && 'ignored' || 'internal' }}
-          - project: ${{ needs.orchestrator.outputs.should-build-and-push-search-docker && 'ignored' || 'search' }}
     uses: ./.github/workflows/docker.yaml
     with:
       project: ${{ matrix.project }}
@@ -312,65 +295,31 @@ jobs:
       pull-requests: write
     secrets: inherit
 
-  terraform_env_dev:
-    name: Environment (dev)
+  deploy_dev:
+    name: (dev)
     if: |
       always() &&
       !cancelled() &&
       !failure() &&
       (needs.orchestrator.outputs.should-apply-environment-terraform || needs.docker.result == 'success' || needs.cdn.result == 'success')
-    concurrency:
-      group: terraform-environment-dev
     needs:
       - get-version
       - orchestrator
       - docker
       - cdn-nonprod
       - terraform-account-nonprod
-    uses: ./.github/workflows/deploy-environment.yaml
+    concurrency:
+      group: ${{ github.workflow }}-dev
+    uses: ./.github/workflows/deploy-and-test.yaml
     with:
+      account: nonprod
       environment: dev
       api-image-tag: ${{ needs.get-version.outputs.api }}
       cli-image-tag: ${{ needs.get-version.outputs.cli }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
-      search-image-tag: ${{ needs.get-version.outputs.search }}
-      apply: true
-    permissions:
-      contents: read
-      id-token: write
-      pull-requests: write
-    secrets: inherit
-
-  liquibase-dev:
-    name: Liquibase Migrations (dev)
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_dev.result == 'success' }}
-    needs:
-      - terraform_env_dev
-    uses: ./.github/workflows/run-liquibase.yaml
-    with:
-      push: true
-      submit_job: true
-      account: nonprod
-      environment: dev
-      dry_run: false
-      etl_ref: ${{ needs.release-please.outputs.release_created && needs.release-please.outputs.tag_name || 'main' }}
-    permissions:
-      contents: read
-      id-token: write
-    secrets:
-      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
-
-  test_dev:
-    name: Run Tests on DEV
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_dev.result == 'success' }}
-    needs:
-      - terraform_env_dev
-      - liquibase-dev
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
-    with:
-      platform_env: dev
+      etl_ref: ${{ needs.release-please.outputs.release_created && format('release-{0}', needs.release-please.outputs.tag_name) || 'main' }}
       aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
       bucket_name: ${{ vars.ACCOUNT_NONPROD_S3_REPORT_BUCKET }}
       bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
@@ -379,141 +328,46 @@ jobs:
     permissions:
       contents: write
       id-token: write
+      pull-requests: write
       checks: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
 
-  terraform_env_int:
-    name: Environment (int)
+  deploy_int:
+    name: (int)
     if: |
       always() &&
       !cancelled() &&
       !failure() &&
-      needs.terraform_env_dev.result == 'success'
-    concurrency:
-      group: terraform-environment-int
+      needs.deploy_dev.result == 'success'
     needs:
       - get-version
       - orchestrator
-      - terraform_env_dev
-      - test_dev
-    uses: ./.github/workflows/deploy-environment.yaml
+      - deploy_dev
+    concurrency:
+      group: ${{ github.workflow }}-int
+    uses: ./.github/workflows/deploy-and-test.yaml
     with:
+      account: nonprod
       environment: int
       api-image-tag: ${{ needs.get-version.outputs.api }}
       cli-image-tag: ${{ needs.get-version.outputs.cli }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
-      search-image-tag: ${{ needs.get-version.outputs.search }}
-      apply: true
+      etl_ref: ${{ needs.release-please.outputs.release_created && format('release-{0}', needs.release-please.outputs.tag_name) || 'main' }}
+      aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
+      bucket_name: ${{ vars.ACCOUNT_NONPROD_S3_REPORT_BUCKET }}
+      bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
+      batch_job_queue: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_QUEUE }}
+      batch_job_definition: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_DEFINITION }}
     permissions:
-      contents: read
+      contents: write
       id-token: write
       pull-requests: write
-    secrets: inherit
-
-  liquibase-int:
-    name: Database Migrations (int)
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_int.result == 'success' }}
-    needs:
-      - terraform_env_int
-    uses: ./.github/workflows/run-liquibase.yaml
-    with:
-      push: false
-      submit_job: true
-      account: nonprod
-      environment: int
-      dry_run: false
-      etl_ref: ${{ needs.release-please.outputs.release_created && needs.release-please.outputs.tag_name || 'main' }}
-    permissions:
-      contents: read
-      id-token: write
+      checks: write
     secrets:
       VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
-
-  test_int_smoke:
-    name: Run Smoke Tests on INT
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_int.result == 'success' }}
-    needs:
-      - terraform_env_int
-      - liquibase-int
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
-    with:
-      platform_env: int
-      aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
-      bucket_name: ${{ vars.ACCOUNT_NONPROD_S3_REPORT_BUCKET }}
-      bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
-      batch_job_queue: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_QUEUE }}
-      batch_job_definition: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_DEFINITION }}
-    permissions:
-      contents: write
-      id-token: write
-      checks: write
-
-  test_int_selfserve:
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_int.result == 'success' }}
-    name: Run Selfserve Regression Tests on INT
-    needs:
-      - test_int_smoke
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSelfServeRegression.yaml@main
-    with:
-      platform_env: int
-      aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
-      bucket_name: ${{ vars.ACCOUNT_NONPROD_S3_REPORT_BUCKET }}
-      bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
-      batch_job_queue: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_QUEUE }}
-      batch_job_definition: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_DEFINITION }}
-    permissions:
-      contents: write
-      id-token: write
-      checks: write
-
-  test_int_internal:
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_int.result == 'success' }}
-    name: Run Internal Regression Tests on INT
-    needs:
-      - test_int_smoke
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eInternalRegression.yaml@main
-    with:
-      platform_env: int
-      aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
-      bucket_name: ${{ vars.ACCOUNT_NONPROD_S3_REPORT_BUCKET }}
-      bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
-      batch_job_queue: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_QUEUE }}
-      batch_job_definition: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_DEFINITION }}
-    permissions:
-      contents: write
-      id-token: write
-      checks: write
-
-  rollback_int:
-    name: Rollback INT Deployment
-    if: |
-      always() &&
-      (needs.test_int_smoke.result == 'failure' || needs.test_int_smoke.result == 'cancelled' ||
-       needs.test_int_selfserve.result == 'failure' || needs.test_int_selfserve.result == 'cancelled' ||
-       needs.test_int_internal.result == 'failure' || needs.test_int_internal.result == 'cancelled') &&
-       needs.terraform_env_int.result == 'success'
-    needs:
-      - test_int_smoke
-      - test_int_selfserve
-      - test_int_internal
-      - terraform_env_int
-    uses: ./.github/workflows/deploy-environment.yaml
-    with:
-      environment: int
-      rollback: true
-      apply: true
-      api-image-tag: ${{ needs.terraform_env_int.outputs.previous_api_image_tag }}
-      cli-image-tag: ${{ needs.terraform_env_int.outputs.previous_cli_image_tag }}
-      selfserve-image-tag: ${{ needs.terraform_env_int.outputs.previous_selfserve_image_tag }}
-      internal-image-tag: ${{ needs.terraform_env_int.outputs.previous_internal_image_tag }}
-      assets-version: ${{ needs.terraform_env_int.outputs.previous_assets_version }}
-      search-image-tag: ${{ needs.get-version.outputs.search }}
-    permissions:
-      contents: read
-      id-token: write
-      pull-requests: write
-    secrets: inherit
 
   push-to-prod-ecr:
     name: Push Docker Images to PROD ECR
@@ -525,16 +379,12 @@ jobs:
       !cancelled() &&
       !failure() &&
       needs.release-please.outputs.release_created &&
-      needs.test_int_smoke.result == 'success' &&
-      needs.test_int_selfserve.result == 'success' &&
-      needs.test_int_internal.result == 'success'
+      needs.deploy_int.result == 'success'
     runs-on: ubuntu-24.04-arm
     needs:
       - release-please
       - get-version
-      - test_int_smoke
-      - test_int_selfserve
-      - test_int_internal
+      - deploy_int
     env:
       NONPROD_REGISTRY: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
       PROD_REGISTRY: 146997448015.dkr.ecr.eu-west-1.amazonaws.com
@@ -553,13 +403,11 @@ jobs:
             repo: vol-app
           - project: liquibase
             repo: vol-app
-          - project: search
-            repo: vol-app
           - project: vft
             repo: vol-qa
     steps:
       - name: Configure AWS credentials for NONPROD
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
@@ -581,8 +429,6 @@ jobs:
             echo "tag=${{ needs.get-version.outputs.selfserve }}" >> $GITHUB_OUTPUT
           elif [ "${{ matrix.project }}" == "internal" ]; then
             echo "tag=${{ needs.get-version.outputs.internal }}" >> $GITHUB_OUTPUT
-          elif [ "${{ matrix.project }}" == "search" ]; then
-            echo "tag=${{ needs.get-version.outputs.search }}" >> $GITHUB_OUTPUT
           elif [ "${{ matrix.project }}" == "liquibase" ]; then
             # For liquibase, use the latest tag
             echo "tag=latest" >> $GITHUB_OUTPUT
@@ -606,7 +452,7 @@ jobs:
           fi
 
       - name: Configure AWS credentials for PROD
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ vars.ACCOUNT_PROD_TF_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
@@ -665,18 +511,35 @@ jobs:
       contents: read
       id-token: write
 
-  terraform-account-prod:
-    name: Account (prod)
+  terraform-account-prod-plan:
+    name: Account (prod) plan
     if: ${{ always() && !cancelled() && !failure() && needs.release-please.outputs.release_created }}
     concurrency:
       group: terraform-account-prod
     needs:
       - release-please
       - orchestrator
-      - terraform_env_int
-      - test_int_internal
-      - test_int_selfserve
-      - test_int_smoke
+      - deploy_int
+      - push-to-prod-ecr
+    uses: ./.github/workflows/deploy-account.yaml
+    with:
+      account: prod
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    secrets: inherit
+
+  terraform-account-prod:
+    name: Account (prod)
+    if: ${{ always() && !cancelled() && !failure() && needs.release-please.outputs.release_created && needs.terraform-account-prod-plan.result != 'failure' }}
+    concurrency:
+      group: terraform-account-prod
+    needs:
+      - terraform-account-prod-plan
+      - release-please
+      - orchestrator
+      - push-to-prod-ecr
     uses: ./.github/workflows/deploy-account.yaml
     with:
       account: prod
@@ -687,65 +550,31 @@ jobs:
       pull-requests: write
     secrets: inherit
 
-  terraform_env_prep:
-    name: Environment (prep)
+  deploy_prep:
+    name: (prep)
     if: |
       always() &&
       !cancelled() &&
       !failure() &&
       needs.release-please.outputs.release_created
-    concurrency:
-      group: terraform-environment-prep
     needs:
       - release-please
       - get-version
       - orchestrator
       - terraform-account-prod
       - push-to-prod-ecr
-    uses: ./.github/workflows/deploy-environment.yaml
+    concurrency:
+      group: ${{ github.workflow }}-prep
+    uses: ./.github/workflows/deploy-and-test.yaml
     with:
+      account: prod
       environment: prep
       api-image-tag: ${{ needs.get-version.outputs.api }}
       cli-image-tag: ${{ needs.get-version.outputs.cli }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
-      search-image-tag: ${{ needs.get-version.outputs.search }}
-      apply: true
-    permissions:
-      contents: read
-      id-token: write
-      pull-requests: write
-    secrets: inherit
-
-  liquibase-prep:
-    name: Database Migrations (prep)
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_int.result == 'success' && needs.release-please.outputs.release_created }}
-    needs:
-      - terraform_env_prep
-    uses: ./.github/workflows/run-liquibase.yaml
-    with:
-      push: false
-      submit_job: true
-      account: prod
-      environment: prep
-      dry_run: false
-      etl_ref: ${{ needs.release-please.outputs.tag_name }}
-    permissions:
-      contents: read
-      id-token: write
-    secrets:
-      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
-
-  test_prep_smoke:
-    name: Run Smoke Tests on PREP
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_prep.result == 'success' }}
-    needs:
-      - terraform_env_prep
-      - liquibase-prep
-    uses: dvsa/vol-functional-tests/.github/workflows/e2ePrepSmoke.yaml@main
-    with:
-      platform_env: prep
+      etl_ref: ${{ needs.release-please.outputs.tag_name && format('release-{0}', needs.release-please.outputs.tag_name) || 'main' }}
       aws_role: ${{ vars.ACCOUNT_PROD_TEST_OIDC_ROLE }}
       bucket_name: ${{ vars.ACCOUNT_PROD_S3_REPORT_BUCKET }}
       bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
@@ -754,90 +583,50 @@ jobs:
     permissions:
       contents: write
       id-token: write
-      checks: write
-
-  rollback_prep:
-    name: Rollback PREP Deployment
-    if: |
-      always() &&
-      (needs.test_prep_smoke.result == 'failure' || needs.test_prep_smoke.result == 'cancelled') &&
-       needs.terraform_env_prep.result == 'success'
-    needs:
-      - test_prep_smoke
-      - terraform_env_prep
-    uses: ./.github/workflows/deploy-environment.yaml
-    with:
-      environment: prep
-      rollback: true
-      apply: true
-      api-image-tag: ${{ needs.terraform_env_prep.outputs.previous_api_image_tag }}
-      cli-image-tag: ${{ needs.terraform_env_prep.outputs.previous_cli_image_tag }}
-      selfserve-image-tag: ${{ needs.terraform_env_prep.outputs.previous_selfserve_image_tag }}
-      internal-image-tag: ${{ needs.terraform_env_prep.outputs.previous_internal_image_tag }}
-      assets-version: ${{ needs.terraform_env_prep.outputs.previous_assets_version }}
-      search-image-tag: ${{ needs.get-version.outputs.search }}
-    permissions:
-      contents: read
-      id-token: write
       pull-requests: write
-    secrets: inherit
+      checks: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
 
-  terraform_env_prod:
-    name: Environment (prod)
+  deploy_prod:
+    name: (prod)
     if: |
       always() &&
       !cancelled() &&
       !failure() &&
       needs.release-please.outputs.release_created &&
-      !contains(needs.get-version.outputs.api, '-') &&
-      !contains(needs.get-version.outputs.cli, '-') &&
-      !contains(needs.get-version.outputs.selfserve, '-') &&
-      !contains(needs.get-version.outputs.internal, '-') &&
-      !contains(needs.get-version.outputs.assets, '-')
-    concurrency:
-      group: terraform-environment-prod
+      !contains(needs.get-version.outputs.api, 'rc') &&
+      !contains(needs.get-version.outputs.cli, 'rc') &&
+      !contains(needs.get-version.outputs.selfserve, 'rc') &&
+      !contains(needs.get-version.outputs.internal, 'rc') &&
+      !contains(needs.get-version.outputs.assets, 'rc')
     needs:
       - release-please
       - get-version
       - orchestrator
-      - terraform_env_prep
-      - test_prep_smoke
-    uses: ./.github/workflows/deploy-environment.yaml
+      - terraform-account-prod
+      - push-to-prod-ecr
+    concurrency:
+      group: ${{ github.workflow }}-prod
+    uses: ./.github/workflows/deploy-and-test.yaml
     with:
+      account: prod
       environment: prod
       api-image-tag: ${{ needs.get-version.outputs.api }}
       cli-image-tag: ${{ needs.get-version.outputs.cli }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
-      search-image-tag: ${{ needs.get-version.outputs.search }}
-      apply: true
+      etl_ref: ${{ needs.release-please.outputs.tag_name && format('release-{0}', needs.release-please.outputs.tag_name) || 'main' }}
+      aws_role: ${{ vars.ACCOUNT_PROD_TEST_OIDC_ROLE }}
+      bucket_name: ${{ vars.ACCOUNT_PROD_S3_REPORT_BUCKET }}
+      bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
+      batch_job_queue: ${{ vars.ACCOUNT_PROD_BATCH_JOB_QUEUE }}
+      batch_job_definition: ${{ vars.ACCOUNT_PROD_BATCH_JOB_DEFINITION }}
     permissions:
-      contents: read
+      contents: write
       id-token: write
       pull-requests: write
-    secrets: inherit
-
-  liquibase-prod:
-    name: Database Migrations (prod)
-    if: |
-      always() &&
-      !cancelled() &&
-      !failure() &&
-      needs.release-please.outputs.release_created &&
-      !contains(needs.get-version.outputs.api, '-')
-    needs:
-      - terraform_env_prod
-    uses: ./.github/workflows/run-liquibase.yaml
-    with:
-      push: false
-      submit_job: true
-      account: prod
-      environment: prod
-      dry_run: false
-      etl_ref: ${{ needs.release-please.outputs.tag_name }}
-    permissions:
-      contents: read
-      id-token: write
+      checks: write
     secrets:
       VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}

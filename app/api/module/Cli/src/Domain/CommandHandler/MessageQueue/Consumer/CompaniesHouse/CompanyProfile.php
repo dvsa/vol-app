@@ -19,6 +19,7 @@ class CompanyProfile extends AbstractConsumer
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $messages = $this->fetchMessages(1);

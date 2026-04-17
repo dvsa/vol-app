@@ -22,6 +22,7 @@ final class LegacyOffenceList extends AbstractQueryHandler
      * @return array
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var LegacyOffenceRepo $repo */

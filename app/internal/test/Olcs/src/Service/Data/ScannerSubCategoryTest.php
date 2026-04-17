@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 use Olcs\Service\Data\ScannerSubCategory;
 
-/**
- * @covers \Olcs\Service\Data\ScannerSubCategory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\ScannerSubCategory::class)]
 class ScannerSubCategoryTest extends AbstractListDataServiceTestCase
 {
     /** @var ScannerSubCategory */
@@ -20,7 +20,7 @@ class ScannerSubCategoryTest extends AbstractListDataServiceTestCase
         $this->sut = new ScannerSubCategory($this->abstractListDataServiceServices);
     }
 
-    public function testFetchListData()
+    public function testFetchListData(): void
     {
         static::assertEquals(ScannerSubCategory::TYPE_IS_SCAN, $this->sut->getCategoryType());
     }

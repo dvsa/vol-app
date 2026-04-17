@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS NI_Extract;
+ 
+CREATE TABLE `NI_Extract` (
+  `TABLE_NAME` varchar(50) NOT NULL,
+  `ORIGINAL_COUNT` int(10) unsigned DEFAULT NULL,
+  `POST_EXTRACT_COUNT` int(10) unsigned DEFAULT NULL,
+  `LAST_MODIFIED_ON` datetime(6) DEFAULT NULL
+);

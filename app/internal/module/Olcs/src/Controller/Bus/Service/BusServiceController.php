@@ -68,6 +68,7 @@ class BusServiceController extends AbstractInternalController implements BusRegC
      *
      * @return \Common\Form\Form
      */
+    #[\Override]
     public function getForm($name)
     {
         $form = $this->formHelperService->createForm($name);

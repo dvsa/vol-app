@@ -27,6 +27,7 @@ class IrfoGvPermitType extends AbstractRepository
      * @param QueryBuilder $qb
      * @param QueryInterface $query
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $qb->orderBy($this->alias . '.description', 'ASC');

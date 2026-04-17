@@ -17,6 +17,7 @@ final class CancelOutstandingFees extends AbstractCommandHandler implements Tran
 {
     protected $repoServiceName = 'Fee';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

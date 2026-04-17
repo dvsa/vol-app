@@ -30,6 +30,7 @@ class BaseFormControlStrategy implements FormControlStrategyInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getFrontendType()
     {
         return $this->frontendType;
@@ -38,6 +39,7 @@ class BaseFormControlStrategy implements FormControlStrategyInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getElement(ElementGeneratorContext $context)
     {
         $qaEntity = $context->getQaEntity();
@@ -52,6 +54,7 @@ class BaseFormControlStrategy implements FormControlStrategyInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function saveFormData(QaContext $qaContext, array $postData)
     {
         $qaEntity = $qaContext->getQaEntity();
@@ -71,6 +74,7 @@ class BaseFormControlStrategy implements FormControlStrategyInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function clearAnswer(QaContext $qaContext)
     {
         $qaEntity = $qaContext->getQaEntity();
@@ -85,6 +89,7 @@ class BaseFormControlStrategy implements FormControlStrategyInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getQuestionText(QaContext $qaContext)
     {
         $qaEntity = $qaContext->getQaEntity();
@@ -99,6 +104,7 @@ class BaseFormControlStrategy implements FormControlStrategyInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getAnswerSummaryProvider()
     {
         return $this->answerSummaryProvider;

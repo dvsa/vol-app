@@ -21,6 +21,7 @@ class IsExecuted extends AbstractFilter
      * @param  array $value
      * @return array
      */
+    #[\Override]
     public function filter($value)
     {
         if (empty($value['imposedErrus'])) {

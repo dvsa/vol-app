@@ -16,6 +16,7 @@ class DiscPrefixes extends AbstractQueryHandler
 {
     protected $repoServiceName = 'DiscSequence';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         if ((($query->getNiFlag() === 'N' && !$query->getOperatorType()) || !$query->getLicenceType())) {

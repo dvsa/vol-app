@@ -19,6 +19,7 @@ class ApplicationVehicleLimit extends DynamicBookmark
      *
      * @return Qry
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         $bundle = ['application'];
@@ -30,6 +31,7 @@ class ApplicationVehicleLimit extends DynamicBookmark
      *
      * @return int
      */
+    #[\Override]
     public function render()
     {
         return $this->data['application']['totAuthVehicles'] ?? 0;

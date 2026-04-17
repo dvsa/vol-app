@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
 
 use DateTime;
@@ -18,7 +20,7 @@ use Mockery as m;
 /**
  * Test the short term permit app part successful email
  */
-class SendEcmtShortTermApsgPartSuccessfulTest extends AbstractPermitTest
+class SendEcmtShortTermApsgPartSuccessfulTest extends AbstractPermitTestCase
 {
     public $orgEmails;
     public $contactDetails;
@@ -32,10 +34,8 @@ class SendEcmtShortTermApsgPartSuccessfulTest extends AbstractPermitTest
     protected $permitApplicationRepo = 'IrhpApplication';
     protected $applicationEntityClass = IrhpApplication::class;
 
-    /**
-     * @dataProvider dpTranslateToWelshLocaleMappings
-     */
-    public function testHandleCommand($translateToWelsh, $expectedLocale)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTranslateToWelshLocaleMappings')]
+    public function testHandleCommand(mixed $translateToWelsh, mixed $expectedLocale): void
     {
         $previousLocale = 'aa_DJ';
         $periodNameKey = 'period.name.translation.key';
@@ -175,10 +175,8 @@ class SendEcmtShortTermApsgPartSuccessfulTest extends AbstractPermitTest
         $this->assertSame($this->subject, $message->getSubject());
     }
 
-    /**
-     * @dataProvider dpTranslateToWelshLocaleMappings
-     */
-    public function testHandleCommandForCreatedByInternalUser($translateToWelsh, $expectedLocale)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTranslateToWelshLocaleMappings')]
+    public function testHandleCommandForCreatedByInternalUser(mixed $translateToWelsh, mixed $expectedLocale): void
     {
         $previousLocale = 'aa_DJ';
         $periodNameKey = 'period.name.translation.key';
@@ -317,7 +315,7 @@ class SendEcmtShortTermApsgPartSuccessfulTest extends AbstractPermitTest
         $this->assertSame($this->subject, $message->getSubject());
     }
 
-    public function dpTranslateToWelshLocaleMappings()
+    public static function dpTranslateToWelshLocaleMappings(): array
     {
         return [
             ['Y', 'cy_GB'],

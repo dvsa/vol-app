@@ -33,6 +33,7 @@ class BusRegNotFound extends AbstractValidator
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($value, $context = [])
     {
         //this check is only done for records which are not new applications

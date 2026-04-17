@@ -12,6 +12,7 @@ class CompaniesHouseVsOlcsDiffsExportCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:companies-house-vs-olcs-diffs-export';
 
+    #[\Override]
     protected function configure()
     {
         $this
@@ -24,6 +25,7 @@ class CompaniesHouseVsOlcsDiffsExportCommand extends AbstractBatchCommand
             );
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

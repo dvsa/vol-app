@@ -28,6 +28,7 @@ final class Complete extends AbstractCommandHandler implements TransactionedInte
      * @param CommandInterface|CompleteQueueCmd $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $item = $command->getItem();

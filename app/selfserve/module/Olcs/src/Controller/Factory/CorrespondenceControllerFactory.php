@@ -18,6 +18,7 @@ class CorrespondenceControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return CorrespondenceController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CorrespondenceController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

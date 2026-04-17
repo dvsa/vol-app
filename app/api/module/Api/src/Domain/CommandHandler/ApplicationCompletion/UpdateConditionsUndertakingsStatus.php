@@ -23,6 +23,7 @@ final class UpdateConditionsUndertakingsStatus extends AbstractUpdateStatus
 
     protected $section = 'ConditionsUndertakings';
 
+    #[\Override]
     protected function isSectionValid(Application $application)
     {
         return true;

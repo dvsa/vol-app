@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Send Username Single Email Test
  */
@@ -38,7 +40,7 @@ class SendUsernameSingleTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $userId = 111;
         $licNo = 'AB12345678';

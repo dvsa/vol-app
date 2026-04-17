@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * DisassociateS4
  *
@@ -23,6 +25,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
  * @package Dvsa\OlcsTest\Api\Domain\CommandHandler\LicenceOperatingCentre
  * @author Joshua Curtis <josh.curtis@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class DisassociateS4Test extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
@@ -33,7 +36,8 @@ class DisassociateS4Test extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             LicenceOperatingCentre::class => [
@@ -45,7 +49,7 @@ class DisassociateS4Test extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'licenceOperatingCentres' => [

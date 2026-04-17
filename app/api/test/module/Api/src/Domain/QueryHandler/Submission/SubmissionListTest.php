@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * SubmissionList Test
  */
@@ -32,7 +34,7 @@ class SubmissionListTest extends QueryHandlerTestCase
     /**
      * Test handle list query
      */
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create([]);
 

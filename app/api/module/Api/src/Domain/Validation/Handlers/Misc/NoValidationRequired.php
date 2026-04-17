@@ -22,6 +22,7 @@ class NoValidationRequired extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return true;

@@ -41,6 +41,7 @@ class PermitController extends AbstractInternalController implements LeftViewPro
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

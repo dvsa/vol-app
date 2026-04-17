@@ -1,24 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
-/**
- * Class EnvironmentalComplaintsTest
- * @author Shaun Lizzio <shaun@valtech.co.uk>
- */
-class EnvironmentalComplaintsTest extends AbstractSubmissionSectionTest
+use Dvsa\Olcs\Api\Service\Submission\Sections\EnvironmentalComplaints;
+
+class EnvironmentalComplaintsTest extends AbstractSubmissionSectionTestCase
 {
-    protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\EnvironmentalComplaints::class;
+    protected $submissionSection = EnvironmentalComplaints::class;
 
-    /**
-     * Filter provider
-     *
-     * @return array
-     */
-    public function sectionTestProvider()
+    public static function sectionTestProvider(): array
     {
-        $case = $this->getCase();
-
         $expectedResult = [
             'data' => [
                 'tables' => [
@@ -96,6 +89,8 @@ class EnvironmentalComplaintsTest extends AbstractSubmissionSectionTest
                 ]
             ]
         ];
+
+        $case = static::getCase();
 
         return [
             [$case, $expectedResult],

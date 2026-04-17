@@ -28,7 +28,7 @@ final class UpdateUserSelfserve extends AbstractUserCommandHandler implements
     use CacheAwareTrait;
     use ConfigAwareTrait;
 
-    public const ADMIN_ROLE_ERROR = 'error-always-one-operator-admin';
+    public const string ADMIN_ROLE_ERROR = 'error-always-one-operator-admin';
 
     protected $repoServiceName = 'User';
 
@@ -51,6 +51,7 @@ final class UpdateUserSelfserve extends AbstractUserCommandHandler implements
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      * @throws \Dvsa\Contracts\Auth\Exceptions\ClientException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->provider = $this->getConfig()['auth']['identity_provider'];

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\AandDStoredPublicationDate;
@@ -14,7 +16,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\TextBlock;
  */
 class BookmarkFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    public function testLocate()
+    public function testLocate(): void
     {
         $sut = new BookmarkFactory();
 
@@ -34,10 +36,8 @@ class BookmarkFactoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @dataProvider allBookmarksProvider
-     */
-    public function testGetClassNameFromToken($token, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('allBookmarksProvider')]
+    public function testGetClassNameFromToken(mixed $token, mixed $expected): void
     {
         $sut = new BookmarkFactory();
 
@@ -51,7 +51,7 @@ class BookmarkFactoryTest extends \PHPUnit\Framework\TestCase
      * where they exist in the Dvsa\OlcsTest\Api\Service\Document\Bookmark
      * namespace.
      */
-    public function allBookmarksProvider()
+    public static function allBookmarksProvider(): array
     {
         return [
             ['AandD_stored_publication_date', 'AandDStoredPublicationDate'],

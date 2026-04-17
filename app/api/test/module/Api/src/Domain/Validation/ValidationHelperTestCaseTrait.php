@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Validation Helper Test Case Trait
  *
@@ -60,7 +62,7 @@ trait ValidationHelperTestCaseTrait
         $this->sut->__invoke($sm, null);
     }
 
-    public function mockRepo($repoName)
+    public function mockRepo(mixed $repoName): m\MockInterface
     {
         $mockRepo = m::mock(RepositoryInterface::class);
         $this->repoManager->shouldReceive('get')->with($repoName)->andReturn($mockRepo);
@@ -68,7 +70,7 @@ trait ValidationHelperTestCaseTrait
         return $mockRepo;
     }
 
-    public function mockUser()
+    public function mockUser(): mixed
     {
         $user = m::mock(User::class);
         $this->auth->shouldReceive('getIdentity->getUser')->andReturn($user);
@@ -76,12 +78,12 @@ trait ValidationHelperTestCaseTrait
         return $user;
     }
 
-    public function setIsGranted($permission, $return, $context = null)
+    public function setIsGranted(mixed $permission, mixed $return, mixed $context = null): void
     {
         $this->auth->shouldReceive('isGranted')->with($permission, $context)->once()->andReturn($return);
     }
 
-    public function setIsValid($validator, $arguments, $isValid = true)
+    public function setIsValid(mixed $validator, mixed $arguments, bool $isValid = true): void
     {
         if ($this->validatorManager->has($validator) === false) {
             $mockValidator = m::mock(ValidatorInterface::class);

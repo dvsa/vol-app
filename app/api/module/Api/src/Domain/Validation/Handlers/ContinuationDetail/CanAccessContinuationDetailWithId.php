@@ -16,6 +16,7 @@ class CanAccessContinuationDetailWithId extends AbstractHandler
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canAccessContinuationDetail($this->getId($dto));

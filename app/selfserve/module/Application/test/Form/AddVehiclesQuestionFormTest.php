@@ -68,10 +68,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
-    public function constructInitialisesACsrfElement()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructInitialisesACsrfElement(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -83,10 +81,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertInstanceOf(Csrf::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function constructInitialisesANextButtonElement()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructInitialisesANextButtonElement(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -98,10 +94,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertInstanceOf(Button::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function constructInitialisesAReturnToOverviewButtonElement()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructInitialisesAReturnToOverviewButtonElement(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -113,10 +107,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertInstanceOf(Button::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function constructInitialisesARadioElement()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructInitialisesARadioElement(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -128,10 +120,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertInstanceOf(RadioVertical::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function constructInitialisesAnApplicationVersionElement()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructInitialisesAnApplicationVersionElement(): void
     {
         // Setup
         $this->setUpSut(static::AN_APPLICATION_VERSION_ELEMENT_NAME);
@@ -143,9 +133,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertInstanceOf(Hidden::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getNextButtonElementIsCallable(): void
     {
         // Setup
@@ -155,12 +143,9 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'getNextButtonElement']);
     }
 
-    /**
-     * @test
-     *
-     * @depends getNextButtonElementIsCallable
-     * @depends _constructInitialisesANextButtonElement
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getNextButtonElementIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('_constructInitialisesANextButtonElement')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getNextButtonElementReturnsAnInstanceOfButton(): void
     {
         // Setup
@@ -170,11 +155,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertInstanceOf(Button::class, $this->sut->getNextButtonElement());
     }
 
-    /**
-     * @test
-     *
-     * @depends getNextButtonElementReturnsAnInstanceOfButton
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getNextButtonElementReturnsAnInstanceOfButton')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getNextButtonElementReturnsAnInstanceOfButtonWithAName(): void
     {
         // Setup
@@ -184,11 +166,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertEquals(static::NEXT_BUTTON_NAME, $this->sut->getNextButtonElement()->getName());
     }
 
-    /**
-     * @test
-     *
-     * @depends getNextButtonElementReturnsAnInstanceOfButton
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getNextButtonElementReturnsAnInstanceOfButton')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getNextButtonElementReturnsAnInstanceOfButtonWithAValue(): void
     {
         // Setup
@@ -198,11 +177,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertEquals(static::NEXT_BUTTON_VALUE, $this->sut->getNextButtonElement()->getValue());
     }
 
-    /**
-     * @test
-     *
-     * @depends getNextButtonElementReturnsAnInstanceOfButton
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getNextButtonElementReturnsAnInstanceOfButton')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getNextButtonElementReturnsAnInstanceOfButtonWithALabel(): void
     {
         // Setup
@@ -212,9 +188,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertEquals(static::NEXT_BUTTON_LABEL, $this->sut->getNextButtonElement()->getLabel());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getReturnToOverviewButtonElementIsCallable(): void
     {
         // Setup
@@ -224,11 +198,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'getReturnToOverviewButtonElement']);
     }
 
-    /**
-     * @test
-     *
-     * @depends _constructInitialisesAReturnToOverviewButtonElement
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('_constructInitialisesAReturnToOverviewButtonElement')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getReturnToOverviewButtonElementReturnsAnInstanceOfButton(): void
     {
         // Setup
@@ -241,11 +212,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertInstanceOf(Button::class, $result);
     }
 
-    /**
-     * @test
-     *
-     * @depends getReturnToOverviewButtonElementReturnsAnInstanceOfButton
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getReturnToOverviewButtonElementReturnsAnInstanceOfButton')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getReturnToOverviewButtonElementReturnsAnInstanceOfButtonWithAName(): void
     {
         // Setup
@@ -258,11 +226,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertEquals(static::RETURN_TO_OVERVIEW_BUTTON_NAME, $result);
     }
 
-    /**
-     * @test
-     *
-     * @depends getReturnToOverviewButtonElementReturnsAnInstanceOfButton
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getReturnToOverviewButtonElementReturnsAnInstanceOfButton')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getReturnToOverviewButtonElementReturnsAnInstanceOfButtonWithAValue(): void
     {
         // Setup
@@ -275,11 +240,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertEquals(static::RETURN_TO_OVERVIEW_BUTTON_VALUE, $result);
     }
 
-    /**
-     * @test
-     *
-     * @depends getReturnToOverviewButtonElementReturnsAnInstanceOfButton
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getReturnToOverviewButtonElementReturnsAnInstanceOfButton')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getReturnToOverviewButtonElementReturnsAnInstanceOfButtonWithALabel(): void
     {
         // Setup
@@ -292,9 +254,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertEquals(static::RETURN_TO_OVERVIEW_BUTTON_LABEL, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioElementIsCallable(): void
     {
         // Setup
@@ -304,12 +264,9 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'getRadioElement']);
     }
 
-    /**
-     * @test
-     *
-     * @depends getRadioElementIsCallable
-     * @depends _constructInitialisesARadioElement
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioElementIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('_constructInitialisesARadioElement')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioElementReturnsARadio(): void
     {
         // Setup
@@ -322,11 +279,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertInstanceOf(RadioVertical::class, $result);
     }
 
-    /**
-     * @test
-     *
-     * @depends getRadioElementReturnsARadio
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioElementReturnsARadio')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioElementReturnsARadioWithName(): void
     {
         // Setup
@@ -339,11 +293,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertEquals(static::RADIO_NAME, $result->getName());
     }
 
-    /**
-     * @test
-     *
-     * @depends getRadioElementReturnsARadio
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioElementReturnsARadio')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioElementReturnsARadioWithLabel(): void
     {
         // Setup
@@ -356,11 +307,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertEquals(static::RADIO_LABEL, $result->getLabel());
     }
 
-    /**
-     * @test
-     *
-     * @depends getRadioElementReturnsARadio
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioElementReturnsARadio')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioElementReturnsARadioWithHintOption(): void
     {
         // Setup
@@ -373,11 +321,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertEquals(static::RADIO_HINT, $result->getOption('hint'));
     }
 
-    /**
-     * @test
-     *
-     * @depends getRadioElementReturnsARadio
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioElementReturnsARadio')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioElementReturnsARadioWithYesOption(): void
     {
         // Setup
@@ -390,11 +335,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertIsArray($result);
     }
 
-    /**
-     * @test
-     *
-     * @depends getRadioElementReturnsARadioWithYesOption
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioElementReturnsARadioWithYesOption')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioElementReturnsARadioWithYesOptionThatIsNotSelected(): void
     {
         // Setup
@@ -407,11 +349,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertFalse($result[static::VALUE_OPTION_SELECTED_KEY] ?? false);
     }
 
-    /**
-     * @test
-     *
-     * @depends getRadioElementReturnsARadioWithYesOption
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioElementReturnsARadioWithYesOption')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioElementReturnsARadioWithYesOptionWithLabel(): void
     {
         // Setup
@@ -424,11 +363,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertEquals(static::YES_VALUE_OPTION_LABEL, $result[static::VALUE_OPTION_LABEL_KEY]);
     }
 
-    /**
-     * @test
-     *
-     * @depends getRadioElementReturnsARadio
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioElementReturnsARadio')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioElementReturnsARadioWithYesOptionWithValue(): void
     {
         // Setup
@@ -441,11 +377,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertEquals(static::YES_VALUE_OPTION_VALUE, $result[static::VALUE_OPTION_VALUE_KEY]);
     }
 
-    /**
-     * @test
-     *
-     * @depends getRadioElementReturnsARadio
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioElementReturnsARadio')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioElementReturnsARadioWithNoOption(): void
     {
         // Setup
@@ -458,11 +391,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertIsArray($result);
     }
 
-    /**
-     * @test
-     *
-     * @depends getRadioElementReturnsARadioWithNoOption
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioElementReturnsARadioWithNoOption')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioElementReturnsARadioWithNoOptionThatIsNotSelected(): void
     {
         // Setup
@@ -475,11 +405,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertFalse($result[static::VALUE_OPTION_SELECTED_KEY] ?? false);
     }
 
-    /**
-     * @test
-     *
-     * @depends getRadioElementReturnsARadioWithNoOption
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioElementReturnsARadioWithNoOption')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioElementReturnsARadioWithNoOptionWithLabel(): void
     {
         // Setup
@@ -492,11 +419,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertEquals(static::NO_VALUE_OPTION_LABEL, $result[static::VALUE_OPTION_LABEL_KEY]);
     }
 
-    /**
-     * @test
-     *
-     * @depends getRadioElementReturnsARadioWithNoOption
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioElementReturnsARadioWithNoOption')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioElementReturnsARadioWithNoOptionWithValue(): void
     {
         // Setup
@@ -509,11 +433,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertEquals(static::NO_VALUE_OPTION_VALUE, $result[static::VALUE_OPTION_VALUE_KEY]);
     }
 
-    /**
-     * @test
-     *
-     * @depends getRadioElementReturnsARadioWithNoOption
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioElementReturnsARadioWithNoOption')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioElementReturnsARadioWithNoOptionWithConditionalContent(): void
     {
         // Setup
@@ -526,9 +447,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertEquals(static::NO_VALUE_OPTION_CONDITIONAL_CONTENT, $result[static::VALUE_OPTION_CONDITIONAL_CONTENT_KEY]);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getSubmitInputIsCallable(): void
     {
         // Setup
@@ -538,11 +457,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'getSubmitInput']);
     }
 
-    /**
-     * @test
-     *
-     * @depends getSubmitInputIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getSubmitInputIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getSubmitInputReturnsAnInput(): void
     {
         // Setup
@@ -552,11 +468,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertInstanceOf(ChainValidatedInput::class, $this->sut->getSubmitInput());
     }
 
-    /**
-     * @test
-     *
-     * @depends getSubmitInputReturnsAnInput
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getSubmitInputReturnsAnInput')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getSubmitInputReturnsInstanceOfInputInterfaceThatIsRequired(): void
     {
         // Setup
@@ -570,11 +483,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertSame(static::IS_REQUIRED, $result);
     }
 
-    /**
-     * @test
-     *
-     * @depends getSubmitInputReturnsAnInput
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getSubmitInputReturnsAnInput')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getSubmitInputReturnsInstanceOfInputInterfaceThatRejectsAnInvalidValue(): void
     {
         // Setup
@@ -588,11 +498,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertNotNull($this->sut->getMessages()[static::SUBMIT_KEY][InArray::NOT_IN_ARRAY] ?? null);
     }
 
-    /**
-     * @test
-     *
-     * @depends getSubmitInputReturnsInstanceOfInputInterfaceThatRejectsAnInvalidValue
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getSubmitInputReturnsInstanceOfInputInterfaceThatRejectsAnInvalidValue')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getSubmitInputReturnsInstanceOfInputInterfaceThatRejectsAnInvalidValueWithACustomMessage(): void
     {
         // Setup
@@ -606,9 +513,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertEquals(static::INVALID_SUBMIT_VALIDATION_MESSAGE, $this->sut->getMessages()[static::SUBMIT_KEY][InArray::NOT_IN_ARRAY]);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioInputIsCallable(): void
     {
         // Setup
@@ -618,12 +523,9 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'getRadioInput']);
     }
 
-    /**
-     * @test
-     *
-     * @depends getRadioInputIsCallable
-     * @depends _constructInitialisesARadioElement
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioInputIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('_constructInitialisesARadioElement')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioInputReturnsAnInput(): void
     {
         // Setup
@@ -639,7 +541,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function validSubmitValuesDataProvider(): array
+    public static function validSubmitValuesDataProvider(): array
     {
         return [
             'return to overview button value' => [static::RETURN_TO_OVERVIEW_BUTTON_VALUE],
@@ -647,13 +549,9 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @test
-     *
-     * @depends getRadioInputReturnsAnInput
-     *
-     * @dataProvider validSubmitValuesDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioInputReturnsAnInput')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('validSubmitValuesDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioInputReturnsInputFilterThatAcceptsValidValues(string $value): void
     {
         // Setup
@@ -667,11 +565,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertNull($this->sut->getMessages()[static::SUBMIT_KEY] ?? null);
     }
 
-    /**
-     * @test
-     *
-     * @depends getRadioInputReturnsAnInput
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioInputReturnsAnInput')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioInputReturnsInputFilterThatIsRequired(): void
     {
         // Setup
@@ -688,7 +583,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function invalidRadioValueDataProvider(): array
+    public static function invalidRadioValueDataProvider(): array
     {
         return [
             'empty string value' => [static::EMPTY_STRING_VALUE],
@@ -699,13 +594,9 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         ];
     }
 
-    /**
-     *
-     * @test
-     *
-     * @depends getRadioInputReturnsAnInput
-     * @dataProvider invalidRadioValueDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioInputReturnsAnInput')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidRadioValueDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioInputReturnsInputFilterThatRejectsAnInvalidValue(mixed $value): void
     {
         // Setup
@@ -719,11 +610,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertNotNull($this->sut->getMessages()[static::RADIO_KEY] ?? null);
     }
 
-    /**
-     * @test
-     *
-     * @depends getRadioInputReturnsAnInput
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioInputReturnsAnInput')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRadioInputReturnsInputFilterThatRejectsAnInvalidValueWithCustomMessageForInArrayNotInArrayRule(): void
     {
         // Setup
@@ -741,7 +629,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function yesRadioValidValuesDataProvider(): array
+    public static function yesRadioValidValuesDataProvider(): array
     {
         return [
             'yes value - int' => [static::YES_VALUE_OPTION_VALUE],
@@ -752,7 +640,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function noRadioValidValuesDataProvider(): array
+    public static function noRadioValidValuesDataProvider(): array
     {
         return [
             'no value - int' => [static::NO_VALUE_OPTION_VALUE],
@@ -768,9 +656,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         return array_merge($this->yesRadioValidValuesDataProvider(), $this->noRadioValidValuesDataProvider());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function isValidIsCallable(): void
     {
         // Setup
@@ -780,9 +666,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'isValid']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function userHasOptedToContinueToTheNextStepIsCallable(): void
     {
         // Setup
@@ -792,13 +676,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'userHasOptedToContinueToTheNextStep']);
     }
 
-    /**
-     * @test
-     *
-     * @depends userHasOptedToContinueToTheNextStepIsCallable
-     * @depends _constructInitialisesANextButtonElement
-     * @depends isValidIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('userHasOptedToContinueToTheNextStepIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('isValidIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('_constructInitialisesANextButtonElement')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function userHasOptedToContinueToTheNextStepReturnsTrueWhenSubmitValueIsNext(): void
     {
         // Setup
@@ -813,13 +694,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertTrue($result);
     }
 
-    /**
-     * @test
-     *
-     * @depends userHasOptedToContinueToTheNextStepIsCallable
-     * @depends _constructInitialisesANextButtonElement
-     * @depends isValidIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('userHasOptedToContinueToTheNextStepIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('isValidIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('_constructInitialisesANextButtonElement')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function userHasOptedToContinueToTheNextStepReturnsFalseWhenSubmitValueIsOverview(): void
     {
         // Setup
@@ -834,13 +712,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @test
-     *
-     * @depends userHasOptedToContinueToTheNextStepIsCallable
-     * @depends _constructInitialisesANextButtonElement
-     * @depends isValidIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('userHasOptedToContinueToTheNextStepIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('isValidIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('_constructInitialisesANextButtonElement')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function userHasOptedToContinueToTheNextStepReturnsFalseWhenSubmitValueIsInvalid(): void
     {
         // Setup
@@ -855,9 +730,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function userHasOptedToSubmitVehicleDetailsIsCallable(): void
     {
         // Setup
@@ -867,15 +740,11 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'userHasOptedToSubmitVehicleDetails']);
     }
 
-    /**
-     *
-     * @test
-     *
-     * @depends userHasOptedToSubmitVehicleDetailsIsCallable
-     * @depends _constructInitialisesARadioElement
-     * @depends isValidIsCallable
-     * @dataProvider yesRadioValidValuesDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('userHasOptedToSubmitVehicleDetailsIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('isValidIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('_constructInitialisesARadioElement')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('yesRadioValidValuesDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function userHasOptedToSubmitVehicleDetailsReturnsTrueWhenRadioValueIsYes(mixed $yesValue): void
     {
         // Setup
@@ -890,15 +759,11 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertTrue($result);
     }
 
-    /**
-     *
-     * @test
-     *
-     * @depends userHasOptedToSubmitVehicleDetailsIsCallable
-     * @depends _constructInitialisesARadioElement
-     * @depends isValidIsCallable
-     * @dataProvider noRadioValidValuesDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('userHasOptedToSubmitVehicleDetailsIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('isValidIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('_constructInitialisesARadioElement')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('noRadioValidValuesDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function userHasOptedToSubmitVehicleDetailsReturnsFalseWhenRadioValueIsNo(mixed $noValue): void
     {
         // Setup
@@ -913,13 +778,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @test
-     *
-     * @depends userHasOptedToSubmitVehicleDetailsIsCallable
-     * @depends _constructInitialisesARadioElement
-     * @depends isValidIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('userHasOptedToSubmitVehicleDetailsIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('isValidIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('_constructInitialisesARadioElement')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function userHasOptedToSubmitVehicleDetailsReturnsFalseWhenRadioValueIsInvalid(): void
     {
         // Setup
@@ -934,9 +796,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function userHasOptedNotToSubmitVehicleDetailsIsCallable(): void
     {
         // Setup
@@ -946,15 +806,11 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'userHasOptedNotToSubmitVehicleDetails']);
     }
 
-    /**
-     *
-     * @test
-     *
-     * @depends userHasOptedNotToSubmitVehicleDetailsIsCallable
-     * @depends _constructInitialisesARadioElement
-     * @depends isValidIsCallable
-     * @dataProvider noRadioValidValuesDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('userHasOptedNotToSubmitVehicleDetailsIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('isValidIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('_constructInitialisesARadioElement')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('noRadioValidValuesDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function userHasOptedNotToSubmitVehicleDetailsReturnsTrueWhenRadioValueIsNo(mixed $noValue): void
     {
         // Setup
@@ -969,15 +825,11 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertTrue($result);
     }
 
-    /**
-     *
-     * @test
-     *
-     * @depends userHasOptedNotToSubmitVehicleDetailsIsCallable
-     * @depends _constructInitialisesARadioElement
-     * @depends isValidIsCallable
-     * @dataProvider yesRadioValidValuesDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('userHasOptedNotToSubmitVehicleDetailsIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('isValidIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('_constructInitialisesARadioElement')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('yesRadioValidValuesDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function userHasOptedNotToSubmitVehicleDetailsReturnsFalseWhenRadioValueIsYes(mixed $yesValue): void
     {
         // Setup
@@ -992,13 +844,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @test
-     *
-     * @depends userHasOptedNotToSubmitVehicleDetailsIsCallable
-     * @depends _constructInitialisesARadioElement
-     * @depends isValidIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('userHasOptedNotToSubmitVehicleDetailsIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('isValidIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('_constructInitialisesARadioElement')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function userHasOptedNotToSubmitVehicleDetailsReturnsFalseWhenRadioValueIsInvalid(): void
     {
         // Setup
@@ -1013,9 +862,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getApplicationVersionElementIsCallable(): void
     {
         // Setup
@@ -1025,12 +872,9 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'getApplicationVersionElement']);
     }
 
-    /**
-     * @test
-     *
-     * @depends getApplicationVersionElementIsCallable
-     * @depends _constructInitialisesAnApplicationVersionElement
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getApplicationVersionElementIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('_constructInitialisesAnApplicationVersionElement')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getApplicationVersionElementReturnsInstanceOfHidden(): void
     {
         // Setup
@@ -1043,9 +887,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertInstanceOf(Hidden::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getApplicationVersionInputIsCallable(): void
     {
         // Setup
@@ -1055,11 +897,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'getApplicationVersionInput']);
     }
 
-    /**
-     * @test
-     *
-     * @depends getApplicationVersionInputIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getApplicationVersionInputIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getApplicationVersionInputReturnsAnInput(): void
     {
         // Setup
@@ -1072,11 +911,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertInstanceOf(ChainValidatedInput::class, $result);
     }
 
-    /**
-     * @test
-     *
-     * @depends getApplicationVersionInputIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getApplicationVersionInputIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getApplicationVersionInputReturnsAnInstanceOfInputWithAnEmptyValidatorChain(): void
     {
         // Setup
@@ -1089,11 +925,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertSame(0, $result->count());
     }
 
-    /**
-     * @test
-     *
-     * @depends getApplicationVersionInputReturnsAnInput
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getApplicationVersionInputReturnsAnInput')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getApplicationVersionInputIsNotRequired(): void
     {
         // Setup
@@ -1106,9 +939,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertSame(static::IS_NOT_REQUIRED, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function selectNoIsCallable(): void
     {
         // Setup
@@ -1118,11 +949,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'selectNo']);
     }
 
-    /**
-     * @test
-     *
-     * @depends selectNoIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('selectNoIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function selectNoReturnsSelf(): void
     {
         // Setup
@@ -1135,11 +963,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertSame($this->sut, $result);
     }
 
-    /**
-     * @test
-     *
-     * @depends selectNoIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('selectNoIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function selectNoAddsRadioToData(): void
     {
         // Setup
@@ -1153,12 +978,9 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertSame(static::NO_VALUE_OPTION_VALUE, $this->sut->getData()[static::RADIO_KEY] ?? null);
     }
 
-    /**
-     * @test
-     *
-     * @depends selectNoIsCallable
-     * @depends getRadioInputReturnsAnInput
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('selectNoIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioInputReturnsAnInput')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function selectNoAddsRadioToInputFilterData(): void
     {
         // Setup
@@ -1172,9 +994,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertSame(static::NO_VALUE_OPTION_VALUE, $this->sut->getRadioInput()->getValue('application-version'));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function selectYesIsCallable(): void
     {
         // Setup
@@ -1184,11 +1004,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'selectYes']);
     }
 
-    /**
-     * @test
-     *
-     * @depends selectYesIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('selectYesIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function selectYesReturnsSelf(): void
     {
         // Setup
@@ -1201,11 +1018,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertSame($this->sut, $result);
     }
 
-    /**
-     * @test
-     *
-     * @depends selectYesIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('selectYesIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function selectYesAddsRadioToData(): void
     {
         // Setup
@@ -1219,12 +1033,9 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertSame(static::YES_VALUE_OPTION_VALUE, $this->sut->getData()[static::RADIO_KEY] ?? null);
     }
 
-    /**
-     * @test
-     *
-     * @depends selectYesIsCallable
-     * @depends getRadioInputReturnsAnInput
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('selectYesIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('getRadioInputReturnsAnInput')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function selectYesAddsRadioToInputFilterData(): void
     {
         // Setup
@@ -1238,9 +1049,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertSame(static::YES_VALUE_OPTION_VALUE, $this->sut->getRadioInput()->getValue('application-version'));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setApplicationVersionIsCallable(): void
     {
         // Setup
@@ -1250,11 +1059,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'setApplicationVersion']);
     }
 
-    /**
-     * @test
-     *
-     * @depends setApplicationVersionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setApplicationVersionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setApplicationVersionReturnsSelf(): void
     {
         // Setup
@@ -1267,11 +1073,8 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertSame($this->sut, $result);
     }
 
-    /**
-     * @test
-     *
-     * @depends setApplicationVersionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setApplicationVersionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setApplicationVersionAddsApplicationVersionToData(): void
     {
         // Setup
@@ -1285,12 +1088,9 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertSame(static::AN_APPLICATION_VERSION, $this->sut->getData()[static::APPLICATION_VERSION_KEY] ?? null);
     }
 
-    /**
-     * @test
-     *
-     * @depends setApplicationVersionIsCallable
-     * @depends getApplicationVersionInputReturnsAnInput
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setApplicationVersionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('getApplicationVersionInputReturnsAnInput')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setApplicationVersionAddsApplicationVersionToInputFilterData(): void
     {
         // Setup

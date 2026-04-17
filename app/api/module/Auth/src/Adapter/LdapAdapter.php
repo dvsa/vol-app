@@ -21,13 +21,11 @@ use Olcs\Logging\Log\Logger;
 
 class LdapAdapter extends AbstractAdapter
 {
-    protected Client $client;
-
-    public function __construct(Client $client)
+    public function __construct(protected Client $client)
     {
-        $this->client = $client;
     }
 
+    #[\Override]
     public function authenticate(): Result
     {
         try {
@@ -183,6 +181,7 @@ class LdapAdapter extends AbstractAdapter
     /**
      * @return mixed|string
      */
+    #[\Override]
     public function getIdentity()
     {
         $identity = parent::getIdentity();

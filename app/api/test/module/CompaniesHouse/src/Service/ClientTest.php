@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\CompaniesHouse\Service;
 
 use Dvsa\Olcs\CompaniesHouse\Service\Client;
@@ -41,7 +43,7 @@ class ClientTest extends MockeryTestCase
         $this->sut->setRateLimit(0);
     }
 
-    public function testGetCompanyProfile()
+    public function testGetCompanyProfile(): void
     {
         $this->mockRequest
             ->shouldReceive('setUri')->with('BASE_URI/company/03127414')->once()->andReturnSelf();
@@ -58,7 +60,7 @@ class ClientTest extends MockeryTestCase
         );
     }
 
-    public function testGetCompanyProfileFailInvalidJson()
+    public function testGetCompanyProfileFailInvalidJson(): void
     {
         //  expect
         $this->expectException(ServiceException::class);
@@ -75,7 +77,7 @@ class ClientTest extends MockeryTestCase
         $this->sut->getCompanyProfile(self::COMPANY_NO, false);
     }
 
-    public function testGetCompanyProfileWithOfficers()
+    public function testGetCompanyProfileWithOfficers(): void
     {
         $this->mockRequest
             ->shouldReceive('setUri')->once()->with('BASE_URI/company/03127414')->andReturnSelf()
@@ -107,10 +109,8 @@ class ClientTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestGetCompanyProfileErrorResponse
-     */
-    public function testGetCompanyProfileErrorResponse($statusCode, $content, $errClass, $errMsg)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetCompanyProfileErrorResponse')]
+    public function testGetCompanyProfileErrorResponse(mixed $statusCode, mixed $content, mixed $errClass, mixed $errMsg): void
     {
         //  expect
         $this->expectException($errClass);
@@ -129,7 +129,7 @@ class ClientTest extends MockeryTestCase
         $this->sut->getCompanyProfile(self::COMPANY_NO);
     }
 
-    public function dpTestGetCompanyProfileErrorResponse()
+    public static function dpTestGetCompanyProfileErrorResponse(): array
     {
         return [
             [

@@ -11,6 +11,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class IrhpPermitReportingControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpPermitReportingController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\BrRegOrVary as BookmarkClass;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BrRegOrVary as BookmarkClass;
  */
 class BrRegOrVaryTest extends AbstractBrRegOrVary
 {
-    protected $renderReg = 'register';
-    protected $renderVary = 'vary';
+    protected const RENDER_REG = 'register';
+    protected const RENDER_VARY = 'vary';
     protected $bookmarkClass = BookmarkClass::class;
 }

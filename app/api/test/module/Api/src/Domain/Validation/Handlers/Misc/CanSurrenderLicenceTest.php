@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Can Access Licence With Id Test
  *
@@ -28,10 +30,8 @@ class CanSurrenderLicenceTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValid($canAccess, $isSurrenderable, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $canAccess, mixed $isSurrenderable, mixed $expected): void
     {
         $licenceId = 1;
         $dto = m::mock(CommandInterface::class);
@@ -43,7 +43,7 @@ class CanSurrenderLicenceTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             'case_01' => [

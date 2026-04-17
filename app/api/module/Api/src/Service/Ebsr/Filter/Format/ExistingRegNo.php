@@ -17,6 +17,7 @@ class ExistingRegNo extends AbstractFilter
      * @param mixed $value
      * @return mixed
      */
+    #[\Override]
     public function filter($value)
     {
         $value['existingRegNo'] = $value['licNo'] . '/' . $value['routeNo'];

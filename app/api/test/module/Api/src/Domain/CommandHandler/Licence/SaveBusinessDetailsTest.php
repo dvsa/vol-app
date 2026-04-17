@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Licence;
 
 use Dvsa\Olcs\Api\Domain\Command as DomainCmd;
@@ -58,10 +60,8 @@ class SaveBusinessDetailsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestHandlerExceptionNotAllow
-     */
-    public function testHandlerExceptionNotAllow($orgData)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandlerExceptionNotAllow')]
+    public function testHandlerExceptionNotAllow(mixed $orgData): void
     {
         $data = [
             'id' => self::ID,
@@ -93,7 +93,7 @@ class SaveBusinessDetailsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpTestHandlerExceptionNotAllow()
+    public static function dpTestHandlerExceptionNotAllow(): array
     {
         return [
             [
@@ -111,7 +111,7 @@ class SaveBusinessDetailsTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandlerDetailsChanged()
+    public function testHandlerDetailsChanged(): void
     {
         //  mock permission check
         $this->mockIsGranted(Permission::INTERNAL_USER, true);
@@ -202,7 +202,7 @@ class SaveBusinessDetailsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandlerDetailsNotChanged()
+    public function testHandlerDetailsNotChanged(): void
     {
         //  mock permission check
         $this->mockIsGranted(Permission::INTERNAL_USER, true);
@@ -254,7 +254,7 @@ class SaveBusinessDetailsTest extends AbstractCommandHandlerTestCase
         static::assertFalse($actual->getFlag('hasChanged'));
     }
 
-    private function mockIsGranted($permission, $result)
+    private function mockIsGranted(mixed $permission, mixed $result): void
     {
         $this->mockAuthSrv
             ->shouldReceive('isGranted')

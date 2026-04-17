@@ -19,6 +19,7 @@ final class AdminCancelBusReg extends AbstractCommandHandler
 {
     protected $repoServiceName = 'Bus';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $busReg = $this->getRepo()->fetchUsingId($command, Query::HYDRATE_OBJECT);

@@ -21,6 +21,7 @@ class IsSideEffect extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         // always fail validation

@@ -38,6 +38,7 @@ abstract class AbstractSummaryController extends AbstractController
      *
      * @return \Common\View\Model\Section
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->renderSummary($this->getParams(true));
@@ -62,9 +63,15 @@ abstract class AbstractSummaryController extends AbstractController
      */
     public function renderSummary($params)
     {
-        $view = new ViewModel($params);
-        $view->setTemplate('pages/application-summary');
+        $template = 'pages/application-summary';
 
+        if (!empty($params['autoGrantChanges'])) {
+            $template = 'pages/auto-grant-success';
+            $params['changes'] = $params['autoGrantChanges']['messages'] ?? [];
+        }
+
+        $view = new ViewModel($params);
+        $view->setTemplate($template);
         return $this->render($view);
     }
 
@@ -101,7 +108,9 @@ abstract class AbstractSummaryController extends AbstractController
             'hideContent' => ($data['appliedVia']['id'] !== RefData::APPLIED_VIA_SELFSERVE),
             'interimStatus' => isset($data['interimStatus']) ? $data['interimStatus']['description'] : null,
             'interimStart' => isset($data['interimStatus']) ? $data['interimStart'] : null,
-            'isNi' => isset($data['niFlag']) && $data['niFlag'] === 'Y' ? true : false
+            'isNi' => isset($data['niFlag']) && $data['niFlag'] === 'Y' ? true : false,
+            'wasAutoGranted' => $data['wasAutoGranted'] ?? false,
+            'autoGrantChanges' => $data['autoGrantChanges'] ?? []
         ];
     }
 

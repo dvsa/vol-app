@@ -85,7 +85,8 @@ class ProcessPackTestCase extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             BusNoticePeriodEntity::class => [

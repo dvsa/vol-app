@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Translate To Welsh Task Test
  *
@@ -35,7 +37,8 @@ class CreateTranslateToWelshTaskTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -44,7 +47,7 @@ class CreateTranslateToWelshTaskTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(['licence' => 111, 'description' => 'foo']);
 

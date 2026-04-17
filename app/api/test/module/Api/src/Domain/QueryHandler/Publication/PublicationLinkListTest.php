@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * PublicationLinkByLicence Test
  *
@@ -31,7 +33,7 @@ class PublicationLinkListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $count = 25;
         $query = Qry::create([]);
@@ -52,7 +54,7 @@ class PublicationLinkListTest extends QueryHandlerTestCase
         $this->assertEquals($result['result'], ['foo']);
     }
 
-    public function testHandleQueryWithApplication()
+    public function testHandleQueryWithApplication(): void
     {
         $count = 25;
         $query = Qry::create(['application' => 1]);

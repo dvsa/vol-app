@@ -18,6 +18,7 @@ class IrfoSignature extends StaticBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         return 'International Road Freight Office';

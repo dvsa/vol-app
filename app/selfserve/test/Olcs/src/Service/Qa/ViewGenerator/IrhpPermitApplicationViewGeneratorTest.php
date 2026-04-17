@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Qa\ViewGenerator;
 
 use Mockery as m;

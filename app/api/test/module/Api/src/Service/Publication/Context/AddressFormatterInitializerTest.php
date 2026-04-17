@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context;
 
 use Dvsa\Olcs\Api\Service\Helper\AddressFormatterAwareInterface;
@@ -19,7 +21,7 @@ class AddressFormatterInitializerTest extends MockeryTestCase
         $this->sut = new AddressFormatterInitializer();
     }
 
-    public function testInvokeWhenInstanceAddressFormatterAware()
+    public function testInvokeWhenInstanceAddressFormatterAware(): void
     {
         $formatAddress = m::mock(FormatAddress::class);
 
@@ -39,7 +41,7 @@ class AddressFormatterInitializerTest extends MockeryTestCase
         );
     }
 
-    public function testInvokeWhenInstanceNotAddressFormatterAware()
+    public function testInvokeWhenInstanceNotAddressFormatterAware(): void
     {
         $container = m::mock(ContainerInterface::class);
 
@@ -53,7 +55,7 @@ class AddressFormatterInitializerTest extends MockeryTestCase
         );
     }
 
-    public function testInitializeWhenInstanceAddressFormatterAware()
+    public function testInitializeWhenInstanceAddressFormatterAware(): void
     {
         $formatAddress = m::mock(FormatAddress::class);
 
@@ -73,7 +75,7 @@ class AddressFormatterInitializerTest extends MockeryTestCase
         );
     }
 
-    public function testInitializeWhenInstanceNotAddressFormatterAware()
+    public function testInitializeWhenInstanceNotAddressFormatterAware(): void
     {
         $container = m::mock(ContainerInterface::class);
 

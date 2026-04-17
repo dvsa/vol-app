@@ -31,6 +31,7 @@ class MyAccount extends AbstractQueryHandler implements CacheAwareInterface
      * @throws NotFoundException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $user = $this->getCurrentUser();

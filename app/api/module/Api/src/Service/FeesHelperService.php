@@ -286,6 +286,7 @@ class FeesHelperService implements FactoryInterface
             'irfoPsvAuth'  => $irfoPsvAuthId,
         ];
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $repoManager = $container->get('RepositoryServiceManager');

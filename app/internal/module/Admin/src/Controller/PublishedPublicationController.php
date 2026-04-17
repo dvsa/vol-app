@@ -23,6 +23,7 @@ class PublishedPublicationController extends AbstractInternalController implemen
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel(
@@ -43,6 +44,7 @@ class PublishedPublicationController extends AbstractInternalController implemen
      *
      * @return array
      */
+    #[\Override]
     protected function modifyListQueryParameters($parameters)
     {
         $parameters = parent::modifyListQueryParameters($parameters);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Recipient Test
  */
@@ -28,7 +30,8 @@ class CreateRecipientTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             TrafficArea::class => [
@@ -40,7 +43,7 @@ class CreateRecipientTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'isObjector' => 'Y',
@@ -90,7 +93,7 @@ class CreateRecipientTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($data['isPolice'], $savedRecipient->getIsPolice());
     }
 
-    public function testHandleCommandWithInvalidSubscriptionDetails()
+    public function testHandleCommandWithInvalidSubscriptionDetails(): void
     {
         $this->expectException(Exception\ValidationException::class);
 

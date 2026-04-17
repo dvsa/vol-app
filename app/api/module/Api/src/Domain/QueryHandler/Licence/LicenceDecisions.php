@@ -23,6 +23,7 @@ class LicenceDecisions extends AbstractQueryHandler
 
     protected $extraRepos = ['BusRegSearchView', 'IrhpPermit'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $licence = $this->getRepo()->fetchUsingId($query);

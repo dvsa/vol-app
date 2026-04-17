@@ -28,6 +28,7 @@ final class CreateUnlicensed extends AbstractCommandHandler
 
     protected $extraRepos = ['ContactDetails', 'LicenceNoGen'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

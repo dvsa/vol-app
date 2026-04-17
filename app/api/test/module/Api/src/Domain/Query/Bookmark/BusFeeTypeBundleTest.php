@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Query\Bookmark;
 
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\BusFeeTypeBundle;
@@ -13,7 +15,7 @@ class BusFeeTypeBundleTest extends \PHPUnit\Framework\TestCase
     /**
      * test structure
      */
-    public function testStructure()
+    public function testStructure(): void
     {
         $id = 1;
         $bundle = ['bundle'];

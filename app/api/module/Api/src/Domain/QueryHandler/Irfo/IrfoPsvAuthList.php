@@ -13,6 +13,7 @@ final class IrfoPsvAuthList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'IrfoPsvAuth';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $repo = $this->getRepo();

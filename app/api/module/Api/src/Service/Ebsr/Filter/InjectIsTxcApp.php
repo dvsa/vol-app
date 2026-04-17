@@ -21,6 +21,7 @@ class InjectIsTxcApp extends AbstractFilter
      * @throws Exception\RuntimeException If filtering $value is impossible
      * @return array
      */
+    #[\Override]
     public function filter($value)
     {
         $value['isTxcApp'] = 'Y';

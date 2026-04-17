@@ -25,6 +25,7 @@ class PresidingTc extends User
      * @return array
      * @throw DataServiceException
      */
+    #[\Override]
     public function fetchUserListData($context = [])
     {
         if (is_null($this->getData('presiding-tc'))) {

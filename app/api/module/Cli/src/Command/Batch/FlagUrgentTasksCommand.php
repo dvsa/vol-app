@@ -10,11 +10,13 @@ class FlagUrgentTasksCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:flag-urgent-tasks';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Flag tasks as urgent');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Validators;
 
 use Dvsa\Olcs\Api\Domain\Validation\Validators\CanConfirmSurrender;
@@ -19,10 +21,8 @@ class CanConfirmSurrenderTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider surrenderStates
-     */
-    public function testIsValid($status, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('surrenderStates')]
+    public function testIsValid(mixed $status, mixed $expected): void
     {
         $entityId = 999;
 
@@ -49,7 +49,7 @@ class CanConfirmSurrenderTest extends AbstractValidatorsTestCase
         $this->assertSame($expected, $this->sut->isValid($entityId));
     }
 
-    public function surrenderStates()
+    public static function surrenderStates(): array
     {
         return [
             'signed surrender' => [

@@ -124,14 +124,14 @@ class DeleteUserTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    private function setPermissionGranted($granted): void
+    private function setPermissionGranted(mixed $granted): void
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
             ->with(PermissionEntity::CAN_MANAGE_USER_INTERNAL, null)
             ->andReturn($granted);
     }
 
-    private function setUserTasks($tasks): void
+    private function setUserTasks(mixed $tasks): void
     {
         $this->repoMap['Task']
             ->shouldReceive('fetchByUser')

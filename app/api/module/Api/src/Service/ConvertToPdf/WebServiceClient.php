@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Exception\RestResponseException;
  * Class InrClient
  * @package Dvsa\Olcs\Api\Service\Nr
  */
-class WebServiceClient
+class WebServiceClient implements ConvertToPdfInterface
 {
     /**
      * @var HttpClient
@@ -57,6 +57,7 @@ class WebServiceClient
      * @return void
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RestResponseException
      */
+    #[\Override]
     public function convert($fileName, $destination)
     {
         $this->getHttpClient()->reset();

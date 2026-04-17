@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\System;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\System\CreateSlaTargetDate as CommandHandler;
@@ -36,7 +38,8 @@ class CreateSlaTargetDateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
 
         $this->references = [
@@ -48,7 +51,7 @@ class CreateSlaTargetDateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $params = [
             'agreedDate' => '2015-09-10',
@@ -94,7 +97,7 @@ class CreateSlaTargetDateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['SlaTargetDate created successfully'], $result->getMessages());
     }
 
-    public function testHandleCommandInvalidEntityType()
+    public function testHandleCommandInvalidEntityType(): void
     {
         $params = [
             'agreedDate' => '2015-09-10',
@@ -110,7 +113,7 @@ class CreateSlaTargetDateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandInvalidEntityId()
+    public function testHandleCommandInvalidEntityId(): void
     {
         $params = [
             'agreedDate' => '2015-09-10',
@@ -148,7 +151,7 @@ class CreateSlaTargetDateTest extends AbstractCommandHandlerTestCase
      * @param $entityId
      * @return m\Mock|m\MockInterface
      */
-    private function getMockEntity($entityType, $entityId)
+    private function getMockEntity(mixed $entityType, mixed $entityId): mixed
     {
         $mock = m::mock();
         switch ($entityType) {

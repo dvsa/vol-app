@@ -16,6 +16,7 @@ class ImpoundingHearingVenue extends DynamicBookmark
      * @param array $data
      * @return Qry|null
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         if (!isset($data['impounding'])) {
@@ -30,6 +31,7 @@ class ImpoundingHearingVenue extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         if (!empty($this->data['venue'])) {

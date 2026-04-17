@@ -25,6 +25,7 @@ class IdentityProviderFactory implements FactoryInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IdentityProviderInterface
     {
         $identityProvider = $container->get('config')['auth']['identity_provider'] ?? '';

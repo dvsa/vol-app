@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ProposeToRevokeByCase Test
  */
@@ -28,7 +30,7 @@ class ProposeToRevokeByCaseTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['case' => 1]);
 
@@ -83,7 +85,7 @@ class ProposeToRevokeByCaseTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryWhenPtrNotFound()
+    public function testHandleQueryWhenPtrNotFound(): void
     {
         $query = Qry::create(['case' => 1]);
 
@@ -116,7 +118,7 @@ class ProposeToRevokeByCaseTest extends QueryHandlerTestCase
         $this->assertSame((array)$expected, (array)$this->sut->handleQuery($query));
     }
 
-    protected function createSlaTargetDate($name, $targetDate)
+    protected function createSlaTargetDate(mixed $name, mixed $targetDate): mixed
     {
         $mock = m::mock(SlaTargetDate::class);
         $mock->shouldReceive('getSla->getField')->andReturn($name);

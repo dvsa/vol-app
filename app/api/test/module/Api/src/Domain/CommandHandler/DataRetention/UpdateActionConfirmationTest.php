@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\DataRetention;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\DataRetention\UpdateActionConfirmation;
@@ -23,7 +25,7 @@ class UpdateActionConfirmationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testActionConfirmationIfStatusIsReview()
+    public function testActionConfirmationIfStatusIsReview(): void
     {
         $command = MarkForReview::create(['ids' => [100]]);
 
@@ -55,7 +57,7 @@ class UpdateActionConfirmationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testActionConfirmationIfStatusIsDelete()
+    public function testActionConfirmationIfStatusIsDelete(): void
     {
         $command = MarkForDelete::create(['ids' => [100], 'status' => 'delete']);
 
@@ -87,7 +89,7 @@ class UpdateActionConfirmationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testActionConfirmationReviewButCannotSetToTrue()
+    public function testActionConfirmationReviewButCannotSetToTrue(): void
     {
         $command = MarkForReview::create(['ids' => [100], 'status' => 'review']);
 
@@ -118,7 +120,7 @@ class UpdateActionConfirmationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testActionConfirmationTrueButCannotDeleteSoResetToFalse()
+    public function testActionConfirmationTrueButCannotDeleteSoResetToFalse(): void
     {
         $command = MarkForDelete::create(['ids' => [100], 'status' => 'delete']);
 
@@ -150,7 +152,7 @@ class UpdateActionConfirmationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testMultipleActionConfirmationToReview()
+    public function testMultipleActionConfirmationToReview(): void
     {
         $command = MarkForReview::create(['ids' => [100, 200, 300], 'status' => 'review']);
 

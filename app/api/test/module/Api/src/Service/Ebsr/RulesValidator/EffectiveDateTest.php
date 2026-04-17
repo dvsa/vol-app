@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator;
 
 use Dvsa\Olcs\Api\Entity\Bus\BusReg as BusRegEntity;
@@ -12,16 +14,14 @@ use PHPUnit\Framework\TestCase;
  */
 class EffectiveDateTest extends TestCase
 {
-    /**
-     * @dataProvider isValidProvider
-     */
-    public function testIsValid($data, $validity)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
+    public function testIsValid(mixed $data, mixed $validity): void
     {
         $sut = new EffectiveDate();
         $this->assertEquals($validity, $sut->isValid($data));
     }
 
-    public function isValidProvider()
+    public static function isValidProvider(): array
     {
         $today = strtotime(date('Y-m-d'));
 

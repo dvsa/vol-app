@@ -23,6 +23,7 @@ class GracePeriod extends AbstractRepository
 {
     protected $entity = Entity::class;
 
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $qb->where($qb->expr()->eq($this->alias . '.licence', ':licenceId'));

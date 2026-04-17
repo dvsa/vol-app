@@ -12,6 +12,7 @@ final class SlaTargetDate extends AbstractQueryHandler
 {
     protected $repoServiceName = 'SlaTargetDate';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $slaTargetDate = $this->getRepo()->fetchUsingEntityIdAndType($query->getEntityType(), $query->getEntityId());

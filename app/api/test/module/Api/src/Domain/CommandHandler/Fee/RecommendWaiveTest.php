@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Recommend Waive Test
  *
@@ -37,7 +39,8 @@ class RecommendWaiveTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function initReferences()
+    #[\Override]
+    public function initReferences(): void
     {
         $this->refData = [
             FeeEntity::METHOD_WAIVE,
@@ -48,7 +51,7 @@ class RecommendWaiveTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandRecommendWaive()
+    public function testHandleCommandRecommendWaive(): void
     {
         $feeId = 69;
 

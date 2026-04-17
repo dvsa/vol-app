@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\OperatingCentre;
 
 use Dvsa\Olcs\Api\Entity\Cases\Cases;
@@ -26,7 +28,7 @@ class OperatingCentreEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testGetHasEnvironmentalComplaint()
+    public function testGetHasEnvironmentalComplaint(): void
     {
         $complaint = $this->createPartialMock(
             ComplaintEntity::class,
@@ -35,13 +37,11 @@ class OperatingCentreEntityTest extends EntityTester
 
         $complaint->expects($this->once())
             ->method('getClosedDate')
-            ->will(
-                $this->returnValue(null)
-            );
+            ->willReturn(null);
 
         $complaint->expects($this->once())
             ->method('isEnvironmentalComplaint')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $complaints = [];
         $complaints[] = $complaint;
@@ -52,7 +52,7 @@ class OperatingCentreEntityTest extends EntityTester
         $this->assertEquals('Y', $entity->getHasEnvironmentalComplaint());
     }
 
-    public function testGetHasEnvironmentalComplaintNot()
+    public function testGetHasEnvironmentalComplaintNot(): void
     {
         $complaint = $this->createPartialMock(
             ComplaintEntity::class,
@@ -61,11 +61,11 @@ class OperatingCentreEntityTest extends EntityTester
 
         $complaint->expects($this->once())
                   ->method('getClosedDate')
-                  ->will($this->returnValue(date('d-m-Y')));
+                  ->willReturn(date('d-m-Y'));
 
         $complaint->expects($this->never())
             ->method('isEnvironmentalComplaint')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $complaints = [];
         $complaints[] = $complaint;
@@ -76,7 +76,7 @@ class OperatingCentreEntityTest extends EntityTester
         $this->assertEquals('N', $entity->getHasEnvironmentalComplaint());
     }
 
-    public function testGetHasOpposition()
+    public function testGetHasOpposition(): void
     {
         $status = 'apsts_granted_1'; // allowed
 
@@ -84,19 +84,19 @@ class OperatingCentreEntityTest extends EntityTester
             ApplicationEntity::class,
             ['getStatus', 'getId']
         );
-        $application->expects($this->once())->method('getStatus')->will($this->returnSelf());
-        $application->expects($this->once())->method('getId')->will($this->returnValue($status));
+        $application->expects($this->once())->method('getStatus')->willReturn($application);
+        $application->expects($this->once())->method('getId')->willReturn($status);
 
         $case = $this->createMock(Cases::class);
-        $case->expects($this->once())->method('getApplication')->will($this->returnValue($application));
+        $case->expects($this->once())->method('getApplication')->willReturn($application);
 
         $opposition = $this->createPartialMock(
             OppositionEntity::class,
             ['getIsWithdrawn', 'getCase']
         );
 
-        $opposition->expects($this->once())->method('getIsWithdrawn')->will($this->returnValue(false));
-        $opposition->expects($this->once())->method('getCase')->will($this->returnValue($case));
+        $opposition->expects($this->once())->method('getIsWithdrawn')->willReturn(false);
+        $opposition->expects($this->once())->method('getCase')->willReturn($case);
 
         $oppositions = [];
         $oppositions[] = $opposition;
@@ -107,7 +107,7 @@ class OperatingCentreEntityTest extends EntityTester
         $this->assertEquals('Y', $entity->getHasOpposition());
     }
 
-    public function testGetHasOppositionNot()
+    public function testGetHasOppositionNot(): void
     {
         $status = 'apsts_granted'; // not allowed
 
@@ -115,19 +115,19 @@ class OperatingCentreEntityTest extends EntityTester
             ApplicationEntity::class,
             ['getStatus', 'getId']
         );
-        $application->expects($this->once())->method('getStatus')->will($this->returnSelf());
-        $application->expects($this->once())->method('getId')->will($this->returnValue($status));
+        $application->expects($this->once())->method('getStatus')->willReturn($application);
+        $application->expects($this->once())->method('getId')->willReturn($status);
 
         $case = $this->createMock(Cases::class);
-        $case->expects($this->once())->method('getApplication')->will($this->returnValue($application));
+        $case->expects($this->once())->method('getApplication')->willReturn($application);
 
         $opposition = $this->createPartialMock(
             OppositionEntity::class,
             ['getIsWithdrawn', 'getCase']
         );
 
-        $opposition->expects($this->once())->method('getIsWithdrawn')->will($this->returnValue(false));
-        $opposition->expects($this->once())->method('getCase')->will($this->returnValue($case));
+        $opposition->expects($this->once())->method('getIsWithdrawn')->willReturn(false);
+        $opposition->expects($this->once())->method('getCase')->willReturn($case);
 
         $oppositions = [];
         $oppositions[] = $opposition;
@@ -138,7 +138,7 @@ class OperatingCentreEntityTest extends EntityTester
         $this->assertEquals('N', $entity->getHasOpposition());
     }
 
-    public function testGetRelatedOrganisationNull()
+    public function testGetRelatedOrganisationNull(): void
     {
         $sut = (new Entity())
             ->setApplications(new ArrayCollection([]));
@@ -146,7 +146,7 @@ class OperatingCentreEntityTest extends EntityTester
         static::assertNull($sut->getRelatedOrganisation());
     }
 
-    public function testGetRelatedOrganisation()
+    public function testGetRelatedOrganisation(): void
     {
         $expectOrg = new Organisation();
         $mockApp = m::mock(ApplicationEntity\Application::class)

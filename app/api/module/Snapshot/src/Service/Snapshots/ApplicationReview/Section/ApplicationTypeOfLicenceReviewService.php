@@ -23,6 +23,7 @@ class ApplicationTypeOfLicenceReviewService extends AbstractReviewService
      * @param array $data
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(array $data = [])
     {
         $config = [

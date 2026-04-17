@@ -24,6 +24,7 @@ class EndIrhpApplicationsAndPermits extends AbstractCommandHandler implements Tr
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $endIrhpApplicationsCmd = EndIrhpApplicationsCmd::create(

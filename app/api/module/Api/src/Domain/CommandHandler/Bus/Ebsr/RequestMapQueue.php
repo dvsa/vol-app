@@ -25,7 +25,7 @@ final class RequestMapQueue extends AbstractCommandHandler implements AuthAwareI
     use AuthAwareTrait;
     use QueueAwareTrait;
 
-    public const CONFIRM_MESSAGE = 'New PDF(s) requested';
+    public const string CONFIRM_MESSAGE = 'New PDF(s) requested';
 
     protected $repoServiceName = 'Bus';
 
@@ -37,6 +37,7 @@ final class RequestMapQueue extends AbstractCommandHandler implements AuthAwareI
      * @return Result
      * @throws NotFoundException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /**
@@ -56,7 +57,6 @@ final class RequestMapQueue extends AbstractCommandHandler implements AuthAwareI
         $optionData = [
             'scale' => $command->getScale(),
             'id' => $entityId,
-            'fromNewEbsr' => $command->getFromNewEbsr(),
             'regNo' => $busReg->getRegNo(),
             'licence' => $busReg->getLicence()->getId(),
             'user' => $this->getCurrentUser()->getId()

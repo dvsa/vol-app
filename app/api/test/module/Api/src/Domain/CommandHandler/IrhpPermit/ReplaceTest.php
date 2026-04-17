@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermit;
 
 use DateTime;
@@ -43,7 +45,8 @@ class ReplaceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrhpPermit::STATUS_CEASED,
@@ -56,7 +59,7 @@ class ReplaceTest extends AbstractCommandHandlerTestCase
     /**
      * Test
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $cmdData = [
             'id' => 9,
@@ -132,7 +135,7 @@ class ReplaceTest extends AbstractCommandHandlerTestCase
     /**
      * Tests exception thrown for wrong status
      */
-    public function testWrongStatusException()
+    public function testWrongStatusException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -161,7 +164,7 @@ class ReplaceTest extends AbstractCommandHandlerTestCase
     /**
      * Tests exception thrown for wrong status
      */
-    public function testBadRangeException()
+    public function testBadRangeException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\NotFoundException::class);
 
@@ -199,7 +202,7 @@ class ReplaceTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testNewPermitException()
+    public function testNewPermitException(): void
     {
         $this->expectException(BadRequestException::class);
         $this->expectExceptionMessage('The inputted Permit Number is not available. Please input a different number from the same range');

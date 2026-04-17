@@ -47,6 +47,7 @@ final class UpdateTypeOfLicence extends AbstractCommandHandler implements AuthAw
 
     protected $extraRepos = ['ApplicationOperatingCentre'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

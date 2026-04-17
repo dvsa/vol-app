@@ -41,6 +41,7 @@ class ReadHistoryController extends AbstractInternalController implements
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

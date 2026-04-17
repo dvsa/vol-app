@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermitStock;
 
 use Mockery as m;
@@ -33,7 +35,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $cmdData = [
             'id' => '1'
@@ -139,7 +141,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
      * Test for preventing a Permit Stock being deleted if it has existing dependencies - no values are asserted as
      * this tests to ensure that a validation exception is thrown.
      */
-    public function testHandleCantDelete()
+    public function testHandleCantDelete(): void
     {
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('irhp-permit-stock-cannot-delete-active-dependencies');
@@ -172,7 +174,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandNotFoundException()
+    public function testHandleCommandNotFoundException(): void
     {
         $cmdData = [
             'id' => '1'

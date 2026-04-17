@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\ContactDetails;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -19,10 +21,8 @@ class CountryEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider dpIsMorocco
-     */
-    public function testIsMorocco($countryId, $expectedIsMorocco)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsMorocco')]
+    public function testIsMorocco(mixed $countryId, mixed $expectedIsMorocco): void
     {
         $entity = new Entity();
         $entity->setId($countryId);
@@ -33,7 +33,7 @@ class CountryEntityTest extends EntityTester
         );
     }
 
-    public function dpIsMorocco()
+    public static function dpIsMorocco(): array
     {
         return [
             [Entity::ID_NORWAY, false],

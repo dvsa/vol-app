@@ -93,6 +93,7 @@ abstract class SendEbsrAbstract extends AbstractCommandHandler implements EmailA
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var $repo Repository $repo */

@@ -17,6 +17,7 @@ class LicenceVehiclesById extends AbstractQueryHandler
      * @return array
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $licenceVehicles = $this->getRepo()->fetchByIds($query->getIds());

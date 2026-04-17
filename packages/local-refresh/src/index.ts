@@ -16,36 +16,82 @@ const progressBarFactory = () => {
   );
 };
 
-program.description("Script to refresh the local VOL application").action(async () => {
-  const actions = await Promise.all(
-    fs
-      .readdirSync(path.resolve(__dirname, "actions"))
-      .filter((file) => file.endsWith(".ts") && !file.endsWith("Interface.ts"))
-      .map((file) => import(`./actions/${file}`)),
-  );
+// Define explicit action order
+const actionOrder = [
+  "ComposerInstall",
+  "CopyAppDistFiles",
+  "SyncAwsSecretsAndParameters",
+  "CopyDockerComposeDist",
+  "FlushRedis",
+  "ResetDatabase",
+  "ResetLdap",
+];
 
+/**
+ * Load an action by name, supporting both single-file and folder-based patterns:
+ * - Single file: actions/ActionName.ts
+ * - Folder module: actions/ActionName/index.ts
+ */
+async function loadAction(actionName: string): Promise<any> {
+  const actionsDir = path.join(__dirname, "actions");
+  const singleFilePath = path.join(actionsDir, `${actionName}.ts`);
+  const folderIndexPath = path.join(actionsDir, actionName, "index.ts");
+
+  // Check if single file exists
+  if (fs.existsSync(singleFilePath)) {
+    return await import(`./actions/${actionName}.ts`);
+  }
+
+  // Check if folder module exists
+  if (fs.existsSync(folderIndexPath)) {
+    return await import(`./actions/${actionName}/index.ts`);
+  }
+
+  // Check if it's a compiled .js file (for compatibility)
+  const singleFileJs = path.join(actionsDir, `${actionName}.js`);
+  if (fs.existsSync(singleFileJs)) {
+    return await import(`./actions/${actionName}.js`);
+  }
+
+  throw new Error(`Action file not found: ${actionName}`);
+}
+
+program.description("Script to refresh the local VOL application").action(async () => {
   const isActionInterface = (action: any): action is ActionInterface => {
     return "prompt" in action && "execute" in action;
   };
 
-  for (const action of actions) {
-    const instance = new action.default();
+  // Load actions in the specified order
+  for (const actionName of actionOrder) {
+    try {
+      const actionModule = await loadAction(actionName);
+      const instance = new actionModule.default();
 
-    if (isActionInterface(instance) === false) {
-      console.warn(chalk.red(`Error: ${instance.name} does not implement ActionInterface`));
-      continue;
-    }
+      if (isActionInterface(instance) === false) {
+        console.warn(chalk.red(`Error: ${actionName} does not implement ActionInterface`));
+        continue;
+      }
 
-    const shouldRun = await instance.prompt();
+      const shouldRun = await instance.prompt();
 
-    if (shouldRun) {
-      try {
-        await instance.execute(progressBarFactory());
-      } catch (e: unknown) {
-        if (e instanceof Error) {
-          console.error(`\n\n${chalk.red(e.message)}\n`);
+      if (shouldRun) {
+        try {
+          await instance.execute(progressBarFactory());
+        } catch (e: unknown) {
+          if (e instanceof Error) {
+            console.error(`\n\n${chalk.red(e.message)}\n`);
+          }
         }
       }
+    } catch (importError) {
+      console.warn(
+        chalk.yellow(
+          `Warning: Could not load action '${actionName}': ${
+            importError instanceof Error ? importError.message : String(importError)
+          }`,
+        ),
+      );
+      continue;
     }
   }
 

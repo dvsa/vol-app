@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\TransportManagerApplication\Section;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -36,7 +38,7 @@ class AbstractReviewServiceTest extends MockeryTestCase
         $this->sut = new AbstractReviewServiceStub($abstractReviewServiceServices);
     }
 
-    public function testFormatPersonFullName()
+    public function testFormatPersonFullName(): void
     {
         $person = m::mock(Person::class);
         $person->shouldReceive('getTitle->getDescription')
@@ -55,15 +57,13 @@ class AbstractReviewServiceTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpFormatDate
-     */
-    public function testFormatDate($expected, $date)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFormatDate')]
+    public function testFormatDate(mixed $expected, mixed $date): void
     {
         $this->assertEquals($expected, $this->sut->formatDate($date));
     }
 
-    public function dpFormatDate()
+    public static function dpFormatDate(): array
     {
         return [
             ['15 Aug 2005', '2005-08-15T15:52:01+00:00'],
@@ -71,7 +71,7 @@ class AbstractReviewServiceTest extends MockeryTestCase
         ];
     }
 
-    public function testFormatFullAddress()
+    public function testFormatFullAddress(): void
     {
         $address = [
             'addressLine1' => 'DVSA',
@@ -93,7 +93,7 @@ class AbstractReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testFormatShortAddress()
+    public function testFormatShortAddress(): void
     {
         $address = [
             'addressLine1' => 'DVSA',
@@ -108,7 +108,7 @@ class AbstractReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testFindFiles()
+    public function testFindFiles(): void
     {
         $document1 = m::mock(Document::class)->makePartial();
         $document1->setCategory(Category::CATEGORY_LICENSING);
@@ -149,7 +149,7 @@ class AbstractReviewServiceTest extends MockeryTestCase
         $this->assertSame($document4, $values[1]);
     }
 
-    public function testTranslate()
+    public function testTranslate(): void
     {
         $translationKey = 'translation.key';
         $translated = 'translated';
@@ -164,7 +164,7 @@ class AbstractReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testTranslateReplace()
+    public function testTranslateReplace(): void
     {
         $translationKey = 'translation.key';
         $translated = 'the %s jumped over the %s hare';
@@ -182,10 +182,8 @@ class AbstractReviewServiceTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpFormatYesNo
-     */
-    public function testFormatYesNo($value, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFormatYesNo')]
+    public function testFormatYesNo(mixed $value, mixed $expected): void
     {
         $this->assertEquals(
             $expected,
@@ -193,7 +191,7 @@ class AbstractReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function dpFormatYesNo()
+    public static function dpFormatYesNo(): array
     {
         return [
             ['B','No'],

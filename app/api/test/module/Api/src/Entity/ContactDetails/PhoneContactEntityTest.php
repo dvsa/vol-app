@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\ContactDetails;
 
 use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact as Entity;
@@ -21,7 +23,7 @@ class PhoneContactEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testGetCalculatedValues()
+    public function testGetCalculatedValues(): void
     {
         $mockType = new RefData();
 

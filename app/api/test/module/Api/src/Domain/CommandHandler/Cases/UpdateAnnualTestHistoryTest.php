@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update AnnualTestHistory Test
  */
@@ -27,7 +29,7 @@ class UpdateAnnualTestHistoryTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::Create(
             [

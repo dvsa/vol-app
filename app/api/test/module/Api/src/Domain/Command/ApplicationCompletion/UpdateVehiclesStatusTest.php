@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Vehicles Status Test
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateVehiclesStatus;
  */
 class UpdateVehiclesStatusTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = UpdateVehiclesStatus::create(['id' => 111, 'foo' => 'bar']);
 

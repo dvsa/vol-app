@@ -11,6 +11,8 @@ use Laminas\Form\Element\Select;
  */
 trait DocumentSearchTrait
 {
+    protected string $showDocsFilter = FilterOptions::SHOW_ALL;
+
     /**
      * Get Document Table Name
      *
@@ -32,7 +34,7 @@ trait DocumentSearchTrait
             'order' => 'DESC',
             'page' => 1,
             'limit' => 10,
-            'showDocs' => FilterOptions::SHOW_ALL,
+            'showDocs' => $this->showDocsFilter,
         ];
 
         $filters = array_merge(

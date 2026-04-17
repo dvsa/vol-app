@@ -32,6 +32,7 @@ class Identity implements IdentityInterface
      *
      * @return string[]|\Rbac\Role\RoleInterface[]
      */
+    #[\Override]
     public function getRoles()
     {
         if ($this->roles === null) {

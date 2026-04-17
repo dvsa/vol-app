@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Validators;
 
 use Dvsa\Olcs\Api\Domain\Validation\Validators\CanAccessPreviousConviction;
@@ -25,7 +27,7 @@ class CanAccessPreviousConvictionTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    public function testIsValidTransportManager()
+    public function testIsValidTransportManager(): void
     {
         $mockTm = m::mock();
 
@@ -41,10 +43,8 @@ class CanAccessPreviousConvictionTest extends AbstractValidatorsTestCase
         $this->assertEquals(true, $this->sut->isValid(111));
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValid($isOwner, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $isOwner, mixed $expected): void
     {
         $entity = m::mock(Application::class);
         $entity->shouldReceive('getTransportManager')->with()->once()->andReturn(null);
@@ -60,7 +60,7 @@ class CanAccessPreviousConvictionTest extends AbstractValidatorsTestCase
         $this->assertEquals($expected, $this->sut->isValid(111));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [true, true],

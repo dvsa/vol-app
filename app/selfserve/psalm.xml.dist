@@ -3,7 +3,7 @@
   errorLevel="8"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="https://getpsalm.org/schema/config"
-  xsi:schemaLocation="https://getpsalm.org/schema/config vendor-bin/psalm/vendor/vimeo/psalm/config.xsd"
+  xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
   findUnusedBaselineEntry="true"
   findUnusedCode="false"
 >
@@ -13,4 +13,13 @@
           <directory name="vendor" />
         </ignoreFiles>
   </projectFiles>
+  <issueHandlers>
+    <!-- Laminas\View\Model\ViewModel marked @final but intended to be extended -->
+    <InvalidExtendClass>
+      <errorLevel type="suppress">
+        <directory name="module/Application/src/View/Model/"/>
+        <directory name="module/Olcs/src/View/Model/"/>
+      </errorLevel>
+    </InvalidExtendClass>
+  </issueHandlers>
 </psalm>

@@ -19,6 +19,7 @@ final class CancelIrfoGvPermitFees extends AbstractCommandHandler implements Tra
 {
     protected $repoServiceName = 'Fee';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

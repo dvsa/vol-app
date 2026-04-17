@@ -44,6 +44,7 @@ class PhoneContact extends AbstractPhoneContact
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedValues()
     {
         return [

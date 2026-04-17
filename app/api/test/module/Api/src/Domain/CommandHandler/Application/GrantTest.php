@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Dvsa\Olcs\Api\Domain\Command\Application\CloseTexTask;
@@ -49,13 +51,13 @@ class GrantTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandIsDefined()
+    public function testHandleCommandIsDefined(): void
     {
         $command = new GrantApplicationCommandHandler();
         $this->assertIsCallable($command->handleCommand(...));
     }
 
-    public function testHandleCommandWithException()
+    public function testHandleCommandWithException(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -69,7 +71,7 @@ class GrantTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithFailedValidation()
+    public function testHandleCommandWithFailedValidation(): void
     {
         $data = [
             'shouldCreateInspectionRequest' => 'N',
@@ -94,7 +96,7 @@ class GrantTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function testHandleCommandGoods()
+    public function testHandleCommandGoods(): void
     {
         $data = [
             'shouldCreateInspectionRequest' => 'N',
@@ -156,7 +158,7 @@ class GrantTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandPsv()
+    public function testHandleCommandPsv(): void
     {
         $data = [
             'shouldCreateInspectionRequest' => 'N',
@@ -214,7 +216,7 @@ class GrantTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandPsvWithInspectionRequest()
+    public function testHandleCommandPsvWithInspectionRequest(): void
     {
         $data = [
             'shouldCreateInspectionRequest' => 'Y',
@@ -282,7 +284,7 @@ class GrantTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandGoodsWithInspectionRequest()
+    public function testHandleCommandGoodsWithInspectionRequest(): void
     {
         $data = [
             'shouldCreateInspectionRequest' => 'Y',

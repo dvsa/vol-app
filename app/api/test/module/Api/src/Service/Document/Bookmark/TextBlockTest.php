@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Domain\Query as DomainQry;
@@ -10,7 +12,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\TextBlock;
  */
 class TextBlockTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQueryNull()
+    public function testGetQueryNull(): void
     {
         $sut = new TextBlock();
         $sut->setToken('unit_Token');
@@ -26,7 +28,7 @@ class TextBlockTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $sut = new TextBlock();
         $sut->setToken('unit_Token');
@@ -47,7 +49,7 @@ class TextBlockTest extends \PHPUnit\Framework\TestCase
         static::assertEquals(8888, $query->getId());
     }
 
-    public function testRenderConcatenatesParagraphsWithNewlines()
+    public function testRenderConcatenatesParagraphsWithNewlines(): void
     {
         $bookmark = new TextBlock();
         $bookmark->setData(
@@ -66,7 +68,7 @@ class TextBlockTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testRenderWithStringDataJustReturnsString()
+    public function testRenderWithStringDataJustReturnsString(): void
     {
         $bookmark = new TextBlock();
         $bookmark->setData('foo bar');

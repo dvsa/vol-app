@@ -1,35 +1,43 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener;
 
+use Laminas\EventManager\EventManagerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Laminas\Mvc\MvcEvent;
 
-/**
- * Class RouteParamsTest
- * @package OlcsTest\Listener
- */
 class RouteParamsTest extends TestCase
 {
-    public function testAttach()
+    private RouteParams $sut;
+
+    public function testAttach(): void
     {
-        $sut = new RouteParams();
+        $this->sut = new RouteParams();
 
-        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
-        $mockEventManager->shouldReceive('attach')->once()
-            ->with(MvcEvent::EVENT_DISPATCH, [$sut, 'onDispatch'], 20);
+        $mockEventManager = m::mock(EventManagerInterface::class);
+        $mockEventManager->expects('attach')
+            ->with(
+                MvcEvent::EVENT_DISPATCH,
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onDispatch';
+                }),
+                20
+            );
 
-        $sut->attach($mockEventManager);
+        $this->sut->attach($mockEventManager);
     }
 
-    public function testOnDispatch()
+    public function testOnDispatch(): void
     {
         $params = ['test' => 'value'];
 
-        $mockEvent = m::mock(\Laminas\Mvc\MvcEvent::class);
+        $mockEvent = m::mock(MvcEvent::class);
         $mockEvent->shouldReceive('getRouteMatch->getParams')->andReturn($params);
 
         $sut = new RouteParams();
@@ -45,7 +53,7 @@ class RouteParamsTest extends TestCase
             return true;
         };
 
-        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
+        $mockEventManager = m::mock(EventManagerInterface::class);
         $mockEventManager->shouldIgnoreMissing();
         $mockEventManager->shouldReceive('trigger')->with(RouteParams::EVENT_PARAM . 'test', m::on($matcher))->once();
 
@@ -54,7 +62,7 @@ class RouteParamsTest extends TestCase
         $sut->onDispatch($mockEvent);
     }
 
-    public function testEventMatchedOnlyOnce()
+    public function testEventMatchedOnlyOnce(): void
     {
         $sut = new RouteParams();
 

@@ -8,7 +8,6 @@ use Dvsa\Olcs\Api\Domain\CacheAwareInterface;
 use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
 use Dvsa\Olcs\Api\Domain\HandlerEnabledTrait;
 use Dvsa\Olcs\Api\Domain\Logger\EntityAccessLogger;
-use Dvsa\Olcs\Api\Domain\NationalRegisterAwareInterface;
 use Dvsa\Olcs\Api\Domain\Repository\RepositoryInterface;
 use Dvsa\Olcs\Api\Domain\ToggleAwareInterface;
 use Dvsa\Olcs\Api\Domain\ToggleRequiredInterface;
@@ -265,10 +264,6 @@ abstract class AbstractQueryHandler implements QueryHandlerInterface, FactoryInt
             $this->setCpmsService($mainServiceLocator->get('CpmsHelperService'));
         }
 
-        if ($this instanceof NationalRegisterAwareInterface) {
-            $this->setNationalRegisterConfig($mainServiceLocator->get('config')['nr']);
-        }
-
         if ($this instanceof CacheAwareInterface) {
             /** @var CacheEncryptionService $cacheEncryptionService */
             $cacheEncryptionService = $mainServiceLocator->get(CacheEncryptionService::class);
@@ -317,6 +312,7 @@ abstract class AbstractQueryHandler implements QueryHandlerInterface, FactoryInt
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         try {

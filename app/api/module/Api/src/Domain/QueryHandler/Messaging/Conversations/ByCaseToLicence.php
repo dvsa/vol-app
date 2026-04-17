@@ -22,6 +22,7 @@ class ByCaseToLicence extends AbstractQueryHandler implements ToggleRequiredInte
     protected $extraRepos = [CaseRepo::class];
 
     /** @param GetConversationsByCaseToLicenceQuery|QueryInterface $query */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $caseRepo = $this->getRepo(CaseRepo::class);

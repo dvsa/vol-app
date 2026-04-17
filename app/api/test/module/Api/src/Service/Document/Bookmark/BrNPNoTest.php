@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\BrNPNo;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BrNPNo;
  */
 class BrNPNoTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new BrNPNo();
 
@@ -20,10 +22,8 @@ class BrNPNoTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_null($bookmark->getQuery([])));
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
-    public function testRender($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
+    public function testRender(mixed $data, mixed $expected): void
     {
         $bookmark = new BrNPNo();
         $bookmark->setData($data);
@@ -31,7 +31,7 @@ class BrNPNoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public function renderDataProvider()
+    public static function renderDataProvider(): array
     {
         return [
             // no results

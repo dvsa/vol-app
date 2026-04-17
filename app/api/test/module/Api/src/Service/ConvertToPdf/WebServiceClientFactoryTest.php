@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\ConvertToPdf;
 
 use Dvsa\Olcs\Api\Service\ConvertToPdf\WebServiceClient;
@@ -10,7 +12,7 @@ use Psr\Container\ContainerInterface;
 
 class WebServiceClientFactoryTest extends MockeryTestCase
 {
-    public function testInvokeMissingConfig()
+    public function testInvokeMissingConfig(): void
     {
         $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('config')->andReturn([]);
@@ -22,7 +24,7 @@ class WebServiceClientFactoryTest extends MockeryTestCase
         $sut->__invoke($mockSl, WebServiceClient::class);
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $config = [
             'convert_to_pdf' => [

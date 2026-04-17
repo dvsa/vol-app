@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Permits\EcmtPermitFees;
@@ -19,7 +21,7 @@ class EcmtPermitFeesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $feeProductReference1 = 'IRHP_GV_APP_ECMT';
         $feeProductReference2 = 'IRHP_GV_ECMT_100_PERMIT_FEE';

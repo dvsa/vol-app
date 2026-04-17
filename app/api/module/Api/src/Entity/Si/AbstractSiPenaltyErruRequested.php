@@ -1,22 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Si;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * SiPenaltyErruRequested Abstract Entity
+ * AbstractSiPenaltyErruRequested Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -24,23 +29,51 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="si_penalty_erru_requested",
  *    indexes={
  *        @ORM\Index(name="ix_si_penalty_erru_requested_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_si_penalty_erru_requested_last_modified_by",
-     *     columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_si_penalty_erru_requested_serious_infringement_id",
-     *     columns={"serious_infringement_id"}),
- *        @ORM\Index(name="ix_si_penalty_erru_requested_si_penalty_requested_type_id",
-     *     columns={"si_penalty_requested_type_id"})
+ *        @ORM\Index(name="ix_si_penalty_erru_requested_last_modified_by", columns={"last_modified_by"}),
+ *        @ORM\Index(name="ix_si_penalty_erru_requested_serious_infringement_id", columns={"serious_infringement_id"}),
+ *        @ORM\Index(name="ix_si_penalty_erru_requested_si_penalty_requested_type_id", columns={"si_penalty_requested_type_id"})
  *    }
  * )
  */
-abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to serious_infringement
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SeriousInfringement", fetch="LAZY")
+     * @ORM\JoinColumn(name="serious_infringement_id", referencedColumnName="id")
+     */
+    protected $seriousInfringement;
+
+    /**
+     * Foreign Key to si_penalty_requested_type
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType", fetch="LAZY")
+     * @ORM\JoinColumn(name="si_penalty_requested_type_id", referencedColumnName="id")
+     */
+    protected $siPenaltyRequestedType;
 
     /**
      * Created by
@@ -54,26 +87,6 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     protected $createdBy;
 
     /**
-     * Duration
-     *
-     * @var int
-     *
-     * @ORM\Column(type="smallint", name="duration", nullable=true)
-     */
-    protected $duration;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -85,7 +98,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     protected $lastModifiedBy;
 
     /**
-     * Penalty requested identifier (nullable only due to pre existing data))
+     * Penalty requested identifier
      *
      * @var int
      *
@@ -94,50 +107,13 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     protected $penaltyRequestedIdentifier;
 
     /**
-     * Olbs key
+     * Number of months.
      *
      * @var int
      *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     * @ORM\Column(type="smallint", name="duration", nullable=true)
      */
-    protected $olbsKey;
-
-    /**
-     * Serious infringement
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Si\SeriousInfringement",
-     *     fetch="LAZY",
-     *     inversedBy="requestedErrus"
-     * )
-     * @ORM\JoinColumn(name="serious_infringement_id", referencedColumnName="id", nullable=false)
-     */
-    protected $seriousInfringement;
-
-    /**
-     * Si penalty requested type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType", fetch="LAZY")
-     * @ORM\JoinColumn(name="si_penalty_requested_type_id", referencedColumnName="id", nullable=false)
-     */
-    protected $siPenaltyRequestedType;
-
-    /**
-     * Penalties that have been applied
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenalty",
-     *     mappedBy="erruPenaltyRequested",
-     *     cascade={"persist"}
-     * )
-     */
-    protected $appliedPenalties;
+    protected $duration;
 
     /**
      * Version
@@ -150,9 +126,116 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     protected $version = 1;
 
     /**
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     */
+    protected $olbsKey;
+
+    /**
+     * AppliedPenalties
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenalty", mappedBy="siPenaltyErruRequested")
+     */
+    protected $appliedPenalties;
+
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+        $this->appliedPenalties = new ArrayCollection();
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return SiPenaltyErruRequested
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the serious infringement
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement $seriousInfringement new value being set
+     *
+     * @return SiPenaltyErruRequested
+     */
+    public function setSeriousInfringement($seriousInfringement)
+    {
+        $this->seriousInfringement = $seriousInfringement;
+
+        return $this;
+    }
+
+    /**
+     * Get the serious infringement
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement
+     */
+    public function getSeriousInfringement()
+    {
+        return $this->seriousInfringement;
+    }
+
+    /**
+     * Set the si penalty requested type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType $siPenaltyRequestedType new value being set
+     *
+     * @return SiPenaltyErruRequested
+     */
+    public function setSiPenaltyRequestedType($siPenaltyRequestedType)
+    {
+        $this->siPenaltyRequestedType = $siPenaltyRequestedType;
+
+        return $this;
+    }
+
+    /**
+     * Get the si penalty requested type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType
+     */
+    public function getSiPenaltyRequestedType()
+    {
+        return $this->siPenaltyRequestedType;
+    }
+
+    /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return SiPenaltyErruRequested
      */
@@ -171,6 +254,54 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return SiPenaltyErruRequested
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the penalty requested identifier
+     *
+     * @param int $penaltyRequestedIdentifier new value being set
+     *
+     * @return SiPenaltyErruRequested
+     */
+    public function setPenaltyRequestedIdentifier($penaltyRequestedIdentifier)
+    {
+        $this->penaltyRequestedIdentifier = $penaltyRequestedIdentifier;
+
+        return $this;
+    }
+
+    /**
+     * Get the penalty requested identifier
+     *
+     * @return int
+     */
+    public function getPenaltyRequestedIdentifier()
+    {
+        return $this->penaltyRequestedIdentifier;
     }
 
     /**
@@ -198,51 +329,27 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     }
 
     /**
-     * Set the id
+     * Set the version
      *
-     * @param int $id new value being set
+     * @param int $version new value being set
      *
      * @return SiPenaltyErruRequested
      */
-    public function setId($id)
+    public function setVersion($version)
     {
-        $this->id = $id;
+        $this->version = $version;
 
         return $this;
     }
 
     /**
-     * Get the id
+     * Get the version
      *
      * @return int
      */
-    public function getId()
+    public function getVersion()
     {
-        return $this->id;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return SiPenaltyErruRequested
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
+        return $this->version;
     }
 
     /**
@@ -269,23 +376,13 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
         return $this->olbsKey;
     }
 
-    public function setPenaltyRequestedIdentifier($penaltyRequestedIdentifier)
-    {
-        $this->penaltyRequestedIdentifier = $penaltyRequestedIdentifier;
-
-        return $this;
-    }
-
-    public function getPenaltyRequestedIdentifier()
-    {
-        return $this->penaltyRequestedIdentifier;
-    }
-
-    public function getAppliedPenalties()
-    {
-        return $this->appliedPenalties;
-    }
-
+    /**
+     * Set the applied penalties
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $appliedPenalties collection being set as the value
+     *
+     * @return SiPenaltyErruRequested
+     */
     public function setAppliedPenalties($appliedPenalties)
     {
         $this->appliedPenalties = $appliedPenalties;
@@ -294,74 +391,60 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     }
 
     /**
-     * Set the serious infringement
+     * Get the applied penalties
      *
-     * @param \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement $seriousInfringement entity being set as the value
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getAppliedPenalties()
+    {
+        return $this->appliedPenalties;
+    }
+
+    /**
+     * Add a applied penalties
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $appliedPenalties collection being added
      *
      * @return SiPenaltyErruRequested
      */
-    public function setSeriousInfringement($seriousInfringement)
+    public function addAppliedPenalties($appliedPenalties)
     {
-        $this->seriousInfringement = $seriousInfringement;
+        if ($appliedPenalties instanceof ArrayCollection) {
+            $this->appliedPenalties = new ArrayCollection(
+                array_merge(
+                    $this->appliedPenalties->toArray(),
+                    $appliedPenalties->toArray()
+                )
+            );
+        } elseif (!$this->appliedPenalties->contains($appliedPenalties)) {
+            $this->appliedPenalties->add($appliedPenalties);
+        }
 
         return $this;
     }
 
     /**
-     * Get the serious infringement
+     * Remove a applied penalties
      *
-     * @return \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement
-     */
-    public function getSeriousInfringement()
-    {
-        return $this->seriousInfringement;
-    }
-
-    /**
-     * Set the si penalty requested type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType $siPenaltyRequestedType entity being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $appliedPenalties collection being removed
      *
      * @return SiPenaltyErruRequested
      */
-    public function setSiPenaltyRequestedType($siPenaltyRequestedType)
+    public function removeAppliedPenalties($appliedPenalties)
     {
-        $this->siPenaltyRequestedType = $siPenaltyRequestedType;
+        if ($this->appliedPenalties->contains($appliedPenalties)) {
+            $this->appliedPenalties->removeElement($appliedPenalties);
+        }
 
         return $this;
     }
 
     /**
-     * Get the si penalty requested type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType
+     * Get bundle data
      */
-    public function getSiPenaltyRequestedType()
+    #[\Override]
+    public function __toString(): string
     {
-        return $this->siPenaltyRequestedType;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return SiPenaltyErruRequested
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
+        return (string) $this->getId();
     }
 }

@@ -134,6 +134,7 @@ class Submission extends AbstractSubmission implements OrganisationProviderInter
      *
      * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation|\Dvsa\Olcs\Api\Entity\Organisation\Organisation[]|null
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this->getCase()->getRelatedOrganisation();

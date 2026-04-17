@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ContinuationReview\Section;
 
 use Mockery as m;
@@ -27,7 +29,7 @@ class AbstractReviewServiceTest extends MockeryTestCase
         $this->sut = new AbstractReviewServiceStub($abstractReviewServiceServices);
     }
 
-    public function testTranslate()
+    public function testTranslate(): void
     {
         $this->mockTranslator
             ->shouldReceive('translate')
@@ -39,15 +41,13 @@ class AbstractReviewServiceTest extends MockeryTestCase
         $this->assertEquals('foo_translated', $this->sut->translate('foo'));
     }
 
-    /**
-     * @dataProvider testFormatDateDataProvider
-     */
-    public function testFormatDate($expected, $date)
+    #[\PHPUnit\Framework\Attributes\DataProvider('formatDateDataProvider')]
+    public function testFormatDate(mixed $expected, mixed $date): void
     {
         $this->assertEquals($expected, $this->sut->formatDate($date));
     }
 
-    public function testFormatDateDataProvider()
+    public static function formatDateDataProvider(): array
     {
         return [
             ['15 Aug 2005', '2005-08-15T15:52:01+00:00'],

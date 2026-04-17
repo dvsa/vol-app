@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cpms\Client;
 
 use GuzzleHttp\Client;
@@ -30,7 +32,7 @@ trait GuzzleTestTrait
         return $client;
     }
 
-    public function appendToHandler($statusCode = 200, $headers = [], $body = '', $version = '1.1', $reason = null)
+    public function appendToHandler(int $statusCode = 200, array $headers = [], string $body = '', string $version = '1.1', mixed $reason = null): void
     {
         if (!$this->mockHandler instanceof MockHandler) {
             $this->setUpMockClient();
@@ -40,7 +42,7 @@ trait GuzzleTestTrait
         $this->mockHandler->append($this->response);
     }
 
-    public function getLastRequest()
+    public function getLastRequest(): mixed
     {
         return $this->mockHandler->getLastRequest();
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Service Register Test
  */
@@ -31,7 +33,7 @@ class UpdateServiceRegisterTest extends AbstractCommandHandlerTestCase
     /**
      * testHandleCommand
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 99;
 

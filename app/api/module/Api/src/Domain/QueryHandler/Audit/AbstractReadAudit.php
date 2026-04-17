@@ -19,6 +19,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
  */
 abstract class AbstractReadAudit extends AbstractQueryHandler
 {
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $this->getRepo()->disableSoftDeleteable();

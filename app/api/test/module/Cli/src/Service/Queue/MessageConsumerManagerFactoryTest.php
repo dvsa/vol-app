@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Service\Queue;
 
 use Dvsa\Olcs\Cli\Service\Queue\MessageConsumerManager;
@@ -17,7 +19,7 @@ class MessageConsumerManagerFactoryTest extends MockeryTestCase
         $this->sut = new MessageConsumerManagerFactory();
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         // Params
         $config = [

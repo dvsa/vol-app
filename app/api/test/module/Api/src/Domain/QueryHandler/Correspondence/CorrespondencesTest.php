@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Correspondence;
 
 use Doctrine\ORM\Query;
@@ -10,9 +12,7 @@ use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondences as Qry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Correspondence\Correspondences
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Correspondence\Correspondences::class)]
 class CorrespondencesTest extends QueryHandlerTestCase
 {
     public const ORG_ID = 9999;
@@ -26,7 +26,7 @@ class CorrespondencesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['organisation' => self::ORG_ID]);
 

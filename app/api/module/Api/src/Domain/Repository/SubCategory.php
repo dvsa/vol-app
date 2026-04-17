@@ -29,6 +29,7 @@ class SubCategory extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if (method_exists($query, 'getIsTaskCategory') && !empty($query->getIsTaskCategory())) {
@@ -59,6 +60,7 @@ class SubCategory extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         $expr = $qb->expr();

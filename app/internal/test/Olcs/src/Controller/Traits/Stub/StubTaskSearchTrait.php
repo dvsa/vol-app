@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Traits\Stub;
 
 use Common\Service\Helper\FormHelperService;
@@ -14,36 +16,31 @@ class StubTaskSearchTrait
 
     public $currentUser;
 
-    protected FormHelperService $formHelper;
-    protected SubCategory $subCategoryDataService;
-
-    public function __construct(FormHelperService $formHelper, SubCategory $subCategoryDataService)
+    public function __construct(protected FormHelperService $formHelper, protected SubCategory $subCategoryDataService)
     {
-        $this->formHelper = $formHelper;
-        $this->subCategoryDataService = $subCategoryDataService;
     }
 
-    public function traitUpdateSelectValueOptions($el, $options)
+    public function traitUpdateSelectValueOptions(mixed $el, mixed $options): void
     {
         $this->updateSelectValueOptions($el, $options);
     }
 
-    public function traitMapTaskFilters($extra)
+    public function traitMapTaskFilters(mixed $extra): array
     {
         return $this->mapTaskFilters($extra);
     }
 
-    public function traitGetTaskForm($filters)
+    public function traitGetTaskForm(mixed $filters): mixed
     {
         return $this->getTaskForm($filters);
     }
 
-    public function currentUser()
+    public function currentUser(): mixed
     {
         return $this->currentUser;
     }
 
-    public function traitProcessTasksActions($type)
+    public function traitProcessTasksActions(mixed $type): mixed
     {
         return $this->processTasksActions($type);
     }

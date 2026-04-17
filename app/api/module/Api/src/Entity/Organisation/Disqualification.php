@@ -137,6 +137,7 @@ class Disqualification extends AbstractDisqualification
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedBundleValues()
     {
         $endDate = $this->getEndDate();

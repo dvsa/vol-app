@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Grant Fee Test
  *
@@ -37,7 +39,7 @@ class CreateGrantFeeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 111
@@ -113,7 +115,7 @@ class CreateGrantFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandExistingGrantFee()
+    public function testHandleCommandExistingGrantFee(): void
     {
         $data = [
             'id' => 111

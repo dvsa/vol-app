@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\User;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * RolePermission Abstract Entity
+ * AbstractRolePermission Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -28,13 +33,44 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractRolePermission implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractRolePermission implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to role
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\Role
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\Role", fetch="LAZY")
+     * @ORM\JoinColumn(name="role_id", referencedColumnName="id")
+     */
+    protected $role;
+
+    /**
+     * Foreign Key to permission
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\Permission
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\Permission", fetch="LAZY")
+     * @ORM\JoinColumn(name="permission_id", referencedColumnName="id")
+     */
+    protected $permission;
 
     /**
      * Created by
@@ -48,17 +84,6 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -68,30 +93,6 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
      * @Gedmo\Blameable(on="update")
      */
     protected $lastModifiedBy;
-
-    /**
-     * Permission
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\Permission
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\Permission", fetch="LAZY")
-     * @ORM\JoinColumn(name="permission_id", referencedColumnName="id", nullable=false)
-     */
-    protected $permission;
-
-    /**
-     * Role
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\Role
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\User\Role",
-     *     fetch="LAZY",
-     *     inversedBy="rolePermissions"
-     * )
-     * @ORM\JoinColumn(name="role_id", referencedColumnName="id", nullable=false)
-     */
-    protected $role;
 
     /**
      * Version
@@ -104,28 +105,20 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
     protected $version = 1;
 
     /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return RolePermission
+     * Initialise the collections
      */
-    public function setCreatedBy($createdBy)
+    public function __construct()
     {
-        $this->createdBy = $createdBy;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * Initialise collections
      */
-    public function getCreatedBy()
+    public function initCollections(): void
     {
-        return $this->createdBy;
     }
+
 
     /**
      * Set the id
@@ -152,33 +145,33 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the last modified by
+     * Set the role
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\Role $role new value being set
      *
      * @return RolePermission
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setRole($role)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->role = $role;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the role
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * @return \Dvsa\Olcs\Api\Entity\User\Role
      */
-    public function getLastModifiedBy()
+    public function getRole()
     {
-        return $this->lastModifiedBy;
+        return $this->role;
     }
 
     /**
      * Set the permission
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\Permission $permission entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\Permission $permission new value being set
      *
      * @return RolePermission
      */
@@ -200,27 +193,51 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the role
+     * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\Role $role entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return RolePermission
      */
-    public function setRole($role)
+    public function setCreatedBy($createdBy)
     {
-        $this->role = $role;
+        $this->createdBy = $createdBy;
 
         return $this;
     }
 
     /**
-     * Get the role
+     * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\Role
+     * @return \Dvsa\Olcs\Api\Entity\User\User
      */
-    public function getRole()
+    public function getCreatedBy()
     {
-        return $this->role;
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return RolePermission
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -245,5 +262,14 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

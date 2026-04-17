@@ -25,6 +25,7 @@ final class CreateOtherLicence extends AbstractCommandHandler
 {
     protected $repoServiceName = 'OtherLicence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $otherLicence = $this->createOtherLicenceObject($command);

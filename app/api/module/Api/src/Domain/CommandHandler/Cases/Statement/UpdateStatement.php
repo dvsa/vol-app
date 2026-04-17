@@ -39,6 +39,7 @@ final class UpdateStatement extends AbstractCommandHandler implements Transactio
      * @return Result
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Generate Licence Number Test
  *
@@ -19,6 +21,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\GenerateLicenceNumber as Cmd;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\Licence\LicenceNoGen as LicenceNoGenEntity;
+use Dvsa\Olcs\Api\Entity\System\RefData;
 
 /**
  * Generate Licence Number Test
@@ -36,7 +39,8 @@ class GenerateLicenceNumberTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
@@ -52,10 +56,8 @@ class GenerateLicenceNumberTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider cantGenerateProvider
-     */
-    public function testHandleCommandCantGenerate(ApplicationEntity $application)
+    #[\PHPUnit\Framework\Attributes\DataProvider('cantGenerateProvider')]
+    public function testHandleCommandCantGenerate(ApplicationEntity $application): void
     {
         $data = [
             'id' => 111
@@ -84,10 +86,8 @@ class GenerateLicenceNumberTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider gvOrPsvProvider
-     */
-    public function testHandleCommandWithoutLicenceNo(ApplicationEntity $application, $expectedLicNo)
+    #[\PHPUnit\Framework\Attributes\DataProvider('gvOrPsvProvider')]
+    public function testHandleCommandWithoutLicenceNo(ApplicationEntity $application, mixed $expectedLicNo): void
     {
         $data = [
             'id' => 111
@@ -130,7 +130,7 @@ class GenerateLicenceNumberTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithLicenceNo()
+    public function testHandleCommandWithLicenceNo(): void
     {
         $data = [
             'id' => 111
@@ -176,7 +176,7 @@ class GenerateLicenceNumberTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithoutChange()
+    public function testHandleCommandWithoutChange(): void
     {
         $data = [
             'id' => 111
@@ -217,13 +217,13 @@ class GenerateLicenceNumberTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function cantGenerateProvider()
+    public static function cantGenerateProvider(): array
     {
-        $this->initReferences();
+        $gvRefData = m::mock(RefData::class)->makePartial()->setId(LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE);
 
         $applicationWithNulls = m::mock(ApplicationEntity::class)->makePartial();
         $applicationWithGoodsOrPsv = m::mock(ApplicationEntity::class)->makePartial();
-        $applicationWithGoodsOrPsv->setGoodsOrPsv($this->refData[LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE]);
+        $applicationWithGoodsOrPsv->setGoodsOrPsv($gvRefData);
 
         return [
             [
@@ -235,15 +235,16 @@ class GenerateLicenceNumberTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function gvOrPsvProvider()
+    public static function gvOrPsvProvider(): array
     {
-        $this->initReferences();
+        $gvRefData = m::mock(RefData::class)->makePartial()->setId(LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE);
+        $psvRefData = m::mock(RefData::class)->makePartial()->setId(LicenceEntity::LICENCE_CATEGORY_PSV);
 
         $applicationGv = m::mock(ApplicationEntity::class)->makePartial();
-        $applicationGv->setGoodsOrPsv($this->refData[LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE]);
+        $applicationGv->setGoodsOrPsv($gvRefData);
 
         $applicationPsv = m::mock(ApplicationEntity::class)->makePartial();
-        $applicationPsv->setGoodsOrPsv($this->refData[LicenceEntity::LICENCE_CATEGORY_PSV]);
+        $applicationPsv->setGoodsOrPsv($psvRefData);
 
         return [
             [

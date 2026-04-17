@@ -20,6 +20,7 @@ class UnlicensedBusinessDetails extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Organisation';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $organisation = $this->getRepo()->fetchUsingId($query);

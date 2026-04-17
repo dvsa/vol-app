@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\AnswerSaver;
 
 use Dvsa\Olcs\Api\Domain\Repository\Answer as AnswerRepository;
@@ -17,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class GenericAnswerProviderTest extends MockeryTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
         $questionId = 43;
         $qaEntityId = 124;

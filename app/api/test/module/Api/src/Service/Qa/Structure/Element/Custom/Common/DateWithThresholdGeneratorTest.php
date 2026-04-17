@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Common;
 
 use DateInterval;
@@ -21,7 +23,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class DateWithThresholdGeneratorTest extends MockeryTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $elementGeneratorContext = m::mock(ElementGeneratorContext::class);
 

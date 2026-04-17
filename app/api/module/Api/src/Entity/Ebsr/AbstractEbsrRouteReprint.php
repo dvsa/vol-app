@@ -1,18 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Ebsr;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
- * EbsrRouteReprint Abstract Entity
+ * AbstractEbsrRouteReprint Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\Table(name="ebsr_route_reprint",
@@ -23,21 +28,42 @@ use Doctrine\ORM\Mapping as ORM;
  *    }
  * )
  */
-abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
 
     /**
-     * Bus reg
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to bus_reg
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
      *
      * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", fetch="LAZY")
-     * @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id")
      */
     protected $busReg;
+
+    /**
+     * RequestedUser
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\User
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="requested_user_id", referencedColumnName="id")
+     */
+    protected $requestedUser;
 
     /**
      * Exception name
@@ -49,24 +75,13 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
     protected $exceptionName;
 
     /**
-     * Identifier - Id
+     * Scale
      *
-     * @var int
+     * @var bool
      *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(type="boolean", name="scale", nullable=false, options={"default": 0})
      */
-    protected $id;
-
-    /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
+    protected $scale = 0;
 
     /**
      * Published timestamp
@@ -87,28 +102,58 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
     protected $requestedTimestamp;
 
     /**
-     * Requested user
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="requested_user_id", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
-    protected $requestedUser;
+    protected $olbsKey;
 
     /**
-     * Scale
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="scale", nullable=false, options={"default": 0})
+     * Initialise the collections
      */
-    protected $scale = 0;
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return EbsrRouteReprint
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set the bus reg
      *
-     * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
      * @return EbsrRouteReprint
      */
@@ -127,6 +172,30 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
     public function getBusReg()
     {
         return $this->busReg;
+    }
+
+    /**
+     * Set the requested user
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $requestedUser new value being set
+     *
+     * @return EbsrRouteReprint
+     */
+    public function setRequestedUser($requestedUser)
+    {
+        $this->requestedUser = $requestedUser;
+
+        return $this;
+    }
+
+    /**
+     * Get the requested user
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getRequestedUser()
+    {
+        return $this->requestedUser;
     }
 
     /**
@@ -154,51 +223,27 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
     }
 
     /**
-     * Set the id
+     * Set the scale
      *
-     * @param int $id new value being set
+     * @param bool $scale new value being set
      *
      * @return EbsrRouteReprint
      */
-    public function setId($id)
+    public function setScale($scale)
     {
-        $this->id = $id;
+        $this->scale = $scale;
 
         return $this;
     }
 
     /**
-     * Get the id
+     * Get the scale
      *
-     * @return int
+     * @return bool
      */
-    public function getId()
+    public function getScale()
     {
-        return $this->id;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return EbsrRouteReprint
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
+        return $this->scale;
     }
 
     /**
@@ -220,8 +265,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
+     * @return \DateTime
      */
     public function getPublishedTimestamp($asDateTime = false)
     {
@@ -251,8 +295,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
+     * @return \DateTime
      */
     public function getRequestedTimestamp($asDateTime = false)
     {
@@ -264,50 +307,35 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
     }
 
     /**
-     * Set the requested user
+     * Set the olbs key
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $requestedUser entity being set as the value
+     * @param int $olbsKey new value being set
      *
      * @return EbsrRouteReprint
      */
-    public function setRequestedUser($requestedUser)
+    public function setOlbsKey($olbsKey)
     {
-        $this->requestedUser = $requestedUser;
+        $this->olbsKey = $olbsKey;
 
         return $this;
     }
 
     /**
-     * Get the requested user
+     * Get the olbs key
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * @return int
      */
-    public function getRequestedUser()
+    public function getOlbsKey()
     {
-        return $this->requestedUser;
+        return $this->olbsKey;
     }
 
     /**
-     * Set the scale
-     *
-     * @param boolean $scale new value being set
-     *
-     * @return EbsrRouteReprint
+     * Get bundle data
      */
-    public function setScale($scale)
+    #[\Override]
+    public function __toString(): string
     {
-        $this->scale = $scale;
-
-        return $this;
-    }
-
-    /**
-     * Get the scale
-     *
-     * @return boolean
-     */
-    public function getScale()
-    {
-        return $this->scale;
+        return (string) $this->getId();
     }
 }

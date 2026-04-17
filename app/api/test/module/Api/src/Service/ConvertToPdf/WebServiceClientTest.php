@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\ConvertToPdf;
 
 use Dvsa\Olcs\Api\Service\ConvertToPdf\WebServiceClient;
@@ -14,7 +16,7 @@ use org\bovigo\vfs\vfsStream;
  */
 class WebServiceClientTest extends MockeryTestCase
 {
-    public function testConvertError()
+    public function testConvertError(): void
     {
         $mockResponse = m::mock(Response::class);
         $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(false);
@@ -35,7 +37,7 @@ class WebServiceClientTest extends MockeryTestCase
         $sut->convert('foo.rtf', 'bar.pdf');
     }
 
-    public function testConvertErrorWithMessage()
+    public function testConvertErrorWithMessage(): void
     {
         $mockResponse = m::mock(Response::class);
         $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(false);
@@ -55,7 +57,7 @@ class WebServiceClientTest extends MockeryTestCase
         $sut->convert('foo.rtf', 'bar.pdf');
     }
 
-    public function testConvert()
+    public function testConvert(): void
     {
         $mockResponse = m::mock(Response::class);
         $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(true);

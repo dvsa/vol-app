@@ -21,6 +21,7 @@ class Stlstandardlicparagraph extends DynamicBookmark
      *
      * @return QueryInterface
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         if (isset($data['application'])) {
@@ -48,6 +49,7 @@ class Stlstandardlicparagraph extends DynamicBookmark
      *
      * @return null|string
      */
+    #[\Override]
     public function render()
     {
         $licenceType = $this->getLicenceType();

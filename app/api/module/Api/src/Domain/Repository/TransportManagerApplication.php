@@ -101,6 +101,7 @@ class TransportManagerApplication extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(\Doctrine\ORM\QueryBuilder $qb, \Dvsa\Olcs\Transfer\Query\QueryInterface $query)
     {
         // if user param exists then add where clauses
@@ -142,6 +143,7 @@ class TransportManagerApplication extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListJoins(\Doctrine\ORM\QueryBuilder $qb)
     {
         $this->getQueryBuilder()

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\FeatureToggle;
 
 use Mockery as m;
@@ -26,7 +28,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $cmdData = [
             'friendlyName' => 'friendly name',

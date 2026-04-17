@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Send Ebsr Received Email Test
  *
@@ -14,13 +16,13 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrReceived;
 
 /**
  * Send Ebsr Received Email Test
- * @group ebsrEmails
  *
  * @author Craig R <uk@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\Group('ebsrEmails')]
 class SendEbsrReceivedTest extends SendEbsrEmailTestAbstract
 {
     protected $template = 'ebsr-received';
     protected $sutClass = \Dvsa\Olcs\Api\Domain\CommandHandler\Email\SendEbsrReceived::class;
-    protected $cmdClass = SendEbsrReceived::class;
+    protected const CMD_CLASS = SendEbsrReceived::class;
 }

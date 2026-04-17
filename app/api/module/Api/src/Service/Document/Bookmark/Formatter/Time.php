@@ -18,6 +18,7 @@ class Time implements FormatterInterface
      *
      * @return null|string
      */
+    #[\Override]
     public static function format(array $data)
     {
         try {

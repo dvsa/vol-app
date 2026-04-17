@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Discs;
 
 use Mockery as m;
@@ -22,7 +24,7 @@ class CeaseGoodsDiscsForApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandNewApp()
+    public function testHandleCommandNewApp(): void
     {
         $data = [
             'application' => 123
@@ -52,7 +54,7 @@ class CeaseGoodsDiscsForApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandVariationApp()
+    public function testHandleCommandVariationApp(): void
     {
         $data = [
             'application' => 123

@@ -24,7 +24,7 @@ class ApplicationBuilder implements BuilderInterface
     /**
      * @param int|null $id
      */
-    public function __construct(Licence $licence, int $id = null, bool $isVariation = false)
+    public function __construct(Licence $licence, ?int $id = null, bool $isVariation = false)
     {
         $this->instance = new Application($licence, new RefData(Application::APPLICATION_STATUS_NOT_SUBMITTED), $isVariation);
         $this->instance->setId($id ?? self::AN_ID);
@@ -126,7 +126,7 @@ class ApplicationBuilder implements BuilderInterface
      * @param int|null $id
      * @return self
      */
-    public static function applicationForLicence($licence, int $id = null): self
+    public static function applicationForLicence(mixed $licence, ?int $id = null): self
     {
         if ($licence instanceof LicenceBuilder) {
             $licence = $licence->build();
@@ -138,7 +138,7 @@ class ApplicationBuilder implements BuilderInterface
      * @param int|null $id
      * @return self
      */
-    public static function application(int $id = null): self
+    public static function application(?int $id = null): self
     {
         return static::applicationForLicence(LicenceBuilder::aLicence($id));
     }
@@ -148,7 +148,7 @@ class ApplicationBuilder implements BuilderInterface
      * @param int|null $id
      * @return self
      */
-    public static function variationForLicence($licence, int $id = null): self
+    public static function variationForLicence(mixed $licence, ?int $id = null): self
     {
         if ($licence instanceof LicenceBuilder) {
             $licence = $licence->build();
@@ -160,7 +160,7 @@ class ApplicationBuilder implements BuilderInterface
      * @param int|null $id
      * @return self
      */
-    public static function variation(int $id = null): self
+    public static function variation(?int $id = null): self
     {
         return static::variationForLicence(LicenceBuilder::aLicence($id));
     }

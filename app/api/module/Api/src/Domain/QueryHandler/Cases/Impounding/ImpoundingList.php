@@ -14,6 +14,7 @@ final class ImpoundingList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Impounding';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var ImpoundingRepo $repo */

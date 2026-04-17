@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * PiHearingTest
  */
@@ -58,7 +60,8 @@ class PiHearingTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->ta1 = m::mock(TrafficAreaEntity::class);
         $this->ta1->shouldReceive('getId')->andReturn($this->trafficArea);
@@ -89,10 +92,10 @@ class PiHearingTest extends AbstractCommandHandlerTestCase
     /**
      * testHandleCommand
      *
-     * @dataProvider handleTmHearingProvider
      * @param string $cmdClass
      */
-    public function testHandleNonTmHearing($cmdClass, $caseType)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleTmHearingProvider')]
+    public function testHandleNonTmHearing(mixed $cmdClass, mixed $caseType): void
     {
         $id = 99;
         $isTm = false;
@@ -160,11 +163,10 @@ class PiHearingTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider commandProvider
-     *
      * @param $cmdClass
      */
-    public function testHandleTmHearingCreate($cmdClass)
+    #[\PHPUnit\Framework\Attributes\DataProvider('commandProvider')]
+    public function testHandleTmHearingCreate(mixed $cmdClass): void
     {
         $id = 99;
         $isTm = true;
@@ -257,11 +259,10 @@ class PiHearingTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider commandProvider
-     *
      * @param $cmdClass
      */
-    public function testHandleTmHearingDelete($cmdClass)
+    #[\PHPUnit\Framework\Attributes\DataProvider('commandProvider')]
+    public function testHandleTmHearingDelete(mixed $cmdClass): void
     {
         $id = 99;
         $isTm = true;
@@ -342,7 +343,7 @@ class PiHearingTest extends AbstractCommandHandlerTestCase
      * @param $publicationId
      * @return m\MockInterface
      */
-    private function getPublicationMock($publicationId)
+    private function getPublicationMock(mixed $publicationId): mixed
     {
         $publicationMock = m::mock(PublicationEntity::class);
         $publicationMock->shouldReceive('getId')->andReturn($publicationId);
@@ -354,7 +355,7 @@ class PiHearingTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function commandProvider()
+    public static function commandProvider(): array
     {
         return [
             [PiHearingCmd::class],
@@ -365,7 +366,7 @@ class PiHearingTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function handleTmHearingProvider()
+    public static function handleTmHearingProvider(): array
     {
         return [
             [PiHearingCmd::class, CasesEntity::APP_CASE_TYPE],

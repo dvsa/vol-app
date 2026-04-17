@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\TrafficArea;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,9 +17,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * TrafficArea Abstract Entity
+ * AbstractTrafficArea Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -29,7 +32,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -38,25 +41,22 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     use ModifiedOnTrait;
 
     /**
-     * Bus reg
+     * Primary key
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var string
      *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg",
-     *     mappedBy="trafficAreas",
-     *     fetch="LAZY"
-     * )
+     * @ORM\Id
+     * @ORM\Column(type="string", name="id", length=1, nullable=false)
      */
-    protected $busRegs;
+    protected $id = '';
 
     /**
-     * Contact details
+     * Foreign Key to contact_details
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
      *
      * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
-     * @ORM\JoinColumn(name="contact_details_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="contact_details_id", referencedColumnName="id")
      */
     protected $contactDetails;
 
@@ -72,52 +72,6 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(type="string", name="id", length=1)
-     */
-    protected $id;
-
-    /**
-     * Is england
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_england", nullable=false, options={"default": 0})
-     */
-    protected $isEngland = 0;
-
-    /**
-     * Is ni
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_ni", nullable=false, options={"default": 0})
-     */
-    protected $isNi = 0;
-
-    /**
-     * Is scotland
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_scotland", nullable=false, options={"default": 0})
-     */
-    protected $isScotland = 0;
-
-    /**
-     * Is wales
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_wales", nullable=false, options={"default": 0})
-     */
-    protected $isWales = 0;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -129,44 +83,67 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     protected $lastModifiedBy;
 
     /**
-     * Name
+     * e.g. North Eastern, Wales
      *
      * @var string
      *
      * @ORM\Column(type="string", name="name", length=70, nullable=false)
      */
-    protected $name;
+    protected $name = '';
 
     /**
-     * Recipient
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Publication\Recipient",
-     *     mappedBy="trafficAreas",
-     *     fetch="LAZY"
-     * )
-     */
-    protected $recipients;
-
-    /**
-     * Sales person reference
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="sales_person_reference", length=70, nullable=false)
-     */
-    protected $salesPersonReference;
-
-    /**
-     * Txc name
+     * TransXChange name
      *
      * @var string
      *
      * @ORM\Column(type="string", name="txc_name", length=70, nullable=true)
      */
     protected $txcName;
+
+    /**
+     * Is in Scotland.  Affects some business logic with different Scottish regulations
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_scotland", nullable=false, options={"default": 0})
+     */
+    protected $isScotland = 0;
+
+    /**
+     * Is in Wales
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_wales", nullable=false, options={"default": 0})
+     */
+    protected $isWales = 0;
+
+    /**
+     * Is in Northern Ireland
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_ni", nullable=false, options={"default": 0})
+     */
+    protected $isNi = 0;
+
+    /**
+     * Is in England
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_england", nullable=false, options={"default": 0})
+     */
+    protected $isEngland = 0;
+
+    /**
+     * used for fee payments
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="sales_person_reference", length=70, nullable=false)
+     */
+    protected $salesPersonReference = '';
 
     /**
      * Version
@@ -179,7 +156,25 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     protected $version = 1;
 
     /**
-     * Document
+     * BusRegs
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", mappedBy="trafficAreas", fetch="LAZY")
+     */
+    protected $busRegs;
+
+    /**
+     * Recipients
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Publication\Recipient", mappedBy="trafficAreas", fetch="LAZY")
+     */
+    protected $recipients;
+
+    /**
+     * Documents
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -188,21 +183,16 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     protected $documents;
 
     /**
-     * Traffic area enforcement area
+     * TrafficAreaEnforcementAreas
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficAreaEnforcementArea",
-     *     mappedBy="trafficArea"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficAreaEnforcementArea", mappedBy="trafficArea")
      */
     protected $trafficAreaEnforcementAreas;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -210,11 +200,9 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->busRegs = new ArrayCollection();
         $this->recipients = new ArrayCollection();
@@ -222,116 +210,6 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
         $this->trafficAreaEnforcementAreas = new ArrayCollection();
     }
 
-    /**
-     * Set the bus reg
-     *
-     * @param ArrayCollection $busRegs collection being set as the value
-     *
-     * @return TrafficArea
-     */
-    public function setBusRegs($busRegs)
-    {
-        $this->busRegs = $busRegs;
-
-        return $this;
-    }
-
-    /**
-     * Get the bus regs
-     *
-     * @return ArrayCollection
-     */
-    public function getBusRegs()
-    {
-        return $this->busRegs;
-    }
-
-    /**
-     * Add a bus regs
-     *
-     * @param ArrayCollection|mixed $busRegs collection being added
-     *
-     * @return TrafficArea
-     */
-    public function addBusRegs($busRegs)
-    {
-        if ($busRegs instanceof ArrayCollection) {
-            $this->busRegs = new ArrayCollection(
-                array_merge(
-                    $this->busRegs->toArray(),
-                    $busRegs->toArray()
-                )
-            );
-        } elseif (!$this->busRegs->contains($busRegs)) {
-            $this->busRegs->add($busRegs);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Remove a bus regs
-     *
-     * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being removed
-     *
-     * @return TrafficArea
-     */
-    public function removeBusRegs($busRegs)
-    {
-        if ($this->busRegs->contains($busRegs)) {
-            $this->busRegs->removeElement($busRegs);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the contact details
-     *
-     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails entity being set as the value
-     *
-     * @return TrafficArea
-     */
-    public function setContactDetails($contactDetails)
-    {
-        $this->contactDetails = $contactDetails;
-
-        return $this;
-    }
-
-    /**
-     * Get the contact details
-     *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     */
-    public function getContactDetails()
-    {
-        return $this->contactDetails;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return TrafficArea
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
 
     /**
      * Set the id
@@ -358,105 +236,57 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Set the is england
+     * Set the contact details
      *
-     * @param boolean $isEngland new value being set
+     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails new value being set
      *
      * @return TrafficArea
      */
-    public function setIsEngland($isEngland)
+    public function setContactDetails($contactDetails)
     {
-        $this->isEngland = $isEngland;
+        $this->contactDetails = $contactDetails;
 
         return $this;
     }
 
     /**
-     * Get the is england
+     * Get the contact details
      *
-     * @return boolean
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
      */
-    public function getIsEngland()
+    public function getContactDetails()
     {
-        return $this->isEngland;
+        return $this->contactDetails;
     }
 
     /**
-     * Set the is ni
+     * Set the created by
      *
-     * @param boolean $isNi new value being set
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return TrafficArea
      */
-    public function setIsNi($isNi)
+    public function setCreatedBy($createdBy)
     {
-        $this->isNi = $isNi;
+        $this->createdBy = $createdBy;
 
         return $this;
     }
 
     /**
-     * Get the is ni
+     * Get the created by
      *
-     * @return boolean
+     * @return \Dvsa\Olcs\Api\Entity\User\User
      */
-    public function getIsNi()
+    public function getCreatedBy()
     {
-        return $this->isNi;
-    }
-
-    /**
-     * Set the is scotland
-     *
-     * @param boolean $isScotland new value being set
-     *
-     * @return TrafficArea
-     */
-    public function setIsScotland($isScotland)
-    {
-        $this->isScotland = $isScotland;
-
-        return $this;
-    }
-
-    /**
-     * Get the is scotland
-     *
-     * @return boolean
-     */
-    public function getIsScotland()
-    {
-        return $this->isScotland;
-    }
-
-    /**
-     * Set the is wales
-     *
-     * @param boolean $isWales new value being set
-     *
-     * @return TrafficArea
-     */
-    public function setIsWales($isWales)
-    {
-        $this->isWales = $isWales;
-
-        return $this;
-    }
-
-    /**
-     * Get the is wales
-     *
-     * @return boolean
-     */
-    public function getIsWales()
-    {
-        return $this->isWales;
+        return $this->createdBy;
     }
 
     /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return TrafficArea
      */
@@ -502,9 +332,240 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Set the recipient
+     * Set the txc name
      *
-     * @param ArrayCollection $recipients collection being set as the value
+     * @param string $txcName new value being set
+     *
+     * @return TrafficArea
+     */
+    public function setTxcName($txcName)
+    {
+        $this->txcName = $txcName;
+
+        return $this;
+    }
+
+    /**
+     * Get the txc name
+     *
+     * @return string
+     */
+    public function getTxcName()
+    {
+        return $this->txcName;
+    }
+
+    /**
+     * Set the is scotland
+     *
+     * @param bool $isScotland new value being set
+     *
+     * @return TrafficArea
+     */
+    public function setIsScotland($isScotland)
+    {
+        $this->isScotland = $isScotland;
+
+        return $this;
+    }
+
+    /**
+     * Get the is scotland
+     *
+     * @return bool
+     */
+    public function getIsScotland()
+    {
+        return $this->isScotland;
+    }
+
+    /**
+     * Set the is wales
+     *
+     * @param bool $isWales new value being set
+     *
+     * @return TrafficArea
+     */
+    public function setIsWales($isWales)
+    {
+        $this->isWales = $isWales;
+
+        return $this;
+    }
+
+    /**
+     * Get the is wales
+     *
+     * @return bool
+     */
+    public function getIsWales()
+    {
+        return $this->isWales;
+    }
+
+    /**
+     * Set the is ni
+     *
+     * @param bool $isNi new value being set
+     *
+     * @return TrafficArea
+     */
+    public function setIsNi($isNi)
+    {
+        $this->isNi = $isNi;
+
+        return $this;
+    }
+
+    /**
+     * Get the is ni
+     *
+     * @return bool
+     */
+    public function getIsNi()
+    {
+        return $this->isNi;
+    }
+
+    /**
+     * Set the is england
+     *
+     * @param bool $isEngland new value being set
+     *
+     * @return TrafficArea
+     */
+    public function setIsEngland($isEngland)
+    {
+        $this->isEngland = $isEngland;
+
+        return $this;
+    }
+
+    /**
+     * Get the is england
+     *
+     * @return bool
+     */
+    public function getIsEngland()
+    {
+        return $this->isEngland;
+    }
+
+    /**
+     * Set the sales person reference
+     *
+     * @param string $salesPersonReference new value being set
+     *
+     * @return TrafficArea
+     */
+    public function setSalesPersonReference($salesPersonReference)
+    {
+        $this->salesPersonReference = $salesPersonReference;
+
+        return $this;
+    }
+
+    /**
+     * Get the sales person reference
+     *
+     * @return string
+     */
+    public function getSalesPersonReference()
+    {
+        return $this->salesPersonReference;
+    }
+
+    /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return TrafficArea
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set the bus regs
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being set as the value
+     *
+     * @return TrafficArea
+     */
+    public function setBusRegs($busRegs)
+    {
+        $this->busRegs = $busRegs;
+
+        return $this;
+    }
+
+    /**
+     * Get the bus regs
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getBusRegs()
+    {
+        return $this->busRegs;
+    }
+
+    /**
+     * Add a bus regs
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $busRegs collection being added
+     *
+     * @return TrafficArea
+     */
+    public function addBusRegs($busRegs)
+    {
+        if ($busRegs instanceof ArrayCollection) {
+            $this->busRegs = new ArrayCollection(
+                array_merge(
+                    $this->busRegs->toArray(),
+                    $busRegs->toArray()
+                )
+            );
+        } elseif (!$this->busRegs->contains($busRegs)) {
+            $this->busRegs->add($busRegs);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove a bus regs
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being removed
+     *
+     * @return TrafficArea
+     */
+    public function removeBusRegs($busRegs)
+    {
+        if ($this->busRegs->contains($busRegs)) {
+            $this->busRegs->removeElement($busRegs);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the recipients
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $recipients collection being set as the value
      *
      * @return TrafficArea
      */
@@ -518,7 +579,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Get the recipients
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getRecipients()
     {
@@ -528,7 +589,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Add a recipients
      *
-     * @param ArrayCollection|mixed $recipients collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $recipients collection being added
      *
      * @return TrafficArea
      */
@@ -565,81 +626,9 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Set the sales person reference
+     * Set the documents
      *
-     * @param string $salesPersonReference new value being set
-     *
-     * @return TrafficArea
-     */
-    public function setSalesPersonReference($salesPersonReference)
-    {
-        $this->salesPersonReference = $salesPersonReference;
-
-        return $this;
-    }
-
-    /**
-     * Get the sales person reference
-     *
-     * @return string
-     */
-    public function getSalesPersonReference()
-    {
-        return $this->salesPersonReference;
-    }
-
-    /**
-     * Set the txc name
-     *
-     * @param string $txcName new value being set
-     *
-     * @return TrafficArea
-     */
-    public function setTxcName($txcName)
-    {
-        $this->txcName = $txcName;
-
-        return $this;
-    }
-
-    /**
-     * Get the txc name
-     *
-     * @return string
-     */
-    public function getTxcName()
-    {
-        return $this->txcName;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return TrafficArea
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set the document
-     *
-     * @param ArrayCollection $documents collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being set as the value
      *
      * @return TrafficArea
      */
@@ -653,7 +642,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Get the documents
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getDocuments()
     {
@@ -663,7 +652,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Add a documents
      *
-     * @param ArrayCollection|mixed $documents collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $documents collection being added
      *
      * @return TrafficArea
      */
@@ -700,9 +689,9 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Set the traffic area enforcement area
+     * Set the traffic area enforcement areas
      *
-     * @param ArrayCollection $trafficAreaEnforcementAreas collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $trafficAreaEnforcementAreas collection being set as the value
      *
      * @return TrafficArea
      */
@@ -716,7 +705,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Get the traffic area enforcement areas
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getTrafficAreaEnforcementAreas()
     {
@@ -726,7 +715,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Add a traffic area enforcement areas
      *
-     * @param ArrayCollection|mixed $trafficAreaEnforcementAreas collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $trafficAreaEnforcementAreas collection being added
      *
      * @return TrafficArea
      */
@@ -760,5 +749,14 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

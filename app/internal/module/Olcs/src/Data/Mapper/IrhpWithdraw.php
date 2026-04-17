@@ -24,6 +24,7 @@ class IrhpWithdraw implements MapperInterface
         return $cmdData;
     }
 
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         return $data;

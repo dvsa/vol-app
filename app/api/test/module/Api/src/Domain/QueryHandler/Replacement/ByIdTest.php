@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Replacement;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Replacement\ById as ReplacementByIdHandler;
 use Dvsa\Olcs\Api\Domain\Repository\Replacement as ReplacementRepo;
 use Dvsa\Olcs\Transfer\Query\Replacement\ById as QryClass;
-use Dvsa\OlcsTest\Api\Domain\QueryHandler\AbstractQueryByIdHandlerTest;
+use Dvsa\OlcsTest\Api\Domain\QueryHandler\AbstractQueryByIdHandlerTestCase;
 use Dvsa\Olcs\Api\Entity\System\Replacement as ReplacementEntity;
 
 /**
@@ -13,7 +15,7 @@ use Dvsa\Olcs\Api\Entity\System\Replacement as ReplacementEntity;
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-class ByIdTest extends AbstractQueryByIdHandlerTest
+class ByIdTest extends AbstractQueryByIdHandlerTestCase
 {
     protected $sutClass = ReplacementByIdHandler::class;
     protected $sutRepo = 'Replacement';

@@ -28,6 +28,7 @@ final class DeleteApplicationLinks extends AbstractCommandHandler implements Tra
      * @param Cmd $command
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var OperatingCentreEntity $operatingCentre */

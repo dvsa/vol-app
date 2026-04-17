@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ContinuationReview\Section;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -33,7 +35,7 @@ class TransportManagersReviewServiceTest extends MockeryTestCase
         $this->sut = new TransportManagersReviewService($abstractReviewServiceServices);
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         $continuationDetail = new ContinuationDetail();
 

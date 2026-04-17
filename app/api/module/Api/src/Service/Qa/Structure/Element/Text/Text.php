@@ -23,6 +23,7 @@ class Text implements ElementInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getRepresentation()
     {
         $representation = [

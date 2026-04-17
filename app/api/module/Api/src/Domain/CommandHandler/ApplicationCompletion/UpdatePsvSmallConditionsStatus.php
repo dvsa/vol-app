@@ -10,6 +10,7 @@ final class UpdatePsvSmallConditionsStatus extends AbstractUpdateStatus
 {
     protected $section = 'PsvSmallConditions';
 
+    #[\Override]
     protected function isSectionValid(Application $application): bool
     {
         return $application->isSectionCompleted($this->section);

@@ -18,6 +18,7 @@ class TransportManagerDeclarationReviewService extends AbstractReviewService
      *
      * @return array
      */
+    #[\Override]
     public function getConfig(TransportManagerApplication $tma)
     {
         $markup = 'markup-tma-declaration';

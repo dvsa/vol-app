@@ -27,6 +27,7 @@ class SearchDateRangeFieldset extends Fieldset
      *
      * @return void
      */
+    #[\Override]
     public function init()
     {
         $index = $this->getOption('index');

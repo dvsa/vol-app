@@ -39,6 +39,7 @@ class ContentStoreFileUploader implements FileUploaderInterface, FactoryInterfac
      * @throws Exception
      * @throws MimeNotAllowedException
      */
+    #[\Override]
     public function upload($identifier, ContentStoreFile $file)
     {
         $file->setIdentifier($identifier);
@@ -67,6 +68,7 @@ class ContentStoreFileUploader implements FileUploaderInterface, FactoryInterfac
      *
      * @return ContentStoreFile|null
      */
+    #[\Override]
     public function download($identifier)
     {
         return $this->contentStoreClient->read($identifier);
@@ -79,6 +81,7 @@ class ContentStoreFileUploader implements FileUploaderInterface, FactoryInterfac
      *
      * @return Response
      */
+    #[\Override]
     public function remove($identifier)
     {
         return $this->contentStoreClient->remove($identifier);
@@ -96,6 +99,7 @@ class ContentStoreFileUploader implements FileUploaderInterface, FactoryInterfac
     {
         return $this->contentStoreClient->write($identifier, $file);
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->contentStoreClient = $container->get('ContentStore');

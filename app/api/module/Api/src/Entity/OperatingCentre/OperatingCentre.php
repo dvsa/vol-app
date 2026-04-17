@@ -78,6 +78,7 @@ class OperatingCentre extends AbstractOperatingCentre implements OrganisationPro
      *
      * @return null|\Dvsa\Olcs\Api\Entity\Organisation\Organisation
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         // Application could be different if the operating centre has been S4'd, therefore choose the most recent

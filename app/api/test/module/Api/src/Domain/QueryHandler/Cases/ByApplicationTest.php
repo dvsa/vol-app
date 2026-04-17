@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ByApplication Test
  */
@@ -27,7 +29,7 @@ class ByApplicationTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $applicationId = 7;
         $licenceId = 99;

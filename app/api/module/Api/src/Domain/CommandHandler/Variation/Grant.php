@@ -40,6 +40,7 @@ final class Grant extends AbstractCommandHandler implements TransactionedInterfa
      * @param  Cmd $command Command
      * @return Result                    Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command Cmd */

@@ -30,6 +30,7 @@ final class CeaseGoodsDiscs extends AbstractCommandHandler implements Transactio
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Cmd $command */

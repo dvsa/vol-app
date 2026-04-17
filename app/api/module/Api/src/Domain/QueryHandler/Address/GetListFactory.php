@@ -8,6 +8,7 @@ use Psr\Container\ContainerInterface;
 
 class GetListFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): GetList
     {
         $instance = new GetList(

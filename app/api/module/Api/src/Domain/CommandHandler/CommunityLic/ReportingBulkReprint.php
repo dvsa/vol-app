@@ -20,8 +20,8 @@ final class ReportingBulkReprint extends AbstractCommandHandler implements Uploa
 {
     use UploaderAwareTrait;
 
-    public const UPLOAD_PATH = 'documents/Report/';
-    public const FILENAME_EXTENSION = 'log';
+    public const string UPLOAD_PATH = 'documents/Report/';
+    public const string FILENAME_EXTENSION = 'log';
 
     /**
      * Handle command
@@ -30,6 +30,7 @@ final class ReportingBulkReprint extends AbstractCommandHandler implements Uploa
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $documentIdentifier = $command->getDocumentIdentifier();

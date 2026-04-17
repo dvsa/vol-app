@@ -33,6 +33,7 @@ final class CreateAppeal extends AbstractCommandHandler implements Transactioned
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

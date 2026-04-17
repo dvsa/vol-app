@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Lva;
 
 use Dvsa\Olcs\Api\Entity\Application\Application;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class SectionConfigTest extends MockeryTestCase
 {
-    public function testGetAll()
+    public function testGetAll(): void
     {
         $sut = new SectionConfig();
 
@@ -29,7 +31,7 @@ class SectionConfigTest extends MockeryTestCase
         );
     }
 
-    public function testIsNotUnchanged()
+    public function testIsNotUnchanged(): void
     {
         /** @var ApplicationCompletion $appCompletion */
         $appCompletion = m::mock(ApplicationCompletion::class)->makePartial();
@@ -41,7 +43,7 @@ class SectionConfigTest extends MockeryTestCase
         $this->assertFalse($sut->isNotUnchanged('vehicles'));
     }
 
-    public function testIsNotUnchangedWhenNotUnchanged()
+    public function testIsNotUnchangedWhenNotUnchanged(): void
     {
         /** @var ApplicationCompletion $appCompletion */
         $appCompletion = m::mock(ApplicationCompletion::class)->makePartial();

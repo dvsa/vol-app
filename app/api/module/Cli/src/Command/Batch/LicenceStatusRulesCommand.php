@@ -11,11 +11,13 @@ class LicenceStatusRulesCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:licence-status-rules';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Process licence status change rules');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

@@ -25,16 +25,13 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     use ControllerTraits\DocumentActionTrait;
     use ControllerTraits\DocumentSearchTrait;
 
-    protected TranslationHelperService $translationHelper;
-    protected DocumentSubCategory $docSubCategoryDataService;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        TranslationHelperService $translationHelper,
-        DocumentSubCategory $docSubCategoryDataService
+        protected TranslationHelperService $translationHelper,
+        protected DocumentSubCategory $docSubCategoryDataService
     ) {
         parent::__construct(
             $scriptFactory,
@@ -42,8 +39,6 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
             $tableFactory,
             $viewHelperManager
         );
-        $this->translationHelper = $translationHelper;
-        $this->docSubCategoryDataService = $docSubCategoryDataService;
     }
 
     /**
@@ -52,6 +47,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
      * @see    \Olcs\Controller\Traits\DocumentSearchTrait
      * @return string
      */
+    #[\Override]
     protected function getDocumentTableName()
     {
         return 'documents-with-sla';
@@ -63,6 +59,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
+    #[\Override]
     protected function getDocumentRoute()
     {
         return 'case_licence_docs_attachments';
@@ -74,6 +71,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
+    #[\Override]
     protected function getDocumentRouteParams()
     {
         return ['case' => $this->getFromRoute('case')];
@@ -85,6 +83,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     protected function getDocumentView()
     {
         $filters = $this->getDocumentFilters();
@@ -126,6 +125,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return \Laminas\Form\FormInterface
      */
+    #[\Override]
     protected function getConfiguredDocumentForm()
     {
         $filters = $this->getDocumentFilters();

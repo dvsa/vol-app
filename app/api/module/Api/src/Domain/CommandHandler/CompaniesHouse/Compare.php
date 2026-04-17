@@ -28,6 +28,7 @@ final class Compare extends AbstractCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->result->setFlag('isInsolvent', false);

@@ -10,6 +10,7 @@ class DeclarationReviewService extends AbstractReviewService
      * @param Surrender $surrender
      * @return mixed
      */
+    #[\Override]
     public function getConfigFromData(Surrender $surrender)
     {
         return ['markup' => $this->translateReplace('markup-licence-surrender-declaration', [$surrender->getLicence()->getLicNo()])];

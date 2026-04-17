@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\DocumentShare\Object;
 
 use Dvsa\Olcs\DocumentShare\Data\Object\File;
 use org\bovigo\vfs\vfsStream;
 
-/**
- * @covers \Dvsa\Olcs\DocumentShare\Data\Object\File
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\DocumentShare\Data\Object\File::class)]
 class FileTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \org\bovigo\vfs\vfsStreamDirectory */
@@ -18,7 +18,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $this->vfs = vfsStream::setup('temp');
     }
 
-    public function testSetGet()
+    public function testSetGet(): void
     {
         $sut = new File();
 
@@ -35,7 +35,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
         static::assertEquals(strlen($content), $sut->getSize());
     }
 
-    public function testSetResource()
+    public function testSetResource(): void
     {
         $fsFilePath1 = vfsStream::newFile('unitTemp1')->at($this->vfs)->url();
         $fsFilePath2 = vfsStream::newFile('unitTemp2')->at($this->vfs)->url();

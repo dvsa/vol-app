@@ -52,6 +52,7 @@ abstract class AbstractProcessDlq extends AbstractConsumer implements ConfigAwar
      * @throws ServiceException
      * @throws \Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $organisationRepo = $this->getRepo('Organisation');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Search;
 
 use Common\Service\Helper\FormHelperService;
@@ -68,7 +70,7 @@ class SearchControllerTest extends TestCase
         $this->assertEquals('search/index', $view->getTemplate());
     }
 
-    public function testIndexActionRedirectsWhenNotAuthorizedForVehicleExternal()
+    public function testIndexActionRedirectsWhenNotAuthorizedForVehicleExternal(): void
     {
         $params = m::mock();
         $params->shouldReceive('fromRoute')

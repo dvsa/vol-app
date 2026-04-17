@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CompaniesHouseCompany test
  *
@@ -27,7 +29,7 @@ class CompaniesHouseCompanyTest extends RepositoryTestCase
         $this->setUpSut(CompaniesHouseCompanyRepo::class);
     }
 
-    public function testGetLatestByCompanyNumber()
+    public function testGetLatestByCompanyNumber(): void
     {
         $companyNumber = '01234567';
 
@@ -81,7 +83,7 @@ class CompaniesHouseCompanyTest extends RepositoryTestCase
         $this->sut->getLatestByCompanyNumber($companyNumber);
     }
 
-    public function testGetLatesByCompanyNumberNotFound()
+    public function testGetLatesByCompanyNumberNotFound(): void
     {
         $companyNumber = '01234567';
         $results = [];

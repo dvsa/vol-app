@@ -25,6 +25,7 @@ class Subsidy extends AbstractFilter
      * @throws Exception\RuntimeException If filtering $value is impossible
      * @return mixed
      */
+    #[\Override]
     public function filter($value)
     {
         //if we've no value, default to "none"

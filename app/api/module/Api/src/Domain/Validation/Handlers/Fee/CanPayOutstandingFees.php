@@ -14,6 +14,7 @@ class CanPayOutstandingFees extends AbstractHandler
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto)
     {
         if ($dto->getOrganisationId()) {

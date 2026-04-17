@@ -17,7 +17,8 @@ use Mockery as m;
 
 class DocumentsTest extends QueryHandlerTestCase
 {
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->categoryReferences = [
             Category::CATEGORY_APPLICATION => m::mock(Category::class),
@@ -38,7 +39,7 @@ class DocumentsTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $documents = new ArrayCollection(
             [

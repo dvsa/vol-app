@@ -10,11 +10,13 @@ class ResolvePaymentsCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:resolve-payments';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Resolve pending CPMS payments.');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

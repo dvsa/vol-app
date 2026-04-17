@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Traffic Area list test
  *
@@ -32,7 +34,7 @@ class TrafficAreaListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Query::create(['QUERY']);
 
@@ -52,7 +54,7 @@ class TrafficAreaListTest extends QueryHandlerTestCase
         $this->assertSame('COUNT', $result['count']);
     }
 
-    public function testRedirectForInternalUser()
+    public function testRedirectForInternalUser(): void
     {
         $query = Query::create([]);
         $trafficAreas = ['B','C'];

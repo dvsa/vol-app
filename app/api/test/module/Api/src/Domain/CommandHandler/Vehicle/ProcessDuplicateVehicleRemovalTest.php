@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Vehicle;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -37,7 +39,7 @@ class ProcessDuplicateVehicleRemovalTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandNoResults()
+    public function testHandleCommandNoResults(): void
     {
         $command = Cmd::create([]);
 
@@ -57,7 +59,7 @@ class ProcessDuplicateVehicleRemovalTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $licVehicleId2 = 2;
 
@@ -177,7 +179,7 @@ class ProcessDuplicateVehicleRemovalTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithRemoveVehicleException()
+    public function testHandleCommandWithRemoveVehicleException(): void
     {
         $licVehicleId = 2;
 
@@ -235,7 +237,7 @@ class ProcessDuplicateVehicleRemovalTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandNoEmailAddress()
+    public function testHandleCommandNoEmailAddress(): void
     {
         $licVehicleId = 2;
 
@@ -304,7 +306,7 @@ class ProcessDuplicateVehicleRemovalTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandSorting()
+    public function testHandleCommandSorting(): void
     {
         $licVehicleId1 = 1;
         $licVehicleId2 = 2;
@@ -459,7 +461,7 @@ class ProcessDuplicateVehicleRemovalTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithSendEmailException()
+    public function testHandleCommandWithSendEmailException(): void
     {
         $licVehicleId = 2;
 

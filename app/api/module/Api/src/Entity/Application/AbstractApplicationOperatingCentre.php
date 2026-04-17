@@ -1,100 +1,94 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Application;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * ApplicationOperatingCentre Abstract Entity
+ * AbstractApplicationOperatingCentre Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
  * @ORM\Table(name="application_operating_centre",
  *    indexes={
- *        @ORM\Index(name="ix_application_operating_centre_application_id",
-     *     columns={"application_id"}),
+ *        @ORM\Index(name="ix_application_operating_centre_application_id", columns={"application_id"}),
  *        @ORM\Index(name="ix_application_operating_centre_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_application_operating_centre_last_modified_by",
-     *     columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_application_operating_centre_operating_centre_id",
-     *     columns={"operating_centre_id"}),
- *        @ORM\Index(name="ix_application_operating_centre_s4_id", columns={"s4_id"})
+ *        @ORM\Index(name="ix_application_operating_centre_last_modified_by", columns={"last_modified_by"}),
+ *        @ORM\Index(name="ix_application_operating_centre_operating_centre_id", columns={"operating_centre_id"}),
+ *        @ORM\Index(name="ix_application_operating_centre_s4_id", columns={"s4_id"}),
+ *        @ORM\Index(name="uk_application_operating_centre_olbs_key", columns={"olbs_key"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_application_operating_centre_olbs_key", columns={"olbs_key"})
  *    }
  * )
  */
-abstract class AbstractApplicationOperatingCentre implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractApplicationOperatingCentre implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
 
     /**
-     * Action
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="action", length=1, nullable=true)
-     */
-    protected $action;
-
-    /**
-     * Ad placed
+     * Primary key.  Auto incremented if numeric.
      *
      * @var int
      *
-     * @ORM\Column(type="smallint", name="ad_placed", nullable=false)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $adPlaced;
+    protected $id;
 
     /**
-     * Ad placed date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="ad_placed_date", nullable=true)
-     */
-    protected $adPlacedDate;
-
-    /**
-     * Ad placed in
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="ad_placed_in", length=70, nullable=true)
-     */
-    protected $adPlacedIn;
-
-    /**
-     * Application
+     * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Application\Application",
-     *     fetch="LAZY",
-     *     inversedBy="operatingCentres"
-     * )
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
+     * @ORM\JoinColumn(name="application_id", referencedColumnName="id")
      */
     protected $application;
+
+    /**
+     * Foreign Key to operating_centre
+     *
+     * @var \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre", fetch="LAZY")
+     * @ORM\JoinColumn(name="operating_centre_id", referencedColumnName="id")
+     */
+    protected $operatingCentre;
+
+    /**
+     * Foreign Key to s4
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Application\S4
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\S4", fetch="LAZY")
+     * @ORM\JoinColumn(name="s4_id", referencedColumnName="id", nullable=true)
+     */
+    protected $s4;
 
     /**
      * Created by
@@ -108,26 +102,6 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is interim
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_interim", nullable=false, options={"default": 0})
-     */
-    protected $isInterim = 0;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -139,7 +113,61 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
     protected $lastModifiedBy;
 
     /**
-     * No of trailers required
+     * Flag for add, delete, update. Values A,U or D
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="action", length=1, nullable=true)
+     */
+    protected $action;
+
+    /**
+     * An advert has been placed in a suitable publication to notify public of op centre changes.
+     *
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="ad_placed", nullable=false)
+     */
+    protected $adPlaced = 0;
+
+    /**
+     * Publication advert placed in.
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="ad_placed_in", length=70, nullable=true)
+     */
+    protected $adPlacedIn;
+
+    /**
+     * Date advert published.
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="ad_placed_date", nullable=true)
+     */
+    protected $adPlacedDate;
+
+    /**
+     * Publication deemed appropriate by caseworker.
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="publication_appropriate", nullable=false, options={"default": 0})
+     */
+    protected $publicationAppropriate = 0;
+
+    /**
+     * Applicant has permission to use site or owns it.
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="permission", nullable=false)
+     */
+    protected $permission = 0;
+
+    /**
+     * Number of trailers required to be kept at op centre
      *
      * @var int
      *
@@ -148,7 +176,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
     protected $noOfTrailersRequired;
 
     /**
-     * No of vehicles required
+     * Number of vehicles required to be kept at op centre
      *
      * @var int
      *
@@ -157,62 +185,22 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
     protected $noOfVehiclesRequired;
 
     /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Operating centre
-     *
-     * @var \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre",
-     *     fetch="LAZY",
-     *     inversedBy="applications"
-     * )
-     * @ORM\JoinColumn(name="operating_centre_id", referencedColumnName="id", nullable=false)
-     */
-    protected $operatingCentre;
-
-    /**
-     * Permission
+     * Flag used in populated the vehicle inspectorate extract sent to mobile compliance system as part of batch job
      *
      * @var string
      *
-     * @ORM\Column(type="yesno", name="permission", nullable=false)
+     * @ORM\Column(type="string", name="vi_action", length=1, nullable=true)
      */
-    protected $permission;
+    protected $viAction;
 
     /**
-     * Publication appropriate
+     * is operating centre required to be on interim licence.
      *
      * @var string
      *
-     * @ORM\Column(type="yesno",
-     *     name="publication_appropriate",
-     *     nullable=false,
-     *     options={"default": 0})
+     * @ORM\Column(type="yesno", name="is_interim", nullable=false, options={"default": 0})
      */
-    protected $publicationAppropriate = 0;
-
-    /**
-     * S4
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Application\S4
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Application\S4",
-     *     fetch="LAZY",
-     *     inversedBy="aocs"
-     * )
-     * @ORM\JoinColumn(name="s4_id", referencedColumnName="id", nullable=true)
-     */
-    protected $s4;
+    protected $isInterim = 0;
 
     /**
      * Version
@@ -225,13 +213,173 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
     protected $version = 1;
 
     /**
-     * Vi action
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="string", name="vi_action", length=1, nullable=true)
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
-    protected $viAction;
+    protected $olbsKey;
+
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return ApplicationOperatingCentre
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the application
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
+     *
+     * @return ApplicationOperatingCentre
+     */
+    public function setApplication($application)
+    {
+        $this->application = $application;
+
+        return $this;
+    }
+
+    /**
+     * Get the application
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
+    public function getApplication()
+    {
+        return $this->application;
+    }
+
+    /**
+     * Set the operating centre
+     *
+     * @param \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre $operatingCentre new value being set
+     *
+     * @return ApplicationOperatingCentre
+     */
+    public function setOperatingCentre($operatingCentre)
+    {
+        $this->operatingCentre = $operatingCentre;
+
+        return $this;
+    }
+
+    /**
+     * Get the operating centre
+     *
+     * @return \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
+     */
+    public function getOperatingCentre()
+    {
+        return $this->operatingCentre;
+    }
+
+    /**
+     * Set the s4
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Application\S4 $s4 new value being set
+     *
+     * @return ApplicationOperatingCentre
+     */
+    public function setS4($s4)
+    {
+        $this->s4 = $s4;
+
+        return $this;
+    }
+
+    /**
+     * Get the s4
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Application\S4
+     */
+    public function getS4()
+    {
+        return $this->s4;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return ApplicationOperatingCentre
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return ApplicationOperatingCentre
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
 
     /**
      * Set the action
@@ -282,37 +430,6 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
     }
 
     /**
-     * Set the ad placed date
-     *
-     * @param \DateTime $adPlacedDate new value being set
-     *
-     * @return ApplicationOperatingCentre
-     */
-    public function setAdPlacedDate($adPlacedDate)
-    {
-        $this->adPlacedDate = $adPlacedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the ad placed date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getAdPlacedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->adPlacedDate);
-        }
-
-        return $this->adPlacedDate;
-    }
-
-    /**
      * Set the ad placed in
      *
      * @param string $adPlacedIn new value being set
@@ -337,123 +454,81 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
     }
 
     /**
-     * Set the application
+     * Set the ad placed date
      *
-     * @param \Dvsa\Olcs\Api\Entity\Application\Application $application entity being set as the value
+     * @param \DateTime $adPlacedDate new value being set
      *
      * @return ApplicationOperatingCentre
      */
-    public function setApplication($application)
+    public function setAdPlacedDate($adPlacedDate)
     {
-        $this->application = $application;
+        $this->adPlacedDate = $adPlacedDate;
 
         return $this;
     }
 
     /**
-     * Get the application
+     * Get the ad placed date
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
      */
-    public function getApplication()
+    public function getAdPlacedDate($asDateTime = false)
     {
-        return $this->application;
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->adPlacedDate);
+        }
+
+        return $this->adPlacedDate;
     }
 
     /**
-     * Set the created by
+     * Set the publication appropriate
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param string $publicationAppropriate new value being set
      *
      * @return ApplicationOperatingCentre
      */
-    public function setCreatedBy($createdBy)
+    public function setPublicationAppropriate($publicationAppropriate)
     {
-        $this->createdBy = $createdBy;
+        $this->publicationAppropriate = $publicationAppropriate;
 
         return $this;
     }
 
     /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return ApplicationOperatingCentre
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the is interim
-     *
-     * @param string $isInterim new value being set
-     *
-     * @return ApplicationOperatingCentre
-     */
-    public function setIsInterim($isInterim)
-    {
-        $this->isInterim = $isInterim;
-
-        return $this;
-    }
-
-    /**
-     * Get the is interim
+     * Get the publication appropriate
      *
      * @return string
      */
-    public function getIsInterim()
+    public function getPublicationAppropriate()
     {
-        return $this->isInterim;
+        return $this->publicationAppropriate;
     }
 
     /**
-     * Set the last modified by
+     * Set the permission
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param string $permission new value being set
      *
      * @return ApplicationOperatingCentre
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setPermission($permission)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->permission = $permission;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the permission
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * @return string
      */
-    public function getLastModifiedBy()
+    public function getPermission()
     {
-        return $this->lastModifiedBy;
+        return $this->permission;
     }
 
     /**
@@ -505,123 +580,51 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
     }
 
     /**
-     * Set the olbs key
+     * Set the vi action
      *
-     * @param int $olbsKey new value being set
+     * @param string $viAction new value being set
      *
      * @return ApplicationOperatingCentre
      */
-    public function setOlbsKey($olbsKey)
+    public function setViAction($viAction)
     {
-        $this->olbsKey = $olbsKey;
+        $this->viAction = $viAction;
 
         return $this;
     }
 
     /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
-    }
-
-    /**
-     * Set the operating centre
-     *
-     * @param \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre $operatingCentre entity being set as the value
-     *
-     * @return ApplicationOperatingCentre
-     */
-    public function setOperatingCentre($operatingCentre)
-    {
-        $this->operatingCentre = $operatingCentre;
-
-        return $this;
-    }
-
-    /**
-     * Get the operating centre
-     *
-     * @return \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
-     */
-    public function getOperatingCentre()
-    {
-        return $this->operatingCentre;
-    }
-
-    /**
-     * Set the permission
-     *
-     * @param string $permission new value being set
-     *
-     * @return ApplicationOperatingCentre
-     */
-    public function setPermission($permission)
-    {
-        $this->permission = $permission;
-
-        return $this;
-    }
-
-    /**
-     * Get the permission
+     * Get the vi action
      *
      * @return string
      */
-    public function getPermission()
+    public function getViAction()
     {
-        return $this->permission;
+        return $this->viAction;
     }
 
     /**
-     * Set the publication appropriate
+     * Set the is interim
      *
-     * @param string $publicationAppropriate new value being set
+     * @param string $isInterim new value being set
      *
      * @return ApplicationOperatingCentre
      */
-    public function setPublicationAppropriate($publicationAppropriate)
+    public function setIsInterim($isInterim)
     {
-        $this->publicationAppropriate = $publicationAppropriate;
+        $this->isInterim = $isInterim;
 
         return $this;
     }
 
     /**
-     * Get the publication appropriate
+     * Get the is interim
      *
      * @return string
      */
-    public function getPublicationAppropriate()
+    public function getIsInterim()
     {
-        return $this->publicationAppropriate;
-    }
-
-    /**
-     * Set the s4
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Application\S4 $s4 entity being set as the value
-     *
-     * @return ApplicationOperatingCentre
-     */
-    public function setS4($s4)
-    {
-        $this->s4 = $s4;
-
-        return $this;
-    }
-
-    /**
-     * Get the s4
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Application\S4
-     */
-    public function getS4()
-    {
-        return $this->s4;
+        return $this->isInterim;
     }
 
     /**
@@ -649,26 +652,35 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
     }
 
     /**
-     * Set the vi action
+     * Set the olbs key
      *
-     * @param string $viAction new value being set
+     * @param int $olbsKey new value being set
      *
      * @return ApplicationOperatingCentre
      */
-    public function setViAction($viAction)
+    public function setOlbsKey($olbsKey)
     {
-        $this->viAction = $viAction;
+        $this->olbsKey = $olbsKey;
 
         return $this;
     }
 
     /**
-     * Get the vi action
+     * Get the olbs key
      *
-     * @return string
+     * @return int
      */
-    public function getViAction()
+    public function getOlbsKey()
     {
-        return $this->viAction;
+        return $this->olbsKey;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

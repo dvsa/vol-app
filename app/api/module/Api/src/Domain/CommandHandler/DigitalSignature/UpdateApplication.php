@@ -19,6 +19,7 @@ final class UpdateApplication extends AbstractCommandHandler implements Transact
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         assert($command instanceof UpdateApplicationCmd);

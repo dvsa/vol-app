@@ -44,6 +44,7 @@ class CorrespondenceInbox extends AbstractCorrespondenceInbox implements Organis
      *
      * @return Organisation
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this->getLicence()->getOrganisation();

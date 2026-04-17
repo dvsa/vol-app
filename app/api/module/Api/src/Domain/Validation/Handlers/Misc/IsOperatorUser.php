@@ -24,6 +24,7 @@ class IsOperatorUser extends AbstractHandler implements AuthAwareInterface
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->isOperator();

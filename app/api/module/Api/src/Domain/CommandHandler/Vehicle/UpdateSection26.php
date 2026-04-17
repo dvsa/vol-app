@@ -22,6 +22,7 @@ final class UpdateSection26 extends AbstractCommandHandler implements Transactio
      */
     private $searchService;
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         foreach ($command->getIds() as $id) {
@@ -42,6 +43,7 @@ final class UpdateSection26 extends AbstractCommandHandler implements Transactio
 
         return $this->result;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

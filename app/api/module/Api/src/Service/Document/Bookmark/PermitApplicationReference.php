@@ -18,6 +18,7 @@ class PermitApplicationReference extends DynamicBookmark
      * @param array $data
      * @return Qry|\Dvsa\Olcs\Transfer\Query\AbstractQuery
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(
@@ -35,6 +36,7 @@ class PermitApplicationReference extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         if (isset($this->data['irhpPermitApplication']['relatedApplication']['applicationRef'])) {

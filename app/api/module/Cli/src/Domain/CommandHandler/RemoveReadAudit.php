@@ -31,6 +31,7 @@ final class RemoveReadAudit extends AbstractCommandHandler
 
     protected $maxAge = '1 year';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $oldestDate = date('Y-m-d', strtotime('-' . $this->maxAge));
@@ -47,6 +48,7 @@ final class RemoveReadAudit extends AbstractCommandHandler
 
         return $this->result;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');

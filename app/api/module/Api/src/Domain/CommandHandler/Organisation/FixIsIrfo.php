@@ -21,6 +21,7 @@ class FixIsIrfo extends AbstractCommandHandler implements TransactionedInterface
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $count = $this->getRepo()->fixIsIrfo();

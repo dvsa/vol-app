@@ -24,6 +24,7 @@ final class Precheck extends AbstractCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $limit = $command->getLimit();
@@ -58,6 +59,7 @@ final class Precheck extends AbstractCommandHandler
 
         return $systemParameterRepo->getDataRetentionDeleteLimit();
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

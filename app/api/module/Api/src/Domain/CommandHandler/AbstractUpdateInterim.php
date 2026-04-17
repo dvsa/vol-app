@@ -56,6 +56,7 @@ abstract class AbstractUpdateInterim extends AbstractCommandHandler implements T
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var ApplicationEntity $application */

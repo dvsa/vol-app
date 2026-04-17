@@ -30,8 +30,6 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
     protected $lva = 'licence';
     protected string $location = 'external';
 
-    protected LicenceLvaAdapter $lvaAdapter;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -48,7 +46,7 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
         ScriptFactory $scriptFactory,
         FormServiceManager $formServiceManager,
         VariationLvaService $variationLvaService,
-        LicenceLvaAdapter $lvaAdapter
+        protected LicenceLvaAdapter $lvaAdapter
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -58,6 +56,5 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
             $formServiceManager,
             $variationLvaService
         );
-        $this->lvaAdapter = $lvaAdapter;
     }
 }

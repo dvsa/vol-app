@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Vehicle;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -20,7 +22,7 @@ class VehicleEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testConstuctor()
+    public function testConstuctor(): void
     {
         $sut = new Vehicle();
 

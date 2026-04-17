@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\ConditionUndertaking;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\ConditionUndertaking\Create as CommandHandler;
@@ -30,7 +32,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'TYPE',
@@ -60,7 +63,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandNoOperatingCentre()
+    public function testHandleCommandNoOperatingCentre(): void
     {
         $command = Command::create(
             ['attachedTo' => 'cat_oc']
@@ -70,7 +73,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandNoCaseApplicationOrLicence()
+    public function testHandleCommandNoCaseApplicationOrLicence(): void
     {
         $command = Command::create(
             []
@@ -80,7 +83,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandCase()
+    public function testHandleCommandCase(): void
     {
         $params = [
             'type' => 'TYPE',
@@ -123,7 +126,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['ConditionUndertaking created'], $response->getMessages());
     }
 
-    public function testHandleCommandLicence()
+    public function testHandleCommandLicence(): void
     {
         $params = [
             'type' => 'TYPE',
@@ -158,7 +161,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['ConditionUndertaking created'], $response->getMessages());
     }
 
-    public function testHandleCommandApplication()
+    public function testHandleCommandApplication(): void
     {
         $params = [
             'type' => 'TYPE',

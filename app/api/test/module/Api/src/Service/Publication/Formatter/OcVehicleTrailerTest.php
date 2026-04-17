@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Formatter;
 
 use Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre;
@@ -14,10 +16,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class OcVehicleTrailerTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpFormat
-     */
-    public function testFormat($noOfVehiclesRequired, $noOfTrailersRequired, $useHgvCaption, $expectedOutput)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFormat')]
+    public function testFormat(mixed $noOfVehiclesRequired, mixed $noOfTrailersRequired, mixed $useHgvCaption, mixed $expectedOutput): void
     {
         $applicationOperatingCentre = m::mock(ApplicationOperatingCentre::class);
         $applicationOperatingCentre->shouldReceive('getNoOfVehiclesRequired')
@@ -33,7 +33,7 @@ class OcVehicleTrailerTest extends MockeryTestCase
         );
     }
 
-    public function dpFormat()
+    public static function dpFormat(): array
     {
         return [
             'vehicles only' => [

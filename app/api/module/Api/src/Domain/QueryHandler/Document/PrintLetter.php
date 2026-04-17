@@ -22,6 +22,7 @@ class PrintLetter extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var Entity\Doc\Document $doc */

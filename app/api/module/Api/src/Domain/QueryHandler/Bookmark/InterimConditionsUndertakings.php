@@ -22,6 +22,7 @@ class InterimConditionsUndertakings extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var Application $licence */

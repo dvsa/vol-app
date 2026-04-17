@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * PiTest
  *
@@ -29,7 +31,7 @@ class PiTest extends RepositoryTestCase
         $this->setUpSut(PiRepo::class);
     }
 
-    public function testFetchUsingCase()
+    public function testFetchUsingCase(): void
     {
         $command = m::mock(QueryInterface::class);
         $command->shouldReceive('getId')->andReturn(24);
@@ -55,7 +57,9 @@ class PiTest extends RepositoryTestCase
             ->shouldReceive('with')->once()->with('tmDecisions')->andReturnSelf()
             ->shouldReceive('with')->once()->with('piHearings')->andReturnSelf()
             ->shouldReceive('with')->once()->with('case', 'c')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('c.transportManager')->andReturnSelf();
+            ->shouldReceive('with')->once()->with('c.transportManager')->andReturnSelf()
+            ->shouldReceive('with')->once()->with('piSlaExceptions', 's')->andReturnSelf()
+            ->shouldReceive('withCreatedBy')->once()->withNoArgs()->andReturnSelf();
 
         /** @var EntityRepository $repo */
         $repo = m::mock(EntityRepository::class);

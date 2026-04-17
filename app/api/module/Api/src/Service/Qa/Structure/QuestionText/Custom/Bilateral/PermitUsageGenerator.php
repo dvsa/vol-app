@@ -24,6 +24,7 @@ class PermitUsageGenerator implements QuestionTextGeneratorInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function generate(QaContext $qaContext)
     {
         $irhpPermitApplicationEntity = $qaContext->getQaEntity();

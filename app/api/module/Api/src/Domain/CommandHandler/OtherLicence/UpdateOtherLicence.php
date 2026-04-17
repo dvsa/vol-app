@@ -23,6 +23,7 @@ final class UpdateOtherLicence extends AbstractCommandHandler
 {
     protected $repoServiceName = 'OtherLicence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

@@ -17,6 +17,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Base\StaticBookmark;
  */
 class S9AuthorisorsAge extends StaticBookmark
 {
+    #[\Override]
     public function render()
     {
         return '';

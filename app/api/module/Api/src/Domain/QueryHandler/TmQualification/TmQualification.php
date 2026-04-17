@@ -21,6 +21,7 @@ class TmQualification extends AbstractQueryHandler
 {
     protected $repoServiceName = 'TmQualification';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var TmQualificationRepo $repo */

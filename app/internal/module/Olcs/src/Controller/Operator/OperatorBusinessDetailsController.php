@@ -88,6 +88,7 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
      *
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         if ($this->isUnlicensed()) {
@@ -193,6 +194,7 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -228,7 +230,7 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
         $operator = $this->params()->fromRoute('organisation');
         $postData = (array)$this->getRequest()->getPost();
 
-        $dtoData = json_decode($postData['custom'], true);
+        $dtoData = json_decode((string) $postData['custom'], true);
         $dtoData['confirm'] = true;
 
         $commandClass = $this->updateDtoClass;
@@ -405,6 +407,7 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
      *
      * @return array| null
      */
+    #[\Override]
     protected function getOrganisation($organisationId)
     {
         if (!$this->organisation) {

@@ -38,6 +38,7 @@ class ApplicationConditionsUndertakingsReviewService extends AbstractReviewServi
      * @param array $data
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(array $data = [])
     {
         [$licConds, $licUnds, $ocConds, $ocUnds] = $this->helper->splitUpConditionsAndUndertakings($data);

@@ -27,6 +27,7 @@ final class UpdateTeam extends AbstractCommandHandler implements TransactionedIn
 
     protected $extraRepos = ['Printer'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->checkIfTeamAlreadyExists($command->getName(), $command->getId());

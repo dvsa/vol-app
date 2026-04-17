@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Cases\ProposeToRevoke;
 
 use Mockery as m;
@@ -26,7 +28,8 @@ class UpdateProposeToRevokeSlaTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             PresidingTc::class => [
@@ -41,7 +44,7 @@ class UpdateProposeToRevokeSlaTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 2,

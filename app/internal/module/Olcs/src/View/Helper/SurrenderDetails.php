@@ -18,9 +18,9 @@ class SurrenderDetails extends AbstractHelper
     public function getDeclarationSignatureText(): string
     {
         if ($this->surrender['signatureType']['id'] === RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE) {
-            $unixTimeStamp = strtotime($this->surrender["digitalSignature"]['createdOn']);
+            $unixTimeStamp = strtotime((string) $this->surrender["digitalSignature"]['createdOn']);
             $date = date("j M Y", $unixTimeStamp);
-            $attributes = json_decode($this->surrender["digitalSignature"]["attributes"]);
+            $attributes = json_decode((string) $this->surrender["digitalSignature"]["attributes"]);
             return "Digitally signed by $attributes->firstname $attributes->surname on $date";
         }
         return 'Physical signature';

@@ -21,6 +21,7 @@ class LicenceInspectionRequestList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'InspectionRequest';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return [

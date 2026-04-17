@@ -20,6 +20,7 @@ class Document extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Document';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->result($this->getRepo()->fetchUsingId($query));

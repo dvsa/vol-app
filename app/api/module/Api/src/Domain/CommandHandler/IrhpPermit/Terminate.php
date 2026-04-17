@@ -25,6 +25,7 @@ class Terminate extends AbstractCommandHandler implements TransactionedInterface
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         $permit = $this->getRepo()->fetchById($command->getId());

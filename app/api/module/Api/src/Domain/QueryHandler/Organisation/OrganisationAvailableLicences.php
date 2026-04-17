@@ -40,6 +40,7 @@ class OrganisationAvailableLicences extends AbstractQueryHandler
      * @return array
      * @throws \Exception
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $permitTypeId = $query->getIrhpPermitType();
@@ -149,6 +150,7 @@ class OrganisationAvailableLicences extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

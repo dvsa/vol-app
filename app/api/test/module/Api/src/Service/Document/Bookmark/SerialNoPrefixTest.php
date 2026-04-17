@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\SerialNoPrefix;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\SerialNoPrefix;
  */
 class SerialNoPrefixTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new SerialNoPrefix();
         $query = $bookmark->getQuery(['communityLic' => 123]);
@@ -19,7 +21,7 @@ class SerialNoPrefixTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderWithNonZeroIssueNumber()
+    public function testRenderWithNonZeroIssueNumber(): void
     {
         $bookmark = new SerialNoPrefix();
         $bookmark->setData(

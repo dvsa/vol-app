@@ -20,6 +20,7 @@ class TaAddress extends DynamicBookmark
      *
      * @return LicenceQry
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         $licenceBundle = [
@@ -37,6 +38,7 @@ class TaAddress extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         $licence = $this->data;

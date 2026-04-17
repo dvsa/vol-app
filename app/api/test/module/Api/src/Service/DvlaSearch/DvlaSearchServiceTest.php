@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\DvlaSearch;
 
 use Dvsa\Olcs\Api\Service\DvlaSearch\DvlaSearchService;
@@ -53,7 +55,7 @@ class DvlaSearchServiceTest extends MockeryTestCase
         parent::setUp();
     }
 
-    public function testSuccessfulDvlaVehicleAcquisition()
+    public function testSuccessfulDvlaVehicleAcquisition(): void
     {
         $this->mockHandler->append(
             new Response(200, [], $this->generateJsonVehicleResponse())
@@ -76,7 +78,7 @@ class DvlaSearchServiceTest extends MockeryTestCase
         $this->assertInstanceOf(DvlaVehicle::class, $vehicle);
     }
 
-    public function testDvlaApiErrorsCauseVehicleUnavailableException()
+    public function testDvlaApiErrorsCauseVehicleUnavailableException(): void
     {
         $this->expectException(VehicleUnavailableException::class);
 
@@ -91,7 +93,7 @@ class DvlaSearchServiceTest extends MockeryTestCase
         $this->sut->getVehicle("ABC123");
     }
 
-    public function testDvlaBrokerApiBadRequestIsCaught()
+    public function testDvlaBrokerApiBadRequestIsCaught(): void
     {
         $this->expectException(BadRequestException::class);
 
@@ -106,7 +108,7 @@ class DvlaSearchServiceTest extends MockeryTestCase
         $this->sut->getVehicle("ABC123");
     }
 
-    public function testDvlaBrokerApiForbiddenIsCaught()
+    public function testDvlaBrokerApiForbiddenIsCaught(): void
     {
         $this->expectException(ForbiddenException::class);
 
@@ -121,7 +123,7 @@ class DvlaSearchServiceTest extends MockeryTestCase
         $this->sut->getVehicle("ABC123");
     }
 
-    public function testDvlaBrokerApiNotFoundIsCaught()
+    public function testDvlaBrokerApiNotFoundIsCaught(): void
     {
         $this->expectException(NotFoundException::class);
 
@@ -136,7 +138,7 @@ class DvlaSearchServiceTest extends MockeryTestCase
         $this->sut->getVehicle("ABC123");
     }
 
-    public function testDvlaBrokerApiServerErrorIsCaught()
+    public function testDvlaBrokerApiServerErrorIsCaught(): void
     {
         $this->expectException(ServiceException::class);
 
@@ -151,7 +153,7 @@ class DvlaSearchServiceTest extends MockeryTestCase
         $this->sut->getVehicle("ABC123");
     }
 
-    public function testDvlaBrokerApiReturnsInvalidJsonIsCaught()
+    public function testDvlaBrokerApiReturnsInvalidJsonIsCaught(): void
     {
         $this->expectException(BadResponseException::class);
 
@@ -166,7 +168,7 @@ class DvlaSearchServiceTest extends MockeryTestCase
         $this->sut->getVehicle("ABC123");
     }
 
-    public function testNoLoggerIsDefined()
+    public function testNoLoggerIsDefined(): void
     {
         $this->expectException(BadResponseException::class);
 

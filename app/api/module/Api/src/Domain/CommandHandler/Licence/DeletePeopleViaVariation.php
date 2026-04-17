@@ -24,6 +24,7 @@ final class DeletePeopleViaVariation extends AbstractCommandHandler implements T
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $createVariationResult = $this->handleSideEffect(

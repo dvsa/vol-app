@@ -13,6 +13,7 @@ class CreatePsvLicenceSurrenderTasksCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:create-psv-licence-surrender-tasks';
 
+    #[\Override]
     protected function configure()
     {
         $this
@@ -20,6 +21,7 @@ class CreatePsvLicenceSurrenderTasksCommand extends AbstractBatchCommand
         $this->addCommonOptions();
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

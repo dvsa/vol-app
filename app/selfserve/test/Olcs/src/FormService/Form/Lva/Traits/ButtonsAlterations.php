@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva\Traits;
 
 use Laminas\Form\ElementInterface;
@@ -12,7 +14,7 @@ use Mockery as m;
  */
 trait ButtonsAlterations
 {
-    protected function mockAlterButtons($form, $formHelper, $formActions = null): void
+    protected function mockAlterButtons(m\MockInterface $form, m\MockInterface $formHelper, ?m\MockInterface $formActions = null): void
     {
         if ($formActions === null) {
             $formActions = m::mock(ElementInterface::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Refuse Bus Reg By Short Notice Test
  */
@@ -32,7 +34,7 @@ class RefuseBusRegByShortNoticeTest extends AbstractCommandHandlerTestCase
     /**
      * test handleCommand when Ebsr
      */
-    public function testHandleCommandEbsr()
+    public function testHandleCommandEbsr(): void
     {
         $id = 99;
         $ebsrId = 55;
@@ -66,7 +68,7 @@ class RefuseBusRegByShortNoticeTest extends AbstractCommandHandlerTestCase
     /**
      * test handleCommand when not Ebsr
      */
-    public function testHandleCommandNotEbsr()
+    public function testHandleCommandNotEbsr(): void
     {
         $id = 99;
 

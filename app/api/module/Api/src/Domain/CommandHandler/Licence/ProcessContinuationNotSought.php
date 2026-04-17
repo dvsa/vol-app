@@ -32,9 +32,10 @@ final class ProcessContinuationNotSought extends AbstractCommandHandler implemen
 {
     protected $repoServiceName = 'Licence';
 
-    public const DOCUMENT_DESCRIPTION_GB = 'GV - Termination letter following non payment of cont fee';
-    public const DOCUMENT_DESCRIPTION_NI = 'GV - Termination letter following non payment of cont fee (NI)';
+    public const string DOCUMENT_DESCRIPTION_GB = 'GV - Termination letter following non payment of cont fee';
+    public const string DOCUMENT_DESCRIPTION_NI = 'GV - Termination letter following non payment of cont fee (NI)';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Document;
 
 use Dvsa\Olcs\Transfer\Command\Document\CopyDocument as Cmd;
@@ -55,7 +57,7 @@ class CopyDocumentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWithAppplication()
+    public function testHandleCommandWithAppplication(): void
     {
         $data = [
             'targetId' => 1,
@@ -121,7 +123,7 @@ class CopyDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('Document(s) copied', $res['messages'][0]);
     }
 
-    public function testHandleCommandWithException()
+    public function testHandleCommandWithException(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -189,7 +191,7 @@ class CopyDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('Document(s) copied', $res['messages'][0]);
     }
 
-    public function testHandleCommandWithLicence()
+    public function testHandleCommandWithLicence(): void
     {
         $data = [
             'targetId' => 1,
@@ -249,7 +251,7 @@ class CopyDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('Document(s) copied', $res['messages'][0]);
     }
 
-    public function testHandleCommandWithBusReg()
+    public function testHandleCommandWithBusReg(): void
     {
         $data = [
             'targetId' => 1,
@@ -311,7 +313,7 @@ class CopyDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('Document(s) copied', $res['messages'][0]);
     }
 
-    public function testHandleCommandWithCases()
+    public function testHandleCommandWithCases(): void
     {
         $data = [
             'targetId' => 1,
@@ -395,7 +397,7 @@ class CopyDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('Document(s) copied', $res['messages'][0]);
     }
 
-    public function testHandleCommandWithIrfo()
+    public function testHandleCommandWithIrfo(): void
     {
         $data = [
             'targetId' => 1,
@@ -451,7 +453,7 @@ class CopyDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('Document(s) copied', $res['messages'][0]);
     }
 
-    public function testHandleCommandWithIrhpApplication()
+    public function testHandleCommandWithIrhpApplication(): void
     {
         $data = [
             'targetId' => 1,
@@ -509,7 +511,7 @@ class CopyDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('Document(s) copied', $res['messages'][0]);
     }
 
-    public function testHandleCommandWithTransportManager()
+    public function testHandleCommandWithTransportManager(): void
     {
         $data = [
             'targetId' => 1,
@@ -568,7 +570,7 @@ class CopyDocumentTest extends AbstractCommandHandlerTestCase
     /**
      * Tests copying a publication document
      */
-    public function testHandleCommandWithPublication()
+    public function testHandleCommandWithPublication(): void
     {
         $data = [
             'targetId' => 1,
@@ -627,7 +629,7 @@ class CopyDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('Document(s) copied', $res['messages'][0]);
     }
 
-    public function testHandleCommandWithWrongType()
+    public function testHandleCommandWithWrongType(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -641,7 +643,7 @@ class CopyDocumentTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithInvalidEntity()
+    public function testHandleCommandWithInvalidEntity(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -662,7 +664,7 @@ class CopyDocumentTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    protected function getMockDocument($trafficArea = null, $getIdentifierCount = 2)
+    protected function getMockDocument(mixed $trafficArea = null, int $getIdentifierCount = 2): m\MockInterface
     {
         return m::mock()
             ->shouldReceive('getIdentifier')
@@ -704,7 +706,7 @@ class CopyDocumentTest extends AbstractCommandHandlerTestCase
             ->getMock();
     }
 
-    protected function mockCopyDocumentsCommands($params, $emptyDownload = false)
+    protected function mockCopyDocumentsCommands(mixed $params, bool $emptyDownload = false): void
     {
         if (!$emptyDownload) {
             $mockDownloadedFile = m::mock()

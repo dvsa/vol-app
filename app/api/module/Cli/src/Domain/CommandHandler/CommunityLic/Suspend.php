@@ -25,6 +25,7 @@ final class Suspend extends AbstractCommandHandler implements TransactionedInter
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $ids = $command->getCommunityLicenceIds();

@@ -23,6 +23,7 @@ class QuestionTextGenerator implements QuestionTextGeneratorInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function generate(QaContext $qaContext)
     {
         $questionTextEntity = $qaContext->getApplicationStepEntity()->getQuestion()->getActiveQuestionText();

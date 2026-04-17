@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Cases\PresidingTc;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Cases\PresidingTc\GetList as QueryHandler;
@@ -22,7 +24,7 @@ class GetListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Query::create(['QUERY']);
 

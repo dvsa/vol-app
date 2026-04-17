@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CreatePartner Test
  */
@@ -29,7 +31,8 @@ class CreatePartnerTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ContactDetailsEntity::CONTACT_TYPE_PARTNER
@@ -38,7 +41,7 @@ class CreatePartnerTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'description' => 'description',

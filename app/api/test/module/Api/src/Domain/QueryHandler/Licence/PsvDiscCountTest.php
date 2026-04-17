@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Licence;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Licence\PsvDiscCount as QryHandler;
@@ -17,7 +19,7 @@ class PsvDiscCountTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = PsvDiscCount::create(['id' => 1]);
 

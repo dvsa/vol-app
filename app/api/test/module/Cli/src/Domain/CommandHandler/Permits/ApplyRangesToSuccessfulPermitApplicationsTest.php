@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler\Permits;
 
 use Doctrine\Common\Collections\AbstractLazyCollection;
@@ -46,7 +48,7 @@ class ApplyRangesToSuccessfulPermitApplicationsTest extends AbstractCommandHandl
     /**
      * tests handleCommand
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $stockId = 8;
 
@@ -199,7 +201,7 @@ class ApplyRangesToSuccessfulPermitApplicationsTest extends AbstractCommandHandl
         );
     }
 
-    private function createRange($id, $size, $fromNo, $countryCodes, $emissionsCategoryId)
+    private function createRange(mixed $id, mixed $size, mixed $fromNo, mixed $countryCodes, mixed $emissionsCategoryId): mixed
     {
         $persistentCollection = $this->createCountriesPersistentCollection($countryCodes);
 
@@ -218,7 +220,7 @@ class ApplyRangesToSuccessfulPermitApplicationsTest extends AbstractCommandHandl
         return $range;
     }
 
-    private function createCandidatePermit($id, $randomizedScore)
+    private function createCandidatePermit(mixed $id, mixed $randomizedScore): mixed
     {
         $candidatePermit = m::mock(IrhpCandidatePermit::class);
         $candidatePermit->shouldReceive('getId')
@@ -229,7 +231,7 @@ class ApplyRangesToSuccessfulPermitApplicationsTest extends AbstractCommandHandl
         return $candidatePermit;
     }
 
-    private function createCountriesPersistentCollection($countryCodes)
+    private function createCountriesPersistentCollection(mixed $countryCodes): mixed
     {
         $countries = [];
         foreach ($countryCodes as $countryCode) {

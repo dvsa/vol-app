@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller;
 
 use Common\Form\Form;
@@ -54,7 +56,6 @@ class MyDetailsControllerTest extends TestCase
     public function setMockedProperties(ReflectionClass $reflectionClass, string $property, m\LegacyMockInterface $value): void
     {
         $reflectionProperty = $reflectionClass->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->sut, $value);
     }
 

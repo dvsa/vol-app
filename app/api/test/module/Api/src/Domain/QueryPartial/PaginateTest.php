@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryPartial;
 
 use Dvsa\Olcs\Api\Domain\QueryPartial\Paginate;
@@ -16,10 +18,8 @@ class PaginateTest extends QueryPartialTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestModifyQuery
-     */
-    public function testModifyQuery($page, $limit, $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestModifyQuery')]
+    public function testModifyQuery(mixed $page, mixed $limit, mixed $expect): void
     {
         foreach ($expect as $method => $value) {
             $this->qb->shouldReceive($method)->once()->with($value);
@@ -28,7 +28,7 @@ class PaginateTest extends QueryPartialTestCase
         $this->sut->modifyQuery($this->qb, [$page, $limit]);
     }
 
-    public function dpTestModifyQuery()
+    public static function dpTestModifyQuery(): array
     {
         return [
             [
@@ -66,16 +66,14 @@ class PaginateTest extends QueryPartialTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestModifyQueryEmptyExpect
-     * @doesNotPerformAssertions
-     */
-    public function testModifyQueryEmptyExpect($page, $limit, $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestModifyQueryEmptyExpect')]
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testModifyQueryEmptyExpect(mixed $page, mixed $limit, mixed $expect): void
     {
         $this->sut->modifyQuery($this->qb, [$page, $limit]);
     }
 
-    public function dpTestModifyQueryEmptyExpect()
+    public static function dpTestModifyQueryEmptyExpect(): array
     {
         return [
             [

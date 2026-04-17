@@ -42,6 +42,7 @@ class ProposeToRevoke extends AbstractCommandHandler implements AuthAwareInterfa
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->licenceId = (int)$command->getLicence();

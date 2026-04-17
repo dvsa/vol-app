@@ -13,6 +13,7 @@ use Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Command\Queue\Create as CreateQueue;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class ProcessPackFailedTest extends ProcessPackTestCase
 {
     public function setUp(): void
@@ -21,7 +22,7 @@ class ProcessPackFailedTest extends ProcessPackTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $cmdData = [
             'organisation' => 11,

@@ -39,9 +39,7 @@ class ByIdTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider shouldRegenProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('shouldRegenProvider')]
     public function testHandleQuery(bool $shouldRegen): void
     {
         $cacheId = CacheEncryption::TRANSLATION_KEY_IDENTIFIER;
@@ -81,7 +79,7 @@ class ByIdTest extends QueryHandlerTestCase
         $this->assertEquals($cacheValue, $this->sut->handleQuery($query));
     }
 
-    public function shouldRegenProvider(): array
+    public static function shouldRegenProvider(): array
     {
         return [
             [true],

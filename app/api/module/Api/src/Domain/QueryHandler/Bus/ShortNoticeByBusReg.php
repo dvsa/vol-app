@@ -16,6 +16,7 @@ class ShortNoticeByBusReg extends AbstractQueryHandler
 {
     protected $repoServiceName = 'BusShortNotice';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $shortNotice = $this->getRepo()->fetchByBusReg($query);

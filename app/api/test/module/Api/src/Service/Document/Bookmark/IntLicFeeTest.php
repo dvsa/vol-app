@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\IntLicFee;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\IntLicFee;
  */
 class IntLicFeeTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new IntLicFee();
         $query = $bookmark->getQuery(['fee' => 123]);
@@ -19,7 +21,7 @@ class IntLicFeeTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderWithNoIntLicFee()
+    public function testRenderWithNoIntLicFee(): void
     {
         $bookmark = new IntLicFee();
         $bookmark->setData(
@@ -34,7 +36,7 @@ class IntLicFeeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testRenderWithIntLicFee()
+    public function testRenderWithIntLicFee(): void
     {
         $bookmark = new IntLicFee();
         $bookmark->setData(

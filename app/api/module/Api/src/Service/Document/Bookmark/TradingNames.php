@@ -19,6 +19,7 @@ class TradingNames extends DynamicBookmark
      *
      * @return \Dvsa\Olcs\Transfer\Query\QueryInterface
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         $bundle = [
@@ -33,6 +34,7 @@ class TradingNames extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         if (isset($this->data['tradingNames'])) {

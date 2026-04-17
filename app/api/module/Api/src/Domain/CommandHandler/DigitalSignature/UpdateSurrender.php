@@ -28,6 +28,7 @@ final class UpdateSurrender extends AbstractCommandHandler implements Transactio
     {
     }
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         assert($command instanceof UpdateSurrenderCmd);

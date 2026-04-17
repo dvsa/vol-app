@@ -19,6 +19,7 @@ class TmLinkedApplications extends DynamicBookmark
      *
      * @return Qry
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(['transportManager' => $data['transportManager']]);
@@ -29,6 +30,7 @@ class TmLinkedApplications extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         $result = [];

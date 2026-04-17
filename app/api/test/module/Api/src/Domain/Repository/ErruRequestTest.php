@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ErruRequest test
  *
@@ -33,10 +35,9 @@ class ErruRequestTest extends RepositoryTestCase
      *
      * @param array $result
      * @param bool $recordFound
-     *
-     * @dataProvider existsByWorkflowIdProvider
      */
-    public function testExistsByWorkflowId($result, $recordFound)
+    #[\PHPUnit\Framework\Attributes\DataProvider('existsByWorkflowIdProvider')]
+    public function testExistsByWorkflowId(mixed $result, mixed $recordFound): void
     {
         $workflowId = '123456';
         $qb = m::mock(QueryBuilder::class);
@@ -61,7 +62,7 @@ class ErruRequestTest extends RepositoryTestCase
      *
      * @return array
      */
-    public function existsByWorkflowIdProvider()
+    public static function existsByWorkflowIdProvider(): array
     {
         return [
             [[0 => 'Result'], true],

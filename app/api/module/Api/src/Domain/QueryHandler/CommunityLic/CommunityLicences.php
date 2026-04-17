@@ -32,6 +32,7 @@ class CommunityLicences extends AbstractQueryHandler
      * @throws NotFoundException
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         assert($query instanceof CommunityLicencesQuery, 'Expected instance of CommunityLicencesQuery');

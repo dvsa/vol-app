@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -35,10 +37,9 @@ class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCa
 
     /**
      * Test get / set type
-     *
-     * @group operatingCentresForInspectionRequest
      */
-    public function testGetSetType()
+    #[\PHPUnit\Framework\Attributes\Group('operatingCentresForInspectionRequest')]
+    public function testGetSetType(): void
     {
         $this->sut->setType('application');
         $this->assertEquals('application', $this->sut->getType());
@@ -46,10 +47,9 @@ class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCa
 
     /**
      * Test get / set identifier
-     *
-     * @group operatingCentresForInspectionRequest
      */
-    public function testGetSetIdentifier()
+    #[\PHPUnit\Framework\Attributes\Group('operatingCentresForInspectionRequest')]
+    public function testGetSetIdentifier(): void
     {
         $this->sut->setIdentifier(1);
         $this->assertEquals(1, $this->sut->getIdentifier());
@@ -57,11 +57,10 @@ class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCa
 
     /**
      * Test fetch list options
-     *
-     * @dataProvider providerListOptions
-     * @group operatingCentresForInspectionRequest1
      */
-    public function testFetchListOptions($data, $expected)
+    #[\PHPUnit\Framework\Attributes\Group('operatingCentresForInspectionRequest1')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerListOptions')]
+    public function testFetchListOptions(mixed $data, mixed $expected): void
     {
         $this->sut->setData('OperatingCentres', $data);
 
@@ -71,7 +70,7 @@ class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCa
     /**
      * Data provider
      */
-    public function providerListOptions()
+    public static function providerListOptions(): array
     {
         return [
             [
@@ -100,7 +99,7 @@ class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCa
         ];
     }
 
-    public function testFetchListData()
+    public function testFetchListData(): void
     {
         $results = ['results' => 'results'];
 
@@ -123,7 +122,7 @@ class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCa
         $this->assertEquals($results, $this->sut->fetchListData());  //ensure data is cached
     }
 
-    public function testFetchLicenceDataWithError()
+    public function testFetchLicenceDataWithError(): void
     {
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->with(m::type(Qry::class))

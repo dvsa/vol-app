@@ -40,6 +40,7 @@ class DeclarationController extends AbstractSurrenderController
     /**
      * @return Response|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         if ($this->getRequest()->isPost()) {
@@ -70,16 +71,6 @@ class DeclarationController extends AbstractSurrenderController
         if ($form->isValid()) {
             $data = (array) $this->getRequest()->getPost();
             if (isset($data['sign'])) {
-                $featureEnabled = $this->handleQuery(IsEnabledQry::create(['ids' => [FeatureToggle::GOVUK_ACCOUNT]]))->getResult()['isEnabled'];
-                if (!$featureEnabled) {
-                    return $this->redirect()->toRoute(
-                        'verify/surrender',
-                        [
-                            'licenceId' => $this->licenceId,
-                        ]
-                    );
-                }
-
                 $returnUrl = $this->url()->fromRoute(
                     'licence/surrender/confirmation',
                     [
@@ -141,6 +132,7 @@ class DeclarationController extends AbstractSurrenderController
      * @return array
      *
      */
+    #[\Override]
     protected function getViewVariables(): array
     {
         return [

@@ -23,6 +23,7 @@ final class GenerateChecklistReminder extends AbstractCommandHandler implements 
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var ContinuationDetail $continuationDetail */
@@ -36,7 +37,7 @@ final class GenerateChecklistReminder extends AbstractCommandHandler implements 
                         [
                             'id' => $continuationDetail->getId(),
                             'user' => $command->getUser(),
-                            'enforcePrint' => true,
+                            'enforcePrint' => false,
                         ]
                     )
                 )

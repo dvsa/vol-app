@@ -21,6 +21,7 @@ class Update extends AbstractCommandHandler
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(Command\CommandInterface $command)
     {
         /** @var \Dvsa\Olcs\Api\Entity\System\PublicHoliday $entity */

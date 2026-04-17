@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\CompaniesHouse;
 
 use Dvsa\Olcs\Api\Domain\Command\CompaniesHouse\CreateAlert as Cmd;
@@ -37,7 +39,7 @@ class CreateAlertTest extends AbstractCommandHandlerTestCase
     /**
      * Test handleCommand method
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $companyNumber = '01234567';
 
@@ -91,7 +93,7 @@ class CreateAlertTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('reason_bar', $alert->getReasons()[1]->getReasonType()->getId());
     }
 
-    public function testHandleCommandNoOrganisation()
+    public function testHandleCommandNoOrganisation(): void
     {
         $companyNumber = '01234567';
 

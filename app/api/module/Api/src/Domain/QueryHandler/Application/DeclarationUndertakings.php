@@ -24,6 +24,7 @@ class DeclarationUndertakings extends AbstractQueryHandler
      */
     protected $reviewService;
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $application ApplicationEntity */
@@ -61,6 +62,7 @@ class DeclarationUndertakings extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

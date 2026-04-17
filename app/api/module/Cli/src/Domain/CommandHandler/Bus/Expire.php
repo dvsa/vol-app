@@ -25,6 +25,7 @@ final class Expire extends AbstractCommandHandler implements TransactionedInterf
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

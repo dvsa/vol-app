@@ -49,6 +49,7 @@ class TranslationKeyText extends AbstractTranslationKeyText implements Deletable
      *
      * @return boolean
      */
+    #[\Override]
     public function canDelete()
     {
         return true;

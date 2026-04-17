@@ -14,11 +14,13 @@ class OpFaoName extends DynamicBookmark
 {
     protected $params = ['licence'];
 
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(['id' => $data['licence'], 'bundle' => ['correspondenceCd']]);
     }
 
+    #[\Override]
     public function render()
     {
         return $this->data['correspondenceCd']['fao'] ?? '';

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva\People\SoleTrader;
 
 use Common\Form\Element\DynamicMultiCheckbox;
@@ -46,10 +48,8 @@ class LicenceSoleTraderTest extends MockeryTestCase
         $this->sut = new Sut($this->formHelper, m::mock(AuthorizationService::class), $this->peopleLvaService, $this->fsm);
     }
 
-    /**
-     * @dataProvider noDisqualifyProvider
-     */
-    public function testGetFormNoDisqualify($params): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('noDisqualifyProvider')]
+    public function testGetFormNoDisqualify(array $params): void
     {
         $params['canModify'] = true;
 
@@ -166,7 +166,7 @@ class LicenceSoleTraderTest extends MockeryTestCase
      *
      * @psalm-return list{list{array{location: 'external'}}, list{array{location: 'internal', personId: null}}, list{array{location: 'internal', personId: 123, isDisqualified: true}}}
      */
-    public function noDisqualifyProvider(): array
+    public static function noDisqualifyProvider(): array
     {
         return [
             [

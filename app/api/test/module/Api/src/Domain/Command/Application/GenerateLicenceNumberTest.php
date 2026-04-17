@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Generate Licence Number Test
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\GenerateLicenceNumber;
  */
 class GenerateLicenceNumberTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = GenerateLicenceNumber::create(['id' => 111, 'foo' => 'bar']);
 

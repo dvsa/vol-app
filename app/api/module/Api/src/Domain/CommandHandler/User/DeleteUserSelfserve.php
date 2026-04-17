@@ -25,7 +25,7 @@ final class DeleteUserSelfserve extends AbstractCommandHandler implements
     use AuthAwareTrait;
     use CacheAwareTrait;
 
-    public const ADMIN_ROLE_ERROR = 'error-always-one-operator-admin';
+    public const string ADMIN_ROLE_ERROR = 'error-always-one-operator-admin';
 
     protected $repoServiceName = 'User';
 
@@ -44,6 +44,7 @@ final class DeleteUserSelfserve extends AbstractCommandHandler implements
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         if ((int)$command->getId() === $this->getCurrentUser()->getId()) {

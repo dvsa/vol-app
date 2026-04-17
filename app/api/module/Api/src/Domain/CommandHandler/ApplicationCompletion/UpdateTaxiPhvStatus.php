@@ -23,6 +23,7 @@ final class UpdateTaxiPhvStatus extends AbstractUpdateStatus
 
     protected $section = 'TaxiPhv';
 
+    #[\Override]
     protected function isSectionValid(Application $application)
     {
         return !$application->getLicence()->getPrivateHireLicences()->isEmpty() &&

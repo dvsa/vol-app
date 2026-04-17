@@ -23,6 +23,7 @@ final class RefuseBusReg extends AbstractCommandHandler
 
     protected $repoServiceName = 'Bus';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var BusRegEntity $busReg */

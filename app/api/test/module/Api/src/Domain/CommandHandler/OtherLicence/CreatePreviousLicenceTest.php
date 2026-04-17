@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CreatePreviousLicenceTest
  *
@@ -32,7 +34,7 @@ class CreatePreviousLicenceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Command::create(
             [

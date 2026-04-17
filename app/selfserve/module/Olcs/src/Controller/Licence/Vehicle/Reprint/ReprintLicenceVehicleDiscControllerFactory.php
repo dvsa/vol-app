@@ -20,6 +20,7 @@ class ReprintLicenceVehicleDiscControllerFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ReprintLicenceVehicleDiscController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

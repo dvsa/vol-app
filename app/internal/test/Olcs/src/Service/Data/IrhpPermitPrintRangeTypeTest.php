@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -47,10 +49,8 @@ class IrhpPermitPrintRangeTypeTest extends AbstractDataServiceTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestFetchListOptions
-     */
-    public function testFetchListOptions($results, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestFetchListOptions')]
+    public function testFetchListOptions(mixed $results, mixed $expected): void
     {
         $irhpPermitStockId = 100;
         $this->sut->setIrhpPermitStock($irhpPermitStockId);
@@ -66,7 +66,7 @@ class IrhpPermitPrintRangeTypeTest extends AbstractDataServiceTestCase
         $this->assertEquals($irhpPermitStockId, $this->sut->getIrhpPermitStock());
     }
 
-    public function dpTestFetchListOptions()
+    public static function dpTestFetchListOptions(): array
     {
         return [
             'with data' => [
@@ -90,7 +90,7 @@ class IrhpPermitPrintRangeTypeTest extends AbstractDataServiceTestCase
         ];
     }
 
-    public function testFetchListOptionsWithException()
+    public function testFetchListOptionsWithException(): void
     {
         $this->expectException(DataServiceException::class);
 

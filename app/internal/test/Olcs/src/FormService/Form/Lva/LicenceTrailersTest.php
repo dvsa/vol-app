@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva;
 
 use Olcs\FormService\Form\Lva\LicenceTrailers;
@@ -31,7 +33,7 @@ class LicenceTrailersTest extends MockeryTestCase
         $this->sut = new LicenceTrailers($this->formHelper);
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         $mockSaveButton = m::mock()
             ->shouldReceive('setAttribute')

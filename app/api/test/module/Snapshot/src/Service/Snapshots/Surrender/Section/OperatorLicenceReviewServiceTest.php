@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\Surrender\Section;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -29,14 +31,13 @@ class OperatorLicenceReviewServiceTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider dpTestGetConfigFromData
-     *
      * @param $args
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetConfigFromData')]
     public function testGetConfigFromData(
-        $args,
-        $expected
-    ) {
+        mixed $args,
+        mixed $expected
+    ): void {
         $mockEntity = m::mock(Surrender::class);
 
         $mockEntity->shouldReceive('getLicenceDocumentStatus->getDescription')->andReturn($args['licDocDescription']);
@@ -47,7 +48,7 @@ class OperatorLicenceReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($mockEntity));
     }
 
-    public function dpTestGetConfigFromData()
+    public static function dpTestGetConfigFromData(): array
     {
         return [
 

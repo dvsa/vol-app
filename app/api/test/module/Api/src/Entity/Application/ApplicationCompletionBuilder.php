@@ -18,7 +18,7 @@ class ApplicationCompletionBuilder implements BuilderInterface
     /**
      * @param int|null $id
      */
-    public function __construct(Application $application, int $id = null)
+    public function __construct(Application $application, ?int $id = null)
     {
         $this->instance = new ApplicationCompletion($application);
         if (null !== $id) {
@@ -47,7 +47,7 @@ class ApplicationCompletionBuilder implements BuilderInterface
      * @param int|null $id
      * @return static
      */
-    public static function forApplication(Application $application, int $id = null): self
+    public static function forApplication(Application $application, ?int $id = null): self
     {
         return new static($application, $id);
     }

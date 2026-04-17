@@ -21,6 +21,7 @@ final class UpdateUserLastLoginAt extends AbstractUserCommandHandler
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         $user = $this->getCurrentUser();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper\Lva;
 
 use Common\RefData;
@@ -31,7 +33,7 @@ class PhoneContactTest extends MockeryTestCase
         ];
     }
 
-    public function testMapFromResult()
+    public function testMapFromResult(): void
     {
         $apiData = [
             'id' => 'unit_Id',
@@ -46,7 +48,7 @@ class PhoneContactTest extends MockeryTestCase
         static::assertEquals($this->formData, PhoneContact::mapFromResult($apiData));
     }
 
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         static::assertEquals(
             [
@@ -60,7 +62,7 @@ class PhoneContactTest extends MockeryTestCase
         );
     }
 
-    public function testMapFromErrorsNull()
+    public function testMapFromErrorsNull(): void
     {
         /** @var \Laminas\Form\FormInterface $mockForm */
         $mockForm = m::mock(FormInterface::class);
@@ -68,7 +70,7 @@ class PhoneContactTest extends MockeryTestCase
         static::assertEquals([], PhoneContact::mapFromErrors($mockForm, ['messages' => []]));
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $errors = [
             'messages' => [

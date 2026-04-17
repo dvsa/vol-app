@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\NoResultException;
@@ -21,7 +23,7 @@ class ApplicationStepTest extends RepositoryTestCase
         $this->setUpSut(ApplicationStep::class);
     }
 
-    public function testFetchByApplicationPathIdAndSlug()
+    public function testFetchByApplicationPathIdAndSlug(): void
     {
         $applicationPathId = 22;
         $slug = 'removals-eligibility';
@@ -68,7 +70,7 @@ class ApplicationStepTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchByApplicationPathIdAndSlugNotFound()
+    public function testFetchByApplicationPathIdAndSlugNotFound(): void
     {
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage(

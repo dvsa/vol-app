@@ -22,6 +22,7 @@ final class GetList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'PresidingTc';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var PresidingTcRepo $repo */

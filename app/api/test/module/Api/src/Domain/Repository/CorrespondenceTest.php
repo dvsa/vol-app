@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\Correspondence
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Correspondence::class)]
 class CorrespondenceTest extends RepositoryTestCase
 {
     /** @var  Repository\Correspondence */
@@ -19,7 +19,7 @@ class CorrespondenceTest extends RepositoryTestCase
         $this->setUpSut(Repository\Correspondence::class, true);
     }
 
-    public function testApplyListMethods()
+    public function testApplyListMethods(): void
     {
         $orgId = 9999;
 

@@ -26,6 +26,7 @@ final class UpdateStops extends AbstractCommandHandler implements TransactionedI
      * @return Result
      * @throws \Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var UpdateStopsCmd $command */

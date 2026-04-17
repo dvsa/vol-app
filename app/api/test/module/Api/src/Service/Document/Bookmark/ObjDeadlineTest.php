@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\ObjDeadline;
@@ -10,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class ObjDeadlineTest extends MockeryTestCase
 {
-    public function test()
+    public function test(): void
     {
         $sut = new ObjDeadline();
         $sut->setData(['pubDate' => '2003-02-01']);

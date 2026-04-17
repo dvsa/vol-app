@@ -30,6 +30,7 @@ final class UpdateTaxiPhv extends AbstractCommandHandler implements Transactione
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $application = $this->getRepo()->fetchUsingId($command);
@@ -95,6 +96,7 @@ final class UpdateTaxiPhv extends AbstractCommandHandler implements Transactione
             \Dvsa\Olcs\Api\Domain\Command\Application\UpdateApplicationCompletion::create($data)
         );
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

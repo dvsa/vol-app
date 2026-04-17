@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermit;
 
 use Doctrine\ORM\Query;
@@ -34,17 +36,15 @@ class GeneratePermitDocumentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-    * @dataProvider dpHandleCommand
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand(
-        $irhpPermitTypeId,
-        $countryId,
-        $permitCategoryId,
-        $expectedTemplate,
-        $expectedDescription,
-        $expectedMessages
-    ) {
+        mixed $irhpPermitTypeId,
+        mixed $countryId,
+        mixed $permitCategoryId,
+        mixed $expectedTemplate,
+        mixed $expectedDescription,
+        mixed $expectedMessages
+    ): void {
         $irhpPermitId = 1;
         $permitNo = 123;
         $licenceId = 10;
@@ -131,7 +131,7 @@ class GeneratePermitDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand(): array
     {
         return [
             'ECMT Annual' => [
@@ -587,7 +587,7 @@ class GeneratePermitDocumentTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandForUndefinedTemplate()
+    public function testHandleCommandForUndefinedTemplate(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\RuntimeException::class);
         $this->expectExceptionMessage('Permit template not defined for IRHP Permit Type (id: undefined)');

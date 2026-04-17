@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Si Test
  */
@@ -30,7 +32,7 @@ class SiTest extends QueryHandlerTestCase
     /**
      * tests handleQuery
      */
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 111]);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
@@ -26,7 +28,7 @@ class ApplicationTest extends MockeryTestCase
         $this->sut = new Application($this->formHelper, m::mock(AuthorizationService::class));
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
         $form = m::mock(Form::class);
         $formActions = m::mock(Fieldset::class);

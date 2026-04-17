@@ -19,6 +19,7 @@ class GenerateReport extends AbstractCommandConsumer
      *
      * @return array
      */
+    #[\Override]
     public function getCommandData(QueueEntity $item): array
     {
         $cmdData = json_decode($item->getOptions(), true);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * TrafficArea test
  *
@@ -26,7 +28,7 @@ class TrafficAreaTest extends RepositoryTestCase
         $this->setUpSut(TrafficAreaRepo::class);
     }
 
-    public function testGetValueOptionsWhereAllowedTrafficAreasUnspecified()
+    public function testGetValueOptionsWhereAllowedTrafficAreasUnspecified(): void
     {
         $mockQb = $this->createMockQueryBuilder();
 
@@ -47,7 +49,7 @@ class TrafficAreaTest extends RepositoryTestCase
         );
     }
 
-    public function testGetValueOptionsWhereAllowedTrafficAreaGb()
+    public function testGetValueOptionsWhereAllowedTrafficAreaGb(): void
     {
         $mockQb = $this->createMockQueryBuilder();
 
@@ -68,7 +70,7 @@ class TrafficAreaTest extends RepositoryTestCase
         );
     }
 
-    public function testGetValueOptionsWhereAllowedTrafficAreaNi()
+    public function testGetValueOptionsWhereAllowedTrafficAreaNi(): void
     {
         $mockQb = $this->createMockQueryBuilder();
 
@@ -88,7 +90,7 @@ class TrafficAreaTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchListForNewApplication()
+    public function testFetchListForNewApplication(): void
     {
         $mockQb = $this->createMockQueryBuilder();
 
@@ -107,7 +109,7 @@ class TrafficAreaTest extends RepositoryTestCase
     /**
      * @return m\MockInterface|QueryBuilder
      */
-    protected function createMockQueryBuilder()
+    protected function createMockQueryBuilder(): m\MockInterface
     {
         /** @var QueryBuilder $qb */
         $mockQb = m::mock(QueryBuilder::class);
@@ -122,7 +124,7 @@ class TrafficAreaTest extends RepositoryTestCase
     /**
      * @param m\MockInterface $mockQb
      */
-    protected function expectWhereNiOnly($mockQb)
+    protected function expectWhereNiOnly(mixed $mockQb): void
     {
         $mockQb->shouldReceive('expr->eq')->with('m.isNi', ':isNi')->andReturn('DUMMY_WHERE_EXPR');
         $mockQb->shouldReceive('andWhere')->with('DUMMY_WHERE_EXPR')->once(1)->andReturnSelf();
@@ -132,7 +134,7 @@ class TrafficAreaTest extends RepositoryTestCase
     /**
      * @param m\MockInterface $mockQb
      */
-    private function expectOrderByName($mockQb)
+    private function expectOrderByName(mixed $mockQb): void
     {
         $mockQb->shouldReceive('orderBy')->with('m.name')->atLeast(1)->andReturnSelf();
     }
@@ -143,7 +145,7 @@ class TrafficAreaTest extends RepositoryTestCase
      *
      * @return m\MockInterface|TrafficArea
      */
-    protected function createMockTrafficArea($id, $name)
+    protected function createMockTrafficArea(mixed $id, mixed $name): mixed
     {
         $ta = m::mock(TrafficArea::class);
         $ta->shouldReceive('getId')->andReturn($id);

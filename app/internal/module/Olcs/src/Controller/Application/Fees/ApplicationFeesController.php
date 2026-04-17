@@ -39,10 +39,6 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
     protected OppositionHelperService $oppositionHelper;
     protected ComplaintsHelperService $complaintsHelper;
     protected FlashMessengerHelperService $flashMessengerHelper;
-    protected UrlHelperService $urlHelper;
-    protected IdentityProviderInterface $identityProvider;
-    protected TranslationHelperService $translationHelper;
-    protected DateHelperService $dateHelper;
 
     public function __construct(
         ScriptFactory $scriptFactory,
@@ -53,10 +49,10 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
         OppositionHelperService $oppositionHelper,
         ComplaintsHelperService $complaintsHelper,
         FlashMessengerHelperService $flashMessengerHelper,
-        UrlHelperService $urlHelper,
-        IdentityProviderInterface $identityProvider,
-        TranslationHelperService $translationHelper,
-        DateHelperService $dateHelper,
+        protected UrlHelperService $urlHelper,
+        protected IdentityProviderInterface $identityProvider,
+        protected TranslationHelperService $translationHelper,
+        protected DateHelperService $dateHelper,
         $navigation
     ) {
         parent::__construct(
@@ -70,10 +66,6 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
             $flashMessengerHelper,
             $navigation
         );
-        $this->urlHelper = $urlHelper;
-        $this->identityProvider = $identityProvider;
-        $this->translationHelper = $translationHelper;
-        $this->dateHelper = $dateHelper;
     }
 
     /**
@@ -84,6 +76,7 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
      *
      * @return mixed
      */
+    #[\Override]
     protected function renderLayout($view, $pageTitle = null)
     {
         return $this->render($view, $pageTitle);
@@ -96,6 +89,7 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
      *
      * @return string
      */
+    #[\Override]
     protected function getFeesRoute()
     {
         return 'lva-application/fees';
@@ -108,6 +102,7 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
      *
      * @return array
      */
+    #[\Override]
     protected function getFeesRouteParams()
     {
         return [
@@ -122,6 +117,7 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
      *
      * @return array
      */
+    #[\Override]
     protected function getFeesTableParams()
     {
         return [

@@ -19,6 +19,7 @@ final class RegisterConsultantAndOperator extends AbstractUserCommandHandler imp
     protected $repoServiceName = 'User';
     protected $extraRepos = ['Role'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         //because this is being created by a transport consultant the operator admin will need to agree terms

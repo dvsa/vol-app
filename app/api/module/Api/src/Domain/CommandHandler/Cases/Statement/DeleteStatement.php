@@ -32,6 +32,7 @@ final class DeleteStatement extends AbstractCommandHandler implements Transactio
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

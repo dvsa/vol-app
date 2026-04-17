@@ -13,6 +13,7 @@ class UserListInternal extends AbstractQueryHandler
 {
     protected $repoServiceName = 'User';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         assert($query instanceof Qry);

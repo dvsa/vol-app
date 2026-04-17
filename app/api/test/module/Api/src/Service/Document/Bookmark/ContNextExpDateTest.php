@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\ContNextExpDate;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\ContNextExpDate;
  */
 class ContNextExpDateTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new ContNextExpDate();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -19,7 +21,7 @@ class ContNextExpDateTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderWithNoExpiryDate()
+    public function testRenderWithNoExpiryDate(): void
     {
         $bookmark = new ContNextExpDate();
         $bookmark->setData(
@@ -34,7 +36,7 @@ class ContNextExpDateTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testRenderWithContNextExpirtyDate()
+    public function testRenderWithContNextExpirtyDate(): void
     {
         $bookmark = new ContNextExpDate();
         $bookmark->setData(

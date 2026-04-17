@@ -20,6 +20,7 @@ final readonly class WithCreatedByWithTeam implements QueryPartialInterface
      * @param QueryBuilder $qb
      * @param array $arguments
      */
+    #[\Override]
     public function modifyQuery(QueryBuilder $qb, array $arguments = [])
     {
         $alias = ((isset($arguments[0]) && isset($arguments[1])) ? $arguments[1] : $qb->getRootAliases()[0]);

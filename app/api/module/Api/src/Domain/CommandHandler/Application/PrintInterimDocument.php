@@ -29,6 +29,7 @@ final class PrintInterimDocument extends AbstractCommandHandler implements Trans
     /**
      * @param Cmd $command
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var ApplicationEntity $application */

@@ -41,6 +41,7 @@ class ApplicationFinancialEvidenceReviewService extends AbstractReviewService
      *
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(array $data = [])
     {
         // @NOTE Tmp solution during migration

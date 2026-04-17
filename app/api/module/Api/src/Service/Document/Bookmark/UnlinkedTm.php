@@ -26,6 +26,7 @@ class UnlinkedTm extends DynamicBookmark
      *
      * @return \Dvsa\Olcs\Api\Domain\Query\Bookmark\LicenceBundle
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         $bundle = [
@@ -46,6 +47,7 @@ class UnlinkedTm extends DynamicBookmark
      *
      * @return string The TM fore and family names.
      */
+    #[\Override]
     public function render()
     {
         $licences = $this->data['tmLicences'];

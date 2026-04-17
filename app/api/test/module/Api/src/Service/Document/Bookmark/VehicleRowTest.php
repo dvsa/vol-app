@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\VehicleRow;
@@ -12,7 +14,7 @@ use Dvsa\Olcs\Api\Service\Document\Parser\RtfParser;
  */
 class VehicleRowTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new VehicleRow();
         $query = $bookmark->getQuery(['licence' => 7]);
@@ -20,7 +22,7 @@ class VehicleRowTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderWithNoData()
+    public function testRenderWithNoData(): void
     {
         $parser = new RtfParser();
         $bookmark = new VehicleRow();
@@ -32,7 +34,7 @@ class VehicleRowTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('', $result);
     }
 
-    public function testRenderLicenceVehicles()
+    public function testRenderLicenceVehicles(): void
     {
         $data = [
             'licenceVehicles' => [
@@ -79,7 +81,7 @@ class VehicleRowTest extends \PHPUnit\Framework\TestCase
 
         $bookmark = $this->createPartialMock(\Dvsa\Olcs\Api\Service\Document\Bookmark\VehicleRow::class, ['getSnippet']);
 
-        $bookmark->expects($this->any())
+        $bookmark->expects($this->atLeastOnce())
             ->method('getSnippet')
             ->willReturn('snippet');
 

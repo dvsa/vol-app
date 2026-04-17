@@ -153,11 +153,12 @@ return [
         'factories' => [
             \Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class => \Dvsa\Olcs\Api\Service\EditorJs\ConverterServiceFactory::class,
             \Dvsa\Olcs\Api\Domain\Logger\EntityAccessLogger::class => \Dvsa\Olcs\Api\Domain\Logger\EntityAccessLoggerFactory::class,
-            'ConvertToPdf' => \Dvsa\Olcs\Api\Service\ConvertToPdf\WebServiceClientFactory::class,
+            'ConvertToPdf' => \Dvsa\Olcs\Api\Service\ConvertToPdf\ConvertToPdfFactory::class,
             'FileUploader' => \Dvsa\Olcs\Api\Service\File\ContentStoreFileUploader::class,
             'Document' => \Dvsa\Olcs\Api\Service\Document\DocumentFactory::class,
             'DocumentGenerator' => \Dvsa\Olcs\Api\Service\Document\DocumentGenerator::class,
             'DocumentNamingService' => \Dvsa\Olcs\Api\Service\Document\NamingService::class,
+            \Dvsa\Olcs\Api\Service\Letter\VolGrabReplacementService::class => \Dvsa\Olcs\Api\Service\Letter\VolGrabReplacementServiceFactory::class,
             'UpdateOperatingCentreHelper' => \Dvsa\Olcs\Api\Domain\Service\UpdateOperatingCentreHelper::class,
             'OperatingCentreHelper' => \Dvsa\Olcs\Api\Domain\Service\OperatingCentreHelper::class,
             'VariationOperatingCentreHelper' => \Dvsa\Olcs\Api\Domain\Service\VariationOperatingCentreHelper::class,
@@ -199,6 +200,14 @@ return [
             \Dvsa\Olcs\Api\Service\Submission\Sections\SectionGeneratorPluginManager::class =>
                 \Dvsa\Olcs\Api\Service\Submission\Sections\SectionGeneratorPluginManagerFactory::class,
 
+            // Letter Section Renderer Plugin System
+            \Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManager::class =>
+                \Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManagerFactory::class,
+
+            // Letter Preview Service
+            \Dvsa\Olcs\Api\Service\Letter\LetterPreviewService::class =>
+                \Dvsa\Olcs\Api\Service\Letter\LetterPreviewServiceFactory::class,
+
             \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClient::class =>
                 \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClientFactory::class,
             \Dvsa\Olcs\Api\Rbac\IdentityProviderInterface::class => \Dvsa\Olcs\Api\Rbac\IdentityProviderFactory::class,
@@ -226,8 +235,11 @@ return [
             'ComplianceXmlStructure' => \Dvsa\Olcs\Api\Service\Nr\InputFilter\XmlStructureInputFactory::class,
             'SeriousInfringementInput' => \Dvsa\Olcs\Api\Service\Nr\InputFilter\SeriousInfringementInputFactory::class,
             'ComplianceEpisodeXmlMapping' => \Dvsa\Olcs\Api\Service\Nr\Mapping\ComplianceEpisodeXmlFactory::class,
+            ApiSrv\Nr\InputFilter\CgrInputFactory::class => ApiSrv\Nr\InputFilter\CgrInputFactory::class,
+            ApiSrv\Nr\Mapping\CgrResponseXml::class => ApiSrv\Nr\Mapping\CgrResponseXmlFactory::class,
 
             \Dvsa\Olcs\Api\Service\Nr\InrClientInterface::class => Dvsa\Olcs\Api\Service\Nr\InrClientFactory::class,
+            \Dvsa\Olcs\Api\Service\Nr\CheckGoodRepute::class => \Dvsa\Olcs\Api\Service\Nr\CheckGoodReputeFactory::class,
             \Dvsa\Olcs\Api\Service\Nr\MsiResponse::class => \Dvsa\Olcs\Api\Service\Nr\MsiResponseFactory::class,
 
             \Dvsa\Olcs\Api\Mvc\OlcsBlameableListener::class => \Dvsa\Olcs\Api\Mvc\OlcsBlameableListenerFactory::class,
@@ -626,6 +638,8 @@ return [
             'EventHistoryType' => RepositoryFactory::class,
             'PublicHoliday' => RepositoryFactory::class,
             'Sla' => RepositoryFactory::class,
+            Repository\SlaException::class => RepositoryFactory::class,
+            Repository\PiSlaException::class => RepositoryFactory::class,
             'LicenceNoGen' => RepositoryFactory::class,
             'UserPasswordReset' => RepositoryFactory::class,
             'PreviousConviction' => RepositoryFactory::class,
@@ -796,7 +810,31 @@ return [
             Repository\Task::class => RepositoryFactory::class,
             Repository\MessagingUserMessageRead::class => RepositoryFactory::class,
             Repository\User::class => RepositoryFactory::class,
-            Repository\Bus::class => RepositoryFactory::class
+            Repository\Bus::class => RepositoryFactory::class,
+            // Letter repositories
+            Repository\LetterType::class => RepositoryFactory::class,
+            Repository\LetterSection::class => RepositoryFactory::class,
+            Repository\LetterSectionVersion::class => RepositoryFactory::class,
+            Repository\LetterIssue::class => RepositoryFactory::class,
+            Repository\LetterIssueVersion::class => RepositoryFactory::class,
+            Repository\LetterTodo::class => RepositoryFactory::class,
+            Repository\LetterTodoVersion::class => RepositoryFactory::class,
+            Repository\LetterAppendix::class => RepositoryFactory::class,
+            Repository\LetterAppendixVersion::class => RepositoryFactory::class,
+            Repository\LetterInstance::class => RepositoryFactory::class,
+            Repository\MasterTemplate::class => RepositoryFactory::class,
+            Repository\LetterTestData::class => RepositoryFactory::class,
+            Repository\LetterIssueType::class => RepositoryFactory::class,
+            Repository\LetterTypeSection::class => RepositoryFactory::class,
+            Repository\LetterTypeIssue::class => RepositoryFactory::class,
+            Repository\LetterTypeTodo::class => RepositoryFactory::class,
+            Repository\LetterTypeAppendix::class => RepositoryFactory::class,
+            Repository\LetterInstanceSection::class => RepositoryFactory::class,
+            Repository\LetterInstanceIssue::class => RepositoryFactory::class,
+            Repository\LetterInstanceTodo::class => RepositoryFactory::class,
+            Repository\LetterInstanceAppendix::class => RepositoryFactory::class,
+            Repository\LetterChoice::class => RepositoryFactory::class,
+            Repository\LetterSectionVariant::class => RepositoryFactory::class
         ],
         'aliases' => [
             'Conversation' => Repository\Conversation::class,
@@ -815,6 +853,32 @@ return [
             'Correspondence' => Repository\Correspondence::class,
             'PostcodeEnforcementArea' => Repository\PostcodeEnforcementArea::class,
             'AdminAreaTrafficArea' => Repository\AdminAreaTrafficArea::class,
+            'SlaException' => Repository\SlaException::class,
+            'PiSlaException' => Repository\PiSlaException::class,
+            // Letter repository aliases
+            'LetterType' => Repository\LetterType::class,
+            'LetterSection' => Repository\LetterSection::class,
+            'LetterSectionVersion' => Repository\LetterSectionVersion::class,
+            'LetterIssue' => Repository\LetterIssue::class,
+            'LetterIssueVersion' => Repository\LetterIssueVersion::class,
+            'LetterTodo' => Repository\LetterTodo::class,
+            'LetterTodoVersion' => Repository\LetterTodoVersion::class,
+            'LetterAppendix' => Repository\LetterAppendix::class,
+            'LetterAppendixVersion' => Repository\LetterAppendixVersion::class,
+            'LetterInstance' => Repository\LetterInstance::class,
+            'MasterTemplate' => Repository\MasterTemplate::class,
+            'LetterTestData' => Repository\LetterTestData::class,
+            'LetterIssueType' => Repository\LetterIssueType::class,
+            'LetterTypeSection' => Repository\LetterTypeSection::class,
+            'LetterTypeIssue' => Repository\LetterTypeIssue::class,
+            'LetterTypeTodo' => Repository\LetterTypeTodo::class,
+            'LetterTypeAppendix' => Repository\LetterTypeAppendix::class,
+            'LetterInstanceSection' => Repository\LetterInstanceSection::class,
+            'LetterInstanceIssue' => Repository\LetterInstanceIssue::class,
+            'LetterInstanceTodo' => Repository\LetterInstanceTodo::class,
+            'LetterInstanceAppendix' => Repository\LetterInstanceAppendix::class,
+            'LetterChoice' => Repository\LetterChoice::class,
+            'LetterSectionVariant' => Repository\LetterSectionVariant::class,
         ],
     ],
     \Dvsa\Olcs\Api\Domain\FormControlServiceManagerFactory::CONFIG_KEY => [
@@ -1158,7 +1222,8 @@ return [
             __DIR__ . '/../data/ebsr/xsd/TransXChange_schema_2.5/TransXChange_registration.xsd',
         'http://naptan.dft.gov.uk/transxchange/publisher/schema/3.1.2/TransXChangePublisherService.xsd' =>
             __DIR__ . '/../data/ebsr/xsd/TransXChange_schema_2.4/TransXChangePublisherService_2_4.xsd',
-        'https://webgate.ec.testa.eu/move-hub/erru/3.4' => __DIR__ . '/../data/nr/xsd/NotifyCheckResult_Request.xsd'
+        'https://webgate.ec.testa.eu/move-hub/erru/3.4' => __DIR__ . '/../data/nr/xsd/NotifyCheckResult_Request.xsd',
+        'https://webgate.ec.testa.eu/move-hub/erru/3.5' => __DIR__ . '/../data/nr/xsd/3.5/NotifyCheckResult_Request.xsd'
     ],
     'validators' => [
         'invokables' => [

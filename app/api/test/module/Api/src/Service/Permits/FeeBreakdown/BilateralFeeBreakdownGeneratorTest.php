@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\FeeBreakdown;
 
 use Dvsa\Olcs\Api\Domain\Repository\FeeType as FeeTypeRepository;
@@ -20,7 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class BilateralFeeBreakdownGeneratorTest extends MockeryTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $feeTypeRepo = m::mock(FeeTypeRepository::class);
 

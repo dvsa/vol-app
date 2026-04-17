@@ -68,6 +68,7 @@ abstract class AbstractMarker implements MarkerInterface
      *
      * @return AbstractMarker
      */
+    #[\Override]
     public function setData(array $data)
     {
         $this->data = $data;

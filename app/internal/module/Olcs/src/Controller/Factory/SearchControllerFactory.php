@@ -20,6 +20,7 @@ class SearchControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return SearchController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchController
     {
         $scriptFactory = $container->get(ScriptFactory::class);

@@ -28,6 +28,7 @@ final class GeneratePermits extends AbstractCommandHandler
      * @throws ValidationException
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $ids = $command->getIds();
@@ -188,6 +189,7 @@ final class GeneratePermits extends AbstractCommandHandler
         }
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->transMngr = $container->get('TransactionManager');

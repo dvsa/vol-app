@@ -62,6 +62,7 @@ class DocumentSearchView extends AbstractReadonlyRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         //sometimes we want only the records which aren't linked to a particular licence, case, bus reg etc.

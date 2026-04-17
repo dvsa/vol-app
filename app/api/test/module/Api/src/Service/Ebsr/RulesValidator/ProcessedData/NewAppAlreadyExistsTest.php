@@ -17,13 +17,13 @@ class NewAppAlreadyExistsTest extends MockeryTestCase
     /**
      * tests whether a new application is prevented from reusing an existing number
      *
-     * @dataProvider isValidProvider
      *
      * @param string $txcAppType
      * @param BusRegEntity|null $busReg
      * @param bool $valid
      */
-    public function testIsValid($txcAppType, $busReg, $valid): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
+    public function testIsValid(mixed $txcAppType, mixed $busReg, mixed $valid): void
     {
         $sut = new NewAppAlreadyExists();
 
@@ -42,7 +42,7 @@ class NewAppAlreadyExistsTest extends MockeryTestCase
      *
      * @return array
      */
-    public function isValidProvider(): array
+    public static function isValidProvider(): array
     {
         $busMock = m::mock(BusRegEntity::class);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Is Internal or System User Test
  *
@@ -33,7 +35,7 @@ class IsInternalOrSystemUserTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsValidSysytem()
+    public function testIsValidSysytem(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -48,7 +50,7 @@ class IsInternalOrSystemUserTest extends AbstractHandlerTestCase
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsNotValidSysytem()
+    public function testIsNotValidSysytem(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);

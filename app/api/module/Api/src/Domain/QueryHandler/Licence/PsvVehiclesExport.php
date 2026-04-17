@@ -21,6 +21,7 @@ class PsvVehiclesExport extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $vehicles = $this->getRepo()->fetchPsvVehiclesByLicenceId($query->getId(), $query->getIncludeRemoved());

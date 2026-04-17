@@ -37,6 +37,7 @@ final class CreateSubmission extends AbstractCommandHandler implements Submissio
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var SubmissionEntity $submissionEntity */

@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\TrafficArea;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * AdminAreaTrafficArea Abstract Entity
+ * AbstractAdminAreaTrafficArea Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -27,13 +32,33 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractAdminAreaTrafficArea implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractAdminAreaTrafficArea implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
+
+    /**
+     * Primary key
+     *
+     * @var string
+     *
+     * @ORM\Id
+     * @ORM\Column(type="string", name="id", length=40, nullable=false)
+     */
+    protected $id = '';
+
+    /**
+     * Foreign Key to traffic_area
+     *
+     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
+     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id")
+     */
+    protected $trafficArea;
 
     /**
      * Created by
@@ -47,16 +72,6 @@ abstract class AbstractAdminAreaTrafficArea implements BundleSerializableInterfa
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(type="string", name="id", length=40)
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -66,16 +81,6 @@ abstract class AbstractAdminAreaTrafficArea implements BundleSerializableInterfa
      * @Gedmo\Blameable(on="update")
      */
     protected $lastModifiedBy;
-
-    /**
-     * Traffic area
-     *
-     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=false)
-     */
-    protected $trafficArea;
 
     /**
      * Version
@@ -88,28 +93,20 @@ abstract class AbstractAdminAreaTrafficArea implements BundleSerializableInterfa
     protected $version = 1;
 
     /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return AdminAreaTrafficArea
+     * Initialise the collections
      */
-    public function setCreatedBy($createdBy)
+    public function __construct()
     {
-        $this->createdBy = $createdBy;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * Initialise collections
      */
-    public function getCreatedBy()
+    public function initCollections(): void
     {
-        return $this->createdBy;
     }
+
 
     /**
      * Set the id
@@ -136,33 +133,9 @@ abstract class AbstractAdminAreaTrafficArea implements BundleSerializableInterfa
     }
 
     /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return AdminAreaTrafficArea
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
      * Set the traffic area
      *
-     * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
      *
      * @return AdminAreaTrafficArea
      */
@@ -181,6 +154,54 @@ abstract class AbstractAdminAreaTrafficArea implements BundleSerializableInterfa
     public function getTrafficArea()
     {
         return $this->trafficArea;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return AdminAreaTrafficArea
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return AdminAreaTrafficArea
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -205,5 +226,14 @@ abstract class AbstractAdminAreaTrafficArea implements BundleSerializableInterfa
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

@@ -23,6 +23,7 @@ class LicenceVehicle extends AbstractQueryHandler
 
     protected $extraRepos = ['VehicleHistoryView'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $licenceVehicle = $this->getRepo()->fetchUsingId($query);

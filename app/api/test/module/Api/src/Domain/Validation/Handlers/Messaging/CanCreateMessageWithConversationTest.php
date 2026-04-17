@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Messaging;
 
 use Dvsa\Olcs\Api\Domain\Repository\MessagingConversation as ConversationRepo;
@@ -24,10 +26,8 @@ class CanCreateMessageWithConversationTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestIsValid
-     */
-    public function testIsValid($canAccess, $hasPermission, $isOpen, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsValid')]
+    public function testIsValid(mixed $canAccess, mixed $hasPermission, mixed $isOpen, mixed $expected): void
     {
         /** @var CommandInterface $dto */
         $conversationId = 1;
@@ -54,7 +54,7 @@ class CanCreateMessageWithConversationTest extends AbstractHandlerTestCase
         }
     }
 
-    public function dpTestIsValid()
+    public static function dpTestIsValid(): array
     {
         return [
             [true, true, true, true],

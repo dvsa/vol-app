@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\Application;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -15,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class TransportManagersTest extends MockeryTestCase
 {
-    public function testProvideEmpty()
+    public function testProvideEmpty(): void
     {
         $publicationLink = m::mock(PublicationLink::class);
         $publicationLink->shouldReceive('getApplication->getTransportManagers')
@@ -29,12 +31,9 @@ class TransportManagersTest extends MockeryTestCase
         $this->assertEquals($expectedOutput, $sut->provide($publicationLink, new \ArrayObject()));
     }
 
-    /**
-     * @group publicationFilter
-     *
-     * Test the application transport managers filter
-     */
-    public function testProvide()
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the application transport managers filter')]
+    public function testProvide(): void
     {
         $tma1 = $this->setupTransportManagerApplication('Bill', 'Clinton', 'A');
         $tma2 = $this->setupTransportManagerApplication('Barbara', 'Bush', 'D');
@@ -64,7 +63,7 @@ class TransportManagersTest extends MockeryTestCase
      *
      * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
      */
-    private function setupTransportManagerApplication($forename, $familyName, $action)
+    private function setupTransportManagerApplication(mixed $forename, mixed $familyName, mixed $action): mixed
     {
         $person = new \Dvsa\Olcs\Api\Entity\Person\Person();
         $person->setForename($forename);

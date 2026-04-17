@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Command\Batch;
 
 use DateTime;
@@ -9,19 +11,20 @@ use Dvsa\Olcs\Api\Domain\Query\Licence\ContinuationNotSoughtList;
 use Dvsa\Olcs\Cli\Command\Batch\ContinuationNotSoughtCommand;
 use Symfony\Component\Console\Command\Command;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class ContinuationNotSoughtCommandTest extends AbstractBatchCommandCases
 {
-    protected function getCommandClass()
+    protected function getCommandClass(): string
     {
         return ContinuationNotSoughtCommand::class;
     }
 
-    protected function getCommandName()
+    protected function getCommandName(): string
     {
         return 'batch:continuation-not-sought';
     }
 
-    protected function getCommandDTOs()
+    protected function getCommandDTOs(): array
     {
         return [
             EnqueueContinuationNotSought::create(['date' => new DateTime()]),
@@ -35,7 +38,7 @@ class ContinuationNotSoughtCommandTest extends AbstractBatchCommandCases
             ->willReturnCallback(fn($query) => ['count' => 2, 'result' => ['licence1', 'licence2']]);
     }
 
-    public function testExecuteWithDryRun()
+    public function testExecuteWithDryRun(): void
     {
         $this->mockCommandHandlerManager->expects($this->never())
             ->method('handleCommand');
@@ -43,7 +46,8 @@ class ContinuationNotSoughtCommandTest extends AbstractBatchCommandCases
         $this->executeCommand(['--dry-run' => true]);
     }
 
-    public function testExecuteSuccess()
+    #[\Override]
+    public function testExecuteSuccess(): void
     {
         $this->mockCommandHandlerManager->expects($this->once())
             ->method('handleCommand')

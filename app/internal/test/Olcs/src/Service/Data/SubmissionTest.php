@@ -1,16 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Service\Data\RefData;
 use Olcs\Service\Data\Submission;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/**
- * Class SubmissionTest
- * @package OlcsTest\Service\Data
- */
 class SubmissionTest extends TestCase
 {
     /** @var Submission */
@@ -26,10 +25,8 @@ class SubmissionTest extends TestCase
         $this->sut = new Submission($this->refDataService);
     }
 
-    /**
-     * @dataProvider providerSubmissions
-     */
-    public function testExtractSelectedSubmissionSectionsData($input, $expected)
+    #[DataProvider('providerSubmissions')]
+    public function testExtractSelectedSubmissionSectionsData(mixed $input, mixed $expected): void
     {
         $mockSectionRefData = $this->getMockSectionRefData();
 
@@ -46,11 +43,13 @@ class SubmissionTest extends TestCase
         $this->assertEquals($result, $expected);
     }
 
-    /**
-     * @dataProvider providerSubmissions
-     */
-    public function testExtractSelectedTextOnlySubmissionSectionsData($input)
+    public function testExtractSelectedTextOnlySubmissionSectionsData(): void
     {
+        $input = [
+            'dataSnapshot' => '{"introduction":{"data":["a"]}}',
+            'submissionSectionComments' => []
+        ];
+
         $mockSectionRefData = $this->getMockSectionRefData();
 
         $submissionConfig = [
@@ -68,7 +67,7 @@ class SubmissionTest extends TestCase
         $this->assertEmpty($result['introduction']['data']);
     }
 
-    public function testGetAllSectionsRefData()
+    public function testGetAllSectionsRefData(): void
     {
         $mockSectionRefData = $this->getMockSectionRefData();
 
@@ -83,14 +82,14 @@ class SubmissionTest extends TestCase
         $this->assertEquals($this->getMockSectionRefData(), $this->sut->getAllSectionsRefData());
     }
 
-    public function testSetAllSectionsRefData()
+    public function testSetAllSectionsRefData(): void
     {
         $this->sut->setAllSectionsRefData($this->getMockSectionRefData());
 
         $this->assertEquals($this->getMockSectionRefData(), $this->sut->getAllSectionsRefData());
     }
 
-    public function testFilterCommentsBySection()
+    public function testFilterCommentsBySection(): void
     {
         $fooComments = [0 => 'foo'];
         $barComments = [1 => 'bar'];
@@ -139,7 +138,7 @@ class SubmissionTest extends TestCase
         );
     }
 
-    public function providerSubmissions()
+    public static function providerSubmissions(): array
     {
         return [
             [
@@ -159,7 +158,7 @@ class SubmissionTest extends TestCase
         ];
     }
 
-    private function getMockSectionRefData()
+    private function getMockSectionRefData(): array
     {
         return  [
             'introduction' => 'Introduction',

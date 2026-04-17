@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application\Grant;
 
 use Dvsa\Olcs\Api\Domain\Command\Application\Grant\CreatePostDeletePeopleGrantTask as CreatePostGrantPeopleTasksCommand;
@@ -29,7 +31,7 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWithNoVariationType()
+    public function testHandleCommandWithNoVariationType(): void
     {
         $command = CreatePostGrantPeopleTasksCommand::create(['applicationId' => 'TEST_APPLICATION_ID']);
 
@@ -38,7 +40,7 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['id' => [], 'messages' => []], $this->sut->handleCommand($command)->toArray());
     }
 
-    public function testHandleCommandWithNonDirectorChangeVariation()
+    public function testHandleCommandWithNonDirectorChangeVariation(): void
     {
         $this->createMockApplication('Some other type');
 
@@ -46,7 +48,7 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['id' => [], 'messages' => []], $this->sut->handleCommand($command)->toArray());
     }
 
-    public function testHandleCommandWhenNoPeopleAdded()
+    public function testHandleCommandWhenNoPeopleAdded(): void
     {
         $application = $this->createMockApplication(Application::VARIATION_TYPE_DIRECTOR_CHANGE);
         $applicationOrganisationPersons = $this->createMockApplicationOrganisationPersons();
@@ -58,7 +60,7 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['id' => [], 'messages' => []], $this->sut->handleCommand($command)->toArray());
     }
 
-    public function testHandleCommandWhenPeopleAdded()
+    public function testHandleCommandWhenPeopleAdded(): void
     {
         $application = $this->createMockApplication(Application::VARIATION_TYPE_DIRECTOR_CHANGE);
 
@@ -76,7 +78,7 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testCreatedTaskCategory()
+    public function testCreatedTaskCategory(): void
     {
         $application = $this->createMockApplication(Application::VARIATION_TYPE_DIRECTOR_CHANGE);
 
@@ -102,10 +104,9 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
     /**
      * @param $organisationType
      * @param $expectedSubCategory
-     *
-     * @dataProvider provideCreatedTaskSubCategoryCases
      */
-    public function testCreatedTaskSubCategory($organisationType, $expectedSubCategory)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCreatedTaskSubCategoryCases')]
+    public function testCreatedTaskSubCategory(mixed $organisationType, mixed $expectedSubCategory): void
     {
         $application = $this->createMockApplication(Application::VARIATION_TYPE_DIRECTOR_CHANGE);
         $application->getLicence()->getOrganisation()->setType(new RefData($organisationType));
@@ -128,7 +129,7 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function provideCreatedTaskSubCategoryCases()
+    public static function provideCreatedTaskSubCategoryCases(): array
     {
         return [
             [Organisation::ORG_TYPE_REGISTERED_COMPANY, Category::TASK_SUB_CATEGORY_DIRECTOR_CHANGE_DIGITAL],
@@ -141,7 +142,7 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testCreatedTaskLicence()
+    public function testCreatedTaskLicence(): void
     {
         $application = $this->createMockApplication(Application::VARIATION_TYPE_DIRECTOR_CHANGE);
         $applicationOrganisationPersons = $this->createMockApplicationOrganisationPersons(['A']);
@@ -167,10 +168,9 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
      * @param $organisationType
      *
      * @param $expectedDescription
-     *
-     * @dataProvider provideCreatedTaskDescriptionCases
      */
-    public function testCreatedTaskDescription($organisationType, $expectedDescription)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCreatedTaskDescriptionCases')]
+    public function testCreatedTaskDescription(mixed $organisationType, mixed $expectedDescription): void
     {
         $application = $this->createMockApplication(Application::VARIATION_TYPE_DIRECTOR_CHANGE);
         $application->getLicence()->getOrganisation()->setType(new RefData($organisationType));
@@ -193,7 +193,7 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function provideCreatedTaskDescriptionCases()
+    public static function provideCreatedTaskDescriptionCases(): array
     {
         return [
             [Organisation::ORG_TYPE_REGISTERED_COMPANY, 'Add director(s)'],
@@ -211,10 +211,9 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
      * @param $financialAnswers
      *
      * @param $expectedUrgency
-     *
-     * @dataProvider provideCreatedTaskUrgencyCases
      */
-    public function testCreatedTaskUrgency($previousConvictionAnswer, $financialAnswers, $expectedUrgency)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCreatedTaskUrgencyCases')]
+    public function testCreatedTaskUrgency(mixed $previousConvictionAnswer, mixed $financialAnswers, mixed $expectedUrgency): void
     {
         $application = $this->createMockApplication(Application::VARIATION_TYPE_DIRECTOR_CHANGE);
 
@@ -242,7 +241,7 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function provideCreatedTaskUrgencyCases()
+    public static function provideCreatedTaskUrgencyCases(): \Generator
     {
         $negativeFinancialAnswers = [
             'bankrupt' => 'N',
@@ -263,7 +262,7 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    private function createMockApplication($variationType)
+    private function createMockApplication(mixed $variationType): mixed
     {
         /** @var Organisation|m\Mock $organisation */
         $organisation = m::mock(Organisation::class)->makePartial();
@@ -286,7 +285,7 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         return $application;
     }
 
-    private function createMockApplicationOrganisationPersons($actions = [])
+    private function createMockApplicationOrganisationPersons(array $actions = []): mixed
     {
         $applicationOrganisationPersons = [];
 

@@ -28,6 +28,7 @@ class DatabaseTwigLoader implements LoaderInterface
      *
      * @throws LoaderError When $name is not found
      */
+    #[\Override]
     public function getSourceContext(string $name): Source
     {
         try {
@@ -46,6 +47,7 @@ class DatabaseTwigLoader implements LoaderInterface
      *
      * @return bool If the template source code is handled by this loader or not
      */
+    #[\Override]
     public function exists(string $name)
     {
         $exists = true;
@@ -65,6 +67,7 @@ class DatabaseTwigLoader implements LoaderInterface
      *
      * @return string The cache key
      */
+    #[\Override]
     public function getCacheKey(string $name): string
     {
         return $name;
@@ -79,6 +82,7 @@ class DatabaseTwigLoader implements LoaderInterface
      *
      * @return bool true if the template is fresh, false otherwise
      */
+    #[\Override]
     public function isFresh(string $name, int $time): bool
     {
         $template = $this->templateFetcher->fetch($name);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * StatementList Test
  *
@@ -29,7 +31,7 @@ class StatementListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create([]);
 

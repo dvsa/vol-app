@@ -13,11 +13,13 @@ class EnqueueCompaniesHouseCompareCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:enqueue-companies-house-compare';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Enqueue Companies House lookup for all Organisations');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

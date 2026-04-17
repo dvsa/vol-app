@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * BusTest
  */
@@ -56,7 +58,8 @@ class BusTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->ta1 = m::mock(TrafficAreaEntity::class);
         $this->ta1->shouldReceive('getId')->andReturn($this->trafficArea);
@@ -89,7 +92,7 @@ class BusTest extends AbstractCommandHandlerTestCase
     /**
      * testHandleCommand throws exception on incorrect status
      */
-    public function testHandleCommandThrowsCorrectException()
+    public function testHandleCommandThrowsCorrectException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -120,7 +123,7 @@ class BusTest extends AbstractCommandHandlerTestCase
     /**
      * testHandleCommandDelete
      */
-    public function testHandleCommandDelete()
+    public function testHandleCommandDelete(): void
     {
         $id = 99;
         $publicationId = 33;
@@ -185,11 +188,11 @@ class BusTest extends AbstractCommandHandlerTestCase
     /**
      * testHandleCommand
      *
-     * @dataProvider handleCommandCreateProvider
      * @param string $revertStatus
      * @param string $shortNotice
      */
-    public function testHandleCommandCreate($revertStatus, $shortNotice)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandCreateProvider')]
+    public function testHandleCommandCreate(mixed $revertStatus, mixed $shortNotice): void
     {
         $id = 99;
         $publicationId = 33;
@@ -258,7 +261,7 @@ class BusTest extends AbstractCommandHandlerTestCase
      * @param $publicationId
      * @return m\MockInterface
      */
-    private function getPublicationMock($publicationId)
+    private function getPublicationMock(mixed $publicationId): mixed
     {
         $publicationMock = m::mock(PublicationEntity::class);
         $publicationMock->shouldReceive('getId')->andReturn($publicationId);
@@ -270,7 +273,7 @@ class BusTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function handleCommandCreateProvider()
+    public static function handleCommandCreateProvider(): array
     {
         return [
             [BusRegEntity::STATUS_NEW, 'Y'],

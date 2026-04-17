@@ -21,6 +21,7 @@ class GetForResponsibilities extends AbstractQueryHandler
 {
     protected $repoServiceName = 'TransportManagerLicence';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $transportManagerLicence = $this->getRepo()->fetchForResponsibilities($query->getId());

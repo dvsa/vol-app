@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\PiHearing;
 
 use Dvsa\Olcs\Api\Entity\Publication\PublicationLink;
@@ -13,12 +15,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class HearingDateTest extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the hearing date filter
-     */
-    public function testProvideGmt()
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the hearing date filter')]
+    public function testProvideGmt(): void
     {
         $input = [
             'hearingDate' => '2014-03-16 14:30:00',
@@ -36,7 +35,7 @@ class HearingDateTest extends MockeryTestCase
         $this->assertEquals($expectedOutput, $sut->provide(new PublicationLink(), new \ArrayObject($input)));
     }
 
-    public function testProvideBst()
+    public function testProvideBst(): void
     {
         $input = [
             'hearingDate' => '2014-04-16 14:30:00',

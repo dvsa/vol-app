@@ -20,6 +20,7 @@ final class Create extends AbstractCommandHandler implements TransactionedInterf
 
     protected $extraRepos = ['Licence', 'ContinuationDetail'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $continuations = $this->getRepo()->fetchContinuation(

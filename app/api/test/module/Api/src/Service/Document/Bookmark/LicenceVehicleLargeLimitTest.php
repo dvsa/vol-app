@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\LicenceVehicleLargeLimit;
@@ -11,28 +13,28 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\LicenceVehicleLargeLimit;
  */
 class LicenceVehicleLargeLimitTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new LicenceVehicleLargeLimit();
         $query = $bookmark->getQuery(['licence' => 123]);
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderEmpty()
+    public function testRenderEmpty(): void
     {
         $bookmark = new LicenceVehicleLargeLimit();
         $bookmark->setData(['totAuthLargeVehicles' => null, 'licenceType' => ['id' => 'ltyp_si']]);
         $this->assertEquals(LicenceVehicleLargeLimit::EMPTY_AUTH, $bookmark->render());
     }
 
-    public function testRenderRestricted()
+    public function testRenderRestricted(): void
     {
         $bookmark = new LicenceVehicleLargeLimit();
         $bookmark->setData(['totAuthLargeVehicles' => null, 'licenceType' => ['id' => 'ltyp_r']]);
         $this->assertEquals(LicenceVehicleLargeLimit::NA, $bookmark->render());
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $bookmark = new LicenceVehicleLargeLimit();
         $bookmark->setData(['totAuthLargeVehicles' => 1, 'licenceType' => ['id' => 'ltyp_si']]);

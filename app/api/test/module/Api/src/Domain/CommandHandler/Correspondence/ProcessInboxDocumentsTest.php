@@ -20,9 +20,7 @@ use Dvsa\Olcs\Email\Service\TemplateRenderer;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Correspondence\ProcessInboxDocuments
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Correspondence\ProcessInboxDocuments::class)]
 class ProcessInboxDocumentsTest extends AbstractCommandHandlerTestCase
 {
     public const LIC_ID = 999;
@@ -48,7 +46,7 @@ class ProcessInboxDocumentsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Command::create([]);
         $orgName = 'org name';
@@ -142,7 +140,7 @@ class ProcessInboxDocumentsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandFailSendEmail()
+    public function testHandleCommandFailSendEmail(): void
     {
         $command = Command::create([]);
 
@@ -207,7 +205,7 @@ class ProcessInboxDocumentsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandNoUsers()
+    public function testHandleCommandNoUsers(): void
     {
         $command = Command::create([]);
 

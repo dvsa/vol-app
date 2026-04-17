@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Internal;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication;
@@ -14,10 +16,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class BilateralRequiredGeneratorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpGenerate
-     */
-    public function testGenerate($permitUsageSelection, $postData, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
+    public function testGenerate(mixed $permitUsageSelection, mixed $postData, mixed $expected): void
     {
         $bilateralRequiredGenerator = new BilateralRequiredGenerator();
 
@@ -27,7 +27,7 @@ class BilateralRequiredGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate(): array
     {
         return [
             [

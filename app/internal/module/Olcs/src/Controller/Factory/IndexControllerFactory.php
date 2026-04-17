@@ -31,6 +31,7 @@ class IndexControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return IndexController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IndexController
     {
         $scriptFactory = $container->get(ScriptFactory::class);

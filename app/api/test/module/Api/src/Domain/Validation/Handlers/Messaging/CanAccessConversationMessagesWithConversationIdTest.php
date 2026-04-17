@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Messaging;
 
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Messaging\CanAccessConversationMessagesWithConversationId;
@@ -22,10 +24,8 @@ class CanAccessConversationMessagesWithConversationIdTest extends AbstractHandle
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestIsValid
-     */
-    public function testIsValid($canAccess, $hasPermission, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsValid')]
+    public function testIsValid(mixed $canAccess, mixed $hasPermission, mixed $expected): void
     {
         /** @var CommandInterface $dto */
         $conversationId = 1;
@@ -43,7 +43,7 @@ class CanAccessConversationMessagesWithConversationIdTest extends AbstractHandle
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function dpTestIsValid()
+    public static function dpTestIsValid(): array
     {
         return [
             [true, true, true],

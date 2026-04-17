@@ -23,6 +23,7 @@ class ApplicationSoleTrader extends CommonApplicationSoleTrader
      *
      * @return Form
      */
+    #[\Override]
     protected function alterForm($form, array $params)
     {
         $form = parent::alterForm($form, $params);

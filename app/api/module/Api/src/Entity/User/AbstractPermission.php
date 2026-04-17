@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\User;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Permission Abstract Entity
+ * AbstractPermission Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -26,22 +31,24 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractPermission implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractPermission implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
 
     /**
-     * Code
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="string", name="code", length=5, nullable=false)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $code;
+    protected $id;
 
     /**
      * Created by
@@ -55,17 +62,6 @@ abstract class AbstractPermission implements BundleSerializableInterface, JsonSe
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -77,13 +73,22 @@ abstract class AbstractPermission implements BundleSerializableInterface, JsonSe
     protected $lastModifiedBy;
 
     /**
+     * Code
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="code", length=5, nullable=false)
+     */
+    protected $code = '';
+
+    /**
      * Name
      *
      * @var string
      *
      * @ORM\Column(type="string", name="name", length=45, nullable=false)
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * Version
@@ -96,52 +101,20 @@ abstract class AbstractPermission implements BundleSerializableInterface, JsonSe
     protected $version = 1;
 
     /**
-     * Set the code
-     *
-     * @param string $code new value being set
-     *
-     * @return Permission
+     * Initialise the collections
      */
-    public function setCode($code)
+    public function __construct()
     {
-        $this->code = $code;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the code
-     *
-     * @return string
+     * Initialise collections
      */
-    public function getCode()
+    public function initCollections(): void
     {
-        return $this->code;
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return Permission
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
 
     /**
      * Set the id
@@ -168,9 +141,33 @@ abstract class AbstractPermission implements BundleSerializableInterface, JsonSe
     }
 
     /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Permission
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return Permission
      */
@@ -189,6 +186,30 @@ abstract class AbstractPermission implements BundleSerializableInterface, JsonSe
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the code
+     *
+     * @param string $code new value being set
+     *
+     * @return Permission
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get the code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
     }
 
     /**
@@ -237,5 +258,14 @@ abstract class AbstractPermission implements BundleSerializableInterface, JsonSe
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

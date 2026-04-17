@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Options;
 
 use Dvsa\Olcs\Api\Domain\Repository\AbstractReadonlyRepository;
@@ -16,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class RepoQuerySourceTest extends MockeryTestCase
 {
-    public function testPopulateOptionList()
+    public function testPopulateOptionList(): void
     {
         $methodName = 'fetchSectorOptions';
         $repoName = 'Sector';

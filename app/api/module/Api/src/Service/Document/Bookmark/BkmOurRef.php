@@ -16,6 +16,7 @@ class BkmOurRef extends BkmAuthNo
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         return 'PT2/21/' . parent::render();

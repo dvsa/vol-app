@@ -21,6 +21,7 @@ class Documents extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Document';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
 

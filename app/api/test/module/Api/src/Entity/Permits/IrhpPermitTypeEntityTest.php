@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Permits;
 
 use DateTime;
@@ -33,7 +35,7 @@ class IrhpPermitTypeEntityTest extends EntityTester
         $this->sut = m::mock(Entity::class)->makePartial();
     }
 
-    public function testGetCalculatedBundleValues()
+    public function testGetCalculatedBundleValues(): void
     {
         $this->sut->shouldReceive('isEcmtAnnual')
             ->once()
@@ -78,17 +80,15 @@ class IrhpPermitTypeEntityTest extends EntityTester
         );
     }
 
-    /**
-    * @dataProvider dpIsEcmtAnnual
-    */
-    public function testIsEcmtAnnual($id, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsEcmtAnnual')]
+    public function testIsEcmtAnnual(mixed $id, mixed $expected): void
     {
         $this->sut->setId($id);
 
         $this->assertEquals($expected, $this->sut->isEcmtAnnual());
     }
 
-    public function dpIsEcmtAnnual()
+    public static function dpIsEcmtAnnual(): array
     {
         return [
             [Entity::IRHP_PERMIT_TYPE_ID_ECMT, true],
@@ -101,17 +101,15 @@ class IrhpPermitTypeEntityTest extends EntityTester
         ];
     }
 
-    /**
-    * @dataProvider dpIsEcmtShortTerm
-    */
-    public function testIsEcmtShortTerm($id, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsEcmtShortTerm')]
+    public function testIsEcmtShortTerm(mixed $id, mixed $expected): void
     {
         $this->sut->setId($id);
 
         $this->assertEquals($expected, $this->sut->isEcmtShortTerm());
     }
 
-    public function dpIsEcmtShortTerm()
+    public static function dpIsEcmtShortTerm(): array
     {
         return [
             [Entity::IRHP_PERMIT_TYPE_ID_ECMT, false],
@@ -124,17 +122,15 @@ class IrhpPermitTypeEntityTest extends EntityTester
         ];
     }
 
-    /**
-    * @dataProvider dpIsEcmtRemoval
-    */
-    public function testIsEcmtRemoval($id, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsEcmtRemoval')]
+    public function testIsEcmtRemoval(mixed $id, mixed $expected): void
     {
         $this->sut->setId($id);
 
         $this->assertEquals($expected, $this->sut->isEcmtRemoval());
     }
 
-    public function dpIsEcmtRemoval()
+    public static function dpIsEcmtRemoval(): array
     {
         return [
             [Entity::IRHP_PERMIT_TYPE_ID_ECMT, false],
@@ -147,17 +143,15 @@ class IrhpPermitTypeEntityTest extends EntityTester
         ];
     }
 
-    /**
-    * @dataProvider dpIsBilateral
-    */
-    public function testIsBilateral($id, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsBilateral')]
+    public function testIsBilateral(mixed $id, mixed $expected): void
     {
         $this->sut->setId($id);
 
         $this->assertEquals($expected, $this->sut->isBilateral());
     }
 
-    public function dpIsBilateral()
+    public static function dpIsBilateral(): array
     {
         return [
             [Entity::IRHP_PERMIT_TYPE_ID_ECMT, false],
@@ -170,17 +164,15 @@ class IrhpPermitTypeEntityTest extends EntityTester
         ];
     }
 
-    /**
-    * @dataProvider dpIsMultilateral
-    */
-    public function testIsMultilateral($id, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsMultilateral')]
+    public function testIsMultilateral(mixed $id, mixed $expected): void
     {
         $this->sut->setId($id);
 
         $this->assertEquals($expected, $this->sut->isMultilateral());
     }
 
-    public function dpIsMultilateral()
+    public static function dpIsMultilateral(): array
     {
         return [
             [Entity::IRHP_PERMIT_TYPE_ID_ECMT, false],
@@ -193,17 +185,15 @@ class IrhpPermitTypeEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsMultiStock
-     */
-    public function testIsMultiStock($id, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsMultiStock')]
+    public function testIsMultiStock(mixed $id, mixed $expected): void
     {
         $this->sut->setId($id);
 
         $this->assertEquals($expected, $this->sut->isMultiStock());
     }
 
-    public function dpIsMultiStock()
+    public static function dpIsMultiStock(): array
     {
         return [
             [Entity::IRHP_PERMIT_TYPE_ID_ECMT, false],
@@ -216,17 +206,15 @@ class IrhpPermitTypeEntityTest extends EntityTester
         ];
     }
 
-    /**
-    * @dataProvider dpIsApplicationPathEnabled
-    */
-    public function testIsApplicationPathEnabled($id, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsApplicationPathEnabled')]
+    public function testIsApplicationPathEnabled(mixed $id, mixed $expected): void
     {
         $this->sut->setId($id);
 
         $this->assertEquals($expected, $this->sut->isApplicationPathEnabled());
     }
 
-    public function dpIsApplicationPathEnabled()
+    public static function dpIsApplicationPathEnabled(): array
     {
         return [
             [Entity::IRHP_PERMIT_TYPE_ID_ECMT, true],
@@ -239,16 +227,14 @@ class IrhpPermitTypeEntityTest extends EntityTester
         ];
     }
 
-    /**
-    * @dataProvider dpGenerateExpiryDate
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerateExpiryDate')]
     public function testGenerateExpiryDate(
-        $isEcmtRemoval,
-        $isBilateral,
-        $isEcmtShortTerm,
-        $issueDateString,
-        $expectedExpiryDateString
-    ) {
+        mixed $isEcmtRemoval,
+        mixed $isBilateral,
+        mixed $isEcmtShortTerm,
+        mixed $issueDateString,
+        mixed $expectedExpiryDateString
+    ): void {
         $this->sut->shouldReceive('isEcmtRemoval')
             ->withNoArgs()
             ->andReturn($isEcmtRemoval);
@@ -270,7 +256,7 @@ class IrhpPermitTypeEntityTest extends EntityTester
         );
     }
 
-    public function dpGenerateExpiryDate()
+    public static function dpGenerateExpiryDate(): array
     {
         return [
             [true, false, false, '2019-04-15', '2020-04-14'],
@@ -285,7 +271,7 @@ class IrhpPermitTypeEntityTest extends EntityTester
         ];
     }
 
-    public function testGenerateExpiryDateException()
+    public function testGenerateExpiryDateException(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to generate an expiry date for permit type 77');
@@ -301,17 +287,15 @@ class IrhpPermitTypeEntityTest extends EntityTester
         $this->sut->generateExpiryDate(new DateTime());
     }
 
-    /**
-     * @dataProvider dpIsCertificateOfRoadworthiness
-     */
-    public function testIsCertificateOfRoadworthiness($id, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsCertificateOfRoadworthiness')]
+    public function testIsCertificateOfRoadworthiness(mixed $id, mixed $expected): void
     {
         $this->sut->setId($id);
 
         $this->assertEquals($expected, $this->sut->isCertificateOfRoadworthiness());
     }
 
-    public function dpIsCertificateOfRoadworthiness()
+    public static function dpIsCertificateOfRoadworthiness(): array
     {
         return [
             [Entity::IRHP_PERMIT_TYPE_ID_ECMT, false],
@@ -324,15 +308,13 @@ class IrhpPermitTypeEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpUsesMultiStockLicenceBehaviour
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpUsesMultiStockLicenceBehaviour')]
     public function testUsesMultiStockLicenceBehaviour(
-        $isMultiStock,
-        $isEcmtRemoval,
-        $isCertificateOfRoadworthiness,
-        $expected
-    ) {
+        mixed $isMultiStock,
+        mixed $isEcmtRemoval,
+        mixed $isCertificateOfRoadworthiness,
+        mixed $expected
+    ): void {
         $this->sut->shouldReceive('isMultiStock')
             ->withNoArgs()
             ->andReturn($isMultiStock);
@@ -351,7 +333,7 @@ class IrhpPermitTypeEntityTest extends EntityTester
         );
     }
 
-    public function dpUsesMultiStockLicenceBehaviour()
+    public static function dpUsesMultiStockLicenceBehaviour(): array
     {
         return [
             [false, false, false, false],
@@ -365,17 +347,15 @@ class IrhpPermitTypeEntityTest extends EntityTester
         ];
     }
 
-    /**
-    * @dataProvider dpIsConstrainedCountriesType
-    */
-    public function testIsConstrainedCountriesType($id, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsConstrainedCountriesType')]
+    public function testIsConstrainedCountriesType(mixed $id, mixed $expected): void
     {
         $this->sut->setId($id);
 
         $this->assertEquals($expected, $this->sut->isConstrainedCountriesType());
     }
 
-    public function dpIsConstrainedCountriesType()
+    public static function dpIsConstrainedCountriesType(): array
     {
         return [
             [Entity::IRHP_PERMIT_TYPE_ID_ECMT, true],

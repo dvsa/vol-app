@@ -21,6 +21,7 @@ class IrfoDetails implements MapperInterface
      *
      * @return array Form data
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         $formData['fields'] = $data;

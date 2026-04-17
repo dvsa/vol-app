@@ -12,6 +12,7 @@ use Laminas\Mvc\MvcEvent;
  */
 class Module implements BootstrapListenerInterface
 {
+    #[\Override]
     public function onBootstrap(EventInterface $e)
     {
         $sm = $e->getApplication()->getServiceManager();

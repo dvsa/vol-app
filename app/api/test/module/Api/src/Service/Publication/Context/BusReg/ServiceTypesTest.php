@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\BusReg;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,12 +18,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class ServiceTypesTest extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the bus reg service designation filter
-     */
-    public function testProvide()
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the bus reg service designation filter')]
+    public function testProvide(): void
     {
         $description = 'description';
         $description2 = 'description 2';

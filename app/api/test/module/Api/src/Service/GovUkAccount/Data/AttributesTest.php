@@ -11,16 +11,14 @@ use Dvsa\Olcs\Api\Service\GovUkAccount\Data\Attributes;
  */
 class AttributesTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider dpGetFullName
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetFullName')]
     public function testGetFullName(array $attributes, string $expected): void
     {
         $attributes = new Attributes($attributes);
         $this->assertSame($expected, $attributes->getFullName());
     }
 
-    public function dpGetFullName(): array
+    public static function dpGetFullName(): array
     {
         return [
             [
@@ -58,16 +56,14 @@ class AttributesTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($attributes->getDateOfBirth());
     }
 
-    /**
-     * @dataProvider dpIsValidSignature
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValidSignature')]
     public function testIsValidSignature(array $attributes, bool $expected): void
     {
         $attributes = new Attributes($attributes);
         $this->assertSame($expected, $attributes->isValidSignature());
     }
 
-    public function dpIsValidSignature(): array
+    public static function dpIsValidSignature(): array
     {
         return [
             [

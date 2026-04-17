@@ -20,6 +20,7 @@ class LicenceNumber extends AbstractFilter
      *
      * @return array
      */
+    #[\Override]
     public function filter($value)
     {
         //licence number defaults to the initial value

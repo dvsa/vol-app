@@ -34,7 +34,7 @@ class LicenceGoodsVehiclesTest extends MockeryTestCase
         $this->sut = new LicenceGoodsVehicles($this->formHelper, m::mock(AuthorizationService::class), $this->formService);
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         // Params
         $mockTable = m::mock(\Common\Service\Table\TableBuilder::class);

@@ -36,6 +36,7 @@ class ResetPassword extends AbstractCommandHandler
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         assert($command instanceof ResetPasswordCmd);

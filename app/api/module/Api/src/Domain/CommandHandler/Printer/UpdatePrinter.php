@@ -29,6 +29,7 @@ final class UpdatePrinter extends AbstractCommandHandler
      * @return Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $printer = $this->getRepo()->fetchUsingId($command);

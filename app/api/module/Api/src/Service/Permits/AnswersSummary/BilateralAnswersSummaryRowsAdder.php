@@ -23,6 +23,7 @@ class BilateralAnswersSummaryRowsAdder implements AnswersSummaryRowsAdderInterfa
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function addRows(AnswersSummary $answersSummary, QaEntityInterface $irhpApplication, $isSnapshot)
     {
         $irhpPermitApplications = $irhpApplication->getIrhpPermitApplicationsByCountryName();

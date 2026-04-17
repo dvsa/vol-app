@@ -15,6 +15,7 @@ final class StatementList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Statement';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var StatementRepo $repo */

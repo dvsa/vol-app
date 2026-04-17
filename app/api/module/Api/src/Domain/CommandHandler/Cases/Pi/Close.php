@@ -27,6 +27,7 @@ final class Close extends AbstractCommandHandler implements TransactionedInterfa
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

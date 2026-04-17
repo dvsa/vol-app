@@ -117,7 +117,7 @@ trait MocksServicesTrait
      *
      * @return void|array
      */
-    protected function setUpDefaultServices(ServiceManager $serviceManager)
+    protected function setUpDefaultServices(ServiceManager $serviceManager): void
     {
         // Set up any default services
     }

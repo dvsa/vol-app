@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Psv Vehicle Test
  *
@@ -39,7 +41,7 @@ class CreatePsvVehicleTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandVrmExists()
+    public function testHandleCommandVrmExists(): void
     {
         $command = Cmd::create(
             [
@@ -74,7 +76,7 @@ class CreatePsvVehicleTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandVrmDoesntExist()
+    public function testHandleCommandVrmDoesntExist(): void
     {
         $command = Cmd::create(
             [
@@ -164,7 +166,7 @@ class CreatePsvVehicleTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandNoOtherVehicles()
+    public function testHandleCommandNoOtherVehicles(): void
     {
         $command = Cmd::create(
             [
@@ -239,7 +241,7 @@ class CreatePsvVehicleTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandVehicleExistsOnOtherLicence()
+    public function testHandleCommandVehicleExistsOnOtherLicence(): void
     {
         $command = Cmd::create(
             [

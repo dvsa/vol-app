@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Stay Test
  *
@@ -43,7 +45,7 @@ class CreateStayTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandExistingAppeal()
+    public function testHandleCommandExistingAppeal(): void
     {
         $mockAppeal = m::mock(AppealEntity::class);
         $mockCase = m::mock(CasesEntity::class)->makePartial();
@@ -96,7 +98,7 @@ class CreateStayTest extends AbstractCommandHandlerTestCase
         $this->assertContains('Stay created', $result->getMessages());
     }
 
-    public function testHandleCommandNoExistingAppeal()
+    public function testHandleCommandNoExistingAppeal(): void
     {
         $mockCase = m::mock(CasesEntity::class)->makePartial();
         $mockCase->shouldReceive('getAppeal')
@@ -128,7 +130,7 @@ class CreateStayTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandStayTypeAlreadyExists()
+    public function testHandleCommandStayTypeAlreadyExists(): void
     {
         $mockAppeal = m::mock(AppealEntity::class);
 

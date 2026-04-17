@@ -84,6 +84,7 @@ class InspectionRequest extends AbstractRepository
      * @param QueryBuilder $qb
      * @param QueryInterface $query
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $qb->andWhere($qb->expr()->eq($this->alias . '.licence', ':licence'));
@@ -97,6 +98,7 @@ class InspectionRequest extends AbstractRepository
         $qb->setParameter('enforcementArea', $enforcementArea);
     }
 
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         $this->getQueryBuilder()->modifyQuery($qb)

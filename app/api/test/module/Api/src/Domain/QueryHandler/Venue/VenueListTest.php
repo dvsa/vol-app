@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Venue List Test
  *
@@ -29,7 +31,7 @@ class VenueListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $count = 25;
         $query = Qry::create([]);

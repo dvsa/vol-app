@@ -45,6 +45,7 @@ class Address implements FormatterInterface
      * @param array $data
      * @return string
      */
+    #[\Override]
     public static function format(array $data)
     {
         $address = [];

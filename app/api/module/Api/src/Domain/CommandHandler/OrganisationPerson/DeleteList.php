@@ -27,6 +27,7 @@ final class DeleteList extends AbstractCommandHandler implements TransactionedIn
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $org = null;

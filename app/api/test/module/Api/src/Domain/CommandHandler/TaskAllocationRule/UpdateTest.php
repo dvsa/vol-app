@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\TaskAllocationRule;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\TaskAllocationRule\Update as CommandHandler;
@@ -28,7 +30,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
     /**
      * Init references
      */
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             CategoryEntity::class => [
@@ -56,9 +59,9 @@ class UpdateTest extends AbstractCommandHandlerTestCase
      * @param string $goodsOrPsv
      * @param string $mlh
      * @param bool $expected
-     * @dataProvider mlhProvider
      */
-    public function testHandleCommandAllParams($goodsOrPsv, $mlh, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('mlhProvider')]
+    public function testHandleCommandAllParams(mixed $goodsOrPsv, mixed $mlh, mixed $expected): void
     {
         $command = Cmd::create(
             [
@@ -110,7 +113,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function mlhProvider()
+    public static function mlhProvider(): array
     {
         return [
             ['lcat_gv', 'Y', true],
@@ -122,7 +125,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
     /**
      * Test handle command with min params
      */
-    public function testHandleCommandMinParams()
+    public function testHandleCommandMinParams(): void
     {
         $command = Cmd::create(
             [

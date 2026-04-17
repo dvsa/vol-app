@@ -37,6 +37,7 @@ final class CreateOpposition extends AbstractCommandHandler implements Transacti
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

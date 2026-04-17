@@ -34,8 +34,6 @@ class InterimController extends AbstractInterimController implements VariationCo
     protected string $location = 'internal';
     protected $updateInterimCommand = UpdateInterim::class;
 
-    protected StringHelperService $stringHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -54,12 +52,10 @@ class InterimController extends AbstractInterimController implements VariationCo
         FormHelperService $formHelper,
         ScriptFactory $scriptFactory,
         TableFactory $tableFactory,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         protected FormServiceManager $formServiceManager,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

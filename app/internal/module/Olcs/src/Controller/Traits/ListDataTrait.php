@@ -20,16 +20,91 @@ trait ListDataTrait
      */
     public function getListDataDocTemplates($categoryId = null, $subCategoryId = null, $firstOption = null)
     {
-        $dto = \Dvsa\Olcs\Transfer\Query\DocTemplate\GetList::create(
-            [
-                'order' => 'ASC',
-                'sort' => 'description',
-                'category' => $categoryId,
-                'subCategory' => $subCategoryId,
-            ]
+        $isFeatureEnabled = $this->isLettersDatabaseDrivenEnabled();
+
+        $params = [
+            'category' => $categoryId,
+            'subCategory' => $subCategoryId,
+            'order' => 'ASC',
+            'sort' => 'description',
+        ];
+
+        $dto = \Dvsa\Olcs\Transfer\Query\DocTemplate\GetList::create($params);
+
+        /** @var \Common\Service\Cqrs\Response $response */
+        $response = $this->handleQuery($dto);
+        if (!$response->isOk()) {
+            return [];
+        }
+
+        $options = [];
+        // Add default first option
+        if (is_array($firstOption)) {
+            $options = (array)$firstOption;
+        }
+        if (is_string($firstOption)) {
+            $options[''] = $firstOption;
+        }
+
+        // Build options array with [New] prefix for new templates
+        foreach ($response->getResult()['results'] as $item) {
+            $key = $item['id'];
+            $value = $item['description'];
+
+            // Add [New] prefix for templates with letterType when feature is enabled
+            if ($isFeatureEnabled && !empty($item['letterType'])) {
+                $value = '[New] ' . $value;
+            }
+
+            $options[$key] = $value;
+        }
+
+        // Sort array to put [New] templates first, then alphabetically within each group
+        if ($isFeatureEnabled && count($options) > 1) {
+            // Separate the first option (empty string key) if it exists
+            $firstOption = null;
+            if (isset($options[''])) {
+                $firstOption = $options[''];
+                unset($options['']);
+            }
+
+            // Sort remaining options
+            uasort($options, function ($a, $b) {
+                $aIsNew = str_starts_with($a, '[New]');
+                $bIsNew = str_starts_with($b, '[New]');
+
+                if ($aIsNew === $bIsNew) {
+                    // Both new or both legacy - sort alphabetically (case-insensitive)
+                    return strcasecmp($a, $b);
+                }
+
+                // [New] items first (return negative if $a is new and $b is not)
+                return $bIsNew - $aIsNew;
+            });
+
+            // Re-add first option at the beginning if it existed
+            if ($firstOption !== null) {
+                $options = ['' => $firstOption] + $options;
+            }
+        }
+
+        return $options;
+    }
+
+    /**
+     * Check if letters database-driven feature is enabled
+     *
+     * @return bool
+     */
+    protected function isLettersDatabaseDrivenEnabled(): bool
+    {
+        $result = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled::create(
+                ['ids' => [\Common\FeatureToggle::LETTERS_DATABASE_DRIVEN]]
+            )
         );
 
-        return $this->getListDataOptions($dto, 'id', 'description', $firstOption);
+        return $result->getResult()['isEnabled'] ?? false;
     }
 
     /**

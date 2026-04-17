@@ -28,17 +28,15 @@ class ReportController extends LaminasAbstractActionController implements LeftVi
 
     protected ScriptFactory $scriptFactory;
     protected TableFactory $tableFactory;
-    protected FormHelperService $formHelper;
 
     public function __construct(
         ScriptFactory $scriptFactory,
         TableFactory $tableFactory,
-        FormHelperService $formHelper,
+        protected FormHelperService $formHelper,
         protected Placeholder $placeholder
     ) {
         $this->scriptFactory = $scriptFactory;
         $this->tableFactory = $tableFactory;
-        $this->formHelper = $formHelper;
     }
 
     /**
@@ -63,6 +61,7 @@ class ReportController extends LaminasAbstractActionController implements LeftVi
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->redirectToRoute('admin-dashboard/admin-report/ch-alerts', [], null, true);

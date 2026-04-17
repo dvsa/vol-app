@@ -1,22 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\System;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * SlaTargetDate Abstract Entity
+ * AbstractSlaTargetDate Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -27,33 +32,95 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_sla_target_date_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_sla_target_date_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_sla_target_date_pi_id", columns={"pi_id"}),
- *        @ORM\Index(name="ix_sla_target_date_propose_to_revoke_idx",
-     *     columns={"propose_to_revoke_id"}),
+ *        @ORM\Index(name="ix_sla_target_date_propose_to_revoke_idx", columns={"propose_to_revoke_id"}),
  *        @ORM\Index(name="ix_sla_target_date_sla_id", columns={"sla_id"}),
- *        @ORM\Index(name="ix_sla_target_date_submission_id", columns={"submission_id"})
+ *        @ORM\Index(name="ix_sla_target_date_submission_id", columns={"submission_id"}),
+ *        @ORM\Index(name="uk_sla_target_date_document_id", columns={"document_id"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_sla_target_date_document_id", columns={"document_id"})
  *    }
  * )
  */
-abstract class AbstractSlaTargetDate implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSlaTargetDate implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
 
     /**
-     * Agreed date
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(type="date", name="agreed_date", nullable=false)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $agreedDate;
+    protected $id;
+
+    /**
+     * Foreign Key to document
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
+     *
+     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
+     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=true)
+     */
+    protected $document;
+
+    /**
+     * Foreign Key to pi
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Pi\Pi
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\Pi", fetch="LAZY")
+     * @ORM\JoinColumn(name="pi_id", referencedColumnName="id", nullable=true)
+     */
+    protected $pi;
+
+    /**
+     * Foreign Key to submission
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Submission\Submission
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Submission\Submission", fetch="LAZY")
+     * @ORM\JoinColumn(name="submission_id", referencedColumnName="id", nullable=true)
+     */
+    protected $submission;
+
+    /**
+     * ProposeToRevoke
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke", fetch="LAZY")
+     * @ORM\JoinColumn(name="propose_to_revoke_id", referencedColumnName="id", nullable=true)
+     */
+    protected $proposeToRevoke;
+
+    /**
+     * Statement
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Cases\Statement
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Statement", fetch="LAZY")
+     * @ORM\JoinColumn(name="statement_id", referencedColumnName="id", nullable=true)
+     */
+    protected $statement;
+
+    /**
+     * Foreign Key to sla
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\Sla
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\Sla", fetch="LAZY")
+     * @ORM\JoinColumn(name="sla_id", referencedColumnName="id", nullable=true)
+     */
+    protected $sla;
 
     /**
      * Created by
@@ -67,31 +134,6 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     protected $createdBy;
 
     /**
-     * Document
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\OneToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document",
-     *     fetch="LAZY",
-     *     inversedBy="slaTargetDate"
-     * )
-     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=true)
-     */
-    protected $document;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -103,88 +145,13 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     protected $lastModifiedBy;
 
     /**
-     * Notes
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="notes", length=4000, nullable=true)
-     */
-    protected $notes;
-
-    /**
-     * Pi
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Pi\Pi
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Pi\Pi",
-     *     fetch="LAZY",
-     *     inversedBy="slaTargetDates"
-     * )
-     * @ORM\JoinColumn(name="pi_id", referencedColumnName="id", nullable=true)
-     */
-    protected $pi;
-
-    /**
-     * Propose to revoke
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke",
-     *     fetch="LAZY",
-     *     inversedBy="slaTargetDates"
-     * )
-     * @ORM\JoinColumn(name="propose_to_revoke_id", referencedColumnName="id", nullable=true)
-     */
-    protected $proposeToRevoke;
-
-    /**
-     * Sent date
+     * Agreed date
      *
      * @var \DateTime
      *
-     * @ORM\Column(type="date", name="sent_date", nullable=true)
+     * @ORM\Column(type="date", name="agreed_date", nullable=false)
      */
-    protected $sentDate;
-
-    /**
-     * Sla
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\Sla
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\Sla", fetch="LAZY")
-     * @ORM\JoinColumn(name="sla_id", referencedColumnName="id", nullable=true)
-     */
-    protected $sla;
-
-    /**
-     * Statement
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Cases\Statement
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Cases\Statement",
-     *     fetch="LAZY",
-     *     inversedBy="slaTargetDates"
-     * )
-     * @ORM\JoinColumn(name="statement_id", referencedColumnName="id", nullable=true)
-     */
-    protected $statement;
-
-    /**
-     * Submission
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Submission\Submission
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Submission\Submission",
-     *     fetch="LAZY",
-     *     inversedBy="slaTargetDates"
-     * )
-     * @ORM\JoinColumn(name="submission_id", referencedColumnName="id", nullable=true)
-     */
-    protected $submission;
+    protected $agreedDate;
 
     /**
      * Target date
@@ -196,13 +163,31 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     protected $targetDate;
 
     /**
-     * Under delegation
+     * Sent date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="sent_date", nullable=true)
+     */
+    protected $sentDate;
+
+    /**
+     * underDelegation
      *
      * @var string
      *
      * @ORM\Column(type="yesno", name="under_delegation", nullable=false, options={"default": 0})
      */
     protected $underDelegation = 0;
+
+    /**
+     * SLA Target date notes
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="notes", length=4000, nullable=true)
+     */
+    protected $notes;
 
     /**
      * Version
@@ -215,83 +200,20 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     protected $version = 1;
 
     /**
-     * Set the agreed date
-     *
-     * @param \DateTime $agreedDate new value being set
-     *
-     * @return SlaTargetDate
+     * Initialise the collections
      */
-    public function setAgreedDate($agreedDate)
+    public function __construct()
     {
-        $this->agreedDate = $agreedDate;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the agreed date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
+     * Initialise collections
      */
-    public function getAgreedDate($asDateTime = false)
+    public function initCollections(): void
     {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->agreedDate);
-        }
-
-        return $this->agreedDate;
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return SlaTargetDate
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the document
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Doc\Document $document entity being set as the value
-     *
-     * @return SlaTargetDate
-     */
-    public function setDocument($document)
-    {
-        $this->document = $document;
-
-        return $this;
-    }
-
-    /**
-     * Get the document
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
-     */
-    public function getDocument()
-    {
-        return $this->document;
-    }
 
     /**
      * Set the id
@@ -318,57 +240,33 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     }
 
     /**
-     * Set the last modified by
+     * Set the document
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Doc\Document $document new value being set
      *
      * @return SlaTargetDate
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setDocument($document)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->document = $document;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the document
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
      */
-    public function getLastModifiedBy()
+    public function getDocument()
     {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the notes
-     *
-     * @param string $notes new value being set
-     *
-     * @return SlaTargetDate
-     */
-    public function setNotes($notes)
-    {
-        $this->notes = $notes;
-
-        return $this;
-    }
-
-    /**
-     * Get the notes
-     *
-     * @return string
-     */
-    public function getNotes()
-    {
-        return $this->notes;
+        return $this->document;
     }
 
     /**
      * Set the pi
      *
-     * @param \Dvsa\Olcs\Api\Entity\Pi\Pi $pi entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Pi\Pi $pi new value being set
      *
      * @return SlaTargetDate
      */
@@ -390,112 +288,9 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     }
 
     /**
-     * Set the propose to revoke
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke $proposeToRevoke entity being set as the value
-     *
-     * @return SlaTargetDate
-     */
-    public function setProposeToRevoke($proposeToRevoke)
-    {
-        $this->proposeToRevoke = $proposeToRevoke;
-
-        return $this;
-    }
-
-    /**
-     * Get the propose to revoke
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke
-     */
-    public function getProposeToRevoke()
-    {
-        return $this->proposeToRevoke;
-    }
-
-    /**
-     * Set the sent date
-     *
-     * @param \DateTime $sentDate new value being set
-     *
-     * @return SlaTargetDate
-     */
-    public function setSentDate($sentDate)
-    {
-        $this->sentDate = $sentDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the sent date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getSentDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->sentDate);
-        }
-
-        return $this->sentDate;
-    }
-
-    /**
-     * Set the sla
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\Sla $sla entity being set as the value
-     *
-     * @return SlaTargetDate
-     */
-    public function setSla($sla)
-    {
-        $this->sla = $sla;
-
-        return $this;
-    }
-
-    /**
-     * Get the sla
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\Sla
-     */
-    public function getSla()
-    {
-        return $this->sla;
-    }
-
-    /**
-     * Set the statement
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Cases\Statement $statement entity being set as the value
-     *
-     * @return SlaTargetDate
-     */
-    public function setStatement($statement)
-    {
-        $this->statement = $statement;
-
-        return $this;
-    }
-
-    /**
-     * Get the statement
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Statement
-     */
-    public function getStatement()
-    {
-        return $this->statement;
-    }
-
-    /**
      * Set the submission
      *
-     * @param \Dvsa\Olcs\Api\Entity\Submission\Submission $submission entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Submission\Submission $submission new value being set
      *
      * @return SlaTargetDate
      */
@@ -517,6 +312,156 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     }
 
     /**
+     * Set the propose to revoke
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke $proposeToRevoke new value being set
+     *
+     * @return SlaTargetDate
+     */
+    public function setProposeToRevoke($proposeToRevoke)
+    {
+        $this->proposeToRevoke = $proposeToRevoke;
+
+        return $this;
+    }
+
+    /**
+     * Get the propose to revoke
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke
+     */
+    public function getProposeToRevoke()
+    {
+        return $this->proposeToRevoke;
+    }
+
+    /**
+     * Set the statement
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Cases\Statement $statement new value being set
+     *
+     * @return SlaTargetDate
+     */
+    public function setStatement($statement)
+    {
+        $this->statement = $statement;
+
+        return $this;
+    }
+
+    /**
+     * Get the statement
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Statement
+     */
+    public function getStatement()
+    {
+        return $this->statement;
+    }
+
+    /**
+     * Set the sla
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\Sla $sla new value being set
+     *
+     * @return SlaTargetDate
+     */
+    public function setSla($sla)
+    {
+        $this->sla = $sla;
+
+        return $this;
+    }
+
+    /**
+     * Get the sla
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\Sla
+     */
+    public function getSla()
+    {
+        return $this->sla;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return SlaTargetDate
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return SlaTargetDate
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the agreed date
+     *
+     * @param \DateTime $agreedDate new value being set
+     *
+     * @return SlaTargetDate
+     */
+    public function setAgreedDate($agreedDate)
+    {
+        $this->agreedDate = $agreedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the agreed date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
+     */
+    public function getAgreedDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->agreedDate);
+        }
+
+        return $this->agreedDate;
+    }
+
+    /**
      * Set the target date
      *
      * @param \DateTime $targetDate new value being set
@@ -535,8 +480,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
+     * @return \DateTime
      */
     public function getTargetDate($asDateTime = false)
     {
@@ -545,6 +489,36 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
         }
 
         return $this->targetDate;
+    }
+
+    /**
+     * Set the sent date
+     *
+     * @param \DateTime $sentDate new value being set
+     *
+     * @return SlaTargetDate
+     */
+    public function setSentDate($sentDate)
+    {
+        $this->sentDate = $sentDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the sent date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
+     */
+    public function getSentDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->sentDate);
+        }
+
+        return $this->sentDate;
     }
 
     /**
@@ -572,6 +546,30 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     }
 
     /**
+     * Set the notes
+     *
+     * @param string $notes new value being set
+     *
+     * @return SlaTargetDate
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
+
+        return $this;
+    }
+
+    /**
+     * Get the notes
+     *
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
      * Set the version
      *
      * @param int $version new value being set
@@ -593,5 +591,14 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

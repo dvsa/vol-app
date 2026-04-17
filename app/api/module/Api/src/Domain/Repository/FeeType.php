@@ -159,6 +159,7 @@ class FeeType extends AbstractRepository
      * @param QueryBuilder $qb
      * @param QueryInterface $query
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if (method_exists($query, 'getEffectiveDate') && !empty($query->getEffectiveDate())) {
@@ -277,6 +278,7 @@ class FeeType extends AbstractRepository
      * @param QueryBuilder $qb
      * @param QueryInterface $query
      */
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         $this->getQueryBuilder()->modifyQuery($qb)

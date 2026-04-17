@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Variation Test
  *
@@ -46,7 +48,8 @@ class CreateVariationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION,
@@ -62,7 +65,7 @@ class CreateVariationTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandInternalFull()
+    public function testHandleCommandInternalFull(): void
     {
         $data = [
             'id' => 111,
@@ -147,7 +150,7 @@ class CreateVariationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandInternalWithVariationType()
+    public function testHandleCommandInternalWithVariationType(): void
     {
         $data = [
             'id' => 111,
@@ -200,7 +203,7 @@ class CreateVariationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandInternalNoFee()
+    public function testHandleCommandInternalNoFee(): void
     {
         $data = [
             'id' => 111,
@@ -277,7 +280,7 @@ class CreateVariationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandInternalNoLicenceType()
+    public function testHandleCommandInternalNoLicenceType(): void
     {
         $data = [
             'id' => 111,
@@ -348,7 +351,7 @@ class CreateVariationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandInternalNoReceivedDate()
+    public function testHandleCommandInternalNoReceivedDate(): void
     {
         $data = [
             'id' => 111,
@@ -406,7 +409,7 @@ class CreateVariationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandSelfserveNoReceivedDate()
+    public function testHandleCommandSelfserveNoReceivedDate(): void
     {
         $data = [
             'id' => 111,
@@ -463,7 +466,7 @@ class CreateVariationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandVariationException()
+    public function testHandleCommandVariationException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 

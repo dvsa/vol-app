@@ -72,7 +72,7 @@ jobs:
         shell: bash
         working-directory: ${{ env.WORKING_DIR }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || null }}
           sparse-checkout: infra/terraform
@@ -82,7 +82,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ env.AWS_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
@@ -114,7 +114,7 @@ jobs:
         if: ${{ !inputs.apply }}
         run: terraform show -no-color tfplan > tfplan.txt
 
-      - uses: actions/github-script@v7
+      - uses: actions/github-script@v8
         if: ${{ always() && !cancelled() && !failure()  && !inputs.apply && github.event_name == 'pull_request' }}
         env:
           PLAN: "${{ steps.plan.outputs.stdout }}"

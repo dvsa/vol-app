@@ -23,6 +23,7 @@ class VehiclesPsvReviewService extends AbstractReviewService
      * @param array $data
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(array $data = [], $mainItems = [])
     {
         if ($data['isVariation'] || $data['hasEnteredReg'] == 'Y') {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Mvc;
 
 use Dvsa\Olcs\Api\Entity\User\User;
@@ -39,10 +41,8 @@ class OlcsBlameableListenerTest extends MockeryTestCase
         $this->sut = new OlcsBlameableListener($this->serviceLocator);
     }
 
-    /**
-     * @dataProvider getFieldValueDataProvider
-     */
-    public function testGetFieldValue($currentUser, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('getFieldValueDataProvider')]
+    public function testGetFieldValue(mixed $currentUser, mixed $expected): void
     {
         /** @var AuthorizationService $mockAuth */
         $mockAuth = m::mock(AuthorizationService::class);
@@ -89,7 +89,7 @@ class OlcsBlameableListenerTest extends MockeryTestCase
         );
     }
 
-    public function testGetFieldValueMasqueraded()
+    public function testGetFieldValueMasqueraded(): void
     {
         $mockUser = User::create(
             'abc',
@@ -146,7 +146,7 @@ class OlcsBlameableListenerTest extends MockeryTestCase
         );
     }
 
-    public function getFieldValueDataProvider()
+    public static function getFieldValueDataProvider(): array
     {
         $mockUser = User::create(
             'abc',

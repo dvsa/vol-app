@@ -17,7 +17,7 @@ class DocumentSendActions
      *     "class": "govuk-button",
      * })
      * @Form\Options({
-     *     "label": "Email"
+     *     "label": "Send by email"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
@@ -27,10 +27,10 @@ class DocumentSendActions
      * @Form\Attributes({
      *     "type":"submit",
      *     "data-module": "govuk-button",
-     *     "class": "govuk-button",
+     *     "class": "govuk-button govuk-button--secondary",
      * })
      * @Form\Options({
-     *     "label": "Print and post"
+     *     "label": "Print and send by post"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
@@ -38,13 +38,12 @@ class DocumentSendActions
 
     /**
      * @Form\Attributes({
-     *     "data-module": "govuk-button",
      *     "type": "submit",
-     *     "class": "govuk-button govuk-button--secondary",
+     *     "class": "govuk-link",
      *     "id":"close",
      * })
      * @Form\Options({
-     *     "label": "Close",
+     *     "label": "Cancel",
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */

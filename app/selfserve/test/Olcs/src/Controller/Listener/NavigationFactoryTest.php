@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Listener;
 
 use Common\Rbac\User as RbacUser;

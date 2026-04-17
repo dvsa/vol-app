@@ -32,6 +32,7 @@ class SendEcmtApsgPostScoring extends AbstractEcmtShortTermEmailHandler
      *
      * @return array
      */
+    #[\Override]
     protected function getTemplateVariables($recordObject): array
     {
         $this->getRepo()->refresh($recordObject);
@@ -63,6 +64,7 @@ class SendEcmtApsgPostScoring extends AbstractEcmtShortTermEmailHandler
             'periodName' => $periodName
         ];
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

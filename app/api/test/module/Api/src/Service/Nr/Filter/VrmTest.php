@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Nr\Filter;
 
 use Dvsa\Olcs\Api\Service\Nr\Filter\Vrm;
@@ -16,11 +18,11 @@ class VrmTest extends MockeryTestCase
     /**
      * test filter()
      *
-     * @dataProvider dpFilterProvider
      * @param string $initialValue
      * @param string $expectedResult
      */
-    public function testFilter($initialValue, $expectedResult)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFilterProvider')]
+    public function testFilter(mixed $initialValue, mixed $expectedResult): void
     {
         $value = ['vrm' => $initialValue];
         $expected = ['vrm' => $expectedResult];
@@ -39,7 +41,7 @@ class VrmTest extends MockeryTestCase
      *
      * @return array
      */
-    public function dpFilterProvider()
+    public static function dpFilterProvider(): array
     {
         return [
             ['icZs', '1CZS'],

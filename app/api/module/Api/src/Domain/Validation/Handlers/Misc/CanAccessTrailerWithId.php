@@ -14,6 +14,7 @@ class CanAccessTrailerWithId extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canAccessTrailer($this->getId($dto));

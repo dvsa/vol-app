@@ -46,6 +46,7 @@ abstract class AbstractDiscList extends DynamicBookmark
      */
     abstract protected function getQueryClass(): string;
 
+    #[\Override]
     public function getQuery(array $data)
     {
         $queryClass = $this->getQueryClass();

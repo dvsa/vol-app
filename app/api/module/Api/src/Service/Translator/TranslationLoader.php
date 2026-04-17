@@ -37,6 +37,7 @@ class TranslationLoader implements RemoteLoaderInterface
      * @return TextDomain
      * @throws \Exception
      */
+    #[\Override]
     public function load($locale, $textDomain)
     {
         $messages = $this->getMessages($locale, $textDomain);

@@ -16,6 +16,7 @@ class CanAccessBusRegWithId extends AbstractHandler
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canAccessBusReg($dto->getId());

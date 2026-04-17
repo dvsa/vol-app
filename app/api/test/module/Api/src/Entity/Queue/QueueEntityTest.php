@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Queue;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -21,7 +23,7 @@ class QueueEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testConstructorWithType()
+    public function testConstructorWithType(): void
     {
         $type = new RefData('foo');
         $sut = new $this->entityClass($type);
@@ -29,7 +31,7 @@ class QueueEntityTest extends EntityTester
         $this->assertSame($type, $sut->getType());
     }
 
-    public function testIncrementAttempts()
+    public function testIncrementAttempts(): void
     {
         $sut = $this->instantiate($this->entityClass);
 
@@ -40,7 +42,7 @@ class QueueEntityTest extends EntityTester
         $this->assertEquals(2, $sut->getAttempts());
     }
 
-    public function testValidateQueue()
+    public function testValidateQueue(): void
     {
         $sut = new $this->entityClass();
         $this->assertNull(
@@ -52,17 +54,15 @@ class QueueEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider queueDataProvider
-     */
-    public function testValidateQueueWithException($type, $status, $date)
+    #[\PHPUnit\Framework\Attributes\DataProvider('queueDataProvider')]
+    public function testValidateQueueWithException(mixed $type, mixed $status, mixed $date): void
     {
         $this->expectException(ValidationException::class);
         $sut = new $this->entityClass();
         $sut->validateQueue($type, $status, $date);
     }
 
-    public function queueDataProvider()
+    public static function queueDataProvider(): array
     {
         return [
             [Entity::TYPE_ACCEPT_ECMT_SCORING, 'foo', null],

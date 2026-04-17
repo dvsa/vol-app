@@ -54,7 +54,7 @@ class Close extends AbstractCommandHandlerTestCase
                              ->byDefault();
     }
 
-    public function testHandleMarksConversationAsClosed()
+    public function testHandleMarksConversationAsClosed(): void
     {
         $command = CloseConversationCommand::create(['id' => 1]);
 
@@ -72,7 +72,7 @@ class Close extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleMarksTaskAsClosed()
+    public function testHandleMarksTaskAsClosed(): void
     {
         $command = CloseConversationCommand::create($commandParameters = ['id' => 1]);
 
@@ -81,7 +81,7 @@ class Close extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleGeneratesAndStoresSnapshot()
+    public function testHandleGeneratesAndStoresSnapshot(): void
     {
         $command = CloseConversationCommand::create(['id' => 1]);
 
@@ -90,7 +90,7 @@ class Close extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleGeneratesAndStoresEnhancedSnapshot()
+    public function testHandleGeneratesAndStoresEnhancedSnapshot(): void
     {
         $command = CloseConversationCommand::create(['id' => 1]);
 
@@ -99,7 +99,7 @@ class Close extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCreatesCorrespondenceRecord()
+    public function testHandleCreatesCorrespondenceRecord(): void
     {
         $command = CloseConversationCommand::create(['id' => 1]);
 

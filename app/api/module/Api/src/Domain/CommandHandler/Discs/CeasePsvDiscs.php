@@ -24,6 +24,7 @@ final class CeasePsvDiscs extends AbstractCommandHandler implements Transactione
 {
     protected $repoServiceName = 'PsvDisc';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->getRepo()->ceaseDiscsForLicence($command->getLicence());

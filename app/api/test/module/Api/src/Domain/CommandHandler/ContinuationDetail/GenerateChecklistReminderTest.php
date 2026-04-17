@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\ContinuationDetail;
 
 use Dvsa\Olcs\Api\Domain\Command\ContinuationDetail\GenerateChecklistDocument;
@@ -12,9 +14,6 @@ use Dvsa\Olcs\Api\Domain\Command\ContinuationDetail\GenerateCheckListReminder as
 use Dvsa\Olcs\Api\Domain\Repository;
 use Mockery as m;
 
-/**
- * Class GenerateChecklistReminderTest
- */
 class GenerateChecklistReminderTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
@@ -25,7 +24,8 @@ class GenerateChecklistReminderTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             Document::class => [
@@ -36,7 +36,7 @@ class GenerateChecklistReminderTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $continuationDetail = new ContinuationDetail();
         $continuationDetail->setId(87);
@@ -51,7 +51,7 @@ class GenerateChecklistReminderTest extends AbstractCommandHandlerTestCase
             [
                 'id' => 87,
                 'user' => 4,
-                'enforcePrint' => true,
+                'enforcePrint' => false,
             ],
             (new Result())->addId('document', 76)
         );
@@ -64,7 +64,7 @@ class GenerateChecklistReminderTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['Reminder sent'], $result->getMessages());
     }
 
-    public function testHandleCommandAlreadySent()
+    public function testHandleCommandAlreadySent(): void
     {
         $continuationDetail = new ContinuationDetail();
         $continuationDetail->setDigitalReminderSent(true);

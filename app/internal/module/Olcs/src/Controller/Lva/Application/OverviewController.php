@@ -35,10 +35,6 @@ class OverviewController extends AbstractController implements ApplicationContro
     protected $lva = 'application';
     protected string $location = 'internal';
 
-    protected StringHelperService $stringHelper;
-    protected ApplicationOverviewHelperService $applicationOverviewHelper;
-    protected FormHelperService $formHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -52,17 +48,13 @@ class OverviewController extends AbstractController implements ApplicationContro
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        StringHelperService $stringHelper,
-        ApplicationOverviewHelperService $applicationOverviewHelper,
-        FormHelperService $formHelper,
+        protected StringHelperService $stringHelper,
+        protected ApplicationOverviewHelperService $applicationOverviewHelper,
+        protected FormHelperService $formHelper,
         protected RestrictionHelperService $restrictionHelper,
         protected FlashMessengerHelperService $flashMessengerHelper,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-        $this->applicationOverviewHelper = $applicationOverviewHelper;
-        $this->formHelper = $formHelper;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 }

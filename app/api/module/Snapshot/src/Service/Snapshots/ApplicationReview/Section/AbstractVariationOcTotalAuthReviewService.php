@@ -29,6 +29,7 @@ abstract class AbstractVariationOcTotalAuthReviewService extends AbstractReviewS
      * @param array $data
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(array $data = [])
     {
         $config = null;

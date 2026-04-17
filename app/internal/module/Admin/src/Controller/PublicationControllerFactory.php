@@ -12,6 +12,7 @@ use Olcs\Service\Helper\WebDavJsonWebTokenGenerationService;
 
 class PublicationControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PublicationController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

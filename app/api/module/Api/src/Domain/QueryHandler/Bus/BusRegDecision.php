@@ -26,6 +26,7 @@ class BusRegDecision extends AbstractQueryHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var BusRegEntity $busReg */

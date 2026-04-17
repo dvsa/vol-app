@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Qa;
 
 use Mockery as m;
@@ -33,10 +35,8 @@ class CookieReaderTest extends MockeryTestCase
         $this->sut = new CookieReader($this->cookieStateFactory, $this->preferencesFactory);
     }
 
-    /**
-     * @dataProvider dpFalseCookieStateWhenNotCookieObject
-     */
-    public function testFalseCookieStateWhenNotCookieObject($cookie): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFalseCookieStateWhenNotCookieObject')]
+    public function testFalseCookieStateWhenNotCookieObject(mixed $cookie): void
     {
         $this->cookieStateFactory->shouldReceive('create')
             ->with(false)
@@ -54,7 +54,7 @@ class CookieReaderTest extends MockeryTestCase
      *
      * @psalm-return list{list{null}, list{\stdClass}, list{'cookie'}}
      */
-    public function dpFalseCookieStateWhenNotCookieObject(): array
+    public static function dpFalseCookieStateWhenNotCookieObject(): array
     {
         return [
             [null],

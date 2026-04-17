@@ -15,6 +15,7 @@ class PreviousPiHearingData extends AbstractParameterProvider
         $this->pi = (array) $pi;
     }
 
+    #[\Override]
     public function provideParameters()
     {
         $params = ['pi' => $this->pi['id']];

@@ -29,6 +29,7 @@ final class Publish extends AbstractCommandHandler implements TransactionedInter
      */
     private $variationValidationService;
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var ApplicationEntity $application */
@@ -84,6 +85,7 @@ final class Publish extends AbstractCommandHandler implements TransactionedInter
             )
         );
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

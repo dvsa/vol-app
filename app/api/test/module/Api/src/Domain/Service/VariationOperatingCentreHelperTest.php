@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Variation Operating Centre Helper Test
  *
@@ -67,9 +69,9 @@ class VariationOperatingCentreHelperTest extends MockeryTestCase
      * @param $aocData
      * @param $locData
      * @param $expected
-     * @dataProvider ocProvider
      */
-    public function testGetListDataForApplication($aocData, $locData, $expected, $params)
+    #[\PHPUnit\Framework\Attributes\DataProvider('ocProvider')]
+    public function testGetListDataForApplication(mixed $aocData, mixed $locData, mixed $expected, mixed $params): void
     {
         /** @var Licence $licence */
         $licence = m::mock(Licence::class)->makePartial();
@@ -92,7 +94,7 @@ class VariationOperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getListDataForApplication($application, $query));
     }
 
-    public function ocProvider()
+    public static function ocProvider(): array
     {
         return [
             'noOfVehiclesRequired' => [

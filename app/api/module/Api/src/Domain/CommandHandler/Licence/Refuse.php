@@ -23,6 +23,7 @@ final class Refuse extends AbstractCommandHandler implements TransactionedInterf
 {
     protected $repoServiceName = 'Licence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Licence $licence */

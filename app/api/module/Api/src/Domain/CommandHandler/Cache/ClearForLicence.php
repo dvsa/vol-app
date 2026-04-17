@@ -30,6 +30,7 @@ class ClearForLicence extends AbstractCommandHandler implements CacheAwareInterf
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Licence $licence */

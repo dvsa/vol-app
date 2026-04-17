@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create From Grant Test
  *
@@ -19,7 +21,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
  */
 class CreateFromGrantTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = CreateFromGrant::create(
             [

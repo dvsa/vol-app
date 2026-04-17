@@ -16,6 +16,7 @@ final class UpdateAuthSignature extends AbstractCommandHandler implements Transa
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $application \Dvsa\Olcs\Api\Entity\Application\Application */

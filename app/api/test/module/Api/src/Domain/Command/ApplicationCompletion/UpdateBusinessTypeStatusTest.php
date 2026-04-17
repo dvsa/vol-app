@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Business Type Status Test
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateBusinessTypeStatus;
  */
 class UpdateBusinessTypeStatusTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = UpdateBusinessTypeStatus::create(['id' => 111, 'foo' => 'bar']);
 

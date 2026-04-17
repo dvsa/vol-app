@@ -20,6 +20,7 @@ final class CreateCancellation extends AbstractCommandHandler
 {
     protected $repoServiceName = 'Bus';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var CreateCancellationCmd $command */

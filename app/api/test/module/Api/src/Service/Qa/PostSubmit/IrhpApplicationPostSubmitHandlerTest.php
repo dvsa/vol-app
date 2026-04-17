@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\PostSubmit;
 
 use Dvsa\Olcs\Api\Domain\Repository\IrhpPermit as IrhpPermitRepository;
@@ -31,7 +33,7 @@ class IrhpApplicationPostSubmitHandlerTest extends MockeryTestCase
         $this->irhpApplicationPostSubmitHandler = new IrhpApplicationPostSubmitHandler($this->irhpPermitRepo);
     }
 
-    public function testHandleWhenEcmtRemoval()
+    public function testHandleWhenEcmtRemoval(): void
     {
         $irhpPermit1 = m::mock(IrhpPermit::class);
         $irhpPermit1->shouldReceive('regenerateIssueDateAndExpiryDate')
@@ -71,7 +73,7 @@ class IrhpApplicationPostSubmitHandlerTest extends MockeryTestCase
         $this->irhpApplicationPostSubmitHandler->handle($this->irhpApplication);
     }
 
-    public function testHandleWhenNotEcmtRemoval()
+    public function testHandleWhenNotEcmtRemoval(): void
     {
         $this->irhpApplication->shouldReceive('getIrhpPermitType->isEcmtRemoval')
             ->withNoArgs()

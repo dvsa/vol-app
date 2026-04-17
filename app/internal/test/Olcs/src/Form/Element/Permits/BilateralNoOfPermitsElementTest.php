@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * BilateralNoOfPermitsElement Test
  *
@@ -19,7 +21,7 @@ use Laminas\Filter\StringTrim;
  */
 class BilateralNoOfPermitsElementTest extends TestCase
 {
-    public function testGetInputSpecification()
+    public function testGetInputSpecification(): void
     {
         $elementName = 'elementName';
 

@@ -109,6 +109,7 @@ class AbstractLvaFormFactory implements AbstractFactoryInterface
      * @param $requestedName
      * @return bool
      */
+    #[\Override]
     public function canCreate($container, $requestedName): bool
     {
         return in_array($requestedName, self::FORM_SERVICE_CLASS_ALIASES);
@@ -119,6 +120,7 @@ class AbstractLvaFormFactory implements AbstractFactoryInterface
      * @param $requestedName
      * @param array|null $options
      */
+    #[\Override]
     public function __invoke($container, $requestedName, array $options = null)
     {
         /** @var FormServiceManager $formServiceLocator */

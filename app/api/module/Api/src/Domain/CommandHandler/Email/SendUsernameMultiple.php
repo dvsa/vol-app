@@ -23,6 +23,7 @@ final class SendUsernameMultiple extends AbstractCommandHandler implements \Dvsa
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $licence \Dvsa\Olcs\Api\Entity\Licence\Licence */

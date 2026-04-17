@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Email\Service;
 
 use Mockery as m;
@@ -15,13 +17,13 @@ use Dvsa\Olcs\Email\Service\TemplateRenderer;
 class TemplateRendererTest extends MockeryTestCase
 {
     /**
-     * @dataProvider renderBodyProvider
      *
      * @param bool $hasHtml
      * @param int $htmlRenderTimes
      * @param string|null $renderedHtml
      */
-    public function testRenderBody($hasHtml, $htmlRenderTimes, $renderedHtml)
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderBodyProvider')]
+    public function testRenderBody(mixed $hasHtml, mixed $htmlRenderTimes, mixed $renderedHtml): void
     {
         $sut = new TemplateRenderer();
         $message = new \Dvsa\Olcs\Email\Data\Message('TO', 'SUBJECT');
@@ -62,7 +64,7 @@ class TemplateRendererTest extends MockeryTestCase
      *
      * @return array
      */
-    public function renderBodyProvider()
+    public static function renderBodyProvider(): array
     {
         return [
             [true, 1, 'RENDER_HTML_LAYOUT'],

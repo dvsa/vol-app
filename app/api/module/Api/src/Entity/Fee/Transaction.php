@@ -105,6 +105,7 @@ class Transaction extends AbstractTransaction implements OrganisationProviderInt
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedBundleValues()
     {
         return [
@@ -501,6 +502,7 @@ class Transaction extends AbstractTransaction implements OrganisationProviderInt
      *
      * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation[]
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         $organisations = [];

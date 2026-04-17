@@ -32,6 +32,7 @@ final class DeletePeople extends AbstractCommandHandler implements Transactioned
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command \Dvsa\Olcs\Transfer\Command\Licence\DeletePeople */

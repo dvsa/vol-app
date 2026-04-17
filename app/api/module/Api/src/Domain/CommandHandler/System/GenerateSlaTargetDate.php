@@ -40,6 +40,7 @@ final class GenerateSlaTargetDate extends AbstractCommandHandler
      * @return Result
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();
@@ -164,6 +165,7 @@ final class GenerateSlaTargetDate extends AbstractCommandHandler
         return $reduced;
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Application;
 
 use Dvsa\Olcs\Api\Entity\Application\Application;
@@ -29,7 +31,7 @@ class ApplicationOperatingCentreEntityTest extends EntityTester
      *
      * @return S4
      */
-    protected function setupS4($outcomeId = null)
+    protected function setupS4(mixed $outcomeId = null): mixed
     {
         $s4 = $this->instantiate(S4::class);
         if ($outcomeId !== null) {
@@ -41,7 +43,7 @@ class ApplicationOperatingCentreEntityTest extends EntityTester
         return $s4;
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         /** @var Application $mockApp */
         $mockApp = m::mock(Application::class);
@@ -54,7 +56,7 @@ class ApplicationOperatingCentreEntityTest extends EntityTester
         static::assertSame($mockOc, $sut->getOperatingCentre());
     }
 
-    public function testCanDeleteNoS4()
+    public function testCanDeleteNoS4(): void
     {
         $entity = $this->instantiate(Entity::class);
 
@@ -62,21 +64,21 @@ class ApplicationOperatingCentreEntityTest extends EntityTester
         $this->assertSame([], $checkCanDelete);
     }
 
-    public function testCanDeleteS4WithoutOutcome()
+    public function testCanDeleteS4WithoutOutcome(): void
     {
         $entity = $this->instantiate(Entity::class);
         $entity->setS4($this->setupS4());
         $this->assertArrayHasKey('OC_CANNOT_DELETE_HAS_S4', $entity->checkCanDelete());
     }
 
-    public function testCanDeleteS4OutcomeApproved()
+    public function testCanDeleteS4OutcomeApproved(): void
     {
         $entity = $this->instantiate(Entity::class);
         $entity->setS4($this->setupS4(S4::STATUS_APPROVED));
         $this->assertArrayHasKey('OC_CANNOT_DELETE_HAS_S4', $entity->checkCanDelete());
     }
 
-    public function testCanDeleteS4OutcomeRejected()
+    public function testCanDeleteS4OutcomeRejected(): void
     {
         $entity = $this->instantiate(Entity::class);
         $entity->setS4($this->setupS4(S4::STATUS_REFUSED));
@@ -85,7 +87,7 @@ class ApplicationOperatingCentreEntityTest extends EntityTester
         $this->assertSame([], $checkCanDelete);
     }
 
-    public function testGetRelatedOrganisation()
+    public function testGetRelatedOrganisation(): void
     {
         $org = m::mock();
 

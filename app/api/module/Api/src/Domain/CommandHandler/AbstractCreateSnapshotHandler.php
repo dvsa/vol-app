@@ -36,6 +36,7 @@ abstract class AbstractCreateSnapshotHandler extends AbstractCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var RepositoryInterface $repo */
@@ -92,11 +93,10 @@ abstract class AbstractCreateSnapshotHandler extends AbstractCommandHandler
 
         return Upload::create($data);
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $fullContainer = $container;
-
         $this->snapshotService = $container->get($this->generatorClass);
-        return parent::__invoke($fullContainer, $requestedName, $options);
+        return parent::__invoke($container, $requestedName, $options);
     }
 }

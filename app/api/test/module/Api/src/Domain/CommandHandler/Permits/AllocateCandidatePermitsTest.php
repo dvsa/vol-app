@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Permits;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType;
@@ -25,7 +27,8 @@ class AllocateCandidatePermitsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrhpPermit::STATUS_PENDING
@@ -34,10 +37,8 @@ class AllocateCandidatePermitsTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
-    public function testHandleCommand($isShortTerm, $expectedExpiryDate, $expectedIssueDate)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
+    public function testHandleCommand(mixed $isShortTerm, mixed $expectedExpiryDate, mixed $expectedIssueDate): void
     {
         $irhpPermitApplicationId = 472;
 
@@ -140,7 +141,7 @@ class AllocateCandidatePermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand(): array
     {
         $expectedIssueDate = new \DateTime();
         $expectedIssueDate->add(new \DateInterval('P10D'));
@@ -150,7 +151,7 @@ class AllocateCandidatePermitsTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    private function createIrhpCandidatePermitMock($irhpPermitRange, $irhpPermitApplication)
+    private function createIrhpCandidatePermitMock(mixed $irhpPermitRange, mixed $irhpPermitApplication): mixed
     {
         $irhpCandidatePermit = m::mock(IrhpCandidatePermit::class);
         $irhpCandidatePermit->shouldReceive('getIrhpPermitRange')
@@ -161,7 +162,7 @@ class AllocateCandidatePermitsTest extends AbstractCommandHandlerTestCase
         return $irhpCandidatePermit;
     }
 
-    private function createIrhpPermitRange($fromNo, $toNo, $existingPermitNumbers)
+    private function createIrhpPermitRange(mixed $fromNo, mixed $toNo, mixed $existingPermitNumbers): mixed
     {
         $irhpPermitRange = new IrhpPermitRange();
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Agreed And Legislation Test
  */
@@ -31,7 +33,8 @@ class CreateAgreedAndLegislationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'tc_r_dhtru',
@@ -58,7 +61,7 @@ class CreateAgreedAndLegislationTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 22;
         $agreedByTc = 44;

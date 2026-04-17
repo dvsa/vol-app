@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,7 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class ApplicationCountryRemoverTest extends MockeryTestCase
 {
-    public function testRemove()
+    public function testRemove(): void
     {
         $irhpApplicationId = 57;
         $countryCodeForDeletion = 'DE';

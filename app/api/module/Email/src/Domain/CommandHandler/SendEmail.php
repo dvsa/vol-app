@@ -177,6 +177,7 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
      * @throws EmailNotSentException
      * @throws \RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         //make sure we have at least a plain text version
@@ -302,6 +303,7 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
             ]
         );
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');

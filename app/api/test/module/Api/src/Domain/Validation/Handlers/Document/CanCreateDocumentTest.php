@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Document;
 
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
@@ -7,9 +9,7 @@ use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanCreateDocument;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanCreateDocument
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanCreateDocument::class)]
 class CanCreateDocumentTest extends AbstractHandlerTestCase
 {
     /**
@@ -31,7 +31,7 @@ class CanCreateDocumentTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsValid()
+    public function testIsValid(): void
     {
         $this->auth->shouldReceive('isGranted')
             ->with(\Dvsa\Olcs\Api\Entity\User\Permission::INTERNAL_USER, null)
@@ -68,7 +68,7 @@ class CanCreateDocumentTest extends AbstractHandlerTestCase
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsValidEbsr()
+    public function testIsValidEbsr(): void
     {
         $this->auth->shouldReceive('isGranted')
             ->with(\Dvsa\Olcs\Api\Entity\User\Permission::INTERNAL_USER, null)
@@ -92,7 +92,7 @@ class CanCreateDocumentTest extends AbstractHandlerTestCase
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsValidOnFalse()
+    public function testIsValidOnFalse(): void
     {
         $this->auth->shouldReceive('isGranted')
             ->with(\Dvsa\Olcs\Api\Entity\User\Permission::INTERNAL_USER, null)
@@ -129,7 +129,7 @@ class CanCreateDocumentTest extends AbstractHandlerTestCase
         $this->assertFalse($this->sut->isValid($dto));
     }
 
-    public function testIsValidNoChecks()
+    public function testIsValidNoChecks(): void
     {
         $this->auth->shouldReceive('isGranted')
             ->with(\Dvsa\Olcs\Api\Entity\User\Permission::INTERNAL_USER, null)
@@ -154,7 +154,7 @@ class CanCreateDocumentTest extends AbstractHandlerTestCase
         $this->assertFalse($this->sut->isValid($dto));
     }
 
-    public function testIsInternalUser()
+    public function testIsInternalUser(): void
     {
         $this->auth->shouldReceive('isGranted')
             ->with(\Dvsa\Olcs\Api\Entity\User\Permission::INTERNAL_USER, null)
@@ -166,12 +166,12 @@ class CanCreateDocumentTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestIsValidExtensionInternal
      *
      * @param $valid
      * @param $extension
      */
-    public function testIsValidExtensionInternal($valid, $extension)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestIsValidExtensionInternal')]
+    public function testIsValidExtensionInternal(mixed $valid, mixed $extension): void
     {
         $this->auth->shouldReceive('isGranted')
             ->with(\Dvsa\Olcs\Api\Entity\User\Permission::INTERNAL_USER, null)->andReturn(true);
@@ -186,7 +186,7 @@ class CanCreateDocumentTest extends AbstractHandlerTestCase
         }
     }
 
-    public function dataProviderTestIsValidExtensionInternal()
+    public static function dataProviderTestIsValidExtensionInternal(): array
     {
         return [
             [true, 'jpg'],
@@ -206,12 +206,12 @@ class CanCreateDocumentTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestIsValidExtensionExternal
      *
      * @param $valid
      * @param $extension
      */
-    public function testIsValidExtensionExternal($valid, $extension)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestIsValidExtensionExternal')]
+    public function testIsValidExtensionExternal(mixed $valid, mixed $extension): void
     {
         $this->auth->shouldReceive('isGranted')
             ->with(\Dvsa\Olcs\Api\Entity\User\Permission::INTERNAL_USER, null)
@@ -243,7 +243,7 @@ class CanCreateDocumentTest extends AbstractHandlerTestCase
         }
     }
 
-    public function dataProviderTestIsValidExtensionExternal()
+    public static function dataProviderTestIsValidExtensionExternal(): array
     {
         return [
             [true, 'jpg'],

@@ -20,6 +20,7 @@ class ActionToBeTaken extends RefData
      * @return array
      * @throws DataServiceException
      */
+    #[\Override]
     public function fetchListData($category = null)
     {
         return parent::fetchListData('ptr_action_to_be_taken');

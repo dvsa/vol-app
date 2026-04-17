@@ -22,6 +22,7 @@ class ConvictionsPenaltiesControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return ConvictionsPenaltiesController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ConvictionsPenaltiesController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

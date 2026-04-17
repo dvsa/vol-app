@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Prohibition;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Prohibition Abstract Entity
+ * AbstractProhibition Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -28,14 +31,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_prohibition_case_id", columns={"case_id"}),
  *        @ORM\Index(name="ix_prohibition_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_prohibition_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_prohibition_prohibition_type", columns={"prohibition_type"})
+ *        @ORM\Index(name="ix_prohibition_prohibition_type", columns={"prohibition_type"}),
+ *        @ORM\Index(name="uk_prohibition_olbs_key", columns={"olbs_key"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_prohibition_olbs_key", columns={"olbs_key"})
  *    }
  * )
  */
-abstract class AbstractProhibition implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractProhibition implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -45,27 +49,35 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     use SoftDeletableTrait;
 
     /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases",
-     *     fetch="LAZY",
-     *     inversedBy="prohibitions"
-     * )
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
+     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
     protected $case;
 
     /**
-     * Cleared date
+     * ProhibitionType
      *
-     * @var \DateTime
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
-     * @ORM\Column(type="date", name="cleared_date", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="prohibition_type", referencedColumnName="id")
      */
-    protected $clearedDate;
+    protected $prohibitionType;
 
     /**
      * Created by
@@ -79,35 +91,6 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Imposed at
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="imposed_at", length=255, nullable=true)
-     */
-    protected $imposedAt;
-
-    /**
-     * Is trailer
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_trailer", nullable=false, options={"default": 0})
-     */
-    protected $isTrailer = 0;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -119,15 +102,6 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     protected $lastModifiedBy;
 
     /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
      * Prohibition date
      *
      * @var \DateTime
@@ -137,14 +111,40 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     protected $prohibitionDate;
 
     /**
-     * Prohibition type
+     * Cleared date
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \DateTime
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="prohibition_type", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="date", name="cleared_date", nullable=true)
      */
-    protected $prohibitionType;
+    protected $clearedDate;
+
+    /**
+     * isTrailer
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesnonull", name="is_trailer", nullable=true, options={"default": 0})
+     */
+    protected $isTrailer = 0;
+
+    /**
+     * Vrm
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="vrm", length=20, nullable=true)
+     */
+    protected $vrm;
+
+    /**
+     * Imposed at
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="imposed_at", length=255, nullable=true)
+     */
+    protected $imposedAt;
 
     /**
      * Version
@@ -157,30 +157,25 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     protected $version = 1;
 
     /**
-     * Vrm
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="string", name="vrm", length=20, nullable=true)
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
-    protected $vrm;
+    protected $olbsKey;
 
     /**
-     * Defect
+     * Defects
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Prohibition\ProhibitionDefect",
-     *     mappedBy="prohibition"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Prohibition\ProhibitionDefect", mappedBy="prohibition")
      */
     protected $defects;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -188,93 +183,13 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->defects = new ArrayCollection();
     }
 
-    /**
-     * Set the case
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case entity being set as the value
-     *
-     * @return Prohibition
-     */
-    public function setCase($case)
-    {
-        $this->case = $case;
-
-        return $this;
-    }
-
-    /**
-     * Get the case
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
-     */
-    public function getCase()
-    {
-        return $this->case;
-    }
-
-    /**
-     * Set the cleared date
-     *
-     * @param \DateTime $clearedDate new value being set
-     *
-     * @return Prohibition
-     */
-    public function setClearedDate($clearedDate)
-    {
-        $this->clearedDate = $clearedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the cleared date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getClearedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->clearedDate);
-        }
-
-        return $this->clearedDate;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return Prohibition
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
 
     /**
      * Set the id
@@ -301,27 +216,159 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Set the imposed at
+     * Set the case
      *
-     * @param string $imposedAt new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
      * @return Prohibition
      */
-    public function setImposedAt($imposedAt)
+    public function setCase($case)
     {
-        $this->imposedAt = $imposedAt;
+        $this->case = $case;
 
         return $this;
     }
 
     /**
-     * Get the imposed at
+     * Get the case
      *
-     * @return string
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
      */
-    public function getImposedAt()
+    public function getCase()
     {
-        return $this->imposedAt;
+        return $this->case;
+    }
+
+    /**
+     * Set the prohibition type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $prohibitionType new value being set
+     *
+     * @return Prohibition
+     */
+    public function setProhibitionType($prohibitionType)
+    {
+        $this->prohibitionType = $prohibitionType;
+
+        return $this;
+    }
+
+    /**
+     * Get the prohibition type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
+    public function getProhibitionType()
+    {
+        return $this->prohibitionType;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Prohibition
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return Prohibition
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the prohibition date
+     *
+     * @param \DateTime $prohibitionDate new value being set
+     *
+     * @return Prohibition
+     */
+    public function setProhibitionDate($prohibitionDate)
+    {
+        $this->prohibitionDate = $prohibitionDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the prohibition date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
+     */
+    public function getProhibitionDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->prohibitionDate);
+        }
+
+        return $this->prohibitionDate;
+    }
+
+    /**
+     * Set the cleared date
+     *
+     * @param \DateTime $clearedDate new value being set
+     *
+     * @return Prohibition
+     */
+    public function setClearedDate($clearedDate)
+    {
+        $this->clearedDate = $clearedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the cleared date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
+     */
+    public function getClearedDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->clearedDate);
+        }
+
+        return $this->clearedDate;
     }
 
     /**
@@ -349,106 +396,51 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Set the last modified by
+     * Set the vrm
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param string $vrm new value being set
      *
      * @return Prohibition
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setVrm($vrm)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->vrm = $vrm;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the vrm
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * @return string
      */
-    public function getLastModifiedBy()
+    public function getVrm()
     {
-        return $this->lastModifiedBy;
+        return $this->vrm;
     }
 
     /**
-     * Set the olbs key
+     * Set the imposed at
      *
-     * @param int $olbsKey new value being set
+     * @param string $imposedAt new value being set
      *
      * @return Prohibition
      */
-    public function setOlbsKey($olbsKey)
+    public function setImposedAt($imposedAt)
     {
-        $this->olbsKey = $olbsKey;
+        $this->imposedAt = $imposedAt;
 
         return $this;
     }
 
     /**
-     * Get the olbs key
+     * Get the imposed at
      *
-     * @return int
+     * @return string
      */
-    public function getOlbsKey()
+    public function getImposedAt()
     {
-        return $this->olbsKey;
-    }
-
-    /**
-     * Set the prohibition date
-     *
-     * @param \DateTime $prohibitionDate new value being set
-     *
-     * @return Prohibition
-     */
-    public function setProhibitionDate($prohibitionDate)
-    {
-        $this->prohibitionDate = $prohibitionDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the prohibition date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getProhibitionDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->prohibitionDate);
-        }
-
-        return $this->prohibitionDate;
-    }
-
-    /**
-     * Set the prohibition type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $prohibitionType entity being set as the value
-     *
-     * @return Prohibition
-     */
-    public function setProhibitionType($prohibitionType)
-    {
-        $this->prohibitionType = $prohibitionType;
-
-        return $this;
-    }
-
-    /**
-     * Get the prohibition type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getProhibitionType()
-    {
-        return $this->prohibitionType;
+        return $this->imposedAt;
     }
 
     /**
@@ -476,33 +468,33 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Set the vrm
+     * Set the olbs key
      *
-     * @param string $vrm new value being set
+     * @param int $olbsKey new value being set
      *
      * @return Prohibition
      */
-    public function setVrm($vrm)
+    public function setOlbsKey($olbsKey)
     {
-        $this->vrm = $vrm;
+        $this->olbsKey = $olbsKey;
 
         return $this;
     }
 
     /**
-     * Get the vrm
+     * Get the olbs key
      *
-     * @return string
+     * @return int
      */
-    public function getVrm()
+    public function getOlbsKey()
     {
-        return $this->vrm;
+        return $this->olbsKey;
     }
 
     /**
-     * Set the defect
+     * Set the defects
      *
-     * @param ArrayCollection $defects collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $defects collection being set as the value
      *
      * @return Prohibition
      */
@@ -516,7 +508,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     /**
      * Get the defects
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getDefects()
     {
@@ -526,7 +518,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     /**
      * Add a defects
      *
-     * @param ArrayCollection|mixed $defects collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $defects collection being added
      *
      * @return Prohibition
      */
@@ -560,5 +552,14 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

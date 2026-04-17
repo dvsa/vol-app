@@ -14,6 +14,7 @@ class Get extends AbstractQueryHandler
 {
     protected $repoServiceName = 'TrafficArea';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $trafficArea = $this->getRepo()->fetchUsingId($query);

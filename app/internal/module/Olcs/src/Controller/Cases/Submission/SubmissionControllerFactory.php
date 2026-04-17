@@ -17,6 +17,7 @@ use Psr\Container\ContainerInterface;
 
 class SubmissionControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SubmissionController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

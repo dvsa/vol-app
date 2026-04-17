@@ -41,6 +41,7 @@ class ImpoundingLegislation extends RefData
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function fetchListOptions($context = null, $useGroups = false)
     {
         $params = empty($context) ? $this->getLicenceContext() : $context;

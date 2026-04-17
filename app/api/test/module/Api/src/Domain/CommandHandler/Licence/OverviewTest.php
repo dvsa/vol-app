@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Overview Test
  *
@@ -45,7 +47,7 @@ class OverviewTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $licenceId  = 69;
         $organisationId = 1;

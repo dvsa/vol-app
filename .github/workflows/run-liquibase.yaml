@@ -92,26 +92,18 @@ jobs:
       etl_ref: ${{ inputs.etl_ref }}
     runs-on: ubuntu-24.04-arm
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref }}
 
       - name: Generate GitHub App Token
         id: generate-token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ vars.VOL_GITHUB_APP_ID }}
           private-key: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
           owner: dvsa
           repositories: olcs-etl
-
-      - name: Checkout ETL repository
-        uses: actions/checkout@v4
-        with:
-          repository: dvsa/olcs-etl
-          path: infra/docker/liquibase/changelog
-          ref: ${{ inputs.etl_ref }}
-          token: ${{ steps.generate-token.outputs.token }}
 
       - name: Check ETL tag existence
         if: inputs.etl_ref != 'main'
@@ -122,17 +114,43 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
 
+      - name: Checkout ETL repository on main to create tag
+        if: inputs.etl_ref != 'main' && steps.check-tag.outputs.exists != 'true'
+        uses: actions/checkout@v6
+        with:
+          repository: dvsa/olcs-etl
+          path: etl-temp
+          ref: main
+          token: ${{ steps.generate-token.outputs.token }}
+
       - name: Create ETL tag
         if: inputs.etl_ref != 'main' && steps.check-tag.outputs.exists != 'true'
         run: |
-          cd infra/docker/liquibase/changelog
+          cd $GITHUB_WORKSPACE/etl-temp
           git tag ${{ inputs.etl_ref }}
           git push origin ${{ inputs.etl_ref }}
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
 
+      - name: Cleanup temporary ETL checkout
+        if: always() && inputs.etl_ref != 'main' && steps.check-tag.outputs.exists != 'true'
+        run: |
+          if [ -n "$GITHUB_WORKSPACE" ] && [ "$GITHUB_WORKSPACE" != "/" ] && [ -d "$GITHUB_WORKSPACE/etl-temp" ]; then
+            rm -rf "$GITHUB_WORKSPACE/etl-temp"
+          else
+            echo "Skipping cleanup: GITHUB_WORKSPACE is not set correctly or etl-temp does not exist."
+          fi
+
+      - name: Checkout ETL repository
+        uses: actions/checkout@v6
+        with:
+          repository: dvsa/olcs-etl
+          path: infra/docker/liquibase/changelog
+          ref: ${{ inputs.etl_ref }}
+          token: ${{ steps.generate-token.outputs.token }}
+
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ env.AWS_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
@@ -186,7 +204,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ env.AWS_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
@@ -199,7 +217,8 @@ jobs:
           --job-definition "${{ vars[env.BATCH_QUEUE] }}" \
           --container-overrides "{
            \"environment\": [
-             {\"name\": \"DRY_RUN\", \"value\": \"${{ inputs.dry_run }}\"}
+             {\"name\": \"DRY_RUN\", \"value\": \"${{ inputs.dry_run }}\"},
+             {\"name\": \"ENVIRONMENT\", \"value\": \"${{ inputs.environment }}\"}
            ]
           }" \
           --scheduling-priority-override 1 \

@@ -24,6 +24,7 @@ final class DeleteOtherLicence extends AbstractCommandHandler implements Transac
 {
     protected $repoServiceName = 'OtherLicence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

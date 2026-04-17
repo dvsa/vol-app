@@ -36,6 +36,7 @@ class MarkDuplicateVrmsForLicence extends AbstractRawQuery
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getParams()
     {
         return [
@@ -51,6 +52,7 @@ class MarkDuplicateVrmsForLicence extends AbstractRawQuery
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getParamTypes()
     {
         return [

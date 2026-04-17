@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -8,9 +10,7 @@ use Dvsa\Olcs\Transfer\Query\SubCategory\GetList as Qry;
 use Olcs\Service\Data\SubCategory;
 use Mockery as m;
 
-/**
- * @covers \Olcs\Service\Data\SubCategory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\SubCategory::class)]
 class SubCategoryTest extends AbstractListDataServiceTestCase
 {
     public const CAT_ID = 8001;
@@ -25,7 +25,7 @@ class SubCategoryTest extends AbstractListDataServiceTestCase
         $this->sut = new SubCategory($this->abstractListDataServiceServices);
     }
 
-    public function testFetchListData()
+    public function testFetchListData(): void
     {
         $results = ['results' => 'results'];
         $params = [
@@ -63,7 +63,7 @@ class SubCategoryTest extends AbstractListDataServiceTestCase
         $this->assertEquals($results['results'], $this->sut->fetchListData([]));
     }
 
-    public function testFetchListDataCache()
+    public function testFetchListDataCache(): void
     {
         $data = [
             [
@@ -77,7 +77,7 @@ class SubCategoryTest extends AbstractListDataServiceTestCase
         static::assertEquals([9999 => 'EXPECTED'], $this->sut->fetchListOptions());
     }
 
-    public function testFetchListDataWithException()
+    public function testFetchListDataWithException(): void
     {
         $this->expectException(DataServiceException::class);
 
@@ -97,7 +97,7 @@ class SubCategoryTest extends AbstractListDataServiceTestCase
         $this->sut->fetchListData([]);
     }
 
-    public function testFormatData()
+    public function testFormatData(): void
     {
         $this->assertEquals(
             [

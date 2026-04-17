@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Checkbox;
 
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep as ApplicationStepEntity;
@@ -19,10 +21,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class CheckboxGeneratorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestGenerate
-     */
-    public function testGenerate($answerValue, $expectedChecked)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
+    public function testGenerate(mixed $answerValue, mixed $expectedChecked): void
     {
         $labelOptions = [
             'key' => 'labelKey',
@@ -83,7 +83,7 @@ class CheckboxGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpTestGenerate()
+    public static function dpTestGenerate(): array
     {
         return [
             [null, false],

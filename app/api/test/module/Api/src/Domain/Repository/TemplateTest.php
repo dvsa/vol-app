@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\NoResultException;
@@ -21,7 +23,7 @@ class TemplateTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchByLocaleFormatName()
+    public function testFetchByLocaleFormatName(): void
     {
         $queryBuilder = m::mock(QueryBuilder::class);
         $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
@@ -73,7 +75,7 @@ class TemplateTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchByLocaleFormatNameNotFound()
+    public function testFetchByLocaleFormatNameNotFound(): void
     {
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage('Resource not found');
@@ -123,7 +125,7 @@ class TemplateTest extends RepositoryTestCase
         $this->sut->fetchByLocaleFormatName($locale, $format, $name);
     }
 
-    public function testFetchDistinctCategories()
+    public function testFetchDistinctCategories(): void
     {
         $queryBuilder = m::mock(QueryBuilder::class);
         $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);

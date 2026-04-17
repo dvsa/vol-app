@@ -27,6 +27,7 @@ final class ByLicence extends AbstractQueryHandler implements ToggleRequiredInte
      * @return \Dvsa\Olcs\Api\Domain\QueryHandler\Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $licenceId = $query->getId();

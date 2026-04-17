@@ -33,9 +33,7 @@ class JWTIdentityProviderFactoryTest extends MockeryTestCase
         $this->setUpServiceManager();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -45,11 +43,9 @@ class JWTIdentityProviderFactoryTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->__invoke(...));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
-    public function invokeReturnsAnInstanceOfJWTIdentityProvider()
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokeReturnsAnInstanceOfJWTIdentityProvider(): void
     {
         // Setup
         $this->setUpSut();
@@ -70,14 +66,14 @@ class JWTIdentityProviderFactoryTest extends MockeryTestCase
         $this->sut = new JWTIdentityProviderFactory();
     }
 
-    protected function setUpDefaultServices(ServiceManager $serviceManager)
+    protected function setUpDefaultServices(ServiceManager $serviceManager): void
     {
         $this->repositoryServiceManager();
         $this->serviceManager()->setService('Request', m::mock(Request::class));
         $this->serviceManager->setService(OAuthClientInterface::class, m::mock(Client::class));
     }
 
-    private function repositoryServiceManager()
+    private function repositoryServiceManager(): mixed
     {
         if (!$this->serviceManager->has('RepositoryServiceManager')) {
             $instance = $this->setUpMockService(RepositoryServiceManager::class);

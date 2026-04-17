@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Application\View\Model;
 
 class ApplicationOverviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test constructor with set variables
-     *
-     * @group applicationOverview
      */
+    #[\PHPUnit\Framework\Attributes\Group('applicationOverview')]
     public function testSetVariables(): void
     {
         $data = [
@@ -27,9 +28,7 @@ class ApplicationOverviewTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($overview->completionDate, '2014-01-01');
     }
 
-    /**
-     * @dataProvider progressProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('progressProvider')]
     public function testProgressCalculation($sections, $expectedX, $expectedY): void
     {
         $data = [
@@ -61,7 +60,7 @@ class ApplicationOverviewTest extends \PHPUnit\Framework\TestCase
      *
      * @psalm-return array{'no sections': list{array<never, never>, 0, 0}, '1 section': list{array{type_of_licence: array{enabled: true, complete: false}}, 0, 1}, '2 sections': list{array{type_of_licence: array{enabled: true, complete: false}, business_type: array{enabled: true, complete: false}}, 0, 2}, '2 sections 1 complete': list{array{type_of_licence: array{enabled: true, complete: false}, business_type: array{enabled: true, complete: true}}, 1, 2}, 'all complete': list{array{type_of_licence: array{enabled: true, complete: true}, business_type: array{enabled: true, complete: true}, business_details: array{enabled: true, complete: true}}, 3, 3}}
      */
-    public function progressProvider(): array
+    public static function progressProvider(): array
     {
         return [
             'no sections' => [[], 0, 0],

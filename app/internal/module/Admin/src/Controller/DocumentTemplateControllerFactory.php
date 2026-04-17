@@ -14,6 +14,7 @@ use Psr\Container\ContainerInterface;
 
 class DocumentTemplateControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DocumentTemplateController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

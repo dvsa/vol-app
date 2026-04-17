@@ -147,6 +147,7 @@ class SubmissionSections extends LaminasElement implements ElementPrepareAwareIn
      *
      * @param FormInterface $form Form - not currently used
      */
+    #[\Override]
     public function prepareElement(FormInterface $form): void
     {
         unset($form);
@@ -206,6 +207,7 @@ class SubmissionSections extends LaminasElement implements ElementPrepareAwareIn
      *
      * @return SubmissionSections
      */
+    #[\Override]
     public function setValue($value)
     {
         $this->getSubmissionType()->setValue($value['submissionType']);
@@ -254,6 +256,7 @@ class SubmissionSections extends LaminasElement implements ElementPrepareAwareIn
     /**
      * @return array
      */
+    #[\Override]
     public function getInputSpecification()
     {
         return [

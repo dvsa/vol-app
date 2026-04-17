@@ -16,9 +16,7 @@ class PasswordServiceTest extends MockeryTestCase
         $this->sut = new PasswordService();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function generatePasswordThrowsExceptionWhenRequestedLengthIsTooShort(): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -29,9 +27,9 @@ class PasswordServiceTest extends MockeryTestCase
     }
 
     /**
-     * @test
      * @throws \Exception
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function generatePasswordReturnsPasswordThatConformsToPolicy(): void
     {
         /**
@@ -84,9 +82,7 @@ class PasswordServiceTest extends MockeryTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function generatePasswordReturnsPasswordThatMatchesRequestedLength(): void
     {
         $password = $this->sut->generatePassword(15);

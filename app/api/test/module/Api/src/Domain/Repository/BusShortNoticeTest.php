@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Short notice repo test
  */
@@ -25,7 +27,7 @@ class BusShortNoticeTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchByBusReg()
+    public function testFetchByBusReg(): void
     {
         $id = 15;
         $mockResult = ['result'];

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Publish Impounding Test
  */
@@ -48,7 +50,8 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'impt_hearing',
@@ -86,7 +89,7 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
     /**
      * Test handle Impounding publication command for case attached to application
      */
-    public function testHandleCommandForApplicationCases()
+    public function testHandleCommandForApplicationCases(): void
     {
         $publicationId = 33;
         $impoundingId = 17;
@@ -165,7 +168,7 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
     /**
      * Test handle Impounding publication command for case attached to licence
      */
-    public function testHandleCommandForLicenceCases()
+    public function testHandleCommandForLicenceCases(): void
     {
         $publicationId = 33;
         $impoundingId = 17;
@@ -245,7 +248,7 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
      * Test handle Impounding publication when publication traffic areas have changed
      * @param $cmdClass
      */
-    public function testHandleCommandWithDelete()
+    public function testHandleCommandWithDelete(): void
     {
         $publicationId = 33;
         $impoundingId = 17;
@@ -328,7 +331,7 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
      * @param $publicationId
      * @return m\MockInterface
      */
-    private function getPublicationMock($publicationId)
+    private function getPublicationMock(mixed $publicationId): mixed
     {
         $publicationMock = m::mock(PublicationEntity::class);
         $publicationMock->shouldReceive('getId')->andReturn($publicationId);
@@ -341,7 +344,7 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
      * Return static list representing all TAs
      * @return array
      */
-    private function getAllTrafficAreas()
+    private function getAllTrafficAreas(): array
     {
         return [
             0 => m::mock(TrafficAreaEntity::class)->shouldReceive('getId')->andReturn('B')->getMock(),

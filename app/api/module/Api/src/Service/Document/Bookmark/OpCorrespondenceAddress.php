@@ -18,6 +18,7 @@ class OpCorrespondenceAddress extends DynamicBookmark
      * @param array $data
      * @return Qry|null
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(
@@ -37,6 +38,7 @@ class OpCorrespondenceAddress extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         if (isset($this->data['contactDetails']['address'])) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\DataRetention;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\DataRetention\GetProcessedList;
@@ -21,7 +23,7 @@ class GetProcessedListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Query::create(['dataRetentionRuleId' => 9999, 'startDate' => '2017-05-23', 'endDate' => '2017-09-01']);
 

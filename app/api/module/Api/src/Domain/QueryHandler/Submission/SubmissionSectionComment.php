@@ -16,6 +16,7 @@ class SubmissionSectionComment extends AbstractQueryHandler
 {
     protected $repoServiceName = 'SubmissionSectionComment';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->result(

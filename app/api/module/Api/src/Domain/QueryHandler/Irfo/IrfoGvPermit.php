@@ -18,6 +18,7 @@ class IrfoGvPermit extends AbstractQueryHandler
 
     protected $extraRepos = ['Fee'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $irfoGvPermit = $this->getRepo()->fetchUsingId($query);

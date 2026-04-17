@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller;
 
 use Common\RefData;
@@ -92,10 +94,8 @@ class IndexControllerTest extends MockeryTestCase
             ->shouldAllowMockingProtectedMethods();
     }
 
-    /**
-     * @dataProvider dpTestEntityListAction
-     */
-    public function testEntityListAction($type, $value, $dataService, $mockDataService, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestEntityListAction')]
+    public function testEntityListAction(mixed $type, mixed $value, mixed $dataService, mixed $mockDataService, mixed $expected): void
     {
         $list = [11 => 'ABC', 12 => 'DEF'];
 
@@ -117,7 +117,7 @@ class IndexControllerTest extends MockeryTestCase
         $this->assertEquals($expected, $view->serialize());
     }
 
-    public function dpTestEntityListAction()
+    public static function dpTestEntityListAction(): array
     {
         $value = 100;
 

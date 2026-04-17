@@ -20,6 +20,7 @@ class ByLicence extends AbstractConversationQueryHandler implements ToggleRequir
     protected $extraRepos = [Repository\Conversation::class, Repository\Message::class];
 
     /** @param ByLicenceQuery|QueryInterface $query */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $conversationRepository = $this->getRepo(Repository\Conversation::class);

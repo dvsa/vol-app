@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CreateForResponsibilities Test
  *
@@ -47,7 +49,8 @@ class CreateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [TransportManagerApplicationEntity::STATUS_POSTAL_APPLICATION];
 
@@ -63,7 +66,7 @@ class CreateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testCommandHandler()
+    public function testCommandHandler(): void
     {
         $this->mockAuthService();
 
@@ -159,7 +162,7 @@ class CreateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testCommandHandlerInvalidLicence()
+    public function testCommandHandlerInvalidLicence(): void
     {
         $this->mockAuthService();
 
@@ -197,7 +200,7 @@ class CreateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testCommandHandlerNoApplication()
+    public function testCommandHandlerNoApplication(): void
     {
         $this->mockAuthService();
 
@@ -223,7 +226,7 @@ class CreateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testCommandHandlerTmaExist()
+    public function testCommandHandlerTmaExist(): void
     {
         $this->mockAuthService();
 
@@ -268,7 +271,7 @@ class CreateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testCommandHandlerWrongStatus()
+    public function testCommandHandlerWrongStatus(): void
     {
         $this->mockAuthService();
 
@@ -322,7 +325,7 @@ class CreateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    protected function mockAuthService()
+    protected function mockAuthService(): void
     {
         /** @var Team $mockTeam */
         $mockTeam = m::mock(Team::class)->makePartial();

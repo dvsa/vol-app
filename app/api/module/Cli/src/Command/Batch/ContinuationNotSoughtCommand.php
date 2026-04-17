@@ -14,6 +14,7 @@ class ContinuationNotSoughtCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:continuation-not-sought';
 
+    #[\Override]
     protected function configure()
     {
         $this
@@ -28,6 +29,7 @@ class ContinuationNotSoughtCommand extends AbstractBatchCommand
         $this->addCommonOptions();
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

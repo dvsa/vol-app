@@ -12,6 +12,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class ChangeHistoryControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ChangeHistoryController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

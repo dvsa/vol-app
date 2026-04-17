@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Licence;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -22,7 +24,7 @@ class LicenceReadAuditEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $user = m::mock(User::class);
         $licence = m::mock(Licence::class);

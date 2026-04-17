@@ -16,6 +16,7 @@ class RtfParser implements ParserInterface
      *
      * @return string
      */
+    #[\Override]
     public function getFileExtension()
     {
         return 'rtf';
@@ -28,6 +29,7 @@ class RtfParser implements ParserInterface
      *
      * @return array
      */
+    #[\Override]
     public function extractTokens($content)
     {
         $matches = $this->getMatches($content);
@@ -46,6 +48,7 @@ class RtfParser implements ParserInterface
      *
      * @return mixed
      */
+    #[\Override]
     public function replace($content, $data)
     {
         $matches = $this->getMatches($content);
@@ -88,15 +91,35 @@ class RtfParser implements ParserInterface
      *
      * @return string
      */
+    #[\Override]
     public function renderImage($binData, $width, $height, $type)
     {
+        // VOL-7060: Gotenberg's LibreOffice drops a template's existing
+        // `\*\picprop` shape-pictures (e.g. the OTC / NI office logos
+        // embedded in GB and NI licence templates) whenever the document
+        // later contains a bare `\pict` group. Word authors image data as
+        // a shape via `\*\shppict{\*\picprop\shplidN…}`; emitting the same
+        // form, with a `\shplid` that cannot collide with a template's
+        // existing shapes (Word templates start at 1025 and count up), is
+        // enough to stop LibreOffice conflating the injected picture with
+        // an earlier shape. The id is derived from the image bytes so the
+        // output stays deterministic across calls and across test runs.
+        $shplid = 0x20000 + (crc32($binData) & 0xFFFF);
+
         return sprintf(
-            "{\pict\%sblip\picw%d\pich%d\picwgoal%d\pichgoal%d %s}",
-            $type,
+            '{\*\shppict{\pict{\*\picprop\shplid%d'
+            . '{\sp{\sn shapeType}{\sv 75}}'
+            . '{\sp{\sn fLockAspectRatio}{\sv 1}}'
+            . '{\sp{\sn fLayoutInCell}{\sv 1}}}'
+            . '\picscalex100\picscaley100\piccropl0\piccropr0\piccropt0\piccropb0'
+            . '\picw%d\pich%d\picwgoal%d\pichgoal%d'
+            . '\%sblip %s}}',
+            $shplid,
             $width,
             $height,
             $width * self::PIXELS_TO_TWIPS,
             $height * self::PIXELS_TO_TWIPS,
+            $type,
             bin2hex($binData)
         );
     }

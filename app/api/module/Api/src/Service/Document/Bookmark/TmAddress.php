@@ -12,6 +12,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\TransportManagerBundle as Qry;
  */
 class TmAddress extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         $bundle  = [
@@ -23,6 +24,7 @@ class TmAddress extends DynamicBookmark
         return Qry::create(['id' => $data['transportManager'], 'bundle' => $bundle]);
     }
 
+    #[\Override]
     public function render()
     {
         return Formatter\Address::format($this->data['homeCd']['address']);

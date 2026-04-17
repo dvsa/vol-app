@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application\Grant;
 
 use Dvsa\Olcs\Api\Domain\Command\Application\Grant\Schedule41 as Cmd;
@@ -42,7 +44,7 @@ class Schedule41Test extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandNoS4Aoc()
+    public function testHandleCommandNoS4Aoc(): void
     {
         $data = [
             'id' => 111
@@ -79,7 +81,7 @@ class Schedule41Test extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandNoS4Surrender()
+    public function testHandleCommandNoS4Surrender(): void
     {
         $data = [
             'id' => 111
@@ -133,7 +135,7 @@ class Schedule41Test extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandDeleteAll()
+    public function testHandleCommandDeleteAll(): void
     {
         $data = [
             'id' => 111
@@ -219,7 +221,7 @@ class Schedule41Test extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandDeleteSome()
+    public function testHandleCommandDeleteSome(): void
     {
         $data = [
             'id' => 111
@@ -300,7 +302,7 @@ class Schedule41Test extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testIssueOcls16990()
+    public function testIssueOcls16990(): void
     {
         $data = [
             'id' => 111

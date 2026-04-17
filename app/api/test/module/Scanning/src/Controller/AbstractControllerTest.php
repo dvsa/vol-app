@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Abstract controller test
  *
@@ -35,15 +37,12 @@ class AbstractControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('getResponse')
             ->andReturn($this->response);
 
-        // Mock the logger
-        $this->logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($this->logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
     }
 
-    protected function shouldErrorWith($code)
+    protected function shouldErrorWith(mixed $code): void
     {
         $this->response->shouldReceive('setStatusCode')
             ->with($code)
@@ -57,7 +56,7 @@ class AbstractControllerTest extends MockeryTestCase
             );
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $this->shouldErrorWith(405);
 
@@ -68,7 +67,7 @@ class AbstractControllerTest extends MockeryTestCase
         $this->assertEquals('Method Not Allowed', $response->getVariable('title'));
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $this->shouldErrorWith(405);
 
@@ -79,7 +78,7 @@ class AbstractControllerTest extends MockeryTestCase
         $this->assertEquals('Method Not Allowed', $response->getVariable('title'));
     }
 
-    public function testDeleteList()
+    public function testDeleteList(): void
     {
         $this->shouldErrorWith(405);
 
@@ -90,7 +89,7 @@ class AbstractControllerTest extends MockeryTestCase
         $this->assertEquals('Method Not Allowed', $response->getVariable('title'));
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $this->shouldErrorWith(405);
 
@@ -101,7 +100,7 @@ class AbstractControllerTest extends MockeryTestCase
         $this->assertEquals('Method Not Allowed', $response->getVariable('title'));
     }
 
-    public function testGetList()
+    public function testGetList(): void
     {
         $this->shouldErrorWith(405);
 
@@ -112,7 +111,7 @@ class AbstractControllerTest extends MockeryTestCase
         $this->assertEquals('Method Not Allowed', $response->getVariable('title'));
     }
 
-    public function testHead()
+    public function testHead(): void
     {
         $this->shouldErrorWith(405);
 
@@ -123,7 +122,7 @@ class AbstractControllerTest extends MockeryTestCase
         $this->assertEquals('Method Not Allowed', $response->getVariable('title'));
     }
 
-    public function testOptions()
+    public function testOptions(): void
     {
         $this->shouldErrorWith(405);
 
@@ -134,7 +133,7 @@ class AbstractControllerTest extends MockeryTestCase
         $this->assertEquals('Method Not Allowed', $response->getVariable('title'));
     }
 
-    public function testPatch()
+    public function testPatch(): void
     {
         $this->shouldErrorWith(405);
 
@@ -145,7 +144,7 @@ class AbstractControllerTest extends MockeryTestCase
         $this->assertEquals('Method Not Allowed', $response->getVariable('title'));
     }
 
-    public function testReplaceList()
+    public function testReplaceList(): void
     {
         $this->shouldErrorWith(405);
 
@@ -156,7 +155,7 @@ class AbstractControllerTest extends MockeryTestCase
         $this->assertEquals('Method Not Allowed', $response->getVariable('title'));
     }
 
-    public function testPatchList()
+    public function testPatchList(): void
     {
         $this->shouldErrorWith(405);
 
@@ -167,7 +166,7 @@ class AbstractControllerTest extends MockeryTestCase
         $this->assertEquals('Method Not Allowed', $response->getVariable('title'));
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $this->shouldErrorWith(405);
 
@@ -178,7 +177,7 @@ class AbstractControllerTest extends MockeryTestCase
         $this->assertEquals('Method Not Allowed', $response->getVariable('title'));
     }
 
-    public function testNotFoundAction()
+    public function testNotFoundAction(): void
     {
         $this->shouldErrorWith(404);
 

@@ -56,6 +56,7 @@ class LicenceProcessingNoteController extends AbstractInternalController impleme
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

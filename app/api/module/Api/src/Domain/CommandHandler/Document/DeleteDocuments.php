@@ -23,6 +23,7 @@ final class DeleteDocuments extends AbstractCommandHandler implements Transactio
 {
     protected $repoServiceName = 'Document';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

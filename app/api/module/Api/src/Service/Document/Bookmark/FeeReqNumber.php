@@ -12,11 +12,13 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\FeeBundle as FeeQry;
  */
 class FeeReqNumber extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         return FeeQry::create(['id' => $data['fee'], 'bundle' => ['licence']]);
     }
 
+    #[\Override]
     public function render()
     {
         return $this->data['licence']['licNo'] . '/' . $this->data['id'];

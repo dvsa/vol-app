@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\Validator;
@@ -62,7 +64,7 @@ class ValidatorListTest extends MockeryTestCase
         $this->validatorList->addValidator($this->validator2);
     }
 
-    public function testGetRepresentation()
+    public function testGetRepresentation(): void
     {
         $validator1Representation = ['validator1Representation'];
 
@@ -85,7 +87,7 @@ class ValidatorListTest extends MockeryTestCase
         );
     }
 
-    public function testGetValidatorByRule()
+    public function testGetValidatorByRule(): void
     {
         $this->assertSame(
             $this->validator1,
@@ -98,7 +100,7 @@ class ValidatorListTest extends MockeryTestCase
         );
     }
 
-    public function testGetValidatorByRuleNotFound()
+    public function testGetValidatorByRuleNotFound(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Validator with rule name NonExistentRule not found');

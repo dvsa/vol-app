@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Overview Test
  *
@@ -42,7 +44,7 @@ class OverviewTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $licenceId = 7;
         $organisationId = 1;
@@ -157,7 +159,7 @@ class OverviewTest extends QueryHandlerTestCase
         );
     }
 
-    protected function getMockApplication($id)
+    protected function getMockApplication(mixed $id): m\MockInterface
     {
         return m::mock(ApplicationEntity::class)
             ->makePartial()
@@ -167,7 +169,7 @@ class OverviewTest extends QueryHandlerTestCase
             ->getMock();
     }
 
-    protected function getMockCase($id)
+    protected function getMockCase(mixed $id): m\MockInterface
     {
         return m::mock(CaseEntity::class)
             ->makePartial()

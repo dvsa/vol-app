@@ -24,9 +24,8 @@ class TransExchangeClientTest extends TestCase
 {
     public function setUp(): void
     {
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
     }
 

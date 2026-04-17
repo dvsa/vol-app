@@ -18,7 +18,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
  */
 final class Update extends AbstractCommandHandler
 {
-    public const DATE_FORMAT = 'Y-m-d';
+    public const string DATE_FORMAT = 'Y-m-d';
 
     protected $repoServiceName = 'SiPenalty';
 
@@ -29,6 +29,7 @@ final class Update extends AbstractCommandHandler
      * @return Result
      * @throws Exception\ValidationException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /**

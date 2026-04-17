@@ -31,6 +31,7 @@ class DestroyController extends AbstractSurrenderController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
     }
 
+    #[\Override]
     public function indexAction()
     {
         $params = $this->getViewVariables();
@@ -64,6 +65,7 @@ class DestroyController extends AbstractSurrenderController
      * @return array
      *
      */
+    #[\Override]
     protected function getViewVariables(): array
     {
         return [

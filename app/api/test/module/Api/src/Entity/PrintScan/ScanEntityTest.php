@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\PrintScan;
 
 use DateTime;
@@ -21,10 +23,8 @@ class ScanEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider dpIsBackScan
-     */
-    public function testIsBackScan($dateReceived, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsBackScan')]
+    public function testIsBackScan(mixed $dateReceived, mixed $expected): void
     {
         $entity = m::mock(Entity::class)->makePartial();
         $entity->setDateReceived($dateReceived);
@@ -35,7 +35,7 @@ class ScanEntityTest extends EntityTester
         );
     }
 
-    public function dpIsBackScan()
+    public static function dpIsBackScan(): array
     {
         return [
             [null, false],

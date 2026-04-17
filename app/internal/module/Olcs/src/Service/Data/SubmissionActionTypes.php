@@ -48,6 +48,7 @@ class SubmissionActionTypes extends AbstractDataService implements ListDataInter
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function fetchListOptions($context, $useGroups = false)
     {
         $data = $this->fetchListData();

@@ -275,7 +275,7 @@ class Message
 
         //convert the cc string into a suitable array
         if (isset($listString)) {
-            $listArray = array_filter(array_map('trim', explode(',', $listString)));
+            $listArray = array_filter(array_map(trim(...), explode(',', $listString)));
         }
 
         return $this->setCc($listArray);

@@ -29,6 +29,7 @@ final class DeleteConditionUndertakings extends AbstractCommandHandler implement
      * @param Cmd $command
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var OperatingCentreEntity $operatingCentre */

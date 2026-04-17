@@ -23,6 +23,7 @@ final class UnderConsideration extends AbstractCommandHandler implements Transac
 {
     protected $repoServiceName = 'Licence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Licence $licence */

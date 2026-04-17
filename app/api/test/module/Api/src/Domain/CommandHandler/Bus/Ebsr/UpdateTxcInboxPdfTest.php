@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update TxcInbox PDF Test
  */
@@ -33,7 +35,8 @@ class UpdateTxcInboxPdfTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             DocumentEntity::class => [
@@ -46,10 +49,9 @@ class UpdateTxcInboxPdfTest extends AbstractCommandHandlerTestCase
 
     /**
      * Tests that the correct method is called for each PDF type
-     *
-     * @dataProvider handleCommandProvider
      */
-    public function testHandleCommand($pdfType, $method)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
+    public function testHandleCommand(mixed $pdfType, mixed $method): void
     {
         $id = 99;
         $document = 77;
@@ -91,7 +93,7 @@ class UpdateTxcInboxPdfTest extends AbstractCommandHandlerTestCase
     /**
      * data provider for handleCommand
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider(): array
     {
         return [
             ['Pdf', 'setPdfDocument'],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use CommonTest\Common\Service\Data\RefDataTestCase;
@@ -21,7 +23,7 @@ class PaymentTypeTest extends RefDataTestCase
         $this->sut = new PaymentType($this->refDataServices);
     }
 
-    public function testFetchListData()
+    public function testFetchListData(): void
     {
         $data = [
             [

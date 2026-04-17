@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Ecmt;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
@@ -41,7 +43,7 @@ class ConditionalFeeUpdaterTest extends MockeryTestCase
         $this->conditionalFeeUpdater = new ConditionalFeeUpdater($this->feeUpdater);
     }
 
-    public function testCallFeeUpdater()
+    public function testCallFeeUpdater(): void
     {
         $newTotal = 7;
 
@@ -55,7 +57,7 @@ class ConditionalFeeUpdaterTest extends MockeryTestCase
         $this->conditionalFeeUpdater->updateFees($this->irhpApplication, $this->oldTotal);
     }
 
-    public function testDontCallFeeUpdater()
+    public function testDontCallFeeUpdater(): void
     {
         $this->irhpPermitApplication->shouldReceive('getTotalEmissionsCategoryPermitsRequired')
             ->andReturn($this->oldTotal);

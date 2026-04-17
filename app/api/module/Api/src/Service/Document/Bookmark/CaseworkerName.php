@@ -12,6 +12,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\UserBundle as Qry;
  */
 class CaseworkerName extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         $bundle = [
@@ -22,6 +23,7 @@ class CaseworkerName extends DynamicBookmark
         return Qry::create(['id' => $data['user'], 'bundle' => $bundle]);
     }
 
+    #[\Override]
     public function render()
     {
         return Formatter\Name::format($this->data['contactDetails']['person']);

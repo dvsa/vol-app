@@ -22,6 +22,7 @@ class BusFeesControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return BusFeesController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusFeesController
     {
         $scriptFactory = $container->get(ScriptFactory::class);

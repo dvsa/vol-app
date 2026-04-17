@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Application;
 
 use DMS\PHPUnitExtensions\ArraySubset\Assert;
@@ -29,7 +31,7 @@ class UploadEvidenceTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -57,7 +59,7 @@ class UploadEvidenceTest extends QueryHandlerTestCase
 
         $aoc1 = m::mock(ApplicationOperatingCentre::class);
         $aoc2 = m::mock(ApplicationOperatingCentre::class);
-        $aoc2->shouldReceive('serialize')->with(['operatingCentre' => ['address', 'adDocuments']])
+        $aoc2->shouldReceive('serialize')->with(['operatingCentre' => ['address', 'adDocuments' => ['application']]])
             ->once()->andReturn(['OC1']);
         $this->repoMap['ApplicationOperatingCentre']->shouldReceive('fetchByApplicationOrderByAddress')
             ->with(111)->once()->andReturn([$aoc1, $aoc2]);

@@ -27,9 +27,6 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
     use Traits\DocumentSearchTrait;
     use Traits\DocumentActionTrait;
 
-    protected TranslationHelperService $translationHelper;
-    protected DocumentSubCategory $docSubCategoryDataService;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
@@ -37,8 +34,8 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
         HelperPluginManager $viewHelperManager,
         OppositionHelperService $oppositionHelper,
         ComplaintsHelperService $complaintsHelper,
-        TranslationHelperService $translationHelper,
-        DocumentSubCategory $docSubCategoryDataService,
+        protected TranslationHelperService $translationHelper,
+        protected DocumentSubCategory $docSubCategoryDataService,
         $navigation,
         FlashMessengerHelperService $flashMessengerHelper
     ) {
@@ -52,8 +49,6 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
             $navigation,
             $flashMessengerHelper
         );
-        $this->translationHelper = $translationHelper;
-        $this->docSubCategoryDataService = $docSubCategoryDataService;
     }
 
     /**
@@ -62,6 +57,7 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
+    #[\Override]
     protected function getDocumentTableName()
     {
         return 'documents';
@@ -73,6 +69,7 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
+    #[\Override]
     protected function getDocumentRoute()
     {
         return 'licence/documents';
@@ -84,6 +81,7 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
+    #[\Override]
     protected function getDocumentRouteParams()
     {
         return ['licence' => $this->getFromRoute('licence')];
@@ -109,6 +107,7 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
      *
      * @return \Laminas\Form\FieldsetInterface
      */
+    #[\Override]
     protected function getConfiguredDocumentForm()
     {
         $filters = $this->getDocumentFilters();
@@ -131,6 +130,7 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
      * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return ViewModel
      */
+    #[\Override]
     protected function getDocumentView()
     {
         $filters = $this->getDocumentFilters();

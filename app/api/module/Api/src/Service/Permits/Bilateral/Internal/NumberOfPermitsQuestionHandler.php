@@ -20,6 +20,7 @@ class NumberOfPermitsQuestionHandler implements QuestionHandlerInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function handle(QaContext $qaContext, array $requiredPermits)
     {
         $permitUsageSelection = $this->permitUsageSelectionGenerator->generate($requiredPermits);

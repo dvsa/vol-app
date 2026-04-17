@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\System;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -20,7 +22,7 @@ class FeatureToggleEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testCreateUpdate()
+    public function testCreateUpdate(): void
     {
         $status = Entity::ACTIVE_STATUS;
         $refDataStatus = new RefData($status);

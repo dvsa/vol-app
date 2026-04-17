@@ -18,6 +18,7 @@ class PsvVehicles extends AbstractQueryHandler
     protected $repoServiceName = 'Licence';
     protected $extraRepos = ['LicenceVehicle'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $licence Entity\Licence\Licence */

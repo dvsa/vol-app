@@ -30,6 +30,7 @@ final class Create extends AbstractCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         $numberOfOverlappingRanges = $this->numberOfOverlappingRanges(

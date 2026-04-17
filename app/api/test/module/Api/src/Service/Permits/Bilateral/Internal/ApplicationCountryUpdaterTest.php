@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Internal;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
@@ -55,7 +57,7 @@ class ApplicationCountryUpdaterTest extends MockeryTestCase
         );
     }
 
-    public function testUpdateIrhpPermitApplicationExists()
+    public function testUpdateIrhpPermitApplicationExists(): void
     {
         $this->irhpApplication->shouldReceive('getIrhpPermitApplicationByStockCountryId')
             ->with(self::COUNTRY_ID)
@@ -69,7 +71,7 @@ class ApplicationCountryUpdaterTest extends MockeryTestCase
         );
     }
 
-    public function testUpdateIrhpPermitApplicationNotFound()
+    public function testUpdateIrhpPermitApplicationNotFound(): void
     {
         $this->irhpApplication->shouldReceive('getIrhpPermitApplicationByStockCountryId')
             ->with(self::COUNTRY_ID)

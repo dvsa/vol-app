@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Surrender;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -28,7 +30,7 @@ class ClearTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $surrenderEntity = m::mock(SurrenderEntity::class);
         $surrenderEntity->shouldReceive('getId')->andReturn(1);
@@ -55,7 +57,7 @@ class ClearTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Surrender data successfully cleared'], $result->getMessages());
     }
 
-    protected function surrenderProperties()
+    protected function surrenderProperties(): array
     {
         return [
             'CommunityLicenceDocumentInfo' => null,

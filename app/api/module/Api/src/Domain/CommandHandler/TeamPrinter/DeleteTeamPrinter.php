@@ -21,6 +21,7 @@ final class DeleteTeamPrinter extends AbstractCommandHandler
 {
     protected $repoServiceName = 'TeamPrinter';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

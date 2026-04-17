@@ -21,6 +21,7 @@ class DataGovUkFactory implements FactoryInterface
      * @param array|null $options
      * @return DataGovUk
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DataGovUk
     {
         return new DataGovUk(

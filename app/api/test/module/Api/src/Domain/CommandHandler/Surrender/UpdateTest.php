@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Surrender;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -27,10 +29,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider handleCommandProvider
-     */
-    public function testHandleCommand($data)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
+    public function testHandleCommand(mixed $data): void
     {
         $command = Cmd::create($data);
 
@@ -120,7 +120,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
 
-    public function handleCommandProvider()
+    public static function handleCommandProvider(): array
     {
         $data = [
             'case_01' => [

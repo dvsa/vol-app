@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\System;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * SubCategory Abstract Entity
+ * AbstractSubCategory Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -27,21 +32,31 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractSubCategory implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSubCategory implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
 
     /**
-     * Category
+     * Primary key
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     */
+    protected $id = 0;
+
+    /**
+     * Foreign Key to category
      *
      * @var \Dvsa\Olcs\Api\Entity\System\Category
      *
      * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\Category", fetch="LAZY")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     protected $category;
 
@@ -57,62 +72,6 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is doc
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_doc", nullable=false, options={"default": 0})
-     */
-    protected $isDoc = 0;
-
-    /**
-     * Is free text
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_free_text", nullable=false, options={"default": 0})
-     */
-    protected $isFreeText = 0;
-
-    /**
-     * Is messaging
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_messaging", nullable=false, options={"default": 0})
-     */
-    protected $isMessaging = 0;
-
-    /**
-     * Is scan
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_scan", nullable=false, options={"default": 0})
-     */
-    protected $isScan = 0;
-
-    /**
-     * Is task
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_task", nullable=false, options={"default": 0})
-     */
-    protected $isTask = 0;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -124,13 +83,58 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
     protected $lastModifiedBy;
 
     /**
-     * Sub category name
+     * e.g. GV79 Form is a sub cat of application category
      *
      * @var string
      *
      * @ORM\Column(type="string", name="sub_category_name", length=64, nullable=false)
      */
-    protected $subCategoryName;
+    protected $subCategoryName = '';
+
+    /**
+     * Category used for scanning documents
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_scan", nullable=false, options={"default": 0})
+     */
+    protected $isScan = 0;
+
+    /**
+     * Is a valid document category
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_doc", nullable=false, options={"default": 0})
+     */
+    protected $isDoc = 0;
+
+    /**
+     * Is a valid task category
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_task", nullable=false, options={"default": 0})
+     */
+    protected $isTask = 0;
+
+    /**
+     * User can enter freetext description - applied to task etc when creating.
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_free_text", nullable=false, options={"default": 0})
+     */
+    protected $isFreeText = 0;
+
+    /**
+     * Is messaging
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_messaging", nullable=false, options={"default": 0})
+     */
+    protected $isMessaging = 0;
 
     /**
      * Version
@@ -143,52 +147,20 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
     protected $version = 1;
 
     /**
-     * Set the category
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\Category $category entity being set as the value
-     *
-     * @return SubCategory
+     * Initialise the collections
      */
-    public function setCategory($category)
+    public function __construct()
     {
-        $this->category = $category;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the category
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\Category
+     * Initialise collections
      */
-    public function getCategory()
+    public function initCollections(): void
     {
-        return $this->category;
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return SubCategory
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
 
     /**
      * Set the id
@@ -215,129 +187,57 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Set the is doc
+     * Set the category
      *
-     * @param boolean $isDoc new value being set
+     * @param \Dvsa\Olcs\Api\Entity\System\Category $category new value being set
      *
      * @return SubCategory
      */
-    public function setIsDoc($isDoc)
+    public function setCategory($category)
     {
-        $this->isDoc = $isDoc;
+        $this->category = $category;
 
         return $this;
     }
 
     /**
-     * Get the is doc
+     * Get the category
      *
-     * @return boolean
+     * @return \Dvsa\Olcs\Api\Entity\System\Category
      */
-    public function getIsDoc()
+    public function getCategory()
     {
-        return $this->isDoc;
+        return $this->category;
     }
 
     /**
-     * Set the is free text
+     * Set the created by
      *
-     * @param boolean $isFreeText new value being set
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return SubCategory
      */
-    public function setIsFreeText($isFreeText)
+    public function setCreatedBy($createdBy)
     {
-        $this->isFreeText = $isFreeText;
+        $this->createdBy = $createdBy;
 
         return $this;
     }
 
     /**
-     * Get the is free text
+     * Get the created by
      *
-     * @return boolean
+     * @return \Dvsa\Olcs\Api\Entity\User\User
      */
-    public function getIsFreeText()
+    public function getCreatedBy()
     {
-        return $this->isFreeText;
-    }
-
-    /**
-     * Set the is messaging
-     *
-     * @param boolean $isMessaging new value being set
-     *
-     * @return SubCategory
-     */
-    public function setIsMessaging($isMessaging)
-    {
-        $this->isMessaging = $isMessaging;
-
-        return $this;
-    }
-
-    /**
-     * Get the is messaging
-     *
-     * @return boolean
-     */
-    public function getIsMessaging()
-    {
-        return $this->isMessaging;
-    }
-
-    /**
-     * Set the is scan
-     *
-     * @param boolean $isScan new value being set
-     *
-     * @return SubCategory
-     */
-    public function setIsScan($isScan)
-    {
-        $this->isScan = $isScan;
-
-        return $this;
-    }
-
-    /**
-     * Get the is scan
-     *
-     * @return boolean
-     */
-    public function getIsScan()
-    {
-        return $this->isScan;
-    }
-
-    /**
-     * Set the is task
-     *
-     * @param boolean $isTask new value being set
-     *
-     * @return SubCategory
-     */
-    public function setIsTask($isTask)
-    {
-        $this->isTask = $isTask;
-
-        return $this;
-    }
-
-    /**
-     * Get the is task
-     *
-     * @return boolean
-     */
-    public function getIsTask()
-    {
-        return $this->isTask;
+        return $this->createdBy;
     }
 
     /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return SubCategory
      */
@@ -383,6 +283,126 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
     }
 
     /**
+     * Set the is scan
+     *
+     * @param bool $isScan new value being set
+     *
+     * @return SubCategory
+     */
+    public function setIsScan($isScan)
+    {
+        $this->isScan = $isScan;
+
+        return $this;
+    }
+
+    /**
+     * Get the is scan
+     *
+     * @return bool
+     */
+    public function getIsScan()
+    {
+        return $this->isScan;
+    }
+
+    /**
+     * Set the is doc
+     *
+     * @param bool $isDoc new value being set
+     *
+     * @return SubCategory
+     */
+    public function setIsDoc($isDoc)
+    {
+        $this->isDoc = $isDoc;
+
+        return $this;
+    }
+
+    /**
+     * Get the is doc
+     *
+     * @return bool
+     */
+    public function getIsDoc()
+    {
+        return $this->isDoc;
+    }
+
+    /**
+     * Set the is task
+     *
+     * @param bool $isTask new value being set
+     *
+     * @return SubCategory
+     */
+    public function setIsTask($isTask)
+    {
+        $this->isTask = $isTask;
+
+        return $this;
+    }
+
+    /**
+     * Get the is task
+     *
+     * @return bool
+     */
+    public function getIsTask()
+    {
+        return $this->isTask;
+    }
+
+    /**
+     * Set the is free text
+     *
+     * @param bool $isFreeText new value being set
+     *
+     * @return SubCategory
+     */
+    public function setIsFreeText($isFreeText)
+    {
+        $this->isFreeText = $isFreeText;
+
+        return $this;
+    }
+
+    /**
+     * Get the is free text
+     *
+     * @return bool
+     */
+    public function getIsFreeText()
+    {
+        return $this->isFreeText;
+    }
+
+    /**
+     * Set the is messaging
+     *
+     * @param bool $isMessaging new value being set
+     *
+     * @return SubCategory
+     */
+    public function setIsMessaging($isMessaging)
+    {
+        $this->isMessaging = $isMessaging;
+
+        return $this;
+    }
+
+    /**
+     * Get the is messaging
+     *
+     * @return bool
+     */
+    public function getIsMessaging()
+    {
+        return $this->isMessaging;
+    }
+
+    /**
      * Set the version
      *
      * @param int $version new value being set
@@ -404,5 +424,14 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

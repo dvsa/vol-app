@@ -1,22 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Organisation;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * OrganisationPerson Abstract Entity
+ * AbstractOrganisationPerson Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -26,21 +31,53 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_organisation_person_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_organisation_person_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_organisation_person_organisation_id", columns={"organisation_id"}),
- *        @ORM\Index(name="ix_organisation_person_person_id", columns={"person_id"})
+ *        @ORM\Index(name="ix_organisation_person_person_id", columns={"person_id"}),
+ *        @ORM\Index(name="uk_organisation_person_olbs_key", columns={"olbs_key"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_organisation_person_olbs_key", columns={"olbs_key"})
  *    }
  * )
  */
-abstract class AbstractOrganisationPerson implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractOrganisationPerson implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to person
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Person\Person
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Person\Person", fetch="LAZY")
+     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
+     */
+    protected $person;
+
+    /**
+     * Foreign Key to organisation
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
+     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
+     */
+    protected $organisation;
 
     /**
      * Created by
@@ -54,17 +91,6 @@ abstract class AbstractOrganisationPerson implements BundleSerializableInterface
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -74,43 +100,6 @@ abstract class AbstractOrganisationPerson implements BundleSerializableInterface
      * @Gedmo\Blameable(on="update")
      */
     protected $lastModifiedBy;
-
-    /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Organisation
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation",
-     *     fetch="LAZY",
-     *     inversedBy="organisationPersons"
-     * )
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=false)
-     */
-    protected $organisation;
-
-    /**
-     * Person
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Person\Person
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Person\Person",
-     *     fetch="LAZY",
-     *     inversedBy="organisationPersons"
-     * )
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id", nullable=false)
-     */
-    protected $person;
 
     /**
      * Position
@@ -132,28 +121,29 @@ abstract class AbstractOrganisationPerson implements BundleSerializableInterface
     protected $version = 1;
 
     /**
-     * Set the created by
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @var int
      *
-     * @return OrganisationPerson
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
+    protected $olbsKey;
 
-        return $this;
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
     }
 
     /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * Initialise collections
      */
-    public function getCreatedBy()
+    public function initCollections(): void
     {
-        return $this->createdBy;
     }
+
 
     /**
      * Set the id
@@ -180,57 +170,33 @@ abstract class AbstractOrganisationPerson implements BundleSerializableInterface
     }
 
     /**
-     * Set the last modified by
+     * Set the person
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Person\Person $person new value being set
      *
      * @return OrganisationPerson
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setPerson($person)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->person = $person;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the person
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * @return \Dvsa\Olcs\Api\Entity\Person\Person
      */
-    public function getLastModifiedBy()
+    public function getPerson()
     {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return OrganisationPerson
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
+        return $this->person;
     }
 
     /**
      * Set the organisation
      *
-     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
      * @return OrganisationPerson
      */
@@ -252,27 +218,51 @@ abstract class AbstractOrganisationPerson implements BundleSerializableInterface
     }
 
     /**
-     * Set the person
+     * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\Person\Person $person entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return OrganisationPerson
      */
-    public function setPerson($person)
+    public function setCreatedBy($createdBy)
     {
-        $this->person = $person;
+        $this->createdBy = $createdBy;
 
         return $this;
     }
 
     /**
-     * Get the person
+     * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\Person\Person
+     * @return \Dvsa\Olcs\Api\Entity\User\User
      */
-    public function getPerson()
+    public function getCreatedBy()
     {
-        return $this->person;
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return OrganisationPerson
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -321,5 +311,38 @@ abstract class AbstractOrganisationPerson implements BundleSerializableInterface
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Set the olbs key
+     *
+     * @param int $olbsKey new value being set
+     *
+     * @return OrganisationPerson
+     */
+    public function setOlbsKey($olbsKey)
+    {
+        $this->olbsKey = $olbsKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the olbs key
+     *
+     * @return int
+     */
+    public function getOlbsKey()
+    {
+        return $this->olbsKey;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

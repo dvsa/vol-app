@@ -38,11 +38,12 @@ class LicenceFurniture implements
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'licence',
-            [$this, 'onLicenceFurniture'],
+            $this->onLicenceFurniture(...),
             $priority
         );
     }
@@ -82,6 +83,7 @@ class LicenceFurniture implements
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceFurniture
     {
         // Set dependencies

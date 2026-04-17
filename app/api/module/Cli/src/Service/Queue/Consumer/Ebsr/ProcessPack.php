@@ -2,7 +2,6 @@
 
 namespace Dvsa\Olcs\Cli\Service\Queue\Consumer\Ebsr;
 
-use Laminas\Serializer\Adapter\Json as LaminasJson;
 use Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer;
 use Dvsa\Olcs\Api\Domain\Command\Bus\Ebsr\ProcessPack as Cmd;
 use Dvsa\Olcs\Api\Entity\Queue\Queue as QueueEntity;
@@ -18,9 +17,9 @@ class ProcessPack extends AbstractCommandConsumer
      * @param QueueEntity $item
      * @return array
      */
+    #[\Override]
     public function getCommandData(QueueEntity $item)
     {
-        $json = new LaminasJson();
-        return $json->unserialize($item->getOptions());
+        return json_decode($item->getOptions(), true);
     }
 }

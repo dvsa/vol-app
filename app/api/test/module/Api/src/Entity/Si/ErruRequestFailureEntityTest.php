@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Si;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Dvsa\Olcs\Api\Entity\Si\ErruRequestFailure as Entity;
 use Dvsa\Olcs\Api\Entity\Doc\Document;
-use Laminas\Serializer\Adapter\Json;
 use Mockery as m;
 
 /**
@@ -25,17 +26,15 @@ class ErruRequestFailureEntityTest extends EntityTester
     /**
      * Tests creation of erru request failures
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $document = m::mock(Document::class);
 
-        $json = new Json();
-
         $errors = ['foo' => 'bar'];
-        $errorsJson = $json->serialize($errors);
+        $errorsJson = json_encode($errors);
 
         $input = ['bar' => 'foo'];
-        $inputJson = $json->serialize($input);
+        $inputJson = json_encode($input);
 
         $entity = new Entity($document, $errors, $input);
 
@@ -47,14 +46,12 @@ class ErruRequestFailureEntityTest extends EntityTester
     /**
      * Makes sure if the input field is a string then the data is ignored
      */
-    public function testCreateWithStringInput()
+    public function testCreateWithStringInput(): void
     {
         $document = m::mock(Document::class);
 
-        $json = new Json();
-
         $errors = ['foo' => 'bar'];
-        $errorsJson = $json->serialize($errors);
+        $errorsJson = json_encode($errors);
 
         $input = 'some string';
 

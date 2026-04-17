@@ -52,6 +52,7 @@ class ReportDownload extends AbstractConsumer
      *
      * @return string
      */
+    #[\Override]
     public function processMessage(QueueEntity $item)
     {
         if ($item->getAttempts() > self::MAX_ATTEMPTS) {

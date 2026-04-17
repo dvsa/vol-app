@@ -22,6 +22,7 @@ class ConditionUndertaking extends AbstractQueryHandler
     protected $repoServiceName = 'Licence';
     protected $extraRepos = ['ConditionUndertaking'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $licence LicenceEntity */

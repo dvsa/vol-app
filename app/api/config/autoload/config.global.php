@@ -60,16 +60,21 @@ return [
         ],
         'driver' => [
             'EntityDriver' => [
-                'cache' => 'apcu'
+                'cache' => 'redis'
             ],
             'translatable_metadata_driver' => [
-                'cache' => 'apcu',
+                'cache' => 'redis',
             ]
         ],
         'configuration' => [
             'orm_default' => [
-                'metadata_cache' => 'apcu',
+                'metadata_cache' => 'redis',
                 'generate_proxies' => true,
+                'query_cache'       => 'redis',
+                'result_cache'      => 'redis',
+                'hydration_cache'   => 'redis',
+
+
                 // Log SQL queries to the OLCS application log file
                 //'sql_logger' => 'DoctrineLogger',
             ]
@@ -260,7 +265,7 @@ return [
     'email' => [
         // Debugging option forces all email to be sent to an address
         // Selfserve/external URI e.g. http://demo_dvsa-selfserve.web03.olcs.mgt.mtpdvsa *Environment specific*
-        'send_all_mail_to' => $isProduction ? null : '%olcs_send_all_mail_to%',
+        'send_all_mail_to' => ($isProductionAccount && !$isProduction) ? '%olcs_send_all_mail_to%' : null,
         'from_name' => 'OLCS do not reply',
         'from_email' => '%olcs_from_email%',
         'selfserve_uri' => '%olcs_ss_uri%',
@@ -269,6 +274,9 @@ return [
     'awsOptions' => array_filter([
         'region' => '%olcs_aws_region%',
         'version' => '%olcs_aws_version%',
+        's3' => [
+            'use_path_style_endpoint' => false,
+        ],
         's3Options' => $isProductionAccount ? null : [
             'roleArn' => '%olcs_aws_s3_role_arn%',
             'roleSessionName' => '%olcs_aws_s3_role_session_name%'
@@ -277,8 +285,7 @@ return [
             'sts_regional_endpoints' => 'regional'
         ]
     ]),
-    'mail' => ($isProductionAccount && \Aws\Credentials\CredentialProvider::shouldUseEcs())
-    ? [
+    'mail' => [
         'type' => '\Laminas\Mail\Transport\Smtp',
         'options' => [
             'name' => '%olcs_email_host%',
@@ -290,16 +297,7 @@ return [
                 'port' => '%olcs_email_port%',
             ],
         ],
-    ]
-    : ($isProductionAccount ? [] : [
-        'type' => \Dvsa\Olcs\Email\Transport\MultiTransport::class,
-        'options' => [
-            'transport' => [
-                ['type' => 'SMTP', 'options' => ['name' => '%olcs_email_host%', 'host' => '%olcs_email_host%', 'port' => '%olcs_email_port%']],
-                ['type' => \Dvsa\Olcs\Email\Transport\S3File::class, 'options' => ['bucket' => 'devapp-olcs-pri-olcs-autotest-s3', 'key' => '%domain%/email']],
-            ]
-        ],
-    ]),
+    ],
 
     'mailboxes' => [
         // IMAP connection to a the mailbox for reading inspection request emails
@@ -319,7 +317,6 @@ return [
 
     'ebsr' => [
         'transexchange_publisher' => [
-            'uri' => 'http://localhost:8080/txc-%transxchange_version%/publisherService',
             'new_uri' => '%transxchange_uri%',
             'options' => [
                 'adapter' => \Laminas\Http\Client\Adapter\Proxy::class,
@@ -355,32 +352,37 @@ return [
         'max_queue_messages_per_run' => '100',
     ],
     'nr' => [
-        // @to-do currently waiting on the actual nr address
         'inr_service' => [
             'uri' => '%olcs_natreg_uri%',
+            'options' => [],
             'adapter' => Laminas\Http\Client\Adapter\Curl::class,
             'oauth2' => [ // if client['headers']['Authorization'] is not set, then this will be used to get token
                 'client_id' => '%olcs_natreg_client_id%', //param
                 'client_secret' => '%olcs_natreg_client_secret%', // secret
                 'token_url' => '%olcs_natreg_token_url%', //param
                 'scope' => '%olcs_natreg_client_scope%', //param
-                'proxy' => 'http://%shd_proxy%',
-            ]
+            ],
+            'service_name' => 'INR',
         ],
-        'repute_url' => [
-            'uri' => '%olcs_natreg_repute%'
+        'compliance_episode' => [
+            'erruVersion' => '%erru_version%',
+        ],
+        'cgr' => [
+            'erruVersion' => '%erru_version%',
         ],
     ],
 
     // CUPS print server
     'print' => [
-        'server' => 'print.%domain%:631'
+        'server' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? '%cups_server_url%' : 'print.%domain%:631'),
     ],
 
     // If this value is populated then printing will use this service,
     // if it is not populated or missing then the Libreoffice converter will be used
     'convert_to_pdf' => [
-        'uri' => 'http://renderer.%domain%:8080/convert-document',
+        'uri' => \Aws\Credentials\CredentialProvider::shouldUseEcs()
+            ? '%pdf_service_uri%'
+            : 'http://renderer.%domain%:8080/convert-document',
     ],
 
     /**
@@ -491,28 +493,6 @@ return [
         'gv_vehicle_list_batch_size' => 120,
     ],
 
-    // GDS Verify configuration
-    'gds_verify' => [
-        'msa_metadata_url' => 'http://match.%domain%/matching-service/SAML2/metadata',
-        // Cache settings used to cache the above two metadata documents
-        'cache' => [
-            'adapter' => [
-                'name' => 'filesystem',
-                'options' => ['ttl' => 300],
-            ],
-        ],
-        // Entity identifier
-        'entity_identifier' => '%olcs_ss_uri%',
-        // Key used to sign authentication requests
-        'signature_key' => '/opt/dvsa/gds-verify/certs/gds_verify_sign.pem',
-        // Key used to decrypt data from hub
-        'encryption_keys' => [
-            // Array of encryption keys, they will be tried in order
-            '/opt/dvsa/gds-verify/certs/gds_verify_enc.pem',
-            '/opt/dvsa/gds-verify/certs/gds_secondary_verify_enc.pem'
-        ],
-    ],
-
     // Key used to encrypt data stored in the Doctrine EncryptedStringType
     'olcs-doctrine' => [
         'encryption_key' => '%olcs_doctrine_encryption_key%'
@@ -520,11 +500,6 @@ return [
 
     'cache-encryption' => [
         'node_suffix' => 'api',
-        'adapter' => '%cache_encryption_adapter%',
-        'options' => [
-            'algo' => '%cache_encryption_algo%',
-            'mode' => '%cache_encryption_mode%',
-        ],
         'secrets' => [
             'node' => '%cache_encryption_secret_api%',
             'shared' => '%cache_encryption_secret_shared%',
@@ -544,6 +519,28 @@ return [
                 ],
                 'ttl' => 3600, //one hour, likely to be overridden based on use case
                 'namespace' => 'zfcache',
+            ],
+            'plugins' => [
+                [
+                    'name' => 'exception_handler',
+                    'options' => [
+                        'throw_exceptions' => false,
+                    ],
+                ],
+            ],
+        ],
+        'doctrinemodule.cache.redis' => [
+            'adapter' => Laminas\Cache\Storage\Adapter\Redis::class,
+            'options' => [
+                'server' => [
+                    'host' => '%redis_cache_fqdn%',
+                    'port' => 6379,
+                ],
+                'lib_options' => [
+                    \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_IGBINARY
+                ],
+                'ttl' => 3600, //one hour, likely to be overridden based on use case
+                'namespace' => 'doctrine',
             ],
             'plugins' => [
                 [

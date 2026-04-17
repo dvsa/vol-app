@@ -25,6 +25,7 @@ final class CancelLicenceFees extends AbstractCommandHandler
 {
     protected $repoServiceName = 'Licence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

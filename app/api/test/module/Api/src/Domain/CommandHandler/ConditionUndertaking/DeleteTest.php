@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Delete ConditionUndertaking Test
  *
@@ -15,6 +17,9 @@ use Dvsa\Olcs\Api\Domain\Repository\ConditionUndertaking;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Transfer\Command\ConditionUndertaking\Delete as Cmd;
 use Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking as ConditionUndertakingEntity;
+use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
+use Dvsa\Olcs\Api\Entity\System\RefData;
 
 /**
  * Delete ConditionUndertaking Test
@@ -27,11 +32,13 @@ class DeleteTest extends AbstractCommandHandlerTestCase
     {
         $this->sut = new Delete();
         $this->mockRepo('ConditionUndertaking', ConditionUndertaking::class);
+        $this->mockedSmServices ['EventHistoryCreator'] = m::mock(EventHistoryCreator::class);
 
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -40,7 +47,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::Create(
             [
@@ -53,16 +60,28 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         $conditionUndertaking = m::mock(ConditionUndertakingEntity::class)->makePartial();
         $conditionUndertaking->setId($command->getId());
 
+        $refData = m::mock(RefData::class);
+            $refData->shouldReceive('getId')
+            ->andReturn(ConditionUndertakingEntity::TYPE_CONDITION);
+
+        $conditionUndertaking->shouldReceive('getConditionType')
+            ->andReturn($refData);
+
         $this->repoMap['ConditionUndertaking']->shouldReceive('fetchById')
             ->with(99)
             ->andReturn($conditionUndertaking)
-            ->once()
+            ->twice();
+
+        $this->repoMap['ConditionUndertaking']
             ->shouldReceive('delete')
-            ->with(m::type(ConditionUndertakingEntity::class))
-            ->andReturnUsing(
-                function (ConditionUndertakingEntity $conditionUndertaking) {
-                    $conditionUndertaking->setId(99);
-                }
+            ->with($conditionUndertaking)
+            ->once();
+
+        $this->mockedSmServices['EventHistoryCreator']
+            ->shouldReceive('create')
+            ->with(
+                $conditionUndertaking,
+                EventHistoryTypeEntity::EVENT_CODE_CONDITION_DELETED
             )
             ->once();
 

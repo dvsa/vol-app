@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Licence;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -21,7 +23,7 @@ class PsvDiscEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testCease()
+    public function testCease(): void
     {
         $licence = m::mock(Licence::class)->makePartial();
 
@@ -34,7 +36,7 @@ class PsvDiscEntityTest extends EntityTester
         $this->assertEquals(date('Y-m-d'), $psvDisc->getCeasedDate()->format('Y-m-d'));
     }
 
-    public function testGetRelatedOrganisation()
+    public function testGetRelatedOrganisation(): void
     {
         $licence = m::mock(Licence::class)->makePartial();
         $sut = new Entity($licence);

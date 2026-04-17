@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer\CompaniesHouse;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -8,10 +10,8 @@ use Dvsa\Olcs\Cli\Service\Queue\Consumer\CompaniesHouse\InitialDataLoad;
 use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
 use Olcs\Logging\Log\Logger;
 
-/**
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\CompaniesHouse\InitialDataLoad
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\CompaniesHouse\InitialDataLoad::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer::class)]
 class InitialDataLoadTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = InitialDataLoad::class;
@@ -21,16 +21,14 @@ class InitialDataLoadTest extends AbstractConsumerTestCase
 
     public function setUp(): void
     {
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
 
         parent::setUp();
     }
 
-    public function testProcessMessageSuccess()
+    public function testProcessMessageSuccess(): void
     {
         $item = new QueueEntity();
         $item->setId(99);
@@ -63,7 +61,7 @@ class InitialDataLoadTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testProcessMessageFailure()
+    public function testProcessMessageFailure(): void
     {
         $item = new QueueEntity();
         $item->setId(99);

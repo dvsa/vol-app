@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\TransportManagerLicence;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\TransportManagerLicence\GetList as QueryHandler;
@@ -13,6 +15,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class GetListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
@@ -23,7 +26,7 @@ class GetListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Query::create([]);
 

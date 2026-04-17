@@ -29,6 +29,7 @@ final class DeleteOperatingCentres extends AbstractCommandHandler implements Tra
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var ApplicationEntity $application */

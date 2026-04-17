@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\PolicePeopleBundle;
@@ -18,7 +20,7 @@ class PolicePeopleTest extends MockeryTestCase
     /**
      * Tests getQuery
      */
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new PolicePeople();
         $query = $bookmark->getQuery(['id' => 123]);
@@ -29,7 +31,7 @@ class PolicePeopleTest extends MockeryTestCase
     /**
      * Tests rendering when we have no data
      */
-    public function testRenderWithNoData()
+    public function testRenderWithNoData(): void
     {
         $bookmark = new PolicePeople();
         $bookmark->setData([]);
@@ -43,14 +45,14 @@ class PolicePeopleTest extends MockeryTestCase
     /**
      * Tests data renders correctly
      *
-     * @dataProvider renderWithDataProvider
      *
      * @param array $licence
      * @param string $expectedLicNo
      * @param string $pubType
      * @param string $expectedSection
      */
-    public function testRenderWithData($licence, $expectedLicNo, $pubType, $expectedSection)
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderWithDataProvider')]
+    public function testRenderWithData(mixed $licence, mixed $expectedLicNo, mixed $pubType, mixed $expectedSection): void
     {
         $forename1 = 'forename 1';
         $familyName1 = 'family name 1';
@@ -143,7 +145,7 @@ class PolicePeopleTest extends MockeryTestCase
         );
     }
 
-    public function renderWithDataProvider()
+    public static function renderWithDataProvider(): array
     {
         $licNo = 'OB1234567';
 

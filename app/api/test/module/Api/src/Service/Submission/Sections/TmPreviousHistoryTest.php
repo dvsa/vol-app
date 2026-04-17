@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
 /**
  * Class TmPreviousHistoryTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class TmPreviousHistoryTest extends AbstractSubmissionSectionTest
+class TmPreviousHistoryTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\TmPreviousHistory::class;
 
@@ -15,9 +17,9 @@ class TmPreviousHistoryTest extends AbstractSubmissionSectionTest
      *
      * @return array
      */
-    public function sectionTestProvider()
+    public static function sectionTestProvider(): array
     {
-        $case = $this->getCase();
+        $case = static::getCase();
 
         $expectedResult = [
             'data' => [

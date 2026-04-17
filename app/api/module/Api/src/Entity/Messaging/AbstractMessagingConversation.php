@@ -1,40 +1,65 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Messaging;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * MessagingConversation Abstract Entity
+ * AbstractMessagingConversation Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="messaging_conversation",
  *    indexes={
  *        @ORM\Index(name="fk_messaging_conversation_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_messaging_conversation_last_modified_by_user_id",
-     *     columns={"last_modified_by"}),
+ *        @ORM\Index(name="fk_messaging_conversation_last_modified_by_user_id", columns={"last_modified_by"}),
  *        @ORM\Index(name="fk_messaging_conversation_task_id", columns={"task_id"})
  *    }
  * )
  */
-abstract class AbstractMessagingConversation implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractMessagingConversation implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Task
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Task\Task
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Task\Task", fetch="LAZY")
+     * @ORM\JoinColumn(name="task_id", referencedColumnName="id", nullable=true)
+     */
+    protected $task;
 
     /**
      * Created by
@@ -48,47 +73,6 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is archived
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_archived", nullable=true, options={"default": 0})
-     */
-    protected $isArchived = 0;
-
-    /**
-     * Is attachments enabled
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean",
-     *     name="is_attachments_enabled",
-     *     nullable=true,
-     *     options={"default": 0})
-     */
-    protected $isAttachmentsEnabled = 0;
-
-    /**
-     * Is closed
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_closed", nullable=true, options={"default": 0})
-     */
-    protected $isClosed = 0;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -100,6 +84,24 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     protected $lastModifiedBy;
 
     /**
+     * Subject
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="subject", length=255, nullable=false)
+     */
+    protected $subject = '';
+
+    /**
+     * Is attachments enabled
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_attachments_enabled", nullable=true, options={"default": 0})
+     */
+    protected $isAttachmentsEnabled = 0;
+
+    /**
      * Last read at
      *
      * @var \DateTime
@@ -109,23 +111,22 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     protected $lastReadAt;
 
     /**
-     * Subject
+     * Is closed
      *
-     * @var string
+     * @var bool
      *
-     * @ORM\Column(type="string", name="subject", length=255, nullable=false)
+     * @ORM\Column(type="boolean", name="is_closed", nullable=true, options={"default": 0})
      */
-    protected $subject;
+    protected $isClosed = 0;
 
     /**
-     * Task
+     * Is archived
      *
-     * @var \Dvsa\Olcs\Api\Entity\Task\Task
+     * @var bool
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Task\Task", fetch="LAZY")
-     * @ORM\JoinColumn(name="task_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="boolean", name="is_archived", nullable=true, options={"default": 0})
      */
-    protected $task;
+    protected $isArchived = 0;
 
     /**
      * Version
@@ -138,28 +139,20 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     protected $version = 1;
 
     /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return MessagingConversation
+     * Initialise the collections
      */
-    public function setCreatedBy($createdBy)
+    public function __construct()
     {
-        $this->createdBy = $createdBy;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * Initialise collections
      */
-    public function getCreatedBy()
+    public function initCollections(): void
     {
-        return $this->createdBy;
     }
+
 
     /**
      * Set the id
@@ -186,81 +179,57 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     }
 
     /**
-     * Set the is archived
+     * Set the task
      *
-     * @param boolean $isArchived new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Task\Task $task new value being set
      *
      * @return MessagingConversation
      */
-    public function setIsArchived($isArchived)
+    public function setTask($task)
     {
-        $this->isArchived = $isArchived;
+        $this->task = $task;
 
         return $this;
     }
 
     /**
-     * Get the is archived
+     * Get the task
      *
-     * @return boolean
+     * @return \Dvsa\Olcs\Api\Entity\Task\Task
      */
-    public function getIsArchived()
+    public function getTask()
     {
-        return $this->isArchived;
+        return $this->task;
     }
 
     /**
-     * Set the is attachments enabled
+     * Set the created by
      *
-     * @param boolean $isAttachmentsEnabled new value being set
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return MessagingConversation
      */
-    public function setIsAttachmentsEnabled($isAttachmentsEnabled)
+    public function setCreatedBy($createdBy)
     {
-        $this->isAttachmentsEnabled = $isAttachmentsEnabled;
+        $this->createdBy = $createdBy;
 
         return $this;
     }
 
     /**
-     * Get the is attachments enabled
+     * Get the created by
      *
-     * @return boolean
+     * @return \Dvsa\Olcs\Api\Entity\User\User
      */
-    public function getIsAttachmentsEnabled()
+    public function getCreatedBy()
     {
-        return $this->isAttachmentsEnabled;
-    }
-
-    /**
-     * Set the is closed
-     *
-     * @param boolean $isClosed new value being set
-     *
-     * @return MessagingConversation
-     */
-    public function setIsClosed($isClosed)
-    {
-        $this->isClosed = $isClosed;
-
-        return $this;
-    }
-
-    /**
-     * Get the is closed
-     *
-     * @return boolean
-     */
-    public function getIsClosed()
-    {
-        return $this->isClosed;
+        return $this->createdBy;
     }
 
     /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return MessagingConversation
      */
@@ -279,37 +248,6 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the last read at
-     *
-     * @param \DateTime $lastReadAt new value being set
-     *
-     * @return MessagingConversation
-     */
-    public function setLastReadAt($lastReadAt)
-    {
-        $this->lastReadAt = $lastReadAt;
-
-        return $this;
-    }
-
-    /**
-     * Get the last read at
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getLastReadAt($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->lastReadAt);
-        }
-
-        return $this->lastReadAt;
     }
 
     /**
@@ -337,27 +275,105 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     }
 
     /**
-     * Set the task
+     * Set the is attachments enabled
      *
-     * @param \Dvsa\Olcs\Api\Entity\Task\Task $task entity being set as the value
+     * @param bool $isAttachmentsEnabled new value being set
      *
      * @return MessagingConversation
      */
-    public function setTask($task)
+    public function setIsAttachmentsEnabled($isAttachmentsEnabled)
     {
-        $this->task = $task;
+        $this->isAttachmentsEnabled = $isAttachmentsEnabled;
 
         return $this;
     }
 
     /**
-     * Get the task
+     * Get the is attachments enabled
      *
-     * @return \Dvsa\Olcs\Api\Entity\Task\Task
+     * @return bool
      */
-    public function getTask()
+    public function getIsAttachmentsEnabled()
     {
-        return $this->task;
+        return $this->isAttachmentsEnabled;
+    }
+
+    /**
+     * Set the last read at
+     *
+     * @param \DateTime $lastReadAt new value being set
+     *
+     * @return MessagingConversation
+     */
+    public function setLastReadAt($lastReadAt)
+    {
+        $this->lastReadAt = $lastReadAt;
+
+        return $this;
+    }
+
+    /**
+     * Get the last read at
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
+     */
+    public function getLastReadAt($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->lastReadAt);
+        }
+
+        return $this->lastReadAt;
+    }
+
+    /**
+     * Set the is closed
+     *
+     * @param bool $isClosed new value being set
+     *
+     * @return MessagingConversation
+     */
+    public function setIsClosed($isClosed)
+    {
+        $this->isClosed = $isClosed;
+
+        return $this;
+    }
+
+    /**
+     * Get the is closed
+     *
+     * @return bool
+     */
+    public function getIsClosed()
+    {
+        return $this->isClosed;
+    }
+
+    /**
+     * Set the is archived
+     *
+     * @param bool $isArchived new value being set
+     *
+     * @return MessagingConversation
+     */
+    public function setIsArchived($isArchived)
+    {
+        $this->isArchived = $isArchived;
+
+        return $this;
+    }
+
+    /**
+     * Get the is archived
+     *
+     * @return bool
+     */
+    public function getIsArchived()
+    {
+        return $this->isArchived;
     }
 
     /**
@@ -382,5 +398,14 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

@@ -32,6 +32,7 @@ class FinancialEvidence extends AbstractQueryHandler
      */
     protected $helper;
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $applicationRepo = $this->getRepo();
@@ -117,6 +118,7 @@ class FinancialEvidence extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

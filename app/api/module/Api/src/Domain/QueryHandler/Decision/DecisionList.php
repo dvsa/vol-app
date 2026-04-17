@@ -14,6 +14,7 @@ final class DecisionList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Decision';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var DecisionRepo $repo */

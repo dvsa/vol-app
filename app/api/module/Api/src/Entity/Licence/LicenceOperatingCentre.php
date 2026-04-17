@@ -53,6 +53,7 @@ class LicenceOperatingCentre extends AbstractLicenceOperatingCentre implements O
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         return $this->getLicence()->getRelatedOrganisation();

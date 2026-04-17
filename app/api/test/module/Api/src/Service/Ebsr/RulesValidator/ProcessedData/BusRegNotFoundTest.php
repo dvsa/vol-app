@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator\ProcessedData;
 
 use Dvsa\Olcs\Api\Entity\Bus\BusReg as BusRegEntity;
@@ -16,13 +18,13 @@ class BusRegNotFoundTest extends MockeryTestCase
     /**
      * tests whether a bus reg has been found
      *
-     * @dataProvider isValidProvider
      *
      * @param string $txcAppType
      * @param BusRegEntity|null $busReg
      * @param bool $valid
      */
-    public function testIsValid($txcAppType, $busReg, $valid)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
+    public function testIsValid(mixed $txcAppType, mixed $busReg, mixed $valid): void
     {
         $sut = new BusRegNotFound();
 
@@ -41,7 +43,7 @@ class BusRegNotFoundTest extends MockeryTestCase
      *
      * @return array
      */
-    public function isValidProvider()
+    public static function isValidProvider(): array
     {
         $busMock = m::mock(BusRegEntity::class);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Tm;
 
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
@@ -31,7 +33,7 @@ class TransportManagerEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    protected function getRefData($id)
+    protected function getRefData(mixed $id): mixed
     {
         $refData = new RefData();
         $refData->setId($id);
@@ -39,7 +41,7 @@ class TransportManagerEntityTest extends EntityTester
         return $refData;
     }
 
-    public function testUpdatePerson()
+    public function testUpdatePerson(): void
     {
         $entity = new Entity();
 
@@ -51,7 +53,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertEquals(2, $entity->getHomeCd());
     }
 
-    public function testGetAssociatedOrganisationsRemoveDuplicates()
+    public function testGetAssociatedOrganisationsRemoveDuplicates(): void
     {
         $entity = new Entity();
 
@@ -92,7 +94,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame([101 => $org1, 102 => $org2, 103 => $org3], $associatedOrgs);
     }
 
-    public function testGetAssociatedLicenceStatuses()
+    public function testGetAssociatedLicenceStatuses(): void
     {
         $entity = new Entity();
 
@@ -122,7 +124,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame([101 => $org1, 102 => $org2, 103 => $org3], $associatedOrgs);
     }
 
-    public function testGetAssociatedApplicationStatuses()
+    public function testGetAssociatedApplicationStatuses(): void
     {
         $entity = new Entity();
 
@@ -161,7 +163,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame([101 => $org1, 102 => $org2], $associatedOrgs);
     }
 
-    public function testGetAssociatedApplicationVariations()
+    public function testGetAssociatedApplicationVariations(): void
     {
         $entity = new Entity();
 
@@ -200,7 +202,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame([101 => $org1], $associatedOrgs);
     }
 
-    public function testGetTotAuthVehicles()
+    public function testGetTotAuthVehicles(): void
     {
         $entity = new Entity();
 
@@ -247,10 +249,8 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame(12, $total);
     }
 
-    /**
-     * @dataProvider dpTestHasValidSiGbQualification
-     */
-    public function testHasValidSiGbQualification($expected, array $qualificationTypes)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHasValidSiGbQualification')]
+    public function testHasValidSiGbQualification(mixed $expected, array $qualificationTypes): void
     {
         $entity = new Entity();
 
@@ -263,7 +263,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame($expected, $entity->hasValidSiGbQualification());
     }
 
-    public function dpTestHasValidSiGbQualification()
+    public static function dpTestHasValidSiGbQualification(): array
     {
         return [
             [false, []],
@@ -275,10 +275,8 @@ class TransportManagerEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestHasValidSiNiQualification
-     */
-    public function testHasValidSiNiQualification($expected, array $qualificationTypes)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHasValidSiNiQualification')]
+    public function testHasValidSiNiQualification(mixed $expected, array $qualificationTypes): void
     {
         $entity = new Entity();
 
@@ -291,7 +289,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame($expected, $entity->hasValidSiNiQualification());
     }
 
-    public function dpTestHasValidSiNiQualification()
+    public static function dpTestHasValidSiNiQualification(): array
     {
         return [
             [false, []],
@@ -303,10 +301,8 @@ class TransportManagerEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetLgvAcquiredRightsQualificationReturnsNull
-     */
-    public function testGetLgvAcquiredRightsQualificationReturnsNull(array $qualificationTypes)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetLgvAcquiredRightsQualificationReturnsNull')]
+    public function testGetLgvAcquiredRightsQualificationReturnsNull(array $qualificationTypes): void
     {
         $entity = new Entity();
 
@@ -319,7 +315,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertNull($entity->getLgvAcquiredRightsQualification());
     }
 
-    public function dpGetLgvAcquiredRightsQualificationReturnsNull()
+    public static function dpGetLgvAcquiredRightsQualificationReturnsNull(): array
     {
         return [
             [[]],
@@ -327,10 +323,8 @@ class TransportManagerEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetLgvAcquiredRightsQualificationReturnsTmQualification
-     */
-    public function testGetLgvAcquiredRightsQualificationReturnsTmQualification($expected, array $qualificationTypes)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetLgvAcquiredRightsQualificationReturnsTmQualification')]
+    public function testGetLgvAcquiredRightsQualificationReturnsTmQualification(mixed $expected, array $qualificationTypes): void
     {
         $entity = new Entity();
 
@@ -346,7 +340,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertEquals($expected, $lgvAcquiredRightsQualification->getQualificationType()->getId());
     }
 
-    public function dpGetLgvAcquiredRightsQualificationReturnsTmQualification()
+    public static function dpGetLgvAcquiredRightsQualificationReturnsTmQualification(): array
     {
         return [
             [
@@ -360,10 +354,8 @@ class TransportManagerEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpHasLgvAcquiredRightsQualification
-     */
-    public function testHasLgvAcquiredRightsQualification($expected, array $qualificationTypes)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasLgvAcquiredRightsQualification')]
+    public function testHasLgvAcquiredRightsQualification(mixed $expected, array $qualificationTypes): void
     {
         $entity = new Entity();
 
@@ -376,7 +368,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame($expected, $entity->hasLgvAcquiredRightsQualification());
     }
 
-    public function dpHasLgvAcquiredRightsQualification()
+    public static function dpHasLgvAcquiredRightsQualification(): array
     {
         return [
             [false, []],
@@ -386,10 +378,8 @@ class TransportManagerEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpNiFlag
-     */
-    public function testIsSiQualificationRequiredNotSi($niFlag)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpNiFlag')]
+    public function testIsSiQualificationRequiredNotSi(mixed $niFlag): void
     {
         $entity = new Entity();
 
@@ -421,10 +411,8 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame(false, $entity->isSiQualificationRequired($niFlag));
     }
 
-    /**
-     * @dataProvider dpNiFlag
-     */
-    public function testIsSiQualificationRequiredAppSi($niFlag)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpNiFlag')]
+    public function testIsSiQualificationRequiredAppSi(mixed $niFlag): void
     {
         $entity = new Entity();
 
@@ -456,10 +444,8 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame($niFlag === 'N', $entity->isSiQualificationRequired($niFlag));
     }
 
-    /**
-     * @dataProvider dpNiFlag
-     */
-    public function testIsSiQualificationRequiredLic($niFlag)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpNiFlag')]
+    public function testIsSiQualificationRequiredLic(mixed $niFlag): void
     {
         $entity = new Entity();
 
@@ -491,10 +477,8 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame($niFlag === 'N', $entity->isSiQualificationRequired($niFlag));
     }
 
-    /**
-     * @dataProvider dpNiFlag
-     */
-    public function testIsSiQualificationRequiredGbSi($niFlag)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpNiFlag')]
+    public function testIsSiQualificationRequiredGbSi(mixed $niFlag): void
     {
         $entity = new Entity();
 
@@ -526,7 +510,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame($niFlag === 'N', $entity->isSiQualificationRequired($niFlag));
     }
 
-    public function dpNiFlag()
+    public static function dpNiFlag(): array
     {
         return [
             ['N'],
@@ -534,7 +518,7 @@ class TransportManagerEntityTest extends EntityTester
         ];
     }
 
-    public function testIsDetachedCases()
+    public function testIsDetachedCases(): void
     {
         $entity = new Entity();
         $entity->setCases([1,2,3]);
@@ -542,7 +526,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertFalse($entity->isDetached());
     }
 
-    public function testIsDetachedLicences()
+    public function testIsDetachedLicences(): void
     {
         $org1 = new Organisation();
         $lic1 = new Licence($org1, $this->getRefData(Licence::LICENCE_STATUS_VALID));
@@ -557,7 +541,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertFalse($entity->isDetached());
     }
 
-    public function testGetCalculatedBundleValues()
+    public function testGetCalculatedBundleValues(): void
     {
         $entity = new Entity();
 
@@ -577,7 +561,7 @@ class TransportManagerEntityTest extends EntityTester
         );
     }
 
-    public function testGetContextValue()
+    public function testGetContextValue(): void
     {
         $entity = new Entity();
         $entity->setId(111);
@@ -585,10 +569,8 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertEquals(111, $entity->getContextValue());
     }
 
-    /**
-     * @dataProvider dpNiFlag
-     */
-    public function testIsSiQualificationRequiredOnVariation($niFlag)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpNiFlag')]
+    public function testIsSiQualificationRequiredOnVariation(mixed $niFlag): void
     {
         $entity = new Entity();
 
@@ -629,21 +611,15 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame($niFlag === 'N', $entity->isSiQualificationRequiredOnVariation($niFlag));
     }
 
-    /**
-     * @dataProvider dpHasReputeCheckDataProvider
-     *
-     * @param string|null $forename
-     * @param string|null $familyName
-     * @param \DateTime|null $birthDate
-     * @param string|null $birthPlace
-     * @param ArrayCollection|null $qualifications
-     * @param bool $result
-     */
-    public function testHasReputeCheckData($forename, $familyName, $birthDate, $birthPlace, $qualifications, $result)
-    {
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasReputeCheckDataProvider')]
+    public function testHasReputeCheckAddress(
+        ?string $forename,
+        ?string $familyName,
+        ?\DateTime $birthDate,
+        ?string $birthPlace,
+        bool $result
+    ): void {
         $entity = new Entity();
-
-        $entity->setQualifications($qualifications);
 
         $person = new Person();
         $person->setForename($forename);
@@ -656,34 +632,47 @@ class TransportManagerEntityTest extends EntityTester
 
         $entity->setHomeCd($contactDetails);
 
-        $this->assertEquals($result, $entity->hasReputeCheckData());
+        $this->assertEquals($result, $entity->hasReputeCheckAddress());
+    }
+
+    public function testHasQualificationsTrue(): void
+    {
+        $entity = new Entity();
+
+        $qualification = m::mock(TmQualification::class);
+        $qualificationCollection = new ArrayCollection([$qualification]);
+
+        $entity->setQualifications($qualificationCollection);
+        $this->assertTrue($entity->hasQualifications());
+    }
+
+    public function testHasQualificationsFalse(): void
+    {
+        $entity = new Entity();
+        $entity->setQualifications(new ArrayCollection());
+        $this->assertFalse($entity->hasQualifications());
     }
 
     /**
-     * Data provider for testHasReputeCheckData
-     *
-     * @return array
+     * Data provider for testHasReputeCheckAddress
      */
-    public function dpHasReputeCheckDataProvider()
+    public static function dpHasReputeCheckDataProvider(): array
     {
         $forename = 'forename';
         $familyName = 'family name';
         $birthDate = new \DateTime('2015-12-25');
         $birthPlace = 'birth place';
-        $qualification = m::mock(TmQualification::class);
-        $qualifications = new ArrayCollection([$qualification]);
 
         return [
-            [null, $familyName, $birthDate, $birthPlace, $qualifications, false],
-            [$forename, null, $birthDate, $birthPlace, $qualifications, false],
-            [$forename, $familyName, null, $birthPlace, $qualifications, false],
-            [$forename, $familyName, $birthDate, null, $qualifications, false],
-            [$forename, $familyName, $birthDate, $birthPlace, new ArrayCollection(), false],
-            [$forename, $familyName, $birthDate, $birthPlace, $qualifications, true]
+            [null, $familyName, $birthDate, $birthPlace, false],
+            [$forename, null, $birthDate, $birthPlace, false],
+            [$forename, $familyName, null, $birthPlace, false],
+            [$forename, $familyName, $birthDate, null, false],
+            [$forename, $familyName, $birthDate, $birthPlace, true]
         ];
     }
 
-    public function testGetMostRecentQualification()
+    public function testGetMostRecentQualification(): void
     {
         $qual1 = new TmQualification();
         $qual1->setIssuedDate(new \DateTime('2015-12-25 00:00:00'));
@@ -707,6 +696,6 @@ class TransportManagerEntityTest extends EntityTester
         $entity = new Entity();
         $entity->setQualifications($qualifications);
 
-        $this->assertEquals(new ArrayCollection([$qual3]), $entity->getMostRecentQualification());
+        $this->assertEquals($qual3, $entity->getMostRecentQualification()->first());
     }
 }

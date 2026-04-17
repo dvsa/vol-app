@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Event;
 
 use Olcs\Event\RouteParam;
@@ -10,7 +12,7 @@ use Olcs\Event\RouteParam;
  */
 class RouteParamTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetSetValue()
+    public function testGetSetValue(): void
     {
         $sut = new RouteParam();
         $this->assertNull($sut->getValue());
@@ -19,7 +21,7 @@ class RouteParamTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test', $sut->getValue());
     }
 
-    public function testGetSetContext()
+    public function testGetSetContext(): void
     {
         $sut = new RouteParam();
         $this->assertNull($sut->getContext());

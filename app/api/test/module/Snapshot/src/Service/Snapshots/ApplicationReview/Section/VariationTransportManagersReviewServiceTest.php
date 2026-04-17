@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Variation Transport Managers Review Service Test
  *
@@ -44,7 +46,7 @@ class VariationTransportManagersReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetConfigFromDataOneOfEach()
+    public function testGetConfigFromDataOneOfEach(): void
     {
         $tm1 = [
             'action' => 'A',
@@ -84,15 +86,19 @@ class VariationTransportManagersReviewServiceTest extends MockeryTestCase
             ]
         ];
 
+        $tm1Expected = $tm1 + ['noTmConfirmation' => null];
+
         $this->mockTm->shouldReceive('getConfigFromData')
             ->once()
-            ->with([$tm1])
-            ->andReturn(['foo' => 'bar'])
-            ->shouldReceive('getConfigFromData')
+            ->with([$tm1Expected])
+            ->andReturn(['foo' => 'bar']);
+
+        $this->mockTm->shouldReceive('getConfigFromData')
             ->once()
             ->with([$tm2])
-            ->andReturn(['foo' => 'bar'])
-            ->shouldReceive('getConfigFromData')
+            ->andReturn(['foo' => 'bar']);
+
+        $this->mockTm->shouldReceive('getConfigFromData')
             ->once()
             ->with([$tm3])
             ->andReturn(['foo' => 'bar']);
@@ -100,7 +106,7 @@ class VariationTransportManagersReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function testGetConfigFromDataMultipleAndNone()
+    public function testGetConfigFromDataMultipleAndNone(): void
     {
         $tm1 = [
             'action' => 'A',
@@ -136,11 +142,15 @@ class VariationTransportManagersReviewServiceTest extends MockeryTestCase
             ]
         ];
 
+        $tm1Expected = $tm1 + ['noTmConfirmation' => null];
+        $tm2Expected = $tm2 + ['noTmConfirmation' => null];
+
         $this->mockTm->shouldReceive('getConfigFromData')
             ->once()
-            ->with([$tm1, $tm2])
-            ->andReturn(['foo' => 'bar'])
-            ->shouldReceive('getConfigFromData')
+            ->with([$tm1Expected, $tm2Expected])
+            ->andReturn(['foo' => 'bar']);
+
+        $this->mockTm->shouldReceive('getConfigFromData')
             ->once()
             ->with([$tm3])
             ->andReturn(['foo' => 'bar']);

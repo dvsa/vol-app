@@ -20,6 +20,7 @@ class RefundInterimFeesFactory implements FactoryInterface
      * @param array|null $options
      * @return RefundInterimFees
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): RefundInterimFees
     {
         return new RefundInterimFees(

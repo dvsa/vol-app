@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Resolve Payment Test
  *
@@ -18,7 +20,7 @@ use Dvsa\Olcs\Api\Entity\Fee\Fee as FeeEntity;
  */
 class ResolvePaymentTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $data = [
             'id' => 99,

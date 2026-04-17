@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Traits;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class ClearPropertiesTraitTest extends MockeryTestCase
 {
-    public function testClearProperties()
+    public function testClearProperties(): void
     {
         $entity = new StubClearPropertiesTrait();
 

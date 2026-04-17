@@ -63,6 +63,7 @@ class HearingController extends AbstractInternalController implements CaseContro
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -76,6 +77,7 @@ class HearingController extends AbstractInternalController implements CaseContro
      *
      * @return ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $pi = $this->getPi();
@@ -99,6 +101,7 @@ class HearingController extends AbstractInternalController implements CaseContro
      *
      * @return ViewModel|\Laminas\Http\Response
      */
+    #[\Override]
     public function addAction()
     {
         $pi = $this->getPi();
@@ -268,7 +271,7 @@ class HearingController extends AbstractInternalController implements CaseContro
         if (empty($date)) {
             $hint = 'There was no target date found';
         } else {
-            $hint = 'Target date: ' . date('d/m/Y', strtotime($date));
+            $hint = 'Target date: ' . date('d/m/Y', strtotime((string) $date));
         }
 
         $element = $form->get('fields')->get('hearingDate');

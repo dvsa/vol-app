@@ -27,6 +27,7 @@ class LicencePsvVehicles extends PsvVehicles
      *
      * @return Form
      */
+    #[\Override]
     protected function alterForm($form)
     {
         parent::alterForm($form);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Can Access Licence With Licence Test
  *
@@ -32,10 +34,8 @@ class CanAccessLicenceWithLicenceTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValid($canAccess, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $canAccess, mixed $expected): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -46,7 +46,7 @@ class CanAccessLicenceWithLicenceTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [true, true],

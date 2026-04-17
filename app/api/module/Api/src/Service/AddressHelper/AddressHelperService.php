@@ -56,7 +56,7 @@ class AddressHelperService
 
         try {
             return $this->adminAreaTrafficAreaRepository->fetchById($adminArea)->getTrafficArea();
-        } catch (NotFoundException $e) {
+        } catch (NotFoundException) {
             return null;
         }
     }

@@ -22,6 +22,7 @@ class GenericAnswerSaver implements AnswerSaverInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function save(QaContext $qaContext, array $postData)
     {
         $this->baseAnswerSaver->save($qaContext, $postData);

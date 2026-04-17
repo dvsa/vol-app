@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Result Test
  *
@@ -24,7 +26,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $this->sut = new Result();
     }
 
-    public function testResultId()
+    public function testResultId(): void
     {
         $this->sut->addId('application', 111);
         $this->sut->addId('licence', 333);
@@ -36,7 +38,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['application' => 222, 'licence' => 333], $this->sut->getIds());
     }
 
-    public function testResultIdMultiple()
+    public function testResultIdMultiple(): void
     {
         $this->sut->addId('application', 111);
         $this->sut->addId('licence', 333);
@@ -48,7 +50,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['application' => [111, 222], 'licence' => 333], $this->sut->getIds());
     }
 
-    public function testResultMessage()
+    public function testResultMessage(): void
     {
         $this->sut->addMessage('foo');
         $this->sut->addMessage('bar');
@@ -56,7 +58,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['foo', 'bar'], $this->sut->getMessages());
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         $this->sut->addId('foo', 111);
         $this->sut->addId('bar', 222);
@@ -75,7 +77,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->sut->toArray());
     }
 
-    public function testMerge()
+    public function testMerge(): void
     {
         $this->sut->addId('foo', 111);
         $this->sut->addId('bar', 222);
@@ -99,7 +101,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->sut->toArray());
     }
 
-    public function testMergeRecursive()
+    public function testMergeRecursive(): void
     {
         $this->sut->addId('foo', 111);
         $this->sut->addId('bar', 222);

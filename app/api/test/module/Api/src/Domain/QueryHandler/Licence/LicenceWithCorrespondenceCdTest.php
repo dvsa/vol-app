@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Licence;
 
 use Mockery as m;
@@ -17,7 +19,7 @@ class LicenceWithCorrespondenceCdTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
 
         $queryData = ['id' => 1];

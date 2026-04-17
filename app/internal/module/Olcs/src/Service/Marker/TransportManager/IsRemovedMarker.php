@@ -9,6 +9,7 @@ namespace Olcs\Service\Marker\TransportManager;
  */
 class IsRemovedMarker extends \Olcs\Service\Marker\AbstractMarker
 {
+    #[\Override]
     public function canRender()
     {
         $data = $this->getData();
@@ -20,6 +21,7 @@ class IsRemovedMarker extends \Olcs\Service\Marker\AbstractMarker
         return !is_null($data['transportManager']['removedDate']);
     }
 
+    #[\Override]
     public function render()
     {
         $data = $this->getData();

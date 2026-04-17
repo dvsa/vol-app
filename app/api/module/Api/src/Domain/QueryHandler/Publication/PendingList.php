@@ -16,6 +16,7 @@ final class PendingList extends AbstractQueryHandler
 
     protected $repoServiceName = 'Publication';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /**

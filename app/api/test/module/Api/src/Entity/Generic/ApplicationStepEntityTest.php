@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Generic;
 
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
@@ -21,7 +23,7 @@ class ApplicationStepEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testGetNextStepSlug()
+    public function testGetNextStepSlug(): void
     {
         $nextStepSlug = 'number-of-permits';
 
@@ -48,7 +50,7 @@ class ApplicationStepEntityTest extends EntityTester
         );
     }
 
-    public function testGetNextStepSlugCheckAnswers()
+    public function testGetNextStepSlugCheckAnswers(): void
     {
         $previousApplicationStep = m::mock(Entity::class)->makePartial();
 
@@ -68,7 +70,7 @@ class ApplicationStepEntityTest extends EntityTester
         );
     }
 
-    public function testGetPreviousStepSlug()
+    public function testGetPreviousStepSlug(): void
     {
         $previousStepSlug = 'previous-slug';
 
@@ -89,7 +91,7 @@ class ApplicationStepEntityTest extends EntityTester
         );
     }
 
-    public function testGetPreviousStepSlugNull()
+    public function testGetPreviousStepSlugNull(): void
     {
         $currentApplicationStep = m::mock(Entity::class)->makePartial();
 
@@ -102,7 +104,7 @@ class ApplicationStepEntityTest extends EntityTester
         );
     }
 
-    public function testGetPreviousApplicationStep()
+    public function testGetPreviousApplicationStep(): void
     {
         $previousApplicationStep = m::mock(Entity::class)->makePartial();
 
@@ -125,7 +127,7 @@ class ApplicationStepEntityTest extends EntityTester
         );
     }
 
-    public function testGetPreviousApplicationStepNotFound()
+    public function testGetPreviousApplicationStepNotFound(): void
     {
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage('No previous application step found');
@@ -145,7 +147,7 @@ class ApplicationStepEntityTest extends EntityTester
         $currentApplicationStep->getPreviousApplicationStep();
     }
 
-    public function testGetFieldsetName()
+    public function testGetFieldsetName(): void
     {
         $applicationStep = m::mock(Entity::class)->makePartial();
         $applicationStep->setId(345);
@@ -156,7 +158,7 @@ class ApplicationStepEntityTest extends EntityTester
         );
     }
 
-    public function testGetDecodedOptionSource()
+    public function testGetDecodedOptionSource(): void
     {
         $decodedOptionSource = [
             'option1' => 'value1',

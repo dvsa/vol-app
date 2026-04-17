@@ -18,6 +18,7 @@ final class GrantCancelText3 implements ProcessInterface
      * @param ImmutableArrayObject $context
      * @return PublicationLink
      */
+    #[\Override]
     public function process(PublicationLink $publication, ImmutableArrayObject $context)
     {
         $busReg = $publication->getBusReg();

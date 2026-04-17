@@ -40,6 +40,7 @@ class TcSignature extends ImageBookmark
         TA::NORTHERN_IRELAND_TRAFFIC_AREA_CODE => 'NORTHERNIRELAND'
     ];
 
+    #[\Override]
     public function getQuery(array $data)
     {
         $bundle = [
@@ -49,6 +50,7 @@ class TcSignature extends ImageBookmark
         return Qry::create(['id' => $data['licence'], 'bundle' => $bundle]);
     }
 
+    #[\Override]
     public function render()
     {
         $key = $this->data['trafficArea']['id'];

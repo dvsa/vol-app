@@ -36,6 +36,7 @@ class Replace extends AbstractCommandHandler implements TransactionedInterface
      * @throws NotFoundException
      * @throws ValidationException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         // Retrieve old permit and verify that it is in a valid state to replace

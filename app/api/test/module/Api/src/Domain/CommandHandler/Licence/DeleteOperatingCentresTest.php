@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Licence;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,9 +15,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler;
 use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Licence\DeleteOperatingCentres
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Licence\DeleteOperatingCentres::class)]
 class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
 {
     /** @var CommandHandler\Application\DeleteOperatingCentres  */
@@ -34,7 +34,8 @@ class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -50,7 +51,7 @@ class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'licence' => 111,
@@ -111,7 +112,7 @@ class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandCannotDelete()
+    public function testHandleCommandCannotDelete(): void
     {
         $data = [
             'licence' => 111,

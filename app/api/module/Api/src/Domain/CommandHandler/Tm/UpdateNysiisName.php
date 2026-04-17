@@ -37,12 +37,14 @@ final class UpdateNysiisName extends AbstractCommandHandler implements AuthAware
      * @return Result
      * @throws NysiisException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->result->addMessage('TM NYSIIS currently disabled');
         return $this->result;
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

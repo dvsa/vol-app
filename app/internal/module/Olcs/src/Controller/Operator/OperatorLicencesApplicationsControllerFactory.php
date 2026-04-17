@@ -13,6 +13,7 @@ use Olcs\Service\Data\ApplicationStatus;
 
 class OperatorLicencesApplicationsControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OperatorLicencesApplicationsController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

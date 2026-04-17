@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\UserAccess;
@@ -9,7 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 class UserAccessTest extends MockeryTestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new UserAccess();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -17,7 +19,7 @@ class UserAccessTest extends MockeryTestCase
         $this->assertInstanceOf(QueryInterface::class, $query);
     }
 
-    public function testRenderWithNoUsers()
+    public function testRenderWithNoUsers(): void
     {
         $bookmark = new UserAccess();
         $bookmark->setData([]);
@@ -28,7 +30,7 @@ class UserAccessTest extends MockeryTestCase
         );
     }
 
-    public function testRenderWithUsers()
+    public function testRenderWithUsers(): void
     {
         $mockTranslator = m::mock()
             ->shouldReceive('translate')
@@ -218,12 +220,12 @@ class UserAccessTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider selfServeMessageDataProvider
      *
      * @param $isAdministrator
      * @param $expectedMessage
      */
-    public function testSelfServeMessage($isAdministrator, $expectedMessage)
+    #[\PHPUnit\Framework\Attributes\DataProvider('selfServeMessageDataProvider')]
+    public function testSelfServeMessage(mixed $isAdministrator, mixed $expectedMessage): void
     {
         $bookmark = m::mock(UserAccess::class)
             ->makePartial()
@@ -266,7 +268,7 @@ class UserAccessTest extends MockeryTestCase
         $this->assertEquals('replacedstring', $bookmark->render());
     }
 
-    public function selfServeMessageDataProvider()
+    public static function selfServeMessageDataProvider(): array
     {
         return [
             [

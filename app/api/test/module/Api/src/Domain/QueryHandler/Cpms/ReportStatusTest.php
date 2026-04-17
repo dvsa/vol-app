@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Cpms Report Status Query Handler Test
  *
@@ -37,7 +39,7 @@ class ReportStatusTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuerySuccess()
+    public function testHandleQuerySuccess(): void
     {
         $reference = 'OLCS-1234-ABCD';
         $query = Qry::create(['reference' => $reference]);
@@ -79,7 +81,7 @@ class ReportStatusTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testHandleQueryNotFound()
+    public function testHandleQueryNotFound(): void
     {
         $reference = 'OLCS-1234-INVALID';
         $query = Qry::create(['reference' => $reference]);
@@ -96,7 +98,7 @@ class ReportStatusTest extends QueryHandlerTestCase
         $this->sut->handleQuery($query);
     }
 
-    public function testHandleQueryNotReady()
+    public function testHandleQueryNotReady(): void
     {
         $reference = 'OLCS-1234-INVALID';
         $query = Qry::create(['reference' => $reference]);

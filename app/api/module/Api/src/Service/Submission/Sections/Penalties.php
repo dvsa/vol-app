@@ -22,6 +22,7 @@ final class Penalties extends AbstractSection
      *
      * @return array
      */
+    #[\Override]
     public function generateSection(CasesEntity $case)
     {
         $tables['applied-penalties'] = [];

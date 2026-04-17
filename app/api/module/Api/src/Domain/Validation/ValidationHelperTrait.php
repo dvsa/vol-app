@@ -45,6 +45,7 @@ use Dvsa\Olcs\Api\Domain\ValidatorManager;
  * @method bool canAccessLicenceVehicle($entityId)
  * @method bool canAccessCorrespondenceInbox($entityId)
  * @method bool canAccessDocument($entityId)
+ * @method bool canDeleteDocument($entityId)
  * @method bool canAccessSubmission($entityId)
  * @method bool canAccessCase($entityId)
  * @method bool canAccessTransportManager($entityId)

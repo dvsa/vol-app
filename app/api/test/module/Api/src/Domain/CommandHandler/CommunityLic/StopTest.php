@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Stop Test
  *
@@ -47,7 +49,8 @@ class StopTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             CommunityLicEntity::STATUS_ACTIVE,
@@ -72,10 +75,8 @@ class StopTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
-    public function testHandleCommandSuspension($startDate, $message)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
+    public function testHandleCommandSuspension(mixed $startDate, mixed $message): void
     {
         $licenceId = 1;
         $communityLicenceIds = [10];
@@ -186,7 +187,7 @@ class StopTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('reason', $communityLicSuspensionReason->getType()->getId());
     }
 
-    public function dataProvider()
+    public static function dataProvider(): array
     {
         return [
             [(new \DateTime())->format('Y-m-d'), 'The licence 10 have been suspended'],
@@ -194,7 +195,7 @@ class StopTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandSuspensionWithApplication()
+    public function testHandleCommandSuspensionWithApplication(): void
     {
         $licenceId = 1;
         $communityLicenceIds = [10];
@@ -317,7 +318,7 @@ class StopTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('reason', $communityLicSuspensionReason->getType()->getId());
     }
 
-    public function testHandleCommandWithdrawal()
+    public function testHandleCommandWithdrawal(): void
     {
         $licenceId = 1;
         $communityLicenceIds = [10];
@@ -411,7 +412,7 @@ class StopTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('reason', $communityLicWithdrawalReason->getType()->getId());
     }
 
-    public function testCommandHandlerWithException()
+    public function testCommandHandlerWithException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -466,7 +467,7 @@ class StopTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testCommandHandlerWithExceptionAlternative()
+    public function testCommandHandlerWithExceptionAlternative(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

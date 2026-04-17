@@ -86,8 +86,8 @@ class EntityCloner
         $propertiesToCopy = array_diff_key($matchingProperties, array_flip($ignoredProperties));
 
         foreach ($propertiesToCopy as $name => $value) {
-            $getter = 'get' . ucfirst($name);
-            $setter = 'set' . ucfirst($name);
+            $getter = 'get' . ucfirst((string) $name);
+            $setter = 'set' . ucfirst((string) $name);
 
             $targetEntity->$setter($sourceEntity->$getter());
         }

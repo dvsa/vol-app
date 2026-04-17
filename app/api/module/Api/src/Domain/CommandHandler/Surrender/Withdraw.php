@@ -26,6 +26,7 @@ class Withdraw extends AbstractSurrenderCommandHandler
      * @return Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->licenceId = $command->getId();

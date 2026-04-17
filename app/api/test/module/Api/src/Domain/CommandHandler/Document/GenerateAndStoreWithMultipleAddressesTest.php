@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Document;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -24,6 +26,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Document\GenerateAndStoreWithMultipleAdd
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class GenerateAndStoreWithMultipleAddressesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
@@ -43,7 +46,7 @@ class GenerateAndStoreWithMultipleAddressesTest extends AbstractCommandHandlerTe
     /**
      * testHandleCommand
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
 
         $mockCommand = m::mock(Cmd::class);
@@ -61,14 +64,14 @@ class GenerateAndStoreWithMultipleAddressesTest extends AbstractCommandHandlerTe
         $this->sut->handleCommand($mockCommand);
     }
 
-    protected function getAddresses()
+    protected function getAddresses(): mixed
     {
         $addresses = [];
         $addresses['correspondenceAddress'] = $this->addressProvider('correspondenceAddress')['correspondenceAddress'];
         return $addresses;
     }
 
-    public function testEmptyAddress()
+    public function testEmptyAddress(): void
     {
 
         $mockCommand = m::mock(Cmd::class);
@@ -93,10 +96,8 @@ class GenerateAndStoreWithMultipleAddressesTest extends AbstractCommandHandlerTe
         $this->sut->handleCommand($mockCommand);
     }
 
-    /**
-     * @dataProvider insolvencyPractitioners
-     */
-    public function testInsolvencyPractitioner($practitioners, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('insolvencyPractitioners')]
+    public function testInsolvencyPractitioner(mixed $practitioners, mixed $expected): void
     {
         $mockCommand = m::mock(Cmd::class);
         $mockCommand->shouldReceive('getGenerateCommandData')->andReturn(
@@ -145,7 +146,7 @@ class GenerateAndStoreWithMultipleAddressesTest extends AbstractCommandHandlerTe
         $this->sut->handleCommand($mockCommand);
     }
 
-    protected function addressProvider($addressType, $skipCorrespondence = false)
+    protected function addressProvider(mixed $addressType, bool $skipCorrespondence = false): array
     {
 
         if ($addressType === 'operatingCentresAddresses') {
@@ -181,7 +182,7 @@ class GenerateAndStoreWithMultipleAddressesTest extends AbstractCommandHandlerTe
      *
      * @param $mockLicence
      */
-    protected function setUpMockLicence($mockLicence, $noCorrespondanceAddress = false): void
+    protected function setUpMockLicence(mixed $mockLicence, bool $noCorrespondanceAddress = false): void
     {
         $this->repoMap['Licence']->shouldReceive('fetchWithAddressesUsingId')->andReturn(
             $mockLicence->shouldReceive('getCorrespondenceCd')->andReturn(
@@ -223,7 +224,7 @@ class GenerateAndStoreWithMultipleAddressesTest extends AbstractCommandHandlerTe
      *
      * @param $mockCommand
      */
-    private function setUpMockCommand($mockCommand): void
+    private function setUpMockCommand(mixed $mockCommand): void
     {
         $mockCommand->shouldReceive('getGenerateCommandData')->andReturn(
             [
@@ -239,7 +240,7 @@ class GenerateAndStoreWithMultipleAddressesTest extends AbstractCommandHandlerTe
             ->shouldReceive('getSendToAddresses')->andReturn($this->getAddresses());
     }
 
-    public function insolvencyPractitioners(): array
+    public static function insolvencyPractitioners(): array
     {
         return [
             'One practitioner' => [

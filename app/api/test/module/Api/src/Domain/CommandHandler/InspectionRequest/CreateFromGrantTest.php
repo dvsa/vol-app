@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Inspection Request / CreateFromGrant
  *
@@ -47,7 +49,8 @@ class CreateFromGrantTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             InspectionRequestEntity::REQUEST_TYPE_NEW_OP,
@@ -70,7 +73,7 @@ class CreateFromGrantTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->mockAuthService();
 
@@ -109,7 +112,7 @@ class CreateFromGrantTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    protected function mockAuthService()
+    protected function mockAuthService(): void
     {
         /** @var Team $mockTeam */
         $mockTeam = m::mock(Team::class)->makePartial();
@@ -124,7 +127,7 @@ class CreateFromGrantTest extends AbstractCommandHandlerTestCase
             ->andReturn($mockUser);
     }
 
-    public function testNIEmailsNotSent()
+    public function testNIEmailsNotSent(): void
     {
         $licenceId = 1;
         $applicationId = 2;
@@ -187,7 +190,7 @@ class CreateFromGrantTest extends AbstractCommandHandlerTestCase
      *
      * @return Cmd
      */
-    private function setUpMocks($data, $ocId, $licenceId, $enforcementArea, $applicationId): Cmd
+    private function setUpMocks(mixed $data, mixed $ocId, mixed $licenceId, mixed $enforcementArea, mixed $applicationId): Cmd
     {
         $command = Cmd::create($data);
 

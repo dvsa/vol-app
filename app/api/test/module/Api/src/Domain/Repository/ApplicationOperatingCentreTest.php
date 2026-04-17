@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ApplicationOperatingCentreTest
  *
@@ -28,7 +30,7 @@ class ApplicationOperatingCentreTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchByApplication()
+    public function testFetchByApplication(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
 
@@ -48,7 +50,7 @@ class ApplicationOperatingCentreTest extends RepositoryTestCase
         $this->assertSame('RESULT', $this->sut->fetchByApplication(12));
     }
 
-    public function testFetchByS4()
+    public function testFetchByS4(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
 
@@ -66,7 +68,7 @@ class ApplicationOperatingCentreTest extends RepositoryTestCase
         $this->assertSame('RESULT', $this->sut->fetchByS4(12));
     }
 
-    public function testFetchByApplicationIdForOperatingCentres()
+    public function testFetchByApplicationIdForOperatingCentres(): void
     {
         $mockRepoServiceManager = m::mock(\Dvsa\Olcs\Api\Domain\RepositoryServiceManager::class)
             ->shouldReceive('get')
@@ -112,7 +114,7 @@ class ApplicationOperatingCentreTest extends RepositoryTestCase
         $this->assertEquals($expected, $this->query);
     }
 
-    public function testFetchByApplicationIdForOperatingCentresWithQuery()
+    public function testFetchByApplicationIdForOperatingCentresWithQuery(): void
     {
         $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
         $qb = m::mock(\Doctrine\ORM\QueryBuilder::class);
@@ -166,7 +168,7 @@ class ApplicationOperatingCentreTest extends RepositoryTestCase
         $this->assertEquals(['foo' => 'bar'], $sut->fetchByApplicationIdForOperatingCentres(1, $query));
     }
 
-    public function testFindCorrespondingLoc()
+    public function testFindCorrespondingLoc(): void
     {
         /** @var Entity\OperatingCentre\OperatingCentre $oc */
         $oc = m::mock(Entity\OperatingCentre\OperatingCentre::class)->makePartial();
@@ -191,7 +193,7 @@ class ApplicationOperatingCentreTest extends RepositoryTestCase
         $this->assertSame($loc, $foundLoc);
     }
 
-    public function testFindCorrespondingLocWithoutMatch()
+    public function testFindCorrespondingLocWithoutMatch(): void
     {
         /** @var Entity\OperatingCentre\OperatingCentre $oc */
         $oc = m::mock(Entity\OperatingCentre\OperatingCentre::class)->makePartial();
@@ -209,7 +211,7 @@ class ApplicationOperatingCentreTest extends RepositoryTestCase
         $this->assertNull($this->sut->findCorrespondingLoc($aoc, $licence));
     }
 
-    public function testFetchByApplicationOrderByAddress()
+    public function testFetchByApplicationOrderByAddress(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
 

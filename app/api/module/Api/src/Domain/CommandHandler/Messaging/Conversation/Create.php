@@ -37,6 +37,7 @@ final class Create extends AbstractCommandHandler implements ToggleAwareInterfac
      * @param $command CreateConversationCommand
      * @throws NotFoundException|Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         if (empty($command->getApplication()) && empty($command->getLicence())) {

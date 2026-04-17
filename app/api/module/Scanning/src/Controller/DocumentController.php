@@ -30,6 +30,7 @@ class DocumentController extends AbstractController
      *
      * @return \Laminas\Stdlib\ResponseInterface|\Laminas\View\Model\JsonModel
      */
+    #[\Override]
     public function create($postData = null)
     {
         /** @var \Laminas\Http\PhpEnvironment\Request $request */

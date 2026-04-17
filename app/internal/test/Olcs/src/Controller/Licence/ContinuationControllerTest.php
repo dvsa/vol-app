@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Continuation Controller Test
  *
@@ -55,7 +57,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         ]);
     }
 
-    public function testAlterFormActionsComplete()
+    public function testAlterFormActionsComplete(): void
     {
         $mockForm = \Mockery::mock(Form::class);
         $continuationDetail = [
@@ -69,7 +71,8 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $this->sut->alterFormActions($mockForm, false, $continuationDetail);
     }
 
-    public function testAlterFormActionsNotCompleteWithOutFees()
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testAlterFormActionsNotCompleteWithOutFees(): void
     {
         $mockForm = \Mockery::mock(Form::class);
         $continuationDetail = [
@@ -81,7 +84,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $this->sut->alterFormActions($mockForm, false, $continuationDetail);
     }
 
-    public function dataProviderAlterFormReceived()
+    public static function dataProviderAlterFormReceived(): array
     {
         return [
             [true, RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE, 'N'],
@@ -100,13 +103,13 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @dataProvider dataProviderAlterFormReceived
      *
      * @param bool   $enabled
      * @param string $status
      * @param string $received 'Y' or 'N'
      */
-    public function testAlterFormReceived($enabled, $status, $received)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderAlterFormReceived')]
+    public function testAlterFormReceived(mixed $enabled, mixed $status, mixed $received): void
     {
         $mockForm = \Mockery::mock(Form::class);
 
@@ -120,7 +123,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $this->sut->alterFormReceived($mockForm, $continuationDetail);
     }
 
-    public function dataProviderAlterFormChecklistStatus()
+    public static function dataProviderAlterFormChecklistStatus(): array
     {
         return [
             [true, RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE, true],
@@ -138,12 +141,12 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @dataProvider dataProviderAlterFormChecklistStatus
      *
      * @param bool   $enabled
      * @param status $status
      */
-    public function testAlterFormChecklistStatus($enabled, $status, $received)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderAlterFormChecklistStatus')]
+    public function testAlterFormChecklistStatus(mixed $enabled, mixed $status, mixed $received): void
     {
         $mockElement = \Mockery::mock();
 
@@ -185,13 +188,13 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @dataProvider dataProviderFormNumberOfDiscs
      *
      * @param bool   $displayed
      * @param string $goodsOrPsv
      * @param string $licenceType
      */
-    public function testAlterFormTotalVehicleAuthorisation($displayed, $goodsOrPsv, $licenceType)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderFormNumberOfDiscs')]
+    public function testAlterFormTotalVehicleAuthorisation(mixed $displayed, mixed $goodsOrPsv, mixed $licenceType): void
     {
         $mockForm = \Mockery::mock(Form::class);
 
@@ -209,13 +212,17 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @dataProvider dataProviderContinuationDetailStatusElementsEnabled
      *
      * @param bool   $enabled
      * @param string $status
      */
-    public function testAlterFormTotalVehicleAuthorisationDisables($enabled, $status)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderContinuationDetailStatusElementsEnabled')]
+    public function testAlterFormTotalVehicleAuthorisationDisables(mixed $enabled, mixed $status): void
     {
+        if ($enabled) {
+            $this->expectNotToPerformAssertions();
+        }
+
         $mockForm = \Mockery::mock(Form::class);
 
         if (!$enabled) {
@@ -230,7 +237,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $this->sut->alterFormTotalVehicleAuthorisation($mockForm, $continuationDetail);
     }
 
-    public function dataProviderFormNumberOfDiscs()
+    public static function dataProviderFormNumberOfDiscs(): array
     {
         return [
             [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_RESTRICTED],
@@ -245,13 +252,13 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @dataProvider dataProviderFormNumberOfDiscs
      *
      * @param bool   $displayed
      * @param string $goodsOrPsv
      * @param string $licenceType
      */
-    public function testFormNumberOfDiscs($displayed, $goodsOrPsv, $licenceType)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderFormNumberOfDiscs')]
+    public function testFormNumberOfDiscs(mixed $displayed, mixed $goodsOrPsv, mixed $licenceType): void
     {
         $mockForm = \Mockery::mock(Form::class);
         $formField = 'fields->numberOfDiscs';
@@ -285,12 +292,12 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @dataProvider dataProviderContinuationDetailStatusElementsEnabled
      *
      * @param bool   $enabled
      * @param string $status
      */
-    public function testFormNumberOfDiscsDisables($enabled, $status)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderContinuationDetailStatusElementsEnabled')]
+    public function testFormNumberOfDiscsDisables(mixed $enabled, mixed $status): void
     {
         $mockForm = \Mockery::mock(Form::class);
         $formField = 'fields->numberOfDiscs';
@@ -322,7 +329,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         );
     }
 
-    public function dataProviderAlterFormNumberOfCommunityLicences(): array
+    public static function dataProviderAlterFormNumberOfCommunityLicences(): array
     {
         return [
             [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_RESTRICTED, 4],
@@ -337,13 +344,13 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @dataProvider dataProviderAlterFormNumberOfCommunityLicences
      *
      * @param bool   $displayed
      * @param string $goodsOrPsv
      * @param string $licenceType
      */
-    public function testAlterFormNumberOfCommunityLicences($displayed, $goodsOrPsv, $licenceType, $maxAuth)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderAlterFormNumberOfCommunityLicences')]
+    public function testAlterFormNumberOfCommunityLicences(mixed $displayed, mixed $goodsOrPsv, mixed $licenceType, mixed $maxAuth): void
     {
         $mockForm = \Mockery::mock(Form::class);
         $formField = 'fields->numberOfCommunityLicences';
@@ -376,12 +383,12 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @dataProvider dataProviderContinuationDetailStatusElementsEnabled
      *
      * @param bool   $enabled
      * @param string $status
      */
-    public function testAlterFormNumberOfCommunityLicencesDisables($enabled, $status)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderContinuationDetailStatusElementsEnabled')]
+    public function testAlterFormNumberOfCommunityLicencesDisables(mixed $enabled, mixed $status): void
     {
         $mockForm = \Mockery::mock(Form::class);
         $totalVehicleAuth = 4;
@@ -420,7 +427,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
      *
      * @return array
      */
-    public function dataProviderContinuationDetailStatusElementsEnabled()
+    public static function dataProviderContinuationDetailStatusElementsEnabled(): array
     {
         return [
             [true, RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE],

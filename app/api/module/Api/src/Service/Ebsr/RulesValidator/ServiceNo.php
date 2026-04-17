@@ -25,6 +25,7 @@ class ServiceNo extends AbstractValidator
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($value)
     {
         $disallowed = ['', null, false];

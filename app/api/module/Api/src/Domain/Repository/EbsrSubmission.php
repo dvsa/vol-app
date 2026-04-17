@@ -99,6 +99,7 @@ class EbsrSubmission extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function buildDefaultListQuery(QueryBuilder $qb, QueryInterface $query, $compositeFields = [])
     {
         parent::buildDefaultListQuery($qb, $query, $compositeFields);
@@ -118,6 +119,7 @@ class EbsrSubmission extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $qb->andWhere($qb->expr()->eq($this->alias . '.organisation', ':organisation'))

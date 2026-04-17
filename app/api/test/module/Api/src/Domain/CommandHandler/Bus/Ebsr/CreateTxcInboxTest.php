@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create TxcInbox Test
  */
@@ -34,7 +36,7 @@ class CreateTxcInboxTest extends AbstractCommandHandlerTestCase
     /**
      * Tests handleCommand
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $busRegId = 11;
 

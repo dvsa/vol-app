@@ -39,6 +39,7 @@ class Impounding extends AbstractCommandHandler implements TransactionedInterfac
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /**

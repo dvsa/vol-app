@@ -1,0 +1,99 @@
+<?php
+/**
+ * Letter Preview Sidebar
+ *
+ * Left sidebar for the letter preview page showing Issue Types
+ * as checkboxes under "Edit Sections" and action buttons
+ *
+ * @var array $letterInstance Letter instance data
+ * @var array $sectionsList List of Issues (despite the name - kept for backwards compatibility)
+ * @var array $instanceSectionsList List of actual letter instance sections
+ */
+?>
+
+<div class="small-module">
+    <h4 class="title">Edit Issue Sections:</h4>
+    <?php if (!empty($sectionsList)): ?>
+    <div class="govuk-checkboxes govuk-checkboxes--small small-module__details">
+        <?php foreach ($sectionsList as $section): ?>
+        <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" type="checkbox"
+                   id="section-<?= $this->escapeHtmlAttr($section['id']) ?>"
+                   name="sections[]"
+                   value="<?= $this->escapeHtmlAttr($section['id']) ?>">
+            <label class="govuk-label govuk-checkboxes__label"
+                   for="section-<?= $this->escapeHtmlAttr($section['id']) ?>">
+                <?= $this->escapeHtml($section['name']) ?>
+            </label>
+        </div>
+        <?php endforeach; ?>
+    </div>
+    <?php else: ?>
+    <p class="small-module__details">No sections selected</p>
+    <?php endif; ?>
+</div>
+
+<?php if (!empty($instanceSectionsList)): ?>
+<div class="small-module">
+    <h4 class="title">Edit Instance Sections:</h4>
+    <div class="govuk-checkboxes govuk-checkboxes--small small-module__details">
+        <?php foreach ($instanceSectionsList as $instanceSection): ?>
+        <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" type="checkbox"
+                   id="letter-section-<?= $this->escapeHtmlAttr($instanceSection['id']) ?>"
+                   name="letterSections[]"
+                   value="<?= $this->escapeHtmlAttr($instanceSection['id']) ?>">
+            <label class="govuk-label govuk-checkboxes__label"
+                   for="letter-section-<?= $this->escapeHtmlAttr($instanceSection['id']) ?>">
+                <?= $this->escapeHtml($instanceSection['name']) ?>
+            </label>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+<?php endif; ?>
+
+<?php if (!empty($appendicesList)): ?>
+<div class="small-module">
+    <h4 class="title">Editable Appendices:</h4>
+    <div class="govuk-checkboxes govuk-checkboxes--small small-module__details">
+        <?php foreach ($appendicesList as $appendix): ?>
+        <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" type="checkbox"
+                   id="appendix-<?= $this->escapeHtmlAttr($appendix['id']) ?>"
+                   name="appendices[]"
+                   value="<?= $this->escapeHtmlAttr($appendix['id']) ?>">
+            <label class="govuk-label govuk-checkboxes__label"
+                   for="appendix-<?= $this->escapeHtmlAttr($appendix['id']) ?>">
+                <?= $this->escapeHtml($appendix['name']) ?>
+            </label>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+<?php endif; ?>
+
+<div class="small-module">
+    <h4 class="title">Actions</h4>
+    <p class="small-module__details">
+        <button
+            type="button"
+            id="continue-to-editor"
+            class="govuk-button govuk-button--secondary"
+            data-letter-instance-id="<?= $this->escapeHtmlAttr($letterInstance['id'] ?? '') ?>"
+            disabled
+            style="margin-bottom: 10px; width: 100%;"
+        >
+            Continue to editor
+        </button>
+        <button
+            type="button"
+            id="save-letter-exit"
+            class="govuk-button"
+            data-letter-instance-id="<?= $this->escapeHtmlAttr($letterInstance['id'] ?? '') ?>"
+            style="width: 100%;"
+        >
+            Save letter and exit
+        </button>
+    </p>
+</div>

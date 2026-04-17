@@ -22,6 +22,7 @@ use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
  */
 class BusShortNotice extends AbstractBusShortNotice
 {
+    #[\Override]
     public function getCalculatedBundleValues()
     {
         return [
@@ -181,7 +182,7 @@ class BusShortNotice extends AbstractBusShortNotice
     public function fromData($data)
     {
         foreach ($data as $key => $value) {
-            $method = 'set' . ucwords($key);
+            $method = 'set' . ucwords((string) $key);
 
             if (method_exists($this, $method)) {
                 $this->{$method}($value);

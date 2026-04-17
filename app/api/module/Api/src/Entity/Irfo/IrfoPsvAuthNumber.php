@@ -25,6 +25,7 @@ class IrfoPsvAuthNumber extends AbstractIrfoPsvAuthNumber
         $this->name = $name;
     }
 
+    #[\Override]
     protected function getCalculatedValues()
     {
         return ['irfoPsvAuth' => null];

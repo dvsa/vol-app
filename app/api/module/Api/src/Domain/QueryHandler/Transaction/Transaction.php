@@ -22,6 +22,7 @@ class Transaction extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Transaction';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $repo = $this->getRepo();

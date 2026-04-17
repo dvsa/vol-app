@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\CommunityLic;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -20,10 +22,8 @@ class CommunityLicSuspensionEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider dataProvider
-     */
-    public function testUpdateCommunityLicSuspension($endDate, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
+    public function testUpdateCommunityLicSuspension(mixed $endDate, mixed $expected): void
     {
         $communityLic = 1;
         $startDate = '2014-01-01';
@@ -34,7 +34,7 @@ class CommunityLicSuspensionEntityTest extends EntityTester
         $this->assertEquals($expected, $sut->getEndDate());
     }
 
-    public function dataProvider()
+    public static function dataProvider(): array
     {
         return [
             ['2016-01-01', new \DateTime('2016-01-01')],

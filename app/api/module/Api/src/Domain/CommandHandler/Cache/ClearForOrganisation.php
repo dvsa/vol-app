@@ -30,6 +30,7 @@ class ClearForOrganisation extends AbstractCommandHandler implements CacheAwareI
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Organisation $organisation */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Application\Processing;
 
 use Common\Service\Helper\ComplaintsHelperService;
@@ -25,6 +27,7 @@ use Psr\Container\ContainerInterface;
  * @package OlcsTest\Controller\Licence\Processing
  * @covers Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class LicenceProcessingOverviewControllerTest extends \PHPUnit\Framework\TestCase
 {
     protected $mockScriptFactory;
@@ -38,7 +41,7 @@ class LicenceProcessingOverviewControllerTest extends \PHPUnit\Framework\TestCas
     protected $mockFlashMessenger;
     protected $mockRouter;
 
-    public function testIndexActionRedirects()
+    public function testIndexActionRedirects(): void
     {
         $controller = $this->getController('index');
 
@@ -51,7 +54,7 @@ class LicenceProcessingOverviewControllerTest extends \PHPUnit\Framework\TestCas
         $controller->indexAction();
     }
 
-    private function getController($action)
+    private function getController(mixed $action): LicenceProcessingOverviewController
     {
         $this->mockScriptFactory = m::mock(ScriptFactory::class);
         $this->mockFormHelper = m::mock(FormHelperService::class);
@@ -90,7 +93,7 @@ class LicenceProcessingOverviewControllerTest extends \PHPUnit\Framework\TestCas
         $event->setRouter($router);
         $event->setRouteMatch($routeMatch);
 
-        $pluginManager = new PluginManager($this->createMock(ContainerInterface::class));
+        $pluginManager = new PluginManager($this->createStub(ContainerInterface::class));
 
         $controller->setEvent($event);
         $controller->setPluginManager($pluginManager);

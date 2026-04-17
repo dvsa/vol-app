@@ -38,6 +38,7 @@ final class UpdateHearing extends AbstractCommandHandler implements AuthAwareInt
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var CreateHearingCmd $command */

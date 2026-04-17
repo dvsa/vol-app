@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Variation Financial Evidence Review Service Test
  *
@@ -44,7 +46,7 @@ class VariationFinancialEvidenceReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         $data = [
             'foo' => 'bar'

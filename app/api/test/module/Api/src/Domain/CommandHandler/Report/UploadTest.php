@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Report;
 
 use Dvsa\Olcs\Api\Domain\Command\Queue\Create as CreateQueue;
@@ -20,12 +22,9 @@ use Dvsa\Olcs\Transfer\Command\Report\Upload as UploadCmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use org\bovigo\vfs\vfsStream;
-use Laminas\Json\Json as LaminasJson;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Report\Upload
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Report\Upload::class)]
 class UploadTest extends AbstractCommandHandlerTestCase
 {
     public const FILENAME = 'fileName.csv';
@@ -51,7 +50,8 @@ class UploadTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->categoryReferences = [
             Category::CATEGORY_REPORT => m::mock(Category::class)
@@ -66,7 +66,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandForCommunityLicenceBulkReprint()
+    public function testHandleCommandForCommunityLicenceBulkReprint(): void
     {
         $data = [
             'reportType' => RefData::REPORT_TYPE_COMM_LIC_BULK_REPRINT,
@@ -115,12 +115,10 @@ class UploadTest extends AbstractCommandHandlerTestCase
                 'entityId' => null,
                 'type' => Queue::TYPE_COMM_LIC_BULK_REPRINT,
                 'status' => Queue::STATUS_QUEUED,
-                'options' => LaminasJson::encode(
-                    [
-                        'identifier' => self::IDENTIFIER,
-                        'user' => self::USER_ID,
-                    ]
-                ),
+                'options' => json_encode([
+                    'identifier' => self::IDENTIFIER,
+                    'user' => self::USER_ID,
+                ]),
                 'processAfterDate' => null,
             ],
             (new Result())->addMessage('Queue item created')
@@ -142,7 +140,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandForBulkEmail()
+    public function testHandleCommandForBulkEmail(): void
     {
         $data = [
             'reportType' => RefData::REPORT_TYPE_BULK_EMAIL,
@@ -192,13 +190,11 @@ class UploadTest extends AbstractCommandHandlerTestCase
                 'entityId' => null,
                 'type' => Queue::TYPE_EMAIL_BULK_UPLOAD,
                 'status' => Queue::STATUS_QUEUED,
-                'options' => LaminasJson::encode(
-                    [
-                        'identifier' => self::IDENTIFIER,
-                        'user' => self::USER_ID,
-                        'templateName' => $data['name']
-                    ]
-                ),
+                'options' => json_encode([
+                    'identifier' => self::IDENTIFIER,
+                    'user' => self::USER_ID,
+                    'templateName' => $data['name']
+                ]),
                 'processAfterDate' => null,
             ],
             (new Result())->addMessage('Queue item created')
@@ -220,7 +216,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandForBulkLetter()
+    public function testHandleCommandForBulkLetter(): void
     {
         $data = [
             'reportType' => RefData::REPORT_TYPE_BULK_LETTER,
@@ -270,13 +266,11 @@ class UploadTest extends AbstractCommandHandlerTestCase
                 'entityId' => null,
                 'type' => Queue::TYPE_LETTER_BULK_UPLOAD,
                 'status' => Queue::STATUS_QUEUED,
-                'options' => LaminasJson::encode(
-                    [
-                        'identifier' => self::IDENTIFIER,
-                        'user' => self::USER_ID,
-                        'templateSlug' => $data['templateSlug']
-                    ]
-                ),
+                'options' => json_encode([
+                    'identifier' => self::IDENTIFIER,
+                    'user' => self::USER_ID,
+                    'templateSlug' => $data['templateSlug']
+                ]),
                 'processAfterDate' => null,
             ],
             (new Result())->addMessage('Queue item created')
@@ -298,7 +292,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandForPostScoringEmail()
+    public function testHandleCommandForPostScoringEmail(): void
     {
         $data = [
             'reportType' => RefData::REPORT_TYPE_POST_SCORING_EMAIL,
@@ -338,11 +332,9 @@ class UploadTest extends AbstractCommandHandlerTestCase
                 'entityId' => null,
                 'type' => Queue::TYPE_POST_SCORING_EMAIL,
                 'status' => Queue::STATUS_QUEUED,
-                'options' => LaminasJson::encode(
-                    [
-                        'identifier' => self::IDENTIFIER,
-                    ]
-                ),
+                'options' => json_encode([
+                    'identifier' => self::IDENTIFIER,
+                ]),
                 'processAfterDate' => null,
             ],
             (new Result())->addMessage('Queue item created')
@@ -364,7 +356,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
     }
 
 
-    public function testHandleCommandForGenericUpload()
+    public function testHandleCommandForGenericUpload(): void
     {
         $data = [
             'reportType' => null,
@@ -413,7 +405,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandForContentFromStream()
+    public function testHandleCommandForContentFromStream(): void
     {
         $gzBody = gzcompress(self::BODY);
 
@@ -473,7 +465,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandInvalidMime()
+    public function testHandleCommandInvalidMime(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -503,7 +495,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandError()
+    public function testHandleCommandError(): void
     {
         $this->expectException(\Exception::class);
 

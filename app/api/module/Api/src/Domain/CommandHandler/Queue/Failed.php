@@ -23,6 +23,7 @@ final class Failed extends AbstractCommandHandler implements TransactionedInterf
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var \Dvsa\Olcs\Api\Domain\Repository\Queue $repo */

@@ -27,6 +27,7 @@ final class Close extends AbstractCommandHandler implements TransactionedInterfa
      * @throws ValidationException
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         $window = $this->getRepo()->fetchById($command->getId());

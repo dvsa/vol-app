@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\FilteredTranslateableText;
@@ -29,7 +31,7 @@ class FilteredTranslateableTextTest extends MockeryTestCase
         $this->filteredTranslateableText = new FilteredTranslateableText($this->filter, $this->translateableText);
     }
 
-    public function testGetRepresentation()
+    public function testGetRepresentation(): void
     {
         $translateableTextRepresentation = [
             'key' => 'translateableTextKey',
@@ -53,7 +55,7 @@ class FilteredTranslateableTextTest extends MockeryTestCase
         );
     }
 
-    public function testGetTranslateableText()
+    public function testGetTranslateableText(): void
     {
         $this->assertEquals(
             $this->translateableText,

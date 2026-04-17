@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CheckGoodRepute_Request xmlns="https://webgate.ec.testa.eu/move-hub/erru/3.4">
+  <Header version="3.4" technicalId="afbacb8a-b313-4daa-881b-7b7a65204b69"
+          workflowId="446940dc-eb68-4462-9424-4893ce051fdb" sentAt="2016-01-01T00:00:00Z"
+          timeoutValue="2016-01-01T00:00:20Z" from="UK" to="ZZ"/>
+  <Body businessCaseId="CGR Request Example" originatingAuthority="UK Competent Authority" requestPurpose="Other"
+        requestSource="Other">
+    <SearchedTransportManager>
+      <TransportManagerNameDetails familyName="Creighton-Ward" firstName="Penelope" dateOfBirth="1939-12-24"/>
+      <TransportManagerCertificateDetails certificateNumber="CPC004" certificateIssueDate="2012-01-31" certificateIssueCountry="UK"/>
+    </SearchedTransportManager>
+  </Body>
+</CheckGoodRepute_Request>

@@ -13,6 +13,7 @@ final class Appeal extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Appeal';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->result($this->getRepo()->fetchUsingCaseId($query), ['case']);

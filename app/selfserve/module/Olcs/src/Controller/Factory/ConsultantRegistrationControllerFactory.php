@@ -24,6 +24,7 @@ class ConsultantRegistrationControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return UserRegistrationController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ConsultantRegistrationController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

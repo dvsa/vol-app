@@ -31,6 +31,7 @@ class Registration extends AbstractValidator
      * @return bool
      * @throws Exception\RuntimeException If validation of $value is impossible
      */
+    #[\Override]
     public function isValid($value)
     {
         $registrationElements = $value->getElementsByTagName('Registration');

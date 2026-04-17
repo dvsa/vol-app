@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CreateTest
  *
@@ -42,7 +44,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = ['ct_hackney'];
 
@@ -58,7 +61,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $params = [
             'licence' => 323,
@@ -134,7 +137,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['PrivateHireLicence created'], $response->getMessages());
     }
 
-    public function testHandleCommandUpdateTrafficArea()
+    public function testHandleCommandUpdateTrafficArea(): void
     {
         $params = [
             'licence' => 323,
@@ -179,7 +182,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['PrivateHireLicence created'], $response->getMessages());
     }
 
-    public function testHandleCommandUpdateTrafficAreaValidationError()
+    public function testHandleCommandUpdateTrafficAreaValidationError(): void
     {
         $params = [
             'licence' => 323,

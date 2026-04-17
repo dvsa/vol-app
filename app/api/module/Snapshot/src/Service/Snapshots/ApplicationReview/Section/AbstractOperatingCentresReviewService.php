@@ -20,6 +20,7 @@ abstract class AbstractOperatingCentresReviewService extends AbstractReviewServi
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getHeaderTranslationKey(array $reviewData, $section)
     {
         if ($reviewData['vehicleType']['id'] == RefData::APP_VEHICLE_TYPE_LGV) {

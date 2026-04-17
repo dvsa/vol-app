@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Submission;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Submission\CreateSubmissionSectionComment;
@@ -11,9 +13,7 @@ use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmissionSectionComment as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Submission\CreateSubmissionSectionComment
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Submission\CreateSubmissionSectionComment::class)]
 class CreateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
 {
     public const COMMENT_ID = 9999;
@@ -32,7 +32,8 @@ class CreateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'case-summary'
@@ -47,7 +48,7 @@ class CreateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandAlreadyExists()
+    public function testHandleCommandAlreadyExists(): void
     {
         $this->expectException(
             ValidationException::class
@@ -65,7 +66,7 @@ class CreateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($cmd);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'submission' => 1,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\Surrender\Section;
 
 use Dvsa\Olcs\Api\Entity\Surrender;
@@ -29,14 +31,13 @@ class CommunityLicenceReveiwServiceTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider dpTestGetConfigFromData
-     *
      * @param $args
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetConfigFromData')]
     public function testGetConfigFromData(
-        $args,
-        $expected
-    ) {
+        mixed $args,
+        mixed $expected
+    ): void {
         $mockEntity = m::mock(Surrender::class);
         $mockEntity->shouldReceive('getCommunityLicenceDocumentStatus->getDescription')->once()->andReturn($args['commLicDescription']);
         $mockEntity->shouldReceive('getCommunityLicenceDocumentStatus->getId')->once()->andReturn($args['commLicStatus']);
@@ -46,7 +47,7 @@ class CommunityLicenceReveiwServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($mockEntity));
     }
 
-    public function dpTestGetConfigFromData()
+    public static function dpTestGetConfigFromData(): array
     {
         return [
             'stolen_community_licence' => [

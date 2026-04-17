@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Variation LicenceHistory Review Service Test
  *
@@ -44,7 +46,7 @@ class VariationLicenceHistoryReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         $data = [
             'foo' => 'bar'

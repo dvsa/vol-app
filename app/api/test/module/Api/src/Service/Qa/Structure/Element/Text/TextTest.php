@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Text;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\Element\Text\Text;
@@ -41,7 +43,7 @@ class TextTest extends MockeryTestCase
             ->andReturn($this->labelTranslateableTextRepresentation);
     }
 
-    public function testGetRepresentation()
+    public function testGetRepresentation(): void
     {
         $text = new Text(
             $this->value,
@@ -61,7 +63,7 @@ class TextTest extends MockeryTestCase
         );
     }
 
-    public function testGetRepresentationWithLabelOnly()
+    public function testGetRepresentationWithLabelOnly(): void
     {
         $text = new Text(
             $this->value,
@@ -80,7 +82,7 @@ class TextTest extends MockeryTestCase
         );
     }
 
-    public function testGetRepresentationWithHintOnly()
+    public function testGetRepresentationWithHintOnly(): void
     {
         $text = new Text(
             $this->value,
@@ -99,7 +101,7 @@ class TextTest extends MockeryTestCase
         );
     }
 
-    public function testGetHint()
+    public function testGetHint(): void
     {
         $text = new Text(
             $this->value,

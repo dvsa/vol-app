@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Queue Create Command Handler Test
  *
@@ -31,7 +33,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
 
         $this->refData = [
             QueueEntity::STATUS_QUEUED,
-            QueueEntity::TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER
+            QueueEntity::TYPE_CONT_CHECKLIST
         ];
         $this->references = [
             UserEntity::class => [
@@ -47,7 +49,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
     /**
      * Test handleCommand method
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->mockAuthService();
 
@@ -57,7 +59,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $command = Cmd::create(
             [
                 'status' => QueueEntity::STATUS_QUEUED,
-                'type' => QueueEntity::TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER,
+                'type' => QueueEntity::TYPE_CONT_CHECKLIST,
                 'entityId' => 1,
                 'options' => '{"foo":"bar"}',
                 'processAfterDate' => $processAfterDate,
@@ -84,7 +86,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($savedQueue->getId(), 1);
         $this->assertEquals(
             $savedQueue->getType(),
-            $this->refData[QueueEntity::TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER]
+            $this->refData[QueueEntity::TYPE_CONT_CHECKLIST]
         );
         $this->assertEquals(
             $savedQueue->getStatus(),
@@ -100,7 +102,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    protected function mockAuthService()
+    protected function mockAuthService(): void
     {
         /** @var User $mockUser */
         $mockUser = m::mock(UserEntity::class)->makePartial();

@@ -19,6 +19,7 @@ class HistoryController extends AbstractHistoryController implements TransportMa
      *
      * @return \Common\Service\Table\TableBuilder
      */
+    #[\Override]
     protected function alterTable($table, $data)
     {
         $table->removeColumn('appId');

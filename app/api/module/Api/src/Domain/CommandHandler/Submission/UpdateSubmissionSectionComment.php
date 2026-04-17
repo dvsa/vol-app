@@ -33,6 +33,7 @@ final class UpdateSubmissionSectionComment extends AbstractCommandHandler implem
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

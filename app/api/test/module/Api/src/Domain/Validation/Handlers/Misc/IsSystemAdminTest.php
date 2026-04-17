@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Misc;
 
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSystemAdmin;
@@ -25,7 +27,7 @@ class IsSystemAdminTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsValid()
+    public function testIsValid(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -35,7 +37,7 @@ class IsSystemAdminTest extends AbstractHandlerTestCase
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsValidFail()
+    public function testIsValidFail(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);

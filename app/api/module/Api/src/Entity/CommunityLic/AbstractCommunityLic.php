@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\CommunityLic;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,9 +17,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * CommunityLic Abstract Entity
+ * AbstractCommunityLic Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -26,20 +29,52 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_community_lic_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_community_lic_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_community_lic_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_community_lic_status", columns={"status"})
+ *        @ORM\Index(name="ix_community_lic_status", columns={"status"}),
+ *        @ORM\Index(name="uk_community_lic_olbs_key", columns={"olbs_key"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_community_lic_olbs_key", columns={"olbs_key"})
  *    }
  * )
  */
-abstract class AbstractCommunityLic implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCommunityLic implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
     use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to licence
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
+     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
+     */
+    protected $licence;
+
+    /**
+     * annulled, cns, expired, pending, returned, revoked, surrender, suspended, valid, void, withdrawn
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="status", referencedColumnName="id")
+     */
+    protected $status;
 
     /**
      * Created by
@@ -53,35 +88,6 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     protected $createdBy;
 
     /**
-     * Expired date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="expired_date", nullable=true)
-     */
-    protected $expiredDate;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Issue no
-     *
-     * @var int
-     *
-     * @ORM\Column(type="smallint", name="issue_no", nullable=true)
-     */
-    protected $issueNo;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -93,57 +99,16 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     protected $lastModifiedBy;
 
     /**
-     * Licence
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence",
-     *     fetch="LAZY",
-     *     inversedBy="communityLics"
-     * )
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=false)
-     */
-    protected $licence;
-
-    /**
-     * Licence expired date
+     * The date the licence expired.
      *
      * @var \DateTime
      *
-     * @ORM\Column(type="date", name="licence_expired_date", nullable=true)
+     * @ORM\Column(type="datetime", name="expired_date", nullable=true)
      */
-    protected $licenceExpiredDate;
+    protected $expiredDate;
 
     /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Serial no
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="serial_no", nullable=true)
-     */
-    protected $serialNo;
-
-    /**
-     * Serial no prefix
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="serial_no_prefix", length=4, nullable=true)
-     */
-    protected $serialNoPrefix;
-
-    /**
-     * Specified date
+     * Activation date of com licence.
      *
      * @var \DateTime
      *
@@ -152,14 +117,40 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     protected $specifiedDate;
 
     /**
-     * Status
+     * The date the community licence will expire. Typically 5 years after specified date.  Generally less for an interim licence.
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \DateTime
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="date", name="licence_expired_date", nullable=true)
      */
-    protected $status;
+    protected $licenceExpiredDate;
+
+    /**
+     * Issue 0 is the office copy. 0 is the licence, all others are refered to as certified copies.
+     *
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="issue_no", nullable=true)
+     */
+    protected $issueNo;
+
+    /**
+     * Business ID
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="serial_no", nullable=true)
+     */
+    protected $serialNo;
+
+    /**
+     * UKGB or UKNI
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="serial_no_prefix", length=4, nullable=true)
+     */
+    protected $serialNoPrefix;
 
     /**
      * Version
@@ -172,33 +163,34 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     protected $version = 1;
 
     /**
-     * Community lic suspension
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     */
+    protected $olbsKey;
+
+    /**
+     * CommunityLicSuspensions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicSuspension",
-     *     mappedBy="communityLic"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicSuspension", mappedBy="communityLic")
      */
     protected $communityLicSuspensions;
 
     /**
-     * Community lic withdrawal
+     * CommunityLicWithdrawals
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawal",
-     *     mappedBy="communityLic"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawal", mappedBy="communityLic")
      */
     protected $communityLicWithdrawals;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -206,70 +198,14 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->communityLicSuspensions = new ArrayCollection();
         $this->communityLicWithdrawals = new ArrayCollection();
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return CommunityLic
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the expired date
-     *
-     * @param \DateTime $expiredDate new value being set
-     *
-     * @return CommunityLic
-     */
-    public function setExpiredDate($expiredDate)
-    {
-        $this->expiredDate = $expiredDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the expired date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getExpiredDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->expiredDate);
-        }
-
-        return $this->expiredDate;
-    }
 
     /**
      * Set the id
@@ -296,57 +232,9 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     }
 
     /**
-     * Set the issue no
-     *
-     * @param int $issueNo new value being set
-     *
-     * @return CommunityLic
-     */
-    public function setIssueNo($issueNo)
-    {
-        $this->issueNo = $issueNo;
-
-        return $this;
-    }
-
-    /**
-     * Get the issue no
-     *
-     * @return int
-     */
-    public function getIssueNo()
-    {
-        return $this->issueNo;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return CommunityLic
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
      * Set the licence
      *
-     * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
      * @return CommunityLic
      */
@@ -368,6 +256,138 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     }
 
     /**
+     * Set the status
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
+     *
+     * @return CommunityLic
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get the status
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return CommunityLic
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return CommunityLic
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the expired date
+     *
+     * @param \DateTime $expiredDate new value being set
+     *
+     * @return CommunityLic
+     */
+    public function setExpiredDate($expiredDate)
+    {
+        $this->expiredDate = $expiredDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the expired date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
+     */
+    public function getExpiredDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->expiredDate);
+        }
+
+        return $this->expiredDate;
+    }
+
+    /**
+     * Set the specified date
+     *
+     * @param \DateTime $specifiedDate new value being set
+     *
+     * @return CommunityLic
+     */
+    public function setSpecifiedDate($specifiedDate)
+    {
+        $this->specifiedDate = $specifiedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the specified date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
+     */
+    public function getSpecifiedDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->specifiedDate);
+        }
+
+        return $this->specifiedDate;
+    }
+
+    /**
      * Set the licence expired date
      *
      * @param \DateTime $licenceExpiredDate new value being set
@@ -386,8 +406,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
+     * @return \DateTime
      */
     public function getLicenceExpiredDate($asDateTime = false)
     {
@@ -399,27 +418,27 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     }
 
     /**
-     * Set the olbs key
+     * Set the issue no
      *
-     * @param int $olbsKey new value being set
+     * @param int $issueNo new value being set
      *
      * @return CommunityLic
      */
-    public function setOlbsKey($olbsKey)
+    public function setIssueNo($issueNo)
     {
-        $this->olbsKey = $olbsKey;
+        $this->issueNo = $issueNo;
 
         return $this;
     }
 
     /**
-     * Get the olbs key
+     * Get the issue no
      *
      * @return int
      */
-    public function getOlbsKey()
+    public function getIssueNo()
     {
-        return $this->olbsKey;
+        return $this->issueNo;
     }
 
     /**
@@ -471,61 +490,6 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     }
 
     /**
-     * Set the specified date
-     *
-     * @param \DateTime $specifiedDate new value being set
-     *
-     * @return CommunityLic
-     */
-    public function setSpecifiedDate($specifiedDate)
-    {
-        $this->specifiedDate = $specifiedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the specified date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getSpecifiedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->specifiedDate);
-        }
-
-        return $this->specifiedDate;
-    }
-
-    /**
-     * Set the status
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status entity being set as the value
-     *
-     * @return CommunityLic
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get the status
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
      * Set the version
      *
      * @param int $version new value being set
@@ -550,9 +514,33 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     }
 
     /**
-     * Set the community lic suspension
+     * Set the olbs key
      *
-     * @param ArrayCollection $communityLicSuspensions collection being set as the value
+     * @param int $olbsKey new value being set
+     *
+     * @return CommunityLic
+     */
+    public function setOlbsKey($olbsKey)
+    {
+        $this->olbsKey = $olbsKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the olbs key
+     *
+     * @return int
+     */
+    public function getOlbsKey()
+    {
+        return $this->olbsKey;
+    }
+
+    /**
+     * Set the community lic suspensions
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $communityLicSuspensions collection being set as the value
      *
      * @return CommunityLic
      */
@@ -566,7 +554,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Get the community lic suspensions
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getCommunityLicSuspensions()
     {
@@ -576,7 +564,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Add a community lic suspensions
      *
-     * @param ArrayCollection|mixed $communityLicSuspensions collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $communityLicSuspensions collection being added
      *
      * @return CommunityLic
      */
@@ -613,9 +601,9 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     }
 
     /**
-     * Set the community lic withdrawal
+     * Set the community lic withdrawals
      *
-     * @param ArrayCollection $communityLicWithdrawals collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $communityLicWithdrawals collection being set as the value
      *
      * @return CommunityLic
      */
@@ -629,7 +617,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Get the community lic withdrawals
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getCommunityLicWithdrawals()
     {
@@ -639,7 +627,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Add a community lic withdrawals
      *
-     * @param ArrayCollection|mixed $communityLicWithdrawals collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $communityLicWithdrawals collection being added
      *
      * @return CommunityLic
      */
@@ -673,5 +661,14 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

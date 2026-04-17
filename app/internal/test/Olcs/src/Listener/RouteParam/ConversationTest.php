@@ -36,22 +36,21 @@ class ConversationTest extends TestCase
     public function testAttach(): void
     {
         $mockEventManager = m::mock(EventManagerInterface::class);
-        $mockEventManager->shouldReceive('attach')
-                         ->once()
-                         ->with(
-                             RouteParams::EVENT_PARAM . 'licence',
-                             [$this->sut, 'onConversation'],
-                             1,
-                         );
+        $mockEventManager->expects('attach')
+            ->with(
+                RouteParams::EVENT_PARAM . 'licence',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onConversation';
+                }),
+                1
+            );
 
         $this->sut->attach($mockEventManager);
     }
 
     public function testOnConversation(): void
     {
-        /** @todo skipped for now, refactor ticket https://dvsa.atlassian.net/browse/VOL-5357 */
-        $this->markTestSkipped();
-
         $mockAnnotationBuilder = m::mock(AnnotationBuilder::class);
         $mockQueryService = m::mock(QueryService::class);
         $mockAbstractPage = m::mock(AbstractPage::class);
@@ -60,12 +59,11 @@ class ConversationTest extends TestCase
         $mockQuery = m::mock(QueryContainerInterface::class);
         $mockResponse = m::mock(Response::class);
 
-        // Declaration of Mockery_4_Laminas_View_Helper_Navigation::__call($method, array $args) should be
-        // compatible with Laminas\View\Helper\Navigation::__call($method, array $arguments = Array)
-        $er = error_reporting();
-        error_reporting(0);
-        $mockNavigation = m::mock(Navigation::class)->makePartial();
-        error_reporting($er);
+        $mockNavigation = $this->createMock(Navigation::class);
+        $mockNavigation->expects($this->exactly(2))
+                       ->method('__invoke')
+                       ->with('navigation')
+                       ->willReturn($mockNavigationPlugin);
 
         $mockRouteParam->shouldReceive('getValue')
                        ->twice()
@@ -95,12 +93,7 @@ class ConversationTest extends TestCase
                          ->twice()
                          ->with(false);
 
-        $mockNavigation->shouldReceive('__invoke')
-                       ->twice()
-                       ->with('navigation')
-                       ->andReturn($mockNavigationPlugin);
-
-        $mockPage = $this->createMock(AbstractPage::class);
+        $mockPage = $this->createStub(AbstractPage::class);
 
         $mockSideNavigation = m::mock(\Laminas\Navigation\Navigation::class);
         $mockSideNavigation->shouldReceive('findBy')
@@ -154,21 +147,13 @@ class ConversationTest extends TestCase
         $sut->onConversation($e);
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
-        /** @todo skipped for now, refactor ticket https://dvsa.atlassian.net/browse/VOL-5357 */
-        $this->markTestSkipped();
-
         $mockAnnotationBuilder = m::mock(AnnotationBuilder::class);
         $mockQueryService = m::mock(QueryService::class);
         $mockHelperPluginManager = m::mock(ContainerInterface::class);
 
-        // Declaration of Mockery_4_Laminas_View_Helper_Navigation::__call($method, array $args) should be
-        // compatible with Laminas\View\Helper\Navigation::__call($method, array $arguments = Array)
-        $er = error_reporting();
-        error_reporting(0);
-        $mockNavigation = m::mock(Navigation::class)->makePartial();
-        error_reporting($er);
+        $mockNavigation = $this->createStub(Navigation::class);
 
         $mockSideNavigation = m::mock(\Laminas\Navigation\Navigation::class);
 

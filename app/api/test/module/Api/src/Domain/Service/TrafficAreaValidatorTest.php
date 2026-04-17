@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Service;
 
 use Dvsa\Olcs\Api\Service\AddressHelper\AddressHelperService;
@@ -34,7 +36,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->sut->__invoke($container, TrafficAreaValidator::class);
     }
 
-    public function testCalidateForSameTrafficAreasWithPostcodeWithNullPostcode()
+    public function testCalidateForSameTrafficAreasWithPostcodeWithNullPostcode(): void
     {
         $this->addressService->shouldReceive('fetchTrafficAreaByPostcodeOrUprn')
             ->with('POSTCODE')
@@ -46,7 +48,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->assertTrue($this->sut->validateForSameTrafficAreasWithPostcode($application, 'POSTCODE'));
     }
 
-    public function testCalidateForSameTrafficAreasWithPostcode()
+    public function testCalidateForSameTrafficAreasWithPostcode(): void
     {
         $trafficArea = m::mock(TrafficArea::class)->shouldReceive('getId')->with()->once()->andReturn('X')->getMock();
 
@@ -61,7 +63,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->assertTrue($this->sut->validateForSameTrafficAreasWithPostcode($application, 'POSTCODE'));
     }
 
-    public function testValidateErrorWithGoodsLicence()
+    public function testValidateErrorWithGoodsLicence(): void
     {
         $organisation = new \Dvsa\Olcs\Api\Entity\Organisation\Organisation();
         $licence = new Licence($organisation, new RefData());
@@ -94,7 +96,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->assertSame(['ERR_TA_GOODS' => 'TA_NAME'], $result);
     }
 
-    public function testValidateErrorWithPsvLicence()
+    public function testValidateErrorWithPsvLicence(): void
     {
         $organisation = new \Dvsa\Olcs\Api\Entity\Organisation\Organisation();
         $licence = new Licence($organisation, new RefData());
@@ -122,7 +124,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->assertSame(['ERR_TA_PSV' => 'TA_NAME'], $result);
     }
 
-    public function testValidateErrorWithPsvRestrictedLicence()
+    public function testValidateErrorWithPsvRestrictedLicence(): void
     {
         $organisation = new \Dvsa\Olcs\Api\Entity\Organisation\Organisation();
         $licence = new Licence($organisation, new RefData());
@@ -150,7 +152,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->assertSame(['ERR_TA_PSV_RES' => 'TA_NAME'], $result);
     }
 
-    public function testValidateErrorWithPsvSrLicence()
+    public function testValidateErrorWithPsvSrLicence(): void
     {
         $organisation = new \Dvsa\Olcs\Api\Entity\Organisation\Organisation();
         $licence = new Licence($organisation, new RefData());
@@ -178,7 +180,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->assertSame(['ERR_TA_PSV_SR' => 'TA_NAME'], $result);
     }
 
-    public function testValidateErrorWithPsvApplication()
+    public function testValidateErrorWithPsvApplication(): void
     {
         $organisation = new \Dvsa\Olcs\Api\Entity\Organisation\Organisation();
         $licence = new Licence($organisation, new RefData());
@@ -210,7 +212,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->assertSame(['ERR_TA_PSV' => 'TA_NAME'], $result);
     }
 
-    public function testValidateErrorWithPsvSrApplication()
+    public function testValidateErrorWithPsvSrApplication(): void
     {
         $organisation = new \Dvsa\Olcs\Api\Entity\Organisation\Organisation();
         $licence = new Licence($organisation, new RefData());
@@ -243,7 +245,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->assertSame(['ERR_TA_PSV_SR' => 'TA_NAME'], $result);
     }
 
-    public function testValidateErrorWithGoodsLicenceSameLicence()
+    public function testValidateErrorWithGoodsLicenceSameLicence(): void
     {
         $organisation = new \Dvsa\Olcs\Api\Entity\Organisation\Organisation();
         $licence = new Licence($organisation, new RefData());
@@ -270,10 +272,8 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->assertSame(true, $result);
     }
 
-    /**
-     * @dataProvider dataProviderActiveLicenceStatusTypes
-     */
-    public function testValidateErrorWithGoodsLicenceStatus($licenceStatus, $expectValidationMessage)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderActiveLicenceStatusTypes')]
+    public function testValidateErrorWithGoodsLicenceStatus(mixed $licenceStatus, mixed $expectValidationMessage): void
     {
         $organisation = new \Dvsa\Olcs\Api\Entity\Organisation\Organisation();
         $licence = new Licence($organisation, new RefData());
@@ -304,7 +304,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         }
     }
 
-    public function testValidateErrorWithGoodsLicenceHasQueuedRevocation()
+    public function testValidateErrorWithGoodsLicenceHasQueuedRevocation(): void
     {
         $organisation = new \Dvsa\Olcs\Api\Entity\Organisation\Organisation();
         $licence = new Licence($organisation, new RefData());
@@ -329,7 +329,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->assertSame(true, $result);
     }
 
-    public function testValidateErrorWithGoodsLicenceDifferentTrafficArea()
+    public function testValidateErrorWithGoodsLicenceDifferentTrafficArea(): void
     {
         $organisation = new \Dvsa\Olcs\Api\Entity\Organisation\Organisation();
         $licence = new Licence($organisation, new RefData());
@@ -354,7 +354,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->assertSame(true, $result);
     }
 
-    public function testValidateErrorWithGoodsApplication()
+    public function testValidateErrorWithGoodsApplication(): void
     {
         $organisation = new \Dvsa\Olcs\Api\Entity\Organisation\Organisation();
         $licence = new Licence($organisation, new RefData());
@@ -390,7 +390,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->assertSame(['ERR_TA_GOODS' => 'TA_NAME'], $result);
     }
 
-    public function testValidateErrorWithGoodsApplicationSameApp()
+    public function testValidateErrorWithGoodsApplicationSameApp(): void
     {
         $organisation = new \Dvsa\Olcs\Api\Entity\Organisation\Organisation();
         $licence = new Licence($organisation, new RefData());
@@ -421,10 +421,8 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->assertSame(true, $result);
     }
 
-    /**
-     * @dataProvider dataProviderActiveApplicationStatusTypes
-     */
-    public function testValidateErrorWithGoodsApplicationStatus($status, $expectValidationMessage)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderActiveApplicationStatusTypes')]
+    public function testValidateErrorWithGoodsApplicationStatus(mixed $status, mixed $expectValidationMessage): void
     {
         $organisation = new \Dvsa\Olcs\Api\Entity\Organisation\Organisation();
         $licence = new Licence($organisation, new RefData());
@@ -459,7 +457,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         }
     }
 
-    public function dataProviderActiveLicenceStatusTypes()
+    public static function dataProviderActiveLicenceStatusTypes(): array
     {
         return [
             [Licence::LICENCE_STATUS_VALID, true],
@@ -479,7 +477,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         ];
     }
 
-    public function dataProviderActiveApplicationStatusTypes()
+    public static function dataProviderActiveApplicationStatusTypes(): array
     {
         return [
             [Application::APPLICATION_STATUS_NOT_SUBMITTED, true],
@@ -494,7 +492,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         ];
     }
 
-    public function testValidateTrafficAreaWithPostcodeWithEmptyPostcode()
+    public function testValidateTrafficAreaWithPostcodeWithEmptyPostcode(): void
     {
         $postcode = '';
 
@@ -510,7 +508,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->assertFalse($exception);
     }
 
-    public function testValidateTrafficAreaWithPostcodeWithAddressServiceFailure()
+    public function testValidateTrafficAreaWithPostcodeWithAddressServiceFailure(): void
     {
         $postcode = 'AB1 2CD';
 
@@ -531,7 +529,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->assertFalse($exception);
     }
 
-    public function testValidateTrafficAreaWithPostcodeWithNoTaMatched()
+    public function testValidateTrafficAreaWithPostcodeWithNoTaMatched(): void
     {
         $postcode = 'AB1 2CD';
 
@@ -552,7 +550,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->assertFalse($exception);
     }
 
-    public function testValidateTrafficAreaWithPostcodeForGbAppAndNiTa()
+    public function testValidateTrafficAreaWithPostcodeForGbAppAndNiTa(): void
     {
         $postcode = 'AB1 2CD';
 
@@ -580,7 +578,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->sut->validateTrafficAreaWithPostcode($app, $postcode);
     }
 
-    public function testValidateTrafficAreaWithPostcodeForNiAppAndNiTa()
+    public function testValidateTrafficAreaWithPostcodeForNiAppAndNiTa(): void
     {
         $postcode = 'AB1 2CD';
 

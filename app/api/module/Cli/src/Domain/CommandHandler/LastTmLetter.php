@@ -8,7 +8,6 @@ use Dvsa\Olcs\Api\Domain\Repository\Licence;
 use Dvsa\Olcs\Api\Entity\Doc\Document;
 use Dvsa\Olcs\Api\Entity\System\Category;
 use Dvsa\Olcs\Api\Entity\System\SubCategory;
-use Dvsa\Olcs\Api\Entity\System\SystemParameter;
 use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
@@ -25,15 +24,15 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
 {
     use EmailAwareTrait;
 
-    protected const GB_GV_TEMPLATE = [
+    protected const array GB_GV_TEMPLATE = [
         'identifier' => 'GV_letter_to_op_regarding_no_TM_specified',
         'id' => 919
     ];
-    protected const GB_PSV_TEMPLATE = [
+    protected const array GB_PSV_TEMPLATE = [
         'identifier' => 'PSV_letter_to_op_regarding_no_TM_specified',
         'id' => 920
     ];
-    protected const NI_GV_TEMPLATE = [
+    protected const array NI_GV_TEMPLATE = [
         'identifier' => 'GV_letter_to_op_regarding_no_TM_specified_NI',
         'id' => 918
     ];
@@ -46,7 +45,7 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
     /**
      * @var array
      */
-    protected $extraRepos = ['User', 'Document', 'DocTemplate', 'TransportManagerLicence', 'SystemParameter'];
+    protected $extraRepos = ['User', 'Document', 'DocTemplate', 'TransportManagerLicence'];
 
     /**
      * Handle command
@@ -57,17 +56,34 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      * @throws \Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Licence $licenceRepo */
         $licenceRepo = $this->getRepo();
-        $eligibleLicences = $licenceRepo->fetchForLastTmAutoLetter();
+        $eligibleLicences = $licenceRepo->fetchForLastTmAutoLetter($licenceRepo::LETTER_SECOND);
 
         /** @var LicenceEntity $licence */
         foreach ($eligibleLicences as $licence) {
-            $document = $this->generateDocuments($licence);
+            /** @var TransportManagerLicence $tmlRepo */
+            $tmlRepo = $this->getRepo('TransportManagerLicence');
+            $removedTms = $tmlRepo->fetchRemovedTmForLicence($licence->getId(), true);
+
+            if (empty($removedTms)) {
+                continue;
+            }
+
+            $lastRemovedTm = reset($removedTms);
+
+            $document = $this->generateDocuments($licence, $lastRemovedTm);
             $this->printAndEmailDocument($document);
-            $this->updateLastTmLetterDate($licence);
+
+             /** @var TmlEntity $removedTm */
+            foreach ($removedTms as $removedTm) {
+                $removedTm->setLastTmLetterDate(new DateTime());
+                $tmlRepo->save($removedTm);
+            }
+
             $this->sendEmailToOperator($licence);
         }
 
@@ -115,9 +131,9 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
     }
 
     /**
-     * @return array|null
+     * @return int|null
      */
-    private function generateDocuments(LicenceEntity $licence)
+    private function generateDocuments(LicenceEntity $licence, TmlEntity $tml): ?int
     {
         $template = $this->selectTemplate($licence);
 
@@ -151,23 +167,14 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
         $createTaskResult = $this->handleSideEffect($this->createTaskSideEffect($licence));
         $this->result->merge($createTaskResult);
 
-        $userRepo = $this->getRepo('User');
-        /** @var User $user */
-        $user = $userRepo->fetchById($createTaskResult->getId('assignedToUser'));
-        $contactDetails = $user->serialize($caseworkerDetailsBundle);
-        $licenceDetails = $licence->serialize($licenceBundle);
-        $caseworkerName = $user->serialize($caseworkerNameBundle);
-        $caseworkerDetails = [
-            $contactDetails,
-            $licenceDetails
-        ];
-
         $generateCommandData = [
             'template' => $template['identifier'],
             'query' => [
                 'licence' => $licence->getId(),
+                'transportManager' => $tml->getTransportManager()->getId(),
+                'transportManagerLicence' => $tml->getId(),
             ],
-            'description' => 'Last TM letter Licence ' . $licence->getLicNo(),
+            'description' => 'Last TM letter Licence ' . $licence->getLicNo() . ' PTR',
             'licence' => $licence->getId(),
             'category' => Category::CATEGORY_TRANSPORT_MANAGER,
             'subCategory' => Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CORRESPONDENCE,
@@ -180,11 +187,7 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
                     'documentTemplate' => $template['id'],
                     'allowEmail' => $licence->getOrganisation()->getAllowEmail()
                 ]
-            ]),
-            'knownValues' => [
-                'caseworker_details' => $caseworkerDetails,
-                'caseworker_name' => $caseworkerName
-            ]
+            ])
         ];
 
         $result = $this->handleSideEffect(GenerateAndStore::create($generateCommandData));
@@ -278,33 +281,14 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
     private function createTaskSideEffect($licence)
     {
         $params = [
-            'category' => Category::CATEGORY_APPLICATION,
-            'subCategory' => SubCategory::TM_SUB_CATEGORY_TM1_REMOVAL,
-            'description' => TmlEntity::DESC_TM_REMOVED_LAST_RESPONSE,
+            'category' => Category::CATEGORY_TRANSPORT_MANAGER,
+            'subCategory' => SubCategory::TM_SUB_CATEGORY_GENERAL_TASK,
+            'description' => TmlEntity::DESC_TM_REMOVED_LAST_RESPONSE_PTR,
             'actionDate' => (new DateTime())->add(new \DateInterval('P21D'))->format('Y-m-d'),
             'licence' => $licence->getId(),
             'urgent' => 'Y'
         ];
 
-        $sysParamRepo = $this->getRepo('SystemParameter');
-        $assignToUserId = $licence->isNi()
-            ? $sysParamRepo->fetchValue(SystemParameter::LAST_TM_NI_TASK_OWNER)
-            : $sysParamRepo->fetchValue(SystemParameter::LAST_TM_GB_TASK_OWNER);
-        if ($assignToUserId && $assignToUserId != 0) {
-            $params['assignedToUser'] = $assignToUserId;
-        }
         return CreateTask::create($params);
-    }
-
-    private function updateLastTmLetterDate(LicenceEntity $licence)
-    {
-        /** @var TransportManagerLicence $tmlRepo */
-        $tmlRepo = $this->getRepo('TransportManagerLicence');
-        $removedTms = $tmlRepo->fetchRemovedTmForLicence($licence->getId());
-        /** @var TmlEntity $removedTm */
-        foreach ($removedTms as $removedTm) {
-            $removedTm->setLastTmLetterDate(new DateTime());
-            $tmlRepo->save($removedTm);
-        }
     }
 }

@@ -46,6 +46,7 @@ abstract class AbstractReviveApplicationController extends AbstractApplicationDe
      *
      * @return \Common\Form\Form
      */
+    #[\Override]
     protected function getForm()
     {
         $request  = $this->getRequest();
@@ -65,6 +66,7 @@ abstract class AbstractReviveApplicationController extends AbstractApplicationDe
      *
      * @return \Common\Service\Cqrs\Response
      */
+    #[\Override]
     protected function processDecision($id, $data)
     {
         return $this->handleCommand(

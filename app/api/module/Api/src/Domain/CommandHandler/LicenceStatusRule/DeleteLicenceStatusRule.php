@@ -22,6 +22,7 @@ final class DeleteLicenceStatusRule extends AbstractCommandHandler implements Tr
 
     protected $extraRepos = ['Licence'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

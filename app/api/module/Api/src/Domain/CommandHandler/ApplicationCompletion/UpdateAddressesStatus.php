@@ -22,6 +22,7 @@ final class UpdateAddressesStatus extends AbstractUpdateStatus implements AuthAw
 
     protected $section = 'Addresses';
 
+    #[\Override]
     protected function isSectionValid(Application $application)
     {
         $licence = $application->getLicence();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Bus test
  *
@@ -34,7 +36,7 @@ class BusTest extends RepositoryTestCase
         $this->setUpSut(BusRepo::class);
     }
 
-    public function testFetchUsingId()
+    public function testFetchUsingId(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\NotFoundException::class);
 
@@ -58,7 +60,7 @@ class BusTest extends RepositoryTestCase
         $this->sut->fetchUsingId($command, Query::HYDRATE_OBJECT, $version);
     }
 
-    public function testFetchUsingIdWithResults()
+    public function testFetchUsingIdWithResults(): void
     {
         $busRegId = 15;
         $version = 1;
@@ -89,7 +91,7 @@ class BusTest extends RepositoryTestCase
      * @param $qb
      * @return m\MockInterface
      */
-    public function getMockRepo($qb)
+    public function getMockRepo(mixed $qb): mixed
     {
         $repo = m::mock(EntityRepository::class);
         $repo->shouldReceive('createQueryBuilder')
@@ -102,7 +104,7 @@ class BusTest extends RepositoryTestCase
     /**
      * @return m\MockInterface
      */
-    public function getMockFetchByIdQueryBuilder(mixed $results)
+    public function getMockFetchByIdQueryBuilder(mixed $results): mixed
     {
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
@@ -117,7 +119,7 @@ class BusTest extends RepositoryTestCase
      * @param int $busRegId
      * @return m\MockInterface
      */
-    public function getCommandWithId($busRegId)
+    public function getCommandWithId(mixed $busRegId): mixed
     {
         $command = m::mock(QueryInterface::class);
         $command->shouldReceive('getId')
@@ -130,7 +132,7 @@ class BusTest extends RepositoryTestCase
      * @param $qb
      * @param int $busRegId
      */
-    public function getFetchByIdQueryBuilder($qb, $busRegId)
+    public function getFetchByIdQueryBuilder(mixed $qb, mixed $busRegId): void
     {
         $this->queryBuilder->shouldReceive('modifyQuery')
             ->once()
@@ -168,7 +170,7 @@ class BusTest extends RepositoryTestCase
             ->with($busRegId);
     }
 
-    public function testApplyListFiltersPrevVariation()
+    public function testApplyListFiltersPrevVariation(): void
     {
         $sut = m::mock(BusRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
@@ -196,7 +198,7 @@ class BusTest extends RepositoryTestCase
         $sut->applyListFilters($mockQb, $mockQuery);
     }
 
-    public function testApplyListFiltersLicenceRoute()
+    public function testApplyListFiltersLicenceRoute(): void
     {
         $sut = m::mock(BusRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
@@ -224,7 +226,7 @@ class BusTest extends RepositoryTestCase
         $sut->applyListFilters($mockQb, $mockQuery);
     }
 
-    public function testApplyListFiltersLicenceRouteWithEmptyBusRegStatus()
+    public function testApplyListFiltersLicenceRouteWithEmptyBusRegStatus(): void
     {
         $sut = m::mock(BusRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
@@ -252,7 +254,7 @@ class BusTest extends RepositoryTestCase
     /**
      * Tests applyListJoins
      */
-    public function testApplyListJoins()
+    public function testApplyListJoins(): void
     {
         // mock SUT to allow testing the protected method
         $sut = m::mock(BusRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
@@ -270,7 +272,7 @@ class BusTest extends RepositoryTestCase
     /**
      * Test fetchWithTxcInboxListForOrganisation
      */
-    public function testFetchWithTxcInboxListForOrganisation()
+    public function testFetchWithTxcInboxListForOrganisation(): void
     {
         $busRegId = 15;
 
@@ -319,7 +321,7 @@ class BusTest extends RepositoryTestCase
     /**
      * Test fetchWithTxcInboxListForLocalAuthority where LA exists
      */
-    public function testFetchWithTxcInboxListForLocalAuthority()
+    public function testFetchWithTxcInboxListForLocalAuthority(): void
     {
         $busRegId = 15;
 
@@ -370,7 +372,7 @@ class BusTest extends RepositoryTestCase
     /**
      * Test fetchWithTxcInboxListForLocalAuthority where empty LA
      */
-    public function testFetchWithTxcInboxListForEmptyLocalAuthority()
+    public function testFetchWithTxcInboxListForEmptyLocalAuthority(): void
     {
         $busRegId = 15;
 
@@ -423,7 +425,7 @@ class BusTest extends RepositoryTestCase
      *
      * @return array
      */
-    public function dpLatestUsingRegNoProvider()
+    public function dpLatestUsingRegNoProvider(): array
     {
         $withResult = [
             0 => m::mock(BusReg::class)
@@ -435,7 +437,7 @@ class BusTest extends RepositoryTestCase
         ];
     }
 
-    public function testExpireBusRegistrations()
+    public function testExpireBusRegistrations(): void
     {
         $rowCount = 555;
         $mockResult = m::mock(Result::class);

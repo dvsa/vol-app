@@ -27,6 +27,7 @@ class AppealController extends AbstractInternalController implements CaseControl
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -103,6 +104,7 @@ class AppealController extends AbstractInternalController implements CaseControl
      *
      * @return array|mixed|\Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->redirectTo([]);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\System;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,29 +17,42 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * TranslationKey Abstract Entity
+ * AbstractTranslationKey Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="translation_key",
  *    indexes={
  *        @ORM\Index(name="fk_translation_key_users_created_by", columns={"created_by"}),
- *        @ORM\Index(name="fk_translation_key_users_last_modified_by", columns={"last_modified_by"})
+ *        @ORM\Index(name="fk_translation_key_users_last_modified_by", columns={"last_modified_by"}),
+ *        @ORM\Index(name="translation_key_translation_key_uindex", columns={"translation_key"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="translation_key_translation_key_uindex", columns={"translation_key"})
  *    }
  * )
  */
-abstract class AbstractTranslationKey implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTranslationKey implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
     use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
 
     /**
      * Created by
@@ -49,26 +64,6 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
-
-    /**
-     * Description
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=512, nullable=true)
-     */
-    protected $description;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
 
     /**
      * Last modified by
@@ -88,7 +83,16 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
      *
      * @ORM\Column(type="string", name="translation_key", length=512, nullable=false)
      */
-    protected $translationKey;
+    protected $translationKey = '';
+
+    /**
+     * Description
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="description", length=512, nullable=true)
+     */
+    protected $description;
 
     /**
      * Version
@@ -101,21 +105,16 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
     protected $version = 1;
 
     /**
-     * Translation key text
+     * TranslationKeyTexts
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\System\TranslationKeyText",
-     *     mappedBy="translationKey"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\TranslationKeyText", mappedBy="translationKey")
      */
     protected $translationKeyTexts;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -123,62 +122,13 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->translationKeyTexts = new ArrayCollection();
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return TranslationKey
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the description
-     *
-     * @param string $description new value being set
-     *
-     * @return TranslationKey
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get the description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
 
     /**
      * Set the id
@@ -205,9 +155,33 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
     }
 
     /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return TranslationKey
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return TranslationKey
      */
@@ -253,6 +227,30 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
     }
 
     /**
+     * Set the description
+     *
+     * @param string $description new value being set
+     *
+     * @return TranslationKey
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get the description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
      * Set the version
      *
      * @param int $version new value being set
@@ -277,9 +275,9 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the translation key text
+     * Set the translation key texts
      *
-     * @param ArrayCollection $translationKeyTexts collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $translationKeyTexts collection being set as the value
      *
      * @return TranslationKey
      */
@@ -293,7 +291,7 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
     /**
      * Get the translation key texts
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getTranslationKeyTexts()
     {
@@ -303,7 +301,7 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
     /**
      * Add a translation key texts
      *
-     * @param ArrayCollection|mixed $translationKeyTexts collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $translationKeyTexts collection being added
      *
      * @return TranslationKey
      */
@@ -337,5 +335,14 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

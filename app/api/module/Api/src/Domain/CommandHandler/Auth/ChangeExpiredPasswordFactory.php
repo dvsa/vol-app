@@ -21,6 +21,7 @@ class ChangeExpiredPasswordFactory implements FactoryInterface
      * @param array|null $options
      * @return ChangeExpiredPassword
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ChangeExpiredPassword
     {
         $adapter = $container->get(ValidatableAdapterInterface::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Validators;
 
 use Dvsa\Olcs\Api\Domain\Validation\Validators\CanAccessLicenceForSurrender;
@@ -16,16 +18,14 @@ class CanAccessLicenceForSurrenderTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpLicencePermissions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpLicencePermissions')]
     public function testIsValidExternalUserLicenceOwner(
-        $permission,
-        $isOwner,
-        $licenceState,
-        $surrenderStatus,
-        $expected
-    ) {
+        mixed $permission,
+        mixed $isOwner,
+        mixed $licenceState,
+        mixed $surrenderStatus,
+        mixed $expected
+    ): void {
         $entityId = 111;
 
         $this->setIsGranted($permission, true);
@@ -71,7 +71,7 @@ class CanAccessLicenceForSurrenderTest extends AbstractValidatorsTestCase
         $this->assertEquals($expected, $this->sut->isValid($entityId));
     }
 
-    public function dpLicencePermissions()
+    public static function dpLicencePermissions(): array
     {
         return [
             'selfservice-user-owner' => [

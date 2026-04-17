@@ -18,6 +18,7 @@ class SubjectOperatingCentreAddress extends DynamicBookmark
      *
      * @return Qry
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         $bundle = [
@@ -35,6 +36,7 @@ class SubjectOperatingCentreAddress extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         if (empty($this->data['operatingCentres'])) {

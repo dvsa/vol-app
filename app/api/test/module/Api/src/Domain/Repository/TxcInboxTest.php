@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\QueryBuilder;
@@ -12,6 +14,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class TxcInboxTest extends RepositoryTestCase
 {
     /** @var  Repo */
@@ -22,7 +25,7 @@ class TxcInboxTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchByOrganisation()
+    public function testFetchByOrganisation(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -40,7 +43,7 @@ class TxcInboxTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForOrganisationByBusReg()
+    public function testFetchListForOrganisationByBusReg(): void
     {
         $busRegId = 8888;
         $orgId = 7777;
@@ -70,7 +73,7 @@ class TxcInboxTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchListForLocalAuthorityByBusReg()
+    public function testFetchListForLocalAuthorityByBusReg(): void
     {
         $busRegId = 8888;
 
@@ -99,7 +102,7 @@ class TxcInboxTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchListForLocalAuthorityByBusRegOperator()
+    public function testFetchListForLocalAuthorityByBusRegOperator(): void
     {
         $busRegId = 8888;
 
@@ -127,7 +130,7 @@ class TxcInboxTest extends RepositoryTestCase
         );
     }
 
-    public function testBuildDefaultQuery()
+    public function testBuildDefaultQuery(): void
     {
         $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
@@ -147,7 +150,8 @@ class TxcInboxTest extends RepositoryTestCase
         $sut->buildDefaultListQuery($mockQb, $mockQi);
     }
 
-    public function testApplyListFilters()
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testApplyListFilters(): void
     {
         $this->setUpSut(Repo::class, true);
 
@@ -203,7 +207,7 @@ class TxcInboxTest extends RepositoryTestCase
         $this->sut->applyListFilters($mockQb, $query);
     }
 
-    public function testFetchLinkedToDocument()
+    public function testFetchLinkedToDocument(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -225,7 +229,7 @@ class TxcInboxTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchByIdsForLocalAuthority()
+    public function testFetchByIdsForLocalAuthority(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -245,7 +249,7 @@ class TxcInboxTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchByIdsForLocalAuthorityWithEmptyData()
+    public function testFetchByIdsForLocalAuthorityWithEmptyData(): void
     {
         $this->assertEquals([], $this->sut->fetchByIdsForLocalAuthority([], 4));
     }

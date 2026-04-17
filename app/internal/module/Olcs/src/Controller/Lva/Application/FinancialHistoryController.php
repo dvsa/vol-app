@@ -33,7 +33,6 @@ class FinancialHistoryController extends Lva\AbstractFinancialHistoryController 
 
     protected $lva = 'application';
     protected string $location = 'internal';
-    protected StringHelperService $stringHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -54,13 +53,11 @@ class FinancialHistoryController extends Lva\AbstractFinancialHistoryController 
         FormServiceManager $formServiceManager,
         ScriptFactory $scriptFactory,
         DataHelperService $dataHelper,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         FileUploadHelperService $uploadHelper,
         protected RestrictionHelperService $restrictionHelper,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

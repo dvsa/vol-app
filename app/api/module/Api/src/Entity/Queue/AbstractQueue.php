@@ -1,22 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Queue;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Queue Abstract Entity
+ * AbstractQueue Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -26,30 +31,51 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_queue_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_queue_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_queue_status", columns={"status"}),
- *        @ORM\Index(name="ix_queue_status_created_on_process_after_date",
-     *     columns={"status","created_on","process_after_date"}),
- *        @ORM\Index(name="ix_queue_status_type", columns={"status","type"}),
+ *        @ORM\Index(name="ix_queue_status_created_on_process_after_date", columns={"status", "created_on", "process_after_date"}),
+ *        @ORM\Index(name="ix_queue_status_type", columns={"status", "type"}),
  *        @ORM\Index(name="ix_queue_type", columns={"type"})
  *    }
  * )
  */
-abstract class AbstractQueue implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractQueue implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
 
     /**
-     * Attempts
+     * Primary key.  Auto incremented if numeric.
      *
      * @var int
      *
-     * @ORM\Column(type="smallint", name="attempts", nullable=false, options={"default": 0})
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $attempts = 0;
+    protected $id;
+
+    /**
+     * Type
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="type", referencedColumnName="id")
+     */
+    protected $type;
+
+    /**
+     * Status
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="status", referencedColumnName="id")
+     */
+    protected $status;
 
     /**
      * Created by
@@ -63,35 +89,6 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     protected $createdBy;
 
     /**
-     * Entity id
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="entity_id", nullable=true)
-     */
-    protected $entityId;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Last error
-     *
-     * @var string
-     *
-     * @ORM\Column(type="text", name="last_error", length=65535, nullable=true)
-     */
-    protected $lastError;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -103,11 +100,20 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     protected $lastModifiedBy;
 
     /**
+     * Entity id
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="entity_id", nullable=true)
+     */
+    protected $entityId;
+
+    /**
      * Options
      *
      * @var string
      *
-     * @ORM\Column(type="text", name="options", length=0, nullable=true)
+     * @ORM\Column(type="text", name="options", nullable=true)
      */
     protected $options;
 
@@ -121,24 +127,22 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     protected $processAfterDate;
 
     /**
-     * Status
+     * Attempts
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="smallint", name="attempts", nullable=false, options={"default": 0})
      */
-    protected $status;
+    protected $attempts = 0;
 
     /**
-     * Type
+     * Last error
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="type", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="text", name="last_error", nullable=true)
      */
-    protected $type;
+    protected $lastError;
 
     /**
      * Version
@@ -151,76 +155,20 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     protected $version = 1;
 
     /**
-     * Set the attempts
-     *
-     * @param int $attempts new value being set
-     *
-     * @return Queue
+     * Initialise the collections
      */
-    public function setAttempts($attempts)
+    public function __construct()
     {
-        $this->attempts = $attempts;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the attempts
-     *
-     * @return int
+     * Initialise collections
      */
-    public function getAttempts()
+    public function initCollections(): void
     {
-        return $this->attempts;
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return Queue
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the entity id
-     *
-     * @param int $entityId new value being set
-     *
-     * @return Queue
-     */
-    public function setEntityId($entityId)
-    {
-        $this->entityId = $entityId;
-
-        return $this;
-    }
-
-    /**
-     * Get the entity id
-     *
-     * @return int
-     */
-    public function getEntityId()
-    {
-        return $this->entityId;
-    }
 
     /**
      * Set the id
@@ -247,33 +195,81 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the last error
+     * Set the type
      *
-     * @param string $lastError new value being set
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $type new value being set
      *
      * @return Queue
      */
-    public function setLastError($lastError)
+    public function setType($type)
     {
-        $this->lastError = $lastError;
+        $this->type = $type;
 
         return $this;
     }
 
     /**
-     * Get the last error
+     * Get the type
      *
-     * @return string
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    public function getLastError()
+    public function getType()
     {
-        return $this->lastError;
+        return $this->type;
+    }
+
+    /**
+     * Set the status
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
+     *
+     * @return Queue
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get the status
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Queue
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
     }
 
     /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return Queue
      */
@@ -292,6 +288,30 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the entity id
+     *
+     * @param int $entityId new value being set
+     *
+     * @return Queue
+     */
+    public function setEntityId($entityId)
+    {
+        $this->entityId = $entityId;
+
+        return $this;
+    }
+
+    /**
+     * Get the entity id
+     *
+     * @return int
+     */
+    public function getEntityId()
+    {
+        return $this->entityId;
     }
 
     /**
@@ -337,8 +357,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
+     * @return \DateTime
      */
     public function getProcessAfterDate($asDateTime = false)
     {
@@ -350,51 +369,51 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     }
 
     /**
-     * Set the status
+     * Set the attempts
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status entity being set as the value
+     * @param int $attempts new value being set
      *
      * @return Queue
      */
-    public function setStatus($status)
+    public function setAttempts($attempts)
     {
-        $this->status = $status;
+        $this->attempts = $attempts;
 
         return $this;
     }
 
     /**
-     * Get the status
+     * Get the attempts
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     * @return int
      */
-    public function getStatus()
+    public function getAttempts()
     {
-        return $this->status;
+        return $this->attempts;
     }
 
     /**
-     * Set the type
+     * Set the last error
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $type entity being set as the value
+     * @param string $lastError new value being set
      *
      * @return Queue
      */
-    public function setType($type)
+    public function setLastError($lastError)
     {
-        $this->type = $type;
+        $this->lastError = $lastError;
 
         return $this;
     }
 
     /**
-     * Get the type
+     * Get the last error
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     * @return string
      */
-    public function getType()
+    public function getLastError()
     {
-        return $this->type;
+        return $this->lastError;
     }
 
     /**
@@ -419,5 +438,14 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    #[\Override]
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

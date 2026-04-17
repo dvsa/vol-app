@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Workshop test
  *
@@ -31,7 +33,7 @@ class WorkshopTest extends RepositoryTestCase
         $this->setUpSut(WorkshopRepo::class);
     }
 
-    public function testFetchUsingId()
+    public function testFetchUsingId(): void
     {
         $command = m::mock(QueryInterface::class);
         $command->shouldReceive('getId')
@@ -72,7 +74,7 @@ class WorkshopTest extends RepositoryTestCase
         $this->sut->fetchUsingId($command, Query::HYDRATE_OBJECT, 1);
     }
 
-    public function testFetchUsingIdWithResults()
+    public function testFetchUsingIdWithResults(): void
     {
         $command = m::mock(QueryInterface::class);
         $command->shouldReceive('getId')
@@ -116,7 +118,7 @@ class WorkshopTest extends RepositoryTestCase
         $this->sut->fetchUsingId($command, Query::HYDRATE_OBJECT, 1);
     }
 
-    public function testFetchForLicence()
+    public function testFetchForLicence(): void
     {
         $qb = $this->createMockQb('BLAH');
         $this->mockCreateQueryBuilder($qb);
@@ -134,7 +136,7 @@ class WorkshopTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testApplyFiltersLicence()
+    public function testApplyFiltersLicence(): void
     {
         $qb = $this->createMockQb('BLAH');
         $query = m::mock(\Dvsa\Olcs\Transfer\Query\Licence\Safety::class);
@@ -146,7 +148,7 @@ class WorkshopTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testApplyFiltersApplication()
+    public function testApplyFiltersApplication(): void
     {
         $qb = $this->createMockQb('BLAH');
         $query = m::mock(\Dvsa\Olcs\Transfer\Query\Application\Safety::class);

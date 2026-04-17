@@ -20,6 +20,7 @@ class UpdateCompanySubsidiary extends AbstractCompanySubsidiary
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         //  update subsidiary data

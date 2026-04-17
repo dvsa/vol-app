@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Traits;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -10,20 +12,20 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 class ProcessDateTimeTraitTest extends MockeryTestCase
 {
     /**
-     * @dataProvider dataProviderTestProcessDate
      *
      * @param $expected
      * @param $date
      * @param $format
      * @param $zeroTime
      */
-    public function testProcessDate($expected, $date, $format, $zeroTime)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestProcessDate')]
+    public function testProcessDate(mixed $expected, mixed $date, mixed $format, mixed $zeroTime): void
     {
         $sut = new StubProcessDateTime();
         $this->assertEquals($expected, $sut->processDate($date, $format, $zeroTime));
     }
 
-    public function dataProviderTestProcessDate()
+    public static function dataProviderTestProcessDate(): array
     {
         return [
             [null, '2017-02-18', 'Y', true],
@@ -36,18 +38,18 @@ class ProcessDateTimeTraitTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestProcessDateDefaults
      *
      * @param $expected
      * @param $date
      */
-    public function testProcessDateDefaults($expected, $date)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestProcessDateDefaults')]
+    public function testProcessDateDefaults(mixed $expected, mixed $date): void
     {
         $sut = new StubProcessDateTime();
         $this->assertEquals($expected, $sut->processDate($date));
     }
 
-    public function dataProviderTestProcessDateDefaults()
+    public static function dataProviderTestProcessDateDefaults(): array
     {
         return [
             [null, '18/02/2017'],
@@ -57,18 +59,18 @@ class ProcessDateTimeTraitTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestAsDateTime
      *
      * @param $expected
      * @param $value
      */
-    public function testAsDateTime($expected, $value)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestAsDateTime')]
+    public function testAsDateTime(mixed $expected, mixed $value): void
     {
         $sut = new StubProcessDateTime();
         $this->assertEquals($expected, $sut->asDateTime($value));
     }
 
-    public function dataProviderTestAsDateTime()
+    public static function dataProviderTestAsDateTime(): array
     {
         return [
             [new \DateTime('2017-02-12'), new \DateTime('2017-02-12')],

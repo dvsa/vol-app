@@ -29,6 +29,7 @@ final class DeleteEntities extends AbstractCommandHandler
      * @return Result
      * @throws BadRequestException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var SystemParameter $systemParameterRepo */

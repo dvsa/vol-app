@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
 /**
@@ -9,11 +11,11 @@ namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
  *
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class OutstandingApplicationsTest extends AbstractSubmissionSectionTest
+class OutstandingApplicationsTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\OutstandingApplications::class;
 
-    protected $expectedResult = [
+    protected const EXPECTED_RESULT = [
         'data' => [
             'tables' => [
                 'outstanding-applications' => [
@@ -99,12 +101,12 @@ class OutstandingApplicationsTest extends AbstractSubmissionSectionTest
      *
      * @return array
      */
-    public function sectionTestProvider()
+    public static function sectionTestProvider(): array
     {
-        $case = $this->getCase();
+        $case = static::getCase();
 
         return [
-            [$case, $this->expectedResult],
+            [$case, static::EXPECTED_RESULT],
         ];
     }
 }

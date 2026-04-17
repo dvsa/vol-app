@@ -17,6 +17,7 @@ class JsonDecodingFilteredTranslateableTextGeneratorFactory implements FactoryIn
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): JsonDecodingFilteredTranslateableTextGenerator
     {
         return new JsonDecodingFilteredTranslateableTextGenerator(

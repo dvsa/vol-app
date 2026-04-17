@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Fee;
 
 use DateTime;
@@ -31,7 +33,7 @@ class FeeTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 69]);
 
@@ -220,15 +222,15 @@ class FeeTest extends QueryHandlerTestCase
      * @return m\Mock (FeeTransactionEntity)
      */
     private function getMockFeeTransaction(
-        $id,
-        $created,
-        $completed,
-        $status,
-        $amount,
-        $type,
-        $method,
-        $transaction = null
-    ) {
+        mixed $id,
+        mixed $created,
+        mixed $completed,
+        mixed $status,
+        mixed $amount,
+        mixed $type,
+        mixed $method,
+        mixed $transaction = null
+    ): m\MockInterface {
         if (is_null($transaction)) {
             $transaction = m::mock(TransactionEntity::class);
             $transaction

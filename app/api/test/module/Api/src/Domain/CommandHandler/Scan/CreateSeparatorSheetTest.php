@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Scan;
 
 use Dvsa\Olcs\Api\Domain\Command\Document\GenerateAndStore;
@@ -13,9 +15,7 @@ use Dvsa\Olcs\Transfer\Command\Scan\CreateSeparatorSheet as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Scan\CreateSeparatorSheet
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Scan\CreateSeparatorSheet::class)]
 class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
 {
     public const SUB_CAT_ID = 8001;
@@ -59,7 +59,8 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
             ->shouldReceive('fetchByLicNo')->with('entityIdentifier')->andReturn($this->mockLic);
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -90,7 +91,7 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandNoDesc()
+    public function testHandleCommandNoDesc(): void
     {
         $command = Cmd::create(
             [
@@ -107,7 +108,7 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandInvalidCategory()
+    public function testHandleCommandInvalidCategory(): void
     {
         $command = Cmd::create(
             [
@@ -124,14 +125,14 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandNoEntityForCategory()
+    public function testHandleCommandNoEntityForCategory(): void
     {
         $sut = m::mock(CommandHandler::class)->makePartial();
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
         $sut->getEntityTypeForCategory(-1);
     }
 
-    public function testHandleCommandWithDescriptionId()
+    public function testHandleCommandWithDescriptionId(): void
     {
         $command = Cmd::create(
             [
@@ -202,7 +203,7 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Create Document', 'Scan ID ' . self::SCAN_ID . ' created'], $result->getMessages());
     }
 
-    public function testHandleCommandCategoryApplication()
+    public function testHandleCommandCategoryApplication(): void
     {
         $command = Cmd::create(
             [
@@ -267,7 +268,7 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Create Document', 'Scan ID ' . self::SCAN_ID . ' created'], $result->getMessages());
     }
 
-    public function testHandleCommandCategoryLicence()
+    public function testHandleCommandCategoryLicence(): void
     {
         $command = Cmd::create(
             [
@@ -332,7 +333,7 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Create Document', 'Scan ID ' . self::SCAN_ID . ' created'], $result->getMessages());
     }
 
-    public function testHandleCommandCategoryEnvironmental()
+    public function testHandleCommandCategoryEnvironmental(): void
     {
         $command = Cmd::create(
             [
@@ -400,7 +401,7 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Create Document', 'Scan ID ' . self::SCAN_ID . ' created'], $result->getMessages());
     }
 
-    public function testHandleCommandCategoryCompliance()
+    public function testHandleCommandCategoryCompliance(): void
     {
         $command = Cmd::create(
             [
@@ -476,7 +477,7 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Create Document', 'Scan ID ' . self::SCAN_ID . ' created'], $result->getMessages());
     }
 
-    public function testHandleCommandCategoryIrfo()
+    public function testHandleCommandCategoryIrfo(): void
     {
         $command = Cmd::create(
             [
@@ -544,7 +545,7 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Create Document', 'Scan ID ' . self::SCAN_ID . ' created'], $result->getMessages());
     }
 
-    public function testHandleCommandCategoryTransportManager()
+    public function testHandleCommandCategoryTransportManager(): void
     {
         $command = Cmd::create(
             [
@@ -615,7 +616,7 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Create Document', 'Scan ID ' . self::SCAN_ID . ' created'], $result->getMessages());
     }
 
-    public function testHandleCommandCategoryBusReg()
+    public function testHandleCommandCategoryBusReg(): void
     {
         $command = Cmd::create(
             [
@@ -695,7 +696,7 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Create Document', 'Scan ID ' . self::SCAN_ID . ' created'], $result->getMessages());
     }
 
-    public function testHandleCommandCategoryPermits()
+    public function testHandleCommandCategoryPermits(): void
     {
         $command = Cmd::create(
             [
@@ -774,10 +775,8 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Create Document', 'Scan ID ' . self::SCAN_ID . ' created'], $result->getMessages());
     }
 
-    /**
-     * @dataProvider dpHandleCommandCategoryPermitsBadIdentifierFormat
-     */
-    public function testHandleCommandCategoryPermitsBadIdentifierFormat($entityIdentifier)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandCategoryPermitsBadIdentifierFormat')]
+    public function testHandleCommandCategoryPermitsBadIdentifierFormat(mixed $entityIdentifier): void
     {
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage(
@@ -797,7 +796,7 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpHandleCommandCategoryPermitsBadIdentifierFormat()
+    public static function dpHandleCommandCategoryPermitsBadIdentifierFormat(): array
     {
         return [
             ['OB1234567 100007'],
@@ -807,7 +806,7 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandCategoryPermitsApplicationLicenceMismatch()
+    public function testHandleCommandCategoryPermitsApplicationLicenceMismatch(): void
     {
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage('IRHP application 35 does not belong to licence LIC001');

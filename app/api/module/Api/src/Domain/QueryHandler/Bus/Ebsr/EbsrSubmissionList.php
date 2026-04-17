@@ -35,6 +35,7 @@ class EbsrSubmissionList extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var Repository $repo */

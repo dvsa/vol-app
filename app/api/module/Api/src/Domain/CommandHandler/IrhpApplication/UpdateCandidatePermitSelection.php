@@ -35,6 +35,7 @@ class UpdateCandidatePermitSelection extends AbstractCommandHandler implements T
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $irhpApplicationId = $command->getId();

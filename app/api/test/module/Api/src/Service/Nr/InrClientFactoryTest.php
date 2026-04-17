@@ -17,7 +17,7 @@ use Psr\Container\ContainerInterface;
 
 class InrClientFactoryTest extends TestCase
 {
-    public function testCreateServiceNoConfig()
+    public function testCreateServiceNoConfig(): void
     {
         $this->expectException(\RuntimeException::class);
 
@@ -28,7 +28,7 @@ class InrClientFactoryTest extends TestCase
         $sut->__invoke($mockSl, InrClient::class);
     }
 
-    public function testCreateService()
+    public function testCreateService(): void
     {
         $oauth2 = ['options'];
         $config = [

@@ -19,6 +19,7 @@ class ConfirmationControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return ConfirmationController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ConfirmationController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

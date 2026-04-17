@@ -25,6 +25,7 @@ class RefreshTokens extends AbstractCommandHandler implements AuthAwareInterface
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         assert($command instanceof RefreshTokensCommand);

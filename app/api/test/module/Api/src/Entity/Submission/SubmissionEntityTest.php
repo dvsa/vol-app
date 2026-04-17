@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Submission;
 
 use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
@@ -34,7 +36,7 @@ class SubmissionEntityTest extends EntityTester
         $this->sut = $this->instantiate($this->entityClass);
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $case = m::mock(CaseEntity::class)->makePartial();
 
@@ -46,7 +48,7 @@ class SubmissionEntityTest extends EntityTester
         $this->assertSame($case, $submission->getCase());
     }
 
-    public function testClose()
+    public function testClose(): void
     {
         $case = m::mock(CaseEntity::class)->makePartial();
 
@@ -65,7 +67,7 @@ class SubmissionEntityTest extends EntityTester
     /**
      * Tests cases attached to NI licences
      */
-    public function testIsNiLicenceCase()
+    public function testIsNiLicenceCase(): void
     {
         $mockLicence = m::mock();
         $mockLicence->shouldReceive('getNiFlag')->andReturn('Y');
@@ -82,7 +84,7 @@ class SubmissionEntityTest extends EntityTester
     /**
      * Tests cases attached to licences Non-NI
      */
-    public function testIsNotNiLicenceCase()
+    public function testIsNotNiLicenceCase(): void
     {
         $mockLicence = m::mock();
         $mockLicence->shouldReceive('getNiFlag')->andReturn('N');
@@ -99,7 +101,7 @@ class SubmissionEntityTest extends EntityTester
     /**
      * Tests cases attached to applications
      */
-    public function testIsNiApplicationCase()
+    public function testIsNiApplicationCase(): void
     {
         $mockApplication = m::mock();
         $mockApplication->shouldReceive('getNiFlag')->andReturn('Y');
@@ -119,7 +121,7 @@ class SubmissionEntityTest extends EntityTester
     /**
      * Tests cases attached to applications Not NI
      */
-    public function testIsNotNiApplicationCase()
+    public function testIsNotNiApplicationCase(): void
     {
         $mockApplication = m::mock();
         $mockApplication->shouldReceive('getNiFlag')->andReturn('N');
@@ -139,7 +141,7 @@ class SubmissionEntityTest extends EntityTester
     /**
      * Tests cases attached to transport manager
      */
-    public function testIsNiTransportManagerCase()
+    public function testIsNiTransportManagerCase(): void
     {
         $mockApplication = m::mock();
         $mockApplication->shouldReceive('getNiFlag')->andReturn('N');
@@ -156,7 +158,7 @@ class SubmissionEntityTest extends EntityTester
         $this->assertFalse($submission->isNi());
     }
 
-    public function testGetRelatedOrganisation()
+    public function testGetRelatedOrganisation(): void
     {
         $case = m::mock(CaseEntity::class)->makePartial();
         $case->shouldReceive('getRelatedOrganisation')->with()->once()->andReturn('ORG1');
@@ -167,7 +169,7 @@ class SubmissionEntityTest extends EntityTester
         $this->assertSame('ORG1', $submission->getRelatedOrganisation());
     }
 
-    public function testGetSetSectionData()
+    public function testGetSetSectionData(): void
     {
         $value  = $this->sut->getSectionData();
         $this->assertNull($value);
@@ -176,33 +178,33 @@ class SubmissionEntityTest extends EntityTester
         $this->assertSame(['KEY' => 'VALUE'], $value);
     }
 
-    public function testSectionData()
+    public function testSectionData(): void
     {
         $this->sut->setSectionData('KEY', 'VALUE');
         $this->sut->setSubmissionDataSnapshot();
         $this->assertSame('{"KEY":"VALUE"}', ($this->sut->getDataSnapshot()));
     }
 
-    public function testNewSubmissionDataSnapshot()
+    public function testNewSubmissionDataSnapshot(): void
     {
         $this->sut->setNewSubmissionDataSnapshot(['KEY' => 'VALUE']);
         $this->assertSame('{"KEY":"VALUE"}', ($this->sut->getDataSnapshot()));
     }
 
-    public function testReopen()
+    public function testReopen(): void
     {
         $this->sut->setClosedDate('SOMETHING');
         $this->sut->reopen();
         $this->assertNull($this->sut->getClosedDate());
     }
 
-    public function testReopenError()
+    public function testReopenError(): void
     {
         $this->sut->setClosedDate(null);
         $this->expectException(ForbiddenException::class);
         $this->sut->reopen();
     }
-    public function testCloseError()
+    public function testCloseError(): void
     {
         $this->sut->setClosedDate('YYYY-MM-DD');
         $this->expectException(ForbiddenException::class);

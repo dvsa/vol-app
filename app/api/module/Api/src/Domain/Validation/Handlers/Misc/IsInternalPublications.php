@@ -17,6 +17,7 @@ class IsInternalPublications extends AbstractHandler implements AuthAwareInterfa
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return ($this->isGranted(Permission::INTERNAL_PUBLICATIONS));

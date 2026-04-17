@@ -44,6 +44,7 @@ final class CreateEnvironmentalComplaint extends AbstractCommandHandler implemen
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

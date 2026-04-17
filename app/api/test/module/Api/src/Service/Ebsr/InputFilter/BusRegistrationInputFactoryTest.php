@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\InputFilter;
 
 use Dvsa\Olcs\Api\Service\Ebsr\Filter\Format\ExistingRegNo;
@@ -25,7 +27,7 @@ use Psr\Container\ContainerInterface;
 
 class BusRegistrationInputFactoryTest extends TestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockMappings = m::mock(SpecificationInterface::class);
 
@@ -79,7 +81,7 @@ class BusRegistrationInputFactoryTest extends TestCase
     /**
      * Tests create service with disabled validators
      */
-    public function testInvokeDisabledValidators()
+    public function testInvokeDisabledValidators(): void
     {
         $config = [
             'ebsr' => [

@@ -18,6 +18,7 @@ final class Si extends AbstractQueryHandler
 {
     protected $repoServiceName = 'SeriousInfringement';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /**

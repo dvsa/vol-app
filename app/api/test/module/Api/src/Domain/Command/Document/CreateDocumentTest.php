@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Document Test
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\Document\CreateDocument;
  */
 class CreateDocumentTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = CreateDocument::create(
             [

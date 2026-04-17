@@ -17,6 +17,7 @@ final class CreateApplicationOperatingCentre extends AbstractCommandHandler impl
 {
     protected $repoServiceName = 'ApplicationOperatingCentre';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $applicationOperatingCentre = new ApplicationOperatingCentre(

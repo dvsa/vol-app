@@ -125,6 +125,7 @@ class Role extends AbstractRole implements RoleInterface
      *
      * @return string
      */
+    #[\Override]
     public function getName()
     {
         return $this->getRole();
@@ -136,6 +137,7 @@ class Role extends AbstractRole implements RoleInterface
      * @param  mixed $permission
      * @return bool
      */
+    #[\Override]
     public function hasPermission($permission)
     {
 

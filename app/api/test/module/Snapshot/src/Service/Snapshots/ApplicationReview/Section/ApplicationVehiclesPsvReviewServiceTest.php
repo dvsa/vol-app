@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Application Vehicles Psv Review Service Test
  *
@@ -48,10 +50,8 @@ class ApplicationVehiclesPsvReviewServiceTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider providerGetConfigFromData
-     */
-    public function testGetConfigFromData($data, $expectedMainItems, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerGetConfigFromData')]
+    public function testGetConfigFromData(mixed $data, mixed $expectedMainItems, mixed $expected): void
     {
         $this->mockTranslator->shouldReceive('translate')
             ->andReturnUsing(
@@ -65,7 +65,7 @@ class ApplicationVehiclesPsvReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function providerGetConfigFromData()
+    public static function providerGetConfigFromData(): array
     {
         return [
             [

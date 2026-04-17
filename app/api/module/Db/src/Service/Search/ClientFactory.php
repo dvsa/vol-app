@@ -26,6 +26,7 @@ class ClientFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws Exception\InvalidServiceException
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Client
     {
         $config = $container->get('config');

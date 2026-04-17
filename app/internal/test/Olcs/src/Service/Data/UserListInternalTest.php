@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -10,8 +12,8 @@ use Mockery as m;
 
 /**
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
- * @covers \Olcs\Service\Data\UserListInternal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\UserListInternal::class)]
 class UserListInternalTest extends AbstractListDataServiceTestCase
 {
     private $userList = [
@@ -78,7 +80,7 @@ class UserListInternalTest extends AbstractListDataServiceTestCase
     /**
      * Test fetchUserListData
      */
-    public function testFetchUserListData()
+    public function testFetchUserListData(): void
     {
         $results = ['results' => 'results'];
         $params = [
@@ -119,7 +121,7 @@ class UserListInternalTest extends AbstractListDataServiceTestCase
     /**
      * Test fetchUserListData with exception
      */
-    public function testFetchListDataWithException()
+    public function testFetchListDataWithException(): void
     {
         $this->expectException(DataServiceException::class);
 
@@ -142,7 +144,7 @@ class UserListInternalTest extends AbstractListDataServiceTestCase
     /**
      * Test fetchListOptions
      */
-    public function testFetchListOptionsUsingGroups()
+    public function testFetchListOptionsUsingGroups(): void
     {
         $this->sut->setData('userlist', $this->userList);
 
@@ -171,7 +173,7 @@ class UserListInternalTest extends AbstractListDataServiceTestCase
     /**
      * Test fetchListOptions
      */
-    public function testFetchListOptionsWithoutGroups()
+    public function testFetchListOptionsWithoutGroups(): void
     {
         $this->sut->setData('userlist', $this->userList);
 
@@ -190,7 +192,7 @@ class UserListInternalTest extends AbstractListDataServiceTestCase
     /**
      * Test fetchListOptionsEmpty
      */
-    public function testFetchListOptionsEmpty()
+    public function testFetchListOptionsEmpty(): void
     {
         $this->sut->setData('userlist', false);
 
@@ -200,13 +202,13 @@ class UserListInternalTest extends AbstractListDataServiceTestCase
     /**
      * Test set team
      */
-    public function testSetTeamId()
+    public function testSetTeamId(): void
     {
         $this->sut->setTeamId(1);
         $this->assertEquals(1, $this->sut->getTeamId());
     }
 
-    public function testExcludeLimitedReadOnly()
+    public function testExcludeLimitedReadOnly(): void
     {
         $this->sut->setExcludeLimitedReadOnly(true);
         $this->assertTrue($this->sut->getExcludeLimitedReadOnly());

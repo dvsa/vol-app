@@ -28,6 +28,7 @@ final class UpdateTradingNames extends AbstractCommandHandler implements Transac
 
     protected $extraRepos = ['Organisation', 'TradingName'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $fromLicence = $command->getLicence() !== null;

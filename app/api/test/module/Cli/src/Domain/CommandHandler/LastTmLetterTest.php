@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler;
 
 use Dvsa\Olcs\Api\Domain\Command\Document\GenerateAndStore;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\System\Category;
-use Dvsa\Olcs\Api\Entity\System\SystemParameter;
 use Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence;
 use Dvsa\Olcs\Cli\Domain\CommandHandler\LastTmLetter;
 use Dvsa\Olcs\Email\Data\Message;
@@ -33,7 +34,6 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('User', Repository\User::class);
         $this->mockRepo('Document', Repository\Document::class);
         $this->mockRepo('DocTemplate', Repository\DocTemplate::class);
-        $this->mockRepo('SystemParameter', Repository\SystemParameter::class);
         $this->mockRepo('TransportManagerLicence', Repository\TransportManagerLicence::class);
 
         $this->mockedSmServices = [
@@ -44,7 +44,7 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand(): array
     {
         $sideEffectResultsWithAllowEmail = [
             'GenerateAndStore' => [
@@ -68,23 +68,22 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
             'CreateTask' => [
                 'ids' => [
                     'assignedToUser' => 111
-                ]
-
+                ],
             ]
         ];
 
         return [
             'no_licences_with_removed_tm' => [
-                'data' => [
+                'dataProvider' => [
                     'licence' => []
                 ],
-                'expect' => [
+                'expectedResult' => [
                     'id' => [],
                     'messages' => []
                 ]
             ],
             'licence_with_removed_tm_allow_email_gb_gv' => [
-                'data' => [
+                'dataProvider' => [
                     'licence' => [
                         'id' => 1,
                         'licNo' => 'AB123',
@@ -103,9 +102,8 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                     'sideEffectResults' => $sideEffectResultsWithAllowEmail
 
                 ],
-                'expect' => [
+                'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                         'correspondenceAddress' => '123',
                     ],
@@ -117,7 +115,7 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                 ]
             ],
             'licence_with_removed_tm_correspondenceCd_email_null' => [
-                'data' => [
+                'dataProvider' => [
                     'licence' => [
                         'id' => 1,
                         'licNo' => 'AB123',
@@ -138,9 +136,8 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                     'sideEffectResults' => $sideEffectResultsWithAllowEmail
 
                 ],
-                'expect' => [
+                'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                         'correspondenceAddress' => '123',
                     ],
@@ -152,7 +149,7 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                 ]
             ],
             'licence_with_removed_tm_correspondenceCd_with_email_not_existing_user' => [
-                'data' => [
+                'dataProvider' => [
                     'licence' => [
                         'id' => 1,
                         'licNo' => 'AB123',
@@ -174,9 +171,8 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                     'sideEffectResults' => $sideEffectResultsWithAllowEmail
 
                 ],
-                'expect' => [
+                'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                         'correspondenceAddress' => '123',
                     ],
@@ -187,7 +183,7 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                 ]
             ],
             'licence_with_removed_tm_correspondenceCd_with_email_existing_user' => [
-                'data' => [
+                'dataProvider' => [
                     'licence' => [
                         'id' => 1,
                         'licNo' => 'AB123',
@@ -209,9 +205,8 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                     'sideEffectResults' => $sideEffectResultsWithAllowEmail
 
                 ],
-                'expect' => [
+                'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                         'correspondenceAddress' => '123',
                     ],
@@ -223,7 +218,7 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                 ]
             ],
             'licence_with_removed_tm_allow_email_ni_gv' => [
-                'data' => [
+                'dataProvider' => [
                     'licence' => [
                         'id' => 1,
                         'licNo' => 'AB123',
@@ -242,9 +237,8 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                     'sideEffectResults' => $sideEffectResultsWithAllowEmail
 
                 ],
-                'expect' => [
+                'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                         'correspondenceAddress' => '123',
                     ],
@@ -256,7 +250,7 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                 ]
             ],
             'licence_with_removed_tm_not_allow_email_gb_psv' => [
-                'data' => [
+                'dataProvider' => [
                     'licence' => [
                         'id' => 1,
                         'licNo' => 'AB123',
@@ -300,9 +294,8 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                     ]
 
                 ],
-                'expect' => [
+                'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                         'correspondenceAddress' => '123',
                     ],
@@ -310,28 +303,89 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                         "Document id '123', queued for print",
                     ]
                 ]
+            ],
+            'multiple_removed_tms_only_one_document' => [
+                'dataProvider' => [
+                    'licence' => [
+                        'id' => 1,
+                        'licNo' => 'AB123',
+                        'isNi' => false,
+                        'isPsv' => false,
+                        'organisation' => [
+                            'allowEmail' => 'Y',
+                            'name' => 'Test Operator Ltd',
+                        ],
+                        'correspondenceCd' => [
+                            'emailAddress' => 'test@email.com'
+                        ]
+                    ],
+                    'user' => [
+                        'fetchFirstByEmailOrFalse' => false
+                    ],
+                    'sideEffectResults' => [
+                        'GenerateAndStore' => [
+                            'ids' => [
+                                'documents' => [
+                                    '123' => [
+                                        'metadata' => json_encode([
+                                            'details' => [
+                                                'category' => Category::CATEGORY_TRANSPORT_MANAGER,
+                                                'documentSubCategory' => Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CORRESPONDENCE,
+                                                'documentTemplate' => 1285,
+                                                'allowEmail' => 'Y',
+                                                'sendToAddress' => 'correspondenceAddress',
+                                            ]
+                                        ]),
+                                    ],
+                                ]
+                            ]
+                        ],
+                        'CreateTask' => [
+                            'ids' => []
+
+                        ],
+                    ],
+                    'multipleRemovedTms' => true,
+                ],
+                'expectedResult' => [
+                    'id' => [
+                        'document' => 123,
+                        '' => 123,
+                    ],
+                    'messages' => [
+                        "Document id '123', queued for print",
+                        "Correspondence record created",
+                        "Email sent"
+                    ]
+                ]
             ]
         ];
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
-    public function testHandleCommand($dataProvider, $expectedResult)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
+    public function testHandleCommand(mixed $dataProvider, mixed $expectedResult): void
     {
-        if (array_key_exists('isNi', $dataProvider['licence'])) {
-            $this->repoMap['SystemParameter']->shouldReceive('fetchValue')
-                ->with($dataProvider['licence']['isNi'] ? SystemParameter::LAST_TM_NI_TASK_OWNER : SystemParameter::LAST_TM_GB_TASK_OWNER)
-                ->andReturn(1)
-                ->once();
-        }
-
         $licenceRepo = $this->repoMap['Licence'];
 
         $licence = empty($dataProvider['licence']) ? null : m::mock(LicenceEntity::class);
 
         if ($licence !== null) {
             $this->mockLicence($licence, $dataProvider);
+
+            if (array_key_exists('fetchFirstByEmailOrFalse', $dataProvider['user'])) {
+                $fetchedUser = $dataProvider['user']['fetchFirstByEmailOrFalse'];
+
+                if ($fetchedUser instanceof m\MockInterface) {
+                    $fetchedUser->shouldReceive('getTranslateToWelsh')->once()->andReturn('N');
+                }
+
+                $this->repoMap['User']
+                    ->shouldReceive('fetchFirstByEmailOrFalse')
+                    ->once()
+                    ->andReturn($fetchedUser);
+
+                $this->expectedSideEffect(SendEmail::class, [], new Result());
+            }
         }
 
         $eligibleLicences = $licence === null ? [] : [$licence];
@@ -348,7 +402,7 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedResult, $response->toArray());
     }
 
-    public function mockCorrespondenceCd(m\MockInterface $licence, $dataProvider)
+    public function mockCorrespondenceCd(m\MockInterface $licence, mixed $dataProvider): void
     {
         $correspondenceCdWithNullEmail = m::mock(ContactDetails::class);
         $correspondenceCdWithNullEmail->shouldReceive('getEmailAddress')->andReturn(null);
@@ -370,34 +424,33 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
         $licence->shouldReceive('getCorrespondenceCd')->andReturn($mockCorrespondenceCd);
     }
 
-    private function getGenerateAndStoreResult($documents)
+    private function getGenerateAndStoreResult(mixed $documents): mixed
     {
         $result = new Result();
 
         foreach ($documents as $id => $data) {
-            $result->addId($data['address'], $id);
+            $result->addId($data['address'] ?? '', $id);
             $result->addId('document', $id);
         }
 
         return $result;
     }
 
-    private function getCreateTaskResult($dataProvider)
+    private function getCreateTaskResult(mixed $dataProvider): mixed
     {
         $result = new Result();
-        $result->addId('assignedToUser', $dataProvider['sideEffectResults']['CreateTask']['ids']['assignedToUser']);
 
         return $result;
     }
 
-    private function getPrintLetterResult($documentId)
+    private function getPrintLetterResult(mixed $documentId): mixed
     {
         $result = new Result();
         $result->addMessage("Document id '$documentId', queued for print");
         return $result;
     }
 
-    private function getPrintLetterEmailResult()
+    private function getPrintLetterEmailResult(): mixed
     {
         $result = new Result();
         $result->addMessage('Correspondence record created');
@@ -406,7 +459,7 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
         return $result;
     }
 
-    private function mockUser()
+    private function mockUser(): mixed
     {
         $caseworkerDetailsBundle = [
             'contactDetails' => [
@@ -444,7 +497,7 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
         return $user;
     }
 
-    private function mockLicence(m\MockInterface $licence, $dataProvider)
+    private function mockLicence(m\MockInterface $licence, mixed $dataProvider): mixed
     {
 
         $licenceBundle = [
@@ -466,19 +519,49 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
      * @param $dataProvider
      * @param $eligibleLicences
      */
-    private function caseLicenceWithRemovedTmTest($dataProvider, $eligibleLicences): void
+    private function caseLicenceWithRemovedTmTest(mixed $dataProvider, mixed $eligibleLicences): void
     {
-        $this->mockUserRepo($dataProvider);
-
         $tmlRepo = $this->repoMap['TransportManagerLicence'];
         foreach ($eligibleLicences as $eligibleLicence) {
-            $tmlEntity = m::mock(TransportManagerLicence::class);
-            $tmlEntity->shouldReceive('setLastTmLetterDate');
-            $tmlRepo
-                ->shouldReceive('fetchRemovedTmForLicence')
-                ->with($eligibleLicence->getId())
-                ->andReturn([$tmlEntity]);
-            $tmlRepo->shouldReceive('save');
+            if (!empty($dataProvider['multipleRemovedTms'])) {
+                $tmlEntity1 = m::mock(TransportManagerLicence::class);
+                $tmlEntity1->shouldReceive('getId')->andReturn(5);
+                $tmlEntity1->shouldReceive('setLastTmLetterDate')->once();
+
+                $tm1 = m::mock(\Dvsa\Olcs\Api\Entity\Tm\TransportManager::class);
+                $tm1->shouldReceive('getId')->andReturn(1);
+                $tmlEntity1->shouldReceive('getTransportManager')->andReturn($tm1);
+
+                $tmlEntity2 = m::mock(TransportManagerLicence::class);
+                $tmlEntity2->shouldReceive('getId')->andReturn(6);
+                $tmlEntity2->shouldReceive('setLastTmLetterDate')->once();
+
+                $tm2 = m::mock(\Dvsa\Olcs\Api\Entity\Tm\TransportManager::class);
+                $tm2->shouldReceive('getId')->andReturn(2);
+                $tmlEntity2->shouldReceive('getTransportManager')->andReturn($tm2);
+
+                $tmlRepo
+                    ->shouldReceive('fetchRemovedTmForLicence')
+                    ->with($eligibleLicence->getId(), true)
+                    ->once()
+                    ->andReturn([$tmlEntity1, $tmlEntity2]);
+
+                $tmlRepo->shouldReceive('save')->with($tmlEntity1)->once();
+                $tmlRepo->shouldReceive('save')->with($tmlEntity2)->once();
+            } else {
+                $tmlEntity = m::mock(TransportManagerLicence::class);
+                $tmlEntity->shouldReceive('getId')->andReturn(5);
+                $tmlEntity->shouldReceive('setLastTmLetterDate');
+                $tm = m::mock(\Dvsa\Olcs\Api\Entity\Tm\TransportManager::class);
+                $tm->shouldReceive('getId')->andReturn(1);
+
+                $tmlEntity->shouldReceive('getTransportManager')->andReturn($tm);
+                $tmlRepo
+                    ->shouldReceive('fetchRemovedTmForLicence')
+                    ->with($eligibleLicence->getId(), true)
+                    ->andReturn([$tmlEntity]);
+                $tmlRepo->shouldReceive('save');
+            }
         }
 
         $documentsData = $dataProvider['sideEffectResults']['GenerateAndStore']['ids']['documents'];
@@ -519,7 +602,7 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
     /**
      * @param $dataProvider
      */
-    private function mockUserRepo($dataProvider): void
+    private function mockUserRepo(mixed $dataProvider): void
     {
         $userRepo = $this->repoMap['User'];
         $user = $this->mockUser();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermit;
 
 use Dvsa\Olcs\Api\Domain\Command\IrhpApplication\Expire as ExpireIrhpApplication;
@@ -29,7 +31,8 @@ class TerminateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrhpPermit::STATUS_TERMINATED,
@@ -38,7 +41,7 @@ class TerminateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testCatchForbiddenException()
+    public function testCatchForbiddenException(): void
     {
         $permitId = 9;
 
@@ -70,7 +73,7 @@ class TerminateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testTerminatePermit()
+    public function testTerminatePermit(): void
     {
         $permitId = 9;
 
@@ -108,7 +111,7 @@ class TerminateTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testTerminateLastPermitOnIrhpApp()
+    public function testTerminateLastPermitOnIrhpApp(): void
     {
         $permitId = 9;
 

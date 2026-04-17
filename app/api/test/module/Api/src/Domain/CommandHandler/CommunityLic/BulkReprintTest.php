@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\CommunityLic;
 
 use Dvsa\Olcs\Api\Domain\Command\CommunityLic\ValidatingReprintCaller as ValidatingReprintCallerCmd;
@@ -28,7 +30,7 @@ class BulkReprintTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $documentIdentifier = 'documentIdentifier';
         $userId = 491;
@@ -103,7 +105,7 @@ class BulkReprintTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedMessages, $result->getMessages());
     }
 
-    public function testFailOnTooManyRows()
+    public function testFailOnTooManyRows(): void
     {
         $documentIdentifier = 'documentIdentifier2';
 
