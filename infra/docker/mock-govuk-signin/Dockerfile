@@ -6,8 +6,12 @@ WORKDIR ${LAMBDA_TASK_ROOT}
 COPY app/mock-govuk-signin/package*.json ./
 RUN npm ci
 
-# Copy source code
-COPY app/mock-govuk-signin/ .
+# Copy only the inputs needed to build (avoids dragging in host node_modules/
+# or a stale dist/ from the workspace; the build context is the repo root,
+# which has no .dockerignore, so listing inputs explicitly here is safer
+# than a wildcard COPY).
+COPY app/mock-govuk-signin/tsconfig.json ./
+COPY app/mock-govuk-signin/src ./src
 
 # Build TypeScript
 RUN npm run build
