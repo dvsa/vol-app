@@ -51,36 +51,36 @@ EXPOSE 8080
 
 FROM cli AS production
 
-#ADD ./api.tar.gz /var/www/html
+ADD ./api.tar.gz /var/www/html
 
 # Add bash scripts
 COPY ./scripts/ /mnt/data/scripts/
 
 # `chown` and `chmod` flags do not work with `ADD` command when adding a tarball.
 # https://github.com/docker/docs/issues/7305
-#RUN chown -R root:www-data /var/www/html \
+RUN chown -R root:www-data /var/www/html \
   # Reset the permissions of the application files.
-#  && chmod -R 644 /var/www/html \
+  && chmod -R 644 /var/www/html \
   # Add owner (`root`) and group (`www-data`) execute permissions on directories.
-#  && find /var/www/html -type d -exec chmod 755 {} \; \
+  && find /var/www/html -type d -exec chmod 755 {} \; \
   # Add group (`www-data`) write permissions to the cache directory files.
-#  && chmod -R 664 /var/www/html/data/cache \
+  && chmod -R 664 /var/www/html/data/cache \
   # Add group (`www-data`) write permissions on the cache directories.
-#  && find /var/www/html/data/cache -type d -exec chmod 775 {} \; \
+  && find /var/www/html/data/cache -type d -exec chmod 775 {} \; \
   # Ensure Laminas binary is executable for CLI jobs.
-#  && chmod +x /var/www/html/vendor/bin/laminas
+  && chmod +x /var/www/html/vendor/bin/laminas
 
   # Create olcsdump and anondump directory.
-#RUN mkdir -p /mnt/data/olcsdump /mnt/data/anondump\
+RUN mkdir -p /mnt/data/olcsdump /mnt/data/anondump\
   # Set directory ownership.
-#  && chown root:www-data /mnt/data/olcsdump /mnt/data/scripts/ /mnt/data/anondump \
+  && chown root:www-data /mnt/data/olcsdump /mnt/data/scripts/ /mnt/data/anondump \
   # Set directory permissions.
-#  && chmod 775 /mnt/data/olcsdump /mnt/data/scripts/ /mnt/data/anondump \
+  && chmod 775 /mnt/data/olcsdump /mnt/data/scripts/ /mnt/data/anondump \
   # Ensure scripts are executable.
-#  && chmod +x /mnt/data/scripts/*.sh
+  && chmod +x /mnt/data/scripts/*.sh
 
-#RUN chmod +x /mnt/data/scripts/*.py \
-#  && ln -s /mnt/data/scripts/*.py /usr/local/bin/ 
+RUN chmod +x /mnt/data/scripts/data_refresh/*.sh /mnt/data/scripts/data_refresh/*.py \
+  && ln -s /mnt/data/scripts/data_refresh/*.sh /mnt/data/scripts/data_refresh/*.py /usr/local/bin/
 
 USER www-data
 
