@@ -47,7 +47,7 @@ WORK_DIR=$(mktemp -d)
 
 slack_send "$SLACK_CHAN" "$SLACK_COMPLETED" "Starting ${platformEnv} data refresh pipeline"
 
-reset_service_password "$platformEnv"
+reset_service_password "$platformEnv" "$Region"
 
 if ! generate_user_pool_csv "$platformEnv" "$Region"; then
     slack_send "$SLACK_CHAN" "$SLACK_FAIL" "GENERATE_NEW_USER_POOL_CSV_PLB FAILED!"
