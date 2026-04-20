@@ -9,6 +9,10 @@ use Dvsa\Olcs\Api\Service\Template\TwigRenderer;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\Template\UpdateTemplateSource as UpdateTemplateSourceCmd;
 use Exception;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\DisallowedRawHtml\DisallowedRawHtmlExtension;
+use League\CommonMark\MarkdownConverter;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -18,10 +22,14 @@ use Psr\Container\ContainerInterface;
  */
 class UpdateTemplateSource extends AbstractCommandHandler
 {
+    public const FORMAT_MARKDOWN = 'md';
+
     protected $repoServiceName = 'Template';
 
     /** @var TwigRenderer */
     private $twigRenderer;
+
+    private ?MarkdownConverter $markdownValidator = null;
 
     /**
      * Handle command
@@ -37,10 +45,12 @@ class UpdateTemplateSource extends AbstractCommandHandler
         $template = $templateRepo->fetchUsingId($command);
         $source = $command->getSource();
 
+        $isMarkdown = $template->getFormat() === self::FORMAT_MARKDOWN;
+
         $testDatasets = $template->getDecodedTestData();
         foreach ($testDatasets as $datasetName => $datasetValues) {
             try {
-                $this->twigRenderer->renderString($source, $datasetValues);
+                $rendered = $this->twigRenderer->renderString($source, $datasetValues);
             } catch (Exception $e) {
                 throw new ValidationException(
                     [sprintf(
@@ -49,6 +59,10 @@ class UpdateTemplateSource extends AbstractCommandHandler
                         $e->getMessage()
                     )]
                 );
+            }
+
+            if ($isMarkdown) {
+                $this->assertMarkdownSafe($datasetName, $rendered);
             }
         }
 
@@ -66,5 +80,44 @@ class UpdateTemplateSource extends AbstractCommandHandler
 
         $this->twigRenderer = $container->get('TemplateTwigRenderer');
         return parent::__invoke($fullContainer, $requestedName, $options);
+    }
+
+    private function assertMarkdownSafe(string $datasetName, string $rendered): void
+    {
+        if (preg_match('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', $rendered) === 1) {
+            throw new ValidationException([sprintf(
+                'Markdown template contains control characters (dataset %s)',
+                $datasetName,
+            )]);
+        }
+
+        $converter = $this->getMarkdownValidator();
+        try {
+            $converter->convert($rendered);
+        } catch (Exception $e) {
+            throw new ValidationException([sprintf(
+                'Invalid Markdown in template (dataset %s): %s',
+                $datasetName,
+                $e->getMessage(),
+            )]);
+        }
+    }
+
+    private function getMarkdownValidator(): MarkdownConverter
+    {
+        if ($this->markdownValidator !== null) {
+            return $this->markdownValidator;
+        }
+
+        $environment = new Environment([
+            'disallowed_raw_html' => [
+                // Strip any raw HTML so templates can't bypass Notify's rendering.
+                'disallowed_tags' => ['title', 'textarea', 'style', 'xmp', 'iframe', 'noembed', 'noframes', 'script', 'plaintext'],
+            ],
+        ]);
+        $environment->addExtension(new CommonMarkCoreExtension());
+        $environment->addExtension(new DisallowedRawHtmlExtension());
+
+        return $this->markdownValidator = new MarkdownConverter($environment);
     }
 }

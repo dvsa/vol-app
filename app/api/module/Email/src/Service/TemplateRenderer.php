@@ -55,6 +55,22 @@ class TemplateRenderer
     }
 
     /**
+     * Renders a Markdown-Twig template (`format='md'`) directly into the message's markdownBody.
+     *
+     * Unlike {@see self::renderBody()}, there is no layout wrap — Notify provides its own email
+     * chrome server-side (and the dev transport applies a GOV.UK-alike chrome locally).
+     *
+     * @param string|array<int, string> $templates
+     * @param array<string, mixed> $variables
+     */
+    public function renderMarkdownBody(Message $message, $templates, array $variables = []): void
+    {
+        $locale = $message->getLocale();
+        $markdown = $this->getEmailContent($locale, $templates, 'md', $variables);
+        $message->setMarkdownBody($markdown);
+    }
+
+    /**
      * @param string $locale
      * @param string $layout
      * @param string $format

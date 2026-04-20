@@ -103,6 +103,14 @@ return [
     'from_email' => 'mail.olcs.dev@dev-dvsacloud.uk',
     'selfserve_uri' => 'https://olcs-selfserve',
     'internal_uri' => 'https://olcs-internal',
+    // GOV.UK Notify passthrough templates. Leave blank locally and the transport will refuse
+    // to send to Notify; populate with trial-service template UUIDs to exercise the real API.
+    'notify' => [
+      'passthrough_templates' => [
+        'en_GB' => '',
+        'cy_GB' => '',
+      ],
+    ],
   ],
   'awsOptions'=>[
     'region' => 'eu-west-1',
@@ -117,6 +125,10 @@ return [
     ],
   ],
   'mail' => [
+    // Set to `govuknotify+mailpit://mailpit:1025` to route outbound mail through
+    // DevNotifyTransport (renders Markdown → GOV.UK chrome → Mailpit). Default null keeps
+    // plain SMTP → Mailpit, matching historical local behaviour.
+    'dsn' => null,
     'type' => '\Laminas\Mail\Transport\Smtp',
     'options' => new \Laminas\Stdlib\ArrayUtils\MergeReplaceKey([
       'name' => 'mailpit',

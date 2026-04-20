@@ -73,6 +73,7 @@ class UpdateTemplateSourceTest extends AbstractCommandHandlerTestCase
         $template = m::mock(Template::class);
         $template->shouldReceive('getDecodedTestData')
             ->andReturn($datasets);
+        $template->shouldReceive('getFormat')->andReturn('html');
         $template->shouldReceive('setSource')
             ->once()
             ->with($source)
@@ -137,6 +138,7 @@ class UpdateTemplateSourceTest extends AbstractCommandHandlerTestCase
         $template = m::mock(Template::class);
         $template->shouldReceive('getDecodedTestData')
             ->andReturn($datasets);
+        $template->shouldReceive('getFormat')->andReturn('html');
 
         $this->repoMap['Template']->shouldReceive('fetchUsingId')
             ->with($command)

@@ -72,6 +72,7 @@ return [
             'migrations:status'     => MigrationCommands\StatusCommand::class,
             'migrations:version'    => MigrationCommands\VersionCommand::class,
             'entity:generate'       => Dvsa\Olcs\Cli\Command\EntityGenerator\GenerateEntitiesCommand::class,
+            'notify:hello-world'    => Dvsa\Olcs\Cli\Command\Email\NotifyHelloWorldCommand::class,
         ],
     ],
     'dependencies' => [
@@ -218,6 +219,10 @@ return [
         QueueCommands\ProcessInsolvencyDlqSQSQueueCommand::class => $commonCommandDeps,
         QueueCommands\TransXChangeConsumerSQSQueueCommand::class => $commonCommandDeps,
         \Dvsa\Olcs\Cli\Command\EntityGenerator\GenerateEntitiesCommand::class => $commonCommandDeps,
+        \Dvsa\Olcs\Cli\Command\Email\NotifyHelloWorldCommand::class => [
+            ...$commonCommandDeps,
+            \Dvsa\Olcs\Email\Service\TemplateRenderer::class,
+        ],
     ],
     'cache' => [
         'adapter' => [

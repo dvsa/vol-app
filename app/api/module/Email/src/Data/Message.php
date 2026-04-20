@@ -39,6 +39,13 @@ class Message
 
     protected $locale = 'en_GB';
 
+    protected ?string $templateKey = null;
+
+    /** @var array<string, mixed> */
+    protected array $personalisation = [];
+
+    protected ?string $markdownBody = null;
+
     public function __construct($to, $subject)
     {
         $this->setTo($to);
@@ -60,10 +67,52 @@ class Message
             'htmlBody' => $this->getHtmlBody(),
             'highPriority' => $this->isHighPriority(),
             'hasHtml' => $this->getHasHtml(),
-            'locale' => $this->getLocale()
+            'locale' => $this->getLocale(),
+            'templateKey' => $this->getTemplateKey(),
+            'personalisation' => $this->getPersonalisation(),
+            'markdownBody' => $this->getMarkdownBody(),
         ];
 
         return SendEmail::create($data);
+    }
+
+    public function getTemplateKey(): ?string
+    {
+        return $this->templateKey;
+    }
+
+    public function setTemplateKey(?string $templateKey): self
+    {
+        $this->templateKey = $templateKey;
+        return $this;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getPersonalisation(): array
+    {
+        return $this->personalisation;
+    }
+
+    /**
+     * @param array<string, mixed> $personalisation
+     */
+    public function setPersonalisation(array $personalisation): self
+    {
+        $this->personalisation = $personalisation;
+        return $this;
+    }
+
+    public function getMarkdownBody(): ?string
+    {
+        return $this->markdownBody;
+    }
+
+    public function setMarkdownBody(?string $markdownBody): self
+    {
+        $this->markdownBody = $markdownBody;
+        return $this;
     }
 
     /**

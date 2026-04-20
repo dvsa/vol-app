@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Email\Service;
 
 use Dvsa\Olcs\Email\Service\Email;
+use Dvsa\Olcs\Email\Transport\GovUkNotifyTransportFactory;
 use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -63,6 +64,9 @@ class EmailTest extends MockeryTestCase
 
         $sm = m::mock(ContainerInterface::class);
         $sm->shouldReceive('get')->with('config')->andReturn($config);
+        $sm->shouldReceive('get')
+            ->with(GovUkNotifyTransportFactory::class)
+            ->andReturn(m::mock(GovUkNotifyTransportFactory::class));
 
         $service = $this->sut->__invoke($sm, Email::class);
 

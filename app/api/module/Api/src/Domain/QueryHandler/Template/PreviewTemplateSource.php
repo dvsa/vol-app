@@ -8,6 +8,7 @@ use Dvsa\Olcs\Api\Service\Template\TwigRenderer;
 use Dvsa\Olcs\Transfer\Query\Template\PreviewTemplateSource as PreviewTemplateSourceQry;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Exception;
+use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Psr\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -19,6 +20,8 @@ use Psr\Container\NotFoundExceptionInterface;
  */
 class PreviewTemplateSource extends AbstractQueryHandler
 {
+    public const FORMAT_MARKDOWN = 'md';
+
     protected $repoServiceName = 'Template';
 
     /** @var TwigRenderer */
@@ -26,6 +29,8 @@ class PreviewTemplateSource extends AbstractQueryHandler
 
     /** @var StrategySelectingViewRenderer */
     private $strategySelectingViewRenderer;
+
+    private ?GithubFlavoredMarkdownConverter $markdownConverter = null;
 
     /**
      * Handle query
@@ -47,12 +52,15 @@ class PreviewTemplateSource extends AbstractQueryHandler
         $result = [];
         foreach ($datasets as $datasetName => $datasetValues) {
             try {
-                $result[$datasetName] = $this->strategySelectingViewRenderer->render(
-                    $locale,
-                    $format,
-                    'default',
-                    ['content' => $this->twigRenderer->renderString($source, $datasetValues)]
-                );
+                $rendered = $this->twigRenderer->renderString($source, $datasetValues);
+                $result[$datasetName] = $format === self::FORMAT_MARKDOWN
+                    ? $this->renderMarkdownPreview($rendered)
+                    : $this->strategySelectingViewRenderer->render(
+                        $locale,
+                        $format,
+                        'default',
+                        ['content' => $rendered]
+                    );
             } catch (Exception $e) {
                 $result['error'] = true;
                 $result[$datasetName] = $e->getMessage();
@@ -61,6 +69,17 @@ class PreviewTemplateSource extends AbstractQueryHandler
         }
 
         return $result;
+    }
+
+    private function renderMarkdownPreview(string $markdown): string
+    {
+        $this->markdownConverter ??= new GithubFlavoredMarkdownConverter();
+        $html = $this->markdownConverter->convert($markdown)->getContent();
+
+        // Lightweight GOV.UK-alike preview wrapper. Notify provides its own chrome at delivery
+        // time; this is for the admin template-preview UI only.
+        return '<div class="notify-preview" style="font-family:Arial,Helvetica,sans-serif;'
+            . 'max-width:620px;line-height:1.5;color:#0b0c0c;">' . $html . '</div>';
     }
 
     /**
