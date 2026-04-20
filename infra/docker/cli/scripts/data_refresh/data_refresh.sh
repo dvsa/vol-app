@@ -24,7 +24,7 @@ function reset_service_password() {
     local platformEnv="$1"
     local Region="$2"
     echo "Resetting service passwords for OLCSDB in $platformEnv..."
-    /mnt/data/scripts/data_refresh/resetServicePassword.sh "$platformEnv" "$Region"
+    /mnt/data/scripts/data_refresh//resetServicePassword.sh "$platformEnv" "$Region"
 }
 
 function generate_user_pool_csv() {
