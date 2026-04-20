@@ -1,5 +1,4 @@
 #!/bin/bash
-echo "[DEBUG] Called $0 with: $@"
 
 labelForBranch() {
   case "$1" in
