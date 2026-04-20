@@ -5,6 +5,17 @@ locals {
 
   supporting_service_names = ["liquibase"]
 
+  task_exec_iam_role_statements = [
+    {
+      effect = "Allow"
+      actions = [
+        "secretsmanager:GetSecretValue"
+      ]
+      resources = [
+        data.aws_secretsmanager_secret.this["api"].arn
+      ]
+    },
+  ]
   task_iam_role_statements = [
     {
       effect = "Allow"
@@ -180,6 +191,8 @@ module "service" {
       repository = data.aws_ecr_repository.this["api"].repository_url
 
       task_iam_role_statements = local.task_iam_role_statements
+
+      task_exec_iam_role_statements = local.task_exec_iam_role_statements
 
       subnet_ids = data.aws_subnets.this["API"].ids
 
