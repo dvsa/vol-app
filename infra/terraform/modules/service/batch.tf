@@ -95,6 +95,10 @@ locals {
           value = "${var.environment}-aurora-olcsdb-reader"
         },
         {
+          name  = "DBCLUSTER_ID"
+          value = "${var.environment}-aurora-olcsdb-cluster"
+        },
+        {
           name  = "READDB_NAME"
           value = "OLCS_RDS_OLCSDB"
         },
