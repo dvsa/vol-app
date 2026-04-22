@@ -1,5 +1,15 @@
 # Changelog
 
+## [7.3.1](https://github.com/dvsa/vol-app/compare/v7.3.0...v7.3.1) (2026-04-21)
+
+
+### Bug Fixes
+
+* added task exec perms for secrets ([#1411](https://github.com/dvsa/vol-app/issues/1411)) ([7ab70ef](https://github.com/dvsa/vol-app/commit/7ab70ef4bbf4f1ddaa3e7b6e7a5eb142f2d071d7))
+* added welsh translations and fixed formatting issues ([#1415](https://github.com/dvsa/vol-app/issues/1415)) ([8a742a0](https://github.com/dvsa/vol-app/commit/8a742a05a0fc43f7dd2f94c922b7ef0e1a8cceac))
+* consistency of full stops/semicolons - semi colon used for all bullets except the final one VOL-6979 ([#1418](https://github.com/dvsa/vol-app/issues/1418)) ([b4e5ee5](https://github.com/dvsa/vol-app/commit/b4e5ee5509a38e31f8a5a68ddc8190d18cc10df0))
+* swap out errant full stop for semicolon VOL-6979 ([#1417](https://github.com/dvsa/vol-app/issues/1417)) ([5e03c8c](https://github.com/dvsa/vol-app/commit/5e03c8c702ba4bb2442d824ea05228c21701ed68))
+
 ## [7.3.0](https://github.com/dvsa/vol-app/compare/v7.2.0...v7.3.0) (2026-04-17)
 
 
