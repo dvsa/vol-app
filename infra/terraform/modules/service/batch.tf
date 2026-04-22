@@ -122,6 +122,59 @@ locals {
           valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:nonprod_assume_external_id::"
         },
       ]
+    },
+    scripts-testing = {
+      image = "054614622558.dkr.ecr.eu-west-1.amazonaws.com/scripts-testing:latest"
+
+      environment = [
+        {
+          name  = "ENVIRONMENT_NAME"
+          value = var.legacy_environment
+        },
+        {
+          name  = "FULL_DOMAIN"
+          value = "${var.environment}.olcs.${var.domain_name}"
+        },
+        {
+          name  = "DOMAIN"
+          value = var.domain_name
+        },
+        {
+          name  = "READDB_HOST"
+          value = "olcsreaddb-rds.${var.domain_env}.olcs.${var.domain_name}"
+        },
+        {
+          name  = "READDB_ID"
+          value = "${var.environment}-aurora-olcsdb-reader"
+        },
+        {
+          name  = "READDB_NAME"
+          value = "OLCS_RDS_OLCSDB"
+        },
+        {
+          name  = "PROXY"
+          value = "proxy.${var.environment}.olcs.${var.domain_name}:3128"
+        },
+        {
+          name  = "APP_VERSION"
+          value = var.batch.cli_version
+        },
+        {
+          name  = "READDB_HOST"
+          value = "olcsreaddb-rds.${var.environment}.olcs.${var.domain_name}"
+        },
+      ]
+
+      secrets = [
+        {
+          name      = "BATCH_DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_batch_rds_password::"
+        },
+        {
+          name      = "PRODTODEV_ASSUME_ROLE_ID"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:nonprod_assume_external_id::"
+        },
+      ]
     }
   }
 

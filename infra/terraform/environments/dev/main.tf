@@ -668,12 +668,12 @@ module "service" {
       {
         name     = "import-anondb",
         commands = ["/mnt/data/scripts/import_anondb.sh"],
-        type     = "scripts"
+        type     = "scripts-testing"
       },
       {
         name     = "populate-anondb",
         commands = ["/mnt/data/scripts/populate_anondb.sh"],
-        type     = "scripts"
+        type     = "scripts-testing"
       },
       {
         name     = "ni-compliance",
