@@ -24,21 +24,21 @@ function reset_service_password() {
     local platformEnv="$1"
     local Region="$2"
     echo "Resetting service passwords for OLCSDB in $platformEnv..."
-    /infra/docker/cli/scripts/data_refresh/resetServicePassword.sh "$platformEnv" "$Region"
+    /mnt/data/scripts/data_refresh/resetServicePassword.sh "$platformEnv" "$Region"
 }
 
 function generate_user_pool_csv() {
     local platformEnv="$1"
     local Region="$2"
     echo "Generating new user pool CSV for $platformEnv ($Region)..."
-    /infra/docker/cli/scripts/data_refresh/generate_user_pool_csv.sh "$platformEnv" "$Region"
+    /mnt/data/scripts/data_refresh/generate_user_pool_csv.sh "$platformEnv" "$Region"
 }
 
 function load_user_pool() {
     local platformEnv="$1"
     local Region="$2"
     echo "Loading users into user pool for $platformEnv ($Region)..."
-    /infra/docker/cli/scripts/data_refresh/load_user_pool.sh "$platformEnv" "$Region"
+    /mnt/data/scripts/data_refresh/load_user_pool.sh "$platformEnv" "$Region"
 }
 
 trap 'slack_send "$SLACK_CHAN" "$SLACK_FAIL" "The $platformEnv data refresh pipeline has failed"; rm -rf "$WORK_DIR"; exit 1' ERR
