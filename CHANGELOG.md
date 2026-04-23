@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.3.2](https://github.com/dvsa/vol-app/compare/v7.3.1...v7.3.2) (2026-04-23)
+
+
+### Bug Fixes
+
+* more specific message + don't great a task for auto granted apps VOL-5961 ([#1420](https://github.com/dvsa/vol-app/issues/1420)) ([549f429](https://github.com/dvsa/vol-app/commit/549f42948e4b260c544db096db05bf6e5adc4975))
+
 ## [7.3.1](https://github.com/dvsa/vol-app/compare/v7.3.0...v7.3.1) (2026-04-21)
 
 
