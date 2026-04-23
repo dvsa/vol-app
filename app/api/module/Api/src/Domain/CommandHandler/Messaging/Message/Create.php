@@ -54,30 +54,28 @@ final class Create extends AbstractCommandHandler implements ToggleRequiredInter
     #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
+        $shouldUpdateActionDate = $this->shouldUpdateActionDate($command);
         $message = $this->generateAndSaveMessage($command);
-        $updatedTask = $this->updateTaskDescriptionAndActionDate($command);
+        $updatedTask = $this->updateTaskDescriptionAndActionDate($command, $shouldUpdateActionDate);
         $sendEmailResult = $this->sendEmail($command);
-
         if ($command->getCorrelationId() !== null) {
             $this->assignUploadsToMessage($message, $command->getCorrelationId());
         }
-
         $result = new Result();
-
         $result->addId('message', $message->getId())
-               ->addMessage('Message created')
-               ->addId('messageContent', $message->getMessagingContent()->getId())
-               ->addMessage('MessageContent created')
-               ->addId('messageConversation', $message->getMessagingConversation()->getId())
-               ->addMessage('Message added to conversation')
-               ->addId('task', $updatedTask->getId())
-               ->addMessage(
-                   sprintf(
-                       'Updated task action date: %s',
-                       $updatedTask->getActionDate()->format(DateTimeInterface::ATOM),
-                   ),
-               )
-               ->addMessage(sprintf('Updated task description: %s', $updatedTask->getDescription()));
+            ->addMessage('Message created')
+            ->addId('messageContent', $message->getMessagingContent()->getId())
+            ->addMessage('MessageContent created')
+            ->addId('messageConversation', $message->getMessagingConversation()->getId())
+            ->addMessage('Message added to conversation')
+            ->addId('task', $updatedTask->getId())
+            ->addMessage(
+                sprintf(
+                    'Updated task action date: %s',
+                    $updatedTask->getActionDate()->format(DateTimeInterface::ATOM),
+                ),
+            )
+            ->addMessage(sprintf('Updated task description: %s', $updatedTask->getDescription()));
 
         if ($sendEmailResult !== null) {
             $result->merge($sendEmailResult);
@@ -139,16 +137,18 @@ final class Create extends AbstractCommandHandler implements ToggleRequiredInter
         return $this->getRepo(Repository\Message::class);
     }
 
-    private function updateTaskDescriptionAndActionDate(CreateMessageCommand $command): Task
+    private function updateTaskDescriptionAndActionDate(CreateMessageCommand $command, bool $shouldUpdateActionDate): Task
     {
         $task = $this->getConversationFromCommand($command)->getTask();
         $task->setDescription($this->getTaskDescription());
-        if ($this->shouldUpdateActionDate($command)) {
+
+        if ($shouldUpdateActionDate) {
             $task->setActionDate($this->determineActionDate());
         } else {
             $existingDate = $task->getActionDate(true); // Pass true to get DateTime
             $task->setActionDate($existingDate);
         }
+
         $this->getTaskRepository()->save($task);
         return $task;
     }
