@@ -94,7 +94,8 @@ abstract class AbstractDeclarationController extends AbstractController
 
         $this->scriptFactory->loadFiles(['tm-lva-declaration']);
 
-        $hasGovUkAccountError = $this->getFlashMessenger()->getContainer()->offsetExists('govUkAccountError');
+        $hasGovUkAccountError = in_array('govuk-account-error', $this->getFlashMessenger()->getErrorMessages(), true)
+            || in_array('govuk-account-error', $this->getFlashMessenger()->getCurrentErrorMessages(), true);
         if ($hasGovUkAccountError) {
             $form->setMessages([
                 'content' => [

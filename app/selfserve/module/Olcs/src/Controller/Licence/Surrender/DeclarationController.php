@@ -105,7 +105,8 @@ class DeclarationController extends AbstractSurrenderController
             true
         ));
 
-        $hasGovUkAccountError = $this->getFlashMessenger()->getContainer()->offsetExists('govUkAccountError');
+        $hasGovUkAccountError = in_array('govuk-account-error', $this->getFlashMessenger()->getErrorMessages(), true)
+            || in_array('govuk-account-error', $this->getFlashMessenger()->getCurrentErrorMessages(), true);
         if ($hasGovUkAccountError) {
             $form->setMessages([
                 'declarationsAndUndertakings' => [

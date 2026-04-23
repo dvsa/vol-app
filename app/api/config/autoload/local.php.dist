@@ -329,6 +329,17 @@ return [
     'core_identity_did_document_url' => 'https://identity.integration.account.gov.uk/.well-known/did.json',
     'expected_core_identity_issuer' => 'https://identity.integration.account.gov.uk/',
     'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+    // To point at the local mock-govuk-signin compose service instead of the
+    // real GOV.UK Sign In integration tenant, override discovery + DID + the
+    // expected issuer (and pick a client_id the mock will accept). The mock
+    // signs with its own committed PEMs and exposes the public keys via its
+    // /jwks endpoint, so leave the local 'keys' entries empty.
+    // See docs/infrastructure/docker/mock-govuk-signin.md.
+    //
+    // 'discovery_endpoint' => 'http://mocksignin.local.olcs.dev-dvsacloud.uk/.well-known/openid-configuration',
+    // 'core_identity_did_document_url' => 'http://mocksignin.local.olcs.dev-dvsacloud.uk/.well-known/did.json',
+    // 'expected_core_identity_issuer' => 'http://mocksignin.local.olcs.dev-dvsacloud.uk',
+    // 'client_id' => 'mock-client',
   ],
   'top-report-link' => [
     'targetUrl' => 'https://operator-reports-api.develop.edh.dvsacloud.uk/redirect',

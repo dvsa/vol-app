@@ -46,7 +46,7 @@ class SignatureVerificationController extends AbstractSelfserveController
         }
 
         if (!empty($error)) {
-            $this->flashMessenger()->getContainer()->offsetSet('govUkAccountError', true);
+            $this->flashMessenger()->addErrorMessage('govuk-account-error');
 
             if (!empty($redirectUrlOnError)) {
                 $redirectUrl = $redirectUrlOnError;
