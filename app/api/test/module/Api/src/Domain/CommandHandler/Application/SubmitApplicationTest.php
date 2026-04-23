@@ -897,9 +897,6 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
             ->shouldReceive('canAutoGrant')
             ->once()
             ->andReturn(true)
-            ->shouldReceive('getCode')
-            ->times(2)
-            ->andReturn('GV79')
             ->shouldReceive('setStatus')
             ->with($this->mapRefdata(ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION))
             ->once()
@@ -962,10 +959,6 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
             'transportManager' => null,
             'irfoOrganisation' => null,
         ];
-        $taskResult = new Result();
-        $taskResult->addId('task', self::TASK_ID);
-        $taskResult->addMessage('task created');
-        $this->expectedSideEffect(CreateTaskCmd::class, $expectedTaskData, $taskResult);
 
         // Expect light goods vehicle condition check
         $lgvResult = new Result();
