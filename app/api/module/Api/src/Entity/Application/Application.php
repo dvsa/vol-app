@@ -2799,7 +2799,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
         }
 
         $applicationOperatingCentres = $this->getOperatingCentres();
-        $vehicleReduction = 0;
+        $hasOcDelete = false;
         $messages = [];
 
         foreach ($applicationOperatingCentres as $aoc) {
@@ -2818,16 +2818,15 @@ class Application extends AbstractApplication implements ContextProviderInterfac
                     $summary['addressLine'] = $addressLine;
                     $messages[] = "The operating centre at {$addressLine} has been removed.";
                 }
-                $vehicleReduction += (int) $aoc->getNoOfVehiclesRequired();
+
+                $hasOcDelete = true;
             }
         }
 
-        if ($vehicleReduction > 0) {
-            $currentTotal = $this->getTotAuthVehicles();
-            $newTotal = $currentTotal - $vehicleReduction;
-            $summary['vehicleReduction'] = $vehicleReduction;
-            $summary['newTotal'] = $newTotal;
-            $messages[] = "The total number of vehicles authorised has been reduced by {$vehicleReduction}. Your updated authorised vehicle count is now {$newTotal}.";
+        if ($hasOcDelete) {
+            $summary['newTotal'] = $this->getTotAuthVehicles();
+            $summary['newTotalTrailers'] = $this->getTotAuthTrailers();
+            $messages[] = "Your updated vehicle authority is now {$summary['newTotal']} vehicles and {$summary['newTotalTrailers']} trailers.";
         }
 
         $summary['messages'] = $messages;
