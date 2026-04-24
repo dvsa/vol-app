@@ -11,16 +11,9 @@ fi
 s3ConfigBucket="devapp-shd-pri-olcsci-build-s3"
 
 
-token=$(curl -fsS -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
-awsRegion=$(curl -fsS -H "X-aws-ec2-metadata-token: $token" http://169.254.169.254/latest/meta-data/placement/region)
-
-if [[ -z "$token" ]]; then
-  echo "Error: Failed to retrieve EC2 metadata token."
-  exit 1
-fi
-
+awsRegion="${AWS_REGION:-}"
 if [[ -z "$awsRegion" ]]; then
-  echo "Error: Failed to retrieve AWS region from EC2 metadata."
+  echo "Error: AWS region not set. Please set AWS_REGION environment variable."
   exit 1
 fi
 
