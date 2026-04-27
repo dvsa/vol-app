@@ -28,17 +28,28 @@ envFile="$s3ConfigBucket/lambda/OLCS-OLCSDBRefresh-L/$env/env.conf"
 # Create a unique temporary output file with restrictive permissions
 old_umask=$(umask)
 umask 077
-outputFile=$(mktemp /tmp/env.decrypt.XXXXXX)
+outputFile=$(mktemp /tmp/env.decrypt.XXXXXX 2>&1)
+mktemp_status=$?
 umask "$old_umask"
-trap 'rm -f "$outputFile"' EXIT
+if [[ $mktemp_status -ne 0 ]]; then
+  echo "Error: mktemp failed: $outputFile"
+  exit 1
+fi
 
-trap 'rm -f env.conf tmp.blob "$outputFile"' EXIT
+trap 'rm -f "$outputFile"; rc=$?; if [[ $rc -ne 0 ]]; then echo "Error: failed to remove $outputFile (exit code $rc)"; fi' EXIT
+
+trap 'rm -f env.conf tmp.blob "$outputFile"; rc=$?; if [[ $rc -ne 0 ]]; then echo "Error: trap-cleanup failed removing env.conf/tmp.blob/$outputFile (exit code $rc)"; fi' EXIT
 
 export https_proxy="http://proxy.${platformEnv}.olcs.dev-dvsacloud.uk:3128"
 export no_proxy="169.254.169.254"
 
 
-/usr/local/bin/aws s3 cp "s3://$envFile" env.conf
+aws_s3_cp_output=$(/usr/local/bin/aws s3 cp "s3://$envFile" env.conf 2>&1)
+if [[ $? -ne 0 ]]; then
+  echo "Error: Failed to copy env.conf from S3 with 'aws s3 cp':"
+  echo "$aws_s3_cp_output"
+  exit 1
+fi
 
 
 tail -n +2 env.conf | head -n -1 | while read line; do
@@ -57,9 +68,14 @@ tail -n +2 env.conf | head -n -1 | while read line; do
   rm -f tmp.blob
 done
 
-if ! mysql --defaults-file=/usr/local/conf/importanondb.conf -holcsdb-rds."${platformEnv}".olcs.dev-dvsacloud.uk -umaster OLCS_RDS_OLCSDB < "$outputFile"; then
-  rm -f "$outputFile"
+if ! mysql --defaults-file=/usr/local/conf/importanondb.conf -holcsdb-rds."${platformEnv}".olcs.dev-dvsacloud.uk -umaster OLCS_RDS_OLCSDB < "$outputFile" 2>mysql_error.log; then
+  echo "Error: MySQL command failed."
+  echo "MySQL error output:"
+  cat mysql_error.log
+  rm -f mysql_error.log
   exit 1
+else
+  rm -f mysql_error.log
 fi
 
 rm -f "$outputFile"
