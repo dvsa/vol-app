@@ -14,7 +14,8 @@ USER root
 #                               in disc-printing RTF templates).
 #   fonts-noto-*              — broad Unicode coverage for other docstore templates
 # hadolint ignore=DL3008,DL4006
-RUN echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" \
+RUN sed -i 's/^Components: main$/Components: main contrib/' /etc/apt/sources.list.d/debian.sources \
+  && echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" \
     | debconf-set-selections \
   && apt-get update && apt-get install -y --no-install-recommends \
     ttf-mscorefonts-installer \
