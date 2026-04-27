@@ -43,6 +43,11 @@ trap 'rm -f env.conf tmp.blob "$outputFile"; rc=$?; if [[ $rc -ne 0 ]]; then ech
 export https_proxy="http://proxy.${platformEnv}.olcs.dev-dvsacloud.uk:3128"
 export no_proxy="169.254.169.254"
 
+echo "AWS CLI version: $(aws --version)"
+echo "AWS region: $AWS_REGION"
+echo "Attempting to get AWS caller identity:"
+aws sts get-caller-identity || echo "FAILED to get AWS identity"
+
 
 aws_s3_cp_output=$(/usr/local/bin/aws s3 cp "s3://$envFile" env.conf 2>&1)
 if [[ $? -ne 0 ]]; then
