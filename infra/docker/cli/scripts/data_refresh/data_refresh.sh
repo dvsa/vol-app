@@ -24,21 +24,41 @@ function reset_service_password() {
     local platformEnv="$1"
     local Region="$2"
     echo "Resetting service passwords for OLCSDB in $platformEnv..."
-    /mnt/data/scripts/data_refresh/resetServicePassword.sh "$platformEnv" "$Region"
+    output=$(/mnt/data/scripts/data_refresh/resetServicePassword.sh "$platformEnv" "$Region" 2>&1) || {
+        status=$?
+        echo "resetServicePassword.sh failed with exit code $status"
+        echo "Error output:"
+        echo "$output"
+        return $status
+    }
 }
+
 
 function generate_user_pool_csv() {
     local platformEnv="$1"
     local Region="$2"
     echo "Generating new user pool CSV for $platformEnv ($Region)..."
-    /mnt/data/scripts/data_refresh/generate_user_pool_csv.sh "$platformEnv" "$Region"
+    output=$(/mnt/data/scripts/data_refresh/generate_user_pool_csv.sh "$platformEnv" "$Region" 2>&1) || {
+        status=$?
+        echo "generate_user_pool_csv.sh failed with exit code $status"
+        echo "Error output:"
+        echo "$output"
+        return $status
+    }
 }
+
 
 function load_user_pool() {
     local platformEnv="$1"
     local Region="$2"
     echo "Loading users into user pool for $platformEnv ($Region)..."
-    /mnt/data/scripts/data_refresh/load_user_pool.sh "$platformEnv" "$Region"
+    output=$(/mnt/data/scripts/data_refresh/load_user_pool.sh "$platformEnv" "$Region" 2>&1) || {
+        status=$?
+        echo "load_user_pool.sh failed with exit code $status"
+        echo "Error output:"
+        echo "$output"
+        return $status
+    }
 }
 
 trap 'slack_send "$SLACK_CHAN" "$SLACK_FAIL" "The $platformEnv data refresh pipeline has failed"; rm -rf "$WORK_DIR"; exit 1' ERR
