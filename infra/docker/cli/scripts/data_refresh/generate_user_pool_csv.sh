@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 labelForBranch() {
   case "$1" in
     prodsupp) echo "ps" ;;

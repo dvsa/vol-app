@@ -87,6 +87,7 @@ jobs:
           files_ignore: |
             infra/docker/liquibase/**
             infra/docker/printpit/**
+            infra/docker/gotenberg/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v47
         id: changed-accounts-terraform-files
