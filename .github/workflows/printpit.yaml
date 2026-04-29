@@ -91,28 +91,20 @@ jobs:
           cache-from: type=gha,scope=printpit
           cache-to: type=gha,mode=max,scope=printpit
 
-      - name: Setup Trivy
-        uses: aquasecurity/setup-trivy@v0.2.6
+      - name: Scan image with Grype
+        uses: anchore/scan-action@v6
+        id: scan
         with:
-          version: v0.69.3
+          image: "printpit:test"
+          severity-cutoff: medium
+          fail-build: true
+          output-format: sarif
 
-      - name: Scan image with Trivy
-        uses: aquasecurity/trivy-action@v0.33.1
-        continue-on-error: true
+      - name: Upload Grype results to GitHub Security
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
         with:
-          image-ref: printpit:test
-          format: "sarif"
-          output: "trivy-results.sarif"
-          severity: "MEDIUM,HIGH,CRITICAL"
-          exit-code: "1"
-          skip-setup-trivy: true
-
-      - name: Upload Trivy results to GitHub Security
-        if: always() && success() || failure()
-        uses: github/codeql-action/upload-sarif@v4
-        continue-on-error: true
-        with:
-          sarif_file: "trivy-results.sarif"
+          sarif_file: ${{ steps.scan.outputs.sarif }}
 
       - name: Push to NONPROD
         uses: docker/build-push-action@v6
