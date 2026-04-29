@@ -5,6 +5,12 @@ on:
   schedule:
     - cron: '0 0 * * 1'
 
+permissions:
+  contents: read
+  pull-requests: read
+  security-events: write
+  actions: read
+
 jobs:
   security:
     uses: dvsa/.github/.github/workflows/php-library-security.yml@main
@@ -24,3 +30,8 @@ jobs:
     with:
       php-versions: "[\"8.2\", \"8.3\"]"
       fail-fast: false
+
+  secrets:
+    uses: dvsa/.github/.github/workflows/secrets-scan.yaml@v5.0.11
+    with:
+      scan-history: ${{ github.event_name == 'schedule' }}
