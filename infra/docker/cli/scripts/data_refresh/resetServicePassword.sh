@@ -72,7 +72,7 @@ tail -n +2 env.conf | head -n -1 | while read -r line || [[ -n "$line" ]]; do
     rm -f tmp.blob
 done
 
-# Error redirection (2>) is removed so MySQL sends errors straight to CloudWatch
+# Error redirection (2>) is removed so MySQL sends errors straight to cloudWatch
 echo "Updating RDS users for $platformEnv..."
 if ! mysql --defaults-file=/usr/local/conf/importanondb.conf \
      -holcsdb-rds."${platformEnv}".olcs.dev-dvsacloud.uk \
