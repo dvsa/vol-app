@@ -73,7 +73,7 @@ tail -n +2 "$conf_file"  | head -n -1 | while read -r line || [[ -n "$line" ]]; 
     if [[ "$rdsUser" != *master* ]]; then
         echo "ALTER USER '$rdsUserEscaped'@'%' IDENTIFIED BY '$rdsPlainEscaped';" >> "$outputFile"
     fi
-    rm -f "$blob_file
+    rm -f "$blob_file"
 done
 
 # Error redirection (2>) is removed so MySQL sends errors straight to cloudWatch
