@@ -19,7 +19,6 @@ jobs:
         with:
           directory: "infra/terraform"
           framework: terraform
-          check: CRITICAL
           soft_fail: false # This replaces 'exit-code: 1' logic
           download_external_modules: true
           output_format: cli,sarif
