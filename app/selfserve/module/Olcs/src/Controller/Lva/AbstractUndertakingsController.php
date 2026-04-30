@@ -96,6 +96,16 @@ abstract class AbstractUndertakingsController extends AbstractController
 
             $data = (array) $request->getPost();
             $form->setData($data);
+
+            $fieldset = $form->getInputFilter()->get('declarationsAndUndertakings');
+
+            if (
+                isset($data['declarationsAndUndertakings']['printSignReturnFallBack']) &&
+                $fieldset->has('signatureVerifyMandate')
+            ) {
+                $fieldset->remove('signatureVerifyMandate');
+            }
+
             if ($form->isValid()) {
                 if ($this->isButtonPressed('submitAndPay') || $this->isButtonPressed('submit')) {
                     $shouldCompleteSection = true;
