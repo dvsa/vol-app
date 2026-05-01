@@ -117,6 +117,7 @@ locals {
       effect = "Allow"
       actions = [
         "rds:RestoreDBClusterFromSnapshot",
+        "rds:AddTagsToResource",
       ]
       resources = [
         "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*",
