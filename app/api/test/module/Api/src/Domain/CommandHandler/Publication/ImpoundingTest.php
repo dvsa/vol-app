@@ -29,6 +29,7 @@ use Dvsa\Olcs\Api\Entity\Publication\PublicationPoliceData as PoliceEntity;
 use Dvsa\Olcs\Api\Service\Publication\PublicationGenerator;
 use Dvsa\Olcs\Api\Domain\Command\Result as ResultCmd;
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\UnpublishedImpounding as UnpublishedImpoundingQry;
+use Dvsa\Olcs\Api\Entity\Venue as VenuEntity;
 
 /**
  * Publish Impounding Test
@@ -121,6 +122,13 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
         $impoundingMock->shouldReceive('getCase')->andReturn($caseMock);
         $impoundingMock->shouldReceive('getId')->andReturn($impoundingId);
 
+        $venueMock = m::mock(VenueEntity::class);
+        $venueMock->shouldReceive('getId')->andReturn(1);
+
+        $impoundingMock->shouldReceive('getVenue')->once()->andReturn($venueMock);
+        $impoundingMock->shouldReceive('getHearingDate')->once()->andReturn(null);
+        $impoundingMock->shouldReceive('getVenueOther')->andReturn(null);
+
         $publicationMock = $this->getPublicationMock($publicationId);
 
         $publicationLinkMock = m::mock(PublicationLinkEntity::class)->makePartial();
@@ -154,11 +162,18 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
         $this->repoMap['PublicationLink']
             ->shouldReceive('fetchSingleUnpublished')
             ->with(m::type(UnpublishedImpoundingQry::class))
-            ->andReturn($publicationLinkMock)
+            ->andReturn($publicationLinkMock);
+
+        $this->repoMap['PublicationLink']
             ->shouldReceive('save')
-            ->with(m::type(PublicationLinkEntity::class))
-            ->shouldReceive('delete')
-            ->with(m::type(PublicationLinkEntity::class));
+            ->withAnyArgs()
+            ->once();
+
+        $this->mockedSmServices[PublicationGenerator::class]
+            ->shouldReceive('createPublication')
+            ->once()
+            ->withAnyArgs()
+            ->andReturn($publicationMock);
 
         $result = $this->sut->handleCommand($command);
 
@@ -200,6 +215,13 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
         $impoundingMock->shouldReceive('getCase')->andReturn($caseMock);
         $impoundingMock->shouldReceive('getId')->andReturn($impoundingId);
 
+        $venueMock = m::mock(VenueEntity::class);
+        $venueMock->shouldReceive('getId')->andReturn(1);
+
+        $impoundingMock->shouldReceive('getVenue')->once()->andReturn($venueMock);
+        $impoundingMock->shouldReceive('getHearingDate')->once()->andReturn(null);
+        $impoundingMock->shouldReceive('getVenueOther')->andReturn(null);
+
         $publicationMock = $this->getPublicationMock($publicationId);
 
         $publicationLinkMock = m::mock(PublicationLinkEntity::class)->makePartial();
@@ -233,11 +255,18 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
         $this->repoMap['PublicationLink']
             ->shouldReceive('fetchSingleUnpublished')
             ->with(m::type(UnpublishedImpoundingQry::class))
-            ->andReturn($publicationLinkMock)
+            ->andReturn($publicationLinkMock);
+
+        $this->repoMap['PublicationLink']
             ->shouldReceive('save')
-            ->with(m::type(PublicationLinkEntity::class))
-            ->shouldReceive('delete')
-            ->with(m::type(PublicationLinkEntity::class));
+            ->withAnyArgs()
+            ->once();
+
+        $this->mockedSmServices[PublicationGenerator::class]
+            ->shouldReceive('createPublication')
+            ->once()
+            ->withAnyArgs()
+            ->andReturn($publicationMock);
 
         $result = $this->sut->handleCommand($command);
 
@@ -280,11 +309,18 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
         $impoundingMock->shouldReceive('getCase')->andReturn($caseMock);
         $impoundingMock->shouldReceive('getId')->andReturn($impoundingId);
 
+        $venueMock = m::mock(VenueEntity::class);
+        $venueMock->shouldReceive('getId')->andReturn(1);
+
+        $impoundingMock->shouldReceive('getVenue')->once()->andReturn($venueMock);
+        $impoundingMock->shouldReceive('getHearingDate')->once()->andReturn(null);
+        $impoundingMock->shouldReceive('getVenueOther')->andReturn(null);
+
         $publicationMock = $this->getPublicationMock($publicationId);
 
         $publicationLinkMock = m::mock(PublicationLinkEntity::class)->makePartial();
         $publicationLinkMock->shouldReceive('getId')->andReturn(1);
-        $publicationLinkMock->shouldReceive('getPoliceDatas->clear')->times(5)->andReturnSelf();
+        $publicationLinkMock->shouldReceive('getPoliceDatas->clear')->times(4)->andReturnSelf();
 
         $this->references[ApplicationEntity::class][1]->shouldReceive('getLicence')
             ->andReturn($this->references[LicenceEntity::class][7]);
@@ -315,9 +351,23 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
         $this->repoMap['PublicationLink']
             ->shouldReceive('fetchSingleUnpublished')
             ->with(m::type(UnpublishedImpoundingQry::class))
-            ->andReturn($publicationLinkMock)
+            ->andReturn($publicationLinkMock);
+
+        $this->repoMap['PublicationLink']
+            ->shouldReceive('save')
+            ->withAnyArgs()
+            ->once();
+
+        $this->repoMap['PublicationLink']
             ->shouldReceive('delete')
-            ->with(m::type(PublicationLinkEntity::class));
+            ->with(m::type(PublicationLinkEntity::class))
+            ->times(4);
+
+        $this->mockedSmServices[PublicationGenerator::class]
+            ->shouldReceive('createPublication')
+            ->once()
+            ->withAnyArgs()
+            ->andReturn($publicationMock);
 
         $result = $this->sut->handleCommand($command);
 
