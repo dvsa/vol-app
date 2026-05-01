@@ -167,7 +167,7 @@ class ApplicationUndertakingsReviewService extends AbstractReviewService
         #PSEUDO CODE WITH CHANGES BELOW -- DIFFERENCES BETWEEN STANDARD AND RESTRICTED TOO GREAT, RETURN
         #TWO DIFFERENT FILES NOW WITH IS INTERNAL ADDED ON AS PER NEEDS
 
-        if ($isStandard ){
+        if ($isStandard) {
             return $this->translateReplace(self::PSV421, $additionalParts);
         } else {
             return $this->translateReplace(self::PSV421_RESTRICTED, $additionalParts);
