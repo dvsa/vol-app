@@ -29,7 +29,7 @@ use Dvsa\Olcs\Api\Entity\Publication\PublicationPoliceData as PoliceEntity;
 use Dvsa\Olcs\Api\Service\Publication\PublicationGenerator;
 use Dvsa\Olcs\Api\Domain\Command\Result as ResultCmd;
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\UnpublishedImpounding as UnpublishedImpoundingQry;
-use Dvsa\Olcs\Api\Entity\Venue as VenuEntity;
+use Dvsa\Olcs\Api\Entity\Venue as VenueEntity;
 
 /**
  * Publish Impounding Test
