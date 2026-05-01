@@ -19,7 +19,7 @@ class QueueTest extends MockeryTestCase
 
     protected $queue;
 
-    /** @var  m\MockInterface|\Laminas\Log\Logger */
+    /** @var  m\MockInterface|\Psr\Log\LoggerInterface */
     protected $logger;
 
     public function setUp(): void
@@ -46,8 +46,8 @@ class QueueTest extends MockeryTestCase
 
     public function testSendMessageWithExceptionThrown(): void
     {
-        $this->logger = m::mock(\Laminas\Log\Logger::class);
-        $this->logger->shouldReceive('err')
+        $this->logger = m::mock(\Psr\Log\LoggerInterface::class);
+        $this->logger->shouldReceive('error')
             ->with('Failed to send message. Error code: contents error. Error msg: message failed', [])
             ->once();
 
@@ -123,8 +123,8 @@ class QueueTest extends MockeryTestCase
 
     public function testFetchMessagesWithExceptionThrown(): void
     {
-        $this->logger = m::mock(\Laminas\Log\Logger::class);
-        $this->logger->shouldReceive('err')
+        $this->logger = m::mock(\Psr\Log\LoggerInterface::class);
+        $this->logger->shouldReceive('error')
             ->with('Failed to fetch message. Error code: contents error. Error msg: message failed', [])
             ->once();
 
@@ -154,8 +154,8 @@ class QueueTest extends MockeryTestCase
 
     public function testDeleteMessageWithExceptionThrown(): void
     {
-        $this->logger = m::mock(\Laminas\Log\Logger::class);
-        $this->logger->shouldReceive('err')
+        $this->logger = m::mock(\Psr\Log\LoggerInterface::class);
+        $this->logger->shouldReceive('error')
             ->with('Failed to delete message. Error code: contents error. Error msg: message failed', [])
             ->once();
 

@@ -5,8 +5,8 @@ namespace Dvsa\Olcs\Api\Service\File;
 use Dvsa\Olcs\DocumentShare\Data\Object\File as ContentStoreFile;
 use Dvsa\Olcs\DocumentShare\Service\DocumentStoreInterface;
 use Laminas\Http\Response;
-use Laminas\Log\Logger;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Log\LoggerInterface;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -25,7 +25,7 @@ class ContentStoreFileUploader implements FileUploaderInterface, FactoryInterfac
     private $contentStoreClient;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 

@@ -38,9 +38,7 @@ class QueueProcessorTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         $this->mockQueryHandlerManager = m::mock(QueryHandlerManager::class);
 

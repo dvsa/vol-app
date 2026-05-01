@@ -40,7 +40,7 @@ class ErruXmlXsdValidationTest extends MockeryTestCase
 
     public function testCheckGoodReputeXmlValidatesAgainstXsd(): void
     {
-        Logger::setLogger(m::mock(\Laminas\Log\Logger::class)->shouldIgnoreMissing());
+        Logger::setLogger(m::mock(\Psr\Log\LoggerInterface::class)->shouldIgnoreMissing());
 
         $xmlBuilder = new XmlNodeBuilder('CheckGoodRepute_Request', self::XML_NS, []);
         $sut = new CheckGoodRepute($xmlBuilder, self::ERRU_VERSION);

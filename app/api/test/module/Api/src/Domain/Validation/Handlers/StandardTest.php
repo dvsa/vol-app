@@ -31,9 +31,7 @@ class StandardTest extends MockeryTestCase
     {
         $this->sut = new Standard();
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
     }
 
     public function testIsValid(): void
