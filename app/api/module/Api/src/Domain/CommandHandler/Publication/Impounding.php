@@ -93,7 +93,10 @@ class Impounding extends AbstractCommandHandler implements TransactionedInterfac
 
         //no N&P for Northern Ireland, this is already defaulted to published, no need to record it twice below
         if (
-            ($trafficArea->getId() !== TrafficAreaEntity::NORTHERN_IRELAND_TRAFFIC_AREA_CODE)
+            !(
+                $trafficArea->getId() === TrafficAreaEntity::NORTHERN_IRELAND_TRAFFIC_AREA_CODE &&
+                $pubType === 'N&P'
+            )
         ) {
             //record that we've dealt with this traffic area and pub type combination
             $publishedAreas[$trafficArea->getId()][$pubType] = true;
