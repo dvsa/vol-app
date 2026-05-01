@@ -98,6 +98,8 @@ locals {
         "rds:DeleteDBClusterSnapshot",
       ]
       resources = [
+
+        "arn:aws:rds:eu-west-1:054614622558:cluster:dev-aurora-olcsdb-reader",
         "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*"
       ]
     },
@@ -107,6 +109,7 @@ locals {
         "rds:DescribeDBClusters",
       ]
       resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster:dev-aurora-olcsdb-reader",
         "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-*"
       ]
     },
