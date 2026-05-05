@@ -132,7 +132,8 @@ locals {
         "rds:DescribeDBInstances",
       ]
       resources = [
-        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*"
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*"
       ]
     },
     {
