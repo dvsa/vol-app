@@ -2,25 +2,21 @@
 
 namespace Olcs\Logging\Log\Processor;
 
-use Laminas\Log\Processor\ProcessorInterface;
 use Laminas\Http\PhpEnvironment\RemoteAddress;
+use Monolog\LogRecord;
+use Monolog\Processor\ProcessorInterface;
 
 class RemoteIp implements ProcessorInterface
 {
-    /**
-     * @var ?RemoteAddress
-     */
-    protected $remoteAddress;
+    protected ?RemoteAddress $remoteAddress = null;
 
-    /**
-     * Processes a log message before it is given to the writers
-     */
     #[\Override]
-    public function process(array $event): array
+    public function __invoke(LogRecord $record): LogRecord
     {
-        $event['extra']['remoteIp'] = $this->getRemoteAddress()->getIpAddress();
+        $extra = $record->extra;
+        $extra['remoteIp'] = $this->getRemoteAddress()->getIpAddress();
 
-        return $event;
+        return $record->with(extra: $extra);
     }
 
     public function getRemoteAddress(): RemoteAddress

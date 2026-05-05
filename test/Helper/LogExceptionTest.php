@@ -2,28 +2,24 @@
 
 namespace OlcsTest\Logging\Helper;
 
-use Laminas\Log\Logger;
-use Psr\Container\ContainerInterface;
+use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Logging\Helper\LogException;
-use Mockery as m;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
-/**
- * Class LogExceptionTest
- * @package OlcsTest\Logging\Helper
- */
 class LogExceptionTest extends TestCase
 {
-    public function testLogException()
+    public function testLogException(): void
     {
         $e3 = new \Exception('3rd error');
         $e2 = new \Exception('nested error', 22, $e3);
         $e1 = new \Exception('error', 11, $e2);
 
-        $mockLog = $this->getMockLog();
+        $mockLog = m::mock(LoggerInterface::class);
         $mockLog->shouldReceive('info')->ordered('logcalls')->with('', ['exception' => $e3]);
         $mockLog->shouldReceive('info')->ordered('logcalls')->with('', ['exception' => $e2]);
-        $mockLog->shouldReceive('err')->atLeast()->once()->ordered('logcalls')->with('Exception : error', ['exception' => $e1]);
+        $mockLog->shouldReceive('error')->atLeast()->once()->ordered('logcalls')->with('Exception : error', ['exception' => $e1]);
 
         $sut = new LogException();
         $sut->setLogger($mockLog);
@@ -32,20 +28,14 @@ class LogExceptionTest extends TestCase
 
     public function testInvoke(): void
     {
-        $mockLog = $this->getMockLog();
+        $mockLog = m::mock(LoggerInterface::class);
 
         $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('Logger')->andReturn($mockLog);
 
         $sut = new LogException();
-
         $service = $sut->__invoke($mockSl, LogException::class);
-        $this->assertSame($sut, $service);
-        $this->assertSame($mockLog, $service->getLogger());
-    }
 
-    protected function getMockLog()
-    {
-        return m::mock(Logger::class);
+        $this->assertSame($sut, $service);
     }
 }

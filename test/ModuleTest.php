@@ -2,33 +2,44 @@
 
 namespace OlcsTest\Logging;
 
-use Laminas\Log\Logger as LaminasLogger;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Olcs\Logging\Module;
+use Laminas\EventManager\EventInterface;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Monolog\Logger as MonologLogger;
+use Olcs\Logging\Log\Processor\HidePassword;
+use Olcs\Logging\Module;
 
 class ModuleTest extends MockeryTestCase
 {
-    public function testGetConfig()
+    public function testGetConfig(): void
     {
         $sut = new Module();
         $config = $sut->getConfig();
 
         $this->assertArrayHasKey('log', $config);
+        $this->assertArrayHasKey('listeners', $config);
+        $this->assertArrayHasKey('service_manager', $config);
+        $this->assertArrayHasKey('Logger', $config['service_manager']['factories']);
+        $this->assertArrayHasKey('ExceptionLogger', $config['service_manager']['factories']);
     }
 
     /**
      * @dataProvider dpTestOnBootstrap
      */
-    public function testOnBootstrap($hideTimes, $logConfig)
+    public function testOnBootstrap(int $hideTimes, array $logConfig): void
     {
-        $event = m::mock(\Laminas\EventManager\EventInterface::class);
-        $logger = m::mock(LaminasLogger::class);
+        $event = m::mock(EventInterface::class);
+        $logger = m::mock(MonologLogger::class);
+        $hidePassword = m::mock(HidePassword::class);
 
-        $event->shouldReceive('getApplication->getServiceManager->get')->with('Logger')->once()->andReturn($logger);
-        $event->shouldReceive('getApplication->getServiceManager->get')->with('Config')->once()->andReturn($logConfig);
+        $serviceManager = m::mock();
+        $serviceManager->shouldReceive('get')->with('Logger')->once()->andReturn($logger);
+        $serviceManager->shouldReceive('get')->with('Config')->once()->andReturn($logConfig);
+        $serviceManager->shouldReceive('get')->with(HidePassword::class)->times($hideTimes)->andReturn($hidePassword);
 
-        $logger->shouldReceive('addProcessor')
+        $event->shouldReceive('getApplication->getServiceManager')->andReturn($serviceManager);
+
+        $logger->shouldReceive('pushProcessor')
             ->times($hideTimes)
             ->andReturnSelf();
 
@@ -36,13 +47,13 @@ class ModuleTest extends MockeryTestCase
         $sut->onBootstrap($event);
     }
 
-    public function dpTestOnBootstrap()
+    public static function dpTestOnBootstrap(): array
     {
         return [
             'noConfigEntry' => [1, []],
             'allowTrue' => [0, ['log' => ['allowPasswordLogging' => true]]],
-            'allowFalse' => [1, 'log' => ['allowPasswordLogging' => false]],
-            'allowAmbiguous' => [1, 'log' => ['allowPasswordLogging' => 'somestring']],
+            'allowFalse' => [1, ['log' => ['allowPasswordLogging' => false]]],
+            'allowAmbiguous' => [0, ['log' => ['allowPasswordLogging' => 'somestring']]],
         ];
     }
 }

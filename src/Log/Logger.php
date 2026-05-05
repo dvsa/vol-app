@@ -1,156 +1,95 @@
 <?php
 
-/**
- * Logger
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
-
 namespace Olcs\Logging\Log;
 
-use Laminas\Log\Logger as LaminasLogger;
-use Laminas\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
+use Psr\Log\NullLogger;
 
 /**
- * Logger
+ * Static logger facade.
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * Public API is preserved for back-compat with the call sites that
+ * use it across vol-app and olcs-common. Internally backed by any PSR-3
+ * implementation (Monolog in production).
  */
 class Logger
 {
-    /**
-     * @var LaminasLogger
-     */
-    private static $logger;
+    private static ?LoggerInterface $logger = null;
 
-    /**
-     * @param LaminasLogger $logger
-     */
-    public static function setLogger(LaminasLogger $logger)
+    public static function setLogger(LoggerInterface $logger): void
     {
         self::$logger = $logger;
     }
 
-    /**
-     * @return LaminasLogger
-     */
-    public static function getLogger()
+    public static function getLogger(): LoggerInterface
     {
+        if (self::$logger === null) {
+            self::$logger = new NullLogger();
+        }
+
         return self::$logger;
     }
 
-    /**
-     * @param string $message
-     * @param array|\Traversable $extra
-     * @return LoggerInterface
-     */
-    public static function emerg($message, $extra = array())
+    public static function emerg(string|\Stringable $message, array $extra = []): void
     {
-        return self::$logger->emerg($message, $extra);
+        self::getLogger()->emergency($message, $extra);
+    }
+
+    public static function alert(string|\Stringable $message, array $extra = []): void
+    {
+        self::getLogger()->alert($message, $extra);
+    }
+
+    public static function crit(string|\Stringable $message, array $extra = []): void
+    {
+        self::getLogger()->critical($message, $extra);
+    }
+
+    public static function err(string|\Stringable $message, array $extra = []): void
+    {
+        self::getLogger()->error($message, $extra);
+    }
+
+    public static function warn(string|\Stringable $message, array $extra = []): void
+    {
+        self::getLogger()->warning($message, $extra);
+    }
+
+    public static function notice(string|\Stringable $message, array $extra = []): void
+    {
+        self::getLogger()->notice($message, $extra);
+    }
+
+    public static function info(string|\Stringable $message, array $extra = []): void
+    {
+        self::getLogger()->info($message, $extra);
+    }
+
+    public static function debug(string|\Stringable $message, array $extra = []): void
+    {
+        self::getLogger()->debug($message, $extra);
+    }
+
+    public static function log(string $priority, string|\Stringable $message, array $extra = []): void
+    {
+        self::getLogger()->log($priority, $message, $extra);
     }
 
     /**
-     * @param string $message
-     * @param array|\Traversable $extra
-     * @return LoggerInterface
+     * Log data using a response status code to set the priority. Always logs at DEBUG.
      */
-    public static function alert($message, $extra = array())
+    public static function logResponse(int $status, string|\Stringable $message, array $extra = []): void
     {
-        return self::$logger->alert($message, $extra);
+        self::getLogger()->debug($message, $extra);
     }
 
     /**
-     * @param string $message
-     * @param array|\Traversable $extra
-     * @return LoggerInterface
-     */
-    public static function crit($message, $extra = array())
-    {
-        return self::$logger->crit($message, $extra);
-    }
-
-    /**
-     * @param string $message
-     * @param array|\Traversable $extra
-     * @return LoggerInterface
-     */
-    public static function err($message, $extra = array())
-    {
-        return self::$logger->err($message, $extra);
-    }
-
-    /**
-     * @param string $message
-     * @param array|\Traversable $extra
-     * @return LoggerInterface
-     */
-    public static function warn($message, $extra = array())
-    {
-        return self::$logger->warn($message, $extra);
-    }
-
-    /**
-     * @param string $message
-     * @param array|\Traversable $extra
-     * @return LoggerInterface
-     */
-    public static function notice($message, $extra = array())
-    {
-        return self::$logger->notice($message, $extra);
-    }
-
-    /**
-     * @param string $message
-     * @param array|\Traversable $extra
-     * @return LoggerInterface
-     */
-    public static function info($message, $extra = array())
-    {
-        return self::$logger->info($message, $extra);
-    }
-
-    /**
-     * @param string $message
-     * @param array|\Traversable $extra
-     * @return LoggerInterface
-     */
-    public static function debug($message, $extra = array())
-    {
-        return self::$logger->debug($message, $extra);
-    }
-
-    /**
-     * @param $priority
-     * @param $message
-     * @param array $extra
-     * @return LaminasLogger
-     */
-    public static function log($priority, $message, $extra = array())
-    {
-        return self::$logger->log($priority, $message, $extra);
-    }
-
-    /**
-     * Log data using a response status code to set the priority
+     * Log an exception with its trace.
      *
-     * @param int    $status  Https response status code (eg 200, 404, 500)
-     * @param string $message Message to log
-     * @param array  $extra   Extra log data
-     *
-     * @return LaminasLogger
+     * @param string $priority A Psr\Log\LogLevel::* value.
      */
-    public static function logResponse($status, $message, $extra = array())
-    {
-        return self::$logger->log(\Laminas\Log\Logger::DEBUG, $message, $extra);
-    }
-
-    /**
-     * Log an Exception
-     *
-     * @param \Exception $e        The exception to be logged
-     * @param int        $priority One of \Laminas\Log\Logger::*
-     */
-    public static function logException(\Exception $e, $priority = \Laminas\Log\Logger::DEBUG)
+    public static function logException(\Throwable $e, string $priority = LogLevel::DEBUG): void
     {
         $message = sprintf(
             "Code %s : %s\n%s Line %d",
@@ -160,6 +99,6 @@ class Logger
             $e->getLine()
         );
 
-        static::log($priority, $message, ['trace' => $e->getTraceAsString()]);
+        self::getLogger()->log($priority, $message, ['trace' => $e->getTraceAsString()]);
     }
 }

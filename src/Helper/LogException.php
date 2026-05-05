@@ -2,19 +2,15 @@
 
 namespace Olcs\Logging\Helper;
 
-use Psr\Container\ContainerInterface;
-use Laminas\Log\LoggerAwareTrait;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerAwareTrait;
 
 class LogException implements FactoryInterface
 {
     use LoggerAwareTrait;
 
-    /**
-     * @param $exception
-     * @param array $messageData
-     */
-    public function logException($exception, $messageData = [])
+    public function logException(\Throwable $exception, array $messageData = []): void
     {
         $logMessages = [];
 
@@ -27,17 +23,17 @@ class LogException implements FactoryInterface
         $lastException = array_shift($logMessages);
 
         foreach (array_reverse($logMessages) as $logMessage) {
-            $this->getLogger()->info('', $logMessage);
+            $this->logger->info('', $logMessage);
         }
 
-        $this->getLogger()->err(
+        $this->logger->error(
             get_class($lastException['exception']) . ' : ' . $lastException['exception']->getMessage(),
             $lastException
         );
     }
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LogException
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LogException
     {
         $this->setLogger($container->get('Logger'));
         return $this;

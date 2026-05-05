@@ -4,35 +4,35 @@ namespace OlcsTest\Logging\Listener;
 
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\Http\Request;
-use Laminas\Log\Logger;
+use Laminas\Mvc\MvcEvent;
 use Laminas\Router\Http\RouteMatch;
+use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Logging\CliLoggableInterface;
 use Olcs\Logging\Listener\LogRequest;
-use Mockery as m;
-use Laminas\Mvc\MvcEvent;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 class LogRequestTest extends TestCase
 {
-    protected function getMockLog()
+    private function getMockLog()
     {
-        return m::mock(Logger::class);
+        return m::mock(LoggerInterface::class);
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
         $sut = new LogRequest();
 
         $mockEvents = m::mock(EventManagerInterface::class);
         $mockEvents->shouldReceive('attach')->atLeast()->once()
-            ->with(MvcEvent::EVENT_ROUTE, array($sut, 'onRoute'), 10000);
+            ->with(MvcEvent::EVENT_ROUTE, [$sut, 'onRoute'], 10000);
 
         $mockEvents->shouldReceive('attach')->atLeast()->once()
-            ->with(MvcEvent::EVENT_DISPATCH, array($sut, 'onDispatch'), 10000);
+            ->with(MvcEvent::EVENT_DISPATCH, [$sut, 'onDispatch'], 10000);
 
         $mockEvents->shouldReceive('attach')->atLeast()->once()
-            ->with(MvcEvent::EVENT_FINISH, array($sut, 'onDispatchEnd'), 10000);
+            ->with(MvcEvent::EVENT_FINISH, [$sut, 'onDispatchEnd'], 10000);
 
         $sut->attach($mockEvents);
     }
@@ -48,16 +48,12 @@ class LogRequestTest extends TestCase
         $service = $sut->__invoke($mockSl, LogRequest::class);
 
         $this->assertSame($sut, $service);
-        $this->assertSame($mockLog, $service->getLogger());
     }
 
-
     /**
-     * @param string $content
-     * @param boolean $shouldLogContent
      * @dataProvider httpOnDispatchProvider
      */
-    public function testHttpOnRoute($content, $shouldLogContent)
+    public function testHttpOnRoute(string $content, bool $shouldLogContent): void
     {
         $route = ['controller' => 'index', 'action' => 'index'];
         $query = [];
@@ -74,13 +70,9 @@ class LogRequestTest extends TestCase
             'post' => $post,
             'headers' => $headers,
         ];
-        if ($shouldLogContent) {
-            $expectedData['content'] = $content;
-        } else {
-            $expectedData['content'] = 'MAX_CONTENT_LENGTH_TO_LOG exceeded';
-        }
+        $expectedData['content'] = $shouldLogContent ? $content : 'MAX_CONTENT_LENGTH_TO_LOG exceeded';
 
-        $mockRequest = m::mock('Laminas\Http\Request');
+        $mockRequest = m::mock(Request::class);
         $mockRequest->shouldReceive('getQuery->getArrayCopy')->andReturn($query);
         $mockRequest->shouldReceive('getUri->__toString')->andReturn($path);
         $mockRequest->shouldReceive('getMethod')->andReturn($method);
@@ -98,49 +90,38 @@ class LogRequestTest extends TestCase
                     ->getMock()
             );
 
-        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
+        $mockEvent = m::mock(MvcEvent::class);
         $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
         $mockEvent->shouldReceive('getRouteMatch->getParams')->atLeast()->once()->andReturn($route);
 
         $mockLog = $this->getMockLog();
-        $mockLog->shouldReceive('debug')->with(
-            'Request received',
-            [
-                'data' => $expectedData,
-            ]
-        );
+        $mockLog->shouldReceive('debug')->with('Request received', ['data' => $expectedData]);
 
         $sut = new LogRequest();
         $sut->setLogger($mockLog);
         $sut->onRoute($mockEvent);
     }
 
-    public function httpOnDispatchProvider()
+    public static function httpOnDispatchProvider(): array
     {
         return [
-            'acceptable content size' => [
-                'content' => 'foo',
-                'shouldLogContent' => true,
-            ],
-            'content too large' => [
-                'content' => str_pad('foo', 3000),
-                'shouldLogContent' => false,
-            ],
+            'acceptable content size' => ['foo', true],
+            'content too large' => [str_pad('foo', 3000), false],
         ];
     }
 
-    public function testHttpOnDispatchEnd()
+    public function testHttpOnDispatchEnd(): void
     {
         $params = ['request' => 'http://foo.com/bar', 'code' => '200', 'status' => 'OK'];
 
-        $mockResponse = m::mock('Laminas\Http\Response');
+        $mockResponse = m::mock(\Laminas\Http\Response::class);
         $mockResponse->shouldReceive('getStatusCode')->andReturn('200');
         $mockResponse->shouldReceive('getReasonPhrase')->andReturn('OK');
 
-        $mockRequest = m::mock('Laminas\Http\Request');
+        $mockRequest = m::mock(Request::class);
         $mockRequest->shouldReceive('getUriString')->andReturn('http://foo.com/bar');
 
-        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
+        $mockEvent = m::mock(MvcEvent::class);
         $mockEvent->shouldReceive('getResponse')->andReturn($mockResponse);
         $mockEvent->shouldReceive('getRequest')->atLeast()->once()->andReturn($mockRequest);
 
@@ -152,13 +133,13 @@ class LogRequestTest extends TestCase
         $sut->onDispatchEnd($mockEvent);
     }
 
-    public function testHttpOnDispatch()
+    public function testHttpOnDispatch(): void
     {
         $mockController = m::mock();
 
         $params = [
             'controller' => get_class($mockController),
-            'action' => 'foo'
+            'action' => 'foo',
         ];
 
         $mockRequest = m::mock(Request::class);
@@ -169,7 +150,8 @@ class LogRequestTest extends TestCase
 
         $mockEvent = m::mock(MvcEvent::class);
         $mockEvent->shouldReceive('getRouteMatch')->andReturn($routeMatch);
-        $mockEvent->shouldReceive('getApplication->getServiceManager->get->get')->with('ControllerAlias')
+        $mockEvent->shouldReceive('getApplication->getServiceManager->get->get')
+            ->with('ControllerAlias')
             ->andReturn($mockController);
 
         $mockEvent->shouldReceive('getRequest')->atLeast()->once()->andReturn($mockRequest);
@@ -182,7 +164,7 @@ class LogRequestTest extends TestCase
         $sut->onDispatch($mockEvent);
     }
 
-    public function testConsoleOnDispatch()
+    public function testConsoleOnDispatch(): void
     {
         $mockRequest = m::mock(CliLoggableInterface::class);
         $mockRequest->shouldReceive('getScriptPath')->andReturn('file.php');
@@ -198,7 +180,7 @@ class LogRequestTest extends TestCase
                 'data' => [
                     'path' => 'file.php',
                     'params' => ['file.php', 'route-name', '--help'],
-                ]
+                ],
             ]
         );
 
@@ -212,10 +194,9 @@ class LogRequestTest extends TestCase
         $sut->onRoute($mockEvent);
     }
 
-    public function testConsoleOnDispatchEnd()
+    public function testConsoleOnDispatchEnd(): void
     {
         $mockRequest = m::mock(CliLoggableInterface::class);
-
         $mockRequest->shouldReceive('getScriptPath')->andReturn('file.php');
 
         $mockEvent = m::mock(MvcEvent::class);

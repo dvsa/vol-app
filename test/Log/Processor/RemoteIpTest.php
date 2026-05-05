@@ -2,37 +2,35 @@
 
 namespace OlcsTest\Logging\Log\Processor;
 
-use Olcs\Logging\Log\Processor\RemoteIp;
+use DateTimeImmutable;
+use Laminas\Http\PhpEnvironment\RemoteAddress;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use Monolog\Level;
+use Monolog\LogRecord;
+use Olcs\Logging\Log\Processor\RemoteIp;
 
-/**
- * Class RemoteIpTest
- * @package OlcsTest\Logging\Log\Processor
- */
 class RemoteIpTest extends TestCase
 {
-    public function testGetRemoteAddress()
+    public function testGetRemoteAddress(): void
     {
         $sut = new RemoteIp();
-        $remoteAddr = $sut->getRemoteAddress();
-        $this->assertInstanceOf('Laminas\Http\PhpEnvironment\RemoteAddress', $remoteAddr);
+        $this->assertInstanceOf(RemoteAddress::class, $sut->getRemoteAddress());
     }
 
-    public function testProcess()
+    public function testProcess(): void
     {
         $ip = '192.168.1.54';
 
-        $mockRemoteAddr = m::mock('Laminas\Http\PhpEnvironment\RemoteAddress');
+        $mockRemoteAddr = m::mock(RemoteAddress::class);
         $mockRemoteAddr->shouldReceive('getIpAddress')->andReturn($ip);
 
         $sut = new RemoteIp();
         $sut->setRemoteAddress($mockRemoteAddr);
-        $data = $sut->process([]);
 
-        $this->assertArrayHasKey('extra', $data);
-        $this->assertArrayHasKey('remoteIp', $data['extra']);
+        $result = $sut(new LogRecord(new DateTimeImmutable(), 'test', Level::Info, ''));
 
-        $this->assertEquals($ip, $data['extra']['remoteIp']);
+        $this->assertArrayHasKey('remoteIp', $result->extra);
+        $this->assertSame($ip, $result->extra['remoteIp']);
     }
 }

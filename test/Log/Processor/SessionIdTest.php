@@ -2,32 +2,31 @@
 
 namespace OlcsTest\Logging\Log\Processor;
 
+use DateTimeImmutable;
+use Laminas\Session\Container;
 use Laminas\Session\ManagerInterface;
-use Olcs\Logging\Log\Processor\SessionId;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
-use Laminas\Session\Container;
+use Monolog\Level;
+use Monolog\LogRecord;
+use Olcs\Logging\Log\Processor\SessionId;
 
-/**
- * Class SessionIdTest
- * @package OlcsTest\Logging\Log\Processor
- */
 class SessionIdTest extends TestCase
 {
-    public function testGetSessionManager()
+    public function testGetSessionManager(): void
     {
         $mockSessionManager = m::mock(ManagerInterface::class);
         Container::setDefaultManager($mockSessionManager);
 
         $sut = new SessionId();
-
         $manager = $sut->getSessionManager();
+
         $this->assertSame($mockSessionManager, $manager);
 
         Container::setDefaultManager(null);
     }
 
-    public function testProcess()
+    public function testProcess(): void
     {
         $sessionId = 'ghastsdrf';
 
@@ -38,11 +37,9 @@ class SessionIdTest extends TestCase
         $sut = new SessionId();
         $sut->setSessionManager($mockSessionManager);
 
-        $data = $sut->process([]);
+        $result = $sut(new LogRecord(new DateTimeImmutable(), 'test', Level::Info, ''));
 
-        $this->assertArrayHasKey('extra', $data);
-        $this->assertArrayHasKey('sessionId', $data['extra']);
-
-        $this->assertEquals($sessionId, $data['extra']['sessionId']);
+        $this->assertArrayHasKey('sessionId', $result->extra);
+        $this->assertSame($sessionId, $result->extra['sessionId']);
     }
 }

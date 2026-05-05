@@ -3,10 +3,14 @@
 namespace Olcs\Logging;
 
 use Laminas\EventManager\EventInterface;
-use Laminas\Log\Logger;
 use Laminas\Mvc\MvcEvent;
+use Laminas\ServiceManager\Factory\InvokableFactory;
+use Monolog\ErrorHandler;
 use Olcs\Logging\Log\Formatter\Standard;
 use Olcs\Logging\Log\Formatter\StandardFactory;
+use Olcs\Logging\Log\Logger as StaticLogger;
+use Olcs\Logging\Log\LoggerFactory;
+use Psr\Log\LogLevel;
 
 class Module
 {
@@ -15,55 +19,57 @@ class Module
         $logfile = sys_get_temp_dir() . '/olcs-' . PHP_SAPI . '-application.log';
 
         $processors = [
-            ['name' => 'Olcs\Logging\Log\Processor\Microtime'],
-            ['name' => 'Olcs\Logging\Log\Processor\UserId'],
-            ['name' => 'Olcs\Logging\Log\Processor\SessionId'],
-            ['name' => 'Olcs\Logging\Log\Processor\RemoteIp'],
+            ['name' => Log\Processor\Microtime::class],
+            ['name' => Log\Processor\UserId::class],
+            ['name' => Log\Processor\SessionId::class],
+            ['name' => Log\Processor\RemoteIp::class],
             ['name' => Log\Processor\RequestId::class],
             ['name' => Log\Processor\CorrelationId::class],
         ];
 
         return [
             'listeners' => [
-                'Olcs\Logging\Listener\LogRequest',
-                'Olcs\Logging\Listener\LogError'
+                Listener\LogRequest::class,
+                Listener\LogError::class,
             ],
             'service_manager' => [
-                'abstract_factories' => [
-                    'Laminas\Log\LoggerAbstractServiceFactory'
-                ],
                 'factories' => [
-                    'Olcs\Logging\Listener\LogRequest' => 'Olcs\Logging\Listener\LogRequest',
-                    'Olcs\Logging\Listener\LogError' => 'Olcs\Logging\Listener\LogError',
-                    'Olcs\Logging\Helper\LogException' => 'Olcs\Logging\Helper\LogException',
-                    'Olcs\Logging\Helper\LogError' => 'Olcs\Logging\Helper\LogError'
-                ]
+                    'Logger' => LoggerFactory::class,
+                    'ExceptionLogger' => LoggerFactory::class,
+                    Listener\LogRequest::class => Listener\LogRequest::class,
+                    Listener\LogError::class => Listener\LogError::class,
+                    Helper\LogException::class => Helper\LogException::class,
+                    Helper\LogError::class => Helper\LogError::class,
+                    Standard::class => StandardFactory::class,
+                    Log\Processor\Microtime::class => InvokableFactory::class,
+                    Log\Processor\UserId::class => InvokableFactory::class,
+                    Log\Processor\SessionId::class => InvokableFactory::class,
+                    Log\Processor\RemoteIp::class => InvokableFactory::class,
+                    Log\Processor\RequestId::class => InvokableFactory::class,
+                    Log\Processor\HidePassword::class => InvokableFactory::class,
+                    Log\Processor\CorrelationId::class => Log\Processor\CorrelationIdFactory::class,
+                ],
             ],
             'log' => [
                 'Logger' => [
                     'processors' => $processors,
-                    'filters' => [
-
-                    ],
                     'writers' => [
                         'full' => [
                             'name' => 'stream',
                             'options' => [
                                 'stream' => $logfile,
-                                'formatter' => Standard::class
+                                'formatter' => Standard::class,
+                                'filters' => [
+                                    'priority' => [
+                                        'name' => 'priority',
+                                        'options' => [
+                                            'priority' => LogLevel::DEBUG,
+                                        ],
+                                    ],
+                                ],
                             ],
-                        ]
-                    ]
-                ],
-            ],
-            'log_formatters' => [
-                'factories' => [
-                    Standard::class => StandardFactory::class,
-                ],
-            ],
-            'log_processors' => [
-                'factories' => [
-                    Log\Processor\CorrelationId::class => Log\Processor\CorrelationIdFactory::class,
+                        ],
+                    ],
                 ],
             ],
         ];
@@ -72,18 +78,17 @@ class Module
     public function onBootstrap(EventInterface $event): void
     {
         /** @var MvcEvent $event */
-        $logger = $event->getApplication()->getServiceManager()->get('Logger');
-        $config = $event->getApplication()->getServiceManager()->get('Config');
+        $serviceManager = $event->getApplication()->getServiceManager();
+        $logger = $serviceManager->get('Logger');
+        $config = $serviceManager->get('Config');
 
-        if (!isset($config['log']['allowPasswordLogging']) || $config['log']['allowPasswordLogging'] !== true) {
-            $logger->addProcessor(Log\Processor\HidePassword::class);
+        if (empty($config['log']['allowPasswordLogging'])) {
+            $hidePassword = $serviceManager->get(Log\Processor\HidePassword::class);
+            $logger->pushProcessor($hidePassword);
         }
 
-        Logger::registerExceptionHandler($logger);
-        Logger::registerErrorHandler($logger);
-        Logger::registerFatalErrorShutdownFunction($logger);
+        ErrorHandler::register($logger);
 
-        // Set up the static logger
-        \Olcs\Logging\Log\Logger::setLogger($logger);
+        StaticLogger::setLogger($logger);
     }
 }

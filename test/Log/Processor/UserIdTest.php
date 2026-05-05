@@ -2,35 +2,32 @@
 
 namespace OlcsTest\Logging\Log\Processor;
 
+use DateTimeImmutable;
+use Monolog\Level;
+use Monolog\LogRecord;
 use Olcs\Logging\Log\Processor\UserId;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class UserIdTest
- * @package OlcsTest\Logging\Log\Processor
- */
-class UserIdTest extends \PHPUnit\Framework\TestCase
+class UserIdTest extends TestCase
 {
-    public function testProcessNoUser()
+    public function testProcessNoUser(): void
     {
         $sut = new UserId();
         $sut->setUserId(null);
-        $data = $sut->process([]);
 
-        $this->assertArrayHasKey('extra', $data);
-        $this->assertArrayHasKey('userId', $data['extra']);
+        $result = $sut(new LogRecord(new DateTimeImmutable(), 'test', Level::Info, ''));
 
-        $this->assertEquals(null, $data['extra']['userId']);
+        $this->assertArrayHasKey('userId', $result->extra);
+        $this->assertNull($result->extra['userId']);
     }
 
-    public function testProcessWithUserId()
+    public function testProcessWithUserId(): void
     {
         $sut = new UserId();
         $sut->setUserId('USER123');
-        $data = $sut->process([]);
 
-        $this->assertArrayHasKey('extra', $data);
-        $this->assertArrayHasKey('userId', $data['extra']);
+        $result = $sut(new LogRecord(new DateTimeImmutable(), 'test', Level::Info, ''));
 
-        $this->assertEquals('USER123', $data['extra']['userId']);
+        $this->assertSame('USER123', $result->extra['userId']);
     }
 }

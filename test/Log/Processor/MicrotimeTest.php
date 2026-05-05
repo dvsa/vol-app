@@ -2,21 +2,23 @@
 
 namespace OlcsTest\Logging\Log\Processor;
 
+use DateTimeImmutable;
+use Monolog\Level;
+use Monolog\LogRecord;
 use Olcs\Logging\Log\Processor\Microtime;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class MicrotimeTest
- * @package OlcsTest\Logging\Log\Processor
- */
-class MicrotimeTest extends \PHPUnit\Framework\TestCase
+class MicrotimeTest extends TestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         $sut = new Microtime();
-        $data = $sut->process([]);
+        $record = new LogRecord(new DateTimeImmutable(), 'test', Level::Info, '');
 
-        $this->assertArrayHasKey('microsecs', $data);
-        $this->assertEquals(6, strlen($data['microsecs']));
-        $this->assertTrue(is_numeric($data['microsecs']), 'Microsecs wasn\'t an number');
+        $result = $sut($record);
+
+        $this->assertArrayHasKey('microsecs', $result->extra);
+        $this->assertSame(6, strlen($result->extra['microsecs']));
+        $this->assertTrue(is_numeric($result->extra['microsecs']), 'Microsecs was not a number');
     }
 }

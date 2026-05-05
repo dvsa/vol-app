@@ -2,40 +2,42 @@
 
 namespace Olcs\Logging\Log\Processor;
 
-use Laminas\Log\Processor\ProcessorInterface;
+use Monolog\LogRecord;
+use Monolog\Processor\ProcessorInterface;
 
 /**
- * Class HidePassword
- * Strip any password from being logged
- *
- * @package Olcs\Logging\Log\Processor
+ * Strip any password-like values from being logged.
  */
 class HidePassword implements ProcessorInterface
 {
-    private $replaceWith = '*** HIDDEN PASSWORD ***';
+    private const REPLACE_WITH = '*** HIDDEN PASSWORD ***';
 
-    /**
-     * Processes log event and removed any password
-     */
     #[\Override]
-    public function process(array $event): array
+    public function __invoke(LogRecord $record): LogRecord
     {
-        // recurse through the event
+        $context = $record->context;
+        $extra = $record->extra;
+
+        $this->redact($context);
+        $this->redact($extra);
+
+        return $record->with(context: $context, extra: $extra);
+    }
+
+    private function redact(array &$data): void
+    {
         array_walk_recursive(
-            $event,
-            function (&$value, $key) {
-                // if "password" is in the key or value, then mask the value
+            $data,
+            function (&$value, $key): void {
                 if (
-                    (stripos($key, 'password') !== false) ||
-                    (is_string($value) && stripos($value, 'password') !== false) ||
-                    // CognitoAdapter can throw a trace that doesnt contain the string 'password' but has creds in it. Suppress these.
-                    (is_string($value) && strpos($value, 'CognitoAdapter') !== false)
+                    (is_string($key) && stripos($key, 'password') !== false)
+                    || (is_string($value) && stripos($value, 'password') !== false)
+                    // CognitoAdapter can throw a trace that doesn't contain the string 'password' but has creds in it.
+                    || (is_string($value) && strpos($value, 'CognitoAdapter') !== false)
                 ) {
-                    $value = $this->replaceWith;
+                    $value = self::REPLACE_WITH;
                 }
             }
         );
-
-        return $event;
     }
 }

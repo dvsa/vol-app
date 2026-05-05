@@ -2,98 +2,82 @@
 
 namespace Olcs\Logging\Log\Formatter;
 
-use DateTimeInterface;
-use Laminas\Log\Formatter\Base;
-use Laminas\Log\Formatter\FormatterInterface;
+use Monolog\Formatter\FormatterInterface;
+use Monolog\Level;
+use Monolog\LogRecord;
 
+/**
+ * Emits the OLCS log line as JSON. Format must remain byte-equivalent
+ * to the previous laminas-log implementation so CloudWatch dashboards,
+ * alerts and downstream parsers continue to work.
+ *
+ * Example line:
+ *   {"timestamp":"2024-01-15 12:34:56.123456","log_priority":7,
+ *    "log_priority_name":"DEBUG","log-entry-type":"","openam-uuid":"u1",
+ *    "openam_session_token":"s1","correlation_id":"c1","location":"",
+ *    "relevant-message":"hello","relevant-data":{...}}
+ */
 class Standard implements FormatterInterface
 {
-    private Base $laminasBaseFormatter;
-    private string $outputDateTimeFormat = 'Y-m-d H:i:s';
-    protected $dateTimeFormat = DateTimeInterface::W3C;
+    /** Laminas-style short level names, indexed by RFC 5424 severity. */
+    private const PRIORITY_NAMES = [
+        0 => 'EMERG',
+        1 => 'ALERT',
+        2 => 'CRIT',
+        3 => 'ERR',
+        4 => 'WARN',
+        5 => 'NOTICE',
+        6 => 'INFO',
+        7 => 'DEBUG',
+    ];
 
-    public function __construct(Base $laminasBaseFormatter)
-    {
-        $this->laminasBaseFormatter = $laminasBaseFormatter;
-        $this->laminasBaseFormatter->setDateTimeFormat($this->dateTimeFormat);
-    }
-
-    /**
-     * Return a UTC formatted timestamp for the log output
-     *
-     * @return false|string
-     */
-    protected function getTimestamp(array $event)
-    {
-        return gmdate($this->outputDateTimeFormat, strtotime($event['timestamp']));
-    }
-
-    /**
-     * Format a log event
-     *
-     * @param array $event Array of event data
-     */
     #[\Override]
-    public function format($event): string|false
+    public function format(LogRecord $record): string
     {
-        $event = $this->laminasBaseFormatter->format($event);
+        $context = $record->context;
+        $extra = $record->extra;
 
-        // get extra data, remove items that are already in the log format (to avoid them logging twice)
-        $otherExtra = isset($event['extra']) ? $event['extra'] : [];
-        unset($otherExtra['userId']);
-        unset($otherExtra['sessionId']);
-        unset($otherExtra['location']);
+        $combined = $extra + $context;
+        unset($combined['userId'], $combined['sessionId'], $combined['location']);
+
+        $priority = $this->priorityFromLevel($record->level);
 
         $data = [
-            'timestamp' => $this->getTimestamp($event) . '.' . $event['microsecs'],
-            "log_priority" => $event['priority'],
-            "log_priority_name" => $event['priorityName'],
-            "log-entry-type" => isset($event['extra']['type']) ? $event['extra']['type'] : '',
-            "openam-uuid" => $event['extra']['userId'],
-            "openam_session_token" => $event['extra']['sessionId'],
-            "correlation_id" => $this->getCorrelationId($event),
-            "location" => isset($event['extra']['location']) ? $event['extra']['location'] : '',
-            "relevant-message" => $event['message'],
-            "relevant-data" => $otherExtra,
+            'timestamp' => $this->formatTimestamp($record, $extra),
+            'log_priority' => $priority,
+            'log_priority_name' => self::PRIORITY_NAMES[$priority],
+            'log-entry-type' => $context['type'] ?? '',
+            'openam-uuid' => $extra['userId'] ?? null,
+            'openam_session_token' => $extra['sessionId'] ?? null,
+            'correlation_id' => $extra['correlationId'] ?? ($extra['requestId'] ?? null),
+            'location' => $context['location'] ?? '',
+            'relevant-message' => $record->message,
+            'relevant-data' => $combined,
         ];
 
-        return @json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        return (string) @json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
-    /**
-     * Get the correlation ID to add to the log
-     *
-     * @param array $event Log event
-     *
-     * @return mixed
-     */
-    private function getCorrelationId($event)
-    {
-        return isset($event['extra']['correlationId']) ?
-            $event['extra']['correlationId'] :
-            $event['extra']['requestId'];
-    }
-
-    /**
-     * We only need this to conform to the Laminas interface
-     *
-     * {@inheritDoc}
-     */
     #[\Override]
-    public function getDateTimeFormat()
+    public function formatBatch(array $records): string
     {
-        return $this->dateTimeFormat;
+        $out = '';
+        foreach ($records as $record) {
+            $out .= $this->format($record);
+        }
+        return $out;
     }
 
-    /**
-     * We only need this to conform to the Laminas interface
-     *
-     * {@inheritDoc}
-     */
-    #[\Override]
-    public function setDateTimeFormat($dateTimeFormat)
+    private function priorityFromLevel(Level $level): int
     {
-        $this->dateTimeFormat = (string) $dateTimeFormat;
-        return $this;
+        return $level->toRFC5424Level();
+    }
+
+    private function formatTimestamp(LogRecord $record, array $extra): string
+    {
+        $datePart = gmdate('Y-m-d H:i:s', $record->datetime->getTimestamp());
+        $micro = $extra['microsecs'] ?? substr(explode(' ', microtime())[0], 2, 6);
+
+        return $datePart . '.' . $micro;
     }
 }

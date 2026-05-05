@@ -2,32 +2,29 @@
 
 namespace Olcs\Logging\Log\Processor;
 
-use Laminas\Log\Processor\ProcessorInterface;
+use Monolog\LogRecord;
+use Monolog\Processor\ProcessorInterface;
 
 class UserId implements ProcessorInterface
 {
-    private static $userId;
+    private static ?string $userId = null;
 
-    /**
-     * @param ?string $userId
-     */
-    public function setUserId($userId): void
+    public function setUserId(?string $userId): void
     {
         self::$userId = $userId;
     }
 
-    public function getUserId()
+    public function getUserId(): ?string
     {
         return self::$userId;
     }
 
-    /**
-     * Processes a log message before it is given to the writers
-     */
     #[\Override]
-    public function process(array $event): array
+    public function __invoke(LogRecord $record): LogRecord
     {
-        $event['extra']['userId'] = self::$userId;
-        return $event;
+        $extra = $record->extra;
+        $extra['userId'] = self::$userId;
+
+        return $record->with(extra: $extra);
     }
 }

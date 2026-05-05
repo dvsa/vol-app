@@ -2,16 +2,14 @@
 
 namespace Olcs\Logging\Log\Processor;
 
-use Laminas\Log\Processor\ProcessorInterface;
 use Laminas\Session\Container;
 use Laminas\Session\ManagerInterface as Manager;
+use Monolog\LogRecord;
+use Monolog\Processor\ProcessorInterface;
 
 class SessionId implements ProcessorInterface
 {
-    /**
-     * @var ?Manager
-     */
-    protected $sessionManager;
+    protected ?Manager $sessionManager = null;
 
     public function setSessionManager(Manager $sessionManager): SessionId
     {
@@ -27,16 +25,16 @@ class SessionId implements ProcessorInterface
         return $this->sessionManager;
     }
 
-    /**
-     * Processes a log message before it is given to the writers
-     */
     #[\Override]
-    public function process(array $event): array
+    public function __invoke(LogRecord $record): LogRecord
     {
-        //This currently uses the php/laminas session id, could be altered to use open AM sessid when an auth solution has
-        //been implemented
+        // This currently uses the php/laminas session id, could be altered to use open AM sessid when an auth solution
+        // has been implemented
         $this->getSessionManager()->start();
-        $event['extra']['sessionId'] = $this->getSessionManager()->getId();
-        return $event;
+
+        $extra = $record->extra;
+        $extra['sessionId'] = $this->getSessionManager()->getId();
+
+        return $record->with(extra: $extra);
     }
 }

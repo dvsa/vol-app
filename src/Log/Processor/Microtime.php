@@ -2,23 +2,18 @@
 
 namespace Olcs\Logging\Log\Processor;
 
-use Laminas\Log\Processor\ProcessorInterface;
+use Monolog\LogRecord;
+use Monolog\Processor\ProcessorInterface;
 
-/**
- * Class Microtime
- * @package Olcs\Logging\Log\Processor
- */
 class Microtime implements ProcessorInterface
 {
-    /**
-     * Processes a log message before it is given to the writers
-     */
     #[\Override]
-    public function process(array $event): array
+    public function __invoke(LogRecord $record): LogRecord
     {
         $microtime = explode(' ', microtime());
-        $event['microsecs'] = substr($microtime[0], 2, 6);
+        $extra = $record->extra;
+        $extra['microsecs'] = substr($microtime[0], 2, 6);
 
-        return $event;
+        return $record->with(extra: $extra);
     }
 }

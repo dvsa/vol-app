@@ -2,16 +2,16 @@
 
 namespace Olcs\Logging\Listener;
 
-use Laminas\Http\Request;
-use Laminas\Http\Response;
-use Psr\Container\ContainerInterface;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
-use Laminas\Log\LoggerAwareTrait;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
 use Laminas\Mvc\MvcEvent;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Logging\CliLoggableInterface;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerAwareTrait;
 
 class LogRequest implements ListenerAggregateInterface, FactoryInterface
 {
@@ -20,27 +20,21 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
 
     private const MAX_CONTENT_LENGTH_TO_LOG = 2048;
 
-    /**
-     * {@inheritdoc}
-     */
     #[\Override]
     public function attach(EventManagerInterface $events, $priority = 1)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onRoute'), 10000);
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, array($this, 'onDispatch'), 10000);
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'onDispatchEnd'), 10000);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'onRoute'], 10000);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 10000);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, [$this, 'onDispatchEnd'], 10000);
     }
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LogRequest
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LogRequest
     {
         $this->setLogger($container->get('Logger'));
         return $this;
     }
 
-    /**
-     * @param MvcEvent $e
-     */
     public function onRoute(MvcEvent $e)
     {
         if ($this->isConsole($e)) {
@@ -76,7 +70,7 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
             }
         }
 
-        $this->getLogger()->debug('Request received', ['data' => $data]);
+        $this->logger->debug('Request received', ['data' => $data]);
     }
 
     public function onDispatch(MvcEvent $e)
@@ -86,9 +80,9 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
 
             $data = [
                 'controller' => get_class($cm->get($e->getRouteMatch()->getParam('controller'))),
-                'action' => $e->getRouteMatch()->getParam('action')
+                'action' => $e->getRouteMatch()->getParam('action'),
             ];
-            $this->getLogger()->debug('Request dispatched', ['data' => $data]);
+            $this->logger->debug('Request dispatched', ['data' => $data]);
         }
     }
 
@@ -107,13 +101,10 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
                 'status' => $response->getReasonPhrase(),
             ];
 
-            $this->getLogger()->debug('Request completed', ['data' => $data]);
+            $this->logger->debug('Request completed', ['data' => $data]);
         }
     }
 
-    /**
-     * Is the request coming from console
-     */
     private function isConsole(MvcEvent $e): bool
     {
         return ($e->getRequest() instanceof CliLoggableInterface);

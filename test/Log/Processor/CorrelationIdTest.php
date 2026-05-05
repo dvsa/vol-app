@@ -2,16 +2,19 @@
 
 namespace OlcsTest\Logging\Log\Processor;
 
+use DateTimeImmutable;
 use Laminas\Http\Header\HeaderInterface;
 use Laminas\Http\PhpEnvironment\Request;
 use Laminas\Stdlib\RequestInterface;
-use Olcs\Logging\Log\Processor\CorrelationId;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use Monolog\Level;
+use Monolog\LogRecord;
+use Olcs\Logging\Log\Processor\CorrelationId;
 
 class CorrelationIdTest extends TestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         $mockHeader = m::mock(HeaderInterface::class);
         $mockHeader->expects('getFieldValue')->withNoArgs()->andReturn('COR_ID');
@@ -22,22 +25,22 @@ class CorrelationIdTest extends TestCase
         $sut = new CorrelationId($mockRequest);
 
         // run first time
-        $data = $sut->process([]);
-        $this->assertSame('COR_ID', $data['extra']['correlationId']);
+        $result = $sut(new LogRecord(new DateTimeImmutable(), 'test', Level::Info, ''));
+        $this->assertSame('COR_ID', $result->extra['correlationId']);
 
-        // run again to check cache property
-        $data = $sut->process([]);
-        $this->assertSame('COR_ID', $data['extra']['correlationId']);
+        // run again to check cache property (getHeader should only be called once)
+        $result = $sut(new LogRecord(new DateTimeImmutable(), 'test', Level::Info, ''));
+        $this->assertSame('COR_ID', $result->extra['correlationId']);
     }
 
-    public function testProcessCli()
+    public function testProcessCli(): void
     {
         $mockRequest = m::mock(RequestInterface::class);
 
         $sut = new CorrelationId($mockRequest);
 
-        // run first time
-        $data = $sut->process([]);
-        $this->assertSame(null, $data['extra']['correlationId']);
+        $result = $sut(new LogRecord(new DateTimeImmutable(), 'test', Level::Info, ''));
+
+        $this->assertNull($result->extra['correlationId']);
     }
 }

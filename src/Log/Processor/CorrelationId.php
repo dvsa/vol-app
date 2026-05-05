@@ -3,50 +3,30 @@
 namespace Olcs\Logging\Log\Processor;
 
 use Laminas\Http\PhpEnvironment\Request as HttpRequest;
-use Laminas\Log\Processor\ProcessorInterface;
 use Laminas\Stdlib\RequestInterface;
+use Monolog\LogRecord;
+use Monolog\Processor\ProcessorInterface;
 
-/**
- * Class CorrelationId
- * @package Olcs\Logging\Log\Processor
- */
 class CorrelationId implements ProcessorInterface
 {
-    /**
-     * @var string
-     */
-    private $identifier;
+    private ?string $identifier = null;
 
-    /** @var RequestInterface */
-    protected $request;
-
-    public function __construct(RequestInterface $request)
+    public function __construct(protected RequestInterface $request)
     {
-        $this->request = $request;
     }
 
-    /**
-     * Process a log event
-     *
-     * @param array $event Log event to process
-     *
-     * @return array
-     */
     #[\Override]
-    public function process(array $event)
+    public function __invoke(LogRecord $record): LogRecord
     {
-        $event['extra']['correlationId'] = $this->getIdentifier();
-        return $event;
+        $extra = $record->extra;
+        $extra['correlationId'] = $this->getIdentifier();
+
+        return $record->with(extra: $extra);
     }
 
-    /**
-     * Get the correlaction identifier
-     *
-     * @return string
-     */
-    protected function getIdentifier()
+    protected function getIdentifier(): ?string
     {
-        if ($this->identifier) {
+        if ($this->identifier !== null) {
             return $this->identifier;
         }
 
