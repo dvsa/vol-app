@@ -1,5 +1,21 @@
 # Changelog
 
+## [9.0.0](https://github.com/dvsa/olcs-logging/compare/v8.0.0...v9.0.0) (2026-05-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* migrate from laminas-log to monolog VOL-6099 ([#27](https://github.com/dvsa/olcs-logging/issues/27))
+
+### Features
+
+* migrate from laminas-log to monolog VOL-6099 ([#27](https://github.com/dvsa/olcs-logging/issues/27)) ([d128abd](https://github.com/dvsa/olcs-logging/commit/d128abd2a63398fa7e2b5a7e89bb117e992f310e))
+
+
+### Miscellaneous Chores
+
+* vol 6349 secrets scan ([#25](https://github.com/dvsa/olcs-logging/issues/25)) ([a445452](https://github.com/dvsa/olcs-logging/commit/a445452658bdb054b6a6b7d3e5c620534e4ada55))
+
 ## [8.0.0](https://github.com/dvsa/olcs-logging/compare/v7.2.0...v8.0.0) (2025-09-19)
 
 
