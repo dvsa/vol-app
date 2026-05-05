@@ -57,14 +57,14 @@ tail -n +2 "$conf_file"  | head -n -1 | while read -r line || [[ -n "$line" ]]; 
     rdsCipher=$(echo "$line" | awk '{print $2}' | sed 's/[",]//g')
     
     # Decrypt KMS Ciphertext
-    echo "$rdsCipher" | base64 --decode > "$blob_file"
+    echo "$rdsCipher" | base64 -d > "$blob_file"
     
     # If KMS fails, the script will exit here due to set -e
     rdsPlain=$(/usr/local/bin/aws kms decrypt \
         --ciphertext-blob fileb://"$blob_file"  \
         --query Plaintext \
         --output text \
-        --region "$awsRegion" | base64 --decode)
+        --region "$awsRegion" | base64 --d)
 
     # Escape single quotes for SQL safety
     rdsUserEscaped=${rdsUser//\'/\'\'}
