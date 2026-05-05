@@ -1,5 +1,17 @@
 # Changelog
 
+## [7.1.0](https://github.com/dvsa/olcs-utils/compare/v7.0.0...v7.1.0) (2026-05-05)
+
+
+### Features
+
+* removed abandoned laminas-log package VOL-6099 ([#31](https://github.com/dvsa/olcs-utils/issues/31)) ([476ed4b](https://github.com/dvsa/olcs-utils/commit/476ed4ba70717aeb10df6c074c0d9ab57e219f5a))
+
+
+### Miscellaneous Chores
+
+* vol 6349 secrets scan ([#29](https://github.com/dvsa/olcs-utils/issues/29)) ([9713f69](https://github.com/dvsa/olcs-utils/commit/9713f692a122ea42a9c0674378ab53bb68e28875))
+
 ## [7.0.0](https://github.com/dvsa/olcs-utils/compare/v6.3.0...v7.0.0) (2025-09-19)
 
 
