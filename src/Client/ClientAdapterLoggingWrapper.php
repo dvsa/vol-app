@@ -90,16 +90,14 @@ class ClientAdapterLoggingWrapper implements HttpAdapter, StreamInterface
     }
 
     /**
-     * Set the configuration array for the adapter
+     * Set the configuration array for the adapter.
      *
      * @param array $options Adapter options to set
-     *
-     * @return HttpAdapter
      */
     #[\Override]
-    public function setOptions($options = [])
+    public function setOptions($options = []): void
     {
-        return $this->getAdapter()->setOptions($options);
+        $this->getAdapter()->setOptions($options);
     }
 
     /**

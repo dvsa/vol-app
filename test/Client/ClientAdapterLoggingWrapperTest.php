@@ -6,11 +6,11 @@ namespace Dvsa\OlcsTest\Utils\Client;
 
 use Dvsa\Olcs\Utils\Client\ClientAdapterLoggingWrapper;
 use Laminas\Http\Client;
-use Laminas\Log\Writer\Mock;
 use Laminas\Uri\Uri;
 use Olcs\Logging\Log\Logger;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class ClientAdapterLoggingWrapperTest extends TestCase
 {
@@ -20,17 +20,12 @@ class ClientAdapterLoggingWrapperTest extends TestCase
 
     public function setUp(): void
     {
-        $writer = new Mock();
-
         $this->mockAdapter = $this->createMock(Client\Adapter\Curl::class);
-
-        $mockLogger = new \Laminas\Log\Logger();
-        $mockLogger->addWriter($writer);
 
         $this->sut = new ClientAdapterLoggingWrapper();
         $this->sut->setAdapter($this->mockAdapter);
 
-        Logger::setLogger($mockLogger);
+        Logger::setLogger(new NullLogger());
     }
 
     public function testSetAdapter()

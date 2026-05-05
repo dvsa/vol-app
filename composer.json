@@ -23,7 +23,7 @@
         }
     },
     "require-dev": {
-        "olcs/olcs-logging": "^7.1.0 || ^8",
+        "olcs/olcs-logging": "^9",
         "phpunit/phpunit": "^9.6",
         "johnkary/phpunit-speedtrap": "^4.0",
         "bamarni/composer-bin-plugin": "^1.8.2"
@@ -44,7 +44,7 @@
         "test": "phpunit",
         "phpcs": "phpcs",
         "psalm": "psalm",
-        "phpstan": "phpstan",
+        "phpstan": "phpstan --memory-limit=1G",
         "all": [
             "@test",
             "@phpcs",
