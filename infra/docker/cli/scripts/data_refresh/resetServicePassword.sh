@@ -64,7 +64,7 @@ tail -n +2 "$conf_file"  | head -n -1 | while read -r line || [[ -n "$line" ]]; 
         --ciphertext-blob fileb://"$blob_file"  \
         --query Plaintext \
         --output text \
-        --region "$awsRegion" | base64 --d)
+        --region "$awsRegion" | base64 -d)
 
     # Escape single quotes for SQL safety
     rdsUserEscaped=${rdsUser//\'/\'\'}
