@@ -99,8 +99,10 @@ abstract class AbstractUndertakingsController extends AbstractController
 
             $fieldset = $form->getInputFilter()->get('declarationsAndUndertakings');
 
+            //var_dump($data); die();
+
             if(
-                isset($data['declarationsAndUndertakings']['printSignReturnFallBack']) &&
+                isset($data['declarationsAndUndertakings']['signatureOptions']) &&
                 $fieldset->has('signatureVerifyMandate')
             ) {
                 $fieldset->remove('signatureVerifyMandate');
