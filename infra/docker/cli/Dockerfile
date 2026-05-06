@@ -17,15 +17,15 @@ RUN apk add --no-cache icu-dev libzip-dev cups-client poppler-utils bash \
   && docker-php-ext-configure zip \
   && docker-php-ext-install pdo_mysql opcache intl zip
 
-RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq \
-  && python3 -m venv /opt/awscli \
-  && /opt/awscli/bin/pip install --no-cache-dir awscli \
-  && ln -sf /opt/awscli/bin/aws /usr/local/bin/aws \
-  && aws --version
+#RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq \
+#  && python3 -m venv /opt/awscli \
+#  && /opt/awscli/bin/pip install --no-cache-dir awscli \
+#  && ln -sf /opt/awscli/bin/aws /usr/local/bin/aws \
+#  && aws --version
 
 
-RUN python3 -m venv /opt/venv \
-  && /opt/venv/bin/pip install boto3
+#RUN python3 -m venv /opt/venv \
+#  && /opt/venv/bin/pip install boto3
   
 # Install fonts for document rendering.
 # LibreOffice auto-substitutes these when documents request MS fonts:
@@ -53,24 +53,24 @@ EXPOSE 8080
 
 FROM cli AS production
 
-ADD ./api.tar.gz /var/www/html
+#ADD ./api.tar.gz /var/www/html
 
 # Add bash scripts
 COPY ./scripts/ /mnt/data/scripts/
 
 # `chown` and `chmod` flags do not work with `ADD` command when adding a tarball.
 # https://github.com/docker/docs/issues/7305
-RUN chown -R root:www-data /var/www/html \
+#RUN chown -R root:www-data /var/www/html \
   # Reset the permissions of the application files.
-  && chmod -R 644 /var/www/html \
+#  && chmod -R 644 /var/www/html \
   # Add owner (`root`) and group (`www-data`) execute permissions on directories.
-  && find /var/www/html -type d -exec chmod 755 {} \; \
+#  && find /var/www/html -type d -exec chmod 755 {} \; \
   # Add group (`www-data`) write permissions to the cache directory files.
-  && chmod -R 664 /var/www/html/data/cache \
+#  && chmod -R 664 /var/www/html/data/cache \
   # Add group (`www-data`) write permissions on the cache directories.
-  && find /var/www/html/data/cache -type d -exec chmod 775 {} \; \
+#  && find /var/www/html/data/cache -type d -exec chmod 775 {} \; \
   # Ensure Laminas binary is executable for CLI jobs.
-  && chmod +x /var/www/html/vendor/bin/laminas
+#  && chmod +x /var/www/html/vendor/bin/laminas
 
   # Create olcsdump and anondump directory.
 RUN mkdir -p /mnt/data/olcsdump /mnt/data/anondump\
