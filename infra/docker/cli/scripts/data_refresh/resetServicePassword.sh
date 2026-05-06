@@ -76,6 +76,16 @@ tail -n +2 "$conf_file"  | head -n -1 | while read -r line || [[ -n "$line" ]]; 
     rm -f "$blob_file"
 done
 
+# Download the MySQL config file from S3
+IMPORT_CONF_S3_PATH="s3://devapp-shd-pri-olcsci-build-s3/OLCS-OLCSDBRefresh-L/DEV/importanondb.conf"
+LOCAL_IMPORT_CONF_PATH="/usr/local/conf/importanondb.conf"
+
+mkdir -p "$(dirname "$LOCAL_IMPORT_CONF_PATH")"
+if ! /usr/local/bin/aws s3 cp "$IMPORT_CONF_S3_PATH" "$LOCAL_IMPORT_CONF_PATH" --region "$AWS_REGION"; then
+    log_error "Failed to download importanondb.conf from S3."
+    exit 1
+fi
+
 # Error redirection (2>) is removed so MySQL sends errors straight to cloudWatch
 echo "Updating RDS users for $platformEnv..."
 if ! mysql --defaults-file=/usr/local/conf/importanondb.conf \
