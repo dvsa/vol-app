@@ -125,6 +125,13 @@ locals {
           name      = "PRODTODEV_ASSUME_ROLE_ID"
           valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:nonprod_assume_external_id::"
         },
+        {
+         {
+          name      = "BATCH_DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.api_rds_password.arn}:olcs_batch_rds_password::"
+        },   
+        }
+
       ]
     },
     scripts_testing = {
