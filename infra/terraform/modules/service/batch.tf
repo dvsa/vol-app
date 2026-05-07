@@ -128,8 +128,8 @@ locals {
         {
          {
           name      = "MASTER_RDS_PASSWORD"
-          valueFrom = "${data.aws_secretsmanager_secret.api_rds_password.arn}:olcs_batch_rds_password::"
-        },   
+          valueFrom = "${data.aws_secretsmanager_secret.master_rds_password.arn}::"
+        }   
         }
 
       ]
