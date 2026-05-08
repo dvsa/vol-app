@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\GoodsDiscBundle as Qry;
+use Dvsa\Olcs\Api\Entity\System\SystemParameter;
 use Doctrine\Common\Collections\Criteria;
 
 /**
@@ -26,6 +27,12 @@ class DiscList extends AbstractDiscList
      * Last row spacer. Magic number gleaned from old codebase
      */
     public const LAST_ROW_HEIGHT = 359;
+
+    /**
+     * Default line spacing (twips, 240 = 12pt) used by the pinned-layout
+     * snippet. Only consulted when GOODS_DISC_PINNED_LAYOUT is enabled.
+     */
+    public const DEFAULT_LINE_SPACING = 240;
 
     /**
      * Bookmark variable prefix
@@ -112,19 +119,58 @@ class DiscList extends AbstractDiscList
             ];
         }
 
+        $pinned = $this->isPinnedLayout();
+        $extraTokens = $pinned
+            ? ['LINE_SPACING' => $this->resolveLineSpacing()]
+            : [];
+
         // bit ugly, but now we have to chunk the discs into N per row
         $discGroups = [];
         for ($i = 0; $i < count($discs); $i += self::PER_ROW) {
             $discGroups[] = array_merge(
                 $discs[$i],
                 $discs[$i + 1],
-                [
-                    'ROW_HEIGHT' => $this->getRowHeight($i)
-                ]
+                ['ROW_HEIGHT' => $this->getRowHeight($i, $pinned)],
+                $extraTokens
             );
         }
 
         return $this->renderSnippets($discGroups);
+    }
+
+    /**
+     * Load the legacy snippet by default; switch to DiscListPinned when the
+     * pinned-layout toggle is on. Default (toggle off) renders byte-identical
+     * to the pre-PR behaviour.
+     */
+    #[\Override]
+    public function getSnippet($className = null)
+    {
+        if ($className === null && $this->isPinnedLayout()) {
+            $className = 'DiscListPinned';
+        }
+        return parent::getSnippet($className);
+    }
+
+    /**
+     * SystemParameter GOODS_DISC_PINNED_LAYOUT acts as a feature toggle.
+     * Treat any value other than '1' as off.
+     */
+    private function isPinnedLayout(): bool
+    {
+        $repo = $this->getRepoManager()?->get('SystemParameter');
+        return $repo?->fetchValue(SystemParameter::GOODS_DISC_PINNED_LAYOUT) === '1';
+    }
+
+    /**
+     * When the toggle is on, resolve the line spacing override from
+     * SystemParameter, falling back to DEFAULT_LINE_SPACING.
+     */
+    private function resolveLineSpacing(): string
+    {
+        $repo = $this->getRepoManager()?->get('SystemParameter');
+        $value = $repo?->fetchValue(SystemParameter::GOODS_DISC_LINE_SPACING);
+        return is_numeric($value) ? (string)(int)$value : (string)self::DEFAULT_LINE_SPACING;
     }
 
     /*
@@ -143,14 +189,30 @@ class DiscList extends AbstractDiscList
     }
 
     /**
-     * Helper to work out our row height. Yuck
+     * Helper to work out our row height. Yuck. When the pinned layout is on,
+     * draw the regular and last spacer values from SystemParameter (with
+     * fallback to the class constants); otherwise use the constants directly
+     * so the legacy render path is byte-identical to today.
      */
-    private function getRowHeight($index)
+    private function getRowHeight($index, bool $pinned = false)
     {
         $index /= self::PER_ROW;
         $max = self::PER_PAGE / self::PER_ROW;
+        $isLast = ($index % $max === $max - 1);
 
-        return ($index % $max === $max - 1) ? self::LAST_ROW_HEIGHT : self::ROW_HEIGHT;
+        if (!$pinned) {
+            return $isLast ? self::LAST_ROW_HEIGHT : self::ROW_HEIGHT;
+        }
+
+        $repo = $this->getRepoManager()?->get('SystemParameter');
+        $key = $isLast
+            ? SystemParameter::GOODS_DISC_LAST_ROW_HEIGHT
+            : SystemParameter::GOODS_DISC_ROW_HEIGHT;
+        $value = $repo?->fetchValue($key);
+        if (is_numeric($value)) {
+            return (int)$value;
+        }
+        return $isLast ? self::LAST_ROW_HEIGHT : self::ROW_HEIGHT;
     }
 
     #[\Override]
