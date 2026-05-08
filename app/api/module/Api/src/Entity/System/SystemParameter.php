@@ -38,4 +38,15 @@ class SystemParameter extends AbstractSystemParameter
     public const DATA_SEPARATION_TEAMS_EXEMPT = 'DATA_SEPARATION_TEAMS_EXEMPT';
     public const NEW_OP_EMAIL_GB = 'NEW_OP_EMAIL_GB';
     public const NEW_OP_EMAIL_NI = 'NEW_OP_EMAIL_NI';
+
+    public const PSV_DISC_PINNED_LAYOUT = 'PSV_DISC_PINNED_LAYOUT';
+    public const PSV_DISC_ROW_HEIGHT_1 = 'PSV_DISC_ROW_HEIGHT_1';
+    public const PSV_DISC_ROW_HEIGHT_2 = 'PSV_DISC_ROW_HEIGHT_2';
+    public const PSV_DISC_ROW_HEIGHT_3 = 'PSV_DISC_ROW_HEIGHT_3';
+    public const PSV_DISC_LINE_SPACING = 'PSV_DISC_LINE_SPACING';
+
+    public const GOODS_DISC_PINNED_LAYOUT   = 'GOODS_DISC_PINNED_LAYOUT';
+    public const GOODS_DISC_ROW_HEIGHT      = 'GOODS_DISC_ROW_HEIGHT';
+    public const GOODS_DISC_LAST_ROW_HEIGHT = 'GOODS_DISC_LAST_ROW_HEIGHT';
+    public const GOODS_DISC_LINE_SPACING    = 'GOODS_DISC_LINE_SPACING';
 }
