@@ -299,12 +299,10 @@ class UndertakingsController extends AbstractUndertakingsController
             $hasGovUkAccountError = $this->getFlashMessenger()->getContainer()->offsetExists('govUkAccountError');
 
             if ($this->lva === 'application') {
-                $formHelper->remove($form, 'declarationsAndUndertakings->signatureOptions');
-
                 if ($hasGovUkAccountError) {
                     $formHelper->remove($form, 'declarationsAndUndertakings->signatureVerifyMandate');
                 } else {
-                    $formHelper->remove($form, 'declarationsAndUndertakings->printSignReturnFallBack');
+                    $formHelper->remove($form, 'declarationsAndUndertakings->signatureOptions');
                 }
             }
 
