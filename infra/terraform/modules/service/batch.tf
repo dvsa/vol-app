@@ -236,6 +236,27 @@ locals {
       executionRoleArn = module.ecs_service["api"].task_exec_iam_role_arn
       jobRoleArn       = module.ecs_service["api"].tasks_iam_role_arn
 
+      task_exec_iam_role_statements = [
+  {
+    effect = "Allow"
+    actions = [
+      "secretsmanager:GetSecretValue"
+    ]
+    resources = [
+      data.aws_secretsmanager_secret.this["api"].arn
+    ]
+  },
+  {
+    effect = "Allow"
+    actions = [
+      "secretsmanager:GetSecretValue"
+    ]
+    resources = [
+      data.aws_secretsmanager_secret.master_rds_password.arn
+    ]
+  },
+]
+
       logConfiguration = {
         logDriver = "awslogs"
         options = {
