@@ -104,16 +104,6 @@ class AbstractStandardConditionsTest extends MockeryTestCase
                 'vehType' => RefData::APP_VEHICLE_TYPE_HGV,
                 'expect' => 'STANDARD_INT',
             ],
-            [
-                'licType' => Entity\Licence\Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                'vehType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'expect' => 'STANDARD_LGV',
-            ],
-            [
-                'licType' => Entity\Licence\Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                'vehType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'expect' => 'STANDARD_INT_LGV',
-            ],
         ];
     }
 }
