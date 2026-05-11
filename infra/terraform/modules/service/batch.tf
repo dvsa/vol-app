@@ -126,10 +126,6 @@ locals {
           valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:nonprod_assume_external_id::"
         },
         {
-         {
-          name      = "MASTER_RDS_PASSWORD"
-          valueFrom = "${data.aws_secretsmanager_secret.master_rds_password.arn}::"
-        }   
         }
 
       ]
