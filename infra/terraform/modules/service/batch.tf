@@ -125,9 +125,6 @@ locals {
           name      = "PRODTODEV_ASSUME_ROLE_ID"
           valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:nonprod_assume_external_id::"
         },
-        {
-        }
-
       ]
     },
     
