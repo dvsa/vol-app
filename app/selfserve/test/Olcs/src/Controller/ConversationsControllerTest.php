@@ -319,7 +319,6 @@ class ConversationsControllerTest extends TestCase
         $this->sut->shouldReceive('params')
             ->andReturn($this->mockParams);
 
-
         $view = $this->sut->addAction();
         $this->assertInstanceOf(ViewModel::class, $view);
     }
