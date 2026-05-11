@@ -63,9 +63,6 @@ abstract class AbstractStandardConditions extends DynamicBookmark
 
             case Licence::LICENCE_TYPE_STANDARD_NATIONAL:
                 $type = 'STANDARD';
-                if ($this->data['vehicleType']['id'] == RefData::APP_VEHICLE_TYPE_LGV) {
-                    $type .= '_LGV';
-                }
                 break;
 
             case Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL:
