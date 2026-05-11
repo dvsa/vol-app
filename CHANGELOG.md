@@ -1,5 +1,35 @@
 # Changelog
 
+## [7.4.0](https://github.com/dvsa/vol-app/compare/v7.3.2...v7.4.0) (2026-05-11)
+
+
+### Features
+
+* 7077 populate anon modifications ([#1438](https://github.com/dvsa/vol-app/issues/1438)) ([65c3cfb](https://github.com/dvsa/vol-app/commit/65c3cfb0d253ee52043b238ee1715eabd5fd0a70))
+* mandate GOV One login for Licence application and fallback to P… ([#1423](https://github.com/dvsa/vol-app/issues/1423)) ([b037c78](https://github.com/dvsa/vol-app/commit/b037c78229baa565f7743d4e12216ae4a8facf99))
+* Script testing ([#1419](https://github.com/dvsa/vol-app/issues/1419)) ([0891963](https://github.com/dvsa/vol-app/commit/0891963f5cbed7c3c200a0ce51c6627c08342dc5))
+* update olcscommon release version for vol-6555 ([#1454](https://github.com/dvsa/vol-app/issues/1454)) ([cd447e5](https://github.com/dvsa/vol-app/commit/cd447e5673729c07d87810e4b5324945809da653))
+* vol 6958 updated wording for standard licences ([#1434](https://github.com/dvsa/vol-app/issues/1434)) ([5c25a96](https://github.com/dvsa/vol-app/commit/5c25a96e5f3eb908637ba4ec72499d903000b33a))
+* vol 7183 psv review declaration ([#1443](https://github.com/dvsa/vol-app/issues/1443)) ([f2c442f](https://github.com/dvsa/vol-app/commit/f2c442fcbf76309de9da65ba2c3d1b6bf882937f))
+
+
+### Bug Fixes
+
+* 7077 populate anon perms ([#1439](https://github.com/dvsa/vol-app/issues/1439)) ([f57c6fa](https://github.com/dvsa/vol-app/commit/f57c6fad6facad4755bdb9e1915b079ac26054c0))
+* 7077 populate anon update perms ([#1442](https://github.com/dvsa/vol-app/issues/1442)) ([4125af6](https://github.com/dvsa/vol-app/commit/4125af6f0c33b5d59073f3085656f0f1d6dfa5db))
+* 7077 script permissions ([#1452](https://github.com/dvsa/vol-app/issues/1452)) ([94b9971](https://github.com/dvsa/vol-app/commit/94b997167ac2f41ba182bf39200bb42ad2f15a59))
+* add GOVlogin for fallback as well along with print sign and return ([#1447](https://github.com/dvsa/vol-app/issues/1447)) ([f05ab94](https://github.com/dvsa/vol-app/commit/f05ab947e506ce1b685a9dc96c467be8fd3bbf5f))
+* alias CourierPS to Nimbus Mono PS in gotenberg image ([#1426](https://github.com/dvsa/vol-app/issues/1426)) ([f8d7814](https://github.com/dvsa/vol-app/commit/f8d7814f2821034fb91361846ba4360d11cba323))
+* data refresh visibility ([#1430](https://github.com/dvsa/vol-app/issues/1430)) ([bdf2c73](https://github.com/dvsa/vol-app/commit/bdf2c7339a3bbfc492ae4043ca6650b015474f11))
+* enable contrib for gotenberg apt sources ([#1428](https://github.com/dvsa/vol-app/issues/1428)) ([3bb3f12](https://github.com/dvsa/vol-app/commit/3bb3f126896df9f00a8206a48dd11b388f64c718))
+* impoundings for N&P now published correctly VOL-3820 ([#1441](https://github.com/dvsa/vol-app/issues/1441)) ([6c4d237](https://github.com/dvsa/vol-app/commit/6c4d237c07b5586e56f84c6e796ac6185a9cf9c6))
+* opt-in pinned PSV and Goods disc layouts via SystemParameter toggles ([#1455](https://github.com/dvsa/vol-app/issues/1455)) ([c835678](https://github.com/dvsa/vol-app/commit/c8356789c1c102f5400d537ca61a625f53f7791a))
+* rebuild CD for impoundings for N&P now published correctly VOL-3820 ([#1444](https://github.com/dvsa/vol-app/issues/1444)) ([7d91fa9](https://github.com/dvsa/vol-app/commit/7d91fa97e3aca3eada14e474022686393056ab87))
+* remove validation for verify mandate when print sign and return fall back is selected VOL-6555 ([#1440](https://github.com/dvsa/vol-app/issues/1440)) ([03c392c](https://github.com/dvsa/vol-app/commit/03c392c72bfb3ff3d161de32c00ba2c15626a679))
+* save messages before checking database so now present correct date in task ([#1422](https://github.com/dvsa/vol-app/issues/1422)) ([0c6030a](https://github.com/dvsa/vol-app/commit/0c6030a267722b72bdf8813d6964316156a05c3a))
+* typo in base64 command ([#1446](https://github.com/dvsa/vol-app/issues/1446)) ([fc641e2](https://github.com/dvsa/vol-app/commit/fc641e2019eda19f9b10bfd0e6d35691448f8f86))
+* update terraform backend ([#1436](https://github.com/dvsa/vol-app/issues/1436)) ([eada394](https://github.com/dvsa/vol-app/commit/eada39463748319f4db411c75b2432018013befc))
+
 ## [7.3.2](https://github.com/dvsa/vol-app/compare/v7.3.1...v7.3.2) (2026-04-23)
 
 
