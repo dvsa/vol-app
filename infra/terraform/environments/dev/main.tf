@@ -98,6 +98,8 @@ locals {
         "rds:DeleteDBClusterSnapshot",
       ]
       resources = [
+
+        "arn:aws:rds:eu-west-1:054614622558:cluster:dev-aurora-olcsdb-cluster",
         "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*"
       ]
     },
@@ -107,6 +109,7 @@ locals {
         "rds:DescribeDBClusters",
       ]
       resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster:dev-aurora-olcsdb-cluster",
         "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-*"
       ]
     },
@@ -114,10 +117,12 @@ locals {
       effect = "Allow"
       actions = [
         "rds:RestoreDBClusterFromSnapshot",
+        "rds:AddTagsToResource",
       ]
       resources = [
         "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*",
         "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:subgrp:devappdev-olcs-rds-*"
       ]
     },
     {
@@ -127,6 +132,7 @@ locals {
         "rds:DescribeDBInstances",
       ]
       resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
         "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*"
       ]
     },
