@@ -391,6 +391,7 @@ module "service" {
     cli_repository       = data.aws_ecr_repository.this["cli"].repository_url
     liquibase_repository = data.aws_ecr_repository.sservice["liquibase"].repository_url
     api_secret_file      = data.aws_secretsmanager_secret.this["api"].arn
+    api_secret_file      = data.aws_secretsmanager_secret.this["MASTER_RDS_PASSWORD"].arn                          
 
     task_iam_role_statements = local.task_iam_role_statements
 
