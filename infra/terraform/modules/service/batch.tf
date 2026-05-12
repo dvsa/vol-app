@@ -4,6 +4,10 @@ data "aws_secretsmanager_secret" "application_api" {
   name = "${local.account_prefix}${local.env_prefix}-BASE-SM-APPLICATION-API"
 }
 
+data "aws_secretsmanager_secret" "MASTER_RDS_PASSWORD" {
+  name = "${local.account_prefix}${local.env_prefix}-MASTER_RDS_PASSWORD"
+}
+
 locals {
 
   account_prefix = contains(["DEV", "QA"], var.legacy_environment) ? "DEV" : ""
@@ -230,6 +234,7 @@ locals {
 
       executionRoleArn = module.ecs_service["api"].task_exec_iam_role_arn
       jobRoleArn       = module.ecs_service["api"].tasks_iam_role_arn
+      executionRoleArn = module.ecs_service["api"].task_exec_iam_role_arn
 
       task_exec_iam_role_statements = [
   {
