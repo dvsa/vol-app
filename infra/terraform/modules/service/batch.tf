@@ -131,8 +131,6 @@ locals {
         },
       ]
     },
-    
-  
     scripts_testing = {
       image = "054614622558.dkr.ecr.eu-west-1.amazonaws.com/scripts_testing:latest"
 
