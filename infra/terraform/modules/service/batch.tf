@@ -234,7 +234,7 @@ locals {
 
       executionRoleArn = module.ecs_service["api"].task_exec_iam_role_arn
       jobRoleArn       = module.ecs_service["api"].tasks_iam_role_arn
-      executionRoleArn = module.ecs_service["api"].task_exec_iam_role_arn
+      executionRoleArn = module.ecs_service["MASTER_RDS_PASSWORD"].task_exec_iam_role_arn
 
       task_exec_iam_role_statements = [
   {
