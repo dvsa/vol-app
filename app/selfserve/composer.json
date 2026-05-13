@@ -17,7 +17,6 @@
     "laminas/laminas-inputfilter": "^2.35",
     "laminas/laminas-mvc": "^3.8",
     "laminas/laminas-mvc-plugin-flashmessenger": "^1.11",
-    "laminas/laminas-mvc-plugin-prg": "^1.8",
     "laminas/laminas-navigation": "^2.22",
     "laminas/laminas-servicemanager": "^3.24",
     "laminas/laminas-session": "^2.26",

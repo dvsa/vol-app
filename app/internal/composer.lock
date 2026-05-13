@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "e70368517403efa383a7ac52d9ac36a1",
+  "content-hash": "2eaaf436af70e8f8c324acace17c8ada",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -3016,67 +3016,6 @@
       "time": "2024-11-29T08:28:58+00:00"
     },
     {
-      "name": "laminas/laminas-mvc-plugin-prg",
-      "version": "1.8.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/laminas/laminas-mvc-plugin-prg.git",
-        "reference": "b51e7ba892e52c6a80ce8c7dc7f8c429e3937516"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/laminas/laminas-mvc-plugin-prg/zipball/b51e7ba892e52c6a80ce8c7dc7f8c429e3937516",
-        "reference": "b51e7ba892e52c6a80ce8c7dc7f8c429e3937516",
-        "shasum": ""
-      },
-      "require": {
-        "laminas/laminas-mvc": "^3.3.3",
-        "laminas/laminas-session": "^2.12.1",
-        "laminas/laminas-stdlib": "^3.10.1",
-        "php": "~8.1.0 || ~8.2.0 || ~8.3.0"
-      },
-      "conflict": {
-        "zendframework/zend-mvc-plugin-prg": "*"
-      },
-      "require-dev": {
-        "laminas/laminas-coding-standard": "~2.5.0",
-        "phpunit/phpunit": "^10.4",
-        "psalm/plugin-phpunit": "^0.18.0",
-        "vimeo/psalm": "^5.16"
-      },
-      "type": "library",
-      "extra": {
-        "laminas": {
-          "component": "Laminas\\Mvc\\Plugin\\Prg"
-        }
-      },
-      "autoload": {
-        "psr-4": {
-          "Laminas\\Mvc\\Plugin\\Prg\\": "src/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": ["BSD-3-Clause"],
-      "description": "Post/Redirect/Get plugin for laminas-mvc controllers",
-      "homepage": "https://laminas.dev",
-      "keywords": ["laminas", "mvc"],
-      "support": {
-        "chat": "https://laminas.dev/chat",
-        "docs": "https://docs.laminas.dev/laminas-mvc-plugin-prg/",
-        "forum": "https://discourse.laminas.dev",
-        "issues": "https://github.com/laminas/laminas-mvc-plugin-prg/issues",
-        "rss": "https://github.com/laminas/laminas-mvc-plugin-prg/releases.atom",
-        "source": "https://github.com/laminas/laminas-mvc-plugin-prg"
-      },
-      "funding": [
-        {
-          "url": "https://funding.communitybridge.org/projects/laminas-project",
-          "type": "community_bridge"
-        }
-      ],
-      "time": "2023-12-01T06:06:12+00:00"
-    },
-    {
       "name": "laminas/laminas-navigation",
       "version": "2.23.0",
       "source": {
@@ -4305,16 +4244,16 @@
     },
     {
       "name": "olcs/olcs-common",
-      "version": "v9.17.0",
+      "version": "v9.18.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-common.git",
-        "reference": "2ca22cb718963516909dba38d42f543853b59f19"
+        "reference": "9bcea2e510abb61aaddff074ec7ed76667482171"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/2ca22cb718963516909dba38d42f543853b59f19",
-        "reference": "2ca22cb718963516909dba38d42f543853b59f19",
+        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/9bcea2e510abb61aaddff074ec7ed76667482171",
+        "reference": "9bcea2e510abb61aaddff074ec7ed76667482171",
         "shasum": ""
       },
       "require": {
@@ -4331,7 +4270,6 @@
         "laminas/laminas-modulemanager": "^2.17",
         "laminas/laminas-mvc": "^3.8",
         "laminas/laminas-mvc-plugin-flashmessenger": "^1.11",
-        "laminas/laminas-mvc-plugin-prg": "^1.8",
         "laminas/laminas-navigation": "^2.20",
         "laminas/laminas-servicemanager": "^3.23",
         "laminas/laminas-stdlib": "^3.20",
@@ -4372,9 +4310,9 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "Common library for the OLCS Project",
       "support": {
-        "source": "https://github.com/dvsa/olcs-common/tree/v9.17.0"
+        "source": "https://github.com/dvsa/olcs-common/tree/v9.18.0"
       },
-      "time": "2026-05-14T14:43:27+00:00"
+      "time": "2026-05-19T09:21:17+00:00"
     },
     {
       "name": "olcs/olcs-logging",
