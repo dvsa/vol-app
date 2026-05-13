@@ -118,6 +118,10 @@ locals {
 
       secrets = [
         {
+          name      = "API_DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_api_rds_password::"
+        },
+        {
           name      = "BATCH_DB_PASSWORD"
           valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_batch_rds_password::"
         },
@@ -175,8 +179,12 @@ locals {
 
       secrets = [
         {
-          name      = "BATCH_DB_PASSWORD"
+          name      = "API_DB_PASSWORD"
           valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_api_rds_password::"
+        },
+        {
+          name      = "BATCH_DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_batch_rds_password::"
         },
         {
           name      = "PRODTODEV_ASSUME_ROLE_ID"

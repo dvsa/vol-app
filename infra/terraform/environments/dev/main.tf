@@ -680,7 +680,7 @@ module "service" {
       {
         name     = "populate-anondb",
         commands = ["/mnt/data/scripts/populate_anondb.sh"],
-        type     = "scripts_testing"
+        type     = "scripts"
       },
       {
         name     = "ni-compliance",
