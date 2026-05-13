@@ -3,7 +3,8 @@
 # Aurora-based database anonymisation script
 # ----------------------------------------------------
 # Flow:
-#   1. Create Aurora cluster snapshot from production read-replica
+#   0. Fetch DB subnet group and security group from source cluster
+#   1. Create Aurora cluster snapshot from production cluster
 #   2. Restore a temporary Aurora cluster + instance
 #   3. Run anonymisation scripts against restored cluster
 #   4. Dump anonymised database and upload to S3
