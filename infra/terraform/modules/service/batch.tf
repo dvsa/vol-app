@@ -4,9 +4,6 @@ data "aws_secretsmanager_secret" "application_api" {
   name = "${local.account_prefix}${local.env_prefix}-BASE-SM-APPLICATION-API"
 }
 
-data "aws_secretsmanager_secret" "MASTER_RDS_PASSWORD" {
-  name = "${local.account_prefix}${local.env_prefix}-MASTER_RDS_PASSWORD"
-}
 
 locals {
 
@@ -129,6 +126,10 @@ locals {
           name      = "PRODTODEV_ASSUME_ROLE_ID"
           valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:nonprod_assume_external_id::"
         },
+         {
+          name      = "MASTER_RDS_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_api_rds_password::"
+        },
       ]
     },
     scripts_testing = {
@@ -232,7 +233,6 @@ locals {
 
       executionRoleArn = module.ecs_service["api"].task_exec_iam_role_arn
       jobRoleArn       = module.ecs_service["api"].tasks_iam_role_arn
-      executionRoleArn = module.ecs_service["MASTER_RDS_PASSWORD"].task_exec_iam_role_arn
 
       logConfiguration = {
         logDriver = "awslogs"
