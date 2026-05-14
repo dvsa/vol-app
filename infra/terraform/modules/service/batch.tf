@@ -4,6 +4,10 @@ data "aws_secretsmanager_secret" "application_api" {
   name = "${local.account_prefix}${local.env_prefix}-BASE-SM-APPLICATION-API"
 }
 
+data "aws_secretsmanager_secret" "infra" {
+  name = "${local.account_prefix}${local.env_prefix}-BASE-SM-INFRA"
+}
+
 locals {
 
   account_prefix = contains(["DEV", "QA"], var.legacy_environment) ? "DEV" : ""
@@ -126,6 +130,10 @@ locals {
           valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_batch_rds_password::"
         },
         {
+          name      = "M_DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.infra.arn}:master_rds_password::"
+        },
+        {
           name      = "PRODTODEV_ASSUME_ROLE_ID"
           valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:nonprod_assume_external_id::"
         },
@@ -187,6 +195,10 @@ locals {
           valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_batch_rds_password::"
         },
         {
+          name      = "M_DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.infra.arn}:master_rds_password::"
+        },
+        {
           name      = "PRODTODEV_ASSUME_ROLE_ID"
           valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:nonprod_assume_external_id::"
         },
@@ -235,7 +247,7 @@ locals {
       ],
 
       executionRoleArn = module.ecs_service["api"].task_exec_iam_role_arn
-      jobRoleArn       = module.ecs_service["api"].tasks_iam_role_arn
+      jobRoleArn       = module.batch_job_role.iam_role_arn
 
       logConfiguration = {
         logDriver = "awslogs"
@@ -276,6 +288,50 @@ locals {
         "SchedulingPriorityOverride" : 1
       })
     }
+  }
+}
+
+module "batch_job_role" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role"
+
+  name = "vol-app-${var.environment}-batch-job"
+
+  create_inline_policy = true
+
+  trust_policy_permissions = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+  inline_policy_permissions = {
+    api_policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [
+        for stmt in var.batch.api_iam_role_statements : {
+          Effect   = stmt.effect
+          Action   = stmt.actions
+          Resource = stmt.resources
+        }
+      ]
+    })
+    batch_job_policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [
+        for stmt in var.batch.batch_iam_role_statements : {
+          Effect   = stmt.effect
+          Action   = stmt.actions
+          Resource = stmt.resources
+        }
+      ]
+    })
   }
 }
 

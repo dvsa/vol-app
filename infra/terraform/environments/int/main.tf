@@ -90,6 +90,19 @@ locals {
       ]
     },
   ]
+
+  batch_iam_role_statements = [
+    {
+      effect = "Allow"
+      actions = [
+        "secretsmanager:GetSecretValue"
+      ]
+      resources = [
+        data.aws_secretsmanager_secret.infra.arn
+      ]
+    }
+  ]
+
 }
 
 data "aws_ecr_repository" "this" {
@@ -131,6 +144,10 @@ data "aws_secretsmanager_secret" "this" {
   for_each = toset(setsubtract(local.service_names, ["cli"]))
 
   name = "DEVAPPQA-BASE-SM-APPLICATION-${upper(each.key)}"
+}
+
+data "aws_secretsmanager_secret" "infra" {
+  name = "DEVAPPQA-BASE-SM-INFRA"
 }
 
 data "aws_cognito_user_pools" "this" {
@@ -323,7 +340,8 @@ module "service" {
     liquibase_repository = data.aws_ecr_repository.sservice["liquibase"].repository_url
     api_secret_file      = data.aws_secretsmanager_secret.this["api"].arn
 
-    task_iam_role_statements = local.task_iam_role_statements
+    api_iam_role_statements   = local.task_iam_role_statements
+    batch_iam_role_statements = local.batch_iam_role_statements
 
     subnet_ids = data.aws_subnets.this["BATCH"].ids
 

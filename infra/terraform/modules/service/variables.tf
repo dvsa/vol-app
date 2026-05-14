@@ -78,7 +78,12 @@ variable "batch" {
     api_secret_file      = string
     subnet_ids           = list(string)
     alert_emails         = optional(list(string))
-    task_iam_role_statements = list(object({
+    api_iam_role_statements = list(object({
+      effect    = string
+      actions   = list(string)
+      resources = list(string)
+    }))
+    batch_iam_role_statements = list(object({
       effect    = string
       actions   = list(string)
       resources = list(string)
