@@ -24,7 +24,7 @@ locals {
         "secretsmanager:GetSecretValue"
       ]
       resources = [
-        data.aws_secretsmanager_secret.infa.arn
+        data.aws_secretsmanager_secret.infra.arn
       ]
     },
   ]
