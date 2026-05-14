@@ -18,6 +18,18 @@ locals {
     },
   ]
 
+  batch_exec_iam_role_statements = [
+    {
+      effect = "Allow"
+      actions = [
+        "secretsmanager:GetSecretValue"
+      ]
+      resources = [
+        data.aws_secretsmanager_secret.infa.arn
+      ]
+    },
+  ]
+
   task_iam_role_statements = [
     {
       effect = "Allow"
@@ -424,8 +436,9 @@ module "service" {
     liquibase_repository = data.aws_ecr_repository.sservice["liquibase"].repository_url
     api_secret_file      = data.aws_secretsmanager_secret.this["api"].arn
 
-    api_iam_role_statements   = local.task_iam_role_statements
-    batch_iam_role_statements = local.batch_iam_role_statements
+    api_iam_role_statements        = local.task_iam_role_statements
+    batch_iam_role_statements      = local.batch_iam_role_statements
+    batch_exec_iam_role_statements = local.batch_exec_iam_role_statements
 
     subnet_ids = data.aws_subnets.this["BATCH"].ids
 

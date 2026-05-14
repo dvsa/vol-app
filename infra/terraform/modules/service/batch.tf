@@ -246,7 +246,7 @@ locals {
         },
       ],
 
-      executionRoleArn = module.ecs_service["api"].task_exec_iam_role_arn
+      executionRoleArn = module.batch_execution_role.iam_role_arn
       jobRoleArn       = module.batch_job_role.iam_role_arn
 
       logConfiguration = {
@@ -334,6 +334,66 @@ module "batch_job_role" {
     })
   }
 }
+
+module "batch_execution_role" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role"
+
+  name = "vol-app-${var.environment}-batch-exec"
+
+  create_inline_policy = true
+
+  trust_policy_permissions = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+  inline_policy_permissions = {
+    batch_exec_job_policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [
+        for stmt in var.batch.batch_exec_iam_role_statements : {
+          Effect   = stmt.effect
+          Action   = stmt.actions
+          Resource = stmt.resources
+        }
+      ]
+    })
+    default_policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [
+        {
+          "Action" : [
+            "logs:PutLogEvents",
+            "logs:CreateLogStream"
+          ],
+          "Effect" : "Allow",
+          "Resource" : "*",
+          "Sid" : "Logs"
+        },
+        {
+          "Action" : [
+            "ecr:GetDownloadUrlForLayer",
+            "ecr:GetAuthorizationToken",
+            "ecr:BatchGetImage",
+            "ecr:BatchCheckLayerAvailability"
+          ],
+          "Effect" : "Allow",
+          "Resource" : "*",
+          "Sid" : "ECR"
+        },
+      ]
+    })
+  }
+}
+
 
 module "batch" {
   source  = "terraform-aws-modules/batch/aws"
