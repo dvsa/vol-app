@@ -1,4 +1,4 @@
-#! /bin/env bash
+#!/bin/bash
 
 # Used for oLCS-16709 - generate csv output with two names in forename field.
 

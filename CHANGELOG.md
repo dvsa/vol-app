@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.4.1](https://github.com/dvsa/vol-app/compare/v7.4.0...v7.4.1) (2026-05-13)
+
+
+### Bug Fixes
+
+* swap goods vehicle working for PSV VOL-7183 ([#1459](https://github.com/dvsa/vol-app/issues/1459)) ([24d384c](https://github.com/dvsa/vol-app/commit/24d384c5a5dfee047463605bc5c2bf10f44ae6f1))
+
 ## [7.4.0](https://github.com/dvsa/vol-app/compare/v7.3.2...v7.4.0) (2026-05-11)
 
 

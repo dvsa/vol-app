@@ -12,7 +12,8 @@ locals {
         "secretsmanager:GetSecretValue"
       ]
       resources = [
-        data.aws_secretsmanager_secret.this["api"].arn
+        data.aws_secretsmanager_secret.this["api"].arn,
+        data.aws_secretsmanager_secret.infra.arn
       ]
     },
   ]
@@ -42,7 +43,8 @@ locals {
         "sts:AssumeRole"
       ]
       resources = [
-        "arn:aws:iam::000081644369:role/txc-int-consumer-role"
+        "arn:aws:iam::000081644369:role/txc-int-consumer-role",
+        "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole"
       ]
     },
     {
@@ -198,6 +200,10 @@ data "aws_secretsmanager_secret" "this" {
   for_each = toset(setsubtract(local.service_names, ["cli"]))
 
   name = "DEVAPPDEV-BASE-SM-APPLICATION-${upper(each.key)}"
+}
+
+data "aws_secretsmanager_secret" "infra" {
+  name = "DEVAPPDEV-BASE-SM-INFRA"
 }
 
 data "aws_cognito_user_pools" "this" {
@@ -679,7 +685,7 @@ module "service" {
       {
         name     = "populate-anondb",
         commands = ["/mnt/data/scripts/populate_anondb.sh"],
-        type     = "scripts_testing"
+        type     = "scripts"
       },
       {
         name     = "ni-compliance",
