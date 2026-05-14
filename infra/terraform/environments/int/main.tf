@@ -12,7 +12,8 @@ locals {
         "secretsmanager:GetSecretValue"
       ]
       resources = [
-        data.aws_secretsmanager_secret.this["api"].arn
+        data.aws_secretsmanager_secret.this["api"].arn,
+        data.aws_secretsmanager_secret.infra.arn
       ]
     },
   ]
@@ -131,6 +132,10 @@ data "aws_secretsmanager_secret" "this" {
   for_each = toset(setsubtract(local.service_names, ["cli"]))
 
   name = "DEVAPPQA-BASE-SM-APPLICATION-${upper(each.key)}"
+}
+
+data "aws_secretsmanager_secret" "infra" {
+  name = "DEVAPPQA-BASE-SM-INFRA"
 }
 
 data "aws_cognito_user_pools" "this" {

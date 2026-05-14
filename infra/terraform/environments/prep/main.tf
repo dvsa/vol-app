@@ -12,7 +12,8 @@ locals {
         "secretsmanager:GetSecretValue"
       ]
       resources = [
-        data.aws_secretsmanager_secret.this["api"].arn
+        data.aws_secretsmanager_secret.this["api"].arn,
+        data.aws_secretsmanager_secret.infra.arn
       ]
     },
   ]
@@ -134,6 +135,9 @@ data "aws_secretsmanager_secret" "this" {
   name = "APPPP-BASE-SM-APPLICATION-${upper(each.key)}"
 }
 
+data "aws_secretsmanager_secret" "infra" {
+  name = "APPPP-BASE-SM-INFRA"
+}
 data "aws_cognito_user_pools" "this" {
   name = "DVSA-APPPP-COGNITO-USERS"
 }
