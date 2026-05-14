@@ -3,8 +3,6 @@ data "aws_caller_identity" "current" {}
 data "aws_secretsmanager_secret" "application_api" {
   name = "${local.account_prefix}${local.env_prefix}-BASE-SM-APPLICATION-API"
 }
-
-
 locals {
 
   account_prefix = contains(["DEV", "QA"], var.legacy_environment) ? "DEV" : ""
@@ -125,10 +123,6 @@ locals {
         {
           name      = "PRODTODEV_ASSUME_ROLE_ID"
           valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:nonprod_assume_external_id::"
-        },
-         {
-          name      = "MASTER_RDS_PASSWORD"
-          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_api_rds_password::"
         },
       ]
     },
