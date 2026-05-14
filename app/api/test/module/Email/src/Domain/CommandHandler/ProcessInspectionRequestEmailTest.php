@@ -19,6 +19,7 @@ use Dvsa\Olcs\Email\Domain\CommandHandler\ProcessInspectionRequestEmail;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Email\Domain\Command\ProcessInspectionRequestEmail as Cmd;
 use Olcs\Logging\Log\Logger;
+use Olcs\Logging\Test\RecordingLogger;
 
 /**
  * Process Inspection Request Email Test
@@ -33,7 +34,7 @@ class ProcessInspectionRequestEmailTest extends AbstractCommandHandlerTestCase
      */
     protected $sut;
 
-    protected $logWriter;
+    protected RecordingLogger $logRecorder;
 
     public function setUp(): void
     {
@@ -43,8 +44,8 @@ class ProcessInspectionRequestEmailTest extends AbstractCommandHandlerTestCase
 
         parent::setUp();
 
-        $this->logWriter = $logWriter = new \Laminas\Log\Writer\Mock();
-        Logger::getLogger()->addWriter($logWriter);
+        $this->logRecorder = new RecordingLogger();
+        Logger::setLogger($this->logRecorder);
     }
 
     public function testHandleCommand(): void
@@ -108,7 +109,7 @@ class ProcessInspectionRequestEmailTest extends AbstractCommandHandlerTestCase
 
         $this->sut->handleCommand(Cmd::create([]));
 
-        $this->assertMatchesRegularExpression('/Could not retrieve email 4355/', $this->logWriter->events[0]['message']);
+        $this->assertMatchesRegularExpression('/Could not retrieve email 4355/', $this->logRecorder->records[0]['message']);
     }
 
     public function testHandleCommandEmailInvalidSubject(): void
@@ -129,7 +130,7 @@ class ProcessInspectionRequestEmailTest extends AbstractCommandHandlerTestCase
 
         $this->sut->handleCommand(Cmd::create([]));
 
-        $this->assertMatchesRegularExpression('/Unable to parse email subject line: spam!/', $this->logWriter->events[0]['message']);
+        $this->assertMatchesRegularExpression('/Unable to parse email subject line: spam!/', $this->logRecorder->records[0]['message']);
     }
 
     public function testHandleCommandNoEmails(): void
@@ -171,6 +172,6 @@ class ProcessInspectionRequestEmailTest extends AbstractCommandHandlerTestCase
         $expectedLogMessage = '==Unable to find the inspection request from the email subject line: '
             . '[ Maintenance Inspection ] REQUEST=23456,STATUS=S';
 
-        $this->assertEquals($expectedLogMessage, $this->logWriter->events[0]['message']);
+        $this->assertEquals($expectedLogMessage, $this->logRecorder->records[0]['message']);
     }
 }

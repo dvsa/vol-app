@@ -24,9 +24,7 @@ class InterimEndDateEnforcementTest extends AbstractCommandHandlerTestCase
             Creator::class => m::mock(Creator::class)
         ];
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         parent::setUp();
     }

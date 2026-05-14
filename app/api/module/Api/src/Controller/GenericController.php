@@ -10,6 +10,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandlerManager;
 use Olcs\Logging\Log\Logger;
 use Laminas\Http\Response;
 use Laminas\Mvc\Controller\AbstractRestfulController;
+use Psr\Log\LogLevel;
 
 /**
  * Generic Controller
@@ -47,7 +48,7 @@ class GenericController extends AbstractRestfulController
         } catch (Exception\Exception $ex) {
             return $this->response()->error(400, $ex->getMessages());
         } catch (\Exception $ex) {
-            Logger::logException($ex, \Laminas\Log\Logger::ERR);
+            Logger::logException($ex, LogLevel::ERROR);
             return $this->response()->error(500, [$ex->getMessage()]);
         }
     }
@@ -87,7 +88,7 @@ class GenericController extends AbstractRestfulController
         } catch (Exception\Exception $ex) {
             return $this->response()->error(400, $ex->getMessages());
         } catch (\Exception $ex) {
-            Logger::logException($ex, \Laminas\Log\Logger::ERR);
+            Logger::logException($ex, LogLevel::ERROR);
             return $this->response()->error(500, [$ex->getMessage()]);
         }
     }
@@ -122,7 +123,7 @@ class GenericController extends AbstractRestfulController
         } catch (Exception\Exception $ex) {
             return $this->response()->error(400, $ex->getMessages());
         } catch (\Exception $ex) {
-            Logger::logException($ex, \Laminas\Log\Logger::ERR);
+            Logger::logException($ex, LogLevel::ERROR);
             return $this->response()->error(500, [$ex->getMessage()]);
         }
     }
@@ -149,7 +150,7 @@ class GenericController extends AbstractRestfulController
         } catch (Exception\Exception $ex) {
             return $this->response()->error(400, $ex->getMessages());
         } catch (\Exception $ex) {
-            Logger::logException($ex, \Laminas\Log\Logger::ERR);
+            Logger::logException($ex, LogLevel::ERROR);
             return $this->response()->error(500, [$ex->getMessage()]);
         }
     }
@@ -176,7 +177,7 @@ class GenericController extends AbstractRestfulController
         } catch (Exception\Exception $ex) {
             return $this->response()->error(400, $ex->getMessages());
         } catch (\Exception $ex) {
-            Logger::logException($ex, \Laminas\Log\Logger::ERR);
+            Logger::logException($ex, LogLevel::ERROR);
             return $this->response()->error(500, [$ex->getMessage()]);
         }
     }
@@ -203,7 +204,7 @@ class GenericController extends AbstractRestfulController
         } catch (Exception\Exception $ex) {
             return $this->response()->error(400, $ex->getMessages());
         } catch (\Exception $ex) {
-            Logger::logException($ex, \Laminas\Log\Logger::ERR);
+            Logger::logException($ex, LogLevel::ERROR);
             return $this->response()->error(500, [$ex->getMessage()]);
         }
     }
@@ -230,7 +231,7 @@ class GenericController extends AbstractRestfulController
         } catch (Exception\Exception $ex) {
             return $this->response()->error(400, $ex->getMessages());
         } catch (\Exception $ex) {
-            Logger::logException($ex, \Laminas\Log\Logger::ERR);
+            Logger::logException($ex, LogLevel::ERROR);
             return $this->response()->error(500, [$ex->getMessage()]);
         }
     }

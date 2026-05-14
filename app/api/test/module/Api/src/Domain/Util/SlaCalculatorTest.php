@@ -30,9 +30,7 @@ class SlaCalculatorTest extends MockeryTestCase
     public $dateTimeProcessor;
     public function setUp(): void
     {
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         $this->publicHolidayRepo = m::mock(PublicHolidayRepo::class);
 

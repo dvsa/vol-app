@@ -26,10 +26,10 @@
     "laminas/laminas-view": "^2.44",
     "lm-commons/lmc-rbac-mvc": "^3.5",
     "olcs/olcs-auth": "^9.0",
-    "olcs/olcs-common": "^9.16.1",
-    "olcs/olcs-logging": "^8.0",
+    "olcs/olcs-common": "^9.17",
+    "olcs/olcs-logging": "^9.0",
     "olcs/olcs-transfer": "^8.6.1",
-    "olcs/olcs-utils": "^7.0",
+    "olcs/olcs-utils": "^7.1",
     "psr/container": "^1.1|^2",
     "aws/aws-sdk-php": "^3.369",
     "symfony/filesystem": "^7.0"
