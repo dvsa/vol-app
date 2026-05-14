@@ -77,7 +77,7 @@ done
 
 # Update RDS users using the MASTER_RDS_PASSWORD environment variable
 echo "Updating RDS users for $platformEnv..."
-if ! MYSQL_PWD="${MASTER_RDS_PASSWORD}" mysql \
+if ! MYSQL_PWD="${M_DB_PASSWORD}" mysql  \
      -h "olcsdb-rds.${platformEnv}.olcs.${DOMAIN}" \
      -u master OLCS_RDS_OLCSDB < "$outputFile"; then
     log_error "MySQL execution failed. Refer to the logs above for the specific SQL error."
