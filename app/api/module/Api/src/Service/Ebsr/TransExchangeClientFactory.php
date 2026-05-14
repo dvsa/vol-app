@@ -5,8 +5,8 @@ namespace Dvsa\Olcs\Api\Service\Ebsr;
 use Dvsa\Olcs\Api\Service\AccessToken\Provider;
 use Laminas\Filter\FilterPluginManager;
 use Laminas\Http\Request;
-use Laminas\Log\Processor\RequestId;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Olcs\Logging\Log\Processor\RequestId;
 use Olcs\XmlTools\Filter\ParseXmlString;
 use Olcs\XmlTools\Filter\MapXmlFile;
 use Olcs\XmlTools\Validator\Xsd;
@@ -39,7 +39,7 @@ class TransExchangeClientFactory implements FactoryInterface
 
         $config = $config['ebsr']['transexchange_publisher'];
 
-        $correlationId = (new RequestId())->process([])['extra']['requestId'];
+        $correlationId = (new RequestId())->getIdentifier();
 
         /** @var Provider $tokenProvider */
         $tokenProvider = $container->build(Provider::class, $config['oauth2']);

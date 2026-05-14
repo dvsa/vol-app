@@ -5,6 +5,7 @@ namespace Dvsa\Olcs\Cli\Command;
 use Dvsa\Olcs\Api\Domain\CommandHandlerManager;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Olcs\Logging\Log\Logger;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -46,10 +47,10 @@ abstract class AbstractOlcsCommand extends Command
                 }
             }
         } catch (NotFoundException $e) {
-            $this->logAndWriteVerboseMessage('NotFoundException: ' . $e->getMessage(), \Laminas\Log\Logger::WARN, true);
+            $this->logAndWriteVerboseMessage('NotFoundException: ' . $e->getMessage(), LogLevel::WARNING, true);
             return Command::FAILURE;
         } catch (\Exception $e) {
-            $this->logAndWriteVerboseMessage('Error: ' . $e->getMessage(), \Laminas\Log\Logger::ERR, true);
+            $this->logAndWriteVerboseMessage('Error: ' . $e->getMessage(), LogLevel::ERROR, true);
             return Command::FAILURE;
         }
         return Command::SUCCESS;
@@ -60,7 +61,7 @@ abstract class AbstractOlcsCommand extends Command
      *
      * @return void
      */
-    protected function logAndWriteVerboseMessage(string $message, int $logPriority = \Laminas\Log\Logger::DEBUG, bool $isError = false)
+    protected function logAndWriteVerboseMessage(string $message, string $logPriority = LogLevel::DEBUG, bool $isError = false)
     {
         Logger::log($logPriority, $message);
         $formattedMessage = $isError ? "<error>$message</error>" : "<info>$message</info>";
@@ -102,7 +103,7 @@ abstract class AbstractOlcsCommand extends Command
             $this->logAndWriteVerboseMessage($successMessage);
             return Command::SUCCESS;
         } else {
-            $this->logAndWriteVerboseMessage($failureMessage, \Laminas\Log\Logger::ERR, true);
+            $this->logAndWriteVerboseMessage($failureMessage, LogLevel::ERROR, true);
             return Command::FAILURE;
         }
     }

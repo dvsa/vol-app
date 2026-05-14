@@ -12,7 +12,7 @@ use Dvsa\Olcs\AcquiredRights\Exception\DateOfBirthMismatchException;
 use Dvsa\Olcs\AcquiredRights\Exception\Mapper\AcquiredRightsExceptionToValidationExceptionMapper;
 use Dvsa\Olcs\AcquiredRights\Exception\SoftExceptionInterface;
 use Dvsa\Olcs\AcquiredRights\Model\ApplicationReference;
-use Laminas\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 class AcquiredRightsService
 {
@@ -58,7 +58,7 @@ class AcquiredRightsService
                     [$exception]
                 );
             } else {
-                $this->logger->err(
+                $this->logger->error(
                     sprintf(
                         'Acquired Rights Service: There was an error when fetching the acquired rights record (%s)',
                         $reference
