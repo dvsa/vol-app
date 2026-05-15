@@ -17,7 +17,7 @@ RUN apk add --no-cache icu-dev libzip-dev cups-client poppler-utils bash \
   && docker-php-ext-configure zip \
   && docker-php-ext-install pdo_mysql opcache intl zip
 
-RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq \
+RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq git \
   && python3 -m venv /opt/awscli \
   && /opt/awscli/bin/pip install --no-cache-dir awscli \
   && ln -sf /opt/awscli/bin/aws /usr/local/bin/aws \
