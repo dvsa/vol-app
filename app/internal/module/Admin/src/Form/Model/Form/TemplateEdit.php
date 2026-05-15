@@ -37,6 +37,25 @@ class TemplateEdit
     public $jsonUrl = null;
 
     /**
+     * Holds the rendered "Other versions:" sibling-pill HTML. Populated dynamically by
+     * TemplateController::alterFormForEdit so admins can jump between this row's html, plain
+     * and md siblings without going back to the list. VOL-7238.
+     *
+     * @Form\Attributes({"id":"templateSiblings"})
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     */
+    public $templateSiblings = null;
+
+    /**
+     * Holds the markdown-only help hint ("rendered by GOV.UK Notify, no raw HTML…").
+     * Populated dynamically; empty for html/plain rows. VOL-7238.
+     *
+     * @Form\Attributes({"id":"mdHint"})
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     */
+    public $mdHint = null;
+
+    /**
      * @Form\Type("TextArea")
      * @Form\Required(true)
      * @Form\Attributes({

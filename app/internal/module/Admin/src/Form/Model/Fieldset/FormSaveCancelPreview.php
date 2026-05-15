@@ -50,4 +50,22 @@ class FormSaveCancelPreview
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $preview = null;
+
+    /**
+     * VOL-7238: "Send test via Notify" button. Only rendered for md templates when the env
+     * has a notify_test DSN configured — TemplateController::alterFormForEdit removes this
+     * element otherwise so it never appears on html/plain rows or in cut-over production envs.
+     *
+     * @Form\Attributes({
+     *     "type":"button",
+     *     "class":"govuk-button govuk-button--secondary",
+     *     "id": "sendTestViaNotify"
+     * })
+     * @Form\Options({
+     *     "label": "Send test via Notify",
+     *     "keepForReadOnly": true,
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
+     */
+    public $sendTestViaNotify = null;
 }

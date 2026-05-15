@@ -278,6 +278,13 @@ return [
                 'cy_GB' => '%olcs_notify_template_cy_gb%',
             ],
         ],
+        // VOL-7238: dedicated DSN for the admin "Send test via Notify" button. Populated only
+        // in pre-cutover envs (dev/int) so admins can exercise the Notify path against a
+        // Notify test-mode key while the main `mail.dsn` is still SMTP. Empty/unset hides the
+        // admin button.
+        'notify_test' => [
+            'dsn' => '%olcs_notify_test_dsn%',
+        ],
     ],
     'awsOptions' => array_filter([
         'region' => '%olcs_aws_region%',
