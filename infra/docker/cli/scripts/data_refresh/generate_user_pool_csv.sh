@@ -19,7 +19,7 @@ export no_proxy='127.0.0.1,localhost,169.254.169.254,.olcs.dev-dvsacloud.uk'
 
 s3bucket='devapp-shd-pri-olcsci-build-s3'
 s3BucketPath='cognito'
-scriptrepo='https://github.com/dvsa/olcs-etl.git'
+scriptrepo='https://github.com/dvsa/vol-terraform/docker/generate_user_pool/.git'
 scriptrepobranch='main'
 slackChan='#env-status'
 slackFail='#FF9FA1'
