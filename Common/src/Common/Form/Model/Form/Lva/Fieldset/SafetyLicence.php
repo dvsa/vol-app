@@ -92,7 +92,6 @@ class SafetyLicence
      *          "context_field": "tachographIns",
      *          "context_values": {"tach_external"},
      *          "validators": {
-     *              {"name": "NotEmpty"},
      *              {"name": "StringLength", "options": {"min":"1","max":90}}
      *          }
      *     }
