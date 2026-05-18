@@ -696,6 +696,7 @@ return [
 
     // Templates
     TransferQuery\Template\AvailableTemplates::class => QueryHandler\Template\AvailableTemplates::class,
+    TransferQuery\Template\AvailableTemplateGroups::class => QueryHandler\Template\AvailableTemplateGroups::class,
     TransferQuery\Template\PreviewTemplateSource::class => QueryHandler\Template\PreviewTemplateSource::class,
     TransferQuery\Template\TemplateSource::class => QueryHandler\Template\TemplateSource::class,
     TransferQuery\Template\TemplateCategories::class => QueryHandler\Template\TemplateCategories::class,

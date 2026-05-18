@@ -16,6 +16,11 @@ class TemplateRenderer
      */
     protected $viewRenderer;
 
+    protected bool $notifyMode = false;
+
+    /** @var array<string, string> locale → Notify passthrough template UUID */
+    protected array $passthroughTemplateUuids = [];
+
     /**
      * @return StrategySelectingViewRenderer
      */
@@ -33,8 +38,46 @@ class TemplateRenderer
         return $this;
     }
 
+    public function setNotifyMode(bool $enabled): self
+    {
+        $this->notifyMode = $enabled;
+        return $this;
+    }
+
     /**
-     * Render a template into the message body
+     * Whether the active mailer DSN routes through GOV.UK Notify. Set by the factory from
+     * `config['mail']['dsn']` at boot. Used by EmailAwareTrait::sendEmailTemplate() to decide
+     * whether to render a markdown body (`format='md'`) or the legacy html+plain bodies.
+     */
+    public function isNotifyMode(): bool
+    {
+        return $this->notifyMode;
+    }
+
+    /**
+     * @param array<string, string> $uuids
+     */
+    public function setPassthroughTemplateUuids(array $uuids): self
+    {
+        $this->passthroughTemplateUuids = $uuids;
+        return $this;
+    }
+
+    public function getPassthroughTemplateUuid(string $locale): ?string
+    {
+        $uuid = $this->passthroughTemplateUuids[$locale] ?? null;
+        return is_string($uuid) && $uuid !== '' ? $uuid : null;
+    }
+
+    /**
+     * Render a template into the message body.
+     *
+     * In Notify mode (mailer DSN starts `govuknotify`), this delegates to
+     * {@see self::renderMarkdownBody()} — reads the matching `format='md'` row, sets it on
+     * the message's markdownBody, stamps the passthrough Notify template UUID. Missing md rows
+     * propagate as NotFoundException to enforce atomic per-env cutover (see VOL-7238).
+     *
+     * In SMTP mode (legacy default), renders html+plain bodies via the existing path.
      *
      * @param string|array $templates
      * @param array $variables
@@ -42,6 +85,15 @@ class TemplateRenderer
      */
     public function renderBody(Message $message, $templates, $variables = [], $layout = 'default')
     {
+        if ($this->notifyMode) {
+            $uuid = $this->getPassthroughTemplateUuid($message->getLocale());
+            if ($uuid !== null) {
+                $message->setTemplateKey($uuid);
+            }
+            $this->renderMarkdownBody($message, $templates, is_array($variables) ? $variables : []);
+            return;
+        }
+
         $locale = $message->getLocale();
 
         $plainContent = $this->getEmailContent($locale, $templates, 'plain', $variables);

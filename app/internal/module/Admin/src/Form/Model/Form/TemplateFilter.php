@@ -24,6 +24,24 @@ class TemplateFilter
     public $emailTemplateCategory = null;
 
     /**
+     * Filter by template format. Fixed enum (html / plain / md) so a static Select is fine —
+     * no need for a backend data service. Added by VOL-7238 alongside the new `format='md'`
+     * rows so admins can narrow the list of ~180 rows to just the markdown ones.
+     *
+     * @Form\Options({
+     *     "label": "Format",
+     *     "empty_option": "All",
+     *     "value_options": {
+     *         "html": "HTML",
+     *         "plain": "Plain Text",
+     *         "md": "Markdown",
+     *     },
+     * })
+     * @Form\Type("Select")
+     */
+    public $format = null;
+
+    /**
      * @Form\Attributes({
      *     "data-module": "govuk-button",
      *     "type": "submit",

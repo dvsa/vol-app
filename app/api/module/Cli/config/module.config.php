@@ -73,6 +73,8 @@ return [
             'migrations:version'    => MigrationCommands\VersionCommand::class,
             'entity:generate'       => Dvsa\Olcs\Cli\Command\EntityGenerator\GenerateEntitiesCommand::class,
             'notify:hello-world'    => Dvsa\Olcs\Cli\Command\Email\NotifyHelloWorldCommand::class,
+            'template:render-all'   => Dvsa\Olcs\Cli\Command\Email\RenderAllTemplatesCommand::class,
+            'template:convert-to-md' => Dvsa\Olcs\Cli\Command\Email\ConvertToMarkdownCommand::class,
         ],
     ],
     'dependencies' => [
@@ -222,6 +224,16 @@ return [
         \Dvsa\Olcs\Cli\Command\Email\NotifyHelloWorldCommand::class => [
             ...$commonCommandDeps,
             \Dvsa\Olcs\Email\Service\TemplateRenderer::class,
+        ],
+        \Dvsa\Olcs\Cli\Command\Email\RenderAllTemplatesCommand::class => [
+            ...$commonCommandDeps,
+            'doctrine.entitymanager.orm_default',
+            'TemplateTwigRenderer',
+        ],
+        \Dvsa\Olcs\Cli\Command\Email\ConvertToMarkdownCommand::class => [
+            ...$commonCommandDeps,
+            'doctrine.entitymanager.orm_default',
+            'TemplateTwigRenderer',
         ],
     ],
     'cache' => [

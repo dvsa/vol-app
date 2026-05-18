@@ -1303,6 +1303,7 @@ return [
 
     // Templates
     TransferCommand\Template\UpdateTemplateSource::class => CommandHandler\Template\UpdateTemplateSource::class,
+    TransferCommand\Template\SendTestEmail::class => CommandHandler\Template\SendTestEmail::class,
 
     //FeeType
     TransferCommand\FeeType\Update::class => CommandHandler\FeeType\Update::class,
