@@ -153,6 +153,51 @@ class DvlaSearchServiceTest extends MockeryTestCase
         $this->sut->getVehicle("ABC123");
     }
 
+    public function testDvlaBrokerApi404WithRecordNotFoundBodyThrowsVehicleUnavailable(): void
+    {
+        $this->expectException(VehicleUnavailableException::class);
+
+        $this->mockHandler->append(
+            new Response(
+                404,
+                [],
+                '{"message":"Record not found","error":"Record for vehicle not found"}'
+            )
+        );
+
+        $this->logger
+            ->shouldReceive('error')
+            ->once();
+
+        $this->sut->getVehicle("ABC123");
+    }
+
+    public function testDvlaBrokerApi404WithUnrecognisedBodyThrowsNotFoundWithAccurateMessage(): void
+    {
+        $this->mockHandler->append(
+            new Response(
+                404,
+                [],
+                '{"message":"some other 404 body","error":"different broker error"}'
+            )
+        );
+
+        $this->logger
+            ->shouldReceive('error')
+            ->once();
+
+        try {
+            $this->sut->getVehicle("ABC123");
+            $this->fail('Expected NotFoundException was not thrown');
+        } catch (NotFoundException $e) {
+            $this->assertSame(
+                'DVLA Search Broker API: Unexpected 404 response',
+                $e->getMessage(),
+                'NotFoundException message should reflect the actual situation, not the misleading legacy "URI Not Found" label'
+            );
+        }
+    }
+
     public function testDvlaBrokerApiReturnsInvalidJsonIsCaught(): void
     {
         $this->expectException(BadResponseException::class);

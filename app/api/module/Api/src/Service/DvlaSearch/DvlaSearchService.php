@@ -122,17 +122,52 @@ class DvlaSearchService
                 $exception->getCode(),
                 $exception
             ),
-            404 => new NotFoundException(
-                $this->generateBrokerExceptionMessage("URI Not Found"),
-                $exception->getCode(),
-                $exception
-            ),
+            404 => $this->build404Exception($exception),
             default => new ServiceException(
                 $this->generateBrokerExceptionMessage("Server Error"),
                 $exception->getCode(),
                 $exception
             ),
         };
+    }
+
+    /**
+     * Build the appropriate exception for a broker 404.
+     *
+     * The DVLA Search Broker uses 404 + body {"message":"Record not found",...}
+     * to signal "no record for this VRM" — treated as vehicle-unavailable so the
+     * caller can return an empty result rather than surfacing a 500. Any other
+     * 404 (e.g. genuine URI/configuration error) is preserved as a loud failure.
+     */
+    private function build404Exception(GuzzleBadResponseException $exception): ServiceException
+    {
+        $response = $exception->getResponse();
+
+        if ($response !== null && $this->isVehicleNotFoundResponse($response)) {
+            return new VehicleUnavailableException("Vehicle data unavailable from DVLA API");
+        }
+
+        return new NotFoundException(
+            $this->generateBrokerExceptionMessage("Unexpected 404 response"),
+            $exception->getCode(),
+            $exception
+        );
+    }
+
+    /**
+     * Detect the broker's "no vehicle record" 404 body shape.
+     * Uses native \json_decode (null-returning) rather than the Guzzle helper
+     * imported at the top of this file, because we are already inside an
+     * exception-handling path and must not throw on a malformed body.
+     */
+    private function isVehicleNotFoundResponse(ResponseInterface $response): bool
+    {
+        $body = (string) $response->getBody();
+        $response->getBody()->rewind();
+
+        $decoded = \json_decode($body, true);
+
+        return is_array($decoded) && ($decoded['message'] ?? null) === 'Record not found';
     }
 
     /**
