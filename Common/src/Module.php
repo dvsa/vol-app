@@ -151,8 +151,11 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface
             static function () use ($identifier) {
                 // get error
                 $error = error_get_last();
+                // E_USER_ERROR included: vendor __toString fallbacks (laminas-view,
+                // guzzle) were silently swallowed pre-monolog. Tolerate and rely on
+                // monolog's fatal handler logging so user journeys continue.
                 $minorErrors = [
-                    E_WARNING, E_NOTICE, E_USER_NOTICE, E_DEPRECATED, E_USER_DEPRECATED
+                    E_WARNING, E_NOTICE, E_USER_NOTICE, E_DEPRECATED, E_USER_DEPRECATED, E_USER_ERROR
                 ];
                 if (null === $error || (isset($error['type']) && in_array($error['type'], $minorErrors))) {
                     return null;
