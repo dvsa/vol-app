@@ -19,7 +19,7 @@ export no_proxy='127.0.0.1,localhost,169.254.169.254,.olcs.dev-dvsacloud.uk'
 
 s3bucket='devapp-shd-pri-olcsci-build-s3'
 s3BucketPath='cognito'
-scriptdir='docker/generate_user_pool'
+scriptdir='/mnt/data/scripts/data_refresh/generate_user_pool'
 slackChan='#env-status'
 slackFail='#FF9FA1'
 slackCompleted='#36A64F'
