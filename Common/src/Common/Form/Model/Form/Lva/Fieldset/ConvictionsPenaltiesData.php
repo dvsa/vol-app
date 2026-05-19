@@ -25,6 +25,7 @@ class ConvictionsPenaltiesData
      *     "legend-attributes": {"class": "form-element__label field"},
      *     "label_attributes": {"class": "form-control form-control--radio form-control--inline"},
      *     "value_options": {"Y": "Yes", "N": "No"},
+     *     "label_options": {"disable_html_escape": true},
      * })
      * @Form\Type("\Laminas\Form\Element\Radio")
      * @Form\Validator("Common\Form\Elements\Validators\LicenceHistoryLicenceValidator",
