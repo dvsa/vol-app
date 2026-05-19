@@ -174,7 +174,7 @@ return [
       'writers' => [
         'full' => [
           'options' => [
-            'stream' => 'php://stdout',
+            'stream' => 'php://stderr',
             'filters' => [
               'priority' => [
                 'name' => 'priority',
