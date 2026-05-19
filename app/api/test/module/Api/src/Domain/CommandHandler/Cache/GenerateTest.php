@@ -22,9 +22,7 @@ class GenerateTest extends AbstractCommandHandlerTestCase
     {
         $this->sut = m::mock(Handler::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         parent::setUp();
     }

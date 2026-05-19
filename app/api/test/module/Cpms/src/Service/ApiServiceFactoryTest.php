@@ -10,6 +10,7 @@ use Dvsa\Olcs\Cpms\Client\HttpClient;
 use Dvsa\Olcs\Cpms\Service\ApiService;
 use Dvsa\Olcs\Cpms\Service\ApiServiceFactory;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class ApiServiceFactoryTest extends TestCase
 {
@@ -60,7 +61,7 @@ class ApiServiceFactoryTest extends TestCase
 
         $userId = '123';
 
-        $sut = new ApiServiceFactory($config, $userId);
+        $sut = new ApiServiceFactory($config, $userId, new NullLogger());
         $apiService = $sut->createApiService();
 
         $this->assertInstanceOf(ApiService::class, $apiService);
@@ -103,7 +104,7 @@ class ApiServiceFactoryTest extends TestCase
 
         $this->expectException(\RuntimeException::class);
 
-        $sut = new ApiServiceFactory($config, $userId);
+        $sut = new ApiServiceFactory($config, $userId, new NullLogger());
         $sut->createApiService();
     }
 

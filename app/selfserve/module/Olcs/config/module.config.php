@@ -1617,11 +1617,6 @@ return [
             \Olcs\Logging\Log\Processor\CorrelationId::class => \Olcs\Logging\Log\Processor\CorrelationIdFactory::class,
         ],
     ],
-    'log_processors' => [
-        'factories' => [
-            CorrelationId::class => CorrelationIdFactory::class,
-        ],
-    ],
     'search' => [
         'invokables' => [
             'operator'          => Common\Data\Object\Search\LicenceSelfserve::class, // Selfserve licence search

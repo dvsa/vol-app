@@ -31,19 +31,19 @@ fi
 
 envFile="$s3ConfigBucket/lambda/OLCS-OLCSDBRefresh-L/$env/env.conf"
 
-# tmp.blob: The binary data for KMS decryption
+# Temporary files
 conf_file="/tmp/env.conf"
-
 outputFile=$(mktemp /tmp/env.decrypt.XXXXXX)
 blob_file="/tmp/tmp.blob"
 
+# Cleanup on exit
 trap 'rm -f "$outputFile" "$conf_file" "$blob_file"' EXIT
 
-# Include the S3 endpoint in no_proxy to bypass the proxy for S3 traffic
+# Proxy configuration
 export https_proxy="http://proxy.${platformEnv}.olcs.dev-dvsacloud.uk:3128"
 export no_proxy="169.254.169.254,s3.${awsRegion}.amazonaws.com"
 
-# We no longer capture output into a variable so errors go directly to the log
+# Download configuration from S3
 echo "Downloading s3://$envFile to $conf_file ..."
 if ! /usr/local/bin/aws s3 cp "s3://$envFile" "$conf_file" --region "$awsRegion"; then
     log_error "S3 download failed. Check IAM permissions for 's3:GetObject' and 's3:ListBucket'."
@@ -51,17 +51,16 @@ if ! /usr/local/bin/aws s3 cp "s3://$envFile" "$conf_file" --region "$awsRegion"
 fi
 
 echo "Processing credentials from $conf_file ..."
-# tail/head/while loop is now 'pipefail' safe
-tail -n +2 "$conf_file"  | head -n -1 | while read -r line || [[ -n "$line" ]]; do
+# Parse the file and decrypt each credential
+tail -n +2 "$conf_file" | head -n -1 | while read -r line || [[ -n "$line" ]]; do
     rdsUser=$(echo "$line" | awk -F : '{print $1}' | sed 's/[",]//g')
     rdsCipher=$(echo "$line" | awk '{print $2}' | sed 's/[",]//g')
     
     # Decrypt KMS Ciphertext
     echo "$rdsCipher" | base64 -d > "$blob_file"
     
-    # If KMS fails, the script will exit here due to set -e
     rdsPlain=$(/usr/local/bin/aws kms decrypt \
-        --ciphertext-blob fileb://"$blob_file"  \
+        --ciphertext-blob fileb://"$blob_file" \
         --query Plaintext \
         --output text \
         --region "$awsRegion" | base64 -d)
@@ -76,11 +75,11 @@ tail -n +2 "$conf_file"  | head -n -1 | while read -r line || [[ -n "$line" ]]; 
     rm -f "$blob_file"
 done
 
-# Error redirection (2>) is removed so MySQL sends errors straight to cloudWatch
+# Update RDS users using the MASTER_RDS_PASSWORD environment variable
 echo "Updating RDS users for $platformEnv..."
-if ! mysql --defaults-file=/usr/local/conf/importanondb.conf \
-     -holcsdb-rds."${platformEnv}".olcs.dev-dvsacloud.uk \
-     -umaster OLCS_RDS_OLCSDB < "$outputFile"; then
+if ! MYSQL_PWD="${M_DB_PASSWORD}" mysql --no-defaults \
+     -h "olcsdb-rds.${platformEnv}.olcs.${DOMAIN}" \
+     -u master OLCS_RDS_OLCSDB < "$outputFile"; then
     log_error "MySQL execution failed. Refer to the logs above for the specific SQL error."
     exit 1
 fi

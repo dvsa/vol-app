@@ -89,7 +89,7 @@ return [
                             'priority' => [
                                 'name' => 'priority',
                                 'options' => [
-                                    'priority' => \Laminas\Log\Logger::WARN,
+                                    'priority' => \Psr\Log\LogLevel::DEBUG,
                                 ],
                             ],
                         ],
@@ -106,7 +106,7 @@ return [
                   'priority' => [
                     'name' => 'priority',
                     'options' => [
-                      'priority' => \Laminas\Log\Logger::WARN
+                      'priority' => \Psr\Log\LogLevel::DEBUG
                     ],
                   ],
                 ],

@@ -19,6 +19,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Entity;
 use Dvsa\Olcs\Transfer\Command\GovUkAccount\ProcessAuthResponse as ProcessAuthResponseCmd;
 use Olcs\Logging\Log\Logger;
+use Psr\Log\LogLevel;
 
 class ProcessAuthResponse extends AbstractCommandHandler implements TransactionedInterface
 {
@@ -128,7 +129,7 @@ class ProcessAuthResponse extends AbstractCommandHandler implements Transactione
                 $this->handleSideEffect($sideEffectCmd)
             );
         } catch (\Exception $e) {
-            Logger::logException($e, \Laminas\Log\Logger::ERR);
+            Logger::logException($e, LogLevel::ERROR);
             $this->result->setFlag('error', $e->getMessage());
         }
 

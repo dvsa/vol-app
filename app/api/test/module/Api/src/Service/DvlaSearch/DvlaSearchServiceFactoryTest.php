@@ -22,7 +22,7 @@ class DvlaSearchServiceFactoryTest extends TestCase
             ]
         ];
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger = new \Psr\Log\NullLogger();
 
         $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('config')->andReturn($config);

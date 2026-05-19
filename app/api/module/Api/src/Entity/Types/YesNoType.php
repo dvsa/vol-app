@@ -56,7 +56,12 @@ class YesNoType extends Type
     {
         unset($platform);
 
-        return (strtoupper($value) == 'Y' || strtoupper($value) == 'YES') ? 1 : 0;
+        if ($value === null) {
+            return 0;
+        }
+
+        $upper = strtoupper((string) $value);
+        return ($upper === 'Y' || $upper === 'YES') ? 1 : 0;
     }
 
     #[\Override]
