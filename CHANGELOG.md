@@ -1,5 +1,18 @@
 # Changelog
 
+## [9.18.0](https://github.com/dvsa/olcs-common/compare/v9.17.0...v9.18.0) (2026-05-19)
+
+
+### Features
+
+* removed dependency on laminas-mvc-plugin-prg VOL-7230 ([#304](https://github.com/dvsa/olcs-common/issues/304)) ([4f222ff](https://github.com/dvsa/olcs-common/commit/4f222ffe0e5c026ef3ae4edf35032d4167c8ddb9))
+
+
+### Bug Fixes
+
+* removed duplicate validator that was causing duplicate error message ([#302](https://github.com/dvsa/olcs-common/issues/302)) ([8da2705](https://github.com/dvsa/olcs-common/commit/8da27058e9f0da9701a582556df7aaf08697fcfc))
+* tolerate E_USER_ERROR in onFatalError so user journeys continue post-monolog ([#305](https://github.com/dvsa/olcs-common/issues/305)) ([de9f9da](https://github.com/dvsa/olcs-common/commit/de9f9da2d7ac2452a53ef8f458fe849c1bcc1e41))
+
 ## [9.17.0](https://github.com/dvsa/olcs-common/compare/v9.16.1...v9.17.0) (2026-05-14)
 
 
