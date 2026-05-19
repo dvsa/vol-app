@@ -82,7 +82,8 @@ class YesNoTypeTest extends \PHPUnit\Framework\TestCase
             ['N', 0],
             ['No', 0],
             ['NO', 0],
-            ['no', 0]
+            ['no', 0],
+            [null, 0],
         ];
     }
 

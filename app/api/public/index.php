@@ -18,25 +18,51 @@ register_shutdown_function('handleFatal');
 function handleFatal()
 {
     $error = error_get_last();
-    if ($error) {
-        http_response_code(500);
+    if ($error === null) {
+        return;
+    }
 
-        if (ob_get_length() !== false) {
-            ob_clean();
+    // Levels PHP itself treats as terminal. Matches Monolog\ErrorHandler::FATAL_ERRORS.
+    $fatalMask = E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR;
+
+    if (($error['type'] & $fatalMask) === 0) {
+        // Non-fatal (warning / deprecation / notice). Pre-monolog, laminas-log's
+        // error handler returned true for every level, so error_get_last() was
+        // null at shutdown and we exited cleanly. Monolog returns false for
+        // non-fatal levels, leaving error_get_last() populated. Surface a single
+        // tagged log entry per request so these are easy to triage in CloudWatch.
+        if (class_exists(\Olcs\Logging\Log\Logger::class)) {
+            \Olcs\Logging\Log\Logger::warn(
+                'NON_FATAL_AT_SHUTDOWN: ' . $error['message'],
+                [
+                    'tag' => 'non-fatal-at-shutdown',
+                    'errno' => $error['type'],
+                    'file' => $error['file'],
+                    'line' => $error['line'],
+                    'url' => $_SERVER['REQUEST_URI'] ?? null,
+                ]
+            );
         }
+        return;
+    }
 
-        echo json_encode(
-            [
-                'messages' => [
-                    'An unexpected fatal error occurred' => [
-                        $error['message'],
-                        $error['file'] . ': ' . $error['line']
-                    ]
+    http_response_code(500);
+
+    if (ob_get_length() !== false) {
+        ob_clean();
+    }
+
+    echo json_encode(
+        [
+            'messages' => [
+                'An unexpected fatal error occurred' => [
+                    $error['message'],
+                    $error['file'] . ': ' . $error['line']
                 ]
             ]
-        );
-        exit;
-    }
+        ]
+    );
+    exit;
 }
 
 // Decline static file requests back to the PHP built-in webserver
