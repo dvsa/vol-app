@@ -3,6 +3,7 @@
 namespace Common\Controller\Lva\Variation;
 
 use Common\Controller\Lva;
+use Common\Controller\Traits\PostRedirectGetTrait;
 use Common\Data\Mapper\Lva\TypeOfLicence as TypeOfLicenceMapper;
 use Common\FormService\FormServiceManager;
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -21,6 +22,8 @@ use LmcRbacMvc\Service\AuthorizationService;
  */
 abstract class AbstractTypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
 {
+    use PostRedirectGetTrait;
+
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,

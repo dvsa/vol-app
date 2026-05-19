@@ -102,13 +102,9 @@ return [
         ]
     ],
     'controller_plugins' => [
-        'aliases' => [
-          'prg' => \Laminas\Mvc\Plugin\Prg\PostRedirectGet::class
-        ],
         'invokables' => [
             'redirect' => \Common\Controller\Plugin\Redirect::class,
             \Common\Controller\Plugin\Redirect::class => \Common\Controller\Plugin\Redirect::class,
-            \Laminas\Mvc\Plugin\Prg\PostRedirectGet::class => \Laminas\Mvc\Plugin\Prg\PostRedirectGet::class
         ],
         'factories' => [
             'currentUser' => \Common\Controller\Plugin\CurrentUserFactory::class,

@@ -17,7 +17,6 @@
         "laminas/laminas-modulemanager": "^2.17",
         "laminas/laminas-mvc": "^3.8",
         "laminas/laminas-mvc-plugin-flashmessenger": "^1.11",
-        "laminas/laminas-mvc-plugin-prg": "^1.8",
         "laminas/laminas-navigation": "^2.20",
         "laminas/laminas-servicemanager": "^3.23",
         "laminas/laminas-stdlib": "^3.20",
