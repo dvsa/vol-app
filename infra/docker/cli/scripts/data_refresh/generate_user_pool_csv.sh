@@ -31,7 +31,8 @@ trap 'rm -rf "$output_csv"' EXIT
 echo "[INFO] Using local script directory: $scriptdir"
 
 echo "[INFO] Generating user pool CSV..."
-cd "$workdir" || exit 1
+cd "$scriptdir" || { echo "Script directory not found: $scriptdir"; exit 1; }
+
 /usr/bin/php ./scripts/utils/recovery/user-pool-export.php \
   --mode=nonprod-users \
   --perrole="2" \
