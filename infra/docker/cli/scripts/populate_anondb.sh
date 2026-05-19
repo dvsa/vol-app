@@ -23,7 +23,6 @@ export NO_PROXY=169.254.169.254
 
 nonprod_assume_external_id=${PRODTODEV_ASSUME_ROLE_ID}
 db_cluster=${DBCLUSTER_ID}
-domain=${FULL_DOMAIN}
 env=${ENVIRONMENT_NAME}
 pass=${API_DB_PASSWORD}
 DATE=$(date +"%Y-%m-%d")
