@@ -36,7 +36,7 @@ cd "$scriptdir" || { echo "Script directory not found: $scriptdir"; exit 1; }
 set -euo pipefail
 
 php_bin="$(command -v php)"
-"$php_bin" /mnt/data/scripts/data_refresh/generate_user_pool \
+"$php_bin" /mnt/data/scripts/data_refresh/generate_user_pool/user-pool-export.php \
   --mode=nonprod-users \
   --perrole="2" \
   --mycnf=/home/jenkins/.my.cnf \
