@@ -4,7 +4,7 @@ namespace CommonTest\Service\Table\Type;
 
 use Common\Service\Table\TableBuilder;
 use Common\Service\Table\Type\VariationRecordAction;
-use Laminas\Mvc\I18n\Translator;
+use Dvsa\Olcs\Utils\Translation\TranslatorDelegator as Translator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 

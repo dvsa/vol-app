@@ -7,7 +7,7 @@ use Common\Service\Helper\UrlHelperService;
 use Common\Service\Table\Formatter\FormatterPluginManager;
 use Common\Service\Table\TableBuilder;
 use Common\Service\Table\TableBuilderFactory;
-use Laminas\Mvc\I18n\Translator;
+use Dvsa\Olcs\Utils\Translation\TranslatorDelegator as Translator;
 use Laminas\ServiceManager\ServiceManager;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;

@@ -18,7 +18,7 @@ use Hamcrest\Core\IsAnything;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerInterface;
 use Laminas\Mvc\Controller\Plugin\Url;
-use Laminas\Mvc\I18n\Translator;
+use Dvsa\Olcs\Utils\Translation\TranslatorDelegator as Translator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
@@ -81,7 +81,7 @@ class TableBuilderTest extends MockeryTestCase
 
     private function getMockTranslator(): Translator
     {
-        $mockTranslator = $this->createPartialMock(\Laminas\Mvc\I18n\Translator::class, ['translate']);
+        $mockTranslator = $this->createPartialMock(Translator::class, ['translate']);
         $mockTranslator->expects(static::any())
             ->method('translate')
             ->willReturnCallback(
@@ -3133,7 +3133,7 @@ class TableBuilderTest extends MockeryTestCase
         $mockAuthService->shouldReceive('isGranted')
             ->with(m::type('string'))
             ->andReturn(true);
-        $mockTranslatorService = m::mock(\Laminas\Mvc\I18n\Translator::class);
+        $mockTranslatorService = m::mock(Translator::class);
 
         // Setup
         $sut = new TableBuilder(
@@ -3167,7 +3167,7 @@ class TableBuilderTest extends MockeryTestCase
         $mockAuthService->shouldReceive('isGranted')
             ->with(m::type('string'))
             ->andReturn(true);
-        $mockTranslatorService = m::mock(\Laminas\Mvc\I18n\Translator::class);
+        $mockTranslatorService = m::mock(Translator::class);
 
         // Setup
         $sut = new TableBuilder(

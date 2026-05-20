@@ -9,7 +9,7 @@ use Common\Util\RestClient;
 use Psr\Container\ContainerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
-use Laminas\Mvc\I18n\Translator;
+use Dvsa\Olcs\Utils\Translation\TranslatorDelegator as Translator;
 use stdClass;
 
 class RestClientAwareInitializerTest extends MockeryTestCase

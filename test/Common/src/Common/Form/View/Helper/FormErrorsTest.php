@@ -13,7 +13,7 @@ use Laminas\Form\ElementInterface;
 use Psr\Container\ContainerInterface;
 use Laminas\Form\Form;
 use Laminas\I18n\Translator\TranslatorInterface;
-use Laminas\Mvc\I18n\Translator;
+use Dvsa\Olcs\Utils\Translation\TranslatorDelegator as Translator;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\Validator\ValidatorPluginManager;
 use Mockery as m;

@@ -35,7 +35,7 @@ class ContentHelper
     private $partials = [];
 
     /**
-     * @var \Laminas\Mvc\I18n\Translator
+     * @var \Laminas\I18n\Translator\TranslatorInterface
      */
     private $translator;
 
@@ -88,7 +88,7 @@ class ContentHelper
     }
 
     /**
-     * @return \Laminas\Mvc\I18n\Translator
+     * @return \Laminas\I18n\Translator\TranslatorInterface
      */
     public function getTranslator()
     {
@@ -96,7 +96,7 @@ class ContentHelper
     }
 
     /**
-     * @param \Laminas\Mvc\I18n\Translator $translator
+     * @param \Laminas\I18n\Translator\TranslatorInterface $translator
      */
     public function setTranslator($translator): void
     {

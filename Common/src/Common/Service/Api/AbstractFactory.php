@@ -37,7 +37,7 @@ class AbstractFactory implements AbstractFactoryInterface
             throw new ServiceNotCreatedException('No endpoint defined for: ' . $endpoint);
         }
 
-        /** @var \Laminas\Mvc\I18n\Translator $translator */
+        /** @var \Laminas\I18n\Translator\TranslatorInterface $translator */
         $translator = $container->get('translator');
 
         $filter = new CamelCaseToDash();

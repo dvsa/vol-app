@@ -3,7 +3,7 @@
 namespace Common\Service\Table\Type;
 
 use Common\Util\Escape;
-use Laminas\Mvc\I18n\Translator;
+use Laminas\I18n\Translator\TranslatorInterface as Translator;
 
 class Selector extends AbstractType
 {

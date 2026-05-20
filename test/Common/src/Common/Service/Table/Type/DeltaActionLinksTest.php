@@ -4,7 +4,7 @@ namespace CommonTest\Service\Table\Type;
 
 use Common\Service\Table\TableBuilder;
 use Common\Util\Escape;
-use Laminas\Mvc\I18n\Translator;
+use Dvsa\Olcs\Utils\Translation\TranslatorDelegator as Translator;
 use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;

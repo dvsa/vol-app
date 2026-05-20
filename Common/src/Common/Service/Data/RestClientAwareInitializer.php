@@ -25,7 +25,7 @@ class RestClientAwareInitializer implements InitializerInterface
         if ($instance instanceof RestClientAware) {
             /** @var Resolver $apiResolver */
             $apiResolver = $container->get('ServiceApiResolver');
-            /** @var \Laminas\Mvc\I18n\Translator $translator */
+            /** @var \Laminas\I18n\Translator\Translator $translator */
             $translator = $container->get('translator');
 
             $client = $apiResolver->getClient($instance->getServiceName());

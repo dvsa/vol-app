@@ -31,7 +31,7 @@ class PaginationHelper
         'next' => [],
     ];
 
-    /** @var  \Laminas\Mvc\I18n\Translator */
+    /** @var  \Laminas\I18n\Translator\TranslatorInterface */
     private $translator;
 
     /**
@@ -242,7 +242,7 @@ class PaginationHelper
      *
      * @return $this
      */
-    public function setTranslator(\Laminas\Mvc\I18n\Translator $translator)
+    public function setTranslator(\Laminas\I18n\Translator\TranslatorInterface $translator)
     {
         $this->translator = $translator;
         return $this;

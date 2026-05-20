@@ -25,7 +25,7 @@ class ContentHelperTest extends TestCase
      */
     public function testTranslatorSet(): void
     {
-        $translatorMock = $this->createMock(\Laminas\Mvc\I18n\Translator::class);
+        $translatorMock = $this->createMock(\Dvsa\Olcs\Utils\Translation\TranslatorDelegator::class);
 
         $mock = $this->createPartialMock(ContentHelper::class, ['getTranslator']);
 
