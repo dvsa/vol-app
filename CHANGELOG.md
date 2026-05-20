@@ -1,5 +1,17 @@
 # Changelog
 
+## [9.19.0](https://github.com/dvsa/olcs-common/compare/v9.18.0...v9.19.0) (2026-05-20)
+
+
+### Features
+
+* remove the abandoned laminas-mvc-i18n package VOL-7235 ([#306](https://github.com/dvsa/olcs-common/issues/306)) ([433ce59](https://github.com/dvsa/olcs-common/commit/433ce5986d85ad0d6d843698ddd23d34e65e3330))
+
+
+### Bug Fixes
+
+* vol 5066 internal conviction text bug ([#307](https://github.com/dvsa/olcs-common/issues/307)) ([f4afcce](https://github.com/dvsa/olcs-common/commit/f4afcce5fbe434b567b80b04e77c50ccf372618e))
+
 ## [9.18.0](https://github.com/dvsa/olcs-common/compare/v9.17.0...v9.18.0) (2026-05-19)
 
 
