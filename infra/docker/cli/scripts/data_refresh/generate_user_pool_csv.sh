@@ -19,28 +19,30 @@ export no_proxy='127.0.0.1,localhost,169.254.169.254,.olcs.dev-dvsacloud.uk'
 
 s3bucket='devapp-shd-pri-olcsci-build-s3'
 s3BucketPath='cognito'
-scriptrepo='https://github.com/dvsa/olcs-etl.git'
-scriptrepobranch='main'
+scriptdir='/mnt/data/scripts/data_refresh/generate_user_pool'
 slackChan='#env-status'
 slackFail='#FF9FA1'
 slackCompleted='#36A64F'
 
-workdir="$(mktemp -d /tmp/olcs-etl.XXXXXX)"
 output_csv="/tmp/db_output.csv"
 
-trap 'rm -rf "$workdir" "$output_csv"' EXIT
+trap 'rm -rf "$output_csv"' EXIT
 
-echo "[INFO] Cloning $scriptrepo (branch $scriptrepobranch)..."
-git clone --branch "$scriptrepobranch" "$scriptrepo" "$workdir" || { echo "Git clone failed"; exit 1; }
+echo "[INFO] Using local script directory: $scriptdir"
 
 echo "[INFO] Generating user pool CSV..."
-cd "$workdir" || exit 1
-/usr/bin/php ./scripts/utils/recovery/user-pool-export.php \
+cd "$scriptdir" || { echo "Script directory not found: $scriptdir"; exit 1; }
+
+set -euo pipefail
+
+php_bin="$(command -v php)"
+"$php_bin" /mnt/data/scripts/data_refresh/generate_user_pool/user-pool-export.php \
   --mode=nonprod-users \
   --perrole="2" \
   --mycnf=/home/jenkins/.my.cnf \
   --output="$output_csv"
-cd - >/dev/null || exit 1
+
+test -f "$output_csv"
 
 upload_path="$s3BucketPath/users-${environment}.txt"
 echo "[INFO] Uploading $output_csv to S3 bucket: $s3bucket, path: $upload_path"
