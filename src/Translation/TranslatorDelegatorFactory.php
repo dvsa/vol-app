@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Utils\Translation;
 
-use Psr\Container\ContainerInterface;
-use Laminas\I18n\Translator\Loader\RemoteLoaderInterface;
 use Laminas\I18n\Translator\Translator;
 use Laminas\ServiceManager\Factory\DelegatorFactoryInterface;
+use Psr\Container\ContainerInterface;
 
 class TranslatorDelegatorFactory implements DelegatorFactoryInterface
 {
@@ -20,10 +21,10 @@ class TranslatorDelegatorFactory implements DelegatorFactoryInterface
 
         $config = $container->get('Config');
 
-        //use the same remote translation loader to load replacements
+        // Re-use the configured remote translation loader to source the replacement tokens.
         $loaderClass = $config['translator']['remote_translation'][0]['type'];
         $translationLoader = $realTranslator->getPluginManager()->get($loaderClass);
-        $replacements = $translationLoader->loadReplacements();
+        $replacements = new Replacements($translationLoader->loadReplacements());
 
         return new TranslatorDelegator($realTranslator, $replacements);
     }

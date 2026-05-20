@@ -1,82 +1,79 @@
 <?php
 
-/**
- * Translator Delegator
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
+declare(strict_types=1);
 
 namespace Dvsa\Olcs\Utils\Translation;
 
-use Laminas\I18n\Translator\TranslatorInterface;
-use Laminas\Mvc\I18n\Translator;
+use Laminas\I18n\Translator\TranslatorInterface as I18nTranslatorInterface;
+use Laminas\Validator\Translator\TranslatorInterface as ValidatorTranslatorInterface;
 
 /**
- * Translator Delegator
- *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * Wraps an i18n translator and applies token replacements to every translated
+ * message. Composition over inheritance — no longer extends the discontinued
+ * `Laminas\Mvc\I18n\Translator`. The validator translator interface is
+ * implemented directly so form/validator components continue to accept it.
  */
-class TranslatorDelegator extends Translator
+class TranslatorDelegator implements I18nTranslatorInterface, ValidatorTranslatorInterface
 {
-    /**
-     * @var array
-     */
-    private $replacements;
-
-    /**
-     * TranslatorDelegator constructor.
-     *
-     * @param TranslatorInterface $translator   Transloator
-     * @param array               $replacements Array of tokens that can be replaced in translations
-     */
-    public function __construct(TranslatorInterface $translator, array $replacements)
-    {
-        $this->translator = $translator;
-        $this->replacements = $replacements;
+    public function __construct(
+        protected I18nTranslatorInterface $translator,
+        protected Replacements $replacements,
+    ) {
     }
 
     /**
-     * Proxy to any translator methods
+     * Proxy any non-interface translator methods (setCache, setLocale,
+     * enableEventManager, getEventManager, etc.) to the wrapped translator.
      *
-     * @param string $method Method to call
-     * @param array  $args   Methods arguments
-     *
-     * @return mixed
+     * @param string $method
+     * @param array<int, mixed> $args
      */
-    #[\Override]
-    public function __call($method, array $args)
+    public function __call($method, array $args): mixed
     {
         return call_user_func_array([$this->translator, $method], $args);
     }
 
+    public function getTranslator(): I18nTranslatorInterface
+    {
+        return $this->translator;
+    }
+
     /**
-     * Translate a message
+     * Translate a message and apply token replacements.
      *
-     * @param string|null $message    Message to be translated
-     * @param string $textDomain Domain for translations
-     * @param string $locale     Locale to be translated to
-     *
-     * @return string
+     * @param string|null $message
+     * @param string $textDomain
+     * @param string|null $locale
      */
     #[\Override]
-    public function translate($message, $textDomain = 'default', $locale = null)
+    public function translate($message, $textDomain = 'default', $locale = null): string
     {
         if (empty($message)) {
             return '';
         }
 
-        return $this->replaceVariables($this->translator->translate($message, $textDomain, $locale));
+        return $this->replacements->apply($this->translator->translate($message, $textDomain, $locale));
     }
 
     /**
-     * Replace token in translated string
+     * Pluralised translation, with token replacements applied to the result.
      *
-     * @param string $message Message being translated
-     *
-     * @return string
+     * @param string $singular
+     * @param string $plural
+     * @param int $number
+     * @param string $textDomain
+     * @param string|null $locale
      */
-    protected function replaceVariables($message)
-    {
-        return str_replace(array_keys($this->replacements), array_values($this->replacements), $message);
+    #[\Override]
+    public function translatePlural(
+        $singular,
+        $plural,
+        $number,
+        $textDomain = 'default',
+        $locale = null,
+    ): string {
+        return $this->replacements->apply(
+            $this->translator->translatePlural($singular, $plural, $number, $textDomain, $locale),
+        );
     }
 }

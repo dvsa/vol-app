@@ -1,39 +1,46 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Utils\Translation;
 
-use Dvsa\Olcs\Utils\View\Factory\Helper\GetPlaceholder;
+use Closure;
 use Laminas\EventManager\Event;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
 use Laminas\I18n\Translator\Translator;
 use Laminas\I18n\Translator\TranslatorInterface;
-use Laminas\ServiceManager\Factory\FactoryInterface;
-use Laminas\View\Renderer\RendererInterface as Renderer;
-use Laminas\View\Resolver\ResolverInterface as Resolver;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
+use Laminas\View\Renderer\RendererInterface;
+use Laminas\View\Resolver\ResolverInterface;
 
-class MissingTranslationProcessor implements FactoryInterface, ListenerAggregateInterface
+/**
+ * Resolves "missing" translation keys by:
+ *   - expanding `{nested.key}` tokens inside the missing message
+ *   - rendering `markup-*` keys as locale-scoped view partials
+ *   - replacing `{{PLACEHOLDER:NAME}}` markers from a view placeholder helper
+ *
+ * Listens on the translator's own `EVENT_MISSING_TRANSLATION` — the event lives
+ * on the translator, not on the MVC event manager, so it carries no MVC coupling.
+ * Dependencies are constructor-injected; the matching factory builds the
+ * collaborators and a delegator attaches it to the translator at service
+ * construction time.
+ */
+class MissingTranslationProcessor implements ListenerAggregateInterface
 {
     use ListenerAggregateTrait;
 
     /**
-     * @var Renderer
+     * @param Closure|null $placeholder The `getPlaceholder` view helper, which is
+     *                                  registered as a closure of signature
+     *                                  `fn(string $name): \Dvsa\Olcs\Utils\View\Helper\GetPlaceholder`.
      */
-    protected $renderer;
-
-    /**
-     * @var Resolver
-     */
-    protected $resolver;
-
-    /**
-     * @var GetPlaceholder
-     */
-    protected $placeholder;
+    public function __construct(
+        private readonly RendererInterface $renderer,
+        private readonly ResolverInterface $resolver,
+        private readonly ?Closure $placeholder = null,
+    ) {
+    }
 
     /**
      * {@inheritdoc}
@@ -41,7 +48,11 @@ class MissingTranslationProcessor implements FactoryInterface, ListenerAggregate
     #[\Override]
     public function attach(EventManagerInterface $events, $priority = 1)
     {
-        $events->attach(Translator::EVENT_MISSING_TRANSLATION, [$this, 'processEvent'], $priority);
+        $this->listeners[] = $events->attach(
+            Translator::EVENT_MISSING_TRANSLATION,
+            [$this, 'processEvent'],
+            $priority,
+        );
     }
 
     /**
@@ -59,11 +70,7 @@ class MissingTranslationProcessor implements FactoryInterface, ListenerAggregate
 
         $message = $params['message'];
 
-        if (empty($message)) {
-            return;
-        }
-
-        if (!is_string($message)) {
+        if (empty($message) || !is_string($message)) {
             return;
         }
 
@@ -77,15 +84,15 @@ class MissingTranslationProcessor implements FactoryInterface, ListenerAggregate
         // handles partials as translations. Note we only try to resolve keys
         // that match a pattern, to avoid having to run the template resolver
         // against ALL missing translations
-        if (strpos($message, 'markup-') === 0) {
+        if (str_starts_with($message, 'markup-')) {
             $locale    = $params['locale'];
             $partial   = $locale . '/' . $message; // e.g. en_GB/my-translation-key
             $foundPath = $this->resolver->resolve($partial);
 
             // Check for the non-NI version of the file
-            if ($foundPath === false && strstr($locale, 'NI')) {
+            if ($foundPath === false && str_contains($locale, 'NI')) {
                 $fallbackLocale = str_replace('NI', 'GB', $locale);
-                $partial   = $fallbackLocale . '/' . $message; // e.g. en_GB/my-translation-key
+                $partial   = $fallbackLocale . '/' . $message;
                 $foundPath = $this->resolver->resolve($partial);
             }
 
@@ -104,7 +111,7 @@ class MissingTranslationProcessor implements FactoryInterface, ListenerAggregate
         // needs to return void so that the event is propagated to other listeners
     }
 
-    protected function populatePlaceholder(string $message): string
+    private function populatePlaceholder(string $message): string
     {
         if ($this->placeholder === null) {
             return $message;
@@ -121,25 +128,5 @@ class MissingTranslationProcessor implements FactoryInterface, ListenerAggregate
         }
 
         return $message;
-    }
-
-    /**
-     * @param ContainerInterface $container
-     * @param $requestedName
-     * @param array|null $options
-     * @return $this
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): MissingTranslationProcessor
-    {
-        $this->renderer = $container->get('ViewRenderer');
-
-        if ($container->get('ViewHelperManager')->has('getPlaceholder')) {
-            $this->placeholder = $container->get('ViewHelperManager')->get('getPlaceholder');
-        }
-        $this->resolver = $container->get(\Laminas\View\Resolver\TemplatePathStack::class);
-        return $this;
     }
 }
