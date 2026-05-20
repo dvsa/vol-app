@@ -33,12 +33,16 @@ echo "[INFO] Using local script directory: $scriptdir"
 echo "[INFO] Generating user pool CSV..."
 cd "$scriptdir" || { echo "Script directory not found: $scriptdir"; exit 1; }
 
-/usr/bin/php ./scripts/utils/recovery/user-pool-export.php \
+set -euo pipefail
+
+php_bin="$(command -v php)"
+"$php_bin" ./scripts/utils/recovery/user-pool-export.php \
   --mode=nonprod-users \
   --perrole="2" \
   --mycnf=/home/jenkins/.my.cnf \
   --output="$output_csv"
-cd - >/dev/null || exit 1
+
+test -f "$output_csv"
 
 upload_path="$s3BucketPath/users-${environment}.txt"
 echo "[INFO] Uploading $output_csv to S3 bucket: $s3bucket, path: $upload_path"
