@@ -311,6 +311,14 @@ class ConversationsControllerTest extends TestCase
                       'form-actions->file->fileCount',
                   );
 
+        $this->mockParams->shouldReceive('fromPost')
+            ->once()
+            ->with('action')
+            ->andReturn('upload');
+
+        $this->sut->shouldReceive('params')
+            ->andReturn($this->mockParams);
+
         $view = $this->sut->addAction();
         $this->assertInstanceOf(ViewModel::class, $view);
     }

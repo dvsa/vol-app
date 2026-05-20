@@ -100,8 +100,11 @@ class ConversationsController extends AbstractController implements ToggleAwareI
             $form->setData($this->getRequest()->getPost());
         }
 
+        $ifFileAction = $this->params()->fromPost('action') === 'upload'
+            || $this->params()->fromPost('action') === 'delete';
+
         $hasProcessedFiles = false;
-        if ($canUploadFiles && $isPost) {
+        if ($canUploadFiles && $isPost && $ifFileAction) {
             $hasProcessedFiles = $this->processFiles(
                 $form,
                 'form-actions->file',
