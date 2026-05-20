@@ -90,5 +90,49 @@ class Module
         ErrorHandler::register($logger);
 
         StaticLogger::setLogger($logger);
+
+        $this->registerUserErrorTolerance();
+    }
+
+    /**
+     * Tolerate E_USER_ERROR the way laminas-log did pre-monolog.
+     *
+     * laminas-view / guzzle __toString fallbacks call trigger_error(E_USER_ERROR)
+     * then return ''. laminas-log's handler returned true, so execution continued
+     * and pages still rendered. Monolog treats E_USER_ERROR as fatal and halts the
+     * request. We wrap Monolog's handler: log E_USER_ERROR with a triage tag and
+     * return true so execution continues; defer every other level to Monolog so its
+     * logging is unchanged. Only explicit trigger_error(E_USER_ERROR) is affected -
+     * real fatals are not catchable here and remain fatal.
+     */
+    private function registerUserErrorTolerance(): void
+    {
+        // Capture the currently-active handler (Monolog's) without disturbing it.
+        $previous = set_error_handler(static fn (): bool => false);
+        restore_error_handler();
+
+        set_error_handler($this->makeToleranceHandler($previous));
+    }
+
+    public function makeToleranceHandler(?callable $previous): callable
+    {
+        return static function (int $errno, string $message, string $file = '', int $line = 0) use ($previous): bool {
+            if ($errno === E_USER_ERROR) {
+                StaticLogger::err(
+                    'TOLERATED_USER_ERROR: ' . $message,
+                    [
+                        'tag' => 'tolerated-user-error',
+                        'errno' => $errno,
+                        'file' => $file,
+                        'line' => $line,
+                        'url' => $_SERVER['REQUEST_URI'] ?? null,
+                    ]
+                );
+
+                return true;
+            }
+
+            return is_callable($previous) ? (bool) $previous($errno, $message, $file, $line) : false;
+        };
     }
 }
