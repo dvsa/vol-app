@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.0.1](https://github.com/dvsa/olcs-logging/compare/v9.0.0...v9.0.1) (2026-05-20)
+
+
+### Bug Fixes
+
+* tolerate E_USER_ERROR as laminas-log did before monolog ([#29](https://github.com/dvsa/olcs-logging/issues/29)) ([0008310](https://github.com/dvsa/olcs-logging/commit/00083104f7068c4df79d442fe9b75189f1973c41))
+
 ## [9.0.0](https://github.com/dvsa/olcs-logging/compare/v8.0.0...v9.0.0) (2026-05-05)
 
 
