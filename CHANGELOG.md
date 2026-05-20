@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.2.0](https://github.com/dvsa/olcs-utils/compare/v7.1.0...v7.2.0) (2026-05-20)
+
+
+### Features
+
+* remove abandoned laminas-mvc-i8n package VOL-7235 ([#33](https://github.com/dvsa/olcs-utils/issues/33)) ([0b6175b](https://github.com/dvsa/olcs-utils/commit/0b6175b649c73679403336477782861cec0ff4b5))
+
 ## [7.1.0](https://github.com/dvsa/olcs-utils/compare/v7.0.0...v7.1.0) (2026-05-05)
 
 
