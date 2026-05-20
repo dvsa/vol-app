@@ -1,5 +1,24 @@
 # Changelog
 
+## [7.5.0](https://github.com/dvsa/vol-app/compare/v7.4.1...v7.5.0) (2026-05-20)
+
+
+### Features
+
+* 7077 update populate anondb job ([#1460](https://github.com/dvsa/vol-app/issues/1460)) ([51c78d7](https://github.com/dvsa/vol-app/commit/51c78d7680356ee3b31ea0bf15fd7e5b902f8b79))
+* added infra secrets ([#1465](https://github.com/dvsa/vol-app/issues/1465)) ([9e59139](https://github.com/dvsa/vol-app/commit/9e591392c4947a06bc5ba1fe3721d60ed70c88cc))
+* move from laminas-log to monolog VOL-6099 ([#1453](https://github.com/dvsa/vol-app/issues/1453)) ([fe62fd1](https://github.com/dvsa/vol-app/commit/fe62fd12eadc60ed157cd71313bbb871b5e78e82))
+* removed dependency on laminas-mvc-plugin-prg VOL-7230 ([#1473](https://github.com/dvsa/vol-app/issues/1473)) ([3c357e8](https://github.com/dvsa/vol-app/commit/3c357e8fd53b194aa524cc78560dccbfa833ab5f))
+
+
+### Bug Fixes
+
+* handle errors similarly to laminas-log but write a tag along with each error to speed up a future triage/fix ticket ([#1472](https://github.com/dvsa/vol-app/issues/1472)) ([a5c982e](https://github.com/dvsa/vol-app/commit/a5c982e0a5fe356cd072e146c77e4e2de1570a62))
+* move from stdout to stderr, prevents JSON responses being malformed due to erros such as deprecations VOL-6099 ([#1476](https://github.com/dvsa/vol-app/issues/1476)) ([65965bd](https://github.com/dvsa/vol-app/commit/65965bd75650d693dc98adcfd52993794b2719fd))
+* resolve issue brought to light after replacing laminas log with monolog ([#1471](https://github.com/dvsa/vol-app/issues/1471)) ([f33c93e](https://github.com/dvsa/vol-app/commit/f33c93e669151653055254f96eb8686a093296af))
+* use addIndicesByName to avoid Elastica 7.2 deprecation breaking search ([#1470](https://github.com/dvsa/vol-app/issues/1470)) ([037e0b8](https://github.com/dvsa/vol-app/commit/037e0b8df817ac9197cf39dbcea67a41a862f7bd))
+* various changes and fixes to make licence documents render correctly VOL-6958 ([#1462](https://github.com/dvsa/vol-app/issues/1462)) ([bfcdd82](https://github.com/dvsa/vol-app/commit/bfcdd82d55cd544d451463632549d58675964674))
+
 ## [7.4.1](https://github.com/dvsa/vol-app/compare/v7.4.0...v7.4.1) (2026-05-13)
 
 
