@@ -7,8 +7,8 @@
 #   1. Create Aurora cluster snapshot from production cluster
 #   2. Restore a temporary Aurora cluster + instance
 #   3. Run anonymisation scripts against restored cluster
-#   4. Dump anonymised database and upload to S3
-#   5. Clean up temporary cluster and dump files
+#   5. Dump anonymised database and upload to S3
+#   6. Clean up temporary cluster and dump files
 #
 
 set -euo pipefail
@@ -32,6 +32,7 @@ region="eu-west-1"
 tmp_cluster_id="olcs-anon-${TS}"
 tmp_instance_id="olcs-anon-${TS}-instance"
 snapshot_id="olcs-anon-snap-${TS}"
+anondb_snapshot_id="olcs-db-anon-${env}-${DATE}"
 
 anondb_dump_dir="/mnt/data/anondump"
 anondb_tables="template template_test_data translation_key translation_key_text replacement public_holiday fee_type doc_template system_parameter feature_toggle financial_standing_rate"
@@ -146,7 +147,6 @@ aws rds wait db-cluster-available \
 ###############################################
 log "Creating temporary Aurora instance: $tmp_instance_id"
 
-
 aws rds create-db-instance \
   --db-instance-identifier "$tmp_instance_id" \
   --db-cluster-identifier "$tmp_cluster_id" \
@@ -194,8 +194,41 @@ log "Running anonymisation against restored Aurora cluster"
   -f "${anondb_dump_dir}/temp" \
   -F
 
+
 ###############################################
-# 4. DUMP DATA + UPLOAD TO S3
+# 4a. CREATE SNAPSHOT OF ANONYMISED CLUSTER
+###############################################
+log "Creating snapshot of anonymised cluster: $anondb_snapshot_id"
+
+aws rds create-db-cluster-snapshot \
+  --db-cluster-snapshot-identifier "$anondb_snapshot_id" \
+  --db-cluster-identifier "$tmp_cluster_id" \
+  --region "$region" \
+  >/dev/null
+
+log "Waiting for anonymised snapshot to complete..."
+aws rds wait db-cluster-snapshot-available \
+  --db-cluster-snapshot-identifier "$anondb_snapshot_id" \
+  --region "$region"
+
+###############################################
+# 4b. SHARE SNAPSHOT WITH DEV ACCOUNT (PROD ONLY)
+###############################################
+if [[ "$env" == "prod" ]]; then
+  log "Sharing anonymised snapshot with dev account"
+
+  aws rds modify-db-cluster-snapshot-attribute \
+    --db-cluster-snapshot-identifier "$anondb_snapshot_id" \
+    --attribute-name restore \
+    --values-to-add "054614622558" \
+    --region "$region"
+
+  log "Snapshot shared successfully"
+fi
+
+
+###############################################
+# 5. DUMP DATA + UPLOAD TO S3
 ###############################################
 log "Dumping anonymised database"
 mysqldump -h $endpoint -u olcsapi -p${pass} \
