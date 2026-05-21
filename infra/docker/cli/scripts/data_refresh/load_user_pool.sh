@@ -77,7 +77,7 @@ ROLE_RESPONSE=$(aws sts assume-role \
     --role-arn "$ASSUME_ROLE" \
     --role-session-name jenkins \
     --external-id "$PASSPHRASE" \
-    --duration-seconds 900 \
+    --duration-seconds 3600 \
     --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' \
     --output text
 )
