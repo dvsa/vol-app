@@ -74,6 +74,20 @@ class TranslatorDelegatorTest extends TestCase
         $this->assertEquals('', $this->sut->translate(''));
     }
 
+    public function testTranslateCastsNonStringTranslationResultBeforeApplyingReplacements(): void
+    {
+        // Regression: the standalone I18n translator returns the input
+        // unchanged when no translation is found, so a numeric key passed in
+        // would surface as an int. Replacements::apply() is strictly typed
+        // (string), so we must cast before forwarding.
+        $translator = $this->createMock(Translator::class);
+        $translator->method('translate')->willReturn(123);
+
+        $sut = new TranslatorDelegator($translator, new Replacements([]));
+
+        $this->assertSame('123', $sut->translate('123'));
+    }
+
     public function testTranslatePluralAppliesReplacements(): void
     {
         $this->mockTranslator

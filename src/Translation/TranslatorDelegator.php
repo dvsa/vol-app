@@ -52,7 +52,13 @@ class TranslatorDelegator implements I18nTranslatorInterface, ValidatorTranslato
             return '';
         }
 
-        return $this->replacements->apply($this->translator->translate($message, $textDomain, $locale));
+        // The standalone I18n translator returns the input unchanged when no
+        // translation is found, so a non-string $message (e.g. an int key)
+        // would propagate. Cast the result before applying replacements so the
+        // strictly-typed `Replacements::apply()` doesn't reject it.
+        $translated = (string) $this->translator->translate($message, $textDomain, $locale);
+
+        return $this->replacements->apply($translated);
     }
 
     /**
@@ -72,8 +78,14 @@ class TranslatorDelegator implements I18nTranslatorInterface, ValidatorTranslato
         $textDomain = 'default',
         $locale = null,
     ): string {
-        return $this->replacements->apply(
-            $this->translator->translatePlural($singular, $plural, $number, $textDomain, $locale),
+        $translated = (string) $this->translator->translatePlural(
+            $singular,
+            $plural,
+            $number,
+            $textDomain,
+            $locale,
         );
+
+        return $this->replacements->apply($translated);
     }
 }
