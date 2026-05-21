@@ -59,12 +59,16 @@ fi
 slack_message="${platformEnv} User Pool CSV generated"
 slack_color="$slackCompleted"
 
-if [[ -n "$SLACK_WEBHOOK_URL" ]]; then
+slack_message="${platformEnv} User Pool CSV generated"
+slack_color="$slackCompleted"
+
+if [[ -n "${SLACK_WEBHOOK_URL:-}" ]]; then
   curl -X POST -H 'Content-type: application/json' \
     --data "{\"channel\": \"$slackChan\", \"attachments\": [{\"color\": \"$slack_color\", \"text\": \"$slack_message\"}]}" \
-    "$SLACK_WEBHOOK_URL"
+    "$SLACK_WEBHOOK_URL" \
+    || echo "[WARNING] Failed to send Slack notification"
 else
-  echo "[INFO] Slack message: $slack_message"
+  echo "[INFO] SLACK_WEBHOOK_URL not set; skipping Slack notification. Message: $slack_message"
 fi
 
 echo "[SUCCESS] Completed generate_user_pool_csv.sh"
