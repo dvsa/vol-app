@@ -40,6 +40,20 @@ usage() {
     exit 2
 }
 
+assume_role() {
+    echo "Assuming AWS role..."
+    ROLE_RESPONSE=$(aws sts assume-role \
+        --role-arn "$ASSUME_ROLE" \
+        --role-session-name jenkins \
+        --external-id "$PASSPHRASE" \
+        --duration-seconds 3600 \
+        --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' \
+        --output text
+    )
+    read -r AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN <<< "$ROLE_RESPONSE"
+    export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
+}
+
 
 ENV="$1"
 REGION="$2"
@@ -72,17 +86,7 @@ trap 'rm -f "$USER_FILE"' EXIT
 echo "Downloading user file from S3..."
 aws s3 cp "s3://${S3BUCKET}/${S3BUCKETPATH}/users-${ENVIRONMENT}.txt" "$USER_FILE" --region "$REGION"
 
-echo "Assuming AWS role..."
-ROLE_RESPONSE=$(aws sts assume-role \
-    --role-arn "$ASSUME_ROLE" \
-    --role-session-name jenkins \
-    --external-id "$PASSPHRASE" \
-    --duration-seconds 3600 \
-    --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' \
-    --output text
-)
-read -r AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN <<< "$ROLE_RESPONSE"
-export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
+assume_role
 
 echo "Determining Cognito User Pool ID..."
 USER_POOL_ID=$(aws cognito-idp list-user-pools \
@@ -98,6 +102,7 @@ if [[ -z "$USER_POOL_ID" ]]; then
 fi
 
 if [[ "$DELETE_USERS" == "true" ]]; then
+    assume_role
     echo "Deleting users from user pool..."
     if ! /usr/local/bin/delete_users_from_user_pool.py "$USER_POOL_ID" "$REGION"; then
         send_slack_notification "$SLACK_CHAN" "$SLACK_FAIL" "${ENVIRONMENT} Failed to delete users."
@@ -106,6 +111,7 @@ if [[ "$DELETE_USERS" == "true" ]]; then
     echo "Users deleted."
 fi
 
+assume_role
 echo "Loading users into the user pool..."
 if ! /usr/local/bin/load_user_pool.py "$USER_POOL_ID" "$REGION" "$ENVIRONMENT" "DEV/APP/CI-COG-KNOWN-PASSWORD" "$DEFAULT_EMAIL"; then
     send_slack_notification "$SLACK_CHAN" "$SLACK_FAIL" "${ENVIRONMENT} Failed to load users."
