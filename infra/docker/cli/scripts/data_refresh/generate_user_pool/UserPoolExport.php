@@ -142,19 +142,12 @@ class UserPoolExport
         $query->execute([':usersPerRole' => $usersPerRole]);
         $users = $query->fetchAll(PDO::FETCH_ASSOC);
 
-        // Update user table with concatenated login_id and role for easier user privilege identification
+        // Build concatenated login_id for CSV output only; do not modify the database.
         foreach($users as $key => $user) {
             if($user['last_modified_on'] != '2022-01-01 10:20:30.000000') {
-                $updQuery = $this->PDOConnection->prepare(
-                    "UPDATE `user` SET `login_id` = :concatLoginId, `last_modified_on` = '2022-01-01 10:20:30.000000'
-                WHERE `login_id` = :currentLoginId");
-                //concatenate but respect field length incase of unexpected length login ids.
+                // concatenate but respect field length in case of unexpected length login ids.
                 $concatLoginId = substr($user['login_id'].'.'.$user['role'],0,40);
-                $updQuery->execute([
-                    ':concatLoginId' => $concatLoginId,
-                    ':currentLoginId' => $user['login_id']
-                ]);
-                // update the array with login_id changes for csv output.
+                // update the array with login_id changes for csv output only.
                 $users[$key]['login_id'] = $concatLoginId;
             }
             unset($users[$key]['role']);
