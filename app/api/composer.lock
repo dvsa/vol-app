@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "4da1eaedb58532ce633c25a1c6a9776d",
+  "content-hash": "a45e52ad767baced02f2088e10a70c33",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -5706,16 +5706,16 @@
     },
     {
       "name": "olcs/olcs-logging",
-      "version": "v9.0.0",
+      "version": "v9.0.1",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-logging.git",
-        "reference": "53fe948782e5b5902a1555b6d8b6c921bef7b2a6"
+        "reference": "787c9e9d1bcfb40364962f5be743c9b3c97316a8"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-logging/zipball/53fe948782e5b5902a1555b6d8b6c921bef7b2a6",
-        "reference": "53fe948782e5b5902a1555b6d8b6c921bef7b2a6",
+        "url": "https://api.github.com/repos/dvsa/olcs-logging/zipball/787c9e9d1bcfb40364962f5be743c9b3c97316a8",
+        "reference": "787c9e9d1bcfb40364962f5be743c9b3c97316a8",
         "shasum": ""
       },
       "require": {
@@ -5752,9 +5752,9 @@
       "license": ["MIT"],
       "description": "Logging Module for OLCS",
       "support": {
-        "source": "https://github.com/dvsa/olcs-logging/tree/v9.0.0"
+        "source": "https://github.com/dvsa/olcs-logging/tree/v9.0.1"
       },
-      "time": "2026-05-05T14:50:55+00:00"
+      "time": "2026-05-20T13:28:22+00:00"
     },
     {
       "name": "olcs/olcs-transfer",
@@ -14504,5 +14504,5 @@
   "platform-overrides": {
     "ext-redis": "6.2.6"
   },
-  "plugin-api-version": "2.6.0"
+  "plugin-api-version": "2.9.0"
 }
