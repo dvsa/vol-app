@@ -38,7 +38,6 @@
     "twig/twig": "^3.21",
     "lm-commons/lmc-rbac-mvc": "^3.5",
     "laminas/laminas-mvc": "^3.8",
-    "laminas/laminas-mvc-i18n": "^1.9",
     "laminas/laminas-servicemanager": "^3.24",
     "laminas/laminas-http": "^2.22",
     "laminas/laminas-view": "^2.43",

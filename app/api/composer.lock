@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "7b168d17a042eb87d33617bf1093126a",
+  "content-hash": "4da1eaedb58532ce633c25a1c6a9776d",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -4360,78 +4360,6 @@
       "time": "2024-11-18T00:14:29+00:00"
     },
     {
-      "name": "laminas/laminas-mvc-i18n",
-      "version": "1.9.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/laminas/laminas-mvc-i18n.git",
-        "reference": "433e71e949438239cce814536711914a37544c42"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/laminas/laminas-mvc-i18n/zipball/433e71e949438239cce814536711914a37544c42",
-        "reference": "433e71e949438239cce814536711914a37544c42",
-        "shasum": ""
-      },
-      "require": {
-        "container-interop/container-interop": "^1.1",
-        "ext-intl": "*",
-        "laminas/laminas-i18n": "^2.13.0",
-        "laminas/laminas-router": "^3.5.0",
-        "laminas/laminas-servicemanager": "^3.15.1",
-        "laminas/laminas-stdlib": "^3.10.1",
-        "laminas/laminas-validator": "^2.19.0",
-        "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
-      },
-      "conflict": {
-        "laminas/laminas-mvc": "<3.0.0",
-        "phpspec/prophecy": "<1.8.0",
-        "zendframework/zend-mvc-i18n": "*"
-      },
-      "require-dev": {
-        "laminas/laminas-coding-standard": "~2.5.0",
-        "phpspec/prophecy-phpunit": "^2.0.2",
-        "phpunit/phpunit": "^9.6.13",
-        "psalm/plugin-phpunit": "^0.19.0",
-        "vimeo/psalm": "^5.15"
-      },
-      "suggest": {
-        "laminas/laminas-cache": "To enable caching of translation strings"
-      },
-      "type": "library",
-      "extra": {
-        "laminas": {
-          "component": "Laminas\\Mvc\\I18n",
-          "config-provider": "Laminas\\Mvc\\I18n\\ConfigProvider"
-        }
-      },
-      "autoload": {
-        "psr-4": {
-          "Laminas\\Mvc\\I18n\\": "src/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": ["BSD-3-Clause"],
-      "description": "Integration between laminas-mvc and laminas-i18n",
-      "homepage": "https://laminas.dev",
-      "keywords": ["i18n", "laminas", "mvc"],
-      "support": {
-        "chat": "https://laminas.dev/chat",
-        "docs": "https://docs.laminas.dev/laminas-mvc-i18n/",
-        "forum": "https://discourse.laminas.dev",
-        "issues": "https://github.com/laminas/laminas-mvc-i18n/issues",
-        "rss": "https://github.com/laminas/laminas-mvc-i18n/releases.atom",
-        "source": "https://github.com/laminas/laminas-mvc-i18n"
-      },
-      "funding": [
-        {
-          "url": "https://funding.communitybridge.org/projects/laminas-project",
-          "type": "community_bridge"
-        }
-      ],
-      "time": "2024-10-11T09:36:44+00:00"
-    },
-    {
       "name": "laminas/laminas-paginator",
       "version": "2.22.0",
       "source": {
@@ -5889,25 +5817,24 @@
     },
     {
       "name": "olcs/olcs-utils",
-      "version": "v7.1.0",
+      "version": "v7.2.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-utils.git",
-        "reference": "fd13f22e69c641472d0d027f6aa5c40282e24f60"
+        "reference": "3841ba670dacf036a869504dcab0fb25b4917e2a"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-utils/zipball/fd13f22e69c641472d0d027f6aa5c40282e24f60",
-        "reference": "fd13f22e69c641472d0d027f6aa5c40282e24f60",
+        "url": "https://api.github.com/repos/dvsa/olcs-utils/zipball/3841ba670dacf036a869504dcab0fb25b4917e2a",
+        "reference": "3841ba670dacf036a869504dcab0fb25b4917e2a",
         "shasum": ""
       },
       "require": {
         "laminas/laminas-eventmanager": "^3.14",
         "laminas/laminas-http": "^2.22",
         "laminas/laminas-i18n": "^2.30",
-        "laminas/laminas-mvc": "^3.8",
-        "laminas/laminas-mvc-i18n": "^1.9",
         "laminas/laminas-servicemanager": "^3.23",
+        "laminas/laminas-validator": "^2.64",
         "laminas/laminas-view": "^2.41",
         "php": "~8.2.0 || ~8.3.0",
         "psr/container": "^1.1|^2.0"
@@ -5933,9 +5860,9 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "OLCS Utils",
       "support": {
-        "source": "https://github.com/dvsa/olcs-utils/tree/v7.1.0"
+        "source": "https://github.com/dvsa/olcs-utils/tree/v7.2.0"
       },
-      "time": "2026-05-05T21:46:20+00:00"
+      "time": "2026-05-20T19:24:07+00:00"
     },
     {
       "name": "olcs/olcs-xmltools",
@@ -7897,16 +7824,16 @@
     },
     {
       "name": "symfony/cache",
-      "version": "v5.4.46",
+      "version": "v5.4.52",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/cache.git",
-        "reference": "0fe08ee32cec2748fbfea10c52d3ee02049e0f6b"
+        "reference": "03b191dda148c490b5b3929eaac827ee64f1d421"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/symfony/cache/zipball/0fe08ee32cec2748fbfea10c52d3ee02049e0f6b",
-        "reference": "0fe08ee32cec2748fbfea10c52d3ee02049e0f6b",
+        "url": "https://api.github.com/repos/symfony/cache/zipball/03b191dda148c490b5b3929eaac827ee64f1d421",
+        "reference": "03b191dda148c490b5b3929eaac827ee64f1d421",
         "shasum": ""
       },
       "require": {
@@ -7967,7 +7894,7 @@
       "homepage": "https://symfony.com",
       "keywords": ["caching", "psr6"],
       "support": {
-        "source": "https://github.com/symfony/cache/tree/v5.4.46"
+        "source": "https://github.com/symfony/cache/tree/v5.4.52"
       },
       "funding": [
         {
@@ -7979,11 +7906,15 @@
           "type": "github"
         },
         {
+          "url": "https://github.com/nicolas-grekas",
+          "type": "github"
+        },
+        {
           "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
           "type": "tidelift"
         }
       ],
-      "time": "2024-11-04T11:43:55+00:00"
+      "time": "2026-05-15T06:40:15+00:00"
     },
     {
       "name": "symfony/cache-contracts",
@@ -8651,16 +8582,16 @@
     },
     {
       "name": "symfony/mailer",
-      "version": "v7.4.4",
+      "version": "v7.4.12",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/mailer.git",
-        "reference": "7b750074c40c694ceb34cb926d6dffee231c5cd6"
+        "reference": "5cefb712a25f320579615ba9e1942abaeade7dff"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/symfony/mailer/zipball/7b750074c40c694ceb34cb926d6dffee231c5cd6",
-        "reference": "7b750074c40c694ceb34cb926d6dffee231c5cd6",
+        "url": "https://api.github.com/repos/symfony/mailer/zipball/5cefb712a25f320579615ba9e1942abaeade7dff",
+        "reference": "5cefb712a25f320579615ba9e1942abaeade7dff",
         "shasum": ""
       },
       "require": {
@@ -8707,7 +8638,7 @@
       "description": "Helps sending emails",
       "homepage": "https://symfony.com",
       "support": {
-        "source": "https://github.com/symfony/mailer/tree/v7.4.4"
+        "source": "https://github.com/symfony/mailer/tree/v7.4.12"
       },
       "funding": [
         {
@@ -8727,20 +8658,20 @@
           "type": "tidelift"
         }
       ],
-      "time": "2026-01-08T08:25:11+00:00"
+      "time": "2026-05-20T07:20:23+00:00"
     },
     {
       "name": "symfony/mime",
-      "version": "v7.4.5",
+      "version": "v7.4.12",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/mime.git",
-        "reference": "b18c7e6e9eee1e19958138df10412f3c4c316148"
+        "reference": "b198dd66c211c97119bcaaff7c13431dbbb5e470"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/symfony/mime/zipball/b18c7e6e9eee1e19958138df10412f3c4c316148",
-        "reference": "b18c7e6e9eee1e19958138df10412f3c4c316148",
+        "url": "https://api.github.com/repos/symfony/mime/zipball/b198dd66c211c97119bcaaff7c13431dbbb5e470",
+        "reference": "b198dd66c211c97119bcaaff7c13431dbbb5e470",
         "shasum": ""
       },
       "require": {
@@ -8751,7 +8682,7 @@
       },
       "conflict": {
         "egulias/email-validator": "~3.0.0",
-        "phpdocumentor/reflection-docblock": "<5.2|>=6",
+        "phpdocumentor/reflection-docblock": "<5.2|>=7",
         "phpdocumentor/type-resolver": "<1.5.1",
         "symfony/mailer": "<6.4",
         "symfony/serializer": "<6.4.3|>7.0,<7.0.3"
@@ -8759,7 +8690,7 @@
       "require-dev": {
         "egulias/email-validator": "^2.1.10|^3.1|^4",
         "league/html-to-markdown": "^5.0",
-        "phpdocumentor/reflection-docblock": "^5.2",
+        "phpdocumentor/reflection-docblock": "^5.2|^6.0",
         "symfony/dependency-injection": "^6.4|^7.0|^8.0",
         "symfony/process": "^6.4|^7.0|^8.0",
         "symfony/property-access": "^6.4|^7.0|^8.0",
@@ -8789,7 +8720,7 @@
       "homepage": "https://symfony.com",
       "keywords": ["mime", "mime-type"],
       "support": {
-        "source": "https://github.com/symfony/mime/tree/v7.4.5"
+        "source": "https://github.com/symfony/mime/tree/v7.4.12"
       },
       "funding": [
         {
@@ -8809,7 +8740,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2026-01-27T08:59:58+00:00"
+      "time": "2026-05-20T07:20:23+00:00"
     },
     {
       "name": "symfony/options-resolver",
@@ -10064,16 +9995,16 @@
     },
     {
       "name": "twig/twig",
-      "version": "v3.23.0",
+      "version": "v3.26.0",
       "source": {
         "type": "git",
         "url": "https://github.com/twigphp/Twig.git",
-        "reference": "a64dc5d2cc7d6cafb9347f6cd802d0d06d0351c9"
+        "reference": "1fcae487b180d78e6351f4e0afa91f9eab96a2bc"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/twigphp/Twig/zipball/a64dc5d2cc7d6cafb9347f6cd802d0d06d0351c9",
-        "reference": "a64dc5d2cc7d6cafb9347f6cd802d0d06d0351c9",
+        "url": "https://api.github.com/repos/twigphp/Twig/zipball/1fcae487b180d78e6351f4e0afa91f9eab96a2bc",
+        "reference": "1fcae487b180d78e6351f4e0afa91f9eab96a2bc",
         "shasum": ""
       },
       "require": {
@@ -10083,7 +10014,8 @@
         "symfony/polyfill-mbstring": "^1.3"
       },
       "require-dev": {
-        "phpstan/phpstan": "^2.0",
+        "php-cs-fixer/shim": "^3.0@stable",
+        "phpstan/phpstan": "^2.0@stable",
         "psr/container": "^1.0|^2.0",
         "symfony/phpunit-bridge": "^5.4.9|^6.4|^7.0"
       },
@@ -10123,7 +10055,7 @@
       "keywords": ["templating"],
       "support": {
         "issues": "https://github.com/twigphp/Twig/issues",
-        "source": "https://github.com/twigphp/Twig/tree/v3.23.0"
+        "source": "https://github.com/twigphp/Twig/tree/v3.26.0"
       },
       "funding": [
         {
@@ -10135,7 +10067,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2026-01-23T21:00:41+00:00"
+      "time": "2026-05-20T07:31:59+00:00"
     },
     {
       "name": "webimpress/safe-writer",
