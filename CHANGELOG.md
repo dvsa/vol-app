@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.2.1](https://github.com/dvsa/olcs-utils/compare/v7.2.0...v7.2.1) (2026-05-21)
+
+
+### Bug Fixes
+
+* passing integers into the translator was being caught by the string type hint ([#35](https://github.com/dvsa/olcs-utils/issues/35)) ([7119918](https://github.com/dvsa/olcs-utils/commit/71199182c9abc62bd82cacb5b93069c7ed627b5a))
+
 ## [7.2.0](https://github.com/dvsa/olcs-utils/compare/v7.1.0...v7.2.0) (2026-05-20)
 
 
