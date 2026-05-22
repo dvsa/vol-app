@@ -1,47 +1,91 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# This script obtains the latest copy of the anonymised production database from an S3 bucket and imports it into the APP anondb instance
+set -euo pipefail
 
+# ===== CONFIG =====
+: "${PROXY:?PROXY not set}"
+: "${DOMAIN:?DOMAIN not set}"
+: "${PRODTODEV_ASSUME_ROLE_ID:?PRODTODEV_ASSUME_ROLE_ID not set}"
+: "${DB_PASSWORD:?DB_PASSWORD not set}"
 
-export http_proxy=http://${PROXY}:3128
-export https_proxy=http://${PROXY}:3128
-export NO_PROXY=169.254.169.254
-nonprod_assume_external_id=${PRODTODEV_ASSUME_ROLE_ID}
-domain=${DOMAIN}
+S3_BUCKET="devapp-olcs-pri-olcs-deploy-s3"
+S3_PREFIX="anondata/olcs-db-anon-prod"
+DUMP_DIR="/mnt/data/anondump"
+DUMP_FILE="olcs-db-anon-latest-import.sql.gz"
+RDS_HOST="olcsanondb-rds.${DOMAIN}"
+DB_USER="master"
 
-token=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
-ec2_avail_zone=$(curl -s -H "X-aws-ec2-metadata-token: $token" http://169.254.169.254/latest/meta-data/placement/availability-zone)
-ec2_region="`echo \"$ec2_avail_zone\" | sed -e 's:\([0-9][0-9]*\)[a-z]*\$:\\1:'`"
+# ===== PROXY =====
+export http_proxy="http://${PROXY}:3128"
+export https_proxy="http://${PROXY}:3128"
+export NO_PROXY="169.254.169.254"
 
-function log_err {
-  t_stamp=$(date +"%Y-%m-%d %H:%M:%S")
-  echo "${t_stamp} $@" 1>&2;
+# ===== LOGGING =====
+log_msg() {
+  echo "$(date +'%Y-%m-%d %H:%M:%S') $*"
 }
 
-function log_msg {
-  t_stamp=$(date +"%Y-%m-%d %H:%M:%S")
-  echo "${t_stamp} $1"
+log_err() {
+  echo "$(date +'%Y-%m-%d %H:%M:%S') ERROR: $*" >&2
 }
 
-log_msg "Downloading latest version of anondb from S3"
-source ./s3assume.sh "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole" "${nonprod_assume_external_id}"
+# ===== AWS REGION DETECTION =====
+TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
+  -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
 
-anondb_dump_dir="/mnt/data/anondump"
-anondb_archive_latest=`/usr/local/bin/aws s3 ls s3://devapp-olcs-pri-olcs-deploy-s3/anondata/olcs-db-anon-prod --recursive | sort | tail -n 1 | awk '{print $4}'`
-anondb_archive_filename="olcs-db-anon-latest-import.sql.gz"
+AZ=$(curl -s -H "X-aws-ec2-metadata-token: ${TOKEN}" \
+  http://169.254.169.254/latest/meta-data/placement/availability-zone)
 
-/usr/local/bin/aws s3 cp s3://devapp-olcs-pri-olcs-deploy-s3/$anondb_archive_latest $anondb_dump_dir/$anondb_archive_filename 1>/dev/null
-if [ $? -ne 0 ]; then
- log_err "Unable to download latest anondb dump"
- exit 1
+REGION="eu-west-1"
+
+export AWS_DEFAULT_REGION="${REGION}"
+
+# ===== ASSUME ROLE =====
+log_msg "Assuming cross-account role"
+source ./s3assume.sh \
+  "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole" \
+  "${PRODTODEV_ASSUME_ROLE_ID}"
+
+# ===== DOWNLOAD LATEST DUMP =====
+log_msg "Fetching latest anonymised DB dump from S3"
+
+mkdir -p "${DUMP_DIR}"
+
+LATEST_KEY=$(
+  /usr/local/bin/aws s3 ls "s3://${S3_BUCKET}/${S3_PREFIX}/" --recursive \
+    | sort \
+    | tail -n 1 \
+    | awk '{print $4}'
+)
+
+if [[ -z "${LATEST_KEY}" ]]; then
+  log_err "No dump file found in S3"
+  exit 1
 fi
 
-log_msg "Importing ${anondb_archive_filename} into olcsanondb-rds.olcs.${domain}"
-zcat $anondb_dump_dir/$anondb_archive_filename | sed 's/`OLCS_RDS_OLCSDB`/`OLCS_RDS_OLCSANONDB`/g' | mysql --defaults-file=/usr/local/conf/anonrds.conf -holcsanondb-rds.${domain} -umaster
-if [ $? -ne 0 ]; then
- log_err "Restore of latest anondb dump to anondb failed"
- exit 1
-fi
+DEST_FILE="${DUMP_DIR}/${DUMP_FILE}"
 
-rm -f $anondb_dump_dir/$anondb_archive_filename
-log_msg "Import of database complete"
+/usr/local/bin/aws s3 cp \
+  "s3://${S3_BUCKET}/${LATEST_KEY}" \
+  "${DEST_FILE}" \
+  >/dev/null
+
+log_msg "Downloaded: ${LATEST_KEY}"
+
+# ===== IMPORT DATABASE =====
+log_msg "Importing dump into ${RDS_HOST}"
+
+export MYSQL_PWD="${DB_PASSWORD}"
+
+zcat "${DEST_FILE}" \
+  | sed 's/`OLCS_RDS_OLCSDB`/`OLCS_RDS_OLCSANONDB`/g' \
+  | mysql \
+      -h "${RDS_HOST}" \
+      -u "${DB_USER}"
+
+log_msg "Database import completed"
+
+# ===== CLEANUP =====
+rm -f "${DEST_FILE}"
+
+log_msg "Cleanup complete"
