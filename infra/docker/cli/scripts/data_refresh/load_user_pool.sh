@@ -102,7 +102,7 @@ if [[ -z "$USER_POOL_ID" ]]; then
 fi
 
 if [[ "$DELETE_USERS" == "true" ]]; then
-    assume_role
+    
     echo "Deleting users from user pool..."
     if ! /usr/local/bin/delete_users_from_user_pool.py "$USER_POOL_ID" "$REGION"; then
         send_slack_notification "$SLACK_CHAN" "$SLACK_FAIL" "${ENVIRONMENT} Failed to delete users."
