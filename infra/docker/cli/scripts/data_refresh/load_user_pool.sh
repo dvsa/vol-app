@@ -46,7 +46,7 @@ assume_role() {
         --role-arn "$ASSUME_ROLE" \
         --role-session-name jenkins \
         --external-id "$PASSPHRASE" \
-        --duration-seconds 3600 \
+        --duration-seconds 14400 \
         --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' \
         --output text
     )
