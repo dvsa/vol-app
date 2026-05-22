@@ -445,7 +445,6 @@ return [
             \Common\Controller\Lva\Adapters\VariationPeopleAdapter::class => \Common\Controller\Lva\Factories\Adapter\VariationPeopleAdapterFactory::class,
             \Common\Controller\Lva\Adapters\VariationTransportManagerAdapter::class => \Common\Controller\Lva\Factories\Adapter\VariationTransportManagerAdapterFactory::class,
             LicenceConditionsUndertakingsReviewService::class => Common\Service\Review\LicenceConditionsUndertakingsReviewServiceFactory::class,
-            'MvcTranslator' => \Laminas\I18n\Translator\TranslatorServiceFactory::class,
             FormatterPluginManager::class => static function ($container): \Common\Service\Table\Formatter\FormatterPluginManager {
                 $config = $container->get('config');
                 $formatterConfig = $config['formatter_plugins'] ?? [];
