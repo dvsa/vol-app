@@ -12,6 +12,7 @@ return [
                 \Dvsa\Olcs\Utils\Translation\MissingTranslationProcessorFactory::class,
             \Dvsa\Olcs\Utils\Client\HttpExternalClientFactory::class =>
                 \Dvsa\Olcs\Utils\Client\HttpExternalClientFactory::class,
+            'MvcTranslator' => \Laminas\I18n\Translator\TranslatorServiceFactory::class,
         ],
         'delegators' => [
             'MvcTranslator' => [
