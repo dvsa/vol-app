@@ -403,6 +403,8 @@ jobs:
             repo: vol-app
           - project: liquibase
             repo: vol-app
+          - project: gotenberg
+            repo: vol-app
           - project: vft
             repo: vol-qa
     steps:
@@ -429,8 +431,8 @@ jobs:
             echo "tag=${{ needs.get-version.outputs.selfserve }}" >> $GITHUB_OUTPUT
           elif [ "${{ matrix.project }}" == "internal" ]; then
             echo "tag=${{ needs.get-version.outputs.internal }}" >> $GITHUB_OUTPUT
-          elif [ "${{ matrix.project }}" == "liquibase" ]; then
-            # For liquibase, use the latest tag
+          elif [ "${{ matrix.project }}" == "liquibase" ] || [ "${{ matrix.project }}" == "gotenberg" ]; then
+            # For liquibase and gotenberg, use the latest tag
             echo "tag=latest" >> $GITHUB_OUTPUT
           fi
 
