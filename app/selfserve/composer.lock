@@ -4114,16 +4114,16 @@
     },
     {
       "name": "olcs/olcs-common",
-      "version": "v9.19.0",
+      "version": "v9.20.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-common.git",
-        "reference": "e77af082d0dd562f1e5bc884fbc16fbc98d44663"
+        "reference": "86a3259dab2d90365440a74860f2f8e9ecc105ff"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/e77af082d0dd562f1e5bc884fbc16fbc98d44663",
-        "reference": "e77af082d0dd562f1e5bc884fbc16fbc98d44663",
+        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/86a3259dab2d90365440a74860f2f8e9ecc105ff",
+        "reference": "86a3259dab2d90365440a74860f2f8e9ecc105ff",
         "shasum": ""
       },
       "require": {
@@ -4180,9 +4180,9 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "Common library for the OLCS Project",
       "support": {
-        "source": "https://github.com/dvsa/olcs-common/tree/v9.19.0"
+        "source": "https://github.com/dvsa/olcs-common/tree/v9.20.0"
       },
-      "time": "2026-05-20T19:24:26+00:00"
+      "time": "2026-05-22T09:58:45+00:00"
     },
     {
       "name": "olcs/olcs-logging",
@@ -4297,16 +4297,16 @@
     },
     {
       "name": "olcs/olcs-utils",
-      "version": "v7.2.1",
+      "version": "v7.3.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-utils.git",
-        "reference": "3ad717f53106d9876ff065bb393dd8fa94beb382"
+        "reference": "bfb8fa1ea595b8336516737166c22287bb965c97"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-utils/zipball/3ad717f53106d9876ff065bb393dd8fa94beb382",
-        "reference": "3ad717f53106d9876ff065bb393dd8fa94beb382",
+        "url": "https://api.github.com/repos/dvsa/olcs-utils/zipball/bfb8fa1ea595b8336516737166c22287bb965c97",
+        "reference": "bfb8fa1ea595b8336516737166c22287bb965c97",
         "shasum": ""
       },
       "require": {
@@ -4340,9 +4340,9 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "OLCS Utils",
       "support": {
-        "source": "https://github.com/dvsa/olcs-utils/tree/v7.2.1"
+        "source": "https://github.com/dvsa/olcs-utils/tree/v7.3.0"
       },
-      "time": "2026-05-21T10:20:04+00:00"
+      "time": "2026-05-22T09:58:52+00:00"
     },
     {
       "name": "paragonie/constant_time_encoding",
