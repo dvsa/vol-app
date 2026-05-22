@@ -36,10 +36,13 @@ cd "$scriptdir" || { echo "Script directory not found: $scriptdir"; exit 1; }
 set -euo pipefail
 
 php_bin="$(command -v php)"
+USER_POOL_EX_HOST="${READDB_HOST}" \
+USER_POOL_EX_USER="master" \
+USER_POOL_EX_DATABASE="${READDB_NAME}" \
+USER_POOL_EX_PASS="${M_DB_PASSWORD}" \
 "$php_bin" /mnt/data/scripts/data_refresh/generate_user_pool/user-pool-export.php \
   --mode=nonprod-users \
   --perrole="2" \
-  --mycnf=/home/jenkins/.my.cnf \
   --output="$output_csv"
 
 test -f "$output_csv"
@@ -56,12 +59,16 @@ fi
 slack_message="${platformEnv} User Pool CSV generated"
 slack_color="$slackCompleted"
 
-if [[ -n "$SLACK_WEBHOOK_URL" ]]; then
+slack_message="${platformEnv} User Pool CSV generated"
+slack_color="$slackCompleted"
+
+if [[ -n "${SLACK_WEBHOOK_URL:-}" ]]; then
   curl -X POST -H 'Content-type: application/json' \
     --data "{\"channel\": \"$slackChan\", \"attachments\": [{\"color\": \"$slack_color\", \"text\": \"$slack_message\"}]}" \
-    "$SLACK_WEBHOOK_URL"
+    "$SLACK_WEBHOOK_URL" \
+    || echo "[WARNING] Failed to send Slack notification"
 else
-  echo "[INFO] Slack message: $slack_message"
+  echo "[INFO] SLACK_WEBHOOK_URL not set; skipping Slack notification. Message: $slack_message"
 fi
 
 echo "[SUCCESS] Completed generate_user_pool_csv.sh"

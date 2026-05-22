@@ -26,7 +26,7 @@
     "lm-commons/lmc-rbac-mvc": "^3.5",
     "olcs/olcs-auth": "^9.0",
     "olcs/olcs-common": "^9.17",
-    "olcs/olcs-logging": "^9.0",
+    "olcs/olcs-logging": "^9.0.1",
     "olcs/olcs-transfer": "^8.6.1",
     "olcs/olcs-utils": "^7.1",
     "psr/container": "^1.1|^2",

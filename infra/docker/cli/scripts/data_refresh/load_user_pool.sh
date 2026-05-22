@@ -65,17 +65,19 @@ export HTTPS_PROXY="http://${PROXYHOST}:${PROXYPORT}"
 export NO_PROXY="$NOPROXY"
 export AWS_PAGER=""
 
-USER_FILE="users-${ENVIRONMENT}.txt"
+
+USER_FILE="$(mktemp "/tmp/users-${ENVIRONMENT}.txt.XXXXXX")"
+trap 'rm -f "$USER_FILE"' EXIT
 
 echo "Downloading user file from S3..."
-aws s3 cp "s3://${S3BUCKET}/${S3BUCKETPATH}/${USER_FILE}" "$USER_FILE" --region "$REGION"
+aws s3 cp "s3://${S3BUCKET}/${S3BUCKETPATH}/users-${ENVIRONMENT}.txt" "$USER_FILE" --region "$REGION"
 
 echo "Assuming AWS role..."
 ROLE_RESPONSE=$(aws sts assume-role \
     --role-arn "$ASSUME_ROLE" \
     --role-session-name jenkins \
     --external-id "$PASSPHRASE" \
-    --duration-seconds 900 \
+    --duration-seconds 3600 \
     --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' \
     --output text
 )
@@ -112,5 +114,3 @@ fi
 
 send_slack_notification "$SLACK_CHAN" "$SLACK_COMPLETED" "${ENVIRONMENT} User Pool loaded back to default status."
 echo "Workflow complete."
-
-rm -f "$USER_FILE"
