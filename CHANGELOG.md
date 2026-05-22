@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.3.0](https://github.com/dvsa/olcs-utils/compare/v7.2.1...v7.3.0) (2026-05-22)
+
+
+### Features
+
+* moved MvcTranslator registration to olcs-utils, which is loaded in api, internal and selfserve VOL-7235 ([#37](https://github.com/dvsa/olcs-utils/issues/37)) ([32a8771](https://github.com/dvsa/olcs-utils/commit/32a8771dc37c74242dfc413b8a5acebe702696f6))
+
 ## [7.2.1](https://github.com/dvsa/olcs-utils/compare/v7.2.0...v7.2.1) (2026-05-21)
 
 
