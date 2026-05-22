@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.20.0](https://github.com/dvsa/olcs-common/compare/v9.19.0...v9.20.0) (2026-05-22)
+
+
+### Features
+
+* MvcTranslator registration is moved to olcs-utils, which is shared between api, internal, selfserve VOL-7235 ([#309](https://github.com/dvsa/olcs-common/issues/309)) ([a58149d](https://github.com/dvsa/olcs-common/commit/a58149daa6cf3e174810032e8e21e34fc240b373))
+
 ## [9.19.0](https://github.com/dvsa/olcs-common/compare/v9.18.0...v9.19.0) (2026-05-20)
 
 
