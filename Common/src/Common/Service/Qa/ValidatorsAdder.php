@@ -21,9 +21,7 @@ class ValidatorsAdder
             $validatorChain = $input->getValidatorChain();
 
             foreach ($validators as $validator) {
-                // tactical fix to allow entry of lower case registration number in certificate of
-                // roadworthiness journey. To be fixed correctly when we have more time
-                if ($validator['rule'] == \Dvsa\Olcs\Transfer\Validators\Vrm::class) {
+                if (ltrim($validator['rule'], '\\') == \Dvsa\Olcs\Transfer\Validators\Vrm::class) {
                     $filterChain = $input->getFilterChain();
                     $filterChain->attachByName(VrmFilter::class);
                 }
