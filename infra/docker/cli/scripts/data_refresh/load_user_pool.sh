@@ -113,7 +113,7 @@ if [[ "$DELETE_USERS" == "true" ]]; then
             [[ -e "$batch_file" ]] || continue
             BATCH_COUNT=$(grep -cve '^\s*$' "$batch_file" || true)
             echo "Deleting batch from $batch_file ($BATCH_COUNT users)..."
-            assume_role
+            
             if ! /usr/local/bin/delete_users_from_user_pool.py "$USER_POOL_ID" "$REGION" --from-file "$batch_file"; then
                 send_slack_notification "$SLACK_CHAN" "$SLACK_FAIL" "${ENVIRONMENT} Failed to delete users."
                 exit 1
