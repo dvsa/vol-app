@@ -3,11 +3,8 @@
 import sys
 import boto3
 
-# ${userPoolId}" "${params.Region}"
 userPoolId = sys.argv[1]
 region = sys.argv[2]
-
-CLIENT_REFRESH_EVERY = 50
 
 
 def get_user_pool_users(userPoolId, region):
@@ -36,21 +33,49 @@ def get_user_pool_users(userPoolId, region):
     return justUserNames
 
 
-def delete_users_from_pool(userPoolUsers, userPoolId, region, refresh_every=CLIENT_REFRESH_EVERY):
-    client = None
+def read_users_from_file(path):
+    users = []
+    with open(path, "r", encoding="utf-8") as handle:
+        for line in handle:
+            username = line.strip()
+            if username:
+                users.append(username)
+    return users
+
+
+def delete_users_from_pool(userPoolUsers, userPoolId, region):
+    client = boto3.client('cognito-idp', region_name=region)
     total = len(userPoolUsers)
 
     for index, user in enumerate(userPoolUsers, start=1):
-        if client is None or (index - 1) % refresh_every == 0:
-            print(f"Creating Cognito client at user {index}/{total}")
-            client = boto3.client('cognito-idp', region_name=region)
-
-        print(f"Deleting user {index}/{total}: {user}")
+        print(f"Deleting user {index}/{total}: {user}", file=sys.stderr)
         client.admin_delete_user(
             UserPoolId=userPoolId,
             Username=user
         )
 
 
-userPoolUsers = get_user_pool_users(userPoolId, region)
-delete_users_from_pool(userPoolUsers, userPoolId, region)
+def main():
+    if len(sys.argv) == 3:
+        userPoolUsers = get_user_pool_users(userPoolId, region)
+        delete_users_from_pool(userPoolUsers, userPoolId, region)
+        return
+
+    if len(sys.argv) == 4 and sys.argv[3] == "--list-only":
+        userPoolUsers = get_user_pool_users(userPoolId, region)
+        for user in userPoolUsers:
+            print(user)
+        return
+
+    if len(sys.argv) == 5 and sys.argv[3] == "--from-file":
+        userPoolUsers = read_users_from_file(sys.argv[4])
+        delete_users_from_pool(userPoolUsers, userPoolId, region)
+        return
+
+    raise SystemExit(
+        "Usage: delete_users_from_user_pool.py <userPoolId> <region> "
+        "[--list-only | --from-file <path>]"
+    )
+
+
+main()
