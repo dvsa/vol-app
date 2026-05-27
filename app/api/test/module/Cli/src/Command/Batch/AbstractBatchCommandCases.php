@@ -50,9 +50,7 @@ abstract class AbstractBatchCommandCases extends TestCase
         $this->sut = new $commandClass($this->mockCommandHandlerManager, $this->mockQueryHandlerManager);
         $this->sut->setName($this->getCommandName());
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         $application = new Application();
         $application->add($this->sut);

@@ -9,34 +9,25 @@ use Dvsa\Olcs\Cpms\Authenticate\CpmsIdentityProviderFactory;
 use Dvsa\Olcs\Cpms\Client\ClientOptions;
 use Dvsa\Olcs\Cpms\Client\HttpClient;
 use Dvsa\Olcs\Cpms\Client\HttpClientFactory;
-use Dvsa\Olcs\Cpms\Logger\LoggerFactory;
-use Psr\Log\LoggerInterface as Logger;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 
 class ApiServiceFactory
 {
-    public function __construct(private array $config, private readonly string $userId)
-    {
+    public function __construct(
+        private array $config,
+        private readonly string $userId,
+        private readonly LoggerInterface $logger,
+    ) {
     }
 
     public function createApiService(): ApiService
     {
-        /** @var ApiService $service */
-        $service = new ApiService(
+        return new ApiService(
             $this->returnHttpClient(),
             $this->returnIdentity(),
-            $this->returnLogger()
+            $this->logger,
         );
-
-        return $service;
-    }
-
-    private function returnLogger(): Logger
-    {
-        $logPath = $this->config['log']['Logger']['writers']['full']['options']['stream'];
-        $zendLogLevel = $this->config['log']['Logger']['writers']['full']['options']['filters']['priority']['options']['priority'];
-        $loggerFactory = new LoggerFactory($logPath, $zendLogLevel);
-        return $loggerFactory->createLogger();
     }
 
     private function returnIdentity(): CpmsIdentityProvider
@@ -49,7 +40,6 @@ class ApiServiceFactory
             throw new RuntimeException('Missing required CPMS credentials');
         }
 
-        /** @var CpmsIdentityProvider $identity */
         $identityFactory = new CpmsIdentityProviderFactory(
             $this->config['cpms_credentials']['client_id'],
             $this->config['cpms_credentials']['client_secret'],
@@ -75,8 +65,7 @@ class ApiServiceFactory
             $options['headers']
         );
 
-        /** @var HttpClient $httpClient */
-        $httpClientFactory = new HttpClientFactory($clientOptions, $this->returnLogger());
+        $httpClientFactory = new HttpClientFactory($clientOptions, $this->logger);
         return $httpClientFactory->createHttpClient();
     }
 }

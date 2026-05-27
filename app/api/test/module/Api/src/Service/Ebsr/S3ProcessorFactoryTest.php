@@ -50,7 +50,7 @@ class S3ProcessorFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
         ];
 
         m::mock('overload:\Aws\Sts\StsClient')->shouldReceive('AssumeRole')->andReturn($stsAssumeRoleResult);
-        $mockLogger = m::mock(\Laminas\Log\Logger::class);
+        $mockLogger = m::mock(\Psr\Log\LoggerInterface::class);
         $mockSl->shouldReceive('get')->with('S3Client')->andReturn($mockClient);
         $mockSl->shouldReceive('get')->with('FileUploader')->andReturn($mockFileUploader);
         $mockSl->shouldReceive('get')->with('Config')->andReturn($mockConfig);

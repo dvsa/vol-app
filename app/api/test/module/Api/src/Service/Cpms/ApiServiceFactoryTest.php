@@ -10,6 +10,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Psr\Container\ContainerInterface;
+use Psr\Log\NullLogger;
 
 class ApiServiceFactoryTest extends TestCase
 {
@@ -71,6 +72,9 @@ class ApiServiceFactoryTest extends TestCase
                 ->shouldReceive('get')
                 ->with(AuthorizationService::class)
                 ->andReturn($mockAuth)
+                ->shouldReceive('get')
+                ->with('Logger')
+                ->andReturn(new NullLogger())
                 ->getMock();
 
             $sut = new ApiServiceFactory();

@@ -6,11 +6,11 @@ namespace Dvsa\OlcsTest\Cpms\Client;
 
 use Dvsa\Olcs\Cpms\Client\HttpClient;
 use GuzzleHttp\Client;
-use Monolog\Handler\TestHandler;
-use Monolog\Logger;
-use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use GuzzleHttp\Psr7\Response;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use Olcs\Logging\Test\RecordingLogger;
+use Psr\Log\LogLevel;
 
 class HttpClientTest extends TestCase
 {
@@ -24,15 +24,14 @@ class HttpClientTest extends TestCase
 
 
     /**
-     * @var Logger
+     * @var RecordingLogger
      */
     private $logger;
 
 
     public function setUp(): void
     {
-        $this->logger = new Logger('cpms_client_logger');
-        $this->logger->pushHandler(new TestHandler());
+        $this->logger = new RecordingLogger();
 
         $this->sut = new HttpClient(
             $this->setUpMockClient(),
@@ -138,11 +137,11 @@ class HttpClientTest extends TestCase
         $expectedDebugLogMessage = "Request URI: api.cpms.domain/post-endpoint\n Response code: $statusCode\n Response body: {\"access_token\":\"****\"}";
         $expectedInfoLogMessage = "Request URI: api.cpms.domain/post-endpoint\n Response code: $statusCode";
 
-        $this->assertEquals(true, $this->logger->getHandlers()[0]->hasDebugRecords());
-        $this->assertEquals(true, $this->logger->getHandlers()[0]->hasInfoRecords());
-        $this->assertEquals(false, $this->logger->getHandlers()[0]->hasErrorRecords());
-        $this->assertEquals($expectedInfoLogMessage, $this->logger->getHandlers()[0]->getRecords()[0]['message']);
-        $this->assertEquals($expectedDebugLogMessage, $this->logger->getHandlers()[0]->getRecords()[1]['message']);
+        $this->assertTrue($this->logger->hasRecordsAtLevel(LogLevel::DEBUG));
+        $this->assertTrue($this->logger->hasRecordsAtLevel(LogLevel::INFO));
+        $this->assertFalse($this->logger->hasRecordsAtLevel(LogLevel::ERROR));
+        $this->assertSame($expectedInfoLogMessage, $this->logger->records[0]['message']);
+        $this->assertSame($expectedDebugLogMessage, $this->logger->records[1]['message']);
     }
 
     public static function dpTestLogResponseOnSuccess(): array
@@ -182,8 +181,7 @@ class HttpClientTest extends TestCase
         $statusCode = $dpData['statusCode'];
         $encodedResponseBody = $dpData['responseBody'];
 
-        $this->logger = new Logger('cpms_client_logger');
-        $this->logger->pushHandler(new TestHandler());
+        $this->logger = new RecordingLogger();
 
         $mockClient = m::mock(Client::class);
 
@@ -207,10 +205,10 @@ class HttpClientTest extends TestCase
         $result = $this->sut->post('/post-fail-endpoint', $requestBody);
 
         $expectedErrorLogMessage = "Request URI: api.cpms.domain/post-fail-endpoint\n Response code: $statusCode";
-        $this->assertEquals($expectedErrorLogMessage, $this->logger->getHandlers()[0]->getRecords()[0]['message']);
-        $this->assertEquals(false, $this->logger->getHandlers()[0]->hasDebugRecords());
-        $this->assertEquals(false, $this->logger->getHandlers()[0]->hasInfoRecords());
-        $this->assertEquals(true, $this->logger->getHandlers()[0]->hasErrorRecords());
+        $this->assertSame($expectedErrorLogMessage, $this->logger->records[0]['message']);
+        $this->assertFalse($this->logger->hasRecordsAtLevel(LogLevel::DEBUG));
+        $this->assertFalse($this->logger->hasRecordsAtLevel(LogLevel::INFO));
+        $this->assertTrue($this->logger->hasRecordsAtLevel(LogLevel::ERROR));
         $this->assertEquals($dpData['expectedResponse'], $result);
     }
 

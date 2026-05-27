@@ -7,7 +7,7 @@ use Dvsa\Olcs\DvsaAddressService\Exception\ServiceException;
 use Dvsa\Olcs\DvsaAddressService\Exception\ValidationException;
 use Dvsa\Olcs\DvsaAddressService\Model\Address;
 use GuzzleHttp\Exception\GuzzleException;
-use Laminas\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 class DvsaAddressService implements AddressInterface
 {
@@ -34,7 +34,7 @@ class DvsaAddressService implements AddressInterface
             ]);
             return [];
         } catch (ServiceException | GuzzleException $e) {
-            $this->logger->err('DVSA Address Service: Error looking up address by query: ' . $e->getMessage(), [
+            $this->logger->error('DVSA Address Service: Error looking up address by query: ' . $e->getMessage(), [
                 'query' => $query,
                 'exception' => $e,
                 'trace' => $e->getTraceAsString()

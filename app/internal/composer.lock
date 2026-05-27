@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "ad679847ff5305c9ec6259b561bde40a",
+  "content-hash": "b85b852d10d7edccf6a64ab67966ab0a",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -2736,89 +2736,6 @@
       "time": "2025-12-30T11:30:39+00:00"
     },
     {
-      "name": "laminas/laminas-log",
-      "version": "2.17.1",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/laminas/laminas-log.git",
-        "reference": "abc93b0c597e5dd55a18d29f0ae3b18c2f0e3f0c"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/laminas/laminas-log/zipball/abc93b0c597e5dd55a18d29f0ae3b18c2f0e3f0c",
-        "reference": "abc93b0c597e5dd55a18d29f0ae3b18c2f0e3f0c",
-        "shasum": ""
-      },
-      "require": {
-        "laminas/laminas-servicemanager": "^3.21.0",
-        "laminas/laminas-stdlib": "^3.0",
-        "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
-        "psr/log": "^1.1.2"
-      },
-      "conflict": {
-        "zendframework/zend-log": "*"
-      },
-      "provide": {
-        "psr/log-implementation": "1.0.0"
-      },
-      "require-dev": {
-        "ext-dom": "*",
-        "ext-json": "*",
-        "ext-xml": "*",
-        "firephp/firephp-core": "^0.5.3",
-        "laminas/laminas-coding-standard": "~2.3.0",
-        "laminas/laminas-db": "^2.6",
-        "laminas/laminas-escaper": "^2.5",
-        "laminas/laminas-filter": "^2.5",
-        "laminas/laminas-mail": "^2.6.1",
-        "laminas/laminas-validator": "^2.10.1",
-        "mikey179/vfsstream": "^1.6.7",
-        "phpspec/prophecy-phpunit": "^2.0",
-        "phpunit/phpunit": "^9.5.10"
-      },
-      "suggest": {
-        "ext-mongo": "mongo extension to use Mongo writer",
-        "ext-mongodb": "mongodb extension to use MongoDB writer",
-        "laminas/laminas-db": "Laminas\\Db component to use the database log writer",
-        "laminas/laminas-escaper": "Laminas\\Escaper component, for use in the XML log formatter",
-        "laminas/laminas-mail": "Laminas\\Mail component to use the email log writer",
-        "laminas/laminas-validator": "Laminas\\Validator component to block invalid log messages"
-      },
-      "type": "library",
-      "extra": {
-        "laminas": {
-          "component": "Laminas\\Log",
-          "config-provider": "Laminas\\Log\\ConfigProvider"
-        }
-      },
-      "autoload": {
-        "psr-4": {
-          "Laminas\\Log\\": "src/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": ["BSD-3-Clause"],
-      "description": "Robust, composite logger with filtering, formatting, and PSR-3 support",
-      "homepage": "https://laminas.dev",
-      "keywords": ["laminas", "log", "logging"],
-      "support": {
-        "chat": "https://laminas.dev/chat",
-        "docs": "https://docs.laminas.dev/laminas-log/",
-        "forum": "https://discourse.laminas.dev",
-        "issues": "https://github.com/laminas/laminas-log/issues",
-        "rss": "https://github.com/laminas/laminas-log/releases.atom",
-        "source": "https://github.com/laminas/laminas-log"
-      },
-      "funding": [
-        {
-          "url": "https://funding.communitybridge.org/projects/laminas-project",
-          "type": "community_bridge"
-        }
-      ],
-      "abandoned": "monolog/monolog",
-      "time": "2024-12-05T15:59:56+00:00"
-    },
-    {
       "name": "laminas/laminas-modulemanager",
       "version": "2.19.0",
       "source": {
@@ -2963,78 +2880,6 @@
       "time": "2024-11-18T00:14:29+00:00"
     },
     {
-      "name": "laminas/laminas-mvc-i18n",
-      "version": "1.9.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/laminas/laminas-mvc-i18n.git",
-        "reference": "433e71e949438239cce814536711914a37544c42"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/laminas/laminas-mvc-i18n/zipball/433e71e949438239cce814536711914a37544c42",
-        "reference": "433e71e949438239cce814536711914a37544c42",
-        "shasum": ""
-      },
-      "require": {
-        "container-interop/container-interop": "^1.1",
-        "ext-intl": "*",
-        "laminas/laminas-i18n": "^2.13.0",
-        "laminas/laminas-router": "^3.5.0",
-        "laminas/laminas-servicemanager": "^3.15.1",
-        "laminas/laminas-stdlib": "^3.10.1",
-        "laminas/laminas-validator": "^2.19.0",
-        "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
-      },
-      "conflict": {
-        "laminas/laminas-mvc": "<3.0.0",
-        "phpspec/prophecy": "<1.8.0",
-        "zendframework/zend-mvc-i18n": "*"
-      },
-      "require-dev": {
-        "laminas/laminas-coding-standard": "~2.5.0",
-        "phpspec/prophecy-phpunit": "^2.0.2",
-        "phpunit/phpunit": "^9.6.13",
-        "psalm/plugin-phpunit": "^0.19.0",
-        "vimeo/psalm": "^5.15"
-      },
-      "suggest": {
-        "laminas/laminas-cache": "To enable caching of translation strings"
-      },
-      "type": "library",
-      "extra": {
-        "laminas": {
-          "component": "Laminas\\Mvc\\I18n",
-          "config-provider": "Laminas\\Mvc\\I18n\\ConfigProvider"
-        }
-      },
-      "autoload": {
-        "psr-4": {
-          "Laminas\\Mvc\\I18n\\": "src/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": ["BSD-3-Clause"],
-      "description": "Integration between laminas-mvc and laminas-i18n",
-      "homepage": "https://laminas.dev",
-      "keywords": ["i18n", "laminas", "mvc"],
-      "support": {
-        "chat": "https://laminas.dev/chat",
-        "docs": "https://docs.laminas.dev/laminas-mvc-i18n/",
-        "forum": "https://discourse.laminas.dev",
-        "issues": "https://github.com/laminas/laminas-mvc-i18n/issues",
-        "rss": "https://github.com/laminas/laminas-mvc-i18n/releases.atom",
-        "source": "https://github.com/laminas/laminas-mvc-i18n"
-      },
-      "funding": [
-        {
-          "url": "https://funding.communitybridge.org/projects/laminas-project",
-          "type": "community_bridge"
-        }
-      ],
-      "time": "2024-10-11T09:36:44+00:00"
-    },
-    {
       "name": "laminas/laminas-mvc-plugin-flashmessenger",
       "version": "1.11.0",
       "source": {
@@ -3097,67 +2942,6 @@
         }
       ],
       "time": "2024-11-29T08:28:58+00:00"
-    },
-    {
-      "name": "laminas/laminas-mvc-plugin-prg",
-      "version": "1.8.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/laminas/laminas-mvc-plugin-prg.git",
-        "reference": "b51e7ba892e52c6a80ce8c7dc7f8c429e3937516"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/laminas/laminas-mvc-plugin-prg/zipball/b51e7ba892e52c6a80ce8c7dc7f8c429e3937516",
-        "reference": "b51e7ba892e52c6a80ce8c7dc7f8c429e3937516",
-        "shasum": ""
-      },
-      "require": {
-        "laminas/laminas-mvc": "^3.3.3",
-        "laminas/laminas-session": "^2.12.1",
-        "laminas/laminas-stdlib": "^3.10.1",
-        "php": "~8.1.0 || ~8.2.0 || ~8.3.0"
-      },
-      "conflict": {
-        "zendframework/zend-mvc-plugin-prg": "*"
-      },
-      "require-dev": {
-        "laminas/laminas-coding-standard": "~2.5.0",
-        "phpunit/phpunit": "^10.4",
-        "psalm/plugin-phpunit": "^0.18.0",
-        "vimeo/psalm": "^5.16"
-      },
-      "type": "library",
-      "extra": {
-        "laminas": {
-          "component": "Laminas\\Mvc\\Plugin\\Prg"
-        }
-      },
-      "autoload": {
-        "psr-4": {
-          "Laminas\\Mvc\\Plugin\\Prg\\": "src/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": ["BSD-3-Clause"],
-      "description": "Post/Redirect/Get plugin for laminas-mvc controllers",
-      "homepage": "https://laminas.dev",
-      "keywords": ["laminas", "mvc"],
-      "support": {
-        "chat": "https://laminas.dev/chat",
-        "docs": "https://docs.laminas.dev/laminas-mvc-plugin-prg/",
-        "forum": "https://discourse.laminas.dev",
-        "issues": "https://github.com/laminas/laminas-mvc-plugin-prg/issues",
-        "rss": "https://github.com/laminas/laminas-mvc-plugin-prg/releases.atom",
-        "source": "https://github.com/laminas/laminas-mvc-plugin-prg"
-      },
-      "funding": [
-        {
-          "url": "https://funding.communitybridge.org/projects/laminas-project",
-          "type": "community_bridge"
-        }
-      ],
-      "time": "2023-12-01T06:06:12+00:00"
     },
     {
       "name": "laminas/laminas-navigation",
@@ -4120,6 +3904,103 @@
       "time": "2024-08-09T13:21:49+00:00"
     },
     {
+      "name": "monolog/monolog",
+      "version": "3.10.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/Seldaek/monolog.git",
+        "reference": "b321dd6749f0bf7189444158a3ce785cc16d69b0"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/Seldaek/monolog/zipball/b321dd6749f0bf7189444158a3ce785cc16d69b0",
+        "reference": "b321dd6749f0bf7189444158a3ce785cc16d69b0",
+        "shasum": ""
+      },
+      "require": {
+        "php": ">=8.1",
+        "psr/log": "^2.0 || ^3.0"
+      },
+      "provide": {
+        "psr/log-implementation": "3.0.0"
+      },
+      "require-dev": {
+        "aws/aws-sdk-php": "^3.0",
+        "doctrine/couchdb": "~1.0@dev",
+        "elasticsearch/elasticsearch": "^7 || ^8",
+        "ext-json": "*",
+        "graylog2/gelf-php": "^1.4.2 || ^2.0",
+        "guzzlehttp/guzzle": "^7.4.5",
+        "guzzlehttp/psr7": "^2.2",
+        "mongodb/mongodb": "^1.8 || ^2.0",
+        "php-amqplib/php-amqplib": "~2.4 || ^3",
+        "php-console/php-console": "^3.1.8",
+        "phpstan/phpstan": "^2",
+        "phpstan/phpstan-deprecation-rules": "^2",
+        "phpstan/phpstan-strict-rules": "^2",
+        "phpunit/phpunit": "^10.5.17 || ^11.0.7",
+        "predis/predis": "^1.1 || ^2",
+        "rollbar/rollbar": "^4.0",
+        "ruflin/elastica": "^7 || ^8",
+        "symfony/mailer": "^5.4 || ^6",
+        "symfony/mime": "^5.4 || ^6"
+      },
+      "suggest": {
+        "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
+        "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
+        "elasticsearch/elasticsearch": "Allow sending log messages to an Elasticsearch server via official client",
+        "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
+        "ext-curl": "Required to send log messages using the IFTTTHandler, the LogglyHandler, the SendGridHandler, the SlackWebhookHandler or the TelegramBotHandler",
+        "ext-mbstring": "Allow to work properly with unicode symbols",
+        "ext-mongodb": "Allow sending log messages to a MongoDB server (via driver)",
+        "ext-openssl": "Required to send log messages using SSL",
+        "ext-sockets": "Allow sending log messages to a Syslog server (via UDP driver)",
+        "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
+        "mongodb/mongodb": "Allow sending log messages to a MongoDB server (via library)",
+        "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
+        "rollbar/rollbar": "Allow sending log messages to Rollbar",
+        "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
+      },
+      "type": "library",
+      "extra": {
+        "branch-alias": {
+          "dev-main": "3.x-dev"
+        }
+      },
+      "autoload": {
+        "psr-4": {
+          "Monolog\\": "src/Monolog"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": ["MIT"],
+      "authors": [
+        {
+          "name": "Jordi Boggiano",
+          "email": "j.boggiano@seld.be",
+          "homepage": "https://seld.be"
+        }
+      ],
+      "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
+      "homepage": "https://github.com/Seldaek/monolog",
+      "keywords": ["log", "logging", "psr-3"],
+      "support": {
+        "issues": "https://github.com/Seldaek/monolog/issues",
+        "source": "https://github.com/Seldaek/monolog/tree/3.10.0"
+      },
+      "funding": [
+        {
+          "url": "https://github.com/Seldaek",
+          "type": "github"
+        },
+        {
+          "url": "https://tidelift.com/funding/github/packagist/monolog/monolog",
+          "type": "tidelift"
+        }
+      ],
+      "time": "2026-01-02T08:56:05+00:00"
+    },
+    {
       "name": "mtdowling/jmespath.php",
       "version": "2.8.0",
       "source": {
@@ -4291,16 +4172,16 @@
     },
     {
       "name": "olcs/olcs-common",
-      "version": "v9.16.1",
+      "version": "v9.20.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-common.git",
-        "reference": "556c4889ce3c6543d6d664d6ddf86bcb404ae105"
+        "reference": "86a3259dab2d90365440a74860f2f8e9ecc105ff"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/556c4889ce3c6543d6d664d6ddf86bcb404ae105",
-        "reference": "556c4889ce3c6543d6d664d6ddf86bcb404ae105",
+        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/86a3259dab2d90365440a74860f2f8e9ecc105ff",
+        "reference": "86a3259dab2d90365440a74860f2f8e9ecc105ff",
         "shasum": ""
       },
       "require": {
@@ -4317,17 +4198,16 @@
         "laminas/laminas-modulemanager": "^2.17",
         "laminas/laminas-mvc": "^3.8",
         "laminas/laminas-mvc-plugin-flashmessenger": "^1.11",
-        "laminas/laminas-mvc-plugin-prg": "^1.8",
         "laminas/laminas-navigation": "^2.20",
         "laminas/laminas-servicemanager": "^3.23",
         "laminas/laminas-stdlib": "^3.20",
         "laminas/laminas-text": "^2.12",
         "laminas/laminas-validator": "^2.64",
         "laminas/laminas-view": "^2.41",
-        "olcs/olcs-logging": "^7.2 || ^8.0",
+        "olcs/olcs-logging": "^9.0",
         "olcs/olcs-transfer": "^8.0",
-        "olcs/olcs-utils": "^6.0 || ^7.0",
-        "php": "~8.2.0 || ~8.3.0",
+        "olcs/olcs-utils": "^7.1",
+        "php": "~8.3.0",
         "psr/container": "^1.1|^2"
       },
       "require-dev": {
@@ -4358,34 +4238,34 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "Common library for the OLCS Project",
       "support": {
-        "source": "https://github.com/dvsa/olcs-common/tree/v9.16.1"
+        "source": "https://github.com/dvsa/olcs-common/tree/v9.20.0"
       },
-      "time": "2026-05-08T09:24:06+00:00"
+      "time": "2026-05-22T09:58:45+00:00"
     },
     {
       "name": "olcs/olcs-logging",
-      "version": "v8.0.0",
+      "version": "v9.0.1",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-logging.git",
-        "reference": "d2ddbd28146543bfb3b50a90b69d590df0c9d82e"
+        "reference": "787c9e9d1bcfb40364962f5be743c9b3c97316a8"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-logging/zipball/d2ddbd28146543bfb3b50a90b69d590df0c9d82e",
-        "reference": "d2ddbd28146543bfb3b50a90b69d590df0c9d82e",
+        "url": "https://api.github.com/repos/dvsa/olcs-logging/zipball/787c9e9d1bcfb40364962f5be743c9b3c97316a8",
+        "reference": "787c9e9d1bcfb40364962f5be743c9b3c97316a8",
         "shasum": ""
       },
       "require": {
         "ext-json": "*",
         "laminas/laminas-eventmanager": "^3.14",
-        "laminas/laminas-log": "^2.17.1",
         "laminas/laminas-mvc": "^3.8",
         "laminas/laminas-session": "^2.21",
         "laminas/laminas-stdlib": "^3.20",
+        "monolog/monolog": "^3.10",
         "php": "~8.2.0 || ~8.3.0",
         "psr/container": "^1.1|^2",
-        "psr/log": "^1.0"
+        "psr/log": "^3.0"
       },
       "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8.2",
@@ -4410,9 +4290,9 @@
       "license": ["MIT"],
       "description": "Logging Module for OLCS",
       "support": {
-        "source": "https://github.com/dvsa/olcs-logging/tree/v8.0.0"
+        "source": "https://github.com/dvsa/olcs-logging/tree/v9.0.1"
       },
-      "time": "2025-09-19T11:03:32+00:00"
+      "time": "2026-05-20T13:28:22+00:00"
     },
     {
       "name": "olcs/olcs-transfer",
@@ -4475,25 +4355,24 @@
     },
     {
       "name": "olcs/olcs-utils",
-      "version": "v7.0.0",
+      "version": "v7.3.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-utils.git",
-        "reference": "5a586d3308f2fa30de29a30d39cd188a5a7febda"
+        "reference": "bfb8fa1ea595b8336516737166c22287bb965c97"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-utils/zipball/5a586d3308f2fa30de29a30d39cd188a5a7febda",
-        "reference": "5a586d3308f2fa30de29a30d39cd188a5a7febda",
+        "url": "https://api.github.com/repos/dvsa/olcs-utils/zipball/bfb8fa1ea595b8336516737166c22287bb965c97",
+        "reference": "bfb8fa1ea595b8336516737166c22287bb965c97",
         "shasum": ""
       },
       "require": {
         "laminas/laminas-eventmanager": "^3.14",
         "laminas/laminas-http": "^2.22",
         "laminas/laminas-i18n": "^2.30",
-        "laminas/laminas-mvc": "^3.8",
-        "laminas/laminas-mvc-i18n": "^1.9",
         "laminas/laminas-servicemanager": "^3.23",
+        "laminas/laminas-validator": "^2.64",
         "laminas/laminas-view": "^2.41",
         "php": "~8.2.0 || ~8.3.0",
         "psr/container": "^1.1|^2.0"
@@ -4501,7 +4380,7 @@
       "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8.2",
         "johnkary/phpunit-speedtrap": "^4.0",
-        "olcs/olcs-logging": "^7.1.0 || ^8",
+        "olcs/olcs-logging": "^9",
         "phpunit/phpunit": "^9.6"
       },
       "type": "library",
@@ -4519,9 +4398,9 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "OLCS Utils",
       "support": {
-        "source": "https://github.com/dvsa/olcs-utils/tree/v7.0.0"
+        "source": "https://github.com/dvsa/olcs-utils/tree/v7.3.0"
       },
-      "time": "2025-09-19T11:03:27+00:00"
+      "time": "2026-05-22T09:58:52+00:00"
     },
     {
       "name": "paragonie/constant_time_encoding",
@@ -5078,30 +4957,30 @@
     },
     {
       "name": "psr/log",
-      "version": "1.1.4",
+      "version": "3.0.2",
       "source": {
         "type": "git",
         "url": "https://github.com/php-fig/log.git",
-        "reference": "d49695b909c3b7628b6289db5479a1c204601f11"
+        "reference": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/php-fig/log/zipball/d49695b909c3b7628b6289db5479a1c204601f11",
-        "reference": "d49695b909c3b7628b6289db5479a1c204601f11",
+        "url": "https://api.github.com/repos/php-fig/log/zipball/f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
+        "reference": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
         "shasum": ""
       },
       "require": {
-        "php": ">=5.3.0"
+        "php": ">=8.0.0"
       },
       "type": "library",
       "extra": {
         "branch-alias": {
-          "dev-master": "1.1.x-dev"
+          "dev-master": "3.x-dev"
         }
       },
       "autoload": {
         "psr-4": {
-          "Psr\\Log\\": "Psr/Log/"
+          "Psr\\Log\\": "src"
         }
       },
       "notification-url": "https://packagist.org/downloads/",
@@ -5116,9 +4995,9 @@
       "homepage": "https://github.com/php-fig/log",
       "keywords": ["log", "psr", "psr-3"],
       "support": {
-        "source": "https://github.com/php-fig/log/tree/1.1.4"
+        "source": "https://github.com/php-fig/log/tree/3.0.2"
       },
-      "time": "2021-05-03T11:20:27+00:00"
+      "time": "2024-09-11T13:17:53+00:00"
     },
     {
       "name": "psr/simple-cache",
@@ -10427,5 +10306,5 @@
   "platform-overrides": {
     "ext-redis": "6.2.6"
   },
-  "plugin-api-version": "2.9.0"
+  "plugin-api-version": "2.6.0"
 }

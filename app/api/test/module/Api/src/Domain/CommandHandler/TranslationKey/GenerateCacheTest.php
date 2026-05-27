@@ -12,7 +12,7 @@ use Dvsa\Olcs\Transfer\Command\TranslationKey\GenerateCache as Cmd;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TranslationKey\GenerateCache as Handler;
 use Dvsa\Olcs\Api\Service\Translator\TranslationLoader;
 use Mockery as m;
-use Laminas\Mvc\I18n\Translator;
+use Laminas\I18n\Translator\Translator;
 
 /**
  * Test cache generation for each locale

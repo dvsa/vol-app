@@ -393,7 +393,7 @@ return [
             'writers' => [
                 'full' => [
                     'options' => [
-                        'stream' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? 'php://stdout' : '/var/log/dvsa/olcs-api/api.log'),
+                        'stream' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? 'php://stderr' : '/var/log/dvsa/olcs-api/api.log'),
                         'filters' => [
                             'priority' => [
                                 'name' => 'priority',

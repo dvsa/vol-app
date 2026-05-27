@@ -4,6 +4,10 @@ data "aws_secretsmanager_secret" "application_api" {
   name = "${local.account_prefix}${local.env_prefix}-BASE-SM-APPLICATION-API"
 }
 
+data "aws_secretsmanager_secret" "infra" {
+  name = "${local.account_prefix}${local.env_prefix}-BASE-SM-INFRA"
+}
+
 locals {
 
   account_prefix = contains(["DEV", "QA"], var.legacy_environment) ? "DEV" : ""
@@ -118,8 +122,16 @@ locals {
 
       secrets = [
         {
+          name      = "API_DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_api_rds_password::"
+        },
+        {
           name      = "BATCH_DB_PASSWORD"
           valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_batch_rds_password::"
+        },
+        {
+          name      = "M_DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.infra.arn}:master_rds_password::"
         },
         {
           name      = "PRODTODEV_ASSUME_ROLE_ID"
@@ -175,8 +187,16 @@ locals {
 
       secrets = [
         {
+          name      = "API_DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_api_rds_password::"
+        },
+        {
           name      = "BATCH_DB_PASSWORD"
           valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_batch_rds_password::"
+        },
+        {
+          name      = "M_DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.infra.arn}:master_rds_password::"
         },
         {
           name      = "PRODTODEV_ASSUME_ROLE_ID"
