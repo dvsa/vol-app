@@ -1,0 +1,11 @@
+# URL list for bench.sh — one URL per line, # for comments.
+# Copy to urls.txt and customise. Unauthenticated by default; see README for auth.
+
+# Selfserve (public-facing)
+http://ssweb.local.olcs.dev-dvsacloud.uk/
+
+# Internal (admin)
+http://iuweb.local.olcs.dev-dvsacloud.uk/
+
+# API health/ping (lightweight, good for tight loops)
+# http://api.local.olcs.dev-dvsacloud.uk/health

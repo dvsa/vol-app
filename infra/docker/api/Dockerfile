@@ -79,15 +79,15 @@ RUN apk update && \
   && docker-php-ext-install ldap \
   && docker-php-ext-enable ldap
 
+# Dev overrides land in zzzzz-dev.ini so they load AFTER the base zzzz-php.ini.
+# OPcache stays ENABLED in dev; only revalidate_freq is tightened so edits show up within ~2s.
+# Xdebug is installed but inert by default (mode=off); flip on by setting XDEBUG_MODE in compose.
 RUN \
-  # Disable OPCache in development.
-  echo "opcache.enable=0" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  # Setup Xdebug.
-  && echo "[xdebug]" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.remote_log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.mode=debug" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.client_host=host.docker.internal" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.start_with_request=yes" >> ${PHP_INI_DIR}/conf.d/1000-php.ini
+  echo "opcache.revalidate_freq=2" >> ${PHP_INI_DIR}/conf.d/zzzzz-dev.ini \
+  && echo "[xdebug]" >> ${PHP_INI_DIR}/conf.d/zzzzz-dev.ini \
+  && echo "xdebug.mode=off" >> ${PHP_INI_DIR}/conf.d/zzzzz-dev.ini \
+  && echo "xdebug.log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/zzzzz-dev.ini \
+  && echo "xdebug.client_host=host.docker.internal" >> ${PHP_INI_DIR}/conf.d/zzzzz-dev.ini \
+  && echo "xdebug.start_with_request=yes" >> ${PHP_INI_DIR}/conf.d/zzzzz-dev.ini
 
 USER www-data
