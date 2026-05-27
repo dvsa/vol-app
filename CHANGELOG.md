@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.20.1](https://github.com/dvsa/olcs-common/compare/v9.20.0...v9.20.1) (2026-05-26)
+
+
+### Bug Fixes
+
+* attach VRM filter when validating registration number input ([#311](https://github.com/dvsa/olcs-common/issues/311)) ([d5e941d](https://github.com/dvsa/olcs-common/commit/d5e941da3108bffe236eff3b5c0f0ba12b9dd306))
+
 ## [9.20.0](https://github.com/dvsa/olcs-common/compare/v9.19.0...v9.20.0) (2026-05-22)
 
 
