@@ -9,6 +9,7 @@ use Psr\Container\ContainerInterface;
 use Dvsa\Olcs\Api\Domain\Command\Application\UpdateApplicationCompletion as UpdateApplicationCompletionCmd;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion;
 
 /**
  * Application
@@ -46,6 +47,18 @@ class Application extends AbstractQueryHandler
                     ['id' => $application->getId(), 'section' => self::OPERATING_CENTRES_SECTION]
                 )
             );
+        }
+
+        $completion = $application->getApplicationCompletion();
+
+        if (
+            $query->getValidateAppCompletion()
+            && $application->getStatus()->getId() === ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED
+            && $application->getFinancialEvidenceUploaded() === ApplicationEntity::FINANCIAL_EVIDENCE_UPLOAD_LATER
+            && $completion->getFinancialEvidenceStatus() !== ApplicationCompletion::STATUS_INCOMPLETE
+        ) {
+            $completion->setFinancialEvidenceStatus(ApplicationCompletion::STATUS_INCOMPLETE);
+            $this->getRepo()->save($application);
         }
 
         $latestNote = $this->getRepo('Note')->fetchForOverview($application->getLicence()->getId());
