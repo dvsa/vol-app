@@ -372,6 +372,8 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
         if ($licence !== null) {
             $this->mockLicence($licence, $dataProvider);
 
+            $licence->shouldReceive('getActiveVariations')->once()->andReturn([]);
+
             if (array_key_exists('fetchFirstByEmailOrFalse', $dataProvider['user'])) {
                 $fetchedUser = $dataProvider['user']['fetchFirstByEmailOrFalse'];
 
