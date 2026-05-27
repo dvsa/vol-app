@@ -65,6 +65,11 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
 
         /** @var LicenceEntity $licence */
         foreach ($eligibleLicences as $licence) {
+            foreach ($licence->getActiveVariations() as $application) {
+                if ($application->hasUpdatedTransportManagers()) {
+                    continue 2;
+                }
+            }
             /** @var TransportManagerLicence $tmlRepo */
             $tmlRepo = $this->getRepo('TransportManagerLicence');
             $removedTms = $tmlRepo->fetchRemovedTmForLicence($licence->getId(), true);
