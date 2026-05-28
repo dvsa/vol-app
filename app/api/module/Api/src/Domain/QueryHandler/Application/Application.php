@@ -49,16 +49,8 @@ class Application extends AbstractQueryHandler
             );
         }
 
-        $completion = $application->getApplicationCompletion();
-
-        if (
-            $query->getValidateAppCompletion()
-            && $application->getStatus()->getId() === ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED
-            && $application->getFinancialEvidenceUploaded() === ApplicationEntity::FINANCIAL_EVIDENCE_UPLOAD_LATER
-            && $completion->getFinancialEvidenceStatus() !== ApplicationCompletion::STATUS_INCOMPLETE
-        ) {
-            $completion->setFinancialEvidenceStatus(ApplicationCompletion::STATUS_INCOMPLETE);
-            $this->getRepo()->save($application);
+        if ($query->getValidateAppCompletion()) {
+            $this->updateUploadLaterEvidenceStatuses($application);
         }
 
         $latestNote = $this->getRepo('Note')->fetchForOverview($application->getLicence()->getId());
@@ -98,6 +90,36 @@ class Application extends AbstractQueryHandler
                 'canHaveInspectionRequest' => !$application->isSpecialRestricted(),
             ]
         );
+    }
+
+    private function updateUploadLaterEvidenceStatuses(ApplicationEntity $application): void
+    {
+        if ($application->getStatus()->getId() !== ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED) {
+            return;
+        }
+
+        $completion = $application->getApplicationCompletion();
+        $completionUpdate = false;
+
+        if (
+            $application->getFinancialEvidenceUploaded() === ApplicationEntity::FINANCIAL_EVIDENCE_UPLOAD_LATER
+            && $completion->getFinancialEvidenceStatus() !== ApplicationCompletion::STATUS_INCOMPLETE
+        ) {
+            $completion->setFinancialEvidenceStatus(ApplicationCompletion::STATUS_INCOMPLETE);
+            $completionUpdate = true;
+        }
+
+        if (
+            $application->getSmallVehicleEvidenceUploaded() === ApplicationEntity::FINANCIAL_EVIDENCE_UPLOAD_LATER
+            && $completion->getPsvDocumentaryEvidenceSmallStatus() !== ApplicationCompletion::STATUS_INCOMPLETE
+        ) {
+            $completion->setPsvDocumentaryEvidenceSmallStatus(ApplicationCompletion::STATUS_INCOMPLETE);
+            $completionUpdate = true;
+        }
+
+        if ($completionUpdate) {
+            $this->getRepo()->save($application);
+        }
     }
 
     /**
