@@ -35,6 +35,31 @@ cd "$scriptdir" || { echo "Script directory not found: $scriptdir"; exit 1; }
 
 set -euo pipefail
 
+echo "[INFO] READDB_HOST: ${READDB_HOST:-<unset>}"
+echo "[INFO] READDB_NAME: ${READDB_NAME:-<unset>}"
+
+if [[ -n "${READDB_HOST:-}" ]]; then
+  echo "[INFO] Testing DNS resolution for READDB_HOST..."
+
+  if command -v getent >/dev/null 2>&1; then
+    if getent hosts "$READDB_HOST"; then
+      echo "[INFO] getent resolved $READDB_HOST successfully"
+    else
+      echo "[ERROR] getent could not resolve $READDB_HOST"
+    fi
+  elif command -v nslookup >/dev/null 2>&1; then
+    if nslookup "$READDB_HOST"; then
+      echo "[INFO] nslookup resolved $READDB_HOST successfully"
+    else
+      echo "[ERROR] nslookup could not resolve $READDB_HOST"
+    fi
+  else
+    echo "[WARNING] Neither getent nor nslookup is available; skipping DNS test"
+  fi
+else
+  echo "[ERROR] READDB_HOST is not set"
+fi
+
 php_bin="$(command -v php)"
 USER_POOL_EX_HOST="${READDB_HOST}" \
 USER_POOL_EX_USER="master" \
