@@ -42,7 +42,7 @@ locals {
         },
       ]
 
-      secrets = []
+      secrets = null
     }
     liquibase = {
       image = "${var.batch.liquibase_repository}:latest"
@@ -214,17 +214,17 @@ locals {
 
     container_properties = jsonencode({
 
-      command = (job.type == "default" ? concat([
+      command = (try(job.type, "default") == "default" ? concat([
         "/var/www/html/vendor/bin/laminas",
         "--container=/var/www/html/config/container-cli.php",
         "-v"
       ], job.commands) : job.commands)
 
-      image = lookup(local.job_types, job.type, local.job_types.default).image
+      image = lookup(local.job_types, try(job.type, "default"), local.job_types.default).image
 
-      environment = lookup(local.job_types, job.type, local.job_types.default).environment
+      environment = lookup(local.job_types, try(job.type, "default"), local.job_types.default).environment != null ? lookup(local.job_types, try(job.type, "default"), local.job_types.default).environment : []
 
-      secrets = lookup(local.job_types, job.type, local.job_types.default).secrets
+      secrets = lookup(local.job_types, try(job.type, "default"), local.job_types.default).secrets != null ? lookup(local.job_types, try(job.type, "default"), local.job_types.default).secrets : null
 
       runtimePlatform = {
         operatingSystemFamily = "LINUX",
