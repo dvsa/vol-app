@@ -178,7 +178,8 @@ class ApplicationTest extends QueryHandlerTestCase
 
         $application = m::mock(ApplicationEntity::class)->makePartial();
         $application->setId($applicationId);
-        $application->setStatus((new \Dvsa\Olcs\Api\Entity\System\RefData())->setId(ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED));
+        $application->setStatus((new \Dvsa\Olcs\Api\Entity\System\RefData())
+            ->setId(ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED));
         $application->setIsVariation(false);
 
         $application->shouldReceive('getApplicationCompletion')->andReturn($completion);
@@ -203,7 +204,8 @@ class ApplicationTest extends QueryHandlerTestCase
 
         $application = m::mock(ApplicationEntity::class)->makePartial();
         $application->setId($applicationId);
-        $application->setStatus((new \Dvsa\Olcs\Api\Entity\System\RefData())->setId(ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION));
+        $application->setStatus((new \Dvsa\Olcs\Api\Entity\System\RefData())
+            ->setId(ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION));
         $application->setIsVariation(false);
 
         $application->shouldNotReceive('getApplicationCompletion');
