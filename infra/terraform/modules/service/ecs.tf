@@ -183,11 +183,11 @@ module "ecs_cluster" {
   for_each = var.services
 
   source  = "terraform-aws-modules/ecs/aws//modules/cluster"
-  version = "~> 5.10"
+  version = "~> 7.5.0"
 
-  cluster_name = "vol-app-${var.environment}-${each.key}-cluster"
+  name = "vol-app-${var.environment}-${each.key}-cluster"
 
-  cluster_settings = [
+  setting = [
     {
       name  = "containerInsights"
       value = "enabled"
@@ -199,25 +199,24 @@ module "ecs_service" {
   for_each = var.services
 
   source  = "terraform-aws-modules/ecs/aws//modules/service"
-  version = "< 6.1.0"
+  version = "~> 7.5.0"
+
+  disable_v7_default_name_description = true
 
   name        = "vol-app-${var.environment}-${each.key}-service"
   cluster_arn = module.ecs_cluster[each.key].arn
 
-  depends_on = [module.ecs_cluster]
+  tasks_iam_role_statements = each.value.task_iam_role_statements
 
-  tasks_iam_role_statements = var.services[each.key].task_iam_role_statements
+  enable_execute_command   = true
+  task_exec_iam_statements = each.value.task_exec_iam_role_statements
 
-  enable_execute_command = true
+  cpu    = each.value.cpu
+  memory = each.value.memory
 
-  task_exec_iam_statements = var.services[each.key].task_exec_iam_role_statements
-
-  cpu    = var.services[each.key].cpu
-  memory = var.services[each.key].memory
-
-  autoscaling_min_capacity = try(var.services[each.key].autoscaling_min, 1)
-  autoscaling_max_capacity = try(var.services[each.key].autoscaling_max, 10)
-  autoscaling_policies = var.services[each.key].enable_autoscaling_policies ? {
+  autoscaling_min_capacity = try(each.value.autoscaling_min, 1)
+  autoscaling_max_capacity = try(each.value.autoscaling_max, 10)
+  autoscaling_policies = each.value.enable_autoscaling_policies ? {
     "cpu" = {
       policy_type = "TargetTrackingScaling"
       target_tracking_scaling_policy_configuration = {
@@ -235,17 +234,18 @@ module "ecs_service" {
       }
     }
   } : {}
+
   runtime_platform = {
-    operating_system_family = "LINUX",
+    operating_system_family = "LINUX"
     cpu_architecture        = "ARM64"
   }
 
   container_definitions = {
     (each.key) = {
-      cpu       = try(var.services[each.key].task_cpu_limit, var.services[each.key].cpu)
-      memory    = try(var.services[each.key].task_memory_limit, var.services[each.key].memory)
+      cpu       = try(each.value.task_cpu_limit, each.value.cpu)
+      memory    = try(each.value.task_memory_limit, each.value.memory)
       essential = true
-      image     = "${var.services[each.key].repository}:${var.services[each.key].version}"
+      image     = "${each.value.repository}:${each.value.version}"
       portMappings = [
         {
           name          = "http"
@@ -254,7 +254,6 @@ module "ecs_service" {
         }
       ]
 
-      # Have to explicitly set the user to null to avoid the default user being set to root.
       user = null
 
       environment = concat(
@@ -265,7 +264,7 @@ module "ecs_service" {
           },
           {
             name  = "APP_VERSION"
-            value = var.services[each.key].version
+            value = each.value.version
           },
           {
             name  = "ELASTICACHE_URL"
@@ -287,10 +286,10 @@ module "ecs_service" {
       )
 
       readonlyRootFilesystem = false
-
-      memoryReservation = 100
+      memoryReservation      = 100
     }
   }
+
   load_balancer = merge(
     {
       primary = {
@@ -309,14 +308,13 @@ module "ecs_service" {
   )
 
   create_security_group = false
-  security_group_ids    = var.services[each.key].security_group_ids
-  subnet_ids            = var.services[each.key].subnet_ids
+  security_group_ids    = each.value.security_group_ids
+  subnet_ids            = each.value.subnet_ids
 
-  #Altered to false as applies are timing out due to health status not pulling through correctly
   wait_for_steady_state = false
   wait_until_stable     = true
   force_new_deployment  = false
 
-
+  depends_on = [module.ecs_cluster]
 }
 
