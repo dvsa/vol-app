@@ -42,7 +42,7 @@ locals {
         },
       ]
 
-      secrets = []
+      secrets = null
     }
     liquibase = {
       image = "${var.batch.liquibase_repository}:latest"
