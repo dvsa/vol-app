@@ -3,22 +3,20 @@
 declare(strict_types=1);
 
 /**
- * Update Financial Evidence Status Test
+ * Update Psv Documentary Evidence Small Status Test
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Teja Vaddala <Teja.vaddala@dvsa.gov.uk>
  */
 
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\ApplicationCompletion;
 
-use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdatePsvDocumentaryEvidenceSmallStatus as Cmd;
 use Dvsa\Olcs\Api\Domain\CommandHandler\ApplicationCompletion\UpdatePsvDocumentaryEvidenceSmallStatus;
-use Mockery as m;
 use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion as ApplicationCompletionEntity;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 
 /**
- * Update Financial Evidence Status Test
+ * Update Psv Documentary Evidence Small Status Test
  *
  * @author Teja Vaddala <Teja.vaddala@dvsa.gov.uk>
  */

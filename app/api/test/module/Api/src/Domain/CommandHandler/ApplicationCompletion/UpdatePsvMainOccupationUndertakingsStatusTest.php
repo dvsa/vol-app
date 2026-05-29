@@ -3,30 +3,30 @@
 declare(strict_types=1);
 
 /**
- * Update Psv Documentry Evidence Large Status Test
+ * Update Psv Main Occupation Undertaking Status Test
  *
- * @author Teja Vaddala <Teja.vaddala@dvsa.gov.uk>
+ * @author Teja Vaddala <teja.vaddala@dvsa.gov.uk>
  */
 
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\ApplicationCompletion;
 
-use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdatePsvDocumentaryEvidenceLargeStatus as Cmd;
-use Dvsa\Olcs\Api\Domain\CommandHandler\ApplicationCompletion\UpdatePsvDocumentaryEvidenceLargeStatus;
+use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdatePsvMainOccupationUndertakingsStatus as Cmd;
+use Dvsa\Olcs\Api\Domain\CommandHandler\ApplicationCompletion\UpdatePsvMainOccupationUndertakingsStatus;
 use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion as ApplicationCompletionEntity;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 
 /**
- * Update Psv Documentry Evidence Large Status Test
+ * Update Psv Main Occupation Undertaking Status Test
  *
  * @author Teja Vaddala <Teja.vaddala@dvsa.gov.uk>
  */
-class UpdatePsvDocumentaryEvidenceLargeStatusTest extends AbstractUpdateStatusTestCase
+class UpdatePsvMainOccupationUndertakingsStatusTest extends AbstractUpdateStatusTestCase
 {
-    protected $section = 'PsvDocumentaryEvidenceLarge';
+    protected $section = 'PsvMainOccupationUndertakings';
 
     public function setUp(): void
     {
-        $this->sut = new UpdatePsvDocumentaryEvidenceLargeStatus();
+        $this->sut = new UpdatePsvMainOccupationUndertakingsStatus();
         $this->command = Cmd::create(['id' => 111]);
 
         parent::setUp();
@@ -34,7 +34,7 @@ class UpdatePsvDocumentaryEvidenceLargeStatusTest extends AbstractUpdateStatusTe
 
     public function testHandleCommandWithUploadLaterSetsIncomplete(): void
     {
-        $this->applicationCompletion->setPsvDocumentaryEvidenceLargeStatus(
+        $this->applicationCompletion->setPsvMainOccupationUndertakingsStatus(
             ApplicationCompletionEntity::STATUS_COMPLETE
         );
 
