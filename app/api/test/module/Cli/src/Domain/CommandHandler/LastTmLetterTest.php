@@ -358,6 +358,36 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                         "Email sent"
                     ]
                 ]
+            ],
+            'licence_with_active_variation_updated_tm_skip_ptr' => [
+                'dataProvider' => [
+                    'licence' => [
+                        'id' => 1,
+                        'licNo' => 'AB123',
+                        'isNi' => false,
+                        'isPsv' => false,
+                        'organisation' => [
+                            'allowEmail' => 'Y'
+                        ],
+                        'correspondenceCd' => null
+                    ],
+                    'user' => [],
+                    'activeVariationHasUpdatedTm' => true,
+                    'sideEffectResults' => [
+                        'GenerateAndStore' => [
+                            'ids' => [
+                                'documents' => []
+                            ]
+                        ],
+                        'CreateTask' => [
+                            'ids' => []
+                        ]
+                    ],
+                ],
+                'expectedResult' => [
+                    'id' => [],
+                    'messages' => []
+                ]
             ]
         ];
     }
@@ -372,7 +402,20 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
         if ($licence !== null) {
             $this->mockLicence($licence, $dataProvider);
 
-            $licence->shouldReceive('getActiveVariations')->once()->andReturn([]);
+            if (!empty($dataProvider['activeVariationHasUpdatedTm'])) {
+                $variation = m::mock();
+                $variation->shouldReceive('hasUpdatedTransportManagers')
+                    ->once()
+                    ->andReturn(true);
+
+                $licence->shouldReceive('getActiveVariations')
+                    ->once()
+                    ->andReturn([$variation]);
+            } else {
+                $licence->shouldReceive('getActiveVariations')
+                    ->once()
+                    ->andReturn([]);
+            }
 
             if (array_key_exists('fetchFirstByEmailOrFalse', $dataProvider['user'])) {
                 $fetchedUser = $dataProvider['user']['fetchFirstByEmailOrFalse'];
@@ -394,7 +437,7 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
 
         $licenceRepo->shouldReceive('fetchForLastTmAutoLetter')->andReturn($eligibleLicences);
 
-        if (!empty($eligibleLicences)) {
+        if (!empty($eligibleLicences) && empty($dataProvider['activeVariationHasUpdatedTm'])) {
             $this->mockCorrespondenceCd($licence, $dataProvider);
             $this->caseLicenceWithRemovedTmTest($dataProvider, $eligibleLicences);
         }
