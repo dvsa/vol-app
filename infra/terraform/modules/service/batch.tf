@@ -84,7 +84,7 @@ locals {
         },
         {
           name  = "FULL_DOMAIN"
-          value = "${var.environment}.olcs.${var.domain_name}"
+          value = "${var.domain_env}.olcs.${var.domain_name}"
         },
         {
           name  = "DOMAIN"
@@ -96,11 +96,11 @@ locals {
         },
         {
           name  = "READDB_ID"
-          value = "${var.environment}-aurora-olcsdb-reader"
+          value = "${var.domain_env}-aurora-olcsdb-reader"
         },
         {
           name  = "DBCLUSTER_ID"
-          value = "${var.environment}-aurora-olcsdb-cluster"
+          value = "${var.domain_env}-aurora-olcsdb-cluster"
         },
         {
           name  = "READDB_NAME"
@@ -108,7 +108,7 @@ locals {
         },
         {
           name  = "PROXY"
-          value = "proxy.${var.environment}.olcs.${var.domain_name}:3128"
+          value = "proxy.${var.domain_env}.olcs.${var.domain_name}:3128"
         },
         {
           name  = "APP_VERSION"
@@ -116,7 +116,7 @@ locals {
         },
         {
           name  = "READDB_HOST"
-          value = "olcsreaddb-rds.${var.environment}.olcs.${var.domain_name}"
+          value = "olcsreaddb-rds.${var.domain_env}.olcs.${var.domain_name}"
         },
       ]
 
