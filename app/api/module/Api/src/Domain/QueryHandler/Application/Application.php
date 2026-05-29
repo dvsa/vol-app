@@ -99,14 +99,14 @@ class Application extends AbstractQueryHandler
         }
 
         $completion = $application->getApplicationCompletion();
-        $completionUpdate = false;
+        $completionUpdated = false;
 
         if (
             $application->getFinancialEvidenceUploaded() === ApplicationEntity::FINANCIAL_EVIDENCE_UPLOAD_LATER
             && $completion->getFinancialEvidenceStatus() !== ApplicationCompletion::STATUS_INCOMPLETE
         ) {
             $completion->setFinancialEvidenceStatus(ApplicationCompletion::STATUS_INCOMPLETE);
-            $completionUpdate = true;
+            $completionUpdated = true;
         }
 
         if (
@@ -114,10 +114,26 @@ class Application extends AbstractQueryHandler
             && $completion->getPsvDocumentaryEvidenceSmallStatus() !== ApplicationCompletion::STATUS_INCOMPLETE
         ) {
             $completion->setPsvDocumentaryEvidenceSmallStatus(ApplicationCompletion::STATUS_INCOMPLETE);
-            $completionUpdate = true;
+            $completionUpdated = true;
         }
 
-        if ($completionUpdate) {
+        if (
+            $application->getOccupationEvidenceUploaded() === ApplicationEntity::FINANCIAL_EVIDENCE_UPLOAD_LATER
+            && $completion->getPsvDocumentaryEvidenceLargeStatus() !== ApplicationCompletion::STATUS_INCOMPLETE
+        ) {
+            $completion->setPsvDocumentaryEvidenceLargeStatus(ApplicationCompletion::STATUS_INCOMPLETE);
+            $completionUpdated = true;
+        }
+
+        if (
+            $application->getOccupationEvidenceUploaded() === ApplicationEntity::FINANCIAL_EVIDENCE_UPLOAD_LATER
+            && $completion->getPsvMainOccupationUndertakingsStatus() !== ApplicationCompletion::STATUS_INCOMPLETE
+        ) {
+            $completion->setPsvMainOccupationUndertakingsStatus(ApplicationCompletion::STATUS_INCOMPLETE);
+            $completionUpdated = true;
+        }
+
+        if ($completionUpdated) {
             $this->getRepo()->save($application);
         }
     }

@@ -13,6 +13,10 @@ final class UpdatePsvDocumentaryEvidenceLargeStatus extends AbstractUpdateStatus
     #[\Override]
     protected function isSectionValid(Application $application): bool
     {
-        return $application->isSectionCompleted($this->section);
+        if ($application->getOccupationEvidenceUploaded() == Application::FINANCIAL_EVIDENCE_UPLOAD_LATER) {
+            return false;
+        }
+        
+        return true;
     }
 }
