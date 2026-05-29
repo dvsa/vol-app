@@ -173,7 +173,7 @@ data "aws_vpc" "this" {
 module "service" {
   source = "../../modules/service"
 
-  environment = "int"
+  environment = "qa"
 
   legacy_environment = "QA"
 
