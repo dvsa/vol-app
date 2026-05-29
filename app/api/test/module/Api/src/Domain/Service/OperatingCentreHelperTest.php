@@ -676,7 +676,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
                 [
                     'noOfVehiclesRequired' => [
                         [
-                            'ERR_OR_R_1' => 'ERR_OR_R_1'
+                            'ERR_OC_R_1' => 'ERR_OC_R_1'
                         ]
                     ],
                     'permission' => [
