@@ -515,6 +515,7 @@ module "service" {
       {
         name     = "permits-reset-test-data",
         commands = ["permits:reset-test-data"],
+        type     = "default",
         timeout  = 1800
       },
       {
