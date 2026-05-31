@@ -515,6 +515,7 @@ module "service" {
       {
         name     = "permits-reset-test-data",
         commands = ["permits:reset-test-data"],
+        type     = "default",
         timeout  = 1800
       },
       {
@@ -631,6 +632,11 @@ module "service" {
         commands = ["batch:first-tm-letter", "-v"],
         timeout  = 43200,
         schedule = ["cron(30 13 * * ? *)"],
+      },
+      {
+        name     = "data-refresh",
+        commands = ["/mnt/data/scripts/data_refresh/data_refresh.sh", "qa", "eu-west-1"],
+        type     = "scripts"
       },
     ]
   }
