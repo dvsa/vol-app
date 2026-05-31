@@ -26,7 +26,7 @@ final class UpdateFinancialEvidenceStatus extends AbstractUpdateStatus
     #[\Override]
     protected function isSectionValid(Application $application): bool
     {
-        if ($application->getFinancialEvidenceUploaded() == Application::FINANCIAL_EVIDENCE_UPLOAD_LATER) {
+        if ($application->getFinancialEvidenceUploaded() === Application::FINANCIAL_EVIDENCE_UPLOAD_LATER) {
             return false;
         }
 
