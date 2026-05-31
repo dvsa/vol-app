@@ -16,7 +16,7 @@ final class UpdatePsvMainOccupationUndertakingsStatus extends AbstractUpdateStat
         if ($application->getOccupationEvidenceUploaded() == Application::FINANCIAL_EVIDENCE_UPLOAD_LATER) {
             return false;
         }
-        
+
         return true;
     }
 }

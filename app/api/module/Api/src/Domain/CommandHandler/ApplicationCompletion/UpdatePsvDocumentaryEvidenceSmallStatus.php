@@ -16,7 +16,7 @@ final class UpdatePsvDocumentaryEvidenceSmallStatus extends AbstractUpdateStatus
         if ($application->getSmallVehicleEvidenceUploaded() == Application::FINANCIAL_EVIDENCE_UPLOAD_LATER) {
             return false;
         }
-        
+
         return true;
     }
 }

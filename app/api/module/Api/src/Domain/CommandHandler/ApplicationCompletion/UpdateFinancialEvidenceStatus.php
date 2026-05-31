@@ -29,7 +29,7 @@ final class UpdateFinancialEvidenceStatus extends AbstractUpdateStatus
         if ($application->getFinancialEvidenceUploaded() == Application::FINANCIAL_EVIDENCE_UPLOAD_LATER) {
             return false;
         }
-        
+
         return true;
     }
 }

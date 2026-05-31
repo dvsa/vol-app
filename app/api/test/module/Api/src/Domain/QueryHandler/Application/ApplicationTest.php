@@ -258,5 +258,4 @@ class ApplicationTest extends QueryHandlerTestCase
             ->with($applicationId)
             ->andReturn(166.70);
     }
-
 }

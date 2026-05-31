@@ -16,7 +16,7 @@ final class UpdatePsvDocumentaryEvidenceLargeStatus extends AbstractUpdateStatus
         if ($application->getOccupationEvidenceUploaded() == Application::FINANCIAL_EVIDENCE_UPLOAD_LATER) {
             return false;
         }
-        
+
         return true;
     }
 }
