@@ -167,9 +167,20 @@ class LetterGenerationController extends AbstractInternalController implements L
             'selectedAppendices' => $postData['letterAppendices'] ?? [],
         ];
 
+        // Checkbox choices post as letterChoices[]; radio "pick one" groups post as
+        // letterChoiceGroup[<groupIndex>] => choiceId. Merge both into selectedChoices.
+        $radioSelections = array_values($postData['letterChoiceGroup'] ?? []);
+        $selectedChoices = array_merge($postData['letterChoices'] ?? [], $radioSelections);
+
+        // Enforce "pick exactly one" for every radio group on this letter type
+        $radioError = $this->validateRequiredRadioChoices($templateId, $selectedChoices);
+        if ($radioError !== null) {
+            return $this->jsonError($radioError);
+        }
+
         // Only include selectedChoices if any were actually selected
-        if (!empty($postData['letterChoices'])) {
-            $commandData['selectedChoices'] = $postData['letterChoices'];
+        if (!empty($selectedChoices)) {
+            $commandData['selectedChoices'] = $selectedChoices;
         }
 
         if (!empty($entityContext['type'])) {
@@ -999,6 +1010,36 @@ class LetterGenerationController extends AbstractInternalController implements L
         }
 
         return $choices;
+    }
+
+    /**
+     * Validate that every radio "pick one" group on the letter type has exactly one option selected.
+     *
+     * Radio groups are mandatory by rule (no default, must pick one). Checkbox choices are optional
+     * and not validated here. Mirrors the client-side guard so the rule holds if JS is bypassed.
+     *
+     * @param int $templateId Doc template ID
+     * @param array $selectedChoices Selected letter choice IDs (checkbox + radio merged)
+     * @return string|null Error message if a radio group is unsatisfied, otherwise null
+     */
+    protected function validateRequiredRadioChoices(int $templateId, array $selectedChoices): ?string
+    {
+        $radioGroups = [];
+        foreach ($this->fetchLetterChoicesForLetterType($templateId) as $choice) {
+            if (($choice['inputType'] ?? 'checkbox') === 'radio') {
+                $radioGroups[$choice['groupLabel']][] = (int) $choice['id'];
+            }
+        }
+
+        $selectedIds = array_map('intval', $selectedChoices);
+
+        foreach ($radioGroups as $groupLabel => $optionIds) {
+            if (count(array_intersect($optionIds, $selectedIds)) !== 1) {
+                return sprintf('Select one option for "%s"', $groupLabel);
+            }
+        }
+
+        return null;
     }
 
     /**
