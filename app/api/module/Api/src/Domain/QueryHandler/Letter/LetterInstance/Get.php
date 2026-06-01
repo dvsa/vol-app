@@ -32,7 +32,12 @@ class Get extends AbstractQueryByIdHandler
             ]
         ],
         'letterInstanceTodos' => [
-            'letterTodoVersion'
+            'letterTodoVersion',
+            'letterInstanceIssue' => [
+                'letterIssueVersion' => [
+                    'letterIssueType',
+                ],
+            ],
         ],
         'letterInstanceAppendices' => [
             'letterAppendixVersion' => [
