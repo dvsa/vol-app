@@ -6,6 +6,7 @@ namespace Dvsa\Olcs\Api\Service\Letter;
 
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance;
 use Dvsa\Olcs\Api\Entity\Letter\MasterTemplate;
+use Dvsa\Olcs\Api\Service\EditorJs\ConverterService;
 use Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManager;
 
 /**
@@ -17,9 +18,17 @@ use Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManager;
 class LetterPreviewService
 {
     private const string LOGO_TEMPLATE_SLUG = 'otclogo-letters';
+    private const string OTC_LOGO_SLUG_GB = 'otclogo-letters-gb';
+    private const string OTC_LOGO_SLUG_NI = 'otclogo-letters-ni';
+    private const string OTC_LOGO_TOKEN = '[[OTC_LOGO]]';
 
-    public function __construct(private readonly SectionRendererPluginManager $rendererManager, private $contentStore, private $docTemplateRepo, private readonly VolGrabReplacementService $volGrabReplacementService)
-    {
+    public function __construct(
+        private readonly SectionRendererPluginManager $rendererManager,
+        private $contentStore,
+        private $docTemplateRepo,
+        private readonly VolGrabReplacementService $volGrabReplacementService,
+        private readonly ?ConverterService $converterService = null
+    ) {
     }
 
     /**
@@ -42,8 +51,18 @@ class LetterPreviewService
             $html = $this->renderWithoutTemplate($assembledHtml, '', $appendicesHtml);
         } else {
             // Build placeholder values — assembled content goes into SECTIONS_CONTENT,
-            // ISSUES_CONTENT is empty since issues are now inline within the assembly
-            $placeholders = $this->buildPlaceholders($letterInstance, $assembledHtml, '', '', $appendicesHtml);
+            // ISSUES_CONTENT is empty since issues are now inline within the assembly.
+            // The MasterTemplate's chrome slot fields (header/signoff/footer) are rendered
+            // here too and slot into the page-chrome HTML shell (VOL-7305).
+            $placeholders = $this->buildPlaceholders(
+                $letterInstance,
+                $assembledHtml,
+                '',
+                '',
+                $appendicesHtml,
+                $masterTemplate,
+                $context
+            );
 
             $html = $this->populateTemplate($masterTemplate->getTemplateContent(), $placeholders);
         }
@@ -238,7 +257,9 @@ class LetterPreviewService
         string $sectionsHtml,
         string $issuesHtml,
         string $closingHtml,
-        string $appendicesHtml = ''
+        string $appendicesHtml = '',
+        ?MasterTemplate $masterTemplate = null,
+        array $volGrabContext = []
     ): array {
         return [
             '{{LOGO_IMAGE}}' => $this->buildLogoImage(),
@@ -248,14 +269,138 @@ class LetterPreviewService
             '{{ISSUES_CONTENT}}' => $issuesHtml,
             '{{CLOSING_CONTENT}}' => $closingHtml,
             '{{CASEWORKER_NAME}}' => $this->buildCaseworkerName($letterInstance),
-            '{{DVSA_ADDRESS}}' => $this->buildDvsaAddress(),
+            // VOL-7305: DVSA_ADDRESS is no longer hardcoded in PHP. It lives in the
+            // headerRightContent slot on the matching MasterTemplate row, picked by
+            // MasterTemplateResolver. Kept here as '' for backward compat in case any
+            // legacy template still references the placeholder.
+            '{{DVSA_ADDRESS}}' => '',
             '{{ENTITY_REFERENCE}}' => $this->buildEntityReference($letterInstance),
             '{{SALUTATION}}' => $this->buildSalutation($letterInstance),
             '{{SIGNATURE_NAME}}' => '', // To be populated from user/config
             '{{SIGNATURE_TITLE}}' => '', // To be populated from user/config
-            '{{FOOTER_CONTENT}}' => '',
+            // VOL-7305: chrome slot placeholders rendered from the MasterTemplate's
+            // EditorJS fields. Bookmarks ([[OTC_LOGO]], [[CASEWORKER_NAME]], etc.)
+            // inside the slot content are resolved by VolGrabReplacementService.
+            '{{HEADER_LEFT_CONTENT}}'  => $this->renderSlot($masterTemplate?->getHeaderLeftContent(),  $volGrabContext),
+            '{{HEADER_RIGHT_CONTENT}}' => $this->renderSlot($masterTemplate?->getHeaderRightContent(), $volGrabContext),
+            '{{SIGNOFF_CONTENT}}'      => $this->renderSlot($masterTemplate?->getSignoffContent(),     $volGrabContext),
+            '{{FOOTER_CONTENT}}'       => $this->renderSlot($masterTemplate?->getFooterContent(),     $volGrabContext),
+            // Recipient address block. Future enhancement could compute this from
+            // the licence's correspondence address; for now we keep the placeholder
+            // recognised (resolved to empty) so it doesn't leak into the output.
+            '{{RECIPIENT_ADDRESS_BLOCK}}' => '',
             '{{APPENDICES_CONTENT}}' => $appendicesHtml,
         ];
+    }
+
+    /**
+     * Render an EditorJS chrome slot to HTML, with vol-grab bookmark replacement.
+     * Returns empty string for null/empty content or if no ConverterService is wired.
+     *
+     * @param array|null $editorJsContent EditorJS JSON as array (from MasterTemplate slot field)
+     * @param array $context Vol-grab context (licence, application, user, etc.)
+     * @return string HTML
+     */
+    private function renderSlot(?array $editorJsContent, array $context): string
+    {
+        if (empty($editorJsContent) || $this->converterService === null) {
+            return '';
+        }
+
+        $json = json_encode($editorJsContent);
+        if ($json === false) {
+            return '';
+        }
+
+        // VOL-7305: resolve [[OTC_LOGO]] before standard bookmark replacement +
+        // EditorJS-to-HTML conversion. The token picks the right region's logo from
+        // the content store via the existing DocTemplate-by-slug mechanism.
+        $json = $this->replaceOtcLogoToken($json, $context);
+
+        $jsonWithGrabs = $this->volGrabReplacementService->replaceGrabs($json, $context);
+
+        return $this->converterService->convertJsonToHtml($jsonWithGrabs);
+    }
+
+    /**
+     * Replace any [[OTC_LOGO]] token in EditorJS JSON with an inline-base64 `<img>` tag.
+     * The image is chosen by isNi context — NI letters get the NI logo, all else GB.
+     *
+     * Embedded directly in the JSON string (properly escaped) so the EditorJS converter
+     * later turns the surrounding paragraph into HTML with the img tag in place.
+     *
+     * @param string $json
+     * @param array $context
+     * @return string JSON with the OTC_LOGO token replaced
+     */
+    private function replaceOtcLogoToken(string $json, array $context): string
+    {
+        if (!str_contains($json, self::OTC_LOGO_TOKEN)) {
+            return $json;
+        }
+
+        $isNi = (bool) ($context['isNi'] ?? false);
+        $slug = $isNi ? self::OTC_LOGO_SLUG_NI : self::OTC_LOGO_SLUG_GB;
+
+        $imgTag = $this->buildLogoImgTagForSlug($slug);
+        if ($imgTag === '') {
+            // Slug not seeded or document not uploaded — replace with empty so the
+            // letter still renders cleanly rather than leaking the bare token.
+            return str_replace(self::OTC_LOGO_TOKEN, '', $json);
+        }
+
+        // JSON-escape the img tag so it can be safely interpolated inside a JSON string
+        $escaped = json_encode($imgTag, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        if ($escaped === false) {
+            return str_replace(self::OTC_LOGO_TOKEN, '', $json);
+        }
+        // Strip the surrounding quotes json_encode added
+        $escaped = substr($escaped, 1, -1);
+
+        return str_replace(self::OTC_LOGO_TOKEN, $escaped, $json);
+    }
+
+    /**
+     * Fetch a DocTemplate by slug, read its underlying Document from the content store,
+     * and return an inline-base64 `<img>` tag. Returns '' on any miss (no DocTemplate,
+     * no Document, missing file) — caller decides how to handle a blank slot.
+     *
+     * @param string $slug
+     * @return string
+     */
+    private function buildLogoImgTagForSlug(string $slug): string
+    {
+        try {
+            $docTemplate = $this->docTemplateRepo->fetchByTemplateSlug($slug);
+            if ($docTemplate === null) {
+                return '';
+            }
+
+            $document = $docTemplate->getDocument();
+            if ($document === null) {
+                return '';
+            }
+
+            $file = $this->contentStore->read($document->getIdentifier());
+            if ($file === null) {
+                return '';
+            }
+
+            $content = (string) $file->getContent();
+            $base64 = base64_encode($content);
+
+            // Pick mime from the magic bytes — default to png so older seed files keep working
+            $info = @getimagesizefromstring($content);
+            $mime = ($info && !empty($info['mime'])) ? $info['mime'] : 'image/png';
+
+            return sprintf(
+                '<img src="data:%s;base64,%s" alt="OTC logo" style="max-width:180px;height:auto;">',
+                htmlspecialchars($mime),
+                $base64
+            );
+        } catch (\Exception) {
+            return '';
+        }
     }
 
     /**
@@ -277,20 +422,6 @@ class LetterPreviewService
             }
         }
         return 'Caseworker';
-    }
-
-    /**
-     * Build static DVSA address
-     *
-     * @return string HTML formatted DVSA address
-     */
-    private function buildDvsaAddress(): string
-    {
-        return 'The Central Licensing Office<br>' .
-               'Hillcrest House<br>' .
-               '386 Harehills Lane<br>' .
-               'Leeds<br>' .
-               'LS9 6NF';
     }
 
     /**
@@ -390,7 +521,7 @@ class LetterPreviewService
      */
     private function buildVolGrabContext(LetterInstance $letterInstance): array
     {
-        return array_filter([
+        $context = array_filter([
             'licence' => $letterInstance->getLicence()?->getId(),
             'application' => $letterInstance->getApplication()?->getId(),
             'user' => $letterInstance->getCreatedBy()?->getId(),
@@ -398,6 +529,13 @@ class LetterPreviewService
             'busRegId' => $letterInstance->getBusReg()?->getId(),
             'organisation' => $letterInstance->getOrganisation()?->getId(),
         ]);
+
+        // VOL-7305: isNi is needed by the OTC_LOGO token resolver and is a useful
+        // signal for any future region-aware bookmark. Added outside the array_filter
+        // because false is a meaningful value (GB letter) that should survive.
+        $context['isNi'] = (bool) ($letterInstance->getLicence()?->isNi() ?? false);
+
+        return $context;
     }
 
     /**

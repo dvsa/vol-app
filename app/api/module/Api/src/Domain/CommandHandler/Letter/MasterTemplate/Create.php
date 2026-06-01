@@ -26,6 +26,12 @@ final class Create extends AbstractCommandHandler
         $masterTemplate->setIsDefault($command->getIsDefault());
         $masterTemplate->setLocale($command->getLocale());
 
+        // VOL-7305: optional chrome slot fields (EditorJS JSON)
+        $masterTemplate->setHeaderLeftContent($command->getHeaderLeftContent());
+        $masterTemplate->setHeaderRightContent($command->getHeaderRightContent());
+        $masterTemplate->setSignoffContent($command->getSignoffContent());
+        $masterTemplate->setFooterContent($command->getFooterContent());
+
         $this->getRepo()->save($masterTemplate);
 
         $this->result->addId('masterTemplate', $masterTemplate->getId());

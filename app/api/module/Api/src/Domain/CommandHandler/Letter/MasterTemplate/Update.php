@@ -36,6 +36,20 @@ final class Update extends AbstractCommandHandler
             $masterTemplate->setLocale($command->getLocale());
         }
 
+        // VOL-7305: optional chrome slot fields (EditorJS JSON). Null = leave alone.
+        if ($command->getHeaderLeftContent() !== null) {
+            $masterTemplate->setHeaderLeftContent($command->getHeaderLeftContent());
+        }
+        if ($command->getHeaderRightContent() !== null) {
+            $masterTemplate->setHeaderRightContent($command->getHeaderRightContent());
+        }
+        if ($command->getSignoffContent() !== null) {
+            $masterTemplate->setSignoffContent($command->getSignoffContent());
+        }
+        if ($command->getFooterContent() !== null) {
+            $masterTemplate->setFooterContent($command->getFooterContent());
+        }
+
         $this->getRepo()->save($masterTemplate);
 
         $this->result->addId('masterTemplate', $masterTemplate->getId());

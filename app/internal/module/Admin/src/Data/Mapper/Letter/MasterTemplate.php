@@ -18,11 +18,19 @@ class MasterTemplate implements MapperInterface
     #[\Override]
     public static function mapFromResult(array $data): array
     {
+        // VOL-7305: the four chrome slot fields hydrate as JSON arrays from Doctrine.
+        // EditorJS form expects a JSON STRING in the hidden input, so re-encode here.
+        $encodeSlot = static fn($slot) => is_array($slot) ? json_encode($slot) : ($slot ?? null);
+
         $formData = [
             'masterTemplate' => [
                 'id' => $data['id'] ?? null,
                 'name' => $data['name'] ?? null,
                 'templateContent' => $data['templateContent'] ?? null,
+                'headerLeftContent' => $encodeSlot($data['headerLeftContent'] ?? null),
+                'headerRightContent' => $encodeSlot($data['headerRightContent'] ?? null),
+                'signoffContent' => $encodeSlot($data['signoffContent'] ?? null),
+                'footerContent' => $encodeSlot($data['footerContent'] ?? null),
                 'isDefault' => $data['isDefault'] ?? false,
                 'locale' => $data['locale'] ?? null,
             ]
@@ -44,6 +52,23 @@ class MasterTemplate implements MapperInterface
         // Ensure boolean value for isDefault
         if (isset($commandData['isDefault'])) {
             $commandData['isDefault'] = (bool) $commandData['isDefault'];
+        }
+
+        // VOL-7305: EditorJS submits a JSON string per slot field. Decode to array
+        // for the command DTO. Empty/whitespace → null so the API handler treats it
+        // as "leave alone" rather than "clear".
+        $decodeSlot = static function ($value): ?array {
+            if (!is_string($value) || trim($value) === '') {
+                return is_array($value) ? $value : null;
+            }
+            $decoded = json_decode($value, true);
+            return (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) ? $decoded : null;
+        };
+
+        foreach (['headerLeftContent', 'headerRightContent', 'signoffContent', 'footerContent'] as $slot) {
+            if (array_key_exists($slot, $commandData)) {
+                $commandData[$slot] = $decodeSlot($commandData[$slot]);
+            }
         }
 
         return $commandData;

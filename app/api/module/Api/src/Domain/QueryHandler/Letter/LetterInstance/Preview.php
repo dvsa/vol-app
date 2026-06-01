@@ -8,6 +8,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
 use Dvsa\Olcs\Api\Entity\Letter\MasterTemplate;
 use Dvsa\Olcs\Api\Service\Letter\LetterPreviewService;
+use Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolver;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Psr\Container\ContainerInterface;
 
@@ -22,6 +23,7 @@ class Preview extends AbstractQueryHandler
     protected $extraRepos = ['MasterTemplate'];
 
     private LetterPreviewService $previewService;
+    private MasterTemplateResolver $masterTemplateResolver;
 
     /**
      * Bundle for fetching letter instance with all relationships
@@ -83,8 +85,8 @@ class Preview extends AbstractQueryHandler
         /** @var LetterInstanceEntity $letterInstance */
         $letterInstance = $this->getRepo()->fetchUsingId($query);
 
-        // Get the master template from the letter type, or fall back to default
-        $masterTemplate = $this->getMasterTemplate($letterInstance);
+        // VOL-7305: pick the right MasterTemplate row for this letter's region (GB/NI/...)
+        $masterTemplate = $this->masterTemplateResolver->resolve($letterInstance);
 
         // Render the preview HTML
         $previewHtml = $this->previewService->renderPreview($letterInstance, $masterTemplate);
@@ -182,6 +184,7 @@ class Preview extends AbstractQueryHandler
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): self
     {
         $this->previewService = $container->get(LetterPreviewService::class);
+        $this->masterTemplateResolver = $container->get(MasterTemplateResolver::class);
         return parent::__invoke($container, $requestedName, $options);
     }
 }

@@ -15,6 +15,7 @@ use Dvsa\Olcs\Api\Entity\Letter\MasterTemplate;
 use Dvsa\Olcs\Api\Service\ConvertToPdf\ConvertHtmlToPdfInterface;
 use Dvsa\Olcs\Api\Service\Document\NamingServiceAwareInterface;
 use Dvsa\Olcs\Api\Service\Letter\LetterPreviewService;
+use Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolver;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\PrepareToSend as Cmd;
 use Olcs\Logging\Log\Logger;
@@ -41,6 +42,8 @@ final class PrepareToSend extends AbstractCommandHandler implements
 
     private LetterPreviewService $previewService;
 
+    private MasterTemplateResolver $masterTemplateResolver;
+
     private ConvertHtmlToPdfInterface $convertHtmlToPdf;
 
     private $contentStore;
@@ -58,8 +61,8 @@ final class PrepareToSend extends AbstractCommandHandler implements
             throw new ValidationException(['Letter instance must be in DRAFT or READY status']);
         }
 
-        // Get master template for rendering
-        $masterTemplate = $this->getMasterTemplate($letterInstance);
+        // VOL-7305: pick the right MasterTemplate row for this letter's region (GB/NI/...)
+        $masterTemplate = $this->masterTemplateResolver->resolve($letterInstance);
 
         // Render preview HTML
         $previewHtml = $this->previewService->renderPreview($letterInstance, $masterTemplate, excludePdfAppendices: true);
@@ -268,6 +271,7 @@ final class PrepareToSend extends AbstractCommandHandler implements
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): mixed
     {
         $this->previewService = $container->get(LetterPreviewService::class);
+        $this->masterTemplateResolver = $container->get(MasterTemplateResolver::class);
         $this->convertHtmlToPdf = $container->get('ConvertToPdf');
         $this->contentStore = $container->get('ContentStore');
         return parent::__invoke($container, $requestedName, $options);

@@ -165,6 +165,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $templateContent = '<html>{{LETTER_REFERENCE}} {{SECTIONS_CONTENT}} {{ISSUES_CONTENT}}</html>';
         $mockTemplate = m::mock(MasterTemplate::class);
+        $mockTemplate->shouldReceive('getHeaderLeftContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getHeaderRightContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getSignoffContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getFooterContent')->andReturn(null)->byDefault();
         $mockTemplate->shouldReceive('getTemplateContent')
             ->andReturn($templateContent);
 
@@ -223,6 +227,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $templateContent = '{{CASEWORKER_NAME}}';
         $mockTemplate = m::mock(MasterTemplate::class);
+        $mockTemplate->shouldReceive('getHeaderLeftContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getHeaderRightContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getSignoffContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getFooterContent')->andReturn(null)->byDefault();
         $mockTemplate->shouldReceive('getTemplateContent')
             ->andReturn($templateContent);
 
@@ -268,6 +276,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $templateContent = '{{CASEWORKER_NAME}}';
         $mockTemplate = m::mock(MasterTemplate::class);
+        $mockTemplate->shouldReceive('getHeaderLeftContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getHeaderRightContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getSignoffContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getFooterContent')->andReturn(null)->byDefault();
         $mockTemplate->shouldReceive('getTemplateContent')
             ->andReturn($templateContent);
 
@@ -316,6 +328,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $templateContent = '{{ENTITY_REFERENCE}}';
         $mockTemplate = m::mock(MasterTemplate::class);
+        $mockTemplate->shouldReceive('getHeaderLeftContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getHeaderRightContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getSignoffContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getFooterContent')->andReturn(null)->byDefault();
         $mockTemplate->shouldReceive('getTemplateContent')
             ->andReturn($templateContent);
 
@@ -340,6 +356,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockOrganisation->shouldReceive('getName')->andReturn('Test Org');
 
         $mockLicence = m::mock(Licence::class);
+        $mockLicence->shouldReceive('isNi')->andReturn(false)->byDefault();
         $mockLicence->shouldReceive('getLicNo')->andReturn('OB1234567');
         $mockLicence->shouldReceive('getId')->andReturn(999);
         $mockLicence->shouldReceive('getOrganisation')->andReturn($mockOrganisation);
@@ -369,6 +386,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $templateContent = '{{ENTITY_REFERENCE}}';
         $mockTemplate = m::mock(MasterTemplate::class);
+        $mockTemplate->shouldReceive('getHeaderLeftContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getHeaderRightContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getSignoffContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getFooterContent')->andReturn(null)->byDefault();
         $mockTemplate->shouldReceive('getTemplateContent')
             ->andReturn($templateContent);
 
@@ -418,6 +439,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $templateContent = '{{SALUTATION}}';
         $mockTemplate = m::mock(MasterTemplate::class);
+        $mockTemplate->shouldReceive('getHeaderLeftContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getHeaderRightContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getSignoffContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getFooterContent')->andReturn(null)->byDefault();
         $mockTemplate->shouldReceive('getTemplateContent')
             ->andReturn($templateContent);
 
@@ -442,6 +467,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockOrganisation->shouldReceive('getName')->andReturn('Licence Org Ltd');
 
         $mockLicence = m::mock(Licence::class);
+        $mockLicence->shouldReceive('isNi')->andReturn(false)->byDefault();
         $mockLicence->shouldReceive('getLicNo')->andReturn('OB123');
         $mockLicence->shouldReceive('getId')->andReturn(1);
         $mockLicence->shouldReceive('getOrganisation')->andReturn($mockOrganisation);
@@ -471,6 +497,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $templateContent = '{{SALUTATION}}';
         $mockTemplate = m::mock(MasterTemplate::class);
+        $mockTemplate->shouldReceive('getHeaderLeftContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getHeaderRightContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getSignoffContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getFooterContent')->andReturn(null)->byDefault();
         $mockTemplate->shouldReceive('getTemplateContent')
             ->andReturn($templateContent);
 
@@ -516,6 +546,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $templateContent = '{{SALUTATION}}';
         $mockTemplate = m::mock(MasterTemplate::class);
+        $mockTemplate->shouldReceive('getHeaderLeftContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getHeaderRightContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getSignoffContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getFooterContent')->andReturn(null)->byDefault();
         $mockTemplate->shouldReceive('getTemplateContent')
             ->andReturn($templateContent);
 
@@ -524,7 +558,15 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $this->assertEquals('<p>Dear Sir or Madam,</p>', $result);
     }
 
-    public function testBuildDvsaAddressReturnsStaticAddress(): void
+    /**
+     * VOL-7305: The {{DVSA_ADDRESS}} placeholder used to resolve to a hardcoded
+     * Leeds office address. It now resolves to an empty string — the address lives
+     * in the headerRightContent slot of the matching MasterTemplate row, picked by
+     * MasterTemplateResolver based on the letter's region (GB/NI). This test
+     * preserves the backward-compat guarantee that the token is still recognised
+     * (no leftover {{DVSA_ADDRESS}} text in the output) but produces nothing.
+     */
+    public function testDvsaAddressPlaceholderResolvesToEmptyForBackwardCompat(): void
     {
         $mockSectionRenderer = m::mock(SectionRendererInterface::class);
         $mockIssueRenderer = m::mock(SectionRendererInterface::class);
@@ -559,17 +601,24 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
 
-        $templateContent = '{{DVSA_ADDRESS}}';
+        // Template content is just the legacy placeholder — should resolve to nothing.
+        $templateContent = '[start]{{DVSA_ADDRESS}}[end]';
         $mockTemplate = m::mock(MasterTemplate::class);
+        $mockTemplate->shouldReceive('getHeaderLeftContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getHeaderRightContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getSignoffContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getFooterContent')->andReturn(null)->byDefault();
         $mockTemplate->shouldReceive('getTemplateContent')
             ->andReturn($templateContent);
 
         $result = $this->sut->renderPreview($mockLetterInstance, $mockTemplate);
 
-        $this->assertStringContainsString('The Central Licensing Office', $result);
-        $this->assertStringContainsString('Hillcrest House', $result);
-        $this->assertStringContainsString('Leeds', $result);
-        $this->assertStringContainsString('LS9 6NF', $result);
+        // Token recognised + replaced with empty
+        $this->assertStringNotContainsString('{{DVSA_ADDRESS}}', $result);
+        $this->assertStringContainsString('[start][end]', $result);
+        // None of the old hardcoded literals leak through
+        $this->assertStringNotContainsString('Central Licensing Office', $result);
+        $this->assertStringNotContainsString('Hillcrest House', $result);
     }
 
     public function testRenderIssuesGroupedByType(): void
@@ -619,6 +668,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
         // Issues are rendered via assembly fallback into SECTIONS_CONTENT (no __ISSUES__ meta-section)
         $templateContent = '{{SECTIONS_CONTENT}}';
         $mockTemplate = m::mock(MasterTemplate::class);
+        $mockTemplate->shouldReceive('getHeaderLeftContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getHeaderRightContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getSignoffContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getFooterContent')->andReturn(null)->byDefault();
         $mockTemplate->shouldReceive('getTemplateContent')
             ->andReturn($templateContent);
 
@@ -648,6 +701,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockSection = $this->createMockSection();
 
         $mockLicence = m::mock(Licence::class);
+        $mockLicence->shouldReceive('isNi')->andReturn(false)->byDefault();
         $mockLicence->shouldReceive('getId')->andReturn(123);
         $mockLicence->shouldReceive('getLicNo')->andReturn('OB123');
         $mockLicence->shouldReceive('getOrganisation')->andReturn(null);
@@ -703,6 +757,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockSection = $this->createMockSection();
 
         $mockLicence = m::mock(Licence::class);
+        $mockLicence->shouldReceive('isNi')->andReturn(false)->byDefault();
         $mockLicence->shouldReceive('getId')->andReturn(111);
         $mockLicence->shouldReceive('getLicNo')->andReturn('OB111');
         $mockLicence->shouldReceive('getOrganisation')->andReturn(null);
@@ -796,9 +851,9 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
 
-        // Verify context is empty when all entities are null
+        // Context carries isNi=false (default) even when all linked entities are null
         $mockSectionRenderer->shouldReceive('render')
-            ->with($mockSection, [])
+            ->with($mockSection, ['isNi' => false])
             ->once()
             ->andReturn('<div class="section">Content</div>');
 
@@ -822,6 +877,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockIssue = $this->createMockIssue('Test Type', 'Test Description', 1);
 
         $mockLicence = m::mock(Licence::class);
+        $mockLicence->shouldReceive('isNi')->andReturn(false)->byDefault();
         $mockLicence->shouldReceive('getId')->andReturn(789);
         $mockLicence->shouldReceive('getLicNo')->andReturn('OB789');
         $mockLicence->shouldReceive('getOrganisation')->andReturn(null);
@@ -877,6 +933,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockSection = $this->createMockSection();
 
         $mockLicence = m::mock(Licence::class);
+        $mockLicence->shouldReceive('isNi')->andReturn(false)->byDefault();
         $mockLicence->shouldReceive('getId')->andReturn(123);
         $mockLicence->shouldReceive('getLicNo')->andReturn('OB123');
         $mockLicence->shouldReceive('getOrganisation')->andReturn(null);
@@ -906,6 +963,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $templateContent = '<html>{{SECTIONS_CONTENT}} [[TODAYS_DATE]]</html>';
         $mockTemplate = m::mock(MasterTemplate::class);
+        $mockTemplate->shouldReceive('getHeaderLeftContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getHeaderRightContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getSignoffContent')->andReturn(null)->byDefault();
+        $mockTemplate->shouldReceive('getFooterContent')->andReturn(null)->byDefault();
         $mockTemplate->shouldReceive('getTemplateContent')
             ->andReturn($templateContent);
 
@@ -953,10 +1014,11 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
 
-        // Override default mock to verify vol-grab replacement is called even without template
+        // Override default mock to verify vol-grab replacement is called even without template.
+        // Context now always carries isNi (VOL-7305) even when no licence is attached.
         $this->mockVolGrabReplacementService->shouldReceive('replaceGrabsInHtml')
             ->once()
-            ->with(m::type('string'), [])
+            ->with(m::type('string'), ['isNi' => false])
             ->andReturnUsing(fn($html, $context) => $html);
 
         $result = $this->sut->renderPreview($mockLetterInstance, null);
