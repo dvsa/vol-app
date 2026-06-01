@@ -9,6 +9,7 @@ use org\bovigo\vfs\vfsStream;
 use DOMDocument;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class XsdTest
@@ -162,10 +163,7 @@ XSD;
         // $this->assertArrayHasKey('invalid-xml-no-error', $messages);
     }
 
-    /**
-     * @dataProvider provideIsValid
-     * @param $xml
-     */
+    #[DataProvider('provideIsValid')]
     public function testIsValid($xml): void
     {
         libxml_clear_errors();
@@ -188,7 +186,7 @@ XSD;
         $this->assertEquals(true, $xsd->isValid($domDocument));
     }
 
-    public function provideIsValid()
+    public static function provideIsValid(): array
     {
         return [
             ['<test></test>'],
