@@ -1,5 +1,37 @@
 # Changelog
 
+## [7.5.0](https://github.com/dvsa/vol-app/compare/v7.4.1...v7.5.0) (2026-06-01)
+
+
+### Features
+
+* 7077 update populate anondb job ([#1460](https://github.com/dvsa/vol-app/issues/1460)) ([51c78d7](https://github.com/dvsa/vol-app/commit/51c78d7680356ee3b31ea0bf15fd7e5b902f8b79))
+* 7078 import anondb new scripts ([#1491](https://github.com/dvsa/vol-app/issues/1491)) ([f77e638](https://github.com/dvsa/vol-app/commit/f77e63894bd377c9576768472e500000fd33ed06))
+* added infra secrets ([#1465](https://github.com/dvsa/vol-app/issues/1465)) ([9e59139](https://github.com/dvsa/vol-app/commit/9e591392c4947a06bc5ba1fe3721d60ed70c88cc))
+* added unit tests to prevent PTR letter generation when TM variation is under consideration ([#1505](https://github.com/dvsa/vol-app/issues/1505)) ([a8d54a7](https://github.com/dvsa/vol-app/commit/a8d54a739610730e37e4ef9e0174deca864c3ff5))
+* move from laminas-log to monolog VOL-6099 ([#1453](https://github.com/dvsa/vol-app/issues/1453)) ([fe62fd1](https://github.com/dvsa/vol-app/commit/fe62fd12eadc60ed157cd71313bbb871b5e78e82))
+* prevent PTR letter generation when TM variation is under consideration ([#1500](https://github.com/dvsa/vol-app/issues/1500)) ([b5043cf](https://github.com/dvsa/vol-app/commit/b5043cf40d7bc2a59fa5791b5807da8a716956b8))
+* remove laminas-mvc-i18n package VOL-7235 ([#1474](https://github.com/dvsa/vol-app/issues/1474)) ([bd6791e](https://github.com/dvsa/vol-app/commit/bd6791e4adbe863ff8487834c3c6fe1e1e2ba257))
+* removed dependency on laminas-mvc-plugin-prg VOL-7230 ([#1473](https://github.com/dvsa/vol-app/issues/1473)) ([3c357e8](https://github.com/dvsa/vol-app/commit/3c357e8fd53b194aa524cc78560dccbfa833ab5f))
+
+
+### Bug Fixes
+
+* add gotenberg to cd ([#1490](https://github.com/dvsa/vol-app/issues/1490)) ([618e3e3](https://github.com/dvsa/vol-app/commit/618e3e3ea7b67f78a39ad8632ab69f6b4c3cd1b7))
+* bump olcs-utils to fix translator type hinting option VOL-7235 ([#1482](https://github.com/dvsa/vol-app/issues/1482)) ([af3685d](https://github.com/dvsa/vol-app/commit/af3685d699d910fc20ad4f529060da3d20487f39))
+* certificate of roadworthiness VRM bug fixed VOL-5427 ([#1503](https://github.com/dvsa/vol-app/issues/1503)) ([ec2a0df](https://github.com/dvsa/vol-app/commit/ec2a0df17d347eff6c9ca5fab7bdf8de3b7fef9c))
+* handle errors similarly to laminas-log but write a tag along with each error to speed up a future triage/fix ticket ([#1472](https://github.com/dvsa/vol-app/issues/1472)) ([a5c982e](https://github.com/dvsa/vol-app/commit/a5c982e0a5fe356cd072e146c77e4e2de1570a62))
+* handle errors similarly to laminas-log but write a tag along with each error to speed up a future triage/fix ticket ([#1481](https://github.com/dvsa/vol-app/issues/1481)) ([8c7ebed](https://github.com/dvsa/vol-app/commit/8c7ebed0c8fcc5de5a83773b137365fd2c8ad4b9))
+* increase batch container memory and allow php to use it ([#1485](https://github.com/dvsa/vol-app/issues/1485)) ([fe82728](https://github.com/dvsa/vol-app/commit/fe827284a394e10d91a914fb9a10c2d75d9d8ec9))
+* move from stdout to stderr, prevents JSON responses being malformed due to erros such as deprecations VOL-6099 ([#1476](https://github.com/dvsa/vol-app/issues/1476)) ([65965bd](https://github.com/dvsa/vol-app/commit/65965bd75650d693dc98adcfd52993794b2719fd))
+* move MvcTranslator registration from olcs-common to olcs-utils ([#1492](https://github.com/dvsa/vol-app/issues/1492)) ([e1da9ab](https://github.com/dvsa/vol-app/commit/e1da9abb046581210b70519b714786c9c5c5f01a))
+* provider issues with batch ([#1511](https://github.com/dvsa/vol-app/issues/1511)) ([be1ec66](https://github.com/dvsa/vol-app/commit/be1ec662471736871232e64fcf7ad4e4f28dba65))
+* resolve issue brought to light after replacing laminas log with monolog ([#1471](https://github.com/dvsa/vol-app/issues/1471)) ([f33c93e](https://github.com/dvsa/vol-app/commit/f33c93e669151653055254f96eb8686a093296af))
+* update .gitignore trigger ([#1517](https://github.com/dvsa/vol-app/issues/1517)) ([2ae5bae](https://github.com/dvsa/vol-app/commit/2ae5baec06860e3456e8de8fb6846d2d3756dd77))
+* update env ([#1509](https://github.com/dvsa/vol-app/issues/1509)) ([aa895a6](https://github.com/dvsa/vol-app/commit/aa895a6a73841455cdf48948683f30422359bc60))
+* use addIndicesByName to avoid Elastica 7.2 deprecation breaking search ([#1470](https://github.com/dvsa/vol-app/issues/1470)) ([037e0b8](https://github.com/dvsa/vol-app/commit/037e0b8df817ac9197cf39dbcea67a41a862f7bd))
+* various changes and fixes to make licence documents render correctly VOL-6958 ([#1462](https://github.com/dvsa/vol-app/issues/1462)) ([bfcdd82](https://github.com/dvsa/vol-app/commit/bfcdd82d55cd544d451463632549d58675964674))
+
 ## [7.4.1](https://github.com/dvsa/vol-app/compare/v7.4.0...v7.4.1) (2026-05-13)
 
 
