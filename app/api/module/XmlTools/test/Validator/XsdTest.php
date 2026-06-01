@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class XsdTest extends TestCase
 {
-    protected $xsd = <<<XSD
+    protected string $xsd = <<<XSD
 <?xml version="1.0" encoding="UTF-8" ?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
  <xs:element name="test" type="xs:string" />
@@ -164,7 +164,7 @@ XSD;
     }
 
     #[DataProvider('provideIsValid')]
-    public function testIsValid($xml): void
+    public function testIsValid(string $xml): void
     {
         libxml_clear_errors();
         vfsStream::setup('root');

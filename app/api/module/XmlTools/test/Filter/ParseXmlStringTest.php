@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\XmlTools\Filter;
 
 use Olcs\XmlTools\Filter\ParseXmlString;
