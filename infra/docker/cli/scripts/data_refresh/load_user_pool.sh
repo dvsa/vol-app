@@ -9,7 +9,7 @@ S3BUCKET="devapp-shd-pri-olcsci-build-s3"
 S3BUCKETPATH="cognito"
 ASSUME_ROLE="arn:aws:iam::054614622558:role/OLCS-DEVAPPCI-DEVCI-Cognito_Pool_Admin"
 PASSPHRASE="56B03196-BB37-440C-AAD2-E0E2278CCF33"
-DELETE_BATCH_SIZE="${DELETE_BATCH_SIZE:-200}"
+DELETE_BATCH_SIZE="${DELETE_BATCH_SIZE:-5000}"
 
 SLACK_CHAN="#env-status"
 SLACK_FAIL="#FF9FA1"
@@ -107,7 +107,7 @@ if [[ "$DELETE_USERS" == "true" ]]; then
     echo "Found $TOTAL_USERS users to delete."
 
     if [[ "$TOTAL_USERS" -gt 0 ]]; then
-        split -l "$DELETE_BATCH_SIZE" "$DELETE_LIST_FILE" "${DELETE_LIST_FILE}.batch."
+        split -l "$DELETE_BATCH_SIZE" -d "$DELETE_LIST_FILE" "${DELETE_LIST_FILE}.batch."
 
         for batch_file in "${DELETE_LIST_FILE}.batch."*; do
             [[ -e "$batch_file" ]] || continue
