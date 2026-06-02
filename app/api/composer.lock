@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "a45e52ad767baced02f2088e10a70c33",
+  "content-hash": "d4d93fca12ea58efce60d362e9bc384a",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -2017,16 +2017,16 @@
     },
     {
       "name": "dvsa/php-govuk-account",
-      "version": "dev-chore/modernise-dependencies",
+      "version": "v4.0.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/php-govuk-account.git",
-        "reference": "f409d1b77c1c686ad8129128f00e9c6eebb571a9"
+        "reference": "f4416d04a92714aea66c546995e54c1af0865560"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/php-govuk-account/zipball/f409d1b77c1c686ad8129128f00e9c6eebb571a9",
-        "reference": "f409d1b77c1c686ad8129128f00e9c6eebb571a9",
+        "url": "https://api.github.com/repos/dvsa/php-govuk-account/zipball/f4416d04a92714aea66c546995e54c1af0865560",
+        "reference": "f4416d04a92714aea66c546995e54c1af0865560",
         "shasum": ""
       },
       "require": {
@@ -2066,9 +2066,9 @@
       "keywords": ["dvsa", "govuk", "onelogin", "sdk", "signin"],
       "support": {
         "issues": "https://github.com/dvsa/php-govuk-account/issues",
-        "source": "https://github.com/dvsa/php-govuk-account/tree/chore/modernise-dependencies"
+        "source": "https://github.com/dvsa/php-govuk-account/tree/v4.0.0"
       },
-      "time": "2026-04-22T14:08:19+00:00"
+      "time": "2026-06-02T11:23:01+00:00"
     },
     {
       "name": "egulias/email-validator",
@@ -14477,18 +14477,9 @@
       "time": "2022-01-24T18:55:24+00:00"
     }
   ],
-  "aliases": [
-    {
-      "package": "dvsa/php-govuk-account",
-      "version": "dev-chore/modernise-dependencies",
-      "alias": "3.1.0",
-      "alias_normalized": "3.1.0.0"
-    }
-  ],
+  "aliases": [],
   "minimum-stability": "dev",
-  "stability-flags": {
-    "dvsa/php-govuk-account": 20
-  },
+  "stability-flags": {},
   "prefer-stable": true,
   "prefer-lowest": false,
   "platform": {
