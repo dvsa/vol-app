@@ -107,7 +107,7 @@ if [[ "$DELETE_USERS" == "true" ]]; then
     echo "Found $TOTAL_USERS users to delete."
 
     if [[ "$TOTAL_USERS" -gt 0 ]]; then
-        split -l "$DELETE_BATCH_SIZE" -d "$DELETE_LIST_FILE" "${DELETE_LIST_FILE}.batch."
+        split -l "$DELETE_BATCH_SIZE"  "$DELETE_LIST_FILE" "${DELETE_LIST_FILE}.batch."
 
         for batch_file in "${DELETE_LIST_FILE}.batch."*; do
             [[ -e "$batch_file" ]] || continue
