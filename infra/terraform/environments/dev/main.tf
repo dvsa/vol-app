@@ -102,7 +102,8 @@ locals {
       resources = [
 
         "arn:aws:rds:eu-west-1:054614622558:cluster:dev-aurora-olcsdb-cluster",
-        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*"
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-db-anon-*"
       ]
     },
     {
@@ -396,7 +397,7 @@ module "service" {
 
     cli_repository       = data.aws_ecr_repository.this["cli"].repository_url
     liquibase_repository = data.aws_ecr_repository.sservice["liquibase"].repository_url
-    api_secret_file      = data.aws_secretsmanager_secret.this["api"].arn                         
+    api_secret_file      = data.aws_secretsmanager_secret.this["api"].arn
 
     task_iam_role_statements = local.task_iam_role_statements
 
