@@ -39,7 +39,7 @@ class OperatingCentreHelper implements FactoryInterface
     public const ERR_OC_AD_FI_1 = 'ERR_OC_AD_FI_1';
     public const ERR_OC_VR_1A = 'ERR_OC_VR_1A'; // with trailers
     public const ERR_OC_VR_1B = 'ERR_OC_VR_1B'; // without trailers
-    public const ERR_OR_R_TOO_MANY = 'ERR_OR_R_TOO_MANY';
+    public const ERR_OC_R_1 = 'ERR_OC_R_1';
     public const ERR_OC_PC_TA_NI = 'ERR_OC_PC_TA_NI';
     public const ERR_OC_PC_TA_GB = 'ERR_OC_PC_TA_GB';
     public const ERR_OC_PERMISSION = 'ERR_OC_PERMISSION';
@@ -82,7 +82,7 @@ class OperatingCentreHelper implements FactoryInterface
         $this->validateTrafficArea($entity, $command);
 
         if ($entity->isPsv() && $entity->isRestricted() && (int)$command->getNoOfVehiclesRequired() > 2) {
-            $this->addMessage('noOfVehiclesRequired', self::ERR_OR_R_TOO_MANY);
+            $this->addMessage('noOfVehiclesRequired', self::ERR_OC_R_1);
         }
 
         if ($entity->isPsv() && (int)$command->getNoOfVehiclesRequired() < 1) {
