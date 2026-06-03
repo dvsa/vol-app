@@ -102,13 +102,16 @@ class ConversationsController extends AbstractController implements ToggleAwareI
 
         $hasProcessedFiles = false;
         if ($canUploadFiles && $isPost) {
+            // No count selector: attaching a file is optional. Passing one makes the helper write the
+            // uploaded-file count into the hidden fileCount field; when that count is 0 it renders as
+            // value="0", and on the next submit the string "0" is treated as a present value, tripping
+            // the FileUploadCountV2 (min 1) validator with a spurious "Too few files uploaded" error.
             $hasProcessedFiles = $this->processFiles(
                 $form,
                 'form-actions->file',
                 $this->processFileUpload(...),
                 $this->deleteFile(...),
                 $this->getUploadedFiles(...),
-                'form-actions->file->fileCount',
             );
         }
 
@@ -245,13 +248,14 @@ class ConversationsController extends AbstractController implements ToggleAwareI
 
         $hasProcessedFiles = false;
         if ($this->getCurrentOrganisation()['isMessagingFileUploadEnabled']) {
+            // No count selector: attaching a file is optional. See addAction() for the full explanation -
+            // a baked fileCount="0" would otherwise trip the min-1 validator with "Too few files uploaded".
             $hasProcessedFiles = $this->processFiles(
                 $form,
                 'form-actions->file',
                 $this->processFileUpload(...),
                 $this->deleteFile(...),
                 $this->getUploadedFiles(...),
-                'form-actions->file->fileCount',
             );
 
             $view->setVariable('openReply', $hasProcessedFiles);
