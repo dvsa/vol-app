@@ -16,7 +16,7 @@
     "doctrine/orm": "^2.20",
     "dvsa/authentication-cognito": "^3.3",
     "dvsa/laminas-config-cloud-parameters": "^1.0",
-    "dvsa/php-govuk-account": "dev-chore/modernise-dependencies as 3.1.0",
+    "dvsa/php-govuk-account": "^4.0",
     "gedmo/doctrine-extensions": "^3.21",
     "guzzlehttp/guzzle": "^7.10",
     "league/flysystem": "^1.1",

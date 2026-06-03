@@ -9,12 +9,16 @@ S3BUCKET="devapp-shd-pri-olcsci-build-s3"
 S3BUCKETPATH="cognito"
 ASSUME_ROLE="arn:aws:iam::054614622558:role/OLCS-DEVAPPCI-DEVCI-Cognito_Pool_Admin"
 PASSPHRASE="56B03196-BB37-440C-AAD2-E0E2278CCF33"
-DELETE_BATCH_SIZE="${DELETE_BATCH_SIZE:-200}"
+DELETE_BATCH_SIZE="${DELETE_BATCH_SIZE:-5000}"
 
 SLACK_CHAN="#env-status"
 SLACK_FAIL="#FF9FA1"
 SLACK_COMPLETED="#36A64F"
 DEFAULT_EMAIL="no@emailaddress.com"
+
+ORIGINAL_AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID:-}"
+ORIGINAL_AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY:-}"
+ORIGINAL_AWS_SESSION_TOKEN="${AWS_SESSION_TOKEN:-}"
 
 label_for_branch() {
     case "$1" in
@@ -38,8 +42,22 @@ usage() {
     exit 2
 }
 
+restore_base_credentials() {
+    export AWS_ACCESS_KEY_ID="$ORIGINAL_AWS_ACCESS_KEY_ID"
+    export AWS_SECRET_ACCESS_KEY="$ORIGINAL_AWS_SECRET_ACCESS_KEY"
+
+    if [[ -n "$ORIGINAL_AWS_SESSION_TOKEN" ]]; then
+        export AWS_SESSION_TOKEN="$ORIGINAL_AWS_SESSION_TOKEN"
+    else
+        unset AWS_SESSION_TOKEN
+    fi
+}
+
 assume_role() {
     echo "Assuming AWS role..."
+
+    restore_base_credentials
+
     ROLE_RESPONSE=$(aws sts assume-role \
         --role-arn "$ASSUME_ROLE" \
         --role-session-name jenkins \
@@ -100,7 +118,7 @@ fi
 
 if [[ "$DELETE_USERS" == "true" ]]; then
     echo "Exporting users from user pool..."
-    
+
     /usr/local/bin/delete_users_from_user_pool.py "$USER_POOL_ID" "$REGION" --list-only > "$DELETE_LIST_FILE"
 
     TOTAL_USERS=$(grep -cve '^\s*$' "$DELETE_LIST_FILE" || true)
@@ -113,7 +131,9 @@ if [[ "$DELETE_USERS" == "true" ]]; then
             [[ -e "$batch_file" ]] || continue
             BATCH_COUNT=$(grep -cve '^\s*$' "$batch_file" || true)
             echo "Deleting batch from $batch_file ($BATCH_COUNT users)..."
-            
+
+            assume_role
+
             if ! /usr/local/bin/delete_users_from_user_pool.py "$USER_POOL_ID" "$REGION" --from-file "$batch_file"; then
                 send_slack_notification "$SLACK_CHAN" "$SLACK_FAIL" "${ENVIRONMENT} Failed to delete users."
                 exit 1
@@ -125,6 +145,8 @@ if [[ "$DELETE_USERS" == "true" ]]; then
 fi
 
 echo "Loading users into the user pool..."
+
+assume_role
 
 if ! /usr/local/bin/load_user_pool.py "$USER_POOL_ID" "$REGION" "$ENVIRONMENT" "DEV/APP/CI-COG-KNOWN-PASSWORD" "$DEFAULT_EMAIL" "$USER_FILE"; then
      send_slack_notification "$SLACK_CHAN" "$SLACK_FAIL" "${ENVIRONMENT} Failed to load users."
