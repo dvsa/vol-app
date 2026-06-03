@@ -107,13 +107,15 @@ if [[ "$DELETE_USERS" == "true" ]]; then
     echo "Found $TOTAL_USERS users to delete."
 
     if [[ "$TOTAL_USERS" -gt 0 ]]; then
-        split -l "$DELETE_BATCH_SIZE"  "$DELETE_LIST_FILE" "${DELETE_LIST_FILE}.batch."
+        split -l "$DELETE_BATCH_SIZE" "$DELETE_LIST_FILE" "${DELETE_LIST_FILE}.batch."
 
         for batch_file in "${DELETE_LIST_FILE}.batch."*; do
             [[ -e "$batch_file" ]] || continue
             BATCH_COUNT=$(grep -cve '^\s*$' "$batch_file" || true)
             echo "Deleting batch from $batch_file ($BATCH_COUNT users)..."
-            
+
+            assume_role
+
             if ! /usr/local/bin/delete_users_from_user_pool.py "$USER_POOL_ID" "$REGION" --from-file "$batch_file"; then
                 send_slack_notification "$SLACK_CHAN" "$SLACK_FAIL" "${ENVIRONMENT} Failed to delete users."
                 exit 1
@@ -125,6 +127,8 @@ if [[ "$DELETE_USERS" == "true" ]]; then
 fi
 
 echo "Loading users into the user pool..."
+
+assume_role
 
 if ! /usr/local/bin/load_user_pool.py "$USER_POOL_ID" "$REGION" "$ENVIRONMENT" "DEV/APP/CI-COG-KNOWN-PASSWORD" "$DEFAULT_EMAIL" "$USER_FILE"; then
      send_slack_notification "$SLACK_CHAN" "$SLACK_FAIL" "${ENVIRONMENT} Failed to load users."
