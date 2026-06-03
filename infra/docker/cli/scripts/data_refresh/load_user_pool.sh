@@ -16,6 +16,10 @@ SLACK_FAIL="#FF9FA1"
 SLACK_COMPLETED="#36A64F"
 DEFAULT_EMAIL="no@emailaddress.com"
 
+ORIGINAL_AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID:-}"
+ORIGINAL_AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY:-}"
+ORIGINAL_AWS_SESSION_TOKEN="${AWS_SESSION_TOKEN:-}"
+
 label_for_branch() {
     case "$1" in
         prodsupp) echo "ps" ;;
@@ -38,8 +42,22 @@ usage() {
     exit 2
 }
 
+restore_base_credentials() {
+    export AWS_ACCESS_KEY_ID="$ORIGINAL_AWS_ACCESS_KEY_ID"
+    export AWS_SECRET_ACCESS_KEY="$ORIGINAL_AWS_SECRET_ACCESS_KEY"
+
+    if [[ -n "$ORIGINAL_AWS_SESSION_TOKEN" ]]; then
+        export AWS_SESSION_TOKEN="$ORIGINAL_AWS_SESSION_TOKEN"
+    else
+        unset AWS_SESSION_TOKEN
+    fi
+}
+
 assume_role() {
     echo "Assuming AWS role..."
+
+    restore_base_credentials
+
     ROLE_RESPONSE=$(aws sts assume-role \
         --role-arn "$ASSUME_ROLE" \
         --role-session-name jenkins \
@@ -100,7 +118,7 @@ fi
 
 if [[ "$DELETE_USERS" == "true" ]]; then
     echo "Exporting users from user pool..."
-    
+
     /usr/local/bin/delete_users_from_user_pool.py "$USER_POOL_ID" "$REGION" --list-only > "$DELETE_LIST_FILE"
 
     TOTAL_USERS=$(grep -cve '^\s*$' "$DELETE_LIST_FILE" || true)
