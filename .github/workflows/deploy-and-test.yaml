@@ -133,13 +133,30 @@ jobs:
       id-token: write
       checks: write
 
+  approve_batch:
+    name: Approve Batch Failure
+    if: ${{ always() && (needs.test_batch.result == 'failure' || needs.test_batch.result == 'cancelled') }}
+    needs:
+      - test_batch
+    runs-on: ubuntu-latest
+    environment: test-approval
+    steps:
+      - run: echo "Batch approved"
+
   test_smoke:
     name: Smoke Tests
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment != 'prod' && inputs.environment != 'prep' }}
+    if: |
+      always() &&
+      !cancelled() &&
+      needs.terraform_env.result == 'success' &&
+      (needs.test_batch.result == 'success' || needs.approve_batch.result == 'success') &&
+      inputs.environment != 'prod' &&
+      inputs.environment != 'prep'
     needs:
       - terraform_env
       - liquibase
       - test_batch
+      - approve_batch
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@v4.23.0
     with:
       platform_env: ${{ inputs.environment }}
@@ -153,13 +170,29 @@ jobs:
       id-token: write
       checks: write
 
+  approve_smoke:
+    name: Approve Smoke Failure
+    if: ${{ always() && (needs.test_smoke.result == 'failure' || needs.test_smoke.result == 'cancelled') }}
+    needs:
+      - test_smoke
+    runs-on: ubuntu-latest
+    environment: test-approval
+    steps:
+      - run: echo "Smoke approved"
+
   test_prep_smoke:
     name: Prep Smoke Tests
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'prep' }}
+    if: |
+      always() &&
+      !cancelled() &&
+      needs.terraform_env.result == 'success' &&
+      (needs.test_batch.result == 'success' || needs.approve_batch.result == 'success') &&
+      inputs.environment == 'prep'
     needs:
       - terraform_env
       - liquibase
       - test_batch
+      - approve_batch
     uses: dvsa/vol-functional-tests/.github/workflows/e2ePrepSmoke.yaml@v4.23.0
     with:
       platform_env: ${{ inputs.environment }}
@@ -173,11 +206,27 @@ jobs:
       id-token: write
       checks: write
 
+  approve_prep:
+    name: Approve Prep Failure
+    if: ${{ always() && (needs.test_prep_smoke.result == 'failure' || needs.test_prep_smoke.result == 'cancelled') }}
+    needs:
+      - test_prep_smoke
+    runs-on: ubuntu-latest
+    environment: test-approval
+    steps:
+      - run: echo "Prep approved"
+
   test_selfserve:
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'int'}}
+    if: |
+      always() &&
+      !cancelled() &&
+      needs.terraform_env.result == 'success' &&
+      inputs.environment == 'int' &&
+      (needs.test_smoke.result == 'success' || needs.approve_smoke.result == 'success')
     name: Selfserve Regression Tests
     needs:
       - test_smoke
+      - approve_smoke
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSelfServeRegression.yaml@v4.23.0
     with:
       platform_env: ${{ inputs.environment }}
@@ -192,10 +241,16 @@ jobs:
       checks: write
 
   test_internal:
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'int' }}
+    if: |
+      always() &&
+      !cancelled() &&
+      needs.terraform_env.result == 'success' &&
+      inputs.environment == 'int' &&
+      (needs.test_smoke.result == 'success' || needs.approve_smoke.result == 'success')
     name: Internal Regression Tests
     needs:
       - test_smoke
+      - approve_smoke
     uses: dvsa/vol-functional-tests/.github/workflows/e2eInternalRegression.yaml@v4.23.0
     with:
       platform_env: ${{ inputs.environment }}
@@ -208,6 +263,26 @@ jobs:
       contents: write
       id-token: write
       checks: write
+
+  approve_selfserve:
+    name: Approve Selfserve Failure
+    if: ${{ always() && (needs.test_selfserve.result == 'failure' || needs.test_selfserve.result == 'cancelled') }}
+    needs:
+      - test_selfserve
+    runs-on: ubuntu-latest
+    environment: test-approval
+    steps:
+      - run: echo "Selfserve approved"
+
+  approve_internal:
+    name: Approve Internal Failure
+    if: ${{ always() && (needs.test_internal.result == 'failure' || needs.test_internal.result == 'cancelled') }}
+    needs:
+      - test_internal
+    runs-on: ubuntu-latest
+    environment: test-approval
+    steps:
+      - run: echo "Internal approved"
 
   #  test_accessibility:
   #    name: Accessibility Tests (Will not fail)
