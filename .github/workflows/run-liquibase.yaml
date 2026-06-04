@@ -122,11 +122,15 @@ jobs:
           path: etl-temp
           ref: main
           token: ${{ steps.generate-token.outputs.token }}
+          persist-credentials: false
 
       - name: Create ETL tag
         if: inputs.etl_ref != 'main' && steps.check-tag.outputs.exists != 'true'
         run: |
           cd $GITHUB_WORKSPACE/etl-temp
+
+          git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/dvsa/olcs-etl.git
+
           git tag ${{ inputs.etl_ref }}
           git push origin ${{ inputs.etl_ref }}
         env:
