@@ -2135,8 +2135,10 @@ class Application extends AbstractApplication implements ContextProviderInterfac
             'PsvSmallConditions' => $this->psvSmallVhlConfirmation !== null,
             'PsvMainOccupationUndertakings' => $this->isMainOccupationUndertakingsSectionCompleted(),
             'PsvSmallPartWritten' => $this->isWrittenEvidenceSectionCompleted(),
-            'PsvDocumentaryEvidenceSmall' => $this->smallVehicleEvidenceUploaded !== null  && $this->smallVehicleEvidenceUploaded !== self::FINANCIAL_EVIDENCE_UPLOAD_LATER,
-            'PsvDocumentaryEvidenceLarge' => $this->occupationEvidenceUploaded !== null && $this->occupationEvidenceUploaded !== self::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+            'PsvDocumentaryEvidenceSmall' => $this->smallVehicleEvidenceUploaded !== null
+                && $this->smallVehicleEvidenceUploaded !== self::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+            'PsvDocumentaryEvidenceLarge' => $this->occupationEvidenceUploaded !== null
+                && $this->occupationEvidenceUploaded !== self::FINANCIAL_EVIDENCE_UPLOAD_LATER,
             default => throw new \RuntimeException('There is no validation for this section: ' . $applicationSection),
         };
     }
