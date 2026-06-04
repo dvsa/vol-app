@@ -962,7 +962,7 @@ class ApplicationEntityTest extends EntityTester
                 Entity::FINANCIAL_EVIDENCE_UPLOADED,
             ],
             'upload later' => [
-                true,
+                false,
                 Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
             ],
         ];
@@ -5788,5 +5788,16 @@ class ApplicationEntityTest extends EntityTester
         $tmApplications = new ArrayCollection([$tmApplication]);
         $application->setTransportManagers($tmApplications);
         $this->assertTrue($application->showPeriodOfGraceQuestion());
+    }
+
+    public function testMainOccupationUndertakingsIncompleteWhenOccupationEvidenceUploadLater(): void
+    {
+        $this->entity->setOccupationEvidenceUploaded(Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER);
+        $this->entity->setPsvOccupationRecordsConfirmation('Y');
+        $this->entity->setPsvIncomeRecordsConfirmation('Y');
+
+        $this->assertFalse(
+            $this->entity->isSectionCompleted('PsvMainOccupationUndertakings')
+        );
     }
 }

@@ -2234,7 +2234,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
         if ($this->occupationEvidenceUploaded === self::FINANCIAL_EVIDENCE_UPLOAD_LATER) {
             return false;
         }
-        
+
         return $this->psvOccupationRecordsConfirmation !== null && $this->psvIncomeRecordsConfirmation !== null;
     }
 
