@@ -111,6 +111,13 @@ return [
         'cy_GB' => '',
       ],
     ],
+    // VOL-7238: dedicated DSN for the admin "Send test via Notify" button (independent of
+    // `mail.dsn`). Set to `govuknotify+mailpit://mailpit:1025` to wire the button through
+    // the local Mailpit, or `govuknotify://<test-key>@notify.gov.uk` to hit a real Notify
+    // test-mode key. Leave null to hide the button entirely.
+    'notify_test' => [
+      'dsn' => null,
+    ],
   ],
   'awsOptions'=>[
     'region' => 'eu-west-1',

@@ -5,6 +5,7 @@ namespace Dvsa\Olcs\Api\Domain\QueryHandler\Template;
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
 use Dvsa\Olcs\Api\Service\Template\StrategySelectingViewRenderer;
 use Dvsa\Olcs\Api\Service\Template\TwigRenderer;
+use Dvsa\Olcs\Email\View\NotifyChrome;
 use Dvsa\Olcs\Transfer\Query\Template\PreviewTemplateSource as PreviewTemplateSourceQry;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Exception;
@@ -48,13 +49,14 @@ class PreviewTemplateSource extends AbstractQueryHandler
         $datasets = $template->getDecodedTestData();
         $locale = $template->getLocale();
         $format = $template->getFormat();
+        $description = (string) $template->getDescription();
 
         $result = [];
         foreach ($datasets as $datasetName => $datasetValues) {
             try {
                 $rendered = $this->twigRenderer->renderString($source, $datasetValues);
                 $result[$datasetName] = $format === self::FORMAT_MARKDOWN
-                    ? $this->renderMarkdownPreview($rendered)
+                    ? $this->renderMarkdownPreview($rendered, $description)
                     : $this->strategySelectingViewRenderer->render(
                         $locale,
                         $format,
@@ -71,15 +73,13 @@ class PreviewTemplateSource extends AbstractQueryHandler
         return $result;
     }
 
-    private function renderMarkdownPreview(string $markdown): string
+    private function renderMarkdownPreview(string $markdown, string $subject): string
     {
         $this->markdownConverter ??= new GithubFlavoredMarkdownConverter();
         $html = $this->markdownConverter->convert($markdown)->getContent();
 
-        // Lightweight GOV.UK-alike preview wrapper. Notify provides its own chrome at delivery
-        // time; this is for the admin template-preview UI only.
-        return '<div class="notify-preview" style="font-family:Arial,Helvetica,sans-serif;'
-            . 'max-width:620px;line-height:1.5;color:#0b0c0c;">' . $html . '</div>';
+        // Shared chrome with DevNotifyTransport so the admin preview matches Mailpit output.
+        return NotifyChrome::wrap($html, $subject);
     }
 
     /**

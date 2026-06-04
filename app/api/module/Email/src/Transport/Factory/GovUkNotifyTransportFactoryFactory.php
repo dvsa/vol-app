@@ -6,6 +6,7 @@ namespace Dvsa\Olcs\Email\Transport\Factory;
 
 use Alphagov\Notifications\Client as NotifyClient;
 use Dvsa\Olcs\Email\Transport\GovUkNotifyTransportFactory;
+use Dvsa\Olcs\Email\View\NotifyChrome;
 use GuzzleHttp\Client as GuzzleClient;
 use Http\Adapter\Guzzle7\Client as GuzzleAdapter;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -35,7 +36,7 @@ final class GovUkNotifyTransportFactoryFactory implements FactoryInterface
 
         $chromeTemplate = is_string($notifyConfig['dev_chrome_template'] ?? null)
             ? $notifyConfig['dev_chrome_template']
-            : self::defaultChromeTemplate();
+            : NotifyChrome::template();
 
         $markdownConverter = new GithubFlavoredMarkdownConverter();
 
@@ -54,25 +55,4 @@ final class GovUkNotifyTransportFactoryFactory implements FactoryInterface
         );
     }
 
-    private static function defaultChromeTemplate(): string
-    {
-        // Minimal GOV.UK-alike chrome for DevNotifyTransport; production rendering is Notify-side.
-        return <<<'HTML'
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>{{subject}}</title>
-</head>
-<body style="margin:0; font-family:Arial, Helvetica, sans-serif; background:#f3f2f1; padding:20px;">
-  <div style="max-width:620px; margin:0 auto; background:#ffffff; padding:30px; border-top:10px solid #1d70b8;">
-    <h1 style="font-size:24px; margin:0 0 20px; color:#0b0c0c;">{{subject}}</h1>
-    <div style="font-size:16px; line-height:1.5; color:#0b0c0c;">{{body}}</div>
-    <hr style="border:0; border-top:1px solid #b1b4b6; margin:30px 0 15px;">
-    <p style="font-size:12px; color:#505a5f;">Dev preview — rendered locally via DevNotifyTransport.</p>
-  </div>
-</body>
-</html>
-HTML;
-    }
 }

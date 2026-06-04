@@ -6,6 +6,7 @@ namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Template;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Template\PreviewTemplateSource;
 use Dvsa\Olcs\Api\Domain\Repository\Template as TemplateRepo;
+use Dvsa\Olcs\Api\Entity\Template\Template;
 use Dvsa\Olcs\Api\Service\Template\StrategySelectingViewRenderer;
 use Dvsa\Olcs\Api\Service\Template\TwigRenderer;
 use Dvsa\Olcs\Transfer\Query\Template\PreviewTemplateSource as Qry;
@@ -36,6 +37,7 @@ class PreviewTemplateSourceMarkdownTest extends QueryHandlerTestCase
         $template->shouldReceive('getDecodedTestData')->andReturn(['Default' => ['name' => 'world']]);
         $template->shouldReceive('getLocale')->andReturn('en_GB');
         $template->shouldReceive('getFormat')->andReturn(PreviewTemplateSource::FORMAT_MARKDOWN);
+        $template->shouldReceive('getDescription')->andReturn('Greeting template');
 
         $this->mockedSmServices['TemplateTwigRenderer']
             ->shouldReceive('renderString')->with($source, ['name' => 'world'])
@@ -50,6 +52,8 @@ class PreviewTemplateSourceMarkdownTest extends QueryHandlerTestCase
 
         $this->assertArrayHasKey('Default', $result);
         $this->assertStringContainsString('<strong>world</strong>', $result['Default']);
-        $this->assertStringContainsString('notify-preview', $result['Default']);
+        // New shared chrome wrap: GOV.UK header + description used as subject heading.
+        $this->assertStringContainsString('GOV.UK', $result['Default']);
+        $this->assertStringContainsString('Greeting template', $result['Default']);
     }
 }
