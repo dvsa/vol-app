@@ -1,5 +1,17 @@
 # Changelog
 
+## [8.14.0](https://github.com/dvsa/olcs-transfer/compare/v8.13.0...v8.14.0) (2026-06-04)
+
+
+### Features
+
+* add S3 bucket browser document DTOs and routes ([#187](https://github.com/dvsa/olcs-transfer/issues/187)) ([1140522](https://github.com/dvsa/olcs-transfer/commit/1140522dcba46af7b6596c55687ea1fb457f0ccb))
+
+
+### Miscellaneous Chores
+
+* vol 6349 secrets scan ([#185](https://github.com/dvsa/olcs-transfer/issues/185)) ([4968b6f](https://github.com/dvsa/olcs-transfer/commit/4968b6f44ecf46687becdf8a4876f305bca8fdd5))
+
 ## [8.13.0](https://github.com/dvsa/olcs-transfer/compare/v8.12.0...v8.13.0) (2026-04-09)
 
 
