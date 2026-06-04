@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.21.0](https://github.com/dvsa/olcs-common/compare/v9.20.1...v9.21.0) (2026-06-04)
+
+
+### Features
+
+* add S3 bucket browser feature toggle constants ([#315](https://github.com/dvsa/olcs-common/issues/315)) ([0d21924](https://github.com/dvsa/olcs-common/commit/0d21924a812870703a5196e0cc1104368d878a6e))
+
 ## [9.20.1](https://github.com/dvsa/olcs-common/compare/v9.20.0...v9.20.1) (2026-05-26)
 
 
