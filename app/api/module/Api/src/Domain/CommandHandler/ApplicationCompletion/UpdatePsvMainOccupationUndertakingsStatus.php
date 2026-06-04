@@ -13,10 +13,6 @@ final class UpdatePsvMainOccupationUndertakingsStatus extends AbstractUpdateStat
     #[\Override]
     protected function isSectionValid(Application $application): bool
     {
-        if ($application->getOccupationEvidenceUploaded() === Application::FINANCIAL_EVIDENCE_UPLOAD_LATER) {
-            return false;
-        }
-
-        return true;
+        return $application->isSectionCompleted($this->section);
     }
 }
