@@ -30,4 +30,8 @@ class FeatureToggle
     public const LETTERS_DATABASE_DRIVEN = 'letters_database_driven';
 
     public const INTERNAL_WEBDAV = 'internal_webdav';
+
+    public const S3_BUCKET_BROWSER = 's3_bucket_browser';
+
+    public const S3_BUCKET_BROWSER_OVERWRITE = 's3_bucket_browser_overwrite';
 }
