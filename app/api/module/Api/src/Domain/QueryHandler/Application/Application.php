@@ -9,7 +9,6 @@ use Psr\Container\ContainerInterface;
 use Dvsa\Olcs\Api\Domain\Command\Application\UpdateApplicationCompletion as UpdateApplicationCompletionCmd;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion;
 
 /**
  * Application
@@ -49,10 +48,6 @@ class Application extends AbstractQueryHandler
             );
         }
 
-        if ($query->getValidateAppCompletion()) {
-            $this->updateUploadLaterEvidenceStatuses($application);
-        }
-
         $latestNote = $this->getRepo('Note')->fetchForOverview($application->getLicence()->getId());
         return $this->result(
             $application,
@@ -90,52 +85,6 @@ class Application extends AbstractQueryHandler
                 'canHaveInspectionRequest' => !$application->isSpecialRestricted(),
             ]
         );
-    }
-
-    private function updateUploadLaterEvidenceStatuses(ApplicationEntity $application): void
-    {
-        if ($application->getStatus()->getId() !== ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED) {
-            return;
-        }
-
-        $completion = $application->getApplicationCompletion();
-        $completionUpdated = false;
-
-        if (
-            $application->getFinancialEvidenceUploaded() === ApplicationEntity::FINANCIAL_EVIDENCE_UPLOAD_LATER
-            && $completion->getFinancialEvidenceStatus() !== ApplicationCompletion::STATUS_INCOMPLETE
-        ) {
-            $completion->setFinancialEvidenceStatus(ApplicationCompletion::STATUS_INCOMPLETE);
-            $completionUpdated = true;
-        }
-
-        if (
-            $application->getSmallVehicleEvidenceUploaded() === ApplicationEntity::FINANCIAL_EVIDENCE_UPLOAD_LATER
-            && $completion->getPsvDocumentaryEvidenceSmallStatus() !== ApplicationCompletion::STATUS_INCOMPLETE
-        ) {
-            $completion->setPsvDocumentaryEvidenceSmallStatus(ApplicationCompletion::STATUS_INCOMPLETE);
-            $completionUpdated = true;
-        }
-
-        if (
-            $application->getOccupationEvidenceUploaded() === ApplicationEntity::FINANCIAL_EVIDENCE_UPLOAD_LATER
-            && $completion->getPsvDocumentaryEvidenceLargeStatus() !== ApplicationCompletion::STATUS_INCOMPLETE
-        ) {
-            $completion->setPsvDocumentaryEvidenceLargeStatus(ApplicationCompletion::STATUS_INCOMPLETE);
-            $completionUpdated = true;
-        }
-
-        if (
-            $application->getOccupationEvidenceUploaded() === ApplicationEntity::FINANCIAL_EVIDENCE_UPLOAD_LATER
-            && $completion->getPsvMainOccupationUndertakingsStatus() !== ApplicationCompletion::STATUS_INCOMPLETE
-        ) {
-            $completion->setPsvMainOccupationUndertakingsStatus(ApplicationCompletion::STATUS_INCOMPLETE);
-            $completionUpdated = true;
-        }
-
-        if ($completionUpdated) {
-            $this->getRepo()->save($application);
-        }
     }
 
     /**
