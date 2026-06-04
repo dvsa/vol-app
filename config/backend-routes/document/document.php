@@ -89,6 +89,24 @@ return [
                     'GET' => QueryConfig::getConfig(Query\Document\DownloadGuide::class),
                 ]
             ),
+            'bucket-browser' => RouteConfig::getRouteConfig(
+                'bucket-browser',
+                [
+                    'GET' => QueryConfig::getConfig(Query\Document\BucketBrowserList::class),
+                    'download' => RouteConfig::getRouteConfig(
+                        'download',
+                        [
+                            'GET' => QueryConfig::getConfig(Query\Document\BucketBrowserDownload::class),
+                        ]
+                    ),
+                    'overwrite' => RouteConfig::getRouteConfig(
+                        'overwrite',
+                        [
+                            'POST' => CommandConfig::getPostConfig(Command\Document\BucketBrowserOverwrite::class),
+                        ]
+                    ),
+                ]
+            ),
             'upload' => RouteConfig::getRouteConfig(
                 'upload',
                 [
