@@ -346,6 +346,8 @@ return [
     TransferQuery\Document\DocumentList::class => QueryHandler\Document\DocumentList::class,
     TransferQuery\Document\Download::class => QueryHandler\Document\Download::class,
     TransferQuery\Document\DownloadGuide::class => QueryHandler\Document\DownloadGuide::class,
+    TransferQuery\Document\BucketBrowserList::class => QueryHandler\Document\BucketBrowserList::class,
+    TransferQuery\Document\BucketBrowserDownload::class => QueryHandler\Document\BucketBrowserDownload::class,
     TransferQuery\Document\PrintLetter::class => QueryHandler\Document\PrintLetter::class,
 
     // Transport Manager Application
