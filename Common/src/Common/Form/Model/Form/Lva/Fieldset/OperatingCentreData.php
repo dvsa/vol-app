@@ -13,7 +13,6 @@ class OperatingCentreData
      * @Form\Attributes({"class":"tiny","pattern":"\d*","id":"noOfVehiclesRequired"})
      * @Form\Options({
      *     "label": "application_operating-centres_authorisation-sub-action.data.noOfVehiclesRequired",
-     *     "error-message": "Your total number of vehicles"
      * })
      * @Form\Validator("Between", options={"min":0, "max":1000000})
      */
