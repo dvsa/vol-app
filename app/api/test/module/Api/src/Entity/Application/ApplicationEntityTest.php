@@ -942,7 +942,7 @@ class ApplicationEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestPsvEvidenceSectionsCompleted')]
-    public function testPsvEvidenceSectionsCompleted(bool $isCompleted, ?int $value): void
+    public function testPsvEvidenceSectionsCompleted(mixed $isCompleted, mixed $value): void
     {
         $this->entity->setSmallVehicleEvidenceUploaded($value);
         $this->entity->setOccupationEvidenceUploaded($value);
@@ -964,6 +964,10 @@ class ApplicationEntityTest extends EntityTester
             'upload later' => [
                 false,
                 Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+            ],
+            'upload later as string' => [
+                false,
+                '2',
             ],
         ];
     }
@@ -5793,6 +5797,17 @@ class ApplicationEntityTest extends EntityTester
     public function testMainOccupationUndertakingsIncompleteWhenOccupationEvidenceUploadLater(): void
     {
         $this->entity->setOccupationEvidenceUploaded(Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER);
+        $this->entity->setPsvOccupationRecordsConfirmation('Y');
+        $this->entity->setPsvIncomeRecordsConfirmation('Y');
+
+        $this->assertFalse(
+            $this->entity->isSectionCompleted('PsvMainOccupationUndertakings')
+        );
+    }
+
+    public function testMainOccupationUndertakingsIncompleteWhenOccupationEvidenceUploadLaterAsString(): void
+    {
+        $this->entity->setOccupationEvidenceUploaded('2');
         $this->entity->setPsvOccupationRecordsConfirmation('Y');
         $this->entity->setPsvIncomeRecordsConfirmation('Y');
 

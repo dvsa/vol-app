@@ -56,7 +56,7 @@ class UpdateFinancialEvidenceStatusTest extends AbstractUpdateStatusTestCase
 
         $this->application
             ->shouldReceive('getFinancialEvidenceUploaded')
-            ->andReturn(ApplicationEntity::FINANCIAL_EVIDENCE_UPLOAD_LATER);
+            ->andReturn('2');
 
         $this->expectStatusChange(
             ApplicationCompletionEntity::STATUS_INCOMPLETE
