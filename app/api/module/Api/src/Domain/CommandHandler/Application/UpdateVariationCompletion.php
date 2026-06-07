@@ -65,7 +65,7 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
         'addresses' => 'hasUpdatedAddresses',
         'people' => 'hasUpdatedPeople',
         'operating_centres' => 'hasUpdatedOperatingCentres',
-        'financial_evidence' => 'hasSavedSection',
+        'financial_evidence' => 'hasUploadedFinancialEvidence',
         'transport_managers' => 'hasUpdatedTransportManagers',
         'vehicles' => 'hasUpdatedVehicles',
         'vehicles_psv' => 'hasUpdatedVehicles',
@@ -74,10 +74,10 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
         'psv_operate_small' => 'hasSavedSection',
         'psv_small_part_written' => 'hasSavedSection',
         'psv_small_conditions' => 'hasSavedSection',
-        'psv_documentary_evidence_small' => 'hasSavedSection',
-        'psv_documentary_evidence_large' => 'hasSavedSection',
+        'psv_documentary_evidence_small' => 'hasUploadedPsvSmallDocumentaryEvidence',
+        'psv_documentary_evidence_large' => 'hasUploadedPsvLargeDocumentaryEvidence',
         'psv_operate_novelty' => 'hasSavedSection',
-        'psv_main_occupation_undertakings' => 'hasSavedSection',
+        'psv_main_occupation_undertakings' => 'hasCompletedPsvMainOccupationUndertakings',
         'discs' => 'hasSavedSection',
         'community_licences' => 'hasSavedSection',
         'safety' => 'hasUpdatedSafetySection',
@@ -325,6 +325,40 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
     protected function hasUpdatedTransportManagers()
     {
         return ($this->application->getTransportManagers()->count() > 0);
+    }
+
+    protected function hasUploadedFinancialEvidence(): bool
+    {
+        if ((int) $this->application->getFinancialEvidenceUploaded() === Application::FINANCIAL_EVIDENCE_UPLOAD_LATER) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function hasUploadedPsvSmallDocumentaryEvidence(): bool
+    {
+        return $this->application->getSmallVehicleEvidenceUploaded() !== null
+            && (int) $this->application->getSmallVehicleEvidenceUploaded() !== Application::FINANCIAL_EVIDENCE_UPLOAD_LATER;
+    }
+
+    protected function hasUploadedPsvLargeDocumentaryEvidence(): bool
+    {
+        return $this->application->getOccupationEvidenceUploaded() !== null
+            && (int) $this->application->getOccupationEvidenceUploaded() !== Application::FINANCIAL_EVIDENCE_UPLOAD_LATER;
+    }
+
+    protected function hasCompletedPsvMainOccupationUndertakings(): bool
+    {
+        if (
+            (int) $this->application->getOccupationEvidenceUploaded()
+            === Application::FINANCIAL_EVIDENCE_UPLOAD_LATER
+        ) {
+            return false;
+        }
+
+        return $this->application->getPsvOccupationRecordsConfirmation() !== null
+            && $this->application->getPsvIncomeRecordsConfirmation() !== null;
     }
 
     /**
