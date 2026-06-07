@@ -329,7 +329,10 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
 
     protected function hasUploadedFinancialEvidence(): bool
     {
-        if ((int) $this->application->getFinancialEvidenceUploaded() === Application::FINANCIAL_EVIDENCE_UPLOAD_LATER) {
+        if (
+            (int) $this->application->getFinancialEvidenceUploaded()
+            === Application::FINANCIAL_EVIDENCE_UPLOAD_LATER
+        ) {
             return false;
         }
 
