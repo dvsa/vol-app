@@ -1,5 +1,17 @@
 # Changelog
 
+## [9.22.0](https://github.com/dvsa/olcs-common/compare/v9.21.0...v9.22.0) (2026-06-08)
+
+
+### Features
+
+* remove dependency on the abandoned laminas-text package VOL-7348 ([#317](https://github.com/dvsa/olcs-common/issues/317)) ([eb2ac35](https://github.com/dvsa/olcs-common/commit/eb2ac352051532e88e40de16cd3fd5f52e02a389))
+
+
+### Bug Fixes
+
+* display correct restricted licence vehicle limit error message ([#313](https://github.com/dvsa/olcs-common/issues/313)) ([763dcfa](https://github.com/dvsa/olcs-common/commit/763dcfa2aed2d5c7d29d7eba45233a425cd413cc))
+
 ## [9.21.0](https://github.com/dvsa/olcs-common/compare/v9.20.1...v9.21.0) (2026-06-04)
 
 
