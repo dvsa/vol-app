@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "a1764fa294f696c7e661788b0620d1c3",
+  "content-hash": "107bdc68ecb3958682f05af9a78462e0",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -3408,6 +3408,63 @@
       "time": "2025-10-14T22:21:28+00:00"
     },
     {
+      "name": "laminas/laminas-code",
+      "version": "4.17.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/laminas/laminas-code.git",
+        "reference": "40d61e2899ec17c5d08bbc0a2d586b3ca17ab9bd"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/laminas/laminas-code/zipball/40d61e2899ec17c5d08bbc0a2d586b3ca17ab9bd",
+        "reference": "40d61e2899ec17c5d08bbc0a2d586b3ca17ab9bd",
+        "shasum": ""
+      },
+      "require": {
+        "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0"
+      },
+      "require-dev": {
+        "doctrine/annotations": "^2.0.1",
+        "ext-phar": "*",
+        "laminas/laminas-coding-standard": "^3.0.0",
+        "laminas/laminas-stdlib": "^3.18.0",
+        "phpunit/phpunit": "^10.5.58",
+        "psalm/plugin-phpunit": "^0.19.0",
+        "vimeo/psalm": "^5.15.0"
+      },
+      "suggest": {
+        "doctrine/annotations": "Doctrine\\Common\\Annotations >=1.0 for annotation features",
+        "laminas/laminas-stdlib": "Laminas\\Stdlib component"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "Laminas\\Code\\": "src/"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": ["BSD-3-Clause"],
+      "description": "Extensions to the PHP Reflection API, static code scanning, and code generation",
+      "homepage": "https://laminas.dev",
+      "keywords": ["code", "laminas", "laminasframework"],
+      "support": {
+        "chat": "https://laminas.dev/chat",
+        "docs": "https://docs.laminas.dev/laminas-code/",
+        "forum": "https://discourse.laminas.dev",
+        "issues": "https://github.com/laminas/laminas-code/issues",
+        "rss": "https://github.com/laminas/laminas-code/releases.atom",
+        "source": "https://github.com/laminas/laminas-code"
+      },
+      "funding": [
+        {
+          "url": "https://funding.communitybridge.org/projects/laminas-project",
+          "type": "community_bridge"
+        }
+      ],
+      "time": "2025-11-01T09:38:14+00:00"
+    },
+    {
       "name": "laminas/laminas-config",
       "version": "3.11.0",
       "source": {
@@ -4358,6 +4415,146 @@
         }
       ],
       "time": "2024-11-18T00:14:29+00:00"
+    },
+    {
+      "name": "laminas/laminas-mvc-plugin-flashmessenger",
+      "version": "1.11.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/laminas/laminas-mvc-plugin-flashmessenger.git",
+        "reference": "664822d8d9f259d880ae25b686848421235f96ec"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/laminas/laminas-mvc-plugin-flashmessenger/zipball/664822d8d9f259d880ae25b686848421235f96ec",
+        "reference": "664822d8d9f259d880ae25b686848421235f96ec",
+        "shasum": ""
+      },
+      "require": {
+        "laminas/laminas-mvc": "^3.3",
+        "laminas/laminas-session": "^2.12.0",
+        "laminas/laminas-stdlib": "^3.6.4",
+        "laminas/laminas-view": "^2.13.1",
+        "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
+      },
+      "conflict": {
+        "laminas/laminas-mvc": "<3.0.0",
+        "zendframework/zend-mvc-plugin-flashmessenger": "*"
+      },
+      "require-dev": {
+        "laminas/laminas-coding-standard": "~3.0.1",
+        "laminas/laminas-i18n": "^2.29.0",
+        "phpunit/phpunit": "^9.6.21",
+        "psalm/plugin-phpunit": "^0.19.0",
+        "vimeo/psalm": "^5.26.1"
+      },
+      "type": "library",
+      "extra": {
+        "laminas": {
+          "component": "Laminas\\Mvc\\Plugin\\FlashMessenger"
+        }
+      },
+      "autoload": {
+        "psr-4": {
+          "Laminas\\Mvc\\Plugin\\FlashMessenger\\": "src/"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": ["BSD-3-Clause"],
+      "description": "Plugin for creating and exposing flash messages via laminas-mvc controllers",
+      "homepage": "https://laminas.dev",
+      "keywords": ["laminas", "mvc"],
+      "support": {
+        "chat": "https://laminas.dev/chat",
+        "docs": "https://docs.laminas.dev/laminas-mvc-plugin-flashmessenger/",
+        "forum": "https://discourse.laminas.dev",
+        "issues": "https://github.com/laminas/laminas-mvc-plugin-flashmessenger/issues",
+        "rss": "https://github.com/laminas/laminas-mvc-plugin-flashmessenger/releases.atom",
+        "source": "https://github.com/laminas/laminas-mvc-plugin-flashmessenger"
+      },
+      "funding": [
+        {
+          "url": "https://funding.communitybridge.org/projects/laminas-project",
+          "type": "community_bridge"
+        }
+      ],
+      "time": "2024-11-29T08:28:58+00:00"
+    },
+    {
+      "name": "laminas/laminas-navigation",
+      "version": "2.23.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/laminas/laminas-navigation.git",
+        "reference": "76b032c39d6f3686e12a2a81d6473e01754cabc8"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/laminas/laminas-navigation/zipball/76b032c39d6f3686e12a2a81d6473e01754cabc8",
+        "reference": "76b032c39d6f3686e12a2a81d6473e01754cabc8",
+        "shasum": ""
+      },
+      "require": {
+        "laminas/laminas-stdlib": "^2.7 || ^3.0",
+        "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0"
+      },
+      "conflict": {
+        "zendframework/zend-navigation": "*"
+      },
+      "require-dev": {
+        "laminas/laminas-coding-standard": "~3.1.0",
+        "laminas/laminas-config": "^3.10.1",
+        "laminas/laminas-http": "^2.22",
+        "laminas/laminas-i18n": "^2.30",
+        "laminas/laminas-mvc": "^3.8",
+        "laminas/laminas-permissions-acl": "^2.17",
+        "laminas/laminas-router": "^3.14.0",
+        "laminas/laminas-servicemanager": "^3.23.1",
+        "laminas/laminas-uri": "^2.13.0",
+        "laminas/laminas-view": "^2.43",
+        "phpunit/phpunit": "^11.5.50",
+        "psalm/plugin-phpunit": "^0.19.5",
+        "vimeo/psalm": "^6.13.1"
+      },
+      "suggest": {
+        "laminas/laminas-config": "^3.7, to provide page configuration (optional, as arrays and Traversables are also allowed)",
+        "laminas/laminas-permissions-acl": "^2.9, to provide ACL-based access restrictions to pages",
+        "laminas/laminas-router": "^3.5, to use router-based URI generation with Mvc pages",
+        "laminas/laminas-servicemanager": "^3.16, to use the navigation factories",
+        "laminas/laminas-view": "^2.14, to use the navigation view helpers"
+      },
+      "type": "library",
+      "extra": {
+        "laminas": {
+          "component": "Laminas\\Navigation",
+          "config-provider": "Laminas\\Navigation\\ConfigProvider"
+        }
+      },
+      "autoload": {
+        "psr-4": {
+          "Laminas\\Navigation\\": "src/"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": ["BSD-3-Clause"],
+      "description": "Manage trees of pointers to web pages in order to build navigation systems",
+      "homepage": "https://laminas.dev",
+      "keywords": ["laminas", "navigation"],
+      "support": {
+        "chat": "https://laminas.dev/chat",
+        "docs": "https://docs.laminas.dev/laminas-navigation/",
+        "forum": "https://discourse.laminas.dev",
+        "issues": "https://github.com/laminas/laminas-navigation/issues",
+        "rss": "https://github.com/laminas/laminas-navigation/releases.atom",
+        "source": "https://github.com/laminas/laminas-navigation"
+      },
+      "funding": [
+        {
+          "url": "https://funding.communitybridge.org/projects/laminas-project",
+          "type": "community_bridge"
+        }
+      ],
+      "time": "2026-02-04T20:59:23+00:00"
     },
     {
       "name": "laminas/laminas-paginator",
@@ -5703,6 +5900,77 @@
         }
       ],
       "time": "2021-11-18T09:23:29+00:00"
+    },
+    {
+      "name": "olcs/olcs-common",
+      "version": "v9.22.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/dvsa/olcs-common.git",
+        "reference": "08289535d13b8d902c0d0f30c46dd3fc72a8fa69"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/08289535d13b8d902c0d0f30c46dd3fc72a8fa69",
+        "reference": "08289535d13b8d902c0d0f30c46dd3fc72a8fa69",
+        "shasum": ""
+      },
+      "require": {
+        "ezyang/htmlpurifier": "^4.17",
+        "laminas/laminas-authentication": "^2.18",
+        "laminas/laminas-cache": "^3.13",
+        "laminas/laminas-code": "^4.16",
+        "laminas/laminas-eventmanager": "^3.14",
+        "laminas/laminas-filter": "^2.41",
+        "laminas/laminas-form": "^3.21",
+        "laminas/laminas-http": "^2.22",
+        "laminas/laminas-i18n": "^2.30",
+        "laminas/laminas-inputfilter": "^2.33",
+        "laminas/laminas-modulemanager": "^2.17",
+        "laminas/laminas-mvc": "^3.8",
+        "laminas/laminas-mvc-plugin-flashmessenger": "^1.11",
+        "laminas/laminas-navigation": "^2.20",
+        "laminas/laminas-servicemanager": "^3.23",
+        "laminas/laminas-stdlib": "^3.20",
+        "laminas/laminas-validator": "^2.64",
+        "laminas/laminas-view": "^2.41",
+        "olcs/olcs-logging": "^9.0",
+        "olcs/olcs-transfer": "^8.0",
+        "olcs/olcs-utils": "^7.1",
+        "php": "~8.3.0",
+        "psr/container": "^1.1|^2"
+      },
+      "require-dev": {
+        "bamarni/composer-bin-plugin": "^1.8.2",
+        "doctrine/annotations": "^1.14.2",
+        "johnkary/phpunit-speedtrap": "^4.0",
+        "lm-commons/lmc-rbac-mvc": "^3.5",
+        "mikey179/vfsstream": "~v1.6.11",
+        "mockery/mockery": "^1.6.7",
+        "phpstan/phpstan-mockery": "^2.0",
+        "phpunit/phpunit": "^9.6",
+        "symfony/filesystem": "^5.4",
+        "symfony/lock": "^5.4"
+      },
+      "type": "library",
+      "extra": {
+        "bamarni-bin": {
+          "bin-links": true,
+          "forward-command": true
+        }
+      },
+      "autoload": {
+        "psr-4": {
+          "Common\\": "Common/src/Common"
+        },
+        "classmap": ["./Common/src/Module.php"]
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "description": "Common library for the OLCS Project",
+      "support": {
+        "source": "https://github.com/dvsa/olcs-common/tree/v9.22.0"
+      },
+      "time": "2026-06-08T13:40:54+00:00"
     },
     {
       "name": "olcs/olcs-logging",
@@ -14443,5 +14711,5 @@
   "platform-overrides": {
     "ext-redis": "6.2.6"
   },
-  "plugin-api-version": "2.6.0"
+  "plugin-api-version": "2.9.0"
 }
