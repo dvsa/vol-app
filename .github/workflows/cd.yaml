@@ -347,6 +347,7 @@ jobs:
       - get-version
       - orchestrator
       - deploy_dev
+      - release-please
     concurrency:
       group: ${{ github.workflow }}-int
     uses: ./.github/workflows/deploy-and-test.yaml
