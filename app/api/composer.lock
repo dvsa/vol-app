@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "a45e52ad767baced02f2088e10a70c33",
+  "content-hash": "a1764fa294f696c7e661788b0620d1c3",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -2017,16 +2017,16 @@
     },
     {
       "name": "dvsa/php-govuk-account",
-      "version": "dev-chore/modernise-dependencies",
+      "version": "v4.0.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/php-govuk-account.git",
-        "reference": "f409d1b77c1c686ad8129128f00e9c6eebb571a9"
+        "reference": "f4416d04a92714aea66c546995e54c1af0865560"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/php-govuk-account/zipball/f409d1b77c1c686ad8129128f00e9c6eebb571a9",
-        "reference": "f409d1b77c1c686ad8129128f00e9c6eebb571a9",
+        "url": "https://api.github.com/repos/dvsa/php-govuk-account/zipball/f4416d04a92714aea66c546995e54c1af0865560",
+        "reference": "f4416d04a92714aea66c546995e54c1af0865560",
         "shasum": ""
       },
       "require": {
@@ -2066,9 +2066,9 @@
       "keywords": ["dvsa", "govuk", "onelogin", "sdk", "signin"],
       "support": {
         "issues": "https://github.com/dvsa/php-govuk-account/issues",
-        "source": "https://github.com/dvsa/php-govuk-account/tree/chore/modernise-dependencies"
+        "source": "https://github.com/dvsa/php-govuk-account/tree/v4.0.0"
       },
-      "time": "2026-04-22T14:08:19+00:00"
+      "time": "2026-06-02T11:23:01+00:00"
     },
     {
       "name": "egulias/email-validator",
@@ -5865,58 +5865,6 @@
       "time": "2026-05-22T09:58:52+00:00"
     },
     {
-      "name": "olcs/olcs-xmltools",
-      "version": "v8.1.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/dvsa/olcs-xmltools.git",
-        "reference": "039e03a103029f76e194c53030693008dbe7ccf4"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-xmltools/zipball/039e03a103029f76e194c53030693008dbe7ccf4",
-        "reference": "039e03a103029f76e194c53030693008dbe7ccf4",
-        "shasum": ""
-      },
-      "require": {
-        "ext-dom": "*",
-        "ext-libxml": "*",
-        "laminas/laminas-filter": "^2.41",
-        "laminas/laminas-servicemanager": "^3.23",
-        "laminas/laminas-stdlib": "^3.20",
-        "laminas/laminas-validator": "^2.64",
-        "laminas/laminas-xml": "^1.7",
-        "php": "~8.2.0 || ~8.3.0",
-        "psr/container": "^1.1|^2"
-      },
-      "require-dev": {
-        "bamarni/composer-bin-plugin": "^1.8.2",
-        "johnkary/phpunit-speedtrap": "^4.0",
-        "mikey179/vfsstream": "^1.6.11",
-        "mockery/mockery": "^1.6",
-        "phpstan/phpstan-mockery": "^2.0",
-        "phpunit/phpunit": "^9.6"
-      },
-      "type": "library",
-      "extra": {
-        "bamarni-bin": {
-          "bin-links": true,
-          "forward-command": true
-        }
-      },
-      "autoload": {
-        "psr-4": {
-          "Olcs\\XmlTools\\": "src/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "description": "XML tools for OLCS",
-      "support": {
-        "source": "https://github.com/dvsa/olcs-xmltools/tree/v8.1.0"
-      },
-      "time": "2025-09-26T15:11:41+00:00"
-    },
-    {
       "name": "oro/doctrine-extensions",
       "version": "2.0.5",
       "source": {
@@ -8959,16 +8907,16 @@
     },
     {
       "name": "symfony/polyfill-intl-idn",
-      "version": "v1.33.0",
+      "version": "v1.38.1",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/polyfill-intl-idn.git",
-        "reference": "9614ac4d8061dc257ecc64cba1b140873dce8ad3"
+        "reference": "dc21118016c039a66235cf93d96b435ffb282412"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/9614ac4d8061dc257ecc64cba1b140873dce8ad3",
-        "reference": "9614ac4d8061dc257ecc64cba1b140873dce8ad3",
+        "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/dc21118016c039a66235cf93d96b435ffb282412",
+        "reference": "dc21118016c039a66235cf93d96b435ffb282412",
         "shasum": ""
       },
       "require": {
@@ -9018,7 +8966,7 @@
         "shim"
       ],
       "support": {
-        "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.33.0"
+        "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.38.1"
       },
       "funding": [
         {
@@ -9038,7 +8986,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2024-09-10T14:38:51+00:00"
+      "time": "2026-05-25T15:22:23+00:00"
     },
     {
       "name": "symfony/polyfill-intl-normalizer",
@@ -9995,16 +9943,16 @@
     },
     {
       "name": "twig/twig",
-      "version": "v3.26.0",
+      "version": "v3.27.1",
       "source": {
         "type": "git",
         "url": "https://github.com/twigphp/Twig.git",
-        "reference": "1fcae487b180d78e6351f4e0afa91f9eab96a2bc"
+        "reference": "ae2071bffb38f04847fc0864d730c94b9cb8ab74"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/twigphp/Twig/zipball/1fcae487b180d78e6351f4e0afa91f9eab96a2bc",
-        "reference": "1fcae487b180d78e6351f4e0afa91f9eab96a2bc",
+        "url": "https://api.github.com/repos/twigphp/Twig/zipball/ae2071bffb38f04847fc0864d730c94b9cb8ab74",
+        "reference": "ae2071bffb38f04847fc0864d730c94b9cb8ab74",
         "shasum": ""
       },
       "require": {
@@ -10055,7 +10003,7 @@
       "keywords": ["templating"],
       "support": {
         "issues": "https://github.com/twigphp/Twig/issues",
-        "source": "https://github.com/twigphp/Twig/tree/v3.26.0"
+        "source": "https://github.com/twigphp/Twig/tree/v3.27.1"
       },
       "funding": [
         {
@@ -10067,7 +10015,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2026-05-20T07:31:59+00:00"
+      "time": "2026-05-30T17:09:26+00:00"
     },
     {
       "name": "webimpress/safe-writer",
@@ -14477,18 +14425,9 @@
       "time": "2022-01-24T18:55:24+00:00"
     }
   ],
-  "aliases": [
-    {
-      "package": "dvsa/php-govuk-account",
-      "version": "dev-chore/modernise-dependencies",
-      "alias": "3.1.0",
-      "alias_normalized": "3.1.0.0"
-    }
-  ],
+  "aliases": [],
   "minimum-stability": "dev",
-  "stability-flags": {
-    "dvsa/php-govuk-account": 20
-  },
+  "stability-flags": {},
   "prefer-stable": true,
   "prefer-lowest": false,
   "platform": {
