@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "107bdc68ecb3958682f05af9a78462e0",
+  "content-hash": "a45e52ad767baced02f2088e10a70c33",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -2017,16 +2017,16 @@
     },
     {
       "name": "dvsa/php-govuk-account",
-      "version": "v4.0.0",
+      "version": "dev-chore/modernise-dependencies",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/php-govuk-account.git",
-        "reference": "f4416d04a92714aea66c546995e54c1af0865560"
+        "reference": "f409d1b77c1c686ad8129128f00e9c6eebb571a9"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/php-govuk-account/zipball/f4416d04a92714aea66c546995e54c1af0865560",
-        "reference": "f4416d04a92714aea66c546995e54c1af0865560",
+        "url": "https://api.github.com/repos/dvsa/php-govuk-account/zipball/f409d1b77c1c686ad8129128f00e9c6eebb571a9",
+        "reference": "f409d1b77c1c686ad8129128f00e9c6eebb571a9",
         "shasum": ""
       },
       "require": {
@@ -2066,9 +2066,9 @@
       "keywords": ["dvsa", "govuk", "onelogin", "sdk", "signin"],
       "support": {
         "issues": "https://github.com/dvsa/php-govuk-account/issues",
-        "source": "https://github.com/dvsa/php-govuk-account/tree/v4.0.0"
+        "source": "https://github.com/dvsa/php-govuk-account/tree/chore/modernise-dependencies"
       },
-      "time": "2026-06-02T11:23:01+00:00"
+      "time": "2026-04-22T14:08:19+00:00"
     },
     {
       "name": "egulias/email-validator",
@@ -3408,63 +3408,6 @@
       "time": "2025-10-14T22:21:28+00:00"
     },
     {
-      "name": "laminas/laminas-code",
-      "version": "4.17.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/laminas/laminas-code.git",
-        "reference": "40d61e2899ec17c5d08bbc0a2d586b3ca17ab9bd"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/laminas/laminas-code/zipball/40d61e2899ec17c5d08bbc0a2d586b3ca17ab9bd",
-        "reference": "40d61e2899ec17c5d08bbc0a2d586b3ca17ab9bd",
-        "shasum": ""
-      },
-      "require": {
-        "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0"
-      },
-      "require-dev": {
-        "doctrine/annotations": "^2.0.1",
-        "ext-phar": "*",
-        "laminas/laminas-coding-standard": "^3.0.0",
-        "laminas/laminas-stdlib": "^3.18.0",
-        "phpunit/phpunit": "^10.5.58",
-        "psalm/plugin-phpunit": "^0.19.0",
-        "vimeo/psalm": "^5.15.0"
-      },
-      "suggest": {
-        "doctrine/annotations": "Doctrine\\Common\\Annotations >=1.0 for annotation features",
-        "laminas/laminas-stdlib": "Laminas\\Stdlib component"
-      },
-      "type": "library",
-      "autoload": {
-        "psr-4": {
-          "Laminas\\Code\\": "src/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": ["BSD-3-Clause"],
-      "description": "Extensions to the PHP Reflection API, static code scanning, and code generation",
-      "homepage": "https://laminas.dev",
-      "keywords": ["code", "laminas", "laminasframework"],
-      "support": {
-        "chat": "https://laminas.dev/chat",
-        "docs": "https://docs.laminas.dev/laminas-code/",
-        "forum": "https://discourse.laminas.dev",
-        "issues": "https://github.com/laminas/laminas-code/issues",
-        "rss": "https://github.com/laminas/laminas-code/releases.atom",
-        "source": "https://github.com/laminas/laminas-code"
-      },
-      "funding": [
-        {
-          "url": "https://funding.communitybridge.org/projects/laminas-project",
-          "type": "community_bridge"
-        }
-      ],
-      "time": "2025-11-01T09:38:14+00:00"
-    },
-    {
       "name": "laminas/laminas-config",
       "version": "3.11.0",
       "source": {
@@ -4415,146 +4358,6 @@
         }
       ],
       "time": "2024-11-18T00:14:29+00:00"
-    },
-    {
-      "name": "laminas/laminas-mvc-plugin-flashmessenger",
-      "version": "1.11.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/laminas/laminas-mvc-plugin-flashmessenger.git",
-        "reference": "664822d8d9f259d880ae25b686848421235f96ec"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/laminas/laminas-mvc-plugin-flashmessenger/zipball/664822d8d9f259d880ae25b686848421235f96ec",
-        "reference": "664822d8d9f259d880ae25b686848421235f96ec",
-        "shasum": ""
-      },
-      "require": {
-        "laminas/laminas-mvc": "^3.3",
-        "laminas/laminas-session": "^2.12.0",
-        "laminas/laminas-stdlib": "^3.6.4",
-        "laminas/laminas-view": "^2.13.1",
-        "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
-      },
-      "conflict": {
-        "laminas/laminas-mvc": "<3.0.0",
-        "zendframework/zend-mvc-plugin-flashmessenger": "*"
-      },
-      "require-dev": {
-        "laminas/laminas-coding-standard": "~3.0.1",
-        "laminas/laminas-i18n": "^2.29.0",
-        "phpunit/phpunit": "^9.6.21",
-        "psalm/plugin-phpunit": "^0.19.0",
-        "vimeo/psalm": "^5.26.1"
-      },
-      "type": "library",
-      "extra": {
-        "laminas": {
-          "component": "Laminas\\Mvc\\Plugin\\FlashMessenger"
-        }
-      },
-      "autoload": {
-        "psr-4": {
-          "Laminas\\Mvc\\Plugin\\FlashMessenger\\": "src/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": ["BSD-3-Clause"],
-      "description": "Plugin for creating and exposing flash messages via laminas-mvc controllers",
-      "homepage": "https://laminas.dev",
-      "keywords": ["laminas", "mvc"],
-      "support": {
-        "chat": "https://laminas.dev/chat",
-        "docs": "https://docs.laminas.dev/laminas-mvc-plugin-flashmessenger/",
-        "forum": "https://discourse.laminas.dev",
-        "issues": "https://github.com/laminas/laminas-mvc-plugin-flashmessenger/issues",
-        "rss": "https://github.com/laminas/laminas-mvc-plugin-flashmessenger/releases.atom",
-        "source": "https://github.com/laminas/laminas-mvc-plugin-flashmessenger"
-      },
-      "funding": [
-        {
-          "url": "https://funding.communitybridge.org/projects/laminas-project",
-          "type": "community_bridge"
-        }
-      ],
-      "time": "2024-11-29T08:28:58+00:00"
-    },
-    {
-      "name": "laminas/laminas-navigation",
-      "version": "2.23.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/laminas/laminas-navigation.git",
-        "reference": "76b032c39d6f3686e12a2a81d6473e01754cabc8"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/laminas/laminas-navigation/zipball/76b032c39d6f3686e12a2a81d6473e01754cabc8",
-        "reference": "76b032c39d6f3686e12a2a81d6473e01754cabc8",
-        "shasum": ""
-      },
-      "require": {
-        "laminas/laminas-stdlib": "^2.7 || ^3.0",
-        "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0"
-      },
-      "conflict": {
-        "zendframework/zend-navigation": "*"
-      },
-      "require-dev": {
-        "laminas/laminas-coding-standard": "~3.1.0",
-        "laminas/laminas-config": "^3.10.1",
-        "laminas/laminas-http": "^2.22",
-        "laminas/laminas-i18n": "^2.30",
-        "laminas/laminas-mvc": "^3.8",
-        "laminas/laminas-permissions-acl": "^2.17",
-        "laminas/laminas-router": "^3.14.0",
-        "laminas/laminas-servicemanager": "^3.23.1",
-        "laminas/laminas-uri": "^2.13.0",
-        "laminas/laminas-view": "^2.43",
-        "phpunit/phpunit": "^11.5.50",
-        "psalm/plugin-phpunit": "^0.19.5",
-        "vimeo/psalm": "^6.13.1"
-      },
-      "suggest": {
-        "laminas/laminas-config": "^3.7, to provide page configuration (optional, as arrays and Traversables are also allowed)",
-        "laminas/laminas-permissions-acl": "^2.9, to provide ACL-based access restrictions to pages",
-        "laminas/laminas-router": "^3.5, to use router-based URI generation with Mvc pages",
-        "laminas/laminas-servicemanager": "^3.16, to use the navigation factories",
-        "laminas/laminas-view": "^2.14, to use the navigation view helpers"
-      },
-      "type": "library",
-      "extra": {
-        "laminas": {
-          "component": "Laminas\\Navigation",
-          "config-provider": "Laminas\\Navigation\\ConfigProvider"
-        }
-      },
-      "autoload": {
-        "psr-4": {
-          "Laminas\\Navigation\\": "src/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": ["BSD-3-Clause"],
-      "description": "Manage trees of pointers to web pages in order to build navigation systems",
-      "homepage": "https://laminas.dev",
-      "keywords": ["laminas", "navigation"],
-      "support": {
-        "chat": "https://laminas.dev/chat",
-        "docs": "https://docs.laminas.dev/laminas-navigation/",
-        "forum": "https://discourse.laminas.dev",
-        "issues": "https://github.com/laminas/laminas-navigation/issues",
-        "rss": "https://github.com/laminas/laminas-navigation/releases.atom",
-        "source": "https://github.com/laminas/laminas-navigation"
-      },
-      "funding": [
-        {
-          "url": "https://funding.communitybridge.org/projects/laminas-project",
-          "type": "community_bridge"
-        }
-      ],
-      "time": "2026-02-04T20:59:23+00:00"
     },
     {
       "name": "laminas/laminas-paginator",
@@ -5902,77 +5705,6 @@
       "time": "2021-11-18T09:23:29+00:00"
     },
     {
-      "name": "olcs/olcs-common",
-      "version": "v9.22.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/dvsa/olcs-common.git",
-        "reference": "08289535d13b8d902c0d0f30c46dd3fc72a8fa69"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/08289535d13b8d902c0d0f30c46dd3fc72a8fa69",
-        "reference": "08289535d13b8d902c0d0f30c46dd3fc72a8fa69",
-        "shasum": ""
-      },
-      "require": {
-        "ezyang/htmlpurifier": "^4.17",
-        "laminas/laminas-authentication": "^2.18",
-        "laminas/laminas-cache": "^3.13",
-        "laminas/laminas-code": "^4.16",
-        "laminas/laminas-eventmanager": "^3.14",
-        "laminas/laminas-filter": "^2.41",
-        "laminas/laminas-form": "^3.21",
-        "laminas/laminas-http": "^2.22",
-        "laminas/laminas-i18n": "^2.30",
-        "laminas/laminas-inputfilter": "^2.33",
-        "laminas/laminas-modulemanager": "^2.17",
-        "laminas/laminas-mvc": "^3.8",
-        "laminas/laminas-mvc-plugin-flashmessenger": "^1.11",
-        "laminas/laminas-navigation": "^2.20",
-        "laminas/laminas-servicemanager": "^3.23",
-        "laminas/laminas-stdlib": "^3.20",
-        "laminas/laminas-validator": "^2.64",
-        "laminas/laminas-view": "^2.41",
-        "olcs/olcs-logging": "^9.0",
-        "olcs/olcs-transfer": "^8.0",
-        "olcs/olcs-utils": "^7.1",
-        "php": "~8.3.0",
-        "psr/container": "^1.1|^2"
-      },
-      "require-dev": {
-        "bamarni/composer-bin-plugin": "^1.8.2",
-        "doctrine/annotations": "^1.14.2",
-        "johnkary/phpunit-speedtrap": "^4.0",
-        "lm-commons/lmc-rbac-mvc": "^3.5",
-        "mikey179/vfsstream": "~v1.6.11",
-        "mockery/mockery": "^1.6.7",
-        "phpstan/phpstan-mockery": "^2.0",
-        "phpunit/phpunit": "^9.6",
-        "symfony/filesystem": "^5.4",
-        "symfony/lock": "^5.4"
-      },
-      "type": "library",
-      "extra": {
-        "bamarni-bin": {
-          "bin-links": true,
-          "forward-command": true
-        }
-      },
-      "autoload": {
-        "psr-4": {
-          "Common\\": "Common/src/Common"
-        },
-        "classmap": ["./Common/src/Module.php"]
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "description": "Common library for the OLCS Project",
-      "support": {
-        "source": "https://github.com/dvsa/olcs-common/tree/v9.22.0"
-      },
-      "time": "2026-06-08T13:40:54+00:00"
-    },
-    {
       "name": "olcs/olcs-logging",
       "version": "v9.0.1",
       "source": {
@@ -6131,6 +5863,58 @@
         "source": "https://github.com/dvsa/olcs-utils/tree/v7.3.0"
       },
       "time": "2026-05-22T09:58:52+00:00"
+    },
+    {
+      "name": "olcs/olcs-xmltools",
+      "version": "v8.1.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/dvsa/olcs-xmltools.git",
+        "reference": "039e03a103029f76e194c53030693008dbe7ccf4"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/dvsa/olcs-xmltools/zipball/039e03a103029f76e194c53030693008dbe7ccf4",
+        "reference": "039e03a103029f76e194c53030693008dbe7ccf4",
+        "shasum": ""
+      },
+      "require": {
+        "ext-dom": "*",
+        "ext-libxml": "*",
+        "laminas/laminas-filter": "^2.41",
+        "laminas/laminas-servicemanager": "^3.23",
+        "laminas/laminas-stdlib": "^3.20",
+        "laminas/laminas-validator": "^2.64",
+        "laminas/laminas-xml": "^1.7",
+        "php": "~8.2.0 || ~8.3.0",
+        "psr/container": "^1.1|^2"
+      },
+      "require-dev": {
+        "bamarni/composer-bin-plugin": "^1.8.2",
+        "johnkary/phpunit-speedtrap": "^4.0",
+        "mikey179/vfsstream": "^1.6.11",
+        "mockery/mockery": "^1.6",
+        "phpstan/phpstan-mockery": "^2.0",
+        "phpunit/phpunit": "^9.6"
+      },
+      "type": "library",
+      "extra": {
+        "bamarni-bin": {
+          "bin-links": true,
+          "forward-command": true
+        }
+      },
+      "autoload": {
+        "psr-4": {
+          "Olcs\\XmlTools\\": "src/"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "description": "XML tools for OLCS",
+      "support": {
+        "source": "https://github.com/dvsa/olcs-xmltools/tree/v8.1.0"
+      },
+      "time": "2025-09-26T15:11:41+00:00"
     },
     {
       "name": "oro/doctrine-extensions",
@@ -9175,16 +8959,16 @@
     },
     {
       "name": "symfony/polyfill-intl-idn",
-      "version": "v1.38.1",
+      "version": "v1.33.0",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/polyfill-intl-idn.git",
-        "reference": "dc21118016c039a66235cf93d96b435ffb282412"
+        "reference": "9614ac4d8061dc257ecc64cba1b140873dce8ad3"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/dc21118016c039a66235cf93d96b435ffb282412",
-        "reference": "dc21118016c039a66235cf93d96b435ffb282412",
+        "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/9614ac4d8061dc257ecc64cba1b140873dce8ad3",
+        "reference": "9614ac4d8061dc257ecc64cba1b140873dce8ad3",
         "shasum": ""
       },
       "require": {
@@ -9234,7 +9018,7 @@
         "shim"
       ],
       "support": {
-        "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.38.1"
+        "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.33.0"
       },
       "funding": [
         {
@@ -9254,7 +9038,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2026-05-25T15:22:23+00:00"
+      "time": "2024-09-10T14:38:51+00:00"
     },
     {
       "name": "symfony/polyfill-intl-normalizer",
@@ -10211,16 +9995,16 @@
     },
     {
       "name": "twig/twig",
-      "version": "v3.27.1",
+      "version": "v3.26.0",
       "source": {
         "type": "git",
         "url": "https://github.com/twigphp/Twig.git",
-        "reference": "ae2071bffb38f04847fc0864d730c94b9cb8ab74"
+        "reference": "1fcae487b180d78e6351f4e0afa91f9eab96a2bc"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/twigphp/Twig/zipball/ae2071bffb38f04847fc0864d730c94b9cb8ab74",
-        "reference": "ae2071bffb38f04847fc0864d730c94b9cb8ab74",
+        "url": "https://api.github.com/repos/twigphp/Twig/zipball/1fcae487b180d78e6351f4e0afa91f9eab96a2bc",
+        "reference": "1fcae487b180d78e6351f4e0afa91f9eab96a2bc",
         "shasum": ""
       },
       "require": {
@@ -10271,7 +10055,7 @@
       "keywords": ["templating"],
       "support": {
         "issues": "https://github.com/twigphp/Twig/issues",
-        "source": "https://github.com/twigphp/Twig/tree/v3.27.1"
+        "source": "https://github.com/twigphp/Twig/tree/v3.26.0"
       },
       "funding": [
         {
@@ -10283,7 +10067,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2026-05-30T17:09:26+00:00"
+      "time": "2026-05-20T07:31:59+00:00"
     },
     {
       "name": "webimpress/safe-writer",
@@ -14693,9 +14477,18 @@
       "time": "2022-01-24T18:55:24+00:00"
     }
   ],
-  "aliases": [],
+  "aliases": [
+    {
+      "package": "dvsa/php-govuk-account",
+      "version": "dev-chore/modernise-dependencies",
+      "alias": "3.1.0",
+      "alias_normalized": "3.1.0.0"
+    }
+  ],
   "minimum-stability": "dev",
-  "stability-flags": {},
+  "stability-flags": {
+    "dvsa/php-govuk-account": 20
+  },
   "prefer-stable": true,
   "prefer-lowest": false,
   "platform": {
@@ -14711,5 +14504,5 @@
   "platform-overrides": {
     "ext-redis": "6.2.6"
   },
-  "plugin-api-version": "2.9.0"
+  "plugin-api-version": "2.6.0"
 }
