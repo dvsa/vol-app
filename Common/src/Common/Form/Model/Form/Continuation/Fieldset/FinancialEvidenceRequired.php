@@ -17,8 +17,7 @@ class FinancialEvidenceRequired
      * @Form\Type("Common\Form\Elements\Types\Radio")
      * @Form\Options({
      *     "value_options": {
-     *          "upload": "lva-financial-evidence-upload-now.yes",
-     *          "send": "lva-financial-evidence-upload-now.no",
+     *          "upload": "lva-continuations-financial-evidence-upload-now.yes",
      *      },
      * })
      * @Form\ErrorMessage("continuations.financial-evidence-required.error")
