@@ -301,6 +301,7 @@ jobs:
       always() &&
       !cancelled() &&
       !failure() &&
+      !needs.release-please.outputs.release_created &&
       (needs.orchestrator.outputs.should-apply-environment-terraform || needs.docker.result == 'success' || needs.cdn-nonprod.result == 'success')
     needs:
       - get-version
@@ -340,7 +341,8 @@ jobs:
       always() &&
       !cancelled() &&
       !failure() &&
-      (needs.deploy_dev.result == 'success' || needs.deploy_dev.result == 'skipped')
+      (needs.orchestrator.outputs.should-apply-environment-terraform || needs.docker.result == 'success' || needs.cdn-nonprod.result == 'success') &&
+      (needs.deploy_dev.result == 'success' || needs.release-please.outputs.release_created && needs.deploy_dev.result == 'skipped')
     needs:
       - get-version
       - orchestrator
