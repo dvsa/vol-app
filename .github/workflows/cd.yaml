@@ -301,7 +301,6 @@ jobs:
       always() &&
       !cancelled() &&
       !failure() &&
-      !needs.release-please.outputs.release_created &&
       (needs.orchestrator.outputs.should-apply-environment-terraform || needs.docker.result == 'success' || needs.cdn-nonprod.result == 'success')
     needs:
       - get-version
