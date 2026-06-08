@@ -20,7 +20,6 @@
         "laminas/laminas-navigation": "^2.20",
         "laminas/laminas-servicemanager": "^3.23",
         "laminas/laminas-stdlib": "^3.20",
-        "laminas/laminas-text": "^2.12",
         "laminas/laminas-validator": "^2.64",
         "laminas/laminas-view": "^2.41",
         "olcs/olcs-logging": "^9.0",

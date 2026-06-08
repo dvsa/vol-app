@@ -10,12 +10,12 @@ namespace CommonTest\Service\Printing;
 
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Lva\PeopleLvaService;
+use Common\Service\Table\TableBuilder;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Laminas\Form\Element;
 use Laminas\Form\FieldsetInterface;
 use Laminas\Form\Form;
-use Laminas\Text\Table\Table;
 
 /**
  * People LVA Service tests
@@ -79,7 +79,7 @@ class PeopleLvaServiceTest extends MockeryTestCase
         /** @var Form|m\Mock $form */
         $form = m::mock(Form::class);
 
-        $table = m::mock(Table::class);
+        $table = m::mock(TableBuilder::class);
         $table->shouldReceive('removeActions')
             ->once();
         $table->shouldReceive('removeColumn')
