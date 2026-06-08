@@ -133,15 +133,6 @@ jobs:
           GIT_CONFIG_KEY_0="http.extraHeader" \
           GIT_CONFIG_VALUE_0="Authorization: Bearer ${GH_TOKEN}" \
           git push origin "${{ inputs.etl_ref }}"
-
-
-
-          cd $GITHUB_WORKSPACE/etl-temp
-
-          git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/dvsa/olcs-etl.git
-
-          git tag ${{ inputs.etl_ref }}
-          git push origin ${{ inputs.etl_ref }}
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
 
