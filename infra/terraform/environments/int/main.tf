@@ -90,6 +90,7 @@ locals {
         "arn:aws:s3:::devapp-vol-content/*"
       ]
     },
+    {
       effect = "Allow"
       actions = [
         "s3:GetObject",
