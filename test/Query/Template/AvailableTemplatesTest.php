@@ -18,7 +18,8 @@ class AvailableTemplatesTest extends TestCase
             'sort' => null,
             'order' => null,
             'sortWhitelist' => [],
-            'emailTemplateCategory' => null
+            'emailTemplateCategory' => null,
+            'format' => ''
         ];
         $sut = AvailableTemplates::create($data);
 

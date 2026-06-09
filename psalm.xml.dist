@@ -19,6 +19,7 @@
           <!-- Laminas have added annotations to some classes we extend, to signify they will be final in upcoming versions -->
           <directory name="src/Validators" />
           <file name="src/Util/ArrayInput.php" />
+          <file name="src/Router/Query.php" />
         </errorLevel>
       </InvalidExtendClass>
       <MethodSignatureMismatch>
@@ -26,6 +27,7 @@
           <!-- Laminas have added annotations to some classes we extend, to signify they will be final in upcoming versions -->
           <directory name="src/Validators" />
           <file name="src/Util/ArrayInput.php" />
+          <file name="src/Router/Query.php" />
         </errorLevel>
       </MethodSignatureMismatch>
     </issueHandlers>

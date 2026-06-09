@@ -9,6 +9,7 @@ parameters:
       paths:
         - 'src/Validators'
         - 'src/Util/ArrayInput.php'
+        - 'src/Router/Query.php'
   - # Laminas have added annotations to say classes we extend will be final in subsequent versions - we can't easily fix this
       identifier: property.parentPropertyFinalByPhpDoc
       paths:

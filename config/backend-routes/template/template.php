@@ -23,6 +23,26 @@ return [
                     'GET' => QueryConfig::getConfig(Query\Template\AvailableTemplates::class),
                 ]
             ],
+            'available-template-groups' => [
+                'type' => 'Segment',
+                'options' => [
+                    'route' => 'available-template-groups[/]',
+                ],
+                'may_terminate' => false,
+                'child_routes' => [
+                    'GET' => QueryConfig::getConfig(Query\Template\AvailableTemplateGroups::class),
+                ]
+            ],
+            'send-test-email' => [
+                'type' => 'Segment',
+                'options' => [
+                    'route' => 'send-test-email[/]',
+                ],
+                'may_terminate' => false,
+                'child_routes' => [
+                    'POST' => CommandConfig::getPostConfig(Command\Template\SendTestEmail::class),
+                ]
+            ],
             'preview-template-source' => [
                 'type' => 'Segment',
                 'options' => [
