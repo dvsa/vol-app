@@ -178,7 +178,7 @@ class Search implements AuthAwareInterface
         $es = new \Elastica\Search($this->getClient());
 
         // Add indices, otherwise search is executed against all indices
-        $es->addIndices($indexes);
+        $es->addIndicesByName($indexes);
 
         $response = [];
         $resultSet = $es->search($elasticaQuery);

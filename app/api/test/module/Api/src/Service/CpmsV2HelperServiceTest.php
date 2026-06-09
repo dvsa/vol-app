@@ -77,9 +77,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         // Create service with mocked dependencies
         $this->sut = $this->createService($this->cpmsClient, $this->feesHelper, $config);
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         parent::setUp();
     }

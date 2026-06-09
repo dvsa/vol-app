@@ -8,7 +8,6 @@
 
 namespace Dvsa\Olcs\Snapshot;
 
-use Dvsa\Olcs\Utils\Translation\MissingTranslationProcessor;
 use Laminas\Cache\Storage\Adapter\Redis;
 use Laminas\I18n\Translator\Translator;
 
@@ -30,15 +29,6 @@ class Module
         $cache = $sm->get('default-cache');
         $translator = $sm->get('translator');
         $translator->setCache($cache);
-
-        $events = $e->getApplication()->getEventManager();
-
-        /** @var  MissingTranslationProcessor $missingTranslationProcessor */
-        $missingTranslationProcessor = $sm->get('Utils\MissingTranslationProcessor');
-        $missingTranslationProcessor->attach($events);
-
-        $translator->enableEventManager();
-        $translator->setEventManager($events);
     }
 
     public function getConfig()

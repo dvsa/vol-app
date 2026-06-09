@@ -301,11 +301,13 @@ jobs:
       always() &&
       !cancelled() &&
       !failure() &&
-      (needs.orchestrator.outputs.should-apply-environment-terraform || needs.docker.result == 'success' || needs.cdn.result == 'success')
+      !needs.release-please.outputs.release_created &&
+      (needs.orchestrator.outputs.should-apply-environment-terraform || needs.docker.result == 'success' || needs.cdn-nonprod.result == 'success')
     needs:
       - get-version
       - orchestrator
       - docker
+      - release-please
       - cdn-nonprod
       - terraform-account-nonprod
     concurrency:
@@ -339,11 +341,13 @@ jobs:
       always() &&
       !cancelled() &&
       !failure() &&
-      needs.deploy_dev.result == 'success'
+      (needs.orchestrator.outputs.should-apply-environment-terraform || needs.docker.result == 'success' || needs.cdn-nonprod.result == 'success') &&
+      (needs.deploy_dev.result == 'success' || needs.release-please.outputs.release_created && needs.deploy_dev.result == 'skipped')
     needs:
       - get-version
       - orchestrator
       - deploy_dev
+      - release-please
     concurrency:
       group: ${{ github.workflow }}-int
     uses: ./.github/workflows/deploy-and-test.yaml
@@ -403,6 +407,8 @@ jobs:
             repo: vol-app
           - project: liquibase
             repo: vol-app
+          - project: gotenberg
+            repo: vol-app
           - project: vft
             repo: vol-qa
     steps:
@@ -429,8 +435,8 @@ jobs:
             echo "tag=${{ needs.get-version.outputs.selfserve }}" >> $GITHUB_OUTPUT
           elif [ "${{ matrix.project }}" == "internal" ]; then
             echo "tag=${{ needs.get-version.outputs.internal }}" >> $GITHUB_OUTPUT
-          elif [ "${{ matrix.project }}" == "liquibase" ]; then
-            # For liquibase, use the latest tag
+          elif [ "${{ matrix.project }}" == "liquibase" ] || [ "${{ matrix.project }}" == "gotenberg" ]; then
+            # For liquibase and gotenberg, use the latest tag
             echo "tag=latest" >> $GITHUB_OUTPUT
           fi
 

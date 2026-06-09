@@ -13,7 +13,8 @@ locals {
         "secretsmanager:GetSecretValue"
       ]
       resources = [
-        data.aws_secretsmanager_secret.this["api"].arn
+        data.aws_secretsmanager_secret.this["api"].arn,
+        data.aws_secretsmanager_secret.infra.arn
       ]
     },
   ]
@@ -43,7 +44,8 @@ locals {
         "sts:AssumeRole"
       ]
       resources = [
-        "arn:aws:iam::259405524870:role/txc-prod-consumer-role"
+        "arn:aws:iam::259405524870:role/txc-prod-consumer-role",
+        "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole"
       ]
     },
     {
@@ -91,6 +93,72 @@ locals {
         "arn:aws:s3:::app-vol-content/*"
       ]
     },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:CreateDBClusterSnapshot",
+        "rds:DescribeDBClusterSnapshots",
+        "rds:DeleteDBClusterSnapshot",
+      ]
+      resources = [
+
+        "arn:aws:rds:eu-west-1:054614622558:cluster:app-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:DescribeDBClusters",
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster:app-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:RestoreDBClusterFromSnapshot",
+        "rds:AddTagsToResource",
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:subgrp:app-olcs-rds-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:CreateDBInstance",
+        "rds:DescribeDBInstances",
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:DeleteDBInstance",
+        "rds:DeleteDBCluster",
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:ModifyDBClusterSnapshotAttribute"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*"
+      ]
+    }
   ]
 }
 
@@ -133,6 +201,10 @@ data "aws_secretsmanager_secret" "this" {
   for_each = toset(setsubtract(local.service_names, ["cli"]))
 
   name = "APP-BASE-SM-APPLICATION-${upper(each.key)}"
+}
+
+data "aws_secretsmanager_secret" "infra" {
+  name = "APP-BASE-SM-INFRA"
 }
 
 data "aws_cognito_user_pools" "this" {

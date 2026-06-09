@@ -7,7 +7,6 @@ namespace Dvsa\Olcs\Api\Service\Ebsr;
 use Aws\S3\S3Client;
 use Aws\Sts\StsClient;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Olcs\Logging\Log\LaminasLogPsr3Adapter;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -25,7 +24,7 @@ class S3ProcessorFactory implements FactoryInterface
      * @throws NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): S3Processor
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): S3Processor
     {
         $config = $container->get('config');
         $stsClient = new StsClient([
@@ -52,8 +51,6 @@ class S3ProcessorFactory implements FactoryInterface
 
         $bucketName = $config['ebsr']['input_s3_bucket'];
         $s3Client = new S3Client($s3ClientConfiguration);
-        $fileUploader = $container->get('FileUploader');
-        $logger = new LaminasLogPsr3Adapter($container->get('Logger'));
-        return new S3Processor($s3Client, $bucketName, $fileUploader, $logger);
+        return new S3Processor($s3Client, $bucketName);
     }
 }

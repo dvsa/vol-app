@@ -14,7 +14,7 @@ class VehiclesSizeReviewService extends AbstractReviewService
                 [
                     [
                         'label' => 'application-review-vehicles-declarations-vs',
-                        'value' => $data['psvWhichVehicleSizes']['description'],
+                        'value' => $data['psvWhichVehicleSizes']['description'] ?? null,
                     ],
                 ],
             ],

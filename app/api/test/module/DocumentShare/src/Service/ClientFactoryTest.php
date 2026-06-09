@@ -6,7 +6,7 @@ namespace Dvsa\OlcsTest\DocumentShare\Service;
 
 use Dvsa\Olcs\DocumentShare\Service\ClientFactory;
 use Dvsa\Olcs\DocumentShare\Service\WebDavClient;
-use Laminas\Log\Logger;
+use Psr\Log\LoggerInterface as Logger;
 use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -31,7 +31,7 @@ class ClientFactoryTest extends MockeryTestCase
 
         $mockContainer = m::mock(ContainerInterface::class);
         $mockContainer->expects('get')->with('Configuration')->andReturn($config);
-        $mockContainer->expects('get')->with('Logger')->andReturn($this->createStub(\Dvsa\OlcsTest\SafeLogger::class));
+        $mockContainer->expects('get')->with('Logger')->andReturn($this->createStub(\Psr\Log\LoggerInterface::class));
 
         $service = $sut->__invoke($mockContainer, WebDavClient::class);
         $this->assertInstanceOf(WebDavClient::class, $service);

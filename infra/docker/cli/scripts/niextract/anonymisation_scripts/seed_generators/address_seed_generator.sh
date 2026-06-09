@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/bin/bash
 #########################################################################
 #
 # generate seed data for address. 

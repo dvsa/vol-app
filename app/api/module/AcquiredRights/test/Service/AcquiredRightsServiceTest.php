@@ -11,7 +11,7 @@ use Dvsa\Olcs\AcquiredRights\Exception\SoftExceptionInterface;
 use Dvsa\Olcs\AcquiredRights\Model\ApplicationReference;
 use Dvsa\Olcs\AcquiredRights\Service\AcquiredRightsService;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
-use Laminas\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
@@ -178,7 +178,7 @@ class AcquiredRightsServiceTest extends MockeryTestCase
 
         $this->expectExceptionObject($exception);
 
-        $this->loggerInterfaceMock->expects('err');
+        $this->loggerInterfaceMock->expects('error');
 
         $this->sut = new AcquiredRightsService(
             $this->loggerInterfaceMock,

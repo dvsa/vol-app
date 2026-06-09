@@ -820,6 +820,63 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
                 1,
                 []
             ],
+            'Financial Evidence upload later is unchanged' => [
+                'financialEvidence',
+                self::getApplicationState1()->setFinancialEvidenceUploaded('2'),
+                self::getLicenceState1(),
+                [
+                    'FinancialEvidence' => UpdateVariationCompletion::STATUS_UPDATED,
+                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
+                ],
+                [
+                    'FinancialEvidence' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
+                ],
+                'Y',
+                [],
+            ],
+            'PSV Documentary Evidence Small upload later is unchanged' => [
+                'psvDocumentaryEvidenceSmall',
+                self::getApplicationState1()->setSmallVehicleEvidenceUploaded('2'),
+                self::getLicenceState1(),
+                [
+                    'PsvDocumentaryEvidenceSmall' => UpdateVariationCompletion::STATUS_UPDATED,
+                ],
+                [
+                    'PsvDocumentaryEvidenceSmall' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                ],
+                'Y',
+                [],
+            ],
+            'PSV Documentary Evidence Large upload later is unchanged' => [
+                'psvDocumentaryEvidenceLarge',
+                self::getApplicationState1()->setOccupationEvidenceUploaded('2'),
+                self::getLicenceState1(),
+                [
+                    'PsvDocumentaryEvidenceLarge' => UpdateVariationCompletion::STATUS_UPDATED,
+                ],
+                [
+                    'PsvDocumentaryEvidenceLarge' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                ],
+                'Y',
+                [],
+            ],
+            'PSV Main Occupation Undertakings upload later is unchanged' => [
+                'psvMainOccupationUndertakings',
+                self::getApplicationState1()
+                    ->setOccupationEvidenceUploaded('2')
+                    ->setPsvOccupationRecordsConfirmation('Y')
+                    ->setPsvIncomeRecordsConfirmation('Y'),
+                self::getLicenceState1(),
+                [
+                    'PsvMainOccupationUndertakings' => UpdateVariationCompletion::STATUS_UPDATED,
+                ],
+                [
+                    'PsvMainOccupationUndertakings' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                ],
+                'Y',
+                [],
+            ],
         ];
     }
 

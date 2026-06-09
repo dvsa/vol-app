@@ -12,7 +12,8 @@ locals {
         "secretsmanager:GetSecretValue"
       ]
       resources = [
-        data.aws_secretsmanager_secret.this["api"].arn
+        data.aws_secretsmanager_secret.this["api"].arn,
+        data.aws_secretsmanager_secret.infra.arn
       ]
     },
   ]
@@ -89,6 +90,18 @@ locals {
         "arn:aws:s3:::devapp-vol-content/*"
       ]
     },
+      effect = "Allow"
+      actions = [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket",
+        "s3:DeleteObject"
+      ]
+      resources = [
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3",
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*"
+      ]
+    },
   ]
 }
 
@@ -131,6 +144,10 @@ data "aws_secretsmanager_secret" "this" {
   for_each = toset(setsubtract(local.service_names, ["cli"]))
 
   name = "DEVAPPQA-BASE-SM-APPLICATION-${upper(each.key)}"
+}
+
+data "aws_secretsmanager_secret" "infra" {
+  name = "DEVAPPQA-BASE-SM-INFRA"
 }
 
 data "aws_cognito_user_pools" "this" {
@@ -510,6 +527,7 @@ module "service" {
       {
         name     = "permits-reset-test-data",
         commands = ["permits:reset-test-data"],
+        type     = "default",
         timeout  = 1800
       },
       {
@@ -626,6 +644,11 @@ module "service" {
         commands = ["batch:first-tm-letter", "-v"],
         timeout  = 43200,
         schedule = ["cron(30 13 * * ? *)"],
+      },
+      {
+        name     = "data-refresh",
+        commands = ["/mnt/data/scripts/data_refresh/data_refresh.sh", "qa", "eu-west-1"],
+        type     = "scripts"
       },
     ]
   }

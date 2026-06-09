@@ -34,9 +34,7 @@ class DataRetentionCommandTest extends TestCase
         $this->mockQueryHandlerManager = $this->createMock(QueryHandlerManager::class);
         $this->command = new DataRetentionCommand($this->mockCommandHandlerManager, $this->mockQueryHandlerManager);
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         $this->commandTester = new CommandTester($this->command);
     }

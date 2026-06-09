@@ -3,10 +3,10 @@
 namespace Dvsa\Olcs\DocumentShare\Service;
 
 use Dvsa\Olcs\DocumentShare\Data\Object\File;
-use Laminas\Log\Logger;
 use League\Flysystem\FileExistsException;
 use League\Flysystem\FileNotFoundException;
 use League\Flysystem\FilesystemInterface;
+use Psr\Log\LoggerInterface;
 
 class WebDavClient implements DocumentStoreInterface
 {
@@ -29,7 +29,7 @@ class WebDavClient implements DocumentStoreInterface
      */
     public function __construct(
         protected FilesystemInterface $filesystem,
-        protected Logger $logger
+        protected LoggerInterface $logger
     ) {
     }
 
@@ -45,7 +45,7 @@ class WebDavClient implements DocumentStoreInterface
         $tmpFileName = tempnam(sys_get_temp_dir(), self::DS_DOWNLOAD_FILE_PREFIX);
 
         if ($tmpFileName === false) {
-            $this->logger->err('Failed to create temp file', ['path' => $path, 'tmpDir' => sys_get_temp_dir()]);
+            $this->logger->error('Failed to create temp file', ['path' => $path, 'tmpDir' => sys_get_temp_dir()]);
             return false;
         }
 
@@ -56,7 +56,7 @@ class WebDavClient implements DocumentStoreInterface
             $fpc = file_put_contents($tmpFileName, $readStream);
 
             if ($fpc === false) {
-                $this->logger->err('Failed to write file to temp location', ['path' => $path, 'tmpFileName' => $tmpFileName]);
+                $this->logger->error('Failed to write file to temp location', ['path' => $path, 'tmpFileName' => $tmpFileName]);
                 return false;
             }
 
@@ -117,7 +117,7 @@ class WebDavClient implements DocumentStoreInterface
             $fh = fopen($file->getResource(), 'rb');
 
             if ($fh === false) {
-                $this->logger->err('Failed to open file for reading', ['file' => $file->getResource(), 'path' => $path]);
+                $this->logger->error('Failed to open file for reading', ['file' => $file->getResource(), 'path' => $path]);
 
                 $response->setResponse(false);
             } else {

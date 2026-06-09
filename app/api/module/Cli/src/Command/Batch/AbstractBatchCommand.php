@@ -8,6 +8,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use Dvsa\Olcs\Api\Domain\QueryHandlerManager;
 use Dvsa\Olcs\Cli\Command\AbstractOlcsCommand;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Input\InputOption;
 
 abstract class AbstractBatchCommand extends AbstractOlcsCommand
@@ -48,11 +49,11 @@ abstract class AbstractBatchCommand extends AbstractOlcsCommand
             $result = $this->queryHandlerManager->handleQuery($dto);
             return $result;
         } catch (NotFoundException $e) {
-            $this->logAndWriteVerboseMessage("NotFoundException: {$e->getMessage()}", \Laminas\Log\Logger::WARN, true);
+            $this->logAndWriteVerboseMessage("NotFoundException: {$e->getMessage()}", LogLevel::WARNING, true);
         } catch (\Exception $e) {
-            $this->logAndWriteVerboseMessage("Exception: {$e->getMessage()}", \Laminas\Log\Logger::ERR, true);
+            $this->logAndWriteVerboseMessage("Exception: {$e->getMessage()}", LogLevel::ERROR, true);
         } catch (\Throwable $e) {
-            $this->logAndWriteVerboseMessage("Unhandled Error: {$e->getMessage()}", \Laminas\Log\Logger::CRIT, true);
+            $this->logAndWriteVerboseMessage("Unhandled Error: {$e->getMessage()}", LogLevel::CRITICAL, true);
         }
         return null;
     }

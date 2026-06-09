@@ -29,9 +29,7 @@ class ProcessNtuCommandTest extends TestCase
         $this->mockCommandHandlerManager = $this->createMock(CommandHandlerManager::class);
         $this->mockQueryHandlerManager = $this->createMock(QueryHandlerManager::class);
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         $this->command = new ProcessNtuCommand($this->mockCommandHandlerManager, $this->mockQueryHandlerManager);
         $this->command->setName('batch:process-ntu');

@@ -8,7 +8,7 @@ use Dvsa\Olcs\Api\Domain\Exception\RestResponseException;
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
-use Laminas\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 class GotenbergClient implements ConvertToPdfInterface, ConvertHtmlToPdfInterface
 {
@@ -249,7 +249,7 @@ class GotenbergClient implements ConvertToPdfInterface, ConvertHtmlToPdfInterfac
             // Log the error but don't fail the conversion
             // The PDF is already saved locally, S3 is just for audit/backup
             if ($this->logger) {
-                $this->logger->err('Failed to upload PDF to S3: ' . $e->getAwsErrorMessage(), [
+                $this->logger->error('Failed to upload PDF to S3: ' . $e->getAwsErrorMessage(), [
                     'bucket' => $this->s3Bucket,
                     'original_file' => basename($originalFileName)
                 ]);

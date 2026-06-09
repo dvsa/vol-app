@@ -89,7 +89,7 @@ variable "batch" {
       queue    = optional(string, "default")
       commands = optional(list(string))
       cpu      = optional(number, 1)
-      memory   = optional(number, 2048)
+      memory   = optional(number, 4096)
       timeout  = optional(number, 300)
       schedule = optional(list(string), [])
     }))
