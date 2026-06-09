@@ -95,6 +95,19 @@ locals {
     {
       effect = "Allow"
       actions = [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket",
+        "s3:DeleteObject"
+      ]
+      resource = [
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3",
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
         "rds:CreateDBClusterSnapshot",
         "rds:DescribeDBClusterSnapshots",
         "rds:DeleteDBClusterSnapshot",
