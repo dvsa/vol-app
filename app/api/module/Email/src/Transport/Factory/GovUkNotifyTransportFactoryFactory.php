@@ -54,5 +54,4 @@ final class GovUkNotifyTransportFactoryFactory implements FactoryInterface
             $chromeTemplate,
         );
     }
-
 }
