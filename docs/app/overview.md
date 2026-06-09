@@ -6,9 +6,9 @@ sidebar_position: 10
 
 The VOL service is distributed across three PHP applications built on the Laminas MVC framework:
 
--   **API**: The backend service.
--   **Selfserve**: The public-facing application.
--   **Internal**: The internal-facing application.
+- **API**: The backend service.
+- **Selfserve**: The public-facing application.
+- **Internal**: The internal-facing application.
 
 These applications are supported by several internal libraries.
 
@@ -24,7 +24,6 @@ These applications are supported by several internal libraries.
 | `olcs-logging`                    | Logging utilities                                                      | [GitHub](https://github.com/dvsa/olcs-logging)                         |
 | `olcs-transfer`                   | Data Transfer Objects (DTOs)                                           | [GitHub](https://github.com/dvsa/olcs-transfer)                        |
 | `olcs-utils`                      | Shared utility functions                                               | [GitHub](https://github.com/dvsa/olcs-utils)                           |
-| `olcs-xmltools`                   | XML processing tools                                                   | [GitHub](https://github.com/dvsa/olcs-xmltools)                        |
 | `php-govuk-account`               | PHP adapter for GOV.UK One Login                                       | [GitHub](https://github.com/dvsa/php-govuk-account)                    |
 
 ### Dependency tree
@@ -37,7 +36,6 @@ flowchart LR
 
     api --> `olcs-logging`
     api --> `olcs-utils`
-    api --> `olcs-xmltools`
     api --> `olcs-transfer`
     api --> `php-govuk-account`
     api --> `authentication-cognito`

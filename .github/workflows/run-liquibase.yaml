@@ -122,13 +122,17 @@ jobs:
           path: etl-temp
           ref: main
           token: ${{ steps.generate-token.outputs.token }}
+          persist-credentials: false
 
       - name: Create ETL tag
         if: inputs.etl_ref != 'main' && steps.check-tag.outputs.exists != 'true'
         run: |
-          cd $GITHUB_WORKSPACE/etl-temp
-          git tag ${{ inputs.etl_ref }}
-          git push origin ${{ inputs.etl_ref }}
+          cd "$GITHUB_WORKSPACE/etl-temp"
+          git tag "${{ inputs.etl_ref }}"
+          GIT_CONFIG_COUNT=1 \
+          GIT_CONFIG_KEY_0="http.extraHeader" \
+          GIT_CONFIG_VALUE_0="Authorization: Bearer ${GH_TOKEN}" \
+          git push origin "${{ inputs.etl_ref }}"
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
 
