@@ -17,6 +17,7 @@ locals {
       ]
     },
   ]
+
   task_iam_role_statements = [
     {
       effect = "Allow"
@@ -33,7 +34,7 @@ locals {
         "ssm:GetParametersByPath"
       ]
       resources = [
-        "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/qa/*"
+        "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
       ]
     },
     {
@@ -42,7 +43,9 @@ locals {
         "sts:AssumeRole"
       ]
       resources = [
-        "arn:aws:iam::000081644369:role/txc-int-consumer-role"
+        "arn:aws:iam::000081644369:role/txc-int-consumer-role",
+        "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole",
+        "arn:aws:iam::054614622558:role/OLCS-DEVAPPCI-DEVCI-Cognito_Pool_Admin",
       ]
     },
     {
@@ -74,10 +77,10 @@ locals {
         "sqs:DeleteMessage"
       ]
       resources = [
-        "arn:aws:sqs:eu-west-1:054614622558:DEVAPPQA-OLCS-PRI-CHGET-INSOLVENCY-DLQ",
-        "arn:aws:sqs:eu-west-1:054614622558:DEVAPPQA-OLCS-PRI-CHGET-INSOLVENCY",
-        "arn:aws:sqs:eu-west-1:054614622558:DEVAPPQA-OLCS-PRI-CHGET-DLQ",
-        "arn:aws:sqs:eu-west-1:054614622558:DEVAPPQA-OLCS-PRI-CHGET"
+        "arn:aws:sqs:eu-west-1:054614622558:DEVAPPDEV-OLCS-PRI-CHGET-INSOLVENCY-DLQ",
+        "arn:aws:sqs:eu-west-1:054614622558:DEVAPPDEV-OLCS-PRI-CHGET-INSOLVENCY",
+        "arn:aws:sqs:eu-west-1:054614622558:DEVAPPDEV-OLCS-PRI-CHGET-DLQ",
+        "arn:aws:sqs:eu-west-1:054614622558:DEVAPPDEV-OLCS-PRI-CHGET"
       ]
     },
     {
@@ -103,6 +106,73 @@ locals {
         "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*"
       ]
     },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:CreateDBClusterSnapshot",
+        "rds:DescribeDBClusterSnapshots",
+        "rds:DeleteDBClusterSnapshot",
+      ]
+      resources = [
+
+        "arn:aws:rds:eu-west-1:054614622558:cluster:dev-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-db-anon-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:DescribeDBClusters",
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster:dev-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:RestoreDBClusterFromSnapshot",
+        "rds:AddTagsToResource",
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:subgrp:devappdev-olcs-rds-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:CreateDBInstance",
+        "rds:DescribeDBInstances",
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:DeleteDBInstance",
+        "rds:DeleteDBCluster",
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:ModifyDBClusterSnapshotAttribute"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*"
+      ]
+    }
   ]
 }
 
@@ -125,7 +195,7 @@ data "aws_ecr_repository" "gotenberg" {
 data "aws_security_group" "this" {
   for_each = toset(local.legacy_service_names)
 
-  name = "DEV/APP/QA-OLCS-PRI-${each.key}-SG"
+  name = "DEV/APP/DEV-OLCS-PRI-${each.key}-SG"
 }
 
 data "aws_subnets" "this" {
@@ -134,9 +204,9 @@ data "aws_subnets" "this" {
   filter {
     name = "tag:Name"
     values = [
-      "DEV/APP/QA-OLCS-PRI-${each.key}-1A",
-      "DEV/APP/QA-OLCS-PRI-${each.key}-1B",
-      "DEV/APP/QA-OLCS-PRI-${each.key}-1C"
+      "DEV/APP/DEV-OLCS-PRI-${each.key}-1A",
+      "DEV/APP/DEV-OLCS-PRI-${each.key}-1B",
+      "DEV/APP/DEV-OLCS-PRI-${each.key}-1C"
     ]
   }
 }
@@ -144,21 +214,21 @@ data "aws_subnets" "this" {
 data "aws_secretsmanager_secret" "this" {
   for_each = toset(setsubtract(local.service_names, ["cli"]))
 
-  name = "DEVAPPQA-BASE-SM-APPLICATION-${upper(each.key)}"
+  name = "DEVAPPDEV-BASE-SM-APPLICATION-${upper(each.key)}"
 }
 
 data "aws_secretsmanager_secret" "infra" {
-  name = "DEVAPPQA-BASE-SM-INFRA"
+  name = "DEVAPPDEV-BASE-SM-INFRA"
 }
 
 data "aws_cognito_user_pools" "this" {
-  name = "DVSA-DEVAPPQA-COGNITO-USERS"
+  name = "DVSA-DEVAPPDEV-COGNITO-USERS"
 }
 
 data "aws_lb" "this" {
   for_each = setsubtract(local.legacy_service_names, ["RENDERER"])
 
-  name = "DEVAPPQA-OLCS-PRI-${(each.key == "API" ? "SVCS" : each.key)}-ALB"
+  name = "DEVAPPDEV-OLCS-PRI-${(each.key == "API" ? "SVCS" : each.key)}-ALB"
 }
 
 data "aws_lb_listener" "this" {
@@ -186,18 +256,18 @@ data "aws_vpc" "this" {
 module "service" {
   source = "../../modules/service"
 
-  environment = "int"
+  environment = "dev"
 
-  legacy_environment = "QA"
+  legacy_environment = "DEV"
 
-  domain_env = "qa"
+  domain_env = "dev"
 
   domain_name    = "dev-dvsacloud.uk"
   assets_version = var.assets_version
 
   vpc_id = data.aws_vpc.this.id
 
-  elasticache_url = "tcp://cache.qa.olcs.dev-dvsacloud.uk:6379"
+  elasticache_url = "tcp://cache.dev.olcs.dev-dvsacloud.uk:6379"
 
   services = {
     "api" = {
@@ -249,7 +319,7 @@ module "service" {
             "ssm:GetParametersByPath"
           ]
           resources = [
-            "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/qa/*"
+            "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
           ]
         },
       ]
@@ -291,7 +361,7 @@ module "service" {
             "ssm:GetParametersByPath"
           ]
           resources = [
-            "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/qa/*"
+            "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
           ]
         },
       ]
@@ -305,7 +375,7 @@ module "service" {
       lb_listener_arn           = data.aws_lb_listener.this["SSWEB"].arn
       lb_arn                    = data.aws_lb.this["SSWEB"].arn
       listener_rule_host_header = ["ssweb.*"]
-    },
+    }
     "pdf-converter" = {
       cpu    = 1024
       memory = 2048
@@ -331,8 +401,10 @@ module "service" {
       lb_arn                    = data.aws_lb.this["API"].arn
       listener_rule_host_header = ["renderer.*"]
       listener_rule_priority    = 5
+
     }
   }
+
   batch = {
 
     cli_version = var.cli_image_tag
@@ -392,7 +464,8 @@ module "service" {
       {
         name     = "data-retention-populate",
         commands = ["batch:data-retention", "--populate"],
-        timeout  = 7200
+        schedule = ["cron(0 21 ? * 3#2 *)",
+        "cron(0 21 ? * 3#4 *)"], #check for multiple schedules prior to prod
       },
       {
         name     = "data-retention-precheck",
@@ -526,12 +599,6 @@ module "service" {
         schedule = ["cron(15 13 * * ? *)"],
       },
       {
-        name     = "permits-reset-test-data",
-        commands = ["permits:reset-test-data"],
-        type     = "default",
-        timeout  = 1800
-      },
-      {
         name     = "process-queue-general",
         commands = ["queue:process-queue", "--exclude", "que_typ_ch_compare,que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing,que_typ_print,que_typ_disc_printing_print,que_typ_create_com_lic,que_typ_remove_deleted_docs,que_typ_permit_generate,que_typ_permit_print,que_typ_run_ecmt_scoring,que_typ_accept_ecmt_scoring,que_typ_irhp_permits_allocate", "--queue-duration", "110", ],
         timeout  = 120,
@@ -612,8 +679,8 @@ module "service" {
       {
         name     = "transxchange-consumer",
         commands = ["queue:transxchange-consumer", "-v"],
-        schedule = ["cron(0/2 6-20 * * ? *)"],
         timeout  = 90,
+        schedule = ["cron(0/2 6-20 * * ? *)"],
       },
       {
         name  = "liquibase",
@@ -628,7 +695,7 @@ module "service" {
       {
         name     = "import-anondb",
         commands = ["/mnt/data/scripts/import_anondb.sh"],
-        type     = "scripts"
+        type     = "scripts_testing"
       },
       {
         name     = "populate-anondb",
@@ -637,7 +704,7 @@ module "service" {
       },
       {
         name     = "ni-compliance",
-        commands = ["/mnt/data/scripts/ni_dvacompliance.sh"],
+        commands = ["/mnt/data/scripts/niextract/ni_dvacompliance.sh"],
         type     = "scripts"
       },
       {
@@ -648,8 +715,10 @@ module "service" {
       },
       {
         name     = "data-refresh",
-        commands = ["/mnt/data/scripts/data_refresh/data_refresh.sh", "qa", "eu-west-1"],
+        commands = ["/mnt/data/scripts/data_refresh/data_refresh.sh", "dev", "eu-west-1"],
         type     = "scripts"
+        cpu      = 2,
+        memory   = 8192,
       },
     ]
   }
