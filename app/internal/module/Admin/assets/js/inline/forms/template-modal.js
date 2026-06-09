@@ -52,7 +52,7 @@ $(function () {
       $form.addClass("editModal js-hidden");
       $form.before(modalTemplate);
     }
-    $(".previewTitle").html("Preview: " + $("#description").val());
+    $(".previewTitle").text("Preview: " + $("#description").val());
   }
 
   $("#preview").click(function () {
