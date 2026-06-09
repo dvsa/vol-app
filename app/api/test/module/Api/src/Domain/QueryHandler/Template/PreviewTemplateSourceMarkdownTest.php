@@ -51,8 +51,10 @@ class PreviewTemplateSourceMarkdownTest extends QueryHandlerTestCase
         $result = $this->sut->handleQuery($query);
 
         $this->assertArrayHasKey('Default', $result);
-        $this->assertStringContainsString('<strong>world</strong>', $result['Default']);
-        // New shared chrome wrap: GOV.UK header + description used as subject heading.
+        // Notify-faithful: bold markers are shown literally, not rendered as <strong>.
+        $this->assertStringContainsString('Hello **world**', $result['Default']);
+        $this->assertStringNotContainsString('<strong>', $result['Default']);
+        // Shared NotifyChrome wrap: GOV.UK header + description in the document title.
         $this->assertStringContainsString('GOV.UK', $result['Default']);
         $this->assertStringContainsString('Greeting template', $result['Default']);
     }

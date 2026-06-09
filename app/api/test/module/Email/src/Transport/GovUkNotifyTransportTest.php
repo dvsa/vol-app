@@ -27,9 +27,7 @@ class GovUkNotifyTransportTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         $this->notifyClient = m::mock(NotifyClient::class);
         $this->sut = new GovUkNotifyTransport(
@@ -62,7 +60,12 @@ class GovUkNotifyTransportTest extends MockeryTestCase
             ->andReturn(['id' => 'notify-msg-id-1']);
 
         $this->sut->send($email);
-        $this->assertFalse($email->getHeaders()->has(GovUkNotifyTransport::PAYLOAD_HEADER));
+
+        // Symfony's AbstractTransport::send() clones the message before doSend(), so the
+        // internal PAYLOAD_HEADER is consumed on the clone and the caller's original $email is
+        // left untouched. The Notify API call (asserted via withArgs above) is the behaviour of
+        // record; header stripping on the sent message is covered by DevNotifyTransportTest.
+        $this->assertTrue($email->getHeaders()->has(GovUkNotifyTransport::PAYLOAD_HEADER));
     }
 
     public function testUsesWelshTemplateForCyLocale(): void

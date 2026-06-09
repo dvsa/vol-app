@@ -42,14 +42,16 @@ class DevNotifyTransportTest extends MockeryTestCase
             ->text('plain');
         $email->getHeaders()->addTextHeader(
             GovUkNotifyTransport::PAYLOAD_HEADER,
-            json_encode(['markdownBody' => '**bold**'], JSON_THROW_ON_ERROR),
+            json_encode(['markdownBody' => 'A short message'], JSON_THROW_ON_ERROR),
         );
 
-        $rendered = new RenderedContent(m::mock('League\CommonMark\Node\Node'), '<p><strong>bold</strong></p>');
-        $this->converter->shouldReceive('convert')->with('**bold**')->andReturn($rendered);
+        // The body is rendered via NotifyChrome (Notify-style Markdown emulation + inline styles).
+        $rendered = new RenderedContent(new \League\CommonMark\Node\Block\Document(), '<p>A short message</p>');
+        $this->converter->shouldReceive('convert')->with('A short message')->andReturn($rendered);
 
         $this->inner->shouldReceive('send')->once()->withArgs(function (SymfonyEmail $msg) {
-            $this->assertStringContainsString('<strong>bold</strong>', $msg->getHtmlBody());
+            $this->assertStringContainsString('<p style=', $msg->getHtmlBody()); // Notify inline styles applied
+            $this->assertStringContainsString('A short message', $msg->getHtmlBody());
             $this->assertStringContainsString('Hello', $msg->getHtmlBody());
             $this->assertFalse($msg->getHeaders()->has(GovUkNotifyTransport::PAYLOAD_HEADER));
             return true;

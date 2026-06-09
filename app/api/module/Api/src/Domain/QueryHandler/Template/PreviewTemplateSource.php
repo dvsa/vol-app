@@ -76,9 +76,11 @@ class PreviewTemplateSource extends AbstractQueryHandler
     private function renderMarkdownPreview(string $markdown, string $subject): string
     {
         $this->markdownConverter ??= new GithubFlavoredMarkdownConverter();
-        $html = $this->markdownConverter->convert($markdown)->getContent();
 
-        // Shared chrome with DevNotifyTransport so the admin preview matches Mailpit output.
+        // Shared Notify-style rendering + chrome with DevNotifyTransport, so the admin preview
+        // matches both Mailpit and what GOV.UK Notify actually delivers.
+        $html = NotifyChrome::renderMarkdownBody($markdown, $this->markdownConverter);
+
         return NotifyChrome::wrap($html, $subject);
     }
 

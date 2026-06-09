@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Email\Transport;
 
+use Dvsa\Olcs\Email\View\NotifyChrome;
 use League\CommonMark\ConverterInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
@@ -72,7 +73,7 @@ final class DevNotifyTransport extends AbstractTransport
             ? $payload['markdownBody']
             : ($email->getTextBody() ?? '');
 
-        $html = $this->markdownConverter->convert($markdown)->getContent();
+        $html = NotifyChrome::renderMarkdownBody($markdown, $this->markdownConverter);
         $chromed = strtr($this->chromeTemplate, [
             '{{subject}}' => htmlspecialchars((string) $email->getSubject(), ENT_QUOTES, 'UTF-8'),
             '{{body}}' => $html,
