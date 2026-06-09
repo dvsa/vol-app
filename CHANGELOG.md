@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.15.0](https://github.com/dvsa/olcs-transfer/compare/v8.14.0...v8.15.0) (2026-06-09)
+
+
+### Features
+
+* add Template DTOs for notify md migration (VOL-7238) ([#188](https://github.com/dvsa/olcs-transfer/issues/188)) ([32bd25b](https://github.com/dvsa/olcs-transfer/commit/32bd25b750cacf9cc506b3449bcc4ae0d3822478))
+
 ## [8.14.0](https://github.com/dvsa/olcs-transfer/compare/v8.13.0...v8.14.0) (2026-06-04)
 
 
