@@ -1,0 +1,22 @@
+<p>Helô,</p>
+<p>
+Mae <?php echo $this->escapeHtml($this->organisation); ?> wedi'ch enwi fel Rheolwr Trafnidiaeth ar Drwydded Gweithredwr
+Cerbydau <?php echo $this->escapeHtml($this->reference); ?>.
+</p>
+<p>
+    Maent wedi adolygu'ch cais ac mae angen ichi ddiwygio neu wirio'ch manylion. Bydd angen ichi lofnodi'r datganiad eto ar ôl ichi adolygu neu ddiwygio'ch cais.
+</p>
+<p>
+    I adolygu'r cais, <a href="<?php echo $this->escapeHtml($this->signInLink); ?>">mewngofnodwch ar-lein</a> gyda'ch enw defnyddiwr
+    (<?php echo $this->escapeHtml($this->username); ?>) a'ch cyfrinair.
+</p>
+<p>
+    <b>Profi problemau?</b><br>
+<?php
+$url = ($this->isNi) ?
+    'http://www.doeni.gov.uk/index/information/foi/recent-releases/publications-details.htm?docid=9994' :
+    'https://www.gov.uk/government/publications/application-to-add-a-transport-manager-to-a-licence-tm1';
+?>
+Am gyngor gwelwch y <a href="<?php echo $this->escapeHtml($url); ?>">Canllaw cymorth ar gyfer Rheolwyr Trafnidiaeth</a> neu
+<a href="mailto:notifications@vehicle-operator-licensing.service.gov.uk">e-bostiwch ni</a>.
+</p>
