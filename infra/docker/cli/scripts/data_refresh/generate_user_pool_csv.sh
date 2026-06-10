@@ -8,8 +8,8 @@ labelForBranch() {
 }
 
 run_on_node="${RUN_ON_NODE:-dev&&api&&olcs}"
-platformEnv="${PLATFORM_ENV:-dev}"
-Region="${REGION:-eu-west-1}"
+platformEnv="${1:-${PLATFORM_ENV:-dev}}"
+Region="${2:-${REGION:-eu-west-1}}"
 
 environment=$(labelForBranch "$platformEnv")
 
@@ -29,6 +29,9 @@ output_csv="/tmp/db_output.csv"
 trap 'rm -rf "$output_csv"' EXIT
 
 echo "[INFO] Using local script directory: $scriptdir"
+echo "[INFO] platformEnv: $platformEnv"
+echo "[INFO] Region: $Region"
+echo "[INFO] Upload environment label: $environment"
 
 echo "[INFO] Generating user pool CSV..."
 cd "$scriptdir" || { echo "Script directory not found: $scriptdir"; exit 1; }
@@ -42,7 +45,6 @@ USER_POOL_EX_DATABASE="${READDB_NAME}" \
 USER_POOL_EX_PASS="${M_DB_PASSWORD}" \
 "$php_bin" /mnt/data/scripts/data_refresh/generate_user_pool/user-pool-export.php \
   --mode=nonprod-users \
-  --perrole="2" \
   --output="$output_csv"
 
 test -f "$output_csv"
@@ -55,9 +57,6 @@ if command -v aws >/dev/null; then
 else
   echo "[WARNING] AWS CLI not installed, skipping S3 upload."
 fi
-
-slack_message="${platformEnv} User Pool CSV generated"
-slack_color="$slackCompleted"
 
 slack_message="${platformEnv} User Pool CSV generated"
 slack_color="$slackCompleted"
