@@ -1,0 +1,60 @@
+{
+    "name": "olcs/olcs-logging",
+    "description": "Logging Module for OLCS",
+    "license": "MIT",
+    "require": {
+        "ext-json": "*",
+        "php": "~8.2.0 || ~8.3.0",
+        "psr/log": "^3.0",
+        "monolog/monolog": "^3.10",
+        "laminas/laminas-eventmanager": "^3.14",
+        "laminas/laminas-mvc": "^3.8",
+        "laminas/laminas-session": "^2.21",
+        "laminas/laminas-stdlib": "^3.20",
+        "psr/container": "^1.1|^2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Olcs\\Logging\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "OlcsTest\\Logging\\": "test/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6",
+        "mockery/mockery": "^1.6",
+        "johnkary/phpunit-speedtrap": "^4.0",
+        "bamarni/composer-bin-plugin": "^1.8.2",
+        "phpstan/phpstan-mockery": "^2.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "bamarni/composer-bin-plugin": true
+        }
+    },
+    "scripts": {
+        "bin": "echo 'bin not installed'",
+        "post-install-cmd": [
+            "@composer bin all install"
+        ],
+        "test": "phpunit",
+        "phpcs": "phpcs",
+        "psalm": "psalm",
+        "phpstan": "phpstan",
+        "all": [
+            "@test",
+            "@phpcs",
+            "@psalm",
+            "@phpstan"
+        ]
+    },
+    "extra": {
+        "bamarni-bin": {
+            "bin-links": true,
+            "forward-command": true
+        }
+    }
+}
