@@ -5,7 +5,7 @@
     "php": "~8.3.0",
     "ext-redis": "*",
     "doctrine/doctrine-module": "^6.3",
-    "dvsa/laminas-config-cloud-parameters": "^1.0",
+    "dvsa/laminas-config-cloud-parameters": "^2.1",
     "laminas/laminas-authentication": "^2.19",
     "laminas/laminas-cache": "^3.13",
     "laminas/laminas-cache-storage-adapter-redis": "^2.10",

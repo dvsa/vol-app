@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "66c8b2f68374574bd966ca2f9f486f64",
+  "content-hash": "7eade20b880c0cfa861c93085be1455c",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -1040,33 +1040,30 @@
     },
     {
       "name": "dvsa/laminas-config-cloud-parameters",
-      "version": "v1.0.0",
+      "version": "v2.1.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters.git",
-        "reference": "7d3fe94fabc215d4721d550393018944055a6168"
+        "reference": "2baec7c36d8efc20294bfd5f8c37fbb77d729863"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/dvsa-laminas-config-cloud-parameters/zipball/7d3fe94fabc215d4721d550393018944055a6168",
-        "reference": "7d3fe94fabc215d4721d550393018944055a6168",
+        "url": "https://api.github.com/repos/dvsa/dvsa-laminas-config-cloud-parameters/zipball/2baec7c36d8efc20294bfd5f8c37fbb77d729863",
+        "reference": "2baec7c36d8efc20294bfd5f8c37fbb77d729863",
         "shasum": ""
       },
       "require": {
         "ext-json": "*",
-        "laminas/laminas-config": "^2.0|^3.0",
-        "laminas/laminas-config-aggregator": "^1.7",
-        "laminas/laminas-modulemanager": "^2.4|^3.0",
-        "php": "^8.0",
-        "symfony/dependency-injection": "^5.4",
-        "symfony/property-access": "^5.4|^6.3"
+        "laminas/laminas-modulemanager": "^2.4",
+        "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
+        "symfony/dependency-injection": "^5|^6|^7",
+        "symfony/property-access": "^5|^6|^7"
       },
       "require-dev": {
         "aws/aws-sdk-php": "^3.281",
         "bamarni/composer-bin-plugin": "^1.8",
         "dvsa/coding-standards": "^2.0",
-        "laminas/laminas-mvc": "^3.3",
-        "phpunit/phpunit": "^9.6"
+        "phpunit/phpunit": "^11.3"
       },
       "suggest": {
         "aws/aws-sdk-php": "To use the AWS parameter providers"
@@ -1087,9 +1084,9 @@
       "license": ["MIT"],
       "support": {
         "issues": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/issues",
-        "source": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/tree/v1.0.0"
+        "source": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/tree/v2.1.0"
       },
-      "time": "2024-03-19T14:06:05+00:00"
+      "time": "2026-06-09T12:32:58+00:00"
     },
     {
       "name": "ezyang/htmlpurifier",
@@ -1932,69 +1929,6 @@
       ],
       "abandoned": true,
       "time": "2026-01-29T12:14:07+00:00"
-    },
-    {
-      "name": "laminas/laminas-config-aggregator",
-      "version": "1.19.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/laminas/laminas-config-aggregator.git",
-        "reference": "612343ce135c340fc667da3615e50d865a86b4d9"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/laminas/laminas-config-aggregator/zipball/612343ce135c340fc667da3615e50d865a86b4d9",
-        "reference": "612343ce135c340fc667da3615e50d865a86b4d9",
-        "shasum": ""
-      },
-      "require": {
-        "brick/varexporter": "^0.5.0 || ^0.4.0 || ^0.6.0",
-        "laminas/laminas-stdlib": "^3.18.0",
-        "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
-        "webimpress/safe-writer": "^2.2.0"
-      },
-      "conflict": {
-        "nikic/php-parser": "<4.12",
-        "zendframework/zend-config-aggregator": "*"
-      },
-      "require-dev": {
-        "laminas/laminas-coding-standard": "~3.1.0",
-        "laminas/laminas-config": "^3.10.1",
-        "phpunit/phpunit": "^11.5.42",
-        "psalm/plugin-phpunit": "^0.19.5",
-        "vimeo/psalm": "^6.13.1"
-      },
-      "suggest": {
-        "laminas/laminas-config": "Allows loading configuration from XML, INI, YAML, and JSON files",
-        "laminas/laminas-config-aggregator-modulemanager": "Allows loading configuration from laminas-mvc Module classes",
-        "laminas/laminas-config-aggregator-parameters": "Allows usage of templated parameters within your configuration"
-      },
-      "type": "library",
-      "autoload": {
-        "psr-4": {
-          "Laminas\\ConfigAggregator\\": "src/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": ["BSD-3-Clause"],
-      "description": "Lightweight library for collecting and merging configuration from different sources",
-      "homepage": "https://laminas.dev",
-      "keywords": ["config-aggregator", "laminas"],
-      "support": {
-        "chat": "https://laminas.dev/chat",
-        "docs": "https://docs.laminas.dev/laminas-config-aggregator/",
-        "forum": "https://discourse.laminas.dev",
-        "issues": "https://github.com/laminas/laminas-config-aggregator/issues",
-        "rss": "https://github.com/laminas/laminas-config-aggregator/releases.atom",
-        "source": "https://github.com/laminas/laminas-config-aggregator"
-      },
-      "funding": [
-        {
-          "url": "https://funding.communitybridge.org/projects/laminas-project",
-          "type": "community_bridge"
-        }
-      ],
-      "time": "2025-10-14T19:57:01+00:00"
     },
     {
       "name": "laminas/laminas-escaper",
@@ -10119,5 +10053,5 @@
   "platform-overrides": {
     "ext-redis": "6.2.6"
   },
-  "plugin-api-version": "2.9.0"
+  "plugin-api-version": "2.6.0"
 }
