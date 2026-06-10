@@ -1,6 +1,15 @@
 {
   "name": "olcs/olcs-internal",
   "description": "OLCS Internal Web Site",
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../../lib/olcs-logging",
+      "options": {
+        "symlink": true
+      }
+    }
+  ],
   "require": {
     "php": "~8.3.0",
     "ext-redis": "*",
@@ -28,7 +37,7 @@
     "firebase/php-jwt": "^7.0",
     "olcs/olcs-auth": "^9.0",
     "olcs/olcs-common": "^9.22.0",
-    "olcs/olcs-logging": "^9.0.1",
+    "olcs/olcs-logging": "*",
     "olcs/olcs-transfer": "^8.15.0",
     "olcs/olcs-utils": "^7.1",
     "saeven/zf3-purifier": "^1.1",

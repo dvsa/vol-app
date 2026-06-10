@@ -1,6 +1,15 @@
 {
   "name": "olcs/backend",
   "description": "Back End Application for OLCS Project",
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../../lib/olcs-logging",
+      "options": {
+        "symlink": true
+      }
+    }
+  ],
   "require": {
     "php": "~8.3.0",
     "ext-intl": "*",
@@ -21,7 +30,7 @@
     "guzzlehttp/guzzle": "^7.10",
     "league/flysystem": "^1.1",
     "league/flysystem-webdav": "1.0.10",
-    "olcs/olcs-logging": "^9.0.1",
+    "olcs/olcs-logging": "*",
     "olcs/olcs-transfer": "^8.15.0",
     "olcs/olcs-utils": "^7.1",
     "oro/doctrine-extensions": "^2",
