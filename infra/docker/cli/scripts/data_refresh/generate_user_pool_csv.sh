@@ -45,7 +45,6 @@ USER_POOL_EX_DATABASE="${READDB_NAME}" \
 USER_POOL_EX_PASS="${M_DB_PASSWORD}" \
 "$php_bin" /mnt/data/scripts/data_refresh/generate_user_pool/user-pool-export.php \
   --mode=nonprod-users \
-  --perrole="2" \
   --output="$output_csv"
 
 test -f "$output_csv"
