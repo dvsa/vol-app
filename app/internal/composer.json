@@ -29,7 +29,7 @@
     "olcs/olcs-auth": "^9.0",
     "olcs/olcs-common": "^9.22.0",
     "olcs/olcs-logging": "^9.0.1",
-    "olcs/olcs-transfer": "^8.13.0",
+    "olcs/olcs-transfer": "^8.15.0",
     "olcs/olcs-utils": "^7.1",
     "saeven/zf3-purifier": "^1.1",
     "doctrine/doctrine-module": "^6.3",

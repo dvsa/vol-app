@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Email\Service;
 
 use Dvsa\Olcs\Email\Exception\EmailNotSentException;
+use Dvsa\Olcs\Email\Transport\GovUkNotifyTransportFactory;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Logging\Log\Logger;
 use Psr\Container\ContainerInterface;
@@ -10,6 +11,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Transport\Dsn;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email as SymfonyEmail;
 
@@ -125,7 +127,8 @@ class Email implements FactoryInterface
         array $cc = [],
         array $bcc = [],
         array $docs = [],
-        bool $highPriority = false
+        bool $highPriority = false,
+        ?array $notifyPayload = null
     ) {
         $fromAddress = $this->validateAddresses([$fromEmail => $fromName]);
 
@@ -176,6 +179,14 @@ class Email implements FactoryInterface
             $email->priority(SymfonyEmail::PRIORITY_HIGH);
         }
 
+        // Attach Notify payload header when the handler provided one. Transport reads+strips it.
+        if ($notifyPayload !== null) {
+            $email->getHeaders()->addTextHeader(
+                \Dvsa\Olcs\Email\Transport\GovUkNotifyTransport::PAYLOAD_HEADER,
+                json_encode($notifyPayload, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES)
+            );
+        }
+
         try {
             $this->mailer->send($email);
         } catch (TransportExceptionInterface | \Exception $e) {
@@ -193,27 +204,46 @@ class Email implements FactoryInterface
             throw new \RuntimeException('No mail config found');
         }
 
-        // Build DSN from mail config
+        $dsn = $this->resolveDsn($config);
+
+        $factories = iterator_to_array(Transport::getDefaultFactories());
+        $factories[] = $container->get(GovUkNotifyTransportFactory::class);
+
+        $transport = (new Transport($factories))->fromDsnObject(Dsn::fromString($dsn));
+        $mailer = new Mailer($transport);
+
+        $this->setMailer($mailer);
+        return $this;
+    }
+
+    /**
+     * Resolves the transport DSN. Prefers `config['mail']['dsn']` (the new Notify-aware path);
+     * falls back to composing an SMTP DSN from the legacy host/port/connection_config structure.
+     */
+    private function resolveDsn(array $config): string
+    {
         $mailConfig = $config['mail'];
+
+        $dsn = $mailConfig['dsn'] ?? null;
+        // Ignore unresolved `%placeholder%` strings left over when SM/SSM didn't provide a value.
+        if (is_string($dsn) && $dsn !== '' && !preg_match('/^%[^%]+%$/', $dsn)) {
+            return $dsn;
+        }
+
         $host = $mailConfig['options']['host'] ?? '';
         $port = $mailConfig['options']['port'] ?? '';
 
         if (empty($host) || empty($port)) {
             throw new \RuntimeException('Mail host and port must be configured');
         }
+
         $username = $mailConfig['options']['connection_config']['username'] ?? null;
         $password = $mailConfig['options']['connection_config']['password'] ?? null;
 
         if ($username && $password && $username !== 'null' && $password !== 'null') {
-            $dsn = sprintf('smtp://%s:%s@%s:%s', $username, $password, $host, $port);
-        } else {
-            $dsn = sprintf('smtp://%s:%s', $host, $port);
+            return sprintf('smtp://%s:%s@%s:%s', $username, $password, $host, $port);
         }
 
-        $transport = Transport::fromDsn($dsn);
-        $mailer = new Mailer($transport);
-
-        $this->setMailer($mailer);
-        return $this;
+        return sprintf('smtp://%s:%s', $host, $port);
     }
 }
