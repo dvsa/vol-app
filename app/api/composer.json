@@ -15,7 +15,7 @@
     "doctrine/doctrine-orm-module": "^6.3",
     "doctrine/orm": "^2.20",
     "dvsa/authentication-cognito": "^3.3",
-    "dvsa/laminas-config-cloud-parameters": "^1.0",
+    "dvsa/laminas-config-cloud-parameters": "^2.1",
     "dvsa/php-govuk-account": "^4.0",
     "gedmo/doctrine-extensions": "^3.21",
     "guzzlehttp/guzzle": "^7.10",
