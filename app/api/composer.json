@@ -8,6 +8,13 @@
       "options": {
         "symlink": true
       }
+    },
+    {
+      "type": "path",
+      "url": "../../lib/olcs-utils",
+      "options": {
+        "symlink": true
+      }
     }
   ],
   "require": {
@@ -32,7 +39,7 @@
     "league/flysystem-webdav": "1.0.10",
     "olcs/olcs-logging": "*",
     "olcs/olcs-transfer": "^8.15.0",
-    "olcs/olcs-utils": "^7.1",
+    "olcs/olcs-utils": "*",
     "oro/doctrine-extensions": "^2",
     "phprtflite/phprtflite": "~1.3.3",
     "phpseclib/phpseclib": "^3.0.47",

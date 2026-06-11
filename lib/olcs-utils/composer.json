@@ -1,60 +1,71 @@
 {
-    "name": "olcs/olcs-utils",
-    "description": "OLCS Utils",
-    "require": {
-        "php": "~8.2.0 || ~8.3.0",
-        "laminas/laminas-view": "^2.41",
-        "laminas/laminas-servicemanager": "^3.23",
-        "laminas/laminas-i18n": "^2.30",
-        "laminas/laminas-eventmanager": "^3.14",
-        "laminas/laminas-http": "^2.22",
-        "laminas/laminas-validator": "^2.64",
-        "psr/container": "^1.1|^2.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "Dvsa\\Olcs\\Utils\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Dvsa\\OlcsTest\\Utils\\": "test/"
-        }
-    },
-    "require-dev": {
-        "olcs/olcs-logging": "^9",
-        "phpunit/phpunit": "^9.6",
-        "johnkary/phpunit-speedtrap": "^4.0",
-        "bamarni/composer-bin-plugin": "^1.8.2"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "config": {
-        "allow-plugins": {
-            "bamarni/composer-bin-plugin": true,
-            "laminas/laminas-dependency-plugin": true
-        }
-    },
-    "scripts": {
-        "bin": "echo 'bin not installed'",
-        "post-install-cmd": [
-            "@composer bin all install"
-        ],
-        "test": "phpunit",
-        "phpcs": "phpcs",
-        "psalm": "psalm",
-        "phpstan": "phpstan --memory-limit=1G",
-        "all": [
-            "@test",
-            "@phpcs",
-            "@psalm",
-            "@phpstan"
-        ]
-    },
-    "extra": {
-        "bamarni-bin": {
-            "bin-links": true,
-            "forward-command": true
-        }
+  "name": "olcs/olcs-utils",
+  "description": "OLCS Utils",
+  "license": "MIT",
+  "version": "7.3.0",
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../olcs-logging",
+      "options": {
+        "symlink": true
+      }
     }
+  ],
+  "require": {
+    "php": "~8.2.0 || ~8.3.0",
+    "laminas/laminas-view": "^2.41",
+    "laminas/laminas-servicemanager": "^3.23",
+    "laminas/laminas-i18n": "^2.30",
+    "laminas/laminas-eventmanager": "^3.14",
+    "laminas/laminas-http": "^2.22",
+    "laminas/laminas-validator": "^2.64",
+    "psr/container": "^1.1|^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dvsa\\Olcs\\Utils\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Dvsa\\OlcsTest\\Utils\\": "test/"
+    }
+  },
+  "require-dev": {
+    "olcs/olcs-logging": "^9",
+    "phpunit/phpunit": "^9.6",
+    "johnkary/phpunit-speedtrap": "^4.0",
+    "bamarni/composer-bin-plugin": "^1.8.2"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "allow-plugins": {
+      "bamarni/composer-bin-plugin": true,
+      "laminas/laminas-dependency-plugin": true
+    }
+  },
+  "scripts": {
+    "bin": "echo 'bin not installed'",
+    "post-install-cmd": [
+      "@composer bin all install"
+    ],
+    "test": "phpunit",
+    "phpcs": "phpcs",
+    "psalm": "psalm",
+    "phpstan": "phpstan --memory-limit=1G",
+    "all": [
+      "@test",
+      "@phpcs",
+      "@psalm",
+      "@phpstan"
+    ]
+  },
+  "extra": {
+    "bamarni-bin": {
+      "bin-links": true,
+      "forward-command": true
+    }
+  }
 }

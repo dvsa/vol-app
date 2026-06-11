@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "eba279969067671c159ebfc4699c7972",
+  "content-hash": "943725e398e262cd0c30664635f8ab62",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -4239,17 +4239,11 @@
     },
     {
       "name": "olcs/olcs-utils",
-      "version": "v7.3.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/dvsa/olcs-utils.git",
-        "reference": "bfb8fa1ea595b8336516737166c22287bb965c97"
-      },
+      "version": "7.3.0",
       "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-utils/zipball/bfb8fa1ea595b8336516737166c22287bb965c97",
-        "reference": "bfb8fa1ea595b8336516737166c22287bb965c97",
-        "shasum": ""
+        "type": "path",
+        "url": "../../lib/olcs-utils",
+        "reference": "b2ac075717ba63e61654934b31e19da13bf2d3eb"
       },
       "require": {
         "laminas/laminas-eventmanager": "^3.14",
@@ -4279,12 +4273,26 @@
           "Dvsa\\Olcs\\Utils\\": "src/"
         }
       },
-      "notification-url": "https://packagist.org/downloads/",
-      "description": "OLCS Utils",
-      "support": {
-        "source": "https://github.com/dvsa/olcs-utils/tree/v7.3.0"
+      "autoload-dev": {
+        "psr-4": {
+          "Dvsa\\OlcsTest\\Utils\\": "test/"
+        }
       },
-      "time": "2026-05-22T09:58:52+00:00"
+      "scripts": {
+        "bin": ["echo 'bin not installed'"],
+        "post-install-cmd": ["@composer bin all install"],
+        "test": ["phpunit"],
+        "phpcs": ["phpcs"],
+        "psalm": ["psalm"],
+        "phpstan": ["phpstan --memory-limit=1G"],
+        "all": ["@test", "@phpcs", "@psalm", "@phpstan"]
+      },
+      "license": ["MIT"],
+      "description": "OLCS Utils",
+      "transport-options": {
+        "symlink": true,
+        "relative": true
+      }
     },
     {
       "name": "paragonie/constant_time_encoding",
