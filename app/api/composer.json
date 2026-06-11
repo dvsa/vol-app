@@ -1,6 +1,15 @@
 {
   "name": "olcs/backend",
   "description": "Back End Application for OLCS Project",
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../../lib/olcs-logging",
+      "options": {
+        "symlink": true
+      }
+    }
+  ],
   "require": {
     "php": "~8.3.0",
     "ext-intl": "*",
@@ -15,16 +24,15 @@
     "doctrine/doctrine-orm-module": "^6.3",
     "doctrine/orm": "^2.20",
     "dvsa/authentication-cognito": "^3.3",
-    "dvsa/laminas-config-cloud-parameters": "^1.0",
-    "dvsa/php-govuk-account": "dev-chore/modernise-dependencies as 3.1.0",
+    "dvsa/laminas-config-cloud-parameters": "^2.1",
+    "dvsa/php-govuk-account": "^4.0",
     "gedmo/doctrine-extensions": "^3.21",
     "guzzlehttp/guzzle": "^7.10",
     "league/flysystem": "^1.1",
     "league/flysystem-webdav": "1.0.10",
-    "olcs/olcs-logging": "^9.0.1",
-    "olcs/olcs-transfer": "^8.13.0",
+    "olcs/olcs-logging": "*",
+    "olcs/olcs-transfer": "^8.15.0",
     "olcs/olcs-utils": "^7.1",
-    "olcs/olcs-xmltools": "^8.0",
     "oro/doctrine-extensions": "^2",
     "phprtflite/phprtflite": "~1.3.3",
     "phpseclib/phpseclib": "^3.0.47",
@@ -43,13 +51,20 @@
     "laminas/laminas-view": "^2.43",
     "laminas/laminas-i18n": "^2.31",
     "laminas/laminas-eventmanager": "^3.14",
+    "laminas/laminas-xml": "^1.8",
+    "laminas/laminas-filter": "^2.42",
+    "laminas/laminas-validator": "^2.65",
+    "laminas/laminas-stdlib": "^3.21",
     "psr/container": "^1.1|^2",
     "laminas/laminas-cli": "^1.13",
     "doctrine/migrations": "^3.9",
     "setono/editorjs-php": "^1.3",
     "symfony/mailer": "^7.4",
     "symfony/mime": "^7.4",
-    "firebase/php-jwt": "^7.0"
+    "firebase/php-jwt": "^7.0",
+    "alphagov/notifications-php-client": "^7.0",
+    "league/commonmark": "^2.7",
+    "php-http/guzzle7-adapter": "^1.1"
   },
   "autoload": {
     "psr-4": {
@@ -67,7 +82,8 @@
       "Dvsa\\Olcs\\AwsSdk\\": "module/AwsSdk/src",
       "Dvsa\\Olcs\\Auth\\": "module/Auth/src",
       "Dvsa\\Olcs\\CompaniesHouse\\": "module/CompaniesHouse/src",
-      "Dvsa\\Olcs\\Cpms\\": "module/Cpms/src"
+      "Dvsa\\Olcs\\Cpms\\": "module/Cpms/src",
+      "Olcs\\XmlTools\\": "module/XmlTools/src"
     }
   },
   "autoload-dev": {
@@ -85,7 +101,8 @@
       "Dvsa\\OlcsTest\\Scanning\\": "test/module/Scanning/src",
       "Dvsa\\OlcsTest\\Snapshot\\": "test/module/Snapshot/src",
       "Dvsa\\OlcsTest\\AwsSdk\\": "test/module/AwsSdk/src",
-      "Dvsa\\OlcsTest\\Queue\\": "test/module/Queue/src"
+      "Dvsa\\OlcsTest\\Queue\\": "test/module/Queue/src",
+      "OlcsTest\\XmlTools\\": "module/XmlTools/test"
     }
   },
   "minimum-stability": "dev",
