@@ -20,7 +20,8 @@ final class Delete extends AbstractDeleteCommandHandler
     #[\Override]
     protected function checkDeletable($id, mixed $entity): void
     {
-        if ($entity instanceof LetterSectionEntity
+        if (
+            $entity instanceof LetterSectionEntity
             && $entity->getSectionKey() === '__ISSUES__'
         ) {
             throw new ValidationException(['The __ISSUES__ placeholder section cannot be deleted']);

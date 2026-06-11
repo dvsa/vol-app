@@ -7,7 +7,7 @@ use Common\Service\Data\AbstractListDataService;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
 
 /**
- * Letter Todo data service
+ * LetterTodo data service
  *
  * Populates the "Linked To-dos" multi-select on the Letter Issue admin form.
  *
