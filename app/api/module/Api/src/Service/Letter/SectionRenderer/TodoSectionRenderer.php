@@ -32,16 +32,20 @@ class TodoSectionRenderer extends AbstractSectionRenderer
 
         /** @var LetterInstanceTodo $entity */
         $todoVersion = $entity->getLetterTodoVersion();
+        // The ORM column is declared type=json (so the docblock says array|null)
+        // but in some hydration paths it comes back as a JSON-encoded string. The
+        // type is therefore widened to mixed here so the defensive normalisation
+        // below isn't flagged as dead code by Psalm.
+        /** @var mixed $description */
         $description = $todoVersion?->getDescription();
 
         if (empty($description)) {
             return '';
         }
 
-        // The `description` column is declared type=json but can come back as a
-        // double-encoded JSON string in some hydration paths — same defensive shape
-        // as LetterInstanceIssue::getEffectiveContent. Normalise to array here so
-        // convertEditorJsToHtml's strict array signature is honoured.
+        // Same defensive shape as LetterInstanceIssue::getEffectiveContent —
+        // normalise to array so convertEditorJsToHtml's strict array signature
+        // is honoured.
         if (is_string($description)) {
             $decoded = json_decode($description, true);
             $description = (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) ? $decoded : [];
