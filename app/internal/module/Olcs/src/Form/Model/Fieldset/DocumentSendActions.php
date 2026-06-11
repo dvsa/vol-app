@@ -39,7 +39,8 @@ class DocumentSendActions
     /**
      * @Form\Attributes({
      *     "type": "submit",
-     *     "class": "govuk-link",
+     *     "data-module": "govuk-button",
+     *     "class": "govuk-button govuk-button--secondary",
      *     "id":"close",
      * })
      * @Form\Options({

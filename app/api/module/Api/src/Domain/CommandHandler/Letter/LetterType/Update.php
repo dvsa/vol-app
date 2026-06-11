@@ -102,6 +102,9 @@ final class Update extends AbstractCommandHandler
                 $letterType->removeLetterTypeChoice($existing);
             }
 
+            // Flush removals so DELETEs execute before INSERTs (composite PK)
+            $this->getRepo()->flushAll();
+
             $displayOrder = 0;
             foreach ($command->getChoices() as $choiceId) {
                 $letterChoice = $this->getRepo('LetterChoice')->fetchById($choiceId);
