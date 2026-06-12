@@ -334,13 +334,13 @@ class Schedule41Controller extends AbstractController
      */
     private function isLicenceValid($licenceNumber)
     {
-        $response = $this->handleQuery(
-            LicenceByNumber::create(
-                [
-                    'licenceNumber' => $licenceNumber
-                ]
-            )
-        );
+        try {
+            $response = $this->handleQuery(
+                LicenceByNumber::create(['licenceNumber' => $licenceNumber])
+            );
+        } catch (\Common\Service\Cqrs\Exception\NotFoundException $e) {
+            return ['number-not-valid' => ['application.schedule41.licence-number-not-valid']];
+        }
 
         if (!$response->isOk()) {
             $errors['number-not-valid'][] = 'application.schedule41.licence-number-not-valid';
