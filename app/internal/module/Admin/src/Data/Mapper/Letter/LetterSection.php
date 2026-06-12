@@ -53,10 +53,7 @@ class LetterSection implements MapperInterface
                 'id' => $data['id'] ?? null,
                 'sectionKey' => $currentVersion['sectionKey'] ?? $data['sectionKey'] ?? null,
                 'name' => $currentVersion['name'] ?? $data['name'] ?? null,
-                'sectionType' => $currentVersion['sectionType'] ?? $data['sectionType'] ?? null,
                 'defaultContent' => $currentVersion['defaultContent'] ?? $data['defaultContent'] ?? null,
-                'goodsOrPsv' => $currentVersion['goodsOrPsv']['id'] ?? $data['goodsOrPsv']['id'] ?? null,
-                'isNi' => $currentVersion['isNi'] ?? $data['isNi'] ?? false,
                 'requiresInput' => $currentVersion['requiresInput'] ?? $data['requiresInput'] ?? false,
                 'minLength' => $currentVersion['minLength'] ?? $data['minLength'] ?? null,
                 'maxLength' => $currentVersion['maxLength'] ?? $data['maxLength'] ?? null,
@@ -91,18 +88,14 @@ class LetterSection implements MapperInterface
     {
         $commandData = $data['letterSection'] ?? [];
 
-        // Convert boolean values
-        if (isset($commandData['isNi'])) {
-            $commandData['isNi'] = (bool) $commandData['isNi'];
-        }
+        // sectionType, goodsOrPsv and isNi have been removed from the admin form
+        // (variant conditions cover those distinctions). The Create/Update DTOs still
+        // require a sectionType, so default it to body; the handlers always set isNi
+        // and goodsOrPsv from their command defaults (false / null).
+        $commandData['sectionType'] = 'letter_section_type_body';
 
         if (isset($commandData['requiresInput'])) {
             $commandData['requiresInput'] = (bool) $commandData['requiresInput'];
-        }
-
-        // Handle empty selections
-        if (empty($commandData['goodsOrPsv'])) {
-            unset($commandData['goodsOrPsv']);
         }
 
         // publishFrom field removed from form - unset if present
