@@ -696,11 +696,15 @@ module "service" {
         name     = "import-anondb",
         commands = ["/mnt/data/scripts/import_anondb.sh"],
         type     = "scripts_testing"
+        cpu      = 2,
+        memory   = 8192,
       },
       {
         name     = "populate-anondb",
         commands = ["/mnt/data/scripts/populate_anondb.sh"],
         type     = "scripts"
+        cpu      = 2,
+        memory   = 8192,
       },
       {
         name     = "ni-compliance",

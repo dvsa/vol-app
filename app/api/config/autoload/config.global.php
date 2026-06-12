@@ -270,6 +270,21 @@ return [
         'from_email' => '%olcs_from_email%',
         'selfserve_uri' => '%olcs_ss_uri%',
         'internal_uri' => '%olcs_iu_uri%',
+        // GOV.UK Notify transport config. Populated from Secrets Manager / Parameter Store in
+        // deployed environments; overridden in local.php for local dev.
+        'notify' => [
+            'passthrough_templates' => [
+                'en_GB' => '%olcs_notify_template_en_gb%',
+                'cy_GB' => '%olcs_notify_template_cy_gb%',
+            ],
+        ],
+        // VOL-7238: dedicated DSN for the admin "Send test via Notify" button. Populated only
+        // in pre-cutover envs (dev/int) so admins can exercise the Notify path against a
+        // Notify test-mode key while the main `mail.dsn` is still SMTP. Empty/unset hides the
+        // admin button.
+        'notify_test' => [
+            'dsn' => '%olcs_notify_test_dsn%',
+        ],
     ],
     'awsOptions' => array_filter([
         'region' => '%olcs_aws_region%',
@@ -286,6 +301,11 @@ return [
         ]
     ]),
     'mail' => [
+        // Optional explicit Symfony Mailer DSN. When set (e.g. `govuknotify://…` or
+        // `govuknotify+mailpit://mailpit:1025`), takes precedence over the legacy host/port
+        // SMTP composition below. Populated from Secrets Manager / Parameter Store once the
+        // Notify cutover has happened per-environment; overridden in local.php for dev.
+        'dsn' => '%olcs_mail_dsn%',
         'type' => '\Laminas\Mail\Transport\Smtp',
         'options' => [
             'name' => '%olcs_email_host%',

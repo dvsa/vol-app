@@ -35,7 +35,9 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || null }}
-          sparse-checkout: app/${{ inputs.project }}
+          sparse-checkout: |
+            app/${{ inputs.project }}
+            lib
           fetch-depth: ${{ !inputs.ref && 1 || 0 }}
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -67,7 +69,9 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || null }}
-          sparse-checkout: app/${{ inputs.project }}
+          sparse-checkout: |
+            app/${{ inputs.project }}
+            lib
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -100,7 +104,9 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || null }}
-          sparse-checkout: app/${{ inputs.project }}
+          sparse-checkout: |
+            app/${{ inputs.project }}
+            lib
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -138,7 +144,9 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || null }}
-          sparse-checkout: app/${{ inputs.project }}
+          sparse-checkout: |
+            app/${{ inputs.project }}
+            lib
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -156,6 +164,19 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist --no-dev --optimize-autoloader
+      - name: Materialise in-tree libs into vendor
+        # composer symlinks path-repo libs (lib/<name>) into vendor/olcs/*. Those
+        # relative symlinks resolve on the runner but dangle once the tarball is
+        # ADDed into the container image (only the app dir is shipped, not lib/).
+        # Replace each with a real copy so the packaged artefact is self-contained.
+        run: |
+          for link in vendor/olcs/*; do
+            if [ -L "$link" ]; then
+              target=$(cd "$link" && pwd -P)
+              rm "$link"
+              cp -a "$target" "$link"
+            fi
+          done
       - name: Write version file
         if: ${{ inputs.version }}
         run: echo "${{ inputs.version }}" > config/version

@@ -34,7 +34,10 @@ class LetterChoice
     public $label = null;
 
     /**
-     * @Form\Options({"label": "Group Label"})
+     * @Form\Options({
+     *     "label": "Group Label",
+     *     "hint": "Options that share a Group Label appear together. For a 'pick one' question, give every option the same Group Label and set Input Type to Radio."
+     * })
      * @Form\Required(false)
      * @Form\Type("Text")
      * @Form\Attributes({"class":"long"})
@@ -46,6 +49,7 @@ class LetterChoice
     /**
      * @Form\Options({
      *     "label": "Input Type",
+     *     "hint": "Checkbox = an independent, optional toggle. Radio = part of a 'pick one' group (no default, the caseworker must select exactly one).",
      *     "value_options": {
      *         "checkbox": "Checkbox",
      *         "radio": "Radio"
