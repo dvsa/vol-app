@@ -9,7 +9,7 @@ labelForBranch() {
 
 bucketForEnvironment() {
   case "$1" in
-    prod|prodsupp)
+    prod|prodsupp|pp)
       echo "app-shd-pri-olcsci-build-s3"
       ;;
     *)

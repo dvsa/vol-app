@@ -114,11 +114,6 @@ csvFileUsers = get_csv_file_users(csvFile)
 
 # Logic for handling each environment, as expected by your wrapper and deployment process
 if environment in ["dev", "reg", "da", "qa", "demo", "prodsupp"]:
-    knownPassword = get_known_password("nonprod", knownPasswordId, region)
-    # nonprod only needs known passwords for users
-    load_users_into_pool(csvFileUsers, userPoolUsers, userPoolId, knownPassword, defaultEmail, True)
-
-if environment == "int":
     csvUatFileUsers = get_csv_file_users(uatUsersCsvFile)
     knownPassword = get_known_password(environment, knownPasswordId, region)
     # int needs known passwords for users
