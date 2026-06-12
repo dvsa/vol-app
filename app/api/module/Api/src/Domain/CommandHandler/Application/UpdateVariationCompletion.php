@@ -77,7 +77,7 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
         'psv_documentary_evidence_small' => 'hasUploadedPsvSmallDocumentaryEvidence',
         'psv_documentary_evidence_large' => 'hasUploadedPsvLargeDocumentaryEvidence',
         'psv_operate_novelty' => 'hasSavedSection',
-        'psv_main_occupation_undertakings' => 'hasSavedSection',
+        'psv_main_occupation_undertakings' => 'hasCompletedPsvMainOccupationUndertakings',
         'discs' => 'hasSavedSection',
         'community_licences' => 'hasSavedSection',
         'safety' => 'hasUpdatedSafetySection',
@@ -349,6 +349,12 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
     {
         return $this->application->getOccupationEvidenceUploaded() !== null
             && (int) $this->application->getOccupationEvidenceUploaded() !== Application::FINANCIAL_EVIDENCE_UPLOAD_LATER;
+    }
+
+    protected function hasCompletedPsvMainOccupationUndertakings(): bool
+    {
+        return $this->application->getPsvOccupationRecordsConfirmation() !== null
+            && $this->application->getPsvIncomeRecordsConfirmation() !== null;
     }
 
     /**
