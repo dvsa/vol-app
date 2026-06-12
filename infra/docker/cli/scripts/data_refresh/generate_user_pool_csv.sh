@@ -49,6 +49,8 @@ echo "[INFO] Using S3 bucket: $s3bucket"
 echo "[INFO] Generating user pool CSV..."
 cd "$scriptdir" || { echo "Script directory not found: $scriptdir"; exit 1; }
 
+chmod u+w . || { echo "[WARNING] Could not set write permissions on script directory"; }
+
 set -euo pipefail
 
 echo "[INFO] Downloading UAT user file from S3..."
