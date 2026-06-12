@@ -31,7 +31,7 @@ export no_proxy='127.0.0.1,localhost,169.254.169.254,.olcs.dev-dvsacloud.uk'
 
 s3BucketPath='cognito'
 scriptdir='/mnt/data/scripts/data_refresh/generate_user_pool'
-uat_users_file="./uat-users.txt"
+uat_users_file="/tmp/uat-users.txt"
 slackChan='#env-status'
 slackFail='#FF9FA1'
 slackCompleted='#36A64F'
@@ -48,8 +48,6 @@ echo "[INFO] Using S3 bucket: $s3bucket"
 
 echo "[INFO] Generating user pool CSV..."
 cd "$scriptdir" || { echo "Script directory not found: $scriptdir"; exit 1; }
-
-chmod u+w . || { echo "[WARNING] Could not set write permissions on script directory"; }
 
 set -euo pipefail
 
@@ -68,7 +66,7 @@ USER_POOL_EX_DATABASE="${READDB_NAME}" \
 USER_POOL_EX_PASS="${M_DB_PASSWORD}" \
 "$php_bin" /mnt/data/scripts/data_refresh/generate_user_pool/user-pool-export.php \
   --mode=nonprod-users \
-  --append=./uat-users.txt \
+  --append="$uat_users_file" \
   --output="$output_csv"
 
 test -f "$output_csv"
