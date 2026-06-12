@@ -28,7 +28,7 @@ if environment not in allowed_environments:
 userPoolUsers = []
 csvFileUsers = []
 
-uatUsersCsvFile = "uat-users.txt"
+uatUsersCsvFile = "/tmp/uat-users.txt"
 
 def get_known_password(environment_key, secretId, region):
     client = boto3.client('secretsmanager', region_name=region)
