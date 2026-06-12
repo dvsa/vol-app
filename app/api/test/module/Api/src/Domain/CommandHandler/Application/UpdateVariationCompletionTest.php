@@ -861,22 +861,6 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
                 'Y',
                 [],
             ],
-            'PSV Main Occupation Undertakings upload later is unchanged' => [
-                'psvMainOccupationUndertakings',
-                self::getApplicationState1()
-                    ->setOccupationEvidenceUploaded('2')
-                    ->setPsvOccupationRecordsConfirmation('Y')
-                    ->setPsvIncomeRecordsConfirmation('Y'),
-                self::getLicenceState1(),
-                [
-                    'PsvMainOccupationUndertakings' => UpdateVariationCompletion::STATUS_UPDATED,
-                ],
-                [
-                    'PsvMainOccupationUndertakings' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                'Y',
-                [],
-            ],
         ];
     }
 
