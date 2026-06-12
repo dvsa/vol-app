@@ -31,6 +31,7 @@ export no_proxy='127.0.0.1,localhost,169.254.169.254,.olcs.dev-dvsacloud.uk'
 
 s3BucketPath='cognito'
 scriptdir='/mnt/data/scripts/data_refresh/generate_user_pool'
+uat_users_file="./uat-users.txt"
 slackChan='#env-status'
 slackFail='#FF9FA1'
 slackCompleted='#36A64F'
