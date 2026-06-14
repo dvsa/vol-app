@@ -64,7 +64,8 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
 
         $this->references = [
             PublicationSectionEntity::class => [
-                PublicationSectionEntity::HEARING_SECTION => m::mock(PublicationSectionEntity::class)
+                PublicationSectionEntity::HEARING_SECTION => m::mock(PublicationSectionEntity::class),
+                PublicationSectionEntity::DECISION_SECTION => m::mock(PublicationSectionEntity::class),
             ],
             ApplicationEntity::class => [
                 1 => m::mock(ApplicationEntity::class)->makePartial()
@@ -121,6 +122,7 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
         $impoundingMock = m::mock(ImpoundingEntity::class);
         $impoundingMock->shouldReceive('getCase')->andReturn($caseMock);
         $impoundingMock->shouldReceive('getId')->andReturn($impoundingId);
+        $impoundingMock->shouldReceive('getOutcome')->andReturn(null);
 
         $venueMock = m::mock(VenueEntity::class);
         $venueMock->shouldReceive('getId')->andReturn(1);
@@ -214,6 +216,7 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
         $impoundingMock = m::mock(ImpoundingEntity::class);
         $impoundingMock->shouldReceive('getCase')->andReturn($caseMock);
         $impoundingMock->shouldReceive('getId')->andReturn($impoundingId);
+        $impoundingMock->shouldReceive('getOutcome')->andReturn(null);
 
         $venueMock = m::mock(VenueEntity::class);
         $venueMock->shouldReceive('getId')->andReturn(1);
@@ -308,6 +311,7 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
         $impoundingMock = m::mock(ImpoundingEntity::class);
         $impoundingMock->shouldReceive('getCase')->andReturn($caseMock);
         $impoundingMock->shouldReceive('getId')->andReturn($impoundingId);
+        $impoundingMock->shouldReceive('getOutcome')->andReturn(null);
 
         $venueMock = m::mock(VenueEntity::class);
         $venueMock->shouldReceive('getId')->andReturn(1);
@@ -401,5 +405,93 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
             1 => m::mock(TrafficAreaEntity::class)->shouldReceive('getId')->andReturn('N')->getMock(),
             2 => m::mock(TrafficAreaEntity::class)->shouldReceive('getId')->andReturn('D')->getMock()
         ];
+    }
+
+    public function testHandleCommandForLicenceCaseDecision(): void
+    {
+        $publicationId = 33;
+        $impoundingId = 17;
+
+        $trafficAreaId = 'B';
+        $pubTypeId = 'N&P';
+        $piId = 44;
+        $licenceId = 7;
+
+        $allTrafficAreas = $this->getAllTrafficAreas();
+        $caseType = CasesEntity::LICENCE_CASE_TYPE;
+
+        $command = ImpoundingCmd::create(
+            [
+                'trafficArea' => $trafficAreaId,
+                'pubType' => $pubTypeId,
+                'pi' => $piId,
+                'application' => null,
+                'licence' => $licenceId,
+            ]
+        );
+
+        $caseMock = m::mock(CasesEntity::class);
+        $caseMock->shouldReceive('getCaseType')->andReturn($this->refData[$caseType]);
+
+        $outcomeMock = m::mock();
+        $outcomeMock->shouldReceive('getDescription')->andReturn('Withdrawn');
+
+        $impoundingMock = m::mock(ImpoundingEntity::class);
+        $impoundingMock->shouldReceive('getCase')->andReturn($caseMock);
+        $impoundingMock->shouldReceive('getId')->andReturn($impoundingId);
+        $impoundingMock->shouldReceive('getOutcome')->andReturn($outcomeMock);
+
+        $venueMock = m::mock(VenueEntity::class);
+        $venueMock->shouldReceive('getId')->andReturn(1);
+
+        $impoundingMock->shouldReceive('getVenue')->once()->andReturn($venueMock);
+        $impoundingMock->shouldReceive('getHearingDate')->once()->andReturn(null);
+        $impoundingMock->shouldReceive('getVenueOther')->andReturn(null);
+
+        $publicationMock = $this->getPublicationMock($publicationId);
+        $publicationLinkMock = m::mock(PublicationLinkEntity::class)->makePartial();
+
+        $this->repoMap['Impounding']->shouldReceive('fetchUsingId')->andReturn($impoundingMock);
+        $this->repoMap['TrafficArea']->shouldReceive('fetchAll')->andReturn($allTrafficAreas);
+
+        $this->repoMap['Publication']->shouldReceive('fetchLatestForTrafficAreaAndType')
+            ->with('B', 'A&D')->once()->andReturn($publicationMock)
+            ->shouldReceive('fetchLatestForTrafficAreaAndType')
+            ->with('B', 'N&P')->once()->andReturn($publicationMock)
+            ->shouldReceive('fetchLatestForTrafficAreaAndType')
+            ->with('N', 'A&D')->once()->andReturn($publicationMock)
+            ->shouldReceive('fetchLatestForTrafficAreaAndType')
+            ->with('D', 'A&D')->once()->andReturn($publicationMock)
+            ->shouldReceive('fetchLatestForTrafficAreaAndType')
+            ->with('D', 'N&P')->once()->andReturn($publicationMock);
+
+        $this->repoMap['PublicationLink']
+            ->shouldReceive('fetchSingleUnpublished')
+            ->with(m::on(function ($query) {
+                return $query instanceof UnpublishedImpoundingQry
+                    && $query->getPublicationSection() === PublicationSectionEntity::DECISION_SECTION;
+            }))
+            ->andReturn($publicationLinkMock);
+
+        $this->repoMap['PublicationLink']
+            ->shouldReceive('save')
+            ->withAnyArgs()
+            ->once();
+
+        $this->mockedSmServices[PublicationGenerator::class]
+            ->shouldReceive('createPublication')
+            ->once()
+            ->with(
+                'ImpoundingLicenceDecisionPublication',
+                m::type(PublicationLinkEntity::class),
+                m::on(function ($data) {
+                    return isset($data['outcome']) && $data['outcome'] === 'Withdrawn';
+                })
+            )
+            ->andReturn($publicationMock);
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertInstanceOf(ResultCmd::class, $result);
     }
 }
