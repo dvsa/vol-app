@@ -5,7 +5,7 @@
 # set -o pipefail: catch errors in pipes
 set -euo pipefail
 
-VALID_PLATFORM_ENVS=("dev" "reg" "da" "qa" "demo" "prodsupp")
+VALID_PLATFORM_ENVS=("dev" "reg" "da" "qa" "demo" "prodsupp" "pp")
 VALID_REGIONS=("eu-west-1" "eu-west-2")
 
 # Capture inputs (defaulting to first index if not provided)

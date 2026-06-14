@@ -31,7 +31,10 @@ class GetTest extends QueryHandlerTestCase
         $mockLetterInstance = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class)
             ->shouldReceive('serialize')->with(
                 [
-                    'letterType',
+                    'letterType' => [
+                        'category',
+                        'subCategory'
+                    ],
                     'licence',
                     'application',
                     'case',
@@ -48,7 +51,12 @@ class GetTest extends QueryHandlerTestCase
                         ]
                     ],
                     'letterInstanceTodos' => [
-                        'letterTodoVersion'
+                        'letterTodoVersion',
+                        'letterInstanceIssue' => [
+                            'letterIssueVersion' => [
+                                'letterIssueType',
+                            ],
+                        ],
                     ],
                     'letterInstanceAppendices' => [
                         'letterAppendixVersion' => [

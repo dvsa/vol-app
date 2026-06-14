@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterSection;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterSection\Update as Cmd;
@@ -21,6 +22,12 @@ final class Update extends AbstractCommandHandler
 
         /** @var \Dvsa\Olcs\Api\Entity\Letter\LetterSection $letterSection */
         $letterSection = $this->getRepo()->fetchUsingId($command);
+
+        // The __ISSUES__ placeholder section is reserved by the letter assembler and
+        // must not be edited via the admin UI (or any other path).
+        if ($letterSection->getSectionKey() === '__ISSUES__') {
+            throw new ValidationException(['The __ISSUES__ placeholder section cannot be edited']);
+        }
 
         // Update all properties - versioning will be handled by repository
         $letterSection->setSectionKey($command->getSectionKey());
