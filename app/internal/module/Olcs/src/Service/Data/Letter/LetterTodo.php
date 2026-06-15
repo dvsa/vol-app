@@ -7,13 +7,15 @@ use Common\Service\Data\AbstractListDataService;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
 
 /**
- * Letter Appendix data service
+ * LetterTodo data service
+ *
+ * Populates the "Linked To-dos" multi-select on the Letter Issue admin form.
  *
  * @package Olcs\Service\Data\Letter
  */
-class LetterAppendix extends AbstractListDataService
+class LetterTodo extends AbstractListDataService
 {
-    protected static $sort = 'appendixKey';
+    protected static $sort = 'todoKey';
     protected static $order = 'ASC';
 
     /**
@@ -27,7 +29,7 @@ class LetterAppendix extends AbstractListDataService
     #[\Override]
     public function fetchListData($context = null)
     {
-        $data = (array)$this->getData('letter-appendix');
+        $data = (array)$this->getData('letter-todos');
 
         if (0 !== count($data)) {
             return $data;
@@ -41,21 +43,21 @@ class LetterAppendix extends AbstractListDataService
         ];
 
         $response = $this->handleQuery(
-            TransferQry\Letter\LetterAppendix\GetList::create($params)
+            TransferQry\Letter\LetterTodo\GetList::create($params)
         );
 
         if (!$response->isOk()) {
             $body = $response->getBody();
-            $errorMessage = 'Failed to fetch letter appendices: ' .
-                ($body ? $body : 'HTTP ' . $response->getStatusCode());
+            $errorMessage = 'Failed to fetch letter todos: ' .
+                ($body ?: 'HTTP ' . $response->getStatusCode());
             throw new DataServiceException($errorMessage);
         }
 
         $result = $response->getResult();
 
-        $this->setData('letter-appendix', ($result['results'] ?? []));
+        $this->setData('letter-todos', ($result['results'] ?? []));
 
-        return $this->getData('letter-appendix');
+        return $this->getData('letter-todos');
     }
 
     /**
@@ -71,14 +73,7 @@ class LetterAppendix extends AbstractListDataService
         $optionData = [];
 
         foreach ($data as $datum) {
-            $name = $datum['currentVersion']['name']
-                ?? $datum['name']
-                ?? ('Appendix #' . $datum['id']);
-            $appendixType = $datum['currentVersion']['appendixType']
-                ?? $datum['appendixType']
-                ?? null;
-            $type = $appendixType ? ' (' . ucfirst($appendixType) . ')' : '';
-            $optionData[$datum['id']] = $name . $type;
+            $optionData[$datum['id']] = $datum['todoKey'] ?? ('Todo #' . $datum['id']);
         }
 
         return $optionData;
