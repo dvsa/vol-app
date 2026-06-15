@@ -101,6 +101,23 @@ final class Update extends AbstractCommand
     protected $letterIssueTypeId;
 
     /**
+     * IDs of LetterTodos to link to this issue's current version (VOL-7280).
+     *
+     * @var array
+     * @Transfer\Optional
+     * @Transfer\ArrayInput
+     */
+    protected $letterTodos;
+
+    /**
+     * @return array
+     */
+    public function getLetterTodos()
+    {
+        return $this->letterTodos;
+    }
+
+    /**
      * @return string
      */
     public function getIssueKey()
