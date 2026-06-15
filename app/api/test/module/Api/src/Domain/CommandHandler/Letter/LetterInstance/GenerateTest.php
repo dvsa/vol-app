@@ -19,10 +19,12 @@ use Dvsa\Olcs\Api\Entity\Cases\Cases as CasesEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterChoice as LetterChoiceEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssue as LetterIssueEntity;
+use Dvsa\Olcs\Api\Entity\Letter\LetterIssueTodo as LetterIssueTodoEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion as LetterIssueVersionEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSection as LetterSectionEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant as LetterSectionVariantEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion as LetterSectionVersionEntity;
+use Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion as LetterTodoVersionEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterType as LetterTypeEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection as LetterTypeSectionEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
@@ -1031,5 +1033,93 @@ class GenerateTest extends AbstractCommandHandlerTestCase
 
         $this->assertSame(999, $result->getId('letterInstance'));
         $this->assertCount(1, $letterInstance->getLetterInstanceSections());
+    }
+
+    /**
+     * VOL-7280: when two selected issues link to the same LetterTodoVersion, exactly one
+     * LetterInstanceTodo should be created and attached to the FIRST issue in display order.
+     */
+    public function testHandleCommandDedupesIssueTodosAcrossSelectedIssues(): void
+    {
+        $letterTypeId = 123;
+        $issueId1 = 789;
+        $issueId2 = 790;
+
+        $command = Cmd::create([
+            'letterType' => $letterTypeId,
+            'selectedIssues' => [$issueId1, $issueId2],
+        ]);
+
+        $letterType = m::mock(LetterTypeEntity::class)->makePartial();
+        $letterType->setId($letterTypeId);
+
+        $this->repoMap['LetterType']->shouldReceive('fetchById')
+            ->with($letterTypeId)
+            ->once()
+            ->andReturn($letterType);
+
+        // A single LetterTodoVersion is linked to both issues -> should dedupe to one
+        $sharedTodoVersion = m::mock(LetterTodoVersionEntity::class)->makePartial();
+        $sharedTodoVersion->setId(5000);
+
+        $junction1 = m::mock(LetterIssueTodoEntity::class)->makePartial();
+        $junction1->shouldReceive('getLetterTodoVersion')->andReturn($sharedTodoVersion);
+
+        $issueVersion1 = m::mock(LetterIssueVersionEntity::class)->makePartial();
+        $issueVersion1->setId(1001);
+        $issueVersion1->shouldReceive('getLetterIssueTodos')
+            ->andReturn(new ArrayCollection([$junction1]));
+
+        $letterIssue1 = m::mock(LetterIssueEntity::class)->makePartial();
+        $letterIssue1->setId($issueId1);
+        $letterIssue1->shouldReceive('getCurrentVersion')->andReturn($issueVersion1);
+
+        $this->repoMap['LetterIssue']->shouldReceive('fetchById')
+            ->with($issueId1)
+            ->once()
+            ->andReturn($letterIssue1);
+
+        $junction2 = m::mock(LetterIssueTodoEntity::class)->makePartial();
+        $junction2->shouldReceive('getLetterTodoVersion')->andReturn($sharedTodoVersion);
+
+        $issueVersion2 = m::mock(LetterIssueVersionEntity::class)->makePartial();
+        $issueVersion2->setId(1002);
+        $issueVersion2->shouldReceive('getLetterIssueTodos')
+            ->andReturn(new ArrayCollection([$junction2]));
+
+        $letterIssue2 = m::mock(LetterIssueEntity::class)->makePartial();
+        $letterIssue2->setId($issueId2);
+        $letterIssue2->shouldReceive('getCurrentVersion')->andReturn($issueVersion2);
+
+        $this->repoMap['LetterIssue']->shouldReceive('fetchById')
+            ->with($issueId2)
+            ->once()
+            ->andReturn($letterIssue2);
+
+        $letterInstance = null;
+
+        $this->repoMap['LetterInstance']->shouldReceive('save')
+            ->with(m::type(LetterInstanceEntity::class))
+            ->once()
+            ->andReturnUsing(
+                function (LetterInstanceEntity $entity) use (&$letterInstance) {
+                    $letterInstance = $entity;
+                    $entity->setId(999);
+                }
+            );
+
+        $this->sut->handleCommand($command);
+
+        $todos = $letterInstance->getLetterInstanceTodos();
+        $this->assertCount(1, $todos, 'Same to-do on two issues should be deduped to one');
+
+        $instanceTodo = $todos->first();
+        $this->assertSame($sharedTodoVersion, $instanceTodo->getLetterTodoVersion());
+        $this->assertSame(
+            $letterInstance->getLetterInstanceIssues()->first(),
+            $instanceTodo->getLetterInstanceIssue(),
+            'Deduped to-do should attach to the first issue in display order'
+        );
+        $this->assertSame($letterInstance, $instanceTodo->getLetterInstance());
     }
 }

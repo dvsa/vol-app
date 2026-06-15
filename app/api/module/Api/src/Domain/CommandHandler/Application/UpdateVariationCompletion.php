@@ -353,13 +353,6 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
 
     protected function hasCompletedPsvMainOccupationUndertakings(): bool
     {
-        if (
-            (int) $this->application->getOccupationEvidenceUploaded()
-            === Application::FINANCIAL_EVIDENCE_UPLOAD_LATER
-        ) {
-            return false;
-        }
-
         return $this->application->getPsvOccupationRecordsConfirmation() !== null
             && $this->application->getPsvIncomeRecordsConfirmation() !== null;
     }
