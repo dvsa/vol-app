@@ -1,5 +1,13 @@
 # Changelog
 
+## [8.16.0](https://github.com/dvsa/olcs-transfer/compare/v8.15.0...v8.16.0) (2026-06-15)
+
+
+### Features
+
+* add chrome slot fields to MasterTemplate Create/Update DTOs (VOL-7305) ([#191](https://github.com/dvsa/olcs-transfer/issues/191)) ([923dcbc](https://github.com/dvsa/olcs-transfer/commit/923dcbc3b48b8a46c0cef263ef0479a8ff144c1b))
+* add letterTodos to LetterIssue Create/Update DTOs (VOL-7280) ([#190](https://github.com/dvsa/olcs-transfer/issues/190)) ([a9c526e](https://github.com/dvsa/olcs-transfer/commit/a9c526ea628713559e44576de7a0132d83e519a1))
+
 ## [8.15.0](https://github.com/dvsa/olcs-transfer/compare/v8.14.0...v8.15.0) (2026-06-09)
 
 
