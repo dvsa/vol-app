@@ -8,6 +8,13 @@
       "options": {
         "symlink": true
       }
+    },
+    {
+      "type": "path",
+      "url": "../../lib/olcs-utils",
+      "options": {
+        "symlink": true
+      }
     }
   ],
   "require": {
@@ -37,7 +44,7 @@
     "olcs/olcs-common": "^9.22.0",
     "olcs/olcs-logging": "*",
     "olcs/olcs-transfer": "^8.6.1",
-    "olcs/olcs-utils": "^7.1",
+    "olcs/olcs-utils": "*",
     "psr/container": "^1.1|^2",
     "aws/aws-sdk-php": "^3.369",
     "symfony/filesystem": "^7.0"

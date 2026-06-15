@@ -26,7 +26,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          sparse-checkout: lib/${{ inputs.project }}
+          # All of lib/, not just the project under test: in-tree libs can depend
+          # on each other via relative path repositories (e.g. olcs-utils requires
+          # olcs-logging for its test suite).
+          sparse-checkout: lib
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:

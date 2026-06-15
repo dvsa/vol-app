@@ -245,6 +245,7 @@ jobs:
       matrix:
         project:
           - olcs-logging
+          - olcs-utils
     uses: ./.github/workflows/php-lib.yaml
     with:
       project: ${{ matrix.project }}
