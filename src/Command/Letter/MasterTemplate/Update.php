@@ -36,12 +36,51 @@ final class Update extends AbstractCommand
     protected $isDefault;
 
     /**
+     * Locale / chrome variant key. Extended vocabulary supports values beyond strict
+     * ISO codes, e.g. en_GB, en_NI, cy_GB, customN_GB (VOL-7305).
+     *
      * @var string
      * @Transfer\Optional
      * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"max":5})
+     * @Transfer\Validator("Laminas\Validator\StringLength", options={"max":20})
      */
     protected $locale;
+
+    /**
+     * EditorJS JSON for the top-left header slot (VOL-7305).
+     *
+     * @var array
+     * @Transfer\Optional
+     * @Transfer\Escape(false)
+     */
+    protected $headerLeftContent;
+
+    /**
+     * EditorJS JSON for the top-right header slot (VOL-7305).
+     *
+     * @var array
+     * @Transfer\Optional
+     * @Transfer\Escape(false)
+     */
+    protected $headerRightContent;
+
+    /**
+     * EditorJS JSON for the signoff slot (VOL-7305).
+     *
+     * @var array
+     * @Transfer\Optional
+     * @Transfer\Escape(false)
+     */
+    protected $signoffContent;
+
+    /**
+     * EditorJS JSON for the footer slot (VOL-7305).
+     *
+     * @var array
+     * @Transfer\Optional
+     * @Transfer\Escape(false)
+     */
+    protected $footerContent;
 
 
     /**
@@ -74,5 +113,37 @@ final class Update extends AbstractCommand
     public function getLocale()
     {
         return $this->locale;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaderLeftContent()
+    {
+        return $this->headerLeftContent;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaderRightContent()
+    {
+        return $this->headerRightContent;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSignoffContent()
+    {
+        return $this->signoffContent;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFooterContent()
+    {
+        return $this->footerContent;
     }
 }
