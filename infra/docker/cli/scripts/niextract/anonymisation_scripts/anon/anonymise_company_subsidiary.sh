@@ -85,7 +85,7 @@ SET @DISABLE_TRIGGERS = 1;
 truncate table company_subsidiary;
 SET FOREIGN_KEY_CHECKS = 1;
 
--- [OPTIMIZATION] Added index disable command to maximize speed during execution of the data pipeline load.
+-- Added index disable command to maximize speed during execution of the data pipeline load.
 ALTER TABLE company_subsidiary DISABLE KEYS;
 
 LOAD DATA LOCAL INFILE '$ANON_DATA_DIR/$SUBSIDIARY_ANON_DATA_FILE' INTO table company_subsidiary FIELDS TERMINATED BY '\t'
@@ -112,7 +112,7 @@ licence_id=NULLIF(@licence_id,'')
 ,olbs_key=NULLIF(@olbs_key,'')
 ,deleted_date=NULLIF(@deleted_date,'');
 
--- [OPTIMIZATION] Re-enable indexes cleanly in a single fast block operation after the data finishes writing.
+-- Re-enable indexes cleanly in a single fast block operation after the data finishes writing.
 ALTER TABLE company_subsidiary ENABLE KEYS;
 
 SET @DISABLE_TRIGGERS = null;" || log_error "reload_company_subsidiary FAILED!"

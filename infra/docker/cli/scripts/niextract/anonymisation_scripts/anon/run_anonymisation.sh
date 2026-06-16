@@ -268,8 +268,7 @@ check_OLCS_schema () {
 
     dump_OLCS_schema $CURRENT_OLCS_SCHEMA_FILE
 
-    # [OPTIMIZATION] Replaced slow loop and grep sub-processes with high-speed awk cross-comparison.
-    # Evaluates schema differences in-memory using arrays to detect modifications quickly.
+    # Replaced slow loop and grep sub-processes with high-speed awk cross-comparison.
     eval "$(awk -F',' '
     NR==FNR {
         ref_lookup[$1","$2] = 1;

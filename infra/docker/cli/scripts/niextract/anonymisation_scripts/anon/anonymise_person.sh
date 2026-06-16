@@ -91,7 +91,7 @@ SET @DISABLE_TRIGGERS = 1;
 
 truncate table person;
 
--- [OPTIMIZATION] Added index disable command to maximize speed during execution of the data pipeline load.
+-- Added index disable command to maximize speed during execution of the data pipeline load.
 ALTER TABLE person DISABLE KEYS;
 
 LOAD DATA LOCAL INFILE '$ANON_DATA_DIR/$PERSON_ANON_DATA_FILE' INTO table person FIELDS TERMINATED BY '\t' 
@@ -127,7 +127,7 @@ SET forename=NULLIF(@forename,'')
 # hack - add the skipped row - publication_police_data will be patched to use this FK
 insert person (forename,family_name) SELECT 'ETL','ETL';
 
--- [OPTIMIZATION] Re-enable indexes cleanly in a single fast block operation after the data finishes writing.
+-- Re-enable indexes cleanly in a single fast block operation after the data finishes writing.
 ALTER TABLE person ENABLE KEYS;
 
 SET FOREIGN_KEY_CHECKS = 1;

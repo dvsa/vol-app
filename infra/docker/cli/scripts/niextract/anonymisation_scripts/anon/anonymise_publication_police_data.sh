@@ -100,7 +100,7 @@ SET @DISABLE_TRIGGERS = 1;
 
 truncate table publication_police_data;
 
--- [OPTIMIZATION] Added index disable command to maximize speed during execution of the data pipeline load.
+-- Added index disable command to maximize speed during execution of the data pipeline load.
 ALTER TABLE publication_police_data DISABLE KEYS;
 
 LOAD DATA LOCAL INFILE '$ANON_DATA_DIR/$POLICE_ANON_DATA_FILE' INTO table publication_police_data FIELDS TERMINATED BY '\t'
@@ -134,7 +134,7 @@ UPDATE publication_police_data
 SET person_id = ( SELECT id FROM person WHERE forename='ETL' AND family_name='ETL')
 WHERE person_id=0;
 
--- [OPTIMIZATION] Re-enable indexes cleanly in a single fast block operation after the data finishes writing.
+-- Re-enable indexes cleanly in a single fast block operation after the data finishes writing.
 ALTER TABLE publication_police_data ENABLE KEYS;
 
 SET @DISABLE_TRIGGERS = null;
