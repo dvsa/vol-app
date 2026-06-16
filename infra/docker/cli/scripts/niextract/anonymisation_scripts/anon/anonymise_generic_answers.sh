@@ -44,6 +44,7 @@ awk -F'^' '
     }
 
     # Stream out the modified line record using tab-separated fields
+    $1 = $1; # force $0 rebuild using OFS even when no fields are modified
     print $0;
 }' OFS='\t' "$ANON_DATA_DIR/$ANSWERS_DATA_FILE" >> $ANON_DATA_DIR/$ANSWERS_ANON_DATA_FILE || log_error "anonymise_answers FAILED!"
 
