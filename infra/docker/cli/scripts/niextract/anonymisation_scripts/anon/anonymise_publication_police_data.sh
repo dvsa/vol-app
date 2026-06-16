@@ -80,6 +80,7 @@ NR==FNR {
     }
 
     # Stream out the modified line record using tab-separated fields
+    $1 = $1; # force $0 rebuild using OFS even when no fields are modified
     print $0;
 }' OFS='\t' "$NAMES_CSV_FILE" "$ANON_DATA_DIR/$POLICE_DATA_FILE" >> $ANON_DATA_DIR/$POLICE_ANON_DATA_FILE || log_error "anonymise_publication_police_data FAILED!"
 
