@@ -43,14 +43,14 @@ BEGIN {
 }
 # Pass 1: Parse the Comma-Separated Reference File up to a max of 10,000 rows
 NR==FNR {
+    # POSIX-compliant way to cap memory: skip processing if we exceed 10,000 rows
+    if (FNR > 10000) {
+        next;
+    }
+
     split($0, csv, ",");
     c_name[FNR] = csv[2];
     total_ref = FNR;
-    
-    # Preserves your original max_rows=10000 constraint logic
-    if (FNR >= 10000) {
-        nextfile; # Instantly jumps to processing the next file
-    }
     next;
 }
 # Pass 2: Stream through the Main Caret-Separated Database Data File
@@ -65,6 +65,9 @@ NR==FNR {
     # $3=name, $4=company_no
     $4 = rand_company_no;
     if ($3 != "") $3 = c_name[r1];
+
+    # Force $0 to rebuild using OFS even when no fields are modified
+    $1 = $1;
 
     # Stream out the modified line record using tab-separated fields
     print $0;
