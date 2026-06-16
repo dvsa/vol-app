@@ -1,6 +1,7 @@
 <?php
 
 namespace Dvsa\Olcs\Api\Domain\Validation\Validators;
+
 use Dvsa\Olcs\Api\Entity\Fee\Fee;
 
 /**
@@ -25,11 +26,11 @@ class CanAccessFee extends AbstractCanAccessEntity
 
         /** @var Fee $fee */
         $fee = $this -> getEntity($entityId);
-        if ($licenceId !== null){
+        if ($licenceId !== null) {
             return $fee->getLicence() ?->getId() === $licenceId;
         }
-        if ($applicationId !== null){
+        if ($applicationId !== null) {
             return $fee->getApplication() ?->getId() === $applicationId;
         }
-}
+    }
 }
