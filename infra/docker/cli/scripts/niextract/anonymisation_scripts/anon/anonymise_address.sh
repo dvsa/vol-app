@@ -38,7 +38,7 @@ anonymise_address () {
 #county -> locality : 10
 #street -> null ( OLCS-13670 )
 #town -> town : 11
-#postcode -> poatcode : 12
+#postcode -> postcode : 12
 
 [ -e $ANON_DATA_DIR/$ADDRESS_ANON_DATA_FILE ] && rm $ANON_DATA_DIR/$ADDRESS_ANON_DATA_FILE
 
