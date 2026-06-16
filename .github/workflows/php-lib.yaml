@@ -1,0 +1,54 @@
+name: PHP Lib
+
+# Runs an in-tree shared library's own quality suite (test + phpcs + psalm +
+# phpstan) using the library's own pinned tooling in lib/<project>/. This
+# replaces the per-repo CI that each library had before it was absorbed into
+# the monorepo (see docs: monorepo library absorption).
+
+on:
+  workflow_call:
+    inputs:
+      project:
+        type: string
+        required: true
+      php-version:
+        type: string
+        required: false
+        default: "8.3"
+
+jobs:
+  checks:
+    name: Checks
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: lib/${{ inputs.project }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # All of lib/, not just the project under test: in-tree libs can depend
+          # on each other via relative path repositories (e.g. olcs-utils requires
+          # olcs-logging for its test suite).
+          sparse-checkout: lib
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ inputs.php-version }}
+          coverage: none
+          extensions: intl, mbstring
+          # The library's phpstan script has no --memory-limit flag; phpstan's
+          # parallel workers crash under the default 128M, so lift the cap.
+          ini-values: memory_limit=-1
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - name: Cache Composer packages
+        uses: actions/cache@v5
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-lib-${{ inputs.project }}-${{ hashFiles(format('**/lib/{0}/composer.lock', inputs.project)) }}
+          restore-keys: ${{ runner.os }}-composer-lib-${{ inputs.project }}-
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist
+      - name: Test, phpcs, psalm, phpstan
+        run: composer run-script all

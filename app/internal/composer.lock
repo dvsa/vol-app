@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "22a568b5da40bf7eda130847778c4ad6",
+  "content-hash": "943725e398e262cd0c30664635f8ab62",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -53,16 +53,16 @@
     },
     {
       "name": "aws/aws-sdk-php",
-      "version": "3.378.0",
+      "version": "3.384.9",
       "source": {
         "type": "git",
         "url": "https://github.com/aws/aws-sdk-php.git",
-        "reference": "7a95e0665ad13c2cb8999d64439cf969c86724dd"
+        "reference": "71513f9c05ed1fde0fb95e8c7e7d3c88409d7de9"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7a95e0665ad13c2cb8999d64439cf969c86724dd",
-        "reference": "7a95e0665ad13c2cb8999d64439cf969c86724dd",
+        "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/71513f9c05ed1fde0fb95e8c7e7d3c88409d7de9",
+        "reference": "71513f9c05ed1fde0fb95e8c7e7d3c88409d7de9",
         "shasum": ""
       },
       "require": {
@@ -73,7 +73,7 @@
         "guzzlehttp/guzzle": "^7.4.5",
         "guzzlehttp/promises": "^2.0",
         "guzzlehttp/psr7": "^2.4.5",
-        "mtdowling/jmespath.php": "^2.8.0",
+        "mtdowling/jmespath.php": "^2.9.1",
         "php": ">=8.1",
         "psr/http-message": "^1.0 || ^2.0",
         "symfony/filesystem": "^v5.4.45 || ^v6.4.3 || ^v7.1.0 || ^v8.0.0"
@@ -138,9 +138,9 @@
       "support": {
         "forum": "https://github.com/aws/aws-sdk-php/discussions",
         "issues": "https://github.com/aws/aws-sdk-php/issues",
-        "source": "https://github.com/aws/aws-sdk-php/tree/3.378.0"
+        "source": "https://github.com/aws/aws-sdk-php/tree/3.384.9"
       },
-      "time": "2026-04-08T18:13:19+00:00"
+      "time": "2026-06-12T18:10:49+00:00"
     },
     {
       "name": "brick/varexporter",
@@ -1040,33 +1040,30 @@
     },
     {
       "name": "dvsa/laminas-config-cloud-parameters",
-      "version": "v1.0.0",
+      "version": "v2.1.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters.git",
-        "reference": "7d3fe94fabc215d4721d550393018944055a6168"
+        "reference": "2baec7c36d8efc20294bfd5f8c37fbb77d729863"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/dvsa-laminas-config-cloud-parameters/zipball/7d3fe94fabc215d4721d550393018944055a6168",
-        "reference": "7d3fe94fabc215d4721d550393018944055a6168",
+        "url": "https://api.github.com/repos/dvsa/dvsa-laminas-config-cloud-parameters/zipball/2baec7c36d8efc20294bfd5f8c37fbb77d729863",
+        "reference": "2baec7c36d8efc20294bfd5f8c37fbb77d729863",
         "shasum": ""
       },
       "require": {
         "ext-json": "*",
-        "laminas/laminas-config": "^2.0|^3.0",
-        "laminas/laminas-config-aggregator": "^1.7",
-        "laminas/laminas-modulemanager": "^2.4|^3.0",
-        "php": "^8.0",
-        "symfony/dependency-injection": "^5.4",
-        "symfony/property-access": "^5.4|^6.3"
+        "laminas/laminas-modulemanager": "^2.4",
+        "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
+        "symfony/dependency-injection": "^5|^6|^7",
+        "symfony/property-access": "^5|^6|^7"
       },
       "require-dev": {
         "aws/aws-sdk-php": "^3.281",
         "bamarni/composer-bin-plugin": "^1.8",
         "dvsa/coding-standards": "^2.0",
-        "laminas/laminas-mvc": "^3.3",
-        "phpunit/phpunit": "^9.6"
+        "phpunit/phpunit": "^11.3"
       },
       "suggest": {
         "aws/aws-sdk-php": "To use the AWS parameter providers"
@@ -1087,9 +1084,9 @@
       "license": ["MIT"],
       "support": {
         "issues": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/issues",
-        "source": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/tree/v1.0.0"
+        "source": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/tree/v2.1.0"
       },
-      "time": "2024-03-19T14:06:05+00:00"
+      "time": "2026-06-09T12:32:58+00:00"
     },
     {
       "name": "ezyang/htmlpurifier",
@@ -1405,23 +1402,25 @@
     },
     {
       "name": "guzzlehttp/psr7",
-      "version": "2.9.0",
+      "version": "2.11.0",
       "source": {
         "type": "git",
         "url": "https://github.com/guzzle/psr7.git",
-        "reference": "7d0ed42f28e42d61352a7a79de682e5e67fec884"
+        "reference": "bbb5e61349fa5cb822b3e87842b951088b76b81f"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/guzzle/psr7/zipball/7d0ed42f28e42d61352a7a79de682e5e67fec884",
-        "reference": "7d0ed42f28e42d61352a7a79de682e5e67fec884",
+        "url": "https://api.github.com/repos/guzzle/psr7/zipball/bbb5e61349fa5cb822b3e87842b951088b76b81f",
+        "reference": "bbb5e61349fa5cb822b3e87842b951088b76b81f",
         "shasum": ""
       },
       "require": {
         "php": "^7.2.5 || ^8.0",
         "psr/http-factory": "^1.0",
         "psr/http-message": "^1.1 || ^2.0",
-        "ralouphie/getallheaders": "^3.0"
+        "ralouphie/getallheaders": "^3.0",
+        "symfony/deprecation-contracts": "^2.5 || ^3.0",
+        "symfony/polyfill-php80": "^1.24"
       },
       "provide": {
         "psr/http-factory-implementation": "1.0",
@@ -1429,9 +1428,9 @@
       },
       "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8.2",
-        "http-interop/http-factory-tests": "0.9.0",
+        "http-interop/http-factory-tests": "1.1.0",
         "jshttp/mime-db": "1.54.0.1",
-        "phpunit/phpunit": "^8.5.44 || ^9.6.25"
+        "phpunit/phpunit": "^8.5.52 || ^9.6.34"
       },
       "suggest": {
         "laminas/laminas-httphandlerrunner": "Emit PSR-7 responses"
@@ -1500,7 +1499,7 @@
       ],
       "support": {
         "issues": "https://github.com/guzzle/psr7/issues",
-        "source": "https://github.com/guzzle/psr7/tree/2.9.0"
+        "source": "https://github.com/guzzle/psr7/tree/2.11.0"
       },
       "funding": [
         {
@@ -1516,7 +1515,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2026-03-10T16:41:02+00:00"
+      "time": "2026-06-02T12:30:48+00:00"
     },
     {
       "name": "laminas/laminas-authentication",
@@ -1990,69 +1989,6 @@
       ],
       "abandoned": true,
       "time": "2026-01-29T12:14:07+00:00"
-    },
-    {
-      "name": "laminas/laminas-config-aggregator",
-      "version": "1.19.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/laminas/laminas-config-aggregator.git",
-        "reference": "612343ce135c340fc667da3615e50d865a86b4d9"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/laminas/laminas-config-aggregator/zipball/612343ce135c340fc667da3615e50d865a86b4d9",
-        "reference": "612343ce135c340fc667da3615e50d865a86b4d9",
-        "shasum": ""
-      },
-      "require": {
-        "brick/varexporter": "^0.5.0 || ^0.4.0 || ^0.6.0",
-        "laminas/laminas-stdlib": "^3.18.0",
-        "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
-        "webimpress/safe-writer": "^2.2.0"
-      },
-      "conflict": {
-        "nikic/php-parser": "<4.12",
-        "zendframework/zend-config-aggregator": "*"
-      },
-      "require-dev": {
-        "laminas/laminas-coding-standard": "~3.1.0",
-        "laminas/laminas-config": "^3.10.1",
-        "phpunit/phpunit": "^11.5.42",
-        "psalm/plugin-phpunit": "^0.19.5",
-        "vimeo/psalm": "^6.13.1"
-      },
-      "suggest": {
-        "laminas/laminas-config": "Allows loading configuration from XML, INI, YAML, and JSON files",
-        "laminas/laminas-config-aggregator-modulemanager": "Allows loading configuration from laminas-mvc Module classes",
-        "laminas/laminas-config-aggregator-parameters": "Allows usage of templated parameters within your configuration"
-      },
-      "type": "library",
-      "autoload": {
-        "psr-4": {
-          "Laminas\\ConfigAggregator\\": "src/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": ["BSD-3-Clause"],
-      "description": "Lightweight library for collecting and merging configuration from different sources",
-      "homepage": "https://laminas.dev",
-      "keywords": ["config-aggregator", "laminas"],
-      "support": {
-        "chat": "https://laminas.dev/chat",
-        "docs": "https://docs.laminas.dev/laminas-config-aggregator/",
-        "forum": "https://discourse.laminas.dev",
-        "issues": "https://github.com/laminas/laminas-config-aggregator/issues",
-        "rss": "https://github.com/laminas/laminas-config-aggregator/releases.atom",
-        "source": "https://github.com/laminas/laminas-config-aggregator"
-      },
-      "funding": [
-        {
-          "url": "https://funding.communitybridge.org/projects/laminas-project",
-          "type": "community_bridge"
-        }
-      ],
-      "time": "2025-10-14T19:57:01+00:00"
     },
     {
       "name": "laminas/laminas-escaper",
@@ -3946,16 +3882,16 @@
     },
     {
       "name": "mtdowling/jmespath.php",
-      "version": "2.8.0",
+      "version": "2.9.1",
       "source": {
         "type": "git",
         "url": "https://github.com/jmespath/jmespath.php.git",
-        "reference": "a2a865e05d5f420b50cc2f85bb78d565db12a6bc"
+        "reference": "9c208ba27ae7d90853c288b3795d6702eb251d34"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/jmespath/jmespath.php/zipball/a2a865e05d5f420b50cc2f85bb78d565db12a6bc",
-        "reference": "a2a865e05d5f420b50cc2f85bb78d565db12a6bc",
+        "url": "https://api.github.com/repos/jmespath/jmespath.php/zipball/9c208ba27ae7d90853c288b3795d6702eb251d34",
+        "reference": "9c208ba27ae7d90853c288b3795d6702eb251d34",
         "shasum": ""
       },
       "require": {
@@ -3964,13 +3900,13 @@
       },
       "require-dev": {
         "composer/xdebug-handler": "^3.0.3",
-        "phpunit/phpunit": "^8.5.33"
+        "phpunit/phpunit": "^8.5.52"
       },
       "bin": ["bin/jp.php"],
       "type": "library",
       "extra": {
         "branch-alias": {
-          "dev-master": "2.8-dev"
+          "dev-master": "2.9-dev"
         }
       },
       "autoload": {
@@ -3997,9 +3933,9 @@
       "keywords": ["json", "jsonpath"],
       "support": {
         "issues": "https://github.com/jmespath/jmespath.php/issues",
-        "source": "https://github.com/jmespath/jmespath.php/tree/2.8.0"
+        "source": "https://github.com/jmespath/jmespath.php/tree/2.9.1"
       },
-      "time": "2024-09-04T18:46:31+00:00"
+      "time": "2026-06-11T10:43:56+00:00"
     },
     {
       "name": "nikic/php-parser",
@@ -4187,17 +4123,11 @@
     },
     {
       "name": "olcs/olcs-logging",
-      "version": "v9.0.1",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/dvsa/olcs-logging.git",
-        "reference": "787c9e9d1bcfb40364962f5be743c9b3c97316a8"
-      },
+      "version": "9.0.1",
       "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-logging/zipball/787c9e9d1bcfb40364962f5be743c9b3c97316a8",
-        "reference": "787c9e9d1bcfb40364962f5be743c9b3c97316a8",
-        "shasum": ""
+        "type": "path",
+        "url": "../../lib/olcs-logging",
+        "reference": "ba58c1c158ee6a8f05405980eac7c405c6d52d9d"
       },
       "require": {
         "ext-json": "*",
@@ -4229,26 +4159,39 @@
           "Olcs\\Logging\\": "src/"
         }
       },
-      "notification-url": "https://packagist.org/downloads/",
+      "autoload-dev": {
+        "psr-4": {
+          "OlcsTest\\Logging\\": "test/"
+        }
+      },
+      "scripts": {
+        "bin": ["echo 'bin not installed'"],
+        "post-install-cmd": ["@composer bin all install"],
+        "test": ["phpunit"],
+        "phpcs": ["phpcs"],
+        "psalm": ["psalm"],
+        "phpstan": ["phpstan"],
+        "all": ["@test", "@phpcs", "@psalm", "@phpstan"]
+      },
       "license": ["MIT"],
       "description": "Logging Module for OLCS",
-      "support": {
-        "source": "https://github.com/dvsa/olcs-logging/tree/v9.0.1"
-      },
-      "time": "2026-05-20T13:28:22+00:00"
+      "transport-options": {
+        "symlink": true,
+        "relative": true
+      }
     },
     {
       "name": "olcs/olcs-transfer",
-      "version": "v8.13.0",
+      "version": "v8.15.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-transfer.git",
-        "reference": "26bfd418c724707bd95b9c0bee837b2706e0a041"
+        "reference": "0d09ab1886ec17e7505206433b1f9ae4ff57637c"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/26bfd418c724707bd95b9c0bee837b2706e0a041",
-        "reference": "26bfd418c724707bd95b9c0bee837b2706e0a041",
+        "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/0d09ab1886ec17e7505206433b1f9ae4ff57637c",
+        "reference": "0d09ab1886ec17e7505206433b1f9ae4ff57637c",
         "shasum": ""
       },
       "require": {
@@ -4292,23 +4235,17 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "OLCS Transfer",
       "support": {
-        "source": "https://github.com/dvsa/olcs-transfer/tree/v8.13.0"
+        "source": "https://github.com/dvsa/olcs-transfer/tree/v8.15.0"
       },
-      "time": "2026-04-09T10:49:39+00:00"
+      "time": "2026-06-09T14:20:55+00:00"
     },
     {
       "name": "olcs/olcs-utils",
-      "version": "v7.3.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/dvsa/olcs-utils.git",
-        "reference": "bfb8fa1ea595b8336516737166c22287bb965c97"
-      },
+      "version": "7.3.0",
       "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-utils/zipball/bfb8fa1ea595b8336516737166c22287bb965c97",
-        "reference": "bfb8fa1ea595b8336516737166c22287bb965c97",
-        "shasum": ""
+        "type": "path",
+        "url": "../../lib/olcs-utils",
+        "reference": "e3bc74d952173cbabe51d9b441e794de983db14b"
       },
       "require": {
         "laminas/laminas-eventmanager": "^3.14",
@@ -4338,12 +4275,26 @@
           "Dvsa\\Olcs\\Utils\\": "src/"
         }
       },
-      "notification-url": "https://packagist.org/downloads/",
-      "description": "OLCS Utils",
-      "support": {
-        "source": "https://github.com/dvsa/olcs-utils/tree/v7.3.0"
+      "autoload-dev": {
+        "psr-4": {
+          "Dvsa\\OlcsTest\\Utils\\": "test/"
+        }
       },
-      "time": "2026-05-22T09:58:52+00:00"
+      "scripts": {
+        "bin": ["echo 'bin not installed'"],
+        "post-install-cmd": ["@composer bin all install"],
+        "test": ["phpunit"],
+        "phpcs": ["phpcs"],
+        "psalm": ["psalm"],
+        "phpstan": ["phpstan --memory-limit=1G"],
+        "all": ["@test", "@phpcs", "@psalm", "@phpstan"]
+      },
+      "license": ["MIT"],
+      "description": "OLCS Utils",
+      "transport-options": {
+        "symlink": true,
+        "relative": true
+      }
     },
     {
       "name": "paragonie/constant_time_encoding",
