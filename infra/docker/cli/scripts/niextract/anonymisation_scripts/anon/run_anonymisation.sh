@@ -269,25 +269,32 @@ check_OLCS_schema () {
     dump_OLCS_schema $CURRENT_OLCS_SCHEMA_FILE
 
     # Replaced slow loop and grep sub-processes with high-speed awk cross-comparison.
-    eval "$(awk -F',' '
-    NR==FNR {
-        ref_lookup[$1","$2] = 1;
-        next;
-    }
-    {
-        curr_lookup[$1","$2] = 1;
-        if (!( ($1","$2) in ref_lookup )) {
-            printf "new_cols+=(\"%s.%s\");\n", $1, $2;
+    new_cols=()
+    rem_cols=()
+    while IFS=$'\t' read -r kind col; do
+        case "$kind" in
+            new) new_cols+=("$col") ;;
+            rem) rem_cols+=("$col") ;;
+        esac
+    done < <(awk -F',' -v OFS=$'\t' '
+        NR==FNR {
+            ref_lookup[$1","$2] = 1;
+            next;
         }
-    }
-    END {
-        for (key in ref_lookup) {
-            if (!(key in curr_lookup)) {
-                split(key, parts, ",");
-                printf "rem_cols+=(\"%s.%s\");\n", parts[1], parts[2];
+        {
+            curr_lookup[$1","$2] = 1;
+            if (!( ($1","$2) in ref_lookup )) {
+                print "new", $1 "." $2;
             }
         }
-    }' "$OLCS_SCHEMA_REFERENCE_FILE" "$CURRENT_OLCS_SCHEMA_FILE")"
+        END {
+            for (key in ref_lookup) {
+                if (!(key in curr_lookup)) {
+                    split(key, parts, ",");
+                    print "rem", parts[1] "." parts[2];
+                }
+            }
+        }' "$OLCS_SCHEMA_REFERENCE_FILE" "$CURRENT_OLCS_SCHEMA_FILE")
 
     rm $CURRENT_OLCS_SCHEMA_FILE
 
@@ -325,7 +332,7 @@ check_OLCS_schema () {
     else
        echo
        ok "***********************************"
-       ok "** schema OK - no changes found **"
+       ok "** schema OK - no changes found  **"
        ok "***********************************"
     fi
 }
