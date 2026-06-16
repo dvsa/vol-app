@@ -24,7 +24,7 @@ export NO_PROXY=169.254.169.254
 nonprod_assume_external_id=${PRODTODEV_ASSUME_ROLE_ID}
 db_cluster=${DBCLUSTER_ID}
 env=${ENVIRONMENT_NAME}
-pass=${API_DB_PASSWORD}
+pass=${M_DB_PASSWORD}
 DATE=$(date +"%Y-%m-%d")
 TS=$(date +"%Y-%m-%d-%H-%M-%S")
 region="eu-west-1"
@@ -189,7 +189,7 @@ cd /mnt/data/scripts/niextract/anonymisation_scripts/anon
 log "Running anonymisation against restored Aurora cluster"
 
 ./run_anonymisation.sh \
-  -c "-uolcsapi -h${endpoint} -p${pass}" \
+  -c "-umaster -h${endpoint} -p${pass}" \
   -d OLCS_RDS_OLCSDB \
   -f "${anondb_dump_dir}/temp" \
   -F
@@ -231,13 +231,13 @@ fi
 # 5. DUMP DATA + UPLOAD TO S3
 ###############################################
 log "Dumping anonymised database"
-mysqldump -h $endpoint -u olcsapi -p${pass} \
+mysqldump -h $endpoint -u master -p${pass} \
   --routines --triggers \
   --add-drop-database --databases OLCS_RDS_OLCSDB \
   | gzip > $anondb_dump_dir/olcs-db-anon-$env-$DATE.sql.gz
 
 log "Dumping localdev tables"
-mysqldump -h $endpoint -u olcsapi -p${pass} \
+mysqldump -h $endpoint -u master -p${pass} \
   --skip-triggers --skip-routines \
   OLCS_RDS_OLCSDB $anondb_tables \
   | sed 's/`OLCS_RDS_OLCSDB`[.]//g' \
@@ -246,7 +246,7 @@ mysqldump -h $endpoint -u olcsapi -p${pass} \
 gzip $anondb_dump_dir/olcs-db-localdev-anon-$env-$DATE.sql
 
 log "Dumping table list"
-mysql -h $endpoint -u olcsapi -p${pass} \
+mysql -h $endpoint -u master -p${pass} \
   OLCS_RDS_OLCSDB -e 'SHOW TABLES;' \
   > $anondb_dump_dir/olcs-dbtables-anon-$env-$DATE.txt
 
