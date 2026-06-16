@@ -90,6 +90,18 @@ locals {
         "arn:aws:s3:::devapp-vol-content/*"
       ]
     },
+      effect = "Allow"
+      actions = [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket",
+        "s3:DeleteObject"
+      ]
+      resources = [
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3",
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*"
+      ]
+    },
   ]
 }
 
@@ -515,6 +527,7 @@ module "service" {
       {
         name     = "permits-reset-test-data",
         commands = ["permits:reset-test-data"],
+        type     = "default",
         timeout  = 1800
       },
       {

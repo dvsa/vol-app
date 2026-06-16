@@ -301,11 +301,13 @@ jobs:
       always() &&
       !cancelled() &&
       !failure() &&
-      (needs.orchestrator.outputs.should-apply-environment-terraform || needs.docker.result == 'success' || needs.cdn.result == 'success')
+      !needs.release-please.outputs.release_created &&
+      (needs.orchestrator.outputs.should-apply-environment-terraform || needs.docker.result == 'success' || needs.cdn-nonprod.result == 'success')
     needs:
       - get-version
       - orchestrator
       - docker
+      - release-please
       - cdn-nonprod
       - terraform-account-nonprod
     concurrency:
@@ -339,11 +341,13 @@ jobs:
       always() &&
       !cancelled() &&
       !failure() &&
-      needs.deploy_dev.result == 'success'
+      (needs.orchestrator.outputs.should-apply-environment-terraform || needs.docker.result == 'success' || needs.cdn-nonprod.result == 'success') &&
+      (needs.deploy_dev.result == 'success' || needs.release-please.outputs.release_created && needs.deploy_dev.result == 'skipped')
     needs:
       - get-version
       - orchestrator
       - deploy_dev
+      - release-please
     concurrency:
       group: ${{ github.workflow }}-int
     uses: ./.github/workflows/deploy-and-test.yaml
