@@ -102,7 +102,8 @@ class SendEmailTest extends AbstractCommandHandlerTestCase
                 [],
                 [],
                 [],
-                false
+                false,
+                null
             );
 
         $this->sut->handleCommand($command);
@@ -196,7 +197,8 @@ class SendEmailTest extends AbstractCommandHandlerTestCase
                 ['bar@foo.com'],
                 ['bcc@foobar.com'],
                 $expectedDocs,
-                true
+                true,
+                null
             );
 
         $this->sut->handleCommand($command);

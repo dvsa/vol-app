@@ -5,9 +5,11 @@ namespace Dvsa\Olcs\Api\Domain\QueryHandler\Template;
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
 use Dvsa\Olcs\Api\Service\Template\StrategySelectingViewRenderer;
 use Dvsa\Olcs\Api\Service\Template\TwigRenderer;
+use Dvsa\Olcs\Email\View\NotifyChrome;
 use Dvsa\Olcs\Transfer\Query\Template\PreviewTemplateSource as PreviewTemplateSourceQry;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Exception;
+use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Psr\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -19,6 +21,8 @@ use Psr\Container\NotFoundExceptionInterface;
  */
 class PreviewTemplateSource extends AbstractQueryHandler
 {
+    public const FORMAT_MARKDOWN = 'md';
+
     protected $repoServiceName = 'Template';
 
     /** @var TwigRenderer */
@@ -26,6 +30,8 @@ class PreviewTemplateSource extends AbstractQueryHandler
 
     /** @var StrategySelectingViewRenderer */
     private $strategySelectingViewRenderer;
+
+    private ?GithubFlavoredMarkdownConverter $markdownConverter = null;
 
     /**
      * Handle query
@@ -43,16 +49,20 @@ class PreviewTemplateSource extends AbstractQueryHandler
         $datasets = $template->getDecodedTestData();
         $locale = $template->getLocale();
         $format = $template->getFormat();
+        $description = (string) $template->getDescription();
 
         $result = [];
         foreach ($datasets as $datasetName => $datasetValues) {
             try {
-                $result[$datasetName] = $this->strategySelectingViewRenderer->render(
-                    $locale,
-                    $format,
-                    'default',
-                    ['content' => $this->twigRenderer->renderString($source, $datasetValues)]
-                );
+                $rendered = $this->twigRenderer->renderString($source, $datasetValues);
+                $result[$datasetName] = $format === self::FORMAT_MARKDOWN
+                    ? $this->renderMarkdownPreview($rendered, $description)
+                    : $this->strategySelectingViewRenderer->render(
+                        $locale,
+                        $format,
+                        'default',
+                        ['content' => $rendered]
+                    );
             } catch (Exception $e) {
                 $result['error'] = true;
                 $result[$datasetName] = $e->getMessage();
@@ -61,6 +71,17 @@ class PreviewTemplateSource extends AbstractQueryHandler
         }
 
         return $result;
+    }
+
+    private function renderMarkdownPreview(string $markdown, string $subject): string
+    {
+        $this->markdownConverter ??= new GithubFlavoredMarkdownConverter();
+
+        // Shared Notify-style rendering + chrome with DevNotifyTransport, so the admin preview
+        // matches both Mailpit and what GOV.UK Notify actually delivers.
+        $html = NotifyChrome::renderMarkdownBody($markdown, $this->markdownConverter);
+
+        return NotifyChrome::wrap($html, $subject);
     }
 
     /**

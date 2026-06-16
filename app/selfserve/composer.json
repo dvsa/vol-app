@@ -1,11 +1,27 @@
 {
   "name": "olcs/olcs-selfserve",
   "description": "OLCS Self Service Web Site",
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../../lib/olcs-logging",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "../../lib/olcs-utils",
+      "options": {
+        "symlink": true
+      }
+    }
+  ],
   "require": {
     "php": "~8.3.0",
     "ext-redis": "*",
     "doctrine/doctrine-module": "^6.3",
-    "dvsa/laminas-config-cloud-parameters": "^1.0",
+    "dvsa/laminas-config-cloud-parameters": "^2.1",
     "laminas/laminas-authentication": "^2.19",
     "laminas/laminas-cache": "^3.13",
     "laminas/laminas-cache-storage-adapter-redis": "^2.10",
@@ -26,9 +42,9 @@
     "lm-commons/lmc-rbac-mvc": "^3.5",
     "olcs/olcs-auth": "^9.0",
     "olcs/olcs-common": "^9.22.0",
-    "olcs/olcs-logging": "^9.0.1",
+    "olcs/olcs-logging": "*",
     "olcs/olcs-transfer": "^8.6.1",
-    "olcs/olcs-utils": "^7.1",
+    "olcs/olcs-utils": "*",
     "psr/container": "^1.1|^2",
     "aws/aws-sdk-php": "^3.369",
     "symfony/filesystem": "^7.0"

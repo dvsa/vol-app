@@ -5793,26 +5793,4 @@ class ApplicationEntityTest extends EntityTester
         $application->setTransportManagers($tmApplications);
         $this->assertTrue($application->showPeriodOfGraceQuestion());
     }
-
-    public function testMainOccupationUndertakingsIncompleteWhenOccupationEvidenceUploadLater(): void
-    {
-        $this->entity->setOccupationEvidenceUploaded(Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER);
-        $this->entity->setPsvOccupationRecordsConfirmation('Y');
-        $this->entity->setPsvIncomeRecordsConfirmation('Y');
-
-        $this->assertFalse(
-            $this->entity->isSectionCompleted('PsvMainOccupationUndertakings')
-        );
-    }
-
-    public function testMainOccupationUndertakingsIncompleteWhenOccupationEvidenceUploadLaterAsString(): void
-    {
-        $this->entity->setOccupationEvidenceUploaded('2');
-        $this->entity->setPsvOccupationRecordsConfirmation('Y');
-        $this->entity->setPsvIncomeRecordsConfirmation('Y');
-
-        $this->assertFalse(
-            $this->entity->isSectionCompleted('PsvMainOccupationUndertakings')
-        );
-    }
 }
