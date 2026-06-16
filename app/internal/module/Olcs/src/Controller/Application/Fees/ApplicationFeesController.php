@@ -32,9 +32,7 @@ use LmcRbacMvc\Identity\IdentityProviderInterface;
  */
 class ApplicationFeesController extends ApplicationController implements LeftViewProvider
 {
-    use FeesActionTrait {
-        editFeeAction as traitEditFeeAction;
-    }
+    use FeesActionTrait;
     use GenericReceipt;
 
     protected PluginManager $dataServiceManager;
@@ -136,31 +134,6 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
     protected function getFeeTypeDtoData()
     {
         return ['application' => $this->params()->fromRoute('application')];
-    }
-
-    /**
-     * Override editFeeAction to validate the fee belongs to this application
-     */
-    public function editFeeAction()
-    {
-        $feeId = (int) $this->params()->fromRoute('fee', null);
-        $licenceId = $this->getLicenceIdForApplication();
-
-        // Fetch fees for this licence with no status filter to find any fee
-        $feeData = $this->getFees([
-            'licence' => $licenceId,
-            'ids' => [$feeId],
-            'sort' => 'id',
-            'order' => 'ASC',
-            'limit' => 1,
-        ]);
-
-        if (empty($feeData['results'])) {
-            $this->addErrorMessage('Fee not found for this application');
-            return $this->redirectToList();
-        }
-
-        return $this->traitEditFeeAction();
     }
 
     /**

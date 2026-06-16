@@ -225,9 +225,13 @@ trait FeesActionTrait
         return $response->getResult();
     }
 
-    protected function getFee($id)
+    protected function getFee($id, ?int $licenceId = null, ?int $applicationId = null)
     {
-        $query = FeeQry::create(['id' => $id]);
+        $query = FeeQry::create(array_filter([
+            'id' => $id,
+            'licenceId' => $licenceId,
+            'applicationId' => $applicationId
+        ], fn($value) => $value !== null));
         $response = $this->handleQuery($query);
         return $response->getResult();
     }
