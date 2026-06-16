@@ -18,6 +18,7 @@ const progressBarFactory = () => {
 
 // Define explicit action order
 const actionOrder = [
+  "CheckDockerResources",
   "ComposerInstall",
   "CopyAppDistFiles",
   "SyncAwsSecretsAndParameters",

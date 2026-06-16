@@ -24,6 +24,7 @@
   ],
   "scripts": {
     "prepare": "husky",
-    "refresh": "npm run start --workspace @vol-app/local-refresh"
+    "refresh": "npm run start --workspace @vol-app/local-refresh",
+    "bench": "bash infra/bench/bench.sh"
   }
 }

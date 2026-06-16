@@ -47,7 +47,7 @@ export default class ComposerInstall implements ActionInterface {
     phpAppDirectories.forEach((dir) => {
       debug(chalk.blue(`Running composer install in ${dir}...`));
 
-      const command = `composer install ${this.ignorePlatformReqs ? '--ignore-platform-reqs' : ''} --no-interaction --no-progress`;
+      const command = `composer install ${this.ignorePlatformReqs ? "--ignore-platform-reqs" : ""} --no-interaction --no-progress --optimize-autoloader --apcu-autoloader`;
 
       exec(command, debug, {
         cwd: dir,

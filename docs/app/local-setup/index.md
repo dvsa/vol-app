@@ -21,6 +21,27 @@ You will need:
 - [Composer](https://getcomposer.org/) `composer -V`
 - [AWS CLI](https://aws.amazon.com/cli/) `aws --version`
 
+## Docker resource requirements
+
+The VOL stack runs four PHP services, MySQL, Redis, OpenLDAP, LibreOffice (in the API container for document rendering), Gotenberg, and a Node CDN. The defaults shipped by Docker Desktop are usually not enough.
+
+| Resource | Minimum | Recommended | Notes                                                                                                                                     |
+| -------- | ------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Memory   | 12 GB   | 16 GB       | Floor leaves no slack. 16 GB gives room for tests, docker builds, and IDE indexing alongside the stack.                                   |
+| CPUs     | 4       | 6–8         | Helps docker builds, PHPStan/Psalm, PHP-CS-Fixer, and concurrent request handling. PHPUnit is single-threaded today and does not benefit. |
+| Disk     | 64 GB   | 100 GB      | Images + volumes + buildkit cache. Prune occasionally with `docker system prune`.                                                         |
+
+:::tip
+
+Above ~20 GB of memory the gains taper off — the bottleneck shifts to the bind-mounted filesystem rather than RAM. If you're on a 32 GB host, 16 GB for Docker and 16 GB for the host is the sweet spot.
+
+:::
+
+**Docker Desktop:** _Settings → Resources_.
+**OrbStack:** typically auto-scales and needs no configuration.
+
+`npm run refresh` (see below) runs a `CheckDockerResources` step that probes the running Docker daemon and warns if you're below the floor.
+
 ## Getting started
 
 1. Clone the repository
