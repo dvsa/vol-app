@@ -28,6 +28,7 @@ pass=${M_DB_PASSWORD}
 DATE=$(date +"%Y-%m-%d")
 TS=$(date +"%Y-%m-%d-%H-%M-%S")
 region="eu-west-1"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 tmp_cluster_id="olcs-anon-${TS}"
 tmp_instance_id="olcs-anon-${TS}-instance"
@@ -251,7 +252,7 @@ mysql -h $endpoint -u master -p${pass} \
   > $anondb_dump_dir/olcs-dbtables-anon-$env-$DATE.txt
 
 log "Assuming role for S3 upload"
-source ./s3assume.sh "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole" "$nonprod_assume_external_id"
+source "$SCRIPT_DIR/s3assume.sh" "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole" "$nonprod_assume_external_id"
 
 log "Uploading anonymised dumps to S3"
 aws s3 cp $anondb_dump_dir s3://devapp-olcs-pri-olcs-deploy-s3/anondata/ \
