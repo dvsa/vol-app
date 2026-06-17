@@ -6,8 +6,8 @@
 $app: internal;
 
 // Vendor
-@use "../../../node_modules/govuk-frontend/dist/govuk/components/radios" as *;
-@use "../../../node_modules/govuk-frontend/dist/govuk/index" as *;
+@import "../../../node_modules/govuk-frontend/dist/govuk/components/radios";
+@import "../../../node_modules/govuk-frontend/dist/govuk/index";
 
 //govuk frontend toolkit legacy compatibility (main toolkit removed)
 @import "../core/legacy";
