@@ -17,10 +17,12 @@ RUN apk add --no-cache icu-dev libzip-dev cups-client poppler-utils bash \
   && docker-php-ext-configure zip \
   && docker-php-ext-install pdo_mysql opcache intl zip
 
-RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq git \
-  && python3 -m venv /opt/awscli \
-  && /opt/awscli/bin/pip install --no-cache-dir awscli \
-  && ln -sf /opt/awscli/bin/aws /usr/local/bin/aws \
+# Installed native AWS CLI v2 with glibc compatibility layer (gcompat) for Alpine Linux
+RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq git gcompat \
+  && curl -s "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+  && unzip -q awscliv2.zip \
+  && ./aws/install \
+  && rm -rf awscliv2.zip ./aws \
   && aws --version
 
 # Retained dedicated virtual environment for Python scripts needing boto3
@@ -81,12 +83,14 @@ RUN mkdir -p /mnt/data/olcsdump /mnt/data/anondump\
   # Ensure scripts are executable.
   && chmod +x /mnt/data/scripts/*.sh
   
-# Fixed wildcard symlink evaluation behavior using -t target directory argument flag
+# Replaced 'ln -t' with a standard loop compatible with BusyBox/Alpine systems
 RUN chmod +x /mnt/data/scripts/data_refresh/*.sh \
   /mnt/data/scripts/data_refresh/*.py \
   /mnt/data/scripts/niextract/anonymisation_scripts/anon/*.sh \
   /mnt/data/scripts/niextract/anonymisation_scripts/seed_generators/*.sh \
-  && ln -s -t /usr/local/bin/ /mnt/data/scripts/data_refresh/*.sh /mnt/data/scripts/data_refresh/*.py
+  && for file in /mnt/data/scripts/data_refresh/*.sh /mnt/data/scripts/data_refresh/*.py; do \
+       ln -sf "$file" /usr/local/bin/$(basename "$file"); \
+     done
 
 USER www-data
 
