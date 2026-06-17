@@ -664,7 +664,6 @@ UPDATE messaging_message_hist SET hist_db_user = 'anon';
 UPDATE messaging_subject_hist SET hist_db_user = 'anon';
 COMMIT;
 
-SET sql_log_bin = @OLD_SQL_LOG_BIN;
 SET autocommit = 1;
 
 SELECT CONCAT(now(),' ...anonymise history tables complete.') as '';
