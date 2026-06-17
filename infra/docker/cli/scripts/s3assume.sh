@@ -11,7 +11,8 @@ unset AWS_SESSION_TOKEN
 
 export http_proxy=http://${PROXY}:3128
 export https_proxy=http://${PROXY}:3128
-export NO_PROXY=169.254.169.254
+export NO_PROXY=169.254.169.254,169.254.170.2,localhost,127.0.0.1,.amazonaws.com
+
 token=$(curl -s -X PUT 'http://169.254.169.254/latest/api/token' -H 'X-aws-ec2-metadata-token-ttl-seconds: 21600')
 region=$(curl -s -H "X-aws-ec2-metadata-token: $token" http://169.254.169.254/latest/meta-data/placement/region)
 ec2_instance_id=$(curl -s -H "X-aws-ec2-metadata-token: $token" http://169.254.169.254/latest/meta-data/instance-id)
