@@ -56,12 +56,12 @@ anonymise_other_tables.sql
 anonymise_email_address.sql
 anonymise_messaging_content.sql
 anonymise_hist_tables.sql
+delete_event_history.sql
 add_search_data.sql
 cleanup.sql
 )
 
 STEPS_IN_BACKGROUND=(
-delete_event_history.sql
 )
 
 PIDS_IN_BACKGROUND=()
