@@ -21,6 +21,7 @@ RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq git 
   && python3 -m venv /opt/awscli \
   && /opt/awscli/bin/pip install --no-cache-dir awscli \
   && ln -sf /opt/awscli/bin/aws /usr/local/bin/aws \
+  && aws --version
 
 # Retained dedicated virtual environment for Python scripts needing boto3
 RUN python3 -m venv /opt/venv \
