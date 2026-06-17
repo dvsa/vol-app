@@ -6,14 +6,22 @@ set -euo pipefail
 # ENVIRONMENT
 ###############################################
 
-export http_proxy=http://<%= @proxy %>
-export https_proxy=http://<%= @proxy %>
-export NO_PROXY=169.254.169.254
+
+
+: "${PROXY:?PROXY is required}"
+: "${DBCLUSTER_ID:?DBCLUSTER_ID is required}"
+: "${READDB_HOST:?READDB_HOST is required}"
+: "${M_DB_PASSWORD:?M_DB_PASSWORD is required}"
+: "${ENVIRONMENT_NAME:?ENVIRONMENT_NAME is required}"
+
+export http_proxy="http://${PROXY}"
+export https_proxy="http://${PROXY}"
+export NO_PROXY="${NO_PROXY:+${NO_PROXY},}169.254.169.254"
 
 region="eu-west-1"
-db_cluster_id=${DBCLUSTER_ID}
-tmp_cluster_id="ni-extract-${RANDOM}"
+tmp_cluster_id="ni-extract-$(date +%Y%m%d%H%M%S)-${RANDOM}"
 tmp_instance_id="${tmp_cluster_id}-instance"
+db_cluster_id=${DBCLUSTER_ID}
 snapshot_id="${tmp_cluster_id}-snap"
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readdb_host=${READDB_HOST}
