@@ -6,6 +6,11 @@
 
 SELECT CONCAT(now(),' anonymise history tables...') as '';
 
+SET @OLD_SQL_LOG_BIN = @@sql_log_bin;
+SET sql_log_bin = 0;
+SET SESSION join_buffer_size = 1024 * 1024 * 64;
+SET autocommit = 0;
+
 UPDATE address_hist a
 JOIN address b ON a.id = b.id
 SET a.paon_desc = b.paon_desc,
@@ -15,11 +20,13 @@ SET a.paon_desc = b.paon_desc,
     a.town = b.town,
     a.postcode = b.postcode,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE answer_hist a
 JOIN answer b ON a.id = b.id
 SET a.ans_text = b.ans_text,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE companies_house_company_hist a
 JOIN companies_house_company b ON a.id = b.id
@@ -34,6 +41,7 @@ SET a.company_number = b.company_number,
     a.region = b.region,
     a.premises = b.premises,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE person_hist a
 JOIN person b on a.id = b.id
@@ -43,20 +51,23 @@ SET a.forename = b.forename,
     a.birth_place = b.birth_place,
     a.other_name = b.other_name,
     a.hist_db_user = "anon";
-	
+COMMIT;
+    
 UPDATE publication_police_data_hist a
-JOIN publication_police_data b ON a.id = b.id	
+JOIN publication_police_data b ON a.id = b.id   
 SET a.forename = b.forename,
     a.family_name= b.family_name,
     a.birth_date = b.birth_date,
     a.olbs_dob = b.olbs_dob,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE organisation_hist a
 JOIN organisation b ON a.id = b.id
 SET a.company_or_llp_no= b.company_or_llp_no,
     a.name= b.name,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE complaint_hist a
 JOIN complaint b ON a.id = b.id
@@ -64,6 +75,7 @@ SET a.driver_forename = b.driver_forename,
     a.driver_family_name = b.driver_family_name,
     a.description = b.description,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE conviction_hist a
 JOIN conviction b ON a.id = b.id
@@ -76,7 +88,8 @@ SET a.person_firstname = b.person_firstname,
     a.taken_into_consideration = b.taken_into_consideration,
     a.operator_name = b.operator_name,
     a.hist_db_user = "anon";
-	
+COMMIT;
+    
 UPDATE previous_conviction_hist a
 JOIN previous_conviction b ON a.id = b.id
 SET a.forename = b.forename, 
@@ -87,17 +100,20 @@ SET a.forename = b.forename,
     a.court_fpn = b.court_fpn,
     a.penalty = b.penalty,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE transport_manager_hist a
 JOIN transport_manager b ON a.id = b.id
 SET a.nysiis_forename=b.nysiis_forename,
     a.nysiis_family_name=b.nysiis_family_name,
     a.hist_db_user = "anon";
-	
+COMMIT;
+    
 UPDATE trading_name_hist a
 JOIN trading_name b ON a.id = b.id
 SET a.name = b.name,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE bus_reg_hist a
 JOIN bus_reg b ON a.id = b.id
@@ -119,12 +135,14 @@ SET a.start_point = b.start_point,
     a.quality_partnership_details = b.quality_partnership_details,
     a.quality_contract_details = b.quality_contract_details,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE appeal_hist a
 JOIN appeal b ON a.id = b.id
 SET a.outline_ground = b.outline_ground,
     a.comment = b.comment,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE application_hist a
 JOIN application b ON a.id = b.id
@@ -134,6 +152,7 @@ SET a.insolvency_details = b.insolvency_details,
     a.interim_reason = b.interim_reason,
     a.request_inspection_comment = b.request_inspection_comment,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE bus_short_notice_hist a
 JOIN bus_short_notice b ON a.id = b.id
@@ -147,6 +166,7 @@ SET a.unforseen_detail = b.unforseen_detail,
     a.connection_detail = b.connection_detail,
     a.not_available_detail = b.not_available_detail,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE cases_hist a
 JOIN cases b ON a.id = b.id
@@ -157,38 +177,45 @@ SET a.ecms_no = b.ecms_no,
     a.penalties_note = b.penalties_note,
     a.conviction_note = b.conviction_note,
     a.hist_db_user = "anon";
-	
+COMMIT;
+    
 UPDATE change_of_entity_hist a
 JOIN change_of_entity b ON a.id = b.id
 SET a.old_organisation_name = b.old_organisation_name,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE community_lic_hist a
 JOIN community_lic b ON a.id = b.id 
 SET a.serial_no = b.serial_no,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE companies_house_alert_hist a
 JOIN companies_house_alert b ON a.id = b.id
 SET a.company_or_llp_no = b.company_or_llp_no,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE companies_house_officer_hist a
 JOIN companies_house_officer b ON a.id = b.id
 SET a.name = b.name,
     a.date_of_birth = b.date_of_birth,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE company_subsidiary_hist a
-JOIN company_subsidiary b ON a.id = b.id	
+JOIN company_subsidiary b ON a.id = b.id    
 SET a.name = b.name,
     a.company_no = b.company_no,
     a.hist_db_user = "anon";
+COMMIT;
 
-UPDATE condition_undertaking_hist a	
+UPDATE condition_undertaking_hist a 
 JOIN condition_undertaking b ON a.id = b.id
 SET a.notes = b.notes,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE contact_details_hist a
 JOIN contact_details b ON a.id = b.id
@@ -196,82 +223,97 @@ SET a.email_address = b.email_address,
     a.fao = b.fao,
     a.description = b.description,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE decision_hist a
 JOIN decision b ON a.id = b.id
 SET a.description = b.description,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE disqualification_hist a
 JOIN disqualification b ON a.id = b.id 
 SET a.notes = b.notes,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE document_hist a
 JOIN document b ON a.id = b.id
 SET a.description = b.description,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE ebsr_submission_hist a
 JOIN ebsr_submission b ON a.id = b.id
 SET a.organisation_email_address = b.organisation_email_address,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE enforcement_area_hist a
 JOIN enforcement_area b ON a.id = b.id
 SET a.email_address = b.email_address,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE erru_request_hist a
 JOIN erru_request b ON a.id = b.id
 SET a.vrm = b.vrm,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE grace_period_hist a
 JOIN grace_period b ON a.id = b.id
 SET a.description = b.description,
     a.hist_db_user = "anon";
+COMMIT;
     
 UPDATE impounding_hist a
 JOIN impounding b ON a.id = b.id
 SET a.vrm = b.vrm,
     a.notes = b.notes,
     a.hist_db_user = "anon";
+COMMIT;
 
-UPDATE inspection_email_hist a	
+UPDATE inspection_email_hist a  
 JOIN inspection_email b ON a.id = b.id
 SET a.subject = b.subject,
     a.message_body = b.message_body,
     a.sender_email_address = b.sender_email_address,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE inspection_request_hist a
 JOIN inspection_request b ON a.id = b.id
 SET a.requestor_notes = b.requestor_notes,
     a.inspector_notes = b.inspector_notes,
     a.hist_db_user = "anon";
+COMMIT;
     
 UPDATE irfo_gv_permit_hist a
 JOIN irfo_gv_permit b ON a.id = b.id
 SET a.note = b.note,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE irfo_partner_hist a
 JOIN irfo_partner b ON a.id = b.id
 SET a.name = b.name,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE irfo_psv_auth_hist a
-JOIN irfo_psv_auth b ON a.id = b.id	
+JOIN irfo_psv_auth b ON a.id = b.id 
 SET a.exemption_details = b.exemption_details,
     a.service_route_from = b.service_route_from,
     a.service_route_to = b.service_route_to,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE irfo_vehicle_hist a
 JOIN irfo_vehicle b ON a.id = b.id
 SET a.vrm = b.vrm,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE legacy_offence_hist a
 JOIN legacy_offence b ON a.id = b.id
@@ -280,53 +322,62 @@ SET a.notes = b.notes,
     a.offender_name = b.offender_name,
     a.vrm = b.vrm,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE legacy_recommendation_hist a
 JOIN legacy_recommendation b ON a.id = b.id
 SET a.comment = b.comment,
     a.notes = b.notes,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE licence_hist a
 JOIN licence b ON a.id = b.id
 SET a.tachograph_ins_name = b.tachograph_ins_name,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE local_authority_hist a
 JOIN local_authority b ON a.id = b.id
 SET a.email_address = b.email_address,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE note_hist a
 JOIN note b ON a.id = b.id
 SET a.comment = b.comment,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE opposition_hist a
 JOIN opposition b ON a.id = b.id
 SET a.notes = b.notes,
     a.valid_notes = b.valid_notes,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE other_licence_hist a
-JOIN other_licence b ON a.id = b.id	
+JOIN other_licence b ON a.id = b.id 
 SET a.holder_name = b.holder_name,
     a.disqualification_length = b.disqualification_length,
     a.additional_information = b.additional_information,
     a.operating_centres = b.operating_centres,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE phone_contact_hist a
 JOIN phone_contact b ON a.id = b.id
 SET a.phone_number = b.phone_number,
     a.details = b.details,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE pi_hist a
 JOIN pi b ON a.id = b.id
 SET a.decision_notes = b.decision_notes,
     a.comment = b.comment,
     a.hist_db_user = "anon";
+COMMIT;
     
 UPDATE pi_hearing_hist a
 JOIN pi_hearing b ON a.id = b.id
@@ -334,108 +385,127 @@ SET a.cancelled_reason = b.cancelled_reason,
     a.adjourned_reason = b.adjourned_reason,
     a.details = b.details,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE prohibition_hist a
 JOIN prohibition b ON a.id = b.id
 SET a.vrm = b.vrm,
     a.imposed_at = b.imposed_at,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE prohibition_defect_hist a
 JOIN prohibition_defect b ON a.id = b.id
 SET a.notes = b.notes,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE propose_to_revoke_hist a
 JOIN propose_to_revoke b ON a.id = b.id
 SET a.comment = b.comment,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE recipient_hist a
 JOIN recipient b ON a.id = b.id
 SET a.contact_name = b.contact_name,
     a.email_address = b.email_address,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE serious_infringement_hist a
 JOIN serious_infringement b ON a.id = b.id
 SET a.reason=b.reason,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE statement_hist a
 JOIN statement b ON a.id = b.id
 SET a.vrm = b.vrm,
     a.authorisers_decision = b.authorisers_decision,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE stay_hist a
 JOIN stay b ON a.id = b.id
 SET a.notes = b.notes,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE submission_hist a
 JOIN submission b ON a.id = b.id
 SET a.data_snapshot = b.data_snapshot,
     a.hist_db_user = "anon"; 
+COMMIT;
 
 UPDATE submission_action_hist a
 JOIN submission_action b ON a.id = b.id
 SET a.comment = b.comment,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE submission_section_comment_hist a
 JOIN submission_section_comment b ON a.id = b.id
 SET a.comment = b.comment,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE tm_case_decision_hist a
 JOIN tm_case_decision b ON a.id = b.id
 SET a.repute_not_lost_reason = b.repute_not_lost_reason,
     a.no_further_action_reason = b.no_further_action_reason,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE tm_employment_hist a
 JOIN tm_employment b ON a.id = b.id
 SET a.position = b.position,
     a.employer_name = b.employer_name,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE trailer_hist a
 JOIN trailer b ON a.id = b.id
 SET a.trailer_no = b.trailer_no,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE transport_manager_application_hist a
 JOIN transport_manager_application b ON a.id = b.id
 SET a.additional_information = b.additional_information,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE transport_manager_licence_hist a
 JOIN transport_manager_licence b ON a.id = b.id
 SET a.additional_information = b.additional_information,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE txn_hist a
 JOIN txn b ON a.id = b.id
 SET a.payer_name = b.payer_name,
     a.comment = b.comment,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE user_hist a
 JOIN user b ON a.id = b.id
 SET a.login_id = b.login_id,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE vehicle_hist a
 JOIN vehicle b ON a.id = b.id
 SET a.vrm = b.vrm,
     a.hist_db_user = "anon";
+COMMIT;
 
 UPDATE messaging_content_hist a
 JOIN messaging_content b ON a.id = b.id
 SET a.text = b.text;
+COMMIT;
 
-#anonymise hist_db_user in other hist tables
 SELECT CONCAT(now(),' ...anonymise hist_db_user in other hist tables...') as '';
 
 UPDATE admin_area_traffic_area_hist SET hist_db_user = "anon";
@@ -595,5 +665,9 @@ UPDATE messaging_user_message_read_hist SET hist_db_user = 'anon';
 UPDATE messaging_conversation_hist SET hist_db_user = 'anon';
 UPDATE messaging_message_hist SET hist_db_user = 'anon';
 UPDATE messaging_subject_hist SET hist_db_user = 'anon';
+COMMIT;
+
+SET sql_log_bin = @OLD_SQL_LOG_BIN;
+SET autocommit = 1;
 
 SELECT CONCAT(now(),' ...anonymise history tables complete.') as '';
