@@ -247,8 +247,7 @@ mariadbdump -h $endpoint -u master -p${pass} \
 gzip $anondb_dump_dir/olcs-db-localdev-anon-$env-$DATE.sql
 
 log "Dumping table list"
-mariadbdump -h $endpoint -u master -p${pass} \
-  OLCS_RDS_OLCSDB -e 'SHOW TABLES;' \
+mariadb -h $endpoint -u master -p${pass} -D OLCS_RDS_OLCSDB -e 'SHOW TABLES;' \
   > $anondb_dump_dir/olcs-dbtables-anon-$env-$DATE.txt
 
 log "Assuming role for S3 upload"
