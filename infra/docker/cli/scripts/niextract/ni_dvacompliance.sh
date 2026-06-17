@@ -11,11 +11,11 @@ export https_proxy=http://<%= @proxy %>
 export NO_PROXY=169.254.169.254
 
 region="eu-west-1"
-
-db_cluster_id="<%= @ni_dvacompliance_readdb_id %>"
+db_cluster_id=${DBCLUSTER_ID}
 tmp_cluster_id="ni-extract-${RANDOM}"
 tmp_instance_id="${tmp_cluster_id}-instance"
 snapshot_id="${tmp_cluster_id}-snap"
+script_dir="/scripts"
 
 ###############################################
 # DEBUG MODE
@@ -135,21 +135,21 @@ log "Cluster ready at: $endpoint"
 ###############################################
 # 6. RUN NI EXTRACT
 ###############################################
-if [ ! -d <%= @dbam_common_script_dir %>/NI_Extract ]; then
+if [ ! -d $script_dir/NI_Extract ]; then
   loge "Missing NI_Extract directory"
   exit 1
 fi
 
 log "Running NI Extract"
 
-cd <%= @dbam_common_script_dir %>/NI_Extract
+cd $script_dir/NI_Extract
 
 <% if @env != 'prod' -%>
 ./NI_Extract.sh \
   -c "-h${endpoint} -umaster" \
   -d OLCS_RDS_OLCSDB \
   -A \
-  -a <%= @dbam_common_script_dir %>/anonymisation_scripts/anon \
+  -a $script_dir/anonymisation_scripts/anon \
   -f <%= @ni_dvacompliance_dir %>/temp \
   -X <%= @ni_dvacompliance_dir %>
 <% else -%>
