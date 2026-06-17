@@ -25,5 +25,8 @@
   "scripts": {
     "prepare": "husky",
     "refresh": "npm run start --workspace @vol-app/local-refresh"
+  },
+  "dependencies": {
+    "govuk-frontend": "^6.2.0"
   }
 }

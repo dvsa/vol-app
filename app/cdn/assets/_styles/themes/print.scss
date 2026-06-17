@@ -8,7 +8,7 @@
 
 $app: print;
 
-@import "../../../node_modules/govuk-frontend/dist/govuk/index";
+@use "../../../node_modules/govuk-frontend/dist/govuk/index" as *;
 
 //govuk frontend toolkit legacy compatibility (main toolkit removed)
 @import "../core/legacy";
