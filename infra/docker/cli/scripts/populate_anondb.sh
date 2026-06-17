@@ -232,13 +232,13 @@ fi
 # 5. DUMP DATA + UPLOAD TO S3
 ###############################################
 log "Dumping anonymised database"
-mariadbdump -h $endpoint -u master -p${pass} \
+mysqldump -h $endpoint -u master -p${pass} \
   --routines --triggers \
   --add-drop-database --databases OLCS_RDS_OLCSDB \
   | gzip > $anondb_dump_dir/olcs-db-anon-$env-$DATE.sql.gz
 
 log "Dumping localdev tables"
-mariadbdump -h $endpoint -u master -p${pass} \
+mysqldump -h $endpoint -u master -p${pass} \
   --skip-triggers --skip-routines \
   OLCS_RDS_OLCSDB $anondb_tables \
   | sed 's/`OLCS_RDS_OLCSDB`[.]//g' \
@@ -247,7 +247,8 @@ mariadbdump -h $endpoint -u master -p${pass} \
 gzip $anondb_dump_dir/olcs-db-localdev-anon-$env-$DATE.sql
 
 log "Dumping table list"
-mariadb -h $endpoint -u master -p${pass} -D OLCS_RDS_OLCSDB -e 'SHOW TABLES;' \
+mysql -h $endpoint -u master -p${pass} \
+  OLCS_RDS_OLCSDB -e 'SHOW TABLES;' \
   > $anondb_dump_dir/olcs-dbtables-anon-$env-$DATE.txt
 
 log "Assuming role for S3 upload"
