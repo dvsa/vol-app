@@ -155,15 +155,14 @@ log "Cluster ready at: $endpoint"
 ###############################################
 # 6. RUN NI EXTRACT
 ###############################################
-if [ ! -d $script_dir/NI_Extract ]; then
-  loge "Missing NI_Extract directory"
+if [[ ! -f "${script_dir}/NI_Extract.sh" || ! -d "${script_dir}/scripts" ]]; then
+  loge "Missing NI_Extract.sh or scripts directory in ${script_dir}"
   exit 1
 fi
 
 log "Running NI Extract"
 
-cd $script_dir/NI_Extract
-
+cd "${script_dir}"
 <% if @env != 'prod' -%>
 ./NI_Extract.sh \
   -c "-h${endpoint} -umaster" \
