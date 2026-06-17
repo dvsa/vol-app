@@ -83,13 +83,20 @@ log "Fetching subnet + security groups"
 subnet_group=$(aws rds describe-db-clusters \
   --db-cluster-identifier "$db_cluster_id" \
   --query "DBClusters[0].DBSubnetGroup" \
-  --output text --region $region)
+  --output text --region "$region")
+if [[ -z "$subnet_group" || "$subnet_group" == "None" ]]; then
+  loge "Failed to determine DB subnet group for cluster $db_cluster_id"
+  exit 1
+fi
 
 sec_groups=$(aws rds describe-db-clusters \
   --db-cluster-identifier "$db_cluster_id" \
   --query "DBClusters[0].VpcSecurityGroups[].VpcSecurityGroupId" \
-  --output text --region $region)
-
+  --output text --region "$region")
+if [[ -z "$sec_groups" || "$sec_groups" == "None" ]]; then
+  loge "Failed to determine VPC security groups for cluster $db_cluster_id"
+  exit 1
+fi
 ###############################################
 # 3. RESTORE TEMP CLUSTER
 ###############################################
