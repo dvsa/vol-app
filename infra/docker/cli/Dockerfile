@@ -87,7 +87,7 @@ RUN chmod +x /mnt/data/scripts/data_refresh/*.sh \
   /mnt/data/scripts/niextract/anonymisation_scripts/anon/*.sh \
   /mnt/data/scripts/niextract/anonymisation_scripts/seed_generators/*.sh \
   && for file in /mnt/data/scripts/data_refresh/*.sh /mnt/data/scripts/data_refresh/*.py; do \
-       ln -sf "$file" /usr/local/bin/$(basename "$file"); \
+       ln -sf -- "$file" "/usr/local/bin/${file##*/}" || exit 1; \
      done
 
 USER www-data
