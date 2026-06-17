@@ -55,8 +55,10 @@ anonymise_bus_reg.sql
 anonymise_other_tables.sql
 anonymise_email_address.sql
 anonymise_messaging_content.sql
-anonymise_hist_tables.sql
 delete_event_history.sql
+delete_history_part_1.sql
+delete_history_part_2.sql
+anonymise_hist_tables.sql
 add_search_data.sql
 cleanup.sql
 )
@@ -159,11 +161,6 @@ run_NI_anonymise_sql () {
 }
 
 run_steps_in_background () {
-
-    if ($DELETE_OLD_HISTORY); then
-
-        STEPS_IN_BACKGROUND+=( delete_history_part_1.sql delete_history_part_2.sql )
-    fi
 
     # run each step in background
 
