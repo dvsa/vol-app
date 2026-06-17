@@ -128,14 +128,14 @@ aws rds wait db-cluster-snapshot-available \
 ###############################################
 log "Restoring temporary Aurora cluster: $tmp_cluster_id"
 
-aws rds restore-db-cluster-from-snapshot \
-  --db-cluster-identifier "$tmp_cluster_id" \
-  --snapshot-identifier "$snapshot_id" \
-  --engine aurora-mysql \
-  --db-subnet-group-name "$db_subnet_group" \
-  --vpc-security-group-ids $db_security_groups \
-  --region "$region" \
-  >/dev/null
+  aws rds restore-db-cluster-from-snapshot \
+    --db-cluster-identifier "$tmp_cluster_id" \
+    --snapshot-identifier "$snapshot_id" \
+    --engine aurora-mysql \
+    --db-subnet-group-name "$db_subnet_group" \
+    --vpc-security-group-ids $db_security_groups \
+    --region "$region" \
+    >/dev/null
 
 log "Waiting for cluster to become available..."
 aws rds wait db-cluster-available \
@@ -232,13 +232,13 @@ fi
 # 5. DUMP DATA + UPLOAD TO S3
 ###############################################
 log "Dumping anonymised database"
-mysqldump -h $endpoint -u master -p${pass} \
+mariadbdump -h $endpoint -u master -p${pass} \
   --routines --triggers \
   --add-drop-database --databases OLCS_RDS_OLCSDB \
   | gzip > $anondb_dump_dir/olcs-db-anon-$env-$DATE.sql.gz
 
 log "Dumping localdev tables"
-mysqldump -h $endpoint -u master -p${pass} \
+mariadbdump -h $endpoint -u master -p${pass} \
   --skip-triggers --skip-routines \
   OLCS_RDS_OLCSDB $anondb_tables \
   | sed 's/`OLCS_RDS_OLCSDB`[.]//g' \
@@ -247,7 +247,7 @@ mysqldump -h $endpoint -u master -p${pass} \
 gzip $anondb_dump_dir/olcs-db-localdev-anon-$env-$DATE.sql
 
 log "Dumping table list"
-mysql -h $endpoint -u master -p${pass} \
+mariadbdump -h $endpoint -u master -p${pass} \
   OLCS_RDS_OLCSDB -e 'SHOW TABLES;' \
   > $anondb_dump_dir/olcs-dbtables-anon-$env-$DATE.txt
 
