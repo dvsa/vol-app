@@ -7,6 +7,8 @@
 SELECT CONCAT(now(), ' Fast optimizing event_history via table swap...') as '';
 
 -- Create an identical structure
+DROP TABLE IF EXISTS event_history_new;
+DROP TABLE IF EXISTS event_history_old;
 CREATE TABLE event_history_new LIKE event_history;
 
 -- Copy only the recent 6 years of data
