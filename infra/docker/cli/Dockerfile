@@ -17,13 +17,10 @@ RUN apk add --no-cache icu-dev libzip-dev cups-client poppler-utils bash \
   && docker-php-ext-configure zip \
   && docker-php-ext-install pdo_mysql opcache intl zip
 
-# Installed native AWS CLI v2 with glibc compatibility layer (gcompat) for Alpine Linux
-RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq git gcompat \
-  && curl -s "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
-  && unzip -q awscliv2.zip \
-  && ./aws/install \
-  && rm -rf awscliv2.zip ./aws \
-  && aws --version
+RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq git \
+  && python3 -m venv /opt/awscli \
+  && /opt/awscli/bin/pip install --no-cache-dir awscli \
+  && ln -sf /opt/awscli/bin/aws /usr/local/bin/aws \
 
 # Retained dedicated virtual environment for Python scripts needing boto3
 RUN python3 -m venv /opt/venv \
