@@ -81,12 +81,14 @@ RUN mkdir -p /mnt/data/olcsdump /mnt/data/anondump\
   # Ensure scripts are executable.
   && chmod +x /mnt/data/scripts/*.sh
   
-# Fixed wildcard symlink evaluation behavior using -t target directory argument flag
+# Replaced 'ln -t' with a standard loop compatible with BusyBox/Alpine systems
 RUN chmod +x /mnt/data/scripts/data_refresh/*.sh \
   /mnt/data/scripts/data_refresh/*.py \
   /mnt/data/scripts/niextract/anonymisation_scripts/anon/*.sh \
   /mnt/data/scripts/niextract/anonymisation_scripts/seed_generators/*.sh \
-  && ln -s -t /usr/local/bin/ /mnt/data/scripts/data_refresh/*.sh /mnt/data/scripts/data_refresh/*.py
+  && for file in /mnt/data/scripts/data_refresh/*.sh /mnt/data/scripts/data_refresh/*.py; do \
+       ln -sf -- "$file" "/usr/local/bin/${file##*/}" || exit 1; \
+     done
 
 USER www-data
 
