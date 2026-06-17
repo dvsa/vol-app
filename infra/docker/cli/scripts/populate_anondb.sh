@@ -21,6 +21,8 @@ export http_proxy=http://${PROXY}
 export https_proxy=http://${PROXY}
 export NO_PROXY=169.254.169.254
 
+export NO_PROXY=169.254.169.254,169.254.170.2,localhost,127.0.0.1,.amazonaws.com
+
 nonprod_assume_external_id=${PRODTODEV_ASSUME_ROLE_ID}
 db_cluster=${DBCLUSTER_ID}
 env=${ENVIRONMENT_NAME}
