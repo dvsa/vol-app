@@ -6,11 +6,8 @@
 
 SELECT CONCAT(now(),' anonymise history tables...') as '';
 
-SET @OLD_SQL_LOG_BIN = @@sql_log_bin;
-SET sql_log_bin = 0;
 SET SESSION join_buffer_size = 1024 * 1024 * 64;
 SET autocommit = 0;
-
 UPDATE address_hist a
 JOIN address b ON a.id = b.id
 SET a.paon_desc = b.paon_desc,
