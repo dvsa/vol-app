@@ -23,9 +23,9 @@ RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq git 
   && ln -sf /opt/awscli/bin/aws /usr/local/bin/aws \
   && aws --version
 
-
+# Retained dedicated virtual environment for Python scripts needing boto3
 RUN python3 -m venv /opt/venv \
-  && /opt/venv/bin/pip install boto3
+  && /opt/venv/bin/pip install --no-cache-dir boto3
   
 # Install fonts for document rendering.
 # LibreOffice auto-substitutes these when documents request MS fonts:
@@ -81,11 +81,12 @@ RUN mkdir -p /mnt/data/olcsdump /mnt/data/anondump\
   # Ensure scripts are executable.
   && chmod +x /mnt/data/scripts/*.sh
   
+# Fixed wildcard symlink evaluation behavior using -t target directory argument flag
 RUN chmod +x /mnt/data/scripts/data_refresh/*.sh \
   /mnt/data/scripts/data_refresh/*.py \
   /mnt/data/scripts/niextract/anonymisation_scripts/anon/*.sh \
   /mnt/data/scripts/niextract/anonymisation_scripts/seed_generators/*.sh \
-  && ln -s /mnt/data/scripts/data_refresh/*.sh /mnt/data/scripts/data_refresh/*.py /usr/local/bin/
+  && ln -s -t /usr/local/bin/ /mnt/data/scripts/data_refresh/*.sh /mnt/data/scripts/data_refresh/*.py
 
 USER www-data
 
