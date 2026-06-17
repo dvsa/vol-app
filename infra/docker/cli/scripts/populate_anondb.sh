@@ -28,6 +28,7 @@ pass=${M_DB_PASSWORD}
 DATE=$(date +"%Y-%m-%d")
 TS=$(date +"%Y-%m-%d-%H-%M-%S")
 region="eu-west-1"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 tmp_cluster_id="olcs-anon-${TS}"
 tmp_instance_id="olcs-anon-${TS}-instance"
@@ -127,14 +128,14 @@ aws rds wait db-cluster-snapshot-available \
 ###############################################
 log "Restoring temporary Aurora cluster: $tmp_cluster_id"
 
-aws rds restore-db-cluster-from-snapshot \
-  --db-cluster-identifier "$tmp_cluster_id" \
-  --snapshot-identifier "$snapshot_id" \
-  --engine aurora-mysql \
-  --db-subnet-group-name "$db_subnet_group" \
-  --vpc-security-group-ids $db_security_groups \
-  --region "$region" \
-  >/dev/null
+  aws rds restore-db-cluster-from-snapshot \
+    --db-cluster-identifier "$tmp_cluster_id" \
+    --snapshot-identifier "$snapshot_id" \
+    --engine aurora-mysql \
+    --db-subnet-group-name "$db_subnet_group" \
+    --vpc-security-group-ids $db_security_groups \
+    --region "$region" \
+    >/dev/null
 
 log "Waiting for cluster to become available..."
 aws rds wait db-cluster-available \
@@ -251,7 +252,7 @@ mysql -h $endpoint -u master -p${pass} \
   > $anondb_dump_dir/olcs-dbtables-anon-$env-$DATE.txt
 
 log "Assuming role for S3 upload"
-source ./s3assume.sh "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole" "$nonprod_assume_external_id"
+source "$SCRIPT_DIR/s3assume.sh" "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole" "$nonprod_assume_external_id"
 
 log "Uploading anonymised dumps to S3"
 aws s3 cp $anondb_dump_dir s3://devapp-olcs-pri-olcs-deploy-s3/anondata/ \
