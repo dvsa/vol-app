@@ -136,10 +136,14 @@ aws rds wait db-instance-available \
 endpoint=$(aws rds describe-db-clusters \
   --db-cluster-identifier "$tmp_cluster_id" \
   --query "DBClusters[0].Endpoint" \
-  --output text --region $region)
+  --output text --region "$region")
+
+if [[ -z "$endpoint" || "$endpoint" == "None" ]]; then
+  loge "Failed to resolve endpoint for temporary cluster $tmp_cluster_id"
+  exit 1
+fi
 
 log "Cluster ready at: $endpoint"
-
 ###############################################
 # 6. RUN NI EXTRACT
 ###############################################
