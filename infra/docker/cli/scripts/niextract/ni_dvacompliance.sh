@@ -127,10 +127,19 @@ aws rds wait db-cluster-available \
 ###############################################
 log "Creating cluster instance"
 
+db_instance_class=$(aws rds describe-db-instances \
+  --filters "Name=db-cluster-id,Values=${db_cluster_id}" \
+  --query "DBInstances[0].DBInstanceClass" \
+  --output text --region "$region")
+if [[ -z "$db_instance_class" || "$db_instance_class" == "None" ]]; then
+  loge "Failed to determine DB instance class for cluster $db_cluster_id"
+  exit 1
+fi
+
 aws rds create-db-instance \
   --db-instance-identifier "$tmp_instance_id" \
   --db-cluster-identifier "$tmp_cluster_id" \
-  --db-instance-class db.r6g.large \
+  --db-instance-class "$db_instance_class" \
   --engine aurora-mysql \
   --region $region >/dev/null
 
