@@ -15,7 +15,8 @@ db_cluster_id=${DBCLUSTER_ID}
 tmp_cluster_id="ni-extract-${RANDOM}"
 tmp_instance_id="${tmp_cluster_id}-instance"
 snapshot_id="${tmp_cluster_id}-snap"
-script_dir="/scripts"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readdb_host=${READDB_HOST}
 
 ###############################################
 # DEBUG MODE
@@ -147,13 +148,13 @@ cd $script_dir/NI_Extract
 <% if @env != 'prod' -%>
 ./NI_Extract.sh \
   -c "-h${endpoint} -umaster" \
-  -d OLCS_RDS_OLCSDB \
+  -d readdb_host \
   -A \
   -a $script_dir/anonymisation_scripts/anon \
-  -f <%= @ni_dvacompliance_dir %>/temp \
-  -X <%= @ni_dvacompliance_dir %>
+  -f /tmp/anon\
+  -X /tmp/xml
 <% else -%>
 ./NI_Extract.sh \
   -c "-h${endpoint} -umaster" \
-  -d OLCS_RDS_OLCSDB \
-  -X <%= @ni_dvacompliance_dir %>
+  -d readdb_host \
+  -X /tmp/xml
