@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_person;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_person()
@@ -21,46 +20,29 @@ BEGIN
   
     SET autocommit=0;
 
+    SELECT 'Identifying person rows to delete.' AS '' ;
+    
     DROP TABLE IF EXISTS `tmpPerson`;
     CREATE TEMPORARY TABLE `tmpPerson` ( 
     `id` int(10) unsigned NOT NULL,
     PRIMARY KEY (`id`) );
-
-    SELECT 'Identifying person rows to delete.' AS '' ;
   
     INSERT INTO tmpPerson (id)
-    select id from person;
+    SELECT p.id 
+    FROM person p
+    LEFT JOIN application_organisation_person aop1 ON p.id = aop1.original_person_id
+    LEFT JOIN application_organisation_person aop2 ON p.id = aop2.person_id
+    LEFT JOIN contact_details cd                   ON p.id = cd.person_id
+    LEFT JOIN organisation_person op               ON p.id = op.person_id
+    LEFT JOIN publication_police_data ppd          ON p.id = ppd.person_id
+    LEFT JOIN disqualification d                   ON p.id = d.person_id
+    WHERE aop1.original_person_id IS NULL
+      AND aop2.person_id IS NULL
+      AND cd.person_id IS NULL
+      AND op.person_id IS NULL
+      AND ppd.person_id IS NULL
+      AND d.person_id IS NULL;
 
-    DELETE FROM tmpPerson
-    WHERE id IN (
-        SELECT DISTINCT original_person_id
-        FROM application_organisation_person);
-    
-    DELETE FROM tmpPerson
-    WHERE id IN (
-        SELECT DISTINCT person_id
-        FROM application_organisation_person);
-
-    DELETE FROM tmpPerson 
-    WHERE id IN (
-	    SELECT DISTINCT person_id 
-	    FROM contact_details);
-
-    DELETE FROM tmpPerson
-    WHERE id IN (
-        SELECT DISTINCT person_id
-        FROM organisation_person);
-
-    DELETE FROM tmpPerson
-    WHERE id IN (
-        SELECT DISTINCT person_id
-        FROM publication_police_data);
- 
-    DELETE FROM tmpPerson
-    WHERE id IN (
-        SELECT DISTINCT person_id
-        FROM disqualification);
-        
     DROP TABLE IF EXISTS `tmpPersonBatch`;
     CREATE TEMPORARY TABLE `tmpPersonBatch` ( 
     `id` int(10) unsigned NOT NULL,
@@ -68,13 +50,15 @@ BEGIN
 
     SELECT COUNT(*)
     INTO @total
-	FROM tmpPerson;
+    FROM tmpPerson;
 
     SELECT CONCAT(@total,' person rows to delete.') AS '' ;
   
     SET @total:=0;
     SET @rowcount:=10000;
     
+    START TRANSACTION;
+
     WHILE(@rowcount = 10000) DO
 
         INSERT tmpPersonBatch
@@ -90,7 +74,7 @@ BEGIN
         SET @total := @total + @rowcount;
     
         DELETE FROM tmpPerson
-        WHERE id IN ( SELECT id from tmpPersonBatch);
+        LIMIT 10000;
         
 
     
@@ -98,7 +82,12 @@ BEGIN
 
         truncate table tmpPersonBatch;
         
+        COMMIT;
+        START TRANSACTION;
+        
     END WHILE;
+
+    COMMIT;
 
     DROP TABLE IF EXISTS `tmpPerson`;
     DROP TABLE IF EXISTS `tmpPersonBatch`;
@@ -107,7 +96,4 @@ BEGIN
     
 END
 $$
-
-
-  
-  
+DELIMITER ;
