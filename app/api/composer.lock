@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "a1f2c22181476f261cdda3acb99e5edb",
+  "content-hash": "478116d35edc5cddbefcbc64b05a922a",
   "packages": [
     {
       "name": "alphagov/notifications-php-client",
@@ -6149,17 +6149,11 @@
     },
     {
       "name": "olcs/olcs-transfer",
-      "version": "v8.15.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/dvsa/olcs-transfer.git",
-        "reference": "0d09ab1886ec17e7505206433b1f9ae4ff57637c"
-      },
+      "version": "8.16.0",
       "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/0d09ab1886ec17e7505206433b1f9ae4ff57637c",
-        "reference": "0d09ab1886ec17e7505206433b1f9ae4ff57637c",
-        "shasum": ""
+        "type": "path",
+        "url": "../../lib/olcs-transfer",
+        "reference": "00f8be9bdb67e37f84d1143fec12cbfdb153daab"
       },
       "require": {
         "ext-igbinary": "*",
@@ -6199,12 +6193,24 @@
           "Dvsa\\Olcs\\Transfer\\": "src/"
         }
       },
-      "notification-url": "https://packagist.org/downloads/",
-      "description": "OLCS Transfer",
-      "support": {
-        "source": "https://github.com/dvsa/olcs-transfer/tree/v8.15.0"
+      "autoload-dev": {
+        "psr-4": {
+          "Dvsa\\OlcsTest\\Transfer\\": "test/"
+        }
       },
-      "time": "2026-06-09T14:20:55+00:00"
+      "scripts": {
+        "bin": ["echo 'bin not installed'"],
+        "test": ["phpunit"],
+        "phpcs": ["phpcs"],
+        "psalm": ["psalm"],
+        "phpstan": ["phpstan"],
+        "all": ["@test", "@phpcs", "@psalm", "@phpstan"]
+      },
+      "description": "OLCS Transfer",
+      "transport-options": {
+        "symlink": true,
+        "relative": true
+      }
     },
     {
       "name": "olcs/olcs-utils",

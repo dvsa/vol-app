@@ -19,7 +19,8 @@ set -euo pipefail
 
 export http_proxy=http://${PROXY}
 export https_proxy=http://${PROXY}
-export NO_PROXY=169.254.169.254
+ 
+export NO_PROXY=169.254.169.254,169.254.170.2,localhost,127.0.0.1,.s3.eu-west-1.amazonaws.com,.s3.amazonaws.com,sts.eu-west-1.amazonaws.com
 
 nonprod_assume_external_id=${PRODTODEV_ASSUME_ROLE_ID}
 db_cluster=${DBCLUSTER_ID}
@@ -33,7 +34,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 tmp_cluster_id="olcs-anon-${TS}"
 tmp_instance_id="olcs-anon-${TS}-instance"
 snapshot_id="olcs-anon-snap-${TS}"
-anondb_snapshot_id="olcs-db-anon-${env}-${DATE}"
+anondb_snapshot_id="olcs-db-anon-${env}-${TS}"
 
 anondb_dump_dir="/mnt/data/anondump"
 anondb_tables="template template_test_data translation_key translation_key_text replacement public_holiday fee_type doc_template system_parameter feature_toggle financial_standing_rate"
