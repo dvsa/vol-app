@@ -34,7 +34,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 tmp_cluster_id="olcs-anon-${TS}"
 tmp_instance_id="olcs-anon-${TS}-instance"
 snapshot_id="olcs-anon-snap-${TS}"
-anondb_snapshot_id="olcs-db-anon-${env}-${DATE}"
+anondb_snapshot_id="olcs-db-anon-${env}-${TS}"
 
 anondb_dump_dir="/mnt/data/anondump"
 anondb_tables="template template_test_data translation_key translation_key_text replacement public_holiday fee_type doc_template system_parameter feature_toggle financial_standing_rate"
