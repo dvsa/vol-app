@@ -118,6 +118,10 @@ locals {
           name  = "READDB_HOST"
           value = "olcsreaddb-rds.${var.domain_env}.olcs.${var.domain_name}"
         },
+        {
+          name  = "DVA_REPORT_BUCKET"
+          value = "devappdev-olcs-pri-integration-dva-s3"
+        }
       ]
 
       secrets = [
