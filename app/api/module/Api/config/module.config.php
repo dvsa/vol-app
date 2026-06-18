@@ -1198,6 +1198,36 @@ return [
                 Dvsa\Olcs\Api\Service\Publication\Process\Application\Police::class
             ],
         ],
+        'ImpoundingLicenceDecisionPublication' => [
+            'context' => [
+                Dvsa\Olcs\Api\Service\Publication\Context\PiHearing\Venue::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\PiHearing\HearingDate::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\Licence\LicenceNo::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\Licence\People::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\Licence\LicenceAddress::class,
+            ],
+            'process' => [
+                Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text1::class,
+                Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text2::class,
+                Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text3::class,
+                Dvsa\Olcs\Api\Service\Publication\Process\Licence\Police::class
+            ],
+        ],
+        'ImpoundingApplicationDecisionPublication' => [
+            'context' => [
+                Dvsa\Olcs\Api\Service\Publication\Context\PiHearing\Venue::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\PiHearing\HearingDate::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\Licence\LicenceNo::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\Application\People::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\Licence\LicenceAddress::class,
+            ],
+            'process' => [
+                Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text1::class,
+                Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text2::class,
+                Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text3::class,
+                Dvsa\Olcs\Api\Service\Publication\Process\Application\Police::class
+            ],
+        ],
     ],
     'submissions' => require(__DIR__ . '/submissions.config.php'),
     'ebsr' => [

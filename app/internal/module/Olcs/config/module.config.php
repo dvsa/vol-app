@@ -935,6 +935,7 @@ return [
             DataService\Letter\LetterAppendix::class => CommonDataService\AbstractListDataServiceFactory::class,
             DataService\Letter\LetterChoice::class => CommonDataService\AbstractListDataServiceFactory::class,
             DataService\Letter\LetterSection::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\Letter\LetterTodo::class => CommonDataService\AbstractListDataServiceFactory::class,
             DataService\LetterType::class => DataService\LetterTypeFactory::class,
             DataService\PublicInquiryDecision::class => DataService\AbstractPublicInquiryDataFactory::class,
             DataService\PublicInquiryDefinition::class => DataService\AbstractPublicInquiryDataFactory::class,

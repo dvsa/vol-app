@@ -20,6 +20,7 @@ use Dvsa\Olcs\Transfer\Command\Task\CreateTask;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Mockery as m;
+use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 
 class FirstTmLetterTest extends AbstractCommandHandlerTestCase
 {
@@ -490,5 +491,94 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
         $result = new Result();
 
         return $result;
+    }
+
+    public function testHandleCommandCreatesTaskWhenOperatorNotificationEmailFails(): void
+    {
+        $licenceRepo = $this->repoMap['Licence'];
+        $tmlRepo = $this->repoMap['TransportManagerLicence'];
+
+        $licence = m::mock(LicenceEntity::class);
+
+        $this->mockLicence($licence, [
+            'licence' => [
+                'id' => 1,
+                'licNo' => 'AB123',
+                'isNi' => false,
+                'isPsv' => false,
+                'translateToWelsh' => 'N',
+                'organisation' => [
+                    'allowEmail' => 'Y',
+                    'name' => 'Test Operator Ltd',
+                ],
+                'correspondenceCd' => [
+                    'emailAddress' => 'abc',
+                ],
+            ],
+        ]);
+
+        $this->mockCorrespondenceCd($licence, [
+            'licence' => [
+                'correspondenceCd' => [
+                    'emailAddress' => 'abc',
+                ],
+            ],
+        ]);
+
+        $licenceRepo->shouldReceive('fetchForLastTmAutoLetter')
+            ->once()
+            ->andReturn([$licence]);
+
+        $tm = m::mock(TransportManager::class);
+        $tm->shouldReceive('getId')->andReturn(1);
+
+        $removedTm = m::mock(TransportManagerLicence::class);
+        $removedTm->shouldReceive('getId')->andReturn(10);
+        $removedTm->shouldReceive('getTransportManager')->andReturn($tm);
+        $removedTm->shouldReceive('setLastTmFirstEmailDate')->once();
+
+        $tmlRepo->shouldReceive('fetchRemovedTmForLicence')
+            ->with(1)
+            ->once()
+            ->andReturn([$removedTm]);
+
+        $tmlRepo->shouldReceive('save')
+            ->with($removedTm)
+            ->once();
+
+        $generateResult = new Result();
+        $generateResult->addId('document', 123);
+
+        $this->expectedSideEffect(GenerateAndStore::class, [], $generateResult);
+
+        $this->expectedSideEffect(CreateTask::class, [], new Result());
+
+        $this->repoMap['User']
+            ->shouldReceive('fetchFirstByEmailOrFalse')
+            ->once()
+            ->with('abc')
+            ->andReturn(false);
+
+        $this->commandHandler
+            ->shouldReceive('handleCommand')
+            ->with(m::type(SendEmail::class), false)
+            ->once()
+            ->andThrow(new EmailNotSentException('Email is missing a valid to address'));
+
+        $this->expectedSideEffect(CreateTask::class, [], new Result());
+
+        $response = $this->sut->handleCommand(
+            \Dvsa\Olcs\Cli\Domain\Command\FirstTmLetter::create([])
+        );
+
+        $this->assertEquals(
+            [
+                'id' => [
+                    'document' => 123,
+                ],
+                'messages' => [],
+            ],
+            $response->toArray()
+        );
     }
 }

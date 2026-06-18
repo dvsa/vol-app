@@ -188,7 +188,10 @@ class MessageTest extends MockeryTestCase
                 'plainBody' => 'plain body',
                 'htmlBody' => 'html body',
                 'locale' => 'en_GB',
-                'highPriority' => true
+                'highPriority' => true,
+                'templateKey' => null,
+                'personalisation' => [],
+                'markdownBody' => null,
             ],
             $result->getArrayCopy()
         );

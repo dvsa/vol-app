@@ -19,6 +19,7 @@ use Dvsa\Olcs\Api\Domain\Repository\TransportManagerLicence;
 use Dvsa\Olcs\Api\Domain\EmailAwareInterface;
 use Dvsa\Olcs\Api\Domain\EmailAwareTrait;
 use Dvsa\Olcs\Email\Data\Message;
+use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 
 final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInterface
 {
@@ -89,7 +90,15 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
                 $tmlRepo->save($removedTm);
             }
 
-            $this->sendEmailToOperator($licence);
+            try {
+                    $this->sendEmailToOperator($licence);
+            } catch (EmailNotSentException $e) {
+                $this->result->merge(
+                    $this->handleSideEffect(
+                        $this->createMissingEmailTaskSideEffect($licence)
+                    )
+                );
+            }
         }
 
         return $this->result;
@@ -295,5 +304,20 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
         ];
 
         return CreateTask::create($params);
+    }
+
+    /**
+     * Creates a missing email task side-effect for the given licence.
+     */
+    private function createMissingEmailTaskSideEffect(LicenceEntity $licence): CreateTask
+    {
+        return CreateTask::create([
+            'category' => Category::CATEGORY_TRANSPORT_MANAGER,
+            'subCategory' => SubCategory::TM_SUB_CATEGORY_GENERAL_TASK,
+            'description' => 'Unable to send Last TM operator notification email due to missing or invalid email address',
+            'actionDate'  => (new DateTime())->format('Y-m-d'),
+            'licence' => $licence->getId(),
+            'urgent' => 'Y',
+        ]);
     }
 }

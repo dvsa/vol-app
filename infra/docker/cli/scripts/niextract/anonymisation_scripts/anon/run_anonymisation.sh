@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #####################################################################
-#							            #
-# anonymisation run script.				   	    #
-#							   	    #
+#                                                                   #
+# anonymisation run script.                                         #
+#                                                                   #
 #####################################################################
 SQL_DIR="./sql"
 DATA_DIR="./data"
@@ -55,13 +55,13 @@ anonymise_bus_reg.sql
 anonymise_other_tables.sql
 anonymise_email_address.sql
 anonymise_messaging_content.sql
+delete_event_history.sql
 anonymise_hist_tables.sql
 add_search_data.sql
 cleanup.sql
 )
 
 STEPS_IN_BACKGROUND=(
-delete_event_history.sql
 )
 
 PIDS_IN_BACKGROUND=()
@@ -142,7 +142,16 @@ run_anonymise_sql () {
 
     # run each sql anonymisation step
 
+    local EXECUTION_STEPS=()
     for SQL_SCRIPT in "${ANONYMISATION_SQL_STEPS[@]}"
+    do
+        if [ "$SQL_SCRIPT" == "anonymise_hist_tables.sql" ] && $DELETE_OLD_HISTORY; then
+            EXECUTION_STEPS+=( delete_history_part_1.sql delete_history_part_2.sql )
+        fi
+        EXECUTION_STEPS+=( "$SQL_SCRIPT" )
+    done
+
+    for SQL_SCRIPT in "${EXECUTION_STEPS[@]}"
     do
         mysql --local-infile=1 $CONNECTION -e "use $ANON_DB;\. $SQL_DIR/$SQL_SCRIPT" || log_error "$SQL_DIR/$SQL_SCRIPT FAILED!"
     done
@@ -159,11 +168,6 @@ run_NI_anonymise_sql () {
 }
 
 run_steps_in_background () {
-
-    if ($DELETE_OLD_HISTORY); then
-
-        STEPS_IN_BACKGROUND+=( delete_history_part_1.sql delete_history_part_2.sql )
-    fi
 
     # run each step in background
 
@@ -268,25 +272,33 @@ check_OLCS_schema () {
 
     dump_OLCS_schema $CURRENT_OLCS_SCHEMA_FILE
 
-    new_cols=();
-    rem_cols=();
-    OLDIFS=$IFS
-    IFS=$','
-    while read -r "table" "column"; do
-
-        if [ $(grep -c "$table$IFS$column" $OLCS_SCHEMA_REFERENCE_FILE) -eq 0 ]; then
-            new_cols+=("$table.$column")
-        fi
-    done < $CURRENT_OLCS_SCHEMA_FILE
-
-    while read -r "table" "column"; do
-
-        if [ $(grep -c "$table$IFS$column" $CURRENT_OLCS_SCHEMA_FILE) -eq 0 ]; then
-            rem_cols+=("$table.$column")
-        fi
-    done < $OLCS_SCHEMA_REFERENCE_FILE
-
-    IFS=$OLDIFS
+    # Replaced slow loop and grep sub-processes with high-speed awk cross-comparison.
+    new_cols=()
+    rem_cols=()
+    while IFS=$'\t' read -r kind col; do
+        case "$kind" in
+            new) new_cols+=("$col") ;;
+            rem) rem_cols+=("$col") ;;
+        esac
+    done < <(awk -F',' -v OFS=$'\t' '
+        NR==FNR {
+            ref_lookup[$1","$2] = 1;
+            next;
+        }
+        {
+            curr_lookup[$1","$2] = 1;
+            if (!( ($1","$2) in ref_lookup )) {
+                print "new", $1 "." $2;
+            }
+        }
+        END {
+            for (key in ref_lookup) {
+                if (!(key in curr_lookup)) {
+                    split(key, parts, ",");
+                    print "rem", parts[1] "." parts[2];
+                }
+            }
+        }' "$OLCS_SCHEMA_REFERENCE_FILE" "$CURRENT_OLCS_SCHEMA_FILE")
 
     rm $CURRENT_OLCS_SCHEMA_FILE
 
@@ -324,7 +336,7 @@ check_OLCS_schema () {
     else
        echo
        ok "***********************************"
-       ok "**  schema OK - no changes found **"
+       ok "** schema OK - no changes found  **"
        ok "***********************************"
     fi
 }

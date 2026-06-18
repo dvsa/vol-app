@@ -988,7 +988,7 @@ return [
                             'route' =>
                                 'email-templates[/:action][/:id][/]',
                             'constraints' => [
-                                'action' => '(index|add|edit|delete|previewTemplate)',
+                                'action' => '(index|add|edit|delete|previewTemplate|sendTestEmail)',
                                 'id' => '[0-9\,]+',
                             ],
                             'defaults' => [

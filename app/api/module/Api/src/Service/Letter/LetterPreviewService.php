@@ -94,7 +94,11 @@ class LetterPreviewService
     }
 
     /**
-     * Render issue sections grouped by Issue Type
+     * Render issue sections grouped by Issue Type. After each type's issues, render
+     * the "What you need to do" block listing the type's to-dos — deduplication is
+     * done at generate-time (one LetterInstanceTodo per unique to-do per letter,
+     * attached to the FIRST issue that brought it), so the to-do naturally appears
+     * under whichever issue-type that first issue belongs to (VOL-7280).
      *
      * @param LetterInstance $letterInstance
      * @return string HTML for all issues grouped by type with headings
@@ -102,9 +106,10 @@ class LetterPreviewService
     private function renderIssues(LetterInstance $letterInstance): string
     {
         $issueRenderer = $this->rendererManager->get('issue');
+        $todoRenderer = null;
         $context = $this->buildVolGrabContext($letterInstance);
 
-        // Group issues by Issue Type
+        // Group issues by Issue Type, preserving display order via the order rows arrive in
         $issuesByType = [];
         foreach ($letterInstance->getLetterInstanceIssues() as $issue) {
             $issueVersion = $issue->getLetterIssueVersion();
@@ -121,16 +126,42 @@ class LetterPreviewService
             $issuesByType[$typeId]['issues'][] = $issue;
         }
 
-        // Render grouped issues
+        // Bucket each LetterInstanceTodo into its first-issue's type group (one bucket per type)
+        $todosByType = [];
+        foreach ($letterInstance->getLetterInstanceTodos() as $todo) {
+            $instanceIssue = $todo->getLetterInstanceIssue();
+            if ($instanceIssue === null) {
+                continue;
+            }
+            $issueType = $instanceIssue->getLetterIssueVersion()?->getLetterIssueType();
+            $typeId = $issueType ? $issueType->getId() : 0;
+            $todosByType[$typeId][] = $todo;
+        }
+
+        // Render grouped issues, then the type's to-do block (if any)
         $html = '';
-        foreach ($issuesByType as $typeData) {
-            // Issue Type heading
+        foreach ($issuesByType as $typeId => $typeData) {
             $html .= '<div class="issue-type-group">';
             $html .= '<h3 class="issue-type-heading">' . htmlspecialchars((string) $typeData['name']) . '</h3>';
 
-            // Render each issue under this type
             foreach ($typeData['issues'] as $issue) {
                 $html .= $issueRenderer->render($issue, $context);
+            }
+
+            if (!empty($todosByType[$typeId])) {
+                if ($todoRenderer === null) {
+                    $todoRenderer = $this->rendererManager->get('todo');
+                }
+                $items = '';
+                foreach ($todosByType[$typeId] as $todo) {
+                    $items .= $todoRenderer->render($todo, $context);
+                }
+                if ($items !== '') {
+                    $html .= '<div class="issue-todos">';
+                    $html .= '<h4 class="todo-heading" style="font-size:14pt;font-weight:bold;color:#000;">What you need to do</h4>';
+                    $html .= '<ul class="todo-list">' . $items . '</ul>';
+                    $html .= '</div>';
+                }
             }
 
             $html .= '</div>';

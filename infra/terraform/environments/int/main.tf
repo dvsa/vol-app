@@ -42,7 +42,8 @@ locals {
         "sts:AssumeRole"
       ]
       resources = [
-        "arn:aws:iam::000081644369:role/txc-int-consumer-role"
+        "arn:aws:iam::000081644369:role/txc-int-consumer-role",
+        "arn:aws:iam::054614622558:role/OLCS-DEVAPPCI-DEVCI-Cognito_Pool_Admin"
       ]
     },
     {
@@ -88,6 +89,19 @@ locals {
       resources = [
         "arn:aws:s3:::devapp-olcs-pri-olcs-autotest-s3/*",
         "arn:aws:s3:::devapp-vol-content/*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket",
+        "s3:DeleteObject"
+      ]
+      resources = [
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3",
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*"
       ]
     },
   ]
@@ -637,6 +651,8 @@ module "service" {
         name     = "data-refresh",
         commands = ["/mnt/data/scripts/data_refresh/data_refresh.sh", "qa", "eu-west-1"],
         type     = "scripts"
+        cpu      = 2,
+        memory   = 8192,
       },
     ]
   }

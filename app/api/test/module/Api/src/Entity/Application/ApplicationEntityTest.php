@@ -942,7 +942,7 @@ class ApplicationEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestPsvEvidenceSectionsCompleted')]
-    public function testPsvEvidenceSectionsCompleted(bool $isCompleted, ?int $value): void
+    public function testPsvEvidenceSectionsCompleted(mixed $isCompleted, mixed $value): void
     {
         $this->entity->setSmallVehicleEvidenceUploaded($value);
         $this->entity->setOccupationEvidenceUploaded($value);
@@ -962,8 +962,12 @@ class ApplicationEntityTest extends EntityTester
                 Entity::FINANCIAL_EVIDENCE_UPLOADED,
             ],
             'upload later' => [
-                true,
+                false,
                 Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+            ],
+            'upload later as string' => [
+                false,
+                '2',
             ],
         ];
     }

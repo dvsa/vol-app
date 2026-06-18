@@ -29,20 +29,31 @@ log_err() {
   echo "$(date +'%Y-%m-%d %H:%M:%S') ERROR: $*" >&2
 }
 
+# ===== DYNAMIC PATH DETECTION =====
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # ===== AWS REGION DETECTION =====
-TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
-  -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+# Check if running in ECS/Batch container with AWS_REGION already set; fallback to metadata
+if [[ -n "${AWS_REGION:-}" ]]; then
+  REGION="${AWS_REGION}"
+else
+  TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
+    -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" || echo "")
 
-AZ=$(curl -s -H "X-aws-ec2-metadata-token: ${TOKEN}" \
-  http://169.254.169.254/latest/meta-data/placement/availability-zone)
-
-REGION="eu-west-1"
+  if [[ -n "${TOKEN}" ]]; then
+    AZ=$(curl -s -H "X-aws-ec2-metadata-token: ${TOKEN}" \
+      http://169.254.169.254/latest/meta-data/placement/availability-zone || echo "")
+    REGION="${AZ%[a-z]}"
+  else
+    REGION="eu-west-1"
+  fi
+fi
 
 export AWS_DEFAULT_REGION="${REGION}"
 
 # ===== ASSUME ROLE =====
 log_msg "Assuming cross-account role"
-source ./s3assume.sh \
+source "${SCRIPT_DIR}/s3assume.sh" \
   "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole" \
   "${PRODTODEV_ASSUME_ROLE_ID}"
 
@@ -52,7 +63,7 @@ log_msg "Fetching latest anonymised DB dump from S3"
 mkdir -p "${DUMP_DIR}"
 
 LATEST_KEY=$(
-  /usr/local/bin/aws s3 ls "s3://${S3_BUCKET}/${S3_PREFIX}/" --recursive \
+  aws s3 ls "s3://${S3_BUCKET}/${S3_PREFIX}/" --recursive \
     | sort \
     | tail -n 1 \
     | awk '{print $4}'
@@ -65,7 +76,7 @@ fi
 
 DEST_FILE="${DUMP_DIR}/${DUMP_FILE}"
 
-/usr/local/bin/aws s3 cp \
+aws s3 cp \
   "s3://${S3_BUCKET}/${LATEST_KEY}" \
   "${DEST_FILE}" \
   >/dev/null

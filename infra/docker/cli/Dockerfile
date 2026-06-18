@@ -23,9 +23,9 @@ RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq git 
   && ln -sf /opt/awscli/bin/aws /usr/local/bin/aws \
   && aws --version
 
-
+# Retained dedicated virtual environment for Python scripts needing boto3
 RUN python3 -m venv /opt/venv \
-  && /opt/venv/bin/pip install boto3
+  && /opt/venv/bin/pip install --no-cache-dir boto3
   
 # Install fonts for document rendering.
 # LibreOffice auto-substitutes these when documents request MS fonts:
@@ -81,11 +81,14 @@ RUN mkdir -p /mnt/data/olcsdump /mnt/data/anondump\
   # Ensure scripts are executable.
   && chmod +x /mnt/data/scripts/*.sh
   
+# Replaced 'ln -t' with a standard loop compatible with BusyBox/Alpine systems
 RUN chmod +x /mnt/data/scripts/data_refresh/*.sh \
   /mnt/data/scripts/data_refresh/*.py \
   /mnt/data/scripts/niextract/anonymisation_scripts/anon/*.sh \
   /mnt/data/scripts/niextract/anonymisation_scripts/seed_generators/*.sh \
-  && ln -s /mnt/data/scripts/data_refresh/*.sh /mnt/data/scripts/data_refresh/*.py /usr/local/bin/
+  && for file in /mnt/data/scripts/data_refresh/*.sh /mnt/data/scripts/data_refresh/*.py; do \
+       ln -sf -- "$file" "/usr/local/bin/${file##*/}" || exit 1; \
+     done
 
 USER www-data
 

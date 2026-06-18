@@ -44,7 +44,8 @@ locals {
       ]
       resources = [
         "arn:aws:iam::000081644369:role/txc-int-consumer-role",
-        "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole"
+        "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole",
+        "arn:aws:iam::054614622558:role/OLCS-DEVAPPCI-DEVCI-Cognito_Pool_Admin",
       ]
     },
     {
@@ -95,6 +96,19 @@ locals {
     {
       effect = "Allow"
       actions = [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket",
+        "s3:DeleteObject"
+      ]
+      resources = [
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3",
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
         "rds:CreateDBClusterSnapshot",
         "rds:DescribeDBClusterSnapshots",
         "rds:DeleteDBClusterSnapshot",
@@ -103,7 +117,8 @@ locals {
 
         "arn:aws:rds:eu-west-1:054614622558:cluster:dev-aurora-olcsdb-cluster",
         "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*",
-        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-db-anon-*"
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-db-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
       ]
     },
     {
@@ -682,11 +697,15 @@ module "service" {
         name     = "import-anondb",
         commands = ["/mnt/data/scripts/import_anondb.sh"],
         type     = "scripts_testing"
+        cpu      = 2,
+        memory   = 8192,
       },
       {
         name     = "populate-anondb",
         commands = ["/mnt/data/scripts/populate_anondb.sh"],
         type     = "scripts"
+        cpu      = 2,
+        memory   = 8192,
       },
       {
         name     = "ni-compliance",
@@ -703,6 +722,8 @@ module "service" {
         name     = "data-refresh",
         commands = ["/mnt/data/scripts/data_refresh/data_refresh.sh", "dev", "eu-west-1"],
         type     = "scripts"
+        cpu      = 2,
+        memory   = 8192,
       },
     ]
   }

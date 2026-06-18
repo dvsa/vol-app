@@ -129,6 +129,7 @@ class Fee extends AbstractRepository
 
         $this->whereOutstandingFee($doctrineQb);
         $this->whereCurrentLicenceOrApplicationFee($doctrineQb, $organisationId);
+        $this->hideFeesForExcludedApplicationStatuses($doctrineQb);
 
         if ($hideForCeasedLicences) {
             $this->hideForCeasedLicences($doctrineQb);
@@ -174,6 +175,34 @@ class Fee extends AbstractRepository
         $doctrineQb->andWhere(
             $doctrineQb->expr()->notIn('l.status', ':ceasedStatuses')
         )->setParameter('ceasedStatuses', $ceasedStatuses);
+    }
+
+    /**
+     * Hide fees linked to applications in excluded statuses.
+     *
+     * Fees without an application are still included.
+     *
+     * @param \Doctrine\ORM\QueryBuilder $doctrineQb Doctrine query builder
+     *
+     * @return void
+     */
+    protected function hideFeesForExcludedApplicationStatuses(\Doctrine\ORM\QueryBuilder $doctrineQb): void
+    {
+        $excludedApplicationStatuses = [
+            ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED,
+            ApplicationEntity::APPLICATION_STATUS_CANCELLED,
+            ApplicationEntity::APPLICATION_STATUS_WITHDRAWN,
+        ];
+
+        $doctrineQb
+            ->leftJoin($this->alias . '.application', 'app')
+            ->andWhere(
+                $doctrineQb->expr()->orX(
+                    $doctrineQb->expr()->isNull($this->alias . '.application'),
+                    $doctrineQb->expr()->notIn('app.status', ':excludedApplicationStatuses')
+                )
+            )
+            ->setParameter('excludedApplicationStatuses', $excludedApplicationStatuses);
     }
 
     /**
@@ -586,6 +615,22 @@ class Fee extends AbstractRepository
             ->filterByLicence($query->getLicence())
             ->filterByApplication($query->getApplication())
             ->filterByIds(!empty($query->getIds()) ? $query->getIds() : null);
+
+        if ($query->getLicence() !== null && $query->getApplication() === null) {
+            $qb
+                ->leftJoin($this->alias . '.application', 'app')
+                ->andWhere(
+                    $qb->expr()->orX(
+                        $qb->expr()->isNull($this->alias . '.application'),
+                        $qb->expr()->notIn('app.status', ':excludedApplicationStatuses')
+                    )
+                )
+                ->setParameter('excludedApplicationStatuses', [
+                    ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED,
+                    ApplicationEntity::APPLICATION_STATUS_CANCELLED,
+                    ApplicationEntity::APPLICATION_STATUS_WITHDRAWN,
+                ]);
+        }
 
         if ($query->getOrganisation() !== null) {
             // all fees linked to the organisation by irfo_gv_permit_id or irfo_psv_auth_id

@@ -22,6 +22,7 @@ use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Api\Entity\Doc\Document as DocumentEntity;
 use Dvsa\Olcs\Email\Service\TemplateRenderer;
 use Laminas\Mail\Transport\Sendmail;
+use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 
 class LastTmLetterTest extends AbstractCommandHandlerTestCase
 {
@@ -663,5 +664,143 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
             $userRepo->shouldReceive('fetchFirstByEmailOrFalse')->andReturn($fetchedUser);
             $this->expectedSideEffect(SendEmail::class, [], new Result());
         }
+    }
+
+    public function testHandleCommandCreatesTaskWhenOperatorNotificationEmailFails(): void
+    {
+        $licenceRepo = $this->repoMap['Licence'];
+        $tmlRepo = $this->repoMap['TransportManagerLicence'];
+
+        $licence = m::mock(LicenceEntity::class);
+
+        $dataProvider = [
+            'licence' => [
+                'id' => 1,
+                'licNo' => 'AB123',
+                'isNi' => false,
+                'isPsv' => false,
+                'organisation' => [
+                    'allowEmail' => 'Y',
+                    'name' => 'Test Operator Ltd',
+                ],
+                'correspondenceCd' => [
+                    'emailAddress' => 'abc',
+                ],
+            ],
+            'user' => [
+                'fetchFirstByEmailOrFalse' => false,
+            ],
+            'sideEffectResults' => [
+                'GenerateAndStore' => [
+                    'ids' => [
+                        'documents' => [
+                            '123' => [
+                                'metadata' => json_encode([
+                                    'details' => [
+                                        'category' => Category::CATEGORY_TRANSPORT_MANAGER,
+                                        'documentSubCategory' => Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CORRESPONDENCE,
+                                        'documentTemplate' => 919,
+                                        'allowEmail' => 'N',
+                                        'sendToAddress' => 'correspondenceAddress',
+                                    ],
+                                ]),
+                                'address' => 'correspondenceAddress',
+                            ],
+                        ],
+                    ],
+                ],
+                'CreateTask' => [
+                    'ids' => [],
+                ],
+            ],
+        ];
+
+        $this->mockLicence($licence, $dataProvider);
+
+        $licence->shouldReceive('getActiveVariations')
+            ->once()
+            ->andReturn([]);
+
+        $this->mockCorrespondenceCd($licence, $dataProvider);
+
+        $licenceRepo->shouldReceive('fetchForLastTmAutoLetter')
+            ->once()
+            ->andReturn([$licence]);
+
+        $tmlEntity = m::mock(TransportManagerLicence::class);
+        $tmlEntity->shouldReceive('getId')->andReturn(5);
+        $tmlEntity->shouldReceive('setLastTmLetterDate')->once();
+
+        $tm = m::mock(\Dvsa\Olcs\Api\Entity\Tm\TransportManager::class);
+        $tm->shouldReceive('getId')->andReturn(1);
+        $tmlEntity->shouldReceive('getTransportManager')->andReturn($tm);
+
+        $tmlRepo->shouldReceive('fetchRemovedTmForLicence')
+            ->with(1, true)
+            ->once()
+            ->andReturn([$tmlEntity]);
+
+        $tmlRepo->shouldReceive('save')
+            ->with($tmlEntity)
+            ->once();
+
+        $generateResult = $this->getGenerateAndStoreResult(
+            $dataProvider['sideEffectResults']['GenerateAndStore']['ids']['documents']
+        );
+
+        $this->expectedSideEffect(GenerateAndStore::class, [], $generateResult);
+
+        // Existing Last TM task
+        $this->expectedSideEffect(CreateTask::class, [], new Result());
+
+        // Print document
+        $this->expectedSideEffect(
+            PrintLetter::class,
+            [],
+            $this->getPrintLetterResult(123)
+        );
+
+        $document = m::mock(DocumentEntity::class);
+        $document->shouldReceive('getMetadata')
+            ->once()
+            ->andReturn($dataProvider['sideEffectResults']['GenerateAndStore']['ids']['documents']['123']['metadata']);
+
+        $this->repoMap['Document']
+            ->shouldReceive('fetchById')
+            ->with(123)
+            ->once()
+            ->andReturn($document);
+
+        $this->repoMap['User']
+            ->shouldReceive('fetchFirstByEmailOrFalse')
+            ->once()
+            ->with('abc')
+            ->andReturn(false);
+
+        $this->commandHandler
+            ->shouldReceive('handleCommand')
+            ->with(m::type(SendEmail::class), false)
+            ->once()
+            ->andThrow(new EmailNotSentException('Email is missing a valid to address'));
+
+        // New missing/invalid email follow-up task
+        $this->expectedSideEffect(CreateTask::class, [], new Result());
+
+        $response = $this->sut->handleCommand(
+            \Dvsa\Olcs\Cli\Domain\Command\LastTmLetter::create([])
+        );
+
+        $this->assertEquals(
+            [
+                'id' => [
+                    'correspondenceAddress' => '123',
+                    'document' => 123,
+                ],
+                'messages' => [
+                    "Document id '123', queued for print",
+                ],
+            ],
+            $response->toArray()
+        );
     }
 }

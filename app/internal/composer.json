@@ -1,10 +1,33 @@
 {
   "name": "olcs/olcs-internal",
   "description": "OLCS Internal Web Site",
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../../lib/olcs-logging",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "../../lib/olcs-utils",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "../../lib/olcs-transfer",
+      "options": {
+        "symlink": true
+      }
+    }
+  ],
   "require": {
     "php": "~8.3.0",
     "ext-redis": "*",
-    "dvsa/laminas-config-cloud-parameters": "^1.0",
+    "dvsa/laminas-config-cloud-parameters": "^2.1",
     "laminas/laminas-authentication": "^2.19",
     "laminas/laminas-cache": "^3.13",
     "laminas/laminas-cache-storage-adapter-redis": "^2.10",
@@ -27,10 +50,10 @@
     "lm-commons/lmc-rbac-mvc": "^3.5",
     "firebase/php-jwt": "^7.0",
     "olcs/olcs-auth": "^9.0",
-    "olcs/olcs-common": "^9.21.0",
-    "olcs/olcs-logging": "^9.0.1",
-    "olcs/olcs-transfer": "^8.14.0",
-    "olcs/olcs-utils": "^7.1",
+    "olcs/olcs-common": "^9.22.0",
+    "olcs/olcs-logging": "*",
+    "olcs/olcs-transfer": "*",
+    "olcs/olcs-utils": "*",
     "saeven/zf3-purifier": "^1.1",
     "doctrine/doctrine-module": "^6.3",
     "psr/container": "^1.1|^2",
