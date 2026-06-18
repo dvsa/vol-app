@@ -1,0 +1,32 @@
+<div class="govuk-width-container">
+
+<div class="govuk-panel govuk-panel--confirmation">
+  <h1 class="govuk-panel__title centered">
+    Application to surrender licence %s
+  </h1>
+
+  <div class="govuk-panel__body">
+    Declaration signed through {{SIGNING_SERVICE_NAME}}<br><strong>Signed by %s on %s</strong>
+  </div>
+
+</div>
+</div>
+
+<div class="govuk-width-container">
+  <main class="govuk-main-wrapper">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h3 class="govuk-heading-m">What happens next</h3>
+          <p class="govuk-body-l">
+                We will write to you when a decision has been made about your application to surrender your licence. Until you have received a decision, you must follow the terms and conditions of your current licence.
+           </p>
+           <p class="govuk-body">
+                If you have made an error in the information you have provided or have surrendered the wrong licence you must contact the central licensing office on 0300 123 9000  or email <?php echo $this->partial('en_GB/markup-contact-email-link'); ?>
+           </p>
+            <a href="%s" type="submit" role="button" draggable="false" data-module="govuk-button" class="govuk-button">
+            Return to home
+            </a>
+       </div>
+    </div>
+</main>
+</div>

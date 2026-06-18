@@ -1,0 +1,39 @@
+<div class="field">
+    <?php
+    if (count($this->data['safety']['safetyInspectors']) > 0) {
+        echo $this->partial(
+            'partials/continuation/checklist-section',
+            [
+                'data' => $this->licenceChecklist(\Common\RefData::LICENCE_CHECKLIST_SAFETY_INSPECTORS, $this->data)
+            ]
+        );
+    } else {
+        echo $this->translate('There are no safety inspectors recorded on your licence');
+    }
+    ?>
+    <?php
+    if (
+        count($this->data['safety']['safetyInspectors'])
+        > \Common\RefData::CONTINUATIONS_DISPLAY_SAFETY_INSPECTORS_COUNT
+    ) :
+    ?>
+        <p>
+        <a
+        href="<?php echo $this->url(
+            'continuation/checklist/safety-inspectors', ['continuationDetailId' => $this->data['continuationDetailId']])
+        ; ?>"
+        class="govuk-button govuk-button--secondary" target="_blank" role="button" draggable="false">
+        <?php echo $this->translate('continuations.safety-inspectors.button-label'); ?>
+        </a>
+        </p>
+        <p><?php echo $this->translate('continuations.checklist.section.opens_in_a_new_window'); ?></p>
+    <?php endif; ?>
+</div>
+<h3><?php echo $this->translate('continuations.safety-details.label'); ?></h3>
+<?php echo $this->partial(
+    'partials/continuation/checklist-section',
+    [
+        'data' => $this->licenceChecklist(\Common\RefData::LICENCE_CHECKLIST_SAFETY_DETAILS, $this->data)
+    ]
+);
+

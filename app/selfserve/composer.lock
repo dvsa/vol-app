@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "c745b161cf0eafef60149cfa4270ee62",
+  "content-hash": "66daa4ec1a353045425fdd0bb426f6cd",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -3994,17 +3994,11 @@
     },
     {
       "name": "olcs/olcs-common",
-      "version": "v9.22.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/dvsa/olcs-common.git",
-        "reference": "08289535d13b8d902c0d0f30c46dd3fc72a8fa69"
-      },
+      "version": "9.22.0",
       "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/08289535d13b8d902c0d0f30c46dd3fc72a8fa69",
-        "reference": "08289535d13b8d902c0d0f30c46dd3fc72a8fa69",
-        "shasum": ""
+        "type": "path",
+        "url": "../../lib/olcs-common",
+        "reference": "997cab118bd8a6b16c7d960c299c59321243a2d9"
       },
       "require": {
         "ezyang/htmlpurifier": "^4.17",
@@ -4056,12 +4050,26 @@
         },
         "classmap": ["./Common/src/Module.php"]
       },
-      "notification-url": "https://packagist.org/downloads/",
-      "description": "Common library for the OLCS Project",
-      "support": {
-        "source": "https://github.com/dvsa/olcs-common/tree/v9.22.0"
+      "autoload-dev": {
+        "psr-4": {
+          "CommonTest\\": "test/Common/src/"
+        }
       },
-      "time": "2026-06-08T13:40:54+00:00"
+      "scripts": {
+        "bin": ["echo 'bin not installed'"],
+        "post-install-cmd": ["@composer bin all install"],
+        "test": ["phpunit"],
+        "phpcs": ["phpcs"],
+        "psalm": ["psalm"],
+        "phpstan": ["phpstan"],
+        "all": ["@test", "@phpcs", "@psalm", "@phpstan"]
+      },
+      "license": ["MIT"],
+      "description": "Common library for the OLCS Project",
+      "transport-options": {
+        "symlink": true,
+        "relative": true
+      }
     },
     {
       "name": "olcs/olcs-logging",
@@ -4128,7 +4136,7 @@
       "dist": {
         "type": "path",
         "url": "../../lib/olcs-transfer",
-        "reference": "00f8be9bdb67e37f84d1143fec12cbfdb153daab"
+        "reference": "1e609486e60e8266a840fb71a6f319d23743a91a"
       },
       "require": {
         "ext-igbinary": "*",
@@ -4181,6 +4189,7 @@
         "phpstan": ["phpstan"],
         "all": ["@test", "@phpcs", "@psalm", "@phpstan"]
       },
+      "license": ["MIT"],
       "description": "OLCS Transfer",
       "transport-options": {
         "symlink": true,

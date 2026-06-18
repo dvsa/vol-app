@@ -1,0 +1,47 @@
+<?php $ocChanges = $this->data['operatingCentres']['ocChanges']; ?>
+<?php if ($ocChanges > 0): ?>
+    <p class="important">
+        <?php
+            echo $ocChanges
+                . ' '
+                . $this->escapeHtml($this->translate('continuations.pending.change'. ($ocChanges > 1 ? 's' : '')));
+        ?>
+    </p>
+<?php endif;?>
+<?php if ($this->data['operatingCentres']['totalOperatingCentres'] > 0): ?>
+<div class="field">
+    <?php
+    echo $this->partial(
+        'partials/continuation/checklist-section',
+        [
+            'data' => $this->licenceChecklist(\Common\RefData::LICENCE_CHECKLIST_OPERATING_CENTRES, $this->data)
+        ]
+    );
+    ?>
+    <?php
+    if (
+        count($this->data['operatingCentres']['operatingCentres'])
+        > \Common\RefData::CONTINUATIONS_DISPLAY_OPERATING_CENTRES_COUNT
+    ) :
+    ?>
+        <p>
+        <a
+        href="<?php echo $this->url(
+            'continuation/checklist/operating-centres', ['continuationDetailId' => $this->data['continuationDetailId']])
+        ; ?>"
+        class="govuk-button govuk-button--secondary" target="_blank" role="button" draggable="false">
+        <?php echo $this->escapeHtml($this->translate('continuations.operating-centres.button-label')); ?>
+        </a>
+        </p>
+        <p><?php echo $this->escapeHtml($this->translate('continuations.checklist.section.opens_in_a_new_window')); ?></p>
+    <?php endif; ?>
+</div>
+<?php endif; ?>
+<h3><?php echo $this->escapeHtml($this->translate('continuations.authorisation.label')); ?></h3>
+<?php echo $this->partial(
+    'partials/continuation/checklist-section',
+    [
+        'data' => $this->licenceChecklist(\Common\RefData::LICENCE_CHECKLIST_OPERATING_CENTRES_AUTHORITY, $this->data)
+    ]
+);
+
