@@ -48,6 +48,7 @@ for task in "${TASKS[@]}"; do
 
     mysql $CONNECTION -NB "$DB" < "$GEN_FILE" > "$OUT_FILE" &
     CURRENT_PIDS+=($!)
+    ALL_PIDS+=($!)
 done
 
 wait
