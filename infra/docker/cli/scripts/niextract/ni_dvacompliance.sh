@@ -60,11 +60,18 @@ cleanup() {
 
     aws rds delete-db-instance \
       --db-instance-identifier "$tmp_instance_id" \
-      --skip-final-snapshot --region $region >/dev/null 2>&1 || true
+      --skip-final-snapshot --region "$region" >/dev/null 2>&1 || true
+    aws rds wait db-instance-deleted \
+      --db-instance-identifier "$tmp_instance_id" --region "$region" >/dev/null 2>&1 || true
 
     aws rds delete-db-cluster \
       --db-cluster-identifier "$tmp_cluster_id" \
-      --skip-final-snapshot --region $region >/dev/null 2>&1 || true
+      --skip-final-snapshot --region "$region" >/dev/null 2>&1 || true
+    aws rds wait db-cluster-deleted \
+      --db-cluster-identifier "$tmp_cluster_id" --region "$region" >/dev/null 2>&1 || true
+
+    aws rds delete-db-cluster-snapshot \
+      --db-cluster-snapshot-identifier "$snapshot_id" --region "$region" >/dev/null 2>&1 || true
   fi
 }
 trap cleanup EXIT
