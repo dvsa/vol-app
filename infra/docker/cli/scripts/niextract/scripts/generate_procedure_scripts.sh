@@ -1,12 +1,16 @@
-#!/bin/env bash
+#!/usr/bin/env bash
+
+if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "ERROR: Missing parameters."
+    echo "Usage: $(basename "$0") <connection_string> <database_name>"
+    exit 1
+fi
 
 CONNECTION=$1
 DB=$2
 
-# Configuration: Maximum parallel database connections to protect Aurora ACU scaling
 MAX_PARALLEL_JOBS=3
 
-# Mappings of generator scripts to output files
 declare -a TASKS=(
     "generate-sp_drop_constraints.sql:sp_drop_constraints.sql"
     "generate-sp_add_original_constraints.sql:sp_add_original_constraints.sql"
@@ -21,24 +25,30 @@ declare -a TASKS=(
 
 echo "Starting optimized metadata compilation against $DB..."
 
-# Loop through tasks and execute with parallel throttling
+declare -a CURRENT_PIDS=()
+
 for task in "${TASKS[@]}"; do
-    # Split the mapping key/value
     GEN_FILE="${task%%:*}"
     OUT_FILE="${task#*:}"
 
-    # Execute mysql generation in the background
-    (
-        mysql $CONNECTION -e "USE $DB;\. $GEN_FILE" | tr -d '/-/' > "$OUT_FILE"
-    ) &
-
-    # Throttling gate: If we hit the max jobs, wait for at least one to finish
-    while [ "$(jobs -r | wc -l)" -ge "$MAX_PARALLEL_JOBS" ]; do
-        sleep 0.1
+    while [ "${#CURRENT_PIDS[@]}" -ge "$MAX_PARALLEL_JOBS" ]; do
+        TEMP_PIDS=()
+        for pid in "${CURRENT_PIDS[@]}"; do
+            if kill -0 "$pid" 2>/dev/null; then
+                TEMP_PIDS+=("$pid")
+            fi
+        done
+        CURRENT_PIDS=("${TEMP_PIDS[@]}")
+        
+        if [ "${#CURRENT_PIDS[@]}" -ge "$MAX_PARALLEL_JOBS" ]; then
+            sleep 0.5
+        fi
     done
+
+    mysql $CONNECTION "$DB" < "$GEN_FILE" > "$OUT_FILE" &
+    CURRENT_PIDS+=($!)
 done
 
-# Wait for all remaining background jobs to finish cleanly
 wait
 
 echo "All SP maintenance files compiled successfully inside AWS Batch."
