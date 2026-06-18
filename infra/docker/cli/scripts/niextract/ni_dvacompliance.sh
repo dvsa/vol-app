@@ -179,20 +179,23 @@ fi
 log "Running NI Extract"
 
 cd "${script_dir}"
-<% if @env != 'prod' -%>
-./NI_Extract.sh \
-  -c "-h${endpoint} -umaster" \
-  -d readdb_host \
-  -A \
-  -a $script_dir/anonymisation_scripts/anon \
-  -f /tmp/anon\
-  -X /tmp/xml
-<% else -%>
-./NI_Extract.sh \
-  -c "-h${endpoint} -umaster" \
-  -d readdb_host \
-  -X /tmp/xml
-  
+xml_dir="/tmp/xml"
+anon_dir="/tmp/anon"
+
+if [[ "${ENVIRONMENT_NAME}" != "APP" ]]; then
+  ./NI_Extract.sh \
+    -c "-h${endpoint} -umaster -p${M_DB_PASSWORD}" \
+    -d "${db_name}" \
+    -A \
+    -a "${script_dir}/anonymisation_scripts/anon" \
+    -f "${anon_dir}" \
+    -X "${xml_dir}"
+else
+  ./NI_Extract.sh \
+    -c "-h${endpoint} -umaster -p${M_DB_PASSWORD}" \
+    -d "${db_name}" \
+    -X "${xml_dir}"
+fi
 
 ###############################################
 # 7. UPLOAD RESULT TO S3
