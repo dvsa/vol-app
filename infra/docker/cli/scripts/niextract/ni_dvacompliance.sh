@@ -213,9 +213,7 @@ fi
 
 log "Uploading ${output_file} to S3"
 
-aws s3 cp "$output_file" s3://$dva_report_bucket/dvacompliance/
-
-if [ $? -ne 0 ]; then
+if ! aws s3 cp "$output_file" s3://$dva_report_bucket/dvacompliance/; then
   loge "Failed to upload extract to S3"
   exit 1
 fi
