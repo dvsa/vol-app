@@ -268,9 +268,6 @@ source "$SCRIPT_DIR/s3assume.sh" "arn:aws:iam::054614622558:role/DBAM-ProdToDev-
 export http_proxy="$saved_http_proxy"
 export https_proxy="$saved_https_proxy"
 export NO_PROXY="$saved_no_proxy"
-export http_proxy="$saved_http_proxy"
-export https_proxy="$saved_https_proxy"
-export NO_PROXY="$saved_no_proxy"
 
 log "Uploading anonymised dumps to S3"
 aws s3 cp $anondb_dump_dir s3://devapp-olcs-pri-olcs-deploy-s3/anondata/ \
