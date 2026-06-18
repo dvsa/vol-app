@@ -27,9 +27,9 @@ BEGIN
     SELECT CONCAT(@total,' queue rows to delete.') AS '' ;
 
     /*
-      TRUNCATE is a DDL command that implicitly commits active transactions 
-      and cannot be rolled back by the EXIT HANDLER. Swapped to a batched 
-      DELETE loop to safely honor transactional boundaries and rollback safety.
+      TRUNCATE is a DDL command that implicitly commits active transactions and cannot be rolled back.
+      Use a batched DELETE loop instead to avoid implicit commits; this procedure still commits each batch
+      intentionally to keep transactions small.
     */
     SET @rowcount := 10000;
     SET @total_deleted := 0;
