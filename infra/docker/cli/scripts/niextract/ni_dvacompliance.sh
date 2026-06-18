@@ -185,3 +185,31 @@ cd "${script_dir}"
   -c "-h${endpoint} -umaster" \
   -d readdb_host \
   -X /tmp/xml
+  
+
+###############################################
+# 7. UPLOAD RESULT TO S3
+###############################################
+log "Locating extract output"
+
+output_file=$(find /tmp/anon -type f -name "*.tar.gz" | head -n 1)
+
+if [[ -z "$output_file" ]]; then
+  loge "No extract file produced"
+  exit 1
+fi
+
+log "Uploading ${output_file} to S3"
+
+aws s3 cp "$output_file" s3://<%= @dva_report_bucket %>/dvacompliance/
+
+if [ $? -ne 0 ]; then
+  loge "Failed to upload extract to S3"
+  exit 1
+fi
+
+log "Upload successful"
+
+# Cleanup local files (matches original behaviour)
+rm -f "$output_file"
+rm -f <%= @ni_dvacompliance_dir %>/*.dat || true
