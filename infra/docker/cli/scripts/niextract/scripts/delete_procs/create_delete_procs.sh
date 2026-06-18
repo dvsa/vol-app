@@ -7,7 +7,7 @@ DB=$2
 TMP_SQL=$(mktemp)
 
 # Initialise the file with the target database context
-echo "USE $DB;" > "$TMP_SQL"
+echo "USE \`$DB\`;" > "$TMP_SQL"
 
 # Safely loop through the matching files using native globbing
 for file in sp_delete*.sql; do
