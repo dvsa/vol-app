@@ -4,20 +4,9 @@ CONNECTION=$1
 DB=$2
 
 # drop constraints  and indices not required for extract
-
-mysql $CONNECTION -e "use $DB;CALL sp_drop_constraints;"
-
-mysql $CONNECTION -e "use $DB;CALL sp_drop_indices;"
-
 # add required contraints for the extract
-
-mysql $CONNECTION -e "use $DB;CALL sp_add_NI_Extract_constraints;"
-
 # drop triggers
-
-mysql $CONNECTION -e "use $DB;CALL sp_drop_triggers;"
-
 # drop _hist tables
+# Unable to run in parallel due to foreign key constraints, so all in one call to avoid deadlocks
 
-mysql $CONNECTION -e "use $DB;CALL sp_drop_hist_tables;"
-
+mysql $CONNECTION -e "USE $DB; CALL sp_drop_constraints; CALL sp_drop_indices; CALL sp_add_NI_Extract_constraints; CALL sp_drop_triggers; CALL sp_drop_hist_tables;"
