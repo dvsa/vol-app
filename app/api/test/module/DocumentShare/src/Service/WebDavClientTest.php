@@ -155,7 +155,8 @@ class WebDavClientTest extends MockeryTestCase
 
         $result = $this->sut->remove('testFileToUnlink');
 
-        static::assertEquals(true, $result);
+        static::assertTrue($result->isOk());
+        static::assertSame(200, $result->getStatusCode());
     }
 
     public function testRemoveFail(): void
@@ -164,7 +165,8 @@ class WebDavClientTest extends MockeryTestCase
 
         $result = $this->sut->remove('testFileToUnlink');
 
-        static::assertEquals(false, $result);
+        static::assertFalse($result->isSuccess());
+        static::assertSame(500, $result->getStatusCode());
     }
 
     public function testRemoveFileNotFound(): void
@@ -175,6 +177,7 @@ class WebDavClientTest extends MockeryTestCase
 
         $result = $this->sut->remove('testFileToUnlink');
 
-        static::assertEquals(false, $result);
+        static::assertTrue($result->isNotFound());
+        static::assertSame(404, $result->getStatusCode());
     }
 }

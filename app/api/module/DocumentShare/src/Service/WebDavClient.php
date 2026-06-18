@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\DocumentShare\Service;
 
 use Dvsa\Olcs\DocumentShare\Data\Object\File;
+use Laminas\Http\Response;
 use League\Flysystem\FileExistsException;
 use League\Flysystem\FileNotFoundException;
 use League\Flysystem\FilesystemInterface;
@@ -84,16 +85,20 @@ class WebDavClient implements DocumentStoreInterface
      *
      * @param bool   $hard
      *
-     * @return bool
+     * @return Response
      */
     #[\Override]
-    public function remove($path, $hard = false): bool
+    public function remove($path, $hard = false): Response
     {
+        $response = new Response();
+
         try {
-            return $this->filesystem->delete($path);
+            $response->setStatusCode($this->filesystem->delete($path) ? 200 : 500);
         } catch (FileNotFoundException) {
-            return false;
+            $response->setStatusCode(404);
         }
+
+        return $response;
     }
 
     /**
@@ -111,8 +116,6 @@ class WebDavClient implements DocumentStoreInterface
         $response = new WebDavResponse();
         try {
             $this->logger->debug('Opening file for reading', ['file' => $file->getResource(), 'path' => $path]);
-
-            $this->logger->debug('File contents', ['contents' => file_get_contents($file->getResource())]);
 
             $fh = fopen($file->getResource(), 'rb');
 
