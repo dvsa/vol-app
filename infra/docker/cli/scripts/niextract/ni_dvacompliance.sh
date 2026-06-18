@@ -13,6 +13,7 @@ set -euo pipefail
 : "${READDB_HOST:?READDB_HOST is required}"
 : "${M_DB_PASSWORD:?M_DB_PASSWORD is required}"
 : "${ENVIRONMENT_NAME:?ENVIRONMENT_NAME is required}"
+: "${DVA_REPORT_BUCKET:?DVA_REPORT_BUCKET is required}"
 
 export http_proxy="http://${PROXY}"
 export https_proxy="http://${PROXY}"
@@ -22,6 +23,7 @@ region="eu-west-1"
 tmp_cluster_id="ni-extract-$(date +%Y%m%d%H%M%S)-${RANDOM}"
 tmp_instance_id="${tmp_cluster_id}-instance"
 db_cluster_id=${DBCLUSTER_ID}
+dva_report_bucket=${DVA_REPORT_BUCKET}
 snapshot_id="${tmp_cluster_id}-snap"
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readdb_host=${READDB_HOST}
@@ -202,7 +204,7 @@ fi
 ###############################################
 log "Locating extract output"
 
-output_file=$(find /tmp/anon -type f -name "*.tar.gz" | head -n 1)
+output_file=$(find $xml_dir -type f -name "*.tar.gz" | head -n 1)
 
 if [[ -z "$output_file" ]]; then
   loge "No extract file produced"
@@ -211,7 +213,7 @@ fi
 
 log "Uploading ${output_file} to S3"
 
-aws s3 cp "$output_file" s3://<%= @dva_report_bucket %>/dvacompliance/
+aws s3 cp "$output_file" s3://$dva_report_bucket/dvacompliance/
 
 if [ $? -ne 0 ]; then
   loge "Failed to upload extract to S3"
@@ -219,7 +221,3 @@ if [ $? -ne 0 ]; then
 fi
 
 log "Upload successful"
-
-# Cleanup local files (matches original behaviour)
-rm -f "$output_file"
-rm -f "${anon_dir}"/*.dat || true
