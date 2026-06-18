@@ -222,4 +222,4 @@ log "Upload successful"
 
 # Cleanup local files (matches original behaviour)
 rm -f "$output_file"
-rm -f <%= @ni_dvacompliance_dir %>/*.dat || true
+rm -f "${anon_dir}"/*.dat || true
