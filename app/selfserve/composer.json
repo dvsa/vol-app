@@ -15,6 +15,13 @@
       "options": {
         "symlink": true
       }
+    },
+    {
+      "type": "path",
+      "url": "../../lib/olcs-transfer",
+      "options": {
+        "symlink": true
+      }
     }
   ],
   "require": {
@@ -43,7 +50,7 @@
     "olcs/olcs-auth": "^9.0",
     "olcs/olcs-common": "^9.22.0",
     "olcs/olcs-logging": "*",
-    "olcs/olcs-transfer": "^8.6.1",
+    "olcs/olcs-transfer": "*",
     "olcs/olcs-utils": "*",
     "psr/container": "^1.1|^2",
     "aws/aws-sdk-php": "^3.369",
