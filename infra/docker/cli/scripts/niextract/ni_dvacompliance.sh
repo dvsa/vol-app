@@ -184,10 +184,10 @@ cd "${script_dir}"
 xml_dir="/tmp/xml"
 anon_dir="/tmp/anon"
 
-if [[ "${ENVIRONMENT_NAME}" != "APP" ]]; then
+if [[ "${ENVIRONMENT_NAME}" != "PROD" ]]; then
   ./NI_Extract.sh \
     -c "-h${endpoint} -umaster -p${M_DB_PASSWORD}" \
-    -d "${db_name}" \
+    -d "${readdb_host}" \
     -A \
     -a "${script_dir}/anonymisation_scripts/anon" \
     -f "${anon_dir}" \
@@ -195,7 +195,7 @@ if [[ "${ENVIRONMENT_NAME}" != "APP" ]]; then
 else
   ./NI_Extract.sh \
     -c "-h${endpoint} -umaster -p${M_DB_PASSWORD}" \
-    -d "${db_name}" \
+    -d "${readdb_host}" \
     -X "${xml_dir}"
 fi
 
