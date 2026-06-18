@@ -20,24 +20,29 @@ BEGIN
   
     SET autocommit=0;
     
-    SELECT 'Identifying address rows to delete.' AS '' ;
-
     DROP TABLE IF EXISTS `tmpTM`;
-    CREATE TEMPORARY TABLE `tmpTM` ( 
-        `id` int(10) unsigned NOT NULL,
-        PRIMARY KEY (`id`) 
-    );
     
-    INSERT INTO tmpTM (id)
-    SELECT tm.id 
-    FROM transport_manager tm
-    LEFT JOIN user u ON tm.id = u.transport_manager_id
-    LEFT JOIN transport_manager_licence tml ON tm.id = tml.transport_manager_id
-    LEFT JOIN transport_manager_application tma ON tm.id = tma.transport_manager_id
-    WHERE u.transport_manager_id IS NULL
-      AND tml.transport_manager_id IS NULL
-      AND tma.transport_manager_id IS NULL;
+    CREATE TEMPORARY TABLE `tmpTM`
+    AS SELECT id from transport_manager;
 
+    SELECT 'Identifying transport_manager rows to delete.' AS '' ;
+    
+    DELETE FROM tmpTM
+    WHERE id IN (SELECT DISTINCT transport_manager_id
+        FROM user
+        WHERE transport_manager_id is not null);
+                 
+    DELETE FROM tmpTM
+    WHERE id IN (SELECT DISTINCT transport_manager_id
+        FROM transport_manager_licence
+        WHERE transport_manager_id is not null);             
+
+    DELETE FROM tmpTM
+    WHERE id IN (SELECT DISTINCT transport_manager_id
+        FROM transport_manager_application
+        WHERE transport_manager_id is not null);     
+
+    
     SELECT COUNT(*)
     INTO @total
     FROM tmpTM;
@@ -46,15 +51,12 @@ BEGIN
 
     DROP TABLE IF EXISTS `tmpTMBatch`;
     CREATE TEMPORARY TABLE `tmpTMBatch` ( 
-        `id` int(10) unsigned NOT NULL,
-        PRIMARY KEY (`id`) 
-    );
+    `id` int(10) unsigned NOT NULL,
+    PRIMARY KEY (`id`) );
 
     SET @total:=0;
     SET @rowcount:=10000;
     
-    START TRANSACTION;
-
     WHILE(@rowcount = 10000) DO
 
         INSERT INTO tmpTMBatch (id)
@@ -74,12 +76,7 @@ BEGIN
 
         TRUNCATE TABLE tmpTMBatch;
         
-        COMMIT;
-        START TRANSACTION;
-        
     END WHILE;
-
-    COMMIT;
 
     SET autocommit=1;
 
