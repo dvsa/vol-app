@@ -10,29 +10,20 @@ RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
   && docker-php-ext-enable igbinary apcu redis \
   && apk del pcre-dev $PHPIZE_DEPS
 
-# Install system packages: icu-dev, libzip-dev, cups-client (provides lpr command for printing)
-# Install PHP extensions: intl, pdo_mysql, opcache, zip
 RUN apk add --no-cache icu-dev libzip-dev cups-client poppler-utils bash \
   && docker-php-ext-configure intl \
   && docker-php-ext-configure zip \
   && docker-php-ext-install pdo_mysql opcache intl zip
 
-RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq git \
+RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl jq git coreutils \
   && python3 -m venv /opt/awscli \
   && /opt/awscli/bin/pip install --no-cache-dir awscli \
   && ln -sf /opt/awscli/bin/aws /usr/local/bin/aws \
   && aws --version
 
-# Retained dedicated virtual environment for Python scripts needing boto3
 RUN python3 -m venv /opt/venv \
   && /opt/venv/bin/pip install --no-cache-dir boto3
   
-# Install fonts for document rendering.
-# LibreOffice auto-substitutes these when documents request MS fonts:
-#   Arial/Times New Roman/Courier New → Liberation Sans/Serif/Mono (font-liberation)
-#   Calibri                           → Carlito                    (font-carlito)
-# Liberation Sans Narrow was explicitly required by document templates.
-# Noto fonts provide broad Unicode coverage for docstore templates.
 # hadolint ignore=DL3019
 RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
   && apk add --no-cache \
@@ -42,11 +33,9 @@ RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repo
     font-noto \
     fontconfig
 
-# Install barcode font for CUPS printing
 COPY 3OF9.TTF /usr/share/fonts/3OF9.TTF
 RUN fc-cache -fv
 
-# PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
 
 EXPOSE 8080
@@ -55,40 +44,27 @@ FROM cli AS production
 
 ADD ./api.tar.gz /var/www/html
 
-# Add bash scripts
 COPY ./scripts/ /mnt/data/scripts/
 
-# `chown` and `chmod` flags do not work with `ADD` command when adding a tarball.
-# https://github.com/docker/docs/issues/7305
 RUN chown -R root:www-data /var/www/html \
-  # Reset the permissions of the application files.
   && chmod -R 644 /var/www/html \
-  # Add owner (`root`) and group (`www-data`) execute permissions on directories.
   && find /var/www/html -type d -exec chmod 755 {} \; \
-  # Add group (`www-data`) write permissions to the cache directory files.
   && chmod -R 664 /var/www/html/data/cache \
-  # Add group (`www-data`) write permissions on the cache directories.
   && find /var/www/html/data/cache -type d -exec chmod 775 {} \; \
-  # Ensure Laminas binary is executable for CLI jobs.
   && chmod +x /var/www/html/vendor/bin/laminas
 
-  # Create olcsdump and anondump directory.
-RUN mkdir -p /mnt/data/olcsdump /mnt/data/anondump\
-  # Set directory ownership.
-  && chown root:www-data /mnt/data/olcsdump /mnt/data/scripts/ /mnt/data/anondump \
-  # Set directory permissions.
-  && chmod 775 /mnt/data/olcsdump /mnt/data/scripts/ /mnt/data/anondump \
-  # Ensure scripts are executable.
+RUN mkdir -p /mnt/data/olcsdump /mnt/data/anondump \
+  && chown -R root:www-data /mnt/data/olcsdump /mnt/data/scripts/ /mnt/data/anondump \
+  && chmod -R 775 /mnt/data/olcsdump /mnt/data/scripts/ /mnt/data/anondump \
   && chmod +x /mnt/data/scripts/*.sh
   
-# Replaced 'ln -t' with a standard loop compatible with BusyBox/Alpine systems
 RUN chmod +x /mnt/data/scripts/data_refresh/*.sh \
   /mnt/data/scripts/data_refresh/*.py \
   /mnt/data/scripts/niextract/anonymisation_scripts/anon/*.sh \
   /mnt/data/scripts/niextract/anonymisation_scripts/seed_generators/*.sh \
-  && for file in /mnt/data/scripts/data_refresh/*.sh /mnt/data/scripts/data_refresh/*.py; do \
-       ln -sf -- "$file" "/usr/local/bin/${file##*/}" || exit 1; \
-     done
+  && find /mnt/data/scripts/ -type f \( -name "*.sh" -o -name "*.py" \) -exec ln -sf -- {} /usr/local/bin/ \;
+
+WORKDIR /mnt/data
 
 USER www-data
 
@@ -105,9 +81,7 @@ RUN apk update && \
   && docker-php-ext-enable ldap
 
 RUN \
-  # Disable OPCache in development.
   echo "opcache.enable=0" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  # Setup Xdebug.
   && echo "[xdebug]" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
   && echo "xdebug.log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
   && echo "xdebug.remote_log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
