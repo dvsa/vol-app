@@ -259,11 +259,14 @@ mysql -h $endpoint -u master -p${pass} \
   > $anondb_dump_dir/olcs-dbtables-anon-$env-$DATE.txt
 
 log "Assuming role for S3 upload"
+saved_http_proxy="${http_proxy-}"
+saved_https_proxy="${https_proxy-}"
+saved_no_proxy="${NO_PROXY-}"
 source "$SCRIPT_DIR/s3assume.sh" "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole" "$nonprod_assume_external_id"
 
-export http_proxy=http://${PROXY}
-export https_proxy=http://${PROXY}
-export NO_PROXY=169.254.169.254,169.254.170.2,localhost,127.0.0.1,.s3.eu-west-1.amazonaws.com,.s3.amazonaws.com,sts.eu-west-1.amazonaws.com,sts.amazonaws.com
+export http_proxy="$saved_http_proxy"
+export https_proxy="$saved_https_proxy"
+export NO_PROXY="$saved_no_proxy"
 
 log "Uploading anonymised dumps to S3"
 aws s3 cp $anondb_dump_dir s3://devapp-olcs-pri-olcs-deploy-s3/anondata/ \
