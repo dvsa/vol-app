@@ -24,8 +24,9 @@ BEGIN
     
     DROP TABLE IF EXISTS `tmpPerson`;
     CREATE TEMPORARY TABLE `tmpPerson` ( 
-    `id` int(10) unsigned NOT NULL,
-    PRIMARY KEY (`id`) );
+        `id` int(10) unsigned NOT NULL,
+        PRIMARY KEY (`id`) 
+    );
   
     INSERT INTO tmpPerson (id)
     SELECT p.id 
@@ -45,8 +46,9 @@ BEGIN
 
     DROP TABLE IF EXISTS `tmpPersonBatch`;
     CREATE TEMPORARY TABLE `tmpPersonBatch` ( 
-    `id` int(10) unsigned NOT NULL,
-    PRIMARY KEY (`id`) );
+        `id` int(10) unsigned NOT NULL,
+        PRIMARY KEY (`id`) 
+    );
 
     SELECT COUNT(*)
     INTO @total
@@ -61,26 +63,22 @@ BEGIN
 
     WHILE(@rowcount = 10000) DO
 
-        INSERT tmpPersonBatch
+        INSERT INTO tmpPersonBatch (id)
         SELECT id FROM tmpPerson
         LIMIT 10000;
         
-
-    
         DELETE FROM person
-        WHERE id IN ( SELECT id from tmpPersonBatch);
+        WHERE id IN (SELECT id FROM tmpPersonBatch);
 
         SET @rowcount := row_count();
         SET @total := @total + @rowcount;
     
         DELETE FROM tmpPerson
-        LIMIT 10000;
+        WHERE id IN (SELECT id FROM tmpPersonBatch);
         
-
-    
         SELECT CONCAT(@total,' person rows deleted.') AS '';
 
-        truncate table tmpPersonBatch;
+        TRUNCATE TABLE tmpPersonBatch;
         
         COMMIT;
         START TRANSACTION;

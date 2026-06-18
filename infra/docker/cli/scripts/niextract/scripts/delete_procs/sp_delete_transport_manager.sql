@@ -68,7 +68,7 @@ BEGIN
         SET @total := @total + @rowcount;
     
         DELETE FROM tmpTM
-        LIMIT 10000;
+        WHERE id IN (SELECT id FROM tmpTMBatch);
         
         SELECT CONCAT(@total,' transport_manager rows deleted.') AS '';
 

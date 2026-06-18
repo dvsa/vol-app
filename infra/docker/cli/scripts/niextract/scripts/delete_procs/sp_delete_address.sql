@@ -22,8 +22,9 @@ BEGIN
 
     DROP TABLE IF EXISTS `tmpAddress`;
     CREATE TEMPORARY TABLE `tmpAddress` ( 
-    `id` int(10) unsigned NOT NULL,
-    PRIMARY KEY (`id`) );
+        `id` int(10) unsigned NOT NULL,
+        PRIMARY KEY (`id`) 
+    );
 
     SELECT 'Identifying address rows to delete.' AS '' ;
     
@@ -45,8 +46,9 @@ BEGIN
 
     DROP TABLE IF EXISTS `tmpAddressBatch`;
     CREATE TEMPORARY TABLE `tmpAddressBatch` ( 
-    `id` int(10) unsigned NOT NULL,
-    PRIMARY KEY (`id`) );
+        `id` int(10) unsigned NOT NULL,
+        PRIMARY KEY (`id`) 
+    );
 
     SET @total:=0;
     SET @rowcount:=10000;
@@ -55,26 +57,22 @@ BEGIN
 
     WHILE(@rowcount = 10000) DO
 
-        INSERT tmpAddressBatch
-        SELECT id FROM  tmpAddress
+        INSERT INTO tmpAddressBatch (id)
+        SELECT id FROM tmpAddress
         LIMIT 10000;
         
-
-    
         DELETE FROM address
-        WHERE id IN ( SELECT id from tmpAddressBatch);
+        WHERE id IN (SELECT id FROM tmpAddressBatch);
 
         SET @rowcount := row_count();
         SET @total := @total + @rowcount;
     
         DELETE FROM tmpAddress
-        LIMIT 10000;
+        WHERE id IN (SELECT id FROM tmpAddressBatch);
         
-
-    
         SELECT CONCAT(@total,' address rows deleted.') AS '';
 
-        truncate table tmpAddressBatch;
+        TRUNCATE TABLE tmpAddressBatch;
         
         COMMIT;
         START TRANSACTION;

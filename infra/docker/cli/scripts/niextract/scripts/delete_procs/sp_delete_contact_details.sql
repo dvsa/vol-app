@@ -24,8 +24,9 @@ BEGIN
     
     DROP TABLE IF EXISTS `tmpCD`;
     CREATE TEMPORARY TABLE `tmpCD` ( 
-    `id` int(10) unsigned NOT NULL,
-    PRIMARY KEY (`id`) );
+        `id` int(10) unsigned NOT NULL,
+        PRIMARY KEY (`id`) 
+    );
   
     INSERT INTO tmpCD (id)
     SELECT c.id 
@@ -61,8 +62,9 @@ BEGIN
 
     DROP TABLE IF EXISTS `tmpCDbatch`;
     CREATE TEMPORARY TABLE `tmpCDbatch` ( 
-    `id` int(10) unsigned NOT NULL,
-    PRIMARY KEY (`id`) );
+        `id` int(10) unsigned NOT NULL,
+        PRIMARY KEY (`id`) 
+    );
 
     SELECT COUNT(*)
     INTO @total
@@ -77,26 +79,22 @@ BEGIN
 
     WHILE(@rowcount = 10000) DO
 
-        INSERT tmpCDbatch
-        SELECT id FROM  tmpCD
+        INSERT INTO tmpCDbatch (id)
+        SELECT id FROM tmpCD
         LIMIT 10000;
         
-
-    
         DELETE FROM contact_details
-        WHERE id IN ( SELECT id from tmpCDbatch);
+        WHERE id IN (SELECT id FROM tmpCDbatch);
 
         SET @rowcount := row_count();
         SET @total := @total + @rowcount;
     
         DELETE FROM tmpCD
-        LIMIT 10000;
+        WHERE id IN (SELECT id FROM tmpCDbatch);
         
-
-    
         SELECT CONCAT(@total,' contact_details rows deleted.') AS '';
 
-        truncate table tmpCDbatch;
+        TRUNCATE TABLE tmpCDbatch;
         
         COMMIT;
         START TRANSACTION;
