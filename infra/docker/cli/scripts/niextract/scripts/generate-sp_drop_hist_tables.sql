@@ -1,11 +1,9 @@
-SELECT 'DROP PROCEDURE IF EXISTS sp_drop_hist_tables;' AS '';
-SELECT 'DELIMITER \$\$' AS '';
-SELECT 'CREATE PROCEDURE sp_drop_hist_tables()' AS '';
-SELECT 'BEGIN' AS '';
-SELECT CONCAT('DROP TABLE IF EXISTS ',TABLE_NAME,';') AS ''
-FROM information_schema.TABLES
-WHERE TABLE_SCHEMA=database()
-AND TABLE_NAME like '%_hist'
-ORDER BY TABLE_NAME;
-SELECT 'END' AS '';
-SELECT '\$\$' AS '';
+SELECT 'DROP PROCEDURE IF EXISTS sp_drop_hist_tables;\nDELIMITER $$\nCREATE PROCEDURE sp_drop_hist_tables()\nBEGIN' AS '';
+
+SELECT CONCAT('DROP TABLE IF EXISTS ', t.TABLE_NAME, ';') AS ''
+FROM information_schema.TABLES t
+WHERE t.TABLE_SCHEMA = DATABASE()
+  AND t.TABLE_NAME LIKE '%\_hist'
+ORDER BY t.TABLE_NAME;
+
+SELECT 'END\n$$' AS '';
