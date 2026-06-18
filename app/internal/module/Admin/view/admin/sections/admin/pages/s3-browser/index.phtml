@@ -1,0 +1,119 @@
+<?php
+/**
+ * Super-admin S3 bucket browser (file explorer).
+ *
+ * @var string      $prefix
+ * @var array       $breadcrumb            list of ['label' => string, 'prefix' => string]
+ * @var string[]    $folders               S3 CommonPrefixes
+ * @var array       $objects               list of ['key' => string, 'size' => int, 'lastModified' => mixed]
+ * @var string|null $nextContinuationToken
+ */
+
+$indexRoute = $this->url('admin-dashboard/admin-s3-browser');
+$downloadRoute = $this->url('admin-dashboard/admin-s3-browser/download');
+
+$overwriteRoute = $this->url('admin-dashboard/admin-s3-browser/overwrite');
+$browseUrl = fn(string $p): string => $indexRoute . '?prefix=' . rawurlencode($p);
+$downloadUrl = fn(string $key): string => $downloadRoute . '?key=' . rawurlencode($key);
+$overwriteUrl = fn(string $key): string => $overwriteRoute . '?key=' . rawurlencode($key);
+
+// Display a folder/object relative to the current prefix.
+$displayName = function (string $key) use ($prefix): string {
+    $name = ($prefix !== '' && str_starts_with($key, $prefix)) ? substr($key, strlen($prefix)) : $key;
+    return rtrim($name, '/');
+};
+
+$formatSize = function ($bytes): string {
+    $bytes = (float) $bytes;
+    $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    $i = 0;
+    while ($bytes >= 1024 && $i < count($units) - 1) {
+        $bytes /= 1024;
+        $i++;
+    }
+    return ($i === 0 ? (string) (int) $bytes : number_format($bytes, 1)) . ' ' . $units[$i];
+};
+
+$folderIcon = '<svg width="20" height="16" viewBox="0 0 20 16" fill="currentColor" aria-hidden="true" focusable="false" style="vertical-align:middle;margin-right:8px"><path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H9L7 0H2z"/></svg>';
+$fileIcon = '<svg width="14" height="18" viewBox="0 0 14 18" fill="currentColor" aria-hidden="true" focusable="false" style="vertical-align:middle;margin-right:8px"><path d="M9 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V5L9 0zm0 2.5L11.5 5H9V2.5z"/></svg>';
+?>
+
+<div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <?php foreach ($breadcrumb as $i => $crumb): ?>
+            <li class="govuk-breadcrumbs__list-item">
+                <?php if ($i < count($breadcrumb) - 1): ?>
+                    <a class="govuk-breadcrumbs__link" href="<?= $this->escapeHtmlAttr($browseUrl($crumb['prefix'])) ?>"><?= $this->escapeHtml($crumb['label']) ?></a>
+                <?php else: ?>
+                    <?= $this->escapeHtml($crumb['label']) ?>
+                <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+    </ol>
+</div>
+
+<h1 class="govuk-heading-l">Document store browser</h1>
+
+<form method="get" action="<?= $this->escapeHtmlAttr($downloadRoute) ?>" class="govuk-form-group">
+    <label class="govuk-label" for="jump-key">Jump to key (downloads the object)</label>
+    <input class="govuk-input govuk-input--width-30" id="jump-key" name="key" type="text" spellcheck="false">
+    <button class="govuk-button govuk-button--secondary" data-module="govuk-button">Download</button>
+</form>
+
+<table class="govuk-table">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Name</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Size</th>
+            <th scope="col" class="govuk-table__header">Last modified</th>
+            <th scope="col" class="govuk-table__header">Action</th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        <?php if (empty($folders) && empty($objects)): ?>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell" colspan="4">This location is empty.</td>
+            </tr>
+        <?php endif; ?>
+
+        <?php foreach ($folders as $folder): ?>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                    <?= $folderIcon ?><span class="govuk-visually-hidden">Folder </span>
+                    <a class="govuk-link" href="<?= $this->escapeHtmlAttr($browseUrl($folder)) ?>"><?= $this->escapeHtml($displayName($folder)) ?>/</a>
+                </td>
+                <td class="govuk-table__cell govuk-table__cell--numeric">&ndash;</td>
+                <td class="govuk-table__cell">&ndash;</td>
+                <td class="govuk-table__cell"></td>
+            </tr>
+        <?php endforeach; ?>
+
+        <?php foreach ($objects as $object): ?>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                    <?= $fileIcon ?><span class="govuk-visually-hidden">File </span>
+                    <?= $this->escapeHtml($displayName($object['key'])) ?>
+                </td>
+                <td class="govuk-table__cell govuk-table__cell--numeric"><?= $this->escapeHtml($formatSize($object['size'] ?? 0)) ?></td>
+                <td class="govuk-table__cell"><?= !empty($object['lastModified']) ? $this->escapeHtml((string) $object['lastModified']) : '&ndash;' ?></td>
+                <td class="govuk-table__cell">
+                    <a class="govuk-link" href="<?= $this->escapeHtmlAttr($downloadUrl($object['key'])) ?>">Download</a>
+                    <?php if (!empty($canOverwrite)): ?>
+                        &middot; <a class="govuk-link" href="<?= $this->escapeHtmlAttr($overwriteUrl($object['key'])) ?>">Overwrite</a>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+<?php if (!empty($nextContinuationToken)): ?>
+    <nav class="govuk-pagination govuk-pagination--block" role="navigation" aria-label="Pagination">
+        <div class="govuk-pagination__next">
+            <a class="govuk-link govuk-pagination__link" rel="next"
+               href="<?= $this->escapeHtmlAttr($browseUrl($prefix) . '&ct=' . rawurlencode($nextContinuationToken)) ?>">
+                <span class="govuk-pagination__link-title">Next page</span>
+            </a>
+        </div>
+    </nav>
+<?php endif; ?>

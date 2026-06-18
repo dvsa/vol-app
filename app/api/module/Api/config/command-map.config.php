@@ -772,6 +772,7 @@ return [
     Command\Document\UploadCsv::class => CommandHandler\Document\UploadCsv::class,
     TransferCommand\Document\GenerateAndStore::class => CommandHandler\Document\GenerateAndStore::class,
     TransferCommand\Document\Upload::class => CommandHandler\Document\Upload::class,
+    TransferCommand\Document\BucketBrowserOverwrite::class => CommandHandler\Document\BucketBrowserOverwrite::class,
 
     // Domain - Report
     TransferCommand\Report\Upload::class => CommandHandler\Report\Upload::class,
