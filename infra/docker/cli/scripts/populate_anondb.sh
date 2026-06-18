@@ -262,8 +262,12 @@ log "Assuming role for S3 upload"
 saved_http_proxy="${http_proxy-}"
 saved_https_proxy="${https_proxy-}"
 saved_no_proxy="${NO_PROXY-}"
+
 source "$SCRIPT_DIR/s3assume.sh" "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole" "$nonprod_assume_external_id"
 
+export http_proxy="$saved_http_proxy"
+export https_proxy="$saved_https_proxy"
+export NO_PROXY="$saved_no_proxy"
 export http_proxy="$saved_http_proxy"
 export https_proxy="$saved_https_proxy"
 export NO_PROXY="$saved_no_proxy"
