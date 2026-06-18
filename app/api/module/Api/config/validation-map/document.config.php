@@ -35,4 +35,8 @@ return [
     QueryHandler\Document\PrintLetter::class => CanAccessDocumentWithId::class,
 
     QueryHandler\Document\ByDocumentStoreId::class => IsSystemAdmin::class,
+
+    QueryHandler\Document\BucketBrowserList::class => IsSystemAdmin::class,
+    QueryHandler\Document\BucketBrowserDownload::class => IsSystemAdmin::class,
+    CommandHandler\Document\BucketBrowserOverwrite::class => IsSystemAdmin::class,
 ];
