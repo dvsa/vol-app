@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<psalm
+  errorLevel="8"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="https://getpsalm.org/schema/config"
+  xsi:schemaLocation="https://getpsalm.org/schema/config vendor-bin/psalm/vendor/vimeo/psalm/config.xsd"
+  findUnusedBaselineEntry="true"
+  findUnusedCode="false"
+>
+  <projectFiles>
+    <directory name="Common"/>
+    <directory name="Scripts"/>
+    <directory name="test"/>
+    <ignoreFiles>
+      <directory name="vendor"/>
+    </ignoreFiles>
+  </projectFiles>
+  <issueHandlers>
+    <UndefinedClass>
+      <errorLevel type="suppress">
+        <!-- see ticket VOL-5194 -->
+        <file name="Common/src/Common/Controller/Lva/AbstractCommunityLicencesController.php" />
+        <!-- see ticket VOL-5191 -->
+        <file name="Common/src/Common/Controller/Lva/Traits/CrudTableTrait.php" />
+      </errorLevel>
+    </UndefinedClass>
+    <InvalidExtendClass>
+      <errorLevel type="suppress">
+        <!-- Laminas have added annotations to some classes we extend, to signify they will be final in upcoming versions -->
+        <file name="Common/src/Common/Form/Element/Button.php" />
+        <file name="Common/src/Common/Form/Element/DynamicRadioHtml.php" />
+        <file name="Common/src/Common/Form/Element/DynamicSelect.php" />
+        <file name="Common/src/Common/Form/Element/ErrorOverrideRadio.php" />
+        <file name="Common/src/Common/Form/Element/OptionalSelect.php" />
+        <file name="Common/src/Common/Form/Elements/Custom/DateTimeSelect.php" />
+        <file name="Common/src/Common/Form/Elements/Custom/EcmtCandidatePermitSelectionValidatingElement.php" />
+        <file name="Common/src/Common/Form/Elements/Custom/EcmtNoOfPermitsCombinedTotalElement.php" />
+        <file name="Common/src/Common/Form/Elements/Custom/EcmtNoOfPermitsElement.php" />
+        <file name="Common/src/Common/Form/Elements/Custom/EcmtNoOfPermitsEmissionsCategoryHiddenElement.php" />
+        <file name="Common/src/Common/Form/Elements/Custom/Time.php" />
+        <file name="Common/src/Common/Form/Elements/Custom/YearSelect.php" />
+        <file name="Common/src/Common/Form/Elements/InputFilters/ActionButton.php" />
+        <file name="Common/src/Common/Form/Elements/InputFilters/ActionLink.php" />
+        <file name="Common/src/Common/Form/Elements/InputFilters/ConvictionTextarea.php" />
+        <file name="Common/src/Common/Form/Elements/InputFilters/File.php" />
+        <file name="Common/src/Common/Form/Elements/InputFilters/FinancialHistoryTextarea.php" />
+        <file name="Common/src/Common/Form/Elements/InputFilters/HearingTimeHasDate.php" />
+        <file name="Common/src/Common/Form/Elements/InputFilters/Hidden.php" />
+        <file name="Common/src/Common/Form/Elements/InputFilters/NoRender.php" />
+        <file name="Common/src/Common/Form/Elements/InputFilters/OneContactPhoneRequired.php" />
+        <file name="Common/src/Common/Form/Elements/InputFilters/SelectEmpty.php" />
+        <file name="Common/src/Common/Form/Elements/InputFilters/Text.php" />
+        <file name="Common/src/Common/Form/Elements/InputFilters/Textarea.php" />
+        <file name="Common/src/Common/Form/Elements/Types/AttachFilesButton.php" />
+        <file name="Common/src/Common/Form/Elements/Validators/EmailConfirm.php" />
+        <file name="Common/src/Common/Form/Elements/Validators/FeeAmountValidator.php" />
+        <file name="Common/src/Common/Form/Elements/Validators/FeeExactAmountValidator.php" />
+        <file name="Common/src/Common/Form/Elements/Validators/NoOfPermitsMax.php" />
+        <file name="Common/src/Common/Form/Elements/Validators/NoOfPermitsMin.php" />
+        <file name="Common/src/Common/Form/Elements/Validators/NoOfPermitsNotEmpty.php" />
+        <file name="Common/src/Common/Form/Elements/Validators/PasswordConfirm.php" />
+        <file name="Common/src/Common/Form/Elements/Validators/ReceivedAmount.php" />
+        <file name="Common/src/Common/Form/View/Helper/Form.php" />
+        <file name="Common/src/Common/Form/View/Helper/FormCheckboxAdvanced.php" />
+        <file name="Common/src/Common/Form/View/Helper/FormCollection.php" />
+        <file name="Common/src/Common/Form/View/Helper/FormDateSelect.php" />
+        <file name="Common/src/Common/Form/View/Helper/FormDateTimeSelect.php" />
+        <file name="Common/src/Common/Form/View/Helper/FormElement.php" />
+        <file name="Common/src/Common/Form/View/Helper/FormElementErrors.php" />
+        <file name="Common/src/Common/Form/View/Helper/FormInputSearch.php" />
+        <file name="Common/src/Common/Form/View/Helper/FormRadio.php" />
+        <file name="Common/src/Common/Form/View/Helper/FormRadioHorizontal.php" />
+        <file name="Common/src/Common/Form/View/Helper/FormRadioVertical.php" />
+        <file name="Common/src/Common/Form/View/Helper/FormRow.php" />
+        <file name="Common/src/Common/Form/View/Model/FormRadioContentViewModel.php" />
+        <file name="Common/src/Common/Service/Qa/Custom/Bilateral/NoOfPermitsElement.php" />
+        <file name="Common/src/Common/Service/Qa/Text.php" />
+        <file name="Common/src/Common/Util/LvaRoute.php" />
+        <file name="Common/src/Common/View/Helper/FlashMessenger.php" />
+        <file name="Common/src/Common/View/Model/ReceiptViewModel.php" />
+        <file name="Common/src/Common/View/Model/Section.php" />
+      </errorLevel>
+    </InvalidExtendClass>
+  </issueHandlers>
+</psalm>
+

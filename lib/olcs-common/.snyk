@@ -1,0 +1,10 @@
+# Snyk (https://snyk.io) policy file
+version: v1.25.0
+ignore:
+  'snyk:lic:composer:paragonie:hidden-string:MPL-2.0':
+    - '*':
+        reason: >-
+          MPL-2.0 is a permissive, file-level copyleft license. paragonie/hidden-string
+          is consumed unmodified as a transitive dependency via paragonie/halite, so
+          its terms do not affect surrounding proprietary code.
+        expires: '2036-05-13T00:00:00.000Z'

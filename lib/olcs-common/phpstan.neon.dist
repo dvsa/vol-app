@@ -1,0 +1,31 @@
+parameters:
+  level: 0
+  paths:
+    - Common
+    - Scripts
+    - test
+  ignoreErrors:
+   - # PHPStan does not let you bind a different variable to $this: https://github.com/phpstan/phpstan/issues/8327.
+    message: '#Undefined variable: \$this#'
+    path: '**/*.table.php'
+   - # Laminas have added annotations to say classes we extend will be final in subsequent versions - we can't easily fix this
+    message: '#extends @final class#'
+    paths:
+      - 'Common/src/Common/Form/Element/'
+      - 'Common/src/Common/Form/Elements/'
+      - 'Common/src/Common/Form/View/Helper/'
+      - 'Common/src/Common/Service/Qa/'
+      - 'Common/src/Common/View/Model/'
+      - 'Common/src/Common/Form/View/Model/FormRadioContentViewModel.php'
+      - 'Common/src/Common/Util/LvaRoute.php'
+      - 'Common/src/Common/View/Helper/FlashMessenger.php'
+   - # Laminas have added annotations to say classes we extend will be final in subsequent versions - we're overriding properties in those classes and can't easily fix this
+    message: '#overrides @final property#'
+    paths:
+      - 'Common/src/Common/Form/Element/'
+      - 'Common/src/Common/Form/Elements/'
+      - 'Common/src/Common/Form/View/Helper/'
+      - 'Common/src/Common/Service/Qa/'
+      - 'Common/src/Common/View/Model/'
+      - 'Common/src/Common/Form/View/Model/FormRadioContentViewModel.php'
+      - 'Common/src/Common/View/Helper/FlashMessenger.php'

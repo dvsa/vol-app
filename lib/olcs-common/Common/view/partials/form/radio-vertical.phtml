@@ -1,0 +1,42 @@
+<?php if ($element->has('warning')) { ?>
+    <?= $this->formRow($element->get('warning')); ?>
+<?php } ?>
+
+<?php if ($element->has('warningVisible')) { ?>
+    <?= $this->formRow($element->get('warningVisible')); ?>
+<?php } ?>
+
+<?php
+
+/** @var Common\Form\Elements\Types\RadioHorizontal $element */
+$element = $this->element;
+
+$errors = $this->formElementErrors()->render($this->radioElement);
+$hasValidationError = !empty($errors);
+$dataGroup = $element->getOption('fieldset-data-group');
+$dataGroupAttribute = empty($dataGroup) ? '' : 'data-group="' . $dataGroup . '"';
+?>
+
+<div class="<?= ($hasValidationError) ? 'field error__wrapper' : 'field' ?>">
+    <fieldset class="radio-button__fieldset radio-button__fieldset--vertical" <?= $dataGroupAttribute; ?>>
+        <legend class="<?= $this->labelAttributes['class'] ?? ''; ?>">
+            <?= $this->translate($this->label); ?>
+        </legend>
+
+        <?php if ($this->hint) { ?>
+            <p class="form-hint"><?= $this->translate($this->hint) ?></p>
+        <?php } ?>
+
+        <?php if ($hasValidationError) : ?>
+            <?= $errors ?>
+        <?php endif; ?>
+        <?php foreach ($this->valueOptions as $key => $valueOption) { ?>
+            <?= $this->formRadioOption($this->radioElement, $key); ?>
+            <?= $this->partial(new \Common\Form\View\Model\FormRadioContentViewModel($valueOption)); ?>
+        <?php } ?>
+    </fieldset>
+</div>
+
+<?php if ($element->has('submit')) { ?>
+    <?= $this->formRow($element->get('submit')); ?>
+<?php } ?>
