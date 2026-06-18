@@ -9,7 +9,6 @@
 >
   <projectFiles>
     <directory name="Common"/>
-    <directory name="Scripts"/>
     <directory name="test"/>
     <ignoreFiles>
       <directory name="vendor"/>

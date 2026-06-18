@@ -1,91 +1,116 @@
 {
-    "name": "olcs/olcs-common",
-    "description": "Common library for the OLCS Project",
-    "type": "library",
-    "require": {
-        "php": "~8.3.0",
-        "ezyang/htmlpurifier": "^4.17",
-        "laminas/laminas-authentication": "^2.18",
-        "laminas/laminas-cache": "^3.13",
-        "laminas/laminas-code": "^4.16",
-        "laminas/laminas-eventmanager": "^3.14",
-        "laminas/laminas-filter": "^2.41",
-        "laminas/laminas-form": "^3.21",
-        "laminas/laminas-http": "^2.22",
-        "laminas/laminas-i18n": "^2.30",
-        "laminas/laminas-inputfilter": "^2.33",
-        "laminas/laminas-modulemanager": "^2.17",
-        "laminas/laminas-mvc": "^3.8",
-        "laminas/laminas-mvc-plugin-flashmessenger": "^1.11",
-        "laminas/laminas-navigation": "^2.20",
-        "laminas/laminas-servicemanager": "^3.23",
-        "laminas/laminas-stdlib": "^3.20",
-        "laminas/laminas-validator": "^2.64",
-        "laminas/laminas-view": "^2.41",
-        "olcs/olcs-logging": "^9.0",
-        "olcs/olcs-transfer": "^8.0",
-        "olcs/olcs-utils": "^7.1",
-        "psr/container": "^1.1|^2"
+  "name": "olcs/olcs-common",
+  "description": "Common library for the OLCS Project",
+  "license": "MIT",
+  "version": "9.22.0",
+  "type": "library",
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../olcs-logging",
+      "options": {
+        "symlink": true
+      }
     },
-    "require-dev": {
-        "bamarni/composer-bin-plugin": "^1.8.2",
-        "doctrine/annotations": "^1.14.2",
-        "johnkary/phpunit-speedtrap": "^4.0",
-        "lm-commons/lmc-rbac-mvc": "^3.5",
-        "mikey179/vfsstream": "~v1.6.11",
-        "mockery/mockery": "^1.6.7",
-        "phpstan/phpstan-mockery": "^2.0",
-        "phpunit/phpunit": "^9.6",
-        "symfony/filesystem": "^5.4",
-        "symfony/lock": "^5.4"
+    {
+      "type": "path",
+      "url": "../olcs-utils",
+      "options": {
+        "symlink": true
+      }
     },
-    "autoload": {
-        "psr-4": {
-            "Common\\": "Common/src/Common"
-        },
-        "classmap": [
-            "./Common/src/Module.php"
-        ]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "CommonTest\\": "test/Common/src/"
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "bamarni/composer-bin-plugin": true,
-            "laminas/laminas-dependency-plugin": true,
-            "elendev/composer-push": true,
-            "phpstan/extension-installer": true
-        },
-        "platform": {
-            "ext-redis": "6.0"
-        }
-    },
-    "scripts": {
-        "bin": "echo 'bin not installed'",
-        "post-install-cmd": [
-            "@composer bin all install"
-        ],
-        "test": "phpunit",
-        "phpcs": "phpcs",
-        "psalm": "psalm",
-        "phpstan": "phpstan",
-        "all": [
-            "@test",
-            "@phpcs",
-            "@psalm",
-            "@phpstan"
-        ]
-    },
-    "extra": {
-        "bamarni-bin": {
-            "bin-links": true,
-            "forward-command": true
-        }
+    {
+      "type": "path",
+      "url": "../olcs-transfer",
+      "options": {
+        "symlink": true
+      }
     }
+  ],
+  "require": {
+    "php": "~8.3.0",
+    "ezyang/htmlpurifier": "^4.17",
+    "laminas/laminas-authentication": "^2.18",
+    "laminas/laminas-cache": "^3.13",
+    "laminas/laminas-code": "^4.16",
+    "laminas/laminas-eventmanager": "^3.14",
+    "laminas/laminas-filter": "^2.41",
+    "laminas/laminas-form": "^3.21",
+    "laminas/laminas-http": "^2.22",
+    "laminas/laminas-i18n": "^2.30",
+    "laminas/laminas-inputfilter": "^2.33",
+    "laminas/laminas-modulemanager": "^2.17",
+    "laminas/laminas-mvc": "^3.8",
+    "laminas/laminas-mvc-plugin-flashmessenger": "^1.11",
+    "laminas/laminas-navigation": "^2.20",
+    "laminas/laminas-servicemanager": "^3.23",
+    "laminas/laminas-stdlib": "^3.20",
+    "laminas/laminas-validator": "^2.64",
+    "laminas/laminas-view": "^2.41",
+    "olcs/olcs-logging": "^9.0",
+    "olcs/olcs-transfer": "^8.0",
+    "olcs/olcs-utils": "^7.1",
+    "psr/container": "^1.1|^2"
+  },
+  "require-dev": {
+    "bamarni/composer-bin-plugin": "^1.8.2",
+    "doctrine/annotations": "^1.14.2",
+    "johnkary/phpunit-speedtrap": "^4.0",
+    "lm-commons/lmc-rbac-mvc": "^3.5",
+    "mikey179/vfsstream": "~v1.6.11",
+    "mockery/mockery": "^1.6.7",
+    "phpstan/phpstan-mockery": "^2.0",
+    "phpunit/phpunit": "^9.6",
+    "symfony/filesystem": "^5.4",
+    "symfony/lock": "^5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Common\\": "Common/src/Common"
+    },
+    "classmap": [
+      "./Common/src/Module.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "CommonTest\\": "test/Common/src/"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "bamarni/composer-bin-plugin": true,
+      "laminas/laminas-dependency-plugin": true,
+      "elendev/composer-push": true,
+      "phpstan/extension-installer": true
+    },
+    "platform": {
+      "ext-redis": "6.0"
+    }
+  },
+  "scripts": {
+    "bin": "echo 'bin not installed'",
+    "post-install-cmd": [
+      "@composer bin all install"
+    ],
+    "test": "phpunit",
+    "phpcs": "phpcs",
+    "psalm": "psalm",
+    "phpstan": "phpstan",
+    "all": [
+      "@test",
+      "@phpcs",
+      "@psalm",
+      "@phpstan"
+    ]
+  },
+  "extra": {
+    "bamarni-bin": {
+      "bin-links": true,
+      "forward-command": true
+    }
+  }
 }
