@@ -51,6 +51,16 @@ for task in "${TASKS[@]}"; do
     ALL_PIDS+=($!)
 done
 
-wait
+FAIL=0
+for pid in "${ALL_PIDS[@]}"; do
+    if ! wait "$pid"; then
+        FAIL=1
+    fi
+done
+
+if [ "$FAIL" -ne 0 ]; then
+    echo "ERROR: One or more SP maintenance compilation jobs failed."
+    exit 1
+fi
 
 echo "All SP maintenance files compiled successfully inside AWS Batch."
