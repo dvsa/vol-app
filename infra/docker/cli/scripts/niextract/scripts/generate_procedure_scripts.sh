@@ -26,6 +26,7 @@ declare -a TASKS=(
 echo "Starting optimized metadata compilation against $DB..."
 
 declare -a CURRENT_PIDS=()
+declare -a ALL_PIDS=()
 
 for task in "${TASKS[@]}"; do
     GEN_FILE="${task%%:*}"
