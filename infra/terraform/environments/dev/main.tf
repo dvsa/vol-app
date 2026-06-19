@@ -124,7 +124,6 @@ locals {
       resources = [
         "arn:aws:rds:eu-west-1:054614622558:cluster:dev-aurora-olcsdb-cluster",
         "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-*",
-        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
         "arn:aws:rds:eu-west-1:054614622558:cluster:ni-extract-*",
 
         "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*",
