@@ -141,7 +141,9 @@ locals {
       ]
       resources = [
         "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:ni-extract-*",
         "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:ni-extract-*",
         "arn:aws:rds:eu-west-1:054614622558:subgrp:devappdev-olcs-rds-*"
       ]
     },
