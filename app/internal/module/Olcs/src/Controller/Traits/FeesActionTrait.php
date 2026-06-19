@@ -227,11 +227,13 @@ trait FeesActionTrait
 
     protected function getFee($id, ?int $licenceId = null, ?int $applicationId = null)
     {
-        $query = FeeQry::create(array_filter([
+        $filtered = array_filter([
             'id' => $id,
             'licenceId' => $licenceId,
             'applicationId' => $applicationId
-        ], fn($value) => $value !== null));
+        ], fn($value) => $value !== null);
+
+        $query = FeeQry::create($filtered);
         $response = $this->handleQuery($query);
         return $response->getResult();
     }
@@ -252,8 +254,8 @@ trait FeesActionTrait
         }
 
         $id = $this->params()->fromRoute('fee', null);
-
-        $fee = $this->getFee($id);
+        $tableParams = $this->getFeesTableParams();
+        $fee = $this->getFee($id, $tableParams['licence'] ?? null);
 
         $form = $this->alterFeeForm($this->getForm('Fee'), $fee);
         $this->formHelper->setFormActionFromRequest($form, $this->getRequest());
