@@ -219,7 +219,7 @@ class Organisation extends AbstractRepository
 
         $query = $qb->getQuery();
 
-        return $query->iterate();
+        return $query->toIterable();
     }
 
     /**

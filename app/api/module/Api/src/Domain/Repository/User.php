@@ -416,7 +416,7 @@ class User extends AbstractRepository
         $qb->andWhere($qb->expr()->isNull($this->alias . '.deletedDate'));
         $qb->andWhere($qb->expr()->isNull($this->alias . '.lastLoginAt'));
 
-        return $qb->getQuery()->iterate();
+        return $qb->getQuery()->toIterable();
     }
 
     public function updateLastLogin(Entity $user, DateTime $lastLoginAt, Entity $lastModifiedBy): void

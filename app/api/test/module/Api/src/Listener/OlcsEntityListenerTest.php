@@ -105,7 +105,7 @@ class OlcsEntityListenerTest extends MockeryTestCase
             ->getMock();
 
         //  call
-        $lifecycleEvent = new LifecycleEventArgs($mockEntity, $this->mockEm);
+        $lifecycleEvent = new \Doctrine\Persistence\Event\LifecycleEventArgs($mockEntity, $this->mockEm);
         $this->sut->preSoftDelete($lifecycleEvent);
     }
 
@@ -139,7 +139,7 @@ class OlcsEntityListenerTest extends MockeryTestCase
             ->getMock();
 
         //  call
-        $lifecycleEvent = new LifecycleEventArgs($mockEntity, $this->mockEm);
+        $lifecycleEvent = new \Doctrine\Persistence\Event\LifecycleEventArgs($mockEntity, $this->mockEm);
         $this->sut->preSoftDelete($lifecycleEvent);
     }
 
@@ -182,7 +182,7 @@ class OlcsEntityListenerTest extends MockeryTestCase
             ->getMock();
 
         //  call
-        $lifecycleEvent = new LifecycleEventArgs($mockEntity, $this->mockEm);
+        $lifecycleEvent = new \Doctrine\Persistence\Event\LifecycleEventArgs($mockEntity, $this->mockEm);
         $this->sut->preSoftDelete($lifecycleEvent);
     }
 
@@ -255,7 +255,7 @@ class OlcsEntityListenerTest extends MockeryTestCase
             ->getMock();
 
         //  call
-        $lifecycleEvent = new LifecycleEventArgs($mockEntity, $this->mockEm);
+        $lifecycleEvent = new \Doctrine\Persistence\Event\LifecycleEventArgs($mockEntity, $this->mockEm);
         $this->sut->preSoftDelete($lifecycleEvent);
     }
 }
