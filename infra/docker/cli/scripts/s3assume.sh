@@ -21,14 +21,16 @@ export NO_PROXY=169.254.169.254,169.254.170.2,localhost,127.0.0.1,.s3.eu-west-1.
 region="${AWS_DEFAULT_REGION:-${AWS_REGION:-eu-west-1}}"
 ec2_instance_id="ecs-task-$(date +%s)"
 
-creds=`/usr/local/bin/aws sts assume-role --role-arn $1 --role-session-name $ec2_instance_id --region=$region --external-id $2 2>/tmp/sts_error.txt` || {
+error_file="/tmp/sts_error_$$.txt"
+
+creds=$(/usr/local/bin/aws sts assume-role --role-arn "$1" --role-session-name "$ec2_instance_id" --region="$region" --external-id "$2" 2>"$error_file") || {
   echo "ERROR: AWS STS Assume-Role failed!"
-  echo "Reason: $(cat /tmp/sts_error.txt)"
-  rm -f /tmp/sts_error.txt
+  echo "Reason: $(cat "$error_file")"
+  rm -f "$error_file"
   exit 7
 }
-rm -f /tmp/sts_error.txt
+rm -f "$error_file"
 
-export AWS_ACCESS_KEY_ID=`echo $creds | /usr/bin/jq -r '.AccessKeyId'`
-export AWS_SECRET_ACCESS_KEY=`echo $creds | /usr/bin/jq -r '.SecretAccessKey'`
-export AWS_SESSION_TOKEN=`echo $creds | /usr/bin/jq -r '.SessionToken'`
+export AWS_ACCESS_KEY_ID=$(echo "$creds" | /usr/bin/jq -r '.Credentials.AccessKeyId')
+export AWS_SECRET_ACCESS_KEY=$(echo "$creds" | /usr/bin/jq -r '.Credentials.SecretAccessKey')
+export AWS_SESSION_TOKEN=$(echo "$creds" | /usr/bin/jq -r '.Credentials.SessionToken')
