@@ -13,7 +13,9 @@ echo "USE \`$DB\`;" > "$TMP_SQL"
 for file in sp_delete*.sql; do
     # Check if files actually exist to handle empty directory edge cases safely
     [ -e "$file" ] || continue
+    sed -i 's/\r$//' "$file"
     echo "\. $file" >> "$TMP_SQL"
+    echo "" >> "$TMP_SQL"
 done
 
 echo "Registering deletion procedures into $DB over a single connection..."
