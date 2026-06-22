@@ -124,24 +124,19 @@ scaling_config=$(aws rds describe-db-clusters \
 ###############################################
 log "Restoring temporary cluster"
 
+restore_cmd=(aws rds restore-db-cluster-from-snapshot \
+  --db-cluster-identifier "$tmp_cluster_id" \
+  --snapshot-identifier "$snapshot_id" \
+  --engine aurora-mysql \
+  --db-subnet-group-name "$subnet_group" \
+  --vpc-security-group-ids $sec_groups \
+  --region "$region")
+
 if [[ -n "$scaling_config" && "$scaling_config" != "null" ]]; then
-  aws rds restore-db-cluster-from-snapshot \
-    --db-cluster-identifier "$tmp_cluster_id" \
-    --snapshot-identifier "$snapshot_id" \
-    --engine aurora-mysql \
-    --db-subnet-group-name "$subnet_group" \
-    --vpc-security-group-ids $sec_groups \
-    --serverless-v2-scaling-configuration "$scaling_config" \
-    --region $region >/dev/null
-else
-  aws rds restore-db-cluster-from-snapshot \
-    --db-cluster-identifier "$tmp_cluster_id" \
-    --snapshot-identifier "$snapshot_id" \
-    --engine aurora-mysql \
-    --db-subnet-group-name "$subnet_group" \
-    --vpc-security-group-ids $sec_groups \
-    --region $region >/dev/null
+  restore_cmd+=(--serverless-v2-scaling-configuration "$scaling_config")
 fi
+
+"${restore_cmd[@]}" >/dev/null
 
 aws rds wait db-cluster-available \
   --db-cluster-identifier "$tmp_cluster_id" \
