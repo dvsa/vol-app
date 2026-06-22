@@ -142,18 +142,25 @@ aws rds wait db-cluster-available \
   --db-cluster-identifier "$tmp_cluster_id" \
   --region $region
 
+modified=0
 for i in {1..5}; do
   if aws rds modify-db-cluster \
     --db-cluster-identifier "$tmp_cluster_id" \
-    --serverless-v2-scaling-configuration MinCapacity=0.5,MaxCapacity=4 \
+    --serverless-v2-scaling-configuration "MinCapacity=0.5,MaxCapacity=4" \
     --apply-immediately \
-    --region $region; then
+    --region "$region"; then
+    modified=1
     break
   fi
 
-  echo "Retrying modify-db-cluster ($i)..."
+  loge "modify-db-cluster failed (attempt ${i}/5); retrying in 10s..."
   sleep 10
 done
+
+if [[ $modified -ne 1 ]]; then
+  loge "Unable to apply serverless v2 scaling configuration to cluster $tmp_cluster_id after 5 attempts"
+  exit 1
+fi
 
 aws rds wait db-cluster-available \
   --db-cluster-identifier "$tmp_cluster_id" \
