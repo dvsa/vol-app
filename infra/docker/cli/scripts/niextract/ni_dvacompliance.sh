@@ -24,7 +24,7 @@ tmp_cluster_id="ni-extract-$(date +%Y%m%d%H%M%S)-${RANDOM}"
 tmp_instance_id="${tmp_cluster_id}-instance"
 db_cluster_id=${DBCLUSTER_ID}
 dva_report_bucket=${DVA_REPORT_BUCKET}
-db_name = ${DB_NAME}
+db_name="${DB_NAME}"
 snapshot_id="${tmp_cluster_id}-snap"
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
