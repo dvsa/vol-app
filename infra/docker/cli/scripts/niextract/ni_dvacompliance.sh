@@ -142,6 +142,23 @@ aws rds wait db-cluster-available \
   --db-cluster-identifier "$tmp_cluster_id" \
   --region $region
 
+for i in {1..5}; do
+  if aws rds modify-db-cluster \
+    --db-cluster-identifier "$tmp_cluster_id" \
+    --serverless-v2-scaling-configuration MinCapacity=0.5,MaxCapacity=4 \
+    --apply-immediately \
+    --region $region; then
+    break
+  fi
+
+  echo "Retrying modify-db-cluster ($i)..."
+  sleep 10
+done
+
+aws rds wait db-cluster-available \
+  --db-cluster-identifier "$tmp_cluster_id" \
+  --region $region
+
 ###############################################
 # 4. CREATE INSTANCE
 ###############################################
