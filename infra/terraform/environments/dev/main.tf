@@ -151,14 +151,23 @@ locals {
     {
       effect = "Allow"
       actions = [
-        "rds:CreateDBInstance",
-        "rds:DescribeDBInstances"
+        "rds:CreateDBInstance"
       ]
       resources = [
         "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
         "arn:aws:rds:eu-west-1:054614622558:cluster:ni-extract-*",
         "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*",
         "arn:aws:rds:eu-west-1:054614622558:db:ni-extract-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:DescribeDBInstances"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster:*",
+        "arn:aws:rds:eu-west-1:054614622558:db:*",
       ]
     },
     {
