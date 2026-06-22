@@ -64,7 +64,7 @@
     "saeven/zf3-purifier": "^1.1",
     "doctrine/doctrine-module": "^6.3",
     "psr/container": "^1.1|^2",
-    "aws/aws-sdk-php": "^3.369",
+    "aws/aws-sdk-php": "^3.385",
     "symfony/filesystem": "^7.4"
   },
   "require-dev": {
