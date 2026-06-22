@@ -150,7 +150,10 @@ class PenaltyController extends AbstractInternalController implements CaseContro
     private function getPenaltyData()
     {
         $response = $this->handleQuery(
-            SingleSiDto::create(['id' => $this->params()->fromRoute('si')])
+            SingleSiDto::create([
+                'id' => $this->params()->fromRoute('si'),
+                'caseId' => $this->params()->fromRoute('case'),
+                ])
         );
 
         if (!$response->isOk()) {
@@ -158,15 +161,16 @@ class PenaltyController extends AbstractInternalController implements CaseContro
             return [];
         }
 
-        $data = $response->getResult();
-
-        $routeCaseId = (int) $this->params()->fromRoute('case');
-        if (empty($data['case']['id']) || (int) $data['case']['id'] !== $routeCaseId) {
-            $this->flashMessengerHelperService->addErrorMessage('Case does not have a serious infringement with this ID.');
-            return [];
-        }
-
-        return $data;
+        return $response->getResult();
+//        $data = $response->getResult();
+//
+//        $routeCaseId = (int) $this->params()->fromRoute('case');
+//        if (empty($data['case']['id']) || (int) $data['case']['id'] !== $routeCaseId) {
+//            $this->flashMessengerHelperService->addErrorMessage('Case does not have a serious infringement with this ID.');
+//            return [];
+//        }
+//
+//        return $data;
     }
 
     /**
