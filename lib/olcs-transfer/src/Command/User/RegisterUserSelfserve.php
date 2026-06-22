@@ -6,19 +6,30 @@
 
 namespace Dvsa\Olcs\Transfer\Command\User;
 
-use Dvsa\Olcs\Transfer\FieldType\Traits\OrganisationOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\TranslateToWelshOptional;
 use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
 /**
+ * Register User Selfserve
+ *
+ * This command is exposed on an anonymous, unauthenticated route. It must therefore only ever
+ * link a new operator-admin user to an organisation the caller has demonstrably proven control
+ * of: via a posted licence number (the temporary password is sent by letter to the licence
+ * holder) or by creating a brand new organisation. It deliberately does NOT accept a raw
+ * organisation id — that would let an anonymous caller attach themselves as admin to any existing
+ * organisation (VOL-7370). The trusted, server-side consultant journey links to an existing
+ * organisation via the internal RegisterUserSelfserveByOrganisation command (in the Api module)
+ * instead, where the id originates from a just-created organisation rather than client input.
+ *
+ * NOTE: not declared `final` so the internal command above can extend it.
+ *
  * @Transfer\RouteName("backend/user/selfserve/register")
  * @Transfer\Method("POST")
  */
-final class RegisterUserSelfserve extends AbstractCommand
+class RegisterUserSelfserve extends AbstractCommand
 {
     use TranslateToWelshOptional;
-    use OrganisationOptional;
 
     /**
      * @Transfer\Filter("Laminas\Filter\StringTrim")
