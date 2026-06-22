@@ -10,7 +10,7 @@ set -euo pipefail
 
 : "${PROXY:?PROXY is required}"
 : "${DBCLUSTER_ID:?DBCLUSTER_ID is required}"
-: "${DB_NAME:?DB_NAME is required}"
+: "${READDB_NAME:?READDB_NAME is required}"
 : "${M_DB_PASSWORD:?M_DB_PASSWORD is required}"
 : "${ENVIRONMENT_NAME:?ENVIRONMENT_NAME is required}"
 : "${DVA_REPORT_BUCKET:?DVA_REPORT_BUCKET is required}"
@@ -24,7 +24,7 @@ tmp_cluster_id="ni-extract-$(date +%Y%m%d%H%M%S)-${RANDOM}"
 tmp_instance_id="${tmp_cluster_id}-instance"
 db_cluster_id=${DBCLUSTER_ID}
 dva_report_bucket=${DVA_REPORT_BUCKET}
-db_name="${DB_NAME}"
+db_name="${READDB_NAME}"
 snapshot_id="${tmp_cluster_id}-snap"
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
