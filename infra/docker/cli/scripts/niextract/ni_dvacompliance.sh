@@ -10,7 +10,7 @@ set -euo pipefail
 
 : "${PROXY:?PROXY is required}"
 : "${DBCLUSTER_ID:?DBCLUSTER_ID is required}"
-: "${READDB_HOST:?READDB_HOST is required}"
+: "${DB_NAME:?DB_NAME is required}"
 : "${M_DB_PASSWORD:?M_DB_PASSWORD is required}"
 : "${ENVIRONMENT_NAME:?ENVIRONMENT_NAME is required}"
 : "${DVA_REPORT_BUCKET:?DVA_REPORT_BUCKET is required}"
@@ -24,9 +24,9 @@ tmp_cluster_id="ni-extract-$(date +%Y%m%d%H%M%S)-${RANDOM}"
 tmp_instance_id="${tmp_cluster_id}-instance"
 db_cluster_id=${DBCLUSTER_ID}
 dva_report_bucket=${DVA_REPORT_BUCKET}
+db_name = ${DB_NAME}
 snapshot_id="${tmp_cluster_id}-snap"
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-readdb_host=${READDB_HOST}
 
 ###############################################
 # DEBUG MODE
@@ -198,7 +198,7 @@ anon_dir="/tmp/anon"
 if [[ "${ENVIRONMENT_NAME}" != "PROD" ]]; then
   ./NI_Extract.sh \
     -c "-h${endpoint} -umaster -p${M_DB_PASSWORD}" \
-    -d "${readdb_host}" \
+    -d "${db_name}" \
     -A \
     -a "${script_dir}/anonymisation_scripts/anon" \
     -f "${anon_dir}" \
@@ -206,7 +206,7 @@ if [[ "${ENVIRONMENT_NAME}" != "PROD" ]]; then
 else
   ./NI_Extract.sh \
     -c "-h${endpoint} -umaster -p${M_DB_PASSWORD}" \
-    -d "${readdb_host}" \
+    -d "${db_name}" \
     -X "${xml_dir}"
 fi
 
