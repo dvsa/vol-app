@@ -53,6 +53,18 @@ OLCS.ready(function () {
     }
   }
 
+  // Clear a radio group's error once the caseworker picks an option
+  $("body").on(
+    "change",
+    '[data-required-radio-group] input[type="radio"]',
+    function () {
+      $(this)
+        .closest("[data-required-radio-group]")
+        .find(".letter-choice-group-error")
+        .hide();
+    },
+  );
+
   // Create letter button click - submit form via AJAX
   $("body").on("click", "#create-letter-btn", function (e) {
     e.preventDefault();
@@ -73,6 +85,25 @@ OLCS.ready(function () {
 
     // Hide error
     $errorDiv.hide();
+
+    // Validate every radio "pick one" group has exactly one selection (no default, must pick one)
+    var radioGroupsValid = true;
+    $("[data-required-radio-group]").each(function () {
+      var $group = $(this);
+      var $groupError = $group.find(".letter-choice-group-error");
+      if ($group.find('input[type="radio"]:checked').length === 0) {
+        $groupError.show();
+        if (radioGroupsValid) {
+          this.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+        radioGroupsValid = false;
+      } else {
+        $groupError.hide();
+      }
+    });
+    if (!radioGroupsValid) {
+      return false;
+    }
 
     // Disable button and show loading state
     $button.prop("disabled", true).text("Creating letter...");

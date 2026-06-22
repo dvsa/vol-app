@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #####################################################################
-#							            #
-# anonymisation run script.				   	    #
-#							   	    #
+#                                                                   #
+# anonymisation run script.                                         #
+#                                                                   #
 #####################################################################
 SQL_DIR="./sql"
 DATA_DIR="./data"
@@ -268,25 +268,33 @@ check_OLCS_schema () {
 
     dump_OLCS_schema $CURRENT_OLCS_SCHEMA_FILE
 
-    new_cols=();
-    rem_cols=();
-    OLDIFS=$IFS
-    IFS=$','
-    while read -r "table" "column"; do
-
-        if [ $(grep -c "$table$IFS$column" $OLCS_SCHEMA_REFERENCE_FILE) -eq 0 ]; then
-            new_cols+=("$table.$column")
-        fi
-    done < $CURRENT_OLCS_SCHEMA_FILE
-
-    while read -r "table" "column"; do
-
-        if [ $(grep -c "$table$IFS$column" $CURRENT_OLCS_SCHEMA_FILE) -eq 0 ]; then
-            rem_cols+=("$table.$column")
-        fi
-    done < $OLCS_SCHEMA_REFERENCE_FILE
-
-    IFS=$OLDIFS
+    # Replaced slow loop and grep sub-processes with high-speed awk cross-comparison.
+    new_cols=()
+    rem_cols=()
+    while IFS=$'\t' read -r kind col; do
+        case "$kind" in
+            new) new_cols+=("$col") ;;
+            rem) rem_cols+=("$col") ;;
+        esac
+    done < <(awk -F',' -v OFS=$'\t' '
+        NR==FNR {
+            ref_lookup[$1","$2] = 1;
+            next;
+        }
+        {
+            curr_lookup[$1","$2] = 1;
+            if (!( ($1","$2) in ref_lookup )) {
+                print "new", $1 "." $2;
+            }
+        }
+        END {
+            for (key in ref_lookup) {
+                if (!(key in curr_lookup)) {
+                    split(key, parts, ",");
+                    print "rem", parts[1] "." parts[2];
+                }
+            }
+        }' "$OLCS_SCHEMA_REFERENCE_FILE" "$CURRENT_OLCS_SCHEMA_FILE")
 
     rm $CURRENT_OLCS_SCHEMA_FILE
 
@@ -324,7 +332,7 @@ check_OLCS_schema () {
     else
        echo
        ok "***********************************"
-       ok "**  schema OK - no changes found **"
+       ok "** schema OK - no changes found  **"
        ok "***********************************"
     fi
 }

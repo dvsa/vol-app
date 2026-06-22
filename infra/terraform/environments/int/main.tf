@@ -42,7 +42,8 @@ locals {
         "sts:AssumeRole"
       ]
       resources = [
-        "arn:aws:iam::000081644369:role/txc-int-consumer-role"
+        "arn:aws:iam::000081644369:role/txc-int-consumer-role",
+        "arn:aws:iam::054614622558:role/OLCS-DEVAPPCI-DEVCI-Cognito_Pool_Admin"
       ]
     },
     {
@@ -650,6 +651,8 @@ module "service" {
         name     = "data-refresh",
         commands = ["/mnt/data/scripts/data_refresh/data_refresh.sh", "qa", "eu-west-1"],
         type     = "scripts"
+        cpu      = 2,
+        memory   = 8192,
       },
     ]
   }

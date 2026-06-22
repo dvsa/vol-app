@@ -418,7 +418,19 @@ class LetterIssue extends AbstractLetterIssue
         $newVersion->setRequiresInput($currentVersion->getRequiresInput());
         $newVersion->setIsNi($currentVersion->getIsNi());
         $newVersion->setGoodsOrPsv($currentVersion->getGoodsOrPsv());
+        $newVersion->setLetterIssueType($currentVersion->getLetterIssueType());
         $newVersion->setVersionNumber($currentVersion->getVersionNumber() + 1);
+
+        // Propagate the previous version's LetterTodo links so editing issue content
+        // doesn't silently lose them (VOL-7280). New junction rows point at the new
+        // issue version + the same letterTodoVersion that was previously linked.
+        foreach ($currentVersion->getLetterIssueTodos() ?? [] as $existing) {
+            $copy = new LetterIssueTodo();
+            $copy->setLetterIssueVersion($newVersion);
+            $copy->setLetterTodoVersion($existing->getLetterTodoVersion());
+            $copy->setDisplayOrder($existing->getDisplayOrder());
+            $newVersion->addLetterIssueTodo($copy);
+        }
 
         $this->addVersion($newVersion);
 
