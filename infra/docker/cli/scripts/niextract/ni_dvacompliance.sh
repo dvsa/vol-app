@@ -114,18 +114,34 @@ if [[ -z "$sec_groups" || "$sec_groups" == "None" ]]; then
   loge "Failed to determine VPC security groups for cluster $db_cluster_id"
   exit 1
 fi
+
+scaling_config=$(aws rds describe-db-clusters \
+  --db-cluster-identifier "$db_cluster_id" \
+  --query "DBClusters[0].ServerlessV2ScalingConfiguration" \
+  --output json --region "$region")
 ###############################################
 # 3. RESTORE TEMP CLUSTER
 ###############################################
 log "Restoring temporary cluster"
 
-aws rds restore-db-cluster-from-snapshot \
-  --db-cluster-identifier "$tmp_cluster_id" \
-  --snapshot-identifier "$snapshot_id" \
-  --engine aurora-mysql \
-  --db-subnet-group-name "$subnet_group" \
-  --vpc-security-group-ids $sec_groups \
-  --region $region >/dev/null
+if [[ -n "$scaling_config" && "$scaling_config" != "null" ]]; then
+  aws rds restore-db-cluster-from-snapshot \
+    --db-cluster-identifier "$tmp_cluster_id" \
+    --snapshot-identifier "$snapshot_id" \
+    --engine aurora-mysql \
+    --db-subnet-group-name "$subnet_group" \
+    --vpc-security-group-ids $sec_groups \
+    --serverless-v2-scaling-configuration "$scaling_config" \
+    --region $region >/dev/null
+else
+  aws rds restore-db-cluster-from-snapshot \
+    --db-cluster-identifier "$tmp_cluster_id" \
+    --snapshot-identifier "$snapshot_id" \
+    --engine aurora-mysql \
+    --db-subnet-group-name "$subnet_group" \
+    --vpc-security-group-ids $sec_groups \
+    --region $region >/dev/null
+fi
 
 aws rds wait db-cluster-available \
   --db-cluster-identifier "$tmp_cluster_id" \
