@@ -29,6 +29,13 @@
       "options": {
         "symlink": true
       }
+    },
+    {
+      "type": "path",
+      "url": "../../lib/olcs-auth",
+      "options": {
+        "symlink": true
+      }
     }
   ],
   "require": {
@@ -54,7 +61,7 @@
     "laminas/laminas-validator": "^2.64",
     "laminas/laminas-view": "^2.44",
     "lm-commons/lmc-rbac-mvc": "^3.5",
-    "olcs/olcs-auth": "^9.0",
+    "olcs/olcs-auth": "*",
     "olcs/olcs-common": "*",
     "olcs/olcs-logging": "*",
     "olcs/olcs-transfer": "*",
