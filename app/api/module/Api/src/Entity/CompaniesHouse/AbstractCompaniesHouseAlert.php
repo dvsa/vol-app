@@ -21,17 +21,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="companies_house_alert",
- *    indexes={
- *        @ORM\Index(name="ix_companies_house_alert_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_companies_house_alert_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_companies_house_alert_organisation_id", columns={"organisation_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'companies_house_alert')]
+#[ORM\Index(name: 'ix_companies_house_alert_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_companies_house_alert_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_companies_house_alert_organisation_id', columns: ['organisation_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -44,21 +40,19 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to organisation
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $organisation;
 
     /**
@@ -66,10 +60,10 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -77,47 +71,43 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Company or llp no
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="company_or_llp_no", length=20, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'company_or_llp_no', length: 20, nullable: true)]
     protected $companyOrLlpNo;
 
     /**
      * isClosed
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_closed", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_closed', nullable: false, options: ['default' => 0])]
     protected $isClosed = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Reasons
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlertReason", mappedBy="companiesHouseAlert", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlertReason::class, mappedBy: 'companiesHouseAlert', cascade: ['persist'])]
     protected $reasons;
 
     /**

@@ -21,18 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="question_text",
- *    indexes={
- *        @ORM\Index(name="fk_question_text_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_question_text_last_modified_by_user_id", columns={"last_modified_by"}),
- *        @ORM\Index(name="fk_question_text_question_short_key_translation_key_id", columns={"question_short_key"}),
- *        @ORM\Index(name="ix_question_text_question_id", columns={"question_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'question_text')]
+#[ORM\Index(name: 'fk_question_text_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_question_text_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'fk_question_text_question_short_key_translation_key_id', columns: ['question_short_key'])]
+#[ORM\Index(name: 'ix_question_text_question_id', columns: ['question_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractQuestionText implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,21 +41,19 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Question
      *
      * @var \Dvsa\Olcs\Api\Entity\Generic\Question
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Generic\Question", fetch="LAZY")
-     * @ORM\JoinColumn(name="question_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\Question::class, fetch: 'LAZY')]
     protected $question;
 
     /**
@@ -67,10 +61,10 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -78,119 +72,107 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Effective from
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="effective_from", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'effective_from', nullable: true)]
     protected $effectiveFrom;
 
     /**
      * Question short key
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="question_short_key", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'question_short_key', length: 255, nullable: true)]
     protected $questionShortKey;
 
     /**
      * Question summary key
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="question_summary_key", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'question_summary_key', length: 255, nullable: true)]
     protected $questionSummaryKey;
 
     /**
      * Question key
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="question_key", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'question_key', length: 255, nullable: true)]
     protected $questionKey;
 
     /**
      * Warning key
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="warning_key", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'warning_key', length: 255, nullable: true)]
     protected $warningKey;
 
     /**
      * Details key
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="details_key", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'details_key', length: 255, nullable: true)]
     protected $detailsKey;
 
     /**
      * Guidance key
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="guidance_key", length=1024, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'guidance_key', length: 1024, nullable: true)]
     protected $guidanceKey;
 
     /**
      * Additional guidance key
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="additional_guidance_key", length=1024, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'additional_guidance_key', length: 1024, nullable: true)]
     protected $additionalGuidanceKey;
 
     /**
      * Hint key
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="hint_key", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'hint_key', length: 255, nullable: true)]
     protected $hintKey;
 
     /**
      * Bullet list key
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="bullet_list_key", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'bullet_list_key', length: 255, nullable: true)]
     protected $bulletListKey;
 
     /**
      * Label key
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="label_key", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'label_key', length: 255, nullable: true)]
     protected $labelKey;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

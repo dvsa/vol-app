@@ -18,14 +18,10 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\Table(name="licence_no_gen",
- *    indexes={
- *        @ORM\Index(name="ix_licence_no_gen_licence_id", columns={"licence_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'licence_no_gen')]
+#[ORM\Index(name: 'ix_licence_no_gen_licence_id', columns: ['licence_id'])]
+#[ORM\MappedSuperclass]
 abstract class AbstractLicenceNoGen implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -36,21 +32,19 @@ abstract class AbstractLicenceNoGen implements BundleSerializableInterface, Json
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
     protected $licence;
 
     /**

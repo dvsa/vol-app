@@ -8,15 +8,11 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 
 /**
  * ApplicationPathGroup Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="application_path_group",
- *    indexes={
- *        @ORM\Index(name="ix_application_path_group_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_application_path_group_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'application_path_group')]
+#[ORM\Index(name: 'ix_application_path_group_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_application_path_group_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Entity]
 class ApplicationPathGroup extends AbstractApplicationPathGroup
 {
     public const ECMT_SHORT_TERM_2020_APSG_WITHOUT_SECTORS_ID = 3;

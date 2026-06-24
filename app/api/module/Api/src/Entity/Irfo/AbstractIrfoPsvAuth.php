@@ -21,21 +21,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irfo_psv_auth",
- *    indexes={
- *        @ORM\Index(name="ix_irfo_psv_auth_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_irfo_psv_auth_type_id", columns={"irfo_psv_auth_type_id"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_journey_frequency", columns={"journey_frequency"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_organisation_id", columns={"organisation_id"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_status", columns={"status"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_withdrawn_reason", columns={"withdrawn_reason"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irfo_psv_auth')]
+#[ORM\Index(name: 'ix_irfo_psv_auth_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_irfo_psv_auth_type_id', columns: ['irfo_psv_auth_type_id'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_journey_frequency', columns: ['journey_frequency'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_organisation_id', columns: ['organisation_id'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_status', columns: ['status'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_withdrawn_reason', columns: ['withdrawn_reason'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -48,61 +44,55 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to organisation
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $organisation;
 
     /**
      * Foreign Key to irfo_psv_auth_type
      *
      * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_psv_auth_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'irfo_psv_auth_type_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType::class, fetch: 'LAZY')]
     protected $irfoPsvAuthType;
 
     /**
      * Status
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
     /**
      * JourneyFrequency
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="journey_frequency", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'journey_frequency', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $journeyFrequency;
 
     /**
      * WithdrawnReason
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="withdrawn_reason", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'withdrawn_reason', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $withdrawnReason;
 
     /**
@@ -110,10 +100,10 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -121,199 +111,174 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Exemption details
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="exemption_details", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'exemption_details', length: 255, nullable: true)]
     protected $exemptionDetails;
 
     /**
      * Expiry date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="expiry_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'expiry_date', nullable: true)]
     protected $expiryDate;
 
     /**
      * isFeeExemptApplication
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_fee_exempt_application", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_fee_exempt_application', nullable: false, options: ['default' => 0])]
     protected $isFeeExemptApplication = 0;
 
     /**
      * isFeeExemptAnnual
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_fee_exempt_annual", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_fee_exempt_annual', nullable: false, options: ['default' => 0])]
     protected $isFeeExemptAnnual = 0;
 
     /**
      * In force date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="in_force_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'in_force_date', nullable: true)]
     protected $inForceDate;
 
     /**
      * Irfo fee id
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="irfo_fee_id", length=10, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'irfo_fee_id', length: 10, nullable: true)]
     protected $irfoFeeId;
 
     /**
      * Irfo file no
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="irfo_file_no", length=10, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'irfo_file_no', length: 10, nullable: false)]
     protected $irfoFileNo = '';
 
     /**
      * Copies issued
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="copies_issued", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'smallint', name: 'copies_issued', nullable: false, options: ['default' => 0])]
     protected $copiesIssued = 0;
 
     /**
      * Copies required
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="copies_required", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'smallint', name: 'copies_required', nullable: false, options: ['default' => 0])]
     protected $copiesRequired = 0;
 
     /**
      * Copies required total
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="copies_required_total", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'smallint', name: 'copies_required_total', nullable: false, options: ['default' => 0])]
     protected $copiesRequiredTotal = 0;
 
     /**
      * Copies issued total
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="copies_issued_total", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'smallint', name: 'copies_issued_total', nullable: false, options: ['default' => 0])]
     protected $copiesIssuedTotal = 0;
 
     /**
      * Last date copies req
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="last_date_copies_req", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'last_date_copies_req', nullable: true)]
     protected $lastDateCopiesReq;
 
     /**
      * Renewal date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="renewal_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'renewal_date', nullable: true)]
     protected $renewalDate;
 
     /**
      * Service route from
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="service_route_from", length=30, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'service_route_from', length: 30, nullable: false)]
     protected $serviceRouteFrom = '';
 
     /**
      * Service route to
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="service_route_to", length=30, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'service_route_to', length: 30, nullable: false)]
     protected $serviceRouteTo = '';
 
     /**
      * Years valid for.  Some negative numbers in legacy hence signed.
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="validity_period", nullable=false)
      */
+    #[ORM\Column(type: 'smallint', name: 'validity_period', nullable: false)]
     protected $validityPeriod = 0;
 
     /**
      * Authorisation must be reviewed within x days of this date for approval.  sla related.
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="application_sent_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'application_sent_date', nullable: true)]
     protected $applicationSentDate;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Countrys
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", inversedBy="irfoPsvAuths", fetch="LAZY")
-     * @ORM\JoinTable(name="irfo_psv_auth_country",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="irfo_psv_auth_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="country_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'irfo_psv_auth_country')]
+    #[ORM\JoinColumn(name: 'irfo_psv_auth_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'country_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Country::class, inversedBy: 'irfoPsvAuths', fetch: 'LAZY')]
     protected $countrys;
 
     /**
      * IrfoPsvAuthNumbers
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthNumber", mappedBy="irfoPsvAuth", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthNumber::class, mappedBy: 'irfoPsvAuth', cascade: ['persist'])]
     protected $irfoPsvAuthNumbers;
 
     /**

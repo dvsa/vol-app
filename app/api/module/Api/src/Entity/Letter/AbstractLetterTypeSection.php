@@ -21,18 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_type_section",
- *    indexes={
- *        @ORM\Index(name="ix_letter_type_section_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_type_section_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_type_section_letter_section_id", columns={"letter_section_id"}),
- *        @ORM\Index(name="IDX_6452411030450394", columns={"letter_type_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_type_section')]
+#[ORM\Index(name: 'ix_letter_type_section_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_type_section_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_letter_type_section_letter_section_id', columns: ['letter_section_id'])]
+#[ORM\Index(name: 'IDX_6452411030450394', columns: ['letter_type_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterTypeSection implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,22 +41,20 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
      * LetterType
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
-     *
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterType", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id')]
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, fetch: 'LAZY')]
     protected $letterType;
 
     /**
      * LetterSection
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSection
-     *
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterSection", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_section_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_section_id', referencedColumnName: 'id')]
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSection::class, fetch: 'LAZY')]
     protected $letterSection;
 
     /**
@@ -68,10 +62,10 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -79,46 +73,42 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Display order
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="display_order", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false)]
     protected $displayOrder = 0;
 
     /**
      * Override default section content
      *
      * @var array
-     *
-     * @ORM\Column(type="json", name="override_content", nullable=true)
      */
+    #[ORM\Column(type: 'json', name: 'override_content', nullable: true)]
     protected $overrideContent;
 
     /**
      * JSON filter config for issues meta-section (e.g. {"goodsOrPsv": "lcat_gv", "category": 1})
      *
      * @var array
-     *
-     * @ORM\Column(type="json", name="issue_filter", nullable=true)
      */
+    #[ORM\Column(type: 'json', name: 'issue_filter', nullable: true)]
     protected $issueFilter;
 
     /**
      * If true, warn caseworker when variant resolution skips this section
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_required", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_required', nullable: false, options: ['default' => 0])]
     protected $isRequired = 0;
 
     /**

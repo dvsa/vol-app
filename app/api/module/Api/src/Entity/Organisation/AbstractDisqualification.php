@@ -21,22 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="disqualification",
- *    indexes={
- *        @ORM\Index(name="ix_disqualification_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_disqualification_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_disqualification_organisation_id", columns={"organisation_id"}),
- *        @ORM\Index(name="ix_disqualification_person_id", columns={"person_id"}),
- *        @ORM\Index(name="uk_disqualification_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_disqualification_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'disqualification')]
+#[ORM\Index(name: 'ix_disqualification_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_disqualification_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_disqualification_organisation_id', columns: ['organisation_id'])]
+#[ORM\Index(name: 'ix_disqualification_person_id', columns: ['person_id'])]
+#[ORM\Index(name: 'uk_disqualification_olbs_key', columns: ['olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_disqualification_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractDisqualification implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,31 +43,28 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to organisation
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $organisation;
 
     /**
      * Foreign Key to person
      *
      * @var \Dvsa\Olcs\Api\Entity\Person\Person
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Person\Person", fetch="LAZY")
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, fetch: 'LAZY')]
     protected $person;
 
     /**
@@ -81,10 +72,10 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -92,74 +83,67 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * isDisqualified
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_disqualified", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'is_disqualified', nullable: true)]
     protected $isDisqualified;
 
     /**
      * Start date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="start_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'start_date', nullable: true)]
     protected $startDate;
 
     /**
      * Notes
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="notes", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'notes', length: 4000, nullable: true)]
     protected $notes;
 
     /**
      * Null for permanent, else no of days disqualified
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="period", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'period', nullable: true)]
     protected $period;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=20, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_type', length: 20, nullable: true)]
     protected $olbsType;
 
     /**

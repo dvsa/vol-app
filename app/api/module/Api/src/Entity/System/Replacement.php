@@ -6,15 +6,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Replacement Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="replacement",
- *    indexes={
- *        @ORM\Index(name="fk_replacement_users_created_by", columns={"created_by"}),
- *        @ORM\Index(name="fk_replacement_users_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'replacement')]
+#[ORM\Index(name: 'fk_replacement_users_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_replacement_users_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Entity]
 class Replacement extends AbstractReplacement
 {
     /**

@@ -33,24 +33,21 @@ use RuntimeException;
 /**
  * Application Entity
  *
- * @ORM\Entity
- * @ORM\Table(name="application",
- *    indexes={
- *        @ORM\Index(name="ix_application_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_application_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_application_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_application_licence_type", columns={"licence_type"}),
- *        @ORM\Index(name="ix_application_status", columns={"status"}),
- *        @ORM\Index(name="ix_application_interim_status", columns={"interim_status"}),
- *        @ORM\Index(name="ix_application_withdrawn_reason", columns={"withdrawn_reason"}),
- *        @ORM\Index(name="ix_application_goods_or_psv", columns={"goods_or_psv"}),
- *        @ORM\Index(name="ix_application_applied_via", columns={"applied_via"}),
- *        @ORM\Index(name="ix_application_psv_which_vehicle_sizes", columns={"psv_which_vehicle_sizes"})
- *    }
- * )
  *
  * @see \Dvsa\OlcsTest\Api\Entity\Application\ApplicationEntityTest
  */
+#[ORM\Table(name: 'application')]
+#[ORM\Index(name: 'ix_application_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_application_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_application_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_application_licence_type', columns: ['licence_type'])]
+#[ORM\Index(name: 'ix_application_status', columns: ['status'])]
+#[ORM\Index(name: 'ix_application_interim_status', columns: ['interim_status'])]
+#[ORM\Index(name: 'ix_application_withdrawn_reason', columns: ['withdrawn_reason'])]
+#[ORM\Index(name: 'ix_application_goods_or_psv', columns: ['goods_or_psv'])]
+#[ORM\Index(name: 'ix_application_applied_via', columns: ['applied_via'])]
+#[ORM\Index(name: 'ix_application_psv_which_vehicle_sizes', columns: ['psv_which_vehicle_sizes'])]
+#[ORM\Entity]
 class Application extends AbstractApplication implements ContextProviderInterface, OrganisationProviderInterface
 {
     use TotAuthVehiclesTrait;

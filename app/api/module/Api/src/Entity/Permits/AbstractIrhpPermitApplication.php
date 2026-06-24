@@ -21,21 +21,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irhp_permit_application",
- *    indexes={
- *        @ORM\Index(name="fk_irhp_permit_application_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_irhp_permit_application_irhp_application1", columns={"irhp_application_id"}),
- *        @ORM\Index(name="fk_irhp_permit_application_last_modified_by_user_id", columns={"last_modified_by"}),
- *        @ORM\Index(name="fk_irhp_permit_application_sectors_id1_idx", columns={"sectors_id"}),
- *        @ORM\Index(name="fk_irhp_permit_applications_irhp_permit_windows1_idx", columns={"irhp_permit_window_id"}),
- *        @ORM\Index(name="fk_irhp_permit_applications_licence1_idx", columns={"licence_id"}),
- *        @ORM\Index(name="irhp_permit_type_ref_data_status_id_fk", columns={"status"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irhp_permit_application')]
+#[ORM\Index(name: 'fk_irhp_permit_application_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_irhp_permit_application_irhp_application1', columns: ['irhp_application_id'])]
+#[ORM\Index(name: 'fk_irhp_permit_application_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'fk_irhp_permit_application_sectors_id1_idx', columns: ['sectors_id'])]
+#[ORM\Index(name: 'fk_irhp_permit_applications_irhp_permit_windows1_idx', columns: ['irhp_permit_window_id'])]
+#[ORM\Index(name: 'fk_irhp_permit_applications_licence1_idx', columns: ['licence_id'])]
+#[ORM\Index(name: 'irhp_permit_type_ref_data_status_id_fk', columns: ['status'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrhpPermitApplication implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -48,61 +44,55 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * IrhpPermitWindow
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_permit_window_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'irhp_permit_window_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow::class, fetch: 'LAZY')]
     protected $irhpPermitWindow;
 
     /**
      * Licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
     protected $licence;
 
     /**
      * IrhpApplication
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpApplication", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, fetch: 'LAZY')]
     protected $irhpApplication;
 
     /**
      * Sectors
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\Sectors
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\Sectors", fetch="LAZY")
-     * @ORM\JoinColumn(name="sectors_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'sectors_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\Sectors::class, fetch: 'LAZY')]
     protected $sectors;
 
     /**
      * Status
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
     /**
@@ -110,10 +100,10 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -121,137 +111,123 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Start date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="start_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'start_date', nullable: true)]
     protected $startDate;
 
     /**
      * Checked answers
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="checked_answers", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'checked_answers', nullable: false, options: ['default' => 0])]
     protected $checkedAnswers = 0;
 
     /**
      * Permits required
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="permits_required", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'permits_required', nullable: true)]
     protected $permitsRequired;
 
     /**
      * Required euro5
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="required_euro5", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'required_euro5', nullable: true)]
     protected $requiredEuro5;
 
     /**
      * Required euro6
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="required_euro6", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'required_euro6', nullable: true)]
     protected $requiredEuro6;
 
     /**
      * Required standard
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="required_standard", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'required_standard', nullable: true)]
     protected $requiredStandard;
 
     /**
      * Required cabotage
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="required_cabotage", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'required_cabotage', nullable: true)]
     protected $requiredCabotage;
 
     /**
      * Properties
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="properties", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'properties', nullable: true)]
     protected $properties;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Answers
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Generic\Answer", mappedBy="irhpPermitApplication", indexBy="question_text_id")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\Answer::class, mappedBy: 'irhpPermitApplication', indexBy: 'question_text_id')]
     protected $answers;
 
     /**
      * Fees
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Fee\Fee", mappedBy="irhpPermitApplication")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, mappedBy: 'irhpPermitApplication')]
     protected $fees;
 
     /**
      * IrhpCandidatePermits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit", mappedBy="irhpPermitApplication")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit::class, mappedBy: 'irhpPermitApplication')]
     protected $irhpCandidatePermits;
 
     /**
      * IrhpPermits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermit", mappedBy="irhpPermitApplication")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermit::class, mappedBy: 'irhpPermitApplication')]
     protected $irhpPermits;
 
     /**
      * IrhpPermitRequests
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRequest", mappedBy="irhpPermitApplication")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRequest::class, mappedBy: 'irhpPermitApplication')]
     protected $irhpPermitRequests;
 
     /**

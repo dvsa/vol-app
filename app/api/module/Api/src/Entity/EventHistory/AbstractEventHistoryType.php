@@ -16,17 +16,11 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\Table(name="event_history_type",
- *    indexes={
- *        @ORM\Index(name="uk_event_history_type_event_code", columns={"event_code"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_event_history_type_event_code", columns={"event_code"})
- *    }
- * )
  */
+#[ORM\Table(name: 'event_history_type')]
+#[ORM\Index(name: 'uk_event_history_type_event_code', columns: ['event_code'])]
+#[ORM\UniqueConstraint(name: 'uk_event_history_type_event_code', columns: ['event_code'])]
+#[ORM\MappedSuperclass]
 abstract class AbstractEventHistoryType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -37,29 +31,26 @@ abstract class AbstractEventHistoryType implements BundleSerializableInterface, 
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Event code
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="event_code", length=3, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'event_code', length: 3, nullable: true)]
     protected $eventCode;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=50, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 50, nullable: false)]
     protected $description = '';
 
 

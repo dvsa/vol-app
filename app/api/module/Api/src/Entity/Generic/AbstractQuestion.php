@@ -21,23 +21,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="question",
- *    indexes={
- *        @ORM\Index(name="fk_question_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_question_form_control_type_ref_data_id", columns={"form_control_type"}),
- *        @ORM\Index(name="fk_question_last_modified_by_user_id", columns={"last_modified_by"}),
- *        @ORM\Index(name="fk_question_question_type_ref_data_id", columns={"question_type"}),
- *        @ORM\Index(name="fk_question_submit_options_ref_data_id", columns={"submit_options"}),
- *        @ORM\Index(name="question_slug_uindex", columns={"slug"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="question_slug_uindex", columns={"slug"})
- *    }
- * )
  */
+#[ORM\Table(name: 'question')]
+#[ORM\Index(name: 'fk_question_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_question_form_control_type_ref_data_id', columns: ['form_control_type'])]
+#[ORM\Index(name: 'fk_question_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'fk_question_question_type_ref_data_id', columns: ['question_type'])]
+#[ORM\Index(name: 'fk_question_submit_options_ref_data_id', columns: ['submit_options'])]
+#[ORM\Index(name: 'question_slug_uindex', columns: ['slug'])]
+#[ORM\UniqueConstraint(name: 'question_slug_uindex', columns: ['slug'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractQuestion implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -50,41 +44,37 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * QuestionType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="question_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'question_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $questionType;
 
     /**
      * FormControlType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="form_control_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'form_control_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $formControlType;
 
     /**
      * SubmitOptions
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="submit_options", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'submit_options', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $submitOptions;
 
     /**
@@ -92,10 +82,10 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
@@ -103,75 +93,68 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
      * Title
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="title", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'title', length: 100, nullable: true)]
     protected $title;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
 
     /**
      * Option source
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="option_source", length=4096, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'option_source', length: 4096, nullable: true)]
     protected $optionSource;
 
     /**
      * Slug
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="slug", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'slug', length: 255, nullable: true)]
     protected $slug;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * ApplicationValidations
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationValidation", mappedBy="question")
-     * @ORM\OrderBy({"weight" = "ASC"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationValidation::class, mappedBy: 'question')]
+    #[ORM\OrderBy(['weight' => 'ASC'])]
     protected $applicationValidations;
 
     /**
      * QuestionTexts
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Generic\QuestionText", mappedBy="question")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\QuestionText::class, mappedBy: 'question')]
     protected $questionTexts;
 
     /**

@@ -21,21 +21,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irfo_vehicle",
- *    indexes={
- *        @ORM\Index(name="ix_irfo_vehicle_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_irfo_vehicle_irfo_gv_permit_id", columns={"irfo_gv_permit_id"}),
- *        @ORM\Index(name="ix_irfo_vehicle_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="uk_irfo_vehicle_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_irfo_vehicle_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irfo_vehicle')]
+#[ORM\Index(name: 'ix_irfo_vehicle_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_irfo_vehicle_irfo_gv_permit_id', columns: ['irfo_gv_permit_id'])]
+#[ORM\Index(name: 'ix_irfo_vehicle_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'uk_irfo_vehicle_olbs_key', columns: ['olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_irfo_vehicle_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -48,21 +42,19 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to irfo_gv_permit
      *
      * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_gv_permit_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irfo_gv_permit_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit::class, fetch: 'LAZY')]
     protected $irfoGvPermit;
 
     /**
@@ -70,10 +62,10 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -81,83 +73,75 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * cocA
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="coc_a", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'coc_a', nullable: false, options: ['default' => 0])]
     protected $cocA = 0;
 
     /**
      * cocB
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="coc_b", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'coc_b', nullable: false, options: ['default' => 0])]
     protected $cocB = 0;
 
     /**
      * cocC
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="coc_c", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'coc_c', nullable: false, options: ['default' => 0])]
     protected $cocC = 0;
 
     /**
      * cocD
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="coc_d", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'coc_d', nullable: false, options: ['default' => 0])]
     protected $cocD = 0;
 
     /**
      * cocT
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="coc_t", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'coc_t', nullable: false, options: ['default' => 0])]
     protected $cocT = 0;
 
     /**
      * Vrm
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="vrm", length=20, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'vrm', length: 20, nullable: false)]
     protected $vrm = '';
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=true, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: true, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**

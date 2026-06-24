@@ -1,6 +1,7 @@
 <?php
 
 namespace Dvsa\Olcs\Api\Entity\Traits;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ModifiedOn Trait
@@ -11,18 +12,16 @@ trait ModifiedOnTrait
      * Last modified on
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="last_modified_on", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'last_modified_on', nullable: true)]
     protected $lastModifiedOn;
 
     /**
      * Set the lastModifiedOn field on persist
      *
-     * @ORM\PreUpdate
-     *
      * @return void
      */
+    #[ORM\PreUpdate]
     public function setLastModifiedOnBeforeUpdate()
     {
         $this->lastModifiedOn = new \DateTime();

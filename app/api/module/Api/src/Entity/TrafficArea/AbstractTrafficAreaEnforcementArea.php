@@ -21,22 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="traffic_area_enforcement_area",
- *    indexes={
- *        @ORM\Index(name="ix_traffic_area_enforcement_area_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_traffic_area_enforcement_area_enforcement_area_id", columns={"enforcement_area_id"}),
- *        @ORM\Index(name="ix_traffic_area_enforcement_area_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_traffic_area_enforcement_area_traffic_area_id", columns={"traffic_area_id"}),
- *        @ORM\Index(name="uk_ta_enforcement_area_traffic_area_id_enforcement_area_id", columns={"traffic_area_id", "enforcement_area_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_ta_enforcement_area_traffic_area_id_enforcement_area_id", columns={"traffic_area_id", "enforcement_area_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'traffic_area_enforcement_area')]
+#[ORM\Index(name: 'ix_traffic_area_enforcement_area_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_traffic_area_enforcement_area_enforcement_area_id', columns: ['enforcement_area_id'])]
+#[ORM\Index(name: 'ix_traffic_area_enforcement_area_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_traffic_area_enforcement_area_traffic_area_id', columns: ['traffic_area_id'])]
+#[ORM\Index(name: 'uk_ta_enforcement_area_traffic_area_id_enforcement_area_id', columns: ['traffic_area_id', 'enforcement_area_id'])]
+#[ORM\UniqueConstraint(name: 'uk_ta_enforcement_area_traffic_area_id_enforcement_area_id', columns: ['traffic_area_id', 'enforcement_area_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,31 +43,28 @@ abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableI
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to traffic_area
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
     protected $trafficArea;
 
     /**
      * Foreign Key to enforcement_area
      *
      * @var \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="enforcement_area_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'enforcement_area_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea::class, fetch: 'LAZY')]
     protected $enforcementArea;
 
     /**
@@ -81,10 +72,10 @@ abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableI
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -92,20 +83,19 @@ abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableI
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

@@ -6,15 +6,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Permission Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="permission",
- *    indexes={
- *        @ORM\Index(name="ix_permission_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_permission_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'permission')]
+#[ORM\Index(name: 'ix_permission_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_permission_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Entity]
 class Permission extends AbstractPermission
 {
     public const SYSTEM_ADMIN = 'system-admin';

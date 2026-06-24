@@ -21,17 +21,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="legacy_offence",
- *    indexes={
- *        @ORM\Index(name="ix_legacy_offence_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_legacy_offence_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_legacy_offence_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'legacy_offence')]
+#[ORM\Index(name: 'ix_legacy_offence_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_legacy_offence_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_legacy_offence_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLegacyOffence implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -44,20 +40,18 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
      * Primary key
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
     protected $id = 0;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
     /**
@@ -65,10 +59,10 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -76,128 +70,115 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Definition
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="definition", length=1000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'definition', length: 1000, nullable: true)]
     protected $definition;
 
     /**
      * isTrailer
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_trailer", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'is_trailer', nullable: true)]
     protected $isTrailer;
 
     /**
      * Notes
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="notes", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'notes', length: 4000, nullable: true)]
     protected $notes;
 
     /**
      * Num of offences
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="num_of_offences", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'num_of_offences', nullable: true)]
     protected $numOfOffences;
 
     /**
      * Offence authority
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="offence_authority", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'offence_authority', length: 100, nullable: true)]
     protected $offenceAuthority;
 
     /**
      * Offence date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="offence_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'offence_date', nullable: true)]
     protected $offenceDate;
 
     /**
      * Offence to date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="offence_to_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'offence_to_date', nullable: true)]
     protected $offenceToDate;
 
     /**
      * Offender name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="offender_name", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'offender_name', length: 100, nullable: true)]
     protected $offenderName;
 
     /**
      * Points
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="points", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'points', nullable: true)]
     protected $points;
 
     /**
      * Position
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="position", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'position', length: 100, nullable: true)]
     protected $position;
 
     /**
      * Offence type
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="offence_type", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'offence_type', length: 100, nullable: true)]
     protected $offenceType;
 
     /**
      * Vrm
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="vrm", length=20, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'vrm', length: 20, nullable: true)]
     protected $vrm;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

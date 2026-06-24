@@ -23,29 +23,26 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
  *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="application",
- *    indexes={
- *        @ORM\Index(name="fk_application_grant_authority_ref_data_id", columns={"grant_authority"}),
- *        @ORM\Index(name="fk_application_vehicle_type_ref_data_id", columns={"vehicle_type"}),
- *        @ORM\Index(name="ix_application_applied_via", columns={"applied_via"}),
- *        @ORM\Index(name="ix_application_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_application_digital_signature_id", columns={"digital_signature_id"}),
- *        @ORM\Index(name="ix_application_goods_or_psv", columns={"goods_or_psv"}),
- *        @ORM\Index(name="ix_application_interim_status", columns={"interim_status"}),
- *        @ORM\Index(name="ix_application_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_application_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_application_licence_type", columns={"licence_type"}),
- *        @ORM\Index(name="ix_application_psv_which_vehicle_sizes", columns={"psv_which_vehicle_sizes"}),
- *        @ORM\Index(name="ix_application_signature_type", columns={"signature_type"}),
- *        @ORM\Index(name="ix_application_status", columns={"status"}),
- *        @ORM\Index(name="ix_application_variation_type", columns={"variation_type"}),
- *        @ORM\Index(name="ix_application_withdrawn_reason", columns={"withdrawn_reason"})
- *    }
- * )
  */
+#[ORM\Table(name: 'application')]
+#[ORM\Index(name: 'fk_application_grant_authority_ref_data_id', columns: ['grant_authority'])]
+#[ORM\Index(name: 'fk_application_vehicle_type_ref_data_id', columns: ['vehicle_type'])]
+#[ORM\Index(name: 'ix_application_applied_via', columns: ['applied_via'])]
+#[ORM\Index(name: 'ix_application_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_application_digital_signature_id', columns: ['digital_signature_id'])]
+#[ORM\Index(name: 'ix_application_goods_or_psv', columns: ['goods_or_psv'])]
+#[ORM\Index(name: 'ix_application_interim_status', columns: ['interim_status'])]
+#[ORM\Index(name: 'ix_application_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_application_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_application_licence_type', columns: ['licence_type'])]
+#[ORM\Index(name: 'ix_application_psv_which_vehicle_sizes', columns: ['psv_which_vehicle_sizes'])]
+#[ORM\Index(name: 'ix_application_signature_type', columns: ['signature_type'])]
+#[ORM\Index(name: 'ix_application_status', columns: ['status'])]
+#[ORM\Index(name: 'ix_application_variation_type', columns: ['variation_type'])]
+#[ORM\Index(name: 'ix_application_withdrawn_reason', columns: ['withdrawn_reason'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractApplication implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -59,121 +56,109 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Licence can have many applications, even several being processed at the same time
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY", cascade={"persist"})
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY', cascade: ['persist'])]
     protected $licence;
 
     /**
      * Applications, once submitted, are new. Can then be granted or not. Normally become valid.
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
     /**
      * VariationType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="variation_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'variation_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $variationType;
 
     /**
      * PSV Vehicle size
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="psv_which_vehicle_sizes", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'psv_which_vehicle_sizes', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $psvWhichVehicleSizes;
 
     /**
      * Restricted, Standard International etc.
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'licence_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $licenceType;
 
     /**
      * Application for a good or passenger service vehicle licence.
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $goodsOrPsv;
 
     /**
      * VehicleType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="vehicle_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'vehicle_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $vehicleType;
 
     /**
      * The authority under which an application was granted
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="grant_authority", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'grant_authority', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $grantAuthority;
 
     /**
      * Reason for withdrawing application. Reference data.
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="withdrawn_reason", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'withdrawn_reason', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $withdrawnReason;
 
     /**
      * Interim licence status.
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="interim_status", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'interim_status', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $interimStatus;
 
     /**
      * AppliedVia
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="applied_via", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'applied_via', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $appliedVia;
 
     /**
@@ -181,10 +166,10 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -192,769 +177,685 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * SignatureType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="signature_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'signature_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $signatureType;
 
     /**
      * DigitalSignature
      *
      * @var \Dvsa\Olcs\Api\Entity\DigitalSignature
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\DigitalSignature", fetch="LAZY")
-     * @ORM\JoinColumn(name="digital_signature_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'digital_signature_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\DigitalSignature::class, fetch: 'LAZY')]
     protected $digitalSignature;
 
     /**
      * New or variation application. 0 for new, 1 for variation
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_variation", nullable=false)
      */
+    #[ORM\Column(type: 'boolean', name: 'is_variation', nullable: false)]
     protected $isVariation = 0;
 
     /**
      * Stores user has elected to enter vehicles. Affects application screenflow. Show screen to enter vehicles or not.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="has_entered_reg", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'has_entered_reg', nullable: true)]
     protected $hasEnteredReg;
 
     /**
      * Applicant wants to be authorised for this number of trailers.
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="tot_auth_trailers", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'tot_auth_trailers', nullable: true)]
     protected $totAuthTrailers;
 
     /**
      * Applicant wants to be authorised for this number of vehicles for goods. Will be sum of the psv columns for psv.
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="tot_auth_vehicles", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'tot_auth_vehicles', nullable: true)]
     protected $totAuthVehicles;
 
     /**
      * Applicant wants to be authorised for this number of HGV vehicles for goods
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="tot_auth_hgv_vehicles", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'tot_auth_hgv_vehicles', nullable: true)]
     protected $totAuthHgvVehicles;
 
     /**
      * Applicant wants to be authorised for this number of LGV vehicles for goods
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="tot_auth_lgv_vehicles", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'tot_auth_lgv_vehicles', nullable: true)]
     protected $totAuthLgvVehicles;
 
     /**
      * Number of EU community licences required
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="tot_community_licences", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'tot_community_licences', nullable: true)]
     protected $totCommunityLicences;
 
     /**
      * User confirms they have read LGV undertakings and declarations and will comply
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="lgv_declaration_confirmation", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'lgv_declaration_confirmation', nullable: false, options: ['default' => 0])]
     protected $lgvDeclarationConfirmation = 0;
 
     /**
      * Any person in application has ever been declared bankrupt
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="bankrupt", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'bankrupt', nullable: true)]
     protected $bankrupt;
 
     /**
      * Any person in application has ever been involved in a company that went into administration
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="administration", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'administration', nullable: true)]
     protected $administration;
 
     /**
      * Any person in application has ever been disqualified as a director or manager of a company
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="disqualified", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'disqualified', nullable: true)]
     protected $disqualified;
 
     /**
      * Operator has been liquidated
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="liquidation", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'liquidation', nullable: true)]
     protected $liquidation;
 
     /**
      * Any person in application has ever been involved in a company that went into receivership
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="receivership", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'receivership', nullable: true)]
     protected $receivership;
 
     /**
      * User has confirmed that any futire insolvency will be communicated to the TC
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="insolvency_confirmation", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'insolvency_confirmation', nullable: false, options: ['default' => 0])]
     protected $insolvencyConfirmation = 0;
 
     /**
      * Details of previous bankrupcy, insolvency, administration, receivership of people linked to application
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="insolvency_details", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'insolvency_details', length: 4000, nullable: true)]
     protected $insolvencyDetails;
 
     /**
      * User confirms they have read safety information in application and will comply
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="safety_confirmation", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'safety_confirmation', nullable: false, options: ['default' => 0])]
     protected $safetyConfirmation = 0;
 
     /**
      * User confirms they have read undertakings and declarations and will comply
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="declaration_confirmation", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'declaration_confirmation', nullable: false, options: ['default' => 0])]
     protected $declarationConfirmation = 0;
 
     /**
      * noTmConfirmation
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="no_tm_confirmation", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'no_tm_confirmation', nullable: true)]
     protected $noTmConfirmation;
 
     /**
      * User specifies whether they have uploaded financial evidence or will send by post
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="financial_evidence_uploaded", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'financial_evidence_uploaded', nullable: true)]
     protected $financialEvidenceUploaded;
 
     /**
      * Small vehicle evidence uploaded
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="small_vehicle_evidence_uploaded", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'small_vehicle_evidence_uploaded', nullable: true)]
     protected $smallVehicleEvidenceUploaded;
 
     /**
      * Occupation evidence uploaded
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="occupation_evidence_uploaded", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'occupation_evidence_uploaded', nullable: true)]
     protected $occupationEvidenceUploaded;
 
     /**
      * Submitted date.  Was date_entered in OLBS
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="received_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'received_date', nullable: true)]
     protected $receivedDate;
 
     /**
      * SLA for application to be processed.
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="target_completion_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'target_completion_date', nullable: true)]
     protected $targetCompletionDate;
 
     /**
      * Date application granted.
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="granted_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'granted_date', nullable: true)]
     protected $grantedDate;
 
     /**
      * Date application refused.
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="refused_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'refused_date', nullable: true)]
     protected $refusedDate;
 
     /**
      * Date application withdrawn.
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="withdrawn_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'withdrawn_date', nullable: true)]
     protected $withdrawnDate;
 
     /**
      * History section. Ay person linked to application currently holds a licence
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="prev_has_licence", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'prev_has_licence', nullable: true)]
     protected $prevHasLicence;
 
     /**
      * History section. Any person linked to application has previously held a licence
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="prev_had_licence", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'prev_had_licence', nullable: true)]
     protected $prevHadLicence;
 
     /**
      * History section. Any person linked to application has previously been refused a licence in the EU
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="prev_been_refused", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'prev_been_refused', nullable: true)]
     protected $prevBeenRefused;
 
     /**
      * History section. Any person linked to application has previously been on a licence revoked in the EU
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="prev_been_revoked", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'prev_been_revoked', nullable: true)]
     protected $prevBeenRevoked;
 
     /**
      * History section. Any person linked to application has previously been to a public enquiry before a TC
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="prev_been_at_pi", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'prev_been_at_pi', nullable: true)]
     protected $prevBeenAtPi;
 
     /**
      * History section. Any person linked to application has previously been disqualified by any TC
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="prev_been_disqualified_tc", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'prev_been_disqualified_tc', nullable: true)]
     protected $prevBeenDisqualifiedTc;
 
     /**
      * History section. In last 12 months any person or operator linked to the application has purchased a company or shares of  that has or had a licence
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="prev_purchased_assets", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'prev_purchased_assets', nullable: true)]
     protected $prevPurchasedAssets;
 
     /**
      * Override out of objection date
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="override_ooo", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'override_ooo', nullable: false, options: ['default' => 0])]
     protected $overrideOoo = 0;
 
     /**
      * Anyone linked to app has been convicted or linked to a company that was convicted
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="prev_conviction", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'prev_conviction', nullable: true)]
     protected $prevConviction;
 
     /**
      * User confirmation that any convictions that occur during application process will be communicated to TC.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="convictions_confirmation", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'convictions_confirmation', nullable: false, options: ['default' => 0])]
     protected $convictionsConfirmation = 0;
 
     /**
      * The psv operator intends to operate small vehicles English and Welsh operators only.Section 15B PSV421
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="psv_operate_small_vhl", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'psv_operate_small_vhl', nullable: true)]
     protected $psvOperateSmallVhl;
 
     /**
      * Small vehicle notes. Section 15B PSV421
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="psv_small_vhl_notes", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'psv_small_vhl_notes', length: 4000, nullable: true)]
     protected $psvSmallVhlNotes;
 
     /**
      * User confirmation That if they operate small vehicles they agree to the conditions in the application ui form. Section 15D PSV421
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="psv_small_vhl_confirmation", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'psv_small_vhl_confirmation', nullable: true)]
     protected $psvSmallVhlConfirmation;
 
     /**
      * Confirm vehicles with 8 passenger seats or less will not be operated on the licence. Section 15E PSV421
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="psv_no_small_vhl_confirmation", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'psv_no_small_vhl_confirmation', nullable: true)]
     protected $psvNoSmallVhlConfirmation;
 
     /**
      * User confirms compliance for restricted psv medium vehicle legislation. Section 8 of PSV 421 form
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="psv_medium_vhl_confirmation", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'psv_medium_vhl_confirmation', nullable: true)]
     protected $psvMediumVhlConfirmation;
 
     /**
      * Notes by applicant on psv restriced medium vehicles.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="psv_medium_vhl_notes", length=1000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'psv_medium_vhl_notes', length: 1000, nullable: true)]
     protected $psvMediumVhlNotes;
 
     /**
      * Are any vehicles on licence limos or novelty.Section 15F PSV421
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="psv_limousines", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'psv_limousines', nullable: true)]
     protected $psvLimousines;
 
     /**
      * If no limos on licence user confirms they will not put any on licence. Section 15F PSV421
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="psv_no_limousine_confirmation", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'psv_no_limousine_confirmation', nullable: true)]
     protected $psvNoLimousineConfirmation;
 
     /**
      * Licence is only for limos and no other vehicle types. Section 15G PSV 421
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="psv_only_limousines_confirmation", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'psv_only_limousines_confirmation', nullable: true)]
     protected $psvOnlyLimousinesConfirmation;
 
     /**
      * psvIncomeRecordsConfirmation
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="psv_income_records_confirmation", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'psv_income_records_confirmation', nullable: true)]
     protected $psvIncomeRecordsConfirmation;
 
     /**
      * psvOccupationRecordsConfirmation
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="psv_occupation_records_confirmation", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'psv_occupation_records_confirmation', nullable: true)]
     protected $psvOccupationRecordsConfirmation;
 
     /**
      * Psv total vehicle small
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_total_vehicle_small", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_total_vehicle_small', nullable: true)]
     protected $psvTotalVehicleSmall;
 
     /**
      * Psv total vehicle large
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_total_vehicle_large", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_total_vehicle_large', nullable: true)]
     protected $psvTotalVehicleLarge;
 
     /**
      * Date interim licence is to start.
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="interim_start", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'interim_start', nullable: true)]
     protected $interimStart;
 
     /**
      * Date interim licence is to end.
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="interim_end", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'interim_end', nullable: true)]
     protected $interimEnd;
 
     /**
      * Number of vehicles authorised on interim licence.
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="interim_auth_vehicles", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'interim_auth_vehicles', nullable: true)]
     protected $interimAuthVehicles;
 
     /**
      * Number of HGV vehicles authorised on interim licence.
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="interim_auth_hgv_vehicles", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'interim_auth_hgv_vehicles', nullable: true)]
     protected $interimAuthHgvVehicles;
 
     /**
      * Number of LGV vehicles authorised on interim licence.
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="interim_auth_lgv_vehicles", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'interim_auth_lgv_vehicles', nullable: true)]
     protected $interimAuthLgvVehicles;
 
     /**
      * Number of trailers authorised on interim licence.
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="interim_auth_trailers", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'interim_auth_trailers', nullable: true)]
     protected $interimAuthTrailers;
 
     /**
      * Reason an interim licence is required.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="interim_reason", length=1000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'interim_reason', length: 1000, nullable: true)]
     protected $interimReason;
 
     /**
      * User confirmation that maintenance agreements are suitable and guidence notes read.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_maintenance_suitable", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'is_maintenance_suitable', nullable: true)]
     protected $isMaintenanceSuitable;
 
     /**
      * Auth signature
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="auth_signature", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'auth_signature', nullable: false, options: ['default' => 0])]
     protected $authSignature = 0;
 
     /**
      * Licence is to be for Northern Ireland
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="ni_flag", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'ni_flag', nullable: true)]
     protected $niFlag;
 
     /**
      * When application granted schedule an inspection email
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="request_inspection", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'request_inspection', nullable: true)]
     protected $requestInspection;
 
     /**
      * Comment to add to inspection email
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="request_inspection_comment", length=300, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'request_inspection_comment', length: 300, nullable: true)]
     protected $requestInspectionComment;
 
     /**
      * Delay in months after app is granted before inspection request email sent
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="request_inspection_delay", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'request_inspection_delay', nullable: true)]
     protected $requestInspectionDelay;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * applicationReferredToPi
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="application_referred_to_pi", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'application_referred_to_pi', nullable: true)]
     protected $applicationReferredToPi;
 
     /**
      * Was auto granted
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="was_auto_granted", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'was_auto_granted', nullable: false, options: ['default' => 0])]
     protected $wasAutoGranted = 0;
 
     /**
      * ApplicationCompletion
      *
      * @var \Dvsa\Olcs\Api\Entity\ApplicationCompletion
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion", mappedBy="application", cascade={"persist"})
      */
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion::class, mappedBy: 'application', cascade: ['persist'])]
     protected $applicationCompletion;
 
     /**
      * OperatingCentres
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre", mappedBy="application")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre::class, mappedBy: 'application')]
     protected $operatingCentres;
 
     /**
      * ApplicationOrganisationPersons
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson", mappedBy="application")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson::class, mappedBy: 'application')]
     protected $applicationOrganisationPersons;
 
     /**
      * ReadAudits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Application\ApplicationReadAudit", mappedBy="application")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Application\ApplicationReadAudit::class, mappedBy: 'application')]
     protected $readAudits;
 
     /**
      * ApplicationTracking
      *
      * @var \Dvsa\Olcs\Api\Entity\ApplicationTracking
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\ApplicationTracking", mappedBy="application", cascade={"persist"})
      */
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\ApplicationTracking::class, mappedBy: 'application', cascade: ['persist'])]
     protected $applicationTracking;
 
     /**
      * Cases
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", mappedBy="application")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, mappedBy: 'application')]
     protected $cases;
 
     /**
      * ConditionUndertakings
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking", mappedBy="application")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking::class, mappedBy: 'application')]
     protected $conditionUndertakings;
 
     /**
      * Documents
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", mappedBy="application", fetch="EXTRA_LAZY")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'application', fetch: 'EXTRA_LAZY')]
     protected $documents;
 
     /**
      * Fees
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Fee\Fee", mappedBy="application")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, mappedBy: 'application')]
     protected $fees;
 
     /**
      * LicenceVehicles
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle", mappedBy="application")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle::class, mappedBy: 'application')]
     protected $licenceVehicles;
 
     /**
      * InterimLicenceVehicles
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle", mappedBy="interimApplication")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle::class, mappedBy: 'interimApplication')]
     protected $interimLicenceVehicles;
 
     /**
      * OtherLicences
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence", mappedBy="application")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence::class, mappedBy: 'application')]
     protected $otherLicences;
 
     /**
      * PreviousConvictions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Application\PreviousConviction", mappedBy="application")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Application\PreviousConviction::class, mappedBy: 'application')]
     protected $previousConvictions;
 
     /**
      * PublicationLinks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Publication\PublicationLink", mappedBy="application")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\PublicationLink::class, mappedBy: 'application')]
     protected $publicationLinks;
 
     /**
      * S4s
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Application\S4", mappedBy="application")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Application\S4::class, mappedBy: 'application')]
     protected $s4s;
 
     /**
      * Tasks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Task\Task", mappedBy="application")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, mappedBy: 'application')]
     protected $tasks;
 
     /**
      * TransportManagers
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication", mappedBy="application", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication::class, mappedBy: 'application', cascade: ['remove'])]
     protected $transportManagers;
 
     /**

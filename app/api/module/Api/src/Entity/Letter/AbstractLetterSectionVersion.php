@@ -21,20 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_section_version",
- *    indexes={
- *        @ORM\Index(name="ix_letter_section_version_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_section_version_goods_or_psv", columns={"goods_or_psv"}),
- *        @ORM\Index(name="ix_letter_section_version_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_section_version_letter_section_variant_id", columns={"letter_section_variant_id"}),
- *        @ORM\Index(name="ix_letter_section_version_section_type", columns={"section_type"}),
- *        @ORM\Index(name="ix_letter_section_version_type_goods_or_psv", columns={"section_type", "goods_or_psv"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_section_version')]
+#[ORM\Index(name: 'ix_letter_section_version_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_section_version_goods_or_psv', columns: ['goods_or_psv'])]
+#[ORM\Index(name: 'ix_letter_section_version_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_letter_section_version_letter_section_variant_id', columns: ['letter_section_variant_id'])]
+#[ORM\Index(name: 'ix_letter_section_version_section_type', columns: ['section_type'])]
+#[ORM\Index(name: 'ix_letter_section_version_type_goods_or_psv', columns: ['section_type', 'goods_or_psv'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterSectionVersion implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -47,41 +43,37 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * LetterSectionVariant
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_section_variant_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_section_variant_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant::class, fetch: 'LAZY')]
     protected $letterSectionVariant;
 
     /**
      * FK to ref_data
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="section_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'section_type', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $sectionType;
 
     /**
      * FK to ref_data lcat_gv or lcat_psv
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $goodsOrPsv;
 
     /**
@@ -89,10 +81,10 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -100,110 +92,99 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 255, nullable: false)]
     protected $name = '';
 
     /**
      * Editor.js format
      *
      * @var array
-     *
-     * @ORM\Column(type="json", name="default_content", nullable=true)
      */
+    #[ORM\Column(type: 'json', name: 'default_content', nullable: true)]
     protected $defaultContent;
 
     /**
      * Help text for users
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="help_text", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'help_text', nullable: true)]
     protected $helpText;
 
     /**
      * Minimum content length
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="min_length", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'min_length', nullable: true)]
     protected $minLength;
 
     /**
      * Maximum content length
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="max_length", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'max_length', nullable: true)]
     protected $maxLength;
 
     /**
      * Is locked
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_locked", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_locked', nullable: false, options: ['default' => 0])]
     protected $isLocked = 0;
 
     /**
      * Section has placeholders that must be edited
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="requires_input", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'requires_input', nullable: false, options: ['default' => 0])]
     protected $requiresInput = 0;
 
     /**
      * Applicable in NI
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_ni", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_ni', nullable: false, options: ['default' => 0])]
     protected $isNi = 0;
 
     /**
      * Embargo until this date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="publish_from", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'publish_from', nullable: true)]
     protected $publishFrom;
 
     /**
      * Version number
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="version_number", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'version_number', nullable: false)]
     protected $versionNumber = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

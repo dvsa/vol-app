@@ -23,23 +23,18 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
  *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="team",
- *    indexes={
- *        @ORM\Index(name="ix_team_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_team_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_team_traffic_area_id", columns={"traffic_area_id"}),
- *        @ORM\Index(name="uk_team_name", columns={"name"}),
- *        @ORM\Index(name="uk_team_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_team_name", columns={"name"}),
- *        @ORM\UniqueConstraint(name="uk_team_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'team')]
+#[ORM\Index(name: 'ix_team_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_team_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_team_traffic_area_id', columns: ['traffic_area_id'])]
+#[ORM\Index(name: 'uk_team_name', columns: ['name'])]
+#[ORM\Index(name: 'uk_team_olbs_key', columns: ['olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_team_name', columns: ['name'])]
+#[ORM\UniqueConstraint(name: 'uk_team_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -53,21 +48,19 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to traffic_area
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
     protected $trafficArea;
 
     /**
@@ -75,10 +68,10 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -86,74 +79,67 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
 
     /**
      * Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=70, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 70, nullable: false)]
     protected $name = '';
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * Tasks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Task\Task", mappedBy="assignedToTeam")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, mappedBy: 'assignedToTeam')]
     protected $tasks;
 
     /**
      * TaskAllocationRules
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule", mappedBy="team")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule::class, mappedBy: 'team')]
     protected $taskAllocationRules;
 
     /**
      * TeamPrinters
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\PrintScan\TeamPrinter", mappedBy="team", cascade={"persist", "remove"}, orphanRemoval=true)
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\PrintScan\TeamPrinter::class, mappedBy: 'team', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected $teamPrinters;
 
     /**

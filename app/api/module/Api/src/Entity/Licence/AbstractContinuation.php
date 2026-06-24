@@ -20,17 +20,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="continuation",
- *    indexes={
- *        @ORM\Index(name="ix_continuation_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_continuation_traffic_area_id", columns={"traffic_area_id"}),
- *        @ORM\Index(name="ix_continuation_traffic_area_id_year_month", columns={"traffic_area_id", "year", "month"})
- *    }
- * )
  */
+#[ORM\Table(name: 'continuation')]
+#[ORM\Index(name: 'ix_continuation_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_continuation_traffic_area_id', columns: ['traffic_area_id'])]
+#[ORM\Index(name: 'ix_continuation_traffic_area_id_year_month', columns: ['traffic_area_id', 'year', 'month'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractContinuation implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -42,21 +38,19 @@ abstract class AbstractContinuation implements BundleSerializableInterface, Json
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to traffic_area
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
     protected $trafficArea;
 
     /**
@@ -64,38 +58,35 @@ abstract class AbstractContinuation implements BundleSerializableInterface, Json
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
      * Month
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="month", nullable=false)
      */
+    #[ORM\Column(type: 'smallint', name: 'month', nullable: false)]
     protected $month = 0;
 
     /**
      * Year
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="year", nullable=false)
      */
+    #[ORM\Column(type: 'smallint', name: 'year', nullable: false)]
     protected $year = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

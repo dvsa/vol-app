@@ -9,14 +9,10 @@ use Dvsa\Olcs\Api\Service\Qa\QaEntityInterface;
 
 /**
  * Question Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="question",
- *    indexes={
- *        @ORM\Index(name="fk_question_question_type_ref_data_id", columns={"question_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'question')]
+#[ORM\Index(name: 'fk_question_question_type_ref_data_id', columns: ['question_type'])]
+#[ORM\Entity]
 class Question extends AbstractQuestion
 {
     // Standard question types

@@ -23,25 +23,22 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
  *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="data_retention",
- *    indexes={
- *        @ORM\Index(name="ix_assigned_to", columns={"assigned_to"}),
- *        @ORM\Index(name="ix_data_retention_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_data_retention_goods_or_psv", columns={"goods_or_psv"}),
- *        @ORM\Index(name="ix_data_retention_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_data_retention_rule_id", columns={"data_retention_rule_id"}),
- *        @ORM\Index(name="ix_delete_confirmation", columns={"action_confirmation"}),
- *        @ORM\Index(name="ix_deleted_date", columns={"deleted_date"}),
- *        @ORM\Index(name="ix_entity_name", columns={"entity_name"}),
- *        @ORM\Index(name="ix_entity_name_entity_pk", columns={"entity_name", "entity_pk"}),
- *        @ORM\Index(name="ix_lic_no", columns={"lic_no"}),
- *        @ORM\Index(name="ix_organisation_id", columns={"organisation_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'data_retention')]
+#[ORM\Index(name: 'ix_assigned_to', columns: ['assigned_to'])]
+#[ORM\Index(name: 'ix_data_retention_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_data_retention_goods_or_psv', columns: ['goods_or_psv'])]
+#[ORM\Index(name: 'ix_data_retention_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_data_retention_rule_id', columns: ['data_retention_rule_id'])]
+#[ORM\Index(name: 'ix_delete_confirmation', columns: ['action_confirmation'])]
+#[ORM\Index(name: 'ix_deleted_date', columns: ['deleted_date'])]
+#[ORM\Index(name: 'ix_entity_name', columns: ['entity_name'])]
+#[ORM\Index(name: 'ix_entity_name_entity_pk', columns: ['entity_name', 'entity_pk'])]
+#[ORM\Index(name: 'ix_lic_no', columns: ['lic_no'])]
+#[ORM\Index(name: 'ix_organisation_id', columns: ['organisation_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractDataRetention implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -55,41 +52,37 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * AssignedTo
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="assigned_to", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'assigned_to', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $assignedTo;
 
     /**
      * GoodsOrPsv
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $goodsOrPsv;
 
     /**
      * FK to data retention rule
      *
      * @var \Dvsa\Olcs\Api\Entity\DataRetentionRule
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\DataRetentionRule", fetch="LAZY")
-     * @ORM\JoinColumn(name="data_retention_rule_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'data_retention_rule_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\DataRetentionRule::class, fetch: 'LAZY')]
     protected $dataRetentionRule;
 
     /**
@@ -97,10 +90,10 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -108,91 +101,82 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Entity name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="entity_name", length=64, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'entity_name', length: 64, nullable: false)]
     protected $entityName = '';
 
     /**
      * Entity pk
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="entity_pk", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'entity_pk', nullable: false)]
     protected $entityPk = 0;
 
     /**
      * Organisation name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="organisation_name", length=160, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'organisation_name', length: 160, nullable: true)]
     protected $organisationName;
 
     /**
      * Organisation id
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="organisation_id", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'organisation_id', nullable: true)]
     protected $organisationId;
 
     /**
      * Licence id
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="licence_id", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'licence_id', nullable: true)]
     protected $licenceId;
 
     /**
      * Lic no
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="lic_no", length=18, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'lic_no', length: 18, nullable: true)]
     protected $licNo;
 
     /**
      * Action confirmation
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="action_confirmation", nullable=false)
      */
+    #[ORM\Column(type: 'boolean', name: 'action_confirmation', nullable: false)]
     protected $actionConfirmation = 0;
 
     /**
      * Next review date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="next_review_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'next_review_date', nullable: true)]
     protected $nextReviewDate;
 
     /**
      * Actioned date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="actioned_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'actioned_date', nullable: true)]
     protected $actionedDate;
 
     /**

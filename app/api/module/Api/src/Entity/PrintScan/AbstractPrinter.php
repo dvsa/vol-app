@@ -18,10 +18,9 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\Table(name="printer")
  */
+#[ORM\Table(name: 'printer')]
+#[ORM\MappedSuperclass]
 abstract class AbstractPrinter implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -32,47 +31,42 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Printer tray
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="printer_tray", length=45, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'printer_tray', length: 45, nullable: true)]
     protected $printerTray;
 
     /**
      * Printer name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="printer_name", length=45, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'printer_name', length: 45, nullable: true)]
     protected $printerName;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
 
     /**
      * TeamPrinters
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\PrintScan\TeamPrinter", mappedBy="printer")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\PrintScan\TeamPrinter::class, mappedBy: 'printer')]
     protected $teamPrinters;
 
     /**

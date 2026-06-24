@@ -21,25 +21,21 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irhp_application",
- *    indexes={
- *        @ORM\Index(name="fk_irhp_application_international_journeys", columns={"international_journeys"}),
- *        @ORM\Index(name="fk_irhp_application_sectors_id", columns={"sectors_id"}),
- *        @ORM\Index(name="ix_irhp_application_cancellation_date", columns={"cancellation_date"}),
- *        @ORM\Index(name="ix_irhp_application_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_irhp_application_irhp_permit_type_id", columns={"irhp_permit_type_id"}),
- *        @ORM\Index(name="ix_irhp_application_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_irhp_application_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_irhp_application_source", columns={"source"}),
- *        @ORM\Index(name="ix_irhp_application_status", columns={"status"}),
- *        @ORM\Index(name="ix_irhp_application_withdraw_reason", columns={"withdraw_reason"}),
- *        @ORM\Index(name="ix_irhp_application_withdrawn_date", columns={"withdrawn_date"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irhp_application')]
+#[ORM\Index(name: 'fk_irhp_application_international_journeys', columns: ['international_journeys'])]
+#[ORM\Index(name: 'fk_irhp_application_sectors_id', columns: ['sectors_id'])]
+#[ORM\Index(name: 'ix_irhp_application_cancellation_date', columns: ['cancellation_date'])]
+#[ORM\Index(name: 'ix_irhp_application_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_irhp_application_irhp_permit_type_id', columns: ['irhp_permit_type_id'])]
+#[ORM\Index(name: 'ix_irhp_application_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_irhp_application_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_irhp_application_source', columns: ['source'])]
+#[ORM\Index(name: 'ix_irhp_application_status', columns: ['status'])]
+#[ORM\Index(name: 'ix_irhp_application_withdraw_reason', columns: ['withdraw_reason'])]
+#[ORM\Index(name: 'ix_irhp_application_withdrawn_date', columns: ['withdrawn_date'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrhpApplication implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -52,81 +48,73 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
     protected $licence;
 
     /**
      * InternationalJourneys
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="international_journeys", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'international_journeys', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $internationalJourneys;
 
     /**
      * Source
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="source", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'source', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $source;
 
     /**
      * Status
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
     /**
      * Sectors
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\Sectors
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\Sectors", fetch="LAZY")
-     * @ORM\JoinColumn(name="sectors_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'sectors_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\Sectors::class, fetch: 'LAZY')]
     protected $sectors;
 
     /**
      * IrhpPermitType
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_permit_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'irhp_permit_type_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType::class, fetch: 'LAZY')]
     protected $irhpPermitType;
 
     /**
      * WithdrawReason
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="withdraw_reason", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'withdraw_reason', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $withdrawReason;
 
     /**
@@ -134,10 +122,10 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -145,181 +133,158 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * In scope
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="in_scope", nullable=true, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'in_scope', nullable: true, options: ['default' => 0])]
     protected $inScope = 0;
 
     /**
      * Checked answers
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="checked_answers", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'checked_answers', nullable: false, options: ['default' => 0])]
     protected $checkedAnswers = 0;
 
     /**
      * Declaration
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="declaration", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'declaration', nullable: false, options: ['default' => 0])]
     protected $declaration = 0;
 
     /**
      * Date received
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="date_received", nullable=false)
      */
+    #[ORM\Column(type: 'date', name: 'date_received', nullable: false)]
     protected $dateReceived;
 
     /**
      * Cancellation date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="cancellation_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'cancellation_date', nullable: true)]
     protected $cancellationDate;
 
     /**
      * Withdrawn date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="withdrawn_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'withdrawn_date', nullable: true)]
     protected $withdrawnDate;
 
     /**
      * Expiry date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="expiry_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'expiry_date', nullable: true)]
     protected $expiryDate;
 
     /**
      * Checked
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="checked", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'checked', nullable: true)]
     protected $checked;
 
     /**
      * Cor certificate number
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="cor_certificate_number", length=12, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'cor_certificate_number', length: 12, nullable: true)]
     protected $corCertificateNumber;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Countrys
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", inversedBy="irhpApplications", fetch="LAZY")
-     * @ORM\JoinTable(name="irhp_application_country_link",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="irhp_application_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="country_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'irhp_application_country_link')]
+    #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'country_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Country::class, inversedBy: 'irhpApplications', fetch: 'LAZY')]
     protected $countrys;
 
     /**
      * Answers
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Generic\Answer", mappedBy="irhpApplication", indexBy="question_text_id")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\Answer::class, mappedBy: 'irhpApplication', indexBy: 'question_text_id')]
     protected $answers;
 
     /**
      * Documents
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", mappedBy="irhpApplication")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'irhpApplication')]
     protected $documents;
 
     /**
      * Fees
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Fee\Fee", mappedBy="irhpApplication")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, mappedBy: 'irhpApplication')]
     protected $fees;
 
     /**
      * IrhpPermitApplications
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication", mappedBy="irhpApplication")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, mappedBy: 'irhpApplication')]
     protected $irhpPermitApplications;
 
     /**
      * IrhpPermitRequests
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRequest", mappedBy="irhpApplication")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRequest::class, mappedBy: 'irhpApplication')]
     protected $irhpPermitRequests;
 
     /**
      * Notes
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Note\Note", mappedBy="irhpApplication", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Note\Note::class, mappedBy: 'irhpApplication', cascade: ['persist'])]
     protected $notes;
 
     /**
      * Tasks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Task\Task", mappedBy="irhpApplication")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, mappedBy: 'irhpApplication')]
     protected $tasks;
 
     /**

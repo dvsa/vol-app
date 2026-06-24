@@ -11,9 +11,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Doc Template Search View
  *
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Entity(readOnly=true)
- * @ORM\Table(name="doc_template_search_view")
  */
+#[ORM\Table(name: 'doc_template_search_view')]
+#[ORM\Entity(readOnly: true)]
 class DocTemplateSearchView implements BundleSerializableInterface
 {
     use BundleSerializableTrait;
@@ -24,108 +24,97 @@ class DocTemplateSearchView implements BundleSerializableInterface
      * @var int
      *
      * NOTE: The ID annotation here is to allow doctrine to create the table (Even though we remove it later)
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id')]
     protected $id;
 
     /**
      * Last modified date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="last_modified_on")
      */
+    #[ORM\Column(type: 'datetime', name: 'last_modified_on')]
     protected $lastModifiedOn;
 
     /**
      * Category ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="category_id")
      */
+    #[ORM\Column(type: 'integer', name: 'category_id')]
     protected $category;
 
     /**
      * Sub Category ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="sub_category_id")
      */
+    #[ORM\Column(type: 'integer', name: 'sub_category_id')]
     protected $subCategory;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description")
      */
+    #[ORM\Column(type: 'string', name: 'description')]
     protected $description;
 
     /**
      * Document Store Identifier
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="filename")
      */
+    #[ORM\Column(type: 'string', name: 'filename')]
     protected $filename;
 
     /**
      * Document ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="document_id")
      */
+    #[ORM\Column(type: 'integer', name: 'document_id')]
     protected $document;
 
     /**
      * Letter Type ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="letter_type_id", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'letter_type_id', nullable: true)]
     protected $letterType;
 
     /**
      * Category Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="category_name")
      */
+    #[ORM\Column(type: 'string', name: 'category_name')]
     protected $categoryName;
 
     /**
      * Sub Category Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="sub_category_name")
      */
+    #[ORM\Column(type: 'string', name: 'sub_category_name')]
     protected $subCategoryName;
 
     /**
      * Letter Type Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="letter_type_name", nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'letter_type_name', nullable: true)]
     protected $letterTypeName;
 
     /**
      * Deleted date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="deleted_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'deleted_date', nullable: true)]
     protected $deletedDate;
 
     /**

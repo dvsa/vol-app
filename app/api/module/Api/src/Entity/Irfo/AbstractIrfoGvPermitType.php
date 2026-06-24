@@ -21,18 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irfo_gv_permit_type",
- *    indexes={
- *        @ORM\Index(name="ix_irfo_gv_permit_type_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_irfo_gv_permit_type_irfo_country_id", columns={"irfo_country_id"}),
- *        @ORM\Index(name="ix_irfo_gv_permit_type_irfo_fee_type", columns={"irfo_fee_type"}),
- *        @ORM\Index(name="ix_irfo_gv_permit_type_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irfo_gv_permit_type')]
+#[ORM\Index(name: 'ix_irfo_gv_permit_type_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_irfo_gv_permit_type_irfo_country_id', columns: ['irfo_country_id'])]
+#[ORM\Index(name: 'ix_irfo_gv_permit_type_irfo_fee_type', columns: ['irfo_fee_type'])]
+#[ORM\Index(name: 'ix_irfo_gv_permit_type_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrfoGvPermitType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,31 +41,28 @@ abstract class AbstractIrfoGvPermitType implements BundleSerializableInterface, 
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * IrfoFeeType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_fee_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'irfo_fee_type', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $irfoFeeType;
 
     /**
      * Foreign Key to irfo_country
      *
      * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_country_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irfo_country_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry::class, fetch: 'LAZY')]
     protected $irfoCountry;
 
     /**
@@ -77,10 +70,10 @@ abstract class AbstractIrfoGvPermitType implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -88,38 +81,35 @@ abstract class AbstractIrfoGvPermitType implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=100, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 100, nullable: false)]
     protected $description = '';
 
     /**
      * Display until
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="display_until", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'display_until', nullable: true)]
     protected $displayUntil;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

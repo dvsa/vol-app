@@ -17,11 +17,10 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="document_to_delete")
  */
+#[ORM\Table(name: 'document_to_delete')]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractDocumentToDelete implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -33,47 +32,42 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Document store id
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="document_store_id", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'document_store_id', length: 255, nullable: false)]
     protected $documentStoreId = '';
 
     /**
      * Document id
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="document_id", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'document_id', nullable: false)]
     protected $documentId = 0;
 
     /**
      * Attempts
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="attempts", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'smallint', name: 'attempts', nullable: false, options: ['default' => 0])]
     protected $attempts = 0;
 
     /**
      * Process after date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="process_after_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'process_after_date', nullable: true)]
     protected $processAfterDate;
 
 

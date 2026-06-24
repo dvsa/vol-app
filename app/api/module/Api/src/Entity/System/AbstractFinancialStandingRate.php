@@ -23,19 +23,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
  *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="financial_standing_rate",
- *    indexes={
- *        @ORM\Index(name="fk_financial_standing_rate_vehicle_type_ref_data_id", columns={"vehicle_type"}),
- *        @ORM\Index(name="ix_financial_standing_rate_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_financial_standing_rate_goods_or_psv", columns={"goods_or_psv"}),
- *        @ORM\Index(name="ix_financial_standing_rate_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_financial_standing_rate_licence_type", columns={"licence_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'financial_standing_rate')]
+#[ORM\Index(name: 'fk_financial_standing_rate_vehicle_type_ref_data_id', columns: ['vehicle_type'])]
+#[ORM\Index(name: 'ix_financial_standing_rate_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_financial_standing_rate_goods_or_psv', columns: ['goods_or_psv'])]
+#[ORM\Index(name: 'ix_financial_standing_rate_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_financial_standing_rate_licence_type', columns: ['licence_type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractFinancialStandingRate implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,41 +46,37 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * e.g. Special Restricted
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_type', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $licenceType;
 
     /**
      * Goods or PSV
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $goodsOrPsv;
 
     /**
      * VehicleType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="vehicle_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'vehicle_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $vehicleType;
 
     /**
@@ -91,10 +84,10 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -102,47 +95,43 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Additional vehicle rate
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="additional_vehicle_rate", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'additional_vehicle_rate', nullable: true)]
     protected $additionalVehicleRate;
 
     /**
      * First vehicle rate
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="first_vehicle_rate", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'first_vehicle_rate', nullable: true)]
     protected $firstVehicleRate;
 
     /**
      * Effective from
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="effective_from", nullable=false)
      */
+    #[ORM\Column(type: 'date', name: 'effective_from', nullable: false)]
     protected $effectiveFrom;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'integer', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

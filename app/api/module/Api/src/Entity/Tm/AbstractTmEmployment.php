@@ -23,18 +23,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
  *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="tm_employment",
- *    indexes={
- *        @ORM\Index(name="ix_tm_employment_contact_details_id", columns={"contact_details_id"}),
- *        @ORM\Index(name="ix_tm_employment_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_tm_employment_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_tm_employment_transport_manager_id", columns={"transport_manager_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'tm_employment')]
+#[ORM\Index(name: 'ix_tm_employment_contact_details_id', columns: ['contact_details_id'])]
+#[ORM\Index(name: 'ix_tm_employment_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_tm_employment_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_tm_employment_transport_manager_id', columns: ['transport_manager_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractTmEmployment implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -48,31 +45,28 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to transport_manager
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
     protected $transportManager;
 
     /**
      * Foreign Key to contact_details
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
-     * @ORM\JoinColumn(name="contact_details_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'contact_details_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY')]
     protected $contactDetails;
 
     /**
@@ -80,10 +74,10 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -91,47 +85,43 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Position
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="position", length=45, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'position', length: 45, nullable: true)]
     protected $position;
 
     /**
      * Employer name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="employer_name", length=90, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'employer_name', length: 90, nullable: true)]
     protected $employerName;
 
     /**
      * Hours per week
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="hours_per_week", length=300, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'hours_per_week', length: 300, nullable: true)]
     protected $hoursPerWeek;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'integer', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

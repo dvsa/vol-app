@@ -23,33 +23,28 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
  *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="licence",
- *    indexes={
- *        @ORM\Index(name="ix_licence_correspondence_cd_id", columns={"correspondence_cd_id"}),
- *        @ORM\Index(name="ix_licence_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_licence_enforcement_area_id", columns={"enforcement_area_id"}),
- *        @ORM\Index(name="ix_licence_establishment_cd_id", columns={"establishment_cd_id"}),
- *        @ORM\Index(name="ix_licence_goods_or_psv", columns={"goods_or_psv"}),
- *        @ORM\Index(name="ix_licence_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_licence_licence_type", columns={"licence_type"}),
- *        @ORM\Index(name="ix_licence_organisation_id", columns={"organisation_id"}),
- *        @ORM\Index(name="ix_licence_status", columns={"status"}),
- *        @ORM\Index(name="ix_licence_tachograph_ins", columns={"tachograph_ins"}),
- *        @ORM\Index(name="ix_licence_traffic_area_id", columns={"traffic_area_id"}),
- *        @ORM\Index(name="ix_licence_transport_consultant_cd_id", columns={"transport_consultant_cd_id"}),
- *        @ORM\Index(name="ix_licence_vehicle_type", columns={"vehicle_type"}),
- *        @ORM\Index(name="uk_licence_lic_no", columns={"lic_no"}),
- *        @ORM\Index(name="uk_licence_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_licence_lic_no", columns={"lic_no"}),
- *        @ORM\UniqueConstraint(name="uk_licence_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'licence')]
+#[ORM\Index(name: 'ix_licence_correspondence_cd_id', columns: ['correspondence_cd_id'])]
+#[ORM\Index(name: 'ix_licence_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_licence_enforcement_area_id', columns: ['enforcement_area_id'])]
+#[ORM\Index(name: 'ix_licence_establishment_cd_id', columns: ['establishment_cd_id'])]
+#[ORM\Index(name: 'ix_licence_goods_or_psv', columns: ['goods_or_psv'])]
+#[ORM\Index(name: 'ix_licence_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_licence_licence_type', columns: ['licence_type'])]
+#[ORM\Index(name: 'ix_licence_organisation_id', columns: ['organisation_id'])]
+#[ORM\Index(name: 'ix_licence_status', columns: ['status'])]
+#[ORM\Index(name: 'ix_licence_tachograph_ins', columns: ['tachograph_ins'])]
+#[ORM\Index(name: 'ix_licence_traffic_area_id', columns: ['traffic_area_id'])]
+#[ORM\Index(name: 'ix_licence_transport_consultant_cd_id', columns: ['transport_consultant_cd_id'])]
+#[ORM\Index(name: 'ix_licence_vehicle_type', columns: ['vehicle_type'])]
+#[ORM\Index(name: 'uk_licence_lic_no', columns: ['lic_no'])]
+#[ORM\Index(name: 'uk_licence_olbs_key', columns: ['olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_licence_lic_no', columns: ['lic_no'])]
+#[ORM\UniqueConstraint(name: 'uk_licence_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLicence implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -63,121 +58,109 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * FK to vehicle_inspectorate.
      *
      * @var \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="enforcement_area_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'enforcement_area_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea::class, fetch: 'LAZY')]
     protected $enforcementArea;
 
     /**
      * Organisation that holds the licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY", cascade={"persist"})
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY', cascade: ['persist'])]
     protected $organisation;
 
     /**
      * FK to traffic area.  An Operator can have One licence per area.
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
     protected $trafficArea;
 
     /**
      * Correspondence contact details
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY", cascade={"persist"})
-     * @ORM\JoinColumn(name="correspondence_cd_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'correspondence_cd_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY', cascade: ['persist'])]
     protected $correspondenceCd;
 
     /**
      * Establishment contact details
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
-     * @ORM\JoinColumn(name="establishment_cd_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'establishment_cd_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY')]
     protected $establishmentCd;
 
     /**
      * Transport consultant contact details
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
-     * @ORM\JoinColumn(name="transport_consultant_cd_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'transport_consultant_cd_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY')]
     protected $transportConsultantCd;
 
     /**
      * Is a licence for goods vehicles or passenger service vehicles
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $goodsOrPsv;
 
     /**
      * VehicleType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="vehicle_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'vehicle_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $vehicleType;
 
     /**
      * e.g. Restricted, Standard national.
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'licence_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $licenceType;
 
     /**
      * e.g. Granted, Valid, Suspended.
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
     /**
      * New olcs column values not applicable, external, internal
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="tachograph_ins", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'tachograph_ins', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $tachographIns;
 
     /**
@@ -185,10 +168,10 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -196,506 +179,447 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Licence number.  Normally 9 Chars.  First denotes goods/psv, second TA, rest ID.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="lic_no", length=18, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'lic_no', length: 18, nullable: true)]
     protected $licNo;
 
     /**
      * User confirms they have read LGV undertakings and declarations and will comply
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="lgv_declaration_confirmation", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'lgv_declaration_confirmation', nullable: false, options: ['default' => 0])]
     protected $lgvDeclarationConfirmation = 0;
 
     /**
      * C, U or D.  Triggers vehicle inspectorate-mobile compliance export.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="vi_action", length=1, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'vi_action', length: 1, nullable: true)]
     protected $viAction;
 
     /**
      * Opt out tm letter
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="opt_out_tm_letter", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'opt_out_tm_letter', nullable: false, options: ['default' => 0])]
     protected $optOutTmLetter = 0;
 
     /**
      * Number of trailers authorised on licence
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="tot_auth_trailers", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'tot_auth_trailers', nullable: true)]
     protected $totAuthTrailers;
 
     /**
      * Number of vehicles authorised on licence
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="tot_auth_vehicles", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'tot_auth_vehicles', nullable: true)]
     protected $totAuthVehicles;
 
     /**
      * Number of HGV vehicles authorised on licence
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="tot_auth_hgv_vehicles", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'tot_auth_hgv_vehicles', nullable: true)]
     protected $totAuthHgvVehicles;
 
     /**
      * Number of LGV vehicles authorised on licence
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="tot_auth_lgv_vehicles", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'tot_auth_lgv_vehicles', nullable: true)]
     protected $totAuthLgvVehicles;
 
     /**
      * number of community, (european) licences allowed
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="tot_community_licences", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'tot_community_licences', nullable: true)]
     protected $totCommunityLicences;
 
     /**
      * No of trailers in possession. Should be less than authorised number
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="trailers_in_possession", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'trailers_in_possession', nullable: true)]
     protected $trailersInPossession;
 
     /**
      * Fabs reference
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="fabs_reference", length=10, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'fabs_reference', length: 10, nullable: true)]
     protected $fabsReference;
 
     /**
      * expiry date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="expiry_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'expiry_date', nullable: true)]
     protected $expiryDate;
 
     /**
      * granted date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="granted_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'granted_date', nullable: true)]
     protected $grantedDate;
 
     /**
      * Date licence is reviewed
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="review_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'review_date', nullable: true)]
     protected $reviewDate;
 
     /**
      * Same as expiry date for all new licences.
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="fee_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'fee_date', nullable: true)]
     protected $feeDate;
 
     /**
      * Date licence is effective
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="in_force_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'in_force_date', nullable: true)]
     protected $inForceDate;
 
     /**
      * Date surrendered by operator
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="surrendered_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'surrendered_date', nullable: true)]
     protected $surrenderedDate;
 
     /**
      * Date revoked
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="revoked_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'revoked_date', nullable: true)]
     protected $revokedDate;
 
     /**
      * Date curtailed, i.e. reduced authorisation
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="curtailed_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'curtailed_date', nullable: true)]
     protected $curtailedDate;
 
     /**
      * Date suspended.  Temporarily out of use
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="suspended_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'suspended_date', nullable: true)]
     protected $suspendedDate;
 
     /**
      * Continuation not sought date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="cns_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'cns_date', nullable: true)]
     protected $cnsDate;
 
     /**
      * Max period in weeks between safety inspections.
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="safety_ins_trailers", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'safety_ins_trailers', nullable: true)]
     protected $safetyInsTrailers;
 
     /**
      * Max period in weeks between safety inspections.
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="safety_ins_vehicles", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'safety_ins_vehicles', nullable: true)]
     protected $safetyInsVehicles;
 
     /**
      * Does own safety inspections.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="safety_ins", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'safety_ins', nullable: false, options: ['default' => 0])]
     protected $safetyIns = 0;
 
     /**
      * New olcs column for when some vehicles inspected more often
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="safety_ins_varies", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'safety_ins_varies', nullable: true)]
     protected $safetyInsVaries;
 
     /**
      * New olcs column for tachograph inspector
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="tachograph_ins_name", length=90, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'tachograph_ins_name', length: 90, nullable: true)]
     protected $tachographInsName;
 
     /**
      * Number of psv discs to be printed.  Psv discs are per licence, rather than being assigned to a specific vehicle.
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_discs_to_be_printed_no", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_discs_to_be_printed_no', nullable: true)]
     protected $psvDiscsToBePrintedNo;
 
     /**
      * Documentation to be in Welsh
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="translate_to_welsh", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'translate_to_welsh', nullable: false, options: ['default' => 0])]
     protected $translateToWelsh = 0;
 
     /**
      * Are maintenance facilities/agreements suitable for the vehicles on the licence.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_maintenance_suitable", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'is_maintenance_suitable', nullable: true)]
     protected $isMaintenanceSuitable;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * Decisions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Pi\Decision", inversedBy="licences", fetch="LAZY")
-     * @ORM\JoinTable(name="licence_status_decision",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="decision_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'licence_status_decision')]
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'decision_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Decision::class, inversedBy: 'licences', fetch: 'LAZY')]
     protected $decisions;
 
     /**
      * Applications
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, mappedBy: 'licence')]
     protected $applications;
 
     /**
      * BusRegs
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", mappedBy="licence", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, mappedBy: 'licence', cascade: ['persist'])]
     protected $busRegs;
 
     /**
      * Cases
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, mappedBy: 'licence')]
     protected $cases;
 
     /**
      * ChangeOfEntitys
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\ChangeOfEntity", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\ChangeOfEntity::class, mappedBy: 'licence')]
     protected $changeOfEntitys;
 
     /**
      * CommunityLics
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic", mappedBy="licence", fetch="EXTRA_LAZY")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic::class, mappedBy: 'licence', fetch: 'EXTRA_LAZY')]
     protected $communityLics;
 
     /**
      * CompanySubsidiaries
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\CompanySubsidiary", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\CompanySubsidiary::class, mappedBy: 'licence')]
     protected $companySubsidiaries;
 
     /**
      * ConditionUndertakings
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking::class, mappedBy: 'licence')]
     protected $conditionUndertakings;
 
     /**
      * ContinuationDetails
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail::class, mappedBy: 'licence')]
     protected $continuationDetails;
 
     /**
      * Documents
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'licence')]
     protected $documents;
 
     /**
      * Fees
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Fee\Fee", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, mappedBy: 'licence')]
     protected $fees;
 
     /**
      * GracePeriods
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\GracePeriod", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\GracePeriod::class, mappedBy: 'licence')]
     protected $gracePeriods;
 
     /**
      * IrhpApplications
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpApplication", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, mappedBy: 'licence')]
     protected $irhpApplications;
 
     /**
      * OperatingCentres
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\LicenceOperatingCentre", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\LicenceOperatingCentre::class, mappedBy: 'licence')]
     protected $operatingCentres;
 
     /**
      * ReadAudits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\LicenceReadAudit", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\LicenceReadAudit::class, mappedBy: 'licence')]
     protected $readAudits;
 
     /**
      * LicenceStatusRules
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\LicenceStatusRule", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\LicenceStatusRule::class, mappedBy: 'licence')]
     protected $licenceStatusRules;
 
     /**
      * LicenceVehicles
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle::class, mappedBy: 'licence')]
     protected $licenceVehicles;
 
     /**
      * PrivateHireLicences
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\PrivateHireLicence", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\PrivateHireLicence::class, mappedBy: 'licence')]
     protected $privateHireLicences;
 
     /**
      * PsvDiscs
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\PsvDisc", mappedBy="licence")
-     * @ORM\OrderBy({"discNo" = "ASC"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\PsvDisc::class, mappedBy: 'licence')]
+    #[ORM\OrderBy(['discNo' => 'ASC'])]
     protected $psvDiscs;
 
     /**
      * PublicationLinks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Publication\PublicationLink", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\PublicationLink::class, mappedBy: 'licence')]
     protected $publicationLinks;
 
     /**
      * TradingNames
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\TradingName", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\TradingName::class, mappedBy: 'licence')]
     protected $tradingNames;
 
     /**
      * TmLicences
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence::class, mappedBy: 'licence')]
     protected $tmLicences;
 
     /**
      * Workshops
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Workshop", mappedBy="licence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Workshop::class, mappedBy: 'licence')]
     protected $workshops;
 
     /**

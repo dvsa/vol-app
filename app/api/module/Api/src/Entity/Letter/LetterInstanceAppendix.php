@@ -8,10 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LetterInstanceAppendix Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="letter_instance_appendix")
  */
+#[ORM\Table(name: 'letter_instance_appendix')]
+#[ORM\Entity]
 class LetterInstanceAppendix extends AbstractLetterInstanceAppendix
 {
     /**

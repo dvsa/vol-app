@@ -23,19 +23,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
  *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="previous_conviction",
- *    indexes={
- *        @ORM\Index(name="ix_previous_conviction_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_previous_conviction_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_previous_conviction_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_previous_conviction_title", columns={"title"}),
- *        @ORM\Index(name="ix_previous_conviction_transport_manager_id", columns={"transport_manager_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'previous_conviction')]
+#[ORM\Index(name: 'ix_previous_conviction_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_previous_conviction_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_previous_conviction_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_previous_conviction_title', columns: ['title'])]
+#[ORM\Index(name: 'ix_previous_conviction_transport_manager_id', columns: ['transport_manager_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractPreviousConviction implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,41 +46,37 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
     protected $application;
 
     /**
      * Foreign Key to transport_manager
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
     protected $transportManager;
 
     /**
      * Title
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="title", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'title', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $title;
 
     /**
@@ -91,10 +84,10 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -102,92 +95,83 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Conviction date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="conviction_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'conviction_date', nullable: true)]
     protected $convictionDate;
 
     /**
      * Forename
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="forename", length=35, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'forename', length: 35, nullable: true)]
     protected $forename;
 
     /**
      * Family name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="family_name", length=35, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'family_name', length: 35, nullable: true)]
     protected $familyName;
 
     /**
      * Birth date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="birth_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'birth_date', nullable: true)]
     protected $birthDate;
 
     /**
      * Category text
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="category_text", length=1024, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'category_text', length: 1024, nullable: true)]
     protected $categoryText;
 
     /**
      * Notes
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="notes", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'notes', length: 4000, nullable: true)]
     protected $notes;
 
     /**
      * Court fpn
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="court_fpn", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'court_fpn', length: 70, nullable: true)]
     protected $courtFpn;
 
     /**
      * Penalty
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="penalty", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'penalty', length: 255, nullable: true)]
     protected $penalty;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

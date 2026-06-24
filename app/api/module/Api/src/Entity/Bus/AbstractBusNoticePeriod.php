@@ -21,16 +21,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="bus_notice_period",
- *    indexes={
- *        @ORM\Index(name="ix_bus_notice_period_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_bus_notice_period_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'bus_notice_period')]
+#[ORM\Index(name: 'ix_bus_notice_period_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_bus_notice_period_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractBusNoticePeriod implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -43,11 +39,10 @@ abstract class AbstractBusNoticePeriod implements BundleSerializableInterface, J
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
@@ -55,10 +50,10 @@ abstract class AbstractBusNoticePeriod implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -66,47 +61,43 @@ abstract class AbstractBusNoticePeriod implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * The area relevant for the period. Initially Scotland or Other.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="notice_area", length=70, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'notice_area', length: 70, nullable: false)]
     protected $noticeArea = '';
 
     /**
      * Standard period
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="standard_period", nullable=false)
      */
+    #[ORM\Column(type: 'smallint', name: 'standard_period', nullable: false)]
     protected $standardPeriod = 0;
 
     /**
      * Cancellation period
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="cancellation_period", nullable=false)
      */
+    #[ORM\Column(type: 'smallint', name: 'cancellation_period', nullable: false)]
     protected $cancellationPeriod = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

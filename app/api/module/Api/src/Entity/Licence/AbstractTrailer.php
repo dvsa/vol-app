@@ -23,21 +23,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
  *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="trailer",
- *    indexes={
- *        @ORM\Index(name="ix_trailer_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_trailer_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_trailer_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="uk_trailer_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_trailer_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'trailer')]
+#[ORM\Index(name: 'ix_trailer_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_trailer_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_trailer_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'uk_trailer_olbs_key', columns: ['olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_trailer_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractTrailer implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -51,21 +46,19 @@ abstract class AbstractTrailer implements BundleSerializableInterface, JsonSeria
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
     protected $licence;
 
     /**
@@ -73,10 +66,10 @@ abstract class AbstractTrailer implements BundleSerializableInterface, JsonSeria
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -84,56 +77,51 @@ abstract class AbstractTrailer implements BundleSerializableInterface, JsonSeria
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Identifier of trailer
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="trailer_no", length=20, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'trailer_no', length: 20, nullable: false)]
     protected $trailerNo = '';
 
     /**
      * Is longer semi trailer
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_longer_semi_trailer", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_longer_semi_trailer', nullable: false, options: ['default' => 0])]
     protected $isLongerSemiTrailer = 0;
 
     /**
      * Specified date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="specified_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'specified_date', nullable: true)]
     protected $specifiedDate;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
