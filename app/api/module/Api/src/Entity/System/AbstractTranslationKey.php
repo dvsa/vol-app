@@ -21,20 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="translation_key",
- *    indexes={
- *        @ORM\Index(name="fk_translation_key_users_created_by", columns={"created_by"}),
- *        @ORM\Index(name="fk_translation_key_users_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="translation_key_translation_key_uindex", columns={"translation_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="translation_key_translation_key_uindex", columns={"translation_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'translation_key')]
+#[ORM\Index(name: 'fk_translation_key_users_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_translation_key_users_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'translation_key_translation_key_uindex', columns: ['translation_key'])]
+#[ORM\UniqueConstraint(name: 'translation_key_translation_key_uindex', columns: ['translation_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractTranslationKey implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -47,11 +41,10 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
@@ -59,10 +52,10 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -70,47 +63,43 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Translation key
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="translation_key", length=512, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'translation_key', length: 512, nullable: false)]
     protected $translationKey = '';
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=512, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 512, nullable: true)]
     protected $description;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=true, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: true, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * TranslationKeyTexts
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\TranslationKeyText", mappedBy="translationKey")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\TranslationKeyText::class, mappedBy: 'translationKey')]
     protected $translationKeyTexts;
 
     /**

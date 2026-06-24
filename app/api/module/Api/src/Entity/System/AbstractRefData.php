@@ -19,19 +19,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\Table(name="ref_data",
- *    indexes={
- *        @ORM\Index(name="ix_ref_data_parent_id", columns={"parent_id"}),
- *        @ORM\Index(name="ix_ref_data_ref_data_category_id", columns={"ref_data_category_id"}),
- *        @ORM\Index(name="uk_ref_data_ref_data_category_id_olbs_key", columns={"ref_data_category_id", "olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_ref_data_ref_data_category_id_olbs_key", columns={"ref_data_category_id", "olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'ref_data')]
+#[ORM\Index(name: 'ix_ref_data_parent_id', columns: ['parent_id'])]
+#[ORM\Index(name: 'ix_ref_data_ref_data_category_id', columns: ['ref_data_category_id'])]
+#[ORM\Index(name: 'uk_ref_data_ref_data_category_id_olbs_key', columns: ['ref_data_category_id', 'olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_ref_data_ref_data_category_id_olbs_key', columns: ['ref_data_category_id', 'olbs_key'])]
+#[ORM\MappedSuperclass]
 abstract class AbstractRefData implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -42,66 +36,59 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
      * Primary key
      *
      * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(type="string", name="id", length=32, nullable=false)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'string', name: 'id', length: 32, nullable: false)]
     protected $id = '';
 
     /**
      * Parent
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $parent;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=512, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 512, nullable: true)]
     protected $description;
 
     /**
      * Ref data category id
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="ref_data_category_id", length=32, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'ref_data_category_id', length: 32, nullable: false)]
     protected $refDataCategoryId = '';
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_key", length=20, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_key', length: 20, nullable: true)]
     protected $olbsKey;
 
     /**
      * Display order
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="display_order", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'display_order', nullable: true)]
     protected $displayOrder;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'integer', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

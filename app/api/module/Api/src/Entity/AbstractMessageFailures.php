@@ -19,16 +19,12 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="message_failures",
- *    indexes={
- *        @ORM\Index(name="ix_message_failures_organisation_id", columns={"organisation_id"}),
- *        @ORM\Index(name="ix_message_failures_queue_type", columns={"queue_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'message_failures')]
+#[ORM\Index(name: 'ix_message_failures_organisation_id', columns: ['organisation_id'])]
+#[ORM\Index(name: 'ix_message_failures_queue_type', columns: ['queue_type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractMessageFailures implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -40,30 +36,27 @@ abstract class AbstractMessageFailures implements BundleSerializableInterface, J
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign key to organisation table.
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $organisation;
 
     /**
      * FQCN of the queue comsumer.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="queue_type", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'queue_type', length: 255, nullable: false)]
     protected $queueType = '';
 
     /**

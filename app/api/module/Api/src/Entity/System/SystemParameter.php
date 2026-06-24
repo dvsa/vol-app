@@ -6,10 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * SystemParameter Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="system_parameter")
  */
+#[ORM\Table(name: 'system_parameter')]
+#[ORM\Entity]
 class SystemParameter extends AbstractSystemParameter
 {
     public const CNS_EMAIL_LIST = 'CNS_EMAIL_LIST';

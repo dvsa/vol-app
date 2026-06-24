@@ -6,10 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * SlaException
- *
- * @ORM\Entity
- * @ORM\Table(name="sla_exception")
  */
+#[ORM\Table(name: 'sla_exception')]
+#[ORM\Entity]
 class SlaException extends AbstractSlaException
 {
     /**

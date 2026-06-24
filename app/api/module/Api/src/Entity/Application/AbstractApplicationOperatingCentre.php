@@ -23,23 +23,18 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
  *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="application_operating_centre",
- *    indexes={
- *        @ORM\Index(name="ix_application_operating_centre_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_application_operating_centre_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_application_operating_centre_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_application_operating_centre_operating_centre_id", columns={"operating_centre_id"}),
- *        @ORM\Index(name="ix_application_operating_centre_s4_id", columns={"s4_id"}),
- *        @ORM\Index(name="uk_application_operating_centre_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_application_operating_centre_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'application_operating_centre')]
+#[ORM\Index(name: 'ix_application_operating_centre_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_application_operating_centre_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_application_operating_centre_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_application_operating_centre_operating_centre_id', columns: ['operating_centre_id'])]
+#[ORM\Index(name: 'ix_application_operating_centre_s4_id', columns: ['s4_id'])]
+#[ORM\Index(name: 'uk_application_operating_centre_olbs_key', columns: ['olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_application_operating_centre_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractApplicationOperatingCentre implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -53,41 +48,37 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
     protected $application;
 
     /**
      * Foreign Key to operating_centre
      *
      * @var \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre", fetch="LAZY")
-     * @ORM\JoinColumn(name="operating_centre_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'operating_centre_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre::class, fetch: 'LAZY')]
     protected $operatingCentre;
 
     /**
      * Foreign Key to s4
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\S4
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\S4", fetch="LAZY")
-     * @ORM\JoinColumn(name="s4_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 's4_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\S4::class, fetch: 'LAZY')]
     protected $s4;
 
     /**
@@ -95,10 +86,10 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -106,119 +97,107 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Flag for add, delete, update. Values A,U or D
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="action", length=1, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'action', length: 1, nullable: true)]
     protected $action;
 
     /**
      * An advert has been placed in a suitable publication to notify public of op centre changes.
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="ad_placed", nullable=false)
      */
+    #[ORM\Column(type: 'smallint', name: 'ad_placed', nullable: false)]
     protected $adPlaced = 0;
 
     /**
      * Publication advert placed in.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="ad_placed_in", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'ad_placed_in', length: 70, nullable: true)]
     protected $adPlacedIn;
 
     /**
      * Date advert published.
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="ad_placed_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'ad_placed_date', nullable: true)]
     protected $adPlacedDate;
 
     /**
      * Publication deemed appropriate by caseworker.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="publication_appropriate", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'publication_appropriate', nullable: false, options: ['default' => 0])]
     protected $publicationAppropriate = 0;
 
     /**
      * Applicant has permission to use site or owns it.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="permission", nullable=false)
      */
+    #[ORM\Column(type: 'yesno', name: 'permission', nullable: false)]
     protected $permission = 0;
 
     /**
      * Number of trailers required to be kept at op centre
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="no_of_trailers_required", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'no_of_trailers_required', nullable: true)]
     protected $noOfTrailersRequired;
 
     /**
      * Number of vehicles required to be kept at op centre
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="no_of_vehicles_required", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'no_of_vehicles_required', nullable: true)]
     protected $noOfVehiclesRequired;
 
     /**
      * Flag used in populated the vehicle inspectorate extract sent to mobile compliance system as part of batch job
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="vi_action", length=1, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'vi_action', length: 1, nullable: true)]
     protected $viAction;
 
     /**
      * is operating centre required to be on interim licence.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_interim", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_interim', nullable: false, options: ['default' => 0])]
     protected $isInterim = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**

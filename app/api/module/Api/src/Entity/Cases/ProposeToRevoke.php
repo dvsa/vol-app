@@ -8,17 +8,13 @@ use Dvsa\Olcs\Api\Entity\User\User;
 
 /**
  * ProposeToRevoke Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="propose_to_revoke",
- *    indexes={
- *        @ORM\Index(name="ix_propose_to_revoke_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_propose_to_revoke_presiding_tc_id", columns={"presiding_tc_id"}),
- *        @ORM\Index(name="ix_propose_to_revoke_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_propose_to_revoke_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'propose_to_revoke')]
+#[ORM\Index(name: 'ix_propose_to_revoke_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_propose_to_revoke_presiding_tc_id', columns: ['presiding_tc_id'])]
+#[ORM\Index(name: 'ix_propose_to_revoke_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_propose_to_revoke_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Entity]
 class ProposeToRevoke extends AbstractProposeToRevoke
 {
     public const PTR_ACTION_TO_BE_TAKEN_REVOKE = 'ptr_action_to_be_taken_revoke';

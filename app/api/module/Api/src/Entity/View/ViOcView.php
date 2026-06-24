@@ -13,10 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * VI Operating Centres view
- *
- * @ORM\Entity(readOnly=true)
- * @ORM\Table(name="vi_oc_vw")
  */
+#[ORM\Table(name: 'vi_oc_vw')]
+#[ORM\Entity(readOnly: true)]
 class ViOcView
 {
     /**
@@ -25,36 +24,33 @@ class ViOcView
      * @var int
      *
      * Note: The ID annotation here is to allow doctrine to create the table (Even though we remove it later)
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id')]
     protected $id;
 
     /**
      * Licence ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="lic_id")
      */
+    #[ORM\Column(type: 'integer', name: 'lic_id')]
     protected $licId;
 
     /**
      * Operating centre ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="oc_id")
      */
+    #[ORM\Column(type: 'integer', name: 'oc_id')]
     protected $ocId;
 
     /**
      * Licence number
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="Col_placeholder1")
      */
+    #[ORM\Column(type: 'string', name: 'Col_placeholder1')]
     protected $placeholder;
 
     /**

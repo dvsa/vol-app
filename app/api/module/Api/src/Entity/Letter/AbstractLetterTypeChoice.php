@@ -21,22 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_type_choice",
- *    indexes={
- *        @ORM\Index(name="ix_letter_type_choice_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_type_choice_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_type_choice_letter_choice_id", columns={"letter_choice_id"}),
- *        @ORM\Index(name="uk_letter_type_choice", columns={"letter_type_id", "letter_choice_id"}),
- *        @ORM\Index(name="IDX_89D7E87430450394", columns={"letter_type_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_letter_type_choice", columns={"letter_type_id", "letter_choice_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_type_choice')]
+#[ORM\Index(name: 'ix_letter_type_choice_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_type_choice_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_letter_type_choice_letter_choice_id', columns: ['letter_choice_id'])]
+#[ORM\Index(name: 'uk_letter_type_choice', columns: ['letter_type_id', 'letter_choice_id'])]
+#[ORM\Index(name: 'IDX_89D7E87430450394', columns: ['letter_type_id'])]
+#[ORM\UniqueConstraint(name: 'uk_letter_type_choice', columns: ['letter_type_id', 'letter_choice_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterTypeChoice implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,31 +43,28 @@ abstract class AbstractLetterTypeChoice implements BundleSerializableInterface, 
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * LetterType
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterType", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, fetch: 'LAZY')]
     protected $letterType;
 
     /**
      * LetterChoice
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterChoice
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterChoice", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_choice_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_choice_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterChoice::class, fetch: 'LAZY')]
     protected $letterChoice;
 
     /**
@@ -81,10 +72,10 @@ abstract class AbstractLetterTypeChoice implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -92,19 +83,18 @@ abstract class AbstractLetterTypeChoice implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Display order
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="display_order", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false, options: ['default' => 0])]
     protected $displayOrder = 0;
 
     /**

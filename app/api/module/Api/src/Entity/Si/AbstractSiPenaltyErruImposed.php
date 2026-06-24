@@ -23,19 +23,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
  *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="si_penalty_erru_imposed",
- *    indexes={
- *        @ORM\Index(name="ix_si_penalty_erru_imposed_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_si_penalty_erru_imposed_executed", columns={"executed"}),
- *        @ORM\Index(name="ix_si_penalty_erru_imposed_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_si_penalty_erru_imposed_serious_infringement_id", columns={"serious_infringement_id"}),
- *        @ORM\Index(name="ix_si_penalty_erru_imposed_si_penalty_imposed_type_id", columns={"si_penalty_imposed_type_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'si_penalty_erru_imposed')]
+#[ORM\Index(name: 'ix_si_penalty_erru_imposed_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_si_penalty_erru_imposed_executed', columns: ['executed'])]
+#[ORM\Index(name: 'ix_si_penalty_erru_imposed_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_si_penalty_erru_imposed_serious_infringement_id', columns: ['serious_infringement_id'])]
+#[ORM\Index(name: 'ix_si_penalty_erru_imposed_si_penalty_imposed_type_id', columns: ['si_penalty_imposed_type_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,41 +46,37 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to serious_infringement
      *
      * @var \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SeriousInfringement", fetch="LAZY")
-     * @ORM\JoinColumn(name="serious_infringement_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'serious_infringement_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement::class, fetch: 'LAZY')]
     protected $seriousInfringement;
 
     /**
      * Foreign Key to si_penalty_imposed_type
      *
      * @var \Dvsa\Olcs\Api\Entity\Si\SiPenaltyImposedType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenaltyImposedType", fetch="LAZY")
-     * @ORM\JoinColumn(name="si_penalty_imposed_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'si_penalty_imposed_type_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SiPenaltyImposedType::class, fetch: 'LAZY')]
     protected $siPenaltyImposedType;
 
     /**
      * Executed
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="executed", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'executed', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $executed;
 
     /**
@@ -91,10 +84,10 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -102,65 +95,59 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Penalty imposed identifier
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="penalty_imposed_identifier", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'penalty_imposed_identifier', nullable: true)]
     protected $penaltyImposedIdentifier;
 
     /**
      * Final decision date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="final_decision_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'final_decision_date', nullable: true)]
     protected $finalDecisionDate;
 
     /**
      * Start date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="start_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'start_date', nullable: true)]
     protected $startDate;
 
     /**
      * End date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="end_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'end_date', nullable: true)]
     protected $endDate;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**

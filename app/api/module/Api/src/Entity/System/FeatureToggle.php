@@ -6,16 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * FeatureToggle Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="feature_toggle",
- *    indexes={
- *        @ORM\Index(name="ix_feature_toggle_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_feature_toggle_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_feature_toggle_status", columns={"status"})
- *    }
- * )
  */
+#[ORM\Table(name: 'feature_toggle')]
+#[ORM\Index(name: 'ix_feature_toggle_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_feature_toggle_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_feature_toggle_status', columns: ['status'])]
+#[ORM\Entity]
 class FeatureToggle extends AbstractFeatureToggle
 {
     public const ACTIVE_STATUS = 'always-active';

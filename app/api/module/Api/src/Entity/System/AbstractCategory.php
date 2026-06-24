@@ -21,17 +21,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="category",
- *    indexes={
- *        @ORM\Index(name="ix_category_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_category_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_category_task_allocation_type", columns={"task_allocation_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'category')]
+#[ORM\Index(name: 'ix_category_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_category_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_category_task_allocation_type', columns: ['task_allocation_type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractCategory implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -44,20 +40,18 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
      * Primary key
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
     protected $id = 0;
 
     /**
      * Tasks of this category are allocated based upon TA, a single team or complex rules for icence type, TA, MLH.
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="task_allocation_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'task_allocation_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $taskAllocationType;
 
     /**
@@ -65,10 +59,10 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -76,65 +70,59 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * e.g. Compliance, Environmental
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: false)]
     protected $description = '';
 
     /**
      * Documents can have this category
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_doc_category", nullable=false, options={"default": 1})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_doc_category', nullable: false, options: ['default' => 1])]
     protected $isDocCategory = 1;
 
     /**
      * Tasks can have this category
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_task_category", nullable=false, options={"default": 1})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_task_category', nullable: false, options: ['default' => 1])]
     protected $isTaskCategory = 1;
 
     /**
      * Is a category that can be applied to scanned documents.
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_scan_category", nullable=false, options={"default": 1})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_scan_category', nullable: false, options: ['default' => 1])]
     protected $isScanCategory = 1;
 
     /**
      * Is messaging
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_messaging", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_messaging', nullable: false, options: ['default' => 0])]
     protected $isMessaging = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

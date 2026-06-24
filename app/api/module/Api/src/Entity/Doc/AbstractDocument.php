@@ -23,37 +23,32 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
  *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="document",
- *    indexes={
- *        @ORM\Index(name="fk_document_irhp_application_id_irhp_application_id", columns={"irhp_application_id"}),
- *        @ORM\Index(name="uk_document_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"}),
- *        @ORM\Index(name="ix_document_transport_manager_id", columns={"transport_manager_id"}),
- *        @ORM\Index(name="ix_document_traffic_area_id", columns={"traffic_area_id"}),
- *        @ORM\Index(name="ix_document_surrender_id", columns={"surrender_id"}),
- *        @ORM\Index(name="ix_document_submission_id", columns={"submission_id"}),
- *        @ORM\Index(name="ix_document_sub_category_id", columns={"sub_category_id"}),
- *        @ORM\Index(name="ix_document_statement_id", columns={"statement_id"}),
- *        @ORM\Index(name="ix_document_operating_centre_id", columns={"operating_centre_id"}),
- *        @ORM\Index(name="ix_document_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_document_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_document_irfo_organisation_id", columns={"irfo_organisation_id"}),
- *        @ORM\Index(name="ix_document_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_document_category_id", columns={"category_id"}),
- *        @ORM\Index(name="ix_document_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_document_bus_reg_id", columns={"bus_reg_id"}),
- *        @ORM\Index(name="ix_document_application_id", columns={"application_id"}),
- *        @ORM\Index(name="fk_document_messaging_message_id", columns={"messaging_message_id"}),
- *        @ORM\Index(name="fk_document_messaging_conversation_id", columns={"messaging_conversation_id"}),
- *        @ORM\Index(name="fk_document_continuation_detail_id_continuation_detail_id", columns={"continuation_detail_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_document_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'document')]
+#[ORM\Index(name: 'fk_document_irhp_application_id_irhp_application_id', columns: ['irhp_application_id'])]
+#[ORM\Index(name: 'uk_document_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\Index(name: 'ix_document_transport_manager_id', columns: ['transport_manager_id'])]
+#[ORM\Index(name: 'ix_document_traffic_area_id', columns: ['traffic_area_id'])]
+#[ORM\Index(name: 'ix_document_surrender_id', columns: ['surrender_id'])]
+#[ORM\Index(name: 'ix_document_submission_id', columns: ['submission_id'])]
+#[ORM\Index(name: 'ix_document_sub_category_id', columns: ['sub_category_id'])]
+#[ORM\Index(name: 'ix_document_statement_id', columns: ['statement_id'])]
+#[ORM\Index(name: 'ix_document_operating_centre_id', columns: ['operating_centre_id'])]
+#[ORM\Index(name: 'ix_document_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_document_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_document_irfo_organisation_id', columns: ['irfo_organisation_id'])]
+#[ORM\Index(name: 'ix_document_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_document_category_id', columns: ['category_id'])]
+#[ORM\Index(name: 'ix_document_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_document_bus_reg_id', columns: ['bus_reg_id'])]
+#[ORM\Index(name: 'ix_document_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'fk_document_messaging_message_id', columns: ['messaging_message_id'])]
+#[ORM\Index(name: 'fk_document_messaging_conversation_id', columns: ['messaging_conversation_id'])]
+#[ORM\Index(name: 'fk_document_continuation_detail_id_continuation_detail_id', columns: ['continuation_detail_id'])]
+#[ORM\UniqueConstraint(name: 'uk_document_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractDocument implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -67,181 +62,163 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to traffic_area
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
     protected $trafficArea;
 
     /**
      * Foreign Key to category
      *
      * @var \Dvsa\Olcs\Api\Entity\System\Category
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\Category", fetch="LAZY")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Category::class, fetch: 'LAZY')]
     protected $category;
 
     /**
      * Foreign Key to sub_category
      *
      * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\SubCategory", fetch="LAZY")
-     * @ORM\JoinColumn(name="sub_category_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'sub_category_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\SubCategory::class, fetch: 'LAZY')]
     protected $subCategory;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
     protected $licence;
 
     /**
      * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
     protected $application;
 
     /**
      * FK to related case (cases table)
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
     /**
      * Foreign Key to transport_manager
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
     protected $transportManager;
 
     /**
      * Foreign key to surrender
      *
      * @var \Dvsa\Olcs\Api\Entity\Surrender
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Surrender", fetch="LAZY")
-     * @ORM\JoinColumn(name="surrender_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'surrender_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Surrender::class, fetch: 'LAZY')]
     protected $surrender;
 
     /**
      * Foreign Key to operating_centre
      *
      * @var \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre", fetch="LAZY")
-     * @ORM\JoinColumn(name="operating_centre_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'operating_centre_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre::class, fetch: 'LAZY')]
     protected $operatingCentre;
 
     /**
      * Foreign Key to bus_reg
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", fetch="LAZY")
-     * @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
     protected $busReg;
 
     /**
      * FK to organisation.  Only populated for international road fright operator organisations
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_organisation_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irfo_organisation_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $irfoOrganisation;
 
     /**
      * Foreign Key to submission
      *
      * @var \Dvsa\Olcs\Api\Entity\Submission\Submission
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Submission\Submission", fetch="LAZY")
-     * @ORM\JoinColumn(name="submission_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'submission_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\Submission::class, fetch: 'LAZY')]
     protected $submission;
 
     /**
      * Foreign Key to statement
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Statement
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Statement", fetch="LAZY")
-     * @ORM\JoinColumn(name="statement_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'statement_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Statement::class, fetch: 'LAZY')]
     protected $statement;
 
     /**
      * ContinuationDetail
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail", fetch="LAZY")
-     * @ORM\JoinColumn(name="continuation_detail_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'continuation_detail_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail::class, fetch: 'LAZY')]
     protected $continuationDetail;
 
     /**
      * IrhpApplication
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpApplication", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, fetch: 'LAZY')]
     protected $irhpApplication;
 
     /**
      * MessagingConversation
      *
      * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation", fetch="LAZY")
-     * @ORM\JoinColumn(name="messaging_conversation_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'messaging_conversation_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation::class, fetch: 'LAZY')]
     protected $messagingConversation;
 
     /**
      * MessagingMessage
      *
      * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage", fetch="LAZY")
-     * @ORM\JoinColumn(name="messaging_message_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'messaging_message_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage::class, fetch: 'LAZY')]
     protected $messagingMessage;
 
     /**
@@ -249,10 +226,10 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -260,173 +237,155 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Depending upon document store used could be filepath or unique id of stored document
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="document_store_id", length=1000, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'document_store_id', length: 1000, nullable: false)]
     protected $identifier = '';
 
     /**
      * Brief description of the document.  Sometimes user entered and sometimes set by application based on context of doc creation.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
 
     /**
      * Normally file created date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="issued_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'issued_date', nullable: true)]
     protected $issuedDate;
 
     /**
      * filename on disk
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="filename", length=1000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'filename', length: 1000, nullable: true)]
     protected $filename;
 
     /**
      * Metadata
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="metadata", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'metadata', length: 4000, nullable: true)]
     protected $metadata;
 
     /**
      * Flag true if doc was created/uploaded by non dvsa self service user
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_external", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_external', nullable: false, options: ['default' => 0])]
     protected $isExternal = 0;
 
     /**
      * Was created by scanning a paper document. Used in search filter as there are many scans and removing them helps.
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_scan", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_scan', nullable: false, options: ['default' => 0])]
     protected $isScan = 0;
 
     /**
      * size in bytes
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="size", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'size', nullable: true)]
     protected $size;
 
     /**
      * Is post submission upload
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_post_submission_upload", nullable=true, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_post_submission_upload', nullable: true, options: ['default' => 0])]
     protected $isPostSubmissionUpload = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
     protected $olbsType;
 
     /**
      * ContinuationDetails
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail", mappedBy="checklistDocument")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail::class, mappedBy: 'checklistDocument')]
     protected $continuationDetails;
 
     /**
      * Templates
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Doc\DocTemplate", mappedBy="document")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\DocTemplate::class, mappedBy: 'document')]
     protected $templates;
 
     /**
      * EbsrSubmission
      *
      * @var \Dvsa\Olcs\Api\Entity\EbsrSubmission
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission", mappedBy="document", cascade={"persist"})
      */
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission::class, mappedBy: 'document', cascade: ['persist'])]
     protected $ebsrSubmission;
 
     /**
      * RequestErru
      *
      * @var \Dvsa\Olcs\Api\Entity\ErruRequest
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\ErruRequest", mappedBy="requestDocument", cascade={"persist"})
      */
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\ErruRequest::class, mappedBy: 'requestDocument', cascade: ['persist'])]
     protected $requestErru;
 
     /**
      * ResponseErru
      *
      * @var \Dvsa\Olcs\Api\Entity\ErruRequest
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\ErruRequest", mappedBy="responseDocument", cascade={"persist"})
      */
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\ErruRequest::class, mappedBy: 'responseDocument', cascade: ['persist'])]
     protected $responseErru;
 
     /**
      * SlaTargetDate
      *
      * @var \Dvsa\Olcs\Api\Entity\SlaTargetDate
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\SlaTargetDate", mappedBy="document", cascade={"persist"})
      */
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\SlaTargetDate::class, mappedBy: 'document', cascade: ['persist'])]
     protected $slaTargetDate;
 
     /**

@@ -18,18 +18,12 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\Table(name="sub_category_description",
- *    indexes={
- *        @ORM\Index(name="ix_sub_category_description_sub_category_id", columns={"sub_category_id"}),
- *        @ORM\Index(name="uk_sub_category_description_sub_category_id_description", columns={"sub_category_id", "description"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_sub_category_description_sub_category_id_description", columns={"sub_category_id", "description"})
- *    }
- * )
  */
+#[ORM\Table(name: 'sub_category_description')]
+#[ORM\Index(name: 'ix_sub_category_description_sub_category_id', columns: ['sub_category_id'])]
+#[ORM\Index(name: 'uk_sub_category_description_sub_category_id_description', columns: ['sub_category_id', 'description'])]
+#[ORM\UniqueConstraint(name: 'uk_sub_category_description_sub_category_id_description', columns: ['sub_category_id', 'description'])]
+#[ORM\MappedSuperclass]
 abstract class AbstractSubCategoryDescription implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -40,30 +34,27 @@ abstract class AbstractSubCategoryDescription implements BundleSerializableInter
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to sub_category
      *
      * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\SubCategory", fetch="LAZY")
-     * @ORM\JoinColumn(name="sub_category_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'sub_category_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\SubCategory::class, fetch: 'LAZY')]
     protected $subCategory;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=100, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 100, nullable: false)]
     protected $description = '';
 
     /**

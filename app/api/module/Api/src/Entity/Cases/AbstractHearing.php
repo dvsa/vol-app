@@ -23,25 +23,20 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
  *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="hearing",
- *    indexes={
- *        @ORM\Index(name="ix_hearing_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_hearing_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_hearing_hearing_type", columns={"hearing_type"}),
- *        @ORM\Index(name="ix_hearing_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_hearing_outcome", columns={"outcome"}),
- *        @ORM\Index(name="ix_hearing_presiding_tc_id", columns={"presiding_tc_id"}),
- *        @ORM\Index(name="ix_hearing_venue_id", columns={"venue_id"}),
- *        @ORM\Index(name="uk_hearing_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_hearing_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'hearing')]
+#[ORM\Index(name: 'ix_hearing_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_hearing_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_hearing_hearing_type', columns: ['hearing_type'])]
+#[ORM\Index(name: 'ix_hearing_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_hearing_outcome', columns: ['outcome'])]
+#[ORM\Index(name: 'ix_hearing_presiding_tc_id', columns: ['presiding_tc_id'])]
+#[ORM\Index(name: 'ix_hearing_venue_id', columns: ['venue_id'])]
+#[ORM\Index(name: 'uk_hearing_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\UniqueConstraint(name: 'uk_hearing_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractHearing implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -55,61 +50,55 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
     /**
      * Foreign key to venue table or NULL if other
      *
      * @var \Dvsa\Olcs\Api\Entity\Venue
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Venue", fetch="LAZY")
-     * @ORM\JoinColumn(name="venue_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'venue_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Venue::class, fetch: 'LAZY')]
     protected $venue;
 
     /**
      * Foreign Key to presiding_tc
      *
      * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PresidingTc", fetch="LAZY")
-     * @ORM\JoinColumn(name="presiding_tc_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'presiding_tc_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\PresidingTc::class, fetch: 'LAZY')]
     protected $presidingTc;
 
     /**
      * In chambers or office procedure.
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="hearing_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'hearing_type', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $hearingType;
 
     /**
      * Outcome
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="outcome", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'outcome', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $outcome;
 
     /**
@@ -117,10 +106,10 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -128,83 +117,75 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Freetext if venue is not in list of common venues
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="venue_other", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'venue_other', length: 255, nullable: true)]
     protected $venueOther;
 
     /**
      * Presiding staff name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="presiding_staff_name", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'presiding_staff_name', length: 255, nullable: true)]
     protected $presidingStaffName;
 
     /**
      * Hearing date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="hearing_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'hearing_date', nullable: true)]
     protected $hearingDate;
 
     /**
      * Agreed by tc date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="agreed_by_tc_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'agreed_by_tc_date', nullable: true)]
     protected $agreedByTcDate;
 
     /**
      * Witness count
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="witness_count", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'witness_count', nullable: true)]
     protected $witnessCount;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
     protected $olbsType;
 
     /**

@@ -23,26 +23,21 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
  *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="statement",
- *    indexes={
- *        @ORM\Index(name="ix_statement_assigned_caseworker", columns={"assigned_caseworker"}),
- *        @ORM\Index(name="ix_statement_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_statement_contact_type", columns={"contact_type"}),
- *        @ORM\Index(name="ix_statement_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_statement_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_statement_licence_type", columns={"licence_type"}),
- *        @ORM\Index(name="ix_statement_requestors_contact_details_id", columns={"requestors_contact_details_id"}),
- *        @ORM\Index(name="ix_statement_statement_type", columns={"statement_type"}),
- *        @ORM\Index(name="uk_statement_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_statement_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'statement')]
+#[ORM\Index(name: 'ix_statement_assigned_caseworker', columns: ['assigned_caseworker'])]
+#[ORM\Index(name: 'ix_statement_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_statement_contact_type', columns: ['contact_type'])]
+#[ORM\Index(name: 'ix_statement_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_statement_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_statement_licence_type', columns: ['licence_type'])]
+#[ORM\Index(name: 'ix_statement_requestors_contact_details_id', columns: ['requestors_contact_details_id'])]
+#[ORM\Index(name: 'ix_statement_statement_type', columns: ['statement_type'])]
+#[ORM\Index(name: 'uk_statement_olbs_key', columns: ['olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_statement_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractStatement implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -56,71 +51,64 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
     /**
      * StatementType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="statement_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'statement_type', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $statementType;
 
     /**
      * AssignedCaseworker
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="assigned_caseworker", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'assigned_caseworker', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $assignedCaseworker;
 
     /**
      * ContactType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="contact_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'contact_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $contactType;
 
     /**
      * LicenceType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'licence_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $licenceType;
 
     /**
      * RequestorsContactDetails
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY", cascade={"persist"})
-     * @ORM\JoinColumn(name="requestors_contact_details_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'requestors_contact_details_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY', cascade: ['persist'])]
     protected $requestorsContactDetails;
 
     /**
@@ -128,10 +116,10 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -139,101 +127,91 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Vrm
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="vrm", length=20, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'vrm', length: 20, nullable: true)]
     protected $vrm;
 
     /**
      * Stopped date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="stopped_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'stopped_date', nullable: true)]
     protected $stoppedDate;
 
     /**
      * Requested date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="requested_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'requested_date', nullable: true)]
     protected $requestedDate;
 
     /**
      * Authorisers decision
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="authorisers_decision", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'authorisers_decision', length: 4000, nullable: true)]
     protected $authorisersDecision;
 
     /**
      * Issued date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="issued_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'issued_date', nullable: true)]
     protected $issuedDate;
 
     /**
      * Licence no
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="licence_no", length=20, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'licence_no', length: 20, nullable: true)]
     protected $licenceNo;
 
     /**
      * Requestors body
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="requestors_body", length=40, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'requestors_body', length: 40, nullable: true)]
     protected $requestorsBody;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * SlaTargetDates
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\SlaTargetDate", mappedBy="statement", cascade={"persist"}, indexBy="sla_id", orphanRemoval=true)
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\SlaTargetDate::class, mappedBy: 'statement', cascade: ['persist'], indexBy: 'sla_id', orphanRemoval: true)]
     protected $slaTargetDates;
 
     /**

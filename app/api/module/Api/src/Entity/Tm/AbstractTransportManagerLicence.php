@@ -23,23 +23,18 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
  *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="transport_manager_licence",
- *    indexes={
- *        @ORM\Index(name="ix_transport_manager_licence_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_transport_manager_licence_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_transport_manager_licence_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_transport_manager_licence_tm_type", columns={"tm_type"}),
- *        @ORM\Index(name="ix_transport_manager_licence_transport_manager_id", columns={"transport_manager_id"}),
- *        @ORM\Index(name="uk_transport_manager_licence_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_transport_manager_licence_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'transport_manager_licence')]
+#[ORM\Index(name: 'ix_transport_manager_licence_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_transport_manager_licence_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_transport_manager_licence_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_transport_manager_licence_tm_type', columns: ['tm_type'])]
+#[ORM\Index(name: 'ix_transport_manager_licence_transport_manager_id', columns: ['transport_manager_id'])]
+#[ORM\Index(name: 'uk_transport_manager_licence_olbs_key', columns: ['olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_transport_manager_licence_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractTransportManagerLicence implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -53,41 +48,37 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to transport_manager
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
     protected $transportManager;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
     protected $licence;
 
     /**
      * TmType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="tm_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'tm_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $tmType;
 
     /**
@@ -95,10 +86,10 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -106,137 +97,123 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * isOwner
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_owner", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'is_owner', nullable: true)]
     protected $isOwner;
 
     /**
      * Hours mon
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="hours_mon", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'hours_mon', nullable: true)]
     protected $hoursMon;
 
     /**
      * Hours tue
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="hours_tue", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'hours_tue', nullable: true)]
     protected $hoursTue;
 
     /**
      * Hours wed
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="hours_wed", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'hours_wed', nullable: true)]
     protected $hoursWed;
 
     /**
      * Hours thu
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="hours_thu", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'hours_thu', nullable: true)]
     protected $hoursThu;
 
     /**
      * Hours fri
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="hours_fri", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'hours_fri', nullable: true)]
     protected $hoursFri;
 
     /**
      * Hours sat
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="hours_sat", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'hours_sat', nullable: true)]
     protected $hoursSat;
 
     /**
      * Hours sun
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="hours_sun", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'hours_sun', nullable: true)]
     protected $hoursSun;
 
     /**
      * Additional information
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="additional_information", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'additional_information', length: 4000, nullable: true)]
     protected $additionalInformation;
 
     /**
      * Last tm first email date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="last_tm_first_email_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'last_tm_first_email_date', nullable: true)]
     protected $lastTmFirstEmailDate;
 
     /**
      * Last tm letter date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="last_tm_letter_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'last_tm_letter_date', nullable: true)]
     protected $lastTmLetterDate;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * OtherLicences
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence", mappedBy="transportManagerLicence")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence::class, mappedBy: 'transportManagerLicence')]
     protected $otherLicences;
 
     /**

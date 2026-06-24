@@ -21,17 +21,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="traffic_area",
- *    indexes={
- *        @ORM\Index(name="ix_traffic_area_contact_details_id", columns={"contact_details_id"}),
- *        @ORM\Index(name="ix_traffic_area_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_traffic_area_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'traffic_area')]
+#[ORM\Index(name: 'ix_traffic_area_contact_details_id', columns: ['contact_details_id'])]
+#[ORM\Index(name: 'ix_traffic_area_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_traffic_area_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -44,20 +40,18 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      * Primary key
      *
      * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(type="string", name="id", length=1, nullable=false)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'string', name: 'id', length: 1, nullable: false)]
     protected $id = '';
 
     /**
      * Foreign Key to contact_details
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
-     * @ORM\JoinColumn(name="contact_details_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'contact_details_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY')]
     protected $contactDetails;
 
     /**
@@ -65,10 +59,10 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -76,119 +70,107 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * e.g. North Eastern, Wales
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=70, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 70, nullable: false)]
     protected $name = '';
 
     /**
      * TransXChange name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="txc_name", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'txc_name', length: 70, nullable: true)]
     protected $txcName;
 
     /**
      * Is in Scotland.  Affects some business logic with different Scottish regulations
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_scotland", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_scotland', nullable: false, options: ['default' => 0])]
     protected $isScotland = 0;
 
     /**
      * Is in Wales
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_wales", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_wales', nullable: false, options: ['default' => 0])]
     protected $isWales = 0;
 
     /**
      * Is in Northern Ireland
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_ni", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_ni', nullable: false, options: ['default' => 0])]
     protected $isNi = 0;
 
     /**
      * Is in England
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_england", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_england', nullable: false, options: ['default' => 0])]
     protected $isEngland = 0;
 
     /**
      * used for fee payments
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="sales_person_reference", length=70, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'sales_person_reference', length: 70, nullable: false)]
     protected $salesPersonReference = '';
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * BusRegs
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", mappedBy="trafficAreas", fetch="LAZY")
      */
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, mappedBy: 'trafficAreas', fetch: 'LAZY')]
     protected $busRegs;
 
     /**
      * Recipients
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Publication\Recipient", mappedBy="trafficAreas", fetch="LAZY")
      */
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\Recipient::class, mappedBy: 'trafficAreas', fetch: 'LAZY')]
     protected $recipients;
 
     /**
      * Documents
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", mappedBy="trafficArea")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'trafficArea')]
     protected $documents;
 
     /**
      * TrafficAreaEnforcementAreas
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficAreaEnforcementArea", mappedBy="trafficArea")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficAreaEnforcementArea::class, mappedBy: 'trafficArea')]
     protected $trafficAreaEnforcementAreas;
 
     /**

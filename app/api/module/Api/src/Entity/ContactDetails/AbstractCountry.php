@@ -21,16 +21,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="country",
- *    indexes={
- *        @ORM\Index(name="ix_country_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_country_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'country')]
+#[ORM\Index(name: 'ix_country_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_country_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractCountry implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -43,10 +39,9 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      * Primary key
      *
      * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(type="string", name="id", length=2, nullable=false)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'string', name: 'id', length: 2, nullable: false)]
     protected $id = '';
 
     /**
@@ -54,10 +49,10 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -65,101 +60,91 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Country desc
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="country_desc", length=50, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'country_desc', length: 50, nullable: true)]
     protected $countryDesc;
 
     /**
      * Is EU member. Affects transit rules and EU permits
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_member_state", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_member_state', nullable: false, options: ['default' => 0])]
     protected $isMemberState = 0;
 
     /**
      * Is permit state
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_permit_state", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_permit_state', nullable: false, options: ['default' => 0])]
     protected $isPermitState = 0;
 
     /**
      * Is ecmt state
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_ecmt_state", nullable=true, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_ecmt_state', nullable: true, options: ['default' => 0])]
     protected $isEcmtState = 0;
 
     /**
      * Is eea state
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_eea_state", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_eea_state', nullable: false, options: ['default' => 0])]
     protected $isEeaState = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * IrfoPsvAuths
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth", mappedBy="countrys", fetch="LAZY")
      */
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth::class, mappedBy: 'countrys', fetch: 'LAZY')]
     protected $irfoPsvAuths;
 
     /**
      * IrhpApplications
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpApplication", mappedBy="countrys", fetch="LAZY")
      */
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, mappedBy: 'countrys', fetch: 'LAZY')]
     protected $irhpApplications;
 
     /**
      * IrhpPermitStockRanges
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange", mappedBy="countrys", fetch="LAZY")
      */
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange::class, mappedBy: 'countrys', fetch: 'LAZY')]
     protected $irhpPermitStockRanges;
 
     /**
      * IrhpPermitStocks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock", mappedBy="country")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock::class, mappedBy: 'country')]
     protected $irhpPermitStocks;
 
     /**

@@ -21,18 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_instance_issue",
- *    indexes={
- *        @ORM\Index(name="ix_letter_instance_issue_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_instance_issue_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_instance_issue_letter_instance_id", columns={"letter_instance_id"}),
- *        @ORM\Index(name="ix_letter_instance_issue_letter_issue_version_id", columns={"letter_issue_version_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_instance_issue')]
+#[ORM\Index(name: 'ix_letter_instance_issue_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_instance_issue_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_letter_instance_issue_letter_instance_id', columns: ['letter_instance_id'])]
+#[ORM\Index(name: 'ix_letter_instance_issue_letter_issue_version_id', columns: ['letter_issue_version_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterInstanceIssue implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,31 +41,28 @@ abstract class AbstractLetterInstanceIssue implements BundleSerializableInterfac
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * LetterInstance
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterInstance
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterInstance", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_instance_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_instance_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class, fetch: 'LAZY')]
     protected $letterInstance;
 
     /**
      * LetterIssueVersion
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_issue_version_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_issue_version_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion::class, fetch: 'LAZY')]
     protected $letterIssueVersion;
 
     /**
@@ -77,10 +70,10 @@ abstract class AbstractLetterInstanceIssue implements BundleSerializableInterfac
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -88,38 +81,35 @@ abstract class AbstractLetterInstanceIssue implements BundleSerializableInterfac
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * User edits to default content
      *
      * @var array
-     *
-     * @ORM\Column(type="json", name="edited_content", nullable=true)
      */
+    #[ORM\Column(type: 'json', name: 'edited_content', nullable: true)]
     protected $editedContent;
 
     /**
      * Display order
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="display_order", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false)]
     protected $displayOrder = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

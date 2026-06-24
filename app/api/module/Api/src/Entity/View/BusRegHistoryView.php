@@ -25,10 +25,9 @@ use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 
 /**
  * Bus Reg History View
- *
- * @ORM\Entity(readOnly=true)
- * @ORM\Table(name="bus_reg_history_view")
  */
+#[ORM\Table(name: 'bus_reg_history_view')]
+#[ORM\Entity(readOnly: true)]
 class BusRegHistoryView implements BundleSerializableInterface, JsonSerializable
 {
     use BundleSerializableTrait;
@@ -37,75 +36,67 @@ class BusRegHistoryView implements BundleSerializableInterface, JsonSerializable
      * id
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id')]
     protected $id;
 
     /**
      * busReg
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="bus_reg_id")
      */
+    #[ORM\Column(type: 'integer', name: 'bus_reg_id')]
     protected $busReg;
 
     /**
      * Change made by
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="change_made_by", nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'change_made_by', nullable: true)]
     protected $changeMadeBy;
 
     /**
      * eventDatetime
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="event_datetime")
      */
+    #[ORM\Column(type: 'datetime', name: 'event_datetime')]
     protected $eventDatetime;
 
     /**
      * Event data
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="event_data", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'event_data', length: 255, nullable: true)]
     protected $eventData;
 
     /**
      * Event history type
      *
      * @var EventHistory
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType")
-     * @ORM\JoinColumn(name="event_history_type_id", referencedColumnName="id", nullable=false)
      */
+    #[ORM\JoinColumn(name: 'event_history_type_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType::class)]
     protected $eventHistoryType;
 
     /**
      * User
      *
      * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class)]
     protected $user;
 
     /**
      * Event description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="event_description", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'event_description', length: 255, nullable: true)]
     protected $eventDescription;
 
     /**

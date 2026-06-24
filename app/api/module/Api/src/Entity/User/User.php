@@ -15,20 +15,16 @@ use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 
 /**
  * User Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="user",
- *    indexes={
- *        @ORM\Index(name="ix_user_team_id", columns={"team_id"}),
- *        @ORM\Index(name="ix_user_local_authority_id", columns={"local_authority_id"}),
- *        @ORM\Index(name="ix_user_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_user_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_user_contact_details_id", columns={"contact_details_id"}),
- *        @ORM\Index(name="ix_user_partner_contact_details_id", columns={"partner_contact_details_id"}),
- *        @ORM\Index(name="ix_user_transport_manager_id", columns={"transport_manager_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'user')]
+#[ORM\Index(name: 'ix_user_team_id', columns: ['team_id'])]
+#[ORM\Index(name: 'ix_user_local_authority_id', columns: ['local_authority_id'])]
+#[ORM\Index(name: 'ix_user_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_user_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_user_contact_details_id', columns: ['contact_details_id'])]
+#[ORM\Index(name: 'ix_user_partner_contact_details_id', columns: ['partner_contact_details_id'])]
+#[ORM\Index(name: 'ix_user_transport_manager_id', columns: ['transport_manager_id'])]
+#[ORM\Entity]
 class User extends AbstractUser implements OrganisationProviderInterface
 {
     public const PERMISSION_ADMIN = 'admin';

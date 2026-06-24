@@ -23,25 +23,20 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
  *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="opposition",
- *    indexes={
- *        @ORM\Index(name="ix_opposition_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_opposition_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_opposition_is_valid", columns={"is_valid"}),
- *        @ORM\Index(name="ix_opposition_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_opposition_opposer_id", columns={"opposer_id"}),
- *        @ORM\Index(name="ix_opposition_opposition_type", columns={"opposition_type"}),
- *        @ORM\Index(name="ix_opposition_status", columns={"status"}),
- *        @ORM\Index(name="uk_opposition_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_opposition_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'opposition')]
+#[ORM\Index(name: 'ix_opposition_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_opposition_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_opposition_is_valid', columns: ['is_valid'])]
+#[ORM\Index(name: 'ix_opposition_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_opposition_opposer_id', columns: ['opposer_id'])]
+#[ORM\Index(name: 'ix_opposition_opposition_type', columns: ['opposition_type'])]
+#[ORM\Index(name: 'ix_opposition_status', columns: ['status'])]
+#[ORM\Index(name: 'uk_opposition_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\UniqueConstraint(name: 'uk_opposition_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractOpposition implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -55,61 +50,55 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
     /**
      * Foreign Key to opposer
      *
      * @var \Dvsa\Olcs\Api\Entity\Opposition\Opposer
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Opposition\Opposer", fetch="LAZY", cascade={"persist"})
-     * @ORM\JoinColumn(name="opposer_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'opposer_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Opposition\Opposer::class, fetch: 'LAZY', cascade: ['persist'])]
     protected $opposer;
 
     /**
      * OppositionType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="opposition_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'opposition_type', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $oppositionType;
 
     /**
      * Status
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
     /**
      * yes, no, undecided
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="is_valid", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'is_valid', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $isValid;
 
     /**
@@ -117,10 +106,10 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -128,135 +117,113 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Notes
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="notes", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'notes', length: 4000, nullable: true)]
     protected $notes;
 
     /**
      * isCopied
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_copied", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_copied', nullable: false, options: ['default' => 0])]
     protected $isCopied = 0;
 
     /**
      * Raised date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="raised_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'raised_date', nullable: true)]
     protected $raisedDate;
 
     /**
      * isInTime
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_in_time", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_in_time', nullable: false, options: ['default' => 0])]
     protected $isInTime = 0;
 
     /**
      * isWithdrawn
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_withdrawn", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_withdrawn', nullable: false, options: ['default' => 0])]
     protected $isWithdrawn = 0;
 
     /**
      * Valid notes
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="valid_notes", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'valid_notes', length: 4000, nullable: true)]
     protected $validNotes;
 
     /**
      * isWillingToAttendPi
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_willing_to_attend_pi", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_willing_to_attend_pi', nullable: false, options: ['default' => 0])]
     protected $isWillingToAttendPi = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
     protected $olbsType;
 
     /**
      * OperatingCentres
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre", inversedBy="oppositions", fetch="LAZY")
-     * @ORM\JoinTable(name="operating_centre_opposition",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="opposition_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="operating_centre_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'operating_centre_opposition')]
+    #[ORM\JoinColumn(name: 'opposition_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'operating_centre_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre::class, inversedBy: 'oppositions', fetch: 'LAZY')]
     protected $operatingCentres;
 
     /**
      * Grounds
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="oppositions", fetch="LAZY")
-     * @ORM\JoinTable(name="opposition_grounds",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="opposition_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="ground_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'opposition_grounds')]
+    #[ORM\JoinColumn(name: 'opposition_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'ground_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'oppositions', fetch: 'LAZY')]
     protected $grounds;
 
     /**

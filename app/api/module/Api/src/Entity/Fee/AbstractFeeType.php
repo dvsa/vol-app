@@ -21,22 +21,18 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="fee_type",
- *    indexes={
- *        @ORM\Index(name="ix_fee_type_accrual_rule", columns={"accrual_rule"}),
- *        @ORM\Index(name="ix_fee_type_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_fee_type_fee_type", columns={"fee_type"}),
- *        @ORM\Index(name="ix_fee_type_goods_or_psv", columns={"goods_or_psv"}),
- *        @ORM\Index(name="ix_fee_type_irfo_fee_type", columns={"irfo_fee_type"}),
- *        @ORM\Index(name="ix_fee_type_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_fee_type_licence_type", columns={"licence_type"}),
- *        @ORM\Index(name="ix_fee_type_traffic_area_id", columns={"traffic_area_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'fee_type')]
+#[ORM\Index(name: 'ix_fee_type_accrual_rule', columns: ['accrual_rule'])]
+#[ORM\Index(name: 'ix_fee_type_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_fee_type_fee_type', columns: ['fee_type'])]
+#[ORM\Index(name: 'ix_fee_type_goods_or_psv', columns: ['goods_or_psv'])]
+#[ORM\Index(name: 'ix_fee_type_irfo_fee_type', columns: ['irfo_fee_type'])]
+#[ORM\Index(name: 'ix_fee_type_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_fee_type_licence_type', columns: ['licence_type'])]
+#[ORM\Index(name: 'ix_fee_type_traffic_area_id', columns: ['traffic_area_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractFeeType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,71 +45,64 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * IrfoFeeType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_fee_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irfo_fee_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $irfoFeeType;
 
     /**
      * FeeType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="fee_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'fee_type', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $feeType;
 
     /**
      * AccrualRule
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="accrual_rule", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'accrual_rule', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $accrualRule;
 
     /**
      * Foreign Key to traffic_area
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
     protected $trafficArea;
 
     /**
      * LicenceType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'licence_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $licenceType;
 
     /**
      * GoodsOrPsv
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $goodsOrPsv;
 
     /**
@@ -121,10 +110,10 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -132,137 +121,123 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Effective from
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="effective_from", nullable=false)
      */
+    #[ORM\Column(type: 'datetime', name: 'effective_from', nullable: false)]
     protected $effectiveFrom;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: false)]
     protected $description = '';
 
     /**
      * Fixed value
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="fixed_value", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'fixed_value', nullable: true)]
     protected $fixedValue;
 
     /**
      * Annual value
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="annual_value", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'annual_value', nullable: true)]
     protected $annualValue;
 
     /**
      * Five year value
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="five_year_value", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'five_year_value', nullable: true)]
     protected $fiveYearValue;
 
     /**
      * DVSA value, rather than HMRC.  S for standard, Z for zero
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="vat_code", length=1, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'vat_code', length: 1, nullable: true)]
     protected $vatCode;
 
     /**
      * Percentage vat rate e.g. 20.0
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="vat_rate", nullable=false, options={"default": 0.00})
      */
+    #[ORM\Column(type: 'decimal', name: 'vat_rate', nullable: false, options: ['default' => '0.00'])]
     protected $vatRate = 0.00;
 
     /**
      * Dont allow payment after licence expires
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="expire_fee_with_licence", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'expire_fee_with_licence', nullable: false, options: ['default' => 0])]
     protected $expireFeeWithLicence = 0;
 
     /**
      * Is miscellaneous
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_miscellaneous", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_miscellaneous', nullable: false, options: ['default' => 0])]
     protected $isMiscellaneous = 0;
 
     /**
      * Cost centre ref
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="cost_centre_ref", length=50, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'cost_centre_ref', length: 50, nullable: true)]
     protected $costCentreRef;
 
     /**
      * Product reference for CPMS/Oracle
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="product_reference", length=30, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'product_reference', length: 30, nullable: true)]
     protected $productReference;
 
     /**
      * Is Northern Ireland
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_ni", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_ni', nullable: false, options: ['default' => 0])]
     protected $isNi = 0;
 
     /**
      * Is visible in internal
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_visible_in_internal", nullable=false, options={"default": 1})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_visible_in_internal', nullable: false, options: ['default' => 1])]
     protected $isVisibleInInternal = 1;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

@@ -23,23 +23,18 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
  *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="contact_details",
- *    indexes={
- *        @ORM\Index(name="ix_contact_details_address_id", columns={"address_id"}),
- *        @ORM\Index(name="ix_contact_details_contact_type", columns={"contact_type"}),
- *        @ORM\Index(name="ix_contact_details_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_contact_details_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_contact_details_person_id", columns={"person_id"}),
- *        @ORM\Index(name="uk_contact_details_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_contact_details_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'contact_details')]
+#[ORM\Index(name: 'ix_contact_details_address_id', columns: ['address_id'])]
+#[ORM\Index(name: 'ix_contact_details_contact_type', columns: ['contact_type'])]
+#[ORM\Index(name: 'ix_contact_details_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_contact_details_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_contact_details_person_id', columns: ['person_id'])]
+#[ORM\Index(name: 'uk_contact_details_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\UniqueConstraint(name: 'uk_contact_details_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractContactDetails implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -53,41 +48,37 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * ContactType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="contact_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'contact_type', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $contactType;
 
     /**
      * Foreign Key to address
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Address
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Address", fetch="LAZY", cascade={"persist"})
-     * @ORM\JoinColumn(name="address_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'address_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Address::class, fetch: 'LAZY', cascade: ['persist'])]
     protected $address;
 
     /**
      * Foreign Key to person
      *
      * @var \Dvsa\Olcs\Api\Entity\Person\Person
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Person\Person", fetch="LAZY", cascade={"persist"})
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, fetch: 'LAZY', cascade: ['persist'])]
     protected $person;
 
     /**
@@ -95,10 +86,10 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -106,84 +97,76 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Email address
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="email_address", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'email_address', length: 255, nullable: true)]
     protected $emailAddress;
 
     /**
      * Fao
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="fao", length=90, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'fao', length: 90, nullable: true)]
     protected $fao;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
 
     /**
      * writtenPermissionToEngage
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="written_permission_to_engage", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'written_permission_to_engage', nullable: false, options: ['default' => 0])]
     protected $writtenPermissionToEngage = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
     protected $olbsType;
 
     /**
      * PhoneContacts
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact", mappedBy="contactDetails", cascade={"persist"}, indexBy="id", orphanRemoval=true)
-     * @ORM\OrderBy({"id" = "DESC"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact::class, mappedBy: 'contactDetails', cascade: ['persist'], indexBy: 'id', orphanRemoval: true)]
+    #[ORM\OrderBy(['id' => 'DESC'])]
     protected $phoneContacts;
 
     /**

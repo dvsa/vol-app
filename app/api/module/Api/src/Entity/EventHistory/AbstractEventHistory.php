@@ -18,30 +18,24 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\Table(name="event_history",
- *    indexes={
- *        @ORM\Index(name="ix_event_history_account_id", columns={"account_id"}),
- *        @ORM\Index(name="ix_event_history_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_event_history_bus_reg_id", columns={"bus_reg_id"}),
- *        @ORM\Index(name="ix_event_history_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_event_history_entity_pk", columns={"entity_pk"}),
- *        @ORM\Index(name="ix_event_history_entity_type", columns={"entity_type"}),
- *        @ORM\Index(name="ix_event_history_event_history_type_id", columns={"event_history_type_id"}),
- *        @ORM\Index(name="ix_event_history_irhp_application_id", columns={"irhp_application_id"}),
- *        @ORM\Index(name="ix_event_history_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_event_history_organisation_id", columns={"organisation_id"}),
- *        @ORM\Index(name="ix_event_history_task_id", columns={"task_id"}),
- *        @ORM\Index(name="ix_event_history_transport_manager_id", columns={"transport_manager_id"}),
- *        @ORM\Index(name="ix_event_history_user_id", columns={"user_id"}),
- *        @ORM\Index(name="uk_event_history_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_event_history_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'event_history')]
+#[ORM\Index(name: 'ix_event_history_account_id', columns: ['account_id'])]
+#[ORM\Index(name: 'ix_event_history_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_event_history_bus_reg_id', columns: ['bus_reg_id'])]
+#[ORM\Index(name: 'ix_event_history_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_event_history_entity_pk', columns: ['entity_pk'])]
+#[ORM\Index(name: 'ix_event_history_entity_type', columns: ['entity_type'])]
+#[ORM\Index(name: 'ix_event_history_event_history_type_id', columns: ['event_history_type_id'])]
+#[ORM\Index(name: 'ix_event_history_irhp_application_id', columns: ['irhp_application_id'])]
+#[ORM\Index(name: 'ix_event_history_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_event_history_organisation_id', columns: ['organisation_id'])]
+#[ORM\Index(name: 'ix_event_history_task_id', columns: ['task_id'])]
+#[ORM\Index(name: 'ix_event_history_transport_manager_id', columns: ['transport_manager_id'])]
+#[ORM\Index(name: 'ix_event_history_user_id', columns: ['user_id'])]
+#[ORM\Index(name: 'uk_event_history_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\UniqueConstraint(name: 'uk_event_history_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\MappedSuperclass]
 abstract class AbstractEventHistory implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -52,202 +46,181 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to event_history_type
      *
      * @var \Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType", fetch="LAZY")
-     * @ORM\JoinColumn(name="event_history_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'event_history_type_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType::class, fetch: 'LAZY')]
     protected $eventHistoryType;
 
     /**
      * Foreign Key to user
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
     protected $licence;
 
     /**
      * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
     protected $application;
 
     /**
      * Foreign Key to transport_manager
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
     protected $transportManager;
 
     /**
      * Foreign Key to organisation
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $organisation;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
     /**
      * Foreign Key to bus_reg
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", fetch="LAZY")
-     * @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
     protected $busReg;
 
     /**
      * Account
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'account_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $account;
 
     /**
      * Task
      *
      * @var \Dvsa\Olcs\Api\Entity\Task\Task
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Task\Task", fetch="LAZY")
-     * @ORM\JoinColumn(name="task_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, fetch: 'LAZY')]
     protected $task;
 
     /**
      * IrhpApplication
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpApplication", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, fetch: 'LAZY')]
     protected $irhpApplication;
 
     /**
      * Change made by
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="change_made_by", length=80, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'change_made_by', length: 80, nullable: true)]
     protected $changeMadeBy;
 
     /**
      * Member of organisation
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="member_of_organisation", length=160, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'member_of_organisation', length: 160, nullable: true)]
     protected $memberOfOrganisation;
 
     /**
      * Event datetime
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="event_datetime", nullable=false)
      */
+    #[ORM\Column(type: 'datetime', name: 'event_datetime', nullable: false)]
     protected $eventDatetime;
 
     /**
      * Entity type
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="entity_type", length=45, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'entity_type', length: 45, nullable: true)]
     protected $entityType;
 
     /**
      * Entity pk
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="entity_pk", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'entity_pk', nullable: true)]
     protected $entityPk;
 
     /**
      * Entity version
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="entity_version", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'entity_version', nullable: true)]
     protected $entityVersion;
 
     /**
      * Event data
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="event_data", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'event_data', length: 255, nullable: true)]
     protected $eventData;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=45, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_type', length: 45, nullable: true)]
     protected $olbsType;
 
     /**

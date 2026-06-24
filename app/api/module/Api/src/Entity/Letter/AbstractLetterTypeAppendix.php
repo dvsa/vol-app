@@ -21,18 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_type_appendix",
- *    indexes={
- *        @ORM\Index(name="ix_letter_type_appendix_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_type_appendix_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_type_appendix_letter_appendix_version_id", columns={"letter_appendix_version_id"}),
- *        @ORM\Index(name="IDX_9C765E0130450394", columns={"letter_type_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_type_appendix')]
+#[ORM\Index(name: 'ix_letter_type_appendix_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_type_appendix_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_letter_type_appendix_letter_appendix_version_id', columns: ['letter_appendix_version_id'])]
+#[ORM\Index(name: 'IDX_9C765E0130450394', columns: ['letter_type_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,22 +41,20 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
      * LetterType
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
-     *
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterType", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id')]
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, fetch: 'LAZY')]
     protected $letterType;
 
     /**
      * LetterAppendixVersion
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion
-     *
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_appendix_version_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_appendix_version_id', referencedColumnName: 'id')]
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion::class, fetch: 'LAZY')]
     protected $letterAppendixVersion;
 
     /**
@@ -68,10 +62,10 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -79,38 +73,35 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Order for this letter type
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="display_order", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false)]
     protected $displayOrder = 0;
 
     /**
      * Always include vs selectable
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_mandatory", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_mandatory', nullable: false, options: ['default' => 0])]
     protected $isMandatory = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

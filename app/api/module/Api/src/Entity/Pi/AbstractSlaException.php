@@ -21,16 +21,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="sla_exception",
- *    indexes={
- *        @ORM\Index(name="created_by", columns={"created_by"}),
- *        @ORM\Index(name="last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'sla_exception')]
+#[ORM\Index(name: 'created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'last_modified_by', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractSlaException implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -43,11 +39,10 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
@@ -55,10 +50,10 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -66,56 +61,51 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Sla description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="sla_description", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'sla_description', length: 255, nullable: false)]
     protected $slaDescription = '';
 
     /**
      * Sla exception description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="sla_exception_description", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'sla_exception_description', length: 255, nullable: false)]
     protected $slaExceptionDescription = '';
 
     /**
      * Effective from
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="effective_from", nullable=false)
      */
+    #[ORM\Column(type: 'datetime', name: 'effective_from', nullable: false)]
     protected $effectiveFrom;
 
     /**
      * Effective to
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="effective_to", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'effective_to', nullable: true)]
     protected $effectiveTo;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=true, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: true, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

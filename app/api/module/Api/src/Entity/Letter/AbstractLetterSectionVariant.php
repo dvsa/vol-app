@@ -23,25 +23,20 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
  *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="letter_section_variant",
- *    indexes={
- *        @ORM\Index(name="ix_letter_section_variant_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_section_variant_current_version_id", columns={"current_version_id"}),
- *        @ORM\Index(name="ix_letter_section_variant_goods_or_psv", columns={"goods_or_psv"}),
- *        @ORM\Index(name="ix_letter_section_variant_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_section_variant_letter_choice_id", columns={"letter_choice_id"}),
- *        @ORM\Index(name="ix_letter_section_variant_letter_section_id", columns={"letter_section_id"}),
- *        @ORM\Index(name="ix_letter_section_variant_organisation_type", columns={"organisation_type"}),
- *        @ORM\Index(name="uk_letter_section_variant_conditions", columns={"letter_section_id", "goods_or_psv", "is_variation", "is_ni", "organisation_type", "letter_choice_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_letter_section_variant_conditions", columns={"letter_section_id", "goods_or_psv", "is_variation", "is_ni", "organisation_type", "letter_choice_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_section_variant')]
+#[ORM\Index(name: 'ix_letter_section_variant_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_section_variant_current_version_id', columns: ['current_version_id'])]
+#[ORM\Index(name: 'ix_letter_section_variant_goods_or_psv', columns: ['goods_or_psv'])]
+#[ORM\Index(name: 'ix_letter_section_variant_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_letter_section_variant_letter_choice_id', columns: ['letter_choice_id'])]
+#[ORM\Index(name: 'ix_letter_section_variant_letter_section_id', columns: ['letter_section_id'])]
+#[ORM\Index(name: 'ix_letter_section_variant_organisation_type', columns: ['organisation_type'])]
+#[ORM\Index(name: 'uk_letter_section_variant_conditions', columns: ['letter_section_id', 'goods_or_psv', 'is_variation', 'is_ni', 'organisation_type', 'letter_choice_id'])]
+#[ORM\UniqueConstraint(name: 'uk_letter_section_variant_conditions', columns: ['letter_section_id', 'goods_or_psv', 'is_variation', 'is_ni', 'organisation_type', 'letter_choice_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterSectionVariant implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -55,61 +50,55 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * LetterSection
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSection
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterSection", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_section_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_section_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSection::class, fetch: 'LAZY')]
     protected $letterSection;
 
     /**
      * Points to latest version for this variant
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion", fetch="LAZY")
-     * @ORM\JoinColumn(name="current_version_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'current_version_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion::class, fetch: 'LAZY')]
     protected $currentVersion;
 
     /**
      * FK to ref_data lcat_gv/lcat_psv. NULL = any
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $goodsOrPsv;
 
     /**
      * FK to ref_data org_t_st/org_t_rc/org_t_llp/org_t_p. NULL = any
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'organisation_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $organisationType;
 
     /**
      * FK to letter_choice. NULL = not conditional on a choice
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterChoice
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterChoice", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_choice_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'letter_choice_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterChoice::class, fetch: 'LAZY')]
     protected $letterChoice;
 
     /**
@@ -117,10 +106,10 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -128,47 +117,43 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * NULL = any, 0 = new application, 1 = variation
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_variation", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'is_variation', nullable: true)]
     protected $isVariation;
 
     /**
      * NULL = any, 0 = GB, 1 = NI
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_ni", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'is_ni', nullable: true)]
     protected $isNi;
 
     /**
      * Display order
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="display_order", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false, options: ['default' => 0])]
     protected $displayOrder = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

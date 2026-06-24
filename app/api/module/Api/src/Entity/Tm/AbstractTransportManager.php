@@ -23,21 +23,18 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
  *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="transport_manager",
- *    indexes={
- *        @ORM\Index(name="ix_transport_manager_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_transport_manager_home_cd_id", columns={"home_cd_id"}),
- *        @ORM\Index(name="ix_transport_manager_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_transport_manager_merge_to_transport_manager_id", columns={"merge_to_transport_manager_id"}),
- *        @ORM\Index(name="ix_transport_manager_tm_status", columns={"tm_status"}),
- *        @ORM\Index(name="ix_transport_manager_tm_type", columns={"tm_type"}),
- *        @ORM\Index(name="ix_transport_manager_work_cd_id", columns={"work_cd_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'transport_manager')]
+#[ORM\Index(name: 'ix_transport_manager_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_transport_manager_home_cd_id', columns: ['home_cd_id'])]
+#[ORM\Index(name: 'ix_transport_manager_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_transport_manager_merge_to_transport_manager_id', columns: ['merge_to_transport_manager_id'])]
+#[ORM\Index(name: 'ix_transport_manager_tm_status', columns: ['tm_status'])]
+#[ORM\Index(name: 'ix_transport_manager_tm_type', columns: ['tm_type'])]
+#[ORM\Index(name: 'ix_transport_manager_work_cd_id', columns: ['work_cd_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractTransportManager implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -51,61 +48,55 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Current,Disqualified,Active,Disabled
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="tm_status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'tm_status', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $tmStatus;
 
     /**
      * Internal to organisation, external or both when multi orgs.
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="tm_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'tm_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $tmType;
 
     /**
      * Home contact details FK
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
-     * @ORM\JoinColumn(name="home_cd_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'home_cd_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY')]
     protected $homeCd;
 
     /**
      * Work contact details FK
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
-     * @ORM\JoinColumn(name="work_cd_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'work_cd_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY')]
     protected $workCd;
 
     /**
      * MergeToTransportManager
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
-     * @ORM\JoinColumn(name="merge_to_transport_manager_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'merge_to_transport_manager_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
     protected $mergeToTransportManager;
 
     /**
@@ -113,10 +104,10 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -124,173 +115,155 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * FK to case where TM became disqualified
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="disqualification_tm_case_id", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'disqualification_tm_case_id', nullable: true)]
     protected $disqualificationTmCaseId;
 
     /**
      * Removed date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="removed_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'removed_date', nullable: true)]
     protected $removedDate;
 
     /**
      * Last licence date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="last_licence_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'last_licence_date', nullable: true)]
     protected $lastLicenceDate;
 
     /**
      * Family name recognised by nysiis - cross Europe name resolution
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="nysiis_family_name", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'nysiis_family_name', length: 100, nullable: true)]
     protected $nysiisFamilyName;
 
     /**
      * First name recognised by nysiis - cross Europe name resolution
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="nysiis_forename", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'nysiis_forename', length: 100, nullable: true)]
     protected $nysiisForename;
 
     /**
      * Merge details
      *
      * @var array
-     *
-     * @ORM\Column(type="json", name="merge_details", nullable=true)
      */
+    #[ORM\Column(type: 'json', name: 'merge_details', nullable: true)]
     protected $mergeDetails;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Olbs key
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * Cases
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, mappedBy: 'transportManager')]
     protected $cases;
 
     /**
      * Documents
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'transportManager')]
     protected $documents;
 
     /**
      * OtherLicences
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence::class, mappedBy: 'transportManager')]
     protected $otherLicences;
 
     /**
      * PreviousConvictions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Application\PreviousConviction", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Application\PreviousConviction::class, mappedBy: 'transportManager')]
     protected $previousConvictions;
 
     /**
      * Employments
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TmEmployment", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TmEmployment::class, mappedBy: 'transportManager')]
     protected $employments;
 
     /**
      * Qualifications
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TmQualification", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TmQualification::class, mappedBy: 'transportManager')]
     protected $qualifications;
 
     /**
      * TmApplications
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication::class, mappedBy: 'transportManager')]
     protected $tmApplications;
 
     /**
      * TmLicences
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence::class, mappedBy: 'transportManager')]
     protected $tmLicences;
 
     /**
      * ReadAudits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManagerReadAudit", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerReadAudit::class, mappedBy: 'transportManager')]
     protected $readAudits;
 
     /**
      * Users
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\User\User", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, mappedBy: 'transportManager')]
     protected $users;
 
     /**

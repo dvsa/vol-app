@@ -21,18 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_type_issue",
- *    indexes={
- *        @ORM\Index(name="ix_letter_type_issue_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_type_issue_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_type_issue_letter_issue_version_id", columns={"letter_issue_version_id"}),
- *        @ORM\Index(name="IDX_DC298E9930450394", columns={"letter_type_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_type_issue')]
+#[ORM\Index(name: 'ix_letter_type_issue_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_type_issue_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_letter_type_issue_letter_issue_version_id', columns: ['letter_issue_version_id'])]
+#[ORM\Index(name: 'IDX_DC298E9930450394', columns: ['letter_type_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterTypeIssue implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,22 +41,20 @@ abstract class AbstractLetterTypeIssue implements BundleSerializableInterface, J
      * LetterType
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
-     *
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterType", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id')]
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, fetch: 'LAZY')]
     protected $letterType;
 
     /**
      * LetterIssueVersion
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion
-     *
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_issue_version_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_issue_version_id', referencedColumnName: 'id')]
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion::class, fetch: 'LAZY')]
     protected $letterIssueVersion;
 
     /**
@@ -68,10 +62,10 @@ abstract class AbstractLetterTypeIssue implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -79,10 +73,10 @@ abstract class AbstractLetterTypeIssue implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**

@@ -21,22 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="organisation_user",
- *    indexes={
- *        @ORM\Index(name="ix_organisation_user_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_organisation_user_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_organisation_user_user_id", columns={"user_id"}),
- *        @ORM\Index(name="uk_organisation_user_organisation_id_user_id", columns={"organisation_id", "user_id"}),
- *        @ORM\Index(name="IDX_CFD7D6519E6B1585", columns={"organisation_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_organisation_user_organisation_id_user_id", columns={"organisation_id", "user_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'organisation_user')]
+#[ORM\Index(name: 'ix_organisation_user_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_organisation_user_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_organisation_user_user_id', columns: ['user_id'])]
+#[ORM\Index(name: 'uk_organisation_user_organisation_id_user_id', columns: ['organisation_id', 'user_id'])]
+#[ORM\Index(name: 'IDX_CFD7D6519E6B1585', columns: ['organisation_id'])]
+#[ORM\UniqueConstraint(name: 'uk_organisation_user_organisation_id_user_id', columns: ['organisation_id', 'user_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractOrganisationUser implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,31 +43,28 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to organisation
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $organisation;
 
     /**
      * Foreign Key to user
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 
     /**
@@ -81,10 +72,10 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -92,38 +83,35 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * isAdministrator
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_administrator", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_administrator', nullable: false, options: ['default' => 0])]
     protected $isAdministrator = 0;
 
     /**
      * sftpAccess
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="sftp_access", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'sftp_access', nullable: false, options: ['default' => 0])]
     protected $sftpAccess = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

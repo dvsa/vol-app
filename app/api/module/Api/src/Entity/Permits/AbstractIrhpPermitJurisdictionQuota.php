@@ -21,18 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irhp_permit_jurisdiction_quota",
- *    indexes={
- *        @ORM\Index(name="fk_irhp_jurisdiction_quotas_irhp_permit_stocks1_idx", columns={"irhp_permit_stock_id"}),
- *        @ORM\Index(name="fk_irhp_jurisdiction_quotas_irhp_traffic_area1_idx", columns={"traffic_area_id"}),
- *        @ORM\Index(name="fk_irhp_permit_jurisdiction_quota_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_irhp_permit_jurisdiction_quota_last_modified_by_user_id", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irhp_permit_jurisdiction_quota')]
+#[ORM\Index(name: 'fk_irhp_jurisdiction_quotas_irhp_permit_stocks1_idx', columns: ['irhp_permit_stock_id'])]
+#[ORM\Index(name: 'fk_irhp_jurisdiction_quotas_irhp_traffic_area1_idx', columns: ['traffic_area_id'])]
+#[ORM\Index(name: 'fk_irhp_permit_jurisdiction_quota_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_irhp_permit_jurisdiction_quota_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrhpPermitJurisdictionQuota implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,31 +41,28 @@ abstract class AbstractIrhpPermitJurisdictionQuota implements BundleSerializable
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * TrafficArea
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
     protected $trafficArea;
 
     /**
      * IrhpPermitStock
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_permit_stock_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'irhp_permit_stock_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock::class, fetch: 'LAZY')]
     protected $irhpPermitStock;
 
     /**
@@ -77,10 +70,10 @@ abstract class AbstractIrhpPermitJurisdictionQuota implements BundleSerializable
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -88,29 +81,27 @@ abstract class AbstractIrhpPermitJurisdictionQuota implements BundleSerializable
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Quota number
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="quota_number", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'integer', name: 'quota_number', nullable: false, options: ['default' => 0])]
     protected $quotaNumber = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

@@ -21,24 +21,18 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="appeal",
- *    indexes={
- *        @ORM\Index(name="ix_appeal_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_appeal_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_appeal_outcome", columns={"outcome"}),
- *        @ORM\Index(name="ix_appeal_reason", columns={"reason"}),
- *        @ORM\Index(name="uk_appeal_case_id", columns={"case_id"}),
- *        @ORM\Index(name="uk_appeal_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_appeal_case_id", columns={"case_id"}),
- *        @ORM\UniqueConstraint(name="uk_appeal_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'appeal')]
+#[ORM\Index(name: 'ix_appeal_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_appeal_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_appeal_outcome', columns: ['outcome'])]
+#[ORM\Index(name: 'ix_appeal_reason', columns: ['reason'])]
+#[ORM\Index(name: 'uk_appeal_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'uk_appeal_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\UniqueConstraint(name: 'uk_appeal_case_id', columns: ['case_id'])]
+#[ORM\UniqueConstraint(name: 'uk_appeal_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -51,41 +45,37 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
     /**
      * Reason
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="reason", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'reason', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $reason;
 
     /**
      * Outcome
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="outcome", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'outcome', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $outcome;
 
     /**
@@ -93,10 +83,10 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -104,155 +94,139 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Non system generated number entered by user.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="appeal_no", length=20, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'appeal_no', length: 20, nullable: true)]
     protected $appealNo;
 
     /**
      * Deadline date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="deadline_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'deadline_date', nullable: true)]
     protected $deadlineDate;
 
     /**
      * Appeal date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="appeal_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'appeal_date', nullable: true)]
     protected $appealDate;
 
     /**
      * Grounds for the appeal.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="outline_ground", length=1024, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'outline_ground', length: 1024, nullable: true)]
     protected $outlineGround;
 
     /**
      * Hearing date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="hearing_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'hearing_date', nullable: true)]
     protected $hearingDate;
 
     /**
      * Papers due date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="papers_due_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'papers_due_date', nullable: true)]
     protected $papersDueDate;
 
     /**
      * Papers due tc date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="papers_due_tc_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'papers_due_tc_date', nullable: true)]
     protected $papersDueTcDate;
 
     /**
      * Comment
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="comment", length=1024, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'comment', length: 1024, nullable: true)]
     protected $comment;
 
     /**
      * Papers sent date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="papers_sent_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'papers_sent_date', nullable: true)]
     protected $papersSentDate;
 
     /**
      * Papers sent tc date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="papers_sent_tc_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'papers_sent_tc_date', nullable: true)]
     protected $papersSentTcDate;
 
     /**
      * Decision date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="decision_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'decision_date', nullable: true)]
     protected $decisionDate;
 
     /**
      * Withdrawn date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="withdrawn_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'withdrawn_date', nullable: true)]
     protected $withdrawnDate;
 
     /**
      * dvsaNotified
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="dvsa_notified", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'dvsa_notified', nullable: false, options: ['default' => 0])]
     protected $dvsaNotified = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
     protected $olbsType;
 
     /**

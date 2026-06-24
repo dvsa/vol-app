@@ -9,10 +9,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * LetterInstance Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="letter_instance")
  */
+#[ORM\Table(name: 'letter_instance')]
+#[ORM\Entity]
 class LetterInstance extends AbstractLetterInstance
 {
     public const STATUS_DRAFT = 'ltr_sts_draft';
@@ -25,74 +24,44 @@ class LetterInstance extends AbstractLetterInstance
      * Letter instance sections
      *
      * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection",
-     *     mappedBy="letterInstance",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"displayOrder" = "ASC"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
     protected $letterInstanceSections;
 
     /**
      * Letter instance issues
      *
      * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue",
-     *     mappedBy="letterInstance",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"displayOrder" = "ASC"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
     protected $letterInstanceIssues;
 
     /**
      * Letter instance todos
      *
      * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo",
-     *     mappedBy="letterInstance",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"displayOrder" = "ASC"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
     protected $letterInstanceTodos;
 
     /**
      * Letter instance appendices
      *
      * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterInstanceAppendix",
-     *     mappedBy="letterInstance",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"displayOrder" = "ASC"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceAppendix::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
     protected $letterInstanceAppendices;
 
     /**
      * Letter instance choices (selected by caseworker)
      *
      * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterInstanceChoice",
-     *     mappedBy="letterInstance",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceChoice::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected $letterInstanceChoices;
 
     /**

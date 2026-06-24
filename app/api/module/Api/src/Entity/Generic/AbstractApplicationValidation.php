@@ -21,18 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="application_validation",
- *    indexes={
- *        @ORM\Index(name="fk_application_validation_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_application_validation_last_modified_by_user_id", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_application_validation_application_step_id", columns={"application_step_id"}),
- *        @ORM\Index(name="ix_application_validation_question_id", columns={"question_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'application_validation')]
+#[ORM\Index(name: 'fk_application_validation_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_application_validation_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_application_validation_application_step_id', columns: ['application_step_id'])]
+#[ORM\Index(name: 'ix_application_validation_question_id', columns: ['question_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractApplicationValidation implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,31 +41,28 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Question
      *
      * @var \Dvsa\Olcs\Api\Entity\Generic\Question
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Generic\Question", fetch="LAZY")
-     * @ORM\JoinColumn(name="question_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\Question::class, fetch: 'LAZY')]
     protected $question;
 
     /**
      * ApplicationStep
      *
      * @var \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationStep", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_step_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'application_step_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep::class, fetch: 'LAZY')]
     protected $applicationStep;
 
     /**
@@ -77,10 +70,10 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
@@ -88,56 +81,51 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
      * Rule
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="rule", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'rule', length: 255, nullable: true)]
     protected $rule;
 
     /**
      * Parameters
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="parameters", length=1024, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'parameters', length: 1024, nullable: true)]
     protected $parameters;
 
     /**
      * Weight
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="weight", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'weight', nullable: true)]
     protected $weight;
 
     /**
      * Error translation key
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="error_translation_key", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'error_translation_key', length: 255, nullable: true)]
     protected $errorTranslationKey;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

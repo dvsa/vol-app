@@ -21,22 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="messaging_user_message_read",
- *    indexes={
- *        @ORM\Index(name="ck_unique_user_id_message_id", columns={"user_id", "messaging_message_id"}),
- *        @ORM\Index(name="fk_messaging_user_message_read_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_messaging_user_message_read_last_modified_by_user_id", columns={"last_modified_by"}),
- *        @ORM\Index(name="fk_messaging_user_message_read_messaging_message_id", columns={"messaging_message_id"}),
- *        @ORM\Index(name="IDX_B9D49F7EA76ED395", columns={"user_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="ck_unique_user_id_message_id", columns={"user_id", "messaging_message_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'messaging_user_message_read')]
+#[ORM\Index(name: 'ck_unique_user_id_message_id', columns: ['user_id', 'messaging_message_id'])]
+#[ORM\Index(name: 'fk_messaging_user_message_read_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_messaging_user_message_read_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'fk_messaging_user_message_read_messaging_message_id', columns: ['messaging_message_id'])]
+#[ORM\Index(name: 'IDX_B9D49F7EA76ED395', columns: ['user_id'])]
+#[ORM\UniqueConstraint(name: 'ck_unique_user_id_message_id', columns: ['user_id', 'messaging_message_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractMessagingUserMessageRead implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,31 +43,28 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * User
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 
     /**
      * MessagingMessage
      *
      * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage", fetch="LAZY")
-     * @ORM\JoinColumn(name="messaging_message_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'messaging_message_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage::class, fetch: 'LAZY')]
     protected $messagingMessage;
 
     /**
@@ -81,10 +72,10 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $createdBy;
 
     /**
@@ -92,29 +83,27 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
      * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $lastModifiedBy;
 
     /**
      * Last read on
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="last_read_on", nullable=false)
      */
+    #[ORM\Column(type: 'datetime', name: 'last_read_on', nullable: false)]
     protected $lastReadOn;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

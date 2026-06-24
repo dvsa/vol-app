@@ -13,10 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * VI Operator view
- *
- * @ORM\Entity(readOnly=true)
- * @ORM\Table(name="vi_op_vw")
  */
+#[ORM\Table(name: 'vi_op_vw')]
+#[ORM\Entity(readOnly: true)]
 class ViOpView
 {
     /**
@@ -25,27 +24,25 @@ class ViOpView
      * @var int
      *
      * Note The ID annotation here is to allow doctrine to create the table (Even though we remove it later)
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id')]
     protected $id;
 
     /**
      * Licence ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="lic_id")
      */
+    #[ORM\Column(type: 'integer', name: 'lic_id')]
     protected $licId;
 
     /**
      * VI line
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="vi_line")
      */
+    #[ORM\Column(type: 'string', name: 'vi_line')]
     protected $viLine;
 
     /**
