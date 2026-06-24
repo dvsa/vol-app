@@ -46,14 +46,4 @@ class ReportCasesOpenController extends AbstractInternalController implements Le
 
         return parent::indexAction();
     }
-
-    #[\Override]
-    protected function modifyListQueryParameters($parameters)
-    {
-        if (empty($parameters['limit']))
-        {
-            $parameters['limit'] = $this->defaultTableLimit;
-        }
-        return $parameters;
-    }
 }
