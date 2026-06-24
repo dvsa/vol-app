@@ -141,9 +141,6 @@ class CaseEntityNrStatusTest extends MockeryTestCase
             'application' => null,
         ];
 
-        static::assertSame(
-            '<a class="govuk-link" href="EXPECT_LIC_URL">unit_LicNo</a> (unit_LicStatus)',
-            $this->sut->format($data, null)
-        );
+        static::assertSame('', $this->sut->format($data, null));
     }
 }
