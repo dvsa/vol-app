@@ -96,11 +96,11 @@ locals {
         },
         {
           name  = "READDB_ID"
-          value = "${var.domain_env}-aurora-olcsdb-reader"
+          value = "${var.environment}-aurora-olcsdb-reader"
         },
         {
           name  = "DBCLUSTER_ID"
-          value = "${var.domain_env}-aurora-olcsdb-cluster"
+          value = "${var.environment}-aurora-olcsdb-cluster"
         },
         {
           name  = "READDB_NAME"
