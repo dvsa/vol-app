@@ -934,7 +934,7 @@ return [
     'doctrine' => [
         'driver' => [
             'EntityDriver' => [
-                'class' => \Doctrine\ORM\Mapping\Driver\AnnotationDriver::class,
+                'class' => \Doctrine\ORM\Mapping\Driver\AttributeDriver::class,
                 'cache' => 'array',
                 'paths' => [
                     __DIR__ . '/../src/Entity'

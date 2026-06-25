@@ -83,10 +83,9 @@ abstract class <?php echo $className; ?> implements BundleSerializableInterface,
      *
      * @var <?php echo $field['property']['type']; ?>
 
-     *
-     * <?php echo $field['annotation']; ?>
-
      */
+    <?php echo $field['annotation']; ?>
+    
     protected $<?php echo $field['property']['name']; ?><?php if ($field['property']['defaultValue'] !== 'null'): ?> = <?php echo $field['property']['defaultValue']; ?><?php endif; ?>;
 
 <?php endif; ?>
