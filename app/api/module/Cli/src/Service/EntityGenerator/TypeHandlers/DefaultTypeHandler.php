@@ -45,21 +45,21 @@ class DefaultTypeHandler extends AbstractTypeHandler
         $annotations = [];
 
         // Add type
-        $options[] = 'type="' . $type . '"';
+        $options[] = "type: '" . $type . "'";
 
         // Add name
-        $options[] = 'name="' . $column->getName() . '"';
+        $options[] = "name: '" . $column->getName() . "'";
 
         // Add length for string types
         if (in_array($type, ['string']) && $column->getLength() !== null) {
-            $options[] = 'length=' . $column->getLength();
+            $options[] = 'length: ' . $column->getLength();
         }
 
         // Add nullable
         if ($column->isNullable()) {
-            $options[] = 'nullable=true';
+            $options[] = 'nullable: true';
         } else {
-            $options[] = 'nullable=false';
+            $options[] = 'nullable: false';
         }
 
         // Add default value as option
@@ -81,19 +81,19 @@ class DefaultTypeHandler extends AbstractTypeHandler
                 $defaultValue = $this->generateDefaultValue($default);
             }
 
-            $options[] = 'options={"default": ' . $defaultValue . '}';
+            $options[] = 'options: [\'default\' => ' . $defaultValue . ']';
         }
 
         // Add precision and scale for decimal types
         if ($type === 'decimal' && $column->getLength() !== null) {
-            $options[] = 'precision=' . $column->getLength();
+            $options[] = 'precision: ' . $column->getLength();
             if ($column->getOption('scale') !== null) {
-                $options[] = 'scale=' . $column->getOption('scale');
+                $options[] = 'scale: ' . $column->getOption('scale');
             }
         }
 
         // Build the column annotation
-        $annotations[] = '@ORM\Column(' . implode(', ', $options) . ')';
+        $annotations[] = '#[ORM\Column(' . implode(', ', $options) . ')]';
 
         // Check if field is translatable from EntityConfig
         $columnConfig = $config[$column->getName()] ?? null;
@@ -103,7 +103,7 @@ class DefaultTypeHandler extends AbstractTypeHandler
             $annotations[] = '@Gedmo\Translatable';
         }
 
-        return implode("\n     * ", $annotations);
+        return implode("\n    ", $annotations);
     }
 
     /**
