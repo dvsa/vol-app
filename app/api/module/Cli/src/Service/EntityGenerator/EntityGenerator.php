@@ -626,15 +626,10 @@ class EntityGenerator implements EntityGeneratorInterface
     private function buildOwningManyToManyAnnotation(string $targetEntity, string $inversePropertyName, array $relationship): string
     {
         return sprintf(
-            '@ORM\ManyToMany(targetEntity="%s", inversedBy="%s", fetch="LAZY")' . "\n" .
-            '     * @ORM\JoinTable(name="%s",' . "\n" .
-            '     *     joinColumns={' . "\n" .
-            '     *         @ORM\JoinColumn(name="%s", referencedColumnName="%s")' . "\n" .
-            '     *     },' . "\n" .
-            '     *     inverseJoinColumns={' . "\n" .
-            '     *         @ORM\JoinColumn(name="%s", referencedColumnName="%s")' . "\n" .
-            '     *     }' . "\n" .
-            '     * )',
+            "#[ORM\\ManyToMany(targetEntity: %s::class, inversedBy: '%s', fetch: 'LAZY')]\n" .
+            "#[ORM\\JoinTable(name: '%s')]\n" .
+            "#[ORM\\JoinColumn(name: '%s', referencedColumnName: '%s')]\n" .
+            "#[ORM\\InverseJoinColumn(name: '%s', referencedColumnName: '%s')]",
             $targetEntity,
             $inversePropertyName,
             $relationship['join_table'],
@@ -651,7 +646,7 @@ class EntityGenerator implements EntityGeneratorInterface
     private function buildInverseManyToManyAnnotation(string $targetEntity, string $propertyName): string
     {
         return sprintf(
-            '@ORM\ManyToMany(targetEntity="%s", mappedBy="%s", fetch="LAZY")',
+            "#[ORM\\ManyToMany(targetEntity: %s::class, mappedBy: '%s', fetch: 'LAZY')]",
             $targetEntity,
             $propertyName
         );

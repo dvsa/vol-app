@@ -69,9 +69,9 @@ class YesNoTypeHandler extends AbstractTypeHandler
 
         // Add nullable option
         if ($column->isNullable() || $doctrineType === 'yesnonull') {
-            $options[] = 'nullable=true';
+            $options[] = 'nullable: true';
         } else {
-            $options[] = 'nullable=false';
+            $options[] = 'nullable: false';
         }
 
         // Add default value option
@@ -79,13 +79,13 @@ class YesNoTypeHandler extends AbstractTypeHandler
             // For yesno fields, the default is always numeric (0 or 1)
             $default = $column->getDefault();
             $defaultValue = is_numeric($default) ? (string)$default : '0';
-            $options[] = 'options={"default": ' . $defaultValue . '}';
+            $options[] = "options: ['default' => " . $defaultValue . ']';
         }
 
         $optionsStr = !empty($options) ? ', ' . implode(', ', $options) : '';
 
         return sprintf(
-            '@ORM\Column(type="%s", name="%s"%s)',
+            "#[ORM\Column(type: '%s', name: '%s'%s)]",
             $doctrineType,
             $column->getName(),
             $optionsStr
@@ -103,20 +103,20 @@ class YesNoTypeHandler extends AbstractTypeHandler
 
         // Add nullable option
         $isNullable = $column->isNullable() || $fieldConfig?->type === CustomFieldType::YESNO_NULL;
-        $options[] = $isNullable ? 'nullable=true' : 'nullable=false';
+        $options[] = $isNullable ? 'nullable: true' : 'nullable: false';
 
         // Add default value option
         if ($column->getDefault() !== null) {
             // For yesno fields, the default is always numeric (0 or 1)
             $default = $column->getDefault();
             $defaultValue = is_numeric($default) ? (string)$default : '0';
-            $options[] = 'options={"default": ' . $defaultValue . '}';
+            $options[] = "options: ['default' => " . $defaultValue . ']';
         }
 
         $optionsStr = !empty($options) ? ', ' . implode(', ', $options) : '';
 
         return sprintf(
-            '@ORM\Column(type="%s", name="%s"%s)',
+            "#[ORM\Column(type: '%s', name: '%s'%s)]",
             $doctrineType,
             $column->getName(),
             $optionsStr

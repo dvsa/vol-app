@@ -41,37 +41,21 @@ use <?php echo $import; ?>;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
+ */
+#[ORM\Table(name: '<?php echo $tableName; ?>')]
+<?php foreach ($indexes as $index): ?>
+#[ORM\Index(<?php echo $this->generateOptionsFromAttributes($index, 'indexes'); ?>)]
+<?php endforeach; ?>
+<?php foreach ($uniqueConstraints as $constraint): ?>
+#[ORM\UniqueConstraint(<?php echo $this->generateOptionsFromAttributes($constraint, 'unique-constraints'); ?>)]
+<?php endforeach; ?>
 <?php if ($hasCreatedOn || $hasModifiedOn): ?>
- * @ORM\HasLifecycleCallbacks
+#[ORM\HasLifecycleCallbacks]
 <?php endif; ?>
 <?php if ($softDeletable): ?>
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 <?php endif; ?>
- * @ORM\Table(name="<?php echo $tableName; ?>"<?php
-if (!empty($indexes) || !empty($uniqueConstraints)): ?>,
-<?php if (!empty($indexes)): ?>
- *    indexes={
-<?php foreach ($indexes as $key => $index): ?>
- *        @ORM\Index(<?php echo $this->generateOptionsFromAttributes($index, 'indexes'); ?>)<?php echo ($key < (count($indexes) - 1) ? ',' : ''); ?>
-
-<?php endforeach; ?>
- *    }<?php if (!empty($uniqueConstraints)): ?>,<?php endif; ?>
-
-<?php endif; ?>
-<?php if (!empty($uniqueConstraints)): ?>
- *    uniqueConstraints={
-<?php foreach ($uniqueConstraints as $key => $constraint): ?>
- *        @ORM\UniqueConstraint(<?php echo $this->generateOptionsFromAttributes($constraint, 'unique-constraints'); ?>)<?php echo ($key < (count($uniqueConstraints) - 1) ? ',' : ''); ?>
-
-<?php endforeach; ?>
- *    }
-<?php endif; ?>
- * )
-<?php else: ?>)
-<?php endif; ?>
- */
+#[ORM\MappedSuperclass]
 abstract class <?php echo $className; ?> implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;

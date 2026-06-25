@@ -23,11 +23,11 @@ class BlameableTypeHandler extends AbstractTypeHandler
         $annotations = [];
 
         // Add ManyToOne relationship
-        $annotations[] = '@ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")';
+        $annotations[] = '#[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: \'LAZY\')]';
 
         // Add JoinColumn
         $annotations[] = sprintf(
-            '@ORM\JoinColumn(name="%s", referencedColumnName="id", nullable=true)',
+            "#[ORM\JoinColumn(name: '%s', referencedColumnName: 'id', nullable: true)]",
             $column->getName()
         );
 
@@ -38,7 +38,7 @@ class BlameableTypeHandler extends AbstractTypeHandler
             $annotations[] = '@Gedmo\Blameable(on="update")';
         }
 
-        return implode("\n     * ", $annotations);
+        return implode("\n    ", $annotations);
     }
 
     #[\Override]
