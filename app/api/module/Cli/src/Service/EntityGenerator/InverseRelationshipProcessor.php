@@ -191,7 +191,7 @@ readonly class InverseRelationshipProcessor
 
         $options = [];
         $options[] = sprintf(
-           'targetEntity: \Dvsa\Olcs\Api\Entity\%s\%s::class',
+            'targetEntity: \Dvsa\Olcs\Api\Entity\%s\%s::class',
             $this->getEntityNamespace($sourceEntity),
             $sourceEntity
         );
