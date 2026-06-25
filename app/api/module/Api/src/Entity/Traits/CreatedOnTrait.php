@@ -1,6 +1,7 @@
 <?php
 
 namespace Dvsa\Olcs\Api\Entity\Traits;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
