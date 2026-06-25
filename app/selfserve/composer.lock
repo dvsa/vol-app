@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "90d1fc292c2333e75f1e5f5c8262143c",
+  "content-hash": "2611e22a2200226f22c0c60ec8ae571f",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -3935,17 +3935,11 @@
     },
     {
       "name": "olcs/olcs-auth",
-      "version": "v9.0.1",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/dvsa/olcs-auth.git",
-        "reference": "277396aa38de4520f03ebd342d4d3c2dfaf62b88"
-      },
+      "version": "9.0.1",
       "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-auth/zipball/277396aa38de4520f03ebd342d4d3c2dfaf62b88",
-        "reference": "277396aa38de4520f03ebd342d4d3c2dfaf62b88",
-        "shasum": ""
+        "type": "path",
+        "url": "../../lib/olcs-auth",
+        "reference": "a7575db676b9257799c2f41b4775ffe2703ef061"
       },
       "require": {
         "laminas/laminas-authentication": "^2.18",
@@ -3987,13 +3981,26 @@
           "Dvsa\\Olcs\\Auth\\": "src/"
         }
       },
-      "notification-url": "https://packagist.org/downloads/",
+      "autoload-dev": {
+        "psr-4": {
+          "Dvsa\\OlcsTest\\Auth\\": "test/"
+        }
+      },
+      "scripts": {
+        "bin": ["echo 'bin not installed'"],
+        "post-install-cmd": ["@composer bin all install"],
+        "test": ["phpunit"],
+        "phpcs": ["phpcs"],
+        "psalm": ["psalm"],
+        "phpstan": ["phpstan"],
+        "all": ["@test", "@phpcs", "@psalm", "@phpstan"]
+      },
       "license": ["MIT"],
       "description": "OLCS Authentication",
-      "support": {
-        "source": "https://github.com/dvsa/olcs-auth/tree/v9.0.1"
-      },
-      "time": "2025-09-22T15:19:36+00:00"
+      "transport-options": {
+        "symlink": true,
+        "relative": true
+      }
     },
     {
       "name": "olcs/olcs-common",

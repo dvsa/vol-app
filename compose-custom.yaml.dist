@@ -7,8 +7,6 @@ services:
   selfserve:
     volumes:
       - ./app/selfserve:/var/www/html
-      - ../olcs-auth:/var/www/html/vendor/olcs/olcs-auth
   internal:
     volumes:
       - ./app/internal:/var/www/html
-      - ../olcs-auth:/var/www/html/vendor/olcs/olcs-auth
