@@ -9,11 +9,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Doc Template Search View
- *
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
  */
 #[ORM\Table(name: 'doc_template_search_view')]
 #[ORM\Entity(readOnly: true)]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 class DocTemplateSearchView implements BundleSerializableInterface
 {
     use BundleSerializableTrait;

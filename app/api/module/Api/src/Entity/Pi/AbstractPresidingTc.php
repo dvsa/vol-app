@@ -20,12 +20,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
  */
 #[ORM\Table(name: 'presiding_tc')]
 #[ORM\Index(name: 'presiding_tc_user_id_fk', columns: ['user_id'])]
 #[ORM\MappedSuperclass]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractPresidingTc implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
