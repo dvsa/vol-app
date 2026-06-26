@@ -33,9 +33,9 @@ class BlameableTypeHandler extends AbstractTypeHandler
 
         // Add Blameable annotation
         if ($column->getName() === 'created_by') {
-            $annotations[] = '@Gedmo\Blameable(on="create")';
+            $annotations[] = "#[Gedmo\Blameable(on: 'create')]";
         } elseif ($column->getName() === 'last_modified_by') {
-            $annotations[] = '@Gedmo\Blameable(on="update")';
+            $annotations[] = "#[Gedmo\Blameable(on: 'update')]";
         }
 
         return implode("\n    ", $annotations);

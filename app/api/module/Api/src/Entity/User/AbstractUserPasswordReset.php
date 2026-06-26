@@ -22,8 +22,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
  */
 #[ORM\Table(name: 'user_password_reset')]
 #[ORM\Index(name: 'ix_user_password_reset_created_by', columns: ['created_by'])]
@@ -31,6 +29,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_user_password_reset_user_id', columns: ['user_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractUserPasswordReset implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -63,22 +62,20 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @Gedmo\Blameable(on="create")
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @Gedmo\Blameable(on="update")
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**

@@ -22,8 +22,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
  */
 #[ORM\Table(name: 'letter_section_variant')]
 #[ORM\Index(name: 'ix_letter_section_variant_created_by', columns: ['created_by'])]
@@ -37,6 +35,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\UniqueConstraint(name: 'uk_letter_section_variant_conditions', columns: ['letter_section_id', 'goods_or_psv', 'is_variation', 'is_ni', 'organisation_type', 'letter_choice_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractLetterSectionVariant implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -105,22 +104,20 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @Gedmo\Blameable(on="create")
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @Gedmo\Blameable(on="update")
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**

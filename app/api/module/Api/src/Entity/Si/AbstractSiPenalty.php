@@ -22,8 +22,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
  */
 #[ORM\Table(name: 'si_penalty')]
 #[ORM\Index(name: 'fk_si_penalty_si_penalty_requested_id_si_penalty_requested_id', columns: ['si_penalty_erru_requested_id'])]
@@ -33,6 +31,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_si_penalty_si_penalty_type_id', columns: ['si_penalty_type_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -83,22 +82,20 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @Gedmo\Blameable(on="create")
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @Gedmo\Blameable(on="update")
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**

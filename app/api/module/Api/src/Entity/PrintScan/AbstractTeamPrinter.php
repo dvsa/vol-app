@@ -20,8 +20,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
  */
 #[ORM\Table(name: 'team_printer')]
 #[ORM\Index(name: 'ix_team_printer_printer_id', columns: ['printer_id'])]
@@ -29,6 +27,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_team_printer_team_id', columns: ['team_id'])]
 #[ORM\Index(name: 'ix_team_printer_user_id', columns: ['user_id'])]
 #[ORM\MappedSuperclass]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;

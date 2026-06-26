@@ -20,8 +20,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
  */
 #[ORM\Table(name: 'ebsr_submission')]
 #[ORM\Index(name: 'ix_ebsr_submission_bus_reg_id', columns: ['bus_reg_id'])]
@@ -33,6 +31,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\UniqueConstraint(name: 'uk_ebsr_submission_document_id', columns: ['document_id'])]
 #[ORM\UniqueConstraint(name: 'uk_ebsr_submission_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractEbsrSubmission implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
