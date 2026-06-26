@@ -1,0 +1,6 @@
+<?php assert($this->object instanceof Common\Service\Table\TableBuilder); ?>
+<div class="table__header"<?php
+    echo !empty($this->object->getVariable('id')) ?
+    ' id="' . $this->object->getVariable('id') .'"' : '' ?>>
+    <?php echo $this->object->renderActions(); ?>
+</div>

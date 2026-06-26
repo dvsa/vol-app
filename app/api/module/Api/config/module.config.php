@@ -165,7 +165,7 @@ return [
             'SectionAccessService' => \Dvsa\Olcs\Api\Service\Lva\SectionAccessService::class,
             'ApplicationGrantValidationService' => \Dvsa\Olcs\Api\Service\Lva\Application\GrantValidationService::class,
             'ApplicationPublishValidationService' => \Dvsa\Olcs\Api\Service\Lva\Application\PublishValidationService::class,
-            'ContentStore' => \Dvsa\Olcs\DocumentShare\Service\ClientFactory::class,
+            'ContentStore' => \Dvsa\Olcs\DocumentShare\Service\DocumentStoreFactory::class,
             'PayloadValidationListener' => \Dvsa\Olcs\Api\Mvc\PayloadValidationListenerFactory::class,
             'CommandHandlerManager' => \Dvsa\Olcs\Api\Domain\CommandHandlerManagerFactory::class,
             'QueryHandlerManager' => \Dvsa\Olcs\Api\Domain\QueryHandlerManagerFactory::class,

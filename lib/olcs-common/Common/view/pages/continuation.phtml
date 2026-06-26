@@ -1,0 +1,28 @@
+<?php
+echo $this->partial(
+    'partials/page-header-continuation',
+    [
+        'pageTitle' => $this->pageTitle(),
+        'pageSubTitle' => $this->translate('continuation.sub-title.continue-licence') .' '. $this->licNo,
+        'stepHeader' => $this->stepHeader,
+        'backUrl' => ['url' => $this->url($this->backRoute, [], [], true)],
+    ]
+);
+?>
+
+<div class="row">
+
+  <div class="dashboard two-thirds js-body">
+      <?php
+      echo $this->flashMessengerAll();
+
+      echo $this->partial('partials/guidance');
+
+      if (isset($this->form)):
+          echo $this->formErrors($this->form);
+          echo $this->form($this->form);
+      endif;
+      ?>
+  </div>
+
+</div>

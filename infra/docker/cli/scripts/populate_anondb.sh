@@ -19,8 +19,11 @@ set -euo pipefail
 
 export http_proxy=http://${PROXY}
 export https_proxy=http://${PROXY}
+
+export AWS_STS_REGIONAL_ENDPOINTS=regional
+export AWS_DEFAULT_REGION="eu-west-1"
  
-export NO_PROXY=169.254.169.254,169.254.170.2,localhost,127.0.0.1,.s3.eu-west-1.amazonaws.com,.s3.amazonaws.com,sts.eu-west-1.amazonaws.com
+export NO_PROXY=169.254.169.254,169.254.170.2,localhost,127.0.0.1,.s3.eu-west-1.amazonaws.com,.s3.amazonaws.com,sts.eu-west-1.amazonaws.com,sts.amazonaws.com
 
 nonprod_assume_external_id=${PRODTODEV_ASSUME_ROLE_ID}
 db_cluster=${DBCLUSTER_ID}
@@ -50,6 +53,9 @@ log_error(){ echo "$(date '+%Y-%m-%d %H:%M:%S') ERROR: $*" >&2; }
 # CLEANUP HANDLER
 ###############################################
 cleanup() {
+    # Capture the true exit code of the failing command before set +e runs
+    local exit_code=$? 
+    log "Script exited with code: $exit_code"
     log "Cleaning up temporary Aurora resources and dump files"
 
     set +e
@@ -253,7 +259,15 @@ mysql -h $endpoint -u master -p${pass} \
   > $anondb_dump_dir/olcs-dbtables-anon-$env-$DATE.txt
 
 log "Assuming role for S3 upload"
+saved_http_proxy="${http_proxy-}"
+saved_https_proxy="${https_proxy-}"
+saved_no_proxy="${NO_PROXY-}"
+
 source "$SCRIPT_DIR/s3assume.sh" "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole" "$nonprod_assume_external_id"
+
+export http_proxy="$saved_http_proxy"
+export https_proxy="$saved_https_proxy"
+export NO_PROXY="$saved_no_proxy"
 
 log "Uploading anonymised dumps to S3"
 aws s3 cp $anondb_dump_dir s3://devapp-olcs-pri-olcs-deploy-s3/anondata/ \

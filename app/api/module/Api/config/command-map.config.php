@@ -385,6 +385,8 @@ return [
     TransferCommand\User\UpdateUser::class => CommandHandler\User\UpdateUser::class,
     TransferCommand\User\DeleteUser::class => CommandHandler\User\DeleteUserFactory::class,
     TransferCommand\User\RegisterUserSelfserve::class => CommandHandler\User\RegisterUserSelfserveFactory::class,
+    // Internal, routeless command for the consultant journey (VOL-7370); reuses the same handler.
+    Command\User\RegisterUserSelfserveByOrganisation::class => CommandHandler\User\RegisterUserSelfserveFactory::class,
     TransferCommand\User\RemindUsernameSelfserve::class => CommandHandler\User\RemindUsernameSelfserve::class,
     TransferCommand\User\CreateUserSelfserve::class => CommandHandler\User\CreateUserSelfServeFactory::class,
     TransferCommand\User\UpdateUserSelfserve::class => CommandHandler\User\UpdateUserSelfserveFactory::class,
@@ -772,6 +774,7 @@ return [
     Command\Document\UploadCsv::class => CommandHandler\Document\UploadCsv::class,
     TransferCommand\Document\GenerateAndStore::class => CommandHandler\Document\GenerateAndStore::class,
     TransferCommand\Document\Upload::class => CommandHandler\Document\Upload::class,
+    TransferCommand\Document\BucketBrowserOverwrite::class => CommandHandler\Document\BucketBrowserOverwrite::class,
 
     // Domain - Report
     TransferCommand\Report\Upload::class => CommandHandler\Report\Upload::class,

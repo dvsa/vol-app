@@ -62,12 +62,15 @@ class ContentStoreFileUploaderTest extends MockeryTestCase
 
     public function testRemove(): void
     {
+        $response = new \Laminas\Http\Response();
+        $response->setStatusCode(200);
+
         $this->mockContentStoreCli->shouldReceive('remove')
             ->once()
             ->with(self::IDENTIFIER)
-            ->andReturn(true);
+            ->andReturn($response);
 
-        static::assertTrue($this->sut->remove(self::IDENTIFIER));
+        static::assertSame($response, $this->sut->remove(self::IDENTIFIER));
     }
 
     public function testUpload(): void

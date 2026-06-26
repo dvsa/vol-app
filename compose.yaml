@@ -67,6 +67,8 @@ services:
       - ./lib/olcs-logging:/var/www/html/vendor/olcs/olcs-logging
       - ./lib/olcs-utils:/var/www/html/vendor/olcs/olcs-utils
       - ./lib/olcs-transfer:/var/www/html/vendor/olcs/olcs-transfer
+      - ./lib/olcs-common:/var/www/html/vendor/olcs/olcs-common
+      - ./lib/olcs-auth:/var/www/html/vendor/olcs/olcs-auth
     environment:
       ELASTICACHE_URL: tcp://redis:6379
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID-}
@@ -87,6 +89,8 @@ services:
       - ./lib/olcs-logging:/var/www/html/vendor/olcs/olcs-logging
       - ./lib/olcs-utils:/var/www/html/vendor/olcs/olcs-utils
       - ./lib/olcs-transfer:/var/www/html/vendor/olcs/olcs-transfer
+      - ./lib/olcs-common:/var/www/html/vendor/olcs/olcs-common
+      - ./lib/olcs-auth:/var/www/html/vendor/olcs/olcs-auth
     environment:
       ELASTICACHE_URL: tcp://redis:6379
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID-}

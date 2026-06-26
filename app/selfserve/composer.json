@@ -22,6 +22,20 @@
       "options": {
         "symlink": true
       }
+    },
+    {
+      "type": "path",
+      "url": "../../lib/olcs-common",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "../../lib/olcs-auth",
+      "options": {
+        "symlink": true
+      }
     }
   ],
   "require": {
@@ -47,13 +61,13 @@
     "laminas/laminas-validator": "^2.64",
     "laminas/laminas-view": "^2.44",
     "lm-commons/lmc-rbac-mvc": "^3.5",
-    "olcs/olcs-auth": "^9.0",
-    "olcs/olcs-common": "^9.22.0",
+    "olcs/olcs-auth": "*",
+    "olcs/olcs-common": "*",
     "olcs/olcs-logging": "*",
     "olcs/olcs-transfer": "*",
     "olcs/olcs-utils": "*",
     "psr/container": "^1.1|^2",
-    "aws/aws-sdk-php": "^3.369",
+    "aws/aws-sdk-php": "^3.385",
     "symfony/filesystem": "^7.0"
   },
   "require-dev": {

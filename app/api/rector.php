@@ -14,4 +14,9 @@ return RectorConfig::configure()
         DoctrineSetList::DOCTRINE_ORM_219,
         DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
         DoctrineSetList::GEDMO_ANNOTATIONS_TO_ATTRIBUTES,
+        DoctrineSetList::DOCTRINE_ORM_25,
+        DoctrineSetList::DOCTRINE_ORM_28,
+        DoctrineSetList::DOCTRINE_ORM_213,
+        DoctrineSetList::DOCTRINE_ORM_214,
+        DoctrineSetList::DOCTRINE_ORM_300,
     ]);

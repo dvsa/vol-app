@@ -1,7 +1,6 @@
+DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sp_NI_Extract_update_table_counts;
-
-DELIMITER $$
 
 CREATE PROCEDURE sp_NI_Extract_update_table_counts()
 
@@ -200,6 +199,6 @@ UPDATE NI_Extract SET POST_EXTRACT_COUNT = (SELECT COUNT(*) FROM vehicle),LAST_M
 UPDATE NI_Extract SET POST_EXTRACT_COUNT = (SELECT COUNT(*) FROM venue),LAST_MODIFIED_ON = now() WHERE TABLE_NAME ='venue';
 UPDATE NI_Extract SET POST_EXTRACT_COUNT = (SELECT COUNT(*) FROM workshop),LAST_MODIFIED_ON = now() WHERE TABLE_NAME ='workshop';
 
-END
+END$$
 
-$$
+DELIMITER ;

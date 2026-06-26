@@ -24,6 +24,8 @@ class FeatureToggle extends AbstractFeatureToggle
     public const USE_NEW_ADDRESS_SERVICE = 'use_new_address_service';
     public const TRANSPORT_CONSULTANT_ROLE = 'transport_consultant_role';
     public const LETTERS_DATABASE_DRIVEN = 'letters_database_driven';
+    public const S3_BUCKET_BROWSER = 's3_bucket_browser';
+    public const S3_BUCKET_BROWSER_OVERWRITE = 's3_bucket_browser_overwrite';
 
     public static function create(/*string*/ $configName, /*string*/ $friendlyName, RefData $status)/*: FeatureToggle */
     {

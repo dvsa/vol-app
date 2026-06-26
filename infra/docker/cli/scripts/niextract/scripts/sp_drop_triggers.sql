@@ -1,7 +1,6 @@
+DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sp_drop_triggers;
-
-DELIMITER $$
 
 CREATE PROCEDURE sp_drop_triggers()
 
@@ -558,6 +557,6 @@ DROP TRIGGER IF EXISTS tr_workshop_ai;
 DROP TRIGGER IF EXISTS tr_workshop_au;
 DROP TRIGGER IF EXISTS tr_workshop_ad;
 
-END
+END$$
 
-$$
+DELIMITER ;

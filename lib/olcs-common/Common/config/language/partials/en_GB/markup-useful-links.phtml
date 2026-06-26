@@ -1,0 +1,56 @@
+<div class="info-box info-box--grey">
+    <h3 class="info-box__heading"><?php echo $this->escapeHtml($this->translate('sidebar-more-information')); ?></h3>
+    <p class="govuk-hint"><?php echo $this->escapeHtml($this->translate('following-links.opens-new-window')); ?></p>
+    <ul class="govuk-list">
+        <li>
+            <?php
+                echo $this->linkNewWindowExternal(
+                    $this->translate('being-an-operator-link'),
+                    'sidebar-variation-being-an-operator',
+                    'govuk-link',
+                    true
+                );
+            ?>
+        </li>
+        <li>
+            <?php
+                echo $this->linkNewWindowExternal(
+                    $this->translate('public-services-link'),
+                    'sidebar-variation-public-service',
+                    'govuk-link',
+                    true
+                );
+            ?>
+        </li>
+        <li>
+            <?php
+                echo $this->linkNewWindowExternal(
+                    $this->translate('vehicle-safety-link'),
+                    'sidebar-variation-safety-and-maintenance',
+                    'govuk-link',
+                    true
+                );
+            ?>
+        </li>
+        <?php if(!empty($this->topReportsLink)): ?>
+        <li>
+            <?php
+            echo $this->linkNewWindowExternal(
+                $this->topReportsLink,
+                $this->translate('your-dvsa-reports'),
+                'govuk-link',
+                true
+            );
+            ?>
+        </li>
+        <?php endif; ?>
+        <?php if (!$this->niFlag && ($this->numberOfLicences >= 1 || $this->numberOfApplications >= 1)): ?>
+        <li>
+            <a class="govuk-link" href="{{OTC_NEWS_ALERTS}}" target="_blank" rel="external noreferrer noopener">
+                <?php echo $this->escapeHtml($this->translate('Office of the Traffic Commissioner news alerts')); ?>
+            </a>
+        </li>
+        <?php endif; ?>
+    </ul>
+    
+</div><!-- links -->
