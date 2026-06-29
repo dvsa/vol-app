@@ -15,7 +15,14 @@ cd "$SCRIPT_DIR" || exit 1
 run_sql() {
     local file="$1"
     echo "Running $file..."
-    sed 's/DELIMITER \$\$//g; s/DELIMITER ;//g; s/\$\$/;\'$'\n/g' "$file" | mysql $CONNECTION "$DB" || { echo "ERROR: Failed to execute $file"; exit 1; }
+    python3 - "$file" << 'PYEOF' | mysql $CONNECTION "$DB" || { echo "ERROR: Failed to execute $file"; exit 1; }
+import sys
+content = open(sys.argv[1]).read()
+content = content.replace('DELIMITER $$', '')
+content = content.replace('DELIMITER ;', '')
+content = content.replace('$$', ';')
+print(content)
+PYEOF
 }
 
 run_sql "$SCRIPT_DIR/NI_Extract_table.sql"
