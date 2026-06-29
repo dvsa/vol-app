@@ -15,7 +15,7 @@ cd "$SCRIPT_DIR" || exit 1
 run_sql() {
     local file="$1"
     echo "Running $file..."
-    sed 's/DELIMITER \$\$//g; s/DELIMITER ;//g; s/\$\$/;/g' "$file" | mysql $CONNECTION "$DB" || { echo "ERROR: Failed to execute $file"; exit 1; }
+    sed 's/DELIMITER \$\$//g; s/DELIMITER ;//g; s/\$\$/;\n/g' "$file" | mysql $CONNECTION "$DB" || { echo "ERROR: Failed to execute $file"; exit 1; }
 }
 
 run_sql "$SCRIPT_DIR/NI_Extract_table.sql"
