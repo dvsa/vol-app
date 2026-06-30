@@ -59,6 +59,18 @@ class ConverterServiceTest extends TestCase
         $this->assertInstanceOf(ConverterService::class, $service);
     }
 
+    public function testPurifierConfigUsesWritableSerializerPath(): void
+    {
+        $config = $this->sut->buildPurifierConfig();
+
+        $serializerPath = $config->get('Cache.SerializerPath');
+
+        // Must not be left at HTMLPurifier's default (inside the read-only vendor tree in deployed
+        // containers), which causes "not writable" warnings and per-request cache regeneration.
+        $this->assertSame(sys_get_temp_dir(), $serializerPath);
+        $this->assertDirectoryIsWritable($serializerPath);
+    }
+
     public function testCleanOutputHtmlIsCalled(): void
     {
         $json = json_encode([
