@@ -16,6 +16,15 @@ class WebDavJsonWebTokenGenerationService
     public const TOKEN_PAYLOAD_KEY_DOCUMENT_ID = 'did';
     public const TOKEN_PAYLOAD_KEY_DOCUMENT_SIZE = 'dsz';
 
+    /**
+     * Document extensions the internal WebDAV journey supports. The link generator
+     * (WebDavSessionTrait) and the server (webdav.php) MUST normalise to this same set, otherwise
+     * the URL and the sabre/dav virtual node name disagree and MS Word gets a 404 (sabre/dav
+     * compares node names with strict ===).
+     */
+    public const ALLOWED_DOCUMENT_EXTENSIONS = ['rtf', 'doc', 'docx'];
+    public const DEFAULT_DOCUMENT_EXTENSION = 'rtf';
+
 
     private readonly int $defaultLifetimeSeconds;
     private readonly string $privateKey;

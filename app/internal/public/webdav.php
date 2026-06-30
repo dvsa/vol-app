@@ -23,6 +23,7 @@ include __DIR__ . '/../vendor/autoload.php';
 
 use Common\Auth\Service\RefreshTokenService;
 use Laminas\Session\Container;
+use Olcs\Service\Helper\WebDavJsonWebTokenGenerationService;
 use Olcs\Service\WebDav\JwtVerificationService;
 use Olcs\Service\WebDav\RedisLockBackend;
 use Olcs\Service\WebDav\VirtualDirectory;
@@ -144,12 +145,13 @@ session_write_close();
 
 // Build the virtual filesystem tree
 // Use documentId + extension as filename (all operations use the ID via CQRS).
-// The `doc` claim is signed, but allow-list the extension as defence in depth so it can
-// never introduce unexpected characters into the virtual node name.
-$allowedExtensions = ['rtf', 'doc', 'docx'];
-$extension = in_array(strtolower((string) $documentPath), $allowedExtensions, true)
-    ? strtolower((string) $documentPath)
-    : 'rtf';
+// The `doc` claim is signed, but allow-list the extension as defence in depth so it can never
+// introduce unexpected characters into the virtual node name. This MUST match the normalisation
+// WebDavSessionTrait applies when it builds the link, or sabre/dav's strict === lookup 404s.
+$normalisedExtension = strtolower((string) $documentPath);
+$extension = in_array($normalisedExtension, WebDavJsonWebTokenGenerationService::ALLOWED_DOCUMENT_EXTENSIONS, true)
+    ? $normalisedExtension
+    : WebDavJsonWebTokenGenerationService::DEFAULT_DOCUMENT_EXTENSION;
 $filename = $documentId . '.' . $extension;
 
 $issuedAt = isset($payload->iat) ? (int) $payload->iat : null;

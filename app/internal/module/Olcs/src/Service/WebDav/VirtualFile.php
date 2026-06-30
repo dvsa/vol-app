@@ -91,7 +91,14 @@ class VirtualFile implements IFile
     #[\Override]
     public function getSize(): ?int
     {
-        return $this->cachedSize ?? $this->initialSize;
+        if ($this->cachedSize !== null) {
+            return $this->cachedSize;
+        }
+
+        // Only advertise a size we actually know. Returning 0 for an unknown size makes sabre/dav
+        // send "Content-Length: 0" on GET and the client opens an empty document; null tells it to
+        // omit Content-Length and stream the whole body instead.
+        return $this->initialSize > 0 ? $this->initialSize : null;
     }
 
     #[\Override]

@@ -207,11 +207,13 @@ class VirtualFileTest extends MockeryTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
-    public function getSizeReturnsZeroInitiallyWhenNoSizeProvided(): void
+    public function getSizeReturnsNullWhenNoSizeProvided(): void
     {
         $sut = $this->createSut();
 
-        $this->assertEquals(0, $sut->getSize());
+        // Unknown size must be null, not 0, so sabre/dav omits Content-Length rather than
+        // advertising an empty body on GET.
+        $this->assertNull($sut->getSize());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
