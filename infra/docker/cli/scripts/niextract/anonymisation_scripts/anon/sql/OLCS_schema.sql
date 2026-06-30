@@ -1,0 +1,9 @@
+select t.TABLE_NAME,c.COLUMN_NAME
+FROM information_schema.TABLES t
+JOIN information_schema.COLUMNS c
+WHERE t.TABLE_SCHEMA=database()
+AND t.TABLE_SCHEMA=c.TABLE_SCHEMA
+AND t.TABLE_NAME=c.TABLE_NAME
+AND t.TABLE_NAME NOT LIKE '%_hist' 
+and t.table_type='BASE TABLE'
+ORDER BY t.TABLE_NAME,c.ORDINAL_POSITION;

@@ -71,8 +71,13 @@ class LetterAppendix extends AbstractListDataService
         $optionData = [];
 
         foreach ($data as $datum) {
-            $name = $datum['name'] ?? ('Appendix #' . $datum['id']);
-            $type = isset($datum['appendixType']) ? ' (' . ucfirst($datum['appendixType']) . ')' : '';
+            $name = $datum['currentVersion']['name']
+                ?? $datum['name']
+                ?? ('Appendix #' . $datum['id']);
+            $appendixType = $datum['currentVersion']['appendixType']
+                ?? $datum['appendixType']
+                ?? null;
+            $type = $appendixType ? ' (' . ucfirst($appendixType) . ')' : '';
             $optionData[$datum['id']] = $name . $type;
         }
 

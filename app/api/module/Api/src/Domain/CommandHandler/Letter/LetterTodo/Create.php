@@ -23,6 +23,7 @@ final class Create extends AbstractCommandHandler
         $entity = new LetterTodoEntity();
 
         // Set working properties - versioning will be handled by repository
+        $entity->setTodoKey($command->getTodoKey());
         $entity->setDescription($command->getDescription());
         $entity->setHelpText($command->getHelpText());
 

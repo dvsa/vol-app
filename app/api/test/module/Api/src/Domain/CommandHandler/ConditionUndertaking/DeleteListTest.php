@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\ConditionUndertaking;
 
+use Mockery as m;
 use Dvsa\Olcs\Api\Domain\CommandHandler;
 use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Entity;
 use Dvsa\Olcs\Transfer\Command\ConditionUndertaking\DeleteList as Command;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
+use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
+use Dvsa\Olcs\Api\Domain\Repository\ConditionUndertaking;
 
 /**
  * @author Mat Evans <mat.evans@valtech.co.uk>
@@ -27,6 +31,7 @@ class DeleteListTest extends AbstractCommandHandlerTestCase
         $this->sut = new CommandHandler\ConditionUndertaking\DeleteList();
 
         $this->mockRepo('ConditionUndertaking', Repository\ConditionUndertaking::class);
+        $this->mockedSmServices ['EventHistoryCreator'] = m::mock(EventHistoryCreator::class);
 
         parent::setUp();
     }
@@ -54,6 +59,10 @@ class DeleteListTest extends AbstractCommandHandlerTestCase
             ->shouldReceive('delete')->with($mockCu2)->once()
 
             ->shouldReceive('deleteFromVariations')->with($command->getIds())->once()->andReturn($cntDel);
+
+        $this->mockedSmServices['EventHistoryCreator']
+            ->shouldReceive('create')
+            ->twice();
 
         $result = $this->sut->handleCommand($command);
 

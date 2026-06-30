@@ -20,6 +20,7 @@ use Dvsa\Olcs\Api\Entity\Fee\Fee as FeeEntity;
 use Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication;
 use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Dvsa\Olcs\Api\Entity\Publication\PublicationSection as PublicationSectionEntity;
@@ -941,7 +942,7 @@ class ApplicationEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestPsvEvidenceSectionsCompleted')]
-    public function testPsvEvidenceSectionsCompleted(bool $isCompleted, ?int $value): void
+    public function testPsvEvidenceSectionsCompleted(mixed $isCompleted, mixed $value): void
     {
         $this->entity->setSmallVehicleEvidenceUploaded($value);
         $this->entity->setOccupationEvidenceUploaded($value);
@@ -961,8 +962,12 @@ class ApplicationEntityTest extends EntityTester
                 Entity::FINANCIAL_EVIDENCE_UPLOADED,
             ],
             'upload later' => [
-                true,
+                false,
                 Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+            ],
+            'upload later as string' => [
+                false,
+                '2',
             ],
         ];
     }
@@ -5625,9 +5630,12 @@ class ApplicationEntityTest extends EntityTester
 
     public function testGetAutoGrantChangeSummaryReturnsAddressAndVehicleReduction(): void
     {
+        $totAuthVehicles = 10;
+        $totAuthTrailers = 5;
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setWasAutoGranted(true);
-        $sut->setTotAuthVehicles(10);
+        $sut->setTotAuthVehicles($totAuthVehicles);
+        $sut->setTotAuthTrailers($totAuthTrailers);
 
         $address = m::mock(Address::class);
         $address->shouldReceive('getAddressLine1')->once()->andReturn('123 Test Street');
@@ -5642,32 +5650,28 @@ class ApplicationEntityTest extends EntityTester
         $aoc = m::mock(ApplicationOperatingCentre::class);
         $aoc->shouldReceive('getAction')->once()->andReturn(ApplicationOperatingCentre::ACTION_DELETE);
         $aoc->shouldReceive('getOperatingCentre')->once()->andReturn($oc);
-        $aoc->shouldReceive('getNoOfVehiclesRequired')->once()->andReturn(3);
 
         $sut->shouldReceive('getOperatingCentres')->once()->andReturn(new ArrayCollection([$aoc]));
 
         $result = $sut->getAutoGrantChangeSummary();
 
-        $this->assertIsArray($result);
-        $this->assertArrayHasKey('messages', $result);
-        $this->assertArrayHasKey('vehicleReduction', $result);
-        $this->assertArrayHasKey('newTotal', $result);
-
-        $this->assertEquals(3, $result['vehicleReduction']);
-        $this->assertEquals(7, $result['newTotal']);
+        $this->assertEquals($totAuthVehicles, $result['newTotal']);
+        $this->assertEquals($totAuthTrailers, $result['newTotalTrailers']);
 
         $messages = $result['messages'];
         $this->assertCount(2, $messages);
         $this->assertStringContainsString('123 TEST STREET TEST DISTRICT TESTVILLE TE1 1ST', $messages[0]);
-        $this->assertStringContainsString('reduced by 3', $messages[1]);
-        $this->assertStringContainsString('now 7', $messages[1]);
+        $this->assertStringContainsString('Your updated vehicle authority is now 10 vehicles and 5 trailers.', $messages[1]);
     }
 
     public function testGetAutoGrantChangeSummaryHandlesMultipleOCRemovals(): void
     {
+        $totAuthVehicles = 20;
+        $totAuthTrailers = 10;
         $sut = m::mock(Entity::class)->makePartial();
         $sut->setWasAutoGranted(true);
-        $sut->setTotAuthVehicles(20);
+        $sut->setTotAuthVehicles($totAuthVehicles);
+        $sut->setTotAuthTrailers($totAuthTrailers);
 
         $address1 = m::mock(Address::class);
         $address1->shouldReceive('getAddressLine1')->once()->andReturn('1 First Street');
@@ -5682,7 +5686,6 @@ class ApplicationEntityTest extends EntityTester
         $aoc1 = m::mock(ApplicationOperatingCentre::class);
         $aoc1->shouldReceive('getAction')->once()->andReturn(ApplicationOperatingCentre::ACTION_DELETE);
         $aoc1->shouldReceive('getOperatingCentre')->once()->andReturn($oc1);
-        $aoc1->shouldReceive('getNoOfVehiclesRequired')->once()->andReturn(5);
 
         $address2 = m::mock(Address::class);
         $address2->shouldReceive('getAddressLine1')->once()->andReturn('2 Second Avenue');
@@ -5697,18 +5700,97 @@ class ApplicationEntityTest extends EntityTester
         $aoc2 = m::mock(ApplicationOperatingCentre::class);
         $aoc2->shouldReceive('getAction')->once()->andReturn(ApplicationOperatingCentre::ACTION_DELETE);
         $aoc2->shouldReceive('getOperatingCentre')->once()->andReturn($oc2);
-        $aoc2->shouldReceive('getNoOfVehiclesRequired')->once()->andReturn(3);
 
         $sut->shouldReceive('getOperatingCentres')->once()->andReturn(new ArrayCollection([$aoc1, $aoc2]));
 
         $result = $sut->getAutoGrantChangeSummary();
 
-        $this->assertEquals(8, $result['vehicleReduction']);
-        $this->assertEquals(12, $result['newTotal']);
+        $this->assertEquals($totAuthVehicles, $result['newTotal']);
+        $this->assertEquals($totAuthTrailers, $result['newTotalTrailers']);
 
         $messages = $result['messages'];
         $this->assertCount(3, $messages); // 2 OC removals + 1 vehicle reduction message
         $this->assertStringContainsString('1 FIRST STREET TOWN1 T1 1AA', $messages[0]);
         $this->assertStringContainsString('2 SECOND AVENUE TOWN2 T2 2BB', $messages[1]);
+        $this->assertStringContainsString('Your updated vehicle authority is now 20 vehicles and 10 trailers.', $messages[2]);
+    }
+
+    public function testShowPeriodOfGraceQuestionNotVariation(): void
+    {
+        $application = self::instantiate(Entity::class);
+        $application->setIsVariation(false);
+
+        $licence = m::mock(Licence::class);
+        $licence->expects('isRestricted')->never();
+        $licence->expects('isSpecialRestricted')->never();
+        $licence->expects('hasTransportManager')->never();
+        $application->setLicence($licence);
+
+        $this->assertFalse($application->showPeriodOfGraceQuestion());
+    }
+
+    public function testShowPeriodOfGraceQuestionRestrictedLicence(): void
+    {
+        $application = self::instantiate(Entity::class);
+        $application->setIsVariation(true);
+
+        $licence = m::mock(Licence::class);
+        $licence->expects('isRestricted')->andReturnTrue();
+        $licence->expects('isSpecialRestricted')->never();
+        $licence->expects('hasTransportManager')->never();
+        $application->setLicence($licence);
+
+        $this->assertFalse($application->showPeriodOfGraceQuestion());
+    }
+
+    public function testShowPeriodOfGraceQuestionSpecialRestrictedLicence(): void
+    {
+        $application = self::instantiate(Entity::class);
+        $application->setIsVariation(true);
+
+        $licence = m::mock(Licence::class);
+        $licence->expects('isRestricted')->andReturnFalse();
+        $licence->expects('isSpecialRestricted')->andReturnTrue();
+        $licence->expects('hasTransportManager')->never();
+        $application->setLicence($licence);
+
+        $this->assertFalse($application->showPeriodOfGraceQuestion());
+    }
+
+    public function testShowPeriodOfGraceQuestionLicenceHasTm(): void
+    {
+        $application = self::instantiate(Entity::class);
+        $application->setIsVariation(true);
+
+        $licence = m::mock(Licence::class);
+        $licence->expects('isRestricted')->andReturnFalse();
+        $licence->expects('isSpecialRestricted')->andReturnFalse();
+        $licence->expects('hasTransportManager')->andReturnTrue();
+        $application->setLicence($licence);
+
+        $this->assertFalse($application->showPeriodOfGraceQuestion());
+    }
+
+    /**
+     * tests the method both with a TM on the application (false), and with a TM present (true)
+     */
+    public function testShowPeriodOfGraceQuestionCriteriaMet(): void
+    {
+        $application = self::instantiate(Entity::class);
+        $application->setIsVariation(true);
+
+        $licence = m::mock(Licence::class);
+        $licence->expects('isRestricted')->andReturnFalse()->twice();
+        $licence->expects('isSpecialRestricted')->andReturnFalse()->twice();
+        $licence->expects('hasTransportManager')->andReturnFalse()->twice();
+        $application->setLicence($licence);
+
+        $application->setTransportManagers(new ArrayCollection());
+        $this->assertFalse($application->showPeriodOfGraceQuestion());
+
+        $tmApplication = m::mock(TransportManagerApplication::class);
+        $tmApplications = new ArrayCollection([$tmApplication]);
+        $application->setTransportManagers($tmApplications);
+        $this->assertTrue($application->showPeriodOfGraceQuestion());
     }
 }

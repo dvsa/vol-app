@@ -1,0 +1,6 @@
+{
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.13",
+    "dvsa/coding-standards": "^2.0"
+  }
+}

@@ -7,7 +7,10 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceAppendix;
+use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceChoice;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue;
+use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection;
+use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Generate as Cmd;
 
 /**
@@ -23,6 +26,7 @@ final class Generate extends AbstractCommandHandler
         'LetterType',
         'LetterIssue',
         'LetterAppendix',
+        'LetterChoice',
         'Licence',
         'Application',
         'Cases',
@@ -55,6 +59,41 @@ final class Generate extends AbstractCommandHandler
         // Set optional relations (licence, application, case, etc.)
         $this->setOptionalRelations($letterInstance, $command);
 
+        // Build context for variant resolution
+        $context = $this->buildVariantContext($letterInstance, $command);
+
+        // Populate instance sections from letter type assembly, resolving variants
+        $unresolvedRequiredSections = [];
+
+        foreach ($letterType->getLetterTypeSections() ?? [] as $typeSection) {
+            $section = $typeSection->getLetterSection();
+            $variant = $section->getVariantForContext($context);
+
+            if ($variant === null || $variant->getCurrentVersion() === null) {
+                // Section was skipped -- check if it was required
+                if ($typeSection->getIsRequired()) {
+                    $unresolvedRequiredSections[] = $section->getName() ?? $section->getSectionKey();
+                }
+                continue;
+            }
+
+            $instanceSection = new LetterInstanceSection();
+            $instanceSection->setLetterInstance($letterInstance);
+            $instanceSection->setLetterSectionVersion($variant->getCurrentVersion());
+            $instanceSection->setDisplayOrder($typeSection->getDisplayOrder());
+            $letterInstance->addLetterInstanceSection($instanceSection);
+        }
+
+        // Warn about any required sections that couldn't be resolved
+        if (!empty($unresolvedRequiredSections)) {
+            foreach ($unresolvedRequiredSections as $sectionName) {
+                $this->result->addMessage(
+                    'Required section "' . $sectionName . '" could not be included — no matching variant for the current context'
+                );
+            }
+            $this->result->setFlag('hasRequiredSectionWarnings', true);
+        }
+
         // Create instance issues from selected issues
         if (!empty($command->getSelectedIssues())) {
             $displayOrder = 0;
@@ -70,6 +109,35 @@ final class Generate extends AbstractCommandHandler
 
                     $letterInstance->addLetterInstanceIssue($instanceIssue);
                 }
+            }
+        }
+
+        // Materialise instance to-dos from issues' linked to-dos, deduplicated globally
+        // across the letter (VOL-7280). Each unique to-do attaches to the FIRST issue
+        // (in display order) that brought it, which gives the renderer "appears under
+        // the first issue type it relates to" for free.
+        $seenTodoVersionIds = [];
+        foreach ($letterInstance->getLetterInstanceIssues() as $instanceIssue) {
+            $issueVersion = $instanceIssue->getLetterIssueVersion();
+            if ($issueVersion === null) {
+                continue;
+            }
+            foreach ($issueVersion->getLetterIssueTodos() ?? [] as $issueTodo) {
+                $todoVersion = $issueTodo->getLetterTodoVersion();
+                if ($todoVersion === null) {
+                    continue;
+                }
+                $key = $todoVersion->getId();
+                if (isset($seenTodoVersionIds[$key])) {
+                    continue;
+                }
+                $seenTodoVersionIds[$key] = true;
+
+                $instanceTodo = new LetterInstanceTodo();
+                $instanceTodo->setLetterInstance($letterInstance);
+                $instanceTodo->setLetterInstanceIssue($instanceIssue);
+                $instanceTodo->setLetterTodoVersion($todoVersion);
+                $letterInstance->addLetterInstanceTodo($instanceTodo);
             }
         }
 
@@ -91,6 +159,17 @@ final class Generate extends AbstractCommandHandler
             }
         }
 
+        // Record selected letter choices
+        if (!empty($command->getSelectedChoices())) {
+            foreach ($command->getSelectedChoices() as $choiceId) {
+                $letterChoice = $this->getRepo('LetterChoice')->fetchById($choiceId);
+                $instanceChoice = new LetterInstanceChoice();
+                $instanceChoice->setLetterInstance($letterInstance);
+                $instanceChoice->setLetterChoice($letterChoice);
+                $letterInstance->addLetterInstanceChoice($instanceChoice);
+            }
+        }
+
         // Save the letter instance with all its related entities
         $this->getRepo()->save($letterInstance);
 
@@ -98,6 +177,30 @@ final class Generate extends AbstractCommandHandler
         $this->result->addMessage("Letter instance '{$reference}' generated successfully");
 
         return $this->result;
+    }
+
+    /**
+     * Build context array for variant resolution
+     *
+     * @param LetterInstanceEntity $letterInstance
+     * @param Cmd $command
+     * @return array
+     */
+    private function buildVariantContext(LetterInstanceEntity $letterInstance, Cmd $command): array
+    {
+        $application = $letterInstance->getApplication();
+        $licence = $letterInstance->getLicence();
+
+        $organisation = $letterInstance->getOrganisation();
+
+        return [
+            'goodsOrPsv' => $application?->getGoodsOrPsv()?->getId()
+                ?? $licence?->getGoodsOrPsv()?->getId(),
+            'isVariation' => $application ? (bool) $application->getIsVariation() : null,
+            'isNi' => $licence ? $licence->isNi() : null,
+            'organisationType' => $organisation?->getType()?->getId(),
+            'selectedChoiceIds' => $command->getSelectedChoices() ?? [],
+        ];
     }
 
     /**

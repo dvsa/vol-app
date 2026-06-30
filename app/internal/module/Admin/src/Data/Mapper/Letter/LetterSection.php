@@ -10,6 +10,32 @@ use Laminas\Form\FormInterface;
 class LetterSection implements MapperInterface
 {
     /**
+     * Label mappings for variant condition display
+     */
+    private const GOODS_OR_PSV_LABELS = [
+        'lcat_gv' => 'Goods Vehicle',
+        'lcat_psv' => 'PSV',
+    ];
+
+    private const IS_VARIATION_LABELS = [
+        '0' => 'New Application',
+        '1' => 'Variation',
+    ];
+
+    private const IS_NI_LABELS = [
+        '0' => 'GB',
+        '1' => 'NI',
+    ];
+
+    private const ORG_TYPE_LABELS = [
+        'org_t_st' => 'Sole Trader',
+        'org_t_rc' => 'Registered Company (LTD)',
+        'org_t_llp' => 'LLP',
+        'org_t_p' => 'Partnership',
+        'org_t_pa' => 'Other',
+    ];
+
+    /**
      * Map data from a result array into an array suitable for a form
      * For a versioned entity, we get data from the current version
      *
@@ -27,10 +53,7 @@ class LetterSection implements MapperInterface
                 'id' => $data['id'] ?? null,
                 'sectionKey' => $currentVersion['sectionKey'] ?? $data['sectionKey'] ?? null,
                 'name' => $currentVersion['name'] ?? $data['name'] ?? null,
-                'sectionType' => $currentVersion['sectionType'] ?? $data['sectionType'] ?? null,
                 'defaultContent' => $currentVersion['defaultContent'] ?? $data['defaultContent'] ?? null,
-                'goodsOrPsv' => $currentVersion['goodsOrPsv']['id'] ?? $data['goodsOrPsv']['id'] ?? null,
-                'isNi' => $currentVersion['isNi'] ?? $data['isNi'] ?? false,
                 'requiresInput' => $currentVersion['requiresInput'] ?? $data['requiresInput'] ?? false,
                 'minLength' => $currentVersion['minLength'] ?? $data['minLength'] ?? null,
                 'maxLength' => $currentVersion['maxLength'] ?? $data['maxLength'] ?? null,
@@ -65,18 +88,14 @@ class LetterSection implements MapperInterface
     {
         $commandData = $data['letterSection'] ?? [];
 
-        // Convert boolean values
-        if (isset($commandData['isNi'])) {
-            $commandData['isNi'] = (bool) $commandData['isNi'];
-        }
+        // sectionType, goodsOrPsv and isNi have been removed from the admin form
+        // (variant conditions cover those distinctions). The Create/Update DTOs still
+        // require a sectionType, so default it to body; the handlers always set isNi
+        // and goodsOrPsv from their command defaults (false / null).
+        $commandData['sectionType'] = 'letter_section_type_body';
 
         if (isset($commandData['requiresInput'])) {
             $commandData['requiresInput'] = (bool) $commandData['requiresInput'];
-        }
-
-        // Handle empty selections
-        if (empty($commandData['goodsOrPsv'])) {
-            unset($commandData['goodsOrPsv']);
         }
 
         // publishFrom field removed from form - unset if present

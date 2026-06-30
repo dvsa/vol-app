@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\Base\DynamicBookmark;
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\PsvDiscBundle as Qry;
+use Dvsa\Olcs\Api\Entity\System\SystemParameter;
 
 /**
  * PSV Disc Page bookmark
@@ -29,6 +30,21 @@ class PsvDiscPage extends AbstractDiscList
     public const SHORT_PLACEHOLDER = 'XXXXXX';
 
     public const QUERY_CLASS = Qry::class;
+
+    /**
+     * Stationery alignment defaults (twips). Operators may override at runtime
+     * via SystemParameter rows of the same name; the snippet substitutes them
+     * into table row heights and paragraph line spacing so PSV 423 alignment
+     * can be tuned without a redeploy. Defaults assume evenly spaced disc
+     * circles down the sheet (3 × 89mm rows totalling 267mm on a 268mm page
+     * content area). Line spacing 240 twips = 12pt, fixed leading.
+     */
+    public const DEFAULT_ALIGNMENT = [
+        SystemParameter::PSV_DISC_ROW_HEIGHT_1 => 5040,
+        SystemParameter::PSV_DISC_ROW_HEIGHT_2 => 5040,
+        SystemParameter::PSV_DISC_ROW_HEIGHT_3 => 5040,
+        SystemParameter::PSV_DISC_LINE_SPACING => 240,
+    ];
 
     protected $discBundle = [
         'licence' => [
@@ -86,10 +102,12 @@ class PsvDiscPage extends AbstractDiscList
             ];
         }
 
+        $alignment = $this->isPinnedLayout() ? $this->resolveAlignment() : [];
+
         // bit ugly, but now we have to chunk the discs into N per page
         $discGroups = [];
         for ($i = 0; $i < count($discs); $i += self::PER_PAGE) {
-            $pageDiscs = [];
+            $pageDiscs = $alignment;
             for ($j = 0; $j < self::PER_PAGE; $j++) {
                 $pageDiscs = array_merge(
                     $pageDiscs,
@@ -100,6 +118,48 @@ class PsvDiscPage extends AbstractDiscList
         }
 
         return $this->renderSnippets($discGroups);
+    }
+
+    /**
+     * Load the legacy snippet by default; switch to PsvDiscPagePinned when the
+     * pinned-layout toggle is on. Default (toggle off) renders byte-identical
+     * to the pre-PR behaviour, so deploys are no-op until an operator opts in.
+     */
+    #[\Override]
+    public function getSnippet($className = null)
+    {
+        if ($className === null && $this->isPinnedLayout()) {
+            $className = 'PsvDiscPagePinned';
+        }
+        return parent::getSnippet($className);
+    }
+
+    /**
+     * SystemParameter PSV_DISC_PINNED_LAYOUT acts as a feature toggle. Treat
+     * any value that's not an explicit "1" as off, so the row can ship with
+     * a default of '0' and only switches on once an operator changes it.
+     */
+    private function isPinnedLayout(): bool
+    {
+        $repo = $this->getRepoManager()?->get('SystemParameter');
+        return $repo?->fetchValue(SystemParameter::PSV_DISC_PINNED_LAYOUT) === '1';
+    }
+
+    /**
+     * Resolve the four stationery-alignment bookmarks (row heights + line
+     * spacing) from SystemParameter, falling back to DEFAULT_ALIGNMENT when
+     * the value is missing or non-numeric. Only consulted when the pinned
+     * layout toggle is on.
+     */
+    private function resolveAlignment(): array
+    {
+        $repo = $this->getRepoManager()?->get('SystemParameter');
+        $resolved = [];
+        foreach (self::DEFAULT_ALIGNMENT as $key => $default) {
+            $value = $repo?->fetchValue($key);
+            $resolved[$key] = is_numeric($value) ? (string)(int)$value : (string)$default;
+        }
+        return $resolved;
     }
 
     #[\Override]

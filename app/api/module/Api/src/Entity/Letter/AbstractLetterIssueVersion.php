@@ -137,6 +137,15 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
     protected $heading = '';
 
     /**
+     * Short label for issue picker modal
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="modal_label", length=200, nullable=true)
+     */
+    protected $modalLabel;
+
+    /**
      * Editor.js format
      *
      * @var array
@@ -457,6 +466,30 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
     public function getHeading()
     {
         return $this->heading;
+    }
+
+    /**
+     * Set the modal label
+     *
+     * @param string $modalLabel new value being set
+     *
+     * @return LetterIssueVersion
+     */
+    public function setModalLabel($modalLabel)
+    {
+        $this->modalLabel = $modalLabel;
+
+        return $this;
+    }
+
+    /**
+     * Get the modal label
+     *
+     * @return string
+     */
+    public function getModalLabel()
+    {
+        return $this->modalLabel;
     }
 
     /**

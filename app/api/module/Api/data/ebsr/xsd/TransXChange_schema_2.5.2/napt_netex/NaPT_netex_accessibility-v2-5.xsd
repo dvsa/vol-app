@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2010 rel. 3 sp1 (http://www.altova.com) by Nicholas Knowles (Kizoom) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:core="http://www.govtalk.gov.uk/core" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.5" id="NaPT_netex_accessibility">
+	<xsd:annotation>
+		<xsd:appinfo>
+			<Metadata xmlns="http://www.govtalk.gov.uk/CM/gms-xs">
+				<Aggregation>main schema</Aggregation>
+				<Audience>e-service developers</Audience>
+				<Coverage>Europe</Coverage>
+				<Creator>Drafted for version 1.0 CEN TC278 WG3 SG6 Editor Nicholas Knowles, Kizoom. mailto:schemer@netex.org.uk</Creator>
+				<Date>
+					<Created>2010-09-04</Created>
+				</Date>
+				<Date>
+					<Modified>2013-05-05</Modified>
+					Modifed for 2.5 
+				</Date>
+			 
+				<Description>
+					<p>Based on NeTEx - Network Exchange. This subschema defines common accessibility types.</p>
+				</Description>
+				<Format>
+					<MediaType>text/xml</MediaType>
+					<Syntax>http://www.w3.org/2001/XMLSchema</Syntax>
+					<Description>XML schema, W3C Recommendation 2001</Description>
+				</Format>
+				<Identifier>{http://www.naptan.org.uk/schema/2.5/napt_netex}NaPT_netex__accessibility-v2-5.xsd</Identifier>
+				<Language>[ISO 639-2/B] ENG</Language>
+				<Publisher>Kizoom Software Ltd, 16 High Holborn, London WC1V 6BX</Publisher>
+				<Rights>Unclassified
+ <Copyright>CEN, Crown Copyright 2009-2013</Copyright>
+				</Rights>
+				<Source>
+					<ul>
+						<li>Derived from the NeTEX standard.</li>
+					</ul>
+				</Source>
+				<Status>Version 2.5</Status>
+				<Subject>
+					<Category>Arts, recreation and travel, Tourism, Travel (tourism), Transport,
+Air transport, Airports,
+Ports and maritime transport, Ferries (marine),
+Public transport, Bus services, Coach services, Bus stops and stations,
+Rail transport, Railway stations and track, Train services, Underground trains,
+Business and industry, Transport, Air transport , Ports and maritime transport, Public transport,
+Rail transport, Roads and Road transport
+</Category>
+					<Project>CEN TC278 WG3 SG6</Project>
+				</Subject>
+				<Title>NaPT NeTEx Network Exchange - ACCESSIBILITY types.</Title>
+				<Type>Standard</Type>
+			</Metadata>
+		</xsd:appinfo>
+		<xsd:documentation>ACCESSIBILITY types for NaPTAN  Fixed Objects in Public Transport.</xsd:documentation>
+	</xsd:annotation>
+	<!--=====Limitations=========================================================================-->
+	<xsd:group name="MobilityLimitationGroup">
+		<xsd:annotation>
+			<xsd:documentation>Mobility limitations.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="WheelchairAccess" minOccurs="0"/>
+			<xsd:element ref="StepFreeAccess" minOccurs="0"/>
+			<xsd:element ref="EscalatorFreeAccess" minOccurs="0"/>
+			<xsd:element ref="LiftFreeAccess" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:simpleType name="LimitationStatusEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for an accessibility value.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="true">
+				<xsd:annotation>
+					<xsd:documentation>All of PLACE is accessible for criteria.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="false">
+				<xsd:annotation>
+					<xsd:documentation>PLACE is not considered to meet accessibility criteria.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="unknown">
+				<xsd:annotation>
+					<xsd:documentation>It is not known whether PLACE meets accessibility  criteria.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="partial">
+				<xsd:annotation>
+					<xsd:documentation>Some areas of PLACE are not considered to meet accessibility criteria.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="useDefaultByType"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:group name="SensoryLimitationGroup">
+		<xsd:annotation>
+			<xsd:documentation>Group of sensory limitations.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="AudibleSignalsAvailable" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Whether a PLACE has audible signals for the visually impaired. If not specifed, use default by type.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="VisualSignsAvailable" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Whether a PLACE has visual signals useful for the hearing impaired. If not specifed, use default by type.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:element name="EscalatorFreeAccess" type="LimitationStatusEnumeration" default="useDefaultByType">
+		<xsd:annotation>
+			<xsd:documentation>Whether a PLACE has escalator free access. If not specifed, use default by type.</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<!--======Assesment==================================================================================-->
+	<xsd:element name="WheelchairAccess" type="LimitationStatusEnumeration" default="useDefaultByType">
+		<xsd:annotation>
+			<xsd:documentation>Whether a PLACE is wheelchair accessible. If not specifed, use defaultby type.</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="StepFreeAccess" type="LimitationStatusEnumeration" default="useDefaultByType">
+		<xsd:annotation>
+			<xsd:documentation>Whether a PLACE has step free access. If not specifed, use default by type.</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="LiftFreeAccess" type="LimitationStatusEnumeration" default="useDefaultByType">
+		<xsd:annotation>
+			<xsd:documentation>Whether a PLACE has lift free access. If not specifed, use default by type.</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="AudibleSignalsAvailable" type="LimitationStatusEnumeration" default="useDefaultByType">
+		<xsd:annotation>
+			<xsd:documentation>Whether a PLACE has Audio signals available for the free access. If not specifed, use defaultby type.</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="VisualSignsAvailable" type="LimitationStatusEnumeration" default="useDefaultByType">
+		<xsd:annotation>
+			<xsd:documentation>Whether a PLACE has Visual signals available for the free access. If not specifed, use default by type.</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="GuideDogAccess" type="LimitationStatusEnumeration" default="useDefaultByType">
+		<xsd:annotation>
+			<xsd:documentation>Whether a PLACE allows guide dog access. If not specifed, use default by type.</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<!--===========================================================================================-->
+	<xsd:simpleType name="MobilityLIst">
+		<xsd:annotation>
+			<xsd:documentation>List of Allowed values for of mobility needs.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:list itemType="MobilityEnumeration"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="MobilityEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for of mobility needs.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="wheelchair"/>
+			<xsd:enumeration value="assistedWheelchair"/>
+			<xsd:enumeration value="motorizedWheelchair"/>
+			<xsd:enumeration value="mobilityScooter"/>
+			<xsd:enumeration value="roadMobilityScooter"/>
+			<xsd:enumeration value="walkingFrame"/>
+			<xsd:enumeration value="restrictedMobility"/>
+			<xsd:enumeration value="otherMobilityNeed"/>
+			<xsd:enumeration value="guideDog"/>
+			<xsd:enumeration value="normal"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!--=====Assessment=======================================================================================-->
+</xsd:schema>

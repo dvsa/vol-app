@@ -291,6 +291,8 @@ class ConversationsControllerTest extends TestCase
                        ->once()
                        ->andReturn(false);
 
+        // No count selector is passed: attaching a file is optional, so the min-1 file-count
+        // validator must never be engaged (a baked fileCount="0" would otherwise block sending).
         $this->sut->shouldReceive('processFiles')
                   ->once()
                   ->with(
@@ -308,7 +310,6 @@ class ConversationsControllerTest extends TestCase
                           $rf = new \ReflectionFunction($listener);
                           return $rf->getClosureThis() === $this->sut && $rf->getName() === 'getUploadedFiles';
                       }),
-                      'form-actions->file->fileCount',
                   );
 
         $view = $this->sut->addAction();
@@ -450,10 +451,10 @@ class ConversationsControllerTest extends TestCase
             ->once()
             ->andReturn($this->mockUploadHelper);
 
+        // No count selector is passed (file attachment is optional), so setCountSelector is never called.
         $this->mockUploadHelper
             ->shouldReceive('setCountSelector')
-            ->once()
-            ->andReturn($this->mockUploadHelper);
+            ->never();
 
         $this->mockUploadHelper
             ->shouldReceive('process')

@@ -1,0 +1,36 @@
+<div class="printable">
+    <div class="printable__address">
+        <?php
+        echo $this->partial(
+            'partials/page-header-simple',
+            [
+                'pageTitle' => $this->pageTitle(),
+                'pageSubTitle' => $this->translate('Continue licence') .' '. $this->licNo,
+            ]
+        );
+        ?>
+        
+        <div class="printable__sub-header">
+            <h3><?php echo $this->translate($this->totalMessage) . ' ' . $this->totalCount; ?></h3>
+        </div>
+    </div>
+    <div class="printable__meta printable__meta--right govuk-button-group hide-print js-hidden">
+        <a class="hide-print action govuk-button" role="button" draggable="false" data-module="govuk-button" href="javascript:window.print();">
+            <?php echo $this->translate('continuations.section.print.link'); ?>
+        </a> <br>
+        <a class="govuk-button govuk-button--secondary" role="button" draggable="false" data-module="govuk-button" href="javascript:window.close();">
+            <?php echo $this->translate('continuations.section.close-the-window.link'); ?>
+        </a>
+    </div>
+    <div class="row">
+
+        <div class="dashboard full-width js-body">
+            <?php echo $this->partial('partials/continuation/checklist-section', ['data' => $this->data]); ?>
+        </div>
+
+    </div>
+
+    <div class="printable__sub-header">
+        <h3><?php echo $this->translate($this->totalMessage) . ' ' . $this->totalCount; ?></h3>
+    </div>
+</div>

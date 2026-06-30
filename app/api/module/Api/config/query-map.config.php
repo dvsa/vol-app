@@ -25,6 +25,7 @@ return [
     BookmarkQuery\LicenceBundle::class => BookmarkQueryHandler\LicenceBundle::class,
     BookmarkQuery\CaseBundle::class => BookmarkQueryHandler\CaseBundle::class,
     BookmarkQuery\TransportManagerBundle::class => BookmarkQueryHandler\TransportManagerBundle::class,
+    BookmarkQuery\TransportManagerLicenceBundle::class => BookmarkQueryHandler\TransportManagerLicenceBundle::class,
     BookmarkQuery\DocParagraphBundle::class => BookmarkQueryHandler\DocParagraphBundle::class,
     BookmarkQuery\OppositionBundle::class => BookmarkQueryHandler\OppositionBundle::class,
     BookmarkQuery\StatementBundle::class => BookmarkQueryHandler\StatementBundle::class,
@@ -345,6 +346,8 @@ return [
     TransferQuery\Document\DocumentList::class => QueryHandler\Document\DocumentList::class,
     TransferQuery\Document\Download::class => QueryHandler\Document\Download::class,
     TransferQuery\Document\DownloadGuide::class => QueryHandler\Document\DownloadGuide::class,
+    TransferQuery\Document\BucketBrowserList::class => QueryHandler\Document\BucketBrowserList::class,
+    TransferQuery\Document\BucketBrowserDownload::class => QueryHandler\Document\BucketBrowserDownload::class,
     TransferQuery\Document\PrintLetter::class => QueryHandler\Document\PrintLetter::class,
 
     // Transport Manager Application
@@ -695,6 +698,7 @@ return [
 
     // Templates
     TransferQuery\Template\AvailableTemplates::class => QueryHandler\Template\AvailableTemplates::class,
+    TransferQuery\Template\AvailableTemplateGroups::class => QueryHandler\Template\AvailableTemplateGroups::class,
     TransferQuery\Template\PreviewTemplateSource::class => QueryHandler\Template\PreviewTemplateSource::class,
     TransferQuery\Template\TemplateSource::class => QueryHandler\Template\TemplateSource::class,
     TransferQuery\Template\TemplateCategories::class => QueryHandler\Template\TemplateCategories::class,
@@ -753,4 +757,7 @@ return [
     TransferQuery\Letter\MasterTemplate\GetList::class => QueryHandler\Letter\MasterTemplate\GetList::class,
     TransferQuery\Letter\LetterTestData\Get::class => QueryHandler\Letter\LetterTestData\Get::class,
     TransferQuery\Letter\LetterTestData\GetList::class => QueryHandler\Letter\LetterTestData\GetList::class,
+    TransferQuery\Letter\LetterChoice\Get::class => QueryHandler\Letter\LetterChoice\Get::class,
+    TransferQuery\Letter\LetterChoice\GetList::class => QueryHandler\Letter\LetterChoice\GetList::class,
+    TransferQuery\Letter\LetterSectionVariant\Get::class => QueryHandler\Letter\LetterSectionVariant\Get::class,
 ];

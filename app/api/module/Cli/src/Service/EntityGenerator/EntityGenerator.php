@@ -552,6 +552,13 @@ class EntityGenerator implements EntityGeneratorInterface
             }
         }
 
+        // Check for ownership override in EntityConfig (e.g. when the join table
+        // name ordering doesn't match the desired Doctrine owning side)
+        $ownerTable = $this->entityConfigService->getJoinTableOwner($relationship['join_table'] ?? '');
+        if ($ownerTable !== null) {
+            $isOwning = ($tableName === $ownerTable);
+        }
+
         // Generate the inverse property name
         if (!$isOwning) {
             // For inverse side, mappedBy should reference the property name on the owning side

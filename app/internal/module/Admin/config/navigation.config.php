@@ -298,6 +298,12 @@ return [
                     'route' => 'admin-dashboard/admin-feature-toggle',
                 ],
                 [
+                    'id' => 'admin-dashboard/admin-s3-browser',
+                    'class' => 'govuk-link--no-visited-state',
+                    'label' => 'Document store browser',
+                    'route' => 'admin-dashboard/admin-s3-browser',
+                ],
+                [
                     'id' => 'admin-dashboard/admin-permits',
                     'class' => 'govuk-link--no-visited-state',
                     'label' => 'Permits',
@@ -438,6 +444,18 @@ return [
                             'class' => 'govuk-link--no-visited-state',
                             'label' => 'Letter Appendices',
                             'route' => 'admin-dashboard/admin-letter-appendix',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/letter-management/letter-todos',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'Letter Todos',
+                            'route' => 'admin-dashboard/admin-letter-todo',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/letter-management/letter-choices',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'Letter Choices',
+                            'route' => 'admin-dashboard/admin-letter-choice',
                         ],
                     ],
                 ],

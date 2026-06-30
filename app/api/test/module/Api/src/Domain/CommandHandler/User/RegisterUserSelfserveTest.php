@@ -21,6 +21,7 @@ use Dvsa\Olcs\Api\Entity\System\Category as CategoryEntity;
 use Dvsa\Olcs\Api\Entity\System\SubCategory as SubCategoryEntity;
 use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Auth\Service\PasswordService;
+use Dvsa\Olcs\Api\Domain\Command\User\RegisterUserSelfserveByOrganisation as CmdByOrganisation;
 use Dvsa\Olcs\Transfer\Command\User\RegisterUserSelfserve as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\CommandHandler\User\RegisterUserSelfserve as Sut;
@@ -324,6 +325,131 @@ class RegisterUserSelfserveTest extends AbstractCommandHandlerTestCase
         );
 
         $this->assertEquals(UserEntity::USER_TYPE_OPERATOR, $savedUser->getUserType());
+    }
+
+    /**
+     * The trusted, internal RegisterUserSelfserveByOrganisation command (used by the consultant
+     * journey) links the new user to an EXISTING organisation by id via Organisation::fetchById.
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    public function testHandleCommandWithOrganisationByInternalCommand(): void
+    {
+        $userId = 111;
+        $orgId = 200;
+
+        $data = [
+            'loginId' => 'login_id',
+            'contactDetails' => [
+                'emailAddress' => 'test1@test.me',
+                'person' => [
+                    'forename' => 'updated forename',
+                    'familyName' => 'updated familyName',
+                ],
+            ],
+            'organisation' => $orgId,
+        ];
+
+        $command = CmdByOrganisation::create($data);
+
+        $this->repoMap['User']->expects('disableSoftDeleteable')->withNoArgs();
+        $this->repoMap['User']->expects('fetchByLoginId')->with($data['loginId'])->andReturn([]);
+        $this->repoMap['User']->expects('enableSoftDeleteable')->withNoArgs();
+
+        $org = m::mock(OrganisationEntity::class);
+
+        // The organisation is resolved by id — this is the linking path preserved for the consultant journey.
+        $this->repoMap['Organisation']->expects('fetchById')->with($orgId)->andReturn($org);
+
+        $this->repoMap['User']->expects('populateRefDataReference')->andReturn($data);
+
+        $this->repoMap['ContactDetails']->expects('populateRefDataReference')
+            ->with($data['contactDetails'])
+            ->andReturn($data['contactDetails']);
+
+        /** @var UserEntity $savedUser */
+        $savedUser = null;
+
+        $this->repoMap['User']->expects('save')
+            ->with(m::type(UserEntity::class))
+            ->andReturnUsing(
+                function (UserEntity $user) use (&$savedUser, $userId) {
+                    $user->setId($userId);
+                    $savedUser = $user;
+
+                    $this->expectedSideEffect(
+                        SendUserRegisteredDto::class,
+                        [
+                            'user' => $userId
+                        ],
+                        new Result()
+                    );
+
+                    $this->expectedSideEffect(
+                        SendUserTemporaryPasswordDto::class,
+                        [
+                            'user' => $userId,
+                            'password' => 'abcdef123456',
+                        ],
+                        new Result()
+                    );
+                }
+            );
+
+        $this->mockedAdapter->expects('register')
+            ->with($data['loginId'], 'abcdef123456', $data['contactDetails']['emailAddress']);
+
+        $result = $this->sut->handleCommand($command);
+
+        $expected = [
+            'id' => [
+                'user' => $userId,
+            ],
+            'messages' => [
+                'User created successfully'
+            ]
+        ];
+
+        $this->assertEquals($expected, $result->toArray());
+        $this->assertEquals(UserEntity::USER_TYPE_OPERATOR, $savedUser->getUserType());
+    }
+
+    /**
+     * Regression test for VOL-7370: the public, anonymous RegisterUserSelfserve command must NOT
+     * honour a raw organisation id. The DTO no longer exposes an `organisation` field, so an
+     * attacker-supplied value is dropped during hydration and never reaches the linking branch —
+     * leaving the user with no organisation, which is rejected with a BadRequestException.
+     */
+    public function testPublicCommandIgnoresRawOrganisationId(): void
+    {
+        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
+
+        $data = [
+            'loginId' => 'login_id',
+            'contactDetails' => [
+                'emailAddress' => 'attacker@evil.tld',
+                'person' => [
+                    'forename' => 'Mal',
+                    'familyName' => 'Ory',
+                ],
+            ],
+            // An attacker attempting the original exploit would supply a victim organisation id here.
+            'organisation' => 42,
+        ];
+
+        $command = Cmd::create($data);
+
+        // The field is stripped from the public DTO, so it must not survive hydration.
+        $this->assertArrayNotHasKey('organisation', $command->getArrayCopy());
+
+        // The organisation must never be looked up by a raw id on the public command.
+        $this->repoMap['Organisation']->shouldNotReceive('fetchById');
+
+        $this->repoMap['User']->expects('disableSoftDeleteable')->withNoArgs();
+        $this->repoMap['User']->expects('fetchByLoginId')->with($data['loginId'])->andReturn([]);
+        $this->repoMap['User']->expects('enableSoftDeleteable')->withNoArgs();
+
+        $this->sut->handleCommand($command);
     }
 
     public static function dpHandleCommand(): array

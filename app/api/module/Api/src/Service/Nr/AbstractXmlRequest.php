@@ -20,11 +20,13 @@ class AbstractXmlRequest
 
     protected string $authority;
 
+    private const ERRU_DATETIME_FORMAT = 'Y-m-d\TH:i:s\Z';
+
     public function __construct(protected readonly XmlNodeBuilder $xmlBuilder, private readonly string $erruVersion)
     {
-        $dateTime = new DateTimeExtended();
-        $this->responseDateTime = $dateTime->format(DateTimeInterface::ATOM);
-        $this->timeoutDateTime = $dateTime->add(new \DateInterval('PT10S'))->format(DateTimeInterface::ATOM);
+        $dateTime = new DateTimeExtended('now', new \DateTimeZone('UTC'));
+        $this->responseDateTime = $dateTime->format(self::ERRU_DATETIME_FORMAT);
+        $this->timeoutDateTime = $dateTime->add(new \DateInterval('PT10S'))->format(self::ERRU_DATETIME_FORMAT);
         $this->technicalId = $this->generateGuid();
         $this->authority = self::AUTHORITY_TC;
     }

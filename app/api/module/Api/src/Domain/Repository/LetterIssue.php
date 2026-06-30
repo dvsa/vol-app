@@ -26,13 +26,14 @@ class LetterIssue extends AbstractVersionedRepository
     {
         $qb = $this->createQueryBuilder();
 
+        $this->buildDefaultListQuery($qb, $query);
+
         // Join currentVersion so bundle can load nested relationships (letterIssueType, etc)
         $qb->leftJoin($this->alias . '.currentVersion', 'cv');
 
-        // Apply standard list filters (paging, sorting, etc)
         $this->applyListFilters($qb, $query);
 
-        return $qb->getQuery()->getResult($hydrateMode);
+        return $this->fetchPaginatedList($qb, $hydrateMode);
     }
 
     /**
@@ -45,7 +46,9 @@ class LetterIssue extends AbstractVersionedRepository
     public function fetchCount(QueryInterface $query)
     {
         $qb = $this->createQueryBuilder();
+        $this->buildDefaultListQuery($qb, $query);
         $this->applyListFilters($qb, $query);
+        $qb->resetDQLPart('orderBy');
 
         return $this->fetchPaginatedCount($qb);
     }
@@ -62,6 +65,7 @@ class LetterIssue extends AbstractVersionedRepository
             'category',
             'subCategory',
             'heading',
+            'modalLabel',
             'defaultBodyContent',
             'helpText',
             'minLength',

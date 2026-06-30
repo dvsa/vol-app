@@ -46,7 +46,11 @@ class ApplicationUndertakingsReviewServiceTest extends MockeryTestCase
 
         $this->mockTranslator->shouldReceive('translate')
             ->with('markup-application_undertakings_PSV421')
-            ->andReturn('PSV421-translated [%s] [%s]');
+            ->andReturn('PSV421-translated [%s]');
+
+        $this->mockTranslator->shouldReceive('translate')
+            ->with('markup-application_undertakings_PSV421-Restricted')
+            ->andReturn('PSV421-restricted-translated [%s]');
 
         $this->mockTranslator->shouldReceive('translate')
             ->with('markup-application_undertakings_PSV421-Standard')
@@ -130,7 +134,7 @@ class ApplicationUndertakingsReviewServiceTest extends MockeryTestCase
                     'isInternal' => false,
                 ],
                 [
-                    'markup' => 'PSV421-translated [] []',
+                    'markup' => 'PSV421-restricted-translated []',
                 ]
             ],
             'psv, standard national, not internal' => [
@@ -142,7 +146,7 @@ class ApplicationUndertakingsReviewServiceTest extends MockeryTestCase
                     'isInternal' => false,
                 ],
                 [
-                    'markup' => 'PSV421-translated [PSV421-standard-translated] []',
+                    'markup' => 'PSV421-translated []',
                 ]
             ],
             'psv, standard international, not internal' => [
@@ -154,7 +158,7 @@ class ApplicationUndertakingsReviewServiceTest extends MockeryTestCase
                     'isInternal' => false,
                 ],
                 [
-                    'markup' => 'PSV421-translated [PSV421-standard-translated] []',
+                    'markup' => 'PSV421-translated []',
                 ]
             ],
             'psv, restricted, internal' => [
@@ -166,7 +170,7 @@ class ApplicationUndertakingsReviewServiceTest extends MockeryTestCase
                     'isInternal' => true,
                 ],
                 [
-                    'markup' => 'PSV421-translated [] [PSV421-declare-translated]',
+                    'markup' => 'PSV421-restricted-translated [PSV421-declare-translated]',
                 ]
             ],
             'psv, standard national, internal' => [
@@ -178,7 +182,7 @@ class ApplicationUndertakingsReviewServiceTest extends MockeryTestCase
                     'isInternal' => true,
                 ],
                 [
-                    'markup' => 'PSV421-translated [PSV421-standard-translated] [PSV421-declare-translated]',
+                    'markup' => 'PSV421-translated [PSV421-declare-translated]',
                 ]
             ],
             'psv, standard international, internal' => [
@@ -190,7 +194,7 @@ class ApplicationUndertakingsReviewServiceTest extends MockeryTestCase
                     'isInternal' => true,
                 ],
                 [
-                    'markup' => 'PSV421-translated [PSV421-standard-translated] [PSV421-declare-translated]',
+                    'markup' => 'PSV421-translated [PSV421-declare-translated]',
                 ]
             ],
             'goods, restricted, hgv, not internal, not ni' => [

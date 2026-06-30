@@ -53,6 +53,18 @@ OLCS.ready(function () {
     }
   }
 
+  // Clear a radio group's error once the caseworker picks an option
+  $("body").on(
+    "change",
+    '[data-required-radio-group] input[type="radio"]',
+    function () {
+      $(this)
+        .closest("[data-required-radio-group]")
+        .find(".letter-choice-group-error")
+        .hide();
+    },
+  );
+
   // Create letter button click - submit form via AJAX
   $("body").on("click", "#create-letter-btn", function (e) {
     e.preventDefault();
@@ -73,6 +85,25 @@ OLCS.ready(function () {
 
     // Hide error
     $errorDiv.hide();
+
+    // Validate every radio "pick one" group has exactly one selection (no default, must pick one)
+    var radioGroupsValid = true;
+    $("[data-required-radio-group]").each(function () {
+      var $group = $(this);
+      var $groupError = $group.find(".letter-choice-group-error");
+      if ($group.find('input[type="radio"]:checked').length === 0) {
+        $groupError.show();
+        if (radioGroupsValid) {
+          this.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+        radioGroupsValid = false;
+      } else {
+        $groupError.hide();
+      }
+    });
+    if (!radioGroupsValid) {
+      return false;
+    }
 
     // Disable button and show loading state
     $button.prop("disabled", true).text("Creating letter...");
@@ -101,6 +132,24 @@ OLCS.ready(function () {
           $("#preview-category").text(category.description || "Letter");
           $("#preview-subcategory").text(subCategory.subCategoryName || "-");
           $("#preview-template").text(letterType.name || "Letter Template");
+
+          // Show warnings for missing required sections
+          if (response.warnings && response.warnings.length > 0) {
+            var warningHtml =
+              '<div class="govuk-warning-text" style="margin-bottom: 1rem;">' +
+              '<span class="govuk-warning-text__icon" aria-hidden="true">!</span>' +
+              '<strong class="govuk-warning-text__text">' +
+              '<span class="govuk-visually-hidden">Warning</span>' +
+              "Required sections could not be included:" +
+              '<ul class="govuk-list govuk-list--bullet" style="margin-top: 0.5rem;">';
+            response.warnings.forEach(function (w) {
+              warningHtml += "<li>" + $("<span>").text(w).html() + "</li>";
+            });
+            warningHtml +=
+              "</ul>This may indicate the wrong licence or application was selected." +
+              "</strong></div>";
+            $("#letter-preview-modal").prepend(warningHtml);
+          }
 
           // Get the preview modal content and use OLCS.modal.updateBody()
           var $previewModal = $("#letter-preview-modal");

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:core="http://www.govtalk.gov.uk/core" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.5" id="NaPT_netex_accessibility">
+	<xsd:annotation>
+		<xsd:appinfo>
+			<Metadata xmlns="http://www.govtalk.gov.uk/CM/gms-xs">
+				<Aggregation>main schema</Aggregation>
+				<Audience>e-service developers</Audience>
+				<Coverage>Europe</Coverage>
+				<Creator>Drafted for version 1.0 CEN TC278 WG3 SG6 Editor Nicholas Knowles, Kizoom. mailto:schemer@netex.org.uk</Creator>
+				<Date>
+					<Created>2010-09-04</Created>
+				</Date>
+				<Date>
+					<Modified>2011-02-05</Modified>
+				</Date>
+				<Date>
+					<Modified>2013-05-05</Modified> 
+
+				</Date>
+				
+					<Date>
+					<Modified>2013-10-09</Modified>
+					Add  stepNegotiation to AssistenceNeeded
+
+				</Date>
+				<Description>
+					<p>NeTEx - Network Exchange. This subschema defines common accessibility types.</p>
+				</Description>
+				<Format>
+					<MediaType>text/xml</MediaType>
+					<Syntax>http://www.w3.org/2001/XMLSchema</Syntax>
+					<Description>XML schema, W3C Recommendation 2001</Description>
+				</Format>
+				<Identifier>{http://www.naptan.org.uk/schemas/2.5/napt_netex}NaPT_netex_equipmentVehiclePAssenger-v2-5.xsd</Identifier>
+				<Language>[ISO 639-2/B] ENG</Language>
+				<Publisher>Kizoom Software Ltd, 16 High Holborn, London WC1V 6BX</Publisher>
+				<Relation>
+					<Requires>http://www.naptan.org.uk/schemas/2.5/napt_netex/NaPT_netex_facility_version-v2.5.xsd</Requires>
+					<Requires>http://www.naptan.org.uk/schemas/2.5/napt_netex/NaPT_netex_equipment-v2-5.xsd</Requires>
+					<Requires>http://www.naptan.org.uk/schemas/2.5/napt/NaPT_dayTypes-v2-5.xsd</Requires>
+					<Requires>http://www.naptan.org.uk/schemas/2.5/napt/NaPT_utility_types-v2-5.xsd</Requires>
+				</Relation>
+				<Rights>Unclassified
+ <Copyright>CEN, Crown Copyright 2009-2013</Copyright>
+				</Rights>
+				<Source>
+					<ul>
+						<li>Derived from the Transmodel, VDV, TransXChange, NaPTAN, NOPTIS, BISON and Trident standards.</li>
+					</ul>
+				</Source>
+				<Status>Version 2.5</Status>
+				<Subject>
+					<Category>Arts, recreation and travel, Tourism, Travel (tourism), Transport,
+Air transport, Airports,
+Ports and maritime transport, Ferries (marine),
+Public transport, Bus services, Coach services, Bus stops and stations,
+Rail transport, Railway stations and track, Train services, Underground trains,
+Business and industry, Transport, Air transport , Ports and maritime transport, Public transport,
+Rail transport, Roads and Road transport
+</Category>
+					<Project>CEN TC278 WG3 SG6</Project>
+				</Subject>
+				<Title>NeTEx Network Exchange - Local Service types.</Title>
+				<Type>Standard</Type>
+			</Metadata>
+		</xsd:appinfo>
+		<xsd:documentation>naPT_netex_local_service ACCESSIBILITY types for nAPtan Fixed Objects in Public Transport.</xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="../napt/NaPT_dayTypes-v2-5.xsd"/>
+	<xsd:include schemaLocation="../napt/NaPT_utility_types-v2-5.xsd"/>
+	<xsd:include schemaLocation="NaPT_netex_equipment-v2-5.xsd"/>
+	<xsd:include schemaLocation="NaPT_netex_facility_version-v2.5.xsd"/>
+	<!--===========================================================================================-->
+	<xsd:simpleType name="AssistedBoardingLocationEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for  assisted boarding locations.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:normalizedString">
+			<xsd:enumeration value="boardAtAnyDoor"/>
+			<xsd:enumeration value="boardOnlyAtSpecifiedPositions"/>
+			<xsd:enumeration value="unknown"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="AssistanceNeededEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for  assistance needed.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:normalizedString">
+			<xsd:enumeration value="levelAccess"/>
+			<xsd:enumeration value="stepNegotiation"/>
+			<xsd:enumeration value="rampRequired"/>
+			<xsd:enumeration value="hoistRequired"/>
+			<xsd:enumeration value="unknown"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ======================================================================= -->
+	<!-- ======================================================================= -->
+	<xsd:element name="LocalService" type="LocalServiceStructure" abstract="true">
+		<xsd:annotation>
+			<xsd:documentation>LOCAL SERVICE</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="LocalServiceStructure">
+		<xsd:annotation>
+			<xsd:documentation>Type for LOCAL SERVICE for a Vehicle </xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="EquipmentStructure">
+				<xsd:sequence>
+					<xsd:element name="Availability" type="DayTypesStructure" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>When service is available.  (+V2.5) </xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<xsd:simpleType name="AssistanceServiceIdType">
+		<xsd:annotation>
+			<xsd:documentation>Type for Identifier of AssistanceServcie</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="EquipmentIdType"/>
+	</xsd:simpleType>
+	<xsd:element name="AssistanceServiceRef" type="AssistanceServiceRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>Reference to an ASSISTANCE SERVICE (+TBaPT  v2.5)</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="AssistanceServiceRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>Data type for direct reference to an AssistanceServcie</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="AssistanceServiceIdType"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<!-- ======ASSISTANCE SERVICE ============================================== -->
+	<xsd:element name="AssistanceService" substitutionGroup="LocalService">
+		<xsd:annotation>
+			<xsd:documentation>Assistance service (TXC v2.5) </xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="AssistanceServiceStructure">
+					<xsd:sequence>
+						<xsd:element ref="Extensions" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="AssistanceServiceStructure">
+		<xsd:annotation>
+			<xsd:documentation>Type for ASSISTANCE SERVICES  </xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="LocalServiceStructure">
+				<xsd:sequence>
+					<xsd:group ref="AssistanceServiceGroup"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:group name="AssistanceServiceGroup">
+		<xsd:annotation>
+			<xsd:documentation>Elemenst fro Assistance Service</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="AssistanceServiceType" type="AssistanceServiceList" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Types of assistance services available.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="AssistanceAvailability" type="AssistanceAvailabilityEnumeration" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Availability of assistance (+TXC  V2.5)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Staffing" type="StaffingEnumeration" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Type of Staffing available. (Txc2.5)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="AccessibilityTools" type="AccessibilityToolListOfEnumerations" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Devices available for use by passengers.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Languages" type="LanguageListOfEnumerations" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Languages spoken for assistance.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="AccessibilityTrainedStaff" type="xsd:boolean" default="true" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Whether staff are trained in providing accessibility support.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="EmergencyServices" type="EmergencyServiceListOfEnumerations" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Available emergency service assistance.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<!-- ======================================================================= -->
+	<xsd:simpleType name="AssistanceServiceList">
+		<xsd:annotation>
+			<xsd:documentation>List of  AssistanceServices.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:list itemType="AssistanceServiceEnumeration"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="AssistanceServiceEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for AssistanceService.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:normalizedString"/>
+	</xsd:simpleType>
+	<!--=====Assessment=======================================================================================-->
+</xsd:schema>

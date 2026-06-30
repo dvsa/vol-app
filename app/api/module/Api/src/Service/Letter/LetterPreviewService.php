@@ -31,20 +31,19 @@ class LetterPreviewService
      */
     public function renderPreview(LetterInstance $letterInstance, ?MasterTemplate $masterTemplate = null, bool $excludePdfAppendices = false): string
     {
-        // Render all sections
-        $sectionsHtml = $this->renderSections($letterInstance);
-        $issuesHtml = $this->renderIssues($letterInstance);
+        // Render assembled content (sections + issues interleaved by display order)
+        $assembledHtml = $this->renderAssembledContent($letterInstance);
         $appendicesHtml = $this->renderAppendices($letterInstance, $excludePdfAppendices);
-        $closingHtml = ''; // Closing sections would be rendered similarly when implemented
 
         $context = $this->buildVolGrabContext($letterInstance);
 
         // If no master template, return just the content
         if ($masterTemplate === null) {
-            $html = $this->renderWithoutTemplate($sectionsHtml, $issuesHtml, $appendicesHtml);
+            $html = $this->renderWithoutTemplate($assembledHtml, '', $appendicesHtml);
         } else {
-            // Build placeholder values
-            $placeholders = $this->buildPlaceholders($letterInstance, $sectionsHtml, $issuesHtml, $closingHtml, $appendicesHtml);
+            // Build placeholder values — assembled content goes into SECTIONS_CONTENT,
+            // ISSUES_CONTENT is empty since issues are now inline within the assembly
+            $placeholders = $this->buildPlaceholders($letterInstance, $assembledHtml, '', '', $appendicesHtml);
 
             $html = $this->populateTemplate($masterTemplate->getTemplateContent(), $placeholders);
         }
@@ -53,26 +52,53 @@ class LetterPreviewService
     }
 
     /**
-     * Render content sections (intro, body sections)
+     * Render assembled content — sections and issues interleaved by display order.
+     *
+     * Iterates through letter instance sections in display order. When a section's
+     * parent LetterSection has the reserved key __ISSUES__, the issues block is rendered
+     * at that position. Otherwise, the section content is rendered normally.
+     *
+     * If no __ISSUES__ meta-section is present in the assembly, issues are appended
+     * after all sections (backwards-compatible fallback).
      *
      * @param LetterInstance $letterInstance
-     * @return string HTML for all content sections
+     * @return string HTML for all assembled content
      */
-    private function renderSections(LetterInstance $letterInstance): string
+    private function renderAssembledContent(LetterInstance $letterInstance): string
     {
         $html = '';
         $sectionRenderer = $this->rendererManager->get('content-section');
         $context = $this->buildVolGrabContext($letterInstance);
+        $issuesRendered = false;
 
         foreach ($letterInstance->getLetterInstanceSections() as $section) {
-            $html .= $sectionRenderer->render($section, $context);
+            $sectionVersion = $section->getLetterSectionVersion();
+            $parentSection = $sectionVersion?->getLetterSection();
+            $sectionKey = $parentSection?->getSectionKey();
+
+            if ($sectionKey === '__ISSUES__') {
+                // Render issues at this position in the assembly
+                $html .= $this->renderIssues($letterInstance);
+                $issuesRendered = true;
+            } else {
+                $html .= $sectionRenderer->render($section, $context);
+            }
+        }
+
+        // Fallback: if no __ISSUES__ meta-section was in the assembly, append issues at the end
+        if (!$issuesRendered && $letterInstance->getLetterInstanceIssues()->count() > 0) {
+            $html .= $this->renderIssues($letterInstance);
         }
 
         return $html;
     }
 
     /**
-     * Render issue sections grouped by Issue Type
+     * Render issue sections grouped by Issue Type. After each type's issues, render
+     * the "What you need to do" block listing the type's to-dos — deduplication is
+     * done at generate-time (one LetterInstanceTodo per unique to-do per letter,
+     * attached to the FIRST issue that brought it), so the to-do naturally appears
+     * under whichever issue-type that first issue belongs to (VOL-7280).
      *
      * @param LetterInstance $letterInstance
      * @return string HTML for all issues grouped by type with headings
@@ -80,9 +106,10 @@ class LetterPreviewService
     private function renderIssues(LetterInstance $letterInstance): string
     {
         $issueRenderer = $this->rendererManager->get('issue');
+        $todoRenderer = null;
         $context = $this->buildVolGrabContext($letterInstance);
 
-        // Group issues by Issue Type
+        // Group issues by Issue Type, preserving display order via the order rows arrive in
         $issuesByType = [];
         foreach ($letterInstance->getLetterInstanceIssues() as $issue) {
             $issueVersion = $issue->getLetterIssueVersion();
@@ -99,16 +126,42 @@ class LetterPreviewService
             $issuesByType[$typeId]['issues'][] = $issue;
         }
 
-        // Render grouped issues
+        // Bucket each LetterInstanceTodo into its first-issue's type group (one bucket per type)
+        $todosByType = [];
+        foreach ($letterInstance->getLetterInstanceTodos() as $todo) {
+            $instanceIssue = $todo->getLetterInstanceIssue();
+            if ($instanceIssue === null) {
+                continue;
+            }
+            $issueType = $instanceIssue->getLetterIssueVersion()?->getLetterIssueType();
+            $typeId = $issueType ? $issueType->getId() : 0;
+            $todosByType[$typeId][] = $todo;
+        }
+
+        // Render grouped issues, then the type's to-do block (if any)
         $html = '';
-        foreach ($issuesByType as $typeData) {
-            // Issue Type heading
+        foreach ($issuesByType as $typeId => $typeData) {
             $html .= '<div class="issue-type-group">';
             $html .= '<h3 class="issue-type-heading">' . htmlspecialchars((string) $typeData['name']) . '</h3>';
 
-            // Render each issue under this type
             foreach ($typeData['issues'] as $issue) {
                 $html .= $issueRenderer->render($issue, $context);
+            }
+
+            if (!empty($todosByType[$typeId])) {
+                if ($todoRenderer === null) {
+                    $todoRenderer = $this->rendererManager->get('todo');
+                }
+                $items = '';
+                foreach ($todosByType[$typeId] as $todo) {
+                    $items .= $todoRenderer->render($todo, $context);
+                }
+                if ($items !== '') {
+                    $html .= '<div class="issue-todos">';
+                    $html .= '<h4 class="todo-heading" style="font-size:14pt;font-weight:bold;color:#000;">What you need to do</h4>';
+                    $html .= '<ul class="todo-list">' . $items . '</ul>';
+                    $html .= '</div>';
+                }
             }
 
             $html .= '</div>';
@@ -314,7 +367,8 @@ class LetterPreviewService
 
             // Read from content store
             $file = $this->contentStore->read($identifier);
-            if ($file === null) {
+            // read() returns File|false (never null); a missing logo (false) must not fatal here.
+            if ($file === null || $file === false) {
                 return '';
             }
 

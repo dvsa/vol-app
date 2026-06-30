@@ -60,6 +60,21 @@ class LetterType extends AbstractLetterType
     protected $letterTypeAppendices;
 
     /**
+     * Letter type choices (which choices appear on the creation modal)
+     *
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterTypeChoice",
+     *     mappedBy="letterType",
+     *     cascade={"persist"},
+     *     orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"displayOrder" = "ASC"})
+     */
+    protected $letterTypeChoices;
+
+    /**
      * Initialise collections
      */
     public function __construct()
@@ -67,6 +82,7 @@ class LetterType extends AbstractLetterType
         $this->letterTypeSections = new ArrayCollection();
         $this->letterTypeIssues = new ArrayCollection();
         $this->letterTypeAppendices = new ArrayCollection();
+        $this->letterTypeChoices = new ArrayCollection();
     }
 
     /**
@@ -177,6 +193,43 @@ class LetterType extends AbstractLetterType
     public function removeLetterTypeAppendix(LetterTypeAppendix $letterTypeAppendix)
     {
         $this->letterTypeAppendices->removeElement($letterTypeAppendix);
+        return $this;
+    }
+
+    /**
+     * Get letter type choices
+     *
+     * @return ArrayCollection
+     */
+    public function getLetterTypeChoices()
+    {
+        return $this->letterTypeChoices;
+    }
+
+    /**
+     * Add letter type choice
+     *
+     * @param LetterTypeChoice $letterTypeChoice
+     * @return self
+     */
+    public function addLetterTypeChoice(LetterTypeChoice $letterTypeChoice)
+    {
+        if (!$this->letterTypeChoices->contains($letterTypeChoice)) {
+            $letterTypeChoice->setLetterType($this);
+            $this->letterTypeChoices->add($letterTypeChoice);
+        }
+        return $this;
+    }
+
+    /**
+     * Remove letter type choice
+     *
+     * @param LetterTypeChoice $letterTypeChoice
+     * @return self
+     */
+    public function removeLetterTypeChoice(LetterTypeChoice $letterTypeChoice)
+    {
+        $this->letterTypeChoices->removeElement($letterTypeChoice);
         return $this;
     }
 

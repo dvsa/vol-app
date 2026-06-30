@@ -4,14 +4,12 @@ return [
     // This should be an array of module namespaces used in the application.
     'modules' => [
         'Dvsa\LaminasConfigCloudParameters',
-        'Laminas\Log',
         'Olcs\Logging',
         'Laminas\Router',
         'Laminas\Cache\Module',
         'Laminas\Cache\Storage\Adapter\Redis',
         'Laminas\Filter\Module',
         'Laminas\Validator\Module',
-        'Laminas\Mvc\I18n\Module',
         'Laminas\I18n\Module',
         'Dvsa\Olcs\Utils',
         'Dvsa\Olcs\Auth',

@@ -24,6 +24,16 @@ class LetterIssue
     public $issueKey = null;
 
     /**
+     * @Form\Options({"label": "Modal Label"})
+     * @Form\Required(false)
+     * @Form\Type("Text")
+     * @Form\Attributes({"class":"medium"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1, "max":200})
+     */
+    public $modalLabel = null;
+
+    /**
      * @Form\Options({"label": "Heading"})
      * @Form\Required(true)
      * @Form\Type("Text")
@@ -45,6 +55,20 @@ class LetterIssue
      * @Form\Attributes({"id":"letterIssueType","class":"medium"})
      */
     public $letterIssueType = null;
+
+    /**
+     * @Form\Options({
+     *     "label": "Linked To-dos",
+     *     "hint": "Optional. Select the to-dos that apply when a caseworker picks this issue. Same to-do on multiple issues will appear only once in the generated letter.",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Olcs\Service\Data\Letter\LetterTodo",
+     *     "use_groups": false
+     * })
+     * @Form\Type("DynamicSelect")
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"letterTodos","class":"medium chosen-select-large","multiple":"multiple"})
+     */
+    public $letterTodos = null;
 
     /**
      * @Form\Options({

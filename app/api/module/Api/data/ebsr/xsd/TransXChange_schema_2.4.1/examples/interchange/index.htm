@@ -1,0 +1,769 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head profile="http://www.w3.org/2003/g/data-view">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Dft - TransXChange - Examples 2.4 - Interchange route</title>
+    <meta name="DC.title" content="Examples 2.4 - Interchange route Example for TransXChange"/>
+    <meta name="eGMS.title" content=""/>
+    <meta name="description" content="" />
+    <meta name="language" content="eng" />
+    <meta name="DC.description" content="Examples 2.4 - Interchange route Example for TransXChange, an XML protocol to allow remote journey planning engines to communicate in order to provide multimodal journeys spanning different regions."/>
+    <meta name="keywords" content="" />
+    <meta name="DC.subject" xml:lang="en" scheme="eGMS.IPSV" content=""/>
+    <meta name="Author" content="" />
+    <meta name="DC.creator" content="Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR"/>
+    <meta name="DC.publisher" content="Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR"/>
+    <meta name="DCTERMS.created" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="DCTERMS.issued" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="DCTERMS.modified" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="eGMS.disposalReview" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="DC.format" scheme="DCTERMS.IMT" content="text/html"/>
+    <meta name="DC.type" scheme="eGMS.TES" content=""/>
+    <meta name="DC.type.category" lang="en" content="" />
+    <meta name="DC.type" scheme="DCTERMS.DCMIType" content="Text"/>
+    <meta name="DC.type" scheme="Gov.Body.ContentType" content=""/>
+    <meta name="DC.coverage" content="UK"/>
+    <meta name="DCTERMS.audience" scheme="eGMS.AES" content=""/>
+    <meta name="DC.language" scheme="DCTERMS.ISO639-2" content="eng"/>
+    <meta name="DC.identifier" scheme="ISBN" content="" />
+    <meta name="DC.identifier" scheme="DCTERMS.URI" content=""/>
+    <meta name="eGMS.copyright" content="Crown copyright http://www.dft.gov.uk/terms/copyright" />
+    <meta name="eGMS.accessibility" scheme="eGMS.WCAG10" content="Double-A"/>
+    <link rel="transformation" href="http://www.nationalarchives.gov.uk/metadata/egms-extract/egms-extract.xsl" />
+    <link rel="stylesheet" type="text/css" media="screen, projection" href="../../../../_format/_styles/basic.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="../../../../_format/_styles/screen.css" />
+    <link rel="stylesheet" type="text/css" media="print" href="../../../../_format/_styles/print.css" />
+</head>
+
+<body id="top" class="psx">
+<div id="mainWrapper">
+    <ul id="mainNav">
+        <li><a href="http://www.dft.gov.uk/about/">About DfT</a></li>
+        <li><a href="http://www.dft.gov.uk/pgr/">Policy, guidance and research</a></li>
+        <li><a href="http://www.dft.gov.uk/consultations/">Consultations</a></li>
+        <li><a href="http://www.dft.gov.uk/press/">Press office</a></li>
+        <li><a href="http://www.dft.gov.uk/faqs/">FAQs</a></li>
+        <li><a href="http://www.dft.gov.uk/press/ministers/">Ministers</a></li>
+    </ul>
+
+<div id="wrapper">
+    <div id="widthWrapper" class="clearfix">
+        <div id="pageWrapper">
+            <div id="crumbs">
+                <div>
+                    <a class="first" href="http://www.dft.gov.uk/">DfT home</a>
+                    <img src="../../../../_format/_images/gifs/crumb-arrow.gif" alt=" " width="6" height="11"/>&nbsp;&nbsp;<a href="http://www.dft.gov.uk/public-transportdatastandards/">Public Transport XML Standards index</a>
+                    <img src="../../../../_format/_images/gifs/crumb-arrow.gif" alt=" " width="6" height="11"/>&nbsp;&nbsp;<a href="http://www.dft.gov.uk/transxchange/">TransXChange</a>
+                    <img src="../../../../_format/_images/gifs/crumb-arrow.gif" alt=" " width="6" height="11"/>&nbsp;&nbsp;<a href="#">Examples 2.4 - Interchange route</a>
+                </div>
+            </div><!-- crumbs -->
+
+            <div id="contentWrapper">
+                <div id="content">
+<h1><a name="belowNav" id="belowNav"></a>TransXChange</h1>
+<h2>Examples 2.4 - Interchange route</h2>
+<h3>Summary</h3>
+<p>Two <a href="#Registration">linear routes</a>, connected with an interchange to make a single service.</p>
+<ul>
+    <li>Linear route, with different stop visiting pattern at one end.</li>
+    <li>An <a href="#Interchange">Interchange</a> between two services.</li>
+    <li>Connecting Vehicle Journeys (TXC v2.4)</li>
+    <li>An Interchange with an incoming external feeder connecting vehicle journey.
+    (TXC v2.4)</li>
+    <li>An Interchange with two outgoing external distributor vehicle journeys.
+    (TXC v2.4)</li>
+    <li>Express stops, i.e. &quot;Pass&quot; activity where the bus does not
+    stop.</li>
+    <li>Frequency Based journey times, specified as an interval, but not a frequent service.</li>
+    <li>Combining <a href="#Schooldays">operating days</a> from service, journey pattern and vehicle
+    journey level.</li>
+    <li>Use of Timetable Notes.</li>
+    <li>Use of Stop sequence numbers to control Order of rows.</li>
+    <li>More than one operator.</li>
+    <li>Return Journeys: <a href="#OutboundJourneys">Outbound and Inbound</a>
+    Timetable.</li>
+    <li>Serviced Organisation &amp; <a href="#Schooldays">School dates</a>.</li>
+    <li>Line Colours (TXC v2.4).</li>
+    <li>Registration Schema.</li>
+</ul>
+<p>Published as <a href="../../../2.4e/examples/interchange/interchange.pdf">PDF</a></p>
+<h3>Route Map</h3>
+<p>
+<img src="interchange.png" width="836" height="437" alt="Interchange route image" /></p>
+<h3>Timetable</h3>
+<table class="grid">
+<caption>Line I (Outbound) - Grub Street to Howard's End or Barchester</caption>
+<tr>
+<th>&#160;</th>
+<th>#1</th>
+<th>#2</th>
+<th>#3</th>
+<th>#4</th>
+<th>#5</th>
+</tr>
+<tr>
+<td>Name\Line</td>
+<td><strong>I1</strong></td>
+<td><strong>I1</strong></td>
+<td></td>
+<td><strong>I1</strong></td>
+<td><strong>I2</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><strong>(<a href="#Note1">++1</a>)</strong></td>
+<td><strong>(<a href="#Note2">++2)</a></strong></td>
+<td>&#160;</td>
+<td><strong>(<a href="#Note3">++3</a>)</strong></td>
+<td><strong>(<a href="#Note4">++4</a>)</strong></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td><strong>School</strong></td>
+<td><strong>Mon-Sat</strong></td>
+<td>&#160;</td>
+<td><strong>Mon-Fri</strong></td>
+<td><strong>Wed-W1-W3</strong></td>
+</tr>
+<tr>
+<td><strong>Grub Street</strong></td>
+<td>8:02</td>
+<td>9:02</td>
+<td rowspan="4"> ? every 15 minutes until 11: 47</td>
+<td>12:02</td>
+<td>--</td>
+</tr>
+<tr>
+<td><strong>Tin Pan Alley</strong></td>
+<td>8:12</td>
+<td>9:12</td>
+<td>12:12</td>
+<td>--</td>
+</tr>
+<tr>
+<td><strong>Sinister Street</strong></td>
+<td>8:32</td>
+<td>9:32</td>
+<td>12:32</td>
+<td>--</td>
+</tr>
+<tr>
+<td><strong>Swann's Way</strong></td>
+<td>8:40</td>
+<td>9:40</td>
+<td>12:40</td>
+<td>12:45 <strong>(<a href="#Note5">++4A)</a></strong></td>
+</tr>
+<tr>
+<td><strong>Yellow Brick Road</strong></td>
+<td>--</td>
+<td>--</td>
+<td>--</td>
+<td>--</td>
+<td>12:48</td>
+</tr>
+<tr>
+<td><strong>Barchester</strong></td>
+<td>--</td>
+<td>--</td>
+<td>--</td>
+<td>--</td>
+<td>12:58</td>
+</tr>
+<tr>
+<td><strong>Howard's End</strong></td>
+<td>8:50</td>
+<td>9:50</td>
+<td>--</td>
+<td>12:50</td>
+<td>--</td>
+</tr>
+</table>
+<br /><br />
+<table id="Toc76353061" class="grid">
+<caption>Timetable Notes</caption>
+<tr>
+<th><em>Lines A1 &amp; B1</em></th>
+<th>Service operates from 02/01/2004 until further notice</th>
+<th>&#160;</th>
+</tr>
+<tr>
+<td colspan="2">Service operates Monday to Friday</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td colspan="2">Service does not run Christmas Day, New Years Day, Good Friday, Boxing Day</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td colspan="2">Service runs Bank Holiday Mondays</td>
+<td>SV1</td>
+</tr> <tr>
+<td colspan="2">Service runs 02/06/2004</td>
+<td>SV1</td>
+</tr>
+<tr>
+<td colspan="2">Service does not run 01/06/2004</td>
+<td>SV1</td>
+</tr>
+<tr>
+<td colspan="2">Service does not run 9/12/2004 -15/12/2004</td>
+<td>SV1</td>
+</tr>
+<tr>
+<td id="Note1"><strong><em>(</em>++<em>1)</em></strong></td>
+<td>Journey runs during term days of Dotheboy&#39;s Academy</td>
+<td>VJ1</td>
+</tr>
+<tr>
+<td colspan="2">Journey does not run during holidays of Dotheboy's Academy</td>
+<td>VJ1</td>
+</tr>
+<tr>
+<td colspan="2">Journey does not run May Day</td>
+<td>VJ1</td>
+</tr>
+<tr>
+<td colspan="2">Journey available 12/12/2004</td>
+<td>JP1</td>
+</tr>
+<tr>
+<td colspan="2"><strong>Journey</strong> not available 11/1/2004 until 11/11/2004.</td>
+<td>JP1</td>
+</tr>
+<tr>
+<td id="Note2" rowspan="4"> <strong><em>(</em>++<em>2)</em></strong></td>
+<td>Journey runs Monday to Saturday</td>
+<td>VJ2</td>
+</tr>
+<tr>
+<td>Journey runs New Year&#39;s Day, Boxing Day</td>
+<td>VJ2</td>
+</tr>
+<tr>
+<td>Journey available 12/12/2004</td>
+<td>JP1</td>
+</tr>
+<tr>
+<td>Journey not available 11/1/2004 until 11/11/2004.</td>
+<td>JP1</td>
+</tr>
+<tr>
+<td id="Note3" rowspan="2"> <strong><em>(</em>++<em>3)</em></strong></td>
+<td>Journey available 12/12/2004</td>
+<td>JP1</td>
+</tr>
+<tr>
+<td>Journey not available 11/1/2004 until 11/11/2004.</td>
+<td>JP1</td>
+</tr>
+<tr>
+<td id="Note4" rowspan="4"> <strong><em>(</em>++<em>4)</em></strong></td>
+<td>Journey runs Wednesdays on 1<sup>st</sup> and 3<sup>rd</sup> weeks in month</td>
+<td>VJ4</td>
+</tr>
+<tr>
+<td>Service does run on New Years day and Boxing day</td>
+<td>VJ4</td>
+</tr>
+<tr>
+<td>Journey available 02/05/2004</td>
+<td>VJ4</td>
+</tr>
+<tr>
+<td>Journey not available 04/08/2004-09/08/2004, 05/08/2005-10/08/2005</td>
+<td>VJ4</td>
+</tr>
+<tr>
+<td id="Note5"><strong><em>(</em>++<em>4A)</em></strong></td>
+<td>Connection only available 02/01/2004-17/10/2004.</td>
+<td>&#160;</td>
+</tr>
+</table>
+<br /><br />
+
+<table class="grid">
+<caption>Line I (Inbound) - Barchester or Howard's End to Grub Street</caption>
+<tr>
+<th>&#160;</th>
+<th>#1</th>
+<th>#2</th>
+<th>#3</th>
+<th>#4</th>
+<th>#5</th>
+</tr>
+<tr>
+<td>Name\Line</td>
+<td><strong>I1</strong></td>
+<td><strong>I1</strong></td>
+<td>&#160;</td>
+<td><strong>I1</strong></td>
+<td><strong>I2</strong></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td><strong>(<a href="#Note1">++1</a>)</strong></td>
+<td><strong>(<a href="#Note2">++2)</a></strong></td>
+<td>&#160;</td>
+<td><strong>(<a href="#Note3">++3</a>)</strong></td>
+<td><strong>(<a href="#Note4">++4</a>)</strong></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td><strong>School</strong></td>
+<td><strong>Mon-Sat</strong></td>
+<td>&#160;</td>
+<td><strong>Mon-Fri</strong></td>
+<td><strong>Wed-W1-W3</strong></td>
+</tr>
+<tr>
+<td><strong>Howard's End</strong></td>
+<td>9:00</td>
+<td>10:00</td>
+<td>?</td>
+<td>13:00</td>
+<td>--</td>
+</tr>
+<tr>
+<td><strong>Barchester</strong></td>
+<td>--</td>
+<td>--</td>
+<td>--</td>
+<td>--</td>
+<td><13:15</td>
+</tr>
+<tr>
+<td><strong>Yellow Brick Road</strong></td>
+<td>--</td>
+<td>--</td>
+<td>--</td>
+<td>--</td>
+<td>12:48</td>
+</tr>
+<tr>
+<td><strong>Swann's Way</strong></td>
+<td>8:40</td>
+<td>9:40</td>
+<td rowspan="4">  every 15 minutes until 12:45</td>
+<td>12:40</td>
+<td>12:45 <strong>(<a href="#Note5">++4A)</a></strong></td>
+</tr>
+<tr>
+<td><strong>Sinister Street</strong></td>
+<td>8:32</td>
+<td>9:32</td>
+<td>12:32</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td><strong>Tin Pan Alley</strong></td>
+<td>8:12</td>
+<td>9:12</td>
+<td>12:12</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td><strong>Grub Street</strong></td>
+<td>8:02</td>
+<td>9:02</td>
+<td>12:02</td>
+<td>&#160;</td>
+</tr>
+</table>
+<br /><br />
+<h3>The XML Representation</h3>
+<p><a href="../../../2.4e/examples/interchange/interchange.xml">XML Document </a></p>
+<h4 id="Registration">Service Registration</h4>
+<ul>
+    <li>The service is not registered</li>
+    <li>There are two <strong><code>Operator</code></strong> instances;
+        <ul>
+            <li><em><strong>O1</strong> - 'Smooth Buses',</em> who register and provide the main service,</li>
+            <li><em><strong>O2</strong> - 'Smart Buses'</em> who provide just the journey in column #5 on behalf of <em>'Smooth Buses'.</em></li>
+        </ul>
+    </li>
+</ul>
+
+<h4 id="ServicePattern">Service Structure</h4>
+<ul>
+    <li>There is a single<strong> <code>Service</code> </strong>instance <strong> <em>SV1</em></strong>, with two <strong>
+    <code>Line</code></strong> instances <em><strong>Ln_1</strong></em>.  and<em> <strong>Ln_2</strong></em>.</li>
+    <li>There are seven <strong><code>StopPoint</code></strong> instances, all references to existing
+NaPTAN stops</li>
+    <li>There are two <strong><code>Route</code></strong> instances s (<em><strong>R_1</strong>, <strong>R_2</strong></em>), each with a single <strong>RouteSection</strong> (<em>RS_1,
+    <strong>RS_2</strong></em>)
+        <ul>
+            <li><em>RS_1</em> has four <strong><code>RouteLink</code></strong> instances (<em><strong>RL_1</strong>,
+            <strong>RL_2</strong>, <strong>RL_3</strong>, <strong>RL_4</strong></em>), running <em>'Grub Street - Tin Pan Alley - Sinister Street - Swann's Way - Howard's End'.</em> Each link has two stop references (<em><strong>RL_1a</strong>,
+            <strong>RL1b</strong></em>, etc)</li>
+            <li><em>RS_2</em> has two <strong><code>RouteLink</code></strong> instances <em>(<strong>RL_5</strong>,
+            <strong>RL_6</strong></em>) links respectively. running '<em>Swann's Way - Yellow Brick Road - Howard's End'.</em></li>
+        </ul>
+    </li>
+</ul>
+
+<h4 id="OutboundJourneys">Outbound Journeys</h4>
+<ul>
+    <li>There are two outbound <strong><code>JourneyPatternSection</code></strong> instances
+    <strong> <em>JS_1</em></strong> and <strong> <em>JS_2</em></strong>; corresponding to the two <strong>
+    <code>RouteSection</code> </strong>instances, with corresponding journey pattern timing links.</li>
+    <li>The outbound service is made up of two <strong><code>JourneyPattern</code> </strong>instances;
+        <ul>
+            <li><strong><em>JP_1</em></strong>, section: <strong> <em>JS_1</em></strong>, <strong><code>JourneyPatternTimingLink</code></strong> instances (<em><strong>JL_1{Rl_1}, JL_2{RL_2}, JL_3{RL_3</strong>},
+            <strong>JL_4{RL_4}</strong></em><strong>)</strong>, Each journey pattern timing link has two stop usages (<em>JL_1a, JL1b</em>, etc)</li>
+            <li><strong><em>JP_2</em>,</strong> section: <em><strong>JS_2</strong>,</em> <strong><code>JourneyPatternTimingLink</code></strong> instances <em>
+            <strong>JL_5</strong>{<strong>RL_5</strong>}, </em>  <strong>and</strong><em><strong>JL_6</strong>{<strong>RL_6</strong>}</em></li>
+        </ul>
+    </li>
+    <li>There are four outbound <strong><code>VehicleJourney</code> </strong>instances:
+        <ul>
+            <li><em><strong>VJ_1</strong>,</em>  for line: <strong> <em>Ln_1</em></strong> over <em><strong>JP_1</strong>,</em> with a departure time of<em> 8:02.</em> This appears in column #1</li>
+            <li><em><strong>VJ_2</strong>,</em> also  for line: <strong> <em>Ln_1</em></strong>  with a departure time of<em> 9:02,</em> which references<em>
+            <strong>VJ_1</strong></em> for its links, and so also follows J<em>P_1.</em>
+                <ul>
+                    <li>The <strong><code>Frequency</code> </strong>element specifies that is a Frequency Based service with a <strong>
+                    <code>ScheduledFrequency</code></strong> of <em>every 15 minutes</em> which generates both column #2 and column #3. However The service is not a statutory Frequent Service (and the interval is greater than 10 minutes), so <strong>
+                    <code>FrequentService</code></strong> is <em>false.</em></li>
+                </ul>
+            </li>
+            <li><strong><em>VJ_3</em></strong>, also  for line: <strong> <em>Ln_1</em></strong> , with a departure time of<em> 12:02,</em> which references<em>
+            <strong>VJ_1</strong></em> for its links, and so also follows <strong>J</strong><em><strong>P_1</strong>.</em> This appears in column #4.</li>
+            <li><strong><em>VJ_4</em></strong>, for line: <em><strong>Ln_2</strong>,</em> over <strong> <em>JP_2</em></strong>. with a departure time of<em> 12:45.</em> This appears in column #5. It has a different operator of
+            <em><strong>O2.</strong></em></li>
+        </ul>
+    </li>
+</ul>
+
+<h4><em>Inbound Journeys</em></h4>
+<ul>
+    <li>There are two inbound <strong><code>JourneyPatternSection</code></strong> instances
+    <strong> <em>JS_X1</em></strong> and <strong> <em>JS_X2</em></strong>; corresponding to the two <strong>Rout<code>e</code>Section </strong>instances, with corresponding journey pattern timing links, specified in reverse order</li>
+    <li>The outbound service is made up of two <strong><code>JourneyPattern</code> </strong>instances;
+        <ul>
+            <li><strong><em>JP_Z1</em></strong>, section: <strong> <em>JS_X1</em></strong>, <strong><code>JourneyPatternTimingLink</code></strong> instances (<em><strong>JL_X1</strong> {<strong>RL_4</strong>},
+            <strong>JL_X2</strong> {<strong>Rl_3</strong>}, <strong>JL_X3</strong> {<strong>Rl_2</strong>}, <strong>JL_X4</strong> {<strong>RL_1</strong>}</em>), Each journey pattern timing link has two stop usages (<em><strong>JL_1a</strong>,
+            <strong>JL1b</strong></em>, etc)</li>
+            <li><strong><em>JP_2</em></strong>, section: <em><strong>JS_2</strong>,</em> <strong><code>JourneyPatternTimingLink</code></strong> instances <em>
+            <strong>JL_5</strong>{<strong>RL_6</strong>}, </em>  and<em> <strong>JL_6</strong>{<strong>RL_5}</strong></em></li>
+        </ul>
+    </li>
+    <li>There are four outbound <strong>VehicleJourney </strong>instances:&nbsp;
+        <ul>
+            <li><em><strong>VJ_X1</strong>,</em>  for line: <strong> <em>Ln_1</em></strong>  ('ln1') over <em>
+            <strong>JP_X1</strong>,</em> with a departure time of<em>9:00.</em> This appears in column #1</li>
+            <li><em><strong>VJ_X2</strong>,</em> also  for line: <strong> <em>Ln_1</em></strong>  ('ln1') with a departure time of<em>10:00,</em> which references<em>
+            <strong>VJ_X1</strong></em> for its links, and so also follows <em><strong>JP_X1</strong>.</em><ul>
+            <li>The <strong><code>Frequency</code></strong> element specifies that is a Frequency Based service with a <strong>
+            <code>ScheduledFrequency</code></strong> of every 15 minutes - for which the publisher generates both column #2 and column #3. The service is not a statutory Frequent Service, so <strong>
+            <code>FrequentService</code></strong> is <em>false</em></li>
+        </ul>
+    </li>
+    <li><strong><em>VJ_X3</em></strong>, also  for line: <strong> <em>Ln_1</em></strong>, ('<em>ln1</em>') with a departure time of<em> 13:00,</em> which references<em> also
+    <strong>VJ_X1</strong></em> for its links, and so also follows <strong>J</strong><em><strong>P_X1</strong>.</em> This appears in column #4</li>
+    <li><strong><em>VJ_X4</em></strong>, for line: <strong> <em>Ln_2</em></strong> ('<em>ln2</em>')<em>,</em> over
+    <strong> <em>JP_X2</em></strong>. with a departure time of<em> 12:45.</em> This appears in column #5. It has a different operator of
+    <em><strong>O2</strong></em></li>
+</ul>
+</li>
+</ul>
+<h4 id="Interchange">Interchanges</h4>
+
+<p><em>Connecting Journeys</em></p>
+<blockquote>
+  <ul>
+    <li>There is an interchange at Swann&#39;s Way between&nbsp;
+            <strong> <em>VJ_3</em></strong> &amp; <strong> <em>VJ_4</em></strong><li>There are also three <strong><code>ConnectingJourneys </code></strong></li>
+    describing connections to externally defined journeys<ul>
+    <li><strong><em>EVJ_e1</em></strong>, Line <em>&#39;E1&#39;</em> which connects to feed <em>
+            <strong> VJ_3 </strong></em>at <em>Grub street</em></li>
+    <li><strong><em>EVJ_e2</em></strong> Line <em>&#39;E2&#39; </em>&amp; <strong><em>EVJ_e3</em></strong>,
+    Line <em>&#39;E3&#39; </em>which connects from <em>
+            <strong> VJ_3 </strong></em>at <em>Howards End.</em></li></ul>
+  </ul>
+</blockquote>
+
+<h4><em>Outbound Journey Interchange</em></h4>
+<ul>
+    <li>The service has an outbound <strong><code>JourneyPatternInterchange</code></strong> (<strong><em>JI_1</em></strong>) that connects the two journey patterns (<em><strong>JP_1</strong>,
+    <strong>JP_2</strong></em>) at specific journey pattern timing link stop usages.<ul>
+            <li>inbound: <em><strong>JP_1</strong> : <strong>JL_3b</strong></em>,</li>
+            <li>outbound: <em><strong>JP_2</strong>: <strong>JL_5a</strong></em>.</li>
+        </ul>
+    </li>
+    <li>The connection of the two journeys
+            <strong> <em>VJ_3</em></strong> &amp; <strong> <em>VJ_4</em></strong> at <em>Swann&#39;s Way</em> is modelled by two an outbound <strong>
+    <code>VehicleJourneyInterchange</code></strong> instances, one for each of the two vehicle journeys that connect; both reference the journey pattern interchange
+    <strong> <em>JI_1.</em></strong>
+        <ul>
+            <li>interchange: <strong> <em>VJI_3</em></strong>: for journey <strong> <em>VJ_3</em></strong> has inbound:
+            <strong> <em>VJ_3</em></strong>,: outbound: <strong> <em>VJ_4</em></strong>,</li>
+            <li>interchange <strong> <em>VJI_4</em></strong>: for journey <strong> <em>VJ_4</em></strong> has inbound:
+            <strong> <em>VJ_3</em></strong>,: outbound: <strong> <em>VJ_4</em></strong>).</li>
+        </ul>
+    </li>
+    <li>There are also three <strong>
+    <code>VehicleJourneyInterchanges</code></strong> to describe the externally
+    described connecting journey feeder &amp; distributor interchanges with journey
+    with journey
+            <strong> <em>VJ_3.</em></strong><ul>
+            <li>interchange: <em><strong>VJI_E1</strong></em>
+            : for journey <strong> <em>VJ_3</em></strong> has inbound:
+            <strong> <em>EVJ_e1</em></strong>,: outbound: <strong> <em>VJ_3</em></strong>,</li>
+            <li>interchange: <em><strong>VJI_E2</strong></em>
+            : for journey <strong> <em>VJ_3</em></strong> has inbound: <strong> <em>VJ_3</em></strong>,: outbound:
+            <strong> <em>EVJ_e2</em></strong>,</li>
+            <li>interchange: <em><strong>VJI_E3</strong></em>
+            : for journey <strong> <em>VJ_3</em></strong> has inbound: <strong> <em>VJ_3</em></strong>,: outbound:
+            <strong> <em>EVJ_e3</em></strong>,</li>
+        </ul>
+    </li>
+</ul>
+
+<h4><em>Inbound Journey Interchange</em></h4>
+<ul>
+    <li>The service has an inbound <strong><code>JourneyPatternInterchange</code></strong> (<strong><em>JI_X1</em></strong>) that connects the two journey patterns (<em><strong>JP_X2</strong>,
+    <strong>JP_X1</strong></em>) at specific journey pattern timing link stop usages.<ul>
+            <li>inbound: <em><strong>JP_X2</strong> : <strong>JL_X6b</strong></em>,</li>
+            <li>outbound: <em><strong>JP_X1</strong> : <strong>JL_X2a</strong></em>.</li>
+        </ul>
+    </li>
+    <li>The connection of the two journeys
+            <strong> <em>VJ_3</em></strong> &amp; <strong> <em>VJ_4</em></strong>is modelled by two inbound <strong><code>VehicleJourneyInterchange</code></strong> instances , one for each of the two vehicle journeys that connect; both reference the journey pattern interchange
+    <strong> <em>JI_X1</em></strong>.<ul>
+            <li>interchange: <strong> <em>VJI_X3</em></strong>: for journey <strong> <em>VJ_X3</em></strong> has inbound:
+            <strong> <em>VJ_X3</em></strong>,: outbound: <strong> <em>VJ_X4</em></strong>,</li>
+            <li>interchange <strong> <em>VJI_X4</em></strong>: for journey <strong> <em>VJ_X4</em></strong> has inbound:
+            <strong> <em>VJ_X3</em></strong>,: outbound: <strong> <em>VJ_X4</em></strong>).</li>
+        </ul>
+    </li>
+</ul>
+
+<h4 id="OperatingDays">The Operating Days</h4>
+<ul>
+    <li>The <strong><code>Service operating period</code></strong> for <em>SV_1</em> starts on<em>02/01 2002</em> for all vehicle journeys and continues indefinitely.</li>
+    <li>The <strong><code>OperatingProfile</code></strong> for the Service <em>SV_1</em> states values that apply to all journeys unless overridden on a journey pattern or individual vehicle journey.<ul>
+    <li>The <strong><code>RegularDayType</code></strong> of <em>SV_1</em> specifies journeys of the service run Monday to Friday every week of the year.</li>
+    <li>The <strong><code>BankHolidayOperation</code> / <code>DaysOfNonOperation</code></strong> of <em>SV_1</em> states journeys of the service do not run Christmas (i.e. Christmas Day &amp; Boxing Day) New Year's Day, and Good Friday, but that they do run on all Bank Holiday Mondays.</li>
+    <li>The <strong>SpecialDaysOpe<code>r</code>ation / <code>DaysOfOperation</code></strong> of <em>SV_1</em> states that journeys of the service are will run on <em>02/06/2004</em> regardless.<li>The <strong>SpecialDaysOpe<code>r</code>ation / </strong>
+    <code><strong>DaysOfNonOperation </strong></code>states that all services will not run between <em>09/12/2004</em> and <em>15/12/2004</em> regardless, and also will not run on   <em>01/06/2004</em>.</ul></li>
+    <li>There is an override instance of the OperatingProfile for journey pattern <em>
+    <strong>JP_1</strong>,</em> which applies to all its  <strong><code>VehicleJourney</code></strong> instances:<em>-
+    <strong>VJ1_2</strong>, <strong>VJ_2</strong>, &amp; <strong>VJ_3</strong></em>,
+        <ul>
+            <li>The <strong>SpecialDaysOp<code>e</code>ration / <code>DaysOfOperation</code></strong> of
+            <strong> <em>JP_1</em></strong> states that journeys of the service are will run on <em>12/16/2004</em> regardless.<li>The <strong>
+            <code>SpecialDaysOperation</code> / </strong><strong><code>DaysOfNonOperation
+            states</code></strong> that all services will not run between <em>01/11/2004</em> and <em>1111/2004</em> regardless.
+        </ul>
+    </li>
+    <li>There are override instances of the OperatingProfile for the vehicle journeys <em>
+    <strong>VJ_1</strong>, <strong>VJ_2</strong>, &amp; <strong>VJ_4</strong></em>, but not for <em><strong>VJ_3</strong>,</em> which has the same values as the general service defaults for <em>
+    <strong>SV_1</strong>.</em>
+        <ul>
+            <li>VJ1: OperatingProfile
+                <ul>
+                    <li>The <strong><code>RegularDayType</code></strong> states that <strong> <em>VJ_1</em></strong> runs
+                    <strong><code>Monday</code></strong> to <strong><code>Friday</code></strong> in the term time of serviced organisation <em>SO_2</em> (<em>Dotheboy's</em>).</li>
+                    <li>The <strong>BankHolida<code>y</code>Operation / <code>DaysOfNonOperation</code></strong> states that
+                    <strong> <em>VJ_1</em></strong> does not run on <strong><code>Mayday</code></strong>, differing from the general  defaults.
+                    <strong> <em>VJ_1</em></strong> still does not run on <strong><code>Christmas</code></strong> (i.e.
+                    <strong><code>ChristmasDa</code></strong>y &amp; <strong><code>BoxingDay</code></strong>)
+                    <strong><code>NewYearsDay</code></strong>, and <strong><code>GoodFriday</code></strong>.</li>
+                </ul>
+            <li>VJ2: OperatingProfile
+                <ul>
+                    <li>The <strong><code>RegularDayType</code></strong> of states that <strong> <em>VJ_2</em></strong> runs
+                    <strong><code>Monday</code></strong> to <strong><code>Saturday</code></strong>.</li>
+                    <li>The <strong><code>BankHolidayOperation</code></strong> / <strong><code>DaysOfOperation</code></strong> states that
+                    <strong> <em>VJ_2</em></strong> does run on <code><strong>BoxingDay</strong></code> and
+                    <code><strong>NewYearsDay</strong></code>.</li>
+                </ul>
+            <li>VJ3: OperatingProfile
+                <ul>
+                    <li>As for Service.</li>
+                </ul>
+            <li>VJ4: OperatingProfile
+                <ul>
+                    <li>The <strong><code>RegularDayType</code></strong> states that <strong> <em>VJ_4</em></strong>  runs on
+                    <strong><code>Wednesdays</code></strong>.</li>
+                    <li>The <strong><code>PeriodicDayType</code></strong> states that <strong> <em>VJ_4</em></strong> furthermore only runs  on the first and third weeks of the month.</li>
+                    <li>The <strong><code>SpecialDaysOperation</code> / <code>DaysOfOperation</code></strong>
+                    <strong> <em>VJ_4</em></strong> states that <strong> <em>VJ_4</em></strong> does run on <em>5/08/2004.</em></li>
+                    <li>The <strong><code>SpecialDaysOperation</code> / <code>DaysOfNonOperation</code></strong> states that
+                    <strong> <em>VJ_4</em></strong> is does not run on <em>05/02/2004</em>, and between <em>
+                    04/08/2004 and 09/08/2004</em> and also not between<em> 05/08/2005 to 10/08/2005.</em></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>The <strong><code>VehicleJourneyInterchange</code></strong> instances <em><strong>VI_3</strong> &amp;
+    <strong>VI_4</strong></em> which connect <strong> <em>VJ_3</em></strong> and <strong> <em>VJ_4</em></strong> have a validity period from <em>02/01/2004 to 17/10/2004.</em></li>
+</ul>
+
+<h4 id="Schooldays">The Service Organisation Days</h4>
+<ul>
+    <li><strong>VehicleJour<code>n</code>ey <em>VJ1</em></strong> states on its <strong><code>OperatingProfile</code></strong> that the
+        <ul>
+            <li>The service only runs in the term time of <strong><code>ServicedOrganisation</code></strong>
+            <strong> <em>SO2_1</em></strong> (<em>Dotheboy's</em>).</li>
+        </ul>
+    </li>
+    <li>There are two <strong><code>ServicedOrganisation</code></strong> Definitions.
+        <ul>
+            <li>A local authority '<em>Bleakshire LEA</em>' , <strong> <em>SO_1</em></strong></li>
+            <li><em>Dotheboys</em>, <strong>SO_2</strong> which has <em>Bleakshire LEA</em> as its parent</li>
+        </ul>
+    <li>The <strong><code>ServicedOrganisation</code></strong> definition for '<em>Bleakshire LEA</em>',
+    <strong> <em>SO_1</em></strong> defines the terms of the school year using working days.
+        <ul>
+            <li><em>Michaelmas Term</em> <strong><code>StartDate</code></strong> <em>2004-09-01</em>, <strong>
+            <code>EndDate</code></strong> <em>2004-12-23 ,</em> <code><strong>E</strong></code><strong><code>xception</code></strong><em> 2004-11-11.</em></li>
+            <li><em>Easter Term</em> <strong><code>StartDate</code></strong> <em>2005-01-01</em>, <strong>
+            <code>EndDate</code></strong> <em>2005-04-30.</em> </li>
+            <li><em>Summer Term</em> <strong><code>StartDate</code></strong> 2<em>005-04-02</em>, <strong>
+            <code>EndDate</code></strong> <em>2005-07-2.</em></li>
+        </ul>
+    <li>The <strong><code>ServicedOrganisation</code></strong> definition for <em>Dotheboy's</em> overrides the summer term working days.
+        <ul>
+            <li><em>Summer Term</em> <strong>Star<code>t</code>Date</strong> 2<em>005-04-01</em> <strong>
+            <code>EndDate</code></strong> <em>2005-07-30</em></li>
+        </ul>
+    </li>
+</ul>
+<h3>Notes</h3>
+<p>This example was refined for in the 2.4 Enhanced publisher to not be a Frequent Service</p>
+<p><br />Page last updated: 2013/04/13</p>
+
+                </div><!-- content -->
+            </div><!-- contentWrapper -->
+
+        <div id="leftBar">
+            <h2>TransXChange</h2>
+            <ul class="fade">
+                <li><a href="../../../../index.htm">Index</a></li>
+                <li><a href="../../../../overview.htm">Overview</a></li>
+                <li><a href="../../../../process.htm">Data &#38; Process</a></li>
+                <li><a href="../../../../schema/schemas.htm">Downloads &#38; Schema</a></li>
+                <li><a href="../../../../documentation.htm">Documentation</a></li>
+                <li><a href="../../../../examples.htm">Examples</a></li>
+                <li class="selected"><a href="../index.htm">&#160;&#160;2.4 Route types</a>
+                    <ul>
+
+           <li><a href="../linear/index.htm">Linear</a></li>
+<li><a href="../express/index.htm">Express</a></li>
+
+                        <li class="selected">Interchange</li>
+<li><a href="../circular/index.htm">Circular</a></li>
+<li><a href="../cloverleaf/index.htm">Cloverleaf</a></li>
+<li><a href="../grouping/index.htm">Grouping</a></li>
+<li><a href="../lollipop/index.htm">Lollipop</a></li>
+<li><a href="../eye/index.htm">Eye</a></li>
+<li><a href="../flexible/index.htm">Flexible</a></li>
+<li><a href="../hailandride/index.htm">Hail &#38; Ride</a></li>
+<li><a href="../large/index.htm">Large</a></li>
+<li><a href="../mergefrequency/index.htm">Merged Frequency</a></li>
+<li><a href="../footnotes/index.htm">Footnotes</a></li>
+<li><a href="../cancellation/index.htm">Cancellation</a></li>
+<li><a href="../delta/index.htm">Delta</a></li>
+                    </ul>
+                </li>
+                <li><a href="../../../../ebsrnews/index.htm">EBSR news</a></li>
+                <li><a href="../../../../realexamples/index.htm">Sample Documents</a></li>
+                <li><a href="../../../../publisher.htm">Publisher</a></li>
+                <li><a href="../../../../gtfs.htm">Other Tools</a></li>
+                <li><a href="../../../../technicalFaq.htm">Technical FAQ</a></li>
+                <li><a href="../../../../versioning.htm">Versioning</a></li>
+                <li><a href="../../../../implementations.htm">Implementations</a></li>
+                <li><a href="../../../../training.htm">Training materials</a></li>
+                <li><a href="../../../../history.htm">History</a></li>
+                <li><a href="../../../../termsOfUse.htm">Terms of Use</a></li>
+                <li><a href="../../../../contact.htm">Contact</a></li>
+                <li><a href="../../../../copyright.htm">Copyright</a></li>
+                <li class="listbreaker">Related UK Standards</li>
+                <li><a href="http://www.dft.gov.uk/public-transportdatastandards/">Standards - main index</a></li>
+        
+                
+                <li><a href="http://www.dft.gov.uk/naptan/">NaPTAN</a></li>
+                <li><a href="http://www.dft.gov.uk/nptg/">National PT Gazetteer (NPTG)</a></li>
+                <li><a href="http://www.dft.gov.uk/journeyweb/">JourneyWeb</a></li>
+             
+                <li class="selected"><a href="http://www.dft.gov.uk/transxchange/">TransXChange</a></li>   <li><a href="http://www.dft.gov.uk/CycleNetXchange/">CycleNetXchange</a></li>  <li><a href="http://data.gov.uk/nptdr/">data.gov.uk NPTDR</a></li>
+                <li class="listbreaker">Related EU Standards</li>
+                <li><a href="http://www.dft.gov.uk/transmodel/">TransModel</a></li>
+                <li><a href="http://www.siri.org.uk/">SIRI</a></li>
+                <li><a href="http://www.netex.org.uk/">NeTEx</a></li>
+                <li><a href="http://www.ifopt.org.uk/">IFOPT</a></li>
+                
+                
+            </ul>
+        </div><!-- leftBar -->
+
+        </div><!-- pageWrapper -->
+    </div><!-- widthWrapper -->
+
+<div id="footer">
+    <ul>
+        <li class="first"><a target="_top" href="http://www.dft.gov.uk/accessibility">Accessibility</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/cymraeg">Cymraeg</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/foi/">Freedom of Information</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/about/informationcharter/">Information charter</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/terms/">Terms and conditions</a></li>
+        <li><a target="_top" rel="license" href="http://www.dft.gov.uk/terms/copyright">Crown copyright</a></li>
+    </ul>
+</div><!-- footer -->
+
+
+</div><!-- wrapper -->
+</div><!-- mainWrapper -->
+
+<div id="header">
+    <a href="http://www.dft.gov.uk/">
+    <img id="logo" src="../../../../_format/_images/gifs/logo.gif" alt="Department for Transport - Transport that works for everyone." width="230" height="95" /></a>
+    <div id="topNav">
+        <ul>
+            <li>
+            <img id="utm" src="http://www.dft.gov.uk/__utm.gif" alt="" width="1" height="1" /><a target="_top" href="#belowNav">Skip to main content</a></li>
+            <li><a target="_top" href="http://www.dft.gov.uk/results&#63;view&#61;Filter&#38;w&#61;What&#37;27s&#43;new&#38;df&#61;07&#37;2F03&#37;2F09&#38;dt&#61;07&#37;2F04&#37;2F09&#38;pg&#61;1">What's new</a></li>
+                <li><a target="_top" href="http://www.dft.gov.uk/publications/cookies/">Cookies</a></li> <li><a target="_top" href="http://www.dft.gov.uk/contact">Contact us</a></li>
+            <li><a target="_top" href="http://www.dft.gov.uk/help/">Help</a></li>
+            <li><a target="_top" href="http://www.dft.gov.uk/atoz">A to Z index</a></li>
+            <li class="last"><a target="_top" href="http://www.dft.gov.uk/sitemap">Site map</a></li>
+        </ul>
+
+        <script type="text/javascript" src="../../../../_format/_js/clearField.js"></script>
+        <form action="http://search.dft.gov.uk/search" method="get">
+            <label for="searchStringTop" class="accessibility">Search keyword:</label>
+            <!-- Google Mini Search Criteria -->
+            <input type="hidden" name="client" value="default_frontend"/>
+            <input type="hidden" name="proxyreload" value="1"/>
+            <input type="hidden" name="proxystylesheet" value="default_frontend"/>
+            <input type="hidden" name="output" value="xml_no_dtd"/>
+            <input type="text" name="q" id="searchStringTop" value="Enter search term" onclick="doClear(this) " size="20" />
+            <input type="hidden" name="pg" id="page" value="1" />
+            <input type="submit" value="Search" id="search" class="button" />
+        </form>
+    </div><!-- topNav -->
+
+</div><!-- header -->
+
+<script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+    var pageTracker = _gat._getTracker("UA-7447714-1");
+    pageTracker._setLocalGifPath("http://www.dft.gov.uk/__utm.gif")
+    pageTracker._setLocalRemoteServerMode();
+    pageTracker._trackPageview();
+</script>
+<script src="http://www.dft.gov.uk/_format/_js/gatag.js" type="text/javascript"></script>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script src="http://www.dft.gov.uk/_format/_js/dftglobal.js" type="text/javascript"></script>
+<script src="http://www.dft.gov.uk/_format/_js/dftreporting.js" type="text/javascript"></script>
+<script src="http://www.dft.gov.uk/_format/_js/microsite.js" type="text/javascript"></script>
+</body>
+</html>

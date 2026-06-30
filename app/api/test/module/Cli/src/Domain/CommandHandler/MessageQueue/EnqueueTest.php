@@ -96,10 +96,9 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         ]);
         $this->mockedSmServices[Queue::class]->shouldReceive('sendMessage')->times(1)->andThrow(\Exception::class);
 
-        $logWriter = m::mock(\Laminas\Log\Writer\WriterInterface::class);
-        $logWriter->shouldReceive('write')->once();
-        $this->logger = m::mock(\Dvsa\OlcsTest\SafeLogger::class, [])->makePartial();
-        $this->logger->addWriter($logWriter);
+        $this->logger = m::mock(\Psr\Log\LoggerInterface::class);
+        $this->logger->shouldReceive('notice')->atLeast()->once();
+        $this->logger->shouldIgnoreMissing();
 
         Logger::setLogger($this->logger);
 

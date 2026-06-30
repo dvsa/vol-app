@@ -155,7 +155,7 @@ jobs:
 
       - name: Terraform init
         id: init
-        run: terraform init -no-color -input=false -upgrade
+        run: terraform init -no-color -input=false -upgrade -reconfigure
 
       - name: Get Current Versions from Terraform State
         id: get_current_versions

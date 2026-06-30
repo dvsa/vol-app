@@ -42,15 +42,10 @@ return [
             'formatter' => fn($row) => Escape::html($row['issueKey'] ?? ''),
         ],
         [
-            'title' => 'Heading',
-            'name' => 'heading',
-            'sort' => 'heading',
+            'title' => 'Modal Label',
+            'name' => 'modalLabel',
             'formatter' => function ($row) {
-                // For versioned entity, get heading from current version
-                if (isset($row['currentVersion']['heading'])) {
-                    return Escape::html($row['currentVersion']['heading']);
-                }
-                return Escape::html($row['heading'] ?? '');
+                return Escape::html($row['currentVersion']['modalLabel'] ?? $row['modalLabel'] ?? '');
             },
         ],
         [

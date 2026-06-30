@@ -372,6 +372,15 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     protected $declarationConfirmation = 0;
 
     /**
+     * noTmConfirmation
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesnonull", name="no_tm_confirmation", nullable=true)
+     */
+    protected $noTmConfirmation;
+
+    /**
      * User specifies whether they have uploaded financial evidence or will send by post
      *
      * @var int
@@ -1772,6 +1781,30 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     }
 
     /**
+     * Set the no tm confirmation
+     *
+     * @param string $noTmConfirmation new value being set
+     *
+     * @return Application
+     */
+    public function setNoTmConfirmation($noTmConfirmation)
+    {
+        $this->noTmConfirmation = $noTmConfirmation;
+
+        return $this;
+    }
+
+    /**
+     * Get the no tm confirmation
+     *
+     * @return string
+     */
+    public function getNoTmConfirmation()
+    {
+        return $this->noTmConfirmation;
+    }
+
+    /**
      * Set the financial evidence uploaded
      *
      * @param int $financialEvidenceUploaded new value being set
@@ -2934,7 +2967,8 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the was auto granted
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getWasAutoGranted()
     {
         return $this->wasAutoGranted;

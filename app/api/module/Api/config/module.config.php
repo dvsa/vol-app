@@ -165,7 +165,7 @@ return [
             'SectionAccessService' => \Dvsa\Olcs\Api\Service\Lva\SectionAccessService::class,
             'ApplicationGrantValidationService' => \Dvsa\Olcs\Api\Service\Lva\Application\GrantValidationService::class,
             'ApplicationPublishValidationService' => \Dvsa\Olcs\Api\Service\Lva\Application\PublishValidationService::class,
-            'ContentStore' => \Dvsa\Olcs\DocumentShare\Service\ClientFactory::class,
+            'ContentStore' => \Dvsa\Olcs\DocumentShare\Service\DocumentStoreFactory::class,
             'PayloadValidationListener' => \Dvsa\Olcs\Api\Mvc\PayloadValidationListenerFactory::class,
             'CommandHandlerManager' => \Dvsa\Olcs\Api\Domain\CommandHandlerManagerFactory::class,
             'QueryHandlerManager' => \Dvsa\Olcs\Api\Domain\QueryHandlerManagerFactory::class,
@@ -832,7 +832,9 @@ return [
             Repository\LetterInstanceSection::class => RepositoryFactory::class,
             Repository\LetterInstanceIssue::class => RepositoryFactory::class,
             Repository\LetterInstanceTodo::class => RepositoryFactory::class,
-            Repository\LetterInstanceAppendix::class => RepositoryFactory::class
+            Repository\LetterInstanceAppendix::class => RepositoryFactory::class,
+            Repository\LetterChoice::class => RepositoryFactory::class,
+            Repository\LetterSectionVariant::class => RepositoryFactory::class
         ],
         'aliases' => [
             'Conversation' => Repository\Conversation::class,
@@ -875,6 +877,8 @@ return [
             'LetterInstanceIssue' => Repository\LetterInstanceIssue::class,
             'LetterInstanceTodo' => Repository\LetterInstanceTodo::class,
             'LetterInstanceAppendix' => Repository\LetterInstanceAppendix::class,
+            'LetterChoice' => Repository\LetterChoice::class,
+            'LetterSectionVariant' => Repository\LetterSectionVariant::class,
         ],
     ],
     \Dvsa\Olcs\Api\Domain\FormControlServiceManagerFactory::CONFIG_KEY => [
@@ -1194,6 +1198,36 @@ return [
                 Dvsa\Olcs\Api\Service\Publication\Process\Application\Police::class
             ],
         ],
+        'ImpoundingLicenceDecisionPublication' => [
+            'context' => [
+                Dvsa\Olcs\Api\Service\Publication\Context\PiHearing\Venue::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\PiHearing\HearingDate::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\Licence\LicenceNo::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\Licence\People::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\Licence\LicenceAddress::class,
+            ],
+            'process' => [
+                Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text1::class,
+                Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text2::class,
+                Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text3::class,
+                Dvsa\Olcs\Api\Service\Publication\Process\Licence\Police::class
+            ],
+        ],
+        'ImpoundingApplicationDecisionPublication' => [
+            'context' => [
+                Dvsa\Olcs\Api\Service\Publication\Context\PiHearing\Venue::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\PiHearing\HearingDate::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\Licence\LicenceNo::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\Application\People::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\Licence\LicenceAddress::class,
+            ],
+            'process' => [
+                Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text1::class,
+                Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text2::class,
+                Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text3::class,
+                Dvsa\Olcs\Api\Service\Publication\Process\Application\Police::class
+            ],
+        ],
     ],
     'submissions' => require(__DIR__ . '/submissions.config.php'),
     'ebsr' => [
@@ -1218,7 +1252,8 @@ return [
             __DIR__ . '/../data/ebsr/xsd/TransXChange_schema_2.5/TransXChange_registration.xsd',
         'http://naptan.dft.gov.uk/transxchange/publisher/schema/3.1.2/TransXChangePublisherService.xsd' =>
             __DIR__ . '/../data/ebsr/xsd/TransXChange_schema_2.4/TransXChangePublisherService_2_4.xsd',
-        'https://webgate.ec.testa.eu/move-hub/erru/3.4' => __DIR__ . '/../data/nr/xsd/NotifyCheckResult_Request.xsd'
+        'https://webgate.ec.testa.eu/move-hub/erru/3.4' => __DIR__ . '/../data/nr/xsd/NotifyCheckResult_Request.xsd',
+        'https://webgate.ec.testa.eu/move-hub/erru/3.5' => __DIR__ . '/../data/nr/xsd/3.5/NotifyCheckResult_Request.xsd'
     ],
     'validators' => [
         'invokables' => [

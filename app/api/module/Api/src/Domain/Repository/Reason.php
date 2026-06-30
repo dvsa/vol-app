@@ -36,5 +36,8 @@ class Reason extends AbstractRepository
             $qb->andWhere($qb->expr()->eq('m.isProposeToRevoke', ':isProposeToRevoke'))
                 ->setParameter('isProposeToRevoke', $query->getIsProposeToRevoke() === 'Y');
         }
+
+        $qb->andWhere($qb->expr()->eq('m.isVisibleInInternal', ':isVisibleInInternal'))
+            ->setParameter('isVisibleInInternal', true);
     }
 }

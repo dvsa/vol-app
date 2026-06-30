@@ -15,9 +15,6 @@ return [
         ]
     ],
     'service_manager' => [
-        'abstract_factories' => [
-            \Laminas\Log\LoggerAbstractServiceFactory::class
-        ],
         'factories' => [
             \Elasticsearch\Client::class => Dvsa\Olcs\Db\Service\Search\ClientFactory::class,
             'Elasticsearch\Search' => Dvsa\Olcs\Db\Service\Search\SearchFactory::class,

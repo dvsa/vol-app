@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2010 rel. 3 sp1 (http://www.altova.com) by Nicholas Knowles (Kizoom) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:core="http://www.govtalk.gov.uk/core" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.5" id="NaPT_netex_equipmentVehiclePassenger">
+	<xsd:annotation>
+		<xsd:appinfo>
+			<Metadata xmlns="http://www.govtalk.gov.uk/CM/gms-xs">
+				<Aggregation>main schema</Aggregation>
+				<Audience>e-service developers</Audience>
+				<Coverage>Europe</Coverage>
+				<Creator>Drafted for version 1.0 CEN TC278 WG3 SG6 Editor Nicholas Knowles, Kizoom. mailto:schemer@netex.org.uk</Creator>
+				<Date>
+					<Created>2013-03-04</Created>
+					 Created fro 2.5
+				</Date>
+				<Date>
+					<Modified>2013-05-05</Modified>
+				</Date>
+			 >
+				<Description>
+					<p>NaPT NeTEx - Network Exchange. This subschema defines common Vehicel APssenger Equipment typess.</p>
+				</Description>
+				<Format>
+					<MediaType>text/xml</MediaType>
+					<Syntax>http://www.w3.org/2001/XMLSchema</Syntax>
+					<Description>XML schema, W3C Recommendation 2001</Description>
+				</Format>
+				<Identifier>{http://www.naptan.org.uk/schema/2.5/napt_netex}NaPT_netex_equipmentVehiclePassenger-v2-5.xsd</Identifier>
+				<Language>[ISO 639-2/B] ENG</Language>
+				<Publisher>Kizoom Software Ltd, 16 High Holborn, London WC1V 6BX</Publisher>
+				<Relation>
+					<Requires>http://www.naptan.org.uk/schema/2.5/napt/NaPT_location-v2-5.xsd</Requires>
+					<Requires>http://www.naptan.org.uk/schema/2.5/napt/NaPT_utility_types-v2-5.xsd</Requires>
+					<Requires>http://www.naptan.org.uk/schema/2.5/napt/NaPT_netex_accessibility-v2-5.xsd</Requires>
+					<Requires>http://www.naptan.org.uk/schema/2.5/napt/NaPT_netex_localService-v2-5.xsd</Requires>
+				</Relation>
+				<Rights>Unclassified
+ <Copyright>CEN, Crown Copyright 2009-2013</Copyright>
+				</Rights>
+				<Source>
+					<ul>
+						<li>Derived from the NeTEx schema.</li>
+					</ul>
+				</Source>
+				<Status>Version 2.5</Status>
+				<Subject>
+					<Category>Arts, recreation and travel, Tourism, Travel (tourism), Transport,
+Air transport, Airports,
+Ports and maritime transport, Ferries (marine),
+Public transport, Bus services, Coach services, Bus stops and stations,
+Rail transport, Railway stations and track, Train services, Underground trains,
+Business and industry, Transport, Air transport , Ports and maritime transport, Public transport,
+Rail transport, Roads and Road transport
+</Category>
+					<Project>CEN TC278 WG3 SG6</Project>
+				</Subject>
+				<Title>NeTEx Network Exchange - ACCESSIBILITY types.</Title>
+				<Type>Standard</Type>
+			</Metadata>
+		</xsd:appinfo>
+		<xsd:documentation>NaPT_netex_equipmentVehiclePassenger    Equipment Vehicle Passenger  types for nAPtan Fixed Objects in Public Transport.</xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="../napt/NaPT_utility_types-v2-5.xsd"/>
+	<xsd:include schemaLocation="../napt/NaPT_utility_units-v2-4.xsd"/>
+	<xsd:include schemaLocation="NaPT_netex_accessibility-v2-5.xsd"/>
+	<xsd:include schemaLocation="NaPT_netex_localService-v2-5.xsd"/>
+	<!--===========================================================================================-->
+	<xsd:simpleType name="AccessVehicleEquipmentIdType">
+		<xsd:annotation>
+			<xsd:documentation>Type for Unique Identifier of Operator</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="EquipmentIdType"/>
+	</xsd:simpleType>
+	<xsd:element name="AccessVehicleEquipmentRef" type="AccessVehicleEquipmentRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>Reference to an acess Vehicel Equipment</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="AccessVehicleEquipmentRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>Data type for direct reference to a equipment</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="AccessVehicleEquipmentIdType"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<!-- =====ACCESS VEHICLE EQUPMENT ===================================== -->
+	<xsd:element name="AccessVehicleEquipment" type="AccessVehicleEquipmentStructure">
+		<xsd:annotation>
+			<xsd:documentation>Suitability  / nature of of stop for  access equipment.. [+ NaPT V2.5]</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="AccessVehicleEquipmentStructure" abstract="false">
+		<xsd:annotation>
+			<xsd:documentation>Type for an ACCESS VEHICLE EQUIPMENT.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="EquipmentStructure">
+				<xsd:sequence>
+					<xsd:group ref="AccessVehicleEquipmentGroup"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:group name="AccessVehicleEquipmentGroup">
+		<xsd:annotation>
+			<xsd:documentation>Elements for an ACCESS VEHICLE EQUIPMENT type.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:group ref="AccessVehicleEquipmentBoardingGroup">
+				<xsd:annotation>
+					<xsd:documentation>Boarding Elements for an ACCESS VEHICLE EQUIPMENT type.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:group>
+			<xsd:group ref="AccessVehicleEquipmentDoorGroup">
+				<xsd:annotation>
+					<xsd:documentation>Door Elements for an ACCESS VEHICLE EQUIPMENT type.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:group>
+			<xsd:group ref="AccessVehicleEquipmentAdditionalGroup">
+				<xsd:annotation>
+					<xsd:documentation>Other Elements for an ACCESS VEHICLE EQUIPMENT type.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:group>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="AccessVehicleEquipmentBoardingGroup">
+		<xsd:annotation>
+			<xsd:documentation>Elements for an ACCESS VEHICLE EQUIPMENT type.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="LowFloor" type="xsd:boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Low floor VEHICLES can use stop and be accessible. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="HighFloor" type="xsd:boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>High floor VEHICLES can use stop </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Hoist" type="xsd:boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>VEHICLE Hoist can be used at VEHICLE has a hoist or lift  for wheelchairs.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="HoistOperatingRadius" type="LengthType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Distacne from VEHICLE needed to operate hoist</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Ramp" type="xsd:boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Whether  a ramp may be used to access VEHICLE </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RampBearingCapacity" type="Weight" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Maximum weight that ramp can bear.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NumberOfSteps" type="xsd:nonNegativeInteger" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Number of steps to board or alight from VEHICLE </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="BoardingHeight" type="LengthType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Maximum step height to board.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="GapToPlatform" type="LengthType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Normal gap between VEHICLE and platform.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="AccessVehicleEquipmentAdditionalGroup">
+		<xsd:annotation>
+			<xsd:documentation>Elements for an ACCESS VEHICLE EQUIPMENT type.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="SuitableFor" type="MobilityLIst" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Moobility needs for which access is suitable</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="AssistanceNeeded" type="AssistanceNeededEnumeration" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Nature of assistance needed to board - level Access allows self-boarding</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="AssistedBoardingLocation" type="AssistedBoardingLocationEnumeration" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Whether special position on platform  is needed for boarding</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="GuideDogsAllowed" type="xsd:boolean" default="true" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Whether a Guide Dog is allowed</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="AccessVehicleEquipmentDoorGroup">
+		<xsd:annotation>
+			<xsd:documentation>Elements for an ACCESS VEHICLE EQUIPMENT type.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="WidthOfAccessArea" type="LengthType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Width of access area.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="HeightOfAccessArea" type="LengthType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Height of access area.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="AutomaticDoors" type="xsd:boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Whether there are automatic doors.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<!-- ==== WHEELCHAIR VEHICLE EQUIPMENT============================================ -->
+	<xsd:simpleType name="WheelchairVehicleEquipmentIdType">
+		<xsd:annotation>
+			<xsd:documentation>Type for Unique Identifier of Wheelchair Equipment</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="EquipmentIdType"/>
+	</xsd:simpleType>
+	<xsd:element name="WheelchairVehicleEquipmentRef" type="WheelchairVehicleEquipmentRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>Reference to a Wheelchair Equipment</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="WheelchairVehicleEquipmentRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>Data type for direct reference to a Wheelchair equipment</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="WheelchairVehicleEquipmentIdType"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:element name="WheelchairVehicleEquipment" substitutionGroup="Equipment">
+		<xsd:annotation>
+			<xsd:documentation>Wheelchair Equipment for a Vehicle </xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="WheelchairVehicleEquipmentStructure">
+					<xsd:sequence>
+						<xsd:element ref="Extensions" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="WheelchairVehicleEquipmentStructure">
+		<xsd:annotation>
+			<xsd:documentation>Type for Wheelchair Equipment for a Vehicle </xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="EquipmentStructure">
+				<xsd:sequence>
+					<xsd:element name="NumberOfWheelChairAreas" type="xsd:nonNegativeInteger" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Number of available wheelchair areas in vehicle.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="WidthOfAccessArea" type="LengthType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Access width available for entry by wheelchair.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="HeightOfAccessArea" type="LengthType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Access height available for entry by wheelchair.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="WheelchairTurningCircle" type="LengthType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Wheel chair turning circle on board.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="SuitableFor" type="MobilityLIst" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Moobility needs for which access is suitable + TXC V2.5</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="BookingRequired" type="xsd:boolean" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Whether a booking is required for wheelchair access. + TXC V2.5</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="BookingNumber" type="TelephoneContactStructure" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Wheelchair booking number. + TXC V2.5</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<!--===========================================================================================-->
+</xsd:schema>

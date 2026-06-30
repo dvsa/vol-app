@@ -61,7 +61,9 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
 
         $this->updateStatus($application);
 
-        if ($application->canAutoGrant()) {
+        $autoGrant = $application->canAutoGrant();
+
+        if ($autoGrant) {
             $this->result->merge(
                 $this->handleSideEffectAsSystemUser(
                     AutoGrant::create([
@@ -88,7 +90,11 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
             );
         }
 
-        $this->result->merge($this->createTask($application));
+        //don't create a task if the app is auto granted
+        if (!$autoGrant) {
+            $this->result->merge($this->createTask($application));
+        }
+
         $this->result->merge($this->maybeCreateLightGoodsVehicleCondition($application));
 
         if ($this->shouldPublishApplication($application)) {

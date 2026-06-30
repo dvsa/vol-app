@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Api\Service\Document;
 
+use Dvsa\Olcs\Api\Domain\RepositoryManagerAwareInterface;
+use Dvsa\Olcs\Api\Domain\RepositoryServiceManager;
 use Dvsa\Olcs\Api\Domain\TranslatorAwareInterface;
 use Dvsa\Olcs\Api\Service\Date as DateService;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\Interfaces\DateHelperAwareInterface;
@@ -25,8 +27,12 @@ class Document
      *
      * @return Document
      */
-    public function __construct(private readonly DateService $dateSrvHlpr, private readonly DocumentStoreInterface $documentStore, private readonly TranslatorInterface $translator)
-    {
+    public function __construct(
+        private readonly DateService $dateSrvHlpr,
+        private readonly DocumentStoreInterface $documentStore,
+        private readonly TranslatorInterface $translator,
+        private readonly ?RepositoryServiceManager $repoManager = null,
+    ) {
     }
 
     /**
@@ -162,6 +168,10 @@ class Document
 
             if ($bookmark instanceof TranslatorAwareInterface) {
                 $bookmark->setTranslator($this->translator);
+            }
+
+            if ($this->repoManager !== null && $bookmark instanceof RepositoryManagerAwareInterface) {
+                $bookmark->setRepoManager($this->repoManager);
             }
 
             $bookmarks[$token] = $bookmark;

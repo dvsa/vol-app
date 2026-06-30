@@ -41,9 +41,7 @@ abstract class AbstractConsumerTestCase extends MockeryTestCase
 
         $this->instantiate();
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
     }
 
     protected function instantiate(): void

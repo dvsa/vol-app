@@ -1,0 +1,145 @@
+<?php
+/** @var array $section */
+/** @var array $currentVersion */
+/** @var array $variants */
+/** @var array $versions */
+/** @var int $sectionId */
+
+$baseUrl = '/admin/letter-section';
+?>
+
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-full">
+
+<!-- Metadata -->
+<div style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: start;">
+        <h2 class="govuk-heading-m">Section Details</h2>
+        <a href="<?= $baseUrl ?>/edit/<?= $sectionId ?>/" class="govuk-button govuk-button--secondary js-modal-ajax" data-module="govuk-button">Edit details</a>
+    </div>
+    <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Section Key</dt>
+            <dd class="govuk-summary-list__value"><?= $this->escapeHtml($section['sectionKey'] ?? '') ?></dd>
+        </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Name</dt>
+            <dd class="govuk-summary-list__value"><?= $this->escapeHtml($currentVersion['name'] ?? '') ?></dd>
+        </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Section Type</dt>
+            <dd class="govuk-summary-list__value"><?= $this->escapeHtml($currentVersion['sectionType']['description'] ?? $currentVersion['sectionType'] ?? '') ?></dd>
+        </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Vehicle Type</dt>
+            <dd class="govuk-summary-list__value"><?= $this->escapeHtml($currentVersion['goodsOrPsv']['description'] ?? 'Both') ?></dd>
+        </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">NI Only</dt>
+            <dd class="govuk-summary-list__value"><?= !empty($currentVersion['isNi']) ? 'Yes' : 'No' ?></dd>
+        </div>
+    </dl>
+</div>
+
+<!-- Default Content -->
+<div style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: start;">
+        <h2 class="govuk-heading-m">Default Content</h2>
+        <a href="<?= $baseUrl ?>/EditContent/<?= $sectionId ?>/" class="govuk-button govuk-button--secondary js-modal-ajax" data-module="govuk-button">Edit content</a>
+    </div>
+    <div style="padding: 15px; border: 1px solid #b1b4b6; background: #f3f2f1; min-height: 50px;">
+        <?php
+        $content = $currentVersion['defaultContent'] ?? null;
+        if ($content) {
+            // If it's JSON (EditorJS), try to extract text
+            if (is_string($content)) {
+                $decoded = json_decode($content, true);
+                if ($decoded && isset($decoded['blocks'])) {
+                    foreach ($decoded['blocks'] as $block) {
+                        echo '<p>' . $this->escapeHtml($block['data']['text'] ?? '') . '</p>';
+                    }
+                } else {
+                    echo '<p>' . $this->escapeHtml($content) . '</p>';
+                }
+            } elseif (is_array($content) && isset($content['blocks'])) {
+                foreach ($content['blocks'] as $block) {
+                    echo '<p>' . $this->escapeHtml($block['data']['text'] ?? '') . '</p>';
+                }
+            }
+        } else {
+            echo '<p class="govuk-body-s" style="color: #626a6e;">No content defined</p>';
+        }
+        ?>
+    </div>
+</div>
+
+<!-- Variants -->
+<div style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: start;">
+        <h2 class="govuk-heading-m">Variants (<?= count($variants) ?>)</h2>
+        <a href="<?= $baseUrl ?>/AddVariant/<?= $sectionId ?>/" class="govuk-button govuk-button--secondary js-modal-ajax" data-module="govuk-button">Add variant</a>
+    </div>
+
+    <?php if (empty($variants)): ?>
+        <p class="govuk-body">No variants defined. The default content above will be used for all contexts.</p>
+    <?php else: ?>
+        <table class="govuk-table">
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header">Vehicle</th>
+                    <th class="govuk-table__header">App Type</th>
+                    <th class="govuk-table__header">NI/GB</th>
+                    <th class="govuk-table__header">Org Type</th>
+                    <th class="govuk-table__header">Choice</th>
+                    <th class="govuk-table__header">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                <?php foreach ($variants as $variant): ?>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell"><?= $this->escapeHtml($variant['goodsOrPsv']) ?></td>
+                        <td class="govuk-table__cell"><?= $this->escapeHtml($variant['isVariation']) ?></td>
+                        <td class="govuk-table__cell"><?= $this->escapeHtml($variant['isNi']) ?></td>
+                        <td class="govuk-table__cell"><?= $this->escapeHtml($variant['organisationType']) ?></td>
+                        <td class="govuk-table__cell"><?= $this->escapeHtml($variant['letterChoice']) ?></td>
+                        <td class="govuk-table__cell">
+                            <a href="<?= $baseUrl ?>/EditVariant/<?= $sectionId ?>/variant/<?= $variant['id'] ?>/" class="govuk-link js-modal-ajax">Edit</a>
+                            &nbsp;|&nbsp;
+                            <a href="<?= $baseUrl ?>/DeleteVariant/<?= $sectionId ?>/variant/<?= $variant['id'] ?>/" class="govuk-link js-modal-ajax">Delete</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
+</div>
+
+<!-- Version History -->
+<div>
+    <h2 class="govuk-heading-m">Version History</h2>
+    <?php if (empty($versions)): ?>
+        <p class="govuk-body">No version history available.</p>
+    <?php else: ?>
+        <table class="govuk-table">
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header">Version</th>
+                    <th class="govuk-table__header">Date</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                <?php foreach ($versions as $version): ?>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell"><?= $this->escapeHtml($version['versionNumber'] ?? '') ?></td>
+                        <td class="govuk-table__cell"><?= $this->escapeHtml($version['createdOn'] ?? '') ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
+</div>
+
+<p><a href="<?= $baseUrl ?>/" class="govuk-link">Back to sections list</a></p>
+
+</div>
+</div>

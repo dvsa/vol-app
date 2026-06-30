@@ -1,0 +1,422 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head profile="http://www.w3.org/2003/g/data-view">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Dft - TransXChange - Examples 2.4 - Linear</title>
+    <meta name="DC.title" content="Examples 2.4 - Linear Example for TransXChange"/>
+    <meta name="eGMS.title" content=""/>
+    <meta name="description" content="" />
+    <meta name="language" content="eng" />
+    <meta name="DC.description" content="Examples 2.4 - Linear route Example for TransXChange, an XML protocol to allow remote journey planning engines to communicate in order to provide multimodal journeys spanning different regions."/>
+    <meta name="keywords" content="" />
+    <meta name="DC.subject" xml:lang="en" scheme="eGMS.IPSV" content=""/>
+    <meta name="Author" content="" />
+    <meta name="DC.creator" content="Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR"/>
+    <meta name="DC.publisher" content="Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR"/>
+    <meta name="DCTERMS.created" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="DCTERMS.issued" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="DCTERMS.modified" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="eGMS.disposalReview" scheme="DCTERMS.W3CDTF" content=""/>
+    <meta name="DC.format" scheme="DCTERMS.IMT" content="text/html"/>
+    <meta name="DC.type" scheme="eGMS.TES" content=""/>
+    <meta name="DC.type.category" lang="en" content="" />
+    <meta name="DC.type" scheme="DCTERMS.DCMIType" content="Text"/>
+    <meta name="DC.type" scheme="Gov.Body.ContentType" content=""/>
+    <meta name="DC.coverage" content="UK"/>
+    <meta name="DCTERMS.audience" scheme="eGMS.AES" content=""/>
+    <meta name="DC.language" scheme="DCTERMS.ISO639-2" content="eng"/>
+    <meta name="DC.identifier" scheme="ISBN" content="" />
+    <meta name="DC.identifier" scheme="DCTERMS.URI" content=""/>
+    <meta name="eGMS.copyright" content="Crown copyright http://www.dft.gov.uk/terms/copyright" />
+    <meta name="eGMS.accessibility" scheme="eGMS.WCAG10" content="Double-A"/>
+    <link rel="transformation" href="http://www.nationalarchives.gov.uk/metadata/egms-extract/egms-extract.xsl" />
+    <link rel="stylesheet" type="text/css" media="screen, projection" href="../../../../_format/_styles/basic.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="../../../../_format/_styles/screen.css" />
+    <link rel="stylesheet" type="text/css" media="print" href="../../../../_format/_styles/print.css" />
+</head>
+
+<body id="top" class="psx">
+<div id="mainWrapper">
+    <ul id="mainNav">
+        <li><a href="http://www.dft.gov.uk/about/">About DfT</a></li>
+        <li><a href="http://www.dft.gov.uk/pgr/">Policy, guidance and research</a></li>
+        <li><a href="http://www.dft.gov.uk/consultations/">Consultations</a></li>
+        <li><a href="http://www.dft.gov.uk/press/">Press office</a></li>
+        <li><a href="http://www.dft.gov.uk/faqs/">FAQs</a></li>
+        <li><a href="http://www.dft.gov.uk/press/ministers/">Ministers</a></li>
+    </ul>
+
+<div id="wrapper">
+    <div id="widthWrapper" class="clearfix">
+        <div id="pageWrapper">
+            <div id="crumbs">
+                <div>
+                    <a class="first" href="http://www.dft.gov.uk/">DfT home</a>
+                    <img src="../../../../_format/_images/gifs/crumb-arrow.gif" alt=" " width="6" height="11"/>&nbsp;&nbsp;<a href="http://www.dft.gov.uk/public-transportdatastandards/">Public Transport XML Standards index</a>
+                    <img src="../../../../_format/_images/gifs/crumb-arrow.gif" alt=" " width="6" height="11"/>&nbsp;&nbsp;<a href="http://www.dft.gov.uk/transxchange/">TransXChange</a>
+                    <img src="../../../../_format/_images/gifs/crumb-arrow.gif" alt=" " width="6" height="11"/>&nbsp;&nbsp;<a href="#">Examples 2.4 - Linear route</a>
+                </div>
+            </div><!-- crumbs -->
+
+            <div id="contentWrapper">
+                <div id="content">
+<h1><a name="belowNav" id="belowNav"></a>TransXChange</h1>
+<h2>Examples 2.4 - Linear route Example</h2>
+<h3>Summary  </h3>
+<p>Registration for a single route run by a single operator.
+There are two vehicle journeys with the same timings.</p>
+<ul>
+<li>Linear route.</li>
+<li>Local bus stop definition.</li>
+<li>Route Track Map with Tracks. (Enhanced Publisher Only).</li>
+<li><a href="#tracks">Tracks</a>, including instructions and Mapping System References.</li>
+<li>Local data coordinates for a stop.</li>
+<li>Inbound and outbound journeys and journey patterns on the same route.</li>
+<li><i>Frequent Service</i> Frequency based service, generating a frequency column specified with an interval and a minimum and maximum frequency.</li>
+<li>Operator details including parent (TXC v2.4).</li>
+</ul>
+
+<table class="grid">
+<tr>
+    <th>TransXChange XML Document</th>
+    <th>Particulars and Matrix output PDF</th>
+    <th>Route Map Output</th>
+</tr>
+<tr>
+    <td><a href="linear.xml">linear.xml</a><br />(One direction only)</td>
+    <td><a href="linear.pdf">Particulars and Matrix PDF</a></td>
+    <td><a href="linear-map.pdf">Route Map PDF</a><br /><a href="linear-map-nomap.pdf">Route Map PDF</a> (no background)</td>
+</tr>
+</table>
+
+<h3>Route Map</h3>
+<p><img src="linear.png" width="780" height="267" alt="Linear route image" /></p>
+<h3>Timetable </h3>
+
+<table class="grid">
+<caption>
+<h4>Outbound</h4>
+</caption>
+<tr>
+<th>Line L1</th>
+<th colspan="3">Journeys</th>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>#1</td>
+<td>&#160;</td>
+<td>#2</td>
+</tr>
+<tr>
+<td><i>Netherley Road</i></td>
+<td>07:00</td>
+<td rowspan="5">And then every 7 minutes until 18:30</td>
+<td>19:00</td>
+</tr>
+<tr>
+<td><i>Ashby Road</i></td>
+<td>07:20</td>
+<td>19:20</td>
+</tr>
+<tr>
+<td><i>ASDA, opposite</i></td>
+<td>07:40</td>
+<td>19:40</td>
+</tr>
+<tr>
+<td><i>Leicester Road, SE Bound</i></td>
+<td>07:50</td>
+<td>19:50</td>
+</tr>
+<tr>
+<td><i>Golf Club, outside</i></td>
+<td>08:00</td>
+<td>20:00</td>
+</tr>
+</table>
+<br /><br />
+
+<table class="grid">
+<caption>
+<h4>Inbound</h4>
+</caption>
+<tr>
+<th>Line L1</th>
+<th colspan="3">Journeys</th>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>#3</td>
+<td>&#160;</td>
+<td>#4</td>
+</tr>
+<tr>
+<td><i>Golf Club, outside</i></td>
+<td>07:30</td>
+<td rowspan="5">And then every 7 minutes until 19:30</td>
+<td>20:00</td>
+</tr>
+<tr>
+<td><i>Leicester Road, SE Bound</i></td>
+<td>07:40</td>
+<td>20:10</td>
+</tr>
+<tr>
+<td><i>ASDA, opposite</i></td>
+<td>07:50</td>
+<td>20:20</td>
+</tr>
+<tr>
+<td><i>Ashby Road, before</i><p>&nbsp;</td>
+<td>08:10</td>
+<td>20:30</td>
+</tr>
+<tr>
+<td><i>Netherley Road</i></td>
+<td>08:30</td>
+<td>21:00</td>
+</tr>
+</table>
+<br /><br />
+<hr>
+<h2>The XML Representation</h2>
+<h4 id="Registration">Service Registration</h4>
+<ul>
+    <li>The <strong><code>Registration</code></strong> is for a single <strong><code>Operator</code></strong></li>
+</ul>
+<h4 id="ServicePattern">Service Structure</h4>
+<ul>
+    <li>There is a single<strong> <code>Service</code> </strong>instance <strong> <i>SV1</i></strong> , with one <strong>
+    <code>Line</code></strong> - '<i>L1'</i> .</li>
+    <li>There are five <strong><code>StopPoint</code></strong> instances.
+        <ul>
+            <li>One stop is defined locally (<i>Netherley Road)</i> ., the others are all references to existing NaPTAN stops.</li>
+        </ul>
+    </li>
+    <li>There is a single <strong><code>RouteSection</code></strong> <strong> <i>rs_1</i></strong> with four <strong>
+    <code>RouteLink</code></strong> instances <i><strong>rl_1</strong>-<strong>rl_4</strong></i> connecting the stops.</li>
+    <li>There is a single <strong><code>Route</code></strong> <strong> <i>r_1</i></strong> containing the route section <i>
+    <strong>rs_1</strong>.</i></li>
+</ul>
+
+<h5>Outbound</h5>
+<ul>
+    <li>There is a single <strong><code>JourneyPatternSection</code></strong> <i><strong>js_1</strong>,</i> made up of four <strong>
+    <code>JourneyPatternTimingLink</code></strong> instances, <i>jptl_1-jptl_4,</i> each referencing the corresponding route link.
+        <ul>
+            <li><i><strong>jptl_1</strong></i> references <strong><i>rl_1</i></strong></li>
+            <li><i><strong>jptl_2</strong></i> references <strong><i>rl_2</i></strong></li>
+            <li><i><strong>jptl_3</strong></i> references <strong><i>rl_3</i></strong></li>
+            <li><i><strong>jptl_4</strong></i> references <i><strong>rl_4</strong></i></li>
+        </ul>
+    </li>
+    <li>There is a single outbound <strong><code>JourneyPattern</code>,</strong> <i><strong>jp_1</strong>,</i> that follows route <i>
+    <strong>r_1</strong>.</i></li>
+    <li>There are two outbound <strong><code>VehicleJourney</code> </strong>instances, both based on <strong>
+    <code>JourneyPattern</code></strong> <i><strong>jp_1</strong></i> :
+        <ul>
+            <li>The first, <i>vj<strong>_</strong>1</i> , follows <i><strong>jp_1</strong></i> without any changes to the
+timings on the <strong><code>JourneyPatternTimingLink</code></strong> instances.
+                <ul>
+                    <li>It has a <strong><code>DepartureTime</code></strong> of 7.00.</li>  <li>The <strong>
+                    <code>Frequency</code></strong>  element specified it is a frequency based   journey with a<strong>
+                    <code>ScheduledFrequency</code></strong> of every 8 minutes, and an <strong>
+                    <code>EndTime</code></strong> of 18:30. The <strong><code>Frequency</code></strong> entry causes the publisher to create an additional column. In additional an optional minimum and maxim frequency interval are specified</li>
+                </ul>
+            </li>
+            <li>The second, <i>vj_2<strong>,</strong></i> references <i><strong>vj_1</strong></i> for all its links, with a <strong>
+            <code>DepartureTime</code></strong>  of 19:00.</li>
+        </ul>
+    </li>
+</ul>
+
+<h5>Inbound</h5>
+<ul>
+    <li>There is a single inbound <strong><code>JourneyPatternSection</code></strong> <i>
+    <strong>js_r1</strong>,</i> made up of four <strong><code>JourneyPatternTimingLink</code></strong> instances, referencing a corresponding
+    <strong><code>route link. </code></strong>
+        <ul>
+            <li><i><strong>jptl_r1</strong></i> references <i><strong>rl_4</strong></i></li>
+            <li><i><strong>jptl_r2</strong></i> references <i><strong>rl_3</strong></i></li>
+            <li><i><strong>jptl_r3</strong></i> references <i><strong>rl_2</strong></i></li>
+            <li><i><strong>jptl_r4</strong></i> references <i><strong>rl_1</strong></i></li>
+        </ul>
+    </li>
+    <li>There is a single inbound  <strong><code>JourneyPattern</code>,</strong> <i><strong>jp_r1</strong>,</i> that follows route <i>
+    <strong>r_1</strong>.</i></li>
+    <li>There are two inbound <strong><code>VehicleJourney</code> </strong>instances, both based on <strong>
+    <code>JourneyPattern</code></strong> <i><strong>jp_r1</strong></i> :
+        <ul>
+            <li>The first, <i><strong>vj_r1</strong></i> , follows <i><strong>jp_r1</strong></i> without any changes to the
+timings on the <strong><code>JourneyPatternTimingLink</code></strong> instances. It has a <strong>
+            <code>DepartureTime</code></strong>  of <i>7.30. </i>
+                <ul>
+                    <li>It has a <code><strong>F</strong></code><strong><code>requency</code></strong>  of
+                    <i>every 20 minutes</i>, and an <strong><code>EndTime</code></strong>  of
+                    <i>19:30.</i></li>
+                </ul>
+            </li>
+            <li>The second, <i><strong>vj_r2</strong></i> references <i><strong>vj_r1</strong></i> f or all its links, with a <strong>
+            <code>DepartureTime</code></strong> of 20:00.</li>
+        </ul>
+    </li>
+</ul>
+
+<h4 id="OperatingDays">The Operating Days</h4>
+<ul>
+    <li>The service <strong><code>OperatingProfile</code></strong> says it runs Monday to Friday, every day of the year.</li>
+</ul>
+
+<h4 id="Tracks">Use of Tracks</h4>
+<p>The example includes a description of the physical route as an ordered sequence of tracks, each containing a polyline of geospatial points.</p>
+<ul>
+    <li> Each <strong><code>RouteLink</code></strong> has a single Track, except for the link between '<i>Ashby
+    Road</i>'  and <i>&#39;ASDA</i>',  which has two Track instances (<i><strong>t2</strong></i> &amp;
+    <strong><i>t</i></strong><i><strong>3),</strong></i>  because its road goes over two different roads; the <i>
+A57</i> and the <i>B256</i>. See <a href="#Tracks">Use of Tracks</a></li>
+    <li>Some of the <strong><code>Tracks</code></strong> include <strong><code>MappingSystem</code></strong> references to TOID instances.</li>
+</ul>
+<p>The following diagram shows the how the route projects onto the map representation of the road system, using the NaPTAN stop points as projection points between levels of discourse.</p>
+<ul>
+    <li>A schematic map of the road network appears at the top.</li>
+    <li>The stylised route map appears at the bottom.</li>
+    <li>In between are shown the<strong><code> route links</code></strong> and track link, with  the points</li>
+</ul>
+<p><img src="linear2.png" width="738" height="566" alt="Linear route image" /></p>
+
+<h3>Notes</h3>
+<p>This example was refined for in the 2.4 Enhanced publisher to be a Frequent Service i.e. &lt;10 minutes and to have a minimum and maximum.</p>
+<p>In the enhanced publisher will group the journeys in a single bed  Monday to Sunday, rather than as separate beds Monday to Friday, Saturday and Sunday.</p>
+<p><br />Page last updated: 2013/04/13</p>
+
+                </div><!-- content -->
+            </div><!-- contentWrapper -->
+
+        <div id="leftBar">
+            <h2>TransXChange</h2>
+            <ul class="fade">
+                <li><a href="../../../../index.htm">Index</a></li>
+                <li><a href="../../../../overview.htm">Overview</a></li>
+                <li><a href="../../../../process.htm">Data &#38; Process</a></li>
+                <li><a href="../../../../schema/schemas.htm">Downloads &#38; Schema</a></li>
+                <li><a href="../../../../documentation.htm">Documentation</a></li>
+                <li><a href="../../../../examples.htm">Examples</a></li>
+                <li class="selected"><a href="../../../schemas.htm">&#160;&#160;2.4 Route types</a>
+                    <ul>
+                        <li class="selected">Linear</li><strong>
+                        <li><a href="../express/index.htm">Express</a></li>
+                        <li><a href="../interchange/index.htm">Interchange</a></li>
+                        <li><a href="../circular/index.htm">Circular</a></li>
+                        <li><a href="../cloverleaf/index.htm">Cloverleaf</a></li>
+                        <li><a href="../grouping/index.htm">Grouping</a></li>
+                        <li><a href="../lollipop/index.htm">Lollipop</a></li>
+                        <li><a href="../eye/index.htm">Eye</a></li>
+                        <li><a href="../flexible/index.htm">Flexible</a></li>
+                        <li><a href="../hailandride/index.htm">Hail &#38; Ride</a></li>
+                        <li><a href="../large/index.htm">Large</a></li>
+                        <li><a href="../mergefrequency/index.htm">Merged Frequency</a></li>
+                        <li><a href="../footnotes/index.htm">Footnotes</a></li>
+                        <li><a href="../cancellation/index.htm">Cancellation</a></li>
+                        <li><a href="../delta/index.htm">Delta</a></li></strong>
+                    </ul>
+                </li>
+                <li><a href="../../../../ebsrnews/index.htm">EBSR news</a></li>
+                <li><a href="../../../../realexamples/index.htm">Sample Documents</a></li>
+                <li><a href="../../../../publisher.htm">Publisher</a></li>
+                <li><a href="../../../../gtfs.htm">Other Tools</a></li>
+                <li><a href="../../../../technicalFaq.htm">Technical FAQ</a></li>
+                <li><a href="../../../../versioning.htm">Versioning</a></li>
+                <li><a href="../../../../implementations.htm">Implementations</a></li>
+                <li><a href="../../../../training.htm">Training materials</a></li>
+                <li><a href="../../../../history.htm">History</a></li>
+                <li><a href="../../../../termsOfUse.htm">Terms of Use</a></li>
+                <li><a href="../../../../contact.htm">Contact</a></li>
+                <li><a href="../../../../copyright.htm">Copyright</a></li>
+                <li class="listbreaker">Related UK Standards</li>
+                <li><a href="http://www.dft.gov.uk/public-transportdatastandards/">Standards - main index</a></li>
+        
+                
+                <li><a href="http://www.dft.gov.uk/NaPTAN/">NaPTAN</a></li>
+                <li><a href="http://www.dft.gov.uk/nptg/">National PT Gazetteer (NPTG)</a></li>
+                <li><a href="http://www.dft.gov.uk/journeyweb/">JourneyWeb</a></li>
+             
+                <li class="selected"><a href="http://www.dft.gov.uk/transxchange/">TransXChange</a></li>   <li><a href="http://www.dft.gov.uk/CycleNetXchange/">CycleNetXchange</a></li>  <li><a href="http://data.gov.uk/nptdr/">data.gov.uk NPTDR</a></li>
+                <li class="listbreaker">Related EU Standards</li>
+                <li><a href="http://www.dft.gov.uk/transmodel/">TransModel</a></li>
+                <li><a href="http://www.siri.org.uk/">SIRI</a></li>
+                <li><a href="http://www.netex.org.uk/">NeTEx</a></li>
+                <li><a href="http://www.ifopt.org.uk/">IFOPT</a></li>
+                
+                
+            </ul>
+        </div><!-- leftBar -->
+
+        </div><!-- pageWrapper -->
+    </div><!-- widthWrapper -->
+
+<div id="footer">
+    <ul>
+        <li class="first"><a target="_top" href="http://www.dft.gov.uk/accessibility">Accessibility</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/cymraeg">Cymraeg</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/foi/">Freedom of Information</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/about/informationcharter/">Information charter</a></li>
+        <li><a target="_top" href="http://www.dft.gov.uk/terms/">Terms and conditions</a></li>
+        <li><a target="_top" rel="license" href="http://www.dft.gov.uk/terms/copyright">Crown copyright</a></li>
+    </ul>
+</div><!-- footer -->
+
+
+</div><!-- wrapper -->
+</div><!-- mainWrapper -->
+
+<div id="header">
+    <a href="http://www.dft.gov.uk/">
+    <img id="logo" src="../../../../_format/_images/gifs/logo.gif" alt="Department for Transport - Transport that works for everyone." width="230" height="95" /></a>
+    <div id="topNav">
+        <ul>
+            <li>
+            <img id="utm" src="http://www.dft.gov.uk/__utm.gif" alt="" width="1" height="1" /><a target="_top" href="#belowNav">Skip to main content</a></li>
+            <li><a target="_top" href="http://www.dft.gov.uk/results&#63;view&#61;Filter&#38;w&#61;What&#37;27s&#43;new&#38;df&#61;07&#37;2F03&#37;2F09&#38;dt&#61;07&#37;2F04&#37;2F09&#38;pg&#61;1">What's new</a></li>
+                <li><a target="_top" href="http://www.dft.gov.uk/publications/cookies/">Cookies</a></li> <li><a target="_top" href="http://www.dft.gov.uk/contact">Contact us</a></li>
+            <li><a target="_top" href="http://www.dft.gov.uk/help/">Help</a></li>
+            <li><a target="_top" href="http://www.dft.gov.uk/atoz">A to Z index</a></li>
+            <li class="last"><a target="_top" href="http://www.dft.gov.uk/sitemap">Site map</a></li>
+        </ul>
+
+        <script type="text/javascript" src="../../../../_format/_js/clearField.js"></script>
+        <form action="http://search.dft.gov.uk/search" method="get">
+            <label for="searchStringTop" class="accessibility">Search keyword:</label>
+            <!-- Google Mini Search Criteria -->
+            <input type="hidden" name="client" value="default_frontend"/>
+            <input type="hidden" name="proxyreload" value="1"/>
+            <input type="hidden" name="proxystylesheet" value="default_frontend"/>
+            <input type="hidden" name="output" value="xml_no_dtd"/>
+            <input type="text" name="q" id="searchStringTop" value="Enter search term" onclick="doClear(this) " size="20" />
+            <input type="hidden" name="pg" id="page" value="1" />
+            <input type="submit" value="Search" id="search" class="button" />
+        </form>
+    </div><!-- topNav -->
+
+</div><!-- header -->
+
+<script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+    var pageTracker = _gat._getTracker("UA-7447714-1");
+    pageTracker._setLocalGifPath("http://www.dft.gov.uk/__utm.gif")
+    pageTracker._setLocalRemoteServerMode();
+    pageTracker._trackPageview();
+</script>
+<script src="http://www.dft.gov.uk/_format/_js/gatag.js" type="text/javascript"></script>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script src="http://www.dft.gov.uk/_format/_js/dftglobal.js" type="text/javascript"></script>
+<script src="http://www.dft.gov.uk/_format/_js/dftreporting.js" type="text/javascript"></script>
+<script src="http://www.dft.gov.uk/_format/_js/microsite.js" type="text/javascript"></script>
+</body>
+</html>

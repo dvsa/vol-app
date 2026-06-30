@@ -25,6 +25,8 @@ class LetterType extends AbstractRepository
     {
         $qb = $this->createQueryBuilder();
 
+        $this->buildDefaultListQuery($qb, $query);
+
         // Eager load the relationships
         $qb->leftJoin('m.masterTemplate', 'mt')
            ->addSelect('mt')
@@ -35,10 +37,9 @@ class LetterType extends AbstractRepository
            ->leftJoin('m.letterTestData', 'ltd')
            ->addSelect('ltd');
 
-        // Apply any filters from the query (e.g., pagination, sorting)
         $this->applyListFilters($qb, $query);
 
-        return $qb->getQuery()->getResult($hydrateMode);
+        return $this->fetchPaginatedList($qb, $hydrateMode);
     }
 
     /**

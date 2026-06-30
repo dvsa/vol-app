@@ -8,6 +8,8 @@
  * @var string $letterInstanceId Letter instance ID
  * @var array $letterInstance Letter instance data
  * @var array $groupedIssues Issues grouped by type: [typeId => ['typeName' => ..., 'issues' => [...]]]
+ * @var array $groupedAppendices Editable appendices to render
+ * @var array $groupedSections Editable letter instance sections to render
  */
 ?>
 
@@ -54,6 +56,39 @@
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
     <?php endforeach; ?>
 <?php endforeach; ?>
+
+<?php if (!empty($groupedSections)): ?>
+    <h2 class="govuk-heading-m">Sections</h2>
+
+    <?php foreach ($groupedSections as $section): ?>
+        <div class="govuk-form-group section-editor-group"
+             data-section-id="<?= $this->escapeHtmlAttr($section['id']) ?>"
+             data-version="<?= $this->escapeHtmlAttr($section['version']) ?>">
+            <h3 class="govuk-heading-s"><?= $this->escapeHtml($section['name']) ?></h3>
+
+            <div class="editorjs-container" data-element-name="section_<?= $this->escapeHtmlAttr($section['id']) ?>">
+                <div id="editor-section-<?= $this->escapeHtmlAttr($section['id']) ?>" class="editorjs-editor"></div>
+                <input type="hidden"
+                       name="section_<?= $this->escapeHtmlAttr($section['id']) ?>"
+                       value="<?= $this->escapeHtmlAttr($section['content']) ?>">
+            </div>
+
+            <div style="margin-top: 10px;">
+                <button type="button"
+                        class="govuk-button save-section-btn"
+                        data-section-id="<?= $this->escapeHtmlAttr($section['id']) ?>"
+                        data-version="<?= $this->escapeHtmlAttr($section['version']) ?>">
+                    Save changes
+                </button>
+                <span class="save-indicator govuk-tag govuk-tag--green" style="display: none; margin-left: 10px;">
+                    Saved
+                </span>
+            </div>
+        </div>
+
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    <?php endforeach; ?>
+<?php endif; ?>
 
 <?php if (!empty($groupedAppendices)): ?>
     <h2 class="govuk-heading-m">Appendices</h2>

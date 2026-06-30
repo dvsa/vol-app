@@ -42,6 +42,7 @@ return [
     QueryHandler\Bookmark\StatementBundle::class                    => NoValidationRequired::class,
     QueryHandler\Bookmark\TotalContFee::class                       => NoValidationRequired::class,
     QueryHandler\Bookmark\TransportManagerBundle::class             => NoValidationRequired::class,
+    QueryHandler\Bookmark\TransportManagerLicenceBundle::class      => NoValidationRequired::class,
     QueryHandler\Bookmark\UserBundle::class                         => NoValidationRequired::class,
     QueryHandler\Bookmark\VehicleBundle::class                      => NoValidationRequired::class,
     QueryHandler\Bookmark\VenueBundle::class                        => NoValidationRequired::class,

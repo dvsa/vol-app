@@ -33,7 +33,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
 
         $this->refData = [
             QueueEntity::STATUS_QUEUED,
-            QueueEntity::TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER
+            QueueEntity::TYPE_CONT_CHECKLIST
         ];
         $this->references = [
             UserEntity::class => [
@@ -59,7 +59,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $command = Cmd::create(
             [
                 'status' => QueueEntity::STATUS_QUEUED,
-                'type' => QueueEntity::TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER,
+                'type' => QueueEntity::TYPE_CONT_CHECKLIST,
                 'entityId' => 1,
                 'options' => '{"foo":"bar"}',
                 'processAfterDate' => $processAfterDate,
@@ -86,7 +86,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($savedQueue->getId(), 1);
         $this->assertEquals(
             $savedQueue->getType(),
-            $this->refData[QueueEntity::TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER]
+            $this->refData[QueueEntity::TYPE_CONT_CHECKLIST]
         );
         $this->assertEquals(
             $savedQueue->getStatus(),

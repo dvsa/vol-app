@@ -17,6 +17,8 @@ class LetterTypeSection extends AbstractLetterTypeSection
     /**
      * Get the effective content (override or default)
      *
+     * Resolves via section -> default variant -> current version
+     *
      * @return array
      */
     public function getEffectiveContent()
@@ -25,7 +27,15 @@ class LetterTypeSection extends AbstractLetterTypeSection
             return $this->overrideContent;
         }
 
-        return $this->letterSectionVersion->getDefaultContent();
+        $section = $this->getLetterSection();
+        if ($section !== null) {
+            $defaultVariant = $section->getDefaultVariant();
+            if ($defaultVariant !== null && $defaultVariant->getCurrentVersion() !== null) {
+                return $defaultVariant->getCurrentVersion()->getDefaultContent();
+            }
+        }
+
+        return [];
     }
 
     /**

@@ -48,6 +48,9 @@ class PiDefinitionTest extends RepositoryTestCase
             ->andReturnSelf()
             ->shouldReceive('setParameter')
             ->with('goodsOrPsv', 'lcat_gv')
+            ->andReturnSelf()
+            ->shouldReceive('setParameter')
+            ->with('isVisibleInInternal', true)
             ->andReturnSelf();
 
         $query = PiDefinitionList::create(['isNi' => 'Y', 'goodsOrPsv' => 'lcat_gv']);
@@ -73,6 +76,9 @@ class PiDefinitionTest extends RepositoryTestCase
             ->andReturnSelf()
             ->shouldReceive('isNull')
             ->with('m.goodsOrPsv')
+            ->andReturnSelf()
+            ->shouldReceive('setParameter')
+            ->with('isVisibleInInternal', true)
             ->andReturnSelf();
 
         $query = PiDefinitionList::create(['isNi' => 'Y', 'goodsOrPsv' => 'NULL']);

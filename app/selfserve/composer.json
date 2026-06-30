@@ -1,11 +1,48 @@
 {
   "name": "olcs/olcs-selfserve",
   "description": "OLCS Self Service Web Site",
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../../lib/olcs-logging",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "../../lib/olcs-utils",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "../../lib/olcs-transfer",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "../../lib/olcs-common",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "../../lib/olcs-auth",
+      "options": {
+        "symlink": true
+      }
+    }
+  ],
   "require": {
     "php": "~8.3.0",
     "ext-redis": "*",
     "doctrine/doctrine-module": "^6.3",
-    "dvsa/laminas-config-cloud-parameters": "^1.0",
+    "dvsa/laminas-config-cloud-parameters": "^2.1",
     "laminas/laminas-authentication": "^2.19",
     "laminas/laminas-cache": "^3.13",
     "laminas/laminas-cache-storage-adapter-redis": "^2.10",
@@ -17,7 +54,6 @@
     "laminas/laminas-inputfilter": "^2.35",
     "laminas/laminas-mvc": "^3.8",
     "laminas/laminas-mvc-plugin-flashmessenger": "^1.11",
-    "laminas/laminas-mvc-plugin-prg": "^1.8",
     "laminas/laminas-navigation": "^2.22",
     "laminas/laminas-servicemanager": "^3.24",
     "laminas/laminas-session": "^2.26",
@@ -25,13 +61,13 @@
     "laminas/laminas-validator": "^2.64",
     "laminas/laminas-view": "^2.44",
     "lm-commons/lmc-rbac-mvc": "^3.5",
-    "olcs/olcs-auth": "^9.0",
-    "olcs/olcs-common": "^9.12.0",
-    "olcs/olcs-logging": "^8.0",
-    "olcs/olcs-transfer": "^8.7.0",
-    "olcs/olcs-utils": "^7.0",
+    "olcs/olcs-auth": "*",
+    "olcs/olcs-common": "*",
+    "olcs/olcs-logging": "*",
+    "olcs/olcs-transfer": "*",
+    "olcs/olcs-utils": "*",
     "psr/container": "^1.1|^2",
-    "aws/aws-sdk-php": "^3.369",
+    "aws/aws-sdk-php": "^3.385",
     "symfony/filesystem": "^7.0"
   },
   "require-dev": {

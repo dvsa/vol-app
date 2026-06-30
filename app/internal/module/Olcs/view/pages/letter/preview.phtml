@@ -23,6 +23,22 @@
     </div>
 </div>
 
+<?php if (!empty($warnings)): ?>
+<div class="govuk-warning-text" style="margin-bottom: 1rem;">
+    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text">
+        <span class="govuk-visually-hidden">Warning</span>
+        The following required sections could not be included in this letter:
+        <ul class="govuk-list govuk-list--bullet" style="margin-top: 0.5rem;">
+            <?php foreach ($warnings as $warning): ?>
+                <li><?= $this->escapeHtml($warning) ?></li>
+            <?php endforeach; ?>
+        </ul>
+        This may indicate the wrong licence or application was selected, or a prerequisite has not been met.
+    </strong>
+</div>
+<?php endif; ?>
+
 <h4 class="title">Letter preview</h4>
 
 <div class="letter-preview-frame-container" style="border: 1px solid #b1b4b6; background: #f3f2f1; padding: 10px;">

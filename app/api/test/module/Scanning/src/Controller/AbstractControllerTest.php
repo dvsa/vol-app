@@ -24,11 +24,6 @@ class AbstractControllerTest extends MockeryTestCase
     protected $sut;
     protected $response;
 
-    /**
-     * @var \Laminas\Log\Writer\Mock
-     */
-    protected $logWriter;
-
     protected function setUp(): void
     {
         $this->response = m::mock(\Laminas\Http\Response::class)->makePartial();
@@ -37,9 +32,7 @@ class AbstractControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('getResponse')
             ->andReturn($this->response);
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
     }
 
     protected function shouldErrorWith(mixed $code): void

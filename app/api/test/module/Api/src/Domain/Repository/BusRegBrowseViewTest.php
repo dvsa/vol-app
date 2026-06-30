@@ -45,7 +45,7 @@ class BusRegBrowseViewTest extends RepositoryTestCase
 
         $qb->shouldReceive('getQuery')->andReturn(
             m::mock()->shouldReceive('execute')
-                ->shouldReceive('iterate')
+                ->shouldReceive('toIterable')
                 ->andReturn(['RESULTS'])
                 ->getMock()
         );
@@ -74,7 +74,7 @@ class BusRegBrowseViewTest extends RepositoryTestCase
 
         $qb->shouldReceive('getQuery')->andReturn(
             m::mock()->shouldReceive('execute')
-                ->shouldReceive('iterate')
+                ->shouldReceive('toIterable')
                 ->andReturn(['RESULTS'])
                 ->getMock()
         );

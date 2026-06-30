@@ -3,6 +3,7 @@
 namespace Admin\Controller;
 
 use Common\Controller\Traits\GenericRenderView;
+use Common\Controller\Traits\PostRedirectGetTrait;
 use Common\Service\Data\CategoryDataService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
@@ -15,6 +16,7 @@ use Olcs\Service\Data\SubCategoryDescription;
 class ScanningController extends LaminasAbstractActionController
 {
     use GenericRenderView;
+    use PostRedirectGetTrait;
 
     public const ERR_NO_ENTITY_FOR_CATEGORY = 'ERR_NO_ENTITY_FOR_CATEGORY';
     public const ERR_ENTITY_NAME_NOT_SETUP = 'ERR_ENTITY_NAME_NOT_SETUP';

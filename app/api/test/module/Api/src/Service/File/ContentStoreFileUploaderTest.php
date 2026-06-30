@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Service\File\MimeNotAllowedException;
 use Dvsa\Olcs\DocumentShare\Data\Object\File as DsFile;
 use Dvsa\Olcs\DocumentShare\Service\WebDavClient as ContentStoreClient;
 use Laminas\Http\Response;
-use Laminas\Log\Logger;
+use Psr\Log\LoggerInterface as Logger;
 use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -44,7 +44,7 @@ class ContentStoreFileUploaderTest extends MockeryTestCase
             );
 
         $sm->setService('ContentStore', $this->mockContentStoreCli);
-        $sm->setService('Logger', $this->createStub(\Dvsa\OlcsTest\SafeLogger::class));
+        $sm->setService('Logger', $this->createStub(\Psr\Log\LoggerInterface::class));
 
         static::assertSame($this->sut, $this->sut->__invoke($sm, null));
     }
@@ -62,12 +62,15 @@ class ContentStoreFileUploaderTest extends MockeryTestCase
 
     public function testRemove(): void
     {
+        $response = new \Laminas\Http\Response();
+        $response->setStatusCode(200);
+
         $this->mockContentStoreCli->shouldReceive('remove')
             ->once()
             ->with(self::IDENTIFIER)
-            ->andReturn(true);
+            ->andReturn($response);
 
-        static::assertTrue($this->sut->remove(self::IDENTIFIER));
+        static::assertSame($response, $this->sut->remove(self::IDENTIFIER));
     }
 
     public function testUpload(): void

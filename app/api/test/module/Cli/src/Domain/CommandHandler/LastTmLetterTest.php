@@ -7,7 +7,6 @@ namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler;
 use Dvsa\Olcs\Api\Domain\Command\Document\GenerateAndStore;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\System\Category;
-use Dvsa\Olcs\Api\Entity\System\SystemParameter;
 use Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence;
 use Dvsa\Olcs\Cli\Domain\CommandHandler\LastTmLetter;
 use Dvsa\Olcs\Email\Data\Message;
@@ -23,6 +22,7 @@ use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Api\Entity\Doc\Document as DocumentEntity;
 use Dvsa\Olcs\Email\Service\TemplateRenderer;
 use Laminas\Mail\Transport\Sendmail;
+use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 
 class LastTmLetterTest extends AbstractCommandHandlerTestCase
 {
@@ -35,7 +35,6 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('User', Repository\User::class);
         $this->mockRepo('Document', Repository\Document::class);
         $this->mockRepo('DocTemplate', Repository\DocTemplate::class);
-        $this->mockRepo('SystemParameter', Repository\SystemParameter::class);
         $this->mockRepo('TransportManagerLicence', Repository\TransportManagerLicence::class);
 
         $this->mockedSmServices = [
@@ -70,8 +69,7 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
             'CreateTask' => [
                 'ids' => [
                     'assignedToUser' => 111
-                ]
-
+                ],
             ]
         ];
 
@@ -107,7 +105,6 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
                 'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                         'correspondenceAddress' => '123',
                     ],
@@ -142,7 +139,6 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
                 'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                         'correspondenceAddress' => '123',
                     ],
@@ -178,7 +174,6 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
                 'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                         'correspondenceAddress' => '123',
                     ],
@@ -213,7 +208,6 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
                 'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                         'correspondenceAddress' => '123',
                     ],
@@ -246,7 +240,6 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
                 'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                         'correspondenceAddress' => '123',
                     ],
@@ -304,13 +297,97 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
                 'expectedResult' => [
                     'id' => [
-                        'assignedToUser' => 111,
                         'document' => 123,
                         'correspondenceAddress' => '123',
                     ],
                     'messages' => [
                         "Document id '123', queued for print",
                     ]
+                ]
+            ],
+            'multiple_removed_tms_only_one_document' => [
+                'dataProvider' => [
+                    'licence' => [
+                        'id' => 1,
+                        'licNo' => 'AB123',
+                        'isNi' => false,
+                        'isPsv' => false,
+                        'organisation' => [
+                            'allowEmail' => 'Y',
+                            'name' => 'Test Operator Ltd',
+                        ],
+                        'correspondenceCd' => [
+                            'emailAddress' => 'test@email.com'
+                        ]
+                    ],
+                    'user' => [
+                        'fetchFirstByEmailOrFalse' => false
+                    ],
+                    'sideEffectResults' => [
+                        'GenerateAndStore' => [
+                            'ids' => [
+                                'documents' => [
+                                    '123' => [
+                                        'metadata' => json_encode([
+                                            'details' => [
+                                                'category' => Category::CATEGORY_TRANSPORT_MANAGER,
+                                                'documentSubCategory' => Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CORRESPONDENCE,
+                                                'documentTemplate' => 1285,
+                                                'allowEmail' => 'Y',
+                                                'sendToAddress' => 'correspondenceAddress',
+                                            ]
+                                        ]),
+                                    ],
+                                ]
+                            ]
+                        ],
+                        'CreateTask' => [
+                            'ids' => []
+
+                        ],
+                    ],
+                    'multipleRemovedTms' => true,
+                ],
+                'expectedResult' => [
+                    'id' => [
+                        'document' => 123,
+                        '' => 123,
+                    ],
+                    'messages' => [
+                        "Document id '123', queued for print",
+                        "Correspondence record created",
+                        "Email sent"
+                    ]
+                ]
+            ],
+            'licence_with_active_variation_updated_tm_skip_ptr' => [
+                'dataProvider' => [
+                    'licence' => [
+                        'id' => 1,
+                        'licNo' => 'AB123',
+                        'isNi' => false,
+                        'isPsv' => false,
+                        'organisation' => [
+                            'allowEmail' => 'Y'
+                        ],
+                        'correspondenceCd' => null
+                    ],
+                    'user' => [],
+                    'activeVariationHasUpdatedTm' => true,
+                    'sideEffectResults' => [
+                        'GenerateAndStore' => [
+                            'ids' => [
+                                'documents' => []
+                            ]
+                        ],
+                        'CreateTask' => [
+                            'ids' => []
+                        ]
+                    ],
+                ],
+                'expectedResult' => [
+                    'id' => [],
+                    'messages' => []
                 ]
             ]
         ];
@@ -319,26 +396,49 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand(mixed $dataProvider, mixed $expectedResult): void
     {
-        if (array_key_exists('isNi', $dataProvider['licence'])) {
-            $this->repoMap['SystemParameter']->shouldReceive('fetchValue')
-                ->with($dataProvider['licence']['isNi'] ? SystemParameter::LAST_TM_NI_TASK_OWNER : SystemParameter::LAST_TM_GB_TASK_OWNER)
-                ->andReturn(1)
-                ->once();
-        }
-
         $licenceRepo = $this->repoMap['Licence'];
 
         $licence = empty($dataProvider['licence']) ? null : m::mock(LicenceEntity::class);
 
         if ($licence !== null) {
             $this->mockLicence($licence, $dataProvider);
+
+            if (!empty($dataProvider['activeVariationHasUpdatedTm'])) {
+                $variation = m::mock();
+                $variation->shouldReceive('hasUpdatedTransportManagers')
+                    ->once()
+                    ->andReturn(true);
+
+                $licence->shouldReceive('getActiveVariations')
+                    ->once()
+                    ->andReturn([$variation]);
+            } else {
+                $licence->shouldReceive('getActiveVariations')
+                    ->once()
+                    ->andReturn([]);
+            }
+
+            if (array_key_exists('fetchFirstByEmailOrFalse', $dataProvider['user'])) {
+                $fetchedUser = $dataProvider['user']['fetchFirstByEmailOrFalse'];
+
+                if ($fetchedUser instanceof m\MockInterface) {
+                    $fetchedUser->shouldReceive('getTranslateToWelsh')->once()->andReturn('N');
+                }
+
+                $this->repoMap['User']
+                    ->shouldReceive('fetchFirstByEmailOrFalse')
+                    ->once()
+                    ->andReturn($fetchedUser);
+
+                $this->expectedSideEffect(SendEmail::class, [], new Result());
+            }
         }
 
         $eligibleLicences = $licence === null ? [] : [$licence];
 
         $licenceRepo->shouldReceive('fetchForLastTmAutoLetter')->andReturn($eligibleLicences);
 
-        if (!empty($eligibleLicences)) {
+        if (!empty($eligibleLicences) && empty($dataProvider['activeVariationHasUpdatedTm'])) {
             $this->mockCorrespondenceCd($licence, $dataProvider);
             $this->caseLicenceWithRemovedTmTest($dataProvider, $eligibleLicences);
         }
@@ -375,7 +475,7 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
         $result = new Result();
 
         foreach ($documents as $id => $data) {
-            $result->addId($data['address'], $id);
+            $result->addId($data['address'] ?? '', $id);
             $result->addId('document', $id);
         }
 
@@ -385,7 +485,6 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
     private function getCreateTaskResult(mixed $dataProvider): mixed
     {
         $result = new Result();
-        $result->addId('assignedToUser', $dataProvider['sideEffectResults']['CreateTask']['ids']['assignedToUser']);
 
         return $result;
     }
@@ -468,17 +567,47 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
      */
     private function caseLicenceWithRemovedTmTest(mixed $dataProvider, mixed $eligibleLicences): void
     {
-        $this->mockUserRepo($dataProvider);
-
         $tmlRepo = $this->repoMap['TransportManagerLicence'];
         foreach ($eligibleLicences as $eligibleLicence) {
-            $tmlEntity = m::mock(TransportManagerLicence::class);
-            $tmlEntity->shouldReceive('setLastTmLetterDate');
-            $tmlRepo
-                ->shouldReceive('fetchRemovedTmForLicence')
-                ->with($eligibleLicence->getId())
-                ->andReturn([$tmlEntity]);
-            $tmlRepo->shouldReceive('save');
+            if (!empty($dataProvider['multipleRemovedTms'])) {
+                $tmlEntity1 = m::mock(TransportManagerLicence::class);
+                $tmlEntity1->shouldReceive('getId')->andReturn(5);
+                $tmlEntity1->shouldReceive('setLastTmLetterDate')->once();
+
+                $tm1 = m::mock(\Dvsa\Olcs\Api\Entity\Tm\TransportManager::class);
+                $tm1->shouldReceive('getId')->andReturn(1);
+                $tmlEntity1->shouldReceive('getTransportManager')->andReturn($tm1);
+
+                $tmlEntity2 = m::mock(TransportManagerLicence::class);
+                $tmlEntity2->shouldReceive('getId')->andReturn(6);
+                $tmlEntity2->shouldReceive('setLastTmLetterDate')->once();
+
+                $tm2 = m::mock(\Dvsa\Olcs\Api\Entity\Tm\TransportManager::class);
+                $tm2->shouldReceive('getId')->andReturn(2);
+                $tmlEntity2->shouldReceive('getTransportManager')->andReturn($tm2);
+
+                $tmlRepo
+                    ->shouldReceive('fetchRemovedTmForLicence')
+                    ->with($eligibleLicence->getId(), true)
+                    ->once()
+                    ->andReturn([$tmlEntity1, $tmlEntity2]);
+
+                $tmlRepo->shouldReceive('save')->with($tmlEntity1)->once();
+                $tmlRepo->shouldReceive('save')->with($tmlEntity2)->once();
+            } else {
+                $tmlEntity = m::mock(TransportManagerLicence::class);
+                $tmlEntity->shouldReceive('getId')->andReturn(5);
+                $tmlEntity->shouldReceive('setLastTmLetterDate');
+                $tm = m::mock(\Dvsa\Olcs\Api\Entity\Tm\TransportManager::class);
+                $tm->shouldReceive('getId')->andReturn(1);
+
+                $tmlEntity->shouldReceive('getTransportManager')->andReturn($tm);
+                $tmlRepo
+                    ->shouldReceive('fetchRemovedTmForLicence')
+                    ->with($eligibleLicence->getId(), true)
+                    ->andReturn([$tmlEntity]);
+                $tmlRepo->shouldReceive('save');
+            }
         }
 
         $documentsData = $dataProvider['sideEffectResults']['GenerateAndStore']['ids']['documents'];
@@ -535,5 +664,143 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
             $userRepo->shouldReceive('fetchFirstByEmailOrFalse')->andReturn($fetchedUser);
             $this->expectedSideEffect(SendEmail::class, [], new Result());
         }
+    }
+
+    public function testHandleCommandCreatesTaskWhenOperatorNotificationEmailFails(): void
+    {
+        $licenceRepo = $this->repoMap['Licence'];
+        $tmlRepo = $this->repoMap['TransportManagerLicence'];
+
+        $licence = m::mock(LicenceEntity::class);
+
+        $dataProvider = [
+            'licence' => [
+                'id' => 1,
+                'licNo' => 'AB123',
+                'isNi' => false,
+                'isPsv' => false,
+                'organisation' => [
+                    'allowEmail' => 'Y',
+                    'name' => 'Test Operator Ltd',
+                ],
+                'correspondenceCd' => [
+                    'emailAddress' => 'abc',
+                ],
+            ],
+            'user' => [
+                'fetchFirstByEmailOrFalse' => false,
+            ],
+            'sideEffectResults' => [
+                'GenerateAndStore' => [
+                    'ids' => [
+                        'documents' => [
+                            '123' => [
+                                'metadata' => json_encode([
+                                    'details' => [
+                                        'category' => Category::CATEGORY_TRANSPORT_MANAGER,
+                                        'documentSubCategory' => Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CORRESPONDENCE,
+                                        'documentTemplate' => 919,
+                                        'allowEmail' => 'N',
+                                        'sendToAddress' => 'correspondenceAddress',
+                                    ],
+                                ]),
+                                'address' => 'correspondenceAddress',
+                            ],
+                        ],
+                    ],
+                ],
+                'CreateTask' => [
+                    'ids' => [],
+                ],
+            ],
+        ];
+
+        $this->mockLicence($licence, $dataProvider);
+
+        $licence->shouldReceive('getActiveVariations')
+            ->once()
+            ->andReturn([]);
+
+        $this->mockCorrespondenceCd($licence, $dataProvider);
+
+        $licenceRepo->shouldReceive('fetchForLastTmAutoLetter')
+            ->once()
+            ->andReturn([$licence]);
+
+        $tmlEntity = m::mock(TransportManagerLicence::class);
+        $tmlEntity->shouldReceive('getId')->andReturn(5);
+        $tmlEntity->shouldReceive('setLastTmLetterDate')->once();
+
+        $tm = m::mock(\Dvsa\Olcs\Api\Entity\Tm\TransportManager::class);
+        $tm->shouldReceive('getId')->andReturn(1);
+        $tmlEntity->shouldReceive('getTransportManager')->andReturn($tm);
+
+        $tmlRepo->shouldReceive('fetchRemovedTmForLicence')
+            ->with(1, true)
+            ->once()
+            ->andReturn([$tmlEntity]);
+
+        $tmlRepo->shouldReceive('save')
+            ->with($tmlEntity)
+            ->once();
+
+        $generateResult = $this->getGenerateAndStoreResult(
+            $dataProvider['sideEffectResults']['GenerateAndStore']['ids']['documents']
+        );
+
+        $this->expectedSideEffect(GenerateAndStore::class, [], $generateResult);
+
+        // Existing Last TM task
+        $this->expectedSideEffect(CreateTask::class, [], new Result());
+
+        // Print document
+        $this->expectedSideEffect(
+            PrintLetter::class,
+            [],
+            $this->getPrintLetterResult(123)
+        );
+
+        $document = m::mock(DocumentEntity::class);
+        $document->shouldReceive('getMetadata')
+            ->once()
+            ->andReturn($dataProvider['sideEffectResults']['GenerateAndStore']['ids']['documents']['123']['metadata']);
+
+        $this->repoMap['Document']
+            ->shouldReceive('fetchById')
+            ->with(123)
+            ->once()
+            ->andReturn($document);
+
+        $this->repoMap['User']
+            ->shouldReceive('fetchFirstByEmailOrFalse')
+            ->once()
+            ->with('abc')
+            ->andReturn(false);
+
+        $this->commandHandler
+            ->shouldReceive('handleCommand')
+            ->with(m::type(SendEmail::class), false)
+            ->once()
+            ->andThrow(new EmailNotSentException('Email is missing a valid to address'));
+
+        // New missing/invalid email follow-up task
+        $this->expectedSideEffect(CreateTask::class, [], new Result());
+
+        $response = $this->sut->handleCommand(
+            \Dvsa\Olcs\Cli\Domain\Command\LastTmLetter::create([])
+        );
+
+        $this->assertEquals(
+            [
+                'id' => [
+                    'correspondenceAddress' => '123',
+                    'document' => 123,
+                ],
+                'messages' => [
+                    "Document id '123', queued for print",
+                ],
+            ],
+            $response->toArray()
+        );
     }
 }

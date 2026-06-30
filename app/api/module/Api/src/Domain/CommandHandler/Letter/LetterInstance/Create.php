@@ -6,6 +6,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
+use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Create as Cmd;
 
 /**
@@ -14,6 +15,8 @@ use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Create as Cmd;
 final class Create extends AbstractCommandHandler
 {
     protected $repoServiceName = 'LetterInstance';
+
+    protected $extraRepos = ['LetterType'];
 
     #[\Override]
     public function handleCommand(CommandInterface $command): Result
@@ -75,6 +78,15 @@ final class Create extends AbstractCommandHandler
         if ($command->getStatus() !== null) {
             $status = $this->getRepo()->getRefdataReference($command->getStatus());
             $letterInstance->setStatus($status);
+        }
+
+        // Populate instance sections from letter type assembly
+        foreach ($letterType->getLetterTypeSections() as $typeSection) {
+            $instanceSection = new LetterInstanceSection();
+            $instanceSection->setLetterInstance($letterInstance);
+            $instanceSection->setLetterSectionVersion($typeSection->getLetterSectionVersion());
+            $instanceSection->setDisplayOrder($typeSection->getDisplayOrder());
+            $letterInstance->addLetterInstanceSection($instanceSection);
         }
 
         $this->getRepo()->save($letterInstance);

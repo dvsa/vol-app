@@ -5,6 +5,19 @@ locals {
 
   supporting_service_names = ["liquibase"]
 
+  task_exec_iam_role_statements = [
+    {
+      effect = "Allow"
+      actions = [
+        "secretsmanager:GetSecretValue"
+      ]
+      resources = [
+        data.aws_secretsmanager_secret.this["api"].arn,
+        data.aws_secretsmanager_secret.infra.arn
+      ]
+    },
+  ]
+
   task_iam_role_statements = [
     {
       effect = "Allow"
@@ -78,6 +91,73 @@ locals {
         "arn:aws:s3:::app-vol-content/*"
       ]
     },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:CreateDBClusterSnapshot",
+        "rds:DescribeDBClusterSnapshots",
+        "rds:DeleteDBClusterSnapshot",
+      ]
+      resources = [
+
+        "arn:aws:rds:eu-west-1:146997448015:cluster:apppp-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-db-anon-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:DescribeDBClusters",
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:146997448015:cluster:apppp-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:RestoreDBClusterFromSnapshot",
+        "rds:AddTagsToResource",
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:subgrp:apppp-olcs-rds-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:CreateDBInstance",
+        "rds:DescribeDBInstances",
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:db:olcs-anon-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:DeleteDBInstance",
+        "rds:DeleteDBCluster",
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:146997448015:db:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:ModifyDBClusterSnapshotAttribute"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-anon-*"
+      ]
+    }
   ]
 }
 
@@ -122,6 +202,9 @@ data "aws_secretsmanager_secret" "this" {
   name = "APPPP-BASE-SM-APPLICATION-${upper(each.key)}"
 }
 
+data "aws_secretsmanager_secret" "infra" {
+  name = "APPPP-BASE-SM-INFRA"
+}
 data "aws_cognito_user_pools" "this" {
   name = "DVSA-APPPP-COGNITO-USERS"
 }
@@ -191,6 +274,8 @@ module "service" {
       repository = data.aws_ecr_repository.this["api"].repository_url
 
       task_iam_role_statements = local.task_iam_role_statements
+
+      task_exec_iam_role_statements = local.task_exec_iam_role_statements
 
       subnet_ids = data.aws_subnets.this["API"].ids
 
@@ -638,6 +723,12 @@ module "service" {
         name     = "ni-compliance",
         commands = ["/mnt/data/scripts/ni_dvacompliance.sh"],
         type     = "scripts"
+      },
+      {
+        name     = "first-tm-letter",
+        commands = ["batch:first-tm-letter", "-v"],
+        timeout  = 43200,
+        schedule = ["cron(30 13 * * ? *)"],
       },
     ]
   }

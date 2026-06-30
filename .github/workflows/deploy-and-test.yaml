@@ -95,6 +95,19 @@ jobs:
       pull-requests: write
     secrets: inherit
 
+  cache_clear:
+    name: Clear Cache
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' }}
+    needs:
+      - terraform_env
+    uses: ./.github/workflows/cache-clear.yaml
+    with:
+      account: ${{ inputs.account }}
+      environment: ${{ inputs.environment }}
+    permissions:
+      contents: read
+      id-token: write
+
   liquibase:
     name: Database Migrations
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' }}
@@ -120,6 +133,7 @@ jobs:
     needs:
       - terraform_env
       - liquibase
+      - cache_clear
     uses: dvsa/vol-functional-tests/.github/workflows/e2eAwsBatchJobsSmoke.yaml@v4.21.0
     with:
       platform_env: ${{ inputs.environment }}
@@ -140,7 +154,7 @@ jobs:
       - terraform_env
       - liquibase
       - test_batch
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@v4.21.0
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@v4.23.0
     with:
       platform_env: ${{ inputs.environment }}
       aws_role: ${{ inputs.aws_role }}
@@ -160,7 +174,7 @@ jobs:
       - terraform_env
       - liquibase
       - test_batch
-    uses: dvsa/vol-functional-tests/.github/workflows/e2ePrepSmoke.yaml@v4.21.0
+    uses: dvsa/vol-functional-tests/.github/workflows/e2ePrepSmoke.yaml@v4.23.0
     with:
       platform_env: ${{ inputs.environment }}
       aws_role: ${{ inputs.aws_role }}
@@ -178,7 +192,7 @@ jobs:
     name: Selfserve Regression Tests
     needs:
       - test_smoke
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSelfServeRegression.yaml@v4.21.0
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSelfServeRegression.yaml@v4.23.0
     with:
       platform_env: ${{ inputs.environment }}
       aws_role: ${{ inputs.aws_role }}
@@ -196,7 +210,7 @@ jobs:
     name: Internal Regression Tests
     needs:
       - test_smoke
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eInternalRegression.yaml@v4.21.0
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eInternalRegression.yaml@v4.23.0
     with:
       platform_env: ${{ inputs.environment }}
       aws_role: ${{ inputs.aws_role }}

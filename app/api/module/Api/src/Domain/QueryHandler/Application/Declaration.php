@@ -84,7 +84,8 @@ class Declaration extends AbstractQueryHandler
                     (bool)$this->getRepo('SystemParameter')->fetchValue(SystemParameter::DISABLE_GDS_VERIFY_SIGNATURES),
                 'declarations' => $this->getDeclarations($application),
                 'signature' => $signatureDetails,
-                'interimFee' => $interimFeeAmount
+                'interimFee' => $interimFeeAmount,
+                'showPeriodOfGraceQuestion' => $application->showPeriodOfGraceQuestion(),
             ]
         );
     }

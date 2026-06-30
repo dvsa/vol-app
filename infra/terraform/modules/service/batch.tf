@@ -4,6 +4,10 @@ data "aws_secretsmanager_secret" "application_api" {
   name = "${local.account_prefix}${local.env_prefix}-BASE-SM-APPLICATION-API"
 }
 
+data "aws_secretsmanager_secret" "infra" {
+  name = "${local.account_prefix}${local.env_prefix}-BASE-SM-INFRA"
+}
+
 locals {
 
   account_prefix = contains(["DEV", "QA"], var.legacy_environment) ? "DEV" : ""
@@ -38,7 +42,7 @@ locals {
         },
       ]
 
-      secrets = []
+      secrets = null
     }
     liquibase = {
       image = "${var.batch.liquibase_repository}:latest"
@@ -80,6 +84,75 @@ locals {
         },
         {
           name  = "FULL_DOMAIN"
+          value = "${var.domain_env}.olcs.${var.domain_name}"
+        },
+        {
+          name  = "DOMAIN"
+          value = var.domain_name
+        },
+        {
+          name  = "READDB_HOST"
+          value = "olcsreaddb-rds.${var.domain_env}.olcs.${var.domain_name}"
+        },
+        {
+          name  = "READDB_ID"
+          value = "${var.environment}-aurora-olcsdb-reader"
+        },
+        {
+          name  = "DBCLUSTER_ID"
+          value = "${var.environment}-aurora-olcsdb-cluster"
+        },
+        {
+          name  = "READDB_NAME"
+          value = "OLCS_RDS_OLCSDB"
+        },
+        {
+          name  = "PROXY"
+          value = "proxy.${var.domain_env}.olcs.${var.domain_name}:3128"
+        },
+        {
+          name  = "APP_VERSION"
+          value = var.batch.cli_version
+        },
+        {
+          name  = "READDB_HOST"
+          value = "olcsreaddb-rds.${var.domain_env}.olcs.${var.domain_name}"
+        },
+        {
+          name  = "DVA_REPORT_BUCKET"
+          value = "devappdev-olcs-pri-integration-dva-s3"
+        }
+      ]
+
+      secrets = [
+        {
+          name      = "API_DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_api_rds_password::"
+        },
+        {
+          name      = "BATCH_DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_batch_rds_password::"
+        },
+        {
+          name      = "M_DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.infra.arn}:master_rds_password::"
+        },
+        {
+          name      = "PRODTODEV_ASSUME_ROLE_ID"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:nonprod_assume_external_id::"
+        },
+      ]
+    },
+    scripts_testing = {
+      image = "054614622558.dkr.ecr.eu-west-1.amazonaws.com/scripts_testing:latest"
+
+      environment = [
+        {
+          name  = "ENVIRONMENT_NAME"
+          value = var.legacy_environment
+        },
+        {
+          name  = "FULL_DOMAIN"
           value = "${var.environment}.olcs.${var.domain_name}"
         },
         {
@@ -93,6 +166,10 @@ locals {
         {
           name  = "READDB_ID"
           value = "${var.environment}-aurora-olcsdb-reader"
+        },
+        {
+          name  = "DBCLUSTER_ID"
+          value = "${var.environment}-aurora-olcsdb-cluster"
         },
         {
           name  = "READDB_NAME"
@@ -114,8 +191,16 @@ locals {
 
       secrets = [
         {
+          name      = "API_DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_api_rds_password::"
+        },
+        {
           name      = "BATCH_DB_PASSWORD"
           valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_batch_rds_password::"
+        },
+        {
+          name      = "M_DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.infra.arn}:master_rds_password::"
         },
         {
           name      = "PRODTODEV_ASSUME_ROLE_ID"
@@ -133,17 +218,17 @@ locals {
 
     container_properties = jsonencode({
 
-      command = (job.type == "default" ? concat([
+      command = (try(job.type, "default") == "default" ? concat([
         "/var/www/html/vendor/bin/laminas",
         "--container=/var/www/html/config/container-cli.php",
         "-v"
       ], job.commands) : job.commands)
 
-      image = lookup(local.job_types, job.type, local.job_types.default).image
+      image = lookup(local.job_types, try(job.type, "default"), local.job_types.default).image
 
-      environment = lookup(local.job_types, job.type, local.job_types.default).environment
+      environment = lookup(local.job_types, try(job.type, "default"), local.job_types.default).environment != null ? lookup(local.job_types, try(job.type, "default"), local.job_types.default).environment : []
 
-      secrets = lookup(local.job_types, job.type, local.job_types.default).secrets
+      secrets = lookup(local.job_types, try(job.type, "default"), local.job_types.default).secrets != null ? lookup(local.job_types, try(job.type, "default"), local.job_types.default).secrets : null
 
       runtimePlatform = {
         operatingSystemFamily = "LINUX",
@@ -212,7 +297,7 @@ locals {
 
 module "batch" {
   source  = "terraform-aws-modules/batch/aws"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   instance_iam_role_name        = "vol-app-${var.environment}-batch-instance"
   instance_iam_role_description = "Task execution role for vol-app-${var.environment}-batch"
@@ -239,6 +324,14 @@ module "batch" {
       state    = "ENABLED"
       priority = 1
 
+      compute_environment_order = {
+        first = {
+          order                   = 1
+          compute_environment_key = "fargate"
+        }
+      }
+
+
       # This doesn't offer much value as a tag, but it's here to avoid: https://github.com/hashicorp/terraform-provider-aws/pull/38636.
       # If the PR is merged, we can remove this.
       tags = {
@@ -249,6 +342,14 @@ module "batch" {
       name     = "vol-app-${var.environment}-liquibase"
       state    = "ENABLED"
       priority = 1
+
+      compute_environment_order = {
+        first = {
+          order                   = 1
+          compute_environment_key = "fargate"
+        }
+      }
+
       tags = {
         JobQueue = "vol-app-${var.environment}-liquibase"
       }

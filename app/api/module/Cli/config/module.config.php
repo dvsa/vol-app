@@ -45,6 +45,7 @@ return [
             'batch:inspection-request-email' => Dvsa\Olcs\Cli\Command\Batch\InspectionRequestEmailCommand::class,
             'batch:interim-end-date-enforcement' => Dvsa\Olcs\Cli\Command\Batch\InterimEndDateEnforcementCommand::class,
             'batch:last-tm-letter' => Dvsa\Olcs\Cli\Command\Batch\LastTmLetterCommand::class,
+            'batch:first-tm-letter' => Dvsa\Olcs\Cli\Command\Batch\FirstTmLetterCommand::class,
             'batch:licence-status-rules' => Dvsa\Olcs\Cli\Command\Batch\LicenceStatusRulesCommand::class,
             'batch:process-cl' => Dvsa\Olcs\Cli\Command\Batch\ProcessCommunityLicencesCommand::class,
             'batch:process-inbox' => Dvsa\Olcs\Cli\Command\Batch\ProcessInboxDocumentsCommand::class,
@@ -71,6 +72,9 @@ return [
             'migrations:status'     => MigrationCommands\StatusCommand::class,
             'migrations:version'    => MigrationCommands\VersionCommand::class,
             'entity:generate'       => Dvsa\Olcs\Cli\Command\EntityGenerator\GenerateEntitiesCommand::class,
+            'notify:hello-world'    => Dvsa\Olcs\Cli\Command\Email\NotifyHelloWorldCommand::class,
+            'template:render-all'   => Dvsa\Olcs\Cli\Command\Email\RenderAllTemplatesCommand::class,
+            'template:convert-to-md' => Dvsa\Olcs\Cli\Command\Email\ConvertToMarkdownCommand::class,
         ],
     ],
     'dependencies' => [
@@ -198,6 +202,7 @@ return [
         BatchCommands\InspectionRequestEmailCommand::class => $commonBatchCommandDeps,
         BatchCommands\InterimEndDateEnforcementCommand::class => $commonBatchCommandDeps,
         BatchCommands\LastTmLetterCommand::class => $commonBatchCommandDeps,
+        BatchCommands\FirstTmLetterCommand::class => $commonBatchCommandDeps,
         BatchCommands\LicenceStatusRulesCommand::class => $commonBatchCommandDeps,
         BatchCommands\ProcessCommunityLicencesCommand::class => $commonBatchCommandDeps,
         BatchCommands\ProcessInboxDocumentsCommand::class => $commonBatchCommandDeps,
@@ -216,6 +221,20 @@ return [
         QueueCommands\ProcessInsolvencyDlqSQSQueueCommand::class => $commonCommandDeps,
         QueueCommands\TransXChangeConsumerSQSQueueCommand::class => $commonCommandDeps,
         \Dvsa\Olcs\Cli\Command\EntityGenerator\GenerateEntitiesCommand::class => $commonCommandDeps,
+        \Dvsa\Olcs\Cli\Command\Email\NotifyHelloWorldCommand::class => [
+            ...$commonCommandDeps,
+            \Dvsa\Olcs\Email\Service\TemplateRenderer::class,
+        ],
+        \Dvsa\Olcs\Cli\Command\Email\RenderAllTemplatesCommand::class => [
+            ...$commonCommandDeps,
+            'doctrine.entitymanager.orm_default',
+            'TemplateTwigRenderer',
+        ],
+        \Dvsa\Olcs\Cli\Command\Email\ConvertToMarkdownCommand::class => [
+            ...$commonCommandDeps,
+            'doctrine.entitymanager.orm_default',
+            'TemplateTwigRenderer',
+        ],
     ],
     'cache' => [
         'adapter' => [
@@ -228,8 +247,6 @@ return [
             Dvsa\Olcs\Cli\Service\Queue\Consumer\CompaniesHouse\Compare::class
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\Factory\GenericFactory::class,
             Dvsa\Olcs\Cli\Service\Queue\Consumer\ContinuationChecklist::class
-                => Dvsa\Olcs\Cli\Service\Queue\Consumer\Factory\GenericFactory::class,
-            Dvsa\Olcs\Cli\Service\Queue\Consumer\ContinuationChecklistReminderGenerateLetter::class
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\Factory\GenericFactory::class,
             Dvsa\Olcs\Cli\Service\Queue\Consumer\Tm\Snapshot::class
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\Factory\GenericFactory::class,
@@ -297,8 +314,6 @@ return [
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\CompaniesHouse\Compare::class,
             Queue::TYPE_CONT_CHECKLIST
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\ContinuationChecklist::class,
-            Queue::TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER
-                => Dvsa\Olcs\Cli\Service\Queue\Consumer\ContinuationChecklistReminderGenerateLetter::class,
             Queue::TYPE_TM_SNAPSHOT
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\Tm\Snapshot::class,
             Queue::TYPE_CPMS_REPORT_DOWNLOAD
@@ -385,6 +400,7 @@ return [
             Cli\Domain\Command\Bus\Expire::class => CommandHandler\Bus\Expire::class,
             Cli\Domain\Command\Permits\WithdrawUnpaidIrhp::class => CommandHandler\Permits\WithdrawUnpaidIrhp::class,
             Cli\Domain\Command\LastTmLetter::class => CommandHandler\LastTmLetter::class,
+            Cli\Domain\Command\FirstTmLetter::class => CommandHandler\FirstTmLetter::class,
             Cli\Domain\Command\Permits\CloseExpiredWindows::class => CommandHandler\Permits\CloseExpiredWindows::class,
             Cli\Domain\Command\Permits\CancelUnsubmittedBilateral::class => CommandHandler\Permits\CancelUnsubmittedBilateral::class,
             Cli\Domain\Command\Permits\MarkExpiredPermits::class => CommandHandler\Permits\MarkExpiredPermits::class,

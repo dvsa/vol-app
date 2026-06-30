@@ -41,6 +41,13 @@ class SendEmail extends AbstractCommand
 
     protected $locale = 'en_GB';
 
+    protected ?string $templateKey = null;
+
+    /** @var array<string, mixed> */
+    protected array $personalisation = [];
+
+    protected ?string $markdownBody = null;
+
     public function getFromName()
     {
         return $this->fromName;
@@ -99,5 +106,23 @@ class SendEmail extends AbstractCommand
     public function isHighPriority(): bool
     {
         return $this->highPriority;
+    }
+
+    public function getTemplateKey(): ?string
+    {
+        return $this->templateKey;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getPersonalisation(): array
+    {
+        return $this->personalisation;
+    }
+
+    public function getMarkdownBody(): ?string
+    {
+        return $this->markdownBody;
     }
 }

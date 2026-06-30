@@ -5,6 +5,7 @@ namespace Dvsa\Olcs\Cli\Command\Queue;
 use Dvsa\Olcs\Api\Domain\CommandHandlerManager;
 use Dvsa\Olcs\Cli\Command\AbstractOlcsCommand;
 use Exception;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -60,7 +61,7 @@ abstract class AbstractSQSCommand extends AbstractOlcsCommand
                     $this->logAndWriteVerboseMessage("Processed: $message");
                 }
             } catch (Exception $e) {
-                $this->logAndWriteVerboseMessage("Error processing queue: {$e->getMessage()}", \Laminas\Log\Logger::ERR, true);
+                $this->logAndWriteVerboseMessage("Error processing queue: {$e->getMessage()}", LogLevel::ERROR, true);
                 continue;
             }
         }

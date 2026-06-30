@@ -385,6 +385,8 @@ return [
     TransferCommand\User\UpdateUser::class => CommandHandler\User\UpdateUser::class,
     TransferCommand\User\DeleteUser::class => CommandHandler\User\DeleteUserFactory::class,
     TransferCommand\User\RegisterUserSelfserve::class => CommandHandler\User\RegisterUserSelfserveFactory::class,
+    // Internal, routeless command for the consultant journey (VOL-7370); reuses the same handler.
+    Command\User\RegisterUserSelfserveByOrganisation::class => CommandHandler\User\RegisterUserSelfserveFactory::class,
     TransferCommand\User\RemindUsernameSelfserve::class => CommandHandler\User\RemindUsernameSelfserve::class,
     TransferCommand\User\CreateUserSelfserve::class => CommandHandler\User\CreateUserSelfServeFactory::class,
     TransferCommand\User\UpdateUserSelfserve::class => CommandHandler\User\UpdateUserSelfserveFactory::class,
@@ -773,6 +775,7 @@ return [
     Command\Document\UploadCsv::class => CommandHandler\Document\UploadCsv::class,
     TransferCommand\Document\GenerateAndStore::class => CommandHandler\Document\GenerateAndStore::class,
     TransferCommand\Document\Upload::class => CommandHandler\Document\Upload::class,
+    TransferCommand\Document\BucketBrowserOverwrite::class => CommandHandler\Document\BucketBrowserOverwrite::class,
 
     // Domain - Report
     TransferCommand\Report\Upload::class => CommandHandler\Report\Upload::class,
@@ -968,7 +971,6 @@ return [
     TransferCommand\ContinuationDetail\PrepareContinuations::class =>
         CommandHandler\ContinuationDetail\PrepareContinuations::class,
     Command\ContinuationDetail\Process::class => CommandHandler\ContinuationDetail\Process::class,
-    Command\ContinuationDetail\ProcessReminder::class => CommandHandler\ContinuationDetail\ProcessReminder::class,
     Command\ContinuationDetail\CreateSnapshot::class => CommandHandler\ContinuationDetail\CreateSnapshot::class,
     Command\ContinuationDetail\DigitalSendReminders::class =>
         CommandHandler\ContinuationDetail\DigitalSendReminders::class,
@@ -1305,6 +1307,7 @@ return [
 
     // Templates
     TransferCommand\Template\UpdateTemplateSource::class => CommandHandler\Template\UpdateTemplateSource::class,
+    TransferCommand\Template\SendTestEmail::class => CommandHandler\Template\SendTestEmail::class,
 
     //FeeType
     TransferCommand\FeeType\Update::class => CommandHandler\FeeType\Update::class,
@@ -1366,6 +1369,7 @@ return [
     TransferCommand\Letter\LetterInstance\Generate::class => CommandHandler\Letter\LetterInstance\Generate::class,
     TransferCommand\Letter\LetterInstance\PrepareToSend::class => CommandHandler\Letter\LetterInstance\PrepareToSend::class,
     TransferCommand\Letter\LetterInstanceIssue\UpdateContent::class => CommandHandler\Letter\LetterInstanceIssue\UpdateContent::class,
+    TransferCommand\Letter\LetterInstanceSection\UpdateContent::class => CommandHandler\Letter\LetterInstanceSection\UpdateContent::class,
     TransferCommand\Letter\LetterInstanceAppendix\UpdateContent::class => CommandHandler\Letter\LetterInstanceAppendix\UpdateContent::class,
     TransferCommand\Letter\MasterTemplate\Create::class => CommandHandler\Letter\MasterTemplate\Create::class,
     TransferCommand\Letter\MasterTemplate\Update::class => CommandHandler\Letter\MasterTemplate\Update::class,
@@ -1373,4 +1377,10 @@ return [
     TransferCommand\Letter\LetterTestData\Create::class => CommandHandler\Letter\LetterTestData\Create::class,
     TransferCommand\Letter\LetterTestData\Update::class => CommandHandler\Letter\LetterTestData\Update::class,
     TransferCommand\Letter\LetterTestData\Delete::class => CommandHandler\Letter\LetterTestData\Delete::class,
+    TransferCommand\Letter\LetterChoice\Create::class => CommandHandler\Letter\LetterChoice\Create::class,
+    TransferCommand\Letter\LetterChoice\Update::class => CommandHandler\Letter\LetterChoice\Update::class,
+    TransferCommand\Letter\LetterChoice\Delete::class => CommandHandler\Letter\LetterChoice\Delete::class,
+    TransferCommand\Letter\LetterSectionVariant\Create::class => CommandHandler\Letter\LetterSectionVariant\Create::class,
+    TransferCommand\Letter\LetterSectionVariant\Update::class => CommandHandler\Letter\LetterSectionVariant\Update::class,
+    TransferCommand\Letter\LetterSectionVariant\Delete::class => CommandHandler\Letter\LetterSectionVariant\Delete::class,
 ];

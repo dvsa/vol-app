@@ -13,7 +13,8 @@ class DocumentFactory implements FactoryInterface
         return new Document(
             $container->get('DateService'),
             $container->get('ContentStore'),
-            $container->get('translator')
+            $container->get('translator'),
+            $container->get('RepositoryServiceManager'),
         );
     }
 }

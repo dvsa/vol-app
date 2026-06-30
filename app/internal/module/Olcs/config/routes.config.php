@@ -269,6 +269,17 @@ $routes = [
                 ],
                 'may_terminate' => true,
             ],
+            'save-section-content' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/save-section-content',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'saveSectionContent',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
         ],
     ],
     'template_lists' => [

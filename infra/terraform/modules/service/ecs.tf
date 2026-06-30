@@ -187,8 +187,6 @@ module "ecs_cluster" {
 
   cluster_name = "vol-app-${var.environment}-${each.key}-cluster"
 
-  create_task_exec_iam_role = true
-
   cluster_settings = [
     {
       name  = "containerInsights"
@@ -201,7 +199,7 @@ module "ecs_service" {
   for_each = var.services
 
   source  = "terraform-aws-modules/ecs/aws//modules/service"
-  version = "~> 5.10"
+  version = "< 6.1.0"
 
   name        = "vol-app-${var.environment}-${each.key}-service"
   cluster_arn = module.ecs_cluster[each.key].arn
@@ -212,7 +210,7 @@ module "ecs_service" {
 
   enable_execute_command = true
 
-  task_exec_iam_role_arn = module.ecs_cluster[each.key].task_exec_iam_role_arn
+  task_exec_iam_statements = var.services[each.key].task_exec_iam_role_statements
 
   cpu    = var.services[each.key].cpu
   memory = var.services[each.key].memory
@@ -248,10 +246,9 @@ module "ecs_service" {
       memory    = try(var.services[each.key].task_memory_limit, var.services[each.key].memory)
       essential = true
       image     = "${var.services[each.key].repository}:${var.services[each.key].version}"
-      port_mappings = [
+      portMappings = [
         {
           name          = "http"
-          hostPort      = 8080
           containerPort = 8080
           protocol      = "tcp"
         }
@@ -289,26 +286,26 @@ module "ecs_service" {
         ] : []
       )
 
-      readonly_root_filesystem = false
+      readonlyRootFilesystem = false
 
-      memory_reservation = 100
+      memoryReservation = 100
     }
   }
-  load_balancer = concat(
-    [
-      {
+  load_balancer = merge(
+    {
+      primary = {
         target_group_arn = aws_lb_target_group.this[each.key].arn
         container_name   = each.key
         container_port   = 8080
       }
-    ],
-    each.key == "internal" && contains(["prep", "prod"], var.environment) ? [
-      {
+    },
+    each.key == "internal" && contains(["prep", "prod"], var.environment) ? {
+      internal_pub = {
         target_group_arn = aws_lb_target_group.internal-pub[0].arn
         container_name   = each.key
         container_port   = 8080
       }
-    ] : []
+    } : {}
   )
 
   create_security_group = false

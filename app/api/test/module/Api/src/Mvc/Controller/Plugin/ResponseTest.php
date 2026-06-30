@@ -31,9 +31,7 @@ class ResponseTest extends MockeryTestCase
         $this->sut = m::mock(Plugin\Response::class)->makePartial();
         $this->sut->shouldReceive('getController->getResponse')->andReturn($this->response);
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         parent::setUp();
     }

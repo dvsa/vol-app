@@ -15,7 +15,7 @@ final class Create extends AbstractCommandHandler
 {
     protected $repoServiceName = 'LetterType';
 
-    protected $extraRepos = ['MasterTemplate', 'Category', 'SubCategory', 'LetterTestData', 'LetterAppendix'];
+    protected $extraRepos = ['MasterTemplate', 'Category', 'SubCategory', 'LetterTestData', 'LetterSection', 'LetterAppendix', 'LetterChoice'];
 
     #[\Override]
     public function handleCommand(CommandInterface $command): Result
@@ -51,6 +51,20 @@ final class Create extends AbstractCommandHandler
             $letterType->setLetterTestData($letterTestData);
         }
 
+        // Add sections if provided
+        if ($command->getSections() !== null) {
+            $requiredSections = $command->getSectionsRequired() ?? [];
+            $displayOrder = 0;
+            foreach ($command->getSections() as $sectionId) {
+                $letterSection = $this->getRepo('LetterSection')->fetchById($sectionId);
+                $lts = new \Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection();
+                $lts->setLetterSection($letterSection);
+                $lts->setDisplayOrder($displayOrder++);
+                $lts->setIsRequired(in_array($sectionId, $requiredSections));
+                $letterType->addLetterTypeSection($lts);
+            }
+        }
+
         // Add appendices if provided
         if ($command->getAppendices() !== null) {
             $displayOrder = 0;
@@ -63,6 +77,18 @@ final class Create extends AbstractCommandHandler
                     $lta->setDisplayOrder($displayOrder++);
                     $letterType->addLetterTypeAppendix($lta);
                 }
+            }
+        }
+
+        // Add choices if provided
+        if ($command->getChoices() !== null) {
+            $displayOrder = 0;
+            foreach ($command->getChoices() as $choiceId) {
+                $letterChoice = $this->getRepo('LetterChoice')->fetchById($choiceId);
+                $ltc = new \Dvsa\Olcs\Api\Entity\Letter\LetterTypeChoice();
+                $ltc->setLetterChoice($letterChoice);
+                $ltc->setDisplayOrder($displayOrder++);
+                $letterType->addLetterTypeChoice($ltc);
             }
         }
 

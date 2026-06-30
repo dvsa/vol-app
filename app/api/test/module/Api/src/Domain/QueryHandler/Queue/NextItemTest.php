@@ -29,9 +29,7 @@ class NextItemTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         $this->sut = new NextItem();
         $this->mockRepo('Queue', QueueRepo::class);

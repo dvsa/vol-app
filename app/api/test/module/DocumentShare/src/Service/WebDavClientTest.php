@@ -30,22 +30,18 @@ class WebDavClientTest extends MockeryTestCase
     /** @var  m\MockInterface|DsFile */
     private $mockFile;
 
-    /** @var  m\MockInterface|\Laminas\Log\Logger */
+    /** @var  m\MockInterface|\Psr\Log\LoggerInterface */
     private $logger;
 
     public function setUp(): void
     {
         $this->mockFileSystem = m::mock(FilesystemInterface::class);
 
-        $this->sut = new Client($this->mockFileSystem, $this->createStub(\Dvsa\OlcsTest\SafeLogger::class));
+        $this->sut = new Client($this->mockFileSystem, $this->createStub(\Psr\Log\LoggerInterface::class));
 
         $this->mockFile = m::mock(DsFile::class);
 
-        // Mock the logger
-        $logWriter = m::mock(\Laminas\Log\Writer\WriterInterface::class);
-
-        $this->logger = m::mock(\Dvsa\OlcsTest\SafeLogger::class, [])->makePartial();
-        $this->logger->addWriter($logWriter);
+        $this->logger = m::mock(\Psr\Log\LoggerInterface::class)->shouldIgnoreMissing();
 
         Logger::setLogger($this->logger);
     }
@@ -159,7 +155,8 @@ class WebDavClientTest extends MockeryTestCase
 
         $result = $this->sut->remove('testFileToUnlink');
 
-        static::assertEquals(true, $result);
+        static::assertTrue($result->isOk());
+        static::assertSame(200, $result->getStatusCode());
     }
 
     public function testRemoveFail(): void
@@ -168,7 +165,8 @@ class WebDavClientTest extends MockeryTestCase
 
         $result = $this->sut->remove('testFileToUnlink');
 
-        static::assertEquals(false, $result);
+        static::assertFalse($result->isSuccess());
+        static::assertSame(500, $result->getStatusCode());
     }
 
     public function testRemoveFileNotFound(): void
@@ -179,6 +177,7 @@ class WebDavClientTest extends MockeryTestCase
 
         $result = $this->sut->remove('testFileToUnlink');
 
-        static::assertEquals(false, $result);
+        static::assertTrue($result->isNotFound());
+        static::assertSame(404, $result->getStatusCode());
     }
 }

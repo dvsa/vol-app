@@ -34,9 +34,7 @@ class ProcessCommunityLicencesCommandTest extends TestCase
         $application = new Application();
         $application->add($command);
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         $this->commandTester = new CommandTester($application->find('batch:process-community-licences'));
     }

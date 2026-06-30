@@ -96,17 +96,43 @@ class LetterType
 
     /**
      * @Form\Options({
-     *     "label": "Test Data",
+     *     "label": "Sections",
      *     "disable_inarray_validator": false,
-     *     "service_name": "Olcs\Service\Data\Letter\LetterTestData",
-     *     "empty_option": "Please Select",
+     *     "service_name": "Olcs\Service\Data\Letter\LetterSection",
      *     "use_groups": false
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Required(false)
-     * @Form\Attributes({"id":"letterTestData","class":"medium"})
+     * @Form\Attributes({"id":"sections","class":"medium chosen-select-large","multiple":"multiple"})
      */
-    public $letterTestData = null;
+    public $sections = null;
+
+    /**
+     * @Form\Type("Hidden")
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"sectionsOrder"})
+     */
+    public $sectionsOrder = null;
+
+    /**
+     * @Form\Type("Hidden")
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"sectionsRequired"})
+     */
+    public $sectionsRequired = null;
+
+    /**
+     * @Form\Options({
+     *     "label": "Letter Choices",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Olcs\Service\Data\Letter\LetterChoice",
+     *     "use_groups": false
+     * })
+     * @Form\Type("DynamicSelect")
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"choices","class":"medium chosen-select-large","multiple":"multiple"})
+     */
+    public $choices = null;
 
     /**
      * @Form\Options({

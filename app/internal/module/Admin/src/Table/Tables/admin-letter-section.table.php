@@ -44,7 +44,14 @@ return [
             'title' => 'Section Key',
             'name' => 'sectionKey',
             'sort' => 'sectionKey',
-            'formatter' => fn($row) => Escape::html($row['sectionKey'] ?? ''),
+            'formatter' => function ($row) {
+                $key = Escape::html($row['sectionKey'] ?? '');
+                $id = $row['id'] ?? null;
+                if ($id) {
+                    return '<a href="/admin/letter-section/details/' . (int) $id . '/" class="govuk-link">' . $key . '</a>';
+                }
+                return $key;
+            },
         ],
         [
             'title' => 'Name',

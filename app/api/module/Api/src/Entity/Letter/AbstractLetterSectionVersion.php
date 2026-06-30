@@ -29,7 +29,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_letter_section_version_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_letter_section_version_goods_or_psv", columns={"goods_or_psv"}),
  *        @ORM\Index(name="ix_letter_section_version_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_section_version_letter_section_id", columns={"letter_section_id"}),
+ *        @ORM\Index(name="ix_letter_section_version_letter_section_variant_id", columns={"letter_section_variant_id"}),
  *        @ORM\Index(name="ix_letter_section_version_section_type", columns={"section_type"}),
  *        @ORM\Index(name="ix_letter_section_version_type_goods_or_psv", columns={"section_type", "goods_or_psv"})
  *    }
@@ -55,14 +55,14 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     protected $id;
 
     /**
-     * LetterSection
+     * LetterSectionVariant
      *
-     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSection
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterSection", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_section_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant", fetch="LAZY")
+     * @ORM\JoinColumn(name="letter_section_variant_id", referencedColumnName="id")
      */
-    protected $letterSection;
+    protected $letterSectionVariant;
 
     /**
      * FK to ref_data
@@ -247,27 +247,27 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     }
 
     /**
-     * Set the letter section
+     * Set the letter section variant
      *
-     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterSection $letterSection new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant $letterSectionVariant new value being set
      *
      * @return LetterSectionVersion
      */
-    public function setLetterSection($letterSection)
+    public function setLetterSectionVariant($letterSectionVariant)
     {
-        $this->letterSection = $letterSection;
+        $this->letterSectionVariant = $letterSectionVariant;
 
         return $this;
     }
 
     /**
-     * Get the letter section
+     * Get the letter section variant
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterSection
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant
      */
-    public function getLetterSection()
+    public function getLetterSectionVariant()
     {
-        return $this->letterSection;
+        return $this->letterSectionVariant;
     }
 
     /**

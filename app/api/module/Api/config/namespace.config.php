@@ -239,4 +239,8 @@ return [
     'LetterTypeSection' => 'Letter',
     'MasterTemplate' => 'Letter',
     'LetterIssueType' => 'Letter',
+    'LetterChoice' => 'Letter',
+    'LetterSectionVariant' => 'Letter',
+    'LetterTypeChoice' => 'Letter',
+    'LetterInstanceChoice' => 'Letter',
 ];

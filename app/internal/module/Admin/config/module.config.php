@@ -185,10 +185,11 @@ return [
                     'admin-letter-section' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => 'letter-section[/:action][/:id][/]',
+                            'route' => 'letter-section[/:action][/:id][/variant/:variant][/]',
                             'constraints' => [
-                                'action' => '(index|add|edit|delete|version-history)',
+                                'action' => '(index|add|edit|delete|version-history|details|EditContent|AddVariant|EditVariant|DeleteVariant)',
                                 'id' => '[0-9]+',
+                                'variant' => '[0-9]+',
                             ],
                             'defaults' => [
                                 'controller' => Admin\Controller\Letter\LetterSectionController::class,
@@ -248,6 +249,34 @@ return [
                             ],
                             'defaults' => [
                                 'controller' => Admin\Controller\Letter\LetterAppendixController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'admin-letter-todo' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'letter-todo[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete)',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\Letter\LetterTodoController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'admin-letter-choice' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'letter-choice[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete)',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\Letter\LetterChoiceController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -669,6 +698,40 @@ return [
                             ]
                         ]
                     ],
+                    // Super-admin S3 document-store browser
+                    'admin-s3-browser' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 's3-browser[/]',
+                            'defaults' => [
+                                'controller' => \Admin\Controller\S3\BrowserController::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'download' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'download[/]',
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\S3\BrowserController::class,
+                                        'action' => 'download',
+                                    ],
+                                ],
+                            ],
+                            'overwrite' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'overwrite[/]',
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\S3\BrowserController::class,
+                                        'action' => 'overwrite',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                     // Admin IRHP Permits
                     'admin-permits' => [
                         'type' => 'Segment',
@@ -925,7 +988,7 @@ return [
                             'route' =>
                                 'email-templates[/:action][/:id][/]',
                             'constraints' => [
-                                'action' => '(index|add|edit|delete|previewTemplate)',
+                                'action' => '(index|add|edit|delete|previewTemplate|sendTestEmail)',
                                 'id' => '[0-9\,]+',
                             ],
                             'defaults' => [
@@ -1042,7 +1105,10 @@ return [
             Admin\Controller\Letter\LetterAppendixController::class => Admin\Controller\Letter\LetterAppendixControllerFactory::class,
             Admin\Controller\Letter\LetterIssueTypeController::class => Admin\Controller\Letter\LetterIssueTypeControllerFactory::class,
             Admin\Controller\Letter\LetterTestDataController::class => Admin\Controller\Letter\LetterTestDataControllerFactory::class,
+            Admin\Controller\Letter\LetterTodoController::class => Admin\Controller\Letter\LetterTodoControllerFactory::class,
+            Admin\Controller\Letter\LetterChoiceController::class => Admin\Controller\Letter\LetterChoiceControllerFactory::class,
             Admin\Controller\FeatureToggleController::class => Admin\Controller\FeatureToggleControllerFactory::class,
+            Admin\Controller\S3\BrowserController::class => Admin\Controller\S3\BrowserControllerFactory::class,
             Admin\Controller\FeeRateController::class => Admin\Controller\FeeRateControllerFactory::class,
             Admin\Controller\FinancialStandingRateController::class => Admin\Controller\FinancialStandingRateControllerFactory::class,
             Admin\Controller\InterimRefundsController::class => Admin\Controller\InterimRefundsControllerFactory::class,

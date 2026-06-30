@@ -11,6 +11,7 @@ use Olcs\Logging\Log\Logger;
 use Dvsa\Olcs\Api\Entity\Queue\Queue as QueueEntity;
 use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 use Laminas\ServiceManager\Exception\ExceptionInterface as LaminasServiceException;
+use Psr\Log\LogLevel;
 
 /**
  * Abstract Command Queue Consumer
@@ -76,20 +77,20 @@ abstract class AbstractCommandConsumer extends AbstractConsumer
         try {
             $result = $this->handleCommand($command);
         } catch (NotReadyException | NysiisException $e) {
-            Logger::logException($e, \Laminas\Log\Logger::WARN);
+            Logger::logException($e, LogLevel::WARNING);
             return $this->retry($item, $e->getRetryAfter(), $e->getMessage());
         } catch (EmailNotSentException $e) {
-            Logger::logException($e, \Laminas\Log\Logger::WARN);
+            Logger::logException($e, LogLevel::WARNING);
             return $this->retry($item, $this->retryAfter, $e->getMessage());
         } catch (DomainException $e) {
-            Logger::logException($e, \Laminas\Log\Logger::ERR);
+            Logger::logException($e, LogLevel::ERROR);
             $message = !empty($e->getMessages()) ? implode(', ', $e->getMessages()) : $e->getMessage();
             return $this->failed($item, $message);
         } catch (LaminasServiceException $e) {
-            Logger::logException($e, \Laminas\Log\Logger::ERR);
+            Logger::logException($e, LogLevel::ERROR);
             return $this->handleLaminasServiceException($item, $e);
         } catch (ORMException | DBALException | \Exception $e) {
-            Logger::logException($e, \Laminas\Log\Logger::ERR);
+            Logger::logException($e, LogLevel::ERROR);
             return $this->failed($item, $e->getMessage());
         }
 

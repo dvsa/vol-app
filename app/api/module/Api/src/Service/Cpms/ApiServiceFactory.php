@@ -15,7 +15,10 @@ class ApiServiceFactory implements FactoryInterface
         $config = $container->get('config');
         $authService = $container->get(AuthorizationService::class);
         $userId = $authService->getIdentity()->getUser()->getId();
-        $apiService = new CpmsApiService($config, $userId);
+        $logger = $container->get('Logger');
+
+        $apiService = new CpmsApiService($config, $userId, $logger);
+
         return $apiService->createApiService();
     }
 }

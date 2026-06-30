@@ -1,0 +1,57 @@
+<?php
+
+use Common\Util\Escape;
+
+/**
+ * @var $this->object \Common\Service\Table\TableBuilder
+ */
+$settings = $this->object->getSettings();
+$showStatus = isset($settings['show-status']) ? $settings['show-status'] : true;
+?>
+
+<ul class="search-results">
+    <h3>
+        <?php
+        // OLCS-13312
+        if ($this->object->renderTotal()) {
+            echo $this->object->renderTotal();
+        }
+        echo ' ' . strtolower($this->translate('search.result.results-title.publication'));
+        ?>
+
+    </h3>
+    <?php foreach ($this->object->getRows() as $row): ?>
+    <li class="search-result">
+        <div class="search-result__header">
+            <h4>
+                <a class="govuk-link" href="/licence/<?php echo Escape::htmlAttr($row['licId']); ?>">
+                        <?php Escape::html($row['licNo']); ?></a> <?php echo Escape::html($row['licTypeDesc']); ?>
+            </h4>
+            <p><?php echo htmlentities($row['orgName']); ?></p>
+        </div>
+        <?php if (!empty($row['text1'] . $row['text2'] . $row['text3'])) { ?>
+        <div class="search-result__extract">
+            <p><?php echo htmlentities($row['text1']); ?></p>
+            <p><?php echo htmlentities($row['text2']); ?></p>
+            <p><?php echo htmlentities($row['text3']); ?></p>
+        </div>
+        <?php } ?>
+        <div class="search-result__meta">
+            <p><b><?php echo $this->translate('search.result.publication');?>:</b> <?php
+                    echo htmlentities($row['pubType'] . ' ' . $row['trafficArea'] . '(' . $row['pubNo'] . '), ' .
+                $row['pubSecDesc']); ?></p>
+            <p><b><?php echo $this->translate('search.result.date');?>:</b> <?php echo date(\Common\Module::$dateFormat, strtotime($row['pubDate']));
+                ?></p>
+            <?php
+
+            if ($showStatus) {
+            ?>
+            <p><b><?php echo $this->translate('search.result.status');?>:</b> <?php echo htmlentities($row['pubStatusDesc']); ?></p>
+            <?php
+            }
+            ?>
+        </div>
+    </li>
+    <?php endforeach; ?>
+<?php echo $this->object->renderFooter(); ?>
+</ul>

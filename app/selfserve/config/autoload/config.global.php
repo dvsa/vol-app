@@ -119,7 +119,7 @@ return [
             'writers' => [
                 'full' => [
                     'options' => [
-                        'stream' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? 'php://stdout' : '/var/log/dvsa/olcs-ssweb/ssweb.log'),
+                        'stream' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? 'php://stderr' : '/var/log/dvsa/olcs-ssweb/ssweb.log'),
                         'filters' => [
                             'priority' => [
                                 'name' => 'priority',
@@ -169,11 +169,6 @@ return [
 
     'cache-encryption' => [
         'node_suffix' => 'ssweb',
-        'adapter' => '%cache_encryption_adapter%',
-        'options' => [
-            'algo' => '%cache_encryption_algo%',
-            'mode' => '%cache_encryption_mode%',
-        ],
         'secrets' => [
             'node' => '%cache_encryption_secret_ss%',
             'shared' => '%cache_encryption_secret_shared%',

@@ -1,0 +1,24 @@
+<?php
+if (count($this->data['users']['users']) > 0) {
+    echo $this->partial(
+        'partials/continuation/checklist-section',
+        [
+            'data' => $this->licenceChecklist(\Common\RefData::LICENCE_CHECKLIST_USERS, $this->data)
+        ]
+    );
+} else {
+    echo $this->translate('There are no users recorded on your licence');
+}
+?>
+<?php if (count($this->data['users']['users']) > \Common\RefData::CONTINUATIONS_DISPLAY_USERS_COUNT) : ?>
+    <p>
+    <a
+        href="<?php echo $this->url(
+            'continuation/checklist/users', ['continuationDetailId' => $this->data['continuationDetailId']])
+        ; ?>"
+        class="govuk-button govuk-button--secondary" target="_blank" role="button" draggable="false">
+        <?php echo $this->translate('continuations.users.button-label'); ?>
+    </a>
+    </p>
+    <p><?php echo $this->translate('continuations.checklist.section.opens_in_a_new_window'); ?></p>
+<?php endif; ?>

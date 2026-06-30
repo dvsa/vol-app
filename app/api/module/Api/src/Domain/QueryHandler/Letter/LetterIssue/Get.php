@@ -17,6 +17,11 @@ class Get extends AbstractQueryByIdHandler
             'subCategory',
             'goodsOrPsv',
             'letterIssueType',
+            'letterIssueTodos' => [
+                'letterTodoVersion' => [
+                    'letterTodo',
+                ],
+            ],
         ],
     ];
 }

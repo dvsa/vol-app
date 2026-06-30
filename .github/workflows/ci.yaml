@@ -35,11 +35,13 @@ jobs:
     outputs:
       # Docs
       should-build-docs: ${{ steps.changed-website-files.outputs.any_modified == 'true' || null }}
-      # App
-      should-build-app: ${{ steps.changed-app-files.outputs.any_modified == 'true' || null }}
-      should-build-api: ${{ contains(steps.changed-app-files.outputs.all_modified_files, 'app/api') || null }}
-      should-build-selfserve: ${{ contains(steps.changed-app-files.outputs.all_modified_files, 'app/selfserve') || null }}
-      should-build-internal: ${{ contains(steps.changed-app-files.outputs.all_modified_files, 'app/internal') || null }}
+      # App  (a change to an in-tree shared lib rebuilds every app, since all apps consume them)
+      should-build-app: ${{ steps.changed-app-files.outputs.any_modified == 'true' || steps.changed-lib-files.outputs.any_modified == 'true' || null }}
+      should-build-api: ${{ contains(steps.changed-app-files.outputs.all_modified_files, 'app/api') || steps.changed-lib-files.outputs.any_modified == 'true' || null }}
+      should-build-selfserve: ${{ contains(steps.changed-app-files.outputs.all_modified_files, 'app/selfserve') || steps.changed-lib-files.outputs.any_modified == 'true' || null }}
+      should-build-internal: ${{ contains(steps.changed-app-files.outputs.all_modified_files, 'app/internal') || steps.changed-lib-files.outputs.any_modified == 'true' || null }}
+      # Libs (in-tree shared libraries under lib/)
+      should-build-libs: ${{ steps.changed-lib-files.outputs.any_modified == 'true' || null }}
       # Assets
       should-build-assets: ${{ steps.changed-asset-files.outputs.any_modified == 'true' || null }}
       # Docker
@@ -72,6 +74,13 @@ jobs:
             app/internal/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v47
+        id: changed-lib-files
+        with:
+          dir_names: true
+          files: |
+            lib/**
+          # since_last_remote_commit: true
+      - uses: tj-actions/changed-files@v47
         id: changed-asset-files
         with:
           dir_names: true
@@ -87,6 +96,7 @@ jobs:
           files_ignore: |
             infra/docker/liquibase/**
             infra/docker/printpit/**
+            infra/docker/gotenberg/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v47
         id: changed-accounts-terraform-files
@@ -222,6 +232,26 @@ jobs:
       should-upload-artefact: ${{ !!(needs.orchestrator.outputs[format('should-build-{0}-docker', matrix.project)] || (matrix.project == 'api' && needs.orchestrator.outputs.should-build-cli-docker)) }}
       artefact-name: ${{ matrix.project}}
       retention-days: 1
+    permissions:
+      contents: read
+
+  lib:
+    name: Lib
+    if: ${{ needs.orchestrator.outputs.should-build-libs }}
+    needs:
+      - orchestrator
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - olcs-logging
+          - olcs-utils
+          - olcs-transfer
+          - olcs-common
+          - olcs-auth
+    uses: ./.github/workflows/php-lib.yaml
+    with:
+      project: ${{ matrix.project }}
     permissions:
       contents: read
 

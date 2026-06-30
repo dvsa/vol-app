@@ -14,7 +14,7 @@ final class Update extends AbstractCommandHandler
 {
     protected $repoServiceName = 'LetterType';
 
-    protected $extraRepos = ['LetterType', 'MasterTemplate', 'LetterSection', 'LetterIssue', 'LetterAppendix'];
+    protected $extraRepos = ['LetterType', 'MasterTemplate', 'LetterSection', 'LetterIssue', 'LetterAppendix', 'LetterChoice'];
 
     #[\Override]
     public function handleCommand(CommandInterface $command): Result
@@ -43,10 +43,23 @@ final class Update extends AbstractCommandHandler
 
         // Update sections if provided
         if ($command->getSections() !== null) {
-            $letterType->getLetterTypeSections()->clear();
+            // Clear existing sections (orphanRemoval handles deletion)
+            foreach ($letterType->getLetterTypeSections()->toArray() as $existing) {
+                $letterType->removeLetterTypeSection($existing);
+            }
+
+            // Flush removals so DELETEs execute before INSERTs (composite PK)
+            $this->getRepo()->flushAll();
+
+            $requiredSections = $command->getSectionsRequired() ?? [];
+            $displayOrder = 0;
             foreach ($command->getSections() as $sectionId) {
-                $section = $this->getRepo('LetterSection')->fetchById($sectionId);
-                $letterType->addLetterTypeSection($section);
+                $letterSection = $this->getRepo('LetterSection')->fetchById($sectionId);
+                $lts = new \Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection();
+                $lts->setLetterSection($letterSection);
+                $lts->setDisplayOrder($displayOrder++);
+                $lts->setIsRequired(in_array($sectionId, $requiredSections));
+                $letterType->addLetterTypeSection($lts);
             }
         }
 
@@ -79,6 +92,26 @@ final class Update extends AbstractCommandHandler
                     $lta->setDisplayOrder($displayOrder++);
                     $letterType->addLetterTypeAppendix($lta);
                 }
+            }
+        }
+
+        // Update choices if provided
+        if ($command->getChoices() !== null) {
+            // Clear existing choices
+            foreach ($letterType->getLetterTypeChoices()->toArray() as $existing) {
+                $letterType->removeLetterTypeChoice($existing);
+            }
+
+            // Flush removals so DELETEs execute before INSERTs (composite PK)
+            $this->getRepo()->flushAll();
+
+            $displayOrder = 0;
+            foreach ($command->getChoices() as $choiceId) {
+                $letterChoice = $this->getRepo('LetterChoice')->fetchById($choiceId);
+                $ltc = new \Dvsa\Olcs\Api\Entity\Letter\LetterTypeChoice();
+                $ltc->setLetterChoice($letterChoice);
+                $ltc->setDisplayOrder($displayOrder++);
+                $letterType->addLetterTypeChoice($ltc);
             }
         }
 

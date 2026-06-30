@@ -1,0 +1,16 @@
+<?php
+
+if (!isset($this->continuationData)) {
+    return;
+}
+?>
+<table class="continuations-data">
+    <tbody>
+    <?php foreach ($this->continuationData as $heading => $value) : ?>
+        <tr>
+            <th><?php echo $this->translate($heading) ?></th>
+            <td>&pound;<?php echo number_format((float)$value, 2) ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>

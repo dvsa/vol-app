@@ -221,6 +221,9 @@ return array(
         'declaration_confirmation' => array(
             'type' => 'yesno'
         ),
+        'no_tm_confirmation' => array(
+            'type' => 'yesnonull'
+        ),
         'financial_evidence_uploaded' => array(
             'type' => 'smallint'
         ),
@@ -476,6 +479,7 @@ return array(
         )
     ),
     'operating_centre_opposition' => array(
+        '_owner' => 'opposition',
         'opposition_id' => array(
             'inversedBy' => array(
                 'entity' => 'Opposition',

@@ -1059,9 +1059,9 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
         return $response;
     }
 
-    protected function debug($message, $data)
+    protected function debug($message, $data): void
     {
-        return Logger::debug(
+        Logger::debug(
             $message,
             [
                 'data' => array_merge(

@@ -56,6 +56,13 @@ OLCS.ready(function () {
     setupDirtyTracking($group, appendixId);
   });
 
+  // Listen for EditorJS changes via hidden input mutations - sections
+  $(".section-editor-group").each(function () {
+    var $group = $(this);
+    var sectionKey = "section-" + $group.data("section-id");
+    setupDirtyTracking($group, sectionKey);
+  });
+
   // Save issue button handler
   $(".save-issue-btn").on("click", function (e) {
     e.preventDefault();
@@ -154,6 +161,55 @@ OLCS.ready(function () {
     });
   });
 
+  // Save section button handler
+  $(".save-section-btn").on("click", function (e) {
+    e.preventDefault();
+
+    var $btn = $(this);
+    var sectionId = $btn.data("section-id");
+    var version = $btn.data("version");
+    var $group = $btn.closest(".section-editor-group");
+    var hiddenInput = $group.find("input[type='hidden']");
+    var editedContent = hiddenInput.val();
+
+    $btn.prop("disabled", true).text("Saving...");
+
+    $.ajax({
+      url: "/letter/save-section-content",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({
+        sectionId: sectionId,
+        editedContent: editedContent,
+        version: version,
+      }),
+      success: function (response) {
+        if (response.success) {
+          dirtyMap["section-" + sectionId] = false;
+          $btn.data("version", response.version);
+          $group.find(".save-indicator").show();
+          $btn.prop("disabled", false).text("Save changes");
+        } else {
+          showError(response.message || "Failed to save changes");
+          $btn.prop("disabled", false).text("Save changes");
+        }
+      },
+      error: function (xhr) {
+        var message = "Failed to save changes";
+        try {
+          var resp = JSON.parse(xhr.responseText);
+          if (resp.message) {
+            message = resp.message;
+          }
+        } catch (e) {
+          // Use default message
+        }
+        showError(message);
+        $btn.prop("disabled", false).text("Save changes");
+      },
+    });
+  });
+
   // Back to preview handler with unsaved changes warning
   $("#back-to-preview").on("click", function (e) {
     var unsavedSections = [];
@@ -171,6 +227,15 @@ OLCS.ready(function () {
       var $group = $(this);
       var appendixId = "appendix-" + $group.data("appendix-id");
       if (dirtyMap[appendixId]) {
+        var heading = $group.find("h3").text().trim();
+        unsavedSections.push(heading);
+      }
+    });
+
+    $(".section-editor-group").each(function () {
+      var $group = $(this);
+      var sectionKey = "section-" + $group.data("section-id");
+      if (dirtyMap[sectionKey]) {
         var heading = $group.find("h3").text().trim();
         unsavedSections.push(heading);
       }

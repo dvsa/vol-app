@@ -6,6 +6,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandlerManager;
 use Dvsa\Olcs\Cli\Command\AbstractOlcsCommand;
 use Dvsa\Olcs\Cli\Service\Queue\QueueProcessor;
 use Exception;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -73,14 +74,14 @@ class ProcessQueueCommand extends AbstractOlcsCommand
                 if ($response === null) {
                     usleep($this->sleepFor);
                 } else {
-                    $this->logAndWriteVerboseMessage("Processed: {$response}", \Laminas\Log\Logger::INFO);
+                    $this->logAndWriteVerboseMessage("Processed: {$response}", LogLevel::INFO);
                 }
             } catch (Exception $e) {
-                $this->logAndWriteVerboseMessage("ORM Error: {$e->getMessage()}", \Laminas\Log\Logger::ERR, true);
+                $this->logAndWriteVerboseMessage("ORM Error: {$e->getMessage()}", LogLevel::ERROR, true);
             }
         }
 
-        $this->logAndWriteVerboseMessage("Queue processing completed.", \Laminas\Log\Logger::INFO);
+        $this->logAndWriteVerboseMessage("Queue processing completed.", LogLevel::INFO);
         return Command::SUCCESS;
     }
 }

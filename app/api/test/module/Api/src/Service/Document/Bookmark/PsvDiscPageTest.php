@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
+use Dvsa\Olcs\Api\Domain\RepositoryServiceManager;
+use Dvsa\Olcs\Api\Domain\Repository\SystemParameter as SystemParameterRepo;
+use Dvsa\Olcs\Api\Entity\System\SystemParameter;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\PsvDiscPage;
 use Dvsa\Olcs\Api\Service\Document\Parser\RtfParser;
 use Mockery as m;
@@ -143,5 +146,89 @@ class PsvDiscPageTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $result = $bookmark->render();
         $this->assertEquals('foo', $result);
+    }
+
+    public function testRenderWithPinnedLayoutToggleOnIncludesAlignmentTokens(): void
+    {
+        $data = [[
+            'isCopy' => 'N',
+            'discNo' => 1,
+            'licence' => [
+                'organisation' => ['name' => 'Org'],
+                'licNo' => 'L1',
+                'inForceDate' => '2026-01-01',
+                'expiryDate' => '2027-01-01',
+            ],
+        ]];
+
+        $sysParamRepo = m::mock(SystemParameterRepo::class);
+        $sysParamRepo->shouldReceive('fetchValue')
+            ->with(SystemParameter::PSV_DISC_PINNED_LAYOUT)->andReturn('1');
+        $sysParamRepo->shouldReceive('fetchValue')
+            ->with(SystemParameter::PSV_DISC_ROW_HEIGHT_1)->andReturn('5040');
+        $sysParamRepo->shouldReceive('fetchValue')
+            ->with(SystemParameter::PSV_DISC_ROW_HEIGHT_2)->andReturn('5040');
+        $sysParamRepo->shouldReceive('fetchValue')
+            ->with(SystemParameter::PSV_DISC_ROW_HEIGHT_3)->andReturn('5040');
+        $sysParamRepo->shouldReceive('fetchValue')
+            ->with(SystemParameter::PSV_DISC_LINE_SPACING)->andReturn('240');
+
+        $repoManager = m::mock(RepositoryServiceManager::class);
+        $repoManager->shouldReceive('get')->with('SystemParameter')->andReturn($sysParamRepo);
+
+        $parser = m::mock(RtfParser::class)->makePartial();
+        $parser->shouldReceive('replace')
+            ->with('snippet', m::on(static fn(array $tokens): bool => isset(
+                $tokens['PSV_DISC_ROW_HEIGHT_1'],
+                $tokens['PSV_DISC_ROW_HEIGHT_2'],
+                $tokens['PSV_DISC_ROW_HEIGHT_3'],
+                $tokens['PSV_DISC_LINE_SPACING'],
+            ) && $tokens['PSV_DISC_ROW_HEIGHT_1'] === '5040'))
+            ->andReturn('rendered');
+
+        $bookmark = $this->createPartialMock(PsvDiscPage::class, ['getSnippet']);
+        $bookmark->method('getSnippet')->willReturn('snippet');
+        $bookmark->setRepoManager($repoManager);
+        $bookmark->setData($data);
+        $bookmark->setParser($parser);
+
+        $this->assertSame('rendered', $bookmark->render());
+    }
+
+    public function testRenderWithPinnedLayoutToggleOffOmitsAlignmentTokens(): void
+    {
+        $data = [[
+            'isCopy' => 'N',
+            'discNo' => 1,
+            'licence' => [
+                'organisation' => ['name' => 'Org'],
+                'licNo' => 'L1',
+                'inForceDate' => '2026-01-01',
+                'expiryDate' => '2027-01-01',
+            ],
+        ]];
+
+        $sysParamRepo = m::mock(SystemParameterRepo::class);
+        $sysParamRepo->shouldReceive('fetchValue')
+            ->with(SystemParameter::PSV_DISC_PINNED_LAYOUT)->andReturn(null);
+
+        $repoManager = m::mock(RepositoryServiceManager::class);
+        $repoManager->shouldReceive('get')->with('SystemParameter')->andReturn($sysParamRepo);
+
+        $parser = m::mock(RtfParser::class)->makePartial();
+        $parser->shouldReceive('replace')
+            ->with('snippet', m::on(static fn(array $tokens): bool => !array_key_exists(
+                'PSV_DISC_ROW_HEIGHT_1',
+                $tokens,
+            )))
+            ->andReturn('rendered');
+
+        $bookmark = $this->createPartialMock(PsvDiscPage::class, ['getSnippet']);
+        $bookmark->method('getSnippet')->willReturn('snippet');
+        $bookmark->setRepoManager($repoManager);
+        $bookmark->setData($data);
+        $bookmark->setParser($parser);
+
+        $this->assertSame('rendered', $bookmark->render());
     }
 }

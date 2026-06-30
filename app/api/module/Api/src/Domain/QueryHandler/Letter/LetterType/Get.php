@@ -16,12 +16,17 @@ class Get extends AbstractQueryByIdHandler
         'category',
         'subCategory',
         'letterTestData',
-        'letterTypeSections',
+        'letterTypeSections' => [
+            'letterSection',
+        ],
         'letterTypeIssues',
         'letterTypeAppendices' => [
             'letterAppendixVersion' => [
                 'letterAppendix'
             ]
-        ]
+        ],
+        'letterTypeChoices' => [
+            'letterChoice',
+        ],
     ];
 }

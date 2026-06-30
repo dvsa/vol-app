@@ -28,5 +28,8 @@ class PiDefinition extends AbstractRepository
                     ->setParameter('goodsOrPsv', $query->getGoodsOrPsv());
             }
         }
+
+        $qb->andWhere($qb->expr()->eq('m.isVisibleInInternal', ':isVisibleInInternal'))
+            ->setParameter('isVisibleInInternal', true);
     }
 }

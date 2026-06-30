@@ -9,7 +9,6 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\ResponseHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Dvsa\Olcs\Transfer\Command\ContinuationDetail\Queue as QueueCmd;
 use Dvsa\Olcs\Transfer\Query\ContinuationDetail\ChecklistReminders as ChecklistRemindersQry;
 use Laminas\View\Helper\Placeholder;
 use Laminas\View\Model\ViewModel;
@@ -17,8 +16,6 @@ use Laminas\View\Model\ViewModel;
 class ContinuationChecklistReminderController extends AbstractController
 {
     use CrudActionTrait;
-
-    public const TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER = 'que_typ_cont_check_rem_gen_let';
 
     public function __construct(
         Placeholder $placeholder,
@@ -123,35 +120,6 @@ class ContinuationChecklistReminderController extends AbstractController
         }
 
         return $form;
-    }
-
-    /**
-     * Generate Continuation checklist reminder letters
-     *
-     * @return \Laminas\Http\Response
-     */
-    public function generateLettersAction()
-    {
-        $continuationDetailIds = explode(',', (string) $this->params('child_id'));
-
-        $response = $this->handleCommand(
-            QueueCmd::create(
-                [
-                    'ids' => $continuationDetailIds,
-                    'type' => self::TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER
-                ]
-            )
-        );
-        $flashMessenger = $this->flashMessengerHelper;
-        if ($response->isClientError() || $response->isServerError()) {
-            $flashMessenger->addErrorMessage('The checklist reminder letters could not be generated, please try again');
-        }
-
-        if ($response->isOk()) {
-            $flashMessenger->addSuccessMessage('The checklist reminder letters have been generated.');
-        }
-
-        return $this->redirect()->toRouteAjax(null, ['action' => null, 'child_id' => null], [], true);
     }
 
     /**

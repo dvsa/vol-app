@@ -18,12 +18,43 @@ class LetterType implements MapperInterface
     #[\Override]
     public static function mapFromResult(array $data): array
     {
+        // Extract section IDs and required flags from letterTypeSections collection (ordered by displayOrder)
+        $sectionIds = [];
+        $requiredSectionIds = [];
+        if (!empty($data['letterTypeSections'])) {
+            // Sort by displayOrder to preserve assembly ordering
+            $sections = $data['letterTypeSections'];
+            usort($sections, fn($a, $b) => ($a['displayOrder'] ?? 0) <=> ($b['displayOrder'] ?? 0));
+            foreach ($sections as $lts) {
+                $sectionId = $lts['letterSectionVersion']['letterSection']['id']
+                    ?? $lts['letterSection']['id']
+                    ?? null;
+                if ($sectionId) {
+                    $sectionIds[] = $sectionId;
+                    if (!empty($lts['isRequired'])) {
+                        $requiredSectionIds[] = $sectionId;
+                    }
+                }
+            }
+        }
+
         // Extract appendix IDs from letterTypeAppendices collection
         $appendixIds = [];
         if (!empty($data['letterTypeAppendices'])) {
             foreach ($data['letterTypeAppendices'] as $lta) {
                 if (isset($lta['letterAppendixVersion']['letterAppendix']['id'])) {
                     $appendixIds[] = $lta['letterAppendixVersion']['letterAppendix']['id'];
+                }
+            }
+        }
+
+        // Extract choice IDs from letterTypeChoices collection
+        $choiceIds = [];
+        if (!empty($data['letterTypeChoices'])) {
+            foreach ($data['letterTypeChoices'] as $ltc) {
+                $choiceId = $ltc['letterChoice']['id'] ?? $ltc['letterChoiceId'] ?? null;
+                if ($choiceId) {
+                    $choiceIds[] = $choiceId;
                 }
             }
         }
@@ -37,7 +68,10 @@ class LetterType implements MapperInterface
                 'masterTemplate' => isset($data['masterTemplate']['id']) ? $data['masterTemplate']['id'] : null,
                 'category' => isset($data['category']['id']) ? $data['category']['id'] : null,
                 'subCategory' => isset($data['subCategory']['id']) ? $data['subCategory']['id'] : null,
-                'letterTestData' => isset($data['letterTestData']['id']) ? $data['letterTestData']['id'] : null,
+                'sections' => $sectionIds,
+                'sectionsOrder' => implode(',', $sectionIds),
+                'sectionsRequired' => implode(',', $requiredSectionIds),
+                'choices' => $choiceIds,
                 'appendices' => $appendixIds,
             ]
         ];
@@ -78,13 +112,24 @@ class LetterType implements MapperInterface
             unset($commandData['subCategory']);
         }
 
-        if (empty($commandData['letterTestData'])) {
-            unset($commandData['letterTestData']);
+        // Use sectionsOrder (from hidden input) for ordered section IDs, fall back to sections multi-select
+        $sectionsOrder = $commandData['sectionsOrder'] ?? '';
+        if (!empty($sectionsOrder)) {
+            $commandData['sections'] = array_filter(explode(',', $sectionsOrder));
+        } else {
+            $commandData['sections'] = array_filter((array)($commandData['sections'] ?? []));
         }
+        unset($commandData['sectionsOrder']);
 
-        // Ensure appendices is always an array (even if empty) so the handler processes removals.
-        // When a multi-select has nothing selected, browsers don't submit the field at all.
+        // Parse required sections (comma-separated IDs from hidden input)
+        $sectionsRequired = $commandData['sectionsRequired'] ?? '';
+        $commandData['sectionsRequired'] = !empty($sectionsRequired)
+            ? array_filter(explode(',', $sectionsRequired))
+            : [];
+
+        // Ensure appendices and choices are always arrays so the handler processes removals.
         $commandData['appendices'] = array_filter((array)($commandData['appendices'] ?? []));
+        $commandData['choices'] = array_filter((array)($commandData['choices'] ?? []));
 
         return $commandData;
     }

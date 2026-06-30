@@ -34,9 +34,7 @@ class MyAccountTest extends QueryHandlerTestCase
 
         $this->mockRepo('SystemParameter', SysParamRepo::class);
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         parent::setUp();
     }

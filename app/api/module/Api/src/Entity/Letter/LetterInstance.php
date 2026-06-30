@@ -82,6 +82,20 @@ class LetterInstance extends AbstractLetterInstance
     protected $letterInstanceAppendices;
 
     /**
+     * Letter instance choices (selected by caseworker)
+     *
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterInstanceChoice",
+     *     mappedBy="letterInstance",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $letterInstanceChoices;
+
+    /**
      * Initialise collections
      */
     public function __construct()
@@ -90,6 +104,7 @@ class LetterInstance extends AbstractLetterInstance
         $this->letterInstanceIssues = new ArrayCollection();
         $this->letterInstanceTodos = new ArrayCollection();
         $this->letterInstanceAppendices = new ArrayCollection();
+        $this->letterInstanceChoices = new ArrayCollection();
     }
 
     /**
@@ -320,6 +335,59 @@ class LetterInstance extends AbstractLetterInstance
         }
 
         return true;
+    }
+
+    /**
+     * Get letter instance choices
+     *
+     * @return ArrayCollection
+     */
+    public function getLetterInstanceChoices()
+    {
+        return $this->letterInstanceChoices;
+    }
+
+    /**
+     * Add letter instance choice
+     *
+     * @param LetterInstanceChoice $choice
+     * @return self
+     */
+    public function addLetterInstanceChoice(LetterInstanceChoice $choice)
+    {
+        if (!$this->letterInstanceChoices->contains($choice)) {
+            $choice->setLetterInstance($this);
+            $this->letterInstanceChoices->add($choice);
+        }
+        return $this;
+    }
+
+    /**
+     * Get IDs of selected letter choices
+     *
+     * @return array<int>
+     */
+    public function getSelectedChoiceIds(): array
+    {
+        $ids = [];
+        foreach ($this->letterInstanceChoices as $instanceChoice) {
+            $ids[] = $instanceChoice->getLetterChoice()->getId();
+        }
+        return $ids;
+    }
+
+    /**
+     * Get keys of selected letter choices
+     *
+     * @return array<string>
+     */
+    public function getSelectedChoiceKeys(): array
+    {
+        $keys = [];
+        foreach ($this->letterInstanceChoices as $instanceChoice) {
+            $keys[] = $instanceChoice->getLetterChoice()->getChoiceKey();
+        }
+        return $keys;
     }
 
     /**

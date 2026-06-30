@@ -52,6 +52,9 @@ class ReasonTest extends RepositoryTestCase
             ->andReturnSelf()
             ->shouldReceive('setParameter')
             ->with('goodsOrPsv', 'lcat_gv')
+            ->andReturnSelf()
+            ->shouldReceive('setParameter')
+            ->with('isVisibleInInternal', true)
             ->andReturnSelf();
 
         $query = ReasonList::create(['isProposeToRevoke' => 'Y', 'isNi' => 'Y', 'goodsOrPsv' => 'lcat_gv']);
@@ -85,6 +88,9 @@ class ReasonTest extends RepositoryTestCase
             ->shouldReceive('setParameter')
             ->with('goodsOrPsv', 'NULL')
             ->shouldReceive('isNull')
+            ->andReturnSelf()
+            ->shouldReceive('setParameter')
+            ->with('isVisibleInInternal', true)
             ->andReturnSelf();
 
         $query = ReasonList::create(['isProposeToRevoke' => 'Y', 'isNi' => 'Y', 'goodsOrPsv' => 'NULL']);

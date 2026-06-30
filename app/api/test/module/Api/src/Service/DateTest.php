@@ -28,9 +28,7 @@ class DateTest extends MockeryTestCase
     {
         $this->sut = new Date();
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
     }
 
     public function testGetDateWithNoParams(): void

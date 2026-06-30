@@ -11,6 +11,8 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssueType;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion;
+use Dvsa\Olcs\Api\Entity\Letter\LetterSection;
+use Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion;
 use Dvsa\Olcs\Api\Entity\Letter\MasterTemplate;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
@@ -89,12 +91,13 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->with('issue')
             ->andReturn($mockIssueRenderer);
 
-        $mockSection = m::mock(LetterInstanceSection::class);
+        $mockSection = $this->createMockSection();
         $mockIssue = $this->createMockIssue('Test Issue Type', 'Issue Type Description', 1);
 
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
             ->andReturn(new ArrayCollection([$mockSection]));
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection([$mockIssue]));
         $mockLetterInstance->shouldReceive('getLicence')->andReturn(null);
@@ -111,7 +114,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $this->assertStringContainsString('<div class="letter-content">', $result);
         $this->assertStringContainsString('<div class="sections">', $result);
         $this->assertStringContainsString('Section content', $result);
-        $this->assertStringContainsString('<div class="issues">', $result);
+        // Issues are rendered inline via assembly fallback (no __ISSUES__ meta-section)
         $this->assertStringContainsString('Issue content', $result);
     }
 
@@ -134,12 +137,13 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->with('issue')
             ->andReturn($mockIssueRenderer);
 
-        $mockSection = m::mock(LetterInstanceSection::class);
+        $mockSection = $this->createMockSection();
         $mockIssue = $this->createMockIssue('Adverts', 'Advert issues', 1);
 
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
             ->andReturn(new ArrayCollection([$mockSection]));
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection([$mockIssue]));
         $mockLetterInstance->shouldReceive('getReference')
@@ -197,6 +201,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
             ->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')
@@ -241,6 +246,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
             ->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')
@@ -288,6 +294,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
             ->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')
@@ -340,6 +347,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
             ->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')
@@ -388,6 +396,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
             ->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')
@@ -440,6 +449,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
             ->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')
@@ -484,6 +494,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
             ->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')
@@ -528,6 +539,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
             ->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')
@@ -584,6 +596,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
             ->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection([$mockIssue1, $mockIssue2, $mockIssue3]));
         $mockLetterInstance->shouldReceive('getReference')
@@ -603,7 +616,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
 
-        $templateContent = '{{ISSUES_CONTENT}}';
+        // Issues are rendered via assembly fallback into SECTIONS_CONTENT (no __ISSUES__ meta-section)
+        $templateContent = '{{SECTIONS_CONTENT}}';
         $mockTemplate = m::mock(MasterTemplate::class);
         $mockTemplate->shouldReceive('getTemplateContent')
             ->andReturn($templateContent);
@@ -631,7 +645,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->with('issue')
             ->andReturn($mockIssueRenderer);
 
-        $mockSection = m::mock(LetterInstanceSection::class);
+        $mockSection = $this->createMockSection();
 
         $mockLicence = m::mock(Licence::class);
         $mockLicence->shouldReceive('getId')->andReturn(123);
@@ -644,6 +658,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
             ->andReturn(new ArrayCollection([$mockSection]));
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLicence')
@@ -685,7 +700,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->with('issue')
             ->andReturn($mockIssueRenderer);
 
-        $mockSection = m::mock(LetterInstanceSection::class);
+        $mockSection = $this->createMockSection();
 
         $mockLicence = m::mock(Licence::class);
         $mockLicence->shouldReceive('getId')->andReturn(111);
@@ -712,6 +727,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
             ->andReturn(new ArrayCollection([$mockSection]));
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLicence')
@@ -757,11 +773,12 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->with('issue')
             ->andReturn($mockIssueRenderer);
 
-        $mockSection = m::mock(LetterInstanceSection::class);
+        $mockSection = $this->createMockSection();
 
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
             ->andReturn(new ArrayCollection([$mockSection]));
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLicence')
@@ -812,6 +829,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
             ->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection([$mockIssue]));
         $mockLetterInstance->shouldReceive('getLicence')
@@ -856,7 +874,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->with('issue')
             ->andReturn($mockIssueRenderer);
 
-        $mockSection = m::mock(LetterInstanceSection::class);
+        $mockSection = $this->createMockSection();
 
         $mockLicence = m::mock(Licence::class);
         $mockLicence->shouldReceive('getId')->andReturn(123);
@@ -866,6 +884,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
             ->andReturn(new ArrayCollection([$mockSection]));
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')
@@ -917,11 +936,12 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->with('issue')
             ->andReturn($mockIssueRenderer);
 
-        $mockSection = m::mock(LetterInstanceSection::class);
+        $mockSection = $this->createMockSection();
 
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
             ->andReturn(new ArrayCollection([$mockSection]));
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLicence')->andReturn(null);
@@ -958,5 +978,19 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockIssue->shouldReceive('getLetterIssueVersion')->andReturn($mockIssueVersion);
 
         return $mockIssue;
+    }
+
+    private function createMockSection(string $sectionKey = 'test-section'): m\MockInterface
+    {
+        $mockLetterSection = m::mock(LetterSection::class);
+        $mockLetterSection->shouldReceive('getSectionKey')->andReturn($sectionKey);
+
+        $mockSectionVersion = m::mock(LetterSectionVersion::class);
+        $mockSectionVersion->shouldReceive('getLetterSection')->andReturn($mockLetterSection);
+
+        $mockSection = m::mock(LetterInstanceSection::class);
+        $mockSection->shouldReceive('getLetterSectionVersion')->andReturn($mockSectionVersion);
+
+        return $mockSection;
     }
 }

@@ -12,10 +12,9 @@ use Dvsa\OlcsTest\Cpms\Client\ClientOptionsTestTrait;
 use Dvsa\OlcsTest\Cpms\Client\GuzzleTestTrait;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
-use Monolog\Handler\TestHandler;
-use Monolog\Logger;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
+use Olcs\Logging\Test\RecordingLogger;
 
 class ApiServiceTest extends TestCase
 {
@@ -23,7 +22,7 @@ class ApiServiceTest extends TestCase
     use GuzzleTestTrait;
 
     /**
-     * @var Logger
+     * @var RecordingLogger
      */
     private $logger;
 
@@ -55,8 +54,7 @@ class ApiServiceTest extends TestCase
         $identityFactory = new CpmsIdentityProviderFactory($clientId, $clientSecret, $userId);
         $this->identity = $identityFactory->createCpmsIdentityProvider();
 
-        $this->logger = new Logger('cpms_client_logger');
-        $this->logger->pushHandler(new TestHandler());
+        $this->logger = new RecordingLogger();
 
         $this->httpClient = new HttpClient(
             $this->setUpMockClient(),

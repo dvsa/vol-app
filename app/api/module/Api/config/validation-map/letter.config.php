@@ -3,6 +3,7 @@
 use Dvsa\Olcs\Api\Domain\QueryHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsInternalUser;
+use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSystemAdmin;
 
 return [
     // Letter Type
@@ -66,8 +67,18 @@ return [
     // Letter Instance Issue
     CommandHandler\Letter\LetterInstanceIssue\UpdateContent::class => IsInternalUser::class,
 
+    // Letter Instance Section
+    CommandHandler\Letter\LetterInstanceSection\UpdateContent::class => IsInternalUser::class,
+
     // Letter Instance Appendix
     CommandHandler\Letter\LetterInstanceAppendix\UpdateContent::class => IsInternalUser::class,
+
+    // Letter Choice (read for caseworkers, write for admins)
+    QueryHandler\Letter\LetterChoice\Get::class => IsInternalUser::class,
+    QueryHandler\Letter\LetterChoice\GetList::class => IsInternalUser::class,
+    CommandHandler\Letter\LetterChoice\Create::class => IsSystemAdmin::class,
+    CommandHandler\Letter\LetterChoice\Update::class => IsSystemAdmin::class,
+    CommandHandler\Letter\LetterChoice\Delete::class => IsSystemAdmin::class,
 
     // Letter Test Data
     QueryHandler\Letter\LetterTestData\Get::class => IsInternalUser::class,
@@ -75,4 +86,10 @@ return [
     CommandHandler\Letter\LetterTestData\Create::class => IsInternalUser::class,
     CommandHandler\Letter\LetterTestData\Update::class => IsInternalUser::class,
     CommandHandler\Letter\LetterTestData\Delete::class => IsInternalUser::class,
+
+    // Letter Section Variant
+    QueryHandler\Letter\LetterSectionVariant\Get::class => IsSystemAdmin::class,
+    CommandHandler\Letter\LetterSectionVariant\Create::class => IsSystemAdmin::class,
+    CommandHandler\Letter\LetterSectionVariant\Update::class => IsSystemAdmin::class,
+    CommandHandler\Letter\LetterSectionVariant\Delete::class => IsSystemAdmin::class,
 ];

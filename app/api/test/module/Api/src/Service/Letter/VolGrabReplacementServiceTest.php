@@ -44,9 +44,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         );
 
         // Initialize Logger properly (Logger is static)
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
     }
 
     public function tearDown(): void
