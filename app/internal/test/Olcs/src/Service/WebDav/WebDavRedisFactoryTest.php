@@ -43,18 +43,29 @@ class WebDavRedisFactoryTest extends MockeryTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
-    public function invokeUsesDefaultsWhenConfigMissing(): void
+    public function invokeReturnsNullWhenConnectIsRefused(): void
     {
+        // Loopback with a closed port refuses immediately, so this is deterministic and fast
+        // (no dependency on a running Redis, no risk of hitting the connect timeout).
         $container = $this->createMock(ContainerInterface::class);
         $container->method('get')
             ->with('Config')
-            ->willReturn([]);
+            ->willReturn([
+                'caches' => [
+                    'default-cache' => [
+                        'options' => [
+                            'server' => [
+                                'host' => '127.0.0.1',
+                                'port' => 1,
+                            ],
+                        ],
+                    ],
+                ],
+            ]);
 
         $factory = new WebDavRedisFactory();
-
-        // This will either connect to localhost:6379 if Redis is running, or return null
         $result = $factory($container, WebDavRedisFactory::SERVICE_NAME);
 
-        $this->assertTrue($result === null || $result instanceof \Redis);
+        $this->assertNull($result);
     }
 }

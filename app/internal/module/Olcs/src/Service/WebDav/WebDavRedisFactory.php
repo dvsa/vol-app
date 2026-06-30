@@ -27,11 +27,19 @@ class WebDavRedisFactory implements FactoryInterface
 
         try {
             $redis = new \Redis();
-            @$redis->connect(
+            // Suppress the connection warning (this is a WebDAV front controller — stray output
+            // before headers would corrupt the protocol response) but still inspect the result:
+            // connect() can return false rather than throwing, and we must never hand back a dead client.
+            $connected = @$redis->connect(
                 $redisConfig['host'] ?? 'localhost',
                 (int) ($redisConfig['port'] ?? 6379),
                 5.0
             );
+
+            if ($connected !== true) {
+                return null;
+            }
+
             return $redis;
         } catch (\RedisException) {
             return null;

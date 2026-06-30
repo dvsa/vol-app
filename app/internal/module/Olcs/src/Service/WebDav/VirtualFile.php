@@ -26,6 +26,7 @@ class VirtualFile implements IFile
         private readonly CachingQueryService $queryService,
         private readonly CommandService $commandService,
         private readonly int $initialSize = 0,
+        private readonly ?int $lastModified = null,
     ) {
     }
 
@@ -114,7 +115,9 @@ class VirtualFile implements IFile
     #[\Override]
     public function getLastModified(): ?int
     {
-        return $this->cachedLastModified ?? time();
+        // Prefer the post-write timestamp; otherwise a value stable for the whole editing
+        // session (the JWT issue time) so PROPFIND doesn't report a fresh mtime every request.
+        return $this->cachedLastModified ?? $this->lastModified;
     }
 
     #[\Override]

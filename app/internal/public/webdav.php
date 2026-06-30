@@ -143,9 +143,16 @@ $identityContainer->offsetSet('storage', $tokenData);
 session_write_close();
 
 // Build the virtual filesystem tree
-// Use documentId + extension as filename (all operations use the ID via CQRS)
-$extension = $documentPath ?: 'rtf';
+// Use documentId + extension as filename (all operations use the ID via CQRS).
+// The `doc` claim is signed, but allow-list the extension as defence in depth so it can
+// never introduce unexpected characters into the virtual node name.
+$allowedExtensions = ['rtf', 'doc', 'docx'];
+$extension = in_array(strtolower((string) $documentPath), $allowedExtensions, true)
+    ? strtolower((string) $documentPath)
+    : 'rtf';
 $filename = $documentId . '.' . $extension;
+
+$issuedAt = isset($payload->iat) ? (int) $payload->iat : null;
 
 $virtualFile = new VirtualFile(
     $filename,
@@ -154,6 +161,7 @@ $virtualFile = new VirtualFile(
     $queryService,
     $container->get('CommandService'),
     $documentSize,
+    $issuedAt,
 );
 
 $rootDir = new VirtualDirectory('root', [$virtualFile]);

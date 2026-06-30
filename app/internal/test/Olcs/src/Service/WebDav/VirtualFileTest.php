@@ -31,7 +31,7 @@ class VirtualFileTest extends MockeryTestCase
         $this->commandService = Mockery::mock(CommandService::class);
     }
 
-    private function createSut(string $name = 'test-document.rtf', int $documentId = 42, int $initialSize = 0): VirtualFile
+    private function createSut(string $name = 'test-document.rtf', int $documentId = 42, int $initialSize = 0, ?int $lastModified = null): VirtualFile
     {
         return new VirtualFile(
             $name,
@@ -40,6 +40,7 @@ class VirtualFileTest extends MockeryTestCase
             $this->queryService,
             $this->commandService,
             $initialSize,
+            $lastModified,
         );
     }
 
@@ -307,15 +308,21 @@ class VirtualFileTest extends MockeryTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
-    public function getLastModifiedReturnsTimestamp(): void
+    public function getLastModifiedReturnsSessionTimestampWhenProvided(): void
+    {
+        $sessionTime = 1700000000;
+        $sut = $this->createSut(lastModified: $sessionTime);
+
+        // Stable across calls so PROPFIND doesn't report a fresh mtime every request.
+        $this->assertSame($sessionTime, $sut->getLastModified());
+        $this->assertSame($sessionTime, $sut->getLastModified());
+    }
+
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function getLastModifiedReturnsNullWhenNoTimestampAvailable(): void
     {
         $sut = $this->createSut();
 
-        $before = time();
-        $result = $sut->getLastModified();
-
-        $this->assertIsInt($result);
-        $this->assertGreaterThanOrEqual($before, $result);
-        $this->assertLessThanOrEqual(time(), $result);
+        $this->assertNull($sut->getLastModified());
     }
 }
