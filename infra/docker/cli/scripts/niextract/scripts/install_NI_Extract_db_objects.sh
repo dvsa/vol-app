@@ -15,14 +15,7 @@ cd "$SCRIPT_DIR" || exit 1
 run_sql() {
     local file="$1"
     echo "Running $file..."
-    python3 - "$file" << 'PYEOF' | mysql $CONNECTION "$DB" || { echo "ERROR: Failed to execute $file"; exit 1; }
-import sys
-content = open(sys.argv[1]).read()
-content = content.replace('DELIMITER $$', '')
-content = content.replace('DELIMITER ;', '')
-content = content.replace('$$', ';')
-print(content)
-PYEOF
+    mysql $CONNECTION "$DB" -e "SOURCE $file" || { echo "ERROR: Failed to execute $file"; exit 1; }
 }
 
 run_sql "$SCRIPT_DIR/NI_Extract_table.sql"
