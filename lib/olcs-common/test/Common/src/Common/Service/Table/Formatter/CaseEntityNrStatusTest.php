@@ -116,4 +116,31 @@ class CaseEntityNrStatusTest extends MockeryTestCase
             $this->sut->format($data, null)
         );
     }
+
+    public function testFormatAppWithNoApplication(): void
+    {
+        $licId = 9999;
+
+        $this->mockUrlHlp
+            ->shouldReceive('fromRoute')
+            ->with('lva-licence', ['licence' => $licId])
+            ->once()
+            ->andReturn('EXPECT_LIC_URL');
+
+        $data = [
+            'caseType' => [
+                'id' => \Common\RefData::CASE_TYPE_APPLICATION,
+            ],
+            'licence' => [
+                'id' => $licId,
+                'status' => [
+                    'description' => 'unit_LicStatus',
+                ],
+                'licNo' => 'unit_LicNo',
+            ],
+            'application' => null,
+        ];
+
+        static::assertSame('', $this->sut->format($data, null));
+    }
 }
