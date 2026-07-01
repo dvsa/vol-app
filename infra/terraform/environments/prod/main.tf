@@ -96,14 +96,33 @@ locals {
     {
       effect = "Allow"
       actions = [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket",
+        "s3:DeleteObject"
+      ]
+      resources = [
+        "arn:aws:s3:::app-shd-pri-olcsci-build-s3",
+        "arn:aws:s3:::app-shd-pri-olcsci-build-s3/*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
         "rds:CreateDBClusterSnapshot",
         "rds:DescribeDBClusterSnapshots",
         "rds:DeleteDBClusterSnapshot",
+        "rds:ModifyDBClusterSnapshotAttribute"
       ]
       resources = [
 
-        "arn:aws:rds:eu-west-1:054614622558:cluster:app-aurora-olcsdb-cluster",
-        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*"
+        "arn:aws:rds:eu-west-1:146997448015:cluster:app-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-db-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:ni-extract-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*"
+
       ]
     },
     {
@@ -112,8 +131,9 @@ locals {
         "rds:DescribeDBClusters",
       ]
       resources = [
-        "arn:aws:rds:eu-west-1:054614622558:cluster:app-aurora-olcsdb-cluster",
-        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-*"
+        "arn:aws:rds:eu-west-1:146997448015:cluster:app-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*"
       ]
     },
     {
@@ -123,9 +143,11 @@ locals {
         "rds:AddTagsToResource",
       ]
       resources = [
-        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*",
-        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
-        "arn:aws:rds:eu-west-1:054614622558:subgrp:app-olcs-rds-*"
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:subgrp:app-olcs-rds-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:ni-extract-*"
       ]
     },
     {
@@ -135,8 +157,10 @@ locals {
         "rds:DescribeDBInstances",
       ]
       resources = [
-        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
-        "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*"
+        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:db:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*"
       ]
     },
     {
@@ -146,8 +170,10 @@ locals {
         "rds:DeleteDBCluster",
       ]
       resources = [
-        "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*",
-        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:db:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*"
       ]
     },
     {
@@ -156,7 +182,7 @@ locals {
         "rds:ModifyDBClusterSnapshotAttribute"
       ]
       resources = [
-        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*"
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-anon-*"
       ]
     }
   ]
