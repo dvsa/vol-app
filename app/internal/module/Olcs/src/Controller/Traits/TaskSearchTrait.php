@@ -13,6 +13,8 @@ use Laminas\Form\Element\Select;
  */
 trait TaskSearchTrait
 {
+    protected string $showDocsFilter = FilterOptions::SHOW_ALL;
+
     /**
      * Inspect the request to see if we have any filters set, and if necessary, filter them down to a valid subset
      *
@@ -33,7 +35,7 @@ trait TaskSearchTrait
             'order' => 'DESC,ASC',
             'page' => 1,
             'limit' => 10,
-            'showTasks' => FilterOptions::SHOW_ALL,
+            'showTasks' => $this->showDocsFilter,
         ];
 
         $filters = array_merge(
