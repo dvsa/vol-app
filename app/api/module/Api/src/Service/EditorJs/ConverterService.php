@@ -60,7 +60,7 @@ class ConverterService
             throw new \RuntimeException('HTMLPurifier is required for secure HTML sanitization');
         }
 
-        $purifier = new \HTMLPurifier(\HTMLPurifier_Config::createDefault());
+        $purifier = new \HTMLPurifier($this->buildPurifierConfig());
         $cleanHtml = $purifier->purify($html);
 
         // Remove empty paragraphs and other empty block elements
@@ -68,6 +68,23 @@ class ConverterService
         $cleanHtml = preg_replace('/<div[^>]*>\s*<\/div>/', '', (string) $cleanHtml);
 
         return trim((string) $cleanHtml);
+    }
+
+
+    /**
+     * Build the HTMLPurifier config.
+     *
+     * Points the definition-cache serializer at a writable directory. HTMLPurifier's default is
+     * inside the vendor tree, which is read-only in deployed containers and so triggers
+     * "Directory ... not writable" warnings and forces the definition cache to be regenerated on
+     * every call.
+     */
+    public function buildPurifierConfig(): \HTMLPurifier_Config
+    {
+        $config = \HTMLPurifier_Config::createDefault();
+        $config->set('Cache.SerializerPath', sys_get_temp_dir());
+
+        return $config;
     }
 
 

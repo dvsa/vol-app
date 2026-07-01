@@ -117,6 +117,8 @@ return [
         'en_GB' => '',
         'cy_GB' => '',
       ],
+      // No forward proxy locally — the Notify client connects directly.
+      'proxy' => '',
     ],
     // VOL-7238: dedicated DSN for the admin "Send test via Notify" button (independent of
     // `mail.dsn`). Set to `govuknotify+mailpit://mailpit:1025` to wire the button through
