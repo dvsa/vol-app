@@ -73,7 +73,7 @@ class DeclarationReviewServiceTest extends MockeryTestCase
         $this->assertEquals(
             [
                 'mainItems' => [
-                    ['markup' => 'markup-continuation-declaration-psv_translated()'],
+                    ['markup' => 'markup-continuation-declaration-psv-restricted_translated()'],
                     [
                         'header' => 'continuations.declaration.signature-details',
                         'items' => [
@@ -208,14 +208,14 @@ class DeclarationReviewServiceTest extends MockeryTestCase
                 true,
             ],
             [
-                'markup-continuation-declaration-psv_translated()',
+                'markup-continuation-declaration-psv-restricted_translated()',
                 Licence::LICENCE_CATEGORY_PSV,
                 Licence::LICENCE_TYPE_RESTRICTED,
                 false,
                 false,
             ],
             [
-                'markup-continuation-declaration-psv_translated()',
+                'markup-continuation-declaration-psv-restricted_translated()',
                 Licence::LICENCE_CATEGORY_PSV,
                 Licence::LICENCE_TYPE_RESTRICTED,
                 true,
@@ -236,32 +236,28 @@ class DeclarationReviewServiceTest extends MockeryTestCase
                 false,
             ],
             [
-                'markup-continuation-declaration-psv_translated'
-                    . '(markup-continuation-declaration-psv-standard_translated(%s))',
+                'markup-continuation-declaration-psv_translated()',
                 Licence::LICENCE_CATEGORY_PSV,
                 Licence::LICENCE_TYPE_STANDARD_NATIONAL,
                 false,
                 false,
             ],
             [
-                'markup-continuation-declaration-psv_translated'
-                    . '(markup-continuation-declaration-psv-standard_translated(%s))',
+                'markup-continuation-declaration-psv_translated()',
                 Licence::LICENCE_CATEGORY_PSV,
                 Licence::LICENCE_TYPE_STANDARD_NATIONAL,
                 true,
                 false,
             ],
             [
-                'markup-continuation-declaration-psv_translated'
-                    . '(markup-continuation-declaration-psv-standard_translated(%s))',
+                'markup-continuation-declaration-psv_translated()',
                 Licence::LICENCE_CATEGORY_PSV,
                 Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
                 false,
                 false,
             ],
             [
-                'markup-continuation-declaration-psv_translated'
-                    . '(markup-continuation-declaration-psv-standard_translated(%s))',
+                'markup-continuation-declaration-psv_translated()',
                 Licence::LICENCE_CATEGORY_PSV,
                 Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
                 true,
@@ -277,7 +273,7 @@ class DeclarationReviewServiceTest extends MockeryTestCase
         $this->assertEquals(
             [
                 'mainItems' => [
-                    ['markup' => 'markup-continuation-declaration-psv_translated()'],
+                    ['markup' => 'markup-continuation-declaration-psv-restricted_translated()'],
                     [
                         'header' => 'continuations.declaration.signature-details',
                         'items' => [
@@ -301,7 +297,7 @@ class DeclarationReviewServiceTest extends MockeryTestCase
         $this->assertEquals(
             [
                 'mainItems' => [
-                    ['markup' => 'markup-continuation-declaration-psv_translated()'],
+                    ['markup' => 'markup-continuation-declaration-psv-restricted_translated()'],
                     [
                         'header' => 'continuations.declaration.signature-details',
                         'items' => [
@@ -334,7 +330,7 @@ class DeclarationReviewServiceTest extends MockeryTestCase
         $this->assertEquals(
             [
                 'mainItems' => [
-                    ['markup' => 'markup-continuation-declaration-psv_translated()'],
+                    ['markup' => 'markup-continuation-declaration-psv-restricted_translated()'],
                     [
                         'header' => 'continuations.declaration.signature-details',
                         'items' => [
