@@ -76,6 +76,7 @@ use Dvsa\Olcs\Api\Domain\ValidatorManager;
  * @method bool canDeleteSurrender($entityId)
  * @method bool canAccessLicenceForSurrender($entityId)
  * @method bool canConfirmSurrender($entityId)
+ * @method bool isDocumentCreator($entityId)
  */
 trait ValidationHelperTrait
 {

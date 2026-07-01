@@ -60,13 +60,13 @@ return [
       'webdav_baseuri' => 'http://webdav.dev.olcs.dev-dvsacloud.uk:8080/documents/',
       'password' => ''
     ],
-    // To use the native S3 document store locally, set the backend to 's3' and point it at the
-    // dev bucket. Credentials come from the AWS env credentials (awsOptions.useEnvCredentials).
-    // 'backend' => 's3',
-    // 's3' => [
-    //   'bucket'     => 'olcs-devappdev-base-sabredav',
-    //   'key_prefix' => '', // set to match the EBS->S3 sync key layout once confirmed
-    // ],
+    // Native S3 document store is the local default. Credentials come from the AWS env
+    // credentials (awsOptions.useEnvCredentials); set 'backend' => 'webdav' to use the legacy store.
+    'backend' => 's3',
+    's3' => [
+      'bucket'     => 'olcs-devappdev-base-sabredav',
+      'key_prefix' => 'migration/olcs',
+    ],
   ],
   'asset_path' => 'http://localhost:7001',
   'companies_house' => [

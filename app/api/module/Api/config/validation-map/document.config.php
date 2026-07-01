@@ -6,6 +6,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanAccessDocumentsWithIds;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanAccessDocumentWithId;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanCreateDocument;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanDeleteDocumentWithId;
+use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanOverwriteDocumentWithId;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsInternalUser;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSystemAdmin;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSystemUser;
@@ -26,6 +27,7 @@ return [
     CommandHandler\Document\PrintLetters::class => CanAccessDocumentsWithIds::class,
     CommandHandler\Document\UpdateDocumentLinks::class => IsInternalUser::class,
     CommandHandler\Document\RemoveDeletedDocuments::class => IsSystemUser::class,
+    CommandHandler\Document\OverwriteContent::class => CanOverwriteDocumentWithId::class,
     CommandHandler\Email\SendPsvOperatorListReport::class => CanAccessDocumentWithId::class,
     CommandHandler\Email\SendInternationalGoods::class => CanAccessDocumentWithId::class,
 
