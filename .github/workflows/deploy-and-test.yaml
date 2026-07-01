@@ -95,19 +95,6 @@ jobs:
       pull-requests: write
     secrets: inherit
 
-  cache_clear:
-    name: Clear Cache
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' }}
-    needs:
-      - terraform_env
-    uses: ./.github/workflows/cache-clear.yaml
-    with:
-      account: ${{ inputs.account }}
-      environment: ${{ inputs.environment }}
-    permissions:
-      contents: read
-      id-token: write
-
   liquibase:
     name: Database Migrations
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' }}
@@ -126,6 +113,19 @@ jobs:
       id-token: write
     secrets:
       VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
+
+  cache_clear:
+    name: Clear Cache
+    if: ${{ always() && !cancelled() && !failure() && needs.liquibase.result == 'success' }}
+    needs:
+      - liquibase
+    uses: ./.github/workflows/cache-clear.yaml
+    with:
+      account: ${{ inputs.account }}
+      environment: ${{ inputs.environment }}
+    permissions:
+      contents: read
+      id-token: write
 
   test_batch:
     name: Run Batch Jobs
@@ -147,13 +147,30 @@ jobs:
       id-token: write
       checks: write
 
+  batch_approval:
+    name: Batch Job manual Approval (tests failed)
+    if: |
+      ${{ needs.test_batch.result == 'failure' }}
+    needs:
+      - test_batch
+    runs-on: ubuntu-latest
+    environment:
+      name: manual-approval
+    steps:
+      - run: echo "Batch Tests failed — awaiting approval to continue"
+
   test_smoke:
     name: Smoke Tests
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment != 'prod' && inputs.environment != 'prep' }}
+    if: |
+      always() && !cancelled() && 
+      needs.terraform_env.result == 'success' && 
+      inputs.environment != 'prod' && 
+      inputs.environment != 'prep' &&
+      needs.batch_approval.result != 'failure'
     needs:
       - terraform_env
       - liquibase
-      - test_batch
+      - batch_approval
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@v4.23.0
     with:
       platform_env: ${{ inputs.environment }}
@@ -167,6 +184,18 @@ jobs:
       id-token: write
       checks: write
 
+  smoke_approval:
+    name: Smoke Job manual Approval (tests failed)
+    if: |
+      ${{ needs.test_smoke.result == 'failure' }}
+    needs:
+      - test_smoke
+    runs-on: ubuntu-latest
+    environment:
+      name: manual-approval
+    steps:
+      - run: echo "Smoke Tests failed — awaiting approval to continue"
+
   test_prep_smoke:
     name: Prep Smoke Tests
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'prep' }}
@@ -175,6 +204,7 @@ jobs:
       - liquibase
       - test_batch
     uses: dvsa/vol-functional-tests/.github/workflows/e2ePrepSmoke.yaml@v4.23.0
+    continue-on-error: true
     with:
       platform_env: ${{ inputs.environment }}
       aws_role: ${{ inputs.aws_role }}
@@ -188,11 +218,16 @@ jobs:
       checks: write
 
   test_selfserve:
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'int'}}
+    if: |
+      always() && !cancelled() && 
+      needs.terraform_env.result == 'success' && 
+      inputs.environment == 'int' && 
+      needs.smoke_approval.result != 'failure'
     name: Selfserve Regression Tests
     needs:
-      - test_smoke
+      - smoke_approval
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSelfServeRegression.yaml@v4.23.0
+    continue-on-error: true
     with:
       platform_env: ${{ inputs.environment }}
       aws_role: ${{ inputs.aws_role }}
@@ -206,11 +241,16 @@ jobs:
       checks: write
 
   test_internal:
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'int' }}
+    if: |
+      always() && !cancelled() && 
+      needs.terraform_env.result == 'success' && 
+      inputs.environment == 'int' && 
+      needs.smoke_approval.result != 'failure'
     name: Internal Regression Tests
     needs:
-      - test_smoke
+      - smoke_approval
     uses: dvsa/vol-functional-tests/.github/workflows/e2eInternalRegression.yaml@v4.23.0
+    continue-on-error: true
     with:
       platform_env: ${{ inputs.environment }}
       aws_role: ${{ inputs.aws_role }}
@@ -244,16 +284,33 @@ jobs:
   #      id-token: write
   #      checks: write
 
+manual_approval:
+  name: Manual Approval (Int tests failed)
+  if: |
+    needs.test_selfserve.result == 'failure' ||
+    needs.test_internal.result == 'failure'
+  needs:
+    - test_selfserve
+    - test_internal
+  runs-on: ubuntu-latest
+  environment:
+    name: manual-approval
+  steps:
+    - run: echo "Tests failed — awaiting approval to continue"
+
   rollback:
     name: Rollback Deployment
     if: |
       always() &&
-      (needs.test_smoke.result == 'failure' || needs.test_smoke.result == 'cancelled' ||
-       needs.test_selfserve.result == 'failure' || needs.test_selfserve.result == 'cancelled' ||
-       needs.test_internal.result == 'failure' || needs.test_internal.result == 'cancelled' ||
-       needs.test_prep_smoke.result == 'failure' || needs.test_prep_smoke.result == 'cancelled') &&
-       needs.terraform_env.result == 'success' &&
-       inputs.environment != 'dev'
+      needs.terraform_env.result == 'success' &&
+      inputs.environment != 'dev' &&
+      (
+        needs.test_smoke.result == 'failure' ||
+        needs.test_selfserve.result == 'failure' ||
+        needs.test_internal.result == 'failure' ||
+        needs.test_prep_smoke.result == 'failure'
+      ) &&
+      needs.manual_approval.result != 'success'
     concurrency:
       group: terraform-environment-${{ inputs.environment }}
     needs:
