@@ -2,6 +2,7 @@
 
 namespace Admin\Controller;
 
+use Common\Auth\Service\RefreshTokenService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -13,11 +14,14 @@ use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Controller\Traits\WebDavSessionTrait;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Service\Helper\WebDavJsonWebTokenGenerationService;
 
 class PublicationController extends AbstractInternalController implements LeftViewProvider
 {
+    use WebDavSessionTrait;
+
     protected $navigationId = 'admin-dashboard/admin-publication';
     protected $listVars = [];
     protected $inlineScripts = ['indexAction' => ['table-actions', 'file-link']];
@@ -33,7 +37,9 @@ class PublicationController extends AbstractInternalController implements LeftVi
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelperService,
         Navigation $navigation,
-        protected WebDavJsonWebTokenGenerationService $webDavJsonWebTokenGenerationService
+        protected WebDavJsonWebTokenGenerationService $webDavJsonWebTokenGenerationService,
+        private readonly ?\Redis $redis,
+        private readonly RefreshTokenService $refreshTokenService,
     ) {
         parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
     }
@@ -57,18 +63,19 @@ class PublicationController extends AbstractInternalController implements LeftVi
      */
     protected function getPublicationLinkData($data)
     {
-        $webDavJsonWebTokenGenerationService = $this->webDavJsonWebTokenGenerationService;
+        $webDavEnabled = $this->isInternalWebDavEnabled();
+
+        if ($webDavEnabled) {
+            $this->refreshCognitoTokenForWebDav();
+        }
 
         foreach ($data['results'] as $result => $value) {
             if (isset($value['document'])) {
-                $jwt = $webDavJsonWebTokenGenerationService->generateToken(
-                    'intusr',
-                    $value['document']['identifier']
-                );
-                $url = $webDavJsonWebTokenGenerationService->getJwtWebDavLink(
-                    $jwt,
-                    $value['document']['identifier'],
-                );
+                $identifier = $value['document']['identifier'];
+                $documentId = (int) ($value['document']['id'] ?? 0);
+
+                $documentSize = (int) ($value['document']['size'] ?? 0);
+                $url = $this->generateWebDavUrl($identifier, $documentId, $webDavEnabled, $documentSize);
                 $data['results'][$result]['webDavUrl'] = $url;
             }
         }

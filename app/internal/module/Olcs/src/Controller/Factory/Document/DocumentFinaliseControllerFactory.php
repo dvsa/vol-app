@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Factory\Document;
 
+use Common\Auth\Service\RefreshTokenService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
@@ -11,6 +12,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Document\DocumentFinaliseController;
 use Olcs\Service\Helper\WebDavJsonWebTokenGenerationService;
+use Olcs\Service\WebDav\WebDavRedisFactory;
 
 class DocumentFinaliseControllerFactory implements FactoryInterface
 {
@@ -30,6 +32,8 @@ class DocumentFinaliseControllerFactory implements FactoryInterface
         $config = $container->get('Config');
         $flashMessangerHelper = $container->get(FlashMessengerHelperService::class);
         $webDavJsonWebTokenGenerationService = $container->get(WebDavJsonWebTokenGenerationService::class);
+        $redis = $container->get(WebDavRedisFactory::SERVICE_NAME);
+        $refreshTokenService = $container->get(RefreshTokenService::class);
 
         return new DocumentFinaliseController(
             $scriptFactory,
@@ -38,7 +42,9 @@ class DocumentFinaliseControllerFactory implements FactoryInterface
             $viewHelperManager,
             $config,
             $flashMessangerHelper,
-            $webDavJsonWebTokenGenerationService
+            $webDavJsonWebTokenGenerationService,
+            $redis,
+            $refreshTokenService,
         );
     }
 }
