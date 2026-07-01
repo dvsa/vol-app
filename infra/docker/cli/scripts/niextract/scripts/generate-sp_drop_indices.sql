@@ -1,4 +1,4 @@
-SELECT 'DROP PROCEDURE IF EXISTS sp_drop_indices;\nDELIMITER $$\nCREATE PROCEDURE sp_drop_indices()\nBEGIN' AS '';
+SELECT CONCAT('DROP PROCEDURE IF EXISTS sp_drop_indices;', CHAR(10), 'DELIMITER $$', CHAR(10), 'CREATE PROCEDURE sp_drop_indices()', CHAR(10), 'BEGIN') AS '';
 
 # drop indices on olbs_key and olbs_type only
 
@@ -32,10 +32,10 @@ WHERE i.TABLE_SCHEMA = DATABASE()
   AND i.INDEX_NAME != 'PRIMARY'
   AND kcu.CONSTRAINT_NAME LIKE 'fk\_%'
   AND kcu.REFERENCED_TABLE_NAME IN (
-    'ref_data', 'user', 'category', 'sub_category', 'statement', 
-    'event_history_type', 'fee_type', 'opposer', 'presiding_tc', 
-    'reason', 'propose_to_revoke', 'publication_section', 'impounding', 
-    'country', 'permission', 'bus_notice_period', 'local_authority', 
+    'ref_data', 'user', 'category', 'sub_category', 'statement',
+    'event_history_type', 'fee_type', 'opposer', 'presiding_tc',
+    'reason', 'propose_to_revoke', 'publication_section', 'impounding',
+    'country', 'permission', 'bus_notice_period', 'local_authority',
     'irfo_gv_permit_type'
   )
 GROUP BY i.TABLE_NAME, i.INDEX_NAME;
@@ -62,4 +62,4 @@ WHERE i.TABLE_SCHEMA = DATABASE()
   )
 GROUP BY i.TABLE_NAME, i.INDEX_NAME;
 
-SELECT 'END\n$$' AS '';
+SELECT CONCAT('END', CHAR(10), '$$', CHAR(10), 'DELIMITER ;') AS '';
