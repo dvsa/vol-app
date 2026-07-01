@@ -72,7 +72,8 @@
     "doctrine/doctrine-module": "^6.3",
     "psr/container": "^1.1|^2",
     "aws/aws-sdk-php": "^3.385",
-    "symfony/filesystem": "^7.4"
+    "symfony/filesystem": "^7.4",
+    "sabre/dav": "^4.7"
   },
   "require-dev": {
     "laminas/laminas-developer-tools": "*",

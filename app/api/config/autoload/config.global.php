@@ -290,6 +290,10 @@ return [
                 'en_GB' => '%olcs_notify_template_en_gb%',
                 'cy_GB' => '%olcs_notify_template_cy_gb%',
             ],
+            // Outbound egress in deployed environments is only reachable via the shared forward
+            // proxy, so the Notify HTTP client is routed through it like every other external
+            // integration. Overridden to empty in local.php where egress is direct.
+            'proxy' => 'http://%shd_proxy%',
         ],
         // VOL-7238: dedicated DSN for the admin "Send test via Notify" button. Populated only
         // in pre-cutover envs (dev/int) so admins can exercise the Notify path against a

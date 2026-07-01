@@ -155,6 +155,26 @@ class S3DocumentStoreTest extends MockeryTestCase
         $this->assertSame(500, $response->getStatusCode());
     }
 
+    public function testUpdateOverwritesObjectAndReturnsSuccessResponse(): void
+    {
+        $sut = $this->createSut('olcs');
+        $this->mockHandler->append(new Result(['ETag' => '"etag"']));
+
+        $file = new File();
+        $file->setContent('updated-bytes');
+        $file->setMimeType('application/rtf');
+
+        $response = $sut->update('documents/x.rtf', $file);
+
+        $this->assertTrue($response->isSuccess());
+        $this->assertSame(200, $response->getStatusCode());
+
+        $cmd = $this->mockHandler->getLastCommand();
+        $this->assertSame('PutObject', $cmd->getName());
+        $this->assertSame(self::BUCKET, $cmd['Bucket']);
+        $this->assertSame('olcs/documents/x.rtf', $cmd['Key']);
+    }
+
     public function testRemoveDeletesObjectAndReturnsOkResponse(): void
     {
         $sut = $this->createSut();

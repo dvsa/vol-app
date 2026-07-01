@@ -1,4 +1,4 @@
-SELECT 'DROP PROCEDURE IF EXISTS sp_NI_Extract_save_table_counts;\nDELIMITER $$\nCREATE PROCEDURE sp_NI_Extract_save_table_counts()\nBEGIN\nDELETE FROM NI_Extract;' AS '';
+SELECT CONCAT('DROP PROCEDURE IF EXISTS sp_NI_Extract_save_table_counts;', CHAR(10), 'DELIMITER $$', CHAR(10), 'CREATE PROCEDURE sp_NI_Extract_save_table_counts()', CHAR(10), 'BEGIN', CHAR(10), 'DELETE FROM NI_Extract;') AS '';
 
 SELECT CONCAT(
     'INSERT INTO NI_Extract (TABLE_NAME, ORIGINAL_COUNT) ',
@@ -11,4 +11,4 @@ WHERE t.TABLE_SCHEMA = DATABASE()
   AND t.TABLE_NAME != 'NI_Extract'
 ORDER BY t.TABLE_NAME;
 
-SELECT 'END\n$$' AS '';
+SELECT CONCAT('END', CHAR(10), '$$', CHAR(10), 'DELIMITER ;') AS '';
