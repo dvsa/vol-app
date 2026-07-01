@@ -15,7 +15,7 @@ cd "$SCRIPT_DIR" || exit 1
 run_sql() {
     local file="$1"
     echo "Running $file..."
-    mysql $CONNECTION "$DB" -e "SOURCE $file" || { echo "ERROR: Failed to execute $file"; exit 1; }
+    grep -v '^DELIMITER' "$file" | mysql $CONNECTION "$DB" --delimiter='$$' || { echo "ERROR: Failed to execute $file"; exit 1; }
 }
 
 run_sql "$SCRIPT_DIR/NI_Extract_table.sql"
