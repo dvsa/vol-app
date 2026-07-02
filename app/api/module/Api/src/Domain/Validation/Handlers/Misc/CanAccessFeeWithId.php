@@ -26,11 +26,11 @@ class CanAccessFeeWithId extends AbstractHandler implements AuthAwareInterface
         }
 
         if ($dto->getLicenceId() !== null) {
-            return $this->feeBelongsToLicence($this->getid($dto), $dto->getLicenceId());
+            return $this->feeBelongsToLicence($this->getId($dto), $dto->getLicenceId());
         }
 
         if ($dto->getApplicationId() !== null) {
-            return $this->feebelongsToApplication($this->getid($dto), $dto->getApplicationId());
+            return $this->feeBelongsToApplication($this->getId($dto), $dto->getApplicationId());
         }
 
         return true;
