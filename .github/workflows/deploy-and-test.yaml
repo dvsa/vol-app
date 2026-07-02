@@ -202,7 +202,6 @@ jobs:
       - liquibase
       - test_batch
     uses: dvsa/vol-functional-tests/.github/workflows/e2ePrepSmoke.yaml@v4.23.0
-    continue-on-error: true
     with:
       platform_env: ${{ inputs.environment }}
       aws_role: ${{ inputs.aws_role }}
@@ -223,6 +222,8 @@ jobs:
       needs.smoke_approval.result != 'failure'
     name: Selfserve Regression Tests
     needs:
+      - terraform_env
+      - liquibase
       - smoke_approval
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSelfServeRegression.yaml@v4.23.0
     with:
@@ -245,6 +246,8 @@ jobs:
       needs.smoke_approval.result != 'failure'
     name: Internal Regression Tests
     needs:
+      - terraform_env
+      - liquibase
       - smoke_approval
     uses: dvsa/vol-functional-tests/.github/workflows/e2eInternalRegression.yaml@v4.23.0
     with:
