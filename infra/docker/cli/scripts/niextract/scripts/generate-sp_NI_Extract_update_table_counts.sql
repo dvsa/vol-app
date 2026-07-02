@@ -1,4 +1,4 @@
-SELECT CONCAT('DROP PROCEDURE IF EXISTS sp_NI_Extract_update_table_counts;', CHAR(10), 'CREATE PROCEDURE sp_NI_Extract_update_table_counts()', CHAR(10), 'BEGIN') AS '';
+SELECT CONCAT('DROP PROCEDURE IF EXISTS sp_NI_Extract_update_table_counts', CHAR(10), '$$', CHAR(10), 'CREATE PROCEDURE sp_NI_Extract_update_table_counts()', CHAR(10), 'BEGIN') AS '';
 
 SELECT CONCAT(
     'UPDATE NI_Extract, (SELECT COUNT(*) AS cnt FROM ', t.TABLE_NAME, ') AS src ',
