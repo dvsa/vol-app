@@ -289,11 +289,11 @@ jobs:
       needs.terraform_env.result == 'success' &&
       inputs.environment != 'dev' &&
       (
-        needs.test_batch.result == 'failure' ||
-        needs.test_smoke.result == 'failure' ||
-        needs.test_selfserve.result == 'failure' ||
-        needs.test_internal.result == 'failure' ||
-        needs.test_prep_smoke.result == 'failure'
+        needs.test_batch.result == 'failure' || needs.test_batch.result == 'cancelled' ||
+        needs.test_smoke.result == 'failure' || needs.test_smoke.result == 'cancelled' ||
+        needs.test_selfserve.result == 'failure' || needs.test_selfserve.result == 'cancelled' ||
+        needs.test_internal.result == 'failure' || needs.test_internal.result == 'cancelled' ||
+        needs.test_prep_smoke.result == 'failure' || needs.test_prep_smoke.result == 'cancelled'
       ) &&
       (
         needs.batch_approval.result == 'failure' ||
