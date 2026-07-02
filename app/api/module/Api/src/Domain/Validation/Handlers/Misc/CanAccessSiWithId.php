@@ -19,7 +19,7 @@ class CanAccessSiWithId extends AbstractHandler implements AuthAwareInterface
             return false;
         }
 
-        if ($dto->getCaseId() === null) {
+        if ($dto->getCaseId() !== null) {
             return $this->seriousInfringementBelongsToCase($dto->getId(), $dto->getCaseId());
         }
 
