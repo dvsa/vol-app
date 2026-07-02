@@ -163,9 +163,10 @@ jobs:
     if: |
       always() && !cancelled() &&
       needs.terraform_env.result == 'success' &&
+      needs.liquibase.result == 'success' &&
       inputs.environment != 'prod' &&
       inputs.environment != 'prep' &&
-      needs.batch_approval.result != 'failure'
+      (needs.batch_approval.result == 'success' || needs.batch_approval.result == 'skipped')
     needs:
       - terraform_env
       - liquibase
