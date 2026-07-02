@@ -244,8 +244,9 @@ jobs:
     if: |
       always() && !cancelled() &&
       needs.terraform_env.result == 'success' &&
+      needs.liquibase.result == 'success' &&
       inputs.environment == 'int' &&
-      needs.smoke_approval.result != 'failure'
+      (needs.smoke_approval.result == 'success' || needs.smoke_approval.result == 'skipped')
     name: Internal Regression Tests
     needs:
       - terraform_env
