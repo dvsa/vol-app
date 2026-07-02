@@ -154,7 +154,7 @@ jobs:
       - test_batch
     runs-on: ubuntu-latest
     environment:
-      name: manual-approval
+      name: test-approval
     steps:
       - run: echo "Batch Tests failed — awaiting approval to continue"
 
@@ -191,7 +191,7 @@ jobs:
       - test_smoke
     runs-on: ubuntu-latest
     environment:
-      name: manual-approval
+      name: test-approval
     steps:
       - run: echo "Smoke Tests failed — awaiting approval to continue"
 
@@ -276,7 +276,7 @@ jobs:
       - test_internal
     runs-on: ubuntu-latest
     environment:
-      name: manual-approval
+      name: test-approval
     steps:
       - run: echo "Tests failed — awaiting approval to continue"
 
