@@ -1,4 +1,4 @@
-SELECT CONCAT('DROP PROCEDURE IF EXISTS sp_drop_constraints;', CHAR(10), 'CREATE PROCEDURE sp_drop_constraints()', CHAR(10), 'BEGIN') AS '';
+SELECT CONCAT('DROP PROCEDURE IF EXISTS sp_drop_constraints', CHAR(10), '$$', CHAR(10), 'CREATE PROCEDURE sp_drop_constraints()', CHAR(10), 'BEGIN') AS '';
 
 SELECT CONCAT(
     'IF EXISTS (SELECT 1 FROM information_schema.REFERENTIAL_CONSTRAINTS ',

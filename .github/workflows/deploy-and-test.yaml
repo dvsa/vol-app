@@ -219,8 +219,9 @@ jobs:
     if: |
       always() && !cancelled() &&
       needs.terraform_env.result == 'success' &&
+      needs.liquibase.result == 'success' &&
       inputs.environment == 'int' &&
-      needs.smoke_approval.result != 'failure'
+      (needs.smoke_approval.result == 'success' || needs.smoke_approval.result == 'skipped')
     name: Selfserve Regression Tests
     needs:
       - terraform_env
@@ -243,8 +244,9 @@ jobs:
     if: |
       always() && !cancelled() &&
       needs.terraform_env.result == 'success' &&
+      needs.liquibase.result == 'success' &&
       inputs.environment == 'int' &&
-      needs.smoke_approval.result != 'failure'
+      (needs.smoke_approval.result == 'success' || needs.smoke_approval.result == 'skipped')
     name: Internal Regression Tests
     needs:
       - terraform_env
@@ -287,16 +289,16 @@ jobs:
       needs.terraform_env.result == 'success' &&
       inputs.environment != 'dev' &&
       (
-        needs.test_batch.result == 'failure' ||
-        needs.test_smoke.result == 'failure' ||
-        needs.test_selfserve.result == 'failure' ||
-        needs.test_internal.result == 'failure' ||
-        needs.test_prep_smoke.result == 'failure'
+        needs.test_batch.result == 'failure' || needs.test_batch.result == 'cancelled' ||
+        needs.test_smoke.result == 'failure' || needs.test_smoke.result == 'cancelled' ||
+        needs.test_selfserve.result == 'failure' || needs.test_selfserve.result == 'cancelled' ||
+        needs.test_internal.result == 'failure' || needs.test_internal.result == 'cancelled' ||
+        needs.test_prep_smoke.result == 'failure' || needs.test_prep_smoke.result == 'cancelled'
       ) &&
       (
-        needs.batch_approval.result == 'failure' ||
-        needs.smoke_approval.result == 'failure' ||
-        needs.manual_approval.result == 'failure'
+        needs.batch_approval.result == 'failure' || needs.batch_approval.result == 'cancelled' ||
+        needs.smoke_approval.result == 'failure' || needs.smoke_approval.result == 'cancelled' ||
+        needs.manual_approval.result == 'failure' || needs.manual_approval.result == 'cancelled'
       )
     concurrency:
       group: terraform-environment-${{ inputs.environment }}
