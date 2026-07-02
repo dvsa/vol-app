@@ -296,9 +296,9 @@ jobs:
         needs.test_prep_smoke.result == 'failure' || needs.test_prep_smoke.result == 'cancelled'
       ) &&
       (
-        needs.batch_approval.result == 'failure' ||
-        needs.smoke_approval.result == 'failure' ||
-        needs.manual_approval.result == 'failure'
+        needs.batch_approval.result == 'failure' || needs.batch_approval.result == 'cancelled' ||
+        needs.smoke_approval.result == 'failure' || needs.smoke_approval.result == 'cancelled' ||
+        needs.manual_approval.result == 'failure' || needs.manual_approval.result == 'cancelled'
       )
     concurrency:
       group: terraform-environment-${{ inputs.environment }}
