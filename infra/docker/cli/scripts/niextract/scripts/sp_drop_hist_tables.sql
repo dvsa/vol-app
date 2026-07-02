@@ -1,7 +1,6 @@
+DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sp_drop_hist_tables;
-
-DELIMITER $$
 
 CREATE PROCEDURE sp_drop_hist_tables()
 
@@ -187,6 +186,6 @@ DROP TABLE IF EXISTS vehicle_hist;
 DROP TABLE IF EXISTS venue_hist;
 DROP TABLE IF EXISTS workshop_hist;
 
-END
+END$$
 
-$$
+DELIMITER ;

@@ -439,7 +439,7 @@ class OrganisationTest extends RepositoryTestCase
 
         $qb->shouldReceive('getQuery')
             ->once()
-            ->andReturn(m::mock()->shouldReceive('iterate')->getMock());
+            ->andReturn(m::mock()->shouldReceive('toIterable')->getMock());
 
         $repo = m::mock(EntityRepository::class);
         $repo->shouldReceive('createQueryBuilder')
@@ -470,7 +470,7 @@ class OrganisationTest extends RepositoryTestCase
 
         $qb->shouldReceive('getQuery')
             ->once()
-            ->andReturn(m::mock()->shouldReceive('iterate')->getMock());
+            ->andReturn(m::mock()->shouldReceive('toIterable')->getMock());
 
         $repo = m::mock(EntityRepository::class);
         $repo->shouldReceive('createQueryBuilder')

@@ -2,420 +2,231 @@
 
 set -euo pipefail
 
-echoerr() { printf '%s\n' "$*" >&2; }
+###############################################
+# ENVIRONMENT
+###############################################
 
-: "${READDB_HOST:?READDB_HOST is required}"
-: "${READDB_ID:?READDB_ID is required}"
-: "${ENVIRONMENT_NAME:?ENVIRONMENT_NAME is required (DEV|INT|PREP|PROD)}"
-ENVIRONMENT="${ENVIRONMENT_NAME}"
 
-# PROXY is already host:port (includes :3128). Do not append a port here.
-if [ -n "${PROXY:-}" ]; then
-  export http_proxy="http://${PROXY}"
-  export https_proxy="http://${PROXY}"
-fi
-export NO_PROXY="${NO_PROXY:-169.254.169.254,169.254.170.2,localhost,127.0.0.1}"
 
-# Region: prefer AWS_REGION, else IMDSv2
-ec2_region="${AWS_REGION:-}"
-if [ -z "$ec2_region" ]; then
-  token="$(curl -fsS -X PUT "http://169.254.169.254/latest/api/token" \
-    -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" 2>/dev/null || true)"
+: "${PROXY:?PROXY is required}"
+: "${DBCLUSTER_ID:?DBCLUSTER_ID is required}"
+: "${READDB_NAME:?READDB_NAME is required}"
+: "${M_DB_PASSWORD:?M_DB_PASSWORD is required}"
+: "${ENVIRONMENT_NAME:?ENVIRONMENT_NAME is required}"
+: "${DVA_REPORT_BUCKET:?DVA_REPORT_BUCKET is required}"
 
-  if [ -n "$token" ]; then
-    ec2_region="$(curl -fsS -H "X-aws-ec2-metadata-token: $token" \
-      "http://169.254.169.254/latest/meta-data/placement/region" 2>/dev/null || true)"
+export http_proxy="http://${PROXY}"
+export https_proxy="http://${PROXY}"
+export NO_PROXY="${NO_PROXY:+${NO_PROXY},}169.254.169.254"
 
-    if [ -z "$ec2_region" ]; then
-      az="$(curl -fsS -H "X-aws-ec2-metadata-token: $token" \
-        "http://169.254.169.254/latest/meta-data/placement/availability-zone" 2>/dev/null || true)"
-      [ -n "$az" ] && ec2_region="${az%[a-z]}"
-    fi
-  fi
-fi
+region="eu-west-1"
+tmp_cluster_id="ni-extract-$(date +%Y%m%d%H%M%S)-${RANDOM}"
+tmp_instance_id="${tmp_cluster_id}-instance"
+db_cluster_id=${DBCLUSTER_ID}
+dva_report_bucket=${DVA_REPORT_BUCKET}
+db_name="${READDB_NAME}"
+snapshot_id="${tmp_cluster_id}-snap"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-if [ -z "$ec2_region" ]; then
-  ec2_region="$(/usr/local/bin/aws configure get region 2>/dev/null || true)"
-fi
+###############################################
+# DEBUG MODE
+###############################################
 
-: "${ec2_region:?Could not determine AWS region}"
-export AWS_REGION="$ec2_region"
-aws_region="$ec2_region"
-
-case "${ENVIRONMENT}" in
-  "DEV")  DVA_BUCKET="devapp-olcs-pri-integration-dva-s3"; DVA_PREFIX="dev" ;;
-  "INT")  DVA_BUCKET="appnduint-olcs-pri-integration-dva-s3"; DVA_PREFIX="" ;;
-  "PREP") DVA_BUCKET="apppp-olcs-pri-integration-dva-s3"; DVA_PREFIX="" ;;
-  "PROD") DVA_BUCKET="app-olcs-pri-integration-dva-s3"; DVA_PREFIX="" ;;
-  *) echoerr "ERROR: Invalid environment specified"; exit 1 ;;
-esac
-
-S3_DEST="s3://${DVA_BUCKET}"
-[[ -n "${DVA_PREFIX}" ]] && S3_DEST="${S3_DEST}/${DVA_PREFIX}"
-S3_DEST="${S3_DEST}/dvacompliance/"
-
-# Debug mode disables the deletion of the temp Aurora resources
 mode=""
 while getopts ":hd" opt; do
   case ${opt} in
-    d )
-      echo "In debug mode"
-      mode="debug"
-      ;;
+    d ) echo "Debug mode enabled"; mode="debug" ;;
     h )
-      echo "Usage:"
-      echo "    Use -d                      To enable Debug (temp DB will not be dropped)."
+      echo "Usage: -d (debug mode)"
       exit 0
       ;;
     \? )
-      echo "Invalid Option: -$OPTARG" 1>&2
-      echo "    Use -h                      Help usage."
+      echo "Invalid option"
       exit 1
       ;;
   esac
 done
 
-#global variable to capture output
-aws_cmd_output=
-aws_cmd() {
-  cmd="$1"
-  max_retries="${2:-10}"
-  sleep_between="${3:-5}"
-  sensitive="${4:-}"
+###############################################
+# LOGGING
+###############################################
+log()  { echo "$(date '+%Y-%m-%d %H:%M:%S') $*"; }
+loge() { echo "$(date '+%Y-%m-%d %H:%M:%S') ERROR: $*" >&2; }
 
-  aws_cmd_output=
-  if [ -z "$max_retries" ]; then
-    max_retries=10
+###############################################
+# CLEANUP
+###############################################
+cleanup() {
+  if [[ "$mode" != "debug" ]]; then
+    log "Cleaning up Aurora resources"
+
+    aws rds delete-db-instance \
+      --db-instance-identifier "$tmp_instance_id" \
+      --skip-final-snapshot --region "$region" >/dev/null 2>&1 || true
+    aws rds wait db-instance-deleted \
+      --db-instance-identifier "$tmp_instance_id" --region "$region" >/dev/null 2>&1 || true
+
+    aws rds delete-db-cluster \
+      --db-cluster-identifier "$tmp_cluster_id" \
+      --skip-final-snapshot --region "$region" >/dev/null 2>&1 || true
+    aws rds wait db-cluster-deleted \
+      --db-cluster-identifier "$tmp_cluster_id" --region "$region" >/dev/null 2>&1 || true
+
+    aws rds delete-db-cluster-snapshot \
+      --db-cluster-snapshot-identifier "$snapshot_id" --region "$region" >/dev/null 2>&1 || true
   fi
-  if [ -z "$sleep_between" ]; then
-    sleep_between=5
-  fi
-
-  cmd_count=1
-  while [ $cmd_count -lt $max_retries ];
-  do
-    if [ -z "$sensitive" ]; then
-      echo "Executing [$cmd_count] - [$cmd] .."
-    else
-      echo "Executing [$cmd_count] - [**cmd_hidden_sensitive**] .."
-    fi
-    aws_cmd_output=`eval "$cmd"`
-    if [ $? -eq 0 ]; then
-      echo "Command successful.."
-      return 0
-    else
-      sleep $(($sleep_between * $cmd_count))
-      cmd_count=$(($cmd_count + 1))
-    fi
-  done
-  echo "Exhausted all retries [$cmd_count] - giving up.."
-  # counter has reached max - fail.
-  return 1
 }
+trap cleanup EXIT
 
-function log_err {
-  t_stamp=$(date +"%Y-%m-%d %H:%M:%S")
-  echo "${t_stamp} $@" 1>&2;
-}
+###############################################
+# 1. SNAPSHOT SOURCE CLUSTER
+###############################################
+log "Creating snapshot from source cluster"
 
-function log_msg {
-  t_stamp=$(date +"%Y-%m-%d %H:%M:%S")
-  echo "${t_stamp} $1"
-}
+aws rds create-db-cluster-snapshot \
+  --db-cluster-identifier "$db_cluster_id" \
+  --db-cluster-snapshot-identifier "$snapshot_id" \
+  --region $region >/dev/null
 
-function cleanup {
-  for i in "${cleanup_items[@]}"; do
-      type=$(echo $i|awk -F: '{print $1}')
-      item=$(echo $i|awk -F: '{print $2}')
-      case $type in
-        "snapshot" )
-            echo "Deleting DB cluster snapshot: ${item}"
-            aws_cmd "/usr/local/bin/aws rds delete-db-cluster-snapshot --db-cluster-snapshot-identifier ${item} --region ${aws_region}"
-            if [ $? -ne 0 ]; then
-              log_err "Unable to delete DB cluster snapshot: ${item}"
-            fi
-            result=${aws_cmd_output}
-            ;;
-        "aurora-instance" )
-            echo "Deleting Aurora instance: ${item}"
-            aws_cmd "/usr/local/bin/aws rds delete-db-instance --skip-final-snapshot --db-instance-identifier ${item} --region ${aws_region}"
-            if [ $? -ne 0 ]; then
-              log_err "Unable to delete Aurora instance: ${item}"
-            else
-              echo "Waiting for Aurora instance to be fully deleted: ${item}"
-              aws_cmd "/usr/local/bin/aws rds wait db-instance-deleted --db-instance-identifier ${item} --region ${aws_region}"
-              if [ $? -ne 0 ]; then
-                log_err "Timed out or failed waiting for Aurora instance deletion: ${item}"
-              fi
-            fi
-            result=${aws_cmd_output}
-            ;;
-        "aurora-cluster" )
-            echo "Deleting Aurora cluster: ${item}"
-            aws_cmd "/usr/local/bin/aws rds delete-db-cluster --skip-final-snapshot --db-cluster-identifier ${item} --region ${aws_region}"
-            if [ $? -ne 0 ]; then
-              log_err "Unable to delete Aurora cluster: ${item}"
-            fi
-            result=${aws_cmd_output}
-            ;;
-        "dumpfile" )
-            echo "Removing dump file: ${item}"
-            rm -f "${item}"
-            if [ $? -ne 0 ]; then
-              log_err "Unable to remove dump file ${item}"
-            fi
-            # Remove temporary dat files
-            rm -f /mnt/data/ni_dvacompliance/*.dat
-            ;;
-      esac
-  done
-}
+aws rds wait db-cluster-snapshot-available \
+  --db-cluster-snapshot-identifier "$snapshot_id" \
+  --region $region
 
-: "${READDB_ID:?READDB_ID is not set}"
-db_instance_id="${READDB_ID}"
-restored_db_cluster_id="${ENVIRONMENT}-olcs-aurora-nidataextract-temp-cluster"
-restored_db_instance_id="${ENVIRONMENT}-olcs-aurora-nidataextract-temp-instance"
-snapshot_timestamp=$(date +"%Y-%m-%d-%H-%M-%S")
-env_id=$(echo "$db_instance_id"|cut -d- -f1)
-snapshot_id="$env_id-olcs-aurora-nidataextract-$snapshot_timestamp"
-cleanup_items=()
+###############################################
+# 2. FETCH NETWORK CONFIG
+###############################################
+log "Fetching subnet + security groups"
 
-####### Gather source Aurora instance and cluster info
-
-aws_cmd "/usr/local/bin/aws rds wait db-instance-available --region ${aws_region} --db-instance-identifier ${db_instance_id}"
-if [ $? -ne 0 ]; then
-  log_err "DB Instance not available in the given time: ${db_instance_id}: ${aws_cmd_output}"
-  cleanup
+subnet_group=$(aws rds describe-db-clusters \
+  --db-cluster-identifier "$db_cluster_id" \
+  --query "DBClusters[0].DBSubnetGroup" \
+  --output text --region "$region")
+if [[ -z "$subnet_group" || "$subnet_group" == "None" ]]; then
+  loge "Failed to determine DB subnet group for cluster $db_cluster_id"
   exit 1
 fi
 
-aws_cmd "/usr/local/bin/aws rds describe-db-instances --db-instance-identifier ${db_instance_id} --region ${aws_region}"
-if [ $? -ne 0 ]; then
-  log_err "Unable to describe DB Instances: ${db_instance_id}: ${aws_cmd_output}"
-  cleanup
-  exit 1
-fi
-readonly_db_info=$(echo "${aws_cmd_output}" | /usr/bin/jq -r '.DBInstances[]')
-source_cluster_id=$(echo "${readonly_db_info}" | /usr/bin/jq -r '.DBClusterIdentifier')
-if [ -z "${source_cluster_id}" ] || [ "${source_cluster_id}" = "null" ]; then
-  log_err "DB instance ${db_instance_id} is not attached to an Aurora cluster."
-  cleanup
+sec_groups=$(aws rds describe-db-clusters \
+  --db-cluster-identifier "$db_cluster_id" \
+  --query "DBClusters[0].VpcSecurityGroups[].VpcSecurityGroupId" \
+  --output text --region "$region")
+if [[ -z "$sec_groups" || "$sec_groups" == "None" ]]; then
+  loge "Failed to determine VPC security groups for cluster $db_cluster_id"
   exit 1
 fi
 
-aws_cmd "/usr/local/bin/aws rds wait db-cluster-available --region ${aws_region} --db-cluster-identifier ${source_cluster_id}"
-if [ $? -ne 0 ]; then
-  log_err "DB Cluster not available in the given time: ${source_cluster_id}: ${aws_cmd_output}"
-  cleanup
+scaling_config=$(aws rds describe-db-clusters \
+  --db-cluster-identifier "$db_cluster_id" \
+  --query "DBClusters[0].ServerlessV2ScalingConfiguration" \
+  --output json --region "$region")
+###############################################
+# 3. RESTORE TEMP CLUSTER
+###############################################
+log "Restoring temporary cluster"
+
+restore_cmd=(aws rds restore-db-cluster-from-snapshot \
+  --db-cluster-identifier "$tmp_cluster_id" \
+  --snapshot-identifier "$snapshot_id" \
+  --engine aurora-mysql \
+  --db-subnet-group-name "$subnet_group" \
+  --vpc-security-group-ids $sec_groups \
+  --region "$region")
+
+if [[ -n "$scaling_config" && "$scaling_config" != "null" ]]; then
+  restore_cmd+=(--serverless-v2-scaling-configuration "$scaling_config")
+fi
+
+"${restore_cmd[@]}" >/dev/null
+
+aws rds wait db-cluster-available \
+  --db-cluster-identifier "$tmp_cluster_id" \
+  --region $region
+
+###############################################
+# 4. CREATE INSTANCE
+###############################################
+log "Creating cluster instance"
+
+db_instance_class=$(aws rds describe-db-instances \
+  --filters "Name=db-cluster-id,Values=${db_cluster_id}" \
+  --query "DBInstances[0].DBInstanceClass" \
+  --output text --region "$region")
+if [[ -z "$db_instance_class" || "$db_instance_class" == "None" ]]; then
+  loge "Failed to determine DB instance class for cluster $db_cluster_id"
   exit 1
 fi
 
-aws_cmd "/usr/local/bin/aws rds describe-db-clusters --db-cluster-identifier ${source_cluster_id} --region ${aws_region}"
-if [ $? -ne 0 ]; then
-  log_err "Unable to describe DB Cluster: ${source_cluster_id}: ${aws_cmd_output}"
-  cleanup
-  exit 1
-fi
-readonly_cluster_info=$(echo "${aws_cmd_output}" | /usr/bin/jq -r '.DBClusters[]')
+aws rds create-db-instance \
+  --db-instance-identifier "$tmp_instance_id" \
+  --db-cluster-identifier "$tmp_cluster_id" \
+  --db-instance-class "$db_instance_class" \
+  --engine aurora-mysql \
+  --region $region >/dev/null
 
-log_msg "Creating cluster snapshot: $snapshot_id"
-aws_cmd "/usr/local/bin/aws rds create-db-cluster-snapshot --db-cluster-snapshot-identifier $snapshot_id --db-cluster-identifier $source_cluster_id --region ${aws_region}"
-if [ $? -ne 0 ]; then
-  log_err "Unable to create DB cluster snapshot: ${source_cluster_id}: ${aws_cmd_output}"
-  cleanup
-  exit 1
-fi
+aws rds wait db-instance-available \
+  --db-instance-identifier "$tmp_instance_id" \
+  --region $region
 
-sleep 60
-aws_cmd "/usr/local/bin/aws rds wait db-cluster-snapshot-available --db-cluster-snapshot-identifier $snapshot_id --region ${aws_region}"
-if [ $? -ne 0 ]; then
-  log_err "Unable to verify snapshot availability."
-  cleanup
-  exit 1
-fi
-cleanup_items+=("snapshot:$snapshot_id")
+###############################################
+# 5. GET ENDPOINT
+###############################################
+endpoint=$(aws rds describe-db-clusters \
+  --db-cluster-identifier "$tmp_cluster_id" \
+  --query "DBClusters[0].Endpoint" \
+  --output text --region "$region")
 
-subnet_group=$(echo $readonly_db_info | /usr/bin/jq -r '.DBSubnetGroup.DBSubnetGroupName')
-if [ $? -ne 0 ]; then
-  log_err "Unable to determine subnet group name for new instance."
-  cleanup
-  exit 1
-fi
-log_msg "Subnet group: ${subnet_group}."
-sec_group=$(echo $readonly_db_info | /usr/bin/jq -r '.VpcSecurityGroups[0].VpcSecurityGroupId')
-if [ $? -ne 0 ]; then
-  log_err "Unable to determine security group ID for new instance."
-  cleanup
-  exit 1
-fi
-log_msg "Security group: ${sec_group}"
-param_group=$(echo $readonly_db_info | /usr/bin/jq -r '.DBParameterGroups[0].DBParameterGroupName')
-if [ $? -ne 0 ]; then
-  log_err "Unable to determine DB parameter group for new instance."
-  cleanup
-  exit 1
-fi
-log_msg "DB parameter group: ${param_group}"
-db_instance_class=$(echo "${readonly_db_info}" | /usr/bin/jq -r '.DBInstanceClass')
-if [ $? -ne 0 ] || [ -z "${db_instance_class}" ] || [ "${db_instance_class}" = "null" ]; then
-  log_err "Unable to determine DB instance class for new instance."
-  cleanup
-  exit 1
-fi
-log_msg "DB instance class: ${db_instance_class}"
-cluster_param_group=$(echo "${readonly_cluster_info}" | /usr/bin/jq -r '.DBClusterParameterGroup')
-if [ $? -ne 0 ] || [ -z "${cluster_param_group}" ] || [ "${cluster_param_group}" = "null" ]; then
-  log_err "Unable to determine DB cluster parameter group for new cluster."
-  cleanup
-  exit 1
-fi
-log_msg "DB cluster parameter group: ${cluster_param_group}"
-db_engine=$(echo "${readonly_cluster_info}" | /usr/bin/jq -r '.Engine')
-if [ $? -ne 0 ] || [ -z "${db_engine}" ] || [ "${db_engine}" = "null" ]; then
-  log_err "Unable to determine engine for source cluster."
-  cleanup
-  exit 1
-fi
-log_msg "DB engine: ${db_engine}"
-
-rds_master_pass=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
-
-####### Create new Aurora cluster and instance from snapshot
-
-log_msg "Creating new Aurora cluster: ${restored_db_cluster_id} from snapshot ${snapshot_id}"
-aws_cmd "/usr/local/bin/aws rds restore-db-cluster-from-snapshot --db-cluster-identifier ${restored_db_cluster_id} --snapshot-identifier ${snapshot_id} --engine ${db_engine} --region ${aws_region} --db-subnet-group-name ${subnet_group} --vpc-security-group-ids ${sec_group} --db-cluster-parameter-group-name ${cluster_param_group}"
-if [ $? -ne 0 ]; then
-  log_err "Unable to restore Aurora cluster from snapshot: ${restored_db_cluster_id}: ${aws_cmd_output}"
-  cleanup
+if [[ -z "$endpoint" || "$endpoint" == "None" ]]; then
+  loge "Failed to resolve endpoint for temporary cluster $tmp_cluster_id"
   exit 1
 fi
 
-# Ensure the restored cluster is cleaned up if any later step fails.
-cleanup_items+=("${restored_db_cluster_id}")
-
-aws_cmd "/usr/local/bin/aws rds wait db-cluster-available --region ${aws_region} --db-cluster-identifier ${restored_db_cluster_id}"
-if [ $? -ne 0 ]; then
-  log_err "DB Cluster not available in the given time: ${restored_db_cluster_id}"
-  cleanup
+log "Cluster ready at: $endpoint"
+###############################################
+# 6. RUN NI EXTRACT
+###############################################
+if [[ ! -f "${script_dir}/NI_Extract.sh" || ! -d "${script_dir}/scripts" ]]; then
+  loge "Missing NI_Extract.sh or scripts directory in ${script_dir}"
   exit 1
 fi
 
-log_msg "Creating new Aurora instance: ${restored_db_instance_id} in cluster ${restored_db_cluster_id}"
-aws_cmd "/usr/local/bin/aws rds create-db-instance --db-instance-identifier ${restored_db_instance_id} --db-cluster-identifier ${restored_db_cluster_id} --engine ${db_engine} --db-instance-class ${db_instance_class} --region ${aws_region} --db-parameter-group-name ${param_group}"
-if [ $? -ne 0 ]; then
-  log_err "Unable to create Aurora instance: ${restored_db_instance_id}: ${aws_cmd_output}"
-  cleanup
-  exit 1
-fi
+log "Running NI Extract"
 
-cleanup_items+=("${restored_db_instance_id}")
+cd "${script_dir}"
+xml_dir="/tmp/xml"
+anon_dir="/tmp/anon"
 
-aws_cmd "/usr/local/bin/aws rds wait db-instance-available --region ${aws_region} --db-instance-identifier ${restored_db_instance_id}"
-if [ $? -ne 0 ]; then
-  log_err "DB Instance not available in the given time: ${restored_db_instance_id}"
-  cleanup
-  exit 1
-fi
-
-sleep 20
-aws_cmd "/usr/local/bin/aws rds describe-db-instances --region ${aws_region} --db-instance-identifier ${restored_db_instance_id}"
-if [ $? -ne 0 ]; then
-  log_err "Unable to describe DB Instance: ${restored_db_instance_id}: ${aws_cmd_output}"
-  cleanup
-  exit 1
-fi
-restore_db=$(echo "${aws_cmd_output}" | /usr/bin/jq -r '.DBInstances[]')
-aws_cmd "/usr/local/bin/aws rds describe-db-clusters --region ${aws_region} --db-cluster-identifier ${restored_db_cluster_id}"
-if [ $? -ne 0 ]; then
-  log_err "Unable to describe DB Cluster: ${restored_db_cluster_id}: ${aws_cmd_output}"
-  cleanup
-  exit 1
-fi
-restore_cluster=$(echo "${aws_cmd_output}" | /usr/bin/jq -r '.DBClusters[]')
-db_instance_endpoint=$(echo "${restore_cluster}" | /usr/bin/jq -r '.Endpoint')
-
-log_msg "Aurora cluster available at: $db_instance_endpoint"
-
-if [ "$mode" == "" ]; then
-   cleanup_items+=("aurora-instance:${restored_db_instance_id}")
-   cleanup_items+=("aurora-cluster:${restored_db_cluster_id}")
-fi
-
-####### Apply Aurora configuration to new cluster
-
-log_msg "Modifying database."
-aws_cmd "/usr/local/bin/aws rds modify-db-cluster --region ${aws_region} --db-cluster-identifier ${restored_db_cluster_id} --vpc-security-group-ids ${sec_group} --db-cluster-parameter-group-name ${cluster_param_group} --master-user-password ${rds_master_pass} --apply-immediately" "" "" "yes"
-if [ $? -ne 0 ]; then
-  log_err "Unable to modify database cluster: ${restored_db_cluster_id}: ${aws_cmd_output}"
-  cleanup
-  exit 1
-fi
-
-sleep 60
-
-aws_cmd "/usr/local/bin/aws rds wait db-cluster-available --region ${aws_region} --db-cluster-identifier ${restored_db_cluster_id}"
-if [ $? -ne 0 ]; then
-  log_err "DB Cluster not available in the given time after modification: ${restored_db_cluster_id}"
-  cleanup
-  exit 1
-fi
-sleep 20
-
-####### Run NI DVACOMPLIANCE JOB
-
-if [ ! -d /mnt/data/scripts/niextract ]; then
-  log_err "Unable to find NI extract script directory: /mnt/data/scripts/niextract"
-  cleanup
-  exit 1
-fi
-if [ ! -d /mnt/data/scripts/niextract/anonymisation_scripts ]; then
-  log_err "Unable to find anonymisation scripts directory: /mnt/data/scripts/niextract/anonymisation_scripts"
-  cleanup
-  exit 1
-fi
-
-log_msg "Running NI_Extract-Anon on: ${db_instance_endpoint}"
-cd /mnt/data/scripts/niextract
-
-# Pick DB name (keep old default unless you KNOW the correct one)
-: "${READDB_NAME:?READDB_NAME is not set}"
-DB_NAME="$READDB_NAME"
-log_msg "Using DB_NAME=${DB_NAME}"
-
-# Master username is NOT guaranteed to be READDB_USER.
-# The snapshot restore keeps the original master username.
-# So read it from the restored instance.
-master_user=$(echo "${restore_db}" | /usr/bin/jq -r '.MasterUsername')
-CONN_STR="-h${db_instance_endpoint} -u${master_user} -p${rds_master_pass}"
-: "${master_user:?Could not read MasterUsername from restored DB instance}"
-
-if [[ "${ENVIRONMENT}" != "PROD" ]]; then
-  ./NI_Extract.sh -c "${CONN_STR}" -d "${DB_NAME}" \
-    -A -a /mnt/data/scripts/niextract/anonymisation_scripts/anon \
-    -f /mnt/data/ni_dvacompliance/temp \
-    -X /mnt/data/ni_dvacompliance
+if [[ "${ENVIRONMENT_NAME}" != "PROD" ]]; then
+  ./NI_Extract.sh \
+    -c "-h${endpoint} -umaster -p${M_DB_PASSWORD}" \
+    -d "${db_name}" \
+    -A \
+    -a "${script_dir}/anonymisation_scripts/anon" \
+    -f "${anon_dir}" \
+    -X "${xml_dir}"
 else
-  ./NI_Extract.sh -c "${CONN_STR}" -d "${DB_NAME}" \
-    -X /mnt/data/ni_dvacompliance
+  ./NI_Extract.sh \
+    -c "-h${endpoint} -umaster -p${M_DB_PASSWORD}" \
+    -d "${db_name}" \
+    -X "${xml_dir}"
 fi
 
-if [ $? -ne 0 ]; then
-  log_err "NI EXTRACT failed."
-  cleanup
+###############################################
+# 7. UPLOAD RESULT TO S3
+###############################################
+log "Locating extract output"
+
+output_file=$(find $xml_dir -type f -name "*.tar.gz" | head -n 1)
+
+if [[ -z "$output_file" ]]; then
+  loge "No extract file produced"
   exit 1
 fi
 
-output_file="$(find /mnt/data/ni_dvacompliance -type f -name "*.tar.gz" | head -n 1)"
-if [ -n "${output_file}" ] && [ -f "${output_file}" ]; then
-  log_msg "Found VI Extract output: ${output_file}"
-  /usr/local/bin/aws s3 cp "${output_file}" "${S3_DEST}"
-  if [ $? -ne 0 ]; then
-    log_err "Unable to upload dumpfile to s3 bucket"
-    cleanup
-    exit 1
-  fi
-  cleanup_items+=("dumpfile:${output_file}")
+log "Uploading ${output_file} to S3"
+
+if ! aws s3 cp "$output_file" s3://$dva_report_bucket/dvacompliance/; then
+  loge "Failed to upload extract to S3"
+  exit 1
 fi
 
-####### CLEANUP
-cleanup
+log "Upload successful"

@@ -768,6 +768,12 @@ return [
             WebDavJsonWebTokenGenerationService::class =>
                 WebDavJsonWebTokenGenerationServiceFactory::class,
 
+            \Olcs\Service\WebDav\JwtVerificationService::class =>
+                \Olcs\Service\WebDav\JwtVerificationServiceFactory::class,
+
+            \Olcs\Service\WebDav\WebDavRedisFactory::SERVICE_NAME =>
+                \Olcs\Service\WebDav\WebDavRedisFactory::class,
+
             Auth\Adapter\InternalCommandAdapter::class => Auth\Adapter\InternalCommandAdapterFactory::class,
             'RoutePluginManager' => Laminas\Router\RoutePluginManagerFactory::class,
             \Olcs\Listener\RouteParams::class => \Olcs\Listener\RouteParamsFactory::class,

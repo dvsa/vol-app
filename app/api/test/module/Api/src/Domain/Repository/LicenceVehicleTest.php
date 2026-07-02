@@ -649,7 +649,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($mockQbS);
 
         $mockQb = $this->createMockQb('{{QUERY}}');
-        $mockQb->shouldReceive('getQuery->iterate')
+        $mockQb->shouldReceive('getQuery->toIterable')
             ->once()
             ->with()
             ->andReturn('EXPECT');

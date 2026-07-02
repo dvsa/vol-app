@@ -1,0 +1,43 @@
+<div class="one-third">
+    <div class="sidebar" role="complementary">
+        <div class="info-box info-box--grey">
+            <h3 class="info-box__heading"><?php echo $this->escapeHtml($this->translate('sidebar-guidance-on-permits')); ?></h3>
+            <p class="govuk-hint"><?php echo $this->escapeHtml($this->translate('following-links.opens-new-window')); ?></p>
+            <ul class="govuk-list">
+                <li>
+                    <a class="govuk-link" href="{{ECMT_PERMITS_GUIDANCE_LINK}}" target="_blank" rel="external noreferrer noopener">
+                        <?php echo $this->escapeHtml($this->translate('sidebar-check-permits-you-need')) . $this->partial('partials/opens-new-window-hidden-text'); ?>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="sidebar" role="complementary">
+        <div class="info-box info-box--grey">
+            <h3 class="info-box__heading"><?php echo $this->escapeHtml($this->translate('sidebar-more-information')); ?></h3>
+            <p class="govuk-hint"><?php echo $this->escapeHtml($this->translate('following-links.opens-new-window')); ?></p>
+            <ul class="govuk-list">
+                <li>
+                    <a class="govuk-link" href="{{PERMITS_CARRY_OUT_HAULAGE}}" target="_blank" rel="external noreferrer noopener">
+                        <?php echo $this->escapeHtml($this->translate('sidebar-carry-out-international-haulage')) . $this->partial('partials/opens-new-window-hidden-text'); ?>
+                    </a>
+                </li>
+                <li>
+                    <a class="govuk-link" href="{{PERMITS_UK_LICENCE_FOR_THE_COMMUNITY}}" target="_blank" rel="external noreferrer noopener">
+                        <?php echo $this->escapeHtml($this->translate('sidebar-uk-licence-for-the-community')) . $this->partial('partials/opens-new-window-hidden-text'); ?>
+                    </a>
+                </li>
+                <li>
+                    <a class="govuk-link" href="{{ECMT_PERMITS_FURTHER_GUIDANCE_LINK}}" target="_blank" rel="external noreferrer noopener">
+                        <?php echo $this->escapeHtml($this->translate('sidebar-ecmt-permits-link')) . $this->partial('partials/opens-new-window-hidden-text'); ?>
+                    </a>
+                </li>
+                <li>
+                    <a class="govuk-link" href="{{IRHP_REMOVAL_GUIDANCE_LINK}}" target="_blank" rel="external noreferrer noopener">
+                        <?php echo $this->escapeHtml($this->translate('sidebar-ecmt-removal-permits')) . $this->partial('partials/opens-new-window-hidden-text'); ?>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

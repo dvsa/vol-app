@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_legacy_pi_reason;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_legacy_pi_reason()
@@ -28,22 +27,31 @@ BEGIN
 
     SELECT CONCAT(@total,' legacy_pi_reason rows to delete.') AS '' ;
 
+    SET @total_deleted := 0;
+    SET @rowcount := 10000;
 
-    
-    DELETE FROM legacy_pi_reason
-    WHERE is_ni = 0;
+    START TRANSACTION;
 
-    SET @rowcount := row_count();
+    WHILE(@rowcount = 10000) DO
     
+        DELETE FROM legacy_pi_reason
+        WHERE is_ni = 0
+        LIMIT 10000;
 
+        SET @rowcount := row_count();
+        SET @total_deleted := @total_deleted + @rowcount;
     
-    SELECT CONCAT(@rowcount,' legacy_pi_reason rows deleted.') AS '';
+        SELECT CONCAT(@total_deleted,' legacy_pi_reason rows deleted.') AS '';
+
+        COMMIT;
+        START TRANSACTION;
+
+    END WHILE;
+    
+    COMMIT;
     
     SELECT CONCAT('delete legacy_pi_reason finished at ',now()) AS '' ; 
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

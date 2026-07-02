@@ -508,7 +508,7 @@ class LicenceVehicle extends AbstractRepository
                 $qb->expr()->eq('gd2.id', '(' . $qbs->getDQL() . ')')
             );
 
-        return $qb->getQuery()->iterate();
+        return $qb->getQuery()->toIterable();
     }
 
     /**

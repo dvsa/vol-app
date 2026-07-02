@@ -367,7 +367,8 @@ class LetterPreviewService
 
             // Read from content store
             $file = $this->contentStore->read($identifier);
-            if ($file === null) {
+            // read() returns File|false (never null); a missing logo (false) must not fatal here.
+            if ($file === null || $file === false) {
                 return '';
             }
 

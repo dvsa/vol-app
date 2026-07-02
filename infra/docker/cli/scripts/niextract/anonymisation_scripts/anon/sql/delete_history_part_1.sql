@@ -5,7 +5,7 @@
 ################################################################
 
 SET @monthago = CURRENT_TIMESTAMP(6) - INTERVAL 4 WEEK;
-SET @starttimestamp = CURRENT_TIMESTAMP(6);
+SET @startdatetime = CURRENT_TIMESTAMP(6);
 
 SELECT CONCAT(now(),' delete history (part 1)...') AS '';
 

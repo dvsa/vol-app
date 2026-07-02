@@ -1,7 +1,6 @@
+DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sp_NI_Extract_save_table_counts;
-
-DELIMITER $$
 
 CREATE PROCEDURE sp_NI_Extract_save_table_counts()
 
@@ -202,6 +201,6 @@ INSERT NI_Extract (TABLE_NAME,ORIGINAL_COUNT) SELECT 'vehicle',(SELECT COUNT(*) 
 INSERT NI_Extract (TABLE_NAME,ORIGINAL_COUNT) SELECT 'venue',(SELECT COUNT(*) FROM venue);
 INSERT NI_Extract (TABLE_NAME,ORIGINAL_COUNT) SELECT 'workshop',(SELECT COUNT(*) FROM workshop);
 
-END
+END$$
 
-$$
+DELIMITER ;

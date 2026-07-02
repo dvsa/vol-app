@@ -96,11 +96,11 @@ locals {
         },
         {
           name  = "READDB_ID"
-          value = "${var.domain_env}-aurora-olcsdb-reader"
+          value = "${var.environment}-aurora-olcsdb-reader"
         },
         {
           name  = "DBCLUSTER_ID"
-          value = "${var.domain_env}-aurora-olcsdb-cluster"
+          value = "${var.environment}-aurora-olcsdb-cluster"
         },
         {
           name  = "READDB_NAME"
@@ -118,6 +118,10 @@ locals {
           name  = "READDB_HOST"
           value = "olcsreaddb-rds.${var.domain_env}.olcs.${var.domain_name}"
         },
+        {
+          name  = "DVA_REPORT_BUCKET"
+          value = "devappdev-olcs-pri-integration-dva-s3"
+        }
       ]
 
       secrets = [

@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_txn;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_txn()
@@ -22,25 +21,26 @@ BEGIN
     SET autocommit=0;
     
     SELECT COUNT(*)
-	INTO @total
-    FROM txn
-    WHERE id NOT IN (
-        SELECT txn_id
-        FROM fee_txn);
+    INTO @total
+    FROM txn t
+    LEFT JOIN fee_txn ft ON t.id = ft.txn_id
+    WHERE ft.txn_id IS NULL;
 
     SELECT CONCAT(@total,' txn rows to delete.') AS '';
 
     SET @total:=0;
     SET @rowcount:=10000;
     
+    START TRANSACTION;
+    
     WHILE(@rowcount = 10000) DO
 
 
          
-        DELETE FROM txn
-        WHERE id NOT IN (
-            SELECT txn_id
-            FROM fee_txn);
+        DELETE t FROM txn t
+        LEFT JOIN fee_txn ft ON t.id = ft.txn_id
+        WHERE ft.txn_id IS NULL
+        LIMIT 10000;
 
         SET @rowcount := row_count();
         SET @total := @total + @rowcount;
@@ -49,9 +49,12 @@ BEGIN
 
         SELECT CONCAT(@total,' txn rows deleted.') AS '';
 
+        COMMIT;
+        START TRANSACTION;
+
     END WHILE;
     
-    SELECT CONCAT(@rowcount,' txn rows deleted.') AS '';
+    COMMIT;
   
     set autocommit=1;
 
@@ -59,7 +62,4 @@ BEGIN
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

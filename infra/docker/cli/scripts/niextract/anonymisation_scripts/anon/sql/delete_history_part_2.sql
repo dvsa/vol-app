@@ -5,7 +5,7 @@
 ################################################################
 
 SET @monthago = CURRENT_TIMESTAMP(6) - INTERVAL 4 WEEK;
-SET @starttimestamp = CURRENT_TIMESTAMP(6);
+SET @startdatetime = CURRENT_TIMESTAMP(6);
 
 SELECT CONCAT(now(),' delete history (part 2)...') AS '';
 
@@ -117,6 +117,5 @@ DELETE FROM messaging_content_hist WHERE hist_timestamp > @startdatetime OR hist
 DELETE FROM messaging_conversation_hist WHERE hist_timestamp > @startdatetime OR hist_timestamp < @monthago;
 DELETE FROM messaging_subject_hist WHERE hist_timestamp > @startdatetime OR hist_timestamp < @monthago;
 DELETE FROM messaging_user_message_read_hist WHERE hist_timestamp > @startdatetime OR hist_timestamp < @monthago;
-
 
 SELECT CONCAT(now(), ' ...delete history (part 2) complete.') as '';

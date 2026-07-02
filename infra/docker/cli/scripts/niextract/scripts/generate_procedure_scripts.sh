@@ -1,26 +1,66 @@
-#!/bin/env bash
+#!/usr/bin/env bash
+
+if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "ERROR: Missing parameters."
+    echo "Usage: $(basename "$0") <connection_string> <database_name>"
+    exit 1
+fi
 
 CONNECTION=$1
 DB=$2
 
-# constraint procedure scripts
-mysql $CONNECTION -e "use $DB;\. generate-sp_drop_constraints.sql" | tr -d '/-/' > sp_drop_constraints.sql
-mysql $CONNECTION -e "use $DB;\. generate-sp_add_original_constraints.sql" | tr -d '/-/' > sp_add_original_constraints.sql
-mysql $CONNECTION -e "use $DB;\. generate-sp_add_NI_Extract_constraints.sql" | tr -d '/-/' > sp_add_NI_Extract_constraints.sql
+MAX_PARALLEL_JOBS=3
 
-#NI_Extract table maintainenance scripts
-mysql $CONNECTION -e "use $DB;\. generate-sp_NI_Extract_save_table_counts.sql" | tr -d '/-/' > sp_NI_Extract_save_table_counts.sql
-mysql $CONNECTION -e "use $DB;\. generate-sp_NI_Extract_update_table_counts.sql" | tr -d '/-/' > sp_NI_Extract_update_table_counts.sql
+declare -a TASKS=(
+    "generate-sp_drop_constraints.sql:sp_drop_constraints.sql"
+    "generate-sp_add_original_constraints.sql:sp_add_original_constraints.sql"
+    "generate-sp_add_NI_Extract_constraints.sql:sp_add_NI_Extract_constraints.sql"
+    "generate-sp_NI_Extract_save_table_counts.sql:sp_NI_Extract_save_table_counts.sql"
+    "generate-sp_NI_Extract_update_table_counts.sql:sp_NI_Extract_update_table_counts.sql"
+    "generate-sp_drop_triggers.sql:sp_drop_triggers.sql"
+    "generate-sp_drop_hist_tables.sql:sp_drop_hist_tables.sql"
+    "generate-sp_drop_indices.sql:sp_drop_indices.sql"
+    "generate-sp_add_indices.sql:sp_add_indices.sql"
+)
 
-#drop triggers
-mysql $CONNECTION -e "use $DB;\. generate-sp_drop_triggers.sql" | tr -d '/-/' > sp_drop_triggers.sql
+echo "Starting optimized metadata compilation against $DB..."
 
-#drop _hist tables
-mysql $CONNECTION -e "use $DB;\. generate-sp_drop_hist_tables.sql" | tr -d '/-/' > sp_drop_hist_tables.sql
+declare -a CURRENT_PIDS=()
+declare -a ALL_PIDS=()
 
-# drop indices
-mysql $CONNECTION -e "use $DB;\. generate-sp_drop_indices.sql" | tr -d '/-/' > sp_drop_indices.sql
+for task in "${TASKS[@]}"; do
+    GEN_FILE="${task%%:*}"
+    OUT_FILE="${task#*:}"
 
-# add indices
-mysql $CONNECTION -e "use $DB;\. generate-sp_add_indices.sql" | tr -d '/-/' > sp_add_indices.sql
+    while [ "${#CURRENT_PIDS[@]}" -ge "$MAX_PARALLEL_JOBS" ]; do
+        TEMP_PIDS=()
+        for pid in "${CURRENT_PIDS[@]}"; do
+            if kill -0 "$pid" 2>/dev/null; then
+                TEMP_PIDS+=("$pid")
+            fi
+        done
+        CURRENT_PIDS=("${TEMP_PIDS[@]}")
+        
+        if [ "${#CURRENT_PIDS[@]}" -ge "$MAX_PARALLEL_JOBS" ]; then
+            sleep 0.5
+        fi
+    done
 
+    mysql $CONNECTION -NB "$DB" < "$GEN_FILE" > "$OUT_FILE" &
+    CURRENT_PIDS+=($!)
+    ALL_PIDS+=($!)
+done
+
+FAIL=0
+for pid in "${ALL_PIDS[@]}"; do
+    if ! wait "$pid"; then
+        FAIL=1
+    fi
+done
+
+if [ "$FAIL" -ne 0 ]; then
+    echo "ERROR: One or more SP maintenance compilation jobs failed."
+    exit 1
+fi
+
+echo "All SP maintenance files compiled successfully inside AWS Batch."

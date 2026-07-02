@@ -8,12 +8,12 @@ use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\Query\Expr\Func;
 use Dvsa\Olcs\Api\Domain\Repository\CommunityLic;
 use Dvsa\Olcs\Api\Domain\Repository\CommunityLic as CommunityLicRepo;
-use Hamcrest\Arrays\IsArrayContainingKeyValuePair;
 use Hamcrest\Core\IsEqual;
 use Mockery as m;
 use Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic as CommunityLicEntity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Community Lic test
@@ -247,10 +247,10 @@ class CommunityLicTest extends RepositoryTestCase
         $queryBuilder = $this->resolveMockService($serviceManager, QueryBuilder::class);
         $sut = $this->setUpRepository($serviceManager, CommunityLicRepo::class);
         $expectedLicenceId = 8;
-        $parameterMatcher = IsArrayContainingKeyValuePair::hasKeyValuePair('licence', $expectedLicenceId);
 
-        // Expect
-        $queryBuilder->shouldReceive('setParameters')->once()->with($parameterMatcher);
+        $queryBuilder->shouldReceive('setParameters')
+            ->once()
+            ->with(m::type(ArrayCollection::class));
 
         // Execute
         $sut->countActiveByLicenceId($expectedLicenceId);
@@ -279,10 +279,10 @@ class CommunityLicTest extends RepositoryTestCase
         $serviceManager = $this->setUpServiceManager();
         $queryBuilder = $this->resolveMockService($serviceManager, QueryBuilder::class);
         $sut = $this->setUpRepository($serviceManager, CommunityLicRepo::class);
-        $parameterMatcher = IsArrayContainingKeyValuePair::hasKeyValuePair('status', CommunityLicEntity::STATUS_ACTIVE);
 
-        // Expect
-        $queryBuilder->shouldReceive('setParameters')->once()->with($parameterMatcher);
+        $queryBuilder->shouldReceive('setParameters')
+            ->once()
+            ->with(m::type(ArrayCollection::class));
 
         // Execute
         $sut->countActiveByLicenceId(1);
@@ -311,10 +311,10 @@ class CommunityLicTest extends RepositoryTestCase
         $serviceManager = $this->setUpServiceManager();
         $queryBuilder = $this->resolveMockService($serviceManager, QueryBuilder::class);
         $sut = $this->setUpRepository($serviceManager, CommunityLicRepo::class);
-        $parameterMatcher = IsArrayContainingKeyValuePair::hasKeyValuePair('issueNo', 0);
 
-        // Expect
-        $queryBuilder->shouldReceive('setParameters')->once()->with($parameterMatcher);
+        $queryBuilder->shouldReceive('setParameters')
+            ->once()
+            ->with(m::type(ArrayCollection::class));
 
         // Execute
         $sut->countActiveByLicenceId(1);

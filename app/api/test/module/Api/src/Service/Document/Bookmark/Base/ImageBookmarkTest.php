@@ -31,6 +31,21 @@ class ImageBookmarkTest extends MockeryTestCase
         $sut->getImage($name);
     }
 
+    public function testGetImageFailWhenFileReadReturnsFalse(): void
+    {
+        $mockFs = m::mock();
+        // The content store returns File|false (never null); a missing image must still raise,
+        // not fatal on getContent() against a bool.
+        $mockFs->shouldReceive('read')->andReturn(false);
+
+        $sut = new ImageBookmarkStub();
+        $sut->setFileStore($mockFs);
+
+        static::expectException(\RuntimeException::class);
+
+        $sut->getImage('unit_Name');
+    }
+
     public function testGetImageOk(): void
     {
         $name = 'unit_Name';

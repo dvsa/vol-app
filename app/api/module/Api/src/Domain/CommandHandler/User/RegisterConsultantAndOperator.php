@@ -7,6 +7,7 @@
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\User;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Dvsa\Olcs\Api\Domain\Command\User\RegisterUserSelfserveByOrganisation as RegisterUserSelfServeByOrganisationCommand;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractUserCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Entity\User\Role as RoleEntity;
@@ -32,11 +33,16 @@ final class RegisterConsultantAndOperator extends AbstractUserCommandHandler imp
         // Get the newly created user entity
         $user = $this->getRepo()->fetchById($this->result->getId('user'));
 
-        // Add the org ID of the newly created user/org to the consultant details, then register the consultant
+        // Add the org ID of the newly created user/org to the consultant details, then register the consultant.
+        // We use the internal RegisterUserSelfserveByOrganisation command (not the public, anonymous
+        // RegisterUserSelfserve, which no longer accepts a raw organisation id — VOL-7370). The id here is
+        // trusted: it belongs to the organisation we just created above, never to client input.
         $consultantDetails = $command->getConsultantDetails();
         $consultantDetails['organisation'] = $user->getOrganisationUsers()->first()->getOrganisation()->getId();
 
-        $this->result->merge($this->handleSideEffect(RegisterUserSelfServeCommand::create($consultantDetails)));
+        $this->result->merge(
+            $this->handleSideEffect(RegisterUserSelfServeByOrganisationCommand::create($consultantDetails))
+        );
 
         /**
          * Get the new consultant user entity and set the correct role

@@ -55,13 +55,13 @@ anonymise_bus_reg.sql
 anonymise_other_tables.sql
 anonymise_email_address.sql
 anonymise_messaging_content.sql
+delete_event_history.sql
 anonymise_hist_tables.sql
 add_search_data.sql
 cleanup.sql
 )
 
 STEPS_IN_BACKGROUND=(
-delete_event_history.sql
 )
 
 PIDS_IN_BACKGROUND=()
@@ -142,7 +142,16 @@ run_anonymise_sql () {
 
     # run each sql anonymisation step
 
+    local EXECUTION_STEPS=()
     for SQL_SCRIPT in "${ANONYMISATION_SQL_STEPS[@]}"
+    do
+        if [ "$SQL_SCRIPT" == "anonymise_hist_tables.sql" ] && $DELETE_OLD_HISTORY; then
+            EXECUTION_STEPS+=( delete_history_part_1.sql delete_history_part_2.sql )
+        fi
+        EXECUTION_STEPS+=( "$SQL_SCRIPT" )
+    done
+
+    for SQL_SCRIPT in "${EXECUTION_STEPS[@]}"
     do
         mysql --local-infile=1 $CONNECTION -e "use $ANON_DB;\. $SQL_DIR/$SQL_SCRIPT" || log_error "$SQL_DIR/$SQL_SCRIPT FAILED!"
     done
@@ -159,11 +168,6 @@ run_NI_anonymise_sql () {
 }
 
 run_steps_in_background () {
-
-    if ($DELETE_OLD_HISTORY); then
-
-        STEPS_IN_BACKGROUND+=( delete_history_part_1.sql delete_history_part_2.sql )
-    fi
 
     # run each step in background
 

@@ -20,24 +20,24 @@ BEGIN
   
     SELECT COUNT(*)
     INTO @total
-    FROM organisation
-    WHERE id NOT IN ( 
-        SELECT organisation_id
-	FROM licence);
+    FROM organisation o
+    LEFT JOIN licence l ON o.id = l.organisation_id
+    WHERE l.organisation_id IS NULL;
 
     SELECT CONCAT(@total,' organisation rows to delete.') AS '' ;
 
     SET @total:=0;
     SET @rowcount:=10000;
 
+    START TRANSACTION;
+
     WHILE(@rowcount = 10000) DO
 
 
     
-        DELETE FROM organisation
-        WHERE id NOT IN (
-            SELECT organisation_id
-	    FROM licence)
+        DELETE o FROM organisation o
+        LEFT JOIN licence l ON o.id = l.organisation_id
+        WHERE l.organisation_id IS NULL
         LIMIT 10000;
 
         SET @rowcount := row_count();
@@ -45,7 +45,12 @@ BEGIN
     
 
 
+        COMMIT;
+        START TRANSACTION;
+
     END WHILE;
+    
+    COMMIT;
     
     SELECT CONCAT(@total,' organisation rows deleted.') AS '';
   
@@ -53,3 +58,4 @@ BEGIN
     
 END
 $$
+DELIMITER ;
