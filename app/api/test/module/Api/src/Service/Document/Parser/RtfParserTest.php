@@ -149,4 +149,12 @@ TXT;
         $parser = new RtfParser();
         $this->assertEquals($endText, $parser->getEntitiesAndQuote($startText));
     }
+
+    public function testGetEntitiesAndQuoteToleratesNull(): void
+    {
+        // Optional bookmark values (e.g. a publication link with no text) arrive
+        // as null; this must not fatal, matching the old library's behaviour.
+        $parser = new RtfParser();
+        $this->assertSame('', $parser->getEntitiesAndQuote(null));
+    }
 }
