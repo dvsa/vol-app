@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_queue;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_queue()
@@ -27,19 +26,35 @@ BEGIN
 
     SELECT CONCAT(@total,' queue rows to delete.') AS '' ;
 
+    /*
+      TRUNCATE is a DDL command that implicitly commits active transactions and cannot be rolled back.
+      Use a batched DELETE loop instead to avoid implicit commits; this procedure still commits each batch
+      intentionally to keep transactions small.
+    */
+    SET @rowcount := 10000;
+    SET @total_deleted := 0;
 
+    START TRANSACTION;
 
-    TRUNCATE TABLE queue;
-    
+    WHILE(@rowcount = 10000) DO
 
-    
-    SELECT CONCAT(@total,' queue rows deleted.') AS '';
+        DELETE FROM queue
+        LIMIT 10000;
+
+        SET @rowcount := row_count();
+        SET @total_deleted := @total_deleted + @rowcount;
+        
+        SELECT CONCAT(@total_deleted,' queue rows deleted.') AS '';
+
+        COMMIT;
+        START TRANSACTION;
+
+    END WHILE;
+
+    COMMIT;
 
     SELECT CONCAT('delete queue finished at ',now()) AS '' ; 
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

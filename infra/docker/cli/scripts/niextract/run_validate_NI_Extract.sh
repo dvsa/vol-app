@@ -1,11 +1,13 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
-# Validate NI Extract
+if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "ERROR: Missing parameters."
+    echo "Usage: $(basename "$0") <connection_string> <database_name>"
+    exit 1
+fi
 
 CONNECTION=$1
 DB=$2
-
 PROC="sp_validate_NI_Extract"
 
-mysql $CONNECTION -e  "CALL $DB.$PROC;" | tr -d '/-/'
-
+mysql $CONNECTION -NB -e "CALL \`$DB\`.\`$PROC\`;"

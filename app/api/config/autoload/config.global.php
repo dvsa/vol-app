@@ -108,6 +108,19 @@ return [
 
     // Document service
     'document_share' => [
+        // Document store backend selector: 'webdav' | 's3'. Resolved per environment from
+        // SSM / Secrets Manager; any value other than 's3' (including an unresolved placeholder)
+        // falls back to WebDAV, so this is a safe, instantly-reversible cutover toggle.
+        // (Only used by the WebDAV->S3 migration; the bucket browser ignores it.)
+        'backend' => '%olcs_document_store_backend%',
+        // Native S3 document store / bucket-browser settings. Bucket name + key prefix are
+        // environment-specific and resolved from SSM / Secrets Manager (the bucket name is the
+        // per-env `<project>-<env>-<component>-sabredav`; the key prefix aligns stored identifiers
+        // with the keys the EBS->S3 sync produced, and may resolve to '').
+        's3' => [
+            'bucket' => '%olcs_document_store_s3_bucket%',
+            'key_prefix' => '%olcs_document_store_s3_key_prefix%',
+        ],
         'client' => [
             // Document service workspace "olcs"
             'workspace' => 'olcs',
@@ -277,6 +290,10 @@ return [
                 'en_GB' => '%olcs_notify_template_en_gb%',
                 'cy_GB' => '%olcs_notify_template_cy_gb%',
             ],
+            // Outbound egress in deployed environments is only reachable via the shared forward
+            // proxy, so the Notify HTTP client is routed through it like every other external
+            // integration. Overridden to empty in local.php where egress is direct.
+            'proxy' => 'http://%shd_proxy%',
         ],
         // VOL-7238: dedicated DSN for the admin "Send test via Notify" button. Populated only
         // in pre-cutover envs (dev/int) so admins can exercise the Notify path against a

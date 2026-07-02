@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_scan;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_scan()
@@ -27,19 +26,30 @@ BEGIN
 
     SELECT CONCAT(@total,' scan rows to delete.') AS '' ;
 
-    DELETE FROM scan;
+    SET @total_deleted := 0;
+    SET @rowcount := 10000;
 
-    SET @rowcount := row_count();
-    
+    START TRANSACTION;
 
+    WHILE(@rowcount = 10000) DO
     
-    SELECT CONCAT(@rowcount,' scan rows deleted.') AS '';
+        DELETE FROM scan
+        LIMIT 10000;
+
+        SET @rowcount := row_count();
+        SET @total_deleted := @total_deleted + @rowcount;
+    
+        SELECT CONCAT(@total_deleted,' scan rows deleted.') AS '';
+
+        COMMIT;
+        START TRANSACTION;
+
+    END WHILE;
+    
+    COMMIT;
     
     SELECT CONCAT('delete scan finished at ',now()) AS '' ; 
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

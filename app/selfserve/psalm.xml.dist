@@ -9,8 +9,15 @@
 >
   <projectFiles>
     <directory name="module"/>
+    <!-- In-tree shared libs (symlinked into vendor/olcs/*) are scanned here for symbol
+         resolution (app code uses their classes) but excluded from analysis in
+         ignoreFiles below — the libs have their own psalm runs (CI lib matrix). Listing
+         in BOTH scans them deterministically (avoids a parallel-scan race) without
+         reporting their issues. -->
+    <directory name="../../lib"/>
     <ignoreFiles>
           <directory name="vendor" />
+          <directory name="../../lib" />
         </ignoreFiles>
   </projectFiles>
   <issueHandlers>

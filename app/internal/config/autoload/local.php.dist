@@ -60,8 +60,10 @@ return [
         'private_key' => '',
         // The default length in seconds the JWT is valid for.
         'default_lifetime_seconds' => 21600,
-        // The URL pattern for a WebDAV URL. JWT followed by Document Path will be sprintf'ed into this value.
-        'url_pattern' => ''
+        // Legacy URL pattern (IIS WebDAV). JWT followed by Document Path will be sprintf'ed into this value.
+        'url_pattern' => '',
+        // Internal URL pattern (sabre/dav). JWT and filename will be sprintf'ed into this value.
+        'internal_url_pattern' => 'ms-word:ofe|u|http://iuweb.local.olcs.dev-dvsacloud.uk/internal-dav/%%s/%%s'
     ],
 
     'assets' => [

@@ -1,0 +1,11 @@
+<form method="post" action="{{action}}" class="table__form">
+    <input type="hidden" value="{{submissionVersion}}" name="submissionVersion">
+    <input type="hidden" value="{{hidden}}" name="table">
+    <?php
+    echo $this->object->renderLayout('default');
+
+    /** @var  \Laminas\Form\Element\Csrf $emlCsrf */
+    $emlCsrf = $this->object->getCsrfElement();
+    ?>
+    <input type="hidden" class="js-csrf-token" value="<?= $emlCsrf->getValue() ?>" name="<?= $emlCsrf->getName() ?>">
+</form>

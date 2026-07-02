@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_companies_house_company;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_companies_house_company()
@@ -30,6 +29,8 @@ BEGIN
     SET @total:=0;
     SET @rowcount:=10000;
     
+    START TRANSACTION;
+
     WHILE(@rowcount = 10000) DO
 
 
@@ -44,14 +45,16 @@ BEGIN
     
         SELECT CONCAT(@total,' companies_house_company rows deleted.') AS '';
 
+        COMMIT;
+        START TRANSACTION;
+
     END WHILE;
+
+    COMMIT;
 
 
     SELECT CONCAT('delete companies_house_company finished at ',now()) AS '' ; 
     
 END
 $$
-
-
-  
-  
+DELIMITER ;
