@@ -1,4 +1,4 @@
-SELECT CONCAT('DROP PROCEDURE IF EXISTS sp_drop_indices;', CHAR(10), 'CREATE PROCEDURE sp_drop_indices()', CHAR(10), 'BEGIN') AS '';
+SELECT CONCAT('DROP PROCEDURE IF EXISTS sp_drop_indices', CHAR(10), '$$', CHAR(10), 'CREATE PROCEDURE sp_drop_indices()', CHAR(10), 'BEGIN') AS '';
 
 # drop indices on olbs_key and olbs_type only
 

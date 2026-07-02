@@ -1,4 +1,4 @@
-SELECT CONCAT('DROP PROCEDURE IF EXISTS sp_add_indices;', CHAR(10), 'CREATE PROCEDURE sp_add_indices()', CHAR(10), 'BEGIN') AS '';
+SELECT CONCAT('DROP PROCEDURE IF EXISTS sp_add_indices', CHAR(10), '$$', CHAR(10), 'CREATE PROCEDURE sp_add_indices()', CHAR(10), 'BEGIN') AS '';
 
 SELECT CONCAT(
     'IF NOT EXISTS (SELECT 1 FROM information_schema.statistics WHERE table_schema = DATABASE() AND table_name = \'', SUBSTRING(t.NAME, LENGTH(DATABASE()) + 2), '\' AND index_name = \'', i.NAME, '\') THEN ',

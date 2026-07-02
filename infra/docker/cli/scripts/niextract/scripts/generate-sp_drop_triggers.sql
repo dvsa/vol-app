@@ -1,4 +1,4 @@
-SELECT CONCAT('DROP PROCEDURE IF EXISTS sp_drop_triggers;', CHAR(10), 'CREATE PROCEDURE sp_drop_triggers()', CHAR(10), 'BEGIN') AS '';
+SELECT CONCAT('DROP PROCEDURE IF EXISTS sp_drop_triggers', CHAR(10), '$$', CHAR(10), 'CREATE PROCEDURE sp_drop_triggers()', CHAR(10), 'BEGIN') AS '';
 
 SELECT CONCAT('DROP TRIGGER IF EXISTS ', t.TRIGGER_NAME, ';') AS ''
 FROM information_schema.TRIGGERS t
