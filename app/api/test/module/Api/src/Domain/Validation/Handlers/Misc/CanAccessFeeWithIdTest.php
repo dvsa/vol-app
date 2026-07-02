@@ -79,13 +79,7 @@ class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
         $dto->shouldReceive('getLicenceId')->andReturn(212);
 
         $this->setIsGranted(Permission::INTERNAL_USER, true);
-
-        $licence = m::mock();
-        $licence->shouldReceive('getId')->andReturn(212);
-        $fee = m::mock();
-        $fee->shouldReceive('getLicence')->andReturn($licence);
-
-        $this->mockRepo('Fee')->shouldReceive('fetchById')->with($id)->andReturn($fee);
+        $this->setIsValid('feeBelongsToLicence', [$id, 212], true);
 
         $this->assertTrue($this->sut->isValid($dto));
     }
@@ -98,13 +92,7 @@ class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
         $dto->shouldReceive('getLicenceId')->andReturn(212);
 
         $this->setIsGranted(Permission::INTERNAL_USER, true);
-
-        $licence = m::mock();
-        $licence->shouldReceive('getId')->andReturn(999);
-        $fee = m::mock();
-        $fee->shouldReceive('getLicence')->andReturn($licence);
-
-        $this->mockRepo('Fee')->shouldReceive('fetchById')->with($id)->andReturn($fee);
+        $this->setIsValid('feeBelongsToLicence', [$id, 212], false);
 
         $this->assertFalse($this->sut->isValid($dto));
     }
