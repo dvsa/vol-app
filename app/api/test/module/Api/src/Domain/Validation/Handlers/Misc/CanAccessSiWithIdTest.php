@@ -24,13 +24,9 @@ class CanAccessSiWithIdTest extends AbstractHandlerTestCase
     public function testIsValidInternalNoContext(): void
     {
         $dto = m::mock(CommandInterface::class);
-        $dto->shouldReceive('getId')->andReturn(1);
         $dto->shouldReceive('getCaseId')->andReturn(null);
 
         $this->setIsGranted(Permission::INTERNAL_USER, true);
-
-        $si = m::mock();
-        $this->mockRepo('SeriousInfringement')->shouldReceive('fetchById')->with(1)->andReturn($si);
 
         $this->assertTrue($this->sut->isValid($dto));
     }
@@ -51,14 +47,7 @@ class CanAccessSiWithIdTest extends AbstractHandlerTestCase
         $dto->shouldReceive('getCaseId')->andReturn(2);
 
         $this->setIsGranted(Permission::INTERNAL_USER, true);
-
-        $case = m::mock();
-        $case->shouldReceive('getId')->andReturn(2);
-
-        $si = m::mock();
-        $si->shouldReceive('getCase')->andReturn($case);
-
-        $this->mockRepo('SeriousInfringement')->shouldReceive('fetchById')->with(1)->andReturn($si);
+        $this->setIsValid('seriousInfringementBelongsToCase', [1, 2], true);
 
         $this->assertTrue($this->sut->isValid($dto));
     }
@@ -70,30 +59,7 @@ class CanAccessSiWithIdTest extends AbstractHandlerTestCase
         $dto->shouldReceive('getCaseId')->andReturn(2);
 
         $this->setIsGranted(Permission::INTERNAL_USER, true);
-
-        $case = m::mock();
-        $case->shouldReceive('getId')->andReturn(999);
-
-        $si = m::mock();
-        $si->shouldReceive('getCase')->andReturn($case);
-
-        $this->mockRepo('SeriousInfringement')->shouldReceive('fetchById')->with(1)->andReturn($si);
-
-        $this->assertFalse($this->sut->isValid($dto));
-    }
-
-    public function testIsNotValidWhenSiHasNoCase(): void
-    {
-        $dto = m::mock(CommandInterface::class);
-        $dto->shouldReceive('getId')->andReturn(1);
-        $dto->shouldReceive('getCaseId')->andReturn(2);
-
-        $this->setIsGranted(Permission::INTERNAL_USER, true);
-
-        $si = m::mock();
-        $si->shouldReceive('getCase')->andReturn(null);
-
-        $this->mockRepo('SeriousInfringement')->shouldReceive('fetchById')->with(1)->andReturn($si);
+        $this->setIsValid('seriousInfringementBelongsToCase', [1, 2], false);
 
         $this->assertFalse($this->sut->isValid($dto));
     }
