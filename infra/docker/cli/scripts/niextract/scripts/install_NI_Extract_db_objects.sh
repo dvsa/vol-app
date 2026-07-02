@@ -15,6 +15,9 @@ cd "$SCRIPT_DIR" || exit 1
 run_sql() {
     local file="$1"
     echo "Running $file..."
+    echo "=== FILE CONTENT ==="
+    cat "$file"
+    echo "=== END FILE CONTENT ==="
     grep -v '^DELIMITER' "$file" | mysql $CONNECTION "$DB" --delimiter='$$' 2>&1 || { echo "ERROR: Failed to execute $file"; exit 1; }
 }
 
