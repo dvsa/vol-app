@@ -248,4 +248,112 @@ class SendEmailTest extends AbstractCommandHandlerTestCase
 
         $this->sut->handleCommand($command);
     }
+
+    public static function sendAllMailToSentinelProvider(): array
+    {
+        return [
+            'single space'    => [' '],
+            'multiple spaces' => ['   '],
+            'literal null'    => ['null'],
+            'literal NULL'    => ['NULL'],
+            'empty string'    => [''],
+        ];
+    }
+
+    /**
+     * A blank/whitespace-only value or the literal "null" sentinel must NOT redirect: SSM String
+     * params cannot be empty, so non-prod envs disable the catch-all with " " or "null" (VOL-7240).
+     * The real recipient, cc and bcc are preserved and the subject is not prefixed.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('sendAllMailToSentinelProvider')]
+    public function testHandleCommandSendAllMailToSentinelDoesNotRedirect(string $sentinel): void
+    {
+        $data = [
+            'to' => 'foo@bar.com',
+            'cc' => ['bar@foo.com'],
+            'bcc' => ['bcc@foobar.com'],
+            'docs' => [],
+            'subject' => 'Some subject',
+            'plainBody' => 'This is the email',
+            'htmlBody' => null,
+            'highPriority' => false,
+            'subjectVariables' => []
+        ];
+
+        $command = Cmd::create($data);
+
+        $this->sut->setSendAllMailTo($sentinel);
+
+        $this->repoMap['Document']
+            ->shouldReceive('fetchByIds')
+            ->once()
+            ->with([])
+            ->andReturn([]);
+
+        $this->mockedSmServices['EmailService']->shouldReceive('send')
+            ->once()
+            ->with(
+                'terry.valtech@gmail.com',
+                'Terry',
+                'foo@bar.com',
+                'translated-Some subject',
+                'This is the email',
+                null,
+                ['bar@foo.com'],
+                ['bcc@foobar.com'],
+                [],
+                false,
+                null
+            );
+
+        $this->sut->handleCommand($command);
+    }
+
+    /**
+     * A real address in send_all_mail_to redirects every recipient to it (emptying cc/bcc) and
+     * prefixes the original recipient onto the subject. Surrounding whitespace is trimmed off the
+     * address so an accidentally-padded SSM value still resolves to a clean recipient.
+     */
+    public function testHandleCommandSendAllMailToRedirectsAndTrims(): void
+    {
+        $data = [
+            'to' => 'foo@bar.com',
+            'cc' => ['bar@foo.com'],
+            'bcc' => ['bcc@foobar.com'],
+            'docs' => [],
+            'subject' => 'Some subject',
+            'plainBody' => 'This is the email',
+            'htmlBody' => null,
+            'highPriority' => false,
+            'subjectVariables' => []
+        ];
+
+        $command = Cmd::create($data);
+
+        $this->sut->setSendAllMailTo('  catch-all@dvsa.gov.uk  ');
+
+        $this->repoMap['Document']
+            ->shouldReceive('fetchByIds')
+            ->once()
+            ->with([])
+            ->andReturn([]);
+
+        $this->mockedSmServices['EmailService']->shouldReceive('send')
+            ->once()
+            ->with(
+                'terry.valtech@gmail.com',
+                'Terry',
+                'catch-all@dvsa.gov.uk',
+                'foo@bar.com : translated-Some subject',
+                'This is the email',
+                null,
+                [],
+                [],
+                [],
+                false,
+                null
+            );
+
+        $this->sut->handleCommand($command);
+    }
 }
