@@ -1,5 +1,42 @@
 # Changelog
 
+## [8.1.0](https://github.com/dvsa/vol-app/compare/v8.0.0...v8.1.0) (2026-07-03)
+
+
+### Features
+
+* 7290 CD test approvals part one ([#1616](https://github.com/dvsa/vol-app/issues/1616)) ([e29b2d2](https://github.com/dvsa/vol-app/commit/e29b2d2268d8e383a161879562dfdc438c8bf777))
+* absorb olcs-auth into the vol-app repo VOL-7258 ([1248c6b](https://github.com/dvsa/vol-app/commit/1248c6b2ddae10def3eb60ca130920758c49de44))
+* absorb olcs-auth library into vol-app repo VOL-7258 ([7503168](https://github.com/dvsa/vol-app/commit/7503168e8a44e3351d3f6976d44f7fbf5da70442))
+* **api:** add belongs-to validators for fee and serious infringement VOL-5981 VOL-5983 ([#1609](https://github.com/dvsa/vol-app/issues/1609)) ([bdd6a46](https://github.com/dvsa/vol-app/commit/bdd6a46c9ca2169d809e0f87ad6280c6fbda485f))
+* applied Doctrine Rector compatibility changes ([#1588](https://github.com/dvsa/vol-app/issues/1588)) ([e988b91](https://github.com/dvsa/vol-app/commit/e988b918c6d01a1012b06b355a26a57a44664553))
+* bus reg task list defaulted ([#1612](https://github.com/dvsa/vol-app/issues/1612)) ([ed04b93](https://github.com/dvsa/vol-app/commit/ed04b930ced6c2b73e04109dfc402dbdcb58db1e))
+* sabre webdav server implementation to replace external webdav a… ([#1330](https://github.com/dvsa/vol-app/issues/1330)) ([e7ecff7](https://github.com/dvsa/vol-app/commit/e7ecff7d831cbaa1886b4c52e1118279423dd028))
+
+
+### Bug Fixes
+
+* add permissions required for data anon job to be tested in int ([#1599](https://github.com/dvsa/vol-app/issues/1599)) ([7d606b4](https://github.com/dvsa/vol-app/commit/7d606b44f7f002c5d801ff96e142cf9359697c86))
+* amend parent shell script to hopefully handle delimiter better ([#1603](https://github.com/dvsa/vol-app/issues/1603)) ([5008dc6](https://github.com/dvsa/vol-app/commit/5008dc6dc60895f5bd2f5e7fe1e1348f320e2d95))
+* cluster naming now follows vol-app conventions ([#1600](https://github.com/dvsa/vol-app/issues/1600)) ([9b9d720](https://github.com/dvsa/vol-app/commit/9b9d72019c8255ece461738adab6e15c57f1b4da))
+* correct bucket name ([#1624](https://github.com/dvsa/vol-app/issues/1624)) ([a76ff68](https://github.com/dvsa/vol-app/commit/a76ff68c75a0a19de16f0f9451c78e3ec15a5041))
+* initial concat statement with semi-colon was causing some issues due to inconsistency in delimiter ([#1615](https://github.com/dvsa/vol-app/issues/1615)) ([4d89063](https://github.com/dvsa/vol-app/commit/4d89063c144d151f23e6eca3c845032f179cb69c))
+* ni delimiter statements ([#1613](https://github.com/dvsa/vol-app/issues/1613)) ([e757140](https://github.com/dvsa/vol-app/commit/e757140beab6e8b840ffa007e3a46b8514767cf3))
+* ni sp generation fix ([#1611](https://github.com/dvsa/vol-app/issues/1611)) ([9566b6e](https://github.com/dvsa/vol-app/commit/9566b6e1ae7e158544cd8a400cf7163fe5bcefdf))
+* ni sql errors ([#1595](https://github.com/dvsa/vol-app/issues/1595)) ([c9a48e2](https://github.com/dvsa/vol-app/commit/c9a48e2f510cc579ef9993c8dcffe33b92fed7dd))
+* outputting and overwriting the debug files to a sql files to debug ([#1621](https://github.com/dvsa/vol-app/issues/1621)) ([8961bc3](https://github.com/dvsa/vol-app/commit/8961bc3993dce8f659082f1e6ec744c99fa839d0))
+* prevent bold in Notify md conversion; value-driven send_all_mail_to ([#1620](https://github.com/dvsa/vol-app/issues/1620)) ([4b896e0](https://github.com/dvsa/vol-app/commit/4b896e0b090aad3d763eea7c57dc6ff31fae4d10))
+* print sql statements so you can see the malformed statement ([#1618](https://github.com/dvsa/vol-app/issues/1618)) ([e73f1ab](https://github.com/dvsa/vol-app/commit/e73f1abd2180fdfc67b4ca5a2be5c0cc72cb71d3))
+* refactor to use source ([#1606](https://github.com/dvsa/vol-app/issues/1606)) ([6439230](https://github.com/dvsa/vol-app/commit/6439230647dbcf13e0bf88f93b561fdc03aca3fb))
+* removing manual test approval gates ([#1622](https://github.com/dvsa/vol-app/issues/1622)) ([202c53a](https://github.com/dvsa/vol-app/commit/202c53af64c40d88b42e1d46e0f8b2163d3a27ee))
+* rewrite selfserve/internal URIs in Notify markdown body ([#1623](https://github.com/dvsa/vol-app/issues/1623)) ([47e9fc2](https://github.com/dvsa/vol-app/commit/47e9fc2a22e23024f925caa8cbfcd0d5dadb1f22))
+* route Notify client via shared egress proxy; fix HTMLPurifier cache path ([#1608](https://github.com/dvsa/vol-app/issues/1608)) ([de872da](https://github.com/dvsa/vol-app/commit/de872da02991907290b5a39df4adcd93d6b84a41))
+* sql formatting ([#1604](https://github.com/dvsa/vol-app/issues/1604)) ([ba07e98](https://github.com/dvsa/vol-app/commit/ba07e98552b9dc2cb89119056c1a458da4f05a6d))
+* sql issue not being passed back successfully ([#1617](https://github.com/dvsa/vol-app/issues/1617)) ([231e08f](https://github.com/dvsa/vol-app/commit/231e08f986c06ea8c08975c209c1e24b4c3a1d54))
+* update review and declaration wording for psv continuations ([#1607](https://github.com/dvsa/vol-app/issues/1607)) ([727b786](https://github.com/dvsa/vol-app/commit/727b7865563d2f9cf4d677eaedb55be56e45194d))
+* use python rather than sed for the substitution given busybox behaviour ([#1605](https://github.com/dvsa/vol-app/issues/1605)) ([088a1db](https://github.com/dvsa/vol-app/commit/088a1db5e534c993606c92b1ad24c9e7ff7ca106))
+* vol 6118 open case listings error ([#1597](https://github.com/dvsa/vol-app/issues/1597)) ([827e038](https://github.com/dvsa/vol-app/commit/827e03829e5f1171984d79bb0300a246cba0d2d1))
+
 ## [8.0.0](https://github.com/dvsa/vol-app/compare/v7.5.0...v8.0.0) (2026-06-22)
 
 
