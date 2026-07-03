@@ -356,4 +356,61 @@ class SendEmailTest extends AbstractCommandHandlerTestCase
 
         $this->sut->handleCommand($command);
     }
+
+    /**
+     * The Notify markdown path must rewrite the `http://selfserve/` and `http://internal/` placeholder
+     * hosts to the environment's real FQDNs, exactly as the legacy SMTP plain/html path does — both in
+     * the Notify payload body and in the plain fallback derived from the markdown (VOL-7240).
+     */
+    public function testHandleCommandRewritesUrisInNotifyMarkdownBody(): void
+    {
+        $markdown = "It is an offence to operate without a licence.\n\n"
+            . "http://selfserve/continuation/358801 and http://internal/admin";
+        $expected = "It is an offence to operate without a licence.\n\n"
+            . "http://olcs-selfserve/continuation/358801 and http://olcs-internal/admin";
+
+        $data = [
+            'to' => 'foo@bar.com',
+            'cc' => [],
+            'bcc' => [],
+            'docs' => [],
+            'subject' => 'Some subject',
+            'plainBody' => null,
+            'htmlBody' => null,
+            'markdownBody' => $markdown,
+            'templateKey' => 'notify-template-uuid',
+            'locale' => 'en_GB',
+            'personalisation' => [],
+            'highPriority' => false,
+            'subjectVariables' => []
+        ];
+
+        $command = Cmd::create($data);
+
+        $this->sut->setSendAllMailTo(null);
+
+        $this->repoMap['Document']
+            ->shouldReceive('fetchByIds')
+            ->once()
+            ->with([])
+            ->andReturn([]);
+
+        $this->mockedSmServices['EmailService']->shouldReceive('send')
+            ->once()
+            ->with(
+                'terry.valtech@gmail.com',
+                'Terry',
+                'foo@bar.com',
+                'translated-Some subject',
+                $expected,
+                null,
+                [],
+                [],
+                [],
+                false,
+                m::on(fn($payload): bool => is_array($payload) && $payload['markdownBody'] === $expected)
+            );
+
+        $this->sut->handleCommand($command);
+    }
 }
