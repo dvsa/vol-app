@@ -18,7 +18,7 @@ run_sql() {
     filename=$(basename "$file")
     echo "Running $file..."
     echo "File size: $(wc -c < "$file") bytes, lines: $(wc -l < "$file") lines"
-    aws s3 cp "$file" "s3://devapp-olcs-pri-olcs-deploy-s3/anondata/debug/$filename" 2>&1 || echo "S3 upload failed for $filename"
+    aws s3 cp "$file" "s3://devapp-shd-pri-olcsci-build-s3/anondata/debug/$filename" 2>&1 || echo "S3 upload failed for $filename"
     grep -v '^DELIMITER' "$file" | mysql $CONNECTION "$DB" --delimiter='$$' 2>&1 || { echo "ERROR: Failed to execute $file"; exit 1; }
 }
 
