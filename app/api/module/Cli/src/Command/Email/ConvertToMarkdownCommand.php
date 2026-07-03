@@ -258,6 +258,15 @@ class ConvertToMarkdownCommand extends AbstractOlcsCommand
             return 'output contains forbidden raw HTML tag';
         }
 
+        // Notify has no inline bold/italic — it renders the markers literally. Reject them so a bad
+        // conversion fails loudly instead of round-tripping cleanly through CommonMark below.
+        if (preg_match('/\*\*.+?\*\*/s', $markdown) === 1) {
+            return 'output contains bold markers (** **) — Notify has no bold; use plain text or a "## " heading';
+        }
+        if (preg_match('/(?<![\w\/:])_(?!_)[^_\n]+_(?![\w\/])/', $markdown) === 1) {
+            return 'output contains underscore italics (_..._) — Notify has no italic; use plain text';
+        }
+
         $samples = $datasets === [] ? [['__empty__' => []]] : $datasets;
         foreach ($samples as $datasetName => $datasetValues) {
             $values = is_array($datasetValues) ? $datasetValues : [];
@@ -333,7 +342,10 @@ class ConvertToMarkdownCommand extends AbstractOlcsCommand
            - `<p>` blocks → paragraphs separated by blank lines
            - `<h2>` → `## `, `<h3>` → `### ` (Notify supports up to H2 prominently; H3 is a styled subheading)
            - `<a href="X">Y</a>` → `[Y](X)`. If the href is a bare Twig `{{ url }}`, write `[Y]({{ url }})`.
-           - `<strong>`/`<b>` → `**...**`, `<em>`/`<i>` → `*...*`
+           - `<strong>`/`<b>`/`<em>`/`<i>` → Notify has NO bold or italic (it renders `**`/`*`/`_`
+             markers literally). Output the inner text as PLAIN text and drop the emphasis. Only if
+             such an element is the ENTIRE content of a short standalone line (a section label) may
+             you render that whole line as a `## ` heading instead.
            - `<ul><li>` → `- item` per line; `<ol><li>` → `1. item` per line (Notify renders these correctly)
            - `<table>` → Markdown pipe table if it fits cleanly. Otherwise convert to a labelled list.
            - `<br>` → use blank line for hard break, or two spaces at end of line for soft break.
