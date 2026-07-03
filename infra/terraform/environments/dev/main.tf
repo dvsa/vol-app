@@ -738,6 +738,12 @@ module "service" {
   }
 }
 
+module "idp" {
+  source = "../../modules/idp"
+
+  environment = "dev"
+}
+
 resource "null_resource" "deployed_versions" {
   triggers = {
     deployed_api_image_tag       = var.api_image_tag
