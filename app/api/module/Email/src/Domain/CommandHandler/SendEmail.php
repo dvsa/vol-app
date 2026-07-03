@@ -230,7 +230,7 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
 
         $plainBody = $command->getPlainBody() !== null
             ? $this->replaceUris($command->getPlainBody())
-            : ($hasMarkdownBody ? $command->getMarkdownBody() : '');
+            : ($hasMarkdownBody ? $this->replaceUris((string) $command->getMarkdownBody()) : '');
         $htmlBody = $command->getHtmlBody();
 
         if ($htmlBody !== null) {
@@ -294,7 +294,9 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
             'templateKey' => $command->getTemplateKey(),
             'locale' => $command->getLocale(),
             'personalisation' => $command->getPersonalisation(),
-            'markdownBody' => $command->getMarkdownBody(),
+            'markdownBody' => $command->getMarkdownBody() !== null
+                ? $this->replaceUris($command->getMarkdownBody())
+                : null,
             'attachments' => $attachments,
         ];
     }
