@@ -50,8 +50,6 @@ class WebDavClient implements DocumentStoreInterface
             return false;
         }
 
-        $this->logger->debug('Temp file created', ['tmpFileName' => $tmpFileName, 'is_file' => is_file($tmpFileName), 'is_readable' => is_readable($tmpFileName), 'is_writable' => is_writable($tmpFileName)]);
-
         try {
             $readStream = $this->filesystem->readStream($path);
             $fpc = file_put_contents($tmpFileName, $readStream);
@@ -114,9 +112,8 @@ class WebDavClient implements DocumentStoreInterface
     public function write($path, File $file)
     {
         $response = new WebDavResponse();
+        $fh = null;
         try {
-            $this->logger->debug('Opening file for reading', ['file' => $file->getResource(), 'path' => $path]);
-
             $fh = fopen($file->getResource(), 'rb');
 
             if ($fh === false) {
@@ -129,7 +126,43 @@ class WebDavClient implements DocumentStoreInterface
         } catch (FileExistsException) {
             $response->setResponse(false);
         } finally {
-            @fclose($fh);
+            if (is_resource($fh)) {
+                fclose($fh);
+            }
+        }
+        return $response;
+    }
+
+    /**
+     * Update (overwrite) an existing file on remote storage
+     *
+     * @param string $path File Path on storage
+     * @param File   $file File
+     *
+     * @return WebDavResponse
+     * @throws \Exception
+     */
+    #[\Override]
+    public function update($path, File $file)
+    {
+        $response = new WebDavResponse();
+        $fh = null;
+        try {
+            $fh = fopen($file->getResource(), 'rb');
+
+            if ($fh === false) {
+                $this->logger->error('Failed to open file for reading', ['file' => $file->getResource(), 'path' => $path]);
+                $response->setResponse(false);
+            } else {
+                $response->setResponse($this->filesystem->updateStream($path, $fh));
+            }
+        } catch (FileNotFoundException) {
+            $this->logger->error('File not found for update', ['path' => $path]);
+            $response->setResponse(false);
+        } finally {
+            if (is_resource($fh)) {
+                fclose($fh);
+            }
         }
         return $response;
     }

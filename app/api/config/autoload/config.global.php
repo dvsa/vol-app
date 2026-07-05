@@ -276,9 +276,11 @@ return [
 
     // Email config
     'email' => [
-        // Debugging option forces all email to be sent to an address
-        // Selfserve/external URI e.g. http://demo_dvsa-selfserve.web03.olcs.mgt.mtpdvsa *Environment specific*
-        'send_all_mail_to' => ($isProductionAccount && !$isProduction) ? '%olcs_send_all_mail_to%' : null,
+        // Debugging option: redirect ALL outbound email to a single address. Driven by the env's
+        // `olcs_send_all_mail_to` param — a real address enables it, a blank/"null" sentinel disables
+        // it (SSM String params cannot be empty, so envs opt out with " " or "null"). NEVER in
+        // production (APP): prod always sends to the real recipients regardless of the param.
+        'send_all_mail_to' => $isProduction ? null : '%olcs_send_all_mail_to%',
         'from_name' => 'OLCS do not reply',
         'from_email' => '%olcs_from_email%',
         'selfserve_uri' => '%olcs_ss_uri%',
@@ -290,6 +292,10 @@ return [
                 'en_GB' => '%olcs_notify_template_en_gb%',
                 'cy_GB' => '%olcs_notify_template_cy_gb%',
             ],
+            // Outbound egress in deployed environments is only reachable via the shared forward
+            // proxy, so the Notify HTTP client is routed through it like every other external
+            // integration. Overridden to empty in local.php where egress is direct.
+            'proxy' => 'http://%shd_proxy%',
         ],
         // VOL-7238: dedicated DSN for the admin "Send test via Notify" button. Populated only
         // in pre-cutover envs (dev/int) so admins can exercise the Notify path against a

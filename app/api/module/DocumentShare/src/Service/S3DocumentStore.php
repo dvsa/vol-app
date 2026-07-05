@@ -58,6 +58,18 @@ class S3DocumentStore implements DocumentStoreInterface
     }
 
     /**
+     * S3 PutObject overwrites an existing object in place, so for the native S3 store update is
+     * identical to write (unlike the WebDAV store, which distinguishes create from overwrite).
+     *
+     * @param string $path
+     */
+    #[\Override]
+    public function update($path, File $file): Response
+    {
+        return $this->putFileToObject($this->normaliseKey($path), $file);
+    }
+
+    /**
      * S3 DeleteObject is idempotent — it succeeds whether or not the key exists — so a
      * successful call always maps to 200. (The bucket is not versioned, so this is a true
      * delete.) Returning a Response (rather than a bool) satisfies the isOk()/isNotFound()
