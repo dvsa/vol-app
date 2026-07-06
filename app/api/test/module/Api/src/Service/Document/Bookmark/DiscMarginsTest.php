@@ -65,9 +65,11 @@ class DiscMarginsTest extends MockeryTestCase
     private function repoManagerWith(array $values): RepositoryServiceManager
     {
         $repo = m::mock(SystemParameterRepo::class);
-        foreach ($values as $param => $value) {
-            $repo->shouldReceive('fetchValue')->with($param)->andReturn($value);
-        }
+        $repo->shouldReceive('fetchNumericValue')
+            ->andReturnUsing(static function (string $param, int $default) use ($values): int {
+                $value = $values[$param] ?? null;
+                return is_numeric($value) ? (int)$value : $default;
+            });
 
         $repoManager = m::mock(RepositoryServiceManager::class);
         $repoManager->shouldReceive('get')->with('SystemParameter')->andReturn($repo);

@@ -162,16 +162,16 @@ class PsvDiscPageTest extends m\Adapter\Phpunit\MockeryTestCase
         ]];
 
         $sysParamRepo = m::mock(SystemParameterRepo::class);
-        $sysParamRepo->shouldReceive('fetchValue')
-            ->with(SystemParameter::PSV_DISC_PINNED_LAYOUT)->andReturn('1');
-        $sysParamRepo->shouldReceive('fetchValue')
-            ->with(SystemParameter::PSV_DISC_ROW_HEIGHT_1)->andReturn('5040');
-        $sysParamRepo->shouldReceive('fetchValue')
-            ->with(SystemParameter::PSV_DISC_ROW_HEIGHT_2)->andReturn('5040');
-        $sysParamRepo->shouldReceive('fetchValue')
-            ->with(SystemParameter::PSV_DISC_ROW_HEIGHT_3)->andReturn('5040');
-        $sysParamRepo->shouldReceive('fetchValue')
-            ->with(SystemParameter::PSV_DISC_LINE_SPACING)->andReturn('240');
+        $sysParamRepo->shouldReceive('fetchIsEnabled')
+            ->with(SystemParameter::PSV_DISC_PINNED_LAYOUT)->andReturn(true);
+        $values = [
+            SystemParameter::PSV_DISC_ROW_HEIGHT_1 => 5040,
+            SystemParameter::PSV_DISC_ROW_HEIGHT_2 => 5040,
+            SystemParameter::PSV_DISC_ROW_HEIGHT_3 => 5040,
+            SystemParameter::PSV_DISC_LINE_SPACING => 240,
+        ];
+        $sysParamRepo->shouldReceive('fetchNumericValue')
+            ->andReturnUsing(static fn (string $key, int $default): int => $values[$key] ?? $default);
 
         $repoManager = m::mock(RepositoryServiceManager::class);
         $repoManager->shouldReceive('get')->with('SystemParameter')->andReturn($sysParamRepo);
@@ -212,7 +212,9 @@ class PsvDiscPageTest extends m\Adapter\Phpunit\MockeryTestCase
         $data = array_fill(0, 12, $disc);
 
         $sysParamRepo = m::mock(SystemParameterRepo::class);
-        $sysParamRepo->shouldReceive('fetchValue')->andReturn('1');
+        $sysParamRepo->shouldReceive('fetchIsEnabled')->andReturn(true);
+        $sysParamRepo->shouldReceive('fetchNumericValue')
+            ->andReturnUsing(static fn (string $key, int $default): int => $default);
 
         $repoManager = m::mock(RepositoryServiceManager::class);
         $repoManager->shouldReceive('get')->with('SystemParameter')->andReturn($sysParamRepo);
@@ -246,8 +248,8 @@ class PsvDiscPageTest extends m\Adapter\Phpunit\MockeryTestCase
         ]];
 
         $sysParamRepo = m::mock(SystemParameterRepo::class);
-        $sysParamRepo->shouldReceive('fetchValue')
-            ->with(SystemParameter::PSV_DISC_PINNED_LAYOUT)->andReturn(null);
+        $sysParamRepo->shouldReceive('fetchIsEnabled')
+            ->with(SystemParameter::PSV_DISC_PINNED_LAYOUT)->andReturn(false);
 
         $repoManager = m::mock(RepositoryServiceManager::class);
         $repoManager->shouldReceive('get')->with('SystemParameter')->andReturn($sysParamRepo);

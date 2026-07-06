@@ -135,13 +135,13 @@ final class PrintDiscs extends AbstractCommandHandler implements TransactionedIn
     }
 
     /**
-     * Mirrors the toggle read in the DiscList/PsvDiscPage bookmarks so the
-     * base template and the snippet variant always switch together.
+     * Same toggle read as the DiscList/PsvDiscPage bookmarks, so the base
+     * template and the snippet variant always switch together.
      */
     private function isPinnedLayout(string $type): bool
     {
         return $this->getRepo('SystemParameter')
-            ->fetchValue($this->params[$type]['pinnedToggle']) === '1';
+            ->fetchIsEnabled($this->params[$type]['pinnedToggle']);
     }
 
     protected function generateDocument($template, $queryData, $knownValues)

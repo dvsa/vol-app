@@ -161,7 +161,7 @@ class DiscList extends AbstractDiscList
     private function isPinnedLayout(): bool
     {
         $repo = $this->getRepoManager()?->get('SystemParameter');
-        return $repo?->fetchValue(SystemParameter::GOODS_DISC_PINNED_LAYOUT) === '1';
+        return $repo?->fetchIsEnabled(SystemParameter::GOODS_DISC_PINNED_LAYOUT) ?? false;
     }
 
     /**
@@ -180,8 +180,8 @@ class DiscList extends AbstractDiscList
     private function resolveLineSpacing(): string
     {
         $repo = $this->getRepoManager()?->get('SystemParameter');
-        $value = $repo?->fetchValue(SystemParameter::GOODS_DISC_LINE_SPACING);
-        return is_numeric($value) ? (string)(int)$value : (string)self::DEFAULT_LINE_SPACING;
+        return (string)($repo?->fetchNumericValue(SystemParameter::GOODS_DISC_LINE_SPACING, self::DEFAULT_LINE_SPACING)
+            ?? self::DEFAULT_LINE_SPACING);
     }
 
     /*
@@ -219,11 +219,9 @@ class DiscList extends AbstractDiscList
         $key = $isLast
             ? SystemParameter::GOODS_DISC_LAST_ROW_HEIGHT
             : SystemParameter::GOODS_DISC_ROW_HEIGHT;
-        $value = $repo?->fetchValue($key);
-        if (is_numeric($value)) {
-            return (int)$value;
-        }
-        return $isLast ? self::LAST_ROW_HEIGHT : self::ROW_HEIGHT;
+        $default = $isLast ? self::LAST_ROW_HEIGHT : self::ROW_HEIGHT;
+
+        return $repo?->fetchNumericValue($key, $default) ?? $default;
     }
 
     #[\Override]

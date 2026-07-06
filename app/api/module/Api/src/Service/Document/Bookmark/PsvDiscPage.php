@@ -143,7 +143,7 @@ class PsvDiscPage extends AbstractDiscList
     private function isPinnedLayout(): bool
     {
         $repo = $this->getRepoManager()?->get('SystemParameter');
-        return $repo?->fetchValue(SystemParameter::PSV_DISC_PINNED_LAYOUT) === '1';
+        return $repo?->fetchIsEnabled(SystemParameter::PSV_DISC_PINNED_LAYOUT) ?? false;
     }
 
     /**
@@ -167,8 +167,7 @@ class PsvDiscPage extends AbstractDiscList
         $repo = $this->getRepoManager()?->get('SystemParameter');
         $resolved = [];
         foreach (self::DEFAULT_ALIGNMENT as $key => $default) {
-            $value = $repo?->fetchValue($key);
-            $resolved[$key] = is_numeric($value) ? (string)(int)$value : (string)$default;
+            $resolved[$key] = (string)($repo?->fetchNumericValue($key, $default) ?? $default);
         }
         return $resolved;
     }

@@ -41,9 +41,12 @@ abstract class AbstractDiscMargins extends StaticBookmark implements RepositoryM
 
     private function resolve(string $param, int $default): int
     {
-        $repo = $this->getRepoManager()?->get('SystemParameter');
-        $value = $repo?->fetchValue($param);
+        if ($param === '') {
+            throw new \LogicException(static::class . ' must override TOP_PARAM and LEFT_PARAM');
+        }
 
-        return is_numeric($value) ? (int)$value : $default;
+        $repo = $this->getRepoManager()?->get('SystemParameter');
+
+        return $repo?->fetchNumericValue($param, $default) ?? $default;
     }
 }

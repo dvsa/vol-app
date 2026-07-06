@@ -32,6 +32,27 @@ class SystemParameter extends AbstractRepository
     }
 
     /**
+     * Is an opt-in feature parameter explicitly enabled? Only the literal
+     * '1' counts, so rows can ship defaulted to '0' (or be absent) and the
+     * feature stays off until an operator deliberately flips it.
+     */
+    public function fetchIsEnabled(string $key): bool
+    {
+        return $this->fetchValue($key) === '1';
+    }
+
+    /**
+     * Fetch a numeric parameter, falling back to a default when the row is
+     * missing or non-numeric (used by the disc-printing layout dials).
+     */
+    public function fetchNumericValue(string $key, int $default): int
+    {
+        $value = $this->fetchValue($key);
+
+        return is_numeric($value) ? (int)$value : $default;
+    }
+
+    /**
      * Get Disable card payment setting
      *
      * @return bool
