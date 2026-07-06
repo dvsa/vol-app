@@ -35,15 +35,16 @@ class PsvDiscPage extends AbstractDiscList
      * Stationery alignment defaults (twips). Operators may override at runtime
      * via SystemParameter rows of the same name; the snippet substitutes them
      * into table row heights and paragraph line spacing so PSV 423 alignment
-     * can be tuned without a redeploy. Defaults assume evenly spaced disc
-     * circles down the sheet (3 × 89mm rows totalling 267mm on a 268mm page
-     * content area). Line spacing 240 twips = 12pt, fixed leading.
+     * can be tuned without a redeploy. Row heights match the measured PSV 423
+     * disc pitch of 98.3mm (5576 twips) per row; the third row needs only its
+     * content height as the hard page break follows it. Line spacing 220
+     * (11pt exact leading) reproduces the legacy renderer's in-disc spacing.
      */
     public const DEFAULT_ALIGNMENT = [
-        SystemParameter::PSV_DISC_ROW_HEIGHT_1 => 5040,
-        SystemParameter::PSV_DISC_ROW_HEIGHT_2 => 5040,
-        SystemParameter::PSV_DISC_ROW_HEIGHT_3 => 5040,
-        SystemParameter::PSV_DISC_LINE_SPACING => 240,
+        SystemParameter::PSV_DISC_ROW_HEIGHT_1 => 5576,
+        SystemParameter::PSV_DISC_ROW_HEIGHT_2 => 5576,
+        SystemParameter::PSV_DISC_ROW_HEIGHT_3 => 3700,
+        SystemParameter::PSV_DISC_LINE_SPACING => 220,
     ];
 
     protected $discBundle = [
@@ -143,6 +144,16 @@ class PsvDiscPage extends AbstractDiscList
     {
         $repo = $this->getRepoManager()?->get('SystemParameter');
         return $repo?->fetchValue(SystemParameter::PSV_DISC_PINNED_LAYOUT) === '1';
+    }
+
+    /**
+     * Pinned layout: each snippet is one full page of 6 discs, so hard
+     * page-break between every snippet.
+     */
+    #[\Override]
+    protected function snippetsPerPage(): int
+    {
+        return $this->isPinnedLayout() ? 1 : 0;
     }
 
     /**

@@ -19,6 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\Queue\Create as CreatQueue;
 use Dvsa\Olcs\Api\Entity\Queue\Queue;
 use Dvsa\Olcs\Api\Domain\ConfigAwareInterface;
 use Dvsa\Olcs\Api\Domain\ConfigAwareTrait;
+use Dvsa\Olcs\Api\Entity\System\SystemParameter;
 
 /**
  * Print Discs
@@ -32,18 +33,28 @@ final class PrintDiscs extends AbstractCommandHandler implements TransactionedIn
     public const int BATCH_SIZE = 30;
 
     protected $repoServiceName = 'GoodsDisc';
-    protected $extraRepos = ['PsvDisc'];
+    protected $extraRepos = ['PsvDisc', 'SystemParameter'];
+
+    /**
+     * Suffix appended to the doc-store template name when the pinned layout
+     * toggle is on: the *Gotenberg templates are new files carrying explicit
+     * page geometry for the LibreOffice renderer, so the legacy templates
+     * (and renderer behaviour) stay untouched while the toggle is off.
+     */
+    private const GOTENBERG_TEMPLATE_SUFFIX = 'Gotenberg';
 
     private $params = [
         'PSV' => [
             'template' => 'PSVDiscTemplate',
             'bookmark' => 'Psv_Disc_Page',
-            'repo' => 'PsvDisc'
+            'repo' => 'PsvDisc',
+            'pinnedToggle' => SystemParameter::PSV_DISC_PINNED_LAYOUT
         ],
         'Goods' => [
             'template' => 'GVDiscTemplate',
             'bookmark' => 'Disc_List',
-            'repo' => 'GoodsDisc'
+            'repo' => 'GoodsDisc',
+            'pinnedToggle' => SystemParameter::GOODS_DISC_PINNED_LAYOUT
         ]
     ];
 
@@ -91,6 +102,9 @@ final class PrintDiscs extends AbstractCommandHandler implements TransactionedIn
         }
 
         $template = $this->params[$command->getType()]['template'];
+        if ($this->isPinnedLayout($command->getType())) {
+            $template .= self::GOTENBERG_TEMPLATE_SUFFIX;
+        }
 
         $documentId = $this->generateDocument($template, $queryData, $knownValues);
 
@@ -118,6 +132,16 @@ final class PrintDiscs extends AbstractCommandHandler implements TransactionedIn
         $this->getRepo($this->params[$command->getType()]['repo'])->setIsPrintingOn($discsToPrintIds);
 
         return $this->result;
+    }
+
+    /**
+     * Mirrors the toggle read in the DiscList/PsvDiscPage bookmarks so the
+     * base template and the snippet variant always switch together.
+     */
+    private function isPinnedLayout(string $type): bool
+    {
+        return $this->getRepo('SystemParameter')
+            ->fetchValue($this->params[$type]['pinnedToggle']) === '1';
     }
 
     protected function generateDocument($template, $queryData, $knownValues)

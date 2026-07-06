@@ -17,6 +17,8 @@ use Dvsa\Olcs\Api\Entity\System\SubCategory as SubCategoryEntity;
 use Dvsa\Olcs\Api\Domain\Command\Queue\Create as CreatQueue;
 use Dvsa\Olcs\Api\Entity\Queue\Queue;
 use Dvsa\Olcs\Api\Domain\Repository\GoodsDisc as GoodsDiscRepo;
+use Dvsa\Olcs\Api\Domain\Repository\SystemParameter as SystemParameterRepo;
+use Dvsa\Olcs\Api\Entity\System\SystemParameter;
 
 /**
  * Print discs
@@ -31,6 +33,7 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
     {
         $this->sut = new PrintDiscs();
         $this->mockRepo('GoodsDisc', GoodsDiscRepo::class);
+        $this->mockRepo('SystemParameter', SystemParameterRepo::class);
 
         $this->mockedSmServices = [
             'config' => [
@@ -41,7 +44,8 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('pinnedLayoutProvider')]
+    public function testHandleCommand(?string $toggleValue, string $expectedTemplate): void
     {
         $startNumber = 1;
         $userId = 2;
@@ -54,6 +58,11 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
         ];
         $command = Cmd::create($data);
 
+        $this->repoMap['SystemParameter']
+            ->shouldReceive('fetchValue')
+            ->with(SystemParameter::GOODS_DISC_PINNED_LAYOUT)
+            ->andReturn($toggleValue);
+
         $queuedStartNumber = $startNumber + $this->batchSize;
         $queuedDiscs = array_slice($discs, $this->batchSize);
         $discs = array_slice($discs, 0, $this->batchSize);
@@ -65,7 +74,7 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
         ];
 
         $generateAndStoreData = [
-            'template' => 'GVDiscTemplate',
+            'template' => $expectedTemplate,
             'query' => array_merge($discs, ['user' => $userId]),
             'knownValues' => $this->getKnownValues($startNumber),
             'description' => 'Vehicle discs',
@@ -104,6 +113,19 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
             'messages' => ['Discs printed']
         ];
         $this->assertEquals($expected, $result->toArray());
+    }
+
+    /**
+     * The pinned-layout SystemParameter selects the Gotenberg-specific base
+     * template; anything else (including a missing row) keeps the legacy one.
+     */
+    public static function pinnedLayoutProvider(): array
+    {
+        return [
+            'toggle missing' => [null, 'GVDiscTemplate'],
+            'toggle off' => ['0', 'GVDiscTemplate'],
+            'toggle on' => ['1', 'GVDiscTemplateGotenberg'],
+        ];
     }
 
     protected function getDiscs(): mixed

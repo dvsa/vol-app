@@ -29,10 +29,12 @@ class DiscList extends AbstractDiscList
     public const LAST_ROW_HEIGHT = 359;
 
     /**
-     * Default line spacing (twips, 240 = 12pt) used by the pinned-layout
-     * snippet. Only consulted when GOODS_DISC_PINNED_LAYOUT is enabled.
+     * Default line spacing (twips) used by the pinned-layout snippet. Only
+     * consulted when GOODS_DISC_PINNED_LAYOUT is enabled. 248 matches the
+     * legacy renderer's auto leading for the disc text, so the in-disc line
+     * positions are unchanged from the known-good GV246 output.
      */
-    public const DEFAULT_LINE_SPACING = 240;
+    public const DEFAULT_LINE_SPACING = 248;
 
     /**
      * Bookmark variable prefix
@@ -160,6 +162,15 @@ class DiscList extends AbstractDiscList
     {
         $repo = $this->getRepoManager()?->get('SystemParameter');
         return $repo?->fetchValue(SystemParameter::GOODS_DISC_PINNED_LAYOUT) === '1';
+    }
+
+    /**
+     * Pinned layout: hard page break after every 3 row snippets (6 discs).
+     */
+    #[\Override]
+    protected function snippetsPerPage(): int
+    {
+        return $this->isPinnedLayout() ? self::PER_PAGE / self::PER_ROW : 0;
     }
 
     /**
