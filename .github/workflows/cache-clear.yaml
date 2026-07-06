@@ -17,6 +17,7 @@ on:
         type: choice
         options:
           - dev
+          - reg
           - int
           - prep
           - prod

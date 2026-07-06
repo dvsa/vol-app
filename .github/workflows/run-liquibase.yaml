@@ -17,6 +17,7 @@ on:
         type: choice
         options:
           - dev
+          - reg
           - int
           - prep
           - prod
@@ -79,6 +80,7 @@ env:
   AWS_OIDC_ROLE: ${{ inputs.account == 'prod' && vars.ACCOUNT_PROD_TF_OIDC_ROLE || vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
   BATCH_QUEUE: ${{
     inputs.environment == 'dev'  && 'LQBASE_QUEUE_DEV'  ||
+    inputs.environment == 'reg'  && 'LQBASE_QUEUE_REG'  ||
     inputs.environment == 'int'  && 'LQBASE_QUEUE_INT'  ||
     inputs.environment == 'prep' && 'LQBASE_QUEUE_PREP' ||
     inputs.environment == 'prod' && 'LQBASE_QUEUE_PROD'
