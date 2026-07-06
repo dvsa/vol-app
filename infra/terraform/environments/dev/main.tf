@@ -279,6 +279,60 @@ module "service" {
 
   elasticache_url = "tcp://cache.dev.olcs.dev-dvsacloud.uk:6379"
 
+  application_parameters = {
+    //API  
+    env                               = "dev"
+    domain                            = "dev.olcs.dev-dvsacloud.uk"
+    shd_proxy                         = "proxy.dev.olcs.dev-dvsacloud.uk:3128"
+    olcs_webdav                       = "http://webdav.dev.olcs.dev-dvsacloud.uk:8080/documents/"
+    olcs_document_store_backend       = "webdav"
+    olcs_document_store_s3_bucket     = "olcs-devappdev-base-sabredav"
+    olcs_document_store_s3_key_prefix = "migration/olcs"
+    olcs_aws_sqs_ch_get_queue         = "DEVAPPDEV-OLCS-PRI-CHGET"
+    olcs_aws_sqs_ch_get_dlq           = "DEVAPPDEV-OLCS-PRI-CHGET-DLQ"
+    olcs_aws_sqs_ch_insolvency_queue  = "DEVAPPDEV-OLCS-PRI-CHGET-INSOLVENCY"
+    olcs_aws_sqs_ch_insolvency_dlq    = "DEVAPPDEV-OLCS-PRI-CHGET-INSOLVENCY-DLQ"
+    olcs_ss_uri                       = "https://ssweb.dev.olcs.dev-dvsacloud.uk"
+    olcs_iu_uri                       = "https://iuweb.dev.olcs.dev-dvsacloud.uk"
+    olcs_send_all_mail_to             = "olcs-dev@dvsa.gov.uk"
+    olcs_cpmsserver                   = "api.accept.dev.cpms.dvsacloud.uk"
+    olcs_aws_s3_role_arn              = "arn:aws:iam::054614622558:role/OLCS-DEVAPPDEV-BASE-API"
+    olcs_notify_template_en_gb        = " "
+    olcs_notify_template_cy_gb        = " "
+    olcs_notify_test_dsn              = "govuknotify+mailpit://selenium-mail.olcs.dev-dvsacloud.uk:1025"
+    olcs_mail_dsn                     = "smtp://selenium-mail.olcs.dev-dvsacloud.uk:1025"
+    redis_cache_fqdn                  = "cache.dev.olcs.dev-dvsacloud.uk"
+    data-gov-uk-export-s3uri          = "s3://devapp-vol-content/olcs.dev.nonprod.dvsa.aws/data-gov-uk-export"
+    data-dva-ni-export-s3uri          = "s3://devapp-olcs-pri-integration-dva-s3/dvaoplic"
+    olcs_imap_user                    = "svc_vol_maintreq_nonprod@dvsa.gov.uk"
+    olcs_imap_port                    = "993"
+    olcs_imap_ssl                     = "ssl"
+    olcs_from_email                   = "dev.mail.olcs@dev-dvsacloud.uk"
+    pdf_service_uri                   = "https://renderer.dev.olcs.dev-dvsacloud.uk/" #For renderer replacement from legacy windows based service to gottenberg project container. Port 443 configures usage of gottenberg container over SSL through SVC ALB load balencer listener rules, 8080 uses legacy service through same ALB.
+    cups_server_url                   = "print.dev.olcs.dev-dvsacloud.uk:631"
+    //IUWEB/SSWEB
+    olcs_iu_cookie                = "dev.olcs.dev-dvsacloud.uk"
+    olcs_ss_cookie                = "ssweb.dev.olcs.dev-dvsacloud.uk"
+    assets_url                    = "https://dev-cdn.dev-dvsacloud.uk"
+    assets_cache_busting_strategy = "release"
+    ecs_api_hostname              = "api.dev.olcs.dev-dvsacloud.uk"
+
+    /**
+    * RFC: http://tools.ietf.org/html/rfc3164
+    * 
+    *    Code      Severity
+    *      0       Emergency: system is unusable
+    *      1       Alert: action must be taken immediately
+    *      2       Critical: critical conditions
+    *      3       Error: error conditions
+    *      4       Warning: warning conditions
+    *      5       Notice: normal but significant condition
+    *      6       Informational: informational messages
+    *      7       Debug: debug-level messages
+    */
+    log_level = "4"
+  }
+
   services = {
     "api" = {
       cpu             = 2048
