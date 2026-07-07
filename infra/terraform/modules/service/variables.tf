@@ -97,7 +97,7 @@ variable "batch" {
 }
 
 variable "application_parameters" {
-  type = map(object({
+  type = object({
     domain                                       = string
     shd_proxy                                    = string
     olcs_webdav                                  = string
@@ -158,5 +158,5 @@ variable "application_parameters" {
     assets_cache_busting_strategy                = string
     ecs_api_hostname                             = string
     log_level                                    = string
-  }))
+  })
 }
