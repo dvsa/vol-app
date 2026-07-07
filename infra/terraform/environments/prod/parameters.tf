@@ -1,0 +1,83 @@
+module "parameters" {
+  source = "../../modules/parameters"
+
+  environment = "prod"
+
+  application_parameters = {
+    domain                                       = "app.olcs.dvsacloud.uk"
+    shd_proxy                                    = "proxy.app.olcs.dvsacloud.uk:3128"
+    olcs_webdav                                  = "http://webdav.app.olcs.dvsacloud.uk:8080/documents/"
+    olcs_document_store_backend                  = "webdav"
+    olcs_document_store_s3_bucket                = "olcs-app-base-sabredav"
+    olcs_document_store_s3_key_prefix            = "migration/olcs"
+    olcs_aws_sqs_ch_get_queue                    = "APP-OLCS-PRI-CHGET"
+    olcs_aws_sqs_ch_get_dlq                      = "APP-OLCS-PRI-CHGET-DLQ"
+    olcs_aws_sqs_ch_insolvency_queue             = "APP-OLCS-PRI-CHGET-INSOLVENCY"
+    olcs_aws_sqs_ch_insolvency_dlq               = "APP-OLCS-PRI-CHGET-INSOLVENCY-DLQ"
+    olcs_cpmsserver                              = "api.prod.live.cpms.dvsacloud.uk"
+    olcs_send_all_mail_to                        = "olcs-prd@dvsa.gov.uk"
+    olcs_from_email                              = "notifications@vehicle-operator-licensing.service.gov.uk"
+    olcs_ss_uri                                  = "https://www.vehicle-operator-licensing.service.gov.uk"
+    olcs_iu_uri                                  = "https://iuweb.app.olcs.dvsacloud.uk"
+    olcs_aws_s3_role_arn                         = "arn:aws:iam::146997448015:role/OLCS-APP-BASE-API"
+    olcs_notify_template_en_gb                   = " "
+    olcs_notify_template_cy_gb                   = " "
+    olcs_notify_test_dsn                         = " "
+    olcs_mail_dsn                                = "smtp://smtp.mgmt.olcs.dvsacloud.uk:25"
+    transxchange_aws_consumer_role               = "arn:aws:iam::259405524870:role/txc-prod-consumer-role"
+    transxchange_aws_sqs_output_uri              = "https://sqs.eu-west-1.amazonaws.com/259405524870/txc-prod-output"
+    transxchange_aws_s3_output_bucket            = "txc-prod-output"
+    redis_cache_fqdn                             = "cache.app.olcs.dvsacloud.uk"
+    olcs_dvla_search_base_uri                    = "https://api.dvla.live.smc.dvsacloud.uk/1.0/"
+    aws_cognito_region                           = "eu-west-1"
+    lar_base_uri                                 = "https://fx9cl3117i.execute-api.eu-west-1.amazonaws.com/live/"
+    govuk_account_discovery_endpoint             = "https://oidc.account.gov.uk/.well-known/openid-configuration"
+    govuk_account_client_id                      = "XwwVDyl5oJKtK0DVsuw3sICWkPU"
+    govuk_account_public_key                     = "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQ0lqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FnOEFNSUlDQ2dLQ0FnRUF5UmZETWpPeEpKK0Z5c0NHR1RzRQpVcXpHVStzdFV4bFJ3alJrd3g4ZEFZcUpzb2ZhbFE5RzFsdnpPTG9CVDh5SzBoN0FLeGN1U29LNVAxQXVTY0FqCmJCd1ZnTUIvNmdncE1acGE0WVVJaEhKZFBYOFl2Z05RSkg2eU8ycExXVkN2WmtyYk8rcFQ3QnIzLzVCL3IzMkgKWW1OZUVlbCtWS2NoTFhDZG5NRGFNazJ4YVRDVHgwNmhVcE5TWmVvbEVQYzdqSktURDlFMTAwQStoRFJyWGl3dwo4T2ZHbEYyT2hTb09FMVV1ckUzS0hRVjBDQ2F5NDcxNk9FaUVPSFQrUHhFVFZwS0VlNzhTVFhDR3MyMC9wYnptCnpxNS8vTjB0S3hscVlNL05tYTkwZW8yd3FWTytYUHUrM1QyTjY0UlJmeDBjQXdTTllmbEFJMk1ieElVMnBsclkKMmtkM013RzNiYmpJaXVlRXU0U0JUWlErMTV5b0tscGFyazU2Snp3ZXhraUF5OEZwTGpWWUs2VGhielc4Z2FCOApnNHBNV3dXNWZpMVB6N0UwbC9nVzhWRHdGYVpWbGk5cFVaTUxvMnhDMFhBRnlJaUdrUzFTMDhRWmJ1ajhKekdPClRxTDhqZEpDYXVWeWxmK3ZVM3E2SENULzVpaDdDNHp4VVBnYm1TeTIreDRkRzh4OG5BaVExbkRQdGZDWC9JTmUKVzZleUtIZ1gyZEllWE1YNmZ1SzVsajloS08wY1FQdXFnN0pBcUNQUUM3cDFoaS96S0RBcEZoVEdCYldxRXo5QgpVRGZhWE5TNFp3QVhtSlNDZWtlWVRmZTZreW9YMWFnakJaM096ZHVyNjhETUpxWWdXWnlaaDFOM0ZCUk9mS1Q4CklQKytZOXBWUWpEbytOT09SaityaW5zQ0F3RUFBUT09Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo="
+    govuk_account_id_assurance_public_key        = "{\"kty\":\"EC\",\"use\":\"sig\",\"crv\":\"P-256\",\"x\":\"QrP65yghuglwPkEl11oMaabr4WqAMjuvztBYb7T4Ipo=\",\"y\":\"CSQNybYbCZLl-Xr1OA3pcxjC6qZrG7JPqwXgo-9fHLM=\",\"alg\":\"ES256\"}"
+    govuk_account_id_assurance_issuer            = "https://identity.account.gov.uk/"
+    govuk_account_core_identity_did_document_url = "https://identity.account.gov.uk/.well-known/did.json"
+    operator_reports_api_url                     = "https://operator-reports-api.prod.edh.dvsacloud.uk/redirect"
+    address_service_url                          = "https://prod.address.dvsa.api.gov.uk"
+    address_service_azure_token_scope            = "api://c233d9f0-5e58-4c30-b456-e41fa8e8d13c/.default"
+    address_service_azure_client_id              = "c233d9f0-5e58-4c30-b456-e41fa8e8d13c"
+    address_service_azure_token_url              = "https://login.microsoftonline.com/a455b827-244f-4c97-b5b4-ce5d13b4d00c/oauth2/v2.0/token"
+    olcs_txc_client_id                           = "f917e2d8-ca3a-444e-9328-bb6491447b80"
+    olcs_txc_scope                               = "api://f917e2d8-ca3a-444e-9328-bb6491447b80/.default"
+    olcs_txc_token_url                           = "https://login.microsoftonline.com/a455b827-244f-4c97-b5b4-ce5d13b4d00c/oauth2/v2.0/token"
+    transxchange_uri                             = "https://prod.transxchange.dvsa.api.gov.uk/pdf-request"
+    transxchange_aws_s3_input_bucket             = "txc-prod-input"
+    data-gov-uk-export-s3uri                     = "s3://app-vol-content/olcs.app.prod.dvsa.aws/data-gov-uk-export"
+    data-dva-ni-export-s3uri                     = "s3://app-olcs-pri-integration-dva-s3/dvaoplic/"
+    olcs_natreg_client_id                        = "f7dfe3f7-9d46-4fab-a113-7083d3c86a39"
+    olcs_natreg_token_url                        = "https://login.microsoftonline.com/6c448d90-4ca1-4caf-ab59-0a2aa67d7801/oauth2/v2.0/token"
+    olcs_natreg_client_scope                     = "api://f7dfe3f7-9d46-4fab-a113-7083d3c86a39/.default"
+    pdf_service_uri                              = "http://renderer.%domain%:8080/convert-document" #For renderer replacement from legacy windows based service to gottenberg project container. Port 443 configures usage of gottenberg container over SSL through SVC ALB load balencer listener rules, 8080 uses legacy service through same ALB.
+    cups_server_url                              = "print.app.olcs.dvsacloud.uk:631"
+    # internal/external
+    env                           = "app"
+    olcs_iu_cookie                = "app.olcs.dvsacloud.uk"
+    olcs_ss_cookie                = "www.vehicle-operator-licensing.service.gov.uk"
+    olcs_google_gtm_auth          = "I-Hh3pLokYDFIoEfDw2SeQ"
+    olcs_google_gtm_preview       = "env-2"
+    verify_forwarder_valid_origin = "www.signin.service.gov.uk"
+    assets_url                    = "https://prod-cdn.dvsacloud.uk"
+    assets_cache_busting_strategy = "release"
+    ecs_api_hostname              = "proving-api.app.olcs.dvsacloud.uk"
+
+    /**
+    * RFC: http://tools.ietf.org/html/rfc3164
+    * 
+    *    Code      Severity
+    *      0       Emergency: system is unusable
+    *      1       Alert: action must be taken immediately
+    *      2       Critical: critical conditions
+    *      3       Error: error conditions
+    *      4       Warning: warning conditions
+    *      5       Notice: normal but significant condition
+    *      6       Informational: informational messages
+    *      7       Debug: debug-level messages
+    */
+    log_level = "4"
+  }
+}

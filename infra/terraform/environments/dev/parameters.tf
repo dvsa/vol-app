@@ -1,0 +1,84 @@
+module "parameters" {
+  source = "../../modules/parameters"
+
+  environment = "dev"
+
+  application_parameters = {
+    address_service_azure_client_id              = " "
+    address_service_azure_token_scope            = " "
+    address_service_azure_token_url              = " "
+    address_service_url                          = " "
+    assets_cache_busting_strategy                = "release"
+    assets_url                                   = "https://dev-cdn.dev-dvsacloud.uk"
+    aws_cognito_region                           = " "
+    cups_server_url                              = "print.dev.olcs.dev-dvsacloud.uk:631"
+    data-dva-ni-export-s3uri                     = "s3://devapp-olcs-pri-integration-dva-s3/dvaoplic"
+    data-gov-uk-export-s3uri                     = "s3://devapp-vol-content/olcs.dev.nonprod.dvsa.aws/data-gov-uk-export"
+    domain                                       = "dev.olcs.dev-dvsacloud.uk"
+    ecs_api_hostname                             = "api.dev.olcs.dev-dvsacloud.uk"
+    env                                          = "dev"
+    govuk_account_client_id                      = " "
+    govuk_account_core_identity_did_document_url = " "
+    govuk_account_discovery_endpoint             = " "
+    govuk_account_id_assurance_issuer            = " "
+    govuk_account_id_assurance_public_key        = " "
+    govuk_account_public_key                     = " "
+    lar_base_uri                                 = " "
+    /**
+    * RFC: http://tools.ietf.org/html/rfc3164
+    * 
+    *    Code      Severity
+    *      0       Emergency: system is unusable
+    *      1       Alert: action must be taken immediately
+    *      2       Critical: critical conditions
+    *      3       Error: error conditions
+    *      4       Warning: warning conditions
+    *      5       Notice: normal but significant condition
+    *      6       Informational: informational messages
+    *      7       Debug: debug-level messages
+    */
+    log_level                         = "4"
+    olcs_aws_s3_role_arn              = "arn:aws:iam::054614622558:role/OLCS-DEVAPPDEV-BASE-API"
+    olcs_aws_sqs_ch_get_dlq           = "DEVAPPDEV-OLCS-PRI-CHGET-DLQ"
+    olcs_aws_sqs_ch_get_queue         = "DEVAPPDEV-OLCS-PRI-CHGET"
+    olcs_aws_sqs_ch_insolvency_dlq    = "DEVAPPDEV-OLCS-PRI-CHGET-INSOLVENCY-DLQ"
+    olcs_aws_sqs_ch_insolvency_queue  = "DEVAPPDEV-OLCS-PRI-CHGET-INSOLVENCY"
+    olcs_cpmsserver                   = "api.accept.dev.cpms.dvsacloud.uk"
+    olcs_document_store_backend       = "webdav"
+    olcs_document_store_s3_bucket     = "olcs-devappdev-base-sabredav"
+    olcs_document_store_s3_key_prefix = "migration/olcs"
+    olcs_dvla_search_base_uri         = " "
+    olcs_from_email                   = "dev.mail.olcs@dev-dvsacloud.uk"
+    olcs_google_gtm_auth              = " "
+    olcs_google_gtm_preview           = " "
+    olcs_imap_port                    = "993"
+    olcs_imap_ssl                     = "ssl"
+    olcs_imap_user                    = "svc_vol_maintreq_nonprod@dvsa.gov.uk"
+    olcs_iu_cookie                    = "dev.olcs.dev-dvsacloud.uk"
+    olcs_iu_uri                       = "https://iuweb.dev.olcs.dev-dvsacloud.uk"
+    olcs_mail_dsn                     = "smtp://selenium-mail.olcs.dev-dvsacloud.uk:1025"
+    olcs_natreg_client_id             = " "
+    olcs_natreg_client_scope          = " "
+    olcs_natreg_token_url             = " "
+    olcs_notify_template_cy_gb        = " "
+    olcs_notify_template_en_gb        = " "
+    olcs_notify_test_dsn              = "govuknotify+mailpit://selenium-mail.olcs.dev-dvsacloud.uk:1025"
+    olcs_send_all_mail_to             = "olcs-dev@dvsa.gov.uk"
+    olcs_ss_cookie                    = "ssweb.dev.olcs.dev-dvsacloud.uk"
+    olcs_ss_uri                       = "https://ssweb.dev.olcs.dev-dvsacloud.uk"
+    olcs_txc_client_id                = " "
+    olcs_txc_scope                    = " "
+    olcs_txc_token_url                = " "
+    olcs_webdav                       = "http://webdav.dev.olcs.dev-dvsacloud.uk:8080/documents/"
+    operator_reports_api_url          = " "
+    pdf_service_uri                   = "https://renderer.dev.olcs.dev-dvsacloud.uk/"
+    redis_cache_fqdn                  = "cache.dev.olcs.dev-dvsacloud.uk"
+    shd_proxy                         = "proxy.dev.olcs.dev-dvsacloud.uk:3128"
+    transxchange_aws_consumer_role    = " "
+    transxchange_aws_s3_input_bucket  = " "
+    transxchange_aws_s3_output_bucket = " "
+    transxchange_aws_sqs_output_uri   = " "
+    transxchange_uri                  = " "
+    verify_forwarder_valid_origin     = " "
+  }
+}
