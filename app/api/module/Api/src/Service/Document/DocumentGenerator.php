@@ -22,6 +22,13 @@ use Psr\Container\ContainerInterface;
 class DocumentGenerator implements FactoryInterface
 {
     /**
+     * Repo-tracked templates, preferred over the document store (see
+     * readLocalTemplate and Template/README.md). Sits alongside this class
+     * the same way the bookmark snippets live in Bookmark/Snippet.
+     */
+    private const LOCAL_TEMPLATE_DIR = __DIR__ . '/Template';
+
+    /**
      * Hold an in memory cache of templates fetched from the store;
      * Useful when multiple copies of the same template are printed
      * during a single request
@@ -214,7 +221,7 @@ class DocumentGenerator implements FactoryInterface
                 return $this->templateCache[$template];
             }
 
-            $file = $this->contentStore->read($template);
+            $file = $this->readLocalTemplate($template) ?? $this->contentStore->read($template);
             if ($file === null || $file === false) {
                 continue;
             }
@@ -224,6 +231,39 @@ class DocumentGenerator implements FactoryInterface
         }
 
         return null;
+    }
+
+    /**
+     * Templates tracked in the repo (the Template directory beside this
+     * class) take precedence over the document store, so a template that is
+     * version-coupled to the code that populates it (e.g. the
+     * *DiscTemplateGotenberg files and their margin bookmarks) ships
+     * atomically with the deploy and cannot be missing or edited
+     * out-of-band. Any template not present on disk falls through to the
+     * content store exactly as before.
+     */
+    private function readLocalTemplate(string $templatePath): ?DsFile
+    {
+        $relative = preg_replace('#^/?templates/#', '', $templatePath, 1, $count);
+        if ($count !== 1) {
+            // not a /templates/... path (e.g. a document-row identifier)
+            return null;
+        }
+
+        $baseDir = realpath(self::LOCAL_TEMPLATE_DIR);
+        if ($baseDir === false) {
+            return null;
+        }
+
+        $path = realpath($baseDir . '/' . $relative);
+        if ($path === false || !str_starts_with($path, $baseDir . DIRECTORY_SEPARATOR) || !is_file($path)) {
+            return null;
+        }
+
+        $file = new DsFile();
+        $file->setContent((string)file_get_contents($path));
+
+        return $file;
     }
     #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)

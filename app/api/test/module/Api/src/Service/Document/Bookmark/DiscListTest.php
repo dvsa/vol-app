@@ -236,14 +236,15 @@ class DiscListTest extends m\Adapter\Phpunit\MockeryTestCase
         ]];
 
         $sysParamRepo = m::mock(SystemParameterRepo::class);
-        $sysParamRepo->shouldReceive('fetchValue')
-            ->with(SystemParameter::GOODS_DISC_PINNED_LAYOUT)->andReturn('1');
-        $sysParamRepo->shouldReceive('fetchValue')
-            ->with(SystemParameter::GOODS_DISC_LINE_SPACING)->andReturn('260');
-        $sysParamRepo->shouldReceive('fetchValue')
-            ->with(SystemParameter::GOODS_DISC_LAST_ROW_HEIGHT)->andReturn('400');
-        $sysParamRepo->shouldReceive('fetchValue')
-            ->with(SystemParameter::GOODS_DISC_ROW_HEIGHT)->andReturn('2600');
+        $sysParamRepo->shouldReceive('fetchIsEnabled')
+            ->with(SystemParameter::GOODS_DISC_PINNED_LAYOUT)->andReturn(true);
+        $values = [
+            SystemParameter::GOODS_DISC_LINE_SPACING => 260,
+            SystemParameter::GOODS_DISC_LAST_ROW_HEIGHT => 400,
+            SystemParameter::GOODS_DISC_ROW_HEIGHT => 2600,
+        ];
+        $sysParamRepo->shouldReceive('fetchNumericValue')
+            ->andReturnUsing(static fn (string $key, int $default): int => $values[$key] ?? $default);
 
         $repoManager = m::mock(RepositoryServiceManager::class);
         $repoManager->shouldReceive('get')->with('SystemParameter')->andReturn($sysParamRepo);
@@ -266,6 +267,49 @@ class DiscListTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertSame('chunkchunkchunk', $bookmark->render());
     }
 
+    public function testRenderWithPinnedLayoutEmitsPageBreakBetweenPages(): void
+    {
+        // 12 discs = 6 row chunks = 2 pages of 3 chunks; pinned layout must
+        // emit exactly one hard page break between the two page groups
+        $disc = [
+            'isCopy' => 'N',
+            'discNo' => 1,
+            'licenceVehicle' => [
+                'licence' => [
+                    'organisation' => ['name' => 'Org'],
+                    'tradingNames' => [],
+                    'licNo' => 'L1',
+                    'expiryDate' => '2027-01-01',
+                ],
+                'vehicle' => ['vrm' => 'VRM1'],
+                'interimApplication' => null,
+            ],
+        ];
+        $data = array_fill(0, 12, $disc);
+
+        $sysParamRepo = m::mock(SystemParameterRepo::class);
+        $sysParamRepo->shouldReceive('fetchIsEnabled')->andReturn(true);
+        $sysParamRepo->shouldReceive('fetchNumericValue')
+            ->andReturnUsing(static fn (string $key, int $default): int => $default);
+
+        $repoManager = m::mock(RepositoryServiceManager::class);
+        $repoManager->shouldReceive('get')->with('SystemParameter')->andReturn($sysParamRepo);
+
+        $parser = m::mock(RtfParser::class);
+        $parser->shouldReceive('replace')->times(6)->andReturn('[ROW]');
+
+        $bookmark = $this->createPartialMock(DiscList::class, ['getSnippet']);
+        $bookmark->method('getSnippet')->willReturn('snippet');
+        $bookmark->setRepoManager($repoManager);
+        $bookmark->setData($data);
+        $bookmark->setParser($parser);
+
+        $this->assertSame(
+            str_repeat('[ROW]', 3) . '\pard\plain\sl-1\slmult0\fs1\pagebb\par ' . str_repeat('[ROW]', 3),
+            $bookmark->render()
+        );
+    }
+
     public function testRenderWithPinnedLayoutToggleOffOmitsAlignmentTokens(): void
     {
         $data = [[
@@ -284,8 +328,8 @@ class DiscListTest extends m\Adapter\Phpunit\MockeryTestCase
         ]];
 
         $sysParamRepo = m::mock(SystemParameterRepo::class);
-        $sysParamRepo->shouldReceive('fetchValue')
-            ->with(SystemParameter::GOODS_DISC_PINNED_LAYOUT)->andReturn(null);
+        $sysParamRepo->shouldReceive('fetchIsEnabled')
+            ->with(SystemParameter::GOODS_DISC_PINNED_LAYOUT)->andReturn(false);
 
         $repoManager = m::mock(RepositoryServiceManager::class);
         $repoManager->shouldReceive('get')->with('SystemParameter')->andReturn($sysParamRepo);

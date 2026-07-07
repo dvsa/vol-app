@@ -44,9 +44,13 @@ class SystemParameter extends AbstractSystemParameter
     public const PSV_DISC_ROW_HEIGHT_2 = 'PSV_DISC_ROW_HEIGHT_2';
     public const PSV_DISC_ROW_HEIGHT_3 = 'PSV_DISC_ROW_HEIGHT_3';
     public const PSV_DISC_LINE_SPACING = 'PSV_DISC_LINE_SPACING';
+    public const PSV_DISC_MARGIN_TOP = 'PSV_DISC_MARGIN_TOP';
+    public const PSV_DISC_MARGIN_LEFT = 'PSV_DISC_MARGIN_LEFT';
 
     public const GOODS_DISC_PINNED_LAYOUT   = 'GOODS_DISC_PINNED_LAYOUT';
     public const GOODS_DISC_ROW_HEIGHT      = 'GOODS_DISC_ROW_HEIGHT';
     public const GOODS_DISC_LAST_ROW_HEIGHT = 'GOODS_DISC_LAST_ROW_HEIGHT';
     public const GOODS_DISC_LINE_SPACING    = 'GOODS_DISC_LINE_SPACING';
+    public const GOODS_DISC_MARGIN_TOP  = 'GOODS_DISC_MARGIN_TOP';
+    public const GOODS_DISC_MARGIN_LEFT = 'GOODS_DISC_MARGIN_LEFT';
 }
