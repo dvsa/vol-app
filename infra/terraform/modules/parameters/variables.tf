@@ -86,3 +86,44 @@ variable "application_parameters" {
     verify_forwarder_valid_origin                = string
   })
 }
+
+variable "common_application_parameters" {
+  type = object({
+    olcs_aws_account_number                      = string
+    olcs_aws_region                              = string
+    olcs_aws_version                             = string
+    olcs_aws_sqs_base_uri                        = string
+    olcs_aws_s3_role_session_name                = string
+    companies_house_api_base_uri                 = string
+    company_house_dlq_notification_email_address = string
+    olcs_cpmsclientid                            = string
+    olcs_cpmsclientid_ni                         = string
+    olcs_imap_host                               = string
+    olcs_imap_user                               = string
+    olcs_imap_port                               = string
+    olcs_imap_ssl                                = string
+    olcs_email_host                              = string
+    olcs_email_port                              = string
+    erru_version                                 = string
+    transxchange_version                         = string
+    olcs_natreg_uri                              = string
+    olcs_natreg_repute                           = string
+    olcs_nysiis_version                          = string
+    cache_encryption_adapter                     = string
+    cache_encryption_algo                        = string
+    cache_encryption_mode                        = string
+    govuk_account_private_key_algorithm          = string
+    olcs_txc_client_id                           = string
+    olcs_txc_scope                               = string
+    olcs_txc_token_url                           = string
+
+    #internal/external
+    cache_encryption_adapter = string
+    cache_encryption_algo    = string
+    cache_encryption_mode    = string
+    olcs_google_id           = string
+    cqrs_cache_enabled       = string
+    cqrs_cache_medium_ttl    = string
+    cqrs_cache_long_ttl      = string
+  })
+}
