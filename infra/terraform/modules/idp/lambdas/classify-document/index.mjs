@@ -1,33 +1,3 @@
-// Document classification via a cheap Claude model on Amazon Bedrock.
-//
-// Replaces the Textract Lending Analysis step in the Classification state
-// machine. Textract Lending can only recognise a fixed, lending-oriented set
-// of document types; this classifier recognises any type defined in
-// DOCUMENT_TYPES below (bank statements, transaction reports, newspaper
-// adverts, ...). Adding a type is a config edit + a routing rule, never a code
-// change here.
-//
-// WHY A LAMBDA (the Textract step had none): on Bedrock, Claude PDF input must
-// be supplied as inline base64 - there is no S3 document source, no URL source
-// and no Files API (those exist only on the first-party Claude API). A 50-page
-// PDF base64-encodes to several MB, which cannot pass through a Step Functions
-// state (256 KB transition limit). So the GetObject -> base64 -> InvokeModel
-// round-trip has to happen inside a Lambda that returns only the small
-// classification JSON. This keeps the same "tiny Lambda for a service-imposed
-// limit" philosophy as extract-s3-json-field.
-//
-// WHY InvokeModel, NOT Converse: visual PDF understanding on Bedrock's Converse
-// API requires citations to be force-enabled; without them Converse falls back
-// to embedded-text-only extraction, which is empty for the scanned statements
-// and photo-to-PDF documents this pipeline sees. InvokeModel gives full visual
-// analysis with no forced citations.
-//
-// The model reports facts (per-page type breakdown + total pages). This Lambda
-// computes the dominant type and confidence in JS, mirroring the JSONata in
-// classification.asl.json (ExtractClassification) one-for-one, so the routing
-// verdict stays deterministic and auditable rather than something the model
-// asserts.
-//
 // Dependencies: only the AWS SDK v3 bundled with the Lambda Node.js runtime
 // (@aws-sdk/client-s3 and @aws-sdk/client-bedrock-runtime). No third-party deps.
 //

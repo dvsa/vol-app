@@ -1,8 +1,24 @@
 {
   "Comment": "Document Classification using a cheap Claude model on Bedrock (replaces Textract Lending Analysis). A single Lambda (classify-document) does GetObject -> base64 -> Bedrock InvokeModel -> forced-tool classification, because Bedrock requires inline base64 PDFs which exceed the Step Functions 256KB state limit. The Lambda returns the same verdict shape the old Textract JSONata produced (dominant classified type + confidence + pageBreakdown), so the DocumentProcessing-Classified event and all downstream routing are unchanged.",
-  "StartAt": "HeadObject",
+  "StartAt": "FilterByCurrentYearMonth",
   "TimeoutSeconds": 900,
   "States": {
+    "FilterByCurrentYearMonth": {
+      "Type": "Choice",
+      "QueryLanguage": "JSONata",
+      "Comment": "Dynamic year/month gate. $now() returns an ISO 8601 timestamp at execution time (e.g. '2026-07-03T15:00:00Z'), so $substring($now(),0,4) & '/' & $substring($now(),5,2) yields the current 'YYYY/MM'. $contains() checks the uploaded key includes that segment. Documents outside the current month's path (uploaded to an old or future path) succeed immediately with no classification — no event, no cost. This requires zero Terraform re-applies as the month or year rolls over.",
+      "Choices": [
+        {
+          "Condition": "{% $contains($states.input.key, $substring($now(), 0, 4) & '/' & $substring($now(), 5, 2)) %}",
+          "Next": "HeadObject"
+        }
+      ],
+      "Default": "SkipOutOfWindowDocument"
+    },
+    "SkipOutOfWindowDocument": {
+      "Type": "Succeed",
+      "Comment": "Document key does not contain the current YYYY/MM segment. Not an error — it is simply outside the active processing window. No classification, no event emitted."
+    },
     "HeadObject": {
       "Type": "Task",
       "Resource": "arn:aws:states:::aws-sdk:s3:headObject",

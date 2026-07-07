@@ -3,6 +3,17 @@ variable "environment" {
   description = "Deployment environment (dev, int, prep, prod)"
 }
 
+variable "documents_bucket_name" {
+  type        = string
+  description = "Name of the pre-existing S3 bucket that receives document uploads (e.g. the sabredav bucket managed in vol-terraform)."
+}
+
+variable "documents_key_prefix" {
+  type        = string
+  description = "S3 key prefix used as the EventBridge filter. Only Object Created events whose key starts with this prefix will start the Classification SM. The SM itself further narrows to the current year/month dynamically at runtime."
+  default     = "migration/olcs/documents/Application/Financial_Evidence_Digital/"
+}
+
 variable "bedrock_region" {
   type        = string
   description = "AWS region for Bedrock API calls"

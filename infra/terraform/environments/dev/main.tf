@@ -741,7 +741,8 @@ module "service" {
 module "idp" {
   source = "../../modules/idp"
 
-  environment = "dev"
+  environment           = "dev"
+  documents_bucket_name = "olcs-devappdev-base-sabredav"
 }
 
 resource "null_resource" "deployed_versions" {

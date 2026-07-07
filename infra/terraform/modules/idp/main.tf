@@ -7,52 +7,10 @@ locals {
 }
 
 # ============================================================
-# S3 — Documents Bucket (upload target)
-# Operators upload PDFs directly to this bucket. EventBridge
-# integration fires an Object Created event for every upload,
-# which the rule below routes straight to the Classification SM.
-#
-# Future improvement — GuardDuty seam:
-#   When the MoveCleanDocument phase is migrated, the EventBridge
-#   rule below should be removed and replaced with:
-#     1. A GuardDuty rule that listens for NO_THREATS_FOUND events
-#        on THIS bucket and triggers MoveCleanDocument.
-#     2. A second bucket (clean-documents) that MoveCleanDocument
-#        writes to, whose Object Created event triggers Classification.
-#   The Classification SM and Lambda are unchanged by that addition.
+# S3 — Reference documents bucket managed in vol-terraform (sabredav).
 # ============================================================
-resource "aws_s3_bucket" "documents" {
-  bucket = "${local.name_prefix}-documents"
-}
-
-resource "aws_s3_bucket_public_access_block" "documents" {
-  bucket                  = aws_s3_bucket.documents.id
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
-
-resource "aws_s3_bucket_server_side_encryption_configuration" "documents" {
-  bucket = aws_s3_bucket.documents.id
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
-    }
-  }
-}
-
-resource "aws_s3_bucket_versioning" "documents" {
-  bucket = aws_s3_bucket.documents.id
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
-# Forward all S3 object events to the default EventBridge bus.
-resource "aws_s3_bucket_notification" "documents" {
-  bucket      = aws_s3_bucket.documents.id
-  eventbridge = true
+data "aws_s3_bucket" "documents" {
+  bucket = var.documents_bucket_name
 }
 
 # ============================================================
@@ -65,22 +23,15 @@ resource "aws_cloudwatch_log_group" "classify_document" {
   retention_in_days = 30
 }
 
-# ============================================================
-# Lambda — classify-document
-# GetObject → base64 → Bedrock InvokeModel (forced tool use)
-# → small classification JSON. The round-trip lives in Lambda
-# because Bedrock requires inline base64 PDFs, and a multi-page
-# PDF exceeds Step Functions' 256 KB state limit.
-# ============================================================
 data "archive_file" "classify_document" {
   type        = "zip"
   source_dir  = "${path.module}/lambdas/classify-document"
-  output_path = "${path.module}/lambdas/classify-document.zip"
+  output_path = "${path.module}/lambdas/classify-document/classify-document.zip"
 }
 
 resource "aws_lambda_function" "classify_document" {
   function_name = "${local.name_prefix}-classify-document"
-  description   = "Classifies a PDF via Claude on Bedrock (InvokeModel + forced tool). GetObject → base64 → Bedrock → classification verdict."
+  description   = "Classifies a PDF via Claude on Bedrock. GetObject → base64 → Bedrock → classification verdict."
   role          = aws_iam_role.classify_document_lambda.arn
 
   runtime          = "nodejs24.x"
@@ -118,13 +69,12 @@ resource "aws_cloudwatch_log_group" "classification_sm" {
 # ============================================================
 # Step Functions — Classification State Machine
 # The ASL template uses ${CLASSIFY_DOCUMENT_LAMBDA_ARN} as a
-# definition of the ARN is found below.
+# placeholder; Terraform's templatefile() injects the real ARN.
 # ============================================================
 resource "aws_sfn_state_machine" "classification" {
   name     = "${local.name_prefix}-classification"
   role_arn = aws_iam_role.classification_sm.arn
   type     = "STANDARD"
-
 
   definition = templatefile("${path.module}/state-machines/classification.asl.json", {
     CLASSIFY_DOCUMENT_LAMBDA_ARN = aws_lambda_function.classify_document.arn
@@ -145,26 +95,37 @@ resource "aws_sfn_state_machine" "classification" {
 
 # ============================================================
 # EventBridge — Trigger Classification SM on document upload
+#
+# S3 document bucket (sabredav) lives within vol-terraform
 # S3 fires an "Object Created" event for every upload to the
 # documents bucket. The input transformer reshapes the S3 event
 # into the payload shape the Classification SM expects:
 #   { bucket, key, object: { size, versionId }, config }
 #
-# Future improvement — GuardDuty seam:
-#   Replace this rule with a GuardDuty NO_THREATS_FOUND rule so
-#   only threat-scanned documents reach classification. See the
-#   comment on aws_s3_bucket.documents for the full migration plan.
+# Classification only runs when both conditions are met:
+# 1. EventBridge rule: The object key matches the configured prefix (var.documents_key_prefix).
+# 2. The Step Function (classification.asl.json): verifies the uploaded object is in the current
+#    year/month using JSONata $now(). Objects outside the current year/month are skipped,
+#    so no Terraform changes are needed when the date rolls over.
+#
+# Future migration step — GuardDuty seam:
+#   When GuardDuty is added, replace this rule with a GuardDuty
+#   NO_THREATS_FOUND rule and route through MoveCleanDocument first.
+#
 # ============================================================
 resource "aws_cloudwatch_event_rule" "document_uploaded" {
   name        = "${local.name_prefix}-document-uploaded"
-  description = "Trigger the Classification SM when a document is uploaded to the documents bucket"
+  description = "Trigger Classification SM for Financial Evidence Digital uploads (current year/month narrowed in the SM)"
 
   event_pattern = jsonencode({
     source      = ["aws.s3"]
     detail-type = ["Object Created"]
     detail = {
       bucket = {
-        name = [aws_s3_bucket.documents.bucket]
+        name = [var.documents_bucket_name]
+      }
+      object = {
+        key = [{ prefix = var.documents_key_prefix }]
       }
     }
   })

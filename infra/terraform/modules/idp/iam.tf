@@ -35,8 +35,8 @@ data "aws_iam_policy_document" "classify_document_lambda" {
       "s3:HeadObject",
     ]
     resources = [
-      aws_s3_bucket.documents.arn,
-      "${aws_s3_bucket.documents.arn}/*",
+      data.aws_s3_bucket.documents.arn,
+      "${data.aws_s3_bucket.documents.arn}/*",
     ]
   }
 
@@ -93,8 +93,8 @@ data "aws_iam_policy_document" "classification_sm" {
       "s3:PutObjectTagging",
     ]
     resources = [
-      aws_s3_bucket.documents.arn,
-      "${aws_s3_bucket.documents.arn}/*",
+      data.aws_s3_bucket.documents.arn,
+      "${data.aws_s3_bucket.documents.arn}/*",
     ]
   }
 

@@ -1,2 +1,2 @@
 # Terraform-generated Lambda deployment archive — do not commit
-lambdas/*.zip
+lambdas/**/*.zip
