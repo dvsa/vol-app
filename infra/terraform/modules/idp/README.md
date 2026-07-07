@@ -1,14 +1,18 @@
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+| ---- | ------- |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
+| <a name="requirement_archive"></a> [archive](#requirement\_archive) | >= 2.0.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
-| <a name="provider_archive"></a> [archive](#provider\_archive) | n/a |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| ---- | ------- |
+| <a name="provider_archive"></a> [archive](#provider\_archive) | 2.8.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.53.0 |
 
 ## Modules
 
@@ -17,7 +21,7 @@ No modules.
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [aws_cloudwatch_event_rule.document_uploaded](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule) | resource |
 | [aws_cloudwatch_event_target.classification](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target) | resource |
 | [aws_cloudwatch_log_group.classification_sm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
@@ -44,7 +48,7 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_bedrock_region"></a> [bedrock\_region](#input\_bedrock\_region) | AWS region for Bedrock API calls | `string` | `"eu-west-1"` | no |
 | <a name="input_bedrock_region_prefix"></a> [bedrock\_region\_prefix](#input\_bedrock\_region\_prefix) | Cross-region inference profile prefix, e.g. 'eu' or 'us' | `string` | `"eu"` | no |
 | <a name="input_classification_model_id"></a> [classification\_model\_id](#input\_classification\_model\_id) | Bedrock foundation model ID for document classification. Combined with bedrock\_region\_prefix to form the cross-region inference profile ID. | `string` | `"anthropic.claude-haiku-4-5-20251001-v1:0"` | no |
@@ -57,7 +61,7 @@ No modules.
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_classification_sm_arn"></a> [classification\_sm\_arn](#output\_classification\_sm\_arn) | ARN of the Classification Step Functions state machine |
 | <a name="output_classification_sm_name"></a> [classification\_sm\_name](#output\_classification\_sm\_name) | Name of the Classification Step Functions state machine |
 | <a name="output_classify_document_lambda_arn"></a> [classify\_document\_lambda\_arn](#output\_classify\_document\_lambda\_arn) | ARN of the classify-document Lambda |
