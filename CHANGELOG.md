@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.1.1](https://github.com/dvsa/vol-app/compare/v8.1.0...v8.1.1) (2026-07-06)
+
+
+### Bug Fixes
+
+* amend to use basic auth on header and not bearer ([#1625](https://github.com/dvsa/vol-app/issues/1625)) ([d9893c2](https://github.com/dvsa/vol-app/commit/d9893c2f736c8b36ed962b0ecd30145c5b149272))
+
 ## [8.1.0](https://github.com/dvsa/vol-app/compare/v8.0.0...v8.1.0) (2026-07-03)
 
 
