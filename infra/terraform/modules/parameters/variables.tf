@@ -3,21 +3,6 @@ variable "environment" {
   description = "The environment to deploy to"
 }
 
-/*
-    * Log Level
-    * RFC: http://tools.ietf.org/html/rfc3164
-    * 
-    *    Code      Severity
-    *      0       Emergency: system is unusable
-    *      1       Alert: action must be taken immediately
-    *      2       Critical: critical conditions
-    *      3       Error: error conditions
-    *      4       Warning: warning conditions
-    *      5       Notice: normal but significant condition
-    *      6       Informational: informational messages
-    *      7       Debug: debug-level messages
-*/
-
 variable "application_parameters" {
   type = object({
     address_service_azure_client_id              = string
@@ -27,54 +12,33 @@ variable "application_parameters" {
     assets_cache_busting_strategy                = string
     assets_url                                   = string
     aws_cognito_region                           = string
-    cache_encryption_adapter                     = string
-    cache_encryption_algo                        = string
-    cache_encryption_mode                        = string
-    companies_house_api_base_uri                 = string
-    company_house_dlq_notification_email_address = string
-    cqrs_cache_enabled                           = string
-    cqrs_cache_long_ttl                          = string
-    cqrs_cache_medium_ttl                        = string
     cups_server_url                              = string
     data-dva-ni-export-s3uri                     = string
     data-gov-uk-export-s3uri                     = string
     domain                                       = string
     ecs_api_hostname                             = string
     env                                          = string
-    erru_version                                 = string
     govuk_account_client_id                      = string
     govuk_account_core_identity_did_document_url = string
     govuk_account_discovery_endpoint             = string
     govuk_account_id_assurance_issuer            = string
     govuk_account_id_assurance_public_key        = string
-    govuk_account_private_key_algorithm          = string
     govuk_account_public_key                     = string
     lar_base_uri                                 = string
     log_level                                    = string
-    olcs_aws_account_number                      = string
-    olcs_aws_region                              = string
     olcs_aws_s3_role_arn                         = string
-    olcs_aws_s3_role_session_name                = string
-    olcs_aws_sqs_base_uri                        = string
     olcs_aws_sqs_ch_get_dlq                      = string
     olcs_aws_sqs_ch_get_queue                    = string
     olcs_aws_sqs_ch_insolvency_dlq               = string
     olcs_aws_sqs_ch_insolvency_queue             = string
-    olcs_aws_version                             = string
-    olcs_cpmsclientid                            = string
-    olcs_cpmsclientid_ni                         = string
     olcs_cpmsserver                              = string
     olcs_document_store_backend                  = string
     olcs_document_store_s3_bucket                = string
     olcs_document_store_s3_key_prefix            = string
     olcs_dvla_search_base_uri                    = string
-    olcs_email_host                              = string
-    olcs_email_port                              = string
     olcs_from_email                              = string
     olcs_google_gtm_auth                         = string
     olcs_google_gtm_preview                      = string
-    olcs_google_id                               = string
-    olcs_imap_host                               = string
     olcs_imap_port                               = string
     olcs_imap_ssl                                = string
     olcs_imap_user                               = string
@@ -83,13 +47,10 @@ variable "application_parameters" {
     olcs_mail_dsn                                = string
     olcs_natreg_client_id                        = string
     olcs_natreg_client_scope                     = string
-    olcs_natreg_repute                           = string
     olcs_natreg_token_url                        = string
-    olcs_natreg_uri                              = string
     olcs_notify_template_cy_gb                   = string
     olcs_notify_template_en_gb                   = string
     olcs_notify_test_dsn                         = string
-    olcs_nysiis_version                          = string
     olcs_send_all_mail_to                        = string
     olcs_ss_cookie                               = string
     olcs_ss_uri                                  = string
@@ -106,7 +67,6 @@ variable "application_parameters" {
     transxchange_aws_s3_output_bucket            = string
     transxchange_aws_sqs_output_uri              = string
     transxchange_uri                             = string
-    transxchange_version                         = string
     verify_forwarder_valid_origin                = string
   })
 }
