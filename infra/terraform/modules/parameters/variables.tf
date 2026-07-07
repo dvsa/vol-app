@@ -3,6 +3,21 @@ variable "environment" {
   description = "The environment to deploy to"
 }
 
+/*
+    * Log Level
+    * RFC: http://tools.ietf.org/html/rfc3164
+    * 
+    *    Code      Severity
+    *      0       Emergency: system is unusable
+    *      1       Alert: action must be taken immediately
+    *      2       Critical: critical conditions
+    *      3       Error: error conditions
+    *      4       Warning: warning conditions
+    *      5       Notice: normal but significant condition
+    *      6       Informational: informational messages
+    *      7       Debug: debug-level messages
+*/
+
 variable "application_parameters" {
   type = object({
     address_service_azure_client_id              = string
@@ -24,6 +39,7 @@ variable "application_parameters" {
     govuk_account_id_assurance_issuer            = string
     govuk_account_id_assurance_public_key        = string
     govuk_account_public_key                     = string
+    govuk_account_private_key_algorithm          = string
     lar_base_uri                                 = string
     log_level                                    = string
     olcs_aws_s3_role_arn                         = string
