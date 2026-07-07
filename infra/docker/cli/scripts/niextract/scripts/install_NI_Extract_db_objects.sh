@@ -14,15 +14,12 @@ cd "$SCRIPT_DIR" || exit 1
 
 run_sql() {
     local file="$1"
+    local filename
+    filename=$(basename "$file")
     echo "Running $file..."
-    python3 - "$file" << 'PYEOF' | mysql $CONNECTION "$DB" || { echo "ERROR: Failed to execute $file"; exit 1; }
-import sys
-content = open(sys.argv[1]).read()
-content = content.replace('DELIMITER $$', '')
-content = content.replace('DELIMITER ;', '')
-content = content.replace('$$', ';')
-print(content)
-PYEOF
+    echo "File size: $(wc -c < "$file") bytes, lines: $(wc -l < "$file") lines"
+    aws s3 cp "$file" "s3://devapp-shd-pri-olcsci-build-s3/anondata/debug/$filename" 2>&1 || echo "S3 upload failed for $filename"
+    grep -v '^DELIMITER' "$file" | mysql $CONNECTION "$DB" --delimiter='$$' 2>&1 || { echo "ERROR: Failed to execute $file"; exit 1; }
 }
 
 run_sql "$SCRIPT_DIR/NI_Extract_table.sql"

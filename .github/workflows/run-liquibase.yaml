@@ -131,7 +131,7 @@ jobs:
           git tag "${{ inputs.etl_ref }}"
           GIT_CONFIG_COUNT=1 \
           GIT_CONFIG_KEY_0="http.extraHeader" \
-          GIT_CONFIG_VALUE_0="Authorization: Bearer ${GH_TOKEN}" \
+          GIT_CONFIG_VALUE_0="Authorization: Basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)" \
           git push origin "${{ inputs.etl_ref }}"
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}

@@ -55,6 +55,10 @@ use Dvsa\Olcs\Api\Domain\ValidatorManager;
  * @method bool canAccessStatement($entityId)
  * @method bool canAccessTransaction($transactionReference)
  * @method bool canAccessFee($feeId)
+ * @method bool feeBelongsToLicence($fee, $licence)
+ * @method bool feeBelongsToApplication($fee, $application)
+ * @method bool feeBelongsToBusReg($fee, $busReg)
+ * @method bool seriousInfringementBelongsToCase($seriousInfringement, $case)
  * @method bool canAccessEbsrSubmission($entityId)
  * @method bool canAccessTxcInbox($entityId)
  * @method bool canUpdateTxcInbox($entityId)
@@ -72,6 +76,7 @@ use Dvsa\Olcs\Api\Domain\ValidatorManager;
  * @method bool canDeleteSurrender($entityId)
  * @method bool canAccessLicenceForSurrender($entityId)
  * @method bool canConfirmSurrender($entityId)
+ * @method bool isDocumentCreator($entityId)
  */
 trait ValidationHelperTrait
 {

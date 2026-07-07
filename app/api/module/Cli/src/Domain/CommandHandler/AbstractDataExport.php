@@ -221,15 +221,18 @@ abstract class AbstractDataExport extends AbstractCommandHandler
     protected function uploadToS3($filePath)
     {
         $fileName = basename((string) $filePath);
-        $fileResource = fopen($filePath, 'r');
 
+        // Hand the SDK the file path rather than an open resource: since the
+        // guzzlehttp/psr7 2.12 / aws-sdk bump, a resource passed as Body is
+        // closed by the SDK when the request completes, so a caller-side
+        // fclose() fatals with a TypeError (killed the monthly DfT
+        // international goods export). With SourceFile the SDK opens and
+        // closes the file itself.
         $this->s3Client->putObject([
-            'Bucket' => $this->s3Bucket,
-            'Key'    => $this->path . '/' . $fileName,
-            'Body'   => $fileResource,
+            'Bucket'     => $this->s3Bucket,
+            'Key'        => $this->path . '/' . $fileName,
+            'SourceFile' => $filePath,
         ]);
-
-        fclose($fileResource);
 
         $this->result->addMessage('Uploaded file to S3: ' . $fileName);
     }
