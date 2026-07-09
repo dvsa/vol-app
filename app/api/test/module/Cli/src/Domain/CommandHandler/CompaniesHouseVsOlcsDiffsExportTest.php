@@ -15,7 +15,7 @@ use org\bovigo\vfs\vfsStream;
 /**
  * @covers Dvsa\Olcs\Cli\Domain\CommandHandler\CompaniesHouseVsOlcsDiffsExport
  */
-class CompaniesHouseVsOlcsDiffsExportTest extends AbstractCommandHandlerTestCase
+final class CompaniesHouseVsOlcsDiffsExportTest extends AbstractCommandHandlerTestCase
 {
     /** @var CompaniesHouseVsOlcsDiffsExport */
     protected $sut;
@@ -76,7 +76,7 @@ class CompaniesHouseVsOlcsDiffsExportTest extends AbstractCommandHandlerTestCase
             'Fetching data from DB for Company house and Organisation Officers differences' .
             'create csv file: ' . $this->tmpPath . '/CompanyOfficerDiffs.csv';
 
-        static::assertEquals($expectMsg, implode('', $actual->toArray()['messages']));
+        $this->assertSame($expectMsg, implode('', $actual->toArray()['messages']));
     }
 
     private function mockRepoMethod(mixed $repoMethod): void
@@ -103,11 +103,8 @@ class CompaniesHouseVsOlcsDiffsExportTest extends AbstractCommandHandlerTestCase
 
     private function checkFileContent(mixed $fileName): void
     {
-        static::assertSame(
-            'col1,col2' . "\n" .
-            'val11,"v""\'-/\,"' . "\n" .
-            'val21,val22' . "\n",
-            file_get_contents($this->tmpPath . '/' . $fileName . '.csv')
-        );
+        $this->assertSame('col1,col2' . "\n" .
+        'val11,"v""\'-/\,"' . "\n" .
+        'val21,val22' . "\n", file_get_contents($this->tmpPath . '/' . $fileName . '.csv'));
     }
 }

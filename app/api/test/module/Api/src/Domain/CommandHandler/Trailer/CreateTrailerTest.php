@@ -25,7 +25,7 @@ use Dvsa\Olcs\Transfer\Command\Trailer\CreateTrailer as Cmd;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class CreateTrailerTest extends AbstractCommandHandlerTestCase
+final class CreateTrailerTest extends AbstractCommandHandlerTestCase
 {
     private $licence;
 
@@ -72,7 +72,7 @@ class CreateTrailerTest extends AbstractCommandHandlerTestCase
                     $this->assertEquals($data['trailerNo'], $trailer->getTrailerNo());
                     $this->assertEquals($expectedIsLongerSemiTrailer, $trailer->getIsLongerSemiTrailer());
                     $this->assertSame($this->licence, $trailer->getLicence());
-                    $this->assertEquals($data['specifiedDate'], $trailer->getSpecifiedDate()->format('Y-m-d'));
+                    $this->assertSame($data['specifiedDate'], $trailer->getSpecifiedDate()->format('Y-m-d'));
                 }
             );
 
@@ -90,11 +90,9 @@ class CreateTrailerTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function dpIsLongerSemiTrailer(): array
+    public static function dpIsLongerSemiTrailer(): \Iterator
     {
-        return [
-            ['Y', true],
-            ['N', false],
-        ];
+        yield ['Y', true];
+        yield ['N', false];
     }
 }

@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateSafetyStatus;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateSafetyStatusTest extends \PHPUnit\Framework\TestCase
+final class UpdateSafetyStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Entity;
 /**
  * Create Note Test
  */
-class DeleteTest extends AbstractCommandHandlerTestCase
+final class DeleteTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var DeleteCommandHandler

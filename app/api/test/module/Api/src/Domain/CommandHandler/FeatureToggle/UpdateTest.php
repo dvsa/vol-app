@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Entity\System\FeatureToggle as FeatureToggleEntity;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     protected $refData = [FeatureToggleEntity::ACTIVE_STATUS];
 

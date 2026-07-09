@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class LocalAuthorityMissingTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator\ProcessedData
  */
-class LocalAuthorityMissingTest extends MockeryTestCase
+final class LocalAuthorityMissingTest extends MockeryTestCase
 {
     /**
      * tests whether missing local authorities not required are correctly identified

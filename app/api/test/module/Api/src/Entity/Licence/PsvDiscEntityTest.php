@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Entity\Licence\PsvDisc as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class PsvDiscEntityTest extends EntityTester
+final class PsvDiscEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

@@ -16,7 +16,7 @@ use Dvsa\OlcsTest\Api\Domain\Repository\Query\AbstractDbQueryTestCase;
 /**
  * ExpireIrhpPermits test
  */
-class ExpireIrhpPermitsTest extends AbstractDbQueryTestCase
+final class ExpireIrhpPermitsTest extends AbstractDbQueryTestCase
 {
     protected $tableNameMap = [
         IrhpPermit::class => 'ip_table',
@@ -66,24 +66,22 @@ class ExpireIrhpPermitsTest extends AbstractDbQueryTestCase
         ],
     ];
 
-    public static function paramProvider(): array
+    public static function paramProvider(): \Iterator
     {
         $today = new DateTime();
 
-        return [
+        yield [
+            [],
+            [],
             [
-                [],
-                [],
-                [
-                    'expiredStatus' => IrhpPermit::STATUS_EXPIRED,
-                    'validStatuses' => IrhpPermit::$validStatuses,
-                    'ecmtRemovalTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
-                    'endDate' => $today->format('Y-m-d'),
-                    'currentUserId' => 1,
-                ],
-                [
-                    'validStatuses' => Connection::PARAM_STR_ARRAY,
-                ]
+                'expiredStatus' => IrhpPermit::STATUS_EXPIRED,
+                'validStatuses' => IrhpPermit::$validStatuses,
+                'ecmtRemovalTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
+                'endDate' => $today->format('Y-m-d'),
+                'currentUserId' => 1,
+            ],
+            [
+                'validStatuses' => Connection::PARAM_STR_ARRAY,
             ]
         ];
     }

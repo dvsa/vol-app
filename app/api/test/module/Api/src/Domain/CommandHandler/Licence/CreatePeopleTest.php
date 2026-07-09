@@ -12,11 +12,11 @@ use Dvsa\Olcs\Transfer\Command\Licence\CreatePeople as Command;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Licence\CreatePeople::class)]
-class CreatePeopleTest extends AbstractCommandHandlerTestCase
+final class CreatePeopleTest extends AbstractCommandHandlerTestCase
 {
-    public const ORG_PERSON_ID = 9001;
-    public const PERSON_ID = 8001;
-    public const LIC_ID = 7001;
+    public const int ORG_PERSON_ID = 9001;
+    public const int PERSON_ID = 8001;
+    public const int LIC_ID = 7001;
 
     /** @var  CommandHandler */
     protected $sut;

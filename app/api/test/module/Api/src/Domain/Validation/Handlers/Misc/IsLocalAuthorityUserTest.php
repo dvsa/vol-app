@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsLocalAuthorityUser;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class IsLocalAuthorityUserTest extends AbstractHandlerTestCase
+final class IsLocalAuthorityUserTest extends AbstractHandlerTestCase
 {
     /**
      * @var isLocal AuthorityUser

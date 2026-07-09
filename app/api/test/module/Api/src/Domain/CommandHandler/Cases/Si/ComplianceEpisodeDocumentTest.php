@@ -18,7 +18,7 @@ use Dvsa\Olcs\Transfer\Command\Document\Upload as UploadCmd;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ComplianceEpisodeDocumentTest extends AbstractCommandHandlerTestCase
+final class ComplianceEpisodeDocumentTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

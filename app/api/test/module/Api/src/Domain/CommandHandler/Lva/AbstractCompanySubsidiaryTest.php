@@ -19,13 +19,13 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * @covers Dvsa\Olcs\Api\Domain\CommandHandler\Lva\AbstractCompanySubsidiary
  */
-class AbstractCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
+final class AbstractCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
 {
-    public const ID = 1111;
-    public const LICENCE_ID = 2222;
-    public const TASK_ID = 7777;
-    public const APP_ID = 8888;
-    public const VERSION = 99;
+    public const int ID = 1111;
+    public const int LICENCE_ID = 2222;
+    public const int TASK_ID = 7777;
+    public const int APP_ID = 8888;
+    public const int VERSION = 99;
 
     /** @var  AbstractCompanySubsidiaryStub */
     protected $sut;
@@ -95,9 +95,9 @@ class AbstractCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
             ->once()
             ->andReturnUsing(
                 function (Entity\Organisation\CompanySubsidiary $entity) {
-                    static::assertSame($this->mockLicenceEntity, $entity->getLicence());
-                    static::assertEquals('unit_OrgName', $entity->getName());
-                    static::assertEquals('unit_123456798', $entity->getCompanyNo());
+                    $this->assertSame($this->mockLicenceEntity, $entity->getLicence());
+                    $this->assertEquals('unit_OrgName', $entity->getName());
+                    $this->assertEquals('unit_123456798', $entity->getCompanyNo());
 
                     $entity->setId(self::ID);
                 }
@@ -106,18 +106,15 @@ class AbstractCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         //  call
         $actual = $this->sut->create($command, self::LICENCE_ID);
 
-        static::assertInstanceOf(DomainCmd\Result::class, $actual);
-        static::assertEquals(
-            [
-                'id' => [
-                    'companySubsidiary' => self::ID,
-                ],
-                'messages' => [
-                    'Company Subsidiary created',
-                ],
+        $this->assertInstanceOf(DomainCmd\Result::class, $actual);
+        $this->assertEquals([
+            'id' => [
+                'companySubsidiary' => self::ID,
             ],
-            $actual->toArray()
-        );
+            'messages' => [
+                'Company Subsidiary created',
+            ],
+        ], $actual->toArray());
     }
 
     public function testUpdate(): void
@@ -147,18 +144,15 @@ class AbstractCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         //  call
         $actual = $this->sut->update($command);
 
-        static::assertInstanceOf(DomainCmd\Result::class, $actual);
-        static::assertEquals(
-            [
-                'id' => [],
-                'messages' => [
-                    'Company Subsidiary updated',
-                ],
-                'flags' => ['hasChanged' => 1]
+        $this->assertInstanceOf(DomainCmd\Result::class, $actual);
+        $this->assertEquals([
+            'id' => [],
+            'messages' => [
+                'Company Subsidiary updated',
             ],
-            $actual->toArray()
-        );
-        static::assertTrue($actual->getFlag('hasChanged'));
+            'flags' => ['hasChanged' => 1]
+        ], $actual->toArray());
+        $this->assertTrue($actual->getFlag('hasChanged'));
     }
 
     public function testDelete(): void
@@ -184,16 +178,13 @@ class AbstractCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         //  call
         $actual = $this->sut->delete($command);
 
-        static::assertInstanceOf(DomainCmd\Result::class, $actual);
-        static::assertEquals(
-            [
-                'id' => [],
-                'messages' => [
-                    '2 Company Subsidiaries removed',
-                ],
+        $this->assertInstanceOf(DomainCmd\Result::class, $actual);
+        $this->assertEquals([
+            'id' => [],
+            'messages' => [
+                '2 Company Subsidiaries removed',
             ],
-            $actual->toArray()
-        );
+        ], $actual->toArray());
     }
 
     public function testCreateTask(): void
@@ -207,7 +198,7 @@ class AbstractCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
             'licence' => self::LICENCE_ID,
         ];
 
-        $resultTask = (new DomainCmd\Result())
+        $resultTask = new DomainCmd\Result()
             ->addId('task', self::TASK_ID)
             ->addMessage('Unit Task Created');
         $this->expectedSideEffect(DomainCmd\Task\CreateTask::class, $expectedData, $resultTask);
@@ -215,18 +206,15 @@ class AbstractCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         //  call
         $actual = $this->sut->createTask(self::LICENCE_ID, $expectDesc);
 
-        static::assertInstanceOf(DomainCmd\Result::class, $actual);
-        static::assertEquals(
-            [
-                'id' => [
-                    'task' => self::TASK_ID,
-                ],
-                'messages' => [
-                    'Unit Task Created',
-                ],
+        $this->assertInstanceOf(DomainCmd\Result::class, $actual);
+        $this->assertEquals([
+            'id' => [
+                'task' => self::TASK_ID,
             ],
-            $actual->toArray()
-        );
+            'messages' => [
+                'Unit Task Created',
+            ],
+        ], $actual->toArray());
     }
 
     public function testUpdateAppCompetition(): void
@@ -242,22 +230,19 @@ class AbstractCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
                     'hasChanged' => $expectHasChanged,
                 ]
             ],
-            (new DomainCmd\Result())
+            new DomainCmd\Result()
                 ->addMessage('Section updated')
         );
 
         //  call
         $actual = $this->sut->updateApplicationCompetition(self::APP_ID, $expectHasChanged);
 
-        static::assertInstanceOf(DomainCmd\Result::class, $actual);
-        static::assertEquals(
-            [
-                'id' => [],
-                'messages' => [
-                    'Section updated',
-                ],
+        $this->assertInstanceOf(DomainCmd\Result::class, $actual);
+        $this->assertEquals([
+            'id' => [],
+            'messages' => [
+                'Section updated',
             ],
-            $actual->toArray()
-        );
+        ], $actual->toArray());
     }
 }

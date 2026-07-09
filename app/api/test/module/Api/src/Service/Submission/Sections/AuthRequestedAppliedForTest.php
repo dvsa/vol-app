@@ -10,11 +10,11 @@ use Dvsa\Olcs\Api\Service\Submission\Sections\AuthRequestedAppliedFor;
  * Class AuthRequestedAppliedForTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class AuthRequestedAppliedForTest extends AbstractSubmissionSectionTestCase
+final class AuthRequestedAppliedForTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = AuthRequestedAppliedFor::class;
 
-    public static function sectionTestProvider(): array
+    public static function sectionTestProvider(): \Iterator
     {
         $case = static::getCase();
 
@@ -37,8 +37,6 @@ class AuthRequestedAppliedForTest extends AbstractSubmissionSectionTestCase
             ]
         ];
 
-        return [
-            [$case, $expectedResult],
-        ];
+        yield [$case, $expectedResult];
     }
 }

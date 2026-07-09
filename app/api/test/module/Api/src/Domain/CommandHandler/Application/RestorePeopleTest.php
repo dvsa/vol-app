@@ -23,7 +23,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class RestorePeopleTest extends AbstractCommandHandlerTestCase
+final class RestorePeopleTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

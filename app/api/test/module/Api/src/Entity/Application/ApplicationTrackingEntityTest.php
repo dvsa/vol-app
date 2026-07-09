@@ -13,7 +13,7 @@ use Mockery as m;
  * @covers Dvsa\Olcs\Api\Entity\Application\ApplicationTracking
  * @covers Dvsa\Olcs\Api\Entity\Application\AbstractApplicationTracking
  */
-class ApplicationTrackingEntityTest extends EntityTester
+final class ApplicationTrackingEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -36,8 +36,8 @@ class ApplicationTrackingEntityTest extends EntityTester
         /** @var Application $mockApp */
         $mockApp = m::mock(Application::class);
 
-        $actual = (new Entity($mockApp))->jsonSerialize();
-        static::assertEquals(null, $actual['application']);
+        $actual = new Entity($mockApp)->jsonSerialize();
+        $this->assertEquals(null, $actual['application']);
     }
 
     public function testGetValueOptions(): void

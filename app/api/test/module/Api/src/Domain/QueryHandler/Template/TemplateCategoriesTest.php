@@ -12,7 +12,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 /**
  * TemplateCategories Test
  */
-class TemplateCategoriesTest extends QueryHandlerTestCase
+final class TemplateCategoriesTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -37,12 +37,9 @@ class TemplateCategoriesTest extends QueryHandlerTestCase
             ->once()
             ->andReturn($results);
 
-        self::assertEquals(
-            [
-                'result' => $results,
-                'count' => 2,
-            ],
-            $this->sut->handleQuery($query)
-        );
+        $this->assertEquals([
+            'result' => $results,
+            'count' => 2,
+        ], $this->sut->handleQuery($query));
     }
 }

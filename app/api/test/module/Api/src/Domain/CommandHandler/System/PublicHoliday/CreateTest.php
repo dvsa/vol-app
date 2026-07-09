@@ -13,7 +13,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 /**
  * @covers Dvsa\Olcs\Api\Domain\CommandHandler\System\PublicHoliday\Create
  */
-class CreateTest extends AbstractCommandHandlerTestCase
+final class CreateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -26,7 +26,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
     public function testHandleCommand(): void
     {
         $id = 99999;
-        $holidayDate = (new \DateTime())->setTime(0, 0, 0);
+        $holidayDate = new \DateTime()->setTime(0, 0, 0);
 
         $data = [
             'holidayDate' => $holidayDate->format('Y-m-d'),
@@ -42,11 +42,11 @@ class CreateTest extends AbstractCommandHandlerTestCase
             ->once()
             ->andReturnUsing(
                 function (Entity\System\PublicHoliday $entity) use ($holidayDate, $id) {
-                    static::assertEquals($entity->getPublicHolidayDate(), $holidayDate);
-                    static::assertEquals($entity->getIsEngland(), 'N');
-                    static::assertEquals($entity->getIsWales(), 'Y');
-                    static::assertEquals($entity->getIsScotland(), 'N');
-                    static::assertEquals($entity->getIsNi(), 'Y');
+                    $this->assertEquals($entity->getPublicHolidayDate(), $holidayDate);
+                    $this->assertEquals('N', $entity->getIsEngland());
+                    $this->assertEquals('Y', $entity->getIsWales());
+                    $this->assertEquals('N', $entity->getIsScotland());
+                    $this->assertEquals('Y', $entity->getIsNi());
 
                     $entity->setId($id);
                 }
@@ -59,6 +59,6 @@ class CreateTest extends AbstractCommandHandlerTestCase
             'id' => ['publicHoliday' => $id],
             'messages' => ['Public Holiday \'' . $id . '\' created'],
         ];
-        static::assertEquals($expected, $actual->toArray());
+        $this->assertEquals($expected, $actual->toArray());
     }
 }

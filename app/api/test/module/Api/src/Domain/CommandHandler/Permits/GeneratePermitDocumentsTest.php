@@ -22,7 +22,7 @@ use Mockery as m;
 /**
  * GeneratePermitDocumentsTest
  */
-class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
+final class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -102,7 +102,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId1,
             ],
-            (new Result())->addId('letters', 101)->addMessage('Cover letter #1 generated')
+            new Result()->addId('letters', 101)->addMessage('Cover letter #1 generated')
         );
 
         $this->expectedSideEffect(
@@ -110,7 +110,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId2,
             ],
-            (new Result())->addId('letters', 102)->addMessage('Cover letter #2 generated')
+            new Result()->addId('letters', 102)->addMessage('Cover letter #2 generated')
         );
 
         $this->expectedSideEffect(
@@ -118,7 +118,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId3,
             ],
-            (new Result())->addId('letters', 103)->addMessage('Cover letter #3 generated')
+            new Result()->addId('letters', 103)->addMessage('Cover letter #3 generated')
         );
 
         $this->expectedSideEffect(
@@ -126,7 +126,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId1,
             ],
-            (new Result())->addId('permits', 201)->addMessage('Permit #1 generated')
+            new Result()->addId('permits', 201)->addMessage('Permit #1 generated')
         );
 
         $this->expectedSideEffect(
@@ -134,7 +134,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId2,
             ],
-            (new Result())->addId('permits', 202)->addMessage('Permit #2 generated')
+            new Result()->addId('permits', 202)->addMessage('Permit #2 generated')
         );
 
         $this->expectedSideEffect(
@@ -142,7 +142,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId3,
             ],
-            (new Result())->addId('permits', 203)->addMessage('Permit #3 generated')
+            new Result()->addId('permits', 203)->addMessage('Permit #3 generated')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -258,7 +258,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId1,
             ],
-            (new Result())->addId('letters', 101)->addMessage('Cover letter #1 generated')
+            new Result()->addId('letters', 101)->addMessage('Cover letter #1 generated')
         );
 
         $this->expectedSideEffect(
@@ -266,7 +266,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId3,
             ],
-            (new Result())->addId('letters', 103)->addMessage('Cover letter #3 generated')
+            new Result()->addId('letters', 103)->addMessage('Cover letter #3 generated')
         );
 
         $this->expectedSideEffect(
@@ -274,7 +274,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId1,
             ],
-            (new Result())->addId('permits', 201)->addMessage('Permit #1 generated')
+            new Result()->addId('permits', 201)->addMessage('Permit #1 generated')
         );
 
         $this->expectedSideEffect(
@@ -282,7 +282,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId2,
             ],
-            (new Result())->addId('permits', 202)->addMessage('Permit #2 generated')
+            new Result()->addId('permits', 202)->addMessage('Permit #2 generated')
         );
 
         $this->expectedSideEffect(
@@ -290,7 +290,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId3,
             ],
-            (new Result())->addId('permits', 203)->addMessage('Permit #3 generated')
+            new Result()->addId('permits', 203)->addMessage('Permit #3 generated')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -313,18 +313,16 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function dpHandleCommandForBilateralWithSuppressedCoverLetter(): array
+    public static function dpHandleCommandForBilateralWithSuppressedCoverLetter(): \Iterator
     {
-        return [
-            [CountryEntity::ID_BELARUS],
-            [CountryEntity::ID_GEORGIA],
-            [CountryEntity::ID_KAZAKHSTAN],
-            [CountryEntity::ID_MOROCCO],
-            [CountryEntity::ID_RUSSIA],
-            [CountryEntity::ID_TUNISIA],
-            [CountryEntity::ID_TURKEY],
-            [CountryEntity::ID_UKRAINE],
-        ];
+        yield [CountryEntity::ID_BELARUS];
+        yield [CountryEntity::ID_GEORGIA];
+        yield [CountryEntity::ID_KAZAKHSTAN];
+        yield [CountryEntity::ID_MOROCCO];
+        yield [CountryEntity::ID_RUSSIA];
+        yield [CountryEntity::ID_TUNISIA];
+        yield [CountryEntity::ID_TURKEY];
+        yield [CountryEntity::ID_UKRAINE];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandForBilateralWithSuppressedCoverLetter')]
@@ -397,7 +395,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId1,
             ],
-            (new Result())->addId('permits', 201)->addMessage('Permit #1 generated')
+            new Result()->addId('permits', 201)->addMessage('Permit #1 generated')
         );
 
         $this->expectedSideEffect(
@@ -405,7 +403,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId2,
             ],
-            (new Result())->addId('permits', 202)->addMessage('Permit #2 generated')
+            new Result()->addId('permits', 202)->addMessage('Permit #2 generated')
         );
 
         $this->expectedSideEffect(
@@ -413,7 +411,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId3,
             ],
-            (new Result())->addId('permits', 203)->addMessage('Permit #3 generated')
+            new Result()->addId('permits', 203)->addMessage('Permit #3 generated')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -515,7 +513,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId1,
             ],
-            (new Result())->addId('letters', 101)->addMessage('Cover letter #1 generated')
+            new Result()->addId('letters', 101)->addMessage('Cover letter #1 generated')
         );
 
         $this->expectedSideEffect(
@@ -523,7 +521,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId3,
             ],
-            (new Result())->addId('letters', 103)->addMessage('Cover letter #3 generated')
+            new Result()->addId('letters', 103)->addMessage('Cover letter #3 generated')
         );
 
         $this->expectedSideEffect(
@@ -531,7 +529,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId1,
             ],
-            (new Result())->addId('permits', 201)->addMessage('Permit #1 generated')
+            new Result()->addId('permits', 201)->addMessage('Permit #1 generated')
         );
 
         $this->expectedSideEffect(
@@ -539,7 +537,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId2,
             ],
-            (new Result())->addId('permits', 202)->addMessage('Permit #2 generated')
+            new Result()->addId('permits', 202)->addMessage('Permit #2 generated')
         );
 
         $this->expectedSideEffect(
@@ -547,7 +545,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId3,
             ],
-            (new Result())->addId('permits', 203)->addMessage('Permit #3 generated')
+            new Result()->addId('permits', 203)->addMessage('Permit #3 generated')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -652,7 +650,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId1,
             ],
-            (new Result())->addId('letters', 101)->addMessage('Cover letter #1 generated')
+            new Result()->addId('letters', 101)->addMessage('Cover letter #1 generated')
         );
 
         $this->expectedSideEffect(
@@ -660,7 +658,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId3,
             ],
-            (new Result())->addId('letters', 103)->addMessage('Cover letter #3 generated')
+            new Result()->addId('letters', 103)->addMessage('Cover letter #3 generated')
         );
 
         $this->expectedSideEffect(
@@ -668,7 +666,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId1,
             ],
-            (new Result())->addId('permits', 201)->addMessage('Permit #1 generated')
+            new Result()->addId('permits', 201)->addMessage('Permit #1 generated')
         );
 
         $this->expectedSideEffect(
@@ -676,7 +674,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId2,
             ],
-            (new Result())->addId('permits', 202)->addMessage('Permit #2 generated')
+            new Result()->addId('permits', 202)->addMessage('Permit #2 generated')
         );
 
         $this->expectedSideEffect(
@@ -684,7 +682,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId3,
             ],
-            (new Result())->addId('permits', 203)->addMessage('Permit #3 generated')
+            new Result()->addId('permits', 203)->addMessage('Permit #3 generated')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -789,7 +787,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId1,
             ],
-            (new Result())->addId('letters', 101)->addMessage('Cover letter #1 generated')
+            new Result()->addId('letters', 101)->addMessage('Cover letter #1 generated')
         );
 
         $this->expectedSideEffect(
@@ -797,7 +795,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId3,
             ],
-            (new Result())->addId('letters', 103)->addMessage('Cover letter #3 generated')
+            new Result()->addId('letters', 103)->addMessage('Cover letter #3 generated')
         );
 
         $this->expectedSideEffect(
@@ -805,7 +803,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId1,
             ],
-            (new Result())->addId('permits', 201)->addMessage('Permit #1 generated')
+            new Result()->addId('permits', 201)->addMessage('Permit #1 generated')
         );
 
         $this->expectedSideEffect(
@@ -813,7 +811,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId2,
             ],
-            (new Result())->addId('permits', 202)->addMessage('Permit #2 generated')
+            new Result()->addId('permits', 202)->addMessage('Permit #2 generated')
         );
 
         $this->expectedSideEffect(
@@ -821,7 +819,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'irhpPermit' => $irhpPermitId3,
             ],
-            (new Result())->addId('permits', 203)->addMessage('Permit #3 generated')
+            new Result()->addId('permits', 203)->addMessage('Permit #3 generated')
         );
 
         $result = $this->sut->handleCommand($command);

@@ -11,7 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\FeeDueDate
  */
-class FeeDueDateTest extends MockeryTestCase
+final class FeeDueDateTest extends MockeryTestCase
 {
     public function testGetQuery(): void
     {
@@ -42,17 +42,15 @@ class FeeDueDateTest extends MockeryTestCase
         $this->assertEquals('03/02/2001', $bookmark->render());
     }
 
-    public static function dpTestRender(): array
+    public static function dpTestRender(): \Iterator
     {
-        return [
-            [
-                'invoicedDate' => '2003-02-01',
-                'atCalculate' => new \DateTime('2003-02-01'),
-            ],
-            [
-                'invoicedDate' => new \DateTime('2013-12-11'),
-                'atCalculate' => new \DateTime('2013-12-11'),
-            ],
+        yield [
+            'invoicedDate' => '2003-02-01',
+            'atCalculate' => new \DateTime('2003-02-01'),
+        ];
+        yield [
+            'invoicedDate' => new \DateTime('2013-12-11'),
+            'atCalculate' => new \DateTime('2013-12-11'),
         ];
     }
 }

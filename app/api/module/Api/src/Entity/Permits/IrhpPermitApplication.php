@@ -135,7 +135,7 @@ class IrhpPermitApplication extends AbstractIrhpPermitApplication implements QaE
     public static function createNew(
         IrhpPermitWindow $IrhpPermitWindow,
         Licence $licence,
-        IrhpApplication $irhpApplication = null
+        ?IrhpApplication $irhpApplication = null
     ) {
         $IrhpPermitApplication = new self();
 

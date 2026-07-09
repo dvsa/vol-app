@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\Person\Create;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateTest extends \PHPUnit\Framework\TestCase
+final class CreateTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

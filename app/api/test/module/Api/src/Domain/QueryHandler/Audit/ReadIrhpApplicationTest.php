@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * Read Irhp Application Test
  */
-class ReadIrhpApplicationTest extends QueryHandlerTestCase
+final class ReadIrhpApplicationTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

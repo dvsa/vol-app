@@ -17,12 +17,13 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ReadUserSelfserveTest extends MockeryTestCase
+final class ReadUserSelfserveTest extends MockeryTestCase
 {
     protected $sut;
 
     protected $auth;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new Sut();
@@ -56,15 +57,13 @@ class ReadUserSelfserveTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->assert($this->auth, $user));
     }
 
-    public static function getAssertForOperatorDataProvider(): array
+    public static function getAssertForOperatorDataProvider(): \Iterator
     {
-        return [
-            // operator manages operator
-            [User::USER_TYPE_OPERATOR, 123, User::USER_TYPE_OPERATOR, 123, true],
-            [User::USER_TYPE_OPERATOR, 123, User::USER_TYPE_OPERATOR, 1, false],
-            // operator manages TM
-            [User::USER_TYPE_OPERATOR, 123, User::USER_TYPE_TRANSPORT_MANAGER, 123, true],
-            [User::USER_TYPE_OPERATOR, 123, User::USER_TYPE_TRANSPORT_MANAGER, 1, false],
-        ];
+        // operator manages operator
+        yield [User::USER_TYPE_OPERATOR, 123, User::USER_TYPE_OPERATOR, 123, true];
+        yield [User::USER_TYPE_OPERATOR, 123, User::USER_TYPE_OPERATOR, 1, false];
+        // operator manages TM
+        yield [User::USER_TYPE_OPERATOR, 123, User::USER_TYPE_TRANSPORT_MANAGER, 123, true];
+        yield [User::USER_TYPE_OPERATOR, 123, User::USER_TYPE_TRANSPORT_MANAGER, 1, false];
     }
 }

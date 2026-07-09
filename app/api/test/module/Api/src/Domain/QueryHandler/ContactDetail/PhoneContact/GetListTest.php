@@ -13,7 +13,7 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\QueryHandler\ContactDetail\PhoneContact\GetList
  */
-class GetListTest extends QueryHandlerTestCase
+final class GetListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -45,12 +45,9 @@ class GetListTest extends QueryHandlerTestCase
         /** @var QueryHandler\ResultList $actual */
         $actual = $this->sut->handleQuery($query);
 
-        static::assertSame(
-            [
-                'result' => ['unit_Result', 'unit_Result'],
-                'count' => 2,
-            ],
-            $actual
-        );
+        $this->assertSame([
+            'result' => ['unit_Result', 'unit_Result'],
+            'count' => 2,
+        ], $actual);
     }
 }

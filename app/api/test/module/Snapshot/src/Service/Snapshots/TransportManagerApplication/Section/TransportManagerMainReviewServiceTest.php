@@ -24,7 +24,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * Transport Manager Main Review Service Test
  */
-class TransportManagerMainReviewServiceTest extends MockeryTestCase
+final class TransportManagerMainReviewServiceTest extends MockeryTestCase
 {
     /** @var  TransportManagerMainReviewService */
     protected $sut;
@@ -32,6 +32,7 @@ class TransportManagerMainReviewServiceTest extends MockeryTestCase
     /** @var TranslatorInterface */
     protected $mockTranslator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockTranslator = m::mock(TranslatorInterface::class);

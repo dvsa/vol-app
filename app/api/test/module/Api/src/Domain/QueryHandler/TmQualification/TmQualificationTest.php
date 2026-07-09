@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Domain\Repository\TmQualification as TmQualificationRepo;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TmQualificationTest extends QueryHandlerTestCase
+final class TmQualificationTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

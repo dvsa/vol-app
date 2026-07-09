@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\PolicePeopleBundle;
  * @package Dvsa\OlcsTest\Api\Domain\Query\Bookmark
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PolicePeopleBundleTest extends \PHPUnit\Framework\TestCase
+final class PolicePeopleBundleTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

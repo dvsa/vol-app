@@ -17,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class ConditionUndertakingTest extends MockeryTestCase
+final class ConditionUndertakingTest extends MockeryTestCase
 {
     /**
      * @var \Dvsa\Olcs\Api\Service\Publication\Context\Variation\ConditionUndertaking
@@ -56,16 +56,14 @@ class ConditionUndertakingTest extends MockeryTestCase
         }
     }
 
-    public static function dataProviderTestProvideOnlyRecievedOrGrantSections(): array
+    public static function dataProviderTestProvideOnlyRecievedOrGrantSections(): \Iterator
     {
-        return [
-            [PublicationSection::VAR_GRANTED_SECTION],
-            [PublicationSection::VAR_NEW_SECTION],
-            [PublicationSection::VAR_REFUSED_SECTION],
-            [PublicationSection::APP_GRANTED_SECTION],
-            [PublicationSection::BUS_VAR_SECTION],
-            [PublicationSection::LIC_REVOKED_SECTION],
-        ];
+        yield [PublicationSection::VAR_GRANTED_SECTION];
+        yield [PublicationSection::VAR_NEW_SECTION];
+        yield [PublicationSection::VAR_REFUSED_SECTION];
+        yield [PublicationSection::APP_GRANTED_SECTION];
+        yield [PublicationSection::BUS_VAR_SECTION];
+        yield [PublicationSection::LIC_REVOKED_SECTION];
     }
 
     public function testProvideAttachedToLicence(): void

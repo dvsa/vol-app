@@ -15,11 +15,12 @@ use Psr\Container\ContainerInterface;
 /**
  * @covers Dvsa\Olcs\Api\Service\Submission\Sections\AbstractFactory
  */
-class AbstractFactoryTest extends MockeryTestCase
+final class AbstractFactoryTest extends MockeryTestCase
 {
     /** @var  ContainerInterface | m\MockInterface */
     private $mockSl;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockSl = m::mock(ContainerInterface::class);
@@ -42,8 +43,8 @@ class AbstractFactoryTest extends MockeryTestCase
                 }
             );
 
-        $actual = (new AbstractFactory())->__invoke($this->mockSl, $reqName);
+        $actual = new AbstractFactory()->__invoke($this->mockSl, $reqName);
 
-        static::assertInstanceOf(AbstractSectionStub::class, $actual);
+        $this->assertInstanceOf(AbstractSectionStub::class, $actual);
     }
 }

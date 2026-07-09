@@ -18,7 +18,7 @@ use Laminas\I18n\Translator\TranslatorInterface;
 /**
  * @covers Dvsa\Olcs\Snapshot\Service\Snapshots\TransportManagerApplication\Section\AbstractReviewService
  */
-class AbstractReviewServiceTest extends MockeryTestCase
+final class AbstractReviewServiceTest extends MockeryTestCase
 {
     /** @var AbstractReviewServiceStub */
     private $sut;
@@ -26,6 +26,7 @@ class AbstractReviewServiceTest extends MockeryTestCase
     /** @var TranslatorInterface */
     protected $mockTranslator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockTranslator = m::mock(TranslatorInterface::class);
@@ -63,12 +64,10 @@ class AbstractReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->formatDate($date));
     }
 
-    public static function dpFormatDate(): array
+    public static function dpFormatDate(): \Iterator
     {
-        return [
-            ['15 Aug 2005', '2005-08-15T15:52:01+00:00'],
-            ['01 Aug 2017', '2017-08-01T15:52:00+05:00'],
-        ];
+        yield ['15 Aug 2005', '2005-08-15T15:52:01+00:00'];
+        yield ['01 Aug 2017', '2017-08-01T15:52:00+05:00'];
     }
 
     public function testFormatFullAddress(): void
@@ -191,13 +190,11 @@ class AbstractReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public static function dpFormatYesNo(): array
+    public static function dpFormatYesNo(): \Iterator
     {
-        return [
-            ['B','No'],
-            ['Z', 'No'],
-            ['N', 'No'],
-            ['Y', 'Yes'],
-        ];
+        yield ['B','No'];
+        yield ['Z', 'No'];
+        yield ['N', 'No'];
+        yield ['Y', 'Yes'];
     }
 }

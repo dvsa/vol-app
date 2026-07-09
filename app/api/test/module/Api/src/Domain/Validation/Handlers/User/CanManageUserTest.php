@@ -11,7 +11,7 @@ use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 /**
  * @covers Dvsa\Olcs\Api\Domain\Validation\Handlers\User\CanManageUser
  */
-class CanManageUserTest extends AbstractHandlerTestCase
+final class CanManageUserTest extends AbstractHandlerTestCase
 {
     protected $sut;
 
@@ -43,11 +43,9 @@ class CanManageUserTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

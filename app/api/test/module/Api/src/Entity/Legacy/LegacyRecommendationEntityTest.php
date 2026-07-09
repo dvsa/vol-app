@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Legacy\LegacyRecommendation as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class LegacyRecommendationEntityTest extends EntityTester
+final class LegacyRecommendationEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

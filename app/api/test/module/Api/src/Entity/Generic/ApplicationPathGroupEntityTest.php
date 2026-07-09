@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class ApplicationPathGroupEntityTest extends EntityTester
+final class ApplicationPathGroupEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -97,13 +97,11 @@ class ApplicationPathGroupEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsBilateralCabotageOnly(): array
+    public static function dpIsBilateralCabotageOnly(): \Iterator
     {
-        return [
-            [Entity::BILATERALS_CABOTAGE_PERMITS_ONLY_ID, true],
-            [Entity::BILATERALS_STANDARD_PERMITS_ONLY_ID, false],
-            [Entity::BILATERALS_STANDARD_AND_CABOTAGE_PERMITS_ID, false],
-        ];
+        yield [Entity::BILATERALS_CABOTAGE_PERMITS_ONLY_ID, true];
+        yield [Entity::BILATERALS_STANDARD_PERMITS_ONLY_ID, false];
+        yield [Entity::BILATERALS_STANDARD_AND_CABOTAGE_PERMITS_ID, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsBilateralStandardOnly')]
@@ -118,13 +116,11 @@ class ApplicationPathGroupEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsBilateralStandardOnly(): array
+    public static function dpIsBilateralStandardOnly(): \Iterator
     {
-        return [
-            [Entity::BILATERALS_CABOTAGE_PERMITS_ONLY_ID, false],
-            [Entity::BILATERALS_STANDARD_PERMITS_ONLY_ID, true],
-            [Entity::BILATERALS_STANDARD_AND_CABOTAGE_PERMITS_ID, false],
-        ];
+        yield [Entity::BILATERALS_CABOTAGE_PERMITS_ONLY_ID, false];
+        yield [Entity::BILATERALS_STANDARD_PERMITS_ONLY_ID, true];
+        yield [Entity::BILATERALS_STANDARD_AND_CABOTAGE_PERMITS_ID, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsBilateralStandardAndCabotage')]
@@ -139,12 +135,10 @@ class ApplicationPathGroupEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsBilateralStandardAndCabotage(): array
+    public static function dpIsBilateralStandardAndCabotage(): \Iterator
     {
-        return [
-            [Entity::BILATERALS_CABOTAGE_PERMITS_ONLY_ID, false],
-            [Entity::BILATERALS_STANDARD_PERMITS_ONLY_ID, false],
-            [Entity::BILATERALS_STANDARD_AND_CABOTAGE_PERMITS_ID, true],
-        ];
+        yield [Entity::BILATERALS_CABOTAGE_PERMITS_ONLY_ID, false];
+        yield [Entity::BILATERALS_STANDARD_PERMITS_ONLY_ID, false];
+        yield [Entity::BILATERALS_STANDARD_AND_CABOTAGE_PERMITS_ID, true];
     }
 }

@@ -23,7 +23,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateForTmlTest extends AbstractCommandHandlerTestCase
+final class CreateForTmlTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

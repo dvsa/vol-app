@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NamedAnswerFetcherTest extends MockeryTestCase
+final class NamedAnswerFetcherTest extends MockeryTestCase
 {
     private $fieldsetName;
 
@@ -23,6 +23,7 @@ class NamedAnswerFetcherTest extends MockeryTestCase
 
     private $namedAnswerFetcher;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->fieldsetName = 'fields123';

@@ -19,7 +19,7 @@ class GetGovUkAccountRedirectFactory implements FactoryInterface
      * @return GetGovUkAccountRedirect
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): GetGovUkAccountRedirect
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): GetGovUkAccountRedirect
     {
         return (new GetGovUkAccountRedirect($container->get(GovUkAccountService::class)))->__invoke($container, $requestedName, $options);
     }

@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\StatementContactType;
 /**
  * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\StatementContactType
  */
-class StatementContactTypeTest extends \PHPUnit\Framework\TestCase
+final class StatementContactTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -27,7 +27,7 @@ class StatementContactTypeTest extends \PHPUnit\Framework\TestCase
         $sut = new StatementContactType();
         $actual = $sut->getQuery(['statement' => null]);
 
-        static::assertNull($actual);
+        $this->assertNull($actual);
     }
 
     public function testRender(): void

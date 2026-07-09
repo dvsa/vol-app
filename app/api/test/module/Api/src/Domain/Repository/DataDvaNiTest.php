@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\DataDvaNi::class)]
-class DataDvaNiTest extends MockeryTestCase
+final class DataDvaNiTest extends MockeryTestCase
 {
     public $mockResult;
     /** @var  m\MockInterface */
@@ -23,6 +23,7 @@ class DataDvaNiTest extends MockeryTestCase
     /** @var DataDvaNi */
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockResult = m::mock(Result::class);
@@ -44,9 +45,6 @@ class DataDvaNiTest extends MockeryTestCase
             ->with('SELECT * FROM data_dva_ni_operator_licence_view')
             ->andReturn($this->mockStmt);
 
-        static::assertEquals(
-            $this->mockResult,
-            $this->sut->fetchNiOperatorLicences()
-        );
+        $this->assertEquals($this->mockResult, $this->sut->fetchNiOperatorLicences());
     }
 }

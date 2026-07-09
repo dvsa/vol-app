@@ -13,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @covers Dvsa\Olcs\Api\Domain\Repository\Factory\CompaniesHouseVsOlcsDiffsFactory
  */
-class CompanyHouseVsOlcsDiffsFactoryTest extends MockeryTestCase
+final class CompanyHouseVsOlcsDiffsFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {
@@ -28,9 +28,6 @@ class CompanyHouseVsOlcsDiffsFactoryTest extends MockeryTestCase
             ->andReturn($mockConn)
             ->getMock();
 
-        static::assertInstanceOf(
-            CompaniesHouseVsOlcsDiffs::class,
-            (new CompaniesHouseVsOlcsDiffsFactory())->__invoke($container, CompaniesHouseVsOlcsDiffs::class)
-        );
+        $this->assertInstanceOf(CompaniesHouseVsOlcsDiffs::class, new CompaniesHouseVsOlcsDiffsFactory()->__invoke($container, CompaniesHouseVsOlcsDiffs::class));
     }
 }

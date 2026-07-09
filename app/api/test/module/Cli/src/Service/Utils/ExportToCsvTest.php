@@ -12,21 +12,19 @@ use org\bovigo\vfs\visitor\vfsStreamStructureVisitor;
 /**
  * @covers Dvsa\Olcs\Cli\Service\Utils\ExportToCsv
  */
-class ExportToCsvTest extends MockeryTestCase
+final class ExportToCsvTest extends MockeryTestCase
 {
     /** @var  string */
     private $tmpPath;
     /** @var  string */
     private $fileName;
 
-    /** @var  \org\bovigo\vfs\vfsStreamDirectory */
-    private $vfs;
-
+    #[\Override]
     public function setUp(): void
     {
-        $this->vfs = vfsStream::setup('root');
+        $vfs = vfsStream::setup('root');
 
-        $this->tmpPath = $this->vfs->url() . '/unit';
+        $this->tmpPath = $vfs->url() . '/unit';
         $this->fileName = $this->tmpPath . '/unitFileName.tmp';
     }
 
@@ -37,16 +35,13 @@ class ExportToCsvTest extends MockeryTestCase
 
         /** @var vfsStreamStructureVisitor $vfsRootDir */
         $vfsRootDir = vfsStream::inspect(new vfsStreamStructureVisitor());
-        static::assertEquals(
-            [
-                'root' => [
-                    'unit' => [
-                        'unitFileName.tmp' => null,
-                    ],
+        $this->assertEquals([
+            'root' => [
+                'unit' => [
+                    'unitFileName.tmp' => null,
                 ],
             ],
-            $vfsRootDir->getStructure()
-        );
+        ], $vfsRootDir->getStructure());
     }
 
     public function testExceptionCreateDir(): void

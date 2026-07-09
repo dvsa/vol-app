@@ -19,7 +19,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class OperatingCentreEntityTest extends EntityTester
+final class OperatingCentreEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -140,10 +140,10 @@ class OperatingCentreEntityTest extends EntityTester
 
     public function testGetRelatedOrganisationNull(): void
     {
-        $sut = (new Entity())
+        $sut = new Entity()
             ->setApplications(new ArrayCollection([]));
 
-        static::assertNull($sut->getRelatedOrganisation());
+        $this->assertNull($sut->getRelatedOrganisation());
     }
 
     public function testGetRelatedOrganisation(): void
@@ -157,9 +157,9 @@ class OperatingCentreEntityTest extends EntityTester
             ->shouldReceive('getRelatedOrganisation')->once()->andReturn($expectOrg)
             ->getMock();
 
-        $sut = (new Entity())
+        $sut = new Entity()
          ->setApplications(new ArrayCollection([$mockApp, $mockApp2]));
 
-        static::assertSame($expectOrg, $sut->getRelatedOrganisation());
+        $this->assertSame($expectOrg, $sut->getRelatedOrganisation());
     }
 }

@@ -23,7 +23,7 @@ use Dvsa\Olcs\Transfer\Query\Licence\Licence as Qry;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TypeOfLicenceTest extends QueryHandlerTestCase
+final class TypeOfLicenceTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

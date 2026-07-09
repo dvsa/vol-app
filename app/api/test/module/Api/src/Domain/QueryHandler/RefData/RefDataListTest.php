@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData as RefDataEntity;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class RefDataListTest extends QueryHandlerTestCase
+final class RefDataListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

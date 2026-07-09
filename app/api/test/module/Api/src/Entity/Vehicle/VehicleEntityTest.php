@@ -13,7 +13,7 @@ use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
  * @covers Dvsa\Olcs\Api\Entity\Vehicle\Vehicle
  * @covers Dvsa\Olcs\Api\Entity\Vehicle\AbstractVehicle
  */
-class VehicleEntityTest extends EntityTester
+final class VehicleEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -26,6 +26,6 @@ class VehicleEntityTest extends EntityTester
     {
         $sut = new Vehicle();
 
-        static::assertInstanceOf(ArrayCollection::class, $sut->getLicenceVehicles());
+        $this->assertInstanceOf(ArrayCollection::class, $sut->getLicenceVehicles());
     }
 }

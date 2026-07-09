@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Entity\Organisation\CompanySubsidiary as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class CompanySubsidiaryEntityTest extends EntityTester
+final class CompanySubsidiaryEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

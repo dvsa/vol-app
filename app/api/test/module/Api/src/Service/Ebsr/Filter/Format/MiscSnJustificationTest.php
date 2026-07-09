@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Service\Ebsr\Filter\Format\MiscSnJustification;
  * @covers Dvsa\Olcs\Api\Service\Ebsr\Filter\Format\MiscSnJustification
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class MiscSnJustificationTest extends \PHPUnit\Framework\TestCase
+final class MiscSnJustificationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $expected
@@ -30,9 +30,9 @@ class MiscSnJustificationTest extends \PHPUnit\Framework\TestCase
     /**
      * Data provider for testFilter
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function provideFilter(): array
+    public static function provideFilter(): \Iterator
     {
         $unforseenDetailValue = 'unforseen detail text';
         $unforseenDetailKey = 'unforseenDetail';
@@ -68,11 +68,8 @@ class MiscSnJustificationTest extends \PHPUnit\Framework\TestCase
             $miscJustificationKey => $miscJustificationValue,
             $unforseenChangeKey => 'Y'
         ];
-
-        return [
-            [$onlyUnforseen, $onlyUnforseen],
-            [$bothHaveValuesResult, $bothHaveValuesInput],
-            [$onlyMiscJustificationResult, $onlyMiscJustificationInput]
-        ];
+        yield [$onlyUnforseen, $onlyUnforseen];
+        yield [$bothHaveValuesResult, $bothHaveValuesInput];
+        yield [$onlyMiscJustificationResult, $onlyMiscJustificationInput];
     }
 }

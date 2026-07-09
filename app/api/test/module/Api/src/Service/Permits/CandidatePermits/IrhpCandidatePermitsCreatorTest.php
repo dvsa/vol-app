@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class IrhpCandidatePermitsCreatorTest extends MockeryTestCase
+final class IrhpCandidatePermitsCreatorTest extends MockeryTestCase
 {
     private $irhpApplication;
 
@@ -28,6 +28,7 @@ class IrhpCandidatePermitsCreatorTest extends MockeryTestCase
 
     private $irhpCandidatePermitsCreator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpApplication = m::mock(IrhpApplication::class);

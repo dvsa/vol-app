@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
  *
  * @author Scott Callaway <scott.callaway@capgemini.com>
  */
-class CreateTest extends AbstractCommandHandlerTestCase
+final class CreateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -249,11 +249,9 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function dpShortTermAnnualTypeCombinations(): array
+    public static function dpShortTermAnnualTypeCombinations(): \Iterator
     {
-        return [
-            [true, false, false],
-            [false, true, false],
-        ];
+        yield [true, false, false];
+        yield [false, true, false];
     }
 }

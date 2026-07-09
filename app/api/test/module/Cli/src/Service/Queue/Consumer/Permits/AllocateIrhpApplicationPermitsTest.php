@@ -19,7 +19,7 @@ use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class AllocateIrhpApplicationPermitsTest extends AbstractConsumerTestCase
+final class AllocateIrhpApplicationPermitsTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Sut::class;
 

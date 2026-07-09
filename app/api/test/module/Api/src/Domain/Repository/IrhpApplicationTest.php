@@ -18,8 +18,9 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpPermit;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Mockery as m;
 
-class IrhpApplicationTest extends RepositoryTestCase
+final class IrhpApplicationTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(IrhpApplication::class, true);
@@ -100,14 +101,14 @@ class IrhpApplicationTest extends RepositoryTestCase
                 ->getMock()
         );
 
-        self::assertEquals(['RESULTS'], $this->sut->fetchForRoadworthinessReport($startDate, $endDate));
+        $this->assertEquals(['RESULTS'], $this->sut->fetchForRoadworthinessReport($startDate, $endDate));
 
         $expectedQuery = 'query'
             . ' AND ia.irhpPermitType IN [[[' . implode(',', IrhpPermitType::CERTIFICATE_TYPES) . ']]]'
             . ' AND ia.status NOT IN [[["' . IrhpInterface::STATUS_NOT_YET_SUBMITTED . '","' . IrhpInterface::STATUS_CANCELLED . '","' . IrhpInterface::STATUS_WITHDRAWN . '"]]]'
             . ' AND ia.dateReceived BETWEEN [[' . $startDate . ']] AND [[' . $endDate . ']]';
 
-        self::assertEquals($expectedQuery, $this->query);
+        $this->assertEquals($expectedQuery, $this->query);
     }
 
     public function testFetchAllValidRoadworthiness(): void
@@ -123,13 +124,13 @@ class IrhpApplicationTest extends RepositoryTestCase
                 ->getMock()
         );
 
-        self::assertEquals(['RESULTS'], $this->sut->fetchAllValidRoadworthiness());
+        $this->assertEquals(['RESULTS'], $this->sut->fetchAllValidRoadworthiness());
 
         $expectedQuery = 'BLAH '
             . 'AND ia.status = [[' . IrhpInterface::STATUS_VALID . ']] '
             . 'AND ia.irhpPermitType IN [[[6,7]]]';
 
-        self::assertEquals($expectedQuery, $this->query);
+        $this->assertEquals($expectedQuery, $this->query);
     }
 
     public function testMarkAsExpired(): void
@@ -243,21 +244,19 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public static function dpHasInScopeUnderConsiderationApplications(): array
+    public static function dpHasInScopeUnderConsiderationApplications(): \Iterator
     {
-        return [
-            [
-                [],
-                false
-            ],
-            [
-                [5],
-                true
-            ],
-            [
-                [5, 10],
-                true
-            ],
+        yield [
+            [],
+            false
+        ];
+        yield [
+            [5],
+            true
+        ];
+        yield [
+            [5, 10],
+            true
         ];
     }
 

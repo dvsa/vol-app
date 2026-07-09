@@ -459,7 +459,7 @@ class User extends AbstractUser implements OrganisationProviderInterface
      * @return User
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    private function populateOrganisationUsers(array $orgs = null)
+    private function populateOrganisationUsers(?array $orgs = null)
     {
         $orgs ??= [];
         $seen = [];

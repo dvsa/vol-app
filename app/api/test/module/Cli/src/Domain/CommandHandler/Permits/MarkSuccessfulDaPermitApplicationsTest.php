@@ -19,7 +19,7 @@ use Mockery as m;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class MarkSuccessfulDaPermitApplicationsTest extends AbstractCommandHandlerTestCase
+final class MarkSuccessfulDaPermitApplicationsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

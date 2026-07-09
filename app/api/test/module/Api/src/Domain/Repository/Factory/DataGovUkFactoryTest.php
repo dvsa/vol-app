@@ -13,7 +13,7 @@ use Mockery as m;
 /**
  * @covers  Dvsa\Olcs\Api\Domain\Repository\Factory\DataGovUkFactory
  */
-class DataGovUkFactoryTest extends MockeryTestCase
+final class DataGovUkFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {
@@ -28,9 +28,6 @@ class DataGovUkFactoryTest extends MockeryTestCase
             ->andReturn($mockConn)
             ->getMock();
 
-        static::assertInstanceOf(
-            DataGovUk::class,
-            (new DataGovUkFactory())->__invoke($container, DataGovUk::class)
-        );
+        $this->assertInstanceOf(DataGovUk::class, new DataGovUkFactory()->__invoke($container, DataGovUk::class));
     }
 }

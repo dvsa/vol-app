@@ -18,11 +18,11 @@ use Dvsa\Olcs\Transfer\Query\Permits\MaxPermittedReachedByStockAndLicence
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class MaxPermittedReachedByStockAndLicenceTest extends QueryHandlerTestCase
+final class MaxPermittedReachedByStockAndLicenceTest extends QueryHandlerTestCase
 {
-    public const IRHP_PERMIT_STOCK_ID = 40;
+    public const int IRHP_PERMIT_STOCK_ID = 40;
 
-    public const LICENCE_ID = 7;
+    public const int LICENCE_ID = 7;
 
     private $irhpPermitType;
 
@@ -112,12 +112,10 @@ class MaxPermittedReachedByStockAndLicenceTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public static function dpHandleQueryEcmtAnnual(): array
+    public static function dpHandleQueryEcmtAnnual(): \Iterator
     {
-        return [
-            [2, false],
-            [1, false],
-            [0, true],
-        ];
+        yield [2, false];
+        yield [1, false];
+        yield [0, true];
     }
 }

@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Organisation\ChangeOfEntity as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class ChangeOfEntityEntityTest extends EntityTester
+final class ChangeOfEntityEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

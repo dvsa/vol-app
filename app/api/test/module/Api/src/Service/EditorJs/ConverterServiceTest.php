@@ -8,7 +8,7 @@ use Dvsa\Olcs\Api\Service\EditorJs\ConverterService;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class)]
-class ConverterServiceTest extends TestCase
+final class ConverterServiceTest extends TestCase
 {
     private ConverterService $sut;
 
@@ -20,7 +20,7 @@ class ConverterServiceTest extends TestCase
     public function testConvertJsonToHtmlWithEmptyString(): void
     {
         $result = $this->sut->convertJsonToHtml('');
-        $this->assertEquals('', $result);
+        $this->assertSame('', $result);
     }
 
     public function testConvertJsonToHtmlWithValidJson(): void

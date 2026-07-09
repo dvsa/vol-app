@@ -12,7 +12,7 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\Validation\Validators\CanAccessTransaction
  */
-class CanAccessTransactionTest extends AbstractValidatorsTestCase
+final class CanAccessTransactionTest extends AbstractValidatorsTestCase
 {
     /**
      * @var CanAccessTransaction

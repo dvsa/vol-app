@@ -29,7 +29,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 /**
  * Create Irhp Application test
  */
-class CreateFullTest extends AbstractCommandHandlerTestCase
+final class CreateFullTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -202,7 +202,7 @@ class CreateFullTest extends AbstractCommandHandlerTestCase
                     $this->assertEquals($permitTypeId, $type);
 
                     $this->assertInstanceOf(DateTime::class, $now);
-                    $this->assertEquals(
+                    $this->assertSame(
                         date('Y-m-d'),
                         $now->format('Y-m-d')
                     );

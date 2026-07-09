@@ -209,9 +209,7 @@ class Create extends AbstractCommandHandlerTestCase
         $this->mockedSmServices[AuthorizationService::class]
             ->expects('isGranted')
             ->times(3)
-            ->andReturnUsing(function ($permission) {
-                return $permission !== 'internal-user';
-            });
+            ->andReturnUsing(fn($permission) => $permission !== 'internal-user');
 
         $this->repoMap[TaskRepo::class]
             ->expects('save')

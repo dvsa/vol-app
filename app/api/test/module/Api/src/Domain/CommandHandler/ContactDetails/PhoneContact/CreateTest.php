@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\CommandHandler\ContactDetails\PhoneContact\Create
  */
-class CreateTest extends AbstractCommandHandlerTestCase
+final class CreateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -61,9 +61,9 @@ class CreateTest extends AbstractCommandHandlerTestCase
                     $mockPhoneContactTypeEntity,
                     $mockContactDetailsEntity
                 ) {
-                    static::assertEquals($entity->getPhoneNumber(), 'unit_PhoneNr');
-                    static::assertSame($entity->getPhoneContactType(), $mockPhoneContactTypeEntity);
-                    static::assertSame($entity->getContactDetails(), $mockContactDetailsEntity);
+                    $this->assertEquals('unit_PhoneNr', $entity->getPhoneNumber());
+                    $this->assertSame($entity->getPhoneContactType(), $mockPhoneContactTypeEntity);
+                    $this->assertSame($entity->getContactDetails(), $mockContactDetailsEntity);
 
                     $entity->setId($id);
                 }
@@ -76,6 +76,6 @@ class CreateTest extends AbstractCommandHandlerTestCase
             'id' => ['phoneContact' => $id],
             'messages' => ['Phone Contact \'' . $id . '\' created'],
         ];
-        static::assertEquals($expected, $actual->toArray());
+        $this->assertEquals($expected, $actual->toArray());
     }
 }

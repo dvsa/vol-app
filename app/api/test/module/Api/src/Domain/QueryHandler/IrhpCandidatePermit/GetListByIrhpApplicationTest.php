@@ -13,7 +13,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplication as Get
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class GetListByIrhpApplicationTest extends QueryHandlerTestCase
+final class GetListByIrhpApplicationTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -150,146 +150,144 @@ class GetListByIrhpApplicationTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public static function dpTestHandleQuery(): array
+    public static function dpTestHandleQuery(): \Iterator
     {
-        return [
-            'page 1' => [
-                'queryData' => [
-                    'irhpApplication' => 10,
-                    'page' => 1,
-                    'limit' => 25,
-                    'order' => 'id',
-                    'sort' => 'ASC',
+        yield 'page 1' => [
+            'queryData' => [
+                'irhpApplication' => 10,
+                'page' => 1,
+                'limit' => 25,
+                'order' => 'id',
+                'sort' => 'ASC',
+            ],
+            'bundledIrhpCandidatePermits' => [
+                [
+                    'id' => 463,
+                    'irhpPermitRange' => [
+                        'id' => 101,
+                    ]
                 ],
-                'bundledIrhpCandidatePermits' => [
-                    [
-                        'id' => 463,
-                        'irhpPermitRange' => [
-                            'id' => 101,
-                        ]
-                    ],
-                    [
-                        'id' => 464,
-                        'irhpPermitRange' => [
-                            'id' => 102,
-                        ]
-                    ],
-                    [
-                        'id' => 465,
-                        'irhpPermitRange' => [
-                            'id' => 103,
-                        ]
-                    ],
+                [
+                    'id' => 464,
+                    'irhpPermitRange' => [
+                        'id' => 102,
+                    ]
                 ],
-                'expectedResult' => [
-                    'results' => [
-                        [
-                            'id' => 463,
-                            'irhpPermitRange' => [
-                                'id' => 101,
-                            ],
-                            'permitNumber' => 1,
-                            'constrainedCountries' => [
-                                ['id' => 'AT', 'countryDesc' => 'Austria'],
-                                ['id' => 'GR', 'countryDesc' => 'Greece'],
-                                ['id' => 'HU', 'countryDesc' => 'Hungary'],
-                                ['id' => 'IT', 'countryDesc' => 'Italy'],
-                                ['id' => 'RU', 'countryDesc' => 'Russia']
-                            ]
-                        ],
-                        [
-                            'id' => 464,
-                            'irhpPermitRange' => [
-                                'id' => 102,
-                            ],
-                            'permitNumber' => 2,
-                            'constrainedCountries' => [
-                                ['id' => 'IT', 'countryDesc' => 'Italy'],
-                                ['id' => 'RU', 'countryDesc' => 'Russia']
-                            ]
-                        ],
-                        [
-                            'id' => 465,
-                            'irhpPermitRange' => [
-                                'id' => 103,
-                            ],
-                            'permitNumber' => 3,
-                            'constrainedCountries' => [
-                                ['id' => 'RU', 'countryDesc' => 'Russia']
-                            ]
-                        ]
-                    ],
-                    'count' => 3
+                [
+                    'id' => 465,
+                    'irhpPermitRange' => [
+                        'id' => 103,
+                    ]
                 ],
             ],
-            'page 3' => [
-                'queryData' => [
-                    'irhpApplication' => 10,
-                    'page' => 3,
-                    'limit' => 25,
-                    'order' => 'id',
-                    'sort' => 'ASC',
-                ],
-                'bundledIrhpCandidatePermits' => [
+            'expectedResult' => [
+                'results' => [
                     [
                         'id' => 463,
                         'irhpPermitRange' => [
                             'id' => 101,
+                        ],
+                        'permitNumber' => 1,
+                        'constrainedCountries' => [
+                            ['id' => 'AT', 'countryDesc' => 'Austria'],
+                            ['id' => 'GR', 'countryDesc' => 'Greece'],
+                            ['id' => 'HU', 'countryDesc' => 'Hungary'],
+                            ['id' => 'IT', 'countryDesc' => 'Italy'],
+                            ['id' => 'RU', 'countryDesc' => 'Russia']
                         ]
                     ],
                     [
                         'id' => 464,
                         'irhpPermitRange' => [
                             'id' => 102,
+                        ],
+                        'permitNumber' => 2,
+                        'constrainedCountries' => [
+                            ['id' => 'IT', 'countryDesc' => 'Italy'],
+                            ['id' => 'RU', 'countryDesc' => 'Russia']
                         ]
                     ],
                     [
                         'id' => 465,
                         'irhpPermitRange' => [
                             'id' => 103,
+                        ],
+                        'permitNumber' => 3,
+                        'constrainedCountries' => [
+                            ['id' => 'RU', 'countryDesc' => 'Russia']
+                        ]
+                    ]
+                ],
+                'count' => 3
+            ],
+        ];
+        yield 'page 3' => [
+            'queryData' => [
+                'irhpApplication' => 10,
+                'page' => 3,
+                'limit' => 25,
+                'order' => 'id',
+                'sort' => 'ASC',
+            ],
+            'bundledIrhpCandidatePermits' => [
+                [
+                    'id' => 463,
+                    'irhpPermitRange' => [
+                        'id' => 101,
+                    ]
+                ],
+                [
+                    'id' => 464,
+                    'irhpPermitRange' => [
+                        'id' => 102,
+                    ]
+                ],
+                [
+                    'id' => 465,
+                    'irhpPermitRange' => [
+                        'id' => 103,
+                    ]
+                ],
+            ],
+            'expectedResult' => [
+                'results' => [
+                    [
+                        'id' => 463,
+                        'irhpPermitRange' => [
+                            'id' => 101,
+                        ],
+                        'permitNumber' => 51,
+                        'constrainedCountries' => [
+                            ['id' => 'AT', 'countryDesc' => 'Austria'],
+                            ['id' => 'GR', 'countryDesc' => 'Greece'],
+                            ['id' => 'HU', 'countryDesc' => 'Hungary'],
+                            ['id' => 'IT', 'countryDesc' => 'Italy'],
+                            ['id' => 'RU', 'countryDesc' => 'Russia']
                         ]
                     ],
-                ],
-                'expectedResult' => [
-                    'results' => [
-                        [
-                            'id' => 463,
-                            'irhpPermitRange' => [
-                                'id' => 101,
-                            ],
-                            'permitNumber' => 51,
-                            'constrainedCountries' => [
-                                ['id' => 'AT', 'countryDesc' => 'Austria'],
-                                ['id' => 'GR', 'countryDesc' => 'Greece'],
-                                ['id' => 'HU', 'countryDesc' => 'Hungary'],
-                                ['id' => 'IT', 'countryDesc' => 'Italy'],
-                                ['id' => 'RU', 'countryDesc' => 'Russia']
-                            ]
+                    [
+                        'id' => 464,
+                        'irhpPermitRange' => [
+                            'id' => 102,
                         ],
-                        [
-                            'id' => 464,
-                            'irhpPermitRange' => [
-                                'id' => 102,
-                            ],
-                            'permitNumber' => 52,
-                            'constrainedCountries' => [
-                                ['id' => 'IT', 'countryDesc' => 'Italy'],
-                                ['id' => 'RU', 'countryDesc' => 'Russia']
-                            ]
-                        ],
-                        [
-                            'id' => 465,
-                            'irhpPermitRange' => [
-                                'id' => 103,
-                            ],
-                            'permitNumber' => 53,
-                            'constrainedCountries' => [
-                                ['id' => 'RU', 'countryDesc' => 'Russia']
-                            ]
+                        'permitNumber' => 52,
+                        'constrainedCountries' => [
+                            ['id' => 'IT', 'countryDesc' => 'Italy'],
+                            ['id' => 'RU', 'countryDesc' => 'Russia']
                         ]
                     ],
-                    'count' => 3
+                    [
+                        'id' => 465,
+                        'irhpPermitRange' => [
+                            'id' => 103,
+                        ],
+                        'permitNumber' => 53,
+                        'constrainedCountries' => [
+                            ['id' => 'RU', 'countryDesc' => 'Russia']
+                        ]
+                    ]
                 ],
+                'count' => 3
             ],
         ];
     }

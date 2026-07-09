@@ -21,7 +21,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * Print Permits Test
  */
-class PrintPermitsTest extends AbstractCommandHandlerTestCase
+final class PrintPermitsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -132,7 +132,7 @@ class PrintPermitsTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             CreatQueue::class,
             $data,
-            (new Result())->addMessage('Queue item created')
+            new Result()->addMessage('Queue item created')
         );
 
         $this->expectedSideEffect(
@@ -141,7 +141,7 @@ class PrintPermitsTest extends AbstractCommandHandlerTestCase
                 'ids' => [$p1Id, $p2Id],
                 'status' => IrhpPermit::STATUS_AWAITING_PRINTING,
             ],
-            (new Result())->addMessage('Permits updated')
+            new Result()->addMessage('Permits updated')
         );
 
         $result = $this->sut->handleCommand($command);

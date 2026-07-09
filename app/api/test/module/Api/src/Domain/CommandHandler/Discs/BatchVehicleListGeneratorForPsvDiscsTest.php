@@ -18,7 +18,7 @@ use Dvsa\Olcs\Api\Entity\Queue\Queue;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class BatchVehicleListGeneratorForPsvDiscsTest extends AbstractCommandHandlerTestCase
+final class BatchVehicleListGeneratorForPsvDiscsTest extends AbstractCommandHandlerTestCase
 {
     protected $batchSize = 180;
 

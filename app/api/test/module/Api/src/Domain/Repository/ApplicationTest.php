@@ -26,14 +26,15 @@ use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Application::class)]
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class ApplicationTest extends RepositoryTestCase
+final class ApplicationTest extends RepositoryTestCase
 {
-    public const APP_ID = 8001;
-    public const ORG_ID = 7001;
+    public const int APP_ID = 8001;
+    public const int ORG_ID = 7001;
 
     /** @var Repository\Application | m\MockInterface */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repository\Application::class);
@@ -442,25 +443,22 @@ class ApplicationTest extends RepositoryTestCase
 
         $actual = $this->sut->fetchByOrgAndStatusForActiveLicences(self::ORG_ID, ['unit1', 'unit2']);
 
-        static::assertEquals('EXPECT', $actual);
+        $this->assertEquals('EXPECT', $actual);
 
-        static::assertEquals(
-            '{{QUERY}} ' .
-            'INNER JOIN a.licence l WITH l.organisation = [[' . self::ORG_ID . ']] ' .
-            'AND a.status IN ["unit1","unit2"] ' .
-            'AND (' .
-            'a.isVariation = 0 ' .
-            'OR (' .
-            'l.status IN ["lsts_valid","lsts_suspended","lsts_curtailed"] ' .
-            'AND a.isVariation = 1 ' .
-            'AND (' .
-            'a.variationType IS NULL ' .
-            'OR a.variationType != [[' . Application::VARIATION_TYPE_DIRECTOR_CHANGE . ']]' .
-            ')' .
-            ')' .
-            ')',
-            $this->query
-        );
+        $this->assertEquals('{{QUERY}} ' .
+        'INNER JOIN a.licence l WITH l.organisation = [[' . self::ORG_ID . ']] ' .
+        'AND a.status IN ["unit1","unit2"] ' .
+        'AND (' .
+        'a.isVariation = 0 ' .
+        'OR (' .
+        'l.status IN ["lsts_valid","lsts_suspended","lsts_curtailed"] ' .
+        'AND a.isVariation = 1 ' .
+        'AND (' .
+        'a.variationType IS NULL ' .
+        'OR a.variationType != [[' . Application::VARIATION_TYPE_DIRECTOR_CHANGE . ']]' .
+        ')' .
+        ')' .
+        ')', $this->query);
     }
 
     public function testFetchWithLicenceNotFound(): void

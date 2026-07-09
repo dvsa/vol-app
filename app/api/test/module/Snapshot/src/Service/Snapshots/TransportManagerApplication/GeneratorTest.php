@@ -34,7 +34,7 @@ use Laminas\View\Renderer\PhpRenderer;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class GeneratorTest extends MockeryTestCase
+final class GeneratorTest extends MockeryTestCase
 {
     /**
      * @var \Mockery\MockInterface|PhpRenderer
@@ -86,6 +86,7 @@ class GeneratorTest extends MockeryTestCase
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->viewRenderer = m::mock(PhpRenderer::class);

@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Document as DocumentRepo;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class SendEmailTest extends AbstractCommandHandlerTestCase
+final class SendEmailTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var SendEmail
@@ -249,15 +249,13 @@ class SendEmailTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function sendAllMailToSentinelProvider(): array
+    public static function sendAllMailToSentinelProvider(): \Iterator
     {
-        return [
-            'single space'    => [' '],
-            'multiple spaces' => ['   '],
-            'literal null'    => ['null'],
-            'literal NULL'    => ['NULL'],
-            'empty string'    => [''],
-        ];
+        yield 'single space' => [' '];
+        yield 'multiple spaces' => ['   '];
+        yield 'literal null' => ['null'];
+        yield 'literal NULL' => ['NULL'];
+        yield 'empty string' => [''];
     }
 
     /**

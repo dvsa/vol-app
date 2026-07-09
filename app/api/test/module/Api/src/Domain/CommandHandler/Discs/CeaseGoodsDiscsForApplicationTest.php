@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Domain\Command\Discs\CeaseGoodsDiscsForApplication as Cmd;
 /**
  * @covers Dvsa\Olcs\Api\Domain\CommandHandler\Discs\CeaseGoodsDiscsForApplication
  */
-class CeaseGoodsDiscsForApplicationTest extends AbstractCommandHandlerTestCase
+final class CeaseGoodsDiscsForApplicationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

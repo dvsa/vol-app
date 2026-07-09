@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\QueryHandler\Publication\PublicationLink
  */
-class PublicationLinkTest extends QueryHandlerTestCase
+final class PublicationLinkTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

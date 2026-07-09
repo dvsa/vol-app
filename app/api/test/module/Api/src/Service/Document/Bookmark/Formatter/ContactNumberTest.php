@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Formatter\ContactNumber;
 /**
  * ContactDetails Test
  */
-class ContactNumberTest extends \PHPUnit\Framework\TestCase
+final class ContactNumberTest extends \PHPUnit\Framework\TestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testFormat(mixed $input, mixed $expected): void
@@ -18,7 +18,7 @@ class ContactNumberTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, ContactNumber::format($input));
     }
 
-    public static function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
         $primary = [
             'phoneContactType' => ['id' => PhoneContact::TYPE_PRIMARY],
@@ -28,28 +28,25 @@ class ContactNumberTest extends \PHPUnit\Framework\TestCase
             'phoneContactType' => ['id' => PhoneContact::TYPE_SECONDARY],
             'phoneNumber' => '2222222'
         ];
-
-        return [
-            [
-                [$primary],
-                $primary['phoneNumber']
-            ],
-            [
-                [$secondary],
-                $secondary['phoneNumber']
-            ],
-            [
-                [$primary, $secondary],
-                $primary['phoneNumber']
-            ],
-            [
-                [$secondary, $primary],
-                $primary['phoneNumber']
-            ],
-            [
-                [$secondary, $primary, $secondary],
-                $primary['phoneNumber']
-            ],
+        yield [
+            [$primary],
+            $primary['phoneNumber']
+        ];
+        yield [
+            [$secondary],
+            $secondary['phoneNumber']
+        ];
+        yield [
+            [$primary, $secondary],
+            $primary['phoneNumber']
+        ];
+        yield [
+            [$secondary, $primary],
+            $primary['phoneNumber']
+        ];
+        yield [
+            [$secondary, $primary, $secondary],
+            $primary['phoneNumber']
         ];
     }
 }

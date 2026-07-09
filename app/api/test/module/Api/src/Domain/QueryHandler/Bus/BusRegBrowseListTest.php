@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * BusRegBrowseListTest
  */
-class BusRegBrowseListTest extends QueryHandlerTestCase
+final class BusRegBrowseListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

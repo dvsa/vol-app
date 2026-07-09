@@ -13,7 +13,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class TemplateTestDataEntityTest extends EntityTester
+final class TemplateTestDataEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

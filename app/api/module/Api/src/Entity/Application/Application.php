@@ -2602,7 +2602,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
      *
      * @return bool
      */
-    public function canAddOperatingCentresEvidence(array $applicationOperatingCentres = null)
+    public function canAddOperatingCentresEvidence(?array $applicationOperatingCentres = null)
     {
         // The operating centre tracking section is NOT set to 'Acceptable' or 'Not applicable'
         // (i.e. application_tracking.operating_centre_status <> 1 or 3); AND
@@ -2630,7 +2630,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
      *
      * @return array of ApplicationOperatingCentre
      */
-    public function getApplicationOperatingCentresEvidenceRequired(array $applicationOperatingCentres = null)
+    public function getApplicationOperatingCentresEvidenceRequired(?array $applicationOperatingCentres = null)
     {
         // if $applicationOperatingCentres not passed as a parameter then get from this entity
         if ($applicationOperatingCentres === null) {

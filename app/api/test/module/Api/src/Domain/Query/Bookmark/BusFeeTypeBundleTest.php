@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\BusFeeTypeBundle;
  * Class BusFeeTypeBundleTest
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusFeeTypeBundleTest extends \PHPUnit\Framework\TestCase
+final class BusFeeTypeBundleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * test structure

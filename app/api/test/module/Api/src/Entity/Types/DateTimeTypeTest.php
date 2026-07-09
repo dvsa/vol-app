@@ -11,7 +11,7 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Entity\Types\DateTimeType
  */
-class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
+final class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DateTimeType
@@ -32,19 +32,17 @@ class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('dpConvertToPhpValue')]
     public function testConvertToPhpValue(mixed $value, mixed $expected): void
     {
-        static::assertSame($expected, $this->sut->convertToPHPValue($value, $this->mockPlatform));
+        $this->assertSame($expected, $this->sut->convertToPHPValue($value, $this->mockPlatform));
     }
 
-    public static function dpConvertToPhpValue(): array
+    public static function dpConvertToPhpValue(): \Iterator
     {
-        return [
-            [null, null],
-            [new \DateTime('2016-06-03 15:43', new \DateTimeZone('UTC')), '2016-06-03T15:43:00+0000'],
-            [new \DateTime('2016-06-03 15:43', new \DateTimeZone('Europe/London')), '2016-06-03T15:43:00+0100'],
-            ['2016-06-03 13:03:55', '2016-06-03T13:03:55+0000'],
-            ['2016-06-03 15:43', '2016-06-03T15:43:00+0000'],
-            ['2016-12-25 15:43', '2016-12-25T15:43:00+0000'],
-        ];
+        yield [null, null];
+        yield [new \DateTime('2016-06-03 15:43', new \DateTimeZone('UTC')), '2016-06-03T15:43:00+0000'];
+        yield [new \DateTime('2016-06-03 15:43', new \DateTimeZone('Europe/London')), '2016-06-03T15:43:00+0100'];
+        yield ['2016-06-03 13:03:55', '2016-06-03T13:03:55+0000'];
+        yield ['2016-06-03 15:43', '2016-06-03T15:43:00+0000'];
+        yield ['2016-12-25 15:43', '2016-12-25T15:43:00+0000'];
     }
 
     public function testConvertToPhpValueConvertExc(): void
@@ -61,17 +59,15 @@ class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('dpConvertToDatabaseValue')]
     public function testConvertToDatabaseValue(mixed $value, mixed $expected): void
     {
-        static::assertSame($expected, $this->sut->convertToDatabaseValue($value, $this->mockPlatform));
+        $this->assertSame($expected, $this->sut->convertToDatabaseValue($value, $this->mockPlatform));
     }
 
-    public static function dpConvertToDatabaseValue(): array
+    public static function dpConvertToDatabaseValue(): \Iterator
     {
-        return [
-            [null, null],
-            [new \DateTime('2016-06-03 15:43', new \DateTimeZone('UTC')), '03-06-2016 15:43:00'],
-            [new \DateTime('2016-06-03 15:43', new \DateTimeZone('Europe/London')), '03-06-2016 14:43:00'],
-            ['2016-06-03 13:03:55+0100', '03-06-2016 12:03:55'],
-            ['2016-06-03 13:03:55', '03-06-2016 13:03:55'],
-        ];
+        yield [null, null];
+        yield [new \DateTime('2016-06-03 15:43', new \DateTimeZone('UTC')), '03-06-2016 15:43:00'];
+        yield [new \DateTime('2016-06-03 15:43', new \DateTimeZone('Europe/London')), '03-06-2016 14:43:00'];
+        yield ['2016-06-03 13:03:55+0100', '03-06-2016 12:03:55'];
+        yield ['2016-06-03 13:03:55', '03-06-2016 13:03:55'];
     }
 }

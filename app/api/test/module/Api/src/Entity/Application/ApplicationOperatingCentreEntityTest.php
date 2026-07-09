@@ -15,7 +15,7 @@ use Mockery as m;
  * @covers Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre
  * @covers Dvsa\Olcs\Api\Entity\Application\AbstractApplicationOperatingCentre
  */
-class ApplicationOperatingCentreEntityTest extends EntityTester
+final class ApplicationOperatingCentreEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -52,8 +52,8 @@ class ApplicationOperatingCentreEntityTest extends EntityTester
 
         $sut = new Entity($mockApp, $mockOc);
 
-        static::assertSame($mockApp, $sut->getApplication());
-        static::assertSame($mockOc, $sut->getOperatingCentre());
+        $this->assertSame($mockApp, $sut->getApplication());
+        $this->assertSame($mockOc, $sut->getOperatingCentre());
     }
 
     public function testCanDeleteNoS4(): void

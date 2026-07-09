@@ -247,7 +247,7 @@ final class DataGovUkExport extends AbstractDataExport
     }
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $config = $container->get('config');
         $exportCfg = $config['data-gov-uk-export'] ?? [];

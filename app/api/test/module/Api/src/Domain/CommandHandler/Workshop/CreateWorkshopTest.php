@@ -30,7 +30,7 @@ use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateWorkshopTest extends AbstractCommandHandlerTestCase
+final class CreateWorkshopTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -20,7 +20,7 @@ use Mockery as m;
 /**
  * Create Variation Test
  */
-class CreateVariationTest extends AbstractCommandHandlerTestCase
+final class CreateVariationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

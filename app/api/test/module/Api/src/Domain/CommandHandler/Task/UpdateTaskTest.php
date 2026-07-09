@@ -17,17 +17,17 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Task\UpdateTask::class)]
-class UpdateTaskTest extends AbstractCommandHandlerTestCase
+final class UpdateTaskTest extends AbstractCommandHandlerTestCase
 {
-    public const TASK_ID = 999;
+    public const int TASK_ID = 999;
 
-    public const TEAM_ID = 7001;
-    public const TEAM_ID_2 = 7002;
+    public const int TEAM_ID = 7001;
+    public const int TEAM_ID_2 = 7002;
 
-    public const USER_ID = 6001;
+    public const int USER_ID = 6001;
 
-    public const CAT_ID = 5001;
-    public const SUB_CAT_ID = 4001;
+    public const int CAT_ID = 5001;
+    public const int SUB_CAT_ID = 4001;
 
     /** @var UpdateTask */
     protected $sut;
@@ -113,7 +113,7 @@ class UpdateTaskTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
 
         $this->assertEquals('foo bar', $task->getDescription());
-        $this->assertEquals('2015-01-01', $task->getActionDate()->format('Y-m-d'));
+        $this->assertSame('2015-01-01', $task->getActionDate()->format('Y-m-d'));
         $this->assertEquals('Y', $task->getUrgent());
         $this->assertSame($this->categoryReferences[self::CAT_ID], $task->getCategory());
         $this->assertSame($this->subCategoryReferences[self::SUB_CAT_ID], $task->getSubCategory());
@@ -157,7 +157,7 @@ class UpdateTaskTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
 
         $this->assertEquals('foo bar', $task->getDescription());
-        $this->assertEquals('2015-01-01', $task->getActionDate()->format('Y-m-d'));
+        $this->assertSame('2015-01-01', $task->getActionDate()->format('Y-m-d'));
         $this->assertEquals('Y', $task->getUrgent());
         $this->assertSame($this->categoryReferences[self::CAT_ID], $task->getCategory());
         $this->assertSame($this->subCategoryReferences[self::SUB_CAT_ID], $task->getSubCategory());
@@ -190,10 +190,10 @@ class UpdateTaskTest extends AbstractCommandHandlerTestCase
                 'Task updated',
             ],
         ];
-        static::assertEquals($expected, $result->toArray());
+        $this->assertEquals($expected, $result->toArray());
 
-        static::assertSame($this->mockUser, $task->getAssignedToUser());
-        static::assertSame($this->mockTeam2, $task->getAssignedToTeam());
+        $this->assertSame($this->mockUser, $task->getAssignedToUser());
+        $this->assertSame($this->mockTeam2, $task->getAssignedToTeam());
     }
 
     public function testHandleCommandFailTeamInvalid(): void

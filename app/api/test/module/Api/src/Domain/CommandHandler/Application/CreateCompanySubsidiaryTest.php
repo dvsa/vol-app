@@ -15,11 +15,11 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\CommandHandler\Application\CreateCompanySubsidiary
  */
-class CreateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
+final class CreateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
 {
-    public const ID = 666;
-    public const APP_ID = 8888;
-    public const LICENCE_ID = 7777;
+    public const int ID = 666;
+    public const int APP_ID = 8888;
+    public const int LICENCE_ID = 7777;
 
     /** @var  CreateCompanySubsidiary|m\MockInterface */
     protected $sut;
@@ -60,7 +60,7 @@ class CreateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
             ->andReturn($mockAppEntity);
 
         //  mock create result
-        $result = (new Result())
+        $result = new Result()
             ->addId('companySubsidiary', self::ID)
             ->addMessage('Company Subsidiary created');
 
@@ -74,7 +74,7 @@ class CreateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
             ->once()
             ->with(self::APP_ID, true)
             ->andReturn(
-                (new Result())
+                new Result()
                     ->addId('companySubsidiary', self::ID)
                     ->addMessage('Section updated')
             );
@@ -82,7 +82,7 @@ class CreateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         //  call & check
         $actual = $this->sut->handleCommand($command);
 
-        static::assertInstanceOf(Result::class, $actual);
+        $this->assertInstanceOf(Result::class, $actual);
 
         $expected = [
             'id' => [
@@ -93,6 +93,6 @@ class CreateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
                 'Section updated',
             ]
         ];
-        static::assertEquals($expected, $actual->toArray());
+        $this->assertEquals($expected, $actual->toArray());
     }
 }

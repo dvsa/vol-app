@@ -13,7 +13,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationPathGroupList;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ApplicationPathGroupTest extends RepositoryTestCase
+final class ApplicationPathGroupTest extends RepositoryTestCase
 {
     public function testFetchListForApplicationPathGroupList(): void
     {

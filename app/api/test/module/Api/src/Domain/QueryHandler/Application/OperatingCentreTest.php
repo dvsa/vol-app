@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Application as ApplicationRepo;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class OperatingCentreTest extends QueryHandlerTestCase
+final class OperatingCentreTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

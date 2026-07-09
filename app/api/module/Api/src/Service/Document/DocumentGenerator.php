@@ -266,7 +266,7 @@ class DocumentGenerator implements FactoryInterface
         return $file;
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->documentService = $container->get('Document');
         $this->queryHandlerManager = $container->get('QueryHandlerManager');

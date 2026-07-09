@@ -66,8 +66,8 @@ class Pi extends AbstractPi implements CloseableInterface, ReopenableInterface
         RefData $piStatus,
         $comment,
         $isEcmsCase,
-        UserEntity $assignedCaseworker = null,
-        \DateTime $ecmsFirstReceivedDate = null
+        ?UserEntity $assignedCaseworker = null,
+        ?\DateTime $ecmsFirstReceivedDate = null
     ) {
         parent::__construct();
 
@@ -112,8 +112,8 @@ class Pi extends AbstractPi implements CloseableInterface, ReopenableInterface
         RefData $piStatus,
         $comment,
         $isEcmsCase,
-        UserEntity $assignedCaseworker = null,
-        \DateTime $ecmsFirstReceivedDate = null
+        ?UserEntity $assignedCaseworker = null,
+        ?\DateTime $ecmsFirstReceivedDate = null
     ) {
         if ($case->isClosed()) {
             throw new ForbiddenException('Can\'t create a Pi for a closed case');
@@ -152,8 +152,8 @@ class Pi extends AbstractPi implements CloseableInterface, ReopenableInterface
         \DateTime $agreedDate,
         $comment,
         $isEcmsCase,
-        UserEntity $assignedCaseworker = null,
-        \DateTime $ecmsFirstReceivedDate = null
+        ?UserEntity $assignedCaseworker = null,
+        ?\DateTime $ecmsFirstReceivedDate = null
     ) {
         if ($this->isClosed()) {
             throw new ForbiddenException(self::MSG_UPDATE_CLOSED);

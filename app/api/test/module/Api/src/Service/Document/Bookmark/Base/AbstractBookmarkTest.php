@@ -14,7 +14,7 @@ use org\bovigo\vfs\vfsStream;
  * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\Base\AbstractBookmark
  * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\Base\StaticBookmark
  */
-class AbstractBookmarkTest extends MockeryTestCase
+final class AbstractBookmarkTest extends MockeryTestCase
 {
     public function testGetSet(): void
     {
@@ -22,15 +22,15 @@ class AbstractBookmarkTest extends MockeryTestCase
 
         $expectToken = 'unit_Token';
         $sut->setToken($expectToken);
-        static::assertEquals($expectToken, $sut->getToken());
+        $this->assertEquals($expectToken, $sut->getToken());
 
-        static::assertEquals(AbstractBookmarkStub::PREFORMATTED, $sut->isPreformatted());
-        static::assertTrue($sut->isStatic());
+        $this->assertEquals(AbstractBookmarkStub::PREFORMATTED, $sut->isPreformatted());
+        $this->assertTrue($sut->isStatic());
 
         /** @var ParserInterface $mockParser */
         $mockParser = m::mock(ParserInterface::class);
         $sut->setParser($mockParser);
-        static::assertSame($mockParser, $sut->getParser());
+        $this->assertSame($mockParser, $sut->getParser());
     }
 
     public function testGetSnipped(): void
@@ -52,6 +52,6 @@ class AbstractBookmarkTest extends MockeryTestCase
         $sut->setParser($mockParser);
         $sut->setSnippetPath($vfs->url() . '/');
 
-        static::assertEquals($expectContent, $sut->getSnippet());
+        $this->assertEquals($expectContent, $sut->getSnippet());
     }
 }

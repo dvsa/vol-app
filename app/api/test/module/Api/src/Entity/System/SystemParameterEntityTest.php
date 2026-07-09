@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\System\SystemParameter as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class SystemParameterEntityTest extends EntityTester
+final class SystemParameterEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

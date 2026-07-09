@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
 final class SendResponseFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $inrClient = $container->build(InrClientInterface::class, ['path' => '/outbound/message/response/ncr']);
         return (new SendResponse($inrClient))->__invoke($container, $requestedName, $options);

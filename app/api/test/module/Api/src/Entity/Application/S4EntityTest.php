@@ -13,7 +13,7 @@ use Mockery as m;
  * @covers Dvsa\Olcs\Api\Entity\Application\S4
  * @covers Dvsa\Olcs\Api\Entity\Application\AbstractS4
  */
-class S4EntityTest extends EntityTester
+final class S4EntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -31,8 +31,8 @@ class S4EntityTest extends EntityTester
 
         $sut = new Entity\Application\S4($mockApp, $mockLic);
 
-        static::assertSame($mockApp, $sut->getApplication());
-        static::assertSame($mockLic, $sut->getLicence());
-        static::assertInstanceOf(ArrayCollection::class, $sut->getAocs());
+        $this->assertSame($mockApp, $sut->getApplication());
+        $this->assertSame($mockLic, $sut->getLicence());
+        $this->assertInstanceOf(ArrayCollection::class, $sut->getAocs());
     }
 }

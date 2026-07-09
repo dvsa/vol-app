@@ -93,7 +93,7 @@ final class BucketBrowserOverwrite extends AbstractCommandHandler implements Tog
     }
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->bucketBrowser = $container->get(S3BucketBrowser::class);
         return parent::__invoke($container, $requestedName, $options);

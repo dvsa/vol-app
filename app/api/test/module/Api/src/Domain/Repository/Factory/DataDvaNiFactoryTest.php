@@ -13,7 +13,7 @@ use Mockery as m;
 /**
  * @covers  Dvsa\Olcs\Api\Domain\Repository\Factory\DataDvaNiFactory
  */
-class DataDvaNiFactoryTest extends MockeryTestCase
+final class DataDvaNiFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {
@@ -28,9 +28,6 @@ class DataDvaNiFactoryTest extends MockeryTestCase
             ->andReturn($mockConn)
             ->getMock();
 
-        static::assertInstanceOf(
-            DataDvaNi::class,
-            (new DataDvaNiFactory())->__invoke($container, DataDvaNi::class)
-        );
+        $this->assertInstanceOf(DataDvaNi::class, new DataDvaNiFactory()->__invoke($container, DataDvaNi::class));
     }
 }

@@ -11,7 +11,7 @@ use Dvsa\Olcs\Transfer\Query\TaskAllocationRule\Get as Query;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class GetTest extends QueryHandlerTestCase
+final class GetTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

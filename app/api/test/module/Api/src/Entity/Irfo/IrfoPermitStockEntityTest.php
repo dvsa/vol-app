@@ -13,7 +13,7 @@ use Mockery as m;
  * @covers Dvsa\Olcs\Api\Entity\Irfo\IrfoPermitStock
  * @covers Dvsa\Olcs\Api\Entity\Irfo\AbstractIrfoPermitStock
  */
-class IrfoPermitStockEntityTest extends EntityTester
+final class IrfoPermitStockEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -30,8 +30,8 @@ class IrfoPermitStockEntityTest extends EntityTester
 
         $sut = new Entity($serialNo, $validForYear, $ifroCntr);
 
-        static::assertEquals($serialNo, $sut->getSerialNo());
-        static::assertEquals($validForYear, $sut->getValidForYear());
-        static::assertEquals($ifroCntr, $sut->getIrfoCountry());
+        $this->assertEquals($serialNo, $sut->getSerialNo());
+        $this->assertEquals($validForYear, $sut->getValidForYear());
+        $this->assertEquals($ifroCntr, $sut->getIrfoCountry());
     }
 }

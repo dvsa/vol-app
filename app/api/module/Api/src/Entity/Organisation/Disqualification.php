@@ -32,8 +32,8 @@ class Disqualification extends AbstractDisqualification
      * @throws \Dvsa\Olcs\Api\Domain\Exception\ValidationException
      */
     public function __construct(
-        Organisation $organisation = null,
-        \Dvsa\Olcs\Api\Entity\Person\Person $person = null
+        ?Organisation $organisation = null,
+        ?\Dvsa\Olcs\Api\Entity\Person\Person $person = null
     ) {
 
         if ($organisation === null && $person === null) {
@@ -64,7 +64,7 @@ class Disqualification extends AbstractDisqualification
      */
     public function update(
         $isDisqualified,
-        \DateTime $startDate = null,
+        ?\DateTime $startDate = null,
         $notes = null,
         $period = null
     ) {

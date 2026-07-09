@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\IrfoPsvFrequency as Sut;
 /**
  * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\IrfoPsvFrequency
  */
-class IrfoPsvFrequencyTest extends \PHPUnit\Framework\TestCase
+final class IrfoPsvFrequencyTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -28,21 +28,19 @@ class IrfoPsvFrequencyTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function dpRenderValidDataProvider(): array
+    public static function dpRenderValidDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'journeyFrequency' => [
-                        'description' => 'daily'
-                    ]
-                ],
-                'daily',
+                'journeyFrequency' => [
+                    'description' => 'daily'
+                ]
             ],
-            [
-                [],
-                '',
-            ]
+            'daily',
+        ];
+        yield [
+            [],
+            '',
         ];
     }
 }

@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class StockAvailabilityCounterTest extends MockeryTestCase
+final class StockAvailabilityCounterTest extends MockeryTestCase
 {
     public function testGetCount(): void
     {

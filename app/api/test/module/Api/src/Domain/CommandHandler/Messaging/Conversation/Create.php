@@ -94,7 +94,7 @@ class Create extends AbstractCommandHandlerTestCase
                 'licence' => 2,
                 'application' => 1,
             ],
-            (new Result())->addId('task', 4)
+            new Result()->addId('task', 4)
         );
 
         $mockTask = m::mock(Entity\Task\Task::class);
@@ -114,7 +114,7 @@ class Create extends AbstractCommandHandlerTestCase
                 'conversation' => null,
                 'messageContent' => $commandParameters['messageContent'],
             ],
-            (new Result())->addId('message', 5)
+            new Result()->addId('message', 5)
         );
 
         $this->sut->handleCommand($command);
@@ -167,7 +167,7 @@ class Create extends AbstractCommandHandlerTestCase
                 'category' => 3,
                 'licence' => 1,
             ],
-            (new Result())->addId('task', 4)
+            new Result()->addId('task', 4)
         );
 
         $mockTask = m::mock(Entity\Task\Task::class);
@@ -187,7 +187,7 @@ class Create extends AbstractCommandHandlerTestCase
                 'conversation' => null,
                 'messageContent' => $commandParameters['messageContent'],
             ],
-            (new Result())->addId('message', 5)
+            new Result()->addId('message', 5)
         );
 
         $this->sut->handleCommand($command);

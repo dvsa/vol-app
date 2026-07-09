@@ -17,7 +17,7 @@ use Mockery as m;
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-class GetGrantabilityTest extends QueryHandlerTestCase
+final class GetGrantabilityTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -57,32 +57,30 @@ class GetGrantabilityTest extends QueryHandlerTestCase
         );
     }
 
-    public static function dpTestHandleQuery(): array
+    public static function dpTestHandleQuery(): \Iterator
     {
-        return [
+        yield [
+            true,
+            true,
             [
-                true,
-                true,
-                [
-                    'grantable' => 1,
-                    'message' => '',
-                ]
-            ],
+                'grantable' => 1,
+                'message' => '',
+            ]
+        ];
+        yield [
+            true,
+            false,
             [
-                true,
-                false,
-                [
-                    'grantable' => 0,
-                    'message' => 'IRHP Application can not be granted',
-                ]
-            ],
+                'grantable' => 0,
+                'message' => 'IRHP Application can not be granted',
+            ]
+        ];
+        yield [
+            false,
+            true,
             [
-                false,
-                true,
-                [
-                    'grantable' => 0,
-                    'message' => 'Application requests too many permits from a range',
-                ]
+                'grantable' => 0,
+                'message' => 'Application requests too many permits from a range',
             ]
         ];
     }

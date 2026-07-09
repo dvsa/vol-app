@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface;
 use RuntimeException;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(S3DocumentStoreFactory::class)]
-class S3DocumentStoreFactoryTest extends MockeryTestCase
+final class S3DocumentStoreFactoryTest extends MockeryTestCase
 {
     private function container(array $documentShare): ContainerInterface
     {

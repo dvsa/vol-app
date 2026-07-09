@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\QueryHandler\Cases\PresidingTc\GetList
  */
-class GetListTest extends QueryHandlerTestCase
+final class GetListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

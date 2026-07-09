@@ -12,7 +12,7 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\Validation\Validators\CanAccessIrhpApplicationWithIrhpApplication
  */
-class CanAccessIrhpApplicationWithIrhpApplicationTest extends AbstractValidatorsTestCase
+final class CanAccessIrhpApplicationWithIrhpApplicationTest extends AbstractValidatorsTestCase
 {
     /**
      * @var CanAccessIrhpApplicationWithIrhpApplication
@@ -58,11 +58,9 @@ class CanAccessIrhpApplicationWithIrhpApplicationTest extends AbstractValidators
         $this->assertEquals(true, $this->sut->isValid(111));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false]
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

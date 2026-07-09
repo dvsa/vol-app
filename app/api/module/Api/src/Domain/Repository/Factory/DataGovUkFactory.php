@@ -22,7 +22,7 @@ class DataGovUkFactory implements FactoryInterface
      * @return DataGovUk
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DataGovUk
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): DataGovUk
     {
         return new DataGovUk(
             $container->get('doctrine.connection.export')

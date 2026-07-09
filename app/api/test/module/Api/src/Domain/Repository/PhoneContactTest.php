@@ -13,13 +13,14 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\Repository\PhoneContact
  */
-class PhoneContactTest extends RepositoryTestCase
+final class PhoneContactTest extends RepositoryTestCase
 {
-    public const CONTACT_DETAILS_ID = 9999;
+    public const int CONTACT_DETAILS_ID = 9999;
 
     /** @var  m\MockInterface */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repository\PhoneContact::class, true);

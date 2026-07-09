@@ -27,8 +27,8 @@ class Opposer extends AbstractOpposer
 {
     public function __construct(
         ContactDetails $contactDetails,
-        RefData $opposerType = null,
-        RefData $oppositionType = null
+        ?RefData $opposerType = null,
+        ?RefData $oppositionType = null
     ) {
         $this->setContactDetails($contactDetails);
 

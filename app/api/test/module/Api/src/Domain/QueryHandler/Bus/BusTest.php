@@ -20,7 +20,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * Bus Test
  */
-class BusTest extends QueryHandlerTestCase
+final class BusTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

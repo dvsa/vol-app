@@ -17,7 +17,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Licence\VoidAllCommunityLicences::class)]
-class VoidAllCommunityLicencesTest extends AbstractCommandHandlerTestCase
+final class VoidAllCommunityLicencesTest extends AbstractCommandHandlerTestCase
 {
     /** @var CommandHandler\Licence\VoidAllCommunityLicences */
     protected $sut;

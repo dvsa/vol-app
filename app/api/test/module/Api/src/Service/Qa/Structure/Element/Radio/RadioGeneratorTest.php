@@ -21,7 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class RadioGeneratorTest extends MockeryTestCase
+final class RadioGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

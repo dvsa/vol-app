@@ -22,7 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
   * @author Dan Eggleston <dan@stolenegg.com>
  */
-class DeleteConditionUndertakingsTest extends MockeryTestCase
+final class DeleteConditionUndertakingsTest extends MockeryTestCase
 {
     public function testStructure(): void
     {

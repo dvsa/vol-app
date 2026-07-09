@@ -41,7 +41,7 @@ class ProposeToRevoke extends AbstractProposeToRevoke
         array $reasons,
         PresidingTc $presidingTc,
         \DateTime $ptrAgreedDate,
-        User $assignedCaseworker = null
+        ?User $assignedCaseworker = null
     ) {
         parent::__construct();
         $this->case = $case;
@@ -64,7 +64,7 @@ class ProposeToRevoke extends AbstractProposeToRevoke
         array $reasons,
         PresidingTc $presidingTc,
         \DateTime $ptrAgreedDate,
-        User $assignedCaseworker = null
+        ?User $assignedCaseworker = null
     ) {
         $this->reasons = $reasons;
         $this->presidingTc = $presidingTc;

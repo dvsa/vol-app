@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 
-class CanCreateConversationForOrganisationTest extends AbstractHandlerTestCase
+final class CanCreateConversationForOrganisationTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanCreateConversationForOrganisation
@@ -44,13 +44,11 @@ class CanCreateConversationForOrganisationTest extends AbstractHandlerTestCase
         }
     }
 
-    public static function dpTestIsValid(): array
+    public static function dpTestIsValid(): \Iterator
     {
-        return [
-            [true, true, true],
-            [true, false, false],
-            [false, true, false],
-            [false, false, false],
-        ];
+        yield [true, true, true];
+        yield [true, false, false];
+        yield [false, true, false];
+        yield [false, false, false];
     }
 }

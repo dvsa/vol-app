@@ -20,8 +20,9 @@ use Laminas\Db\Sql\Predicate\Between;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class IrhpPermitWindowTest extends RepositoryTestCase
+final class IrhpPermitWindowTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(IrhpPermitWindow::class);
@@ -344,25 +345,23 @@ class IrhpPermitWindowTest extends RepositoryTestCase
         $this->assertEquals($expected, $this->query);
     }
 
-    public static function fetchOpenWindowsByTypeProvider(): array
+    public static function fetchOpenWindowsByTypeProvider(): \Iterator
     {
-        return [
-            [false, 'BLAH '
-                . 'SELECT ipw '
-                . 'INNER JOIN ipw.irhpPermitStock ips '
-                . 'INNER JOIN ips.irhpPermitType ipt '
-                . 'AND ipt.id = [[' . IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL . ']] '
-                . 'AND ipw.startDate <= [[2019-04-08T09:51:10+00:00]] '
-                . 'AND ipw.endDate > [[2019-04-08T09:51:10+00:00]] '
-                . 'AND ips.hiddenSs != 1'],
-            [true, 'BLAH '
-                . 'SELECT ipw '
-                . 'INNER JOIN ipw.irhpPermitStock ips '
-                . 'INNER JOIN ips.irhpPermitType ipt '
-                . 'AND ipt.id = [[' . IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL . ']] '
-                . 'AND ipw.startDate <= [[2019-04-08T09:51:10+00:00]] '
-                . 'AND ipw.endDate > [[2019-04-08T09:51:10+00:00]]']
-        ];
+        yield [false, 'BLAH '
+            . 'SELECT ipw '
+            . 'INNER JOIN ipw.irhpPermitStock ips '
+            . 'INNER JOIN ips.irhpPermitType ipt '
+            . 'AND ipt.id = [[' . IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL . ']] '
+            . 'AND ipw.startDate <= [[2019-04-08T09:51:10+00:00]] '
+            . 'AND ipw.endDate > [[2019-04-08T09:51:10+00:00]] '
+            . 'AND ips.hiddenSs != 1'];
+        yield [true, 'BLAH '
+            . 'SELECT ipw '
+            . 'INNER JOIN ipw.irhpPermitStock ips '
+            . 'INNER JOIN ips.irhpPermitType ipt '
+            . 'AND ipt.id = [[' . IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL . ']] '
+            . 'AND ipw.startDate <= [[2019-04-08T09:51:10+00:00]] '
+            . 'AND ipw.endDate > [[2019-04-08T09:51:10+00:00]]'];
     }
 
     public function testFetchOpenWindowsByTypeYear(): void

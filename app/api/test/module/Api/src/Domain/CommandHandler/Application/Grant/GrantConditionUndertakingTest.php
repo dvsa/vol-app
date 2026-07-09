@@ -26,7 +26,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class GrantConditionUndertakingTest extends AbstractCommandHandlerTestCase
+final class GrantConditionUndertakingTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsExternalUser;
 /**
  * Is External User Test
  */
-class IsExternalUserTest extends AbstractHandlerTestCase
+final class IsExternalUserTest extends AbstractHandlerTestCase
 {
     /**
      * @var IsExternalUser

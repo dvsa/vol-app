@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Entity\View\DocTemplateSearchView;
 /**
  * @covers Dvsa\Olcs\Api\Entity\View\DocTemplateSearchView
  */
-class DocTemplateSearchViewTest extends \PHPUnit\Framework\TestCase
+final class DocTemplateSearchViewTest extends \PHPUnit\Framework\TestCase
 {
     /** @var DocTemplateSearchView */
     protected $sut;
@@ -48,14 +48,14 @@ class DocTemplateSearchViewTest extends \PHPUnit\Framework\TestCase
             } else {
                 $this->sut->{'set' . $methodName}($value);
             }
-            static::assertEquals($value, $this->sut->{'get' . $methodName}());
+            $this->assertEquals($value, $this->sut->{'get' . $methodName}());
         }
     }
 
     public function testIsDelete(): void
     {
-        static::assertFalse($this->sut->isDeleted());
+        $this->assertFalse($this->sut->isDeleted());
         $this->sut->setDeletedDate(new \DateTime());
-        static::assertTrue($this->sut->isDeleted());
+        $this->assertTrue($this->sut->isDeleted());
     }
 }

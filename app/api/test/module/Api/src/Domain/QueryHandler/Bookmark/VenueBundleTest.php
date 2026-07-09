@@ -18,7 +18,7 @@ use Dvsa\Olcs\Api\Entity\Venue as Entity;
 /**
  * Venue Bundle Test
  */
-class VenueBundleTest extends QueryHandlerTestCase
+final class VenueBundleTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

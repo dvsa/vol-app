@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanAccessDocumentWithId;
 /**
  * @covers Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanAccessDocumentWithId
  */
-class CanAccessDocumentWithIdTest extends AbstractHandlerTestCase
+final class CanAccessDocumentWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessDocumentWithId
@@ -59,11 +59,9 @@ class CanAccessDocumentWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

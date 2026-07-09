@@ -18,7 +18,7 @@ use RuntimeException;
  *
  * Initially auto-generated but won't be overridden
  */
-class AnswerEntityTest extends EntityTester
+final class AnswerEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -27,6 +27,7 @@ class AnswerEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->entity = $this->instantiate($this->entityClass);
@@ -67,37 +68,35 @@ class AnswerEntityTest extends EntityTester
         $this->assertEquals($answerValue, $this->entity->getValue());
     }
 
-    public static function dpValueGetterAndSetter(): array
+    public static function dpValueGetterAndSetter(): \Iterator
     {
-        return [
-            // string
-            [Question::QUESTION_TYPE_STRING, 'abc'],
-            [Question::QUESTION_TYPE_STRING, ''],
-            [Question::QUESTION_TYPE_STRING, 123],
-            [Question::QUESTION_TYPE_STRING, 0],
-            [Question::QUESTION_TYPE_STRING, true],
-            [Question::QUESTION_TYPE_STRING, false],
-            [Question::QUESTION_TYPE_STRING, 'true'],
-            [Question::QUESTION_TYPE_STRING, 'false'],
-            // int
-            [Question::QUESTION_TYPE_INTEGER, 'abc'],
-            [Question::QUESTION_TYPE_INTEGER, ''],
-            [Question::QUESTION_TYPE_INTEGER, 123],
-            [Question::QUESTION_TYPE_INTEGER, 0],
-            [Question::QUESTION_TYPE_INTEGER, true],
-            [Question::QUESTION_TYPE_INTEGER, false],
-            [Question::QUESTION_TYPE_INTEGER, 'true'],
-            [Question::QUESTION_TYPE_INTEGER, 'false'],
-            // bool
-            [Question::QUESTION_TYPE_BOOLEAN, 'abc'],
-            [Question::QUESTION_TYPE_BOOLEAN, ''],
-            [Question::QUESTION_TYPE_BOOLEAN, 123],
-            [Question::QUESTION_TYPE_BOOLEAN, 0],
-            [Question::QUESTION_TYPE_BOOLEAN, true],
-            [Question::QUESTION_TYPE_BOOLEAN, false],
-            [Question::QUESTION_TYPE_BOOLEAN, 'true'],
-            [Question::QUESTION_TYPE_BOOLEAN, 'false'],
-        ];
+        // string
+        yield [Question::QUESTION_TYPE_STRING, 'abc'];
+        yield [Question::QUESTION_TYPE_STRING, ''];
+        yield [Question::QUESTION_TYPE_STRING, 123];
+        yield [Question::QUESTION_TYPE_STRING, 0];
+        yield [Question::QUESTION_TYPE_STRING, true];
+        yield [Question::QUESTION_TYPE_STRING, false];
+        yield [Question::QUESTION_TYPE_STRING, 'true'];
+        yield [Question::QUESTION_TYPE_STRING, 'false'];
+        // int
+        yield [Question::QUESTION_TYPE_INTEGER, 'abc'];
+        yield [Question::QUESTION_TYPE_INTEGER, ''];
+        yield [Question::QUESTION_TYPE_INTEGER, 123];
+        yield [Question::QUESTION_TYPE_INTEGER, 0];
+        yield [Question::QUESTION_TYPE_INTEGER, true];
+        yield [Question::QUESTION_TYPE_INTEGER, false];
+        yield [Question::QUESTION_TYPE_INTEGER, 'true'];
+        yield [Question::QUESTION_TYPE_INTEGER, 'false'];
+        // bool
+        yield [Question::QUESTION_TYPE_BOOLEAN, 'abc'];
+        yield [Question::QUESTION_TYPE_BOOLEAN, ''];
+        yield [Question::QUESTION_TYPE_BOOLEAN, 123];
+        yield [Question::QUESTION_TYPE_BOOLEAN, 0];
+        yield [Question::QUESTION_TYPE_BOOLEAN, true];
+        yield [Question::QUESTION_TYPE_BOOLEAN, false];
+        yield [Question::QUESTION_TYPE_BOOLEAN, 'true'];
+        yield [Question::QUESTION_TYPE_BOOLEAN, 'false'];
     }
 
     public function testSetValueForCustomType(): void
@@ -117,47 +116,45 @@ class AnswerEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isEqualTo($checkValue));
     }
 
-    public static function dpIsEqualTo(): array
+    public static function dpIsEqualTo(): \Iterator
     {
-        return [
-            // matching values
-            // string
-            [Question::QUESTION_TYPE_STRING, 'abc', 'abc', true],
-            [Question::QUESTION_TYPE_STRING, 'abc', true, true],
-            [Question::QUESTION_TYPE_STRING, '', '', true],
-            [Question::QUESTION_TYPE_STRING, 'false', true, true],
-            [Question::QUESTION_TYPE_STRING, '', 0, true],
-            [Question::QUESTION_TYPE_STRING, '', false, true],
-            [Question::QUESTION_TYPE_STRING, '0', 0, true],
-            [Question::QUESTION_TYPE_STRING, '0', false, true],
-            // int
-            [Question::QUESTION_TYPE_INTEGER, 123, 123, true],
-            [Question::QUESTION_TYPE_INTEGER, 123, '123', true],
-            [Question::QUESTION_TYPE_INTEGER, 0, 0, true],
-            [Question::QUESTION_TYPE_INTEGER, 0, '0', true],
-            [Question::QUESTION_TYPE_INTEGER, 0, false, true],
-            [Question::QUESTION_TYPE_INTEGER, 1, true, true],
-            [Question::QUESTION_TYPE_INTEGER, 123, true, true],
-            // bool
-            [Question::QUESTION_TYPE_BOOLEAN, true, true, true],
-            [Question::QUESTION_TYPE_BOOLEAN, true, 1, true],
-            [Question::QUESTION_TYPE_BOOLEAN, true, '1', true],
-            [Question::QUESTION_TYPE_BOOLEAN, true, 'false', true],
-            [Question::QUESTION_TYPE_BOOLEAN, true, 'abc', true],
-            [Question::QUESTION_TYPE_BOOLEAN, false, false, true],
-            [Question::QUESTION_TYPE_BOOLEAN, false, 0, true],
-            [Question::QUESTION_TYPE_BOOLEAN, false, '0', true],
-            // different values
-            // string
-            [Question::QUESTION_TYPE_STRING, 'abc', 'def', false],
-            [Question::QUESTION_TYPE_STRING, '', 'def', false],
-            [Question::QUESTION_TYPE_STRING, 'false', false, false],
-            // int
-            [Question::QUESTION_TYPE_INTEGER, 123, 987, false],
-            // bool
-            [Question::QUESTION_TYPE_BOOLEAN, true, false, false],
-            [Question::QUESTION_TYPE_BOOLEAN, false, true, false],
-        ];
+        // matching values
+        // string
+        yield [Question::QUESTION_TYPE_STRING, 'abc', 'abc', true];
+        yield [Question::QUESTION_TYPE_STRING, 'abc', true, true];
+        yield [Question::QUESTION_TYPE_STRING, '', '', true];
+        yield [Question::QUESTION_TYPE_STRING, 'false', true, true];
+        yield [Question::QUESTION_TYPE_STRING, '', 0, true];
+        yield [Question::QUESTION_TYPE_STRING, '', false, true];
+        yield [Question::QUESTION_TYPE_STRING, '0', 0, true];
+        yield [Question::QUESTION_TYPE_STRING, '0', false, true];
+        // int
+        yield [Question::QUESTION_TYPE_INTEGER, 123, 123, true];
+        yield [Question::QUESTION_TYPE_INTEGER, 123, '123', true];
+        yield [Question::QUESTION_TYPE_INTEGER, 0, 0, true];
+        yield [Question::QUESTION_TYPE_INTEGER, 0, '0', true];
+        yield [Question::QUESTION_TYPE_INTEGER, 0, false, true];
+        yield [Question::QUESTION_TYPE_INTEGER, 1, true, true];
+        yield [Question::QUESTION_TYPE_INTEGER, 123, true, true];
+        // bool
+        yield [Question::QUESTION_TYPE_BOOLEAN, true, true, true];
+        yield [Question::QUESTION_TYPE_BOOLEAN, true, 1, true];
+        yield [Question::QUESTION_TYPE_BOOLEAN, true, '1', true];
+        yield [Question::QUESTION_TYPE_BOOLEAN, true, 'false', true];
+        yield [Question::QUESTION_TYPE_BOOLEAN, true, 'abc', true];
+        yield [Question::QUESTION_TYPE_BOOLEAN, false, false, true];
+        yield [Question::QUESTION_TYPE_BOOLEAN, false, 0, true];
+        yield [Question::QUESTION_TYPE_BOOLEAN, false, '0', true];
+        // different values
+        // string
+        yield [Question::QUESTION_TYPE_STRING, 'abc', 'def', false];
+        yield [Question::QUESTION_TYPE_STRING, '', 'def', false];
+        yield [Question::QUESTION_TYPE_STRING, 'false', false, false];
+        // int
+        yield [Question::QUESTION_TYPE_INTEGER, 123, 987, false];
+        // bool
+        yield [Question::QUESTION_TYPE_BOOLEAN, true, false, false];
+        yield [Question::QUESTION_TYPE_BOOLEAN, false, true, false];
     }
 
     public function testIsEqualToWhenValueNotSet(): void

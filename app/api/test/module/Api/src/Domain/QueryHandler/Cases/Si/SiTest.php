@@ -19,7 +19,7 @@ use Mockery as m;
  * Si Test
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class SiTest extends QueryHandlerTestCase
+final class SiTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

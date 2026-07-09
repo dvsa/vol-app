@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\AddressOfEstablishment;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class AddressOfEstablishmentTest extends \PHPUnit\Framework\TestCase
+final class AddressOfEstablishmentTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

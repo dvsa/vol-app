@@ -100,7 +100,7 @@ class ContentStoreFileUploader implements FileUploaderInterface, FactoryInterfac
         return $this->contentStoreClient->write($identifier, $file);
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->contentStoreClient = $container->get('ContentStore');
         $this->logger = $container->get('Logger');

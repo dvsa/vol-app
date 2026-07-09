@@ -10,7 +10,7 @@ use Mockery as m;
 use Dvsa\Olcs\Api\Entity\Types\EncryptedStringType;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Types\EncryptedStringType::class)]
-class EncryptedStringTypeTest extends \PHPUnit\Framework\TestCase
+final class EncryptedStringTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var EncryptedStringType

@@ -12,7 +12,7 @@ use Qandidate\Toggle\ToggleManager;
  * Class ToggleServiceTest
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ToggleServiceTest extends \PHPUnit\Framework\TestCase
+final class ToggleServiceTest extends \PHPUnit\Framework\TestCase
 {
     public function testEnabledAndDisabled(): void
     {
@@ -36,13 +36,13 @@ class ToggleServiceTest extends \PHPUnit\Framework\TestCase
             new ToggleManager($collection)
         );
 
-        self::assertEquals(false, $sut->isEnabled('toggle1'));
-        self::assertEquals(true, $sut->isEnabled('toggle2'));
+        $this->assertEquals(false, $sut->isEnabled('toggle1'));
+        $this->assertEquals(true, $sut->isEnabled('toggle2'));
 
         $sut->enable('toggle1');
         $sut->disable('toggle2');
 
-        self::assertEquals(true, $sut->isEnabled('toggle1'));
-        self::assertEquals(false, $sut->isEnabled('toggle2'));
+        $this->assertEquals(true, $sut->isEnabled('toggle1'));
+        $this->assertEquals(false, $sut->isEnabled('toggle2'));
     }
 }

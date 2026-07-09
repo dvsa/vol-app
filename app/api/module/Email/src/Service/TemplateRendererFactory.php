@@ -23,7 +23,7 @@ class TemplateRendererFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TemplateRenderer
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TemplateRenderer
     {
         $templateRenderer = new TemplateRenderer();
         $templateRenderer->setViewRenderer($container->get('TemplateStrategySelectingViewRenderer'));

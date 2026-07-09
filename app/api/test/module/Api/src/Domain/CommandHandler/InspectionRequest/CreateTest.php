@@ -32,7 +32,7 @@ use Dvsa\Olcs\Api\Domain\Command\InspectionRequest\SendInspectionRequest as Send
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateTest extends AbstractCommandHandlerTestCase
+final class CreateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

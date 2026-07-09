@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Cli\Domain\Command\MessageQueue;
 use Dvsa\Olcs\Cli\Domain\Command\MessageQueue\Enqueue;
 use PHPUnit\Framework\TestCase;
 
-class EnqueueTest extends TestCase
+final class EnqueueTest extends TestCase
 {
     public function testStructure(): void
     {

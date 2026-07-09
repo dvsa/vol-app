@@ -24,7 +24,7 @@ use Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic as CommunityLicenceEntity;
 use Dvsa\OlcsTest\Api\Entity\Licence\LicenceBuilder;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 
-class CommunityLicencesTest extends QueryHandlerTestCase
+final class CommunityLicencesTest extends QueryHandlerTestCase
 {
     use MocksRepositoriesTrait;
     use MocksServicesTrait;

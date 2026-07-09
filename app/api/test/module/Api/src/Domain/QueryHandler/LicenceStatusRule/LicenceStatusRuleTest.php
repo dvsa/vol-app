@@ -13,7 +13,7 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\QueryHandler\LicenceStatusRule\LicenceStatusRule
  */
-class LicenceStatusRuleTest extends QueryHandlerTestCase
+final class LicenceStatusRuleTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -49,6 +49,6 @@ class LicenceStatusRuleTest extends QueryHandlerTestCase
         /** @var QueryHandler\ResultList $actual */
         $actual = $this->sut->handleQuery($query);
 
-        static::assertSame(['unit_Result'], $actual->serialize());
+        $this->assertSame(['unit_Result'], $actual->serialize());
     }
 }

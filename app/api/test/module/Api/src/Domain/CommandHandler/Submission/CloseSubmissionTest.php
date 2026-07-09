@@ -24,7 +24,7 @@ use Mockery as m;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class CloseSubmissionTest extends AbstractCommandHandlerTestCase
+final class CloseSubmissionTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

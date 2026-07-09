@@ -16,7 +16,7 @@ use Mockery as m;
  * @covers Dvsa\Olcs\Api\Entity\Opposition\Opposer
  * @covers Dvsa\Olcs\Api\Entity\Opposition\AbstractOpposer
  */
-class OpposerEntityTest extends EntityTester
+final class OpposerEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -33,6 +33,7 @@ class OpposerEntityTest extends EntityTester
     /** @var  Entity */
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockCd = m::mock(ContactDetails::class);
@@ -44,8 +45,8 @@ class OpposerEntityTest extends EntityTester
 
     public function testConstructor(): void
     {
-        static::assertSame($this->mockCd, $this->sut->getContactDetails());
-        static::assertSame($this->opposerType, $this->sut->getOpposerType());
+        $this->assertSame($this->mockCd, $this->sut->getContactDetails());
+        $this->assertSame($this->opposerType, $this->sut->getOpposerType());
     }
 
     public function testUpdateOk(): void
@@ -59,7 +60,7 @@ class OpposerEntityTest extends EntityTester
             ]
         );
 
-        static::assertSame($opposerType, $this->sut->getOpposerType());
+        $this->assertSame($opposerType, $this->sut->getOpposerType());
     }
 
     public function testUpdateException(): void

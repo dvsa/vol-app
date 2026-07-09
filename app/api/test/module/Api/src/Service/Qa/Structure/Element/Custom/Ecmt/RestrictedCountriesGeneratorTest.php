@@ -26,7 +26,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class RestrictedCountriesGeneratorTest extends MockeryTestCase
+final class RestrictedCountriesGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

@@ -14,7 +14,7 @@ use org\bovigo\vfs\vfsStream;
 /**
  * WebServiceClientTest
  */
-class WebServiceClientTest extends MockeryTestCase
+final class WebServiceClientTest extends MockeryTestCase
 {
     public function testConvertError(): void
     {

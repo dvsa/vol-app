@@ -18,7 +18,7 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ForCpWithCountriesAndNoMatchingRangesProviderTest extends MockeryTestCase
+final class ForCpWithCountriesAndNoMatchingRangesProviderTest extends MockeryTestCase
 {
     private $result;
 
@@ -38,6 +38,7 @@ class ForCpWithCountriesAndNoMatchingRangesProviderTest extends MockeryTestCase
 
     private $forCpWithCountriesAndNoMatchingRangesProvider;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->result = new Result();

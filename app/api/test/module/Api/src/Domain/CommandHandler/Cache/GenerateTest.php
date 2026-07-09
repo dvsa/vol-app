@@ -16,7 +16,7 @@ use Olcs\Logging\Log\Logger;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class GenerateTest extends AbstractCommandHandlerTestCase
+final class GenerateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -52,12 +52,10 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($messages, $result->getMessages());
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
-        return [
-            [null, ['Cache updated for cacheId without a unique id']],
-            ['uniqueId', ['Cache updated for cacheId with unique id of uniqueId']]
-        ];
+        yield [null, ['Cache updated for cacheId without a unique id']];
+        yield ['uniqueId', ['Cache updated for cacheId with unique id of uniqueId']];
     }
 
     public function testHandleCommandWithQueryException(): void

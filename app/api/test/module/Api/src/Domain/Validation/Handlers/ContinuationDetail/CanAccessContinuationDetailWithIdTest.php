@@ -9,7 +9,7 @@ use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\ContinuationDetail\CanAccessContinuationDetailWithId;
 
-class CanAccessContinuationDetailWithIdTest extends AbstractHandlerTestCase
+final class CanAccessContinuationDetailWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessContinuationDetailWithId
@@ -40,11 +40,9 @@ class CanAccessContinuationDetailWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

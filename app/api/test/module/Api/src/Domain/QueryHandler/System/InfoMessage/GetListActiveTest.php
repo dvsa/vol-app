@@ -13,7 +13,7 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\QueryHandler\System\InfoMessage\GetListActive
  */
-class GetListActiveTest extends QueryHandlerTestCase
+final class GetListActiveTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -37,12 +37,9 @@ class GetListActiveTest extends QueryHandlerTestCase
 
         $actual = $this->sut->handleQuery($query);
 
-        static::assertSame(
-            [
-                'result' => [$mockItem, $mockItem],
-                'count' => 2,
-            ],
-            $actual
-        );
+        $this->assertSame([
+            'result' => [$mockItem, $mockItem],
+            'count' => 2,
+        ], $actual);
     }
 }

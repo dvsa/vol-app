@@ -16,11 +16,9 @@ use Mockery as m;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class TransportManagerReadAuditTest extends AbstractReadAuditTestCase
+final class TransportManagerReadAuditTest extends AbstractReadAuditTestCase
 {
-    /** @var TransportManagerReadAudit|m\MockInterface */
-    protected $sut;
-
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(TransportManagerReadAudit::class, true);

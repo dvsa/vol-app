@@ -127,7 +127,7 @@ class Queue extends AbstractQueue
      *
      * @param RefData $messageType message type
      */
-    public function __construct(RefData $messageType = null)
+    public function __construct(?RefData $messageType = null)
     {
         if (!is_null($messageType)) {
             $this->setType($messageType);

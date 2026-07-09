@@ -22,7 +22,7 @@ class ResetPasswordFactory implements FactoryInterface
      * @return ResetPassword
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ResetPassword
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ResetPassword
     {
         $adapter = $container->get(ValidatableAdapterInterface::class);
         $eventHistoryCreator = $container->get('EventHistoryCreator');

@@ -29,7 +29,7 @@ use Mockery as m;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class UpdateStayTest extends AbstractCommandHandlerTestCase
+final class UpdateStayTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

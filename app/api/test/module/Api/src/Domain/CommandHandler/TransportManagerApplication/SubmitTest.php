@@ -28,10 +28,8 @@ use Dvsa\Olcs\Email\Service\TemplateRenderer;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class SubmitTest extends AbstractCommandHandlerTestCase
+final class SubmitTest extends AbstractCommandHandlerTestCase
 {
-    protected $loggedInUser;
-
     protected $applicationId = 234;
 
     public function setUp(): void
@@ -209,12 +207,10 @@ class SubmitTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function dataProviderTestHandleCommand(): array
+    public static function dataProviderTestHandleCommand(): \Iterator
     {
-        return [
-            [false, 'application'],
-            [true, 'variation']
-        ];
+        yield [false, 'application'];
+        yield [true, 'variation'];
     }
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestHandleCommand')]
     public function testHandleCommandSendEmailToAdminsRemoveDuplicate(mixed $isVariation, mixed $uriSegment): void

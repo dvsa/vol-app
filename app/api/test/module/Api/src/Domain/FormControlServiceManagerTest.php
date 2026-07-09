@@ -11,10 +11,11 @@ use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class FormControlServiceManagerTest extends MockeryTestCase
+final class FormControlServiceManagerTest extends MockeryTestCase
 {
     private FormControlServiceManager $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $container = m::mock(ContainerInterface::class);

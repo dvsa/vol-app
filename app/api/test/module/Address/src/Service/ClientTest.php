@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ClientTest extends MockeryTestCase
+final class ClientTest extends MockeryTestCase
 {
     public function testSetUri(): void
     {

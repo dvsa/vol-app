@@ -16,7 +16,7 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\CommandHandler\System\PublicHoliday\Update
  */
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -29,7 +29,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
     public function testHandleCommand(): void
     {
         $id = 99999;
-        $holidayDate = (new \DateTime())->format('Y-m-d');
+        $holidayDate = new \DateTime()->format('Y-m-d');
 
         $data = [
             'holidayDate' => $holidayDate,
@@ -54,11 +54,11 @@ class UpdateTest extends AbstractCommandHandlerTestCase
             ->once()
             ->andReturnUsing(
                 function (Entity\System\PublicHoliday $entity) use ($holidayDate, $id) {
-                    static::assertEquals($entity->getPublicHolidayDate(), new DateTime($holidayDate));
-                    static::assertEquals($entity->getIsEngland(), 'Y');
-                    static::assertEquals($entity->getIsWales(), 'N');
-                    static::assertEquals($entity->getIsScotland(), 'Y');
-                    static::assertEquals($entity->getIsNi(), 'N');
+                    $this->assertEquals($entity->getPublicHolidayDate(), new DateTime($holidayDate));
+                    $this->assertEquals('Y', $entity->getIsEngland());
+                    $this->assertEquals('N', $entity->getIsWales());
+                    $this->assertEquals('Y', $entity->getIsScotland());
+                    $this->assertEquals('N', $entity->getIsNi());
 
                     return $entity;
                 }
@@ -67,6 +67,6 @@ class UpdateTest extends AbstractCommandHandlerTestCase
 
         $actual = $this->sut->handleCommand($command);
 
-        static::assertEquals(['Public Holiday \'' . $id . '\' updated'], $actual->getMessages());
+        $this->assertEquals(['Public Holiday \'' . $id . '\' updated'], $actual->getMessages());
     }
 }

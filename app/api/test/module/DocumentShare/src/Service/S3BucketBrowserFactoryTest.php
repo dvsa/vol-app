@@ -13,7 +13,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(S3BucketBrowserFactory::class)]
-class S3BucketBrowserFactoryTest extends MockeryTestCase
+final class S3BucketBrowserFactoryTest extends MockeryTestCase
 {
     private function container(array $documentShare): ContainerInterface
     {

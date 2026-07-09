@@ -30,7 +30,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateSafetyTest extends AbstractCommandHandlerTestCase
+final class UpdateSafetyTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -82,29 +82,27 @@ class UpdateSafetyTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
-        return [
-            [
-                'canHaveTrailer' => true,
-                'totAuthTrailers' => 12,
-                'expectedSafetyInsTrailers' => 3,
-            ],
-            [
-                'canHaveTrailer' => true,
-                'totAuthTrailers' => 0,
-                'expectedSafetyInsTrailers' => 0,
-            ],
-            [
-                'canHaveTrailer' => false,
-                'totAuthTrailers' => 12,
-                'expectedSafetyInsTrailers' => null,
-            ],
-            [
-                'canHaveTrailer' => false,
-                'totAuthTrailers' => 0,
-                'expectedSafetyInsTrailers' => null,
-            ],
+        yield [
+            'canHaveTrailer' => true,
+            'totAuthTrailers' => 12,
+            'expectedSafetyInsTrailers' => 3,
+        ];
+        yield [
+            'canHaveTrailer' => true,
+            'totAuthTrailers' => 0,
+            'expectedSafetyInsTrailers' => 0,
+        ];
+        yield [
+            'canHaveTrailer' => false,
+            'totAuthTrailers' => 12,
+            'expectedSafetyInsTrailers' => null,
+        ];
+        yield [
+            'canHaveTrailer' => false,
+            'totAuthTrailers' => 0,
+            'expectedSafetyInsTrailers' => null,
         ];
     }
 
@@ -155,7 +153,7 @@ class UpdateSafetyTest extends AbstractCommandHandlerTestCase
                 'id' => 111,
                 'section' => 'safety'
             ],
-            (new Result())->addMessage('Section updated')
+            new Result()->addMessage('Section updated')
         );
 
         $result = $this->sut->handleCommand($command);

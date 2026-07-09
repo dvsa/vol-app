@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class BaseAnswerSaverTest extends MockeryTestCase
+final class BaseAnswerSaverTest extends MockeryTestCase
 {
     private $qaElementValue = 'qaElementValue';
 
@@ -26,12 +26,11 @@ class BaseAnswerSaverTest extends MockeryTestCase
 
     private $qaContext;
 
-    private $applicationStep;
-
     private $genericAnswerWriter;
 
     private $baseAnswerSaver;
 
+    #[\Override]
     public function setUp(): void
     {
         $fieldsetName = 'fields456';
@@ -42,18 +41,18 @@ class BaseAnswerSaverTest extends MockeryTestCase
             ]
         ];
 
-        $this->applicationStep = m::mock(ApplicationStep::class);
+        $applicationStep = m::mock(ApplicationStep::class);
 
         $this->qaContext = m::mock(QaContext::class);
         $this->qaContext->shouldReceive('getApplicationStepEntity')
             ->withNoArgs()
-            ->andReturn($this->applicationStep);
+            ->andReturn($applicationStep);
 
         $this->genericAnswerWriter = m::mock(GenericAnswerWriter::class);
 
         $genericAnswerFetcher = m::mock(GenericAnswerFetcher::class);
         $genericAnswerFetcher->shouldReceive('fetch')
-            ->with($this->applicationStep, $this->postData)
+            ->with($applicationStep, $this->postData)
             ->andReturn($this->qaElementValue);
 
         $this->baseAnswerSaver = new BaseAnswerSaver($this->genericAnswerWriter, $genericAnswerFetcher);
@@ -78,12 +77,10 @@ class BaseAnswerSaverTest extends MockeryTestCase
         $this->baseAnswerSaver->save($this->qaContext, $this->postData, $questionType);
     }
 
-    public static function dpSaveWithQuestionType(): array
+    public static function dpSaveWithQuestionType(): \Iterator
     {
-        return [
-            [Question::QUESTION_TYPE_STRING],
-            [Question::QUESTION_TYPE_INTEGER],
-            [Question::QUESTION_TYPE_BOOLEAN],
-        ];
+        yield [Question::QUESTION_TYPE_STRING];
+        yield [Question::QUESTION_TYPE_INTEGER];
+        yield [Question::QUESTION_TYPE_BOOLEAN];
     }
 }

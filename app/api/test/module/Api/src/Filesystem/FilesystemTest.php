@@ -15,7 +15,7 @@ use Symfony\Component\Lock\Store\FlockStore;
  * Class FilesystemTest
  * @package Dvsa\OlcsTest\Api\Filesystem
  */
-class FilesystemTest extends m\Adapter\Phpunit\MockeryTestCase
+final class FilesystemTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     public function testCreateTmpDir(): void
     {
@@ -24,7 +24,7 @@ class FilesystemTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $dir = $sut->createTmpDir(vfsStream::url('tmp/'), '', false);
 
-        $this->assertTrue(is_dir($dir));
+        $this->assertDirectoryExists($dir);
     }
 
     public function testCreateTmpDirCleanup(): void
@@ -40,7 +40,7 @@ class FilesystemTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $dir = $sut->createTmpDir(vfsStream::url('tmp/'), '');
 
-        $this->assertFalse(is_dir($dir));
+        $this->assertDirectoryDoesNotExist($dir);
     }
 
     public function testCreateTmpFile(): void
@@ -50,7 +50,7 @@ class FilesystemTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $dir = $sut->createTmpFile(vfsStream::url('tmp/'), '', false);
 
-        $this->assertTrue(file_exists($dir));
+        $this->assertFileExists($dir);
     }
 
     public function testCreateTmpFileCleanup(): void
@@ -66,7 +66,7 @@ class FilesystemTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $dir = $sut->createTmpFile(vfsStream::url('tmp/'), '');
 
-        $this->assertFalse(file_exists($dir));
+        $this->assertFileDoesNotExist($dir);
     }
 
     public function testCreateTmpFileWithLock(): void
@@ -92,6 +92,6 @@ class FilesystemTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $dir = $sut->createTmpFile(vfsStream::url('tmp/'), '', false);
 
-        $this->assertFalse(file_exists($dir));
+        $this->assertFileDoesNotExist($dir);
     }
 }

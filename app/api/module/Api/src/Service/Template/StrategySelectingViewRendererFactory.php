@@ -23,7 +23,7 @@ class StrategySelectingViewRendererFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): StrategySelectingViewRenderer
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): StrategySelectingViewRenderer
     {
         return new StrategySelectingViewRenderer(
             $container->get('ViewRenderer'),

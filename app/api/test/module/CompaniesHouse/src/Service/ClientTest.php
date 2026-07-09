@@ -16,9 +16,9 @@ use Laminas\Http\Response;
 /**
  * @covers Dvsa\Olcs\CompaniesHouse\Service\Client
  */
-class ClientTest extends MockeryTestCase
+final class ClientTest extends MockeryTestCase
 {
-    public const COMPANY_NO = '03127414';
+    public const string COMPANY_NO = '03127414';
 
     /** @var  Client */
     protected $sut;
@@ -28,6 +28,7 @@ class ClientTest extends MockeryTestCase
     /** @var  m\MockInterface */
     private $mockRequest;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockRequest = m::mock(\Laminas\Http\Request::class)->makePartial();
@@ -54,10 +55,7 @@ class ClientTest extends MockeryTestCase
 
         $this->mockHttpClient->shouldReceive('send')->with()->once()->andReturn($response);
 
-        static::assertEquals(
-            ['company_number' => '1234'],
-            $this->sut->getCompanyProfile(self::COMPANY_NO, false)
-        );
+        $this->assertEquals(['company_number' => '1234'], $this->sut->getCompanyProfile(self::COMPANY_NO, false));
     }
 
     public function testGetCompanyProfileFailInvalidJson(): void
@@ -95,18 +93,15 @@ class ClientTest extends MockeryTestCase
             ->shouldReceive('getRequest')->once()->andReturn($this->mockRequest)
             ->shouldReceive('send')->andReturn($companyResponse, $officersResponse);
 
-        static::assertEquals(
-            [
-                'company_number' => 'bar',
-                'officer_summary' => [
-                    'officers' => [
-                        ['name' => 'Bob'],
-                        ['name' => 'Dave'],
-                    ]
+        $this->assertEquals([
+            'company_number' => 'bar',
+            'officer_summary' => [
+                'officers' => [
+                    ['name' => 'Bob'],
+                    ['name' => 'Dave'],
                 ]
-            ],
-            $this->sut->getCompanyProfile(self::COMPANY_NO, true)
-        );
+            ]
+        ], $this->sut->getCompanyProfile(self::COMPANY_NO, true));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetCompanyProfileErrorResponse')]
@@ -129,45 +124,43 @@ class ClientTest extends MockeryTestCase
         $this->sut->getCompanyProfile(self::COMPANY_NO);
     }
 
-    public static function dpTestGetCompanyProfileErrorResponse(): array
+    public static function dpTestGetCompanyProfileErrorResponse(): \Iterator
     {
-        return [
-            [
-                'statusCode' => Response::STATUS_CODE_404,
-                'content' => '{"errors": [{"error": "not found"}]}',
-                'errClass' => ServiceException::class,
-                'errMsg' => Client::ERR_SERVICE_NOT_RESPOND,
-            ],
-            [
-                'statusCode' => Response::STATUS_CODE_404,
-                'content' => '{"errors": [{"error": "' . Client::ERR_KEY_COMPANY_PROFILE_NOT_FOUND . '"}]}',
-                'errClass' => NotFoundException::class,
-                'errMsg' => Client::ERR_COMPANY_PROFILE_NOT_FOUND,
-            ],
-            [
-                'statusCode' => Response::STATUS_CODE_429,
-                'content' => '',
-                'errClass' => RateLimitException::class,
-                'errMsg' => Client::ERR_RATE_LIMIT_EXCEED,
-            ],
-            [
-                'statusCode' => Response::STATUS_CODE_500,
-                'content' => '{"body": "test"}',
-                'errClass' => ServiceException::class,
-                'errMsg' => '{"body": "test"}',
-            ],
-            [
-                'statusCode' => Response::STATUS_CODE_200,
-                'content' => 'non-json content',
-                'errClass' => ServiceException::class,
-                'errMsg' => Client::ERR_INVALID_JSON,
-            ],
-            [
-                'statusCode' => Response::STATUS_CODE_404,
-                'content' => '{"errors":[{"type":"ch:service","error":"company-profile-not-found"}]}',
-                'errClass' => NotFoundException::class,
-                'errMsg' => Client::ERR_COMPANY_PROFILE_NOT_FOUND,
-            ],
+        yield [
+            'statusCode' => Response::STATUS_CODE_404,
+            'content' => '{"errors": [{"error": "not found"}]}',
+            'errClass' => ServiceException::class,
+            'errMsg' => Client::ERR_SERVICE_NOT_RESPOND,
+        ];
+        yield [
+            'statusCode' => Response::STATUS_CODE_404,
+            'content' => '{"errors": [{"error": "' . Client::ERR_KEY_COMPANY_PROFILE_NOT_FOUND . '"}]}',
+            'errClass' => NotFoundException::class,
+            'errMsg' => Client::ERR_COMPANY_PROFILE_NOT_FOUND,
+        ];
+        yield [
+            'statusCode' => Response::STATUS_CODE_429,
+            'content' => '',
+            'errClass' => RateLimitException::class,
+            'errMsg' => Client::ERR_RATE_LIMIT_EXCEED,
+        ];
+        yield [
+            'statusCode' => Response::STATUS_CODE_500,
+            'content' => '{"body": "test"}',
+            'errClass' => ServiceException::class,
+            'errMsg' => '{"body": "test"}',
+        ];
+        yield [
+            'statusCode' => Response::STATUS_CODE_200,
+            'content' => 'non-json content',
+            'errClass' => ServiceException::class,
+            'errMsg' => Client::ERR_INVALID_JSON,
+        ];
+        yield [
+            'statusCode' => Response::STATUS_CODE_404,
+            'content' => '{"errors":[{"type":"ch:service","error":"company-profile-not-found"}]}',
+            'errClass' => NotFoundException::class,
+            'errMsg' => Client::ERR_COMPANY_PROFILE_NOT_FOUND,
         ];
     }
 }

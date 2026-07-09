@@ -14,11 +14,12 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\TotalContFee
  */
-class TotalContFeeTest extends MockeryTestCase
+final class TotalContFeeTest extends MockeryTestCase
 {
     /** @var  TotalContFee */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new TotalContFee();
@@ -44,11 +45,11 @@ class TotalContFeeTest extends MockeryTestCase
         /** @var DomainQry\Bookmark\TotalContFee $query */
         $query = $this->sut->getQuery($data);
 
-        static::assertInstanceOf(DomainQry\Bookmark\TotalContFee::class, $query);
-        static::assertEquals(TrafficArea::NORTHERN_IRELAND_TRAFFIC_AREA_CODE, $query->getTrafficArea());
-        static::assertEquals(Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL, $query->getLicenceType());
-        static::assertEquals(Licence::LICENCE_CATEGORY_GOODS_VEHICLE, $query->getGoodsOrPsv());
-        static::assertEquals('2015-05-01', $query->getEffectiveFrom());
+        $this->assertInstanceOf(DomainQry\Bookmark\TotalContFee::class, $query);
+        $this->assertEquals(TrafficArea::NORTHERN_IRELAND_TRAFFIC_AREA_CODE, $query->getTrafficArea());
+        $this->assertEquals(Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL, $query->getLicenceType());
+        $this->assertEquals(Licence::LICENCE_CATEGORY_GOODS_VEHICLE, $query->getGoodsOrPsv());
+        $this->assertEquals('2015-05-01', $query->getEffectiveFrom());
     }
 
     public function testRenderWithNoTotalContFee(): void
@@ -64,22 +65,20 @@ class TotalContFeeTest extends MockeryTestCase
         $this->assertEquals('123,456', $this->sut->render());
     }
 
-    public static function resultsProvider(): array
+    public static function resultsProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'fixedValue' => '123456',
-                    'effectiveFrom' => '2015-01-01'
-                ],
+                'fixedValue' => '123456',
+                'effectiveFrom' => '2015-01-01'
             ],
+        ];
+        yield [
             [
-                [
-                    'fixedValue' => '0',
-                    'fiveYearValue' => '123456',
-                    'effectiveFrom' => '2015-01-01'
-                ],
-            ]
+                'fixedValue' => '0',
+                'fiveYearValue' => '123456',
+                'effectiveFrom' => '2015-01-01'
+            ],
         ];
     }
 }

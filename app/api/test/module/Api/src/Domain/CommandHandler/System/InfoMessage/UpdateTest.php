@@ -15,7 +15,7 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\CommandHandler\System\InfoMessage\Update
  */
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -28,8 +28,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
     public function test(): void
     {
         $id = 99999;
-        $startDate = (new \DateTime())->setTime(0, 0, 0);
-        $endDate = (new \DateTime())->setTime(23, 59, 59);
+        $startDate = new \DateTime()->setTime(0, 0, 0);
+        $endDate = new \DateTime()->setTime(23, 59, 59);
 
         $data = [
             'description' => 'unit_Desc',
@@ -73,6 +73,6 @@ class UpdateTest extends AbstractCommandHandlerTestCase
 
         $actual = $this->sut->handleCommand($command);
 
-        static::assertEquals(['System Info Message \'' . $id . '\' updated'], $actual->getMessages());
+        $this->assertEquals(['System Info Message \'' . $id . '\' updated'], $actual->getMessages());
     }
 }

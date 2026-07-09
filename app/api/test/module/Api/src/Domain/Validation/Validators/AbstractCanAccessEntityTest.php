@@ -11,13 +11,14 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\Validation\Validators\AbstractCanAccessEntity
  */
-class AbstractCanAccessEntityTest extends MockeryTestCase
+final class AbstractCanAccessEntityTest extends MockeryTestCase
 {
     /**
      * @var AbstractCanAccessEntity|m\Mock
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = m::mock(AbstractCanAccessEntity::class)->makePartial()->shouldAllowMockingProtectedMethods();

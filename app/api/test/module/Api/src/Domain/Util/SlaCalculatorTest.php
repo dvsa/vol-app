@@ -24,7 +24,7 @@ use Olcs\Logging\Log\Logger;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class SlaCalculatorTest extends MockeryTestCase
+final class SlaCalculatorTest extends MockeryTestCase
 {
     public $publicHolidayRepo;
     public $dateTimeProcessor;
@@ -93,27 +93,25 @@ class SlaCalculatorTest extends MockeryTestCase
         return $sla;
     }
 
-    public static function slaDateProvider(): array
+    public static function slaDateProvider(): \Iterator
     {
-        return [
-            ['2015-12-18', -35, true, false, 'B', '2015-10-30'],
-            ['2015-12-18', -35, false, true, 'B', '2015-11-12'],
-            ['2015-12-18', -35, false, false, 'B', '2015-11-13'],
-            ['2015-12-18', -35, true, true, 'B', '2015-10-29'],
-            ['2015-12-18', -14, true, true, 'B', '2015-11-27'],
-            ['2015-12-18', 5, true, true, 'B', '2015-12-29'],
-            ['2015-12-18', 20, true, true, 'B', '2016-01-20'],
-            ['2015-12-18', 5, true, true, 'B', '2015-12-29'],
-            ['2015-12-12', 5, true, true, 'B', '2015-12-18'],
-            ['2015-12-18', 2, true, true, 'B', '2015-12-22'],
-            ['2015-12-12', 60, true, true, 'B', '2016-03-09'],
-            ['2015-01-01', 100, true, true, 'B', '2015-05-28'],
-            ['2015-01-01', 100, true, false, 'B', '2015-05-21'],
-            ['2015-01-01', 100, false, false, 'B', '2015-04-11'],
-            ['2015-12-31', -100, true, true, 'B', '2015-08-07'],
-            ['2015-12-31', -100, true, false, 'B', '2015-08-13'],
-            ['2015-12-31', -100, false, false, 'B', '2015-09-22']
-        ];
+        yield ['2015-12-18', -35, true, false, 'B', '2015-10-30'];
+        yield ['2015-12-18', -35, false, true, 'B', '2015-11-12'];
+        yield ['2015-12-18', -35, false, false, 'B', '2015-11-13'];
+        yield ['2015-12-18', -35, true, true, 'B', '2015-10-29'];
+        yield ['2015-12-18', -14, true, true, 'B', '2015-11-27'];
+        yield ['2015-12-18', 5, true, true, 'B', '2015-12-29'];
+        yield ['2015-12-18', 20, true, true, 'B', '2016-01-20'];
+        yield ['2015-12-18', 5, true, true, 'B', '2015-12-29'];
+        yield ['2015-12-12', 5, true, true, 'B', '2015-12-18'];
+        yield ['2015-12-18', 2, true, true, 'B', '2015-12-22'];
+        yield ['2015-12-12', 60, true, true, 'B', '2016-03-09'];
+        yield ['2015-01-01', 100, true, true, 'B', '2015-05-28'];
+        yield ['2015-01-01', 100, true, false, 'B', '2015-05-21'];
+        yield ['2015-01-01', 100, false, false, 'B', '2015-04-11'];
+        yield ['2015-12-31', -100, true, true, 'B', '2015-08-07'];
+        yield ['2015-12-31', -100, true, false, 'B', '2015-08-13'];
+        yield ['2015-12-31', -100, false, false, 'B', '2015-09-22'];
     }
 
     /**

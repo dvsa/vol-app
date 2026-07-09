@@ -13,7 +13,7 @@ use Mockery as m;
 /**
  * LetterSectionVariant Entity Unit Tests
  */
-class LetterSectionVariantEntityTest extends EntityTester
+final class LetterSectionVariantEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

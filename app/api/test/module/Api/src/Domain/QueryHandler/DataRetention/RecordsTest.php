@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Domain\Repository\DataRetention as DataRetentionRepo;
 /**
  * Records Test
  */
-class RecordsTest extends AbstractListQueryHandlerTestCase
+final class RecordsTest extends AbstractListQueryHandlerTestCase
 {
     protected $sutClass = RecordsHandler::class;
     protected $sutRepo = 'DataRetention';

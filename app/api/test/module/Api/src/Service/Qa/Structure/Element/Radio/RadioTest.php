@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class RadioTest extends MockeryTestCase
+final class RadioTest extends MockeryTestCase
 {
     public function testGetRepresentation(): void
     {

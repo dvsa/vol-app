@@ -19,7 +19,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class IrhpPermitRangeEntityTest extends EntityTester
+final class IrhpPermitRangeEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -134,75 +134,73 @@ class IrhpPermitRangeEntityTest extends EntityTester
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            'valid delete' => [
-                [
-                    'irhpCandidatePermits' => [],
-                    'countrys' => [],
-                    'irhpPermits' => []
-                ],
-                true,
+        yield 'valid delete' => [
+            [
+                'irhpCandidatePermits' => [],
+                'countrys' => [],
+                'irhpPermits' => []
             ],
-            'existing candidate permits' => [
-                [
-                    'irhpCandidatePermits' => [m::mock(IrhpCandidatePermit::class)],
-                    'countrys' => [],
-                    'irhpPermits' => []
-                ],
-                false
+            true,
+        ];
+        yield 'existing candidate permits' => [
+            [
+                'irhpCandidatePermits' => [m::mock(IrhpCandidatePermit::class)],
+                'countrys' => [],
+                'irhpPermits' => []
             ],
-            'existing countries' => [
-                [
-                    'irhpCandidatePermits' => [],
-                    'countrys' => [m::mock(Country::class)],
-                    'irhpPermits' => []
-                ],
-                false
+            false
+        ];
+        yield 'existing countries' => [
+            [
+                'irhpCandidatePermits' => [],
+                'countrys' => [m::mock(Country::class)],
+                'irhpPermits' => []
             ],
-            'existing irhp permits' => [
-                [
-                    'irhpCandidatePermits' => [],
-                    'countrys' => [],
-                    'irhpPermits' => [m::mock(IrhpPermit::class)]
-                ],
-                false
+            false
+        ];
+        yield 'existing irhp permits' => [
+            [
+                'irhpCandidatePermits' => [],
+                'countrys' => [],
+                'irhpPermits' => [m::mock(IrhpPermit::class)]
             ],
-            'candidate permits and countries' => [
-                [
-                    'irhpCandidatePermits' => [m::mock(IrhpCandidatePermit::class)],
-                    'countrys' => [m::mock(Country::class)],
-                    'irhpPermits' => []
-                ],
-                false
+            false
+        ];
+        yield 'candidate permits and countries' => [
+            [
+                'irhpCandidatePermits' => [m::mock(IrhpCandidatePermit::class)],
+                'countrys' => [m::mock(Country::class)],
+                'irhpPermits' => []
             ],
-            'candidate permits and irhp permits' => [
-                [
-                    'irhpCandidatePermits' => [m::mock(IrhpCandidatePermit::class)],
-                    'countrys' => [],
-                    'irhpPermits' => [m::mock(IrhpPermit::class)]
-                ],
-                false
+            false
+        ];
+        yield 'candidate permits and irhp permits' => [
+            [
+                'irhpCandidatePermits' => [m::mock(IrhpCandidatePermit::class)],
+                'countrys' => [],
+                'irhpPermits' => [m::mock(IrhpPermit::class)]
             ],
-            'countries and irhp permits' => [
-                [
-                    'irhpCandidatePermits' => [],
-                    'countrys' => [m::mock(Country::class)],
-                    'irhpPermits' => [m::mock(IrhpPermit::class)]
-                ],
-                false
+            false
+        ];
+        yield 'countries and irhp permits' => [
+            [
+                'irhpCandidatePermits' => [],
+                'countrys' => [m::mock(Country::class)],
+                'irhpPermits' => [m::mock(IrhpPermit::class)]
             ],
-            'candidate permits, countries and irhp permits' => [
-                [
-                    'irhpCandidatePermits' => [m::mock(IrhpCandidatePermit::class)],
-                    'countrys' => [m::mock(Country::class)],
-                    'irhpPermits' => [m::mock(IrhpPermit::class)]
-                ],
-                false
+            false
+        ];
+        yield 'candidate permits, countries and irhp permits' => [
+            [
+                'irhpCandidatePermits' => [m::mock(IrhpCandidatePermit::class)],
+                'countrys' => [m::mock(Country::class)],
+                'irhpPermits' => [m::mock(IrhpPermit::class)]
             ],
+            false
         ];
     }
 
@@ -247,21 +245,19 @@ class IrhpPermitRangeEntityTest extends EntityTester
         );
     }
 
-    public static function dpHasCountries(): array
+    public static function dpHasCountries(): \Iterator
     {
-        return [
-            [
-                [],
-                false
-            ],
-            [
-                [m::mock(Country::class)],
-                true
-            ],
-            [
-                [m::mock(Country::class), m::mock(Country::class)],
-                true
-            ],
+        yield [
+            [],
+            false
+        ];
+        yield [
+            [m::mock(Country::class)],
+            true
+        ];
+        yield [
+            [m::mock(Country::class), m::mock(Country::class)],
+            true
         ];
     }
 
@@ -274,12 +270,10 @@ class IrhpPermitRangeEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->isCabotage());
     }
 
-    public static function dpIsCabotage(): array
+    public static function dpIsCabotage(): \Iterator
     {
-        return [
-            [false, false],
-            [true, true],
-        ];
+        yield [false, false];
+        yield [true, true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsStandard')]
@@ -291,11 +285,9 @@ class IrhpPermitRangeEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->isStandard());
     }
 
-    public static function dpIsStandard(): array
+    public static function dpIsStandard(): \Iterator
     {
-        return [
-            [false, true],
-            [true, false],
-        ];
+        yield [false, true];
+        yield [true, false];
     }
 }

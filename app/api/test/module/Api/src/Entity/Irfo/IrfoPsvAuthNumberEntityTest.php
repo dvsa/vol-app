@@ -13,7 +13,7 @@ use Mockery as m;
  * @covers Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthNumber
  * @covers Dvsa\Olcs\Api\Entity\Irfo\AbstractIrfoPsvAuthNumber
  */
-class IrfoPsvAuthNumberEntityTest extends EntityTester
+final class IrfoPsvAuthNumberEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -38,13 +38,13 @@ class IrfoPsvAuthNumberEntityTest extends EntityTester
 
         $sut = new Entity($this->mockIrfoPsvAuth, $name);
 
-        static::assertEquals($this->mockIrfoPsvAuth, $sut->getIrfoPsvAuth());
-        static::assertEquals($name, $sut->getName());
+        $this->assertEquals($this->mockIrfoPsvAuth, $sut->getIrfoPsvAuth());
+        $this->assertEquals($name, $sut->getName());
     }
 
     public function testGetCalculatedValues(): void
     {
-        $actual = (new Entity($this->mockIrfoPsvAuth, ''))->jsonSerialize();
-        static::assertNull($actual['irfoPsvAuth']);
+        $actual = new Entity($this->mockIrfoPsvAuth, '')->jsonSerialize();
+        $this->assertNull($actual['irfoPsvAuth']);
     }
 }

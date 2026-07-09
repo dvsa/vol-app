@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class DecisionListTest extends QueryHandlerTestCase
+final class DecisionListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -42,7 +42,7 @@ class DecisionListTest extends QueryHandlerTestCase
             ->andReturn(2);
 
         $result = $this->sut->handleQuery($query);
-        $this->assertEquals($result['count'], 2);
+        $this->assertEquals(2, $result['count']);
         $this->assertEquals($result['result'], ['foo']);
     }
 }

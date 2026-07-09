@@ -15,7 +15,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Psr\Container\ContainerInterface;
 
-class InrClientFactoryTest extends TestCase
+final class InrClientFactoryTest extends TestCase
 {
     public function testCreateServiceNoConfig(): void
     {

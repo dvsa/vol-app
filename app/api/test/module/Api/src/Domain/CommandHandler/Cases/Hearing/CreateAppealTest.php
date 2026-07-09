@@ -26,7 +26,7 @@ use Mockery as m;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class CreateAppealTest extends AbstractCommandHandlerTestCase
+final class CreateAppealTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -112,19 +112,19 @@ class CreateAppealTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(99, $savedAppeal->getId());
         $this->assertEquals($data['appealNo'], $savedAppeal->getAppealNo());
         $this->assertSame($this->references[Cases::class][24], $savedAppeal->getCase());
-        $this->assertEquals($data['deadlineDate'], $savedAppeal->getDeadlineDate()->format('Y-m-d'));
-        $this->assertEquals($data['appealDate'], $savedAppeal->getAppealDate()->format('Y-m-d'));
+        $this->assertSame($data['deadlineDate'], $savedAppeal->getDeadlineDate()->format('Y-m-d'));
+        $this->assertSame($data['appealDate'], $savedAppeal->getAppealDate()->format('Y-m-d'));
         $this->assertSame($this->refData['appeal_r_lic_non_pi'], $savedAppeal->getReason());
         $this->assertEquals($data['outlineGround'], $savedAppeal->getOutlineGround());
-        $this->assertEquals($data['hearingDate'], $savedAppeal->getHearingDate()->format('Y-m-d'));
-        $this->assertEquals($data['decisionDate'], $savedAppeal->getDecisionDate()->format('Y-m-d'));
-        $this->assertEquals($data['papersDueDate'], $savedAppeal->getPapersDueDate()->format('Y-m-d'));
-        $this->assertEquals($data['papersDueTcDate'], $savedAppeal->getPapersDueTcDate()->format('Y-m-d'));
-        $this->assertEquals($data['papersSentDate'], $savedAppeal->getPapersSentDate()->format('Y-m-d'));
-        $this->assertEquals($data['papersSentTcDate'], $savedAppeal->getPapersSentTcDate()->format('Y-m-d'));
+        $this->assertSame($data['hearingDate'], $savedAppeal->getHearingDate()->format('Y-m-d'));
+        $this->assertSame($data['decisionDate'], $savedAppeal->getDecisionDate()->format('Y-m-d'));
+        $this->assertSame($data['papersDueDate'], $savedAppeal->getPapersDueDate()->format('Y-m-d'));
+        $this->assertSame($data['papersDueTcDate'], $savedAppeal->getPapersDueTcDate()->format('Y-m-d'));
+        $this->assertSame($data['papersSentDate'], $savedAppeal->getPapersSentDate()->format('Y-m-d'));
+        $this->assertSame($data['papersSentTcDate'], $savedAppeal->getPapersSentTcDate()->format('Y-m-d'));
         $this->assertEquals($data['comment'], $savedAppeal->getComment());
         $this->assertSame($this->refData['appeal_o_dis'], $savedAppeal->getOutcome());
-        $this->assertEquals($data['withdrawnDate'], $savedAppeal->getWithdrawnDate()->format('Y-m-d'));
+        $this->assertSame($data['withdrawnDate'], $savedAppeal->getWithdrawnDate()->format('Y-m-d'));
         $this->assertEquals($data['dvsaNotified'], $savedAppeal->getDvsaNotified());
     }
 
@@ -177,7 +177,7 @@ class CreateAppealTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($data['appealNo'], $savedAppeal->getAppealNo());
         $this->assertSame($this->references[Cases::class][24], $savedAppeal->getCase());
         $this->assertNull($savedAppeal->getDeadlineDate());
-        $this->assertEquals($data['appealDate'], $savedAppeal->getAppealDate()->format('Y-m-d'));
+        $this->assertSame($data['appealDate'], $savedAppeal->getAppealDate()->format('Y-m-d'));
         $this->assertSame($this->refData['appeal_r_lic_non_pi'], $savedAppeal->getReason());
         $this->assertNull($savedAppeal->getOutlineGround());
         $this->assertNull($savedAppeal->getHearingDate());

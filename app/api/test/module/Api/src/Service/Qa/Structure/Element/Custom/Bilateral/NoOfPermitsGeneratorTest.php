@@ -21,7 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsGeneratorTest extends MockeryTestCase
+final class NoOfPermitsGeneratorTest extends MockeryTestCase
 {
     private $irhpPermitApplication;
 
@@ -33,6 +33,7 @@ class NoOfPermitsGeneratorTest extends MockeryTestCase
 
     private $noOfPermitsGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpPermitApplication = m::mock(IrhpPermitApplication::class);
@@ -90,99 +91,97 @@ class NoOfPermitsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpGenerateOneTextbox(): array
+    public static function dpGenerateOneTextbox(): \Iterator
     {
-        return [
-            'single, standard only, not associated with bilateral only application group' => [
-                'permitUsageSelection' => RefData::JOURNEY_SINGLE,
-                'cabotageSelection' => Answer::BILATERAL_CABOTAGE_ONLY,
-                'isAssociatedWithBilateralCabotageOnlyApplicationPathGroup' => false,
-                'required' => [
-                    IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => null,
-                    IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 7,
-                ],
-                'expectedText' => [
-                    'name' => IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
-                    'hint' => 'qanda.bilaterals.number-of-permits.hint.cabotage.single',
-                    'label' => 'qanda.bilaterals.number-of-permits.label.cabotage.single',
-                    'value' => 7,
-                ]
+        yield 'single, standard only, not associated with bilateral only application group' => [
+            'permitUsageSelection' => RefData::JOURNEY_SINGLE,
+            'cabotageSelection' => Answer::BILATERAL_CABOTAGE_ONLY,
+            'isAssociatedWithBilateralCabotageOnlyApplicationPathGroup' => false,
+            'required' => [
+                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => null,
+                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 7,
             ],
-            'single, cabotage only, associated with bilateral only application group' => [
-                'permitUsageSelection' => RefData::JOURNEY_SINGLE,
-                'cabotageSelection' => Answer::BILATERAL_CABOTAGE_ONLY,
-                'isAssociatedWithBilateralCabotageOnlyApplicationPathGroup' => true,
-                'required' => [
-                    IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => null,
-                    IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 6,
-                ],
-                'expectedText' => [
-                    'name' => IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
-                    'hint' => 'qanda.bilaterals.number-of-permits.hint.cabotage.pre-october-2021',
-                    'label' => 'qanda.bilaterals.number-of-permits.label.cabotage.single',
-                    'value' => 6,
-                ]
+            'expectedText' => [
+                'name' => IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
+                'hint' => 'qanda.bilaterals.number-of-permits.hint.cabotage.single',
+                'label' => 'qanda.bilaterals.number-of-permits.label.cabotage.single',
+                'value' => 7,
+            ]
+        ];
+        yield 'single, cabotage only, associated with bilateral only application group' => [
+            'permitUsageSelection' => RefData::JOURNEY_SINGLE,
+            'cabotageSelection' => Answer::BILATERAL_CABOTAGE_ONLY,
+            'isAssociatedWithBilateralCabotageOnlyApplicationPathGroup' => true,
+            'required' => [
+                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => null,
+                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 6,
             ],
-            'single, cabotage only, not associated with bilateral only application group' => [
-                'permitUsageSelection' => RefData::JOURNEY_SINGLE,
-                'cabotageSelection' => Answer::BILATERAL_CABOTAGE_ONLY,
-                'isAssociatedWithBilateralCabotageOnlyApplicationPathGroup' => false,
-                'required' => [
-                    IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => null,
-                    IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 8,
-                ],
-                'expectedText' => [
-                    'name' => IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
-                    'hint' => 'qanda.bilaterals.number-of-permits.hint.cabotage.single',
-                    'label' => 'qanda.bilaterals.number-of-permits.label.cabotage.single',
-                    'value' => 8,
-                ]
+            'expectedText' => [
+                'name' => IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
+                'hint' => 'qanda.bilaterals.number-of-permits.hint.cabotage.pre-october-2021',
+                'label' => 'qanda.bilaterals.number-of-permits.label.cabotage.single',
+                'value' => 6,
+            ]
+        ];
+        yield 'single, cabotage only, not associated with bilateral only application group' => [
+            'permitUsageSelection' => RefData::JOURNEY_SINGLE,
+            'cabotageSelection' => Answer::BILATERAL_CABOTAGE_ONLY,
+            'isAssociatedWithBilateralCabotageOnlyApplicationPathGroup' => false,
+            'required' => [
+                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => null,
+                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 8,
             ],
-            'multiple, standard only, not associated with bilateral only application group' => [
-                'permitUsageSelection' => RefData::JOURNEY_MULTIPLE,
-                'cabotageSelection' => Answer::BILATERAL_CABOTAGE_ONLY,
-                'isAssociatedWithBilateralCabotageOnlyApplicationPathGroup' => false,
-                'required' => [
-                    IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => null,
-                    IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 7,
-                ],
-                'expectedText' => [
-                    'name' => IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
-                    'hint' => 'qanda.bilaterals.number-of-permits.hint.cabotage.multiple',
-                    'label' => 'qanda.bilaterals.number-of-permits.label.cabotage.multiple',
-                    'value' => 7,
-                ]
+            'expectedText' => [
+                'name' => IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
+                'hint' => 'qanda.bilaterals.number-of-permits.hint.cabotage.single',
+                'label' => 'qanda.bilaterals.number-of-permits.label.cabotage.single',
+                'value' => 8,
+            ]
+        ];
+        yield 'multiple, standard only, not associated with bilateral only application group' => [
+            'permitUsageSelection' => RefData::JOURNEY_MULTIPLE,
+            'cabotageSelection' => Answer::BILATERAL_CABOTAGE_ONLY,
+            'isAssociatedWithBilateralCabotageOnlyApplicationPathGroup' => false,
+            'required' => [
+                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => null,
+                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 7,
             ],
-            'multiple, cabotage only, associated with bilateral only application group' => [
-                'permitUsageSelection' => RefData::JOURNEY_MULTIPLE,
-                'cabotageSelection' => Answer::BILATERAL_CABOTAGE_ONLY,
-                'isAssociatedWithBilateralCabotageOnlyApplicationPathGroup' => true,
-                'required' => [
-                    IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => null,
-                    IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 6,
-                ],
-                'expectedText' => [
-                    'name' => IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
-                    'hint' => 'qanda.bilaterals.number-of-permits.hint.cabotage.pre-october-2021',
-                    'label' => 'qanda.bilaterals.number-of-permits.label.cabotage.multiple',
-                    'value' => 6,
-                ]
+            'expectedText' => [
+                'name' => IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
+                'hint' => 'qanda.bilaterals.number-of-permits.hint.cabotage.multiple',
+                'label' => 'qanda.bilaterals.number-of-permits.label.cabotage.multiple',
+                'value' => 7,
+            ]
+        ];
+        yield 'multiple, cabotage only, associated with bilateral only application group' => [
+            'permitUsageSelection' => RefData::JOURNEY_MULTIPLE,
+            'cabotageSelection' => Answer::BILATERAL_CABOTAGE_ONLY,
+            'isAssociatedWithBilateralCabotageOnlyApplicationPathGroup' => true,
+            'required' => [
+                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => null,
+                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 6,
             ],
-            'multiple, cabotage only, not associated with bilateral only application group' => [
-                'permitUsageSelection' => RefData::JOURNEY_MULTIPLE,
-                'cabotageSelection' => Answer::BILATERAL_CABOTAGE_ONLY,
-                'isAssociatedWithBilateralCabotageOnlyApplicationPathGroup' => false,
-                'required' => [
-                    IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => null,
-                    IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 8,
-                ],
-                'expectedText' => [
-                    'name' => IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
-                    'hint' => 'qanda.bilaterals.number-of-permits.hint.cabotage.multiple',
-                    'label' => 'qanda.bilaterals.number-of-permits.label.cabotage.multiple',
-                    'value' => 8,
-                ]
+            'expectedText' => [
+                'name' => IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
+                'hint' => 'qanda.bilaterals.number-of-permits.hint.cabotage.pre-october-2021',
+                'label' => 'qanda.bilaterals.number-of-permits.label.cabotage.multiple',
+                'value' => 6,
+            ]
+        ];
+        yield 'multiple, cabotage only, not associated with bilateral only application group' => [
+            'permitUsageSelection' => RefData::JOURNEY_MULTIPLE,
+            'cabotageSelection' => Answer::BILATERAL_CABOTAGE_ONLY,
+            'isAssociatedWithBilateralCabotageOnlyApplicationPathGroup' => false,
+            'required' => [
+                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => null,
+                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 8,
             ],
+            'expectedText' => [
+                'name' => IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
+                'hint' => 'qanda.bilaterals.number-of-permits.hint.cabotage.multiple',
+                'label' => 'qanda.bilaterals.number-of-permits.label.cabotage.multiple',
+                'value' => 8,
+            ]
         ];
     }
 
@@ -237,42 +236,40 @@ class NoOfPermitsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpGenerateTwoTextboxes(): array
+    public static function dpGenerateTwoTextboxes(): \Iterator
     {
-        return [
-            'single' => [
-                'permitUsageSelection' => RefData::JOURNEY_SINGLE,
-                'required' => [
-                    IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 3,
-                    IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 4,
-                ],
-                'expectedText1' => [
-                    'hint' => 'qanda.bilaterals.number-of-permits.hint.standard.single',
-                    'label' => 'qanda.bilaterals.number-of-permits.label.standard.single',
-                    'value' => 3,
-                ],
-                'expectedText2' => [
-                    'hint' => 'qanda.bilaterals.number-of-permits.hint.cabotage.single',
-                    'label' => 'qanda.bilaterals.number-of-permits.label.cabotage.single',
-                    'value' => 4,
-                ],
+        yield 'single' => [
+            'permitUsageSelection' => RefData::JOURNEY_SINGLE,
+            'required' => [
+                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 3,
+                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 4,
             ],
-            'multiple' => [
-                'permitUsageSelection' => RefData::JOURNEY_MULTIPLE,
-                'required' => [
-                    IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 5,
-                    IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 6,
-                ],
-                'expectedText1' => [
-                    'hint' => 'qanda.bilaterals.number-of-permits.hint.standard.multiple',
-                    'label' => 'qanda.bilaterals.number-of-permits.label.standard.multiple',
-                    'value' => 5,
-                ],
-                'expectedText2' => [
-                    'hint' => 'qanda.bilaterals.number-of-permits.hint.cabotage.multiple',
-                    'label' => 'qanda.bilaterals.number-of-permits.label.cabotage.multiple',
-                    'value' => 6,
-                ],
+            'expectedText1' => [
+                'hint' => 'qanda.bilaterals.number-of-permits.hint.standard.single',
+                'label' => 'qanda.bilaterals.number-of-permits.label.standard.single',
+                'value' => 3,
+            ],
+            'expectedText2' => [
+                'hint' => 'qanda.bilaterals.number-of-permits.hint.cabotage.single',
+                'label' => 'qanda.bilaterals.number-of-permits.label.cabotage.single',
+                'value' => 4,
+            ],
+        ];
+        yield 'multiple' => [
+            'permitUsageSelection' => RefData::JOURNEY_MULTIPLE,
+            'required' => [
+                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 5,
+                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 6,
+            ],
+            'expectedText1' => [
+                'hint' => 'qanda.bilaterals.number-of-permits.hint.standard.multiple',
+                'label' => 'qanda.bilaterals.number-of-permits.label.standard.multiple',
+                'value' => 5,
+            ],
+            'expectedText2' => [
+                'hint' => 'qanda.bilaterals.number-of-permits.hint.cabotage.multiple',
+                'label' => 'qanda.bilaterals.number-of-permits.label.cabotage.multiple',
+                'value' => 6,
             ],
         ];
     }

@@ -11,12 +11,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * Document controller test
  */
-class DocumentControllerTest extends MockeryTestCase
+final class DocumentControllerTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $response;
     /**
      * @var \Dvsa\Olcs\Scanning\Controller\DocumentController|m\Mock
      */
@@ -32,10 +28,11 @@ class DocumentControllerTest extends MockeryTestCase
      */
     private $request;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->request  = m::mock(\Laminas\Http\Request::class)->makePartial();
-        $this->response = m::mock(\Laminas\Http\Response::class)->makePartial();
+        $response = m::mock(\Laminas\Http\Response::class)->makePartial();
 
         $this->sut = m::mock(\Dvsa\Olcs\Scanning\Controller\DocumentController::class)
             ->makePartial()

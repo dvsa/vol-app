@@ -23,7 +23,7 @@ use Mockery as m;
 /**
  * Send Temporary Password Email Test
  */
-class SendUserTemporaryPasswordTest extends AbstractCommandHandlerTestCase
+final class SendUserTemporaryPasswordTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -98,11 +98,9 @@ class SendUserTemporaryPasswordTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function handleCommandDataProvider(): array
+    public static function handleCommandDataProvider(): \Iterator
     {
-        return [
-            [false, 'http://selfserve/'],
-            [true, 'http://internal/'],
-        ];
+        yield [false, 'http://selfserve/'];
+        yield [true, 'http://internal/'];
     }
 }

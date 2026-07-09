@@ -18,7 +18,7 @@ use Mockery as m;
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\TransportManagerApplication\GetDetails::class)]
-class GetDetailsTest extends QueryHandlerTestCase
+final class GetDetailsTest extends QueryHandlerTestCase
 {
     /** @var  QueryHandler\TransportManagerApplication\GetDetails  */
     protected $sut;

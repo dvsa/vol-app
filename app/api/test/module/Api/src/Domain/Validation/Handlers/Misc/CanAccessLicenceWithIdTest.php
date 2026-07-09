@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessLicenceWithId;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CanAccessLicenceWithIdTest extends AbstractHandlerTestCase
+final class CanAccessLicenceWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessLicenceWithId
@@ -46,11 +46,9 @@ class CanAccessLicenceWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

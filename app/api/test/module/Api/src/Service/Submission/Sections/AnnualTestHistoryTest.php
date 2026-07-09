@@ -8,18 +8,16 @@ use Dvsa\Olcs\Api\Service\Submission\Sections\AnnualTestHistory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(AnnualTestHistory::class)]
-class AnnualTestHistoryTest extends AbstractSubmissionSectionTestCase
+final class AnnualTestHistoryTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = AnnualTestHistory::class;
 
-    public static function sectionTestProvider(): array
+    public static function sectionTestProvider(): \Iterator
     {
         $case = static::getCase();
 
         $expectedResult = ['data' => ['text' => 'ath']];
 
-        return [
-            [$case, $expectedResult],
-        ];
+        yield [$case, $expectedResult];
     }
 }

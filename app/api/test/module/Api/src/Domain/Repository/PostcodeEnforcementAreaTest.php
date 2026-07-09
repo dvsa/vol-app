@@ -9,8 +9,9 @@ use Dvsa\Olcs\Api\Entity\EnforcementArea\PostcodeEnforcementArea;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\PostcodeEnforcementArea as PostcodeEnforcementAreaRepo;
 
-class PostcodeEnforcementAreaTest extends RepositoryTestCase
+final class PostcodeEnforcementAreaTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(PostcodeEnforcementAreaRepo::class);

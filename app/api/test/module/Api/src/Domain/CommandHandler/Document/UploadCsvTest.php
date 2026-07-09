@@ -14,7 +14,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 /**
  * @see UploadCsvHandler
  */
-class UploadCsvTest extends AbstractCommandHandlerTestCase
+final class UploadCsvTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -121,11 +121,9 @@ class UploadCsvTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedResult, $result->toArray());
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
-        return [
-            [null, IdentityProviderInterface::SYSTEM_USER],
-            [291, 291],
-        ];
+        yield [null, IdentityProviderInterface::SYSTEM_USER];
+        yield [291, 291];
     }
 }

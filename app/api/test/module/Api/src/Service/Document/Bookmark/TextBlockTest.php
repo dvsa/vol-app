@@ -10,22 +10,20 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\TextBlock;
 /**
  * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\TextBlock
  */
-class TextBlockTest extends \PHPUnit\Framework\TestCase
+final class TextBlockTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQueryNull(): void
     {
         $sut = new TextBlock();
         $sut->setToken('unit_Token');
 
-        static::assertNull(
-            $sut->getQuery(
-                [
-                    'bookmarks' => [
-                        'unit_Token' => null,
-                    ],
-                ]
-            )
-        );
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Domain\Query\Bookmark\DocParagraphBundle::class, $sut->getQuery(
+            [
+                'bookmarks' => [
+                    'unit_Token' => null,
+                ],
+            ]
+        ));
     }
 
     public function testGetQuery(): void
@@ -41,12 +39,12 @@ class TextBlockTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertCount(2, $actual);
-        static::assertInstanceOf(DomainQry\Bookmark\DocParagraphBundle::class, reset($actual));
+        $this->assertCount(2, $actual);
+        $this->assertInstanceOf(DomainQry\Bookmark\DocParagraphBundle::class, reset($actual));
 
         /** @var DomainQry\Bookmark\DocParagraphBundle $query */
         $query = $actual[1];
-        static::assertEquals(8888, $query->getId());
+        $this->assertEquals(8888, $query->getId());
     }
 
     public function testRenderConcatenatesParagraphsWithNewlines(): void

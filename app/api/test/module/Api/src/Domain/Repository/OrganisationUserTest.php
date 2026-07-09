@@ -11,13 +11,14 @@ use Doctrine\ORM\EntityRepository;
 use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\OrganisationUser::class)]
-class OrganisationUserTest extends RepositoryTestCase
+final class OrganisationUserTest extends RepositoryTestCase
 {
     /**
      * @var Repo
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class, true);

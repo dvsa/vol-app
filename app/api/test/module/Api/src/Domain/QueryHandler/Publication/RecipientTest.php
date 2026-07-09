@@ -18,7 +18,7 @@ use Dvsa\Olcs\Transfer\Query\Publication\Recipient as Qry;
 /**
  * Recipient Test
  */
-class RecipientTest extends QueryHandlerTestCase
+final class RecipientTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

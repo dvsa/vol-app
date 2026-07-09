@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\CompaniesHouse\InitialLoad;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class InitialLoadTest extends \PHPUnit\Framework\TestCase
+final class InitialLoadTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

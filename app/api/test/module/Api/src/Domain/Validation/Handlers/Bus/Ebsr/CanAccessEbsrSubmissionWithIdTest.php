@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Bus\Ebsr\CanAccessEbsrSubmissionWit
 /**
  * @covers Dvsa\Olcs\Api\Domain\Validation\Handlers\Bus\Ebsr\CanAccessEbsrSubmissionWithId
  */
-class CanAccessEbsrSubmissionWithIdTest extends AbstractHandlerTestCase
+final class CanAccessEbsrSubmissionWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessEbsrSubmissionWithId
@@ -44,13 +44,11 @@ class CanAccessEbsrSubmissionWithIdTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

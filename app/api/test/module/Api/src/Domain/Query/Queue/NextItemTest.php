@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Query\Queue\NextItem;
 /**
  * NextItem test
  */
-class NextItemTest extends \PHPUnit\Framework\TestCase
+final class NextItemTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

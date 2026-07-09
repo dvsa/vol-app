@@ -31,7 +31,7 @@ final class OverwriteContent extends AbstractCommandHandler implements
     private DocumentStoreInterface $contentStore;
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->contentStore = $container->get('ContentStore');
         return parent::__invoke($container, $requestedName, $options);

@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class TmHearingText1Test
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class TmHearingText1Test extends MockeryTestCase
+final class TmHearingText1Test extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\Group('publicationFilter
 Test the TmHearingText1 filter')]

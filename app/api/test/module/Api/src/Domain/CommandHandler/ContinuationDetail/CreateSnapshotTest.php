@@ -20,7 +20,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateSnapshotTest extends AbstractCommandHandlerTestCase
+final class CreateSnapshotTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

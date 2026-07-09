@@ -13,7 +13,7 @@ use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ReportingBulkReprintTest extends AbstractConsumerTestCase
+final class ReportingBulkReprintTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Sut::class;
 

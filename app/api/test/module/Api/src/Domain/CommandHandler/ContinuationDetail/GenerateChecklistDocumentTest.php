@@ -22,7 +22,7 @@ use Mockery as m;
 /**
  * GenerateChecklistDocumentTest
  */
-class GenerateChecklistDocumentTest extends AbstractCommandHandlerTestCase
+final class GenerateChecklistDocumentTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -121,79 +121,77 @@ class GenerateChecklistDocumentTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function dataProviderTemplates(): array
+    public static function dataProviderTemplates(): \Iterator
     {
-        return [
-            [
-                Document::GV_CONTINUATION_CHECKLIST,
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_MIXED,
-                'B'
-            ],
-            [
-                Document::GV_CONTINUATION_CHECKLIST_NI,
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_MIXED,
-                'N'
-            ],
-            [
-                Document::GV_LGV_CONTINUATION_CHECKLIST,
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_LGV,
-                'B'
-            ],
-            [
-                Document::GV_LGV_CONTINUATION_CHECKLIST_NI,
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_LGV,
-                'N'
-            ],
-            [
-                Document::GV_CONTINUATION_CHECKLIST,
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                RefData::APP_VEHICLE_TYPE_HGV,
-                'B'
-            ],
-            [
-                Document::GV_CONTINUATION_CHECKLIST_NI,
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                RefData::APP_VEHICLE_TYPE_HGV,
-                'N'
-            ],
-            [
-                Document::PSV_CONTINUATION_CHECKLIST,
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_PSV,
-                'B'
-            ],
-            [
-                Document::PSV_CONTINUATION_CHECKLIST,
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                RefData::APP_VEHICLE_TYPE_PSV,
-                'N'
-            ],
-            [
-                Document::PSV_CONTINUATION_CHECKLIST_SR,
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                RefData::APP_VEHICLE_TYPE_PSV,
-                'B'
-            ],
-            [
-                Document::PSV_CONTINUATION_CHECKLIST_SR,
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                RefData::APP_VEHICLE_TYPE_PSV,
-                'N'
-            ],
+        yield [
+            Document::GV_CONTINUATION_CHECKLIST,
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_MIXED,
+            'B'
+        ];
+        yield [
+            Document::GV_CONTINUATION_CHECKLIST_NI,
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_MIXED,
+            'N'
+        ];
+        yield [
+            Document::GV_LGV_CONTINUATION_CHECKLIST,
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_LGV,
+            'B'
+        ];
+        yield [
+            Document::GV_LGV_CONTINUATION_CHECKLIST_NI,
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_LGV,
+            'N'
+        ];
+        yield [
+            Document::GV_CONTINUATION_CHECKLIST,
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            RefData::APP_VEHICLE_TYPE_HGV,
+            'B'
+        ];
+        yield [
+            Document::GV_CONTINUATION_CHECKLIST_NI,
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+            RefData::APP_VEHICLE_TYPE_HGV,
+            'N'
+        ];
+        yield [
+            Document::PSV_CONTINUATION_CHECKLIST,
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_PSV,
+            'B'
+        ];
+        yield [
+            Document::PSV_CONTINUATION_CHECKLIST,
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            RefData::APP_VEHICLE_TYPE_PSV,
+            'N'
+        ];
+        yield [
+            Document::PSV_CONTINUATION_CHECKLIST_SR,
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+            RefData::APP_VEHICLE_TYPE_PSV,
+            'B'
+        ];
+        yield [
+            Document::PSV_CONTINUATION_CHECKLIST_SR,
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+            RefData::APP_VEHICLE_TYPE_PSV,
+            'N'
         ];
     }
 }

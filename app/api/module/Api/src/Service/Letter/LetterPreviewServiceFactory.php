@@ -24,7 +24,7 @@ class LetterPreviewServiceFactory implements FactoryInterface
      * @return LetterPreviewService
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LetterPreviewService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LetterPreviewService
     {
         $repoManager = $container->get('RepositoryServiceManager');
 

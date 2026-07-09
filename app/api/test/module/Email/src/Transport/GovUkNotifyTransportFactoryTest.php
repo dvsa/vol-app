@@ -13,7 +13,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Symfony\Component\Mailer\Transport\Dsn;
 
-class GovUkNotifyTransportFactoryTest extends MockeryTestCase
+final class GovUkNotifyTransportFactoryTest extends MockeryTestCase
 {
     public function testSupportsExpectedSchemes(): void
     {

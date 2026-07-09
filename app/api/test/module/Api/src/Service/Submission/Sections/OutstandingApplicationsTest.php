@@ -11,11 +11,11 @@ namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
  *
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class OutstandingApplicationsTest extends AbstractSubmissionSectionTestCase
+final class OutstandingApplicationsTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\OutstandingApplications::class;
 
-    protected const EXPECTED_RESULT = [
+    protected const array EXPECTED_RESULT = [
         'data' => [
             'tables' => [
                 'outstanding-applications' => [
@@ -99,14 +99,12 @@ class OutstandingApplicationsTest extends AbstractSubmissionSectionTestCase
     /**
      * Filter provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function sectionTestProvider(): array
+    public static function sectionTestProvider(): \Iterator
     {
         $case = static::getCase();
 
-        return [
-            [$case, static::EXPECTED_RESULT],
-        ];
+        yield [$case, static::EXPECTED_RESULT];
     }
 }

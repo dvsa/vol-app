@@ -29,14 +29,14 @@ abstract class AbstractReadAuditTestCase extends RepositoryTestCase
 
         $qb->shouldReceive('getQuery->getResult')->andReturn(['foo']);
 
-        static::assertEquals(['foo'], $this->sut->fetchOneOrMore($userId, $entityId, $date));
+        $this->assertEquals(['foo'], $this->sut->fetchOneOrMore($userId, $entityId, $date));
 
         $expected = '{{QUERY}} AND m.user = [[111]]' .
             ' AND m.' . $entityProperty . ' = [[222]]' .
             ' AND m.createdOn >= [[2013-12-11T00:00:00+00:00]]' .
             ' AND m.createdOn <= [[2013-12-11T23:59:59+00:00]]';
 
-        static::assertEquals($expected, $this->query);
+        $this->assertEquals($expected, $this->query);
     }
 
     protected function commonTestDeleteOlderThan(mixed $entityClass): void
@@ -58,7 +58,7 @@ abstract class AbstractReadAuditTestCase extends RepositoryTestCase
 
         $result = $this->sut->deleteOlderThan('2015-01-01');
 
-        static::assertEquals(10, $result);
+        $this->assertEquals(10, $result);
     }
 
     protected function commonTestFetchList(mixed $queryDto, mixed $whereClause): void
@@ -77,7 +77,7 @@ abstract class AbstractReadAuditTestCase extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('modifyQuery')
             ->andReturn($qbHelper);
 
-        static::assertEquals(['result'], $this->sut->fetchList($queryDto, Query::HYDRATE_OBJECT));
+        $this->assertEquals(['result'], $this->sut->fetchList($queryDto, Query::HYDRATE_OBJECT));
 
         $expected = '{{QUERY}}' .
             ' INNER JOIN m.user u' .
@@ -86,6 +86,6 @@ abstract class AbstractReadAuditTestCase extends RepositoryTestCase
             $whereClause .
             ' ORDER BY m.createdOn DESC';
 
-        static::assertEquals($expected, $this->query);
+        $this->assertEquals($expected, $this->query);
     }
 }

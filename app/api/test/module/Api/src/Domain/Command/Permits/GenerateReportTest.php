@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Command\Permits\GenerateReport as GenerateReportCmd;
 /**
  * @see GenerateReportCmd
  */
-class GenerateReportTest extends \PHPUnit\Framework\TestCase
+final class GenerateReportTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {
@@ -27,9 +27,9 @@ class GenerateReportTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals($id, $sut->getId());
-        static::assertEquals($startDate, $sut->getStartDate());
-        static::assertEquals($endDate, $sut->getEndDate());
-        static::assertEquals($user, $sut->getUser());
+        $this->assertEquals($id, $sut->getId());
+        $this->assertEquals($startDate, $sut->getStartDate());
+        $this->assertEquals($endDate, $sut->getEndDate());
+        $this->assertEquals($user, $sut->getUser());
     }
 }

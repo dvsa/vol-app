@@ -19,7 +19,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ByBusRegTest extends QueryPartialTestCase
+final class ByBusRegTest extends QueryPartialTestCase
 {
     public function setUp(): void
     {

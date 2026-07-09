@@ -20,12 +20,8 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class IrhpPermitEntityTest extends EntityTester
+final class IrhpPermitEntityTest extends EntityTester
 {
-    /**
-     * @var (\DateTime & \Mockery\MockInterface)
-     */
-    public $expiryDate;
     /**
      * Define the entity to test
      *
@@ -68,12 +64,13 @@ class IrhpPermitEntityTest extends EntityTester
      */
     protected $irhpCandidatePermit;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->issueDate = m::mock(DateTime::class);
         $this->status = new RefData();
         $this->permitNumber = 431;
-        $this->expiryDate = m::mock(DateTime::class);
+        $expiryDate = m::mock(DateTime::class);
 
         $this->irhpPermitApplication = m::mock(IrhpPermitApplication::class);
         $this->irhpPermitRange = m::mock(IrhpPermitRange::class);
@@ -89,7 +86,7 @@ class IrhpPermitEntityTest extends EntityTester
             $this->issueDate,
             $this->status,
             $this->permitNumber,
-            $this->expiryDate
+            $expiryDate
         );
     }
 
@@ -185,28 +182,25 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getStartDate());
     }
 
-    public static function dpGetStartDate(): array
+    public static function dpGetStartDate(): \Iterator
     {
         $inPast = new DateTime('last year');
         $now = new DateTime();
         $inFuture = new DateTime('next year');
-
-        return [
-            'issued before valid from date' => [
-                'validFrom' => $inFuture,
-                'issueDate' => $now,
-                'expected' => $inFuture,
-            ],
-            'issued after valid from date' => [
-                'validFrom' => $inPast,
-                'issueDate' => $now,
-                'expected' => $now,
-            ],
-            'not yet issued' => [
-                'validFrom' => $inPast,
-                'issueDate' => null,
-                'expected' => $inPast,
-            ],
+        yield 'issued before valid from date' => [
+            'validFrom' => $inFuture,
+            'issueDate' => $now,
+            'expected' => $inFuture,
+        ];
+        yield 'issued after valid from date' => [
+            'validFrom' => $inPast,
+            'issueDate' => $now,
+            'expected' => $now,
+        ];
+        yield 'not yet issued' => [
+            'validFrom' => $inPast,
+            'issueDate' => null,
+            'expected' => $inPast,
         ];
     }
 
@@ -254,18 +248,16 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals(Entity::STATUS_AWAITING_PRINTING, $this->sut->getStatus()->getId());
     }
 
-    public static function dpProceedToAwaitingPrinting(): array
+    public static function dpProceedToAwaitingPrinting(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, true],
-            [Entity::STATUS_AWAITING_PRINTING, false],
-            [Entity::STATUS_PRINTING, false],
-            [Entity::STATUS_PRINTED, false],
-            [Entity::STATUS_ERROR, true],
-            [Entity::STATUS_CEASED, false],
-            [Entity::STATUS_TERMINATED, false],
-            [Entity::STATUS_EXPIRED, false]
-        ];
+        yield [Entity::STATUS_PENDING, true];
+        yield [Entity::STATUS_AWAITING_PRINTING, false];
+        yield [Entity::STATUS_PRINTING, false];
+        yield [Entity::STATUS_PRINTED, false];
+        yield [Entity::STATUS_ERROR, true];
+        yield [Entity::STATUS_CEASED, false];
+        yield [Entity::STATUS_TERMINATED, false];
+        yield [Entity::STATUS_EXPIRED, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpProceedToPrinting')]
@@ -282,18 +274,16 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals(Entity::STATUS_PRINTING, $this->sut->getStatus()->getId());
     }
 
-    public static function dpProceedToPrinting(): array
+    public static function dpProceedToPrinting(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, false],
-            [Entity::STATUS_AWAITING_PRINTING, true],
-            [Entity::STATUS_PRINTING, false],
-            [Entity::STATUS_PRINTED, false],
-            [Entity::STATUS_ERROR, false],
-            [Entity::STATUS_CEASED, false],
-            [Entity::STATUS_TERMINATED, false],
-            [Entity::STATUS_EXPIRED, false]
-        ];
+        yield [Entity::STATUS_PENDING, false];
+        yield [Entity::STATUS_AWAITING_PRINTING, true];
+        yield [Entity::STATUS_PRINTING, false];
+        yield [Entity::STATUS_PRINTED, false];
+        yield [Entity::STATUS_ERROR, false];
+        yield [Entity::STATUS_CEASED, false];
+        yield [Entity::STATUS_TERMINATED, false];
+        yield [Entity::STATUS_EXPIRED, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpProceedToPrinted')]
@@ -310,18 +300,16 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals(Entity::STATUS_PRINTED, $this->sut->getStatus()->getId());
     }
 
-    public static function dpProceedToPrinted(): array
+    public static function dpProceedToPrinted(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, false],
-            [Entity::STATUS_AWAITING_PRINTING, false],
-            [Entity::STATUS_PRINTING, true],
-            [Entity::STATUS_PRINTED, false],
-            [Entity::STATUS_ERROR, false],
-            [Entity::STATUS_CEASED, false],
-            [Entity::STATUS_TERMINATED, false],
-            [Entity::STATUS_EXPIRED, false]
-        ];
+        yield [Entity::STATUS_PENDING, false];
+        yield [Entity::STATUS_AWAITING_PRINTING, false];
+        yield [Entity::STATUS_PRINTING, true];
+        yield [Entity::STATUS_PRINTED, false];
+        yield [Entity::STATUS_ERROR, false];
+        yield [Entity::STATUS_CEASED, false];
+        yield [Entity::STATUS_TERMINATED, false];
+        yield [Entity::STATUS_EXPIRED, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpProceedToError')]
@@ -338,18 +326,16 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals(Entity::STATUS_ERROR, $this->sut->getStatus()->getId());
     }
 
-    public static function dpProceedToError(): array
+    public static function dpProceedToError(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, true],
-            [Entity::STATUS_AWAITING_PRINTING, true],
-            [Entity::STATUS_PRINTING, true],
-            [Entity::STATUS_PRINTED, false],
-            [Entity::STATUS_ERROR, true],
-            [Entity::STATUS_CEASED, false],
-            [Entity::STATUS_TERMINATED, false],
-            [Entity::STATUS_EXPIRED, false]
-        ];
+        yield [Entity::STATUS_PENDING, true];
+        yield [Entity::STATUS_AWAITING_PRINTING, true];
+        yield [Entity::STATUS_PRINTING, true];
+        yield [Entity::STATUS_PRINTED, false];
+        yield [Entity::STATUS_ERROR, true];
+        yield [Entity::STATUS_CEASED, false];
+        yield [Entity::STATUS_TERMINATED, false];
+        yield [Entity::STATUS_EXPIRED, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpProceedToTerminated')]
@@ -366,18 +352,16 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals(Entity::STATUS_TERMINATED, $this->sut->getStatus()->getId());
     }
 
-    public static function dpProceedToTerminated(): array
+    public static function dpProceedToTerminated(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, true],
-            [Entity::STATUS_AWAITING_PRINTING, true],
-            [Entity::STATUS_PRINTING, true],
-            [Entity::STATUS_PRINTED, true],
-            [Entity::STATUS_ERROR, true],
-            [Entity::STATUS_CEASED, false],
-            [Entity::STATUS_TERMINATED, false],
-            [Entity::STATUS_EXPIRED, false]
-        ];
+        yield [Entity::STATUS_PENDING, true];
+        yield [Entity::STATUS_AWAITING_PRINTING, true];
+        yield [Entity::STATUS_PRINTING, true];
+        yield [Entity::STATUS_PRINTED, true];
+        yield [Entity::STATUS_ERROR, true];
+        yield [Entity::STATUS_CEASED, false];
+        yield [Entity::STATUS_TERMINATED, false];
+        yield [Entity::STATUS_EXPIRED, false];
     }
 
     public function testProceedToUnknown(): void
@@ -395,18 +379,16 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isPending());
     }
 
-    public static function dpIsPending(): array
+    public static function dpIsPending(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, true],
-            [Entity::STATUS_AWAITING_PRINTING, false],
-            [Entity::STATUS_PRINTING, false],
-            [Entity::STATUS_PRINTED, false],
-            [Entity::STATUS_ERROR, false],
-            [Entity::STATUS_CEASED, false],
-            [Entity::STATUS_TERMINATED, false],
-            [Entity::STATUS_EXPIRED, false]
-        ];
+        yield [Entity::STATUS_PENDING, true];
+        yield [Entity::STATUS_AWAITING_PRINTING, false];
+        yield [Entity::STATUS_PRINTING, false];
+        yield [Entity::STATUS_PRINTED, false];
+        yield [Entity::STATUS_ERROR, false];
+        yield [Entity::STATUS_CEASED, false];
+        yield [Entity::STATUS_TERMINATED, false];
+        yield [Entity::STATUS_EXPIRED, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsAwaitingPrinting')]
@@ -417,18 +399,16 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isAwaitingPrinting());
     }
 
-    public static function dpIsAwaitingPrinting(): array
+    public static function dpIsAwaitingPrinting(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, false],
-            [Entity::STATUS_AWAITING_PRINTING, true],
-            [Entity::STATUS_PRINTING, false],
-            [Entity::STATUS_PRINTED, false],
-            [Entity::STATUS_ERROR, false],
-            [Entity::STATUS_CEASED, false],
-            [Entity::STATUS_TERMINATED, false],
-            [Entity::STATUS_EXPIRED, false]
-        ];
+        yield [Entity::STATUS_PENDING, false];
+        yield [Entity::STATUS_AWAITING_PRINTING, true];
+        yield [Entity::STATUS_PRINTING, false];
+        yield [Entity::STATUS_PRINTED, false];
+        yield [Entity::STATUS_ERROR, false];
+        yield [Entity::STATUS_CEASED, false];
+        yield [Entity::STATUS_TERMINATED, false];
+        yield [Entity::STATUS_EXPIRED, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsPrinting')]
@@ -439,18 +419,16 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isPrinting());
     }
 
-    public static function dpIsPrinting(): array
+    public static function dpIsPrinting(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, false],
-            [Entity::STATUS_AWAITING_PRINTING, false],
-            [Entity::STATUS_PRINTING, true],
-            [Entity::STATUS_PRINTED, false],
-            [Entity::STATUS_ERROR, false],
-            [Entity::STATUS_CEASED, false],
-            [Entity::STATUS_TERMINATED, false],
-            [Entity::STATUS_EXPIRED, false]
-        ];
+        yield [Entity::STATUS_PENDING, false];
+        yield [Entity::STATUS_AWAITING_PRINTING, false];
+        yield [Entity::STATUS_PRINTING, true];
+        yield [Entity::STATUS_PRINTED, false];
+        yield [Entity::STATUS_ERROR, false];
+        yield [Entity::STATUS_CEASED, false];
+        yield [Entity::STATUS_TERMINATED, false];
+        yield [Entity::STATUS_EXPIRED, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHasError')]
@@ -461,32 +439,28 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->hasError());
     }
 
-    public static function dpHasError(): array
+    public static function dpHasError(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, false],
-            [Entity::STATUS_AWAITING_PRINTING, false],
-            [Entity::STATUS_PRINTING, false],
-            [Entity::STATUS_PRINTED, false],
-            [Entity::STATUS_ERROR, true],
-            [Entity::STATUS_CEASED, false],
-            [Entity::STATUS_TERMINATED, false],
-            [Entity::STATUS_EXPIRED, false]
-        ];
+        yield [Entity::STATUS_PENDING, false];
+        yield [Entity::STATUS_AWAITING_PRINTING, false];
+        yield [Entity::STATUS_PRINTING, false];
+        yield [Entity::STATUS_PRINTED, false];
+        yield [Entity::STATUS_ERROR, true];
+        yield [Entity::STATUS_CEASED, false];
+        yield [Entity::STATUS_TERMINATED, false];
+        yield [Entity::STATUS_EXPIRED, false];
     }
 
-    public static function dpCease(): array
+    public static function dpCease(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, false],
-            [Entity::STATUS_AWAITING_PRINTING, false],
-            [Entity::STATUS_PRINTING, false],
-            [Entity::STATUS_PRINTED, false],
-            [Entity::STATUS_ERROR, false],
-            [Entity::STATUS_CEASED, true],
-            [Entity::STATUS_TERMINATED, false],
-            [Entity::STATUS_EXPIRED, false]
-        ];
+        yield [Entity::STATUS_PENDING, false];
+        yield [Entity::STATUS_AWAITING_PRINTING, false];
+        yield [Entity::STATUS_PRINTING, false];
+        yield [Entity::STATUS_PRINTED, false];
+        yield [Entity::STATUS_ERROR, false];
+        yield [Entity::STATUS_CEASED, true];
+        yield [Entity::STATUS_TERMINATED, false];
+        yield [Entity::STATUS_EXPIRED, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpCease')]
@@ -511,18 +485,16 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isCeased());
     }
 
-    public static function dpIsCeased(): array
+    public static function dpIsCeased(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, false],
-            [Entity::STATUS_AWAITING_PRINTING, false],
-            [Entity::STATUS_PRINTING, false],
-            [Entity::STATUS_PRINTED, false],
-            [Entity::STATUS_ERROR, false],
-            [Entity::STATUS_CEASED, true],
-            [Entity::STATUS_TERMINATED, false],
-            [Entity::STATUS_EXPIRED, false]
-        ];
+        yield [Entity::STATUS_PENDING, false];
+        yield [Entity::STATUS_AWAITING_PRINTING, false];
+        yield [Entity::STATUS_PRINTING, false];
+        yield [Entity::STATUS_PRINTED, false];
+        yield [Entity::STATUS_ERROR, false];
+        yield [Entity::STATUS_CEASED, true];
+        yield [Entity::STATUS_TERMINATED, false];
+        yield [Entity::STATUS_EXPIRED, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsTerminated')]
@@ -533,18 +505,16 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isTerminated());
     }
 
-    public static function dpIsTerminated(): array
+    public static function dpIsTerminated(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, false],
-            [Entity::STATUS_AWAITING_PRINTING, false],
-            [Entity::STATUS_PRINTING, false],
-            [Entity::STATUS_PRINTED, false],
-            [Entity::STATUS_ERROR, false],
-            [Entity::STATUS_CEASED, false],
-            [Entity::STATUS_TERMINATED, true],
-            [Entity::STATUS_EXPIRED, false]
-        ];
+        yield [Entity::STATUS_PENDING, false];
+        yield [Entity::STATUS_AWAITING_PRINTING, false];
+        yield [Entity::STATUS_PRINTING, false];
+        yield [Entity::STATUS_PRINTED, false];
+        yield [Entity::STATUS_ERROR, false];
+        yield [Entity::STATUS_CEASED, false];
+        yield [Entity::STATUS_TERMINATED, true];
+        yield [Entity::STATUS_EXPIRED, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValid')]
@@ -555,18 +525,16 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isValid());
     }
 
-    public static function dpIsValid(): array
+    public static function dpIsValid(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, true],
-            [Entity::STATUS_AWAITING_PRINTING, true],
-            [Entity::STATUS_PRINTING, true],
-            [Entity::STATUS_PRINTED, true],
-            [Entity::STATUS_ERROR, true],
-            [Entity::STATUS_CEASED, false],
-            [Entity::STATUS_TERMINATED, false],
-            [Entity::STATUS_EXPIRED, false]
-        ];
+        yield [Entity::STATUS_PENDING, true];
+        yield [Entity::STATUS_AWAITING_PRINTING, true];
+        yield [Entity::STATUS_PRINTING, true];
+        yield [Entity::STATUS_PRINTED, true];
+        yield [Entity::STATUS_ERROR, true];
+        yield [Entity::STATUS_CEASED, false];
+        yield [Entity::STATUS_TERMINATED, false];
+        yield [Entity::STATUS_EXPIRED, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsExpired')]
@@ -576,18 +544,16 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isExpired());
     }
 
-    public static function dpIsExpired(): array
+    public static function dpIsExpired(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, false],
-            [Entity::STATUS_AWAITING_PRINTING, false],
-            [Entity::STATUS_PRINTING, false],
-            [Entity::STATUS_PRINTED, false],
-            [Entity::STATUS_ERROR, false],
-            [Entity::STATUS_CEASED, false],
-            [Entity::STATUS_TERMINATED, false],
-            [Entity::STATUS_EXPIRED, true]
-        ];
+        yield [Entity::STATUS_PENDING, false];
+        yield [Entity::STATUS_AWAITING_PRINTING, false];
+        yield [Entity::STATUS_PRINTING, false];
+        yield [Entity::STATUS_PRINTED, false];
+        yield [Entity::STATUS_ERROR, false];
+        yield [Entity::STATUS_CEASED, false];
+        yield [Entity::STATUS_TERMINATED, false];
+        yield [Entity::STATUS_EXPIRED, true];
     }
 
     public function testCreateReplacement(): void
@@ -682,22 +648,19 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getCeasedDate());
     }
 
-    public static function dpGetCeasedDate(): array
+    public static function dpGetCeasedDate(): \Iterator
     {
         $expAsDate = new DateTime('1st Jan 2200');
         $validToDate = new DateTime('1st Jan 2300');
-
-        return [
-            'expiry is set' => [
-                'expiryDate' => $expAsDate,
-                'validTo' => null,
-                'expected' => $expAsDate,
-            ],
-            'expiry is null - valid to from stock expected' => [
-                'expiryDate' => null,
-                'validTo' => $validToDate,
-                'expected' => $validToDate,
-            ]
+        yield 'expiry is set' => [
+            'expiryDate' => $expAsDate,
+            'validTo' => null,
+            'expected' => $expAsDate,
+        ];
+        yield 'expiry is null - valid to from stock expected' => [
+            'expiryDate' => null,
+            'validTo' => $validToDate,
+            'expected' => $validToDate,
         ];
     }
 

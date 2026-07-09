@@ -13,7 +13,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Cases\Hearing\UpdateAppeal::class)]
-class UpdateAppealTest extends AbstractCommandHandlerTestCase
+final class UpdateAppealTest extends AbstractCommandHandlerTestCase
 {
     /** @var  UpdateAppeal */
     protected $sut;

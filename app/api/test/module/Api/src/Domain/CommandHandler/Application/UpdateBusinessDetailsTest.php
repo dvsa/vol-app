@@ -14,10 +14,10 @@ use Mockery as m;
 /**
  * @covers  Dvsa\Olcs\Api\Domain\CommandHandler\Application\UpdateBusinessDetails
  */
-class UpdateBusinessDetailsTest extends AbstractCommandHandlerTestCase
+final class UpdateBusinessDetailsTest extends AbstractCommandHandlerTestCase
 {
-    public const ID = 111;
-    public const LIC_ID = 2222;
+    public const int ID = 111;
+    public const int LIC_ID = 2222;
 
     /** @var UpdateBusinessDetails  */
     protected $sut;
@@ -91,6 +91,6 @@ class UpdateBusinessDetailsTest extends AbstractCommandHandlerTestCase
             'flags' => ['hasChanged' => 1]
         ];
 
-        static::assertEquals($expected, $actual->toArray());
+        $this->assertEquals($expected, $actual->toArray());
     }
 }

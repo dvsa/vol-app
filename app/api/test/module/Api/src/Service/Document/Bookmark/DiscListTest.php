@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class DiscListTest extends m\Adapter\Phpunit\MockeryTestCase
+final class DiscListTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     public function testGetQuery(): void
     {
@@ -251,15 +251,13 @@ class DiscListTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $parser = m::mock(RtfParser::class);
         $parser->shouldReceive('replace')
-            ->with('snippet', m::on(static function (array $tokens): bool {
-                return ($tokens['LINE_SPACING'] ?? null) === '260'
-                    && in_array($tokens['ROW_HEIGHT'] ?? null, [2600, 400], true);
-            }))
+            ->with('snippet', m::on(static fn(array $tokens): bool => ($tokens['LINE_SPACING'] ?? null) === '260'
+                && in_array($tokens['ROW_HEIGHT'] ?? null, [2600, 400], true)))
             ->times(3)
             ->andReturn('chunk');
 
         $bookmark = $this->createPartialMock(DiscList::class, ['getSnippet']);
-        $bookmark->method('getSnippet')->willReturn('snippet');
+        $bookmark->expects($this->atLeastOnce())->method('getSnippet')->willReturn('snippet');
         $bookmark->setRepoManager($repoManager);
         $bookmark->setData($data);
         $bookmark->setParser($parser);
@@ -299,7 +297,7 @@ class DiscListTest extends m\Adapter\Phpunit\MockeryTestCase
         $parser->shouldReceive('replace')->times(6)->andReturn('[ROW]');
 
         $bookmark = $this->createPartialMock(DiscList::class, ['getSnippet']);
-        $bookmark->method('getSnippet')->willReturn('snippet');
+        $bookmark->expects($this->atLeastOnce())->method('getSnippet')->willReturn('snippet');
         $bookmark->setRepoManager($repoManager);
         $bookmark->setData($data);
         $bookmark->setParser($parser);
@@ -350,7 +348,7 @@ class DiscListTest extends m\Adapter\Phpunit\MockeryTestCase
             ->andReturn('chunk');
 
         $bookmark = $this->createPartialMock(DiscList::class, ['getSnippet']);
-        $bookmark->method('getSnippet')->willReturn('snippet');
+        $bookmark->expects($this->atLeastOnce())->method('getSnippet')->willReturn('snippet');
         $bookmark->setRepoManager($repoManager);
         $bookmark->setData($data);
         $bookmark->setParser($parser);

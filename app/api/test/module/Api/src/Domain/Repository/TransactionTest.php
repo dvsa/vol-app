@@ -16,11 +16,12 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\Repository\Transaction
  */
-class TransactionTest extends RepositoryTestCase
+final class TransactionTest extends RepositoryTestCase
 {
     /** @var  TransactionRepo */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(TransactionRepo::class);

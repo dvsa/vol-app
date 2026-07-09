@@ -18,7 +18,7 @@ use Mockery as m;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class GetScoredPermitListTest extends QueryHandlerTestCase
+final class GetScoredPermitListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

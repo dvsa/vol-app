@@ -19,7 +19,7 @@ use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class IsOwnerTest extends AbstractValidatorsTestCase
+final class IsOwnerTest extends AbstractValidatorsTestCase
 {
     /**
      * @var IsOwner

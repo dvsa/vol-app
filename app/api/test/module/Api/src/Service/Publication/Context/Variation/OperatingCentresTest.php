@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class OperatingCentresTest extends MockeryTestCase
+final class OperatingCentresTest extends MockeryTestCase
 {
     /**
      * @var \Dvsa\Olcs\Api\Service\Publication\Context\Variation\OperatingCentres
@@ -66,34 +66,32 @@ class OperatingCentresTest extends MockeryTestCase
         );
     }
 
-    public static function dpTestProvideAdded(): array
+    public static function dpTestProvideAdded(): \Iterator
     {
-        return [
+        yield [
+            false,
             [
-                false,
-                [
-                    'operatingCentres' => [
-                        "New operating centre: ADDRESS43_FORMATTED\n" .
-                            "New authorisation at this operating centre will be: 12 vehicle(s), 3 trailer(s)",
-                        "New operating centre: ADDRESS82_FORMATTED\n" .
-                            "New authorisation at this operating centre will be: 2 trailer(s)",
-                        "New operating centre: ADDRESS653_FORMATTED\n" .
-                            "New authorisation at this operating centre will be: 4234 vehicle(s)",
-                    ]
-                ],
+                'operatingCentres' => [
+                    "New operating centre: ADDRESS43_FORMATTED\n" .
+                        "New authorisation at this operating centre will be: 12 vehicle(s), 3 trailer(s)",
+                    "New operating centre: ADDRESS82_FORMATTED\n" .
+                        "New authorisation at this operating centre will be: 2 trailer(s)",
+                    "New operating centre: ADDRESS653_FORMATTED\n" .
+                        "New authorisation at this operating centre will be: 4234 vehicle(s)",
+                ]
             ],
+        ];
+        yield [
+            true,
             [
-                true,
-                [
-                    'operatingCentres' => [
-                        "New operating centre: ADDRESS43_FORMATTED\n" .
-                            "New authorisation at this operating centre will be: 12 Heavy goods vehicle(s), 3 trailer(s)",
-                        "New operating centre: ADDRESS82_FORMATTED\n" .
-                            "New authorisation at this operating centre will be: 2 trailer(s)",
-                        "New operating centre: ADDRESS653_FORMATTED\n" .
-                            "New authorisation at this operating centre will be: 4234 Heavy goods vehicle(s)",
-                    ]
-                ],
+                'operatingCentres' => [
+                    "New operating centre: ADDRESS43_FORMATTED\n" .
+                        "New authorisation at this operating centre will be: 12 Heavy goods vehicle(s), 3 trailer(s)",
+                    "New operating centre: ADDRESS82_FORMATTED\n" .
+                        "New authorisation at this operating centre will be: 2 trailer(s)",
+                    "New operating centre: ADDRESS653_FORMATTED\n" .
+                        "New authorisation at this operating centre will be: 4234 Heavy goods vehicle(s)",
+                ]
             ],
         ];
     }
@@ -131,30 +129,28 @@ class OperatingCentresTest extends MockeryTestCase
         );
     }
 
-    public static function dpTestProvideS4Ignored(): array
+    public static function dpTestProvideS4Ignored(): \Iterator
     {
-        return [
+        yield [
+            false,
             [
-                false,
-                [
-                    'operatingCentres' => [
-                        "New operating centre: ADDRESS43_FORMATTED\n" .
-                            "New authorisation at this operating centre will be: 12 vehicle(s), 3 trailer(s)",
-                        "New operating centre: ADDRESS653_FORMATTED\n" .
-                            "New authorisation at this operating centre will be: 4234 vehicle(s)",
-                    ]
-                ],
+                'operatingCentres' => [
+                    "New operating centre: ADDRESS43_FORMATTED\n" .
+                        "New authorisation at this operating centre will be: 12 vehicle(s), 3 trailer(s)",
+                    "New operating centre: ADDRESS653_FORMATTED\n" .
+                        "New authorisation at this operating centre will be: 4234 vehicle(s)",
+                ]
             ],
+        ];
+        yield [
+            true,
             [
-                true,
-                [
-                    'operatingCentres' => [
-                        "New operating centre: ADDRESS43_FORMATTED\n" .
-                            "New authorisation at this operating centre will be: 12 Heavy goods vehicle(s), 3 trailer(s)",
-                        "New operating centre: ADDRESS653_FORMATTED\n" .
-                            "New authorisation at this operating centre will be: 4234 Heavy goods vehicle(s)",
-                    ]
-                ],
+                'operatingCentres' => [
+                    "New operating centre: ADDRESS43_FORMATTED\n" .
+                        "New authorisation at this operating centre will be: 12 Heavy goods vehicle(s), 3 trailer(s)",
+                    "New operating centre: ADDRESS653_FORMATTED\n" .
+                        "New authorisation at this operating centre will be: 4234 Heavy goods vehicle(s)",
+                ]
             ],
         ];
     }
@@ -196,34 +192,32 @@ class OperatingCentresTest extends MockeryTestCase
         );
     }
 
-    public static function dpTestProvideUpdated(): array
+    public static function dpTestProvideUpdated(): \Iterator
     {
-        return [
+        yield [
+            false,
             [
-                false,
-                [
-                    'operatingCentres' => [
-                        "Increase at existing operating centre: ADDRESS43_FORMATTED\n" .
-                            "New authorisation at this operating centre will be: 12 vehicle(s), 3 trailer(s)",
-                        "Decrease at existing operating centre: ADDRESS82_FORMATTED\n" .
-                            "New authorisation at this operating centre will be: 10 vehicle(s), 2 trailer(s)",
-                        "Increase at existing operating centre: ADDRESS653_FORMATTED\n" .
-                            "New authorisation at this operating centre will be: 4234 vehicle(s)",
-                    ]
-                ],
+                'operatingCentres' => [
+                    "Increase at existing operating centre: ADDRESS43_FORMATTED\n" .
+                        "New authorisation at this operating centre will be: 12 vehicle(s), 3 trailer(s)",
+                    "Decrease at existing operating centre: ADDRESS82_FORMATTED\n" .
+                        "New authorisation at this operating centre will be: 10 vehicle(s), 2 trailer(s)",
+                    "Increase at existing operating centre: ADDRESS653_FORMATTED\n" .
+                        "New authorisation at this operating centre will be: 4234 vehicle(s)",
+                ]
             ],
+        ];
+        yield [
+            true,
             [
-                true,
-                [
-                    'operatingCentres' => [
-                        "Increase at existing operating centre: ADDRESS43_FORMATTED\n" .
-                            "New authorisation at this operating centre will be: 12 Heavy goods vehicle(s), 3 trailer(s)",
-                        "Decrease at existing operating centre: ADDRESS82_FORMATTED\n" .
-                            "New authorisation at this operating centre will be: 10 Heavy goods vehicle(s), 2 trailer(s)",
-                        "Increase at existing operating centre: ADDRESS653_FORMATTED\n" .
-                            "New authorisation at this operating centre will be: 4234 Heavy goods vehicle(s)",
-                    ]
-                ],
+                'operatingCentres' => [
+                    "Increase at existing operating centre: ADDRESS43_FORMATTED\n" .
+                        "New authorisation at this operating centre will be: 12 Heavy goods vehicle(s), 3 trailer(s)",
+                    "Decrease at existing operating centre: ADDRESS82_FORMATTED\n" .
+                        "New authorisation at this operating centre will be: 10 Heavy goods vehicle(s), 2 trailer(s)",
+                    "Increase at existing operating centre: ADDRESS653_FORMATTED\n" .
+                        "New authorisation at this operating centre will be: 4234 Heavy goods vehicle(s)",
+                ]
             ],
         ];
     }
@@ -287,15 +281,13 @@ class OperatingCentresTest extends MockeryTestCase
         }
     }
 
-    public static function dataProviderTestProvideUpdatedIncreaseDecrease(): array
+    public static function dataProviderTestProvideUpdatedIncreaseDecrease(): \Iterator
     {
-        return [
-            [11, 20, 10, 20, true],
-            [9, 20, 10, 20, false],
-            [10, 21, 10, 20, true],
-            [10, 19, 10, 20, false],
-            [10, 20, 10, 20, null],
-        ];
+        yield [11, 20, 10, 20, true];
+        yield [9, 20, 10, 20, false];
+        yield [10, 21, 10, 20, true];
+        yield [10, 19, 10, 20, false];
+        yield [10, 20, 10, 20, null];
     }
 
     public function testProvideDeleted(): void

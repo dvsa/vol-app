@@ -27,7 +27,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class LicenceOperatingCentreTest extends QueryHandlerTestCase
+final class LicenceOperatingCentreTest extends QueryHandlerTestCase
 {
     protected $expectedBundle = [
         'operatingCentre' => [

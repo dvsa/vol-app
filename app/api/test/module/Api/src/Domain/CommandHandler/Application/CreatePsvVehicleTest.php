@@ -27,7 +27,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreatePsvVehicleTest extends AbstractCommandHandlerTestCase
+final class CreatePsvVehicleTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -142,7 +142,7 @@ class CreatePsvVehicleTest extends AbstractCommandHandlerTestCase
             ->andReturnUsing(
                 function (Entity\Licence\LicenceVehicle $licenceVehicle) use ($licence, $application, &$savedVehicle) {
                     $licenceVehicle->setId(321);
-                    $this->assertEquals('2015-01-01', $licenceVehicle->getReceivedDate()->format('Y-m-d'));
+                    $this->assertSame('2015-01-01', $licenceVehicle->getReceivedDate()->format('Y-m-d'));
                     $this->assertSame($savedVehicle, $licenceVehicle->getVehicle());
                     $this->assertSame($licence, $licenceVehicle->getLicence());
                     $this->assertSame($application, $licenceVehicle->getApplication());
@@ -231,7 +231,7 @@ class CreatePsvVehicleTest extends AbstractCommandHandlerTestCase
             ->andReturnUsing(
                 function (Entity\Licence\LicenceVehicle $licenceVehicle) use ($licence, $application, &$savedVehicle) {
                     $licenceVehicle->setId(321);
-                    $this->assertEquals('2015-01-01', $licenceVehicle->getReceivedDate()->format('Y-m-d'));
+                    $this->assertSame('2015-01-01', $licenceVehicle->getReceivedDate()->format('Y-m-d'));
                     $this->assertSame($savedVehicle, $licenceVehicle->getVehicle());
                     $this->assertSame($licence, $licenceVehicle->getLicence());
                     $this->assertSame($application, $licenceVehicle->getApplication());
@@ -318,7 +318,7 @@ class CreatePsvVehicleTest extends AbstractCommandHandlerTestCase
             ->andReturnUsing(
                 function (Entity\Licence\LicenceVehicle $licenceVehicle) use ($licence, $application, &$mockVehicle) {
                     $licenceVehicle->setId(321);
-                    $this->assertEquals('2015-01-01', $licenceVehicle->getReceivedDate()->format('Y-m-d'));
+                    $this->assertSame('2015-01-01', $licenceVehicle->getReceivedDate()->format('Y-m-d'));
                     $this->assertSame($mockVehicle, $licenceVehicle->getVehicle());
                     $this->assertSame($licence, $licenceVehicle->getLicence());
                     $this->assertSame($application, $licenceVehicle->getApplication());

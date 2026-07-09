@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class TextGeneratorTest extends MockeryTestCase
+final class TextGeneratorTest extends MockeryTestCase
 {
     private $answerValue;
 
@@ -39,10 +39,9 @@ class TextGeneratorTest extends MockeryTestCase
 
     private $textFactory;
 
-    private $translateableTextGenerator;
-
     private $textGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->answerValue = '456';
@@ -78,17 +77,17 @@ class TextGeneratorTest extends MockeryTestCase
         $this->text = m::mock(Text::class);
         $this->textFactory = m::mock(TextFactory::class);
 
-        $this->translateableTextGenerator = m::mock(TranslateableTextGenerator::class);
-        $this->translateableTextGenerator->shouldReceive('generate')
+        $translateableTextGenerator = m::mock(TranslateableTextGenerator::class);
+        $translateableTextGenerator->shouldReceive('generate')
             ->with($this->labelOption)
             ->andReturn($this->labelTranslateableText);
-        $this->translateableTextGenerator->shouldReceive('generate')
+        $translateableTextGenerator->shouldReceive('generate')
             ->with($this->hintOption)
             ->andReturn($this->hintTranslateableText);
 
         $this->textGenerator = new TextGenerator(
             $this->textFactory,
-            $this->translateableTextGenerator
+            $translateableTextGenerator
         );
     }
 

@@ -19,7 +19,7 @@ use Mockery as m;
  * @covers Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth
  * @covers Dvsa\Olcs\Api\Entity\Irfo\AbstractIrfoPsvAuth
  */
-class IrfoPsvAuthEntityTest extends EntityTester
+final class IrfoPsvAuthEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -38,6 +38,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
     /** @var  RefData */
     private $status;
 
+    #[\Override]
     public function setUp(): void
     {
         /** @var Entity entity */
@@ -303,30 +304,26 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->entity->withdraw($newStatus);
     }
 
-    public static function isWithdrawableStates(): array
+    public static function isWithdrawableStates(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, true],
-            [Entity::STATUS_CNS, true],
-            [Entity::STATUS_RENEW, true],
-            [Entity::STATUS_APPROVED, true],
-            [Entity::STATUS_WITHDRAWN, false],
-            [Entity::STATUS_GRANTED, false],
-            [Entity::STATUS_REFUSED, false]
-        ];
+        yield [Entity::STATUS_PENDING, true];
+        yield [Entity::STATUS_CNS, true];
+        yield [Entity::STATUS_RENEW, true];
+        yield [Entity::STATUS_APPROVED, true];
+        yield [Entity::STATUS_WITHDRAWN, false];
+        yield [Entity::STATUS_GRANTED, false];
+        yield [Entity::STATUS_REFUSED, false];
     }
 
-    public static function isRefusableStates(): array
+    public static function isRefusableStates(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, true],
-            [Entity::STATUS_CNS, false],
-            [Entity::STATUS_RENEW, true],
-            [Entity::STATUS_APPROVED, false],
-            [Entity::STATUS_WITHDRAWN, false],
-            [Entity::STATUS_GRANTED, false],
-            [Entity::STATUS_REFUSED, false]
-        ];
+        yield [Entity::STATUS_PENDING, true];
+        yield [Entity::STATUS_CNS, false];
+        yield [Entity::STATUS_RENEW, true];
+        yield [Entity::STATUS_APPROVED, false];
+        yield [Entity::STATUS_WITHDRAWN, false];
+        yield [Entity::STATUS_GRANTED, false];
+        yield [Entity::STATUS_REFUSED, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('isCnsableStates')]
@@ -339,17 +336,15 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isCnsable());
     }
 
-    public static function isCnsableStates(): array
+    public static function isCnsableStates(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, false],
-            [Entity::STATUS_CNS, false],
-            [Entity::STATUS_RENEW, true],
-            [Entity::STATUS_APPROVED, false],
-            [Entity::STATUS_WITHDRAWN, false],
-            [Entity::STATUS_GRANTED, false],
-            [Entity::STATUS_REFUSED, false]
-        ];
+        yield [Entity::STATUS_PENDING, false];
+        yield [Entity::STATUS_CNS, false];
+        yield [Entity::STATUS_RENEW, true];
+        yield [Entity::STATUS_APPROVED, false];
+        yield [Entity::STATUS_WITHDRAWN, false];
+        yield [Entity::STATUS_GRANTED, false];
+        yield [Entity::STATUS_REFUSED, false];
     }
 
     public function testContinuationNotSought(): void
@@ -390,18 +385,16 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isApprovable($outstandingFees));
     }
 
-    public static function isApprovableStates(): array
+    public static function isApprovableStates(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, [], false],
-            [Entity::STATUS_CNS, [], false],
-            [Entity::STATUS_RENEW, [], false],
-            [Entity::STATUS_APPROVED, [], false],
-            [Entity::STATUS_WITHDRAWN, [], false],
-            [Entity::STATUS_GRANTED, [], true],
-            [Entity::STATUS_GRANTED, ['FEE'], false],
-            [Entity::STATUS_REFUSED, [], false]
-        ];
+        yield [Entity::STATUS_PENDING, [], false];
+        yield [Entity::STATUS_CNS, [], false];
+        yield [Entity::STATUS_RENEW, [], false];
+        yield [Entity::STATUS_APPROVED, [], false];
+        yield [Entity::STATUS_WITHDRAWN, [], false];
+        yield [Entity::STATUS_GRANTED, [], true];
+        yield [Entity::STATUS_GRANTED, ['FEE'], false];
+        yield [Entity::STATUS_REFUSED, [], false];
     }
 
     public function testApprove(): void
@@ -445,17 +438,15 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isRenewable());
     }
 
-    public static function isRenewableStates(): array
+    public static function isRenewableStates(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, true],
-            [Entity::STATUS_CNS, false],
-            [Entity::STATUS_RENEW, true],
-            [Entity::STATUS_APPROVED, true],
-            [Entity::STATUS_WITHDRAWN, false],
-            [Entity::STATUS_GRANTED, true],
-            [Entity::STATUS_REFUSED, false]
-        ];
+        yield [Entity::STATUS_PENDING, true];
+        yield [Entity::STATUS_CNS, false];
+        yield [Entity::STATUS_RENEW, true];
+        yield [Entity::STATUS_APPROVED, true];
+        yield [Entity::STATUS_WITHDRAWN, false];
+        yield [Entity::STATUS_GRANTED, true];
+        yield [Entity::STATUS_REFUSED, false];
     }
 
     public function testRenew(): void
@@ -496,18 +487,16 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isGeneratable($outstandingFees));
     }
 
-    public static function isGeneratableDataProvider(): array
+    public static function isGeneratableDataProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_PENDING, [], false],
-            [Entity::STATUS_CNS, [], false],
-            [Entity::STATUS_RENEW, [], false],
-            [Entity::STATUS_APPROVED, [], true],
-            [Entity::STATUS_WITHDRAWN, [], false],
-            [Entity::STATUS_GRANTED, [], false],
-            [Entity::STATUS_GRANTED, ['FEE'], false],
-            [Entity::STATUS_REFUSED, [], false]
-        ];
+        yield [Entity::STATUS_PENDING, [], false];
+        yield [Entity::STATUS_CNS, [], false];
+        yield [Entity::STATUS_RENEW, [], false];
+        yield [Entity::STATUS_APPROVED, [], true];
+        yield [Entity::STATUS_WITHDRAWN, [], false];
+        yield [Entity::STATUS_GRANTED, [], false];
+        yield [Entity::STATUS_GRANTED, ['FEE'], false];
+        yield [Entity::STATUS_REFUSED, [], false];
     }
 
     public function testGenerate(): void
@@ -549,26 +538,26 @@ class IrfoPsvAuthEntityTest extends EntityTester
         //  check false
         $status->setId(Entity::STATUS_PENDING);
 
-        static::assertFalse($this->entity->isResetable());
+        $this->assertFalse($this->entity->isResetable());
 
         //  check true
         $status->setId('UNIT_NOT_PENDING');
 
-        static::assertTrue($this->entity->isResetable());
+        $this->assertTrue($this->entity->isResetable());
     }
 
     public function testReset(): void
     {
         $newStatus = new RefData();
 
-        $statusNoPending = (new RefData())
+        $statusNoPending = new RefData()
             ->setId('NOT_PENDING_STATUS');
 
         $this->entity
             ->setStatus($statusNoPending)
             ->reset($newStatus);
 
-        static::assertSame($newStatus, $this->entity->getStatus());
+        $this->assertSame($newStatus, $this->entity->getStatus());
     }
 
     public function testReexpectException(): void
@@ -577,12 +566,12 @@ class IrfoPsvAuthEntityTest extends EntityTester
 
         $this->entity
             ->setStatus(
-                (new RefData())
+                new RefData()
                     ->setId(Entity::STATUS_PENDING)
             )
             ->reset(new RefData());
 
-        static::assertEquals('UNIT_STATUS', $this->entity->getStatus()->getId());
+        $this->assertEquals('UNIT_STATUS', $this->entity->getStatus()->getId());
     }
 
     public function testGetRelatedOrganisation(): void
@@ -592,6 +581,6 @@ class IrfoPsvAuthEntityTest extends EntityTester
 
         $this->entity->setOrganisation($mockOrg);
 
-        static::assertSame($mockOrg, $this->entity->getRelatedOrganisation());
+        $this->assertSame($mockOrg, $this->entity->getRelatedOrganisation());
     }
 }

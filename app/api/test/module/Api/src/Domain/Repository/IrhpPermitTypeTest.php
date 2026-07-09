@@ -12,8 +12,9 @@ use DateTime;
 /**
  * IRHP Permit Type test
  */
-class IrhpPermitTypeTest extends RepositoryTestCase
+final class IrhpPermitTypeTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(IrhpPermitType::class);

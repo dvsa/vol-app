@@ -12,13 +12,14 @@ use Dvsa\Olcs\Api\Entity\User\Permission;
 /**
  * @covers Dvsa\Olcs\Api\Domain\Validation\Validators\AbstractCanEditEntity
  */
-class AbstractCanEditEntityTest extends MockeryTestCase
+final class AbstractCanEditEntityTest extends MockeryTestCase
 {
     /**
      * @var AbstractCanEditEntity|m\Mock
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = m::mock(AbstractCanEditEntity::class)->makePartial()->shouldAllowMockingProtectedMethods();

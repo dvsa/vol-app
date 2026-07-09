@@ -24,7 +24,7 @@ use Doctrine\ORM\EntityNotFoundException;
  *
  * Initially auto-generated but won't be overridden
  */
-class OrganisationEntityTest extends EntityTester
+final class OrganisationEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -78,18 +78,16 @@ class OrganisationEntityTest extends EntityTester
 
         $this->assertEquals($organisation->getCpid(), ['cpid']);
         $this->assertEquals($organisation->getName(), $expectedName);
-        $this->assertEquals($organisation->getCompanyOrLlpNo(), '12345678');
+        $this->assertEquals('12345678', $organisation->getCompanyOrLlpNo());
         $this->assertEquals($organisation->getIsIrfo(), $isIrfo);
-        $this->assertEquals($organisation->getNatureOfBusiness(), 'nob');
+        $this->assertEquals('nob', $organisation->getNatureOfBusiness());
         $this->assertEquals($organisation->getAllowEmail(), $allowEmail);
     }
 
-    public static function organisationDataProvider(): array
+    public static function organisationDataProvider(): \Iterator
     {
-        return [
-            ['Y', 'lname', 'fname lname', 'Y'],
-            ['N', '', 'name','N']
-        ];
+        yield ['Y', 'lname', 'fname lname', 'Y'];
+        yield ['N', '', 'name','N'];
     }
 
     public function testGetAdminOrganisationUsers(): void
@@ -189,40 +187,36 @@ class OrganisationEntityTest extends EntityTester
 
         $sut->shouldReceive('getAdminOrganisationUsers')->andReturn($orgUsers);
 
-        static::assertEquals($expect, $sut->hasAdminEmailAddresses());
+        $this->assertEquals($expect, $sut->hasAdminEmailAddresses());
     }
 
-    public static function dpTestHasAdminEmailAddresses(): array
+    public static function dpTestHasAdminEmailAddresses(): \Iterator
     {
-        return [
-            [
-                'emailsMap' => [
-                    null,
-                    '',
-                    'unit_broken_emailaddress',
-                ],
-                'expect' => false,
+        yield [
+            'emailsMap' => [
+                null,
+                '',
+                'unit_broken_emailaddress',
             ],
-            [
-                'emailsMap' => [
-                    null,
-                    'aaa.bbb@domain.com',
-                ],
-                'expect' => true,
+            'expect' => false,
+        ];
+        yield [
+            'emailsMap' => [
+                null,
+                'aaa.bbb@domain.com',
             ],
+            'expect' => true,
         ];
     }
 
-    public static function dpOrgTypes(): array
+    public static function dpOrgTypes(): \Iterator
     {
-        return [
-            [Entity::ORG_TYPE_SOLE_TRADER],
-            [Entity::ORG_TYPE_IRFO],
-            [Entity::ORG_TYPE_LLP],
-            [Entity::ORG_TYPE_OTHER],
-            [Entity::ORG_TYPE_PARTNERSHIP],
-            [Entity::ORG_TYPE_REGISTERED_COMPANY],
-        ];
+        yield [Entity::ORG_TYPE_SOLE_TRADER];
+        yield [Entity::ORG_TYPE_IRFO];
+        yield [Entity::ORG_TYPE_LLP];
+        yield [Entity::ORG_TYPE_OTHER];
+        yield [Entity::ORG_TYPE_PARTNERSHIP];
+        yield [Entity::ORG_TYPE_REGISTERED_COMPANY];
     }
 
     /**
@@ -330,28 +324,26 @@ class OrganisationEntityTest extends EntityTester
         );
     }
 
-    public static function dpActiveLicences(): array
+    public static function dpActiveLicences(): \Iterator
     {
-        return [
-            [null, LicenceEntity::LICENCE_STATUS_VALID, true, false, false],
-            [null, LicenceEntity::LICENCE_STATUS_SUSPENDED, true, false, false],
-            [null, LicenceEntity::LICENCE_STATUS_CURTAILED, true, false, false],
-            [null, LicenceEntity::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION, true, false, false],
-            [null, LicenceEntity::LICENCE_STATUS_NOT_SUBMITTED, false, false, false],
-            [null, LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, false, false, false],
-            [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_VALID, true, true, false],
-            [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_SUSPENDED, true, true, false],
-            [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_CURTAILED, true, true, false],
-            [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION, true, true, false],
-            [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_NOT_SUBMITTED, false, false, false],
-            [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, false, false, false],
-            [LicenceEntity::LICENCE_CATEGORY_PSV, LicenceEntity::LICENCE_STATUS_VALID, true, false, true],
-            [LicenceEntity::LICENCE_CATEGORY_PSV, LicenceEntity::LICENCE_STATUS_SUSPENDED, true, false, true],
-            [LicenceEntity::LICENCE_CATEGORY_PSV, LicenceEntity::LICENCE_STATUS_CURTAILED, true, false, true],
-            [LicenceEntity::LICENCE_CATEGORY_PSV, LicenceEntity::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION, true, false, true],
-            [LicenceEntity::LICENCE_CATEGORY_PSV, LicenceEntity::LICENCE_STATUS_NOT_SUBMITTED, false, false, false],
-            [LicenceEntity::LICENCE_CATEGORY_PSV, LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, false, false, false],
-        ];
+        yield [null, LicenceEntity::LICENCE_STATUS_VALID, true, false, false];
+        yield [null, LicenceEntity::LICENCE_STATUS_SUSPENDED, true, false, false];
+        yield [null, LicenceEntity::LICENCE_STATUS_CURTAILED, true, false, false];
+        yield [null, LicenceEntity::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION, true, false, false];
+        yield [null, LicenceEntity::LICENCE_STATUS_NOT_SUBMITTED, false, false, false];
+        yield [null, LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, false, false, false];
+        yield [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_VALID, true, true, false];
+        yield [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_SUSPENDED, true, true, false];
+        yield [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_CURTAILED, true, true, false];
+        yield [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION, true, true, false];
+        yield [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_NOT_SUBMITTED, false, false, false];
+        yield [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, false, false, false];
+        yield [LicenceEntity::LICENCE_CATEGORY_PSV, LicenceEntity::LICENCE_STATUS_VALID, true, false, true];
+        yield [LicenceEntity::LICENCE_CATEGORY_PSV, LicenceEntity::LICENCE_STATUS_SUSPENDED, true, false, true];
+        yield [LicenceEntity::LICENCE_CATEGORY_PSV, LicenceEntity::LICENCE_STATUS_CURTAILED, true, false, true];
+        yield [LicenceEntity::LICENCE_CATEGORY_PSV, LicenceEntity::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION, true, false, true];
+        yield [LicenceEntity::LICENCE_CATEGORY_PSV, LicenceEntity::LICENCE_STATUS_NOT_SUBMITTED, false, false, false];
+        yield [LicenceEntity::LICENCE_CATEGORY_PSV, LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, false, false, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpActiveLicences')]
@@ -403,19 +395,17 @@ class OrganisationEntityTest extends EntityTester
         );
     }
 
-    public static function dpEligibleIrhpLicences(): array
+    public static function dpEligibleIrhpLicences(): \Iterator
     {
-        return [
-            [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL, true],
-            [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL, true],
-            [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_TYPE_RESTRICTED, true],
-            [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_TYPE_SPECIAL_RESTRICTED, false],
-            [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_SUSPENDED, LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL, true],
-            [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_CURTAILED, LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL, true],
-            [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL, false],
-            [LicenceEntity::LICENCE_CATEGORY_PSV, LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL, false],
-            [null, LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL, false],
-        ];
+        yield [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL, true];
+        yield [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL, true];
+        yield [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_TYPE_RESTRICTED, true];
+        yield [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_TYPE_SPECIAL_RESTRICTED, false];
+        yield [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_SUSPENDED, LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL, true];
+        yield [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_CURTAILED, LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL, true];
+        yield [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL, false];
+        yield [LicenceEntity::LICENCE_CATEGORY_PSV, LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL, false];
+        yield [null, LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL, false];
     }
 
     public function testGetEligibleIrhpLicencesForStock(): void
@@ -483,7 +473,7 @@ class OrganisationEntityTest extends EntityTester
             ->once()
             ->andReturn($licenceCollection);
 
-        self::assertEquals($expectedData, $organisation->getEligibleIrhpLicencesForStock($stock));
+        $this->assertEquals($expectedData, $organisation->getEligibleIrhpLicencesForStock($stock));
     }
 
     public function testGetDisqualificationNull(): void
@@ -492,7 +482,7 @@ class OrganisationEntityTest extends EntityTester
         $organisation = $this->instantiate($this->entityClass);
         $organisation->setDisqualifications(new ArrayCollection());
 
-        $this->assertSame(null, $organisation->getDisqualification());
+        $this->assertNull($organisation->getDisqualification());
     }
 
     public function testGetDisqualification(): void
@@ -544,26 +534,24 @@ class OrganisationEntityTest extends EntityTester
         $this->assertEquals($expected, $organisation->getLinkedLicences()->contains($licence));
     }
 
-    public static function dpGetLinkedLicences(): array
+    public static function dpGetLinkedLicences(): \Iterator
     {
-        return [
-            [LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, false],
-            [LicenceEntity::LICENCE_STATUS_NOT_SUBMITTED, false],
-            [LicenceEntity::LICENCE_STATUS_SUSPENDED, true],
-            [LicenceEntity::LICENCE_STATUS_VALID, true],
-            [LicenceEntity::LICENCE_STATUS_CURTAILED, true],
-            [LicenceEntity::LICENCE_STATUS_GRANTED, false],
-            [LicenceEntity::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION, true],
-            [LicenceEntity::LICENCE_STATUS_SURRENDERED, true],
-            [LicenceEntity::LICENCE_STATUS_WITHDRAWN, false],
-            [LicenceEntity::LICENCE_STATUS_REFUSED, false],
-            [LicenceEntity::LICENCE_STATUS_REVOKED, true],
-            [LicenceEntity::LICENCE_STATUS_NOT_TAKEN_UP, true],
-            [LicenceEntity::LICENCE_STATUS_TERMINATED, true],
-            [LicenceEntity::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT, true],
-            [LicenceEntity::LICENCE_STATUS_UNLICENSED, true],
-            [LicenceEntity::LICENCE_STATUS_CANCELLED, true],
-        ];
+        yield [LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, false];
+        yield [LicenceEntity::LICENCE_STATUS_NOT_SUBMITTED, false];
+        yield [LicenceEntity::LICENCE_STATUS_SUSPENDED, true];
+        yield [LicenceEntity::LICENCE_STATUS_VALID, true];
+        yield [LicenceEntity::LICENCE_STATUS_CURTAILED, true];
+        yield [LicenceEntity::LICENCE_STATUS_GRANTED, false];
+        yield [LicenceEntity::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION, true];
+        yield [LicenceEntity::LICENCE_STATUS_SURRENDERED, true];
+        yield [LicenceEntity::LICENCE_STATUS_WITHDRAWN, false];
+        yield [LicenceEntity::LICENCE_STATUS_REFUSED, false];
+        yield [LicenceEntity::LICENCE_STATUS_REVOKED, true];
+        yield [LicenceEntity::LICENCE_STATUS_NOT_TAKEN_UP, true];
+        yield [LicenceEntity::LICENCE_STATUS_TERMINATED, true];
+        yield [LicenceEntity::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT, true];
+        yield [LicenceEntity::LICENCE_STATUS_UNLICENSED, true];
+        yield [LicenceEntity::LICENCE_STATUS_CANCELLED, true];
     }
 
     public function testGetContextValue(): void
@@ -706,12 +694,10 @@ class OrganisationEntityTest extends EntityTester
     /**
      * Allowed operator location provider (applications)
      */
-    public static function allowedOperatorLocationProviderApplications(): array
+    public static function allowedOperatorLocationProviderApplications(): \Iterator
     {
-        return [
-            ['N', 'GB'],
-            ['Y', 'NI'],
-        ];
+        yield ['N', 'GB'];
+        yield ['Y', 'NI'];
     }
 
     /**
@@ -761,13 +747,11 @@ class OrganisationEntityTest extends EntityTester
     /**
      * Allowed operator location provider (licences)
      */
-    public static function allowedOperatorLocationProviderLicences(): array
+    public static function allowedOperatorLocationProviderLicences(): \Iterator
     {
-        return [
-            ['N', 'NI', LicenceEntity::LICENCE_STATUS_GRANTED],
-            ['B', 'GB', LicenceEntity::LICENCE_STATUS_GRANTED],
-            ['B', null, LicenceEntity::LICENCE_STATUS_WITHDRAWN],
-        ];
+        yield ['N', 'NI', LicenceEntity::LICENCE_STATUS_GRANTED];
+        yield ['B', 'GB', LicenceEntity::LICENCE_STATUS_GRANTED];
+        yield ['B', null, LicenceEntity::LICENCE_STATUS_WITHDRAWN];
     }
 
     /**
@@ -986,26 +970,24 @@ class OrganisationEntityTest extends EntityTester
         );
     }
 
-    public static function dpHasSubmittedLicenceApplication(): array
+    public static function dpHasSubmittedLicenceApplication(): \Iterator
     {
-        return [
-            [null, false],
-            [LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, true],
-            [LicenceEntity::LICENCE_STATUS_NOT_SUBMITTED, false],
-            [LicenceEntity::LICENCE_STATUS_SUSPENDED, true],
-            [LicenceEntity::LICENCE_STATUS_VALID, true],
-            [LicenceEntity::LICENCE_STATUS_CURTAILED, true],
-            [LicenceEntity::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION, true],
-            [LicenceEntity::LICENCE_STATUS_SURRENDERED, true],
-            [LicenceEntity::LICENCE_STATUS_WITHDRAWN, true],
-            [LicenceEntity::LICENCE_STATUS_REFUSED, true],
-            [LicenceEntity::LICENCE_STATUS_REVOKED, true],
-            [LicenceEntity::LICENCE_STATUS_NOT_TAKEN_UP, true],
-            [LicenceEntity::LICENCE_STATUS_TERMINATED, true],
-            [LicenceEntity::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT, true],
-            [LicenceEntity::LICENCE_STATUS_UNLICENSED, true],
-            [LicenceEntity::LICENCE_STATUS_CANCELLED, false],
-        ];
+        yield [null, false];
+        yield [LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, true];
+        yield [LicenceEntity::LICENCE_STATUS_NOT_SUBMITTED, false];
+        yield [LicenceEntity::LICENCE_STATUS_SUSPENDED, true];
+        yield [LicenceEntity::LICENCE_STATUS_VALID, true];
+        yield [LicenceEntity::LICENCE_STATUS_CURTAILED, true];
+        yield [LicenceEntity::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION, true];
+        yield [LicenceEntity::LICENCE_STATUS_SURRENDERED, true];
+        yield [LicenceEntity::LICENCE_STATUS_WITHDRAWN, true];
+        yield [LicenceEntity::LICENCE_STATUS_REFUSED, true];
+        yield [LicenceEntity::LICENCE_STATUS_REVOKED, true];
+        yield [LicenceEntity::LICENCE_STATUS_NOT_TAKEN_UP, true];
+        yield [LicenceEntity::LICENCE_STATUS_TERMINATED, true];
+        yield [LicenceEntity::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT, true];
+        yield [LicenceEntity::LICENCE_STATUS_UNLICENSED, true];
+        yield [LicenceEntity::LICENCE_STATUS_CANCELLED, false];
     }
 
     private function getDisabledOrgUser(): m\LegacyMockInterface

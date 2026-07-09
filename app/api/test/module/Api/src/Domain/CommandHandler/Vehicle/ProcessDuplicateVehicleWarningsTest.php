@@ -25,7 +25,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ProcessDuplicateVehicleWarningsTest extends AbstractCommandHandlerTestCase
+final class ProcessDuplicateVehicleWarningsTest extends AbstractCommandHandlerTestCase
 {
     protected $dto;
 

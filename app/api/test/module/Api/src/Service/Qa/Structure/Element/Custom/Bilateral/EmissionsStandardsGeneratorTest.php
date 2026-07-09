@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EmissionsStandardsGeneratorTest extends MockeryTestCase
+final class EmissionsStandardsGeneratorTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate(mixed $answerValue, mixed $expectedYesNo): void
@@ -41,11 +41,9 @@ class EmissionsStandardsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpGenerate(): array
+    public static function dpGenerate(): \Iterator
     {
-        return [
-            ['string_value', 'Y'],
-            [null, null],
-        ];
+        yield ['string_value', 'Y'];
+        yield [null, null];
     }
 }

@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\ContNextExpDate;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ContNextExpDateTest extends \PHPUnit\Framework\TestCase
+final class ContNextExpDateTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

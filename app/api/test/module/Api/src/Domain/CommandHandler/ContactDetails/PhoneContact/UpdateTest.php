@@ -15,7 +15,7 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\CommandHandler\ContactDetails\PhoneContact\Update
  */
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -70,6 +70,6 @@ class UpdateTest extends AbstractCommandHandlerTestCase
 
         $actual = $this->sut->handleCommand($command);
 
-        static::assertEquals(['Phone contact \'' . $id . '\' updated'], $actual->getMessages());
+        $this->assertEquals(['Phone contact \'' . $id . '\' updated'], $actual->getMessages());
     }
 }

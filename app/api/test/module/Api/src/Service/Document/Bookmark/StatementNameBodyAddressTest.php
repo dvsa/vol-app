@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\StatementNameBodyAddress;
 /**
  * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\StatementNameBodyAddress
  */
-class StatementNameBodyAddressTest extends \PHPUnit\Framework\TestCase
+final class StatementNameBodyAddressTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -27,7 +27,7 @@ class StatementNameBodyAddressTest extends \PHPUnit\Framework\TestCase
         $sut = new StatementNameBodyAddress();
         $actual = $sut->getQuery(['statement' => null]);
 
-        static::assertNull($actual);
+        $this->assertNull($actual);
     }
 
     public function testRender(): void

@@ -679,7 +679,7 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
         return $collection;
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->xmlStructureInput = $container->get(XmlStructureInputFactory::class);
         $this->busRegInput = $container->get(BusRegistrationInputFactory::class);

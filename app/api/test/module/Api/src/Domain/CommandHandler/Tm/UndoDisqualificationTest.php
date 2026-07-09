@@ -23,7 +23,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.pehkov@valtech.co.uk>
  */
-class UndoDisqualificationTest extends AbstractCommandHandlerTestCase
+final class UndoDisqualificationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

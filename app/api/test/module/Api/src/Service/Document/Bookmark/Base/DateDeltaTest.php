@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\Base\DateDelta
  */
-class DateDeltaTest extends MockeryTestCase
+final class DateDeltaTest extends MockeryTestCase
 {
     public function test(): void
     {
@@ -21,9 +21,6 @@ class DateDeltaTest extends MockeryTestCase
         $date = new DateTime();
         $date->sub(new \DateInterval('P' . abs(DateDeltaStub::DELTA) . 'D'));
 
-        static::assertEquals(
-            $date->format(DateDelta::FORMAT),
-            $sut->render()
-        );
+        $this->assertEquals($date->format(DateDelta::FORMAT), $sut->render());
     }
 }

@@ -9,9 +9,9 @@ use Dvsa\Olcs\Api\Domain\Repository\EventHistory;
 use Dvsa\Olcs\Transfer\Query\Surrender\PreviousLicenceStatus as PreviousLicenceStatusQuery;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 
-class PreviousLicenceStatusTest extends QueryHandlerTestCase
+final class PreviousLicenceStatusTest extends QueryHandlerTestCase
 {
-    public const LICENCE_STATUS = 'lic_sts';
+    public const string LICENCE_STATUS = 'lic_sts';
 
     public function setUp(): void
     {

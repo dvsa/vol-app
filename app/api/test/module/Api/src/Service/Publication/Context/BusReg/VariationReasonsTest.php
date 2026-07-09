@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class VariationReasonsTest
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class VariationReasonsTest extends MockeryTestCase
+final class VariationReasonsTest extends MockeryTestCase
 {
     /**
      * Tests bus reg variation reasons filter

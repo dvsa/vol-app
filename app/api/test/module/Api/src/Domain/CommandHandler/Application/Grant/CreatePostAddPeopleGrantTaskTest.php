@@ -21,7 +21,7 @@ use Mockery as m;
 /**
  * Class CreatePostAddPeopleGrantTaskTest
  */
-class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
+final class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -129,17 +129,15 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public static function provideCreatedTaskSubCategoryCases(): array
+    public static function provideCreatedTaskSubCategoryCases(): \Iterator
     {
-        return [
-            [Organisation::ORG_TYPE_REGISTERED_COMPANY, Category::TASK_SUB_CATEGORY_DIRECTOR_CHANGE_DIGITAL],
-            [Organisation::ORG_TYPE_LLP, Category::TASK_SUB_CATEGORY_PARTNER_CHANGE_DIGITAL],
-            [Organisation::ORG_TYPE_OTHER, Category::TASK_SUB_CATEGORY_PERSON_CHANGE_DIGITAL],
-            [Organisation::ORG_TYPE_PARTNERSHIP, Category::TASK_SUB_CATEGORY_PERSON_CHANGE_DIGITAL],
-            [Organisation::ORG_TYPE_SOLE_TRADER, Category::TASK_SUB_CATEGORY_PERSON_CHANGE_DIGITAL],
-            [Organisation::ORG_TYPE_IRFO, Category::TASK_SUB_CATEGORY_PERSON_CHANGE_DIGITAL],
-            ['any-other-org-type', Category::TASK_SUB_CATEGORY_PERSON_CHANGE_DIGITAL],
-        ];
+        yield [Organisation::ORG_TYPE_REGISTERED_COMPANY, Category::TASK_SUB_CATEGORY_DIRECTOR_CHANGE_DIGITAL];
+        yield [Organisation::ORG_TYPE_LLP, Category::TASK_SUB_CATEGORY_PARTNER_CHANGE_DIGITAL];
+        yield [Organisation::ORG_TYPE_OTHER, Category::TASK_SUB_CATEGORY_PERSON_CHANGE_DIGITAL];
+        yield [Organisation::ORG_TYPE_PARTNERSHIP, Category::TASK_SUB_CATEGORY_PERSON_CHANGE_DIGITAL];
+        yield [Organisation::ORG_TYPE_SOLE_TRADER, Category::TASK_SUB_CATEGORY_PERSON_CHANGE_DIGITAL];
+        yield [Organisation::ORG_TYPE_IRFO, Category::TASK_SUB_CATEGORY_PERSON_CHANGE_DIGITAL];
+        yield ['any-other-org-type', Category::TASK_SUB_CATEGORY_PERSON_CHANGE_DIGITAL];
     }
 
     public function testCreatedTaskLicence(): void
@@ -193,17 +191,15 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public static function provideCreatedTaskDescriptionCases(): array
+    public static function provideCreatedTaskDescriptionCases(): \Iterator
     {
-        return [
-            [Organisation::ORG_TYPE_REGISTERED_COMPANY, 'Add director(s)'],
-            [Organisation::ORG_TYPE_LLP, 'Add partner(s)'],
-            [Organisation::ORG_TYPE_OTHER, 'Add responsible person(s)'],
-            [Organisation::ORG_TYPE_PARTNERSHIP, 'Add responsible person(s)'],
-            [Organisation::ORG_TYPE_SOLE_TRADER, 'Add responsible person(s)'],
-            [Organisation::ORG_TYPE_IRFO, 'Add responsible person(s)'],
-            ['any-other-org-type', 'Add responsible person(s)'],
-        ];
+        yield [Organisation::ORG_TYPE_REGISTERED_COMPANY, 'Add director(s)'];
+        yield [Organisation::ORG_TYPE_LLP, 'Add partner(s)'];
+        yield [Organisation::ORG_TYPE_OTHER, 'Add responsible person(s)'];
+        yield [Organisation::ORG_TYPE_PARTNERSHIP, 'Add responsible person(s)'];
+        yield [Organisation::ORG_TYPE_SOLE_TRADER, 'Add responsible person(s)'];
+        yield [Organisation::ORG_TYPE_IRFO, 'Add responsible person(s)'];
+        yield ['any-other-org-type', 'Add responsible person(s)'];
     }
 
     /**

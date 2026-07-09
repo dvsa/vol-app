@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Permits\CanAccessIrhpApplicationWit
 /**
  * @covers Dvsa\Olcs\Api\Domain\Validation\Handlers\Permits\CanAccessIrhpApplicationWithId
  */
-class CanAccessIrhpApplicationWithIdTest extends AbstractHandlerTestCase
+final class CanAccessIrhpApplicationWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessIrhpApplicationWithId
@@ -39,11 +39,9 @@ class CanAccessIrhpApplicationWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function dpTestIsValid(): array
+    public static function dpTestIsValid(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

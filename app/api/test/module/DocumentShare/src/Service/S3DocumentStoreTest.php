@@ -18,9 +18,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(S3DocumentStore::class)]
-class S3DocumentStoreTest extends MockeryTestCase
+final class S3DocumentStoreTest extends MockeryTestCase
 {
-    private const BUCKET = 'test-bucket';
+    private const string BUCKET = 'test-bucket';
 
     private MockHandler $mockHandler;
 

@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Domain\RepositoryServiceManager;
 use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 
-class RefreshSubmissionSectionsTest extends AbstractCommandHandlerTestCase
+final class RefreshSubmissionSectionsTest extends AbstractCommandHandlerTestCase
 {
     public $submissionConfig = [
         'submissions' => [

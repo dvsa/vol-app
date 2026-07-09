@@ -13,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @covers Dvsa\Olcs\Api\Domain\QueryBuilder
  */
-class QueryBuilderTest extends MockeryTestCase
+final class QueryBuilderTest extends MockeryTestCase
 {
     /** @var  QueryBuilder */
     private $sut;
@@ -21,6 +21,7 @@ class QueryBuilderTest extends MockeryTestCase
     /** @var  m\MockInterface */
     private $mockQueryPartialSrvMngr;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockQueryPartialSrvMngr = m::mock(QueryPartialServiceManager::class);
@@ -52,6 +53,6 @@ class QueryBuilderTest extends MockeryTestCase
             ->modifyQuery($mockQb)
             ->unit_testMethod('unit_Arg1', 'unit_Arg2');
 
-        static::assertSame($this->sut, $actual);
+        $this->assertSame($this->sut, $actual);
     }
 }

@@ -15,32 +15,24 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 /**
  * @covers Dvsa\Olcs\Api\Service\Document\Document
  */
-class DocumentTest extends TestCase
+final class DocumentTest extends TestCase
 {
-    /** @var DateService */
-    private $dateService;
-
-    /** @var DocumentStoreInterface */
-    private $documentStore;
-
-    /** @var TranslatorInterface */
-    private $translator;
-
     /** @var Document */
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
-        $this->dateService = m::mock(DateService::class);
+        $dateService = m::mock(DateService::class);
 
-        $this->documentStore = m::mock(DocumentStoreInterface::class);
+        $documentStore = m::mock(DocumentStoreInterface::class);
 
-        $this->translator = m::mock(TranslatorInterface::class);
+        $translator = m::mock(TranslatorInterface::class);
 
         $this->sut = new Document(
-            $this->dateService,
-            $this->documentStore,
-            $this->translator
+            $dateService,
+            $documentStore,
+            $translator
         );
     }
 

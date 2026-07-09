@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Command\Licence\UpdateTotalCommunityLicences as UpdateT
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\CommunityLic\Reprint::class)]
-class ReprintTest extends AbstractCommandHandlerTestCase
+final class ReprintTest extends AbstractCommandHandlerTestCase
 {
     /** @var Reprint */
     protected $sut;
@@ -184,13 +184,11 @@ class ReprintTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(CommunityLicEntity::STATUS_ACTIVE, $communityLic2->getStatus()->getId());
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
-        return [
-            [false, 0, 0],
-            [false, 1, 0],
-            [true, 0, 1]
-        ];
+        yield [false, 0, 0];
+        yield [false, 1, 0];
+        yield [true, 0, 1];
     }
 
     public function testHandleCommandWithoutDbUpdate(): void

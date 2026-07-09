@@ -8,7 +8,7 @@ use Psr\Container\ContainerInterface;
 class AnnualTripsAbroadGeneratorFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         return new AnnualTripsAbroadGenerator(
             $container->get('QaEcmtAnnualTripsAbroadElementFactory'),

@@ -22,7 +22,7 @@ class CompaniesHouseVsOlcsDiffsFactory implements FactoryInterface
      * @return CompaniesHouseVsOlcsDiffs
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CompaniesHouseVsOlcsDiffs
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CompaniesHouseVsOlcsDiffs
     {
         return new CompaniesHouseVsOlcsDiffs(
             $container->get('doctrine.connection.export')

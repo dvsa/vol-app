@@ -12,7 +12,7 @@ use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
  * @covers Dvsa\Olcs\Api\Entity\System\PublicHoliday
  * @covers Dvsa\Olcs\Api\Entity\System\AbstractPublicHoliday
  */
-class PublicHolidayEntityTest extends EntityTester
+final class PublicHolidayEntityTest extends EntityTester
 {
     protected $entityClass = Entity::class;
 
@@ -26,10 +26,10 @@ class PublicHolidayEntityTest extends EntityTester
 
         $entity = new Entity($expectDate, $isEngland, $isWales, $isScotland, $isNi);
 
-        static::assertEquals($expectDate, $entity->getPublicHolidayDate());
-        static::assertEquals('Y', $entity->getIsEngland());
-        static::assertEquals('N', $entity->getIsWales());
-        static::assertEquals('Y', $entity->getIsScotland());
-        static::assertEquals('Y', $entity->getIsNi());
+        $this->assertEquals($expectDate, $entity->getPublicHolidayDate());
+        $this->assertEquals('Y', $entity->getIsEngland());
+        $this->assertEquals('N', $entity->getIsWales());
+        $this->assertEquals('Y', $entity->getIsScotland());
+        $this->assertEquals('Y', $entity->getIsNi());
     }
 }

@@ -23,7 +23,7 @@ use Mockery as m;
 /**
  * Generate Irfo Gv Permit Test
  */
-class GenerateIrfoGvPermitTest extends AbstractCommandHandlerTestCase
+final class GenerateIrfoGvPermitTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

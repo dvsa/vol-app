@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class RefDataEntityTest extends EntityTester
+final class RefDataEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

@@ -25,7 +25,7 @@ use Dvsa\Olcs\Api\Domain\Command\Publication\PiDecision as PublishDecisionCmd;
 /**
  * Update TM Decision Test
  */
-class UpdateTmDecisionTest extends AbstractCommandHandlerTestCase
+final class UpdateTmDecisionTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

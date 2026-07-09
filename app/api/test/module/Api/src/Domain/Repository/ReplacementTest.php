@@ -15,8 +15,9 @@ use Dvsa\Olcs\Api\Domain\Repository\Replacement as ReplacementRepo;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ReplacementTest extends RepositoryTestCase
+final class ReplacementTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(ReplacementRepo::class);
@@ -35,6 +36,6 @@ class ReplacementTest extends RepositoryTestCase
 
         $this->em->expects('createQueryBuilder')->andReturn($queryBuilder);
 
-        self::assertEquals($queryResult, $this->sut->fetchAll($hydrationMode));
+        $this->assertEquals($queryResult, $this->sut->fetchAll($hydrationMode));
     }
 }

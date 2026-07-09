@@ -15,7 +15,7 @@ use Mockery as m;
  * @covers Dvsa\Olcs\Api\Domain\CommandHandler\ContactDetails\PhoneContact\Delete
  * @covers Dvsa\Olcs\Api\Domain\CommandHandler\AbstractDeleteCommandHandler
  */
-class DeleteTest extends AbstractCommandHandlerTestCase
+final class DeleteTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -40,7 +40,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
 
         $actual = $this->sut->handleCommand($command);
 
-        static::assertEquals(['id' . $id => $id], $actual->getIds());
-        static::assertEquals(['Id ' . $id . ' deleted'], $actual->getMessages());
+        $this->assertEquals(['id' . $id => $id], $actual->getIds());
+        $this->assertEquals(['Id ' . $id . ' deleted'], $actual->getMessages());
     }
 }

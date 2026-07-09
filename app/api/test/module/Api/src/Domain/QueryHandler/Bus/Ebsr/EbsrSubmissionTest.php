@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * EBSR Submission Test
  */
-class EbsrSubmissionTest extends QueryHandlerTestCase
+final class EbsrSubmissionTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

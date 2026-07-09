@@ -10,13 +10,13 @@ use Dvsa\Olcs\Api\Service\Submission\Sections\CaseSummary;
  * Class CaseSummaryTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class CaseSummaryTest extends AbstractSubmissionSectionTestCase
+final class CaseSummaryTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = CaseSummary::class;
 
-    protected const LICENCE_START_DATE = '2012-01-01 15:00:00';
+    protected const string LICENCE_START_DATE = '2012-01-01 15:00:00';
 
-    protected const BASE_EXPECTED_RESULT = [
+    protected const array BASE_EXPECTED_RESULT = [
         'id' => 99,
         'caseType' => 'case type 1',
         'ecmsNo' => 'ecms1234',
@@ -182,6 +182,7 @@ class CaseSummaryTest extends AbstractSubmissionSectionTestCase
          ];
     }
 
+    #[\Override]
     public static function getCase(): mixed
     {
         $case = parent::getCase();

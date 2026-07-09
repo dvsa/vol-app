@@ -17,7 +17,7 @@ use Laminas\Http\Response;
 /**
  * @covers Dvsa\Olcs\Address\Service\Address
  */
-class AddressTest extends MockeryTestCase
+final class AddressTest extends MockeryTestCase
 {
     /**  @var Client */
     protected $client;
@@ -25,6 +25,7 @@ class AddressTest extends MockeryTestCase
     /**  @var Address */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->client = m::mock(Client::class);

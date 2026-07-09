@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @covers Dvsa\Olcs\Snapshot\Service\Snapshots\AbstractGeneratorServices
  */
-class AbstractGeneratorServicesTest extends MockeryTestCase
+final class AbstractGeneratorServicesTest extends MockeryTestCase
 {
     public function testGetRenderer(): void
     {

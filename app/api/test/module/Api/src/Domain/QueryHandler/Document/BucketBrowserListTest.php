@@ -11,7 +11,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
-class BucketBrowserListTest extends QueryHandlerTestCase
+final class BucketBrowserListTest extends QueryHandlerTestCase
 {
     /** @var m\MockInterface|S3BucketBrowser */
     private $mockBrowser;

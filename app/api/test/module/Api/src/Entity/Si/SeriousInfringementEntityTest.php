@@ -18,7 +18,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class SeriousInfringementEntityTest extends EntityTester
+final class SeriousInfringementEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -108,12 +108,10 @@ class SeriousInfringementEntityTest extends EntityTester
         $this->assertEquals($expectedResult, $entity->hasRequestedPenalties());
     }
 
-    public static function dpHasRequestedPenalties(): array
+    public static function dpHasRequestedPenalties(): \Iterator
     {
-        return [
-            [new ArrayCollection(), false],
-            [new ArrayCollection([m::mock(SiPenaltyErruRequested::class)]), true]
-        ];
+        yield [new ArrayCollection(), false];
+        yield [new ArrayCollection([m::mock(SiPenaltyErruRequested::class)]), true];
     }
 
     public function testGetCalculatedBundleValues(): void

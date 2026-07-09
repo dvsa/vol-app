@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
  *
  * Initially auto-generated but won't be overridden
  */
-class InspectionRequestEntityTest extends EntityTester
+final class InspectionRequestEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -68,12 +68,10 @@ class InspectionRequestEntityTest extends EntityTester
         $this->assertEquals('inspector_notes', $sut->getInspectorNotes());
     }
 
-    public static function datesProvider(): array
+    public static function datesProvider(): \Iterator
     {
-        return [
-            [null, 3, (new DateTime('now'))->add(new \DateInterval('P3M')), null, new DateTime('now')],
-            ['2015-01-01', null, new \DateTime('2015-01-01'), '2014-01-01', new \DateTime('2014-01-01')]
-        ];
+        yield [null, 3, new DateTime('now')->add(new \DateInterval('P3M')), null, new DateTime('now')];
+        yield ['2015-01-01', null, new \DateTime('2015-01-01'), '2014-01-01', new \DateTime('2014-01-01')];
     }
 
     public function testUpdateInspectionRequestNotValid(): void
@@ -103,23 +101,20 @@ class InspectionRequestEntityTest extends EntityTester
                 null
             );
         } catch (ValidationException $e) {
-            static::assertEquals(
-                $e->getMessages(),
+            $this->assertEquals($e->getMessages(), [
                 [
-                    [
-                        'reportType' => [Entity::ERROR_FIELD_IS_REQUIRED => 'Field is required'],
-                    ],
-                    [
-                        'resultType' => [Entity::ERROR_FIELD_IS_REQUIRED => 'Field is required'],
-                    ],
-                    [
-                        'dueDate' => [Entity::ERROR_FIELD_IS_REQUIRED => 'Field is required'],
-                    ],
-                    [
-                        'dueDate' => [Entity::ERROR_DUE_DATE => 'Due date should be the same or after date requested'],
-                    ],
-                ]
-            );
+                    'reportType' => [Entity::ERROR_FIELD_IS_REQUIRED => 'Field is required'],
+                ],
+                [
+                    'resultType' => [Entity::ERROR_FIELD_IS_REQUIRED => 'Field is required'],
+                ],
+                [
+                    'dueDate' => [Entity::ERROR_FIELD_IS_REQUIRED => 'Field is required'],
+                ],
+                [
+                    'dueDate' => [Entity::ERROR_DUE_DATE => 'Due date should be the same or after date requested'],
+                ],
+            ]);
         }
     }
 
@@ -150,20 +145,17 @@ class InspectionRequestEntityTest extends EntityTester
                 null
             );
         } catch (ValidationException $e) {
-            static::assertEquals(
-                $e->getMessages(),
+            $this->assertEquals($e->getMessages(), [
                 [
-                    [
-                        'reportType' => [Entity::ERROR_FIELD_IS_REQUIRED => 'Field is required'],
-                    ],
-                    [
-                        'resultType' => [Entity::ERROR_FIELD_IS_REQUIRED => 'Field is required'],
-                    ],
-                    [
-                        'dueDate' => [Entity::ERROR_DUE_DATE_NOT_IN_RANGE => 'Due date not in range'],
-                    ],
-                ]
-            );
+                    'reportType' => [Entity::ERROR_FIELD_IS_REQUIRED => 'Field is required'],
+                ],
+                [
+                    'resultType' => [Entity::ERROR_FIELD_IS_REQUIRED => 'Field is required'],
+                ],
+                [
+                    'dueDate' => [Entity::ERROR_DUE_DATE_NOT_IN_RANGE => 'Due date not in range'],
+                ],
+            ]);
         }
     }
 
@@ -194,14 +186,11 @@ class InspectionRequestEntityTest extends EntityTester
                 'inspector_notes'
             );
         } catch (ValidationException $e) {
-            static::assertEquals(
-                $e->getMessages(),
-                [
-                    'requestDate' => [
-                        Entity::ERROR_REQUEST_DATE_IN_FUTURE => 'Request date should not be in future',
-                    ],
-                ]
-            );
+            $this->assertEquals($e->getMessages(), [
+                'requestDate' => [
+                    Entity::ERROR_REQUEST_DATE_IN_FUTURE => 'Request date should not be in future',
+                ],
+            ]);
         }
     }
 }

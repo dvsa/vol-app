@@ -23,7 +23,7 @@ use Exception;
 use Mockery as m;
 use Olcs\Logging\Log\Logger;
 
-class RunScoringTest extends AbstractCommandHandlerTestCase
+final class RunScoringTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

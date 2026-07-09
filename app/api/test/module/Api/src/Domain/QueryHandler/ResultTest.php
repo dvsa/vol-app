@@ -12,13 +12,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @covers Dvsa\Olcs\Api\Domain\QueryHandler\Result
  */
-class ResultTest extends MockeryTestCase
+final class ResultTest extends MockeryTestCase
 {
     public function testResultWithoutEntity(): void
     {
         $sut = new Result(null);
 
-        static::assertNull($sut->serialize());
+        $this->assertNull($sut->serialize());
     }
 
     public function testResultWithEntityAndBundle(): void

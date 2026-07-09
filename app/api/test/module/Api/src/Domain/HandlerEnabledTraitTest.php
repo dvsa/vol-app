@@ -13,7 +13,7 @@ use Mockery as m;
 /**
  * test the handler enabled trait
  */
-class HandlerEnabledTraitTest extends AbstractCommandHandlerTestCase
+final class HandlerEnabledTraitTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var HandlerEnabledTraitStub
@@ -98,11 +98,9 @@ class HandlerEnabledTraitTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(true, $this->sut->checkEnabled());
     }
 
-    public static function toggleConfigProvider(): array
+    public static function toggleConfigProvider(): \Iterator
     {
-        return [
-            [true, false, 1],
-            [false, true, 0]
-        ];
+        yield [true, false, 1];
+        yield [false, true, 0];
     }
 }

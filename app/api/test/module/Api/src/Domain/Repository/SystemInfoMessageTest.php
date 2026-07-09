@@ -11,11 +11,12 @@ use Dvsa\Olcs\Transfer\Query\System\InfoMessage\GetListActive as Qry;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\SystemInfoMessage::class)]
-class SystemInfoMessageTest extends RepositoryTestCase
+final class SystemInfoMessageTest extends RepositoryTestCase
 {
     /** @var  Repository\SystemInfoMessage */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repository\SystemInfoMessage::class);
@@ -39,9 +40,9 @@ class SystemInfoMessageTest extends RepositoryTestCase
             ->shouldReceive('modifyQuery')->once()->with($qb)->andReturnSelf()
             ->shouldReceive('withRefdata')->once()->with()->andReturnSelf();
 
-        self::assertEquals($expect, $this->sut->fetchListActive($qry));
+        $this->assertEquals($expect, $this->sut->fetchListActive($qry));
 
-        $now = (new DateTime())->format(DateTime::ATOM);
+        $now = new DateTime()->format(DateTime::ATOM);
 
         $expectedQuery = '{QUERY} ' .
             'SELECT partial m.{id, description} ' .
@@ -49,6 +50,6 @@ class SystemInfoMessageTest extends RepositoryTestCase
             'AND m.startDate <= [[' . $now . ']] ' .
             'AND m.endDate >= [[' . $now . ']]';
 
-        self::assertEquals($expectedQuery, $this->query);
+        $this->assertEquals($expectedQuery, $this->query);
     }
 }

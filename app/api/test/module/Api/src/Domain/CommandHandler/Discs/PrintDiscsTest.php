@@ -26,7 +26,7 @@ use Dvsa\Olcs\Api\Entity\System\SystemParameter;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class PrintDiscsTest extends AbstractCommandHandlerTestCase
+final class PrintDiscsTest extends AbstractCommandHandlerTestCase
 {
     protected $batchSize = 180;
 
@@ -127,16 +127,14 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
      * The pinned-layout SystemParameter selects the Gotenberg-specific base
      * template; anything else (including a missing row) keeps the legacy one.
      */
-    public static function pinnedLayoutProvider(): array
+    public static function pinnedLayoutProvider(): \Iterator
     {
-        return [
-            'goods, toggle missing' => ['Goods', SystemParameter::GOODS_DISC_PINNED_LAYOUT, 'GoodsDisc', 'Disc_List', null, 'GVDiscTemplate'],
-            'goods, toggle off' => ['Goods', SystemParameter::GOODS_DISC_PINNED_LAYOUT, 'GoodsDisc', 'Disc_List', '0', 'GVDiscTemplate'],
-            'goods, toggle on' => ['Goods', SystemParameter::GOODS_DISC_PINNED_LAYOUT, 'GoodsDisc', 'Disc_List', '1', 'GVDiscTemplateGotenberg'],
-            'psv, toggle missing' => ['PSV', SystemParameter::PSV_DISC_PINNED_LAYOUT, 'PsvDisc', 'Psv_Disc_Page', null, 'PSVDiscTemplate'],
-            'psv, toggle off' => ['PSV', SystemParameter::PSV_DISC_PINNED_LAYOUT, 'PsvDisc', 'Psv_Disc_Page', '0', 'PSVDiscTemplate'],
-            'psv, toggle on' => ['PSV', SystemParameter::PSV_DISC_PINNED_LAYOUT, 'PsvDisc', 'Psv_Disc_Page', '1', 'PSVDiscTemplateGotenberg'],
-        ];
+        yield 'goods, toggle missing' => ['Goods', SystemParameter::GOODS_DISC_PINNED_LAYOUT, 'GoodsDisc', 'Disc_List', null, 'GVDiscTemplate'];
+        yield 'goods, toggle off' => ['Goods', SystemParameter::GOODS_DISC_PINNED_LAYOUT, 'GoodsDisc', 'Disc_List', '0', 'GVDiscTemplate'];
+        yield 'goods, toggle on' => ['Goods', SystemParameter::GOODS_DISC_PINNED_LAYOUT, 'GoodsDisc', 'Disc_List', '1', 'GVDiscTemplateGotenberg'];
+        yield 'psv, toggle missing' => ['PSV', SystemParameter::PSV_DISC_PINNED_LAYOUT, 'PsvDisc', 'Psv_Disc_Page', null, 'PSVDiscTemplate'];
+        yield 'psv, toggle off' => ['PSV', SystemParameter::PSV_DISC_PINNED_LAYOUT, 'PsvDisc', 'Psv_Disc_Page', '0', 'PSVDiscTemplate'];
+        yield 'psv, toggle on' => ['PSV', SystemParameter::PSV_DISC_PINNED_LAYOUT, 'PsvDisc', 'Psv_Disc_Page', '1', 'PSVDiscTemplateGotenberg'];
     }
 
     protected function getDiscs(): mixed

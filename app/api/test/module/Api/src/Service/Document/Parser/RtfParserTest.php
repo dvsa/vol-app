@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Parser\RtfParser;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class RtfParserTest extends \PHPUnit\Framework\TestCase
+final class RtfParserTest extends \PHPUnit\Framework\TestCase
 {
     public function testExtension(): void
     {

@@ -10,13 +10,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\ObjDeadline
  */
-class ObjDeadlineTest extends MockeryTestCase
+final class ObjDeadlineTest extends MockeryTestCase
 {
     public function test(): void
     {
         $sut = new ObjDeadline();
         $sut->setData(['pubDate' => '2003-02-01']);
 
-        static::assertEquals('22/02/2003', $sut->render());
+        $this->assertEquals('22/02/2003', $sut->render());
     }
 }

@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class PsvDiscPageTest extends m\Adapter\Phpunit\MockeryTestCase
+final class PsvDiscPageTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     public function testGetQuery(): void
     {
@@ -187,7 +187,7 @@ class PsvDiscPageTest extends m\Adapter\Phpunit\MockeryTestCase
             ->andReturn('rendered');
 
         $bookmark = $this->createPartialMock(PsvDiscPage::class, ['getSnippet']);
-        $bookmark->method('getSnippet')->willReturn('snippet');
+        $bookmark->expects($this->atLeastOnce())->method('getSnippet')->willReturn('snippet');
         $bookmark->setRepoManager($repoManager);
         $bookmark->setData($data);
         $bookmark->setParser($parser);
@@ -223,7 +223,7 @@ class PsvDiscPageTest extends m\Adapter\Phpunit\MockeryTestCase
         $parser->shouldReceive('replace')->twice()->andReturn('[PAGE]');
 
         $bookmark = $this->createPartialMock(PsvDiscPage::class, ['getSnippet']);
-        $bookmark->method('getSnippet')->willReturn('snippet');
+        $bookmark->expects($this->atLeastOnce())->method('getSnippet')->willReturn('snippet');
         $bookmark->setRepoManager($repoManager);
         $bookmark->setData($data);
         $bookmark->setParser($parser);
@@ -263,7 +263,7 @@ class PsvDiscPageTest extends m\Adapter\Phpunit\MockeryTestCase
             ->andReturn('rendered');
 
         $bookmark = $this->createPartialMock(PsvDiscPage::class, ['getSnippet']);
-        $bookmark->method('getSnippet')->willReturn('snippet');
+        $bookmark->expects($this->atLeastOnce())->method('getSnippet')->willReturn('snippet');
         $bookmark->setRepoManager($repoManager);
         $bookmark->setData($data);
         $bookmark->setParser($parser);

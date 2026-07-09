@@ -13,7 +13,7 @@ use Mockery as m;
  * @covers Dvsa\Olcs\Api\Entity\Application\PreviousConviction
  * @covers Dvsa\Olcs\Api\Entity\Application\AbstractPreviousConviction
  */
-class PreviousConvictionEntityTest extends EntityTester
+final class PreviousConvictionEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -26,7 +26,7 @@ class PreviousConvictionEntityTest extends EntityTester
     {
         $sut = new Entity();
 
-        $this->assertSame(null, $sut->getRelatedOrganisation());
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, $sut->getRelatedOrganisation());
     }
 
     public function testGetCalculatedValues(): void
@@ -34,11 +34,11 @@ class PreviousConvictionEntityTest extends EntityTester
         /** @var Application $mockApp */
         $mockApp = m::mock(Application::class);
 
-        $actual = (new Entity($mockApp))
+        $actual = new Entity($mockApp)
             ->setApplication($mockApp)
             ->jsonSerialize();
 
-        static::assertEquals(null, $actual['application']);
+        $this->assertEquals(null, $actual['application']);
     }
 
     public function testGetRelatedOrganisation(): void

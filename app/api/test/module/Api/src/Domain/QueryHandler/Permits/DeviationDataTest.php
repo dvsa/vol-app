@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Domain\Query\Permits\DeviationData as DeviationDataQry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class DeviationDataTest extends QueryHandlerTestCase
+final class DeviationDataTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

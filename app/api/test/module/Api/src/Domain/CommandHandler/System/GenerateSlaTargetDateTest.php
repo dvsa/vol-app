@@ -28,7 +28,7 @@ use Mockery as m;
 /**
  * GenerateSlaTargetDate command handler test
  */
-class GenerateSlaTargetDateTest extends AbstractCommandHandlerTestCase
+final class GenerateSlaTargetDateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

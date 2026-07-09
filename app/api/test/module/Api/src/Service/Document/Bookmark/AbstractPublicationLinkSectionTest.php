@@ -15,24 +15,21 @@ use org\bovigo\vfs\vfsStream;
 /**
  * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\AbstractPublicationLinkSection
  */
-class AbstractPublicationLinkSectionTest extends MockeryTestCase
+final class AbstractPublicationLinkSectionTest extends MockeryTestCase
 {
     public function testSetGet(): void
     {
         $sut = new AbstractPublicationLinkSectionStub();
 
-        static::assertEquals(
-            [
-                AbstractPublicationLinkSectionStub::TEST_PUB_TYPE_SECTION => [
-                    AbstractPublicationLinkSectionStub::TEST_SECTION_ID,
-                    AbstractPublicationLinkSectionStub::PUB_SECTION_18,
-                ],
+        $this->assertEquals([
+            AbstractPublicationLinkSectionStub::TEST_PUB_TYPE_SECTION => [
+                AbstractPublicationLinkSectionStub::TEST_SECTION_ID,
+                AbstractPublicationLinkSectionStub::PUB_SECTION_18,
             ],
-            $sut->getPubTypeSection()
-        );
+        ], $sut->getPubTypeSection());
 
         $bookmarkSnippets = $sut->getBookmarkSnippets();
-        static::assertIsArray($bookmarkSnippets);
+        $this->assertIsArray($bookmarkSnippets);
     }
 
     public function testGetBookmarkSnippetsByClass(): void
@@ -56,13 +53,10 @@ class AbstractPublicationLinkSectionTest extends MockeryTestCase
         $sut->setParser($mockParser);
         $sut->setSnippetPath($vfs->url() . '/');
 
-        static::assertEquals(
-            [
-                'unit_SnippedContent',
-                'unit_PubContent',
-            ],
-            $sut->getBookmarkSnippetsByClass('Section33')
-        );
+        $this->assertEquals([
+            'unit_SnippedContent',
+            'unit_PubContent',
+        ], $sut->getBookmarkSnippetsByClass('Section33'));
     }
 
     public function testGetQuery(): void
@@ -72,8 +66,8 @@ class AbstractPublicationLinkSectionTest extends MockeryTestCase
         /** @var DomainQry\Bookmark\PublicationBundle $actual */
         $actual = $sut->getQuery(['publicationId' => 9999]);
 
-        static::assertInstanceOf(DomainQry\Bookmark\PublicationBundle::class, $actual);
-        static::assertEquals(9999, $actual->getId());
+        $this->assertInstanceOf(DomainQry\Bookmark\PublicationBundle::class, $actual);
+        $this->assertEquals(9999, $actual->getId());
     }
 
     public function testRender(): void
@@ -135,11 +129,8 @@ class AbstractPublicationLinkSectionTest extends MockeryTestCase
         //  call & check
         $actual = $sut->render();
 
-        static::assertEquals(
-            'unit_SnippetFile1_|unit_Text2f|unit_Text1f@' .
-            'unit_SnippetFile1_unit_Text1f|unit_Text2f|unit_Text3f@',
-            $actual
-        );
+        $this->assertEquals('unit_SnippetFile1_|unit_Text2f|unit_Text1f@' .
+        'unit_SnippetFile1_unit_Text1f|unit_Text2f|unit_Text3f@', $actual);
     }
 
     public function testRenderNoEntries(): void
@@ -161,6 +152,6 @@ class AbstractPublicationLinkSectionTest extends MockeryTestCase
             ->andReturn(['unit_PubSection' => 660]);
 
         //  call & check
-        static::assertEquals('No entries', $sut->render());
+        $this->assertEquals('No entries', $sut->render());
     }
 }

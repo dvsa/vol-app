@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\ApplicationOperatingCentre\CreateApplica
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateApplicationOperatingCentreTest extends AbstractCommandHandlerTestCase
+final class CreateApplicationOperatingCentreTest extends AbstractCommandHandlerTestCase
 {
     protected $s4;
 

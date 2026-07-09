@@ -12,7 +12,7 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessTransactionWithId
  */
-class CanAccessTransactionWithIdTest extends AbstractHandlerTestCase
+final class CanAccessTransactionWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessTransactionWithId
@@ -43,11 +43,9 @@ class CanAccessTransactionWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

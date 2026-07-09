@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class AuthenticationServiceFactoryTest
  * @see AuthenticationServiceFactory
  */
-class AuthenticationServiceFactoryTest extends MockeryTestCase
+final class AuthenticationServiceFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
@@ -47,6 +47,7 @@ class AuthenticationServiceFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(AuthenticationService::class, $result);
     }
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();

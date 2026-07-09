@@ -16,7 +16,7 @@ use Mockery as m;
 /**
  * @see QueryHandler
  */
-class SystemParameterTest extends QueryHandlerTestCase
+final class SystemParameterTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

@@ -12,7 +12,7 @@ use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
  * @covers Dvsa\Olcs\Api\Entity\System\SystemInfoMessage
  * @covers Dvsa\Olcs\Api\Entity\System\AbstractSystemInfoMessage
  */
-class SystemInfoMessageEntityTest extends EntityTester
+final class SystemInfoMessageEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -26,40 +26,37 @@ class SystemInfoMessageEntityTest extends EntityTester
     {
         $actual = $entity->getCalculatedBundleValues();
 
-        static::assertEquals($expect, $actual);
+        $this->assertEquals($expect, $actual);
     }
 
-    public static function dataProviderTestCalculated(): array
+    public static function dataProviderTestCalculated(): \Iterator
     {
         $now = time();
-
-        return [
-            //  current date in interval
-            [
-                'entity' => (new Entity())
-                    ->setStartDate(date('Y-m-d H:i:s', $now - 30000))
-                    ->setEndDate(date('Y-m-d H:i:s', $now + 30000)),
-                'expect' => [
-                    'isActive' => true,
-                ],
+        //  current date in interval
+        yield [
+            'entity' => new Entity()
+                ->setStartDate(date('Y-m-d H:i:s', $now - 30000))
+                ->setEndDate(date('Y-m-d H:i:s', $now + 30000)),
+            'expect' => [
+                'isActive' => true,
             ],
-            //  interval in past, internal false
-            [
-                'entity' => (new Entity())
-                    ->setStartDate(date('Y-m-d H:i:s', $now - 2 * 30000))
-                    ->setEndDate(date('Y-m-d H:i:s', $now - 30000)),
-                'expect' => [
-                    'isActive' => false,
-                ],
+        ];
+        //  interval in past, internal false
+        yield [
+            'entity' => new Entity()
+                ->setStartDate(date('Y-m-d H:i:s', $now - 2 * 30000))
+                ->setEndDate(date('Y-m-d H:i:s', $now - 30000)),
+            'expect' => [
+                'isActive' => false,
             ],
-            //  interval in future, internal false
-            [
-                'entity' => (new Entity())
-                    ->setStartDate(date('Y-m-d H:i:s', $now + 30000))
-                    ->setEndDate(date('Y-m-d H:i:s', $now + 2 * 30000)),
-                'expect' => [
-                    'isActive' => false,
-                ],
+        ];
+        //  interval in future, internal false
+        yield [
+            'entity' => new Entity()
+                ->setStartDate(date('Y-m-d H:i:s', $now + 30000))
+                ->setEndDate(date('Y-m-d H:i:s', $now + 2 * 30000)),
+            'expect' => [
+                'isActive' => false,
             ],
         ];
     }

@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\NoDiscsPrinted;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class NoDiscsPrintedTest extends \PHPUnit\Framework\TestCase
+final class NoDiscsPrintedTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQueryIsNull(): void
     {

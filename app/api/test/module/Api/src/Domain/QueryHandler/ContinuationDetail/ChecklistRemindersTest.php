@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @covers Dvsa\Olcs\Api\Domain\QueryHandler\ContinuationDetail\ChecklistReminders
  */
-class ChecklistRemindersTest extends QueryHandlerTestCase
+final class ChecklistRemindersTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -64,12 +64,9 @@ class ChecklistRemindersTest extends QueryHandlerTestCase
 
         $actual = $this->sut->handleQuery($query);
 
-        static::assertEquals(
-            [
-                'result' => [['unit_RepoResult', null, null]],
-                'count' => 1,
-            ],
-            $actual
-        );
+        $this->assertEquals([
+            'result' => [['unit_RepoResult', null, null]],
+            'count' => 1,
+        ], $actual);
     }
 }

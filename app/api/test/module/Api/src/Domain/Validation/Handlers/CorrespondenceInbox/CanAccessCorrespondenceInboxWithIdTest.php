@@ -18,7 +18,7 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\Validation\Handlers\CorrespondenceInbox\CanAccessCorrespondenceInboxWithId
  */
-class CanAccessCorrespondenceInboxWithIdTest extends AbstractHandlerTestCase
+final class CanAccessCorrespondenceInboxWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessCorrespondenceInboxWithId
@@ -49,11 +49,9 @@ class CanAccessCorrespondenceInboxWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

@@ -27,23 +27,22 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Letter\LetterPreviewService::class)]
-class LetterPreviewServiceTest extends MockeryTestCase
+final class LetterPreviewServiceTest extends MockeryTestCase
 {
     private LetterPreviewService $sut;
     private m\MockInterface|SectionRendererPluginManager $mockRendererManager;
-    private m\MockInterface $mockContentStore;
-    private m\MockInterface $mockDocTemplateRepo;
     private m\MockInterface|VolGrabReplacementService $mockVolGrabReplacementService;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockRendererManager = m::mock(SectionRendererPluginManager::class);
-        $this->mockContentStore = m::mock();
-        $this->mockDocTemplateRepo = m::mock();
+        $mockContentStore = m::mock();
+        $mockDocTemplateRepo = m::mock();
         $this->mockVolGrabReplacementService = m::mock(VolGrabReplacementService::class);
 
         // Default: logo lookup returns empty (no logo found)
-        $this->mockDocTemplateRepo->shouldReceive('fetchByTemplateSlug')
+        $mockDocTemplateRepo->shouldReceive('fetchByTemplateSlug')
             ->with('otclogo-letters')
             ->andReturn(null)
             ->byDefault();
@@ -66,8 +65,8 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $this->sut = new LetterPreviewService(
             $this->mockRendererManager,
-            $this->mockContentStore,
-            $this->mockDocTemplateRepo,
+            $mockContentStore,
+            $mockDocTemplateRepo,
             $this->mockVolGrabReplacementService
         );
     }
@@ -236,7 +235,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $result = $this->sut->renderPreview($mockLetterInstance, $mockTemplate);
 
-        $this->assertEquals('John Smith', $result);
+        $this->assertSame('John Smith', $result);
     }
 
     public function testBuildCaseworkerNameFallback(): void
@@ -285,7 +284,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $result = $this->sut->renderPreview($mockLetterInstance, $mockTemplate);
 
-        $this->assertEquals('Caseworker', $result);
+        $this->assertSame('Caseworker', $result);
     }
 
     public function testBuildEntityReferenceWithApplication(): void
@@ -337,7 +336,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $result = $this->sut->renderPreview($mockLetterInstance, $mockTemplate);
 
-        $this->assertEquals('Application: 12345', $result);
+        $this->assertSame('Application: 12345', $result);
     }
 
     public function testBuildEntityReferenceWithLicence(): void
@@ -448,7 +447,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $result = $this->sut->renderPreview($mockLetterInstance, $mockTemplate);
 
-        $this->assertEquals('<p>Dear ACME Transport Ltd,</p>', $result);
+        $this->assertSame('<p>Dear ACME Transport Ltd,</p>', $result);
     }
 
     public function testBuildSalutationFromLicenceOrganisation(): void
@@ -506,7 +505,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $result = $this->sut->renderPreview($mockLetterInstance, $mockTemplate);
 
-        $this->assertEquals('<p>Dear Licence Org Ltd,</p>', $result);
+        $this->assertSame('<p>Dear Licence Org Ltd,</p>', $result);
     }
 
     public function testBuildSalutationFallback(): void
@@ -555,7 +554,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $result = $this->sut->renderPreview($mockLetterInstance, $mockTemplate);
 
-        $this->assertEquals('<p>Dear Sir or Madam,</p>', $result);
+        $this->assertSame('<p>Dear Sir or Madam,</p>', $result);
     }
 
     /**
@@ -678,12 +677,12 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $result = $this->sut->renderPreview($mockLetterInstance, $mockTemplate);
 
         // Should have two issue-type-group divs (Adverts and Finances)
-        $this->assertEquals(2, substr_count($result, '<div class="issue-type-group">'));
+        $this->assertSame(2, substr_count($result, '<div class="issue-type-group">'));
         // Should have the issue type headings using description
         $this->assertStringContainsString('Advert issues with your application', $result);
         $this->assertStringContainsString('Financial issues with your application', $result);
         // Should have 3 issues rendered
-        $this->assertEquals(3, substr_count($result, '<div class="issue">Issue content</div>'));
+        $this->assertSame(3, substr_count($result, '<div class="issue">Issue content</div>'));
     }
 
     public function testRenderSectionsPassesContextToRenderer(): void

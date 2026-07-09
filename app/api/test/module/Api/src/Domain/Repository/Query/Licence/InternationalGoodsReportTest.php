@@ -20,7 +20,7 @@ use Dvsa\OlcsTest\Api\Domain\Repository\Query\AbstractDbQueryTestCase;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class InternationalGoodsReportTest extends AbstractDbQueryTestCase
+final class InternationalGoodsReportTest extends AbstractDbQueryTestCase
 {
     protected $tableNameMap = [
         LicenceEntity::class => 'lic_table',
@@ -156,35 +156,33 @@ class InternationalGoodsReportTest extends AbstractDbQueryTestCase
         ]
     ];
 
-    public static function paramProvider(): array
+    public static function paramProvider(): \Iterator
     {
-        return [
+        yield [
+            [],
+            [],
             [
-                [],
-                [],
-                [
-                    'rdLicStatus' => RefDataEntity::LICENCE_STATUS,
-                    'goodsOrPsv' => LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    'licenceStatuses' => [
-                        LicenceEntity::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT,
-                        LicenceEntity::LICENCE_STATUS_CURTAILED,
-                        LicenceEntity::LICENCE_STATUS_REVOKED,
-                        LicenceEntity::LICENCE_STATUS_SURRENDERED,
-                        LicenceEntity::LICENCE_STATUS_SUSPENDED,
-                        LicenceEntity::LICENCE_STATUS_VALID,
-                    ],
-                    'licStatusCns' => LicenceEntity::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT,
-                    'licStatusRevoked' => LicenceEntity::LICENCE_STATUS_REVOKED,
-                    'licStatusSurrendered' => LicenceEntity::LICENCE_STATUS_SURRENDERED,
-                    'licStatusTerminated' => LicenceEntity::LICENCE_STATUS_TERMINATED
+                'rdLicStatus' => RefDataEntity::LICENCE_STATUS,
+                'goodsOrPsv' => LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                'licenceStatuses' => [
+                    LicenceEntity::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT,
+                    LicenceEntity::LICENCE_STATUS_CURTAILED,
+                    LicenceEntity::LICENCE_STATUS_REVOKED,
+                    LicenceEntity::LICENCE_STATUS_SURRENDERED,
+                    LicenceEntity::LICENCE_STATUS_SUSPENDED,
+                    LicenceEntity::LICENCE_STATUS_VALID,
                 ],
-                [
-                    'licenceStatuses' => DoctrineConnection::PARAM_STR_ARRAY,
-                    'goodsOrPsv' => \PDO::PARAM_STR,
-                    'licenceType' => \PDO::PARAM_STR,
-                    'rdLicStatus' => \PDO::PARAM_STR,
-                ]
+                'licStatusCns' => LicenceEntity::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT,
+                'licStatusRevoked' => LicenceEntity::LICENCE_STATUS_REVOKED,
+                'licStatusSurrendered' => LicenceEntity::LICENCE_STATUS_SURRENDERED,
+                'licStatusTerminated' => LicenceEntity::LICENCE_STATUS_TERMINATED
+            ],
+            [
+                'licenceStatuses' => DoctrineConnection::PARAM_STR_ARRAY,
+                'goodsOrPsv' => \PDO::PARAM_STR,
+                'licenceType' => \PDO::PARAM_STR,
+                'rdLicStatus' => \PDO::PARAM_STR,
             ]
         ];
     }

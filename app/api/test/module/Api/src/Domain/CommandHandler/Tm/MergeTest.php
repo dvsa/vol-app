@@ -18,7 +18,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class MergeTest extends AbstractCommandHandlerTestCase
+final class MergeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

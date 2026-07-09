@@ -16,13 +16,14 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @covers Dvsa\Olcs\Api\Service\Publication\PublicationGenerator
  */
-class PublicationGeneratorTest extends MockeryTestCase
+final class PublicationGeneratorTest extends MockeryTestCase
 {
     /** @var ServiceLocatorInterface|m\MockInterface */
     private $mockCtxMngr;
     /** @var ServiceLocatorInterface|m\MockInterface */
     private $mockProcessMngr;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockCtxMngr = m::mock(Publication\Context\PluginManager::class);
@@ -63,7 +64,7 @@ class PublicationGeneratorTest extends MockeryTestCase
         $sut = new PublicationGenerator($cfg, $this->mockCtxMngr, $this->mockProcessMngr);
         $actual = $sut->createPublication('pubKey', $expectPub, $expectCtx);
 
-        static::assertEquals($expectPub, $actual);
+        $this->assertEquals($expectPub, $actual);
     }
 
     public function testCreatePublicationFailInvalidCfg(): void

@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @covers Dvsa\Olcs\Snapshot\Service\Snapshots\TransportManagerApplication\Section\AbstractReviewServiceServices
  */
-class AbstractReviewServiceServicesTest extends MockeryTestCase
+final class AbstractReviewServiceServicesTest extends MockeryTestCase
 {
     public function testGetTranslator(): void
     {

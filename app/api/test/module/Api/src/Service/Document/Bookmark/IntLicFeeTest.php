@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\IntLicFee;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class IntLicFeeTest extends \PHPUnit\Framework\TestCase
+final class IntLicFeeTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

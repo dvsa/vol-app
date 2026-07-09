@@ -14,7 +14,7 @@ use Mockery as m;
  * @covers Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence
  * @covers Dvsa\Olcs\Api\Entity\Tm\AbstractTransportManagerLicence
  */
-class TransportManagerLicenceEntityTest extends EntityTester
+final class TransportManagerLicenceEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -25,8 +25,6 @@ class TransportManagerLicenceEntityTest extends EntityTester
 
     /** @var  Entities\Licence\Licence | m\MockInterface */
     private $mockLic;
-    /** @var  Entities\Tm\TransportManager */
-    private $mockTm;
 
     /** @var  Entity */
     private $sut;
@@ -34,9 +32,9 @@ class TransportManagerLicenceEntityTest extends EntityTester
     public function setUp(): void
     {
         $this->mockLic  = m::mock(Entities\Licence\Licence::class);
-        $this->mockTm  = m::mock(Entities\Tm\TransportManager::class);
+        $mockTm  = m::mock(Entities\Tm\TransportManager::class);
 
-        $this->sut = new Entity($this->mockLic, $this->mockTm);
+        $this->sut = new Entity($this->mockLic, $mockTm);
 
         parent::setUp();
     }
@@ -55,16 +53,16 @@ class TransportManagerLicenceEntityTest extends EntityTester
             'ai',
             1
         );
-        $this->assertEquals($this->sut->getTmType(), 'tmt');
-        $this->assertEquals($this->sut->getHoursMon(), 1);
-        $this->assertEquals($this->sut->getHoursTue(), 2);
-        $this->assertEquals($this->sut->getHoursWed(), 3);
-        $this->assertEquals($this->sut->getHoursThu(), 4);
-        $this->assertEquals($this->sut->getHoursFri(), 5);
-        $this->assertEquals($this->sut->getHoursSat(), 6);
-        $this->assertEquals($this->sut->getHoursSun(), 7);
-        $this->assertEquals($this->sut->getAdditionalInformation(), 'ai');
-        $this->assertEquals($this->sut->getIsOwner(), 1);
+        $this->assertEquals('tmt', $this->sut->getTmType());
+        $this->assertEquals(1, $this->sut->getHoursMon());
+        $this->assertEquals(2, $this->sut->getHoursTue());
+        $this->assertEquals(3, $this->sut->getHoursWed());
+        $this->assertEquals(4, $this->sut->getHoursThu());
+        $this->assertEquals(5, $this->sut->getHoursFri());
+        $this->assertEquals(6, $this->sut->getHoursSat());
+        $this->assertEquals(7, $this->sut->getHoursSun());
+        $this->assertEquals('ai', $this->sut->getAdditionalInformation());
+        $this->assertEquals(1, $this->sut->getIsOwner());
     }
 
     public function testUpdateTransportManagerLicenceInvalid(): void
@@ -83,32 +81,29 @@ class TransportManagerLicenceEntityTest extends EntityTester
                 1
             );
         } catch (ValidationException $e) {
-            static::assertEquals(
-                $e->getMessages(),
+            $this->assertEquals($e->getMessages(), [
                 [
-                    [
-                        'hoursMon' => [Entity::ERROR_MON => 'Mon must be between 0 and 24, inclusively'],
-                    ],
-                    [
-                        'hoursTue' => [Entity::ERROR_TUE => 'Tue must be between 0 and 24, inclusively'],
-                    ],
-                    [
-                        'hoursWed' => [Entity::ERROR_WED => 'Wed must be between 0 and 24, inclusively'],
-                    ],
-                    [
-                        'hoursThu' => [Entity::ERROR_THU => 'Thu must be between 0 and 24, inclusively'],
-                    ],
-                    [
-                        'hoursFri' => [Entity::ERROR_FRI => 'Fri must be between 0 and 24, inclusively'],
-                    ],
-                    [
-                        'hoursSat' => [Entity::ERROR_SAT => 'Sat must be between 0 and 24, inclusively'],
-                    ],
-                    [
-                        'hoursSun' => [Entity::ERROR_SUN => 'Sun must be between 0 and 24, inclusively']
-                    ],
-                ]
-            );
+                    'hoursMon' => [Entity::ERROR_MON => 'Mon must be between 0 and 24, inclusively'],
+                ],
+                [
+                    'hoursTue' => [Entity::ERROR_TUE => 'Tue must be between 0 and 24, inclusively'],
+                ],
+                [
+                    'hoursWed' => [Entity::ERROR_WED => 'Wed must be between 0 and 24, inclusively'],
+                ],
+                [
+                    'hoursThu' => [Entity::ERROR_THU => 'Thu must be between 0 and 24, inclusively'],
+                ],
+                [
+                    'hoursFri' => [Entity::ERROR_FRI => 'Fri must be between 0 and 24, inclusively'],
+                ],
+                [
+                    'hoursSat' => [Entity::ERROR_SAT => 'Sat must be between 0 and 24, inclusively'],
+                ],
+                [
+                    'hoursSun' => [Entity::ERROR_SUN => 'Sun must be between 0 and 24, inclusively']
+                ],
+            ]);
         }
     }
 
@@ -126,7 +121,7 @@ class TransportManagerLicenceEntityTest extends EntityTester
             'ai',
             1
         );
-        $this->assertEquals($this->sut->getTotalWeeklyHours(), 28);
+        $this->assertEquals(28, $this->sut->getTotalWeeklyHours());
     }
 
     public function testGetRelatedOrganisation(): void
@@ -135,6 +130,6 @@ class TransportManagerLicenceEntityTest extends EntityTester
 
         $this->mockLic->shouldReceive('getOrganisation')->once()->andReturn($mockOrg);
 
-        static::assertEquals($mockOrg, $this->sut->getRelatedOrganisation());
+        $this->assertEquals($mockOrg, $this->sut->getRelatedOrganisation());
     }
 }

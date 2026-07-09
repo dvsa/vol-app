@@ -10,10 +10,11 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class MessageConsumerManagerFactoryTest extends MockeryTestCase
+final class MessageConsumerManagerFactoryTest extends MockeryTestCase
 {
     private MessageConsumerManagerFactory $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new MessageConsumerManagerFactory();

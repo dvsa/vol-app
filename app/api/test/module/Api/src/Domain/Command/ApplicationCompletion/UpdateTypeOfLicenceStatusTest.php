@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateTypeOfLicenceStatus
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateTypeOfLicenceStatusTest extends \PHPUnit\Framework\TestCase
+final class UpdateTypeOfLicenceStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

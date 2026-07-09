@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrCancelled;
  * @author Craig R <uk@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\Group('ebsrEmails')]
-class SendEbsrCancelledTest extends SendEbsrRegCancelEmailTestAbstract
+final class SendEbsrCancelledTest extends SendEbsrRegCancelEmailTestAbstract
 {
     protected $template = 'ebsr-cancelled';
     protected $sutClass = \Dvsa\Olcs\Api\Domain\CommandHandler\Email\SendEbsrCancelled::class;

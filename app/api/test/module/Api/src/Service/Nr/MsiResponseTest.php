@@ -19,7 +19,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\XmlTools\Xml\XmlNodeBuilder;
 
-class MsiResponseTest extends MockeryTestCase
+final class MsiResponseTest extends MockeryTestCase
 {
     public function testCreateThrowsException(): void
     {
@@ -254,6 +254,6 @@ class MsiResponseTest extends MockeryTestCase
         ];
 
         $this->assertEquals($expectedXmlData, $sut->getXmlBuilder()->getData());
-        $this->assertEquals($expectedXmlResponse, $actualXmlResponse);
+        $this->assertSame($expectedXmlResponse, $actualXmlResponse);
     }
 }

@@ -263,7 +263,7 @@ class TrafficAreaValidator implements \Laminas\ServiceManager\Factory\FactoryInt
     }
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->addressHelperService = $container->get(AddressHelperService::class);
         return $this;

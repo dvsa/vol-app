@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TaskDetailsTest extends QueryHandlerTestCase
+final class TaskDetailsTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

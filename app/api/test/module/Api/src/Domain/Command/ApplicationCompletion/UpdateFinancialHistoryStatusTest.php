@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateFinancialHistorySta
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateFinancialHistoryStatusTest extends \PHPUnit\Framework\TestCase
+final class UpdateFinancialHistoryStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

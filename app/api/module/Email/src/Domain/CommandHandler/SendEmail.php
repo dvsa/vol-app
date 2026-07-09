@@ -350,7 +350,7 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
         );
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $config = $container->get('config');
         if (isset($config['email']['from_name'])) {

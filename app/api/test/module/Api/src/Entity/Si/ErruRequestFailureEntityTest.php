@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class ErruRequestFailureEntityTest extends EntityTester
+final class ErruRequestFailureEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

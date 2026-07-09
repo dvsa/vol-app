@@ -16,7 +16,7 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\QueryHandler\Cases\Pi
  */
-class PiTest extends QueryHandlerTestCase
+final class PiTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

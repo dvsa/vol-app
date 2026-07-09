@@ -16,9 +16,9 @@ use Mockery as m;
 /**
  * @covers Dvsa\Olcs\Api\Domain\QueryHandler\Licence\Addresses
  */
-class AddressesTest extends QueryHandlerTestCase
+final class AddressesTest extends QueryHandlerTestCase
 {
-    public const CONTACT_DETAILS_ID = 8888;
+    public const int CONTACT_DETAILS_ID = 8888;
 
     /** @var  Addresses */
     protected $sut;
@@ -59,7 +59,7 @@ class AddressesTest extends QueryHandlerTestCase
         //  call & check
         $result = $this->sut->handleQuery($query);
 
-        static::assertInstanceOf(Result::class, $result);
+        $this->assertInstanceOf(Result::class, $result);
 
         $expected = [
             'correspondenceCd' => [
@@ -68,6 +68,6 @@ class AddressesTest extends QueryHandlerTestCase
             'LicenceData' => 'EXPECTED',
         ];
 
-        static::assertEquals($expected, $result->serialize());
+        $this->assertEquals($expected, $result->serialize());
     }
 }

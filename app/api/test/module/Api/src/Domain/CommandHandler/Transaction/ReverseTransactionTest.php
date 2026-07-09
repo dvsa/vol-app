@@ -32,7 +32,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ReverseTransactionTest extends AbstractCommandHandlerTestCase
+final class ReverseTransactionTest extends AbstractCommandHandlerTestCase
 {
     protected $mockCpmsService;
 
@@ -199,7 +199,7 @@ class ReverseTransactionTest extends AbstractCommandHandlerTestCase
             [
                 'fees' => [69 => $fee]
             ],
-            (new Result())->addMessage('Fee 69 reset to Outstanding')
+            new Result()->addMessage('Fee 69 reset to Outstanding')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -232,15 +232,13 @@ class ReverseTransactionTest extends AbstractCommandHandlerTestCase
         $this->assertSame('Bob', $savedTransaction->getPayerName());
     }
 
-    public static function handleCommandProvider(): array
+    public static function handleCommandProvider(): \Iterator
     {
-        return [
-            'cheque' => [FeeEntity::METHOD_CHEQUE],
-            'cash' => [FeeEntity::METHOD_CASH],
-            'po' => [FeeEntity::METHOD_POSTAL_ORDER],
-            'digital card' => [FeeEntity::METHOD_CARD_ONLINE],
-            'assisted digital card' => [FeeEntity::METHOD_CARD_OFFLINE],
-        ];
+        yield 'cheque' => [FeeEntity::METHOD_CHEQUE];
+        yield 'cash' => [FeeEntity::METHOD_CASH];
+        yield 'po' => [FeeEntity::METHOD_POSTAL_ORDER];
+        yield 'digital card' => [FeeEntity::METHOD_CARD_ONLINE];
+        yield 'assisted digital card' => [FeeEntity::METHOD_CARD_OFFLINE];
     }
 
     public function testHandleCommandCpmsResponseException(): void

@@ -21,7 +21,7 @@ use Mockery as m;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class DeleteTest extends AbstractCommandHandlerTestCase
+final class DeleteTest extends AbstractCommandHandlerTestCase
 {
     /**
      * set up
@@ -96,24 +96,22 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
-        return [
-            [
-                'ids' => [555, 666],
-                'yesNo' => null,
-                'optOutTmLetterValue' => 0
-            ],
-            [
-                'ids' => [555, 666],
-                'yesNo' => 'Y',
-                'optOutTmLetterValue' => 0
-            ],
-            [
-                'ids' => [555, 666],
-                'yesNo' => 'N',
-                'optOutTmLetterValue' => 1
-            ],
+        yield [
+            'ids' => [555, 666],
+            'yesNo' => null,
+            'optOutTmLetterValue' => 0
+        ];
+        yield [
+            'ids' => [555, 666],
+            'yesNo' => 'Y',
+            'optOutTmLetterValue' => 0
+        ];
+        yield [
+            'ids' => [555, 666],
+            'yesNo' => 'N',
+            'optOutTmLetterValue' => 1
         ];
     }
 

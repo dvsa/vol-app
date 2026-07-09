@@ -17,12 +17,11 @@ use Dvsa\Olcs\Cli\Service\Queue\Consumer\MessageConsumerInterface;
 use Dvsa\Olcs\Cli\Service\Queue\MessageConsumerManager;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 
-class MessageConsumerManagerTest extends MockeryTestCase
+final class MessageConsumerManagerTest extends MockeryTestCase
 {
     protected $sut;
 
-    protected $sm;
-
+    #[\Override]
     public function setUp(): void
     {
         $sm = m::mock(ServiceManager::class);
@@ -36,7 +35,7 @@ class MessageConsumerManagerTest extends MockeryTestCase
                 }
             );
 
-        $this->sm = $sm;
+        $sm = $sm;
 
         $this->sut = new MessageConsumerManager($sm);
     }

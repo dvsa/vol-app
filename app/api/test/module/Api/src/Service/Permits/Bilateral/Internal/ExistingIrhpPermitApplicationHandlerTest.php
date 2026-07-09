@@ -21,11 +21,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ExistingIrhpPermitApplicationHandlerTest extends MockeryTestCase
+final class ExistingIrhpPermitApplicationHandlerTest extends MockeryTestCase
 {
-    public const EXISTING_STOCK_ID = 10;
+    public const int EXISTING_STOCK_ID = 10;
 
-    public const REQUIRED_PERMITS = [
+    public const array REQUIRED_PERMITS = [
         'requiredPermitsKey1' => 'requiredPermitsValue1',
         'requiredPermitsKey2' => 'requiredPermitsValue2'
     ];
@@ -46,6 +46,7 @@ class ExistingIrhpPermitApplicationHandlerTest extends MockeryTestCase
 
     private $existingIrhpPermitApplicationHandler;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->applicationStep1 = m::mock(ApplicationStep::class);

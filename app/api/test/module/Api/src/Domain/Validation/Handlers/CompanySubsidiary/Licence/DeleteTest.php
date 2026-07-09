@@ -22,7 +22,7 @@ use Dvsa\Olcs\Transfer\Command\Licence\DeleteCompanySubsidiary as Cmd;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DeleteTest extends AbstractHandlerTestCase
+final class DeleteTest extends AbstractHandlerTestCase
 {
     /**
      * @var Delete

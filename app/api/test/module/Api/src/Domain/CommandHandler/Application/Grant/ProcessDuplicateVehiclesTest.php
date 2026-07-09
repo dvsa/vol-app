@@ -22,7 +22,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ProcessDuplicateVehiclesTest extends AbstractCommandHandlerTestCase
+final class ProcessDuplicateVehiclesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

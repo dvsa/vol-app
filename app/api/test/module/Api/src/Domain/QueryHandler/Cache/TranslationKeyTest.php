@@ -16,7 +16,7 @@ use Laminas\I18n\Translator\LoaderPluginManager;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class TranslationKeyTest extends QueryHandlerTestCase
+final class TranslationKeyTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

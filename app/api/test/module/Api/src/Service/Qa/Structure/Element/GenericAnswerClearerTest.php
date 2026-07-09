@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class GenericAnswerClearerTest extends MockeryTestCase
+final class GenericAnswerClearerTest extends MockeryTestCase
 {
     private $qaContext;
 
@@ -28,6 +28,7 @@ class GenericAnswerClearerTest extends MockeryTestCase
 
     private $genericAnswerClearer;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->qaContext = m::mock(QaContext::class);

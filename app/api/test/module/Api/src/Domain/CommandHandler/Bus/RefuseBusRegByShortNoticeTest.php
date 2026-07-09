@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrRefusedBySn;
 /**
  * Refuse Bus Reg By Short Notice Test
  */
-class RefuseBusRegByShortNoticeTest extends AbstractCommandHandlerTestCase
+final class RefuseBusRegByShortNoticeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

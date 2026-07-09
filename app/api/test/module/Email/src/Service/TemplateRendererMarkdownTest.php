@@ -10,7 +10,7 @@ use Dvsa\Olcs\Email\Service\TemplateRenderer;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class TemplateRendererMarkdownTest extends MockeryTestCase
+final class TemplateRendererMarkdownTest extends MockeryTestCase
 {
     public function testRenderMarkdownBodyDispatchesToMdFormat(): void
     {
@@ -20,8 +20,8 @@ class TemplateRendererMarkdownTest extends MockeryTestCase
             ->with('en_GB', 'md', 'notify-smoke-plain', ['name' => 'world'])
             ->andReturn('Hello **world**');
 
-        $sut = (new TemplateRenderer())->setViewRenderer($renderer);
-        $message = (new Message('user@example.com', 'Subj'))->setLocale('en_GB');
+        $sut = new TemplateRenderer()->setViewRenderer($renderer);
+        $message = new Message('user@example.com', 'Subj')->setLocale('en_GB');
 
         $sut->renderMarkdownBody($message, 'notify-smoke-plain', ['name' => 'world']);
 
@@ -38,8 +38,8 @@ class TemplateRendererMarkdownTest extends MockeryTestCase
             ->with('cy_GB', 'md', 'notify-smoke-cy', [])
             ->andReturn('Helo');
 
-        $sut = (new TemplateRenderer())->setViewRenderer($renderer);
-        $message = (new Message('user@example.com', 'Subj'))->setLocale('cy_GB');
+        $sut = new TemplateRenderer()->setViewRenderer($renderer);
+        $message = new Message('user@example.com', 'Subj')->setLocale('cy_GB');
 
         $sut->renderMarkdownBody($message, 'notify-smoke-cy');
 
@@ -57,12 +57,12 @@ class TemplateRendererMarkdownTest extends MockeryTestCase
         $renderer->shouldNotReceive('render')->with(m::any(), 'html', m::any(), m::any());
         $renderer->shouldNotReceive('render')->with(m::any(), 'plain', m::any(), m::any());
 
-        $sut = (new TemplateRenderer())
+        $sut = new TemplateRenderer()
             ->setViewRenderer($renderer)
             ->setNotifyMode(true)
             ->setPassthroughTemplateUuids(['en_GB' => 'uuid-en', 'cy_GB' => 'uuid-cy']);
 
-        $message = (new Message('user@example.com', 'Subj'))->setLocale('en_GB');
+        $message = new Message('user@example.com', 'Subj')->setLocale('en_GB');
 
         $sut->renderBody($message, 'my-template', ['foo' => 'bar']);
 
@@ -77,9 +77,7 @@ class TemplateRendererMarkdownTest extends MockeryTestCase
         $renderer = m::mock(StrategySelectingViewRenderer::class);
         $renderer->shouldReceive('render')
             ->once()
-            ->with('en_GB', 'plain', 'default', m::on(function ($args) {
-                return is_array($args) && ($args['content'] ?? '') === 'plain content';
-            }))
+            ->with('en_GB', 'plain', 'default', m::on(fn($args) => is_array($args) && ($args['content'] ?? '') === 'plain content'))
             ->andReturn('wrapped plain');
         $renderer->shouldReceive('render')
             ->once()
@@ -87,18 +85,16 @@ class TemplateRendererMarkdownTest extends MockeryTestCase
             ->andReturn('plain content');
         $renderer->shouldReceive('render')
             ->once()
-            ->with('en_GB', 'html', 'default', m::on(function ($args) {
-                return is_array($args) && ($args['content'] ?? '') === 'html content';
-            }))
+            ->with('en_GB', 'html', 'default', m::on(fn($args) => is_array($args) && ($args['content'] ?? '') === 'html content'))
             ->andReturn('wrapped html');
         $renderer->shouldReceive('render')
             ->once()
             ->with('en_GB', 'html', 'my-template', ['foo' => 'bar'])
             ->andReturn('html content');
 
-        $sut = (new TemplateRenderer())->setViewRenderer($renderer);
+        $sut = new TemplateRenderer()->setViewRenderer($renderer);
 
-        $message = (new Message('user@example.com', 'Subj'))->setLocale('en_GB');
+        $message = new Message('user@example.com', 'Subj')->setLocale('en_GB');
 
         $sut->renderBody($message, 'my-template', ['foo' => 'bar']);
 
@@ -110,7 +106,7 @@ class TemplateRendererMarkdownTest extends MockeryTestCase
 
     public function testGetPassthroughTemplateUuidReturnsNullForEmptyOrMissing(): void
     {
-        $sut = (new TemplateRenderer())->setPassthroughTemplateUuids(['en_GB' => '', 'cy_GB' => 'uuid-cy']);
+        $sut = new TemplateRenderer()->setPassthroughTemplateUuids(['en_GB' => '', 'cy_GB' => 'uuid-cy']);
 
         $this->assertNull($sut->getPassthroughTemplateUuid('en_GB'));
         $this->assertSame('uuid-cy', $sut->getPassthroughTemplateUuid('cy_GB'));

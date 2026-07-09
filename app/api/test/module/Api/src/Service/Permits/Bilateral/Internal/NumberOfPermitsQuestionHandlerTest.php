@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NumberOfPermitsQuestionHandlerTest extends MockeryTestCase
+final class NumberOfPermitsQuestionHandlerTest extends MockeryTestCase
 {
     public function testHandle(): void
     {

@@ -13,11 +13,11 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Application\GoodsVehiclesExport::class)]
-class GoodsVehiclesExportTest extends QueryHandlerTestCase
+final class GoodsVehiclesExportTest extends QueryHandlerTestCase
 {
-    public const ID = 1111;
-    public const APP_ID = 8888;
-    public const LICENCE_ID = 777;
+    public const int ID = 1111;
+    public const int APP_ID = 8888;
+    public const int LICENCE_ID = 777;
 
     /** @var GoodsVehiclesExport|m\MockInterface */
     protected $sut;
@@ -68,6 +68,6 @@ class GoodsVehiclesExportTest extends QueryHandlerTestCase
         //  call & check
         $actual = $this->sut->handleQuery($query);
 
-        static::assertEquals('EXPECT_RESULT', $actual);
+        $this->assertEquals('EXPECT_RESULT', $actual);
     }
 }

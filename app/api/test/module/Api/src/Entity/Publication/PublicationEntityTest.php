@@ -17,7 +17,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class PublicationEntityTest extends EntityTester
+final class PublicationEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -118,14 +118,12 @@ class PublicationEntityTest extends EntityTester
     /**
      * Provider of publication statuses that aren't generated
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function notGeneratedStatusProvider(): array
+    public static function notGeneratedStatusProvider(): \Iterator
     {
-        return [
-            [Entity::PUB_NEW_STATUS],
-            [Entity::PUB_PRINTED_STATUS]
-        ];
+        yield [Entity::PUB_NEW_STATUS];
+        yield [Entity::PUB_PRINTED_STATUS];
     }
 
     /**
@@ -161,14 +159,12 @@ class PublicationEntityTest extends EntityTester
     /**
      * Provider of publication statuses that aren't new
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function notNewStatusProvider(): array
+    public static function notNewStatusProvider(): \Iterator
     {
-        return [
-            [Entity::PUB_GENERATED_STATUS],
-            [Entity::PUB_PRINTED_STATUS]
-        ];
+        yield [Entity::PUB_GENERATED_STATUS];
+        yield [Entity::PUB_PRINTED_STATUS];
     }
 
     /**
@@ -189,14 +185,12 @@ class PublicationEntityTest extends EntityTester
     /**
      * Provides statuses and whether isNew should return true or false
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isNewPublicationStatusProvider(): array
+    public static function isNewPublicationStatusProvider(): \Iterator
     {
-        return [
-            [Entity::PUB_NEW_STATUS, true],
-            [Entity::PUB_GENERATED_STATUS, false],
-            [Entity::PUB_PRINTED_STATUS, false]
-        ];
+        yield [Entity::PUB_NEW_STATUS, true];
+        yield [Entity::PUB_GENERATED_STATUS, false];
+        yield [Entity::PUB_PRINTED_STATUS, false];
     }
 }

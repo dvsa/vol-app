@@ -14,10 +14,11 @@ use Psr\Container\ContainerInterface;
 /**
  * @covers Dvsa\Olcs\Api\Service\Publication\Context\PluginManager
  */
-class PluginManagerTest extends MockeryTestCase
+final class PluginManagerTest extends MockeryTestCase
 {
     private PluginManager $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new PluginManager($this->createStub(ContainerInterface::class));

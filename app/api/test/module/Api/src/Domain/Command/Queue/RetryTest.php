@@ -18,7 +18,7 @@ use Dvsa\Olcs\Api\Entity\Queue\Queue as QueueEntity;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class RetryTest extends \PHPUnit\Framework\TestCase
+final class RetryTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

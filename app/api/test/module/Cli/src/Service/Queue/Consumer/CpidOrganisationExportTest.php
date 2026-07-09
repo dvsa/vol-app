@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @covers Dvsa\Olcs\Cli\Service\Queue\Consumer\CpidOrganisationExport
  */
-class CpidOrganisationExportTest extends AbstractConsumerTestCase
+final class CpidOrganisationExportTest extends AbstractConsumerTestCase
 {
     protected $queueEntity = null;
 
@@ -30,7 +30,7 @@ class CpidOrganisationExportTest extends AbstractConsumerTestCase
         $user = new Entity\User\User('pid', 'type');
         $user->setId(1);
 
-        $this->queueEntity = (new Queue())
+        $this->queueEntity = new Queue()
             ->setType(new RefData(Queue::TYPE_CPID_EXPORT_CSV))
             ->setStatus(new RefData(Queue::STATUS_QUEUED))
             ->setCreatedBy($user)
@@ -85,7 +85,7 @@ class CpidOrganisationExportTest extends AbstractConsumerTestCase
                 ->once()
                 ->andReturnUsing(
                     function (TransferCmd\Document\Upload $cmd) {
-                        static::assertEquals(base64_encode("A1,B1,C1\n"), $cmd->getContent());
+                        $this->assertEquals(base64_encode("A1,B1,C1\n"), $cmd->getContent());
                     }
                 );
 
@@ -97,21 +97,16 @@ class CpidOrganisationExportTest extends AbstractConsumerTestCase
                 ->andReturn($expectResult);
         }
 
-        static::assertEquals(
-            $this->sut->processMessage($this->queueEntity),
-            $expectResult
-        );
+        $this->assertEquals($this->sut->processMessage($this->queueEntity), $expectResult);
     }
 
-    public static function dpTestMessageProvider(): array
+    public static function dpTestMessageProvider(): \Iterator
     {
-        return [
-            [
-                'shouldThrowException' => false,
-            ],
-            [
-                'shouldThrowException' => true,
-            ],
+        yield [
+            'shouldThrowException' => false,
+        ];
+        yield [
+            'shouldThrowException' => true,
         ];
     }
 }
