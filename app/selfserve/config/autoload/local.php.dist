@@ -146,4 +146,15 @@ return [
     'auth' => [
         'user_unique_id_salt' => '1234',
     ],
+
+    // To run the GOV.UK Sign In journey against the local mock-govuk-signin
+    // compose service, allow its hostname through the referrer check below.
+    // The default keeps real .gov.uk callers working; uncomment to permit the
+    // mock as well. See docs/infrastructure/docker/mock-govuk-signin.md.
+    // 'govukaccount-redirect' => [
+    //     'referrer_ends_with' => [
+    //         '.gov.uk',
+    //         'mocksignin.local.olcs.dev-dvsacloud.uk',
+    //     ],
+    // ],
 ];
