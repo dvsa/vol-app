@@ -19,22 +19,19 @@ use Mockery as m;
 /**
  * Bus Short Controller Test
  */
-class BusShortControllerTest extends MockeryTestCase
+final class BusShortControllerTest extends MockeryTestCase
 {
     protected $sut;
-    protected $translationHelper;
-    protected $formHelper;
-    protected $flashMessengerHelper;
-    protected $navigation;
 
+    #[\Override]
     public function setUp(): void
     {
-        $this->translationHelper = m::mock(TranslationHelperService::class);
-        $this->formHelper = m::mock(FormHelperService::class);
-        $this->flashMessengerHelper =  m::mock(FlashMessengerHelperService::class);
-        $this->navigation = m::mock(Navigation::class);
+        $translationHelper = m::mock(TranslationHelperService::class);
+        $formHelper = m::mock(FormHelperService::class);
+        $flashMessengerHelper =  m::mock(FlashMessengerHelperService::class);
+        $navigation = m::mock(Navigation::class);
 
-        $this->sut = new Sut($this->translationHelper, $this->formHelper, $this->flashMessengerHelper, $this->navigation);
+        $this->sut = new Sut($translationHelper, $formHelper, $flashMessengerHelper, $navigation);
     }
 
     /**
@@ -82,23 +79,21 @@ class BusShortControllerTest extends MockeryTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function alterFormForEditDataProvider(): array
+    public static function alterFormForEditDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'isReadOnly' => true,
-                ],
-                true,
+                'isReadOnly' => true,
             ],
+            true,
+        ];
+        yield [
             [
-                [
-                    'isReadOnly' => false,
-                ],
-                false,
+                'isReadOnly' => false,
             ],
+            false,
         ];
     }
 }

@@ -13,7 +13,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class ReportUploadControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ReportUploadController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ReportUploadController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         assert($translationHelper instanceof TranslationHelperService);

@@ -11,7 +11,7 @@ use Olcs\Form\Element\SubmissionSectionsFactory;
 use Mockery as m;
 use Dvsa\OlcsTest\Controller\ControllerPluginManagerHelper;
 
-class SubmissionSectionsFactoryTest extends MockeryTestCase
+final class SubmissionSectionsFactoryTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testInvoke(): void

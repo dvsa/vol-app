@@ -14,7 +14,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class PiControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PiController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): PiController
     {
         $formHelper = $container->get(FormHelperService::class);
         assert($formHelper instanceof FormHelperService);

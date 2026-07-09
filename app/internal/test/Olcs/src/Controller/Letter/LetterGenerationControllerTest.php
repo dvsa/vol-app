@@ -15,7 +15,7 @@ use Olcs\Controller\Letter\LetterGenerationController as Sut;
 /**
  * Covers the radio "pick one" letter-choice validation (VOL-7282/VOL-7303).
  */
-class LetterGenerationControllerTest extends MockeryTestCase
+final class LetterGenerationControllerTest extends MockeryTestCase
 {
     private function makeSut(array $letterChoices): Sut
     {
@@ -34,7 +34,6 @@ class LetterGenerationControllerTest extends MockeryTestCase
     private function validate(Sut $sut, array $selectedChoices): ?string
     {
         $method = new \ReflectionMethod(Sut::class, 'validateRequiredRadioChoices');
-        $method->setAccessible(true);
 
         return $method->invoke($sut, 1, $selectedChoices);
     }

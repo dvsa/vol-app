@@ -11,7 +11,7 @@ use Olcs\Service\Data\PaymentType;
  * Class PaymentTypeTest
  * @package OlcsTest\Service\Data
  */
-class PaymentTypeTest extends RefDataTestCase
+final class PaymentTypeTest extends RefDataTestCase
 {
     /** @var PaymentType */
     private $sut;

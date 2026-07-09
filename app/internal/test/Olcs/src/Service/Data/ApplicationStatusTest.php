@@ -12,9 +12,9 @@ use Dvsa\Olcs\Transfer\Query\DataService\ApplicationStatus as Qry;
 use Laminas\Http\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\ApplicationStatus::class)]
-class ApplicationStatusTest extends AbstractListDataServiceTestCase
+final class ApplicationStatusTest extends AbstractListDataServiceTestCase
 {
-    public const ORG_ID = 9999;
+    public const int ORG_ID = 9999;
 
     /** @var ApplicationStatus */
     private $sut;
@@ -35,7 +35,7 @@ class ApplicationStatusTest extends AbstractListDataServiceTestCase
     {
         $this->sut->setOrgId('unit_Org');
 
-        static::assertEquals('unit_Org', $this->sut->getOrgId());
+        $this->assertEquals('unit_Org', $this->sut->getOrgId());
     }
 
     public function testFetchListData(): void
@@ -48,7 +48,7 @@ class ApplicationStatusTest extends AbstractListDataServiceTestCase
             ->once()
             ->andReturnUsing(
                 function (Qry $qry) {
-                    static::assertEquals(self::ORG_ID, $qry->getOrganisation());
+                    $this->assertEquals(self::ORG_ID, $qry->getOrganisation());
 
                     return $this->query;
                 }
@@ -62,8 +62,8 @@ class ApplicationStatusTest extends AbstractListDataServiceTestCase
 
         $this->sut->setOrgId(self::ORG_ID);
 
-        static::assertEquals($results['results'], $this->sut->fetchListData());
-        static::assertEquals($results['results'], $this->sut->fetchListData()); //ensure data is cached
+        $this->assertEquals($results['results'], $this->sut->fetchListData());
+        $this->assertEquals($results['results'], $this->sut->fetchListData()); //ensure data is cached
     }
 
     public function testFetchListDataWithException(): void

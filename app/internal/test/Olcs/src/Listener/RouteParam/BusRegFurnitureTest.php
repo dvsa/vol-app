@@ -18,13 +18,14 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Laminas\View\Model\ViewModel;
 
-class BusRegFurnitureTest extends MockeryTestCase
+final class BusRegFurnitureTest extends MockeryTestCase
 {
     /**
      * @var BusRegFurniture
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new BusRegFurniture();

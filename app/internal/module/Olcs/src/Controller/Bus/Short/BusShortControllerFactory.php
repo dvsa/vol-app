@@ -12,7 +12,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class BusShortControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusShortController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): BusShortController
     {
         $formHelper = $container->get(FormHelperService::class);
         assert($formHelper instanceof FormHelperService);

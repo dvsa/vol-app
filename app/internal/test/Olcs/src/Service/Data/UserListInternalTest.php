@@ -14,7 +14,7 @@ use Mockery as m;
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\UserListInternal::class)]
-class UserListInternalTest extends AbstractListDataServiceTestCase
+final class UserListInternalTest extends AbstractListDataServiceTestCase
 {
     private $userList = [
         [

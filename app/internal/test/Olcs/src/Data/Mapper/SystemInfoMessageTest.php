@@ -11,9 +11,9 @@ use Laminas\Form\FormInterface;
 /**
  * @covers Olcs\Data\Mapper\SystemInfoMessage
  */
-class SystemInfoMessageTest extends MockeryTestCase
+final class SystemInfoMessageTest extends MockeryTestCase
 {
-    public const ID = 9999;
+    public const int ID = 9999;
 
     public function testMapFromResult(): void
     {
@@ -22,15 +22,12 @@ class SystemInfoMessageTest extends MockeryTestCase
             'unit_Fld' => 'unit_Val',
         ];
 
-        static::assertEquals(
-            [
-                SystemInfoMessage::DETAILS => [
-                    'id' => self::ID,
-                    'unit_Fld' => 'unit_Val',
-                ],
+        $this->assertEquals([
+            SystemInfoMessage::DETAILS => [
+                'id' => self::ID,
+                'unit_Fld' => 'unit_Val',
             ],
-            SystemInfoMessage::mapFromResult($data)
-        );
+        ], SystemInfoMessage::mapFromResult($data));
     }
 
     public function testMapFromForm(): void
@@ -42,13 +39,10 @@ class SystemInfoMessageTest extends MockeryTestCase
             ],
         ];
 
-        static::assertEquals(
-            [
-                'id' => self::ID,
-                'unit_Fld' => 'unit_Val',
-            ],
-            SystemInfoMessage::mapFromForm($data)
-        );
+        $this->assertEquals([
+            'id' => self::ID,
+            'unit_Fld' => 'unit_Val',
+        ], SystemInfoMessage::mapFromForm($data));
     }
 
     public function testMapFromError(): void
@@ -72,9 +66,6 @@ class SystemInfoMessageTest extends MockeryTestCase
             ->once()
             ->getMock();
 
-        static::assertEquals(
-            $errors,
-            SystemInfoMessage::mapFromErrors($mockForm, $errors)
-        );
+        $this->assertEquals($errors, SystemInfoMessage::mapFromErrors($mockForm, $errors));
     }
 }

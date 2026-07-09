@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * Partner Mapper Test
  */
-class PartnerTest extends MockeryTestCase
+final class PartnerTest extends MockeryTestCase
 {
     /**
      *
@@ -25,37 +25,35 @@ class PartnerTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // add
+        // add
+        yield [
+            [],
+            ['fields' => []]
+        ];
+        // edit
+        yield [
             [
-                [],
-                ['fields' => []]
+                'id' => 987,
+                'version' => 1,
+                'address' => [
+                    'id' => 200,
+                    'version' => 1,
+                    'addressLine1' => 'a1'
+                ],
             ],
-            // edit
             [
-                [
+                'fields' => [
                     'id' => 987,
                     'version' => 1,
-                    'address' => [
-                        'id' => 200,
-                        'version' => 1,
-                        'addressLine1' => 'a1'
-                    ],
+                    'address' => 200,
                 ],
-                [
-                    'fields' => [
-                        'id' => 987,
-                        'version' => 1,
-                        'address' => 200,
-                    ],
-                    'address' => [
-                        'id' => 200,
-                        'version' => 1,
-                        'addressLine1' => 'a1',
-                    ],
-                ]
+                'address' => [
+                    'id' => 200,
+                    'version' => 1,
+                    'addressLine1' => 'a1',
+                ],
             ]
         ];
     }
@@ -71,29 +69,27 @@ class PartnerTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($inData));
     }
 
-    public static function mapFromFormDataProvider(): array
+    public static function mapFromFormDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'fields' => [
-                        'description' => 'p1',
-                    ],
-                    'address' => [
-                        'id' => 200,
-                        'version' => 1,
-                        'addressLine1' => 'a1',
-                    ],
-                ],
-                [
+                'fields' => [
                     'description' => 'p1',
-                    'address' => [
-                        'id' => 200,
-                        'version' => 1,
-                        'addressLine1' => 'a1',
-                    ],
-                ]
+                ],
+                'address' => [
+                    'id' => 200,
+                    'version' => 1,
+                    'addressLine1' => 'a1',
+                ],
             ],
+            [
+                'description' => 'p1',
+                'address' => [
+                    'id' => 200,
+                    'version' => 1,
+                    'addressLine1' => 'a1',
+                ],
+            ]
         ];
     }
 

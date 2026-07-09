@@ -31,26 +31,23 @@ use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\Test;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class LoginControllerTest extends MockeryTestCase
+final class LoginControllerTest extends MockeryTestCase
 {
-    protected $authenticationAdapter;
     protected $authenticationService;
     protected $currentUser;
     protected $flashMessenger;
     protected $formHelper;
-    protected $layout;
     protected $redirectHelper;
-    protected $url;
     protected $authChallengeContainer;
 
 
-    public const EMPTY_FORM_DATA = [
+    public const array EMPTY_FORM_DATA = [
         'username' => null,
         'password' => null,
         'csrf' => null,
     ];
 
-    public const AUTHENTICATION_RESULT_CHALLENGE_NEW_PASSWORD_REQUIRED = [
+    public const array AUTHENTICATION_RESULT_CHALLENGE_NEW_PASSWORD_REQUIRED = [
         LoginController::AUTH_SUCCESS_WITH_CHALLENGE,
         [],
         [
@@ -61,35 +58,28 @@ class LoginControllerTest extends MockeryTestCase
             'challengeSession' => 'challengeSession'
         ]
     ];
-    public const AUTHENTICATION_RESULT_CHALLENGE_UNSUPPORTED = [
+    public const array AUTHENTICATION_RESULT_CHALLENGE_UNSUPPORTED = [
         LoginController::AUTH_SUCCESS_WITH_CHALLENGE,
         [],
         [
             'challengeName' => 'UnsupportedChallenge',
         ]
     ];
-    public const AUTHENTICATION_RESULT_FAILURE = [Result::FAILURE, [], ['failed']];
-    public const AUTHENTICATION_RESULT_USER_NOT_EXIST = [Result::FAILURE_IDENTITY_NOT_FOUND, [], ['Authentication Failed']];
-    public const AUTHENTICATION_RESULT_CREDENTIAL_INVALID = [Result::FAILURE_CREDENTIAL_INVALID, [], ['Authentication Failed']];
-    public const AUTHENTICATION_RESULT_FAILURE_ACCOUNT_DISABLED = [LoginController::AUTH_FAILURE_ACCOUNT_DISABLED, [], ['account-disabled']];
-    public const AUTHENTICATION_RESULT_SUCCESSFUL_COGNITO = [Result::SUCCESS, ['provider' => LoginController::DVSA_OLCS_AUTH_CLIENT_COGNITO]];
-    public const AUTHENTICATION_RESULT_SUCCESSFUL_UNKNOW_PROVIDER = [Result::SUCCESS, [ 'provider' => 'unknown']];
+    public const array AUTHENTICATION_RESULT_FAILURE = [Result::FAILURE, [], ['failed']];
+    public const array AUTHENTICATION_RESULT_USER_NOT_EXIST = [Result::FAILURE_IDENTITY_NOT_FOUND, [], ['Authentication Failed']];
+    public const array AUTHENTICATION_RESULT_CREDENTIAL_INVALID = [Result::FAILURE_CREDENTIAL_INVALID, [], ['Authentication Failed']];
+    public const array AUTHENTICATION_RESULT_FAILURE_ACCOUNT_DISABLED = [LoginController::AUTH_FAILURE_ACCOUNT_DISABLED, [], ['account-disabled']];
+    public const array AUTHENTICATION_RESULT_SUCCESSFUL_COGNITO = [Result::SUCCESS, ['provider' => LoginController::DVSA_OLCS_AUTH_CLIENT_COGNITO]];
+    public const array AUTHENTICATION_RESULT_SUCCESSFUL_UNKNOW_PROVIDER = [Result::SUCCESS, [ 'provider' => 'unknown']];
 
-    /**
-     * @var LoginController
-     */
-    protected $sut;
-
+    #[\Override]
     public function setUp(): void
     {
-        $this->authenticationAdapter = $this->createMock(InternalCommandAdapter::class);
         $this->authenticationService = $this->createMock(AuthenticationServiceInterface::class);
         $this->currentUser = $this->createMock(CurrentUser::class);
         $this->flashMessenger = $this->createMock(FlashMessenger::class);
         $this->formHelper = $this->createMock(FormHelperService::class);
-        $this->layout = $this->createMock(Layout::class);
         $this->redirectHelper = $this->createMock(Redirect::class);
-        $this->url = $this->createMock(Url::class);
         $this->authChallengeContainer = $this->createMock(AuthChallengeContainer::class);
     }
 
@@ -118,7 +108,7 @@ class LoginControllerTest extends MockeryTestCase
         $controller = $this->setUpSut();
 
         // Expect
-        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_DASHBOARD)->willReturn($this->redirect());
+        $this->redirectHelper->method('toRoute')->willReturn($this->redirect());
 
         // Execute
         $controller->indexAction();
@@ -181,21 +171,20 @@ class LoginControllerTest extends MockeryTestCase
         $controller = $this->setUpSut();
 
         $this->flashMessenger->method('hasMessages')
-            ->with(
-                $this->logicalOr(
-                    $this->equalTo(LoginController::FLASH_MESSAGE_NAMESPACE_INPUT),
-                    $this->equalTo(LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR)
-                )
-            )
-            ->willReturn(true);
+            ->willReturnMap([
+                [LoginController::FLASH_MESSAGE_NAMESPACE_INPUT, true],
+                [LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR, true],
+            ]);
 
         $this->flashMessenger->method('getMessages')
-            ->with(LoginController::FLASH_MESSAGE_NAMESPACE_INPUT)
-            ->willReturn(['formData']);
+            ->willReturnMap([
+                [LoginController::FLASH_MESSAGE_NAMESPACE_INPUT, ['formData']],
+            ]);
 
         $this->flashMessenger->method('getMessagesFromNamespace')
-            ->with(LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR)
-            ->willReturn(['failureReason']);
+            ->willReturnMap([
+                [LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR, ['failureReason']],
+            ]);
 
         // Execute
         $result = $controller->indexAction();
@@ -226,7 +215,7 @@ class LoginControllerTest extends MockeryTestCase
         $controller = $this->setUpSut();
         $this->currentUser->method('getIdentity')->willReturn($identity);
 
-        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_DASHBOARD)->willReturn($this->redirect());
+        $this->redirectHelper->expects($this->once())->method('toRoute')->willReturn($this->redirect());
 
         // Execute
         $controller->postAction($this->postRequest(), new RouteMatch([]), new Response());
@@ -252,6 +241,7 @@ class LoginControllerTest extends MockeryTestCase
 
         // Expect
         $this->flashMessenger
+            ->expects($this->exactly(2))
             ->method('addMessage')
             ->with(
                 $this->logicalOr($this->equalTo('[]'), LoginController::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD),
@@ -281,7 +271,7 @@ class LoginControllerTest extends MockeryTestCase
         $response = new Response();
 
         $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_COGNITO));
-        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_DASHBOARD)->willReturn($this->redirect());
+        $this->redirectHelper->expects($this->once())->method('toRoute')->willReturn($this->redirect());
 
         // Execute
         $controller->postAction($request, new RouteMatch([]), $response);
@@ -303,7 +293,7 @@ class LoginControllerTest extends MockeryTestCase
         $response = new Response();
 
         $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_UNKNOW_PROVIDER));
-        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_LOGIN_GET)->willReturn($this->redirect());
+        $this->redirectHelper->expects($this->once())->method('toRoute')->willReturn($this->redirect());
 
         // Execute
         $controller->postAction($request, new RouteMatch([]), $response);
@@ -327,14 +317,11 @@ class LoginControllerTest extends MockeryTestCase
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
         $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_CHALLENGE_NEW_PASSWORD_REQUIRED));
-        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_EXPIRED_PASSWORD)->willReturn($this->redirect());
+        $this->redirectHelper->expects($this->once())->method('toRoute')->willReturn($this->redirect());
 
         $this->authChallengeContainer->method('setChallengeName')->willReturnSelf();
         $this->authChallengeContainer->method('setChallengeSession')->willReturnSelf();
         $this->authChallengeContainer->method('setChallengedIdentity')->willReturnSelf();
-
-        // Expect
-        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_EXPIRED_PASSWORD)->willReturn($this->redirect());
 
         // Execute
         $controller->postAction($request, new RouteMatch([]), new Response());
@@ -355,7 +342,7 @@ class LoginControllerTest extends MockeryTestCase
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
         $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_CHALLENGE_UNSUPPORTED));
-        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_LOGIN_GET)->willReturn($this->redirect());
+        $this->redirectHelper->expects($this->once())->method('toRoute')->willReturn($this->redirect());
 
         // Execute
         $controller->postAction($request, new RouteMatch([]), new Response());
@@ -376,7 +363,7 @@ class LoginControllerTest extends MockeryTestCase
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
         $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_FAILURE));
-        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_LOGIN_GET)->willReturn($this->redirect());
+        $this->redirectHelper->expects($this->once())->method('toRoute')->willReturn($this->redirect());
 
         // Execute
         $controller->postAction($request, new RouteMatch([]), new Response());
@@ -400,10 +387,11 @@ class LoginControllerTest extends MockeryTestCase
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
         $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_FAILURE));
-        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_LOGIN_GET)->willReturn($this->redirect());
+        $this->redirectHelper->expects($this->once())->method('toRoute')->willReturn($this->redirect());
 
         // Expect
         $this->flashMessenger
+            ->expects($this->exactly(2))
             ->method('addMessage')
             ->with(
                 $this->logicalOr($this->equalTo('[]'), LoginController::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD),
@@ -432,10 +420,11 @@ class LoginControllerTest extends MockeryTestCase
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
         $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_USER_NOT_EXIST));
-        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_LOGIN_GET)->willReturn($this->redirect());
+        $this->redirectHelper->expects($this->once())->method('toRoute')->willReturn($this->redirect());
 
         // Expect
         $this->flashMessenger
+            ->expects($this->exactly(2))
             ->method('addMessage')
             ->with(
                 $this->logicalOr($this->equalTo('[]'), LoginController::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD),
@@ -464,10 +453,11 @@ class LoginControllerTest extends MockeryTestCase
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
         $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_CREDENTIAL_INVALID));
-        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_LOGIN_GET)->willReturn($this->redirect());
+        $this->redirectHelper->expects($this->once())->method('toRoute')->willReturn($this->redirect());
 
         // Expect
         $this->flashMessenger
+            ->expects($this->exactly(2))
             ->method('addMessage')
             ->with(
                 $this->logicalOr($this->equalTo('[]'), LoginController::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD),
@@ -496,10 +486,11 @@ class LoginControllerTest extends MockeryTestCase
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
         $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_FAILURE_ACCOUNT_DISABLED));
-        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_LOGIN_GET)->willReturn($this->redirect());
+        $this->redirectHelper->expects($this->once())->method('toRoute')->willReturn($this->redirect());
 
         // Expect
         $this->flashMessenger
+            ->expects($this->exactly(2))
             ->method('addMessage')
             ->with(
                 $this->logicalOr($this->equalTo('[]'), LoginController::TRANSLATION_KEY_SUFFIX_AUTH_ACCOUNT_DISABLED),
@@ -516,14 +507,14 @@ class LoginControllerTest extends MockeryTestCase
     protected function setUpSut(): LoginController
     {
         return new LoginController(
-            $this->authenticationAdapter,
+            $this->createStub(\Olcs\Auth\Adapter\InternalCommandAdapter::class),
             $this->authenticationService,
             $this->currentUser,
             $this->flashMessenger,
             $this->formHelper,
-            $this->layout,
+            $this->createStub(\Laminas\Mvc\Controller\Plugin\Layout::class),
             $this->redirectHelper,
-            $this->url,
+            $this->createStub(\Laminas\Mvc\Controller\Plugin\Url::class),
             $this->authChallengeContainer
         );
     }

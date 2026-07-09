@@ -28,7 +28,7 @@ use Psr\Container\ContainerInterface;
  * @covers Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class LicenceProcessingOverviewControllerTest extends \PHPUnit\Framework\TestCase
+final class LicenceProcessingOverviewControllerTest extends \PHPUnit\Framework\TestCase
 {
     protected $mockScriptFactory;
     protected $mockFormHelper;
@@ -46,7 +46,7 @@ class LicenceProcessingOverviewControllerTest extends \PHPUnit\Framework\TestCas
         $controller = $this->getController('index');
 
         $redirect = $this->createMock(Redirect::class);
-        $redirect->expects(self::once())->method('toRoute');
+        $redirect->expects($this->once())->method('toRoute');
 
         $controller->getPluginManager()
             ->setService('redirect', $redirect);
@@ -79,8 +79,6 @@ class LicenceProcessingOverviewControllerTest extends \PHPUnit\Framework\TestCas
             $this->mockFlashMessenger,
             $this->mockRouter
         );
-
-        $router = $this->createMock(TreeRouteStack::class);
         $routeMatch = new RouteMatch(
             [
                 'application' => 'internal',
@@ -90,7 +88,7 @@ class LicenceProcessingOverviewControllerTest extends \PHPUnit\Framework\TestCas
         );
 
         $event = new MvcEvent();
-        $event->setRouter($router);
+        $event->setRouter($this->createStub(TreeRouteStack::class));
         $event->setRouteMatch($routeMatch);
 
         $pluginManager = new PluginManager($this->createStub(ContainerInterface::class));

@@ -21,7 +21,7 @@ use Laminas\EventManager\EventManagerInterface;
 use Laminas\Navigation\AbstractContainer;
 use Laminas\Navigation\Navigation;
 
-class OrganisationTest extends MockeryTestCase
+final class OrganisationTest extends MockeryTestCase
 {
     /** @var  m\MockInterface */
     private $mockAnnotationBldr;

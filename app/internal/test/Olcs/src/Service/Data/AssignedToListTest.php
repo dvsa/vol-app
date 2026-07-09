@@ -12,7 +12,7 @@ use Dvsa\Olcs\Transfer\Query\User\UserListInternal as Qry;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as MyAccount;
 use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 
-class AssignedToListTest extends AbstractListDataServiceTestCase
+final class AssignedToListTest extends AbstractListDataServiceTestCase
 {
     /** @var AssignedToList */
     private $sut;
@@ -99,7 +99,7 @@ class AssignedToListTest extends AbstractListDataServiceTestCase
             ->once()
             ->andReturnUsing(
                 function ($dto) {
-                    $this->assertTrue(is_a($dto, 'Dvsa\Olcs\Transfer\Query\User\UserListInternal'));
+                    $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\User\UserListInternal::class, $dto);
                     $this->assertEquals($this->userListParams['sort'], $dto->getSort());
                     $this->assertEquals($this->userListParams['order'], $dto->getOrder());
                     $this->assertEquals($this->userListParams['team'], $dto->getTeam());

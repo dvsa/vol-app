@@ -15,7 +15,7 @@ use Psr\Container\ContainerInterface;
 class BrowserControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BrowserController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): BrowserController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         $formHelper = $container->get(FormHelperService::class);

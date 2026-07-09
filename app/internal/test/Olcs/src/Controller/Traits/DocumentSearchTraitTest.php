@@ -11,16 +11,17 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Data\DocumentSubCategory;
 
 #[\PHPUnit\Framework\Attributes\CoversTrait(\Olcs\Controller\Traits\DocumentSearchTrait::class)]
-class DocumentSearchTraitTest extends MockeryTestCase
+final class DocumentSearchTraitTest extends MockeryTestCase
 {
     protected $mockFormHelper;
     protected $docSubCategoryDataService;
 
-    public const CAT_ID = 8001;
+    public const int CAT_ID = 8001;
 
     /** @var Stub\StubDocumentSearchTrait */
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockFormHelper = m::mock(FormHelperService::class);
@@ -56,15 +57,12 @@ class DocumentSearchTraitTest extends MockeryTestCase
             ->once()
             ->andReturnUsing(
                 function ($arg) {
-                    static::assertEquals(
-                        [
-                            'exists2' => 'exists2_NewVal',
-                            'exists3' => 'exists3_Val',
-                            'new1' => 'new Val',
-                            'new2' => '',
-                        ],
-                        $arg
-                    );
+                    $this->assertEquals([
+                        'exists2' => 'exists2_NewVal',
+                        'exists3' => 'exists3_Val',
+                        'new1' => 'new Val',
+                        'new2' => '',
+                    ], $arg);
 
                     return $this;
                 }
@@ -81,13 +79,10 @@ class DocumentSearchTraitTest extends MockeryTestCase
 
         $this->sut->shouldReceive('getRequest')->once()->andReturn($mockRequest);
 
-        static::assertEquals(
-            $expect,
-            $this->sut->traitMapDocumentFilters($extra)
-        );
+        $this->assertEquals($expect, $this->sut->traitMapDocumentFilters($extra));
     }
 
-    public static function dpTestMapDocumentFilters(): array
+    public static function dpTestMapDocumentFilters(): \Iterator
     {
         $def = [
             'sort' => 'issuedDate',
@@ -97,44 +92,41 @@ class DocumentSearchTraitTest extends MockeryTestCase
             'showDocs' => FilterOptions::SHOW_ALL,
             'query' => 'unit_Query',
         ];
-
-        return [
-            [
-                'extra' => [
-                    'sort' => null,
-                    'order' => '',
-                    'page' => 0,
-                    'showDocs' => '0',
-                    'isExternal' => 'internal',
-                    'newKey' => 'unit_NewKey',
-                ],
-                'expect' =>
-                    [
-                        'limit' => 10,
-                        'isExternal' => 'N',
-                        'newKey' => 'unit_NewKey',
-                        'query' => 'unit_Query',
-                    ],
+        yield [
+            'extra' => [
+                'sort' => null,
+                'order' => '',
+                'page' => 0,
+                'showDocs' => '0',
+                'isExternal' => 'internal',
+                'newKey' => 'unit_NewKey',
             ],
-            [
-                'extra' => [
+            'expect' =>
+                [
+                    'limit' => 10,
+                    'isExternal' => 'N',
+                    'newKey' => 'unit_NewKey',
+                    'query' => 'unit_Query',
+                ],
+        ];
+        yield [
+            'extra' => [
+                'order' => 'unit_newOrder',
+                'key1' => false,
+                'isExternal' => 'external',
+            ],
+            'expect' =>
+                [
                     'order' => 'unit_newOrder',
                     'key1' => false,
-                    'isExternal' => 'external',
-                ],
-                'expect' =>
-                    [
-                        'order' => 'unit_newOrder',
-                        'key1' => false,
-                        'isExternal' => 'Y',
-                    ] + $def,
+                    'isExternal' => 'Y',
+                ] + $def,
+        ];
+        yield [
+            'extra' => [
+                'isExternal' => 'invalid',
             ],
-            [
-                'extra' => [
-                    'isExternal' => 'invalid',
-                ],
-                'expect' => $def,
-            ],
+            'expect' => $def,
         ];
     }
 

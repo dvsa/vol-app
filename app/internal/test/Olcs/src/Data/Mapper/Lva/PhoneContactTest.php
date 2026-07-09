@@ -15,11 +15,12 @@ use Laminas\Form\FormInterface;
 /**
  * @covers Olcs\Data\Mapper\Lva\PhoneContact
  */
-class PhoneContactTest extends MockeryTestCase
+final class PhoneContactTest extends MockeryTestCase
 {
     /** @var  array */
     private $formData;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formData = [
@@ -45,21 +46,18 @@ class PhoneContactTest extends MockeryTestCase
             ],
         ];
 
-        static::assertEquals($this->formData, PhoneContact::mapFromResult($apiData));
+        $this->assertEquals($this->formData, PhoneContact::mapFromResult($apiData));
     }
 
     public function testMapFromForm(): void
     {
-        static::assertEquals(
-            [
-                'id' => 'unit_Id',
-                'phoneNumber' => 'unit_PhoneNr',
-                'version' => 'unit_Ver',
-                'phoneContactType' => RefData::PHONE_TYPE_PRIMARY,
-                'contactDetailsId' => 'unit_CdId',
-            ],
-            PhoneContact::mapFromForm($this->formData)
-        );
+        $this->assertEquals([
+            'id' => 'unit_Id',
+            'phoneNumber' => 'unit_PhoneNr',
+            'version' => 'unit_Ver',
+            'phoneContactType' => RefData::PHONE_TYPE_PRIMARY,
+            'contactDetailsId' => 'unit_CdId',
+        ], PhoneContact::mapFromForm($this->formData));
     }
 
     public function testMapFromErrorsNull(): void
@@ -67,7 +65,7 @@ class PhoneContactTest extends MockeryTestCase
         /** @var \Laminas\Form\FormInterface $mockForm */
         $mockForm = m::mock(FormInterface::class);
 
-        static::assertEquals([], PhoneContact::mapFromErrors($mockForm, ['messages' => []]));
+        $this->assertEquals([], PhoneContact::mapFromErrors($mockForm, ['messages' => []]));
     }
 
     public function testMapFromErrors(): void
@@ -105,11 +103,8 @@ class PhoneContactTest extends MockeryTestCase
 
         $actual = PhoneContact::mapFromErrors($mockForm, $errors);
 
-        static::assertEquals(
-            [
-                ['unit_CommonErr'],
-            ],
-            $actual
-        );
+        $this->assertEquals([
+            ['unit_CommonErr'],
+        ], $actual);
     }
 }

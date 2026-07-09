@@ -12,7 +12,7 @@ use Laminas\InputFilter\Input;
 /**
  * @covers Olcs\FormService\Form\Lva\Addresses
  */
-class AddressesTest extends AbstractLvaFormServiceTestCase
+final class AddressesTest extends AbstractLvaFormServiceTestCase
 {
     protected $classToTest = Addresses::class;
 
@@ -76,6 +76,6 @@ class AddressesTest extends AbstractLvaFormServiceTestCase
             ]
         );
 
-        static::assertSame($mockForm, $form);
+        $this->assertSame($mockForm, $form);
     }
 }

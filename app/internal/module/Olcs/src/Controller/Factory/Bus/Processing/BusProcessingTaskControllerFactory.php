@@ -22,7 +22,7 @@ class BusProcessingTaskControllerFactory implements FactoryInterface
      * @return BusProcessingTaskController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusProcessingTaskController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): BusProcessingTaskController
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);

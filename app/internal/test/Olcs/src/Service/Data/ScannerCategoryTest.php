@@ -8,7 +8,7 @@ use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 use Olcs\Service\Data\ScannerCategory;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\ScannerCategory::class)]
-class ScannerCategoryTest extends AbstractListDataServiceTestCase
+final class ScannerCategoryTest extends AbstractListDataServiceTestCase
 {
     /** @var ScannerCategory */
     private $sut;
@@ -22,6 +22,6 @@ class ScannerCategoryTest extends AbstractListDataServiceTestCase
 
     public function testFetchListData(): void
     {
-        static::assertEquals(ScannerCategory::TYPE_IS_SCAN, $this->sut->getCategoryType());
+        $this->assertEquals(ScannerCategory::TYPE_IS_SCAN, $this->sut->getCategoryType());
     }
 }

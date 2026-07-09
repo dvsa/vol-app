@@ -19,7 +19,7 @@ class LicenceDecisionLegislationFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceDecisionLegislation
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LicenceDecisionLegislation
     {
         return new LicenceDecisionLegislation(
             $container->get(AbstractDataServiceServices::class),

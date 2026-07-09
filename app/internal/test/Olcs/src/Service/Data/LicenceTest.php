@@ -15,7 +15,7 @@ use Dvsa\Olcs\Transfer\Query\Licence\GetList as Qry;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class LicenceTest extends AbstractDataServiceTestCase
+final class LicenceTest extends AbstractDataServiceTestCase
 {
     /** @var Licence */
     private $sut;
@@ -56,8 +56,8 @@ class LicenceTest extends AbstractDataServiceTestCase
                 function ($dto) use ($params) {
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
-                    $this->assertEquals($params['excludeStatuses'], []);
-                    $this->assertEquals($params['organisation'], 1);
+                    $this->assertSame($params['excludeStatuses'], []);
+                    $this->assertSame(1, $params['organisation']);
                     return $this->query;
                 }
             );

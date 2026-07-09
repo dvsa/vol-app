@@ -13,24 +13,21 @@ use Olcs\FormService\Form\Lva\FinancialHistory;
 /**
  * @covers Olcs\FormService\Form\Lva\FinancialHistory
  */
-class FinancialHistoryTest extends MockeryTestCase
+final class FinancialHistoryTest extends MockeryTestCase
 {
     /** @var  FinancialHistory */
     protected $sut;
 
     /** @var  m\MockInterface|\Common\Service\Helper\FormHelperService */
     protected $formHelper;
-    /** @var  \Common\FormService\FormServiceManager */
-    protected $fsm;
-
-    protected $translator;
 
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
-        $this->translator = m::mock(TranslationHelperService::class);
-        $this->sut = new FinancialHistory($this->formHelper, $this->translator);
+        $translator = m::mock(TranslationHelperService::class);
+        $this->sut = new FinancialHistory($this->formHelper, $translator);
     }
 
     public function testGetForm(): void

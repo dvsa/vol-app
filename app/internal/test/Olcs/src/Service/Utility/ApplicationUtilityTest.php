@@ -18,7 +18,7 @@ use Olcs\Service\Utility\ApplicationUtility;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationUtilityTest extends \PHPUnit\Framework\TestCase
+final class ApplicationUtilityTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 

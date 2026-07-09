@@ -7,7 +7,7 @@ namespace OlcsTest\Data\Mapper;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\Submission as Sut;
 
-class SubmissionTest extends MockeryTestCase
+final class SubmissionTest extends MockeryTestCase
 {
     /**
      *
@@ -29,20 +29,18 @@ class SubmissionTest extends MockeryTestCase
             ['assignedDate' => null, 'informationCompleteDate' => null]
         ];
         $actual = Sut::mapFromResult($inData);
-        $this->assertEquals((new \DateTime('now'))->format('Y-m-d'), $actual['fields']['assignedDate']);
+        $this->assertEquals(new \DateTime('now')->format('Y-m-d'), $actual['fields']['assignedDate']);
     }
 
-    public static function assignedDateDataProvider(): array
+    public static function assignedDateDataProvider(): \Iterator
     {
 
-        return [
+        yield [
             [
-                [
-                    'assignedDate',
-                    'informationCompleteDate'
-                ],
-                ['assignedDate' => null, 'informationCompleteDate' => 'TEST']
-            ]
+                'assignedDate',
+                'informationCompleteDate'
+            ],
+            ['assignedDate' => null, 'informationCompleteDate' => 'TEST']
         ];
     }
 }

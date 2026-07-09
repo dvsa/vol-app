@@ -13,7 +13,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class HistoryControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): HistoryController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): HistoryController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         assert($translationHelper instanceof TranslationHelperService);

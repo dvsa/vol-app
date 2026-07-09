@@ -11,7 +11,7 @@ use Mockery as m;
 use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class BusNoticePeriodTest extends AbstractDataServiceTestCase
+final class BusNoticePeriodTest extends AbstractDataServiceTestCase
 {
     private BusNoticePeriod $sut;
 
@@ -95,18 +95,16 @@ class BusNoticePeriodTest extends AbstractDataServiceTestCase
         $this->sut->fetchListData();
     }
 
-    public static function provideFetchListOptions(): array
+    public static function provideFetchListOptions(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    ['id' => 'val-1', 'noticeArea' => 'Value 1'],
-                    ['id' => 'val-2', 'noticeArea' => 'Value 2'],
-                    ['id' => 'val-3', 'noticeArea' => 'Value 3'],
-                ],
-                self::SINGLE_EXPECTED,
+                ['id' => 'val-1', 'noticeArea' => 'Value 1'],
+                ['id' => 'val-2', 'noticeArea' => 'Value 2'],
+                ['id' => 'val-3', 'noticeArea' => 'Value 3'],
             ],
-            [false, []]
+            self::SINGLE_EXPECTED,
         ];
+        yield [false, []];
     }
 }

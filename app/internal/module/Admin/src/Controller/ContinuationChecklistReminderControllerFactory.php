@@ -15,7 +15,7 @@ use Laminas\View\Helper\Placeholder;
 class ContinuationChecklistReminderControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ContinuationChecklistReminderController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ContinuationChecklistReminderController
     {
         $placeholder = $container->get('ViewHelperManager')->get(Placeholder::class);
 
