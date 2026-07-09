@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Cqrs\Command;
 
 use Common\Service\Cqrs\Command\CommandSender;
@@ -8,7 +10,7 @@ use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class CommandSenderTest extends MockeryTestCase
+final class CommandSenderTest extends MockeryTestCase
 {
     protected $sut;
 

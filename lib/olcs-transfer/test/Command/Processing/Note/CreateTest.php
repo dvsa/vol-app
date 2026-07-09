@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Processing\Note;
 
 use PHPUnit\Framework\TestCase as TestCase;
@@ -8,7 +10,7 @@ use Dvsa\Olcs\Transfer\Command\Processing\Note\Create;
 /**
  * Create test
  */
-class CreateTest extends TestCase
+final class CreateTest extends TestCase
 {
     public function testStructure()
     {

@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Application;
 
 use Dvsa\Olcs\Transfer\Command\Application\CreateCompanySubsidiary;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Command\Application\CreateCompanySubsidiary
- */
-class CreateCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\Application\CreateCompanySubsidiary::class)]
+final class CreateCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {
@@ -17,6 +17,6 @@ class CreateCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals(7777, $command->getApplication());
+        $this->assertEquals(7777, $command->getApplication());
     }
 }

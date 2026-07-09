@@ -10,7 +10,7 @@ use Dvsa\Olcs\Auth\ControllerFactory\LogoutControllerFactory;
 use Laminas\Http\PhpEnvironment\Request;
 use Mockery as m;
 
-class LogoutControllerFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
+final class LogoutControllerFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     private $container;
 
@@ -42,7 +42,7 @@ class LogoutControllerFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
         );
 
         // Set realm defined in data provider
-        $this->mockRequest->method('getServer')->with('HTTP_X_REALM')->willReturn('test');
+        $this->mockRequest->expects($this->once())->method('getServer')->with('HTTP_X_REALM')->willReturn('test');
         $this->container->expects('get')->with('Request')->andReturn($this->mockRequest);
 
         // Remove the redirect URL from config in this mock

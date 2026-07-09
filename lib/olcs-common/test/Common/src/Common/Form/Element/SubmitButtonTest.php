@@ -8,25 +8,21 @@ use Common\Test\MockeryTestCase;
 use Common\Form\Element\Button;
 use Common\Form\Element\SubmitButton;
 
-/**
- * @covers \Common\Form\Element\SubmitButton
- */
-class SubmitButtonTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\Element\SubmitButton::class)]
+final class SubmitButtonTest extends MockeryTestCase
 {
-    protected const TYPE_ATTRIBUTE = 'type';
+    protected const string TYPE_ATTRIBUTE = 'type';
 
-    protected const A_BUTTON_NAME = 'A BUTTON NAME';
+    protected const string A_BUTTON_NAME = 'A BUTTON NAME';
 
-    protected const A_BUTTON_LABEL = 'A BUTTON LABEL';
+    protected const string A_BUTTON_LABEL = 'A BUTTON LABEL';
 
     /**
      * @var Button|null
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructSetsTypeAttributeToSubmit(): void
     {
         // Setup

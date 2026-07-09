@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Cases\Statement;
 
 use Dvsa\Olcs\Transfer\Command\Cases\Statement\CreateStatement;
 use Dvsa\OlcsTest\Transfer\Command\CommandTest;
 
-class CreateStatementTest extends \PHPUnit\Framework\TestCase
+final class CreateStatementTest extends \PHPUnit\Framework\TestCase
 {
     use CommandTest;
 

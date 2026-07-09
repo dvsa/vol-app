@@ -13,7 +13,7 @@ class SearchCasesNameFactory implements FactoryInterface
      * @param  array|null         $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchCasesName
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SearchCasesName
     {
         $authService = $container->get(AuthorizationService::class);
         $urlHelper = $container->get('Helper\Url');

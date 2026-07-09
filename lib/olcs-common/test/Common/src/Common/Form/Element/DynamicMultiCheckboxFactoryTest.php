@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-class DynamicMultiCheckboxFactoryTest extends MockeryTestCase
+final class DynamicMultiCheckboxFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {

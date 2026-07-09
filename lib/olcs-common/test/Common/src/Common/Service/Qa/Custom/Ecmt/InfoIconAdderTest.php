@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Ecmt;
 
 use Common\Service\Helper\TranslationHelperService;
@@ -14,7 +16,7 @@ use Laminas\Form\Fieldset;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class InfoIconAdderTest extends MockeryTestCase
+final class InfoIconAdderTest extends MockeryTestCase
 {
     public function testPopulate(): void
     {

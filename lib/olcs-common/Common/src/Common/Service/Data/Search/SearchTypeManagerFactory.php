@@ -10,7 +10,7 @@ class SearchTypeManagerFactory implements FactoryInterface
     public const MISSING_CONFIG_MESSAGE = 'Search config is missing';
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchTypeManager
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SearchTypeManager
     {
         $config = $container->get('Config');
 

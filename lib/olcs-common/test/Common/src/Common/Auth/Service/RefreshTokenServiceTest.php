@@ -19,7 +19,7 @@ use Mockery as m;
 /**
  * @see RefreshTokenService
  */
-class RefreshTokenServiceTest extends MockeryTestCase
+final class RefreshTokenServiceTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
@@ -43,38 +43,31 @@ class RefreshTokenServiceTest extends MockeryTestCase
         return new RefreshTokenService($this->commandSender());
     }
 
-    /**
-     * @test
-     * @dataProvider isRefreshRequiredProvider
-     */
-    public function isRefreshRequiredReturnsExpectedResult(array $token, bool $expectedResult): void
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function isRefreshRequiredReturnsExpectedResult(): void
     {
-        $this->markTestSkipped('Works locally, not in pipeline (it did for a while). Investigation required.');
-
         // Setup
         $this->sut = $this->setUpSut();
 
-        // Execute
-        $result = $this->sut->isRefreshRequired($token);
-
-        // Assert
-        $this->assertEquals($expectedResult, $result);
-    }
-
-    public function isRefreshRequiredProvider(): array
-    {
-        return [
-            [['expires' => time() - 70], true],
-            [['expires' => time() + 70], false],
-            [['expires' => time() - 10], true],
-            [['expires' => time() + 10], true],
-            [['expires' => time()], true],
+        // 'now' is evaluated at execution time (not at data-provider collection time)
+        // so the token expiry offsets stay relative to the same clock the service
+        // reads, keeping the boundary cases deterministic regardless of suite runtime.
+        $now = time();
+        $cases = [
+            [['expires' => $now - 70], true],
+            [['expires' => $now + 70], false],
+            [['expires' => $now - 10], true],
+            [['expires' => $now + 10], true],
+            [['expires' => $now], true],
         ];
+
+        foreach ($cases as [$token, $expectedResult]) {
+            // Execute & Assert
+            $this->assertSame($expectedResult, $this->sut->isRefreshRequired($token));
+        }
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function refreshTokensReturnsExpectedResult(): void
     {
         // Setup
@@ -104,9 +97,7 @@ class RefreshTokenServiceTest extends MockeryTestCase
         $this->assertSame(['token' => 'newToken'], $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function refreshTokensThrowsExceptionWhenResultIsNotOk(): void
     {
         // Setup
@@ -127,9 +118,7 @@ class RefreshTokenServiceTest extends MockeryTestCase
         $this->sut->refreshTokens($token, $identifier);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function refreshTokensThrowsExceptionWhenIsValidFlagIsFalse(): void
     {
         // Setup
@@ -157,9 +146,7 @@ class RefreshTokenServiceTest extends MockeryTestCase
         $this->sut->refreshTokens($token, $identifier);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function refreshTokensThrowsExceptionWhenIdentityFlagIsMissing(): void
     {
         // Setup

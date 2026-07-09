@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Lva;
 
 use Dvsa\Olcs\Transfer\Command\Lva\AbstractDeleteCompanySubsidiary;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Lva\AbstractDeleteCompanySubsidiary;
 /**
  * @covers Dvsa\Olcs\Transfer\Command\Lva\AbstractDeleteCompanySubsidiary
  */
-class AbstractDeleteCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
+final class AbstractDeleteCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetSet()
     {
@@ -20,6 +22,6 @@ class AbstractDeleteCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals([111, 222, 333], $command->getIds());
+        $this->assertEquals([111, 222, 333], $command->getIds());
     }
 }

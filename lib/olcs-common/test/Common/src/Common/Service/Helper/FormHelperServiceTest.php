@@ -30,10 +30,8 @@ use Laminas\Form\Element\Select;
 use Laminas\Form\FormInterface;
 use Laminas\InputFilter\InputFilterInterface;
 
-/**
- * @covers \Common\Service\Helper\FormHelperService
- */
-class FormHelperServiceTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Helper\FormHelperService::class)]
+final class FormHelperServiceTest extends MockeryTestCase
 {
     /** @var FormHelperService */
     private $sut;
@@ -124,7 +122,7 @@ class FormHelperServiceTest extends MockeryTestCase
         try {
             $this->sut->createForm('NotFound');
         } catch (\RuntimeException $runtimeException) {
-            $this->assertEquals('Form does not exist: NotFound', $runtimeException->getMessage());
+            $this->assertSame('Form does not exist: NotFound', $runtimeException->getMessage());
             return;
         }
 
@@ -133,55 +131,10 @@ class FormHelperServiceTest extends MockeryTestCase
 
     public function testCreateFormWithValidForm(): void
     {
-        $this->markTestSkipped(
-            "Laminas Annotation Builder now marked final. We're shortly moving to attributes so this whole class will
-            need to change at that point. Fix this then"
-        );
+        // AnnotationBuilder is final and cannot be mocked, so a real builder is used
+        // against a minimal form model and the resulting form is inspected directly.
+        $formClass = \stdClass::class;
 
-        //  register class in namespace; do not remove mock
-        $formClass = 'Common\Form\Model\Form\MyFakeFormTest';
-        m::mock($formClass);
-
-        $mockForm = m::mock(\Laminas\Form\Form::class);
-        $mockForm
-            ->shouldReceive('add')
-            ->once()
-            ->with(
-                [
-                    'type' => \Laminas\Form\Element\Csrf::class,
-                    'name' => 'security',
-                    'options' => [
-                        'csrf_options' => [
-                            'messageTemplates' => [
-                                'notSame' => 'csrf-message'
-                            ],
-                            'timeout' => 9999,
-                        ]
-                    ],
-                    'attributes' => [
-                        'class' => 'js-csrf-token'
-                    ]
-                ]
-            )
-            ->shouldReceive('add')
-            ->once()
-            ->with(
-                [
-                    'type' => \Laminas\Form\Element\Button::class,
-                    'name' => 'form-actions[continue]',
-                    'options' => [
-                        'label' => 'Continue'
-                    ],
-                    'attributes' => [
-                        'type' => 'submit',
-                        'class' => 'govuk-visually-hidden',
-                        'style' => 'display: none;',
-                        'id' => 'hidden-continue'
-                    ]
-                ]
-            );
-
-        $this->mockBuilder->shouldReceive('createForm')->once()->with($formClass)->andReturn($mockForm);
         $this->mockAuthSrv->shouldReceive('isGranted')->with('internal-user')->andReturn(false);
 
         $config = [
@@ -190,9 +143,8 @@ class FormHelperServiceTest extends MockeryTestCase
             ]
         ];
 
-        /** @var FormHelperService | m\MockInterface $sut */
         $sut = new FormHelperService(
-            $this->mockBuilder,
+            new AnnotationBuilder(),
             $config,
             $this->mockAuthSrv,
             $this->mockRenderer,
@@ -202,46 +154,35 @@ class FormHelperServiceTest extends MockeryTestCase
             $this->mockTransSrv
         );
 
-        static::assertEquals($mockForm, $sut->createForm($formClass));
+        $form = $sut->createForm($formClass);
+
+        // CSRF element added with the configured timeout
+        $this->assertTrue($form->has('security'));
+        $csrf = $form->get('security');
+        $this->assertInstanceOf(\Laminas\Form\Element\Csrf::class, $csrf);
+        $this->assertSame('js-csrf-token', $csrf->getAttribute('class'));
+        $this->assertSame(9999, $csrf->getCsrfValidator()->getTimeout());
+
+        // Continue button added
+        $this->assertTrue($form->has('form-actions[continue]'));
+        $continue = $form->get('form-actions[continue]');
+        $this->assertInstanceOf(\Laminas\Form\Element\Button::class, $continue);
+        $this->assertSame('Continue', $continue->getLabel());
+        $this->assertSame('hidden-continue', $continue->getAttribute('id'));
     }
 
     public function testCreateFormWithoutCsrfAndCntn(): void
     {
-        $this->markTestSkipped(
-            "Laminas Annotation Builder now marked final. We're shortly moving to attributes so this whole class will
-            need to change at that point. Fix this then"
-        );
+        // AnnotationBuilder is final and cannot be mocked, so a real builder is used
+        // against a minimal form model and the resulting form is inspected directly.
+        $formClass = \stdClass::class;
 
-        //  register class in namespace; do not remove mock
-        $formClass = 'Common\Form\Model\Form\MyFakeFormTest';
-        m::mock($formClass);
-
-        $mockForm = m::mock(\Laminas\Form\Form::class);
-        $mockForm->shouldReceive('add')
-            ->never()
-            ->with(
-                \Mockery::on(
-                    static function ($arg) {
-                        $res = array_intersect_key($arg, ['type' => 1, 'name' => 1]);
-                        $avail = [
-                            [
-                                'type' => \Laminas\Form\Element\Csrf::class,
-                                'name' => 'security',
-                            ],
-                            [
-                                'type' => \Laminas\Form\Element\Button::class,
-                                'name' => 'form-actions[continue]',
-                            ],
-                        ];
-                        return in_array($res, $avail);
-                    }
-                )
-            );
-
-        $this->mockBuilder->shouldReceive('createForm')->once()->with($formClass)->andReturn($mockForm);
         $this->mockAuthSrv->shouldReceive('isGranted')->with('internal-user')->andReturn(false);
 
-        static::assertEquals($mockForm, $this->sut->createForm($formClass, false, false));
+        $form = $this->sut->createForm($formClass, false, false);
+
+        $this->assertFalse($form->has('security'));
+        $this->assertFalse($form->has('form-actions[continue]'));
     }
 
     public function testProcessAddressLookupWithNoPostcodeOrAddressSelected(): void
@@ -1072,9 +1013,7 @@ class FormHelperServiceTest extends MockeryTestCase
         $this->sut->removeFieldList($form, 'foo', ['bar']);
     }
 
-    /**
-     * @dataProvider companyProfileProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('companyProfileProvider')]
     public function testProcessCompanyLookupValidData($companyProfile, $expected): void
     {
         self::expectNotToPerformAssertions();
@@ -1116,91 +1055,89 @@ class FormHelperServiceTest extends MockeryTestCase
     }
 
     /**
-     * @return (string|string[])[][][]
+     * @return \Iterator<(int | string), array<array<(array<string> | string)>>>
      *
      * @psalm-return array{'full profile data': array{companyProfile: array{company_name: 'Acme Ltd', registered_office_address: array{postal_code: 'CF10 1NS', locality: 'CARDIFF', address_line_1: 'MILLENNIUM STADIUM', address_line_2: 'WESTGATE STREET', address_line_3: 'In a town', address_line_4: 'Somewhere'}}, expected: array{name: 'Acme Ltd', address: array{postcode: 'CF10 1NS', town: 'CARDIFF', addressLine1: 'MILLENNIUM STADIUM', addressLine2: 'WESTGATE STREET', addressLine3: 'In a town', addressLine4: 'Somewhere'}}}, 'missing company name': array{companyProfile: array{registered_office_address: array{postal_code: 'CF10 1NS', locality: 'CARDIFF', address_line_1: 'MILLENNIUM STADIUM', address_line_2: 'WESTGATE STREET', address_line_3: 'In a town', address_line_4: 'Somewhere'}}, expected: array{name: '', address: array{postcode: 'CF10 1NS', town: 'CARDIFF', addressLine1: 'MILLENNIUM STADIUM', addressLine2: 'WESTGATE STREET', addressLine3: 'In a town', addressLine4: 'Somewhere'}}}, 'partial address': array{companyProfile: array{company_name: 'Acme Ltd', registered_office_address: array{postal_code: 'CF10 1NS', locality: 'CARDIFF', address_line_1: 'MILLENNIUM STADIUM'}}, expected: array{name: 'Acme Ltd', address: array{postcode: 'CF10 1NS', town: 'CARDIFF', addressLine1: 'MILLENNIUM STADIUM', addressLine2: '', addressLine3: '', addressLine4: ''}}}, 'missing address': array{companyProfile: array{company_name: 'Acme Ltd'}, expected: array{name: 'Acme Ltd', address: array<never, never>}}}
      */
-    public function companyProfileProvider(): array
+    public static function companyProfileProvider(): \Iterator
     {
-        return [
-            'full profile data' => [
-                'companyProfile' => [
-                    'company_name' => 'Acme Ltd',
-                    'registered_office_address' => [
-                        'postal_code' => 'CF10 1NS',
-                        'locality' => 'CARDIFF',
-                        'address_line_1' => 'MILLENNIUM STADIUM',
-                        'address_line_2' => 'WESTGATE STREET',
-                        'address_line_3' => 'In a town',
-                        'address_line_4' => 'Somewhere',
-                    ]
-                ],
-                'expected' => [
-                    'name' => 'Acme Ltd',
-                    'address' => [
-                        'postcode' => 'CF10 1NS',
-                        'town' => 'CARDIFF',
-                        'addressLine1' => 'MILLENNIUM STADIUM',
-                        'addressLine2' => 'WESTGATE STREET',
-                        'addressLine3' => 'In a town',
-                        'addressLine4' => 'Somewhere',
-                    ]
+        yield 'full profile data' => [
+            'companyProfile' => [
+                'company_name' => 'Acme Ltd',
+                'registered_office_address' => [
+                    'postal_code' => 'CF10 1NS',
+                    'locality' => 'CARDIFF',
+                    'address_line_1' => 'MILLENNIUM STADIUM',
+                    'address_line_2' => 'WESTGATE STREET',
+                    'address_line_3' => 'In a town',
+                    'address_line_4' => 'Somewhere',
                 ]
             ],
-            'missing company name' => [
-                'companyProfile' => [
-                    'registered_office_address' => [
-                        'postal_code' => 'CF10 1NS',
-                        'locality' => 'CARDIFF',
-                        'address_line_1' => 'MILLENNIUM STADIUM',
-                        'address_line_2' => 'WESTGATE STREET',
-                        'address_line_3' => 'In a town',
-                        'address_line_4' => 'Somewhere',
-                    ]
-                ],
-                'expected' => [
-                    'name' => '',
-                    'address' => [
-                        'postcode' => 'CF10 1NS',
-                        'town' => 'CARDIFF',
-                        'addressLine1' => 'MILLENNIUM STADIUM',
-                        'addressLine2' => 'WESTGATE STREET',
-                        'addressLine3' => 'In a town',
-                        'addressLine4' => 'Somewhere',
-                    ]
+            'expected' => [
+                'name' => 'Acme Ltd',
+                'address' => [
+                    'postcode' => 'CF10 1NS',
+                    'town' => 'CARDIFF',
+                    'addressLine1' => 'MILLENNIUM STADIUM',
+                    'addressLine2' => 'WESTGATE STREET',
+                    'addressLine3' => 'In a town',
+                    'addressLine4' => 'Somewhere',
+                ]
+            ]
+        ];
+        yield 'missing company name' => [
+            'companyProfile' => [
+                'registered_office_address' => [
+                    'postal_code' => 'CF10 1NS',
+                    'locality' => 'CARDIFF',
+                    'address_line_1' => 'MILLENNIUM STADIUM',
+                    'address_line_2' => 'WESTGATE STREET',
+                    'address_line_3' => 'In a town',
+                    'address_line_4' => 'Somewhere',
                 ]
             ],
-            'partial address' => [
-                'companyProfile' => [
-                    'company_name' => 'Acme Ltd',
-                    'registered_office_address' => [
-                        'postal_code' => 'CF10 1NS',
-                        'locality' => 'CARDIFF',
-                        'address_line_1' => 'MILLENNIUM STADIUM',
-                    ]
-                ],
-                'expected' => [
-                    'name' => 'Acme Ltd',
-                    'address' => [
-                        'postcode' => 'CF10 1NS',
-                        'town' => 'CARDIFF',
-                        'addressLine1' => 'MILLENNIUM STADIUM',
-                        'addressLine2' => '',
-                        'addressLine3' => '',
-                        'addressLine4' => '',
-                    ]
+            'expected' => [
+                'name' => '',
+                'address' => [
+                    'postcode' => 'CF10 1NS',
+                    'town' => 'CARDIFF',
+                    'addressLine1' => 'MILLENNIUM STADIUM',
+                    'addressLine2' => 'WESTGATE STREET',
+                    'addressLine3' => 'In a town',
+                    'addressLine4' => 'Somewhere',
+                ]
+            ]
+        ];
+        yield 'partial address' => [
+            'companyProfile' => [
+                'company_name' => 'Acme Ltd',
+                'registered_office_address' => [
+                    'postal_code' => 'CF10 1NS',
+                    'locality' => 'CARDIFF',
+                    'address_line_1' => 'MILLENNIUM STADIUM',
                 ]
             ],
-            'missing address' => [
-                'companyProfile' => [
-                    'company_name' => 'Acme Ltd',
-                ],
-                'expected' => [
-                    'name' => 'Acme Ltd',
-                    'address' => [
-                    ]
+            'expected' => [
+                'name' => 'Acme Ltd',
+                'address' => [
+                    'postcode' => 'CF10 1NS',
+                    'town' => 'CARDIFF',
+                    'addressLine1' => 'MILLENNIUM STADIUM',
+                    'addressLine2' => '',
+                    'addressLine3' => '',
+                    'addressLine4' => '',
                 ]
+            ]
+        ];
+        yield 'missing address' => [
+            'companyProfile' => [
+                'company_name' => 'Acme Ltd',
             ],
+            'expected' => [
+                'name' => 'Acme Ltd',
+                'address' => [
+                ]
+            ]
         ];
     }
 

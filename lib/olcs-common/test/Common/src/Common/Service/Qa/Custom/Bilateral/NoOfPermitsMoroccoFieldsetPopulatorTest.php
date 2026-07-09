@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Bilateral;
 
 use Common\Service\Qa\Custom\Bilateral\NoOfPermitsElement;
@@ -14,7 +16,7 @@ use Laminas\Form\Form;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsMoroccoFieldsetPopulatorTest extends MockeryTestCase
+final class NoOfPermitsMoroccoFieldsetPopulatorTest extends MockeryTestCase
 {
     public function testPopulate(): void
     {

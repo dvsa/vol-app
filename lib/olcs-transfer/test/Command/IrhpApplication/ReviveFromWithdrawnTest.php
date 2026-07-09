@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\IrhpApplication;
 
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\ReviveFromWithdrawn;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\ReviveFromWithdrawn;
 /**
  * Revive from withdrawn test
  */
-class ReviveFromWithdrawnTest extends \PHPUnit\Framework\TestCase
+final class ReviveFromWithdrawnTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

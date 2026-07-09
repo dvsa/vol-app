@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Controller;
 
 use Common\Controller\FileController;
@@ -12,7 +14,7 @@ use Laminas\Mvc\Controller\Plugin;
 /**
  * @covers Common\Controller\FileController
  */
-class FileControllerTest extends TestCase
+final class FileControllerTest extends TestCase
 {
     /** @var  m\MockInterface */
     private $mockParams;
@@ -67,11 +69,11 @@ class FileControllerTest extends TestCase
         /** @var \Laminas\Http\Response $response */
         $response = $this->sut->downloadAction();
 
-        static::assertCount(3, $response->getHeaders());
-        static::assertSame('CONTENT_LENGTH', $response->getHeaders()->get('Content-Length')->getFieldValue());
-        static::assertSame('CONTENT_DISPOSITION', $response->getHeaders()->get('Content-Disposition')->getFieldValue());
-        static::assertSame('CONTENT_TYPE', $response->getHeaders()->get('Content-Type')->getFieldValue());
-        static::assertSame('CONTENT', $response->getContent());
+        $this->assertCount(3, $response->getHeaders());
+        $this->assertSame('CONTENT_LENGTH', $response->getHeaders()->get('Content-Length')->getFieldValue());
+        $this->assertSame('CONTENT_DISPOSITION', $response->getHeaders()->get('Content-Disposition')->getFieldValue());
+        $this->assertSame('CONTENT_TYPE', $response->getHeaders()->get('Content-Type')->getFieldValue());
+        $this->assertSame('CONTENT', $response->getContent());
     }
 
     public function testDownloadGuideOk(): void
@@ -113,11 +115,11 @@ class FileControllerTest extends TestCase
         /** @var \Laminas\Http\Response $response */
         $response = $this->sut->downloadAction();
 
-        static::assertCount(3, $response->getHeaders());
-        static::assertSame('CONTENT_LENGTH', $response->getHeaders()->get('Content-Length')->getFieldValue());
-        static::assertSame('CONTENT_DISPOSITION', $response->getHeaders()->get('Content-Disposition')->getFieldValue());
-        static::assertSame('CONTENT_TYPE', $response->getHeaders()->get('Content-Type')->getFieldValue());
-        static::assertSame('CONTENT', $response->getContent());
+        $this->assertCount(3, $response->getHeaders());
+        $this->assertSame('CONTENT_LENGTH', $response->getHeaders()->get('Content-Length')->getFieldValue());
+        $this->assertSame('CONTENT_DISPOSITION', $response->getHeaders()->get('Content-Disposition')->getFieldValue());
+        $this->assertSame('CONTENT_TYPE', $response->getHeaders()->get('Content-Type')->getFieldValue());
+        $this->assertSame('CONTENT', $response->getContent());
     }
 
     public function testFailExceptionErrDownload(): void
@@ -134,8 +136,8 @@ class FileControllerTest extends TestCase
 
         $this->sut->shouldReceive('handleQuery')->once()->andReturn($mockResp);
 
-        static::expectException(\RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
 
-        static::assertEquals('EXPECTED_ERR_NOT_FOUND', $this->sut->downloadAction());
+        $this->assertEquals('EXPECTED_ERR_NOT_FOUND', $this->sut->downloadAction());
     }
 }

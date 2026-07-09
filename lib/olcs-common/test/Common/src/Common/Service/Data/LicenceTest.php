@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -12,7 +14,7 @@ use Dvsa\Olcs\Transfer\Query\Licence\OperatingCentres as OcQry;
  * Class LicenceTest
  * @package OlcsTest\Service\Data
  */
-class LicenceTest extends AbstractDataServiceTestCase
+final class LicenceTest extends AbstractDataServiceTestCase
 {
     /** @var Licence */
     private $sut;
@@ -21,7 +23,6 @@ class LicenceTest extends AbstractDataServiceTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->sut = new Licence($this->abstractDataServiceServices);
     }
 

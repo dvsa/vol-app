@@ -7,7 +7,7 @@ namespace CommonTest\Form\Elements\Validators;
 use Common\Form\Elements\Validators\VehicleUndertakingsOnlyLimousineConfirmationValidator;
 use Common\RefData;
 
-class VehicleUndertakingsOnlyLimousineConfirmationValidatorTest extends \PHPUnit\Framework\TestCase
+final class VehicleUndertakingsOnlyLimousineConfirmationValidatorTest extends \PHPUnit\Framework\TestCase
 {
     public function testSmallVehiclesSkipped()
     {
@@ -24,9 +24,7 @@ class VehicleUndertakingsOnlyLimousineConfirmationValidatorTest extends \PHPUnit
         $this->assertTrue($validator->isValid('anything', $context));
     }
 
-    /**
-     * @dataProvider dpValidSizeProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValidSizeProvider')]
     public function testIsValidWhenValid(string $vehicleSize): void
     {
         $validator = new VehicleUndertakingsOnlyLimousineConfirmationValidator(
@@ -43,9 +41,7 @@ class VehicleUndertakingsOnlyLimousineConfirmationValidatorTest extends \PHPUnit
         $this->assertTrue($validator->isValid('Y', $context));
     }
 
-    /**
-     * @dataProvider dpValidSizeProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValidSizeProvider')]
     public function testIsValidWhenNotValid(string $vehicleSize): void
     {
         $validator = new VehicleUndertakingsOnlyLimousineConfirmationValidator(
@@ -62,9 +58,7 @@ class VehicleUndertakingsOnlyLimousineConfirmationValidatorTest extends \PHPUnit
         $this->assertFalse($validator->isValid('N', $context));
     }
 
-    /**
-     * @dataProvider dpValidSizeProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValidSizeProvider')]
     public function testIsValidWhenValueIsNegativeButContextDoesNotMatch(string $vehicleSize): void
     {
         $validator = new VehicleUndertakingsOnlyLimousineConfirmationValidator(
@@ -81,11 +75,9 @@ class VehicleUndertakingsOnlyLimousineConfirmationValidatorTest extends \PHPUnit
         $this->assertTrue($validator->isValid('N', $context));
     }
 
-    public function dpValidSizeProvider(): array
+    public static function dpValidSizeProvider(): \Iterator
     {
-        return [
-            ['large' => RefData::PSV_VEHICLE_SIZE_MEDIUM_LARGE],
-            ['both' => RefData::PSV_VEHICLE_SIZE_BOTH],
-        ];
+        yield ['vehicleSize' => RefData::PSV_VEHICLE_SIZE_MEDIUM_LARGE];
+        yield ['vehicleSize' => RefData::PSV_VEHICLE_SIZE_BOTH];
     }
 }

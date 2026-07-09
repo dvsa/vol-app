@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Application;
 
 use Dvsa\Olcs\Transfer\Command\Application\UpdateCompanySubsidiary;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Application\UpdateCompanySubsidiary;
 /**
  * @covers Dvsa\Olcs\Transfer\Command\Application\UpdateCompanySubsidiary
  */
-class UpdateCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
+final class UpdateCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {
@@ -17,6 +19,6 @@ class UpdateCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals(7777, $command->getApplication());
+        $this->assertEquals(7777, $command->getApplication());
     }
 }

@@ -8,7 +8,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class RadioFieldsetPopulatorFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): RadioFieldsetPopulator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): RadioFieldsetPopulator
     {
         return new RadioFieldsetPopulator(
             $container->get('QaRadioFactory'),

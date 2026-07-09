@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Custom;
 
 use Common\Form\Elements\Custom\DateSelect;
 use Laminas\Validator\Date as DateValidator;
 
-/**
- * @covers \Common\Form\Elements\Custom\DateSelect
- */
-class DateSelectTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\Elements\Custom\DateSelect::class)]
+final class DateSelectTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  DateSelect */
     private $sut;
@@ -38,8 +38,8 @@ class DateSelectTest extends \PHPUnit\Framework\TestCase
         $validatorMessageTemplates = $validator->getMessageTemplates();
         $this->assertArrayHasKey(DateValidator::FALSEFORMAT, $validatorMessageTemplates);
         $this->assertEquals(
-            $validatorMessageTemplates[DateValidator::FALSEFORMAT],
-            "The input does not fit the date format 'DD MM YYYY'"
+            "The input does not fit the date format 'DD MM YYYY'",
+            $validatorMessageTemplates[DateValidator::FALSEFORMAT]
         );
 
         // Test the filter
@@ -50,7 +50,7 @@ class DateSelectTest extends \PHPUnit\Framework\TestCase
             '2015-02-01',
             $spec['filters'][0]['options']['callback'](['year' => '2015', 'month' => '02', 'day' => '01'])
         );
-        static::assertEquals('date-hint', $this->sut->getOption('hint'));
+        $this->assertEquals('date-hint', $this->sut->getOption('hint'));
     }
 
     public function testSetOptionsMinAndMaxYear(): void
@@ -106,7 +106,7 @@ class DateSelectTest extends \PHPUnit\Framework\TestCase
         $this->sut->setOptions($options);
 
         $this->assertEquals(date('Y-m-d'), $this->sut->getValue());
-        static::assertEquals('unit_Hint', $this->sut->getOption('hint'));
+        $this->assertEquals('unit_Hint', $this->sut->getOption('hint'));
     }
 
     public function testSetOptionsDefaultDate(): void

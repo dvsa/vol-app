@@ -12,7 +12,7 @@ use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class RefreshTokenServiceFactoryTest extends MockeryTestCase
+final class RefreshTokenServiceFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
@@ -24,9 +24,7 @@ class RefreshTokenServiceFactoryTest extends MockeryTestCase
         $this->setUpServiceManager();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -36,10 +34,8 @@ class RefreshTokenServiceFactoryTest extends MockeryTestCase
         $this->assertIsCallable(fn(\Psr\Container\ContainerInterface $container, string $requestedName, ?array $options = null): \Common\Auth\Service\RefreshTokenService => $this->sut->__invoke($container, $requestedName, $options));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeReturnsAnInstanceOfRefreshTokenService(): void
     {
         // Setup

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Licence;
 
 use Dvsa\Olcs\Transfer\Command\Licence\CreateCompanySubsidiary;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Licence\CreateCompanySubsidiary;
 /**
  * @covers Dvsa\Olcs\Transfer\Command\Licence\CreateCompanySubsidiary
  */
-class CreateCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
+final class CreateCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {
@@ -17,6 +19,6 @@ class CreateCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals(7777, $command->getLicence());
+        $this->assertEquals(7777, $command->getLicence());
     }
 }

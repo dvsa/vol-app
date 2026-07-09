@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Types;
 
 use Common\Form\Elements\Types\MultipleFileUpload;
@@ -15,7 +17,7 @@ use Common\Form\Elements\Types\MultipleFileUpload;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class MultipleFileUploadTest extends \PHPUnit\Framework\TestCase
+final class MultipleFileUploadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the element configuration
@@ -24,7 +26,7 @@ class MultipleFileUploadTest extends \PHPUnit\Framework\TestCase
     {
         $element = new MultipleFileUpload();
 
-        $this->assertEquals('Upload file', $element->getLabel());
+        $this->assertSame('Upload file', $element->getLabel());
 
         $this->assertTrue($element->has('list'));
         $this->assertTrue($element->has('__messages__'));

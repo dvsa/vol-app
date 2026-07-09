@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -14,30 +16,25 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CommunityLicenceStatusTest extends MockeryTestCase
+final class CommunityLicenceStatusTest extends MockeryTestCase
 {
     public $sut;
-    public $mockRouteMatch;
     protected $urlHelper;
-
-    protected $router;
-
-    protected $request;
 
     #[\Override]
     protected function setUp(): void
     {
         $this->urlHelper = m::mock(UrlHelperService::class);
-        $this->router = m::mock(TreeRouteStack::class);
-        $this->request = m::mock(Request::class);
-        $this->sut = new CommunityLicenceStatus($this->urlHelper, $this->router, $this->request);
+        $router = m::mock(TreeRouteStack::class);
+        $request = m::mock(Request::class);
+        $this->sut = new CommunityLicenceStatus($this->urlHelper, $router, $request);
 
-        $this->mockRouteMatch = m::mock(\Laminas\Router\RouteMatch::class)
+        $mockRouteMatch = m::mock(\Laminas\Router\RouteMatch::class)
             ->shouldReceive('getMatchedRouteName')
             ->andReturn('route')
             ->getMock();
 
-        $this->request->shouldReceive('getQuery')
+        $request->shouldReceive('getQuery')
             ->andReturn(
                 m::mock()
                     ->shouldReceive('toArray')
@@ -47,18 +44,17 @@ class CommunityLicenceStatusTest extends MockeryTestCase
             )
             ->once();
 
-        $this->router
+        $router
             ->shouldReceive('match')
-            ->with($this->request)
-            ->andReturn($this->mockRouteMatch)
+            ->with($request)
+            ->andReturn($mockRouteMatch)
             ->getMock();
     }
 
     /**
      * Test the format method
-     *
-     * @dataProvider dataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testFormat($data, $url): void
     {
         $this->urlHelper
@@ -74,95 +70,93 @@ class CommunityLicenceStatusTest extends MockeryTestCase
     }
 
     /**
-     * @return ((int|null|string|string[])[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(array<string> | int | string | null)> | string)>>
      *
      * @psalm-return list{list{array{id: 1, futureSuspension: array{startDate: '2017-01-01', endDate: '2018-01-01'}, currentSuspension: null, currentWithdrawal: null}, '<a class="govuk-link" href="the_url">Suspension due: 01/01/2017 to 01/01/2018</a>'}, list{array{id: 1, futureSuspension: array{startDate: '2017-01-01'}, currentSuspension: null, currentWithdrawal: null}, '<a class="govuk-link" href="the_url">Suspension due: 01/01/2017</a>'}, list{array{id: 1, futureSuspension: null, currentSuspension: array{startDate: '2016-01-01', endDate: '2018-01-01'}, currentWithdrawal: null}, '<a class="govuk-link" href="the_url">Suspended: 01/01/2016 to 01/01/2018</a>'}, list{array{id: 1, futureSuspension: null, currentSuspension: array{startDate: '2016-01-01'}, currentWithdrawal: null}, '<a class="govuk-link" href="the_url">Suspended: 01/01/2016</a>'}, list{array{id: 1, futureSuspension: null, currentSuspension: null, currentWithdrawal: array{startDate: '2016-01-01'}}, 'Withdrawn: 01/01/2016'}, list{array{id: 1, status: array{description: 'Expired'}, futureSuspension: null, currentSuspension: null, currentWithdrawal: null, expiredDate: '2016-01-01'}, 'Expired: 01/01/2016'}, list{array{id: 1, status: array{description: 'Pending'}, futureSuspension: null, currentSuspension: null, currentWithdrawal: null}, 'Pending'}}
      */
-    public function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'id' => 1,
-                    'futureSuspension' => [
-                        'startDate' => '2017-01-01',
-                        'endDate' => '2018-01-01'
-                    ],
-                    'currentSuspension' => null,
-                    'currentWithdrawal' => null
+                'id' => 1,
+                'futureSuspension' => [
+                    'startDate' => '2017-01-01',
+                    'endDate' => '2018-01-01'
                 ],
-                '<a class="govuk-link" href="the_url">Suspension due: 01/01/2017 to 01/01/2018</a>'
+                'currentSuspension' => null,
+                'currentWithdrawal' => null
             ],
+            '<a class="govuk-link" href="the_url">Suspension due: 01/01/2017 to 01/01/2018</a>'
+        ];
+        yield [
             [
-                [
-                    'id' => 1,
-                    'futureSuspension' => [
-                        'startDate' => '2017-01-01'
-                    ],
-                    'currentSuspension' => null,
-                    'currentWithdrawal' => null
+                'id' => 1,
+                'futureSuspension' => [
+                    'startDate' => '2017-01-01'
                 ],
-                '<a class="govuk-link" href="the_url">Suspension due: 01/01/2017</a>'
+                'currentSuspension' => null,
+                'currentWithdrawal' => null
             ],
+            '<a class="govuk-link" href="the_url">Suspension due: 01/01/2017</a>'
+        ];
+        yield [
             [
-                [
-                    'id' => 1,
-                    'futureSuspension' => null,
-                    'currentSuspension' => [
-                        'startDate' => '2016-01-01',
-                        'endDate' => '2018-01-01'
-                    ],
-                    'currentWithdrawal' => null
+                'id' => 1,
+                'futureSuspension' => null,
+                'currentSuspension' => [
+                    'startDate' => '2016-01-01',
+                    'endDate' => '2018-01-01'
                 ],
-                '<a class="govuk-link" href="the_url">Suspended: 01/01/2016 to 01/01/2018</a>'
+                'currentWithdrawal' => null
             ],
+            '<a class="govuk-link" href="the_url">Suspended: 01/01/2016 to 01/01/2018</a>'
+        ];
+        yield [
             [
-                [
-                    'id' => 1,
-                    'futureSuspension' => null,
-                    'currentSuspension' => [
-                        'startDate' => '2016-01-01'
-                    ],
-                    'currentWithdrawal' => null
+                'id' => 1,
+                'futureSuspension' => null,
+                'currentSuspension' => [
+                    'startDate' => '2016-01-01'
                 ],
-                '<a class="govuk-link" href="the_url">Suspended: 01/01/2016</a>'
+                'currentWithdrawal' => null
             ],
+            '<a class="govuk-link" href="the_url">Suspended: 01/01/2016</a>'
+        ];
+        yield [
             [
-                [
-                    'id' => 1,
-                    'futureSuspension' => null,
-                    'currentSuspension' => null,
-                    'currentWithdrawal' => [
-                        'startDate' => '2016-01-01'
-                    ]
-                ],
-                'Withdrawn: 01/01/2016'
+                'id' => 1,
+                'futureSuspension' => null,
+                'currentSuspension' => null,
+                'currentWithdrawal' => [
+                    'startDate' => '2016-01-01'
+                ]
             ],
+            'Withdrawn: 01/01/2016'
+        ];
+        yield [
             [
-                [
-                    'id' => 1,
-                    'status' => [
-                        'description' => 'Expired'
-                    ],
-                    'futureSuspension' => null,
-                    'currentSuspension' => null,
-                    'currentWithdrawal' => null,
-                    'expiredDate' => '2016-01-01',
+                'id' => 1,
+                'status' => [
+                    'description' => 'Expired'
                 ],
-                'Expired: 01/01/2016'
+                'futureSuspension' => null,
+                'currentSuspension' => null,
+                'currentWithdrawal' => null,
+                'expiredDate' => '2016-01-01',
             ],
+            'Expired: 01/01/2016'
+        ];
+        yield [
             [
-                [
-                    'id' => 1,
-                    'status' => [
-                        'description' => 'Pending'
-                    ],
-                    'futureSuspension' => null,
-                    'currentSuspension' => null,
-                    'currentWithdrawal' => null,
+                'id' => 1,
+                'status' => [
+                    'description' => 'Pending'
                 ],
-                'Pending'
+                'futureSuspension' => null,
+                'currentSuspension' => null,
+                'currentWithdrawal' => null,
             ],
+            'Pending'
         ];
     }
 }

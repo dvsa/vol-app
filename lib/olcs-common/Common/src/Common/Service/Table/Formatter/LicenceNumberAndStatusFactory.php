@@ -14,7 +14,7 @@ class LicenceNumberAndStatusFactory implements FactoryInterface
      * @return LicenceNumberAndStatus
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $urlHelper = $container->get(UrlHelperService::class);
         return new LicenceNumberAndStatus($urlHelper);

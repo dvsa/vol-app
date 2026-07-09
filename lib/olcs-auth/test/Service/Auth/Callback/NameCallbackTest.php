@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Name Callback Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
+declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Auth\Service\Auth\Callback;
 
@@ -15,7 +11,7 @@ use Dvsa\Olcs\Auth\Service\Auth\Callback\NameCallback;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class NameCallbackTest extends \PHPUnit\Framework\TestCase
+final class NameCallbackTest extends \PHPUnit\Framework\TestCase
 {
     public function testCallback(): void
     {

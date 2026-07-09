@@ -13,7 +13,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class FlashMessengerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FlashMessenger
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): FlashMessenger
     {
         $flashMessengerHelperService = $container->get('Helper\FlashMessenger');
 

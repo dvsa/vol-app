@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Controller\Lva\Traits;
 
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -11,18 +13,14 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * CRUD Table Trait Test
- *
- * @covers \Common\Controller\Lva\Traits\CrudTableTrait
  */
-class CrudTableTraitTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversTrait(\Common\Controller\Lva\Traits\CrudTableTrait::class)]
+final class CrudTableTraitTest extends MockeryTestCase
 {
     public $mockFlashMessengerHelper;
     public $mockFormHelper;
     /** @var  Stubs\CrudTableTraitStub|m\MockInterface */
     protected $sut;
-
-    /** @var  \Laminas\ServiceManager\ServiceManager */
-    protected $sm;
 
     protected Response|m\MockInterface $response;
 

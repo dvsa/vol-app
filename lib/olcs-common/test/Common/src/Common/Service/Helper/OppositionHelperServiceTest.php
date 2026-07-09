@@ -6,6 +6,8 @@
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Helper;
 
 use Common\Service\Helper\OppositionHelperService;
@@ -15,7 +17,7 @@ use Common\Service\Helper\OppositionHelperService;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class OppositionHelperServiceTest extends \PHPUnit\Framework\TestCase
+final class OppositionHelperServiceTest extends \PHPUnit\Framework\TestCase
 {
     public $helper;
     /**

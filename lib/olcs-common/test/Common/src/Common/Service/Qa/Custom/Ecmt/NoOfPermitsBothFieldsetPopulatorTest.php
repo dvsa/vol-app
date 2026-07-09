@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Ecmt;
 
 use Common\Form\Elements\Custom\EcmtNoOfPermitsBothElement;
@@ -19,7 +21,7 @@ use Laminas\Form\Form;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsBothFieldsetPopulatorTest extends MockeryTestCase
+final class NoOfPermitsBothFieldsetPopulatorTest extends MockeryTestCase
 {
     public function testPopulate(): void
     {

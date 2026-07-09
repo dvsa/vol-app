@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\StackHelperService;
@@ -9,7 +11,7 @@ use Mockery as m;
 /**
  * NumberStackValue formatter test
  */
-class NumberStackValueTest extends \PHPUnit\Framework\TestCase
+final class NumberStackValueTest extends \PHPUnit\Framework\TestCase
 {
     protected $stackHelper;
 

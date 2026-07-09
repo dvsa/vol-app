@@ -15,7 +15,7 @@ use Mockery as m;
 /**
  * @covers GenericMethods
  */
-class GenericMethodsTest extends MockeryTestCase
+final class GenericMethodsTest extends MockeryTestCase
 {
     /** @var  GenericMethodsStub | m\MockInterface */
     private $sut;
@@ -45,7 +45,7 @@ class GenericMethodsTest extends MockeryTestCase
             ->shouldReceive('setFormActionFromRequest')->once()->with($mockForm, $mockReq)
             ->shouldReceive('processAddressLookupForm')->once()->with($mockForm, $mockReq);
 
-        static::assertSame($mockForm, $this->sut->getForm($class));
+        $this->assertSame($mockForm, $this->sut->getForm($class));
     }
 
     public function testGenerateFormWithData(): void
@@ -67,6 +67,6 @@ class GenericMethodsTest extends MockeryTestCase
             ->shouldReceive('getForm')->once()->with($class)->andReturn($mockForm)
             ->shouldReceive('formPost')->once()->with($mockForm, $callback, [], true, $fieldVals)->andReturn($mockForm);
 
-        static::assertSame($mockForm, $this->sut->generateFormWithData($class, $callback, $data, false, $fieldVals));
+        $this->assertSame($mockForm, $this->sut->generateFormWithData($class, $callback, $data, false, $fieldVals));
     }
 }

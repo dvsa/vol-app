@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Validators;
 
 use Common\Form\Elements\Validators\YesNoTableRequiredValidator;
@@ -11,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class YesNoTableRequiredValidatorTest extends MockeryTestCase
+final class YesNoTableRequiredValidatorTest extends MockeryTestCase
 {
     public $validator;
     /**
@@ -28,9 +30,8 @@ class YesNoTableRequiredValidatorTest extends MockeryTestCase
 
     /**
      * Test isValid
-     *
-     * @dataProvider providerIsValid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerIsValid')]
     public function testIsValid($value, $context, $expected): void
     {
         $this->assertEquals($expected, $this->validator->isValid($value, $context));
@@ -39,31 +40,29 @@ class YesNoTableRequiredValidatorTest extends MockeryTestCase
     /**
      * Provider for isValid
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function providerIsValid()
+    public static function providerIsValid(): \Iterator
     {
-        return [
-            [
-                'Y',
-                ['testTable' => ['rows' => 1]],
-                true
-            ],
-            [
-                'Y',
-                ['testTable' => ['rows' => 0]],
-                false
-            ],
-            [
-                'N',
-                ['testTable' => ['rows' => 1]],
-                true
-            ],
-            [
-                'N',
-                ['testTable' => ['rows' => 0]],
-                true
-            ],
+        yield [
+            'Y',
+            ['testTable' => ['rows' => 1]],
+            true
+        ];
+        yield [
+            'Y',
+            ['testTable' => ['rows' => 0]],
+            false
+        ];
+        yield [
+            'N',
+            ['testTable' => ['rows' => 1]],
+            true
+        ];
+        yield [
+            'N',
+            ['testTable' => ['rows' => 0]],
+            true
         ];
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Filesystem;
 
 use Common\Filesystem\Filesystem;
@@ -13,7 +15,7 @@ use Mockery as m;
  * Class FilesystemTest
  * @package CommonTest\Filesystem
  */
-class FilesystemTest extends \PHPUnit\Framework\TestCase
+final class FilesystemTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreateTmpDir(): void
     {
@@ -22,7 +24,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
 
         $dir = $sut->createTmpDir(vfsStream::url('tmp/'));
 
-        $this->assertTrue(is_dir($dir));
+        $this->assertDirectoryExists($dir);
     }
 
     public function testCreateTmpFile(): void
@@ -32,7 +34,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
 
         $dir = $sut->createTmpFile(vfsStream::url('tmp/'));
 
-        $this->assertTrue(file_exists($dir));
+        $this->assertFileExists($dir);
     }
 
     public function testCreateTmpFileWithLock(): void
@@ -55,6 +57,6 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
 
         $dir = $sut->createTmpFile(vfsStream::url('tmp/'), '');
 
-        $this->assertFalse(file_exists($dir));
+        $this->assertFileDoesNotExist($dir);
     }
 }

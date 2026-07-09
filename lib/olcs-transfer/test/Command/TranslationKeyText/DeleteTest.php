@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\TranslationKeyText;
 
 use Dvsa\Olcs\Transfer\Command\TranslationKeyText\Delete;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\TranslationKeyText\Delete;
 /**
  * Delete test
  */
-class DeleteTest extends \PHPUnit\Framework\TestCase
+final class DeleteTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

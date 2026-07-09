@@ -11,18 +11,18 @@ use Laminas\EventManager\EventManagerInterface;
 use Laminas\I18n\Translator\TranslatorInterface;
 use Laminas\View\Renderer\RendererInterface;
 use Laminas\View\Resolver\ResolverInterface;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
-class MissingTranslationProcessorTest extends TestCase
+final class MissingTranslationProcessorTest extends TestCase
 {
     /**
-     * @var RendererInterface|MockObject
+     * @var RendererInterface&Stub
      */
     protected $mockRenderer;
 
     /**
-     * @var ResolverInterface|MockObject
+     * @var ResolverInterface&Stub
      */
     protected $mockResolver;
 
@@ -39,8 +39,8 @@ class MissingTranslationProcessorTest extends TestCase
     {
         parent::setUp();
 
-        $this->mockRenderer = $this->createMock(RendererInterface::class);
-        $this->mockResolver = $this->createMock(ResolverInterface::class);
+        $this->mockRenderer = $this->createStub(RendererInterface::class);
+        $this->mockResolver = $this->createStub(ResolverInterface::class);
         $this->getPlaceholder = fn(string $name): ?PlaceholderContainer => null;
     }
 
@@ -55,7 +55,7 @@ class MissingTranslationProcessorTest extends TestCase
     public function testProcessEventForPartial(): void
     {
         $event = $this->createMock(Event::class);
-        $event->method('getTarget')->willReturn($this->createMock(TranslatorInterface::class));
+        $event->method('getTarget')->willReturn($this->createStub(TranslatorInterface::class));
         $event->expects($this->once())
             ->method('getParams')
             ->willReturn([
@@ -65,21 +65,23 @@ class MissingTranslationProcessorTest extends TestCase
 
         $this->mockResolver
             ->method('resolve')
-            ->with('en_GB/markup-some-partial')
-            ->willReturn('path_to_the_partial');
+            ->willReturnMap([
+                ['en_GB/markup-some-partial', 'path_to_the_partial'],
+            ]);
 
         $this->mockRenderer
             ->method('render')
-            ->with('en_GB/markup-some-partial')
-            ->willReturn('markup');
+            ->willReturnMap([
+                ['en_GB/markup-some-partial', 'markup'],
+            ]);
 
         $this->assertEquals('markup', $this->getService()->processEvent($event));
     }
 
     public function testProcessEventForPartialNi(): void
     {
-        $event = $this->createMock(Event::class);
-        $event->method('getTarget')->willReturn($this->createMock(TranslatorInterface::class));
+        $event = $this->createStub(Event::class);
+        $event->method('getTarget')->willReturn($this->createStub(TranslatorInterface::class));
         $event
             ->method('getParams')
             ->willReturn([
@@ -89,21 +91,23 @@ class MissingTranslationProcessorTest extends TestCase
 
         $this->mockResolver
             ->method('resolve')
-            ->with('en_NI/markup-some-partial')
-            ->willReturn('path_to_the_partial');
+            ->willReturnMap([
+                ['en_NI/markup-some-partial', 'path_to_the_partial'],
+            ]);
 
         $this->mockRenderer
             ->method('render')
-            ->with('en_NI/markup-some-partial')
-            ->willReturn('markup');
+            ->willReturnMap([
+                ['en_NI/markup-some-partial', 'markup'],
+            ]);
 
         $this->assertEquals('markup', $this->getService()->processEvent($event));
     }
 
     public function testProcessEventForPartialNiFallsBackToGb(): void
     {
-        $event = $this->createMock(Event::class);
-        $event->method('getTarget')->willReturn($this->createMock(TranslatorInterface::class));
+        $event = $this->createStub(Event::class);
+        $event->method('getTarget')->willReturn($this->createStub(TranslatorInterface::class));
         $event
             ->method('getParams')
             ->willReturn([
@@ -119,21 +123,23 @@ class MissingTranslationProcessorTest extends TestCase
 
         $this->mockRenderer
             ->method('render')
-            ->with('en_GB/markup-some-partial')
-            ->willReturn('gb-markup');
+            ->willReturnMap([
+                ['en_GB/markup-some-partial', 'gb-markup'],
+            ]);
 
         $this->assertEquals('gb-markup', $this->getService()->processEvent($event));
     }
 
     public function testProcessEventForNestedTranslation(): void
     {
-        $translator = $this->createMock(TranslatorInterface::class);
+        $translator = $this->createStub(TranslatorInterface::class);
         $translator
             ->method('translate')
-            ->with('nested.translation.key')
-            ->willReturn('translated substring');
+            ->willReturnMap([
+                ['nested.translation.key', 'translated substring'],
+            ]);
 
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
         $event->method('getTarget')->willReturn($translator);
         $event
             ->method('getParams')
@@ -141,33 +147,37 @@ class MissingTranslationProcessorTest extends TestCase
                 'message' => 'text with a {nested.translation.key} in it',
             ]);
 
-        $this->mockResolver->expects($this->never())->method('resolve');
-        $this->mockRenderer->expects($this->never())->method('render');
+        $resolver = $this->createMock(ResolverInterface::class);
+        $resolver->expects($this->never())->method('resolve');
+        $renderer = $this->createMock(RendererInterface::class);
+        $renderer->expects($this->never())->method('render');
 
         $this->assertEquals(
             'text with a translated substring in it',
-            $this->getService()->processEvent($event),
+            $this->getService($renderer, $resolver)->processEvent($event),
         );
     }
 
     public function testOtherMissingKeysDontTriggerTemplateResolver(): void
     {
-        $event = $this->createMock(Event::class);
-        $event->method('getTarget')->willReturn($this->createMock(TranslatorInterface::class));
+        $event = $this->createStub(Event::class);
+        $event->method('getTarget')->willReturn($this->createStub(TranslatorInterface::class));
         $event
             ->method('getParams')
             ->willReturn(['message' => 'missing.key']);
 
-        $this->mockResolver->expects($this->never())->method('resolve');
-        $this->mockRenderer->expects($this->never())->method('render');
+        $resolver = $this->createMock(ResolverInterface::class);
+        $resolver->expects($this->never())->method('resolve');
+        $renderer = $this->createMock(RendererInterface::class);
+        $renderer->expects($this->never())->method('render');
 
-        $this->assertNull($this->getService()->processEvent($event));
+        $this->assertNull($this->getService($renderer, $resolver)->processEvent($event));
     }
 
     public function testProcessEventForPartialWithPlaceholder(): void
     {
-        $event = $this->createMock(Event::class);
-        $event->method('getTarget')->willReturn($this->createMock(TranslatorInterface::class));
+        $event = $this->createStub(Event::class);
+        $event->method('getTarget')->willReturn($this->createStub(TranslatorInterface::class));
         $event
             ->method('getParams')
             ->willReturn([
@@ -175,30 +185,32 @@ class MissingTranslationProcessorTest extends TestCase
                 'message' => 'markup-some-partial',
             ]);
 
-        $placeholderContainer = $this->createMock(PlaceholderContainer::class);
+        $placeholderContainer = $this->createStub(PlaceholderContainer::class);
         $placeholderContainer->method('asString')->willReturn('foo-placeholder');
 
         $this->getPlaceholder = function (string $name) use ($placeholderContainer): PlaceholderContainer {
-            $this->assertEquals('FOO', $name);
+            $this->assertSame('FOO', $name);
             return $placeholderContainer;
         };
 
         $this->mockResolver
             ->method('resolve')
-            ->with('en_GB/markup-some-partial')
-            ->willReturn('path_to_the_partial');
+            ->willReturnMap([
+                ['en_GB/markup-some-partial', 'path_to_the_partial'],
+            ]);
 
         $this->mockRenderer
             ->method('render')
-            ->with('en_GB/markup-some-partial')
-            ->willReturn('markup {{PLACEHOLDER:FOO}} bar');
+            ->willReturnMap([
+                ['en_GB/markup-some-partial', 'markup {{PLACEHOLDER:FOO}} bar'],
+            ]);
 
         $this->assertEquals('markup foo-placeholder bar', $this->getService()->processEvent($event));
     }
 
     public function testProcessEventReturnsNullWhenTargetIsNotATranslator(): void
     {
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
         $event->method('getTarget')->willReturn(new \stdClass());
 
         $this->assertNull($this->getService()->processEvent($event));
@@ -206,8 +218,8 @@ class MissingTranslationProcessorTest extends TestCase
 
     public function testProcessEventReturnsNullForEmptyMessage(): void
     {
-        $event = $this->createMock(Event::class);
-        $event->method('getTarget')->willReturn($this->createMock(TranslatorInterface::class));
+        $event = $this->createStub(Event::class);
+        $event->method('getTarget')->willReturn($this->createStub(TranslatorInterface::class));
         $event->method('getParams')->willReturn(['message' => '']);
 
         $this->assertNull($this->getService()->processEvent($event));
@@ -215,18 +227,20 @@ class MissingTranslationProcessorTest extends TestCase
 
     public function testProcessEventReturnsNullForNonStringMessage(): void
     {
-        $event = $this->createMock(Event::class);
-        $event->method('getTarget')->willReturn($this->createMock(TranslatorInterface::class));
+        $event = $this->createStub(Event::class);
+        $event->method('getTarget')->willReturn($this->createStub(TranslatorInterface::class));
         $event->method('getParams')->willReturn(['message' => ['not', 'a', 'string']]);
 
         $this->assertNull($this->getService()->processEvent($event));
     }
 
-    protected function getService(): MissingTranslationProcessor
-    {
+    protected function getService(
+        ?RendererInterface $renderer = null,
+        ?ResolverInterface $resolver = null,
+    ): MissingTranslationProcessor {
         return new MissingTranslationProcessor(
-            $this->mockRenderer,
-            $this->mockResolver,
+            $renderer ?? $this->mockRenderer,
+            $resolver ?? $this->mockResolver,
             $this->getPlaceholder,
         );
     }

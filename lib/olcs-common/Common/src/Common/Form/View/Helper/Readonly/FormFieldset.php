@@ -22,7 +22,7 @@ class FormFieldset extends AbstractHelper
      *
      * @return string
      */
-    public function __invoke(FieldsetInterface $fieldset = null)
+    public function __invoke(?FieldsetInterface $fieldset = null)
     {
         return $this->render($fieldset);
     }

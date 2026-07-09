@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Fee;
 
 use Dvsa\Olcs\Transfer\Query\Fee\FeeTypeList;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Fee\FeeTypeList;
 /**
  * Fee List Test
  */
-class FeeTypeListTest extends \PHPUnit\Framework\TestCase
+final class FeeTypeListTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

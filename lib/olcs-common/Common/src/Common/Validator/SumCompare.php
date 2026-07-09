@@ -103,7 +103,7 @@ class SumCompare extends AbstractCompare
      * @return bool
      */
     #[\Override]
-    public function isValid($value, array $context = null)
+    public function isValid($value, ?array $context = null)
     {
         if ($this->getAllowEmpty() && empty($value)) {
             return true;

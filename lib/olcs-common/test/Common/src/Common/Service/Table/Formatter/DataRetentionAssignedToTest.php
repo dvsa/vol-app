@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\DataRetentionAssignedTo;
@@ -8,10 +10,8 @@ use Laminas\View\HelperPluginManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Common\Service\Table\Formatter\DataRetentionAssignedTo
- */
-class DataRetentionAssignedToTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Table\Formatter\DataRetentionAssignedTo::class)]
+final class DataRetentionAssignedToTest extends MockeryTestCase
 {
     protected $viewHelperManager;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\RefData;
@@ -8,7 +10,7 @@ use Laminas\View\HelperPluginManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class TransportManagerDateOfBirthTest extends MockeryTestCase
+final class TransportManagerDateOfBirthTest extends MockeryTestCase
 {
     protected $viewHelperManager;
 
@@ -45,155 +47,151 @@ class TransportManagerDateOfBirthTest extends MockeryTestCase
     /**
      * Provider for testFormat
      *
-     * @return ((bool|string|string[])[][]|string)[][]
+     * @return \Iterator<(int | string), array<(array<array<(array<string> | bool | string)>> | string)>>
      *
      * @psalm-return list{list{array{data: array{dob: '1980-12-01'}, column: array{name: 'dob'}}, '01/12/1980'}, list{array{data: array{dob: '1980-12-01'}, column: array{name: 'dob', lva: 'application'}}, '01/12/1980'}, list{array{data: array{dob: '1980-12-01'}, column: array{name: 'dob', internal: true}}, '01/12/1980'}, list{array{data: array{dob: '1980-12-01', status: array{id: 'tmap_st_postal_application', description: 'status description'}}, column: array{name: 'dob', lva: 'application', internal: true}}, '<span class="nowrap">01/12/1980 <STATUS HTML></span>'}, list{array{data: array{dob: '1980-12-01', status: array{id: 'tmap_st_postal_application', description: 'status description'}}, column: array{name: 'dob', lva: 'application', internal: false}}, '<span class="nowrap">01/12/1980 <STATUS HTML></span>'}, list{array{data: array{dob: '1980-12-01', status: array{id: 'tmap_st_postal_application', description: 'status description'}}, column: array{name: 'dob', lva: 'variation', internal: true}}, '<span class="nowrap">01/12/1980 <STATUS HTML></span>'}, list{array{data: array{dob: '1980-12-01', status: array{id: 'tmap_st_postal_application', description: 'status description'}}, column: array{name: 'dob', lva: 'variation', internal: false}}, '<span class="nowrap">01/12/1980 <STATUS HTML></span>'}, list{array{data: array{dob: '1980-12-01'}, column: array{name: 'dob', lva: 'licence', internal: true}}, '01/12/1980'}, list{array{data: array{dob: '1980-12-01'}, column: array{name: 'dob', lva: 'licence', internal: false}}, '01/12/1980'}}
      */
-    public function providerFormat(): array
+    public static function providerFormat(): \Iterator
     {
-        return [
-            [ // NoLvaNorInternal
+        yield [ // NoLvaNorInternal
 
-                [
-                    'data' => [
-                        'dob' => '1980-12-01'
-                    ],
-                    'column' => ['name' => 'dob']
+            [
+                'data' => [
+                    'dob' => '1980-12-01'
                 ],
-                '01/12/1980'
+                'column' => ['name' => 'dob']
             ],
-            [ // LvaWithoutInternal
+            '01/12/1980'
+        ];
+        yield [ // LvaWithoutInternal
 
-                [
-                    'data' => [
-                        'dob' => '1980-12-01'
-                    ],
-                    'column' => [
-                        'name' => 'dob',
-                        'lva' => 'application'
+            [
+                'data' => [
+                    'dob' => '1980-12-01'
+                ],
+                'column' => [
+                    'name' => 'dob',
+                    'lva' => 'application'
+                ]
+            ],
+            '01/12/1980'
+        ];
+        yield [ // NoLvaWithInternal
+
+            [
+                'data' => [
+                    'dob' => '1980-12-01'
+                ],
+                'column' => [
+                    'name' => 'dob',
+                    'internal' => true
+                ]
+            ],
+            '01/12/1980'
+        ];
+        yield [ // ApplicationInternal
+
+            [
+                'data' => [
+                    'dob' => '1980-12-01',
+                    'status' => [
+                        'id' => RefData::TMA_STATUS_POSTAL_APPLICATION,
+                        'description' => 'status description',
                     ]
                 ],
-                '01/12/1980'
+                'column' => [
+                    'name' => 'dob',
+                    'lva' => 'application',
+                    'internal' => true,
+                ]
             ],
-            [ // NoLvaWithInternal
+            '<span class="nowrap">01/12/1980 <STATUS HTML></span>'
+        ];
+        yield [ // ApplicationExternal
 
-                [
-                    'data' => [
-                        'dob' => '1980-12-01'
-                    ],
-                    'column' => [
-                        'name' => 'dob',
-                        'internal' => true
+            [
+                'data' => [
+                    'dob' => '1980-12-01',
+                    'status' => [
+                        'id' => RefData::TMA_STATUS_POSTAL_APPLICATION,
+                        'description' => 'status description',
                     ]
                 ],
-                '01/12/1980'
+                'column' => [
+                    'name' => 'dob',
+                    'lva' => 'application',
+                    'internal' => false,
+                ]
             ],
-            [ // ApplicationInternal
+            '<span class="nowrap">01/12/1980 <STATUS HTML></span>'
+        ];
+        yield [ // VariationInternal
 
-                [
-                    'data' => [
-                        'dob' => '1980-12-01',
-                        'status' => [
-                            'id' => RefData::TMA_STATUS_POSTAL_APPLICATION,
-                            'description' => 'status description',
-                        ]
+            [
+                'data' => [
+                    'dob' => '1980-12-01',
+                    'status' => [
+                        'id' => RefData::TMA_STATUS_POSTAL_APPLICATION,
+                        'description' => 'status description',
                     ],
-                    'column' => [
-                        'name' => 'dob',
-                        'lva' => 'application',
-                        'internal' => true,
-                    ]
                 ],
-                '<span class="nowrap">01/12/1980 <STATUS HTML></span>'
+                'column' => [
+                    'name' => 'dob',
+                    'lva' => 'variation',
+                    'internal' => true,
+                ]
             ],
-            [ // ApplicationExternal
+            '<span class="nowrap">01/12/1980 <STATUS HTML></span>'
+        ];
+        yield [ // VariationExternal
 
-                [
-                    'data' => [
-                        'dob' => '1980-12-01',
-                        'status' => [
-                            'id' => RefData::TMA_STATUS_POSTAL_APPLICATION,
-                            'description' => 'status description',
-                        ]
+            [
+                'data' => [
+                    'dob' => '1980-12-01',
+                    'status' => [
+                        'id' => RefData::TMA_STATUS_POSTAL_APPLICATION,
+                        'description' => 'status description',
                     ],
-                    'column' => [
-                        'name' => 'dob',
-                        'lva' => 'application',
-                        'internal' => false,
-                    ]
                 ],
-                '<span class="nowrap">01/12/1980 <STATUS HTML></span>'
+                'column' => [
+                    'name' => 'dob',
+                    'lva' => 'variation',
+                    'internal' => false,
+                ]
             ],
-            [ // VariationInternal
+            '<span class="nowrap">01/12/1980 <STATUS HTML></span>'
+        ];
+        yield [ // LicenceInternal
 
-                [
-                    'data' => [
-                        'dob' => '1980-12-01',
-                        'status' => [
-                            'id' => RefData::TMA_STATUS_POSTAL_APPLICATION,
-                            'description' => 'status description',
-                        ],
-                    ],
-                    'column' => [
-                        'name' => 'dob',
-                        'lva' => 'variation',
-                        'internal' => true,
-                    ]
+            [
+                'data' => [
+                    'dob' => '1980-12-01'
                 ],
-                '<span class="nowrap">01/12/1980 <STATUS HTML></span>'
+                'column' => [
+                    'name' => 'dob',
+                    'lva' => 'licence',
+                    'internal' => true,
+                ]
             ],
-            [ // VariationExternal
+            '01/12/1980'
+        ];
+        yield [ // LicenceExternal
 
-                [
-                    'data' => [
-                        'dob' => '1980-12-01',
-                        'status' => [
-                            'id' => RefData::TMA_STATUS_POSTAL_APPLICATION,
-                            'description' => 'status description',
-                        ],
-                    ],
-                    'column' => [
-                        'name' => 'dob',
-                        'lva' => 'variation',
-                        'internal' => false,
-                    ]
+            [
+                'data' => [
+                    'dob' => '1980-12-01'
                 ],
-                '<span class="nowrap">01/12/1980 <STATUS HTML></span>'
+                'column' => [
+                    'name' => 'dob',
+                    'lva' => 'licence',
+                    'internal' => false,
+                ]
             ],
-            [ // LicenceInternal
-
-                [
-                    'data' => [
-                        'dob' => '1980-12-01'
-                    ],
-                    'column' => [
-                        'name' => 'dob',
-                        'lva' => 'licence',
-                        'internal' => true,
-                    ]
-                ],
-                '01/12/1980'
-            ],
-            [ // LicenceExternal
-
-                [
-                    'data' => [
-                        'dob' => '1980-12-01'
-                    ],
-                    'column' => [
-                        'name' => 'dob',
-                        'lva' => 'licence',
-                        'internal' => false,
-                    ]
-                ],
-                '01/12/1980'
-            ]
+            '01/12/1980'
         ];
     }
 
-    /**
-     * @dataProvider providerFormat
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerFormat')]
     public function testFormat($testData, $expected): void
     {
         if (isset($testData['data']['status'])) {

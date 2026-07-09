@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Api;
 
 use Common\Service\Api\AbstractFactory;
@@ -12,7 +14,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-class AbstractFactoryTest extends MockeryTestCase
+final class AbstractFactoryTest extends MockeryTestCase
 {
     /** @var AbstractFactory | m\MockInterface */
     protected $sut;
@@ -45,25 +47,21 @@ class AbstractFactoryTest extends MockeryTestCase
         $this->mockSession = m::mock(Session::class);
     }
 
-    /**
-     * @dataProvider dpTestCanCreate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCanCreate')]
     public function testCanCreate($requestedName, $expect): void
     {
-        static::assertEquals($expect, $this->sut->canCreate($this->mockSl, $requestedName));
+        $this->assertEquals($expect, $this->sut->canCreate($this->mockSl, $requestedName));
     }
 
-    public function dpTestCanCreate(): array
+    public static function dpTestCanCreate(): \Iterator
     {
-        return [
-            [
-                'requestedName' => 'Olcs\\RestService\\Backend\\Task',
-                'expect' => true,
-            ],
-            [
-                'requestedName' => 'Data\\Service\\Backend\\Task',
-                'expect' => false,
-            ],
+        yield [
+            'requestedName' => 'Olcs\\RestService\\Backend\\Task',
+            'expect' => true,
+        ];
+        yield [
+            'requestedName' => 'Data\\Service\\Backend\\Task',
+            'expect' => false,
         ];
     }
 

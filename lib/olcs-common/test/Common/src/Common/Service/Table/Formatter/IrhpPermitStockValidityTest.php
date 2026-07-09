@@ -6,12 +6,14 @@
  * @author Andy Newton <andy@vitri.ltd>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\IrhpPermitStockValidity;
 
-class IrhpPermitStockValidityTest extends \PHPUnit\Framework\TestCase
+final class IrhpPermitStockValidityTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 
@@ -24,11 +26,11 @@ class IrhpPermitStockValidityTest extends \PHPUnit\Framework\TestCase
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group DateFormatter
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('DateFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $column, $expected): void
     {
         $this->assertEquals($expected, $this->sut->format($data, $column));
@@ -37,51 +39,49 @@ class IrhpPermitStockValidityTest extends \PHPUnit\Framework\TestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'Normal Dates' => [
-                [
-                    'validFrom' => '2018-01-01T00:00:00+0000',
-                    'validTo' => '2019-12-31T23:59:59+0000',
-                ],
-                [
-                    'name' => 'validFrom',
-                ],
-                '01/01/2018 to 31/12/2019',
+        yield 'Normal Dates' => [
+            [
+                'validFrom' => '2018-01-01T00:00:00+0000',
+                'validTo' => '2019-12-31T23:59:59+0000',
             ],
-            'Null From' => [
-                [
-                    'validFrom' => null,
-                    'validTo' => '2019-12-31T23:59:59+0000',
-                ],
-                [
-                    'name' => 'validFrom',
-                ],
-                'N/A',
+            [
+                'name' => 'validFrom',
             ],
-            'Null To' => [
-                [
-                    'validFrom' => '2018-01-01T00:00:00+0000',
-                    'validTo' => null,
-                ],
-                [
-                    'name' => 'validFrom',
-                ],
-                'N/A',
+            '01/01/2018 to 31/12/2019',
+        ];
+        yield 'Null From' => [
+            [
+                'validFrom' => null,
+                'validTo' => '2019-12-31T23:59:59+0000',
             ],
-            'Both Null' => [
-                [
-                    'validFrom' => null,
-                    'validTo' => null,
-                ],
-                [
-                    'name' => 'validFrom',
-                ],
-                'N/A',
+            [
+                'name' => 'validFrom',
             ],
+            'N/A',
+        ];
+        yield 'Null To' => [
+            [
+                'validFrom' => '2018-01-01T00:00:00+0000',
+                'validTo' => null,
+            ],
+            [
+                'name' => 'validFrom',
+            ],
+            'N/A',
+        ];
+        yield 'Both Null' => [
+            [
+                'validFrom' => null,
+                'validTo' => null,
+            ],
+            [
+                'name' => 'validFrom',
+            ],
+            'N/A',
         ];
     }
 }

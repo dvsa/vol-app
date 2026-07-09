@@ -33,7 +33,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  * @method TableBuilder table()
  *
  * @see   \Olcs\Controller\Lva\Traits\ApplicationControllerTrait::render
- * @method \Common\View\Model\Section render($titleSuffix, Form $form = null, $variables = [])
+ * @method \Common\View\Model\Section render($titleSuffix, ?Form $form = null, $variables = [])
  */
 abstract class AbstractController extends AbstractActionController
 {

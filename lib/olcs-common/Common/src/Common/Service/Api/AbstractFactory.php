@@ -21,7 +21,7 @@ class AbstractFactory implements AbstractFactoryInterface
     }
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): RestClient
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): RestClient
     {
         $api = str_replace('Olcs\\RestService\\', '', $requestedName);
 

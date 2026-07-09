@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @package CommonTest\Service\Table\Formatter
  */
-class FeatureToggleEditLinkTest extends MockeryTestCase
+final class FeatureToggleEditLinkTest extends MockeryTestCase
 {
     protected $urlHelper;
 

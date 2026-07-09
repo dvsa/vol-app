@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\EbsrSubmissionStatus;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Transfer\Validators\EbsrSubmissionStatus;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class EbsrSubmissionStatusTest extends \PHPUnit\Framework\TestCase
+final class EbsrSubmissionStatusTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 
@@ -18,30 +20,26 @@ class EbsrSubmissionStatusTest extends \PHPUnit\Framework\TestCase
         $this->sut = new EbsrSubmissionStatus();
     }
 
-    /**
-     * @dataProvider isValidProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($value, $expected)
     {
         $this->assertEquals($expected, $this->sut->isValid($value));
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function isValidProvider()
+    public static function isValidProvider(): \Iterator
     {
-        return [
-            ['ebsrs_processed', true],
-            ['ebsrs_processing', true],
-            ['ebsrs_submitted', true],
-            ['ebsrs_validating', true],
-            ['ebsrs_failed', true],
-            ['ebsrs_uploaded', true],
-            ['a', false],
-            [1, false],
-            [' ', false],
-            [null, false],
-        ];
+        yield ['ebsrs_processed', true];
+        yield ['ebsrs_processing', true];
+        yield ['ebsrs_submitted', true];
+        yield ['ebsrs_validating', true];
+        yield ['ebsrs_failed', true];
+        yield ['ebsrs_uploaded', true];
+        yield ['a', false];
+        yield [1, false];
+        yield [' ', false];
+        yield [null, false];
     }
 }

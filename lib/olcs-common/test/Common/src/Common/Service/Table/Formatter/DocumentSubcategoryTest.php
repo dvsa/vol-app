@@ -6,6 +6,8 @@
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 /**
@@ -13,53 +15,51 @@ namespace CommonTest\Service\Table\Formatter;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class DocumentSubcategoryTest extends \PHPUnit\Framework\TestCase
+final class DocumentSubcategoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group DocumentSubcategoryFormatter
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('DocumentSubcategoryFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $expected): void
     {
-        $this->assertEquals($expected, (new \Common\Service\Table\Formatter\DocumentSubcategory())->format($data));
+        $this->assertEquals($expected, new \Common\Service\Table\Formatter\DocumentSubcategory()->format($data));
     }
 
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'documentSubCategoryName' => 'foo',
-                    'isExternal' => false,
-                    'ciId' => null
-                ],
-                'foo'
+                'documentSubCategoryName' => 'foo',
+                'isExternal' => false,
+                'ciId' => null
             ],
+            'foo'
+        ];
+        yield [
             [
-                [
-                    'documentSubCategoryName' => 'foo',
-                    'isExternal' => true,
-                    'ciId' => null
-                ],
-                'foo (selfserve)'
+                'documentSubCategoryName' => 'foo',
+                'isExternal' => true,
+                'ciId' => null
             ],
+            'foo (selfserve)'
+        ];
+        yield [
             [
-                [
-                    'documentSubCategoryName' => 'foo',
-                    'isExternal' => true,
-                    'ciId' => 123
-                ],
-                'foo (selfserve) (emailed)'
-            ]
+                'documentSubCategoryName' => 'foo',
+                'isExternal' => true,
+                'ciId' => 123
+            ],
+            'foo (selfserve) (emailed)'
         ];
     }
 }

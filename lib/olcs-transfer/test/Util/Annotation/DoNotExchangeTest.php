@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Util\Annotation;
 
 use Dvsa\Olcs\Transfer\Util\Annotation\DoNotExchange;
@@ -7,20 +9,20 @@ use Dvsa\Olcs\Transfer\Util\Annotation\DoNotExchange;
 /**
  * DoNotExchange test
  */
-class DoNotExchangeTest extends \PHPUnit\Framework\TestCase
+final class DoNotExchangeTest extends \PHPUnit\Framework\TestCase
 {
     public function testInstantiationNoValue()
     {
         $sut = new DoNotExchange([]);
 
-        $this->assertSame(true, $sut->getDoNotExchange());
+        $this->assertTrue($sut->getDoNotExchange());
     }
 
     /**
      * @param  mixed $value    value passed from annotation
      * @param  bool $expected
-     * @dataProvider valueProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('valueProvider')]
     public function testInstantiationValue(mixed $value, $expected)
     {
         $sut = new DoNotExchange(['value' => $value]);
@@ -28,17 +30,15 @@ class DoNotExchangeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function valueProvider()
+    public static function valueProvider(): \Iterator
     {
-        return [
-            [
-                true, true,
-            ],
-            [
-                false, false,
-            ],
+        yield [
+            true, true,
+        ];
+        yield [
+            false, false,
         ];
     }
 }

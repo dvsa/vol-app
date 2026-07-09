@@ -6,6 +6,8 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -20,7 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TmApplicationManagerTypeTest extends MockeryTestCase
+final class TmApplicationManagerTypeTest extends MockeryTestCase
 {
     protected $application;
 
@@ -47,10 +49,9 @@ class TmApplicationManagerTypeTest extends MockeryTestCase
 
     /**
      * Test formatter
-     *
-     * @group tmApplicationManagerType
-     * @dataProvider formatProvider
      */
+    #[\PHPUnit\Framework\Attributes\Group('tmApplicationManagerType')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('formatProvider')]
     public function testFormat($data, $message, $status, $expected): void
     {
         $routeParams = [
@@ -90,53 +91,51 @@ class TmApplicationManagerTypeTest extends MockeryTestCase
     }
 
     /**
-     * @return ((int|string|string[])[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(array<string> | int | string)> | string)>>
      *
      * @psalm-return list{list{array{id: 1, action: 'A', tmType: array{description: 'desc1'}}, 'tm_application.table.status.new', 'status new', '<a class="govuk-link" href="url">desc1 status new</a>'}, list{array{id: 1, action: 'U', tmType: array{description: 'desc2'}}, 'tm_application.table.status.updated', 'status updated', '<a class="govuk-link" href="url">desc2 status updated</a>'}, list{array{id: 1, action: 'D', tmType: array{description: 'desc3'}}, 'tm_application.table.status.removed', 'status removed', 'desc3 status removed'}, list{array{id: 1, action: '', tmType: array{description: 'desc4'}}, '', '', '<a class="govuk-link" href="url">desc4</a>'}}
      */
-    public function formatProvider(): array
+    public static function formatProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'id' => 1,
-                    'action' => 'A',
-                    'tmType' => ['description' => 'desc1']
-                ],
-                'tm_application.table.status.new',
-                'status new',
-                '<a class="govuk-link" href="url">desc1 status new</a>'
+                'id' => 1,
+                'action' => 'A',
+                'tmType' => ['description' => 'desc1']
             ],
+            'tm_application.table.status.new',
+            'status new',
+            '<a class="govuk-link" href="url">desc1 status new</a>'
+        ];
+        yield [
             [
-                [
-                    'id' => 1,
-                    'action' => 'U',
-                    'tmType' => ['description' => 'desc2']
-                ],
-                'tm_application.table.status.updated',
-                'status updated',
-                '<a class="govuk-link" href="url">desc2 status updated</a>'
+                'id' => 1,
+                'action' => 'U',
+                'tmType' => ['description' => 'desc2']
             ],
+            'tm_application.table.status.updated',
+            'status updated',
+            '<a class="govuk-link" href="url">desc2 status updated</a>'
+        ];
+        yield [
             [
-                [
-                    'id' => 1,
-                    'action' => 'D',
-                    'tmType' => ['description' => 'desc3']
-                ],
-                'tm_application.table.status.removed',
-                'status removed',
-                'desc3 status removed'
+                'id' => 1,
+                'action' => 'D',
+                'tmType' => ['description' => 'desc3']
             ],
+            'tm_application.table.status.removed',
+            'status removed',
+            'desc3 status removed'
+        ];
+        yield [
             [
-                [
-                    'id' => 1,
-                    'action' => '',
-                    'tmType' => ['description' => 'desc4']
-                ],
-                '',
-                '',
-                '<a class="govuk-link" href="url">desc4</a>'
-            ]
+                'id' => 1,
+                'action' => '',
+                'tmType' => ['description' => 'desc4']
+            ],
+            '',
+            '',
+            '<a class="govuk-link" href="url">desc4</a>'
         ];
     }
 }

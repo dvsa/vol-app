@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\FormService\Form\Lva\LicenceGoodsVehiclesFilters;
 
-/**
- * @covers \Common\FormService\Form\Lva\LicenceGoodsVehiclesFilters
- */
-class LicenceGoodsVehiclesFiltersTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\FormService\Form\Lva\LicenceGoodsVehiclesFilters::class)]
+final class LicenceGoodsVehiclesFiltersTest extends MockeryTestCase
 {
     /** @var  LicenceGoodsVehiclesFilters */
     protected $sut;

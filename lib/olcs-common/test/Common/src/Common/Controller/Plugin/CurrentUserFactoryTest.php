@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Controller\Plugin;
 
 use Common\Controller\Plugin\CurrentUserFactory;
@@ -9,7 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class CurrentUserFactoryTest extends TestCase
+final class CurrentUserFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {

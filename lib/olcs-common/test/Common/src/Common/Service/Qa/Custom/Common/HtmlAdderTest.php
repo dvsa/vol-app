@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Common;
 
 use Common\Form\Elements\Types\Html;
@@ -13,13 +15,13 @@ use Laminas\Form\Fieldset;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class HtmlAdderTest extends MockeryTestCase
+final class HtmlAdderTest extends MockeryTestCase
 {
-    public const ELEMENT_NAME = 'elementName';
+    public const string ELEMENT_NAME = 'elementName';
 
-    public const MARKUP = '<h1>markup</h1>';
+    public const string MARKUP = '<h1>markup</h1>';
 
-    public const EXPECTED_PARAMS = [
+    public const array EXPECTED_PARAMS = [
         'name' => self::ELEMENT_NAME,
         'type' => Html::class,
         'attributes' => [

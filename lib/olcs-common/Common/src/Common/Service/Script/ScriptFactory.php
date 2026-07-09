@@ -33,7 +33,7 @@ class ScriptFactory implements FactoryInterface
     protected $viewHelperManager;
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->setViewHelperManager($container->get('ViewHelperManager'));
 

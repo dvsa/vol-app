@@ -22,12 +22,11 @@ use Dvsa\Olcs\Utils\Translation\TranslatorDelegator as Translator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Common\Service\Table\TableBuilder
- */
-class TableBuilderTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Table\TableBuilder::class)]
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
+final class TableBuilderTest extends MockeryTestCase
 {
-    private const TRANSLATED = '_TRSLTD_';
+    private const string TRANSLATED = '_TRSLTD_';
 
     private $mockFormatterPluginManager;
 
@@ -52,7 +51,7 @@ class TableBuilderTest extends MockeryTestCase
     /**
      * Get Mock Table Builder
      *
-     * @return \Common\Service\Table\TableBuilder | MockObject
+     * @return \Common\Service\Table\TableBuilder&MockObject
      *
      * @param string[] $methods
      * @param (MockObject&Permission|MockObject&Translator|mixed)[]|null $constructorArgs
@@ -74,7 +73,7 @@ class TableBuilderTest extends MockeryTestCase
         }
 
         return $this->getMockBuilder(TableBuilder::class)
-            ->setMethods($methods)
+            ->onlyMethods($methods)
             ->setConstructorArgs($constructorArgs)
             ->getMock();
     }
@@ -82,10 +81,10 @@ class TableBuilderTest extends MockeryTestCase
     private function getMockTranslator(): Translator
     {
         $mockTranslator = $this->createPartialMock(Translator::class, ['translate']);
-        $mockTranslator->expects(static::any())
+        $mockTranslator
             ->method('translate')
             ->willReturnCallback(
-                static function ($desc) {
+                static function ($desc): string {
                     if (!is_string($desc)) {
                         return $desc;
                     }
@@ -140,9 +139,8 @@ class TableBuilderTest extends MockeryTestCase
         ];
 
         $mockSm
-            ->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap($servicesMap));
+            ->willReturnMap($servicesMap);
 
         return $mockSm;
     }
@@ -156,11 +154,11 @@ class TableBuilderTest extends MockeryTestCase
 
         $contentHelper = $table->getContentHelper();
 
-        $this->assertTrue($contentHelper instanceof \Common\Service\Table\ContentHelper);
+        $this->assertInstanceOf(\Common\Service\Table\ContentHelper::class, $contentHelper);
 
         $contentHelper2 = $table->getContentHelper();
 
-        $this->assertTrue($contentHelper === $contentHelper2);
+        $this->assertSame($contentHelper2, $contentHelper);
     }
 
     /**
@@ -200,11 +198,11 @@ class TableBuilderTest extends MockeryTestCase
 
         $paginationHelper = $table->getPaginationHelper();
 
-        $this->assertTrue($paginationHelper instanceof \Common\Service\Table\PaginationHelper);
+        $this->assertInstanceOf(\Common\Service\Table\PaginationHelper::class, $paginationHelper);
 
         $paginationHelper2 = $table->getPaginationHelper();
 
-        $this->assertTrue($paginationHelper === $paginationHelper2);
+        $this->assertSame($paginationHelper2, $paginationHelper);
     }
 
     /**
@@ -287,7 +285,7 @@ class TableBuilderTest extends MockeryTestCase
 
         $table->expects($this->once())
             ->method('getConfigFromFile')
-            ->will($this->returnValue($tableConfig));
+            ->willReturn($tableConfig);
 
         $this->assertTrue($table->loadConfig('test'));
 
@@ -324,7 +322,7 @@ class TableBuilderTest extends MockeryTestCase
 
         $table->expects($this->once())
             ->method('getConfigFromFile')
-            ->will($this->returnValue($tableConfig));
+            ->willReturn($tableConfig);
 
         $this->assertTrue($table->loadConfig('test'));
 
@@ -355,7 +353,7 @@ class TableBuilderTest extends MockeryTestCase
 
         $table->expects($this->once())
             ->method('getConfigFromFile')
-            ->will($this->returnValue($tableConfig));
+            ->willReturn($tableConfig);
 
         $this->assertTrue($table->loadConfig('test'));
 
@@ -390,7 +388,7 @@ class TableBuilderTest extends MockeryTestCase
 
         $table->expects($this->once())
             ->method('getConfigFromFile')
-            ->will($this->returnValue($tableConfig));
+            ->willReturn($tableConfig);
 
         $this->assertTrue($table->loadConfig('test'));
 
@@ -454,7 +452,7 @@ class TableBuilderTest extends MockeryTestCase
         $this->assertTrue($table->hasRows());
 
         $this->assertEquals(1, $table->getTotal());
-        self::assertEquals(self::TRANSLATED . 'Thing', $table->getVariable('title'));
+        $this->assertEquals(self::TRANSLATED . 'Thing', $table->getVariable('title'));
     }
 
     /**
@@ -483,9 +481,8 @@ class TableBuilderTest extends MockeryTestCase
 
     /**
      * Test loadParams Without Url
-     *
-     * @doesNotPerformAssertions
      */
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testLoadParamsWithoutUrl(): void
     {
         $params = [];
@@ -557,7 +554,7 @@ class TableBuilderTest extends MockeryTestCase
 
         $table->expects($this->once())
             ->method('getConfigFromFile')
-            ->will($this->returnValue($tableConfig));
+            ->willReturn($tableConfig);
 
         $table->loadConfig('test');
 
@@ -601,9 +598,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getVariables', 'getUrl']);
 
-        $table->expects($this->any())
+        $table
             ->method('getVariables')
-            ->will($this->returnValue($variables));
+            ->willReturn($variables);
 
         $table->setupAction();
 
@@ -622,17 +619,17 @@ class TableBuilderTest extends MockeryTestCase
 
         $mockUrl->expects($this->once())
             ->method('fromRoute')
-            ->will($this->returnValue('/someaction'));
+            ->willReturn('/someaction');
 
         $table = $this->getMockTableBuilder(['getVariables', 'getUrl']);
 
-        $table->expects($this->any())
+        $table
             ->method('getVariables')
-            ->will($this->returnValue($variables));
+            ->willReturn($variables);
 
         $table->expects($this->once())
             ->method('getUrl')
-            ->will($this->returnValue($mockUrl));
+            ->willReturn($mockUrl);
 
         $table->setupAction();
     }
@@ -650,17 +647,17 @@ class TableBuilderTest extends MockeryTestCase
 
         $mockUrl->expects($this->once())
             ->method('fromRoute')
-            ->will($this->returnValue('/someaction'));
+            ->willReturn('/someaction');
 
         $table = $this->getMockTableBuilder(['getVariables', 'getUrl']);
 
-        $table->expects($this->any())
+        $table
             ->method('getVariables')
-            ->will($this->returnValue($variables));
+            ->willReturn($variables);
 
         $table->expects($this->once())
             ->method('getUrl')
-            ->will($this->returnValue($mockUrl));
+            ->willReturn($mockUrl);
 
         $table->setupAction();
     }
@@ -676,21 +673,21 @@ class TableBuilderTest extends MockeryTestCase
         $mockContentHelper->expects($this->once())
             ->method('replaceContent')
             ->with('HTML', [])
-            ->will($this->returnValue('MORE HTML'));
+            ->willReturn('MORE HTML');
 
         $table = $this->getMockTableBuilder(['renderTable', 'getVariables', 'getContentHelper']);
 
         $table->expects($this->once())
             ->method('renderTable')
-            ->will($this->returnValue('HTML'));
+            ->willReturn('HTML');
 
         $table->expects($this->once())
             ->method('getVariables')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $table->expects($this->once())
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $this->assertEquals('MORE HTML', $table->render());
     }
@@ -731,17 +728,15 @@ class TableBuilderTest extends MockeryTestCase
 
         $mockContentHelper = $this->createPartialMock(ContentHelper::class, ['replaceContent']);
 
-        $mockContentHelper->expects($this->any())
+        $mockContentHelper
             ->method('replaceContent')
-            ->will(
-                $this->returnCallback(
-                    static fn($string) => $string
-                )
+            ->willReturnCallback(
+                static fn($string) => $string
             );
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->setFooter($footer);
 
@@ -797,15 +792,12 @@ class TableBuilderTest extends MockeryTestCase
         $table->renderTable();
 
         $csrfElm = $table->getCsrfElement();
-        static::assertEquals('security', $csrfElm->getName());
-        static::assertEquals(
-            [
-                'csrf_options' => [
-                    'timeout' => 9999,
-                ],
+        $this->assertEquals('security', $csrfElm->getName());
+        $this->assertEquals([
+            'csrf_options' => [
+                'timeout' => 9999,
             ],
-            $csrfElm->getOptions()
-        );
+        ], $csrfElm->getOptions());
     }
 
     /**
@@ -922,11 +914,11 @@ class TableBuilderTest extends MockeryTestCase
         $mockContentHelper->expects($this->once())
             ->method('renderLayout')
             ->with($name)
-            ->will($this->returnValue($name));
+            ->willReturn($name);
 
         $table->expects($this->once())
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $this->assertEquals($name, $table->renderLayout($name));
     }
@@ -957,17 +949,17 @@ class TableBuilderTest extends MockeryTestCase
         $mockContentHelper->expects($this->once())
             ->method('replaceContent')
             ->with(' {{[elements/total]}}', ['total' => $expectedTotal])
-            ->will($this->returnValue($expectedTotal));
+            ->willReturn($expectedTotal);
 
         $table = $this->getMockTableBuilder(['getContentHelper', 'shouldPaginate']);
 
         $table->expects($this->once())
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->expects($this->once())
             ->method('shouldPaginate')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $table->setTotal($total);
 
@@ -988,17 +980,17 @@ class TableBuilderTest extends MockeryTestCase
         $mockContentHelper->expects($this->once())
             ->method('replaceContent')
             ->with(' {{[elements/total]}}', ['total' => $expectedTotal])
-            ->will($this->returnValue($expectedTotal));
+            ->willReturn($expectedTotal);
 
         $table = $this->getMockTableBuilder(['getContentHelper', 'shouldPaginate']);
 
         $table->expects($this->once())
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->expects($this->once())
             ->method('shouldPaginate')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $table->setTotal($total);
 
@@ -1018,7 +1010,7 @@ class TableBuilderTest extends MockeryTestCase
         $mockContentHelper->expects($this->once())
             ->method('replaceContent')
             ->with(' {{[elements/total]}}', ['total' => $expectedTotal])
-            ->will($this->returnValue($expectedTotal));
+            ->willReturn($expectedTotal);
 
         $table = m::mock(TableBuilder::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
@@ -1045,7 +1037,7 @@ class TableBuilderTest extends MockeryTestCase
         $table->expects($this->once())
             ->method('getSetting')
             ->with('overrideTotal', false)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $table->setTotal($total);
 
@@ -1121,7 +1113,7 @@ class TableBuilderTest extends MockeryTestCase
             ->setRows(['HAVE ROWS'])
             ->setSettings($settings);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
             ->willReturn($mockContentHelper);
 
@@ -1168,7 +1160,7 @@ class TableBuilderTest extends MockeryTestCase
             ->setRows([])
             ->setSettings($settings);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
             ->willReturn($mockContentHelper);
 
@@ -1219,11 +1211,11 @@ class TableBuilderTest extends MockeryTestCase
             ->setRows([])
             ->setSettings($settings);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
             ->willReturn($mockContentHelper);
 
-        $table->expects($this->any())
+        $table
             ->method('isInternalReadOnly')
             ->willReturn(false);
 
@@ -1250,16 +1242,15 @@ class TableBuilderTest extends MockeryTestCase
 
         $mockContentHelper = $this->createPartialMock(ContentHelper::class, ['replaceContent']);
 
-        $mockContentHelper->expects($this->any())
+        $mockContentHelper
+            ->expects($this->once())
             ->method('replaceContent')
             ->with('{{[elements/actionContainer]}}')
-            ->will(
-                $this->returnCallback(
-                    static function ($content, $vars) {
-                        unset($content);
-                        return $vars;
-                    }
-                )
+            ->willReturnCallback(
+                static function ($content, $vars) {
+                    unset($content);
+                    return $vars;
+                }
             );
 
         $table = $this->getMockTableBuilder(['getContentHelper', 'renderButtonActions']);
@@ -1299,27 +1290,26 @@ class TableBuilderTest extends MockeryTestCase
 
         $mockContentHelper = $this->createPartialMock(ContentHelper::class, ['replaceContent']);
 
-        $mockContentHelper->expects($this->any())
+        $mockContentHelper
+            ->expects($this->once())
             ->method('replaceContent')
             ->with('{{[elements/actionContainer]}}')
-            ->will(
-                $this->returnCallback(
-                    static function ($content, $vars) {
-                        unset($content);
-                        return $vars;
-                    }
-                )
+            ->willReturnCallback(
+                static function ($content, $vars) {
+                    unset($content);
+                    return $vars;
+                }
             );
 
         $table = $this->getMockTableBuilder(['getContentHelper', 'renderDropdownActions']);
 
         $table->expects($this->once())
             ->method('renderDropdownActions')
-            ->will($this->returnValue('DROPDOWN'));
+            ->willReturn('DROPDOWN');
 
         $table->expects($this->once())
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->setType(TableBuilder::TYPE_CRUD);
 
@@ -1349,27 +1339,26 @@ class TableBuilderTest extends MockeryTestCase
 
         $mockContentHelper = $this->createPartialMock(ContentHelper::class, ['replaceContent']);
 
-        $mockContentHelper->expects($this->any())
+        $mockContentHelper
+            ->expects($this->once())
             ->method('replaceContent')
             ->with('{{[elements/actionContainer]}}')
-            ->will(
-                $this->returnCallback(
-                    static function ($content, $vars) {
-                        unset($content);
-                        return $vars;
-                    }
-                )
+            ->willReturnCallback(
+                static function ($content, $vars) {
+                    unset($content);
+                    return $vars;
+                }
             );
 
         $table = $this->getMockTableBuilder(['getContentHelper', 'renderButtonActions']);
 
         $table->expects($this->once())
             ->method('renderButtonActions')
-            ->will($this->returnValue('BUTTONS'));
+            ->willReturn('BUTTONS');
 
         $table->expects($this->once())
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->setType(TableBuilder::TYPE_CRUD);
 
@@ -1396,27 +1385,26 @@ class TableBuilderTest extends MockeryTestCase
 
         $mockContentHelper = $this->createPartialMock(ContentHelper::class, ['replaceContent']);
 
-        $mockContentHelper->expects($this->any())
+        $mockContentHelper
+            ->expects($this->once())
             ->method('replaceContent')
             ->with('{{[elements/actionContainer]}}')
-            ->will(
-                $this->returnCallback(
-                    static function ($content, $vars) {
-                        unset($content);
-                        return $vars;
-                    }
-                )
+            ->willReturnCallback(
+                static function ($content, $vars) {
+                    unset($content);
+                    return $vars;
+                }
             );
 
         $table = $this->getMockTableBuilder(['getContentHelper', 'renderDropdownActions']);
 
         $table->expects($this->once())
             ->method('renderDropdownActions')
-            ->will($this->returnValue('DROPDOWN'));
+            ->willReturn('DROPDOWN');
 
         $table->expects($this->once())
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->setType(TableBuilder::TYPE_CRUD);
 
@@ -1442,7 +1430,7 @@ class TableBuilderTest extends MockeryTestCase
 
         $table->expects($this->once())
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->renderAttributes($attributes);
     }
@@ -1462,7 +1450,7 @@ class TableBuilderTest extends MockeryTestCase
 
         $table->expects($this->once())
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->renderAttributes();
     }
@@ -1497,9 +1485,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $this->assertEquals('content', $table->renderDropdownActions($actions));
     }
@@ -1528,9 +1516,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->renderButtonActions($actions);
     }
@@ -1575,7 +1563,7 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
             ->willReturn($mockContentHelper);
 
@@ -1626,9 +1614,8 @@ class TableBuilderTest extends MockeryTestCase
 
     /**
      * Test renderLimitOptions Without limit options
-     *
-     * @depends testRenderLimitOptionsIsDefined
      */
+    #[\PHPUnit\Framework\Attributes\Depends('testRenderLimitOptionsIsDefined')]
     public function testRenderLimitOptionsWithoutLimitOptions(): void
     {
         $settings = [
@@ -1648,9 +1635,8 @@ class TableBuilderTest extends MockeryTestCase
 
     /**
      * Test renderLimitOptions
-     *
-     * @depends testRenderLimitOptionsIsDefined
      */
+    #[\PHPUnit\Framework\Attributes\Depends('testRenderLimitOptionsIsDefined')]
     public function testRenderLimitOptions(): void
     {
         $settings = [
@@ -1690,13 +1676,13 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper', 'getUrl']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
-        $table->expects($this->any())
+        $table
             ->method('getUrl')
-            ->will($this->returnValue($mockUrl));
+            ->willReturn($mockUrl);
 
         $table->setSettings($settings);
 
@@ -1707,9 +1693,8 @@ class TableBuilderTest extends MockeryTestCase
 
     /**
      * Test renderLimitOptions with query enabled
-     *
-     * @depends testRenderLimitOptionsIsDefined
      */
+    #[\PHPUnit\Framework\Attributes\Depends('testRenderLimitOptionsIsDefined')]
     public function testRenderLimitOptionsWithQueryEnabled(): void
     {
         $settings = [
@@ -1752,23 +1737,23 @@ class TableBuilderTest extends MockeryTestCase
         ];
 
         $mockUrl = $this->createPartialMock(Url::class, ['fromRoute']);
-        $mockUrl->expects($this->any())
+        $mockUrl
             ->method('fromRoute')
-            ->will($this->returnValue('?' . http_build_query($mockQuery)));
+            ->willReturn('?' . http_build_query($mockQuery));
 
         $table = $this->getMockTableBuilder(['getContentHelper', 'getQuery', 'getUrl']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
-        $table->expects($this->any())
+        $table
             ->method('getQuery')
-            ->will($this->returnValue($mockQuery));
+            ->willReturn($mockQuery);
 
-        $table->expects($this->any())
+        $table
             ->method('getUrl')
-            ->will($this->returnValue($mockUrl));
+            ->willReturn($mockUrl);
 
         $table->setSettings($settings);
 
@@ -1777,9 +1762,7 @@ class TableBuilderTest extends MockeryTestCase
         $this->assertEquals('', $table->renderLimitOptions());
     }
 
-    /**
-     * @depends renderPageOptionsIsDefined
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderPageOptionsIsDefined')]
     public function testRenderPageOptionsWithoutOptions(): void
     {
         $options = [
@@ -1792,20 +1775,18 @@ class TableBuilderTest extends MockeryTestCase
 
         $mockPaginationHelper->expects($this->once())
             ->method('getOptions')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $table = $this->getMockTableBuilder(['getPaginationHelper']);
 
         $table->expects($this->once())
             ->method('getPaginationHelper')
-            ->will($this->returnValue($mockPaginationHelper));
+            ->willReturn($mockPaginationHelper);
 
         $this->assertEquals('', $table->renderPageOptions());
     }
 
-    /**
-     * @depends renderPageOptionsIsDefined
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderPageOptionsIsDefined')]
     public function testRenderPageOptions(): void
     {
         $options = [
@@ -1841,7 +1822,7 @@ class TableBuilderTest extends MockeryTestCase
 
         $mockPaginationHelper->expects($this->once())
             ->method('getOptions')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $mockUrl = $this->createPartialMock(Url::class, ['fromRoute']);
 
@@ -1908,15 +1889,15 @@ class TableBuilderTest extends MockeryTestCase
 
         $table->expects($this->once())
             ->method('getPaginationHelper')
-            ->will($this->returnValue($mockPaginationHelper));
+            ->willReturn($mockPaginationHelper);
 
         $table->expects($this->exactly(4))
             ->method('getUrl')
-            ->will($this->returnValue($mockUrl));
+            ->willReturn($mockUrl);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $this->assertEquals(
             $paginationLinkPrevious . $expectedListsMarkup . $paginationLinkNext,
@@ -1939,9 +1920,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->renderHeaderColumn($column);
     }
@@ -1961,9 +1942,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->renderHeaderColumn($column, '{{[elements/foo]}}');
     }
@@ -2011,17 +1992,17 @@ class TableBuilderTest extends MockeryTestCase
 
         $mockUrl->expects($this->once())
             ->method('fromRoute')
-            ->will($this->returnValue('LINK'));
+            ->willReturn('LINK');
 
         $table = $this->getMockTableBuilder(['getContentHelper', 'getUrl']);
 
         $table->expects($this->once())
             ->method('getUrl')
-            ->will($this->returnValue($mockUrl));
+            ->willReturn($mockUrl);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->setSort('foo');
         $table->setOrder('ASC');
@@ -2075,17 +2056,17 @@ class TableBuilderTest extends MockeryTestCase
 
         $mockUrl->expects($this->once())
             ->method('fromRoute')
-            ->will($this->returnValue('LINK'));
+            ->willReturn('LINK');
 
         $table = $this->getMockTableBuilder(['getContentHelper', 'getUrl']);
 
         $table->expects($this->once())
             ->method('getUrl')
-            ->will($this->returnValue($mockUrl));
+            ->willReturn($mockUrl);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->setSort('foo');
         $table->setOrder('DESC');
@@ -2139,17 +2120,17 @@ class TableBuilderTest extends MockeryTestCase
 
         $mockUrl->expects($this->once())
             ->method('fromRoute')
-            ->will($this->returnValue('LINK'));
+            ->willReturn('LINK');
 
         $table = $this->getMockTableBuilder(['getContentHelper', 'getUrl']);
 
         $table->expects($this->once())
             ->method('getUrl')
-            ->will($this->returnValue($mockUrl));
+            ->willReturn($mockUrl);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->setSort('bar');
         $table->setOrder('DESC');
@@ -2185,9 +2166,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->renderHeaderColumn($column);
     }
@@ -2232,9 +2213,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->renderHeaderColumn($column);
     }
@@ -2284,17 +2265,17 @@ class TableBuilderTest extends MockeryTestCase
 
         $mockUrl->expects($this->once())
             ->method('fromRoute')
-            ->will($this->returnValue('LINK'));
+            ->willReturn('LINK');
 
         $table = $this->getMockTableBuilder(['getContentHelper', 'getUrl']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->expects($this->once())
             ->method('getUrl')
-            ->will($this->returnValue($mockUrl));
+            ->willReturn($mockUrl);
 
         $this->assertEquals(
             '[generatedTh]',
@@ -2381,9 +2362,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper'], $constructorArgs);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $response = $table->renderHeaderColumn($column);
 
@@ -2419,9 +2400,9 @@ class TableBuilderTest extends MockeryTestCase
         ];
 
         $table = $this->getMockTableBuilder(['getContentHelper'], $constructorArgs);
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $response = $table->renderBodyColumn([], $column);
 
@@ -2445,9 +2426,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->renderBodyColumn($row, $column);
     }
@@ -2473,9 +2454,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->renderBodyColumn($row, $column);
     }
@@ -2502,9 +2483,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->renderBodyColumn($row, $column);
     }
@@ -2531,13 +2512,13 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper', 'getColumns']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->expects($this->once())
             ->method('getColumns')
-            ->will($this->returnValue([$column]));
+            ->willReturn([$column]);
 
         $table->renderBodyColumn($row, $column);
     }
@@ -2566,13 +2547,13 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper', 'getColumns']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->expects($this->once())
             ->method('getColumns')
-            ->will($this->returnValue([$column]));
+            ->willReturn([$column]);
 
         $table->renderBodyColumn($row, $column, '{{[elements/td]}}', $customAttributes);
     }
@@ -2594,9 +2575,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->renderBodyColumn($row, $column, '{{[elements/foo]}}');
     }
@@ -2622,9 +2603,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->renderBodyColumn($row, $column);
     }
@@ -2651,9 +2632,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $this->mockFormatterPluginManager->shouldReceive('has')->with(Date::class)->andReturn(true);
         $mockDateFormatter = m::mock(Date::class)->makePartial();
@@ -2693,9 +2674,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $mockFormatterPluginManager = m::mock(FormatterPluginManager::class);
         $mockFormatterPluginManager->shouldReceive('has')->andReturn(true);
@@ -2752,9 +2733,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->renderBodyColumn($row, $column);
     }
@@ -2783,9 +2764,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->renderBodyColumn($row, $column);
     }
@@ -2816,9 +2797,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table->setFieldset('table');
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->renderBodyColumn($row, $column);
     }
@@ -2854,9 +2835,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->renderBodyColumn($row, $column);
     }
@@ -2894,9 +2875,9 @@ class TableBuilderTest extends MockeryTestCase
 
         $table->setFieldset('table');
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $table->renderBodyColumn($row, $column);
     }
@@ -2910,7 +2891,7 @@ class TableBuilderTest extends MockeryTestCase
 
         $table->expects($this->once())
             ->method('getRows')
-            ->will($this->returnValue(['foo' => 'bar']));
+            ->willReturn(['foo' => 'bar']);
 
         $this->assertEquals('', $table->renderExtraRows());
     }
@@ -2922,12 +2903,10 @@ class TableBuilderTest extends MockeryTestCase
     {
         $mockTranslator = $this->createPartialMock(Translator::class, ['translate']);
 
-        $mockTranslator->expects($this->any())
+        $mockTranslator
             ->method('translate')
-            ->will(
-                $this->returnCallback(
-                    static fn($string) => $string
-                )
+            ->willReturnCallback(
+                static fn($string): string => $string
             );
 
         $constructorArgs = [
@@ -2948,11 +2927,11 @@ class TableBuilderTest extends MockeryTestCase
 
         $table->expects($this->once())
             ->method('getRows')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $table->expects($this->once())
             ->method('getColumns')
-            ->will($this->returnValue(['foo']));
+            ->willReturn(['foo']);
 
         $mockContentHelper = m::mock(ContentHelper::class)->makePartial();
 
@@ -2960,9 +2939,9 @@ class TableBuilderTest extends MockeryTestCase
             ->with('{{[elements/emptyRow]}}', ['colspan' => 1, 'message' => 'Empty'])
             ->andReturn('CONTENT');
 
-        $table->expects($this->any())
+        $table
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $this->assertEquals('CONTENT', $table->renderExtraRows());
     }
@@ -2974,12 +2953,10 @@ class TableBuilderTest extends MockeryTestCase
     {
         $mockTranslator = $this->createPartialMock(Translator::class, ['translate']);
 
-        $mockTranslator->expects($this->any())
+        $mockTranslator
             ->method('translate')
-            ->will(
-                $this->returnCallback(
-                    static fn($string) => $string
-                )
+            ->willReturnCallback(
+                static fn($string): string => $string
             );
 
         $constructorArgs = [
@@ -2998,22 +2975,22 @@ class TableBuilderTest extends MockeryTestCase
 
         $table->expects($this->once())
             ->method('getRows')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $table->expects($this->once())
             ->method('getColumns')
-            ->will($this->returnValue(['foo']));
+            ->willReturn(['foo']);
 
         $mockContentHelper = $this->createPartialMock(ContentHelper::class, ['replaceContent']);
 
         $mockContentHelper->expects($this->once())
             ->method('replaceContent')
             ->with('{{[elements/emptyRow]}}', ['colspan' => 1, 'message' => 'The table is empty'])
-            ->will($this->returnValue('CONTENT'));
+            ->willReturn('CONTENT');
 
         $table->expects($this->once())
             ->method('getContentHelper')
-            ->will($this->returnValue($mockContentHelper));
+            ->willReturn($mockContentHelper);
 
         $this->assertEquals('CONTENT', $table->renderExtraRows());
     }
@@ -3108,7 +3085,7 @@ class TableBuilderTest extends MockeryTestCase
         $table->removeColumn('name1');
 
         $newColumns = $table->getColumns();
-        $this->assertEquals(count($newColumns), 1);
+        $this->assertCount(1, $newColumns);
     }
 
     /**
@@ -3150,9 +3127,7 @@ class TableBuilderTest extends MockeryTestCase
         $this->assertFalse($sut->isRowDisabled($row));
     }
 
-    /**
-     * @dataProvider providerIsRowDisabled
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerIsRowDisabled')]
     public function testIsRowDisabledWithDisabled($disabled): void
     {
         // Stubbed data
@@ -3185,16 +3160,14 @@ class TableBuilderTest extends MockeryTestCase
     }
 
     /**
-     * @return bool[][]
+     * @return \Iterator<(int | string), array<bool>>
      *
      * @psalm-return list{list{true}, list{false}}
      */
-    public function providerIsRowDisabled(): array
+    public static function providerIsRowDisabled(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 
     public function testRemoveActions(): void
@@ -3243,7 +3216,7 @@ class TableBuilderTest extends MockeryTestCase
 
         $table->expects($this->once())
             ->method('getConfigFromFile')
-            ->will($this->returnValue($tableConfig));
+            ->willReturn($tableConfig);
 
         $table->loadConfig('test');
 
@@ -3311,7 +3284,7 @@ class TableBuilderTest extends MockeryTestCase
 
         $table->expects($this->once())
             ->method('getConfigFromFile')
-            ->will($this->returnValue($tableConfig));
+            ->willReturn($tableConfig);
 
         $table->loadConfig('test');
 
@@ -3407,9 +3380,7 @@ class TableBuilderTest extends MockeryTestCase
         $this->assertEquals($table->getAction('add'), $action);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getUrlParameterNameMapIsDefined(): void
     {
         // Set Up
@@ -3420,14 +3391,14 @@ class TableBuilderTest extends MockeryTestCase
     }
 
     /**
-     * @depends getUrlParameterNameMapIsDefined
      *
-     * @test
      *
      * @return string[]
      *
      * @psalm-return array<string, string>
      */
+    #[\PHPUnit\Framework\Attributes\Depends('getUrlParameterNameMapIsDefined')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getUrlParameterNameMapReturnsAnArray(): array
     {
         // Set Up
@@ -3442,19 +3413,15 @@ class TableBuilderTest extends MockeryTestCase
         return $map;
     }
 
-    /**
-     * @depends getUrlParameterNameMapReturnsAnArray
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getUrlParameterNameMapReturnsAnArray')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getUrlParameterNameMapReturnsAnEmptyArrayByDefault($map): void
     {
         // Assert
         $this->assertEmpty($map);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setUrlParameterNameMapIsDefined(): void
     {
         // Set Up
@@ -3464,10 +3431,8 @@ class TableBuilderTest extends MockeryTestCase
         $this->assertIsCallable(static fn(array $urlParamNameMap): \Common\Service\Table\TableBuilder => $table->setUrlParameterNameMap($urlParamNameMap));
     }
 
-    /**
-     * @depends setUrlParameterNameMapIsDefined
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setUrlParameterNameMapIsDefined')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setUrlParameterNameMapReturnsSelf(): void
     {
         // Set Up
@@ -3480,11 +3445,9 @@ class TableBuilderTest extends MockeryTestCase
         $this->assertSame($result, $table);
     }
 
-    /**
-     * @depends setUrlParameterNameMapIsDefined
-     * @depends getUrlParameterNameMapIsDefined
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setUrlParameterNameMapIsDefined')]
+    #[\PHPUnit\Framework\Attributes\Depends('getUrlParameterNameMapIsDefined')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setUrlParameterNameMapSetsMappings(): void
     {
         // Set Up
@@ -3495,12 +3458,10 @@ class TableBuilderTest extends MockeryTestCase
         $table->setUrlParameterNameMap($expectedMappings);
 
         // Assert
-        $this->assertEquals($expectedMappings, $table->getUrlParameterNameMap());
+        $this->assertSame($expectedMappings, $table->getUrlParameterNameMap());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function testRenderLimitOptionsIsDefined(): void
     {
         // Set Up
@@ -3511,21 +3472,17 @@ class TableBuilderTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      */
-    public function pageAndLimitUrlParameterNamesDataProvider(): array
+    public static function pageAndLimitUrlParameterNamesDataProvider(): \Iterator
     {
-        return [
-            'default query parameter name name used for limiting query results' => ['limit'],
-            'default query parameter name name used for selecting a page' => ['page'],
-        ];
+        yield 'default query parameter name name used for limiting query results' => ['limit'];
+        yield 'default query parameter name name used for selecting a page' => ['page'];
     }
 
-    /**
-     * @depends      testRenderLimitOptionsIsDefined
-     * @dataProvider pageAndLimitUrlParameterNamesDataProvider
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testRenderLimitOptionsIsDefined')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('pageAndLimitUrlParameterNamesDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderLimitOptionsDefaultUrlParameterNames(string $urlParameterName): void
     {
         // Set Up
@@ -3543,21 +3500,17 @@ class TableBuilderTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      */
-    public function mappedPageAndLimitUrlParameterNamesDataProvider(): array
+    public static function mappedPageAndLimitUrlParameterNamesDataProvider(): \Iterator
     {
-        return [
-            'mapped limit url parameter' => ['limit', 'foo'],
-            'mapped page url parameter' => ['page', 'bar'],
-        ];
+        yield 'mapped limit url parameter' => ['limit', 'foo'];
+        yield 'mapped page url parameter' => ['page', 'bar'];
     }
 
-    /**
-     * @depends      renderLimitOptionsDefaultUrlParameterNames
-     * @dataProvider mappedPageAndLimitUrlParameterNamesDataProvider
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderLimitOptionsDefaultUrlParameterNames')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('mappedPageAndLimitUrlParameterNamesDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderLimitOptionsMapsUrlParameterNames(string $originalName, string $mappedName): void
     {
         // Set Up
@@ -3577,9 +3530,7 @@ class TableBuilderTest extends MockeryTestCase
         $table->renderLimitOptions();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderPageOptionsIsDefined(): void
     {
         // Set Up
@@ -3589,11 +3540,9 @@ class TableBuilderTest extends MockeryTestCase
         $this->assertIsCallable([$table, 'renderPageOptions']);
     }
 
-    /**
-     * @depends      renderPageOptionsIsDefined
-     * @dataProvider pageAndLimitUrlParameterNamesDataProvider
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderPageOptionsIsDefined')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('pageAndLimitUrlParameterNamesDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderPageOptionsDefaultUrlParameterNames(string $urlParameterName): void
     {
         // Set Up
@@ -3611,11 +3560,9 @@ class TableBuilderTest extends MockeryTestCase
         $table->renderPageOptions();
     }
 
-    /**
-     * @depends      renderPageOptionsDefaultUrlParameterNames
-     * @dataProvider mappedPageAndLimitUrlParameterNamesDataProvider
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderPageOptionsDefaultUrlParameterNames')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('mappedPageAndLimitUrlParameterNamesDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderPageOptionsMapsUrlParameterNames(string $originalName, string $mappedName): void
     {
         // Set Up
@@ -3634,9 +3581,7 @@ class TableBuilderTest extends MockeryTestCase
         $table->renderPageOptions();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderHeaderColumnIsDefined(): void
     {
         // Set Up
@@ -3647,21 +3592,17 @@ class TableBuilderTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      */
-    public function sortAndOrderUrlParameterNamesDataProvider(): array
+    public static function sortAndOrderUrlParameterNamesDataProvider(): \Iterator
     {
-        return [
-            'default query parameter name name used for sorting query results' => ['sort'],
-            'default query parameter name name used for ordering query results' => ['order'],
-        ];
+        yield 'default query parameter name name used for sorting query results' => ['sort'];
+        yield 'default query parameter name name used for ordering query results' => ['order'];
     }
 
-    /**
-     * @depends      renderHeaderColumnIsDefined
-     * @dataProvider sortAndOrderUrlParameterNamesDataProvider
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderHeaderColumnIsDefined')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('sortAndOrderUrlParameterNamesDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderHeaderColumnDefaultUrlParameterNames(string $urlParameterName): void
     {
         // Set Up
@@ -3678,21 +3619,17 @@ class TableBuilderTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      */
-    public function mappedSortAndOrderUrlParameterNamesDataProvider(): array
+    public static function mappedSortAndOrderUrlParameterNamesDataProvider(): \Iterator
     {
-        return [
-            'mapped sort url parameter' => ['sort', 'foo'],
-            'mapped order url parameter' => ['order', 'bar'],
-        ];
+        yield 'mapped sort url parameter' => ['sort', 'foo'];
+        yield 'mapped order url parameter' => ['order', 'bar'];
     }
 
-    /**
-     * @depends      renderHeaderColumnDefaultUrlParameterNames
-     * @dataProvider mappedSortAndOrderUrlParameterNamesDataProvider
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderHeaderColumnDefaultUrlParameterNames')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('mappedSortAndOrderUrlParameterNamesDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderHeaderColumnMapsUrlParameterNames(string $originalName, string $mappedName): void
     {
         // Set Up

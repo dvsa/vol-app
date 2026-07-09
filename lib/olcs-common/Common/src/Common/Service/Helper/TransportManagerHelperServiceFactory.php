@@ -13,7 +13,7 @@ class TransportManagerHelperServiceFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransportManagerHelperService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TransportManagerHelperService
     {
         return new TransportManagerHelperService(
             $container->get('TransferAnnotationBuilder'),

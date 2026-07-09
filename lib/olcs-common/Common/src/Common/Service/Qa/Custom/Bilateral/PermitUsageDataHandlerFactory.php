@@ -8,7 +8,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class PermitUsageDataHandlerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PermitUsageDataHandler
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): PermitUsageDataHandler
     {
         return new PermitUsageDataHandler(
             $container->get('QaCommonIsValidBasedWarningAdder'),

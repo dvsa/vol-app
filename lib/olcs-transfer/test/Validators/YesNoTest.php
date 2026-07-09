@@ -6,6 +6,8 @@
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\YesNo;
@@ -15,7 +17,7 @@ use Dvsa\Olcs\Transfer\Validators\YesNo;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class YesNoTest extends \PHPUnit\Framework\TestCase
+final class YesNoTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 
@@ -24,26 +26,22 @@ class YesNoTest extends \PHPUnit\Framework\TestCase
         $this->sut = new YesNo();
     }
 
-    /**
-     * @dataProvider dataProviderIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderIsValid')]
     public function testIsValid($value, $expected)
     {
         $this->assertEquals($expected, $this->sut->isValid($value));
     }
 
-    public function dataProviderIsValid()
+    public static function dataProviderIsValid(): \Iterator
     {
-        return [
-            ['N', true],
-            ['Y', true],
-            ['n', false],
-            ['y', false],
-            ['', false],
-            ['A', false],
-            ['B', false],
-            ['Q', false],
-            [null, false],
-        ];
+        yield ['N', true];
+        yield ['Y', true];
+        yield ['n', false];
+        yield ['y', false];
+        yield ['', false];
+        yield ['A', false];
+        yield ['B', false];
+        yield ['Q', false];
+        yield [null, false];
     }
 }

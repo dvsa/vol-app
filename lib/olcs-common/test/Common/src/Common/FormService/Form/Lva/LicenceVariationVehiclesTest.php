@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Mockery as m;
@@ -11,7 +13,7 @@ use Common\FormService\Form\Lva\LicenceVariationVehicles;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class LicenceVariationVehiclesTest extends MockeryTestCase
+final class LicenceVariationVehiclesTest extends MockeryTestCase
 {
     protected $sut;
 

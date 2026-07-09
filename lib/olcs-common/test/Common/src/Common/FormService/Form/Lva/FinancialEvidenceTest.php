@@ -21,21 +21,14 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * @covers Common\FormService\Form\Lva\FinancialEvidence
  */
-class FinancialEvidenceTest extends MockeryTestCase
+final class FinancialEvidenceTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $authService;
     public $validatorPluginManager;
     /** @var  FinancialEvidence */
     protected $sut;
 
     /** @var  m\MockInterface|\Common\Service\Helper\FormHelperService */
     protected $formHelper;
-
-    /** @var  \Common\FormService\FormServiceManager */
-    protected $fsm;
 
     /** @var  m\MockInterface */
     protected $urlHelper;
@@ -47,15 +40,15 @@ class FinancialEvidenceTest extends MockeryTestCase
     protected function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
-        $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
-        $this->authService = m::mock(AuthorizationService::class);
+        $fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
+        $authService = m::mock(AuthorizationService::class);
         $this->urlHelper = m::mock(UrlHelperService::class);
         $this->translator = m::mock(TranslationHelperService::class);
         $this->validatorPluginManager = m::mock(ValidatorPluginManager::class);
 
         $this->sut = new FinancialEvidence(
             $this->formHelper,
-            $this->authService,
+            $authService,
             $this->translator,
             $this->urlHelper,
             $this->validatorPluginManager

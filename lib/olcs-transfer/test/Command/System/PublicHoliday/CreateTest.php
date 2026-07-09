@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\System\PublicHoliday;
 
 use Dvsa\Olcs\Transfer\Command\System\PublicHoliday\Create as CreateCommand;
@@ -8,7 +10,7 @@ use Dvsa\Olcs\Transfer\Command\System\PublicHoliday\Create as CreateCommand;
  * @covers Dvsa\Olcs\Transfer\Command\System\PublicHoliday\Create
  * @covers Dvsa\Olcs\Transfer\Command\System\PublicHoliday\Update
  */
-class CreateTest extends \PHPUnit\Framework\TestCase
+final class CreateTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {
@@ -23,10 +25,10 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         ];
         $command = CreateCommand::create($data);
 
-        static::assertEquals($holidayDate, $command->getHolidayDate());
-        static::assertEquals('Y', $command->getIsEngland());
-        static::assertEquals('N', $command->getIsWales());
-        static::assertEquals('N', $command->getIsScotland());
-        static::assertEquals('Y', $command->getIsIreland());
+        $this->assertEquals($holidayDate, $command->getHolidayDate());
+        $this->assertEquals('Y', $command->getIsEngland());
+        $this->assertEquals('N', $command->getIsWales());
+        $this->assertEquals('N', $command->getIsScotland());
+        $this->assertEquals('Y', $command->getIsIreland());
     }
 }

@@ -1,17 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\FormService\Form\Lva\ApplicationGoodsVehicles;
 
-class ApplicationGoodsVehiclesTest extends MockeryTestCase
+final class ApplicationGoodsVehiclesTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $authService;
     protected $sut;
 
     protected $formHelper;
@@ -22,10 +20,10 @@ class ApplicationGoodsVehiclesTest extends MockeryTestCase
     protected function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
-        $this->authService = m::mock(\LmcRbacMvc\Service\AuthorizationService::class);
+        $authService = m::mock(\LmcRbacMvc\Service\AuthorizationService::class);
         $this->formService = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
 
-        $this->sut = new ApplicationGoodsVehicles($this->formHelper, $this->authService, $this->formService);
+        $this->sut = new ApplicationGoodsVehicles($this->formHelper, $authService, $this->formService);
     }
 
     public function testGetForm(): void

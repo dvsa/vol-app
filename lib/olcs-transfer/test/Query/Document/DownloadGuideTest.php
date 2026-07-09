@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Document;
 
 use Dvsa\Olcs\Transfer\Query\Document\DownloadGuide;
@@ -9,7 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @covers Dvsa\Olcs\Transfer\Query\Document\DownloadGuide
  */
-class DownloadGuideTest extends MockeryTestCase
+final class DownloadGuideTest extends MockeryTestCase
 {
     public function testGetSet()
     {
@@ -19,6 +21,6 @@ class DownloadGuideTest extends MockeryTestCase
 
         $sut = DownloadGuide::create($data);
 
-        static::assertEquals('unit_id', $sut->getIdentifier());
+        $this->assertEquals('unit_id', $sut->getIdentifier());
     }
 }

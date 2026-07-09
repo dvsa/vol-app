@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa;
 
 use Common\Service\Qa\FieldsetPopulatorInterface;
@@ -13,7 +15,7 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class FieldsetPopulatorProviderTest extends MockeryTestCase
+final class FieldsetPopulatorProviderTest extends MockeryTestCase
 {
     private $sut;
 

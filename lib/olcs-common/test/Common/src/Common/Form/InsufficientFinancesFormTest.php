@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form;
 
 use Laminas\Form\ElementInterface;
@@ -9,7 +11,7 @@ use Common\Form\InsufficientFinancesForm;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
-class InsufficientFinancesFormTest extends TestCase
+final class InsufficientFinancesFormTest extends TestCase
 {
     /**
      * @var InsufficientFinancesForm
@@ -20,13 +22,10 @@ class InsufficientFinancesFormTest extends TestCase
     protected function setUp(): void
     {
         $this->sut = new InsufficientFinancesForm();
-
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dataProviderTestIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestIsValid')]
     public function testIsValid(
         $yesNoValue,
         $radioValue,
@@ -52,20 +51,18 @@ class InsufficientFinancesFormTest extends TestCase
     }
 
     /**
-     * @return (bool|string)[][]
+     * @return \Iterator<(int | string), array<(bool | string)>>
      *
      * @psalm-return list{list{'X', '', false, false, false}, list{'N', '', false, false, true}, list{'Y', '', true, false, false}, list{'Y', 'X', true, false, false}, list{'Y', 'upload', true, true, false}, list{'Y', 'send', true, false, false}}
      */
-    public function dataProviderTestIsValid(): array
+    public static function dataProviderTestIsValid(): \Iterator
     {
-        return [
-            ['X', '', false, false, false],
-            ['N', '', false, false, true],
-            ['Y', '', true, false, false],
-            ['Y', 'X', true, false, false],
-            ['Y', 'upload', true, true, false],
-            ['Y', 'send', true, false, false],
-        ];
+        yield ['X', '', false, false, false];
+        yield ['N', '', false, false, true];
+        yield ['Y', '', true, false, false];
+        yield ['Y', 'X', true, false, false];
+        yield ['Y', 'upload', true, true, false];
+        yield ['Y', 'send', true, false, false];
     }
 
     /**

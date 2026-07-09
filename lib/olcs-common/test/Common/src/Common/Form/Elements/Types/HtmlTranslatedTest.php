@@ -6,6 +6,8 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Types;
 
 use Common\Form\Elements\Types\HtmlTranslated;
@@ -15,7 +17,7 @@ use Common\Form\Elements\Types\HtmlTranslated;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class HtmlTranslatedTest extends \PHPUnit\Framework\TestCase
+final class HtmlTranslatedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Placeholder

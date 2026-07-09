@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Controller\Traits;
 
 use Common\Exception\File\InvalidMimeException;
@@ -10,10 +12,8 @@ use Dvsa\Olcs\Transfer\Command\Document\Upload;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Common\Controller\Traits\GenericUpload
- */
-class GenericUploadTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversTrait(\Common\Controller\Traits\GenericUpload::class)]
+final class GenericUploadTest extends MockeryTestCase
 {
     /** @var  GenericUploadStub */
     private $sut;
@@ -30,9 +30,7 @@ class GenericUploadTest extends MockeryTestCase
         $this->sut->stubResponse = $this->mockResp;
     }
 
-    /**
-     * @dataProvider dpTestUploadFile
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestUploadFile')]
     public function testUploadFile($fileData, $data, $expect): void
     {
         $this->mockResp
@@ -50,48 +48,45 @@ class GenericUploadTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][][]
+     * @return \Iterator<(int | string), array<array<string>>>
      *
      * @psalm-return list{array{fileData: array{tmp_name: 'unit_FileName', type: 'unit_Mime'}, data: array{filename: 'unit_FileName1'}, expect: array{fileName: 'unit_FileName1'}}, array{fileData: array{name: 'unit_Name2', tmp_name: 'unit_FileName', type: 'unit_Mime'}, data: array<never, never>, expect: array{fileName: 'unit_Name2'}}, array{fileData: array{filename: 'unit_FileName3', tmp_name: 'unit_FileName', type: 'unit_Mime'}, data: array<never, never>, expect: array{fileName: 'unit_FileName3'}}}
      */
-    public function dpTestUploadFile(): array
+    public static function dpTestUploadFile(): \Iterator
     {
-        return [
-            [
-                'fileData' => [
-                    'tmp_name' => 'unit_FileName',
-                    'type' => 'unit_Mime',
-                ],
-                'data' => [
-                    'filename' => 'unit_FileName1',
-                ],
-                'expect' => [
-                    'fileName' => 'unit_FileName1',
-                ],
+        yield [
+            'fileData' => [
+                'tmp_name' => 'unit_FileName',
+                'type' => 'unit_Mime',
             ],
-            [
-                'fileData' => [
-                    'name' => 'unit_Name2',
-                    'tmp_name' => 'unit_FileName',
-                    'type' => 'unit_Mime',
-                ],
-                'data' => [],
-                'expect' => [
-                    'fileName' => 'unit_Name2',
-                ],
+            'data' => [
+                'filename' => 'unit_FileName1',
             ],
-            [
-                'fileData' => [
-                    'filename' => 'unit_FileName3',
-                    'tmp_name' => 'unit_FileName',
-                    'type' => 'unit_Mime',
-                ],
-                'data' => [],
-                'expect' => [
-                    'fileName' => 'unit_FileName3',
-                ],
+            'expect' => [
+                'fileName' => 'unit_FileName1',
             ],
-
+        ];
+        yield [
+            'fileData' => [
+                'name' => 'unit_Name2',
+                'tmp_name' => 'unit_FileName',
+                'type' => 'unit_Mime',
+            ],
+            'data' => [],
+            'expect' => [
+                'fileName' => 'unit_Name2',
+            ],
+        ];
+        yield [
+            'fileData' => [
+                'filename' => 'unit_FileName3',
+                'tmp_name' => 'unit_FileName',
+                'type' => 'unit_Mime',
+            ],
+            'data' => [],
+            'expect' => [
+                'fileName' => 'unit_FileName3',
+            ],
         ];
     }
 

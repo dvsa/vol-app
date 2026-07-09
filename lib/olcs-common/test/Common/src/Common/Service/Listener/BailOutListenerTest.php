@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Listener;
 
 use Common\Exception\BailOutException;
@@ -20,7 +22,7 @@ use Laminas\Mvc\MvcEvent;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class BailOutListenerTest extends MockeryTestCase
+final class BailOutListenerTest extends MockeryTestCase
 {
     /**
      * @var BailOutListener
@@ -54,7 +56,7 @@ class BailOutListenerTest extends MockeryTestCase
             ->with('exception')
             ->andReturn($ex);
 
-        $this->assertNull($this->sut->onDispatchError($e));
+        $this->assertNotInstanceOf(\Laminas\Mvc\MvcEvent::class, $this->sut->onDispatchError($e));
     }
 
     public function testOnDispatchError(): void

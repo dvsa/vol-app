@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Surrender;
 
 use Dvsa\Olcs\Transfer\Query\DataRetention\Records;
@@ -7,7 +9,7 @@ use Dvsa\OlcsTest\Transfer\Query\QueryTest;
 use Laminas\Stdlib\ArraySerializableInterface;
 use PHPUnit\Framework\TestCase;
 
-class RecordsTest extends TestCase
+final class RecordsTest extends TestCase
 {
     use QueryTest;
 

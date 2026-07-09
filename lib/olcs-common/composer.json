@@ -28,7 +28,7 @@
     }
   ],
   "require": {
-    "php": "~8.3.0",
+    "php": "~8.4.0",
     "ezyang/htmlpurifier": "^4.17",
     "laminas/laminas-authentication": "^2.18",
     "laminas/laminas-cache": "^3.13",
@@ -55,12 +55,12 @@
   "require-dev": {
     "bamarni/composer-bin-plugin": "^1.8.2",
     "doctrine/annotations": "^1.14.2",
-    "johnkary/phpunit-speedtrap": "^4.0",
     "lm-commons/lmc-rbac-mvc": "^3.5",
     "mikey179/vfsstream": "~v1.6.11",
     "mockery/mockery": "^1.6.7",
     "phpstan/phpstan-mockery": "^2.0",
-    "phpunit/phpunit": "^9.6",
+    "phpunit/phpunit": "^13.0",
+    "rector/rector": "^2.3",
     "symfony/filesystem": "^5.4",
     "symfony/lock": "^5.4"
   },
@@ -99,7 +99,7 @@
     "test": "phpunit",
     "phpcs": "phpcs",
     "psalm": "psalm",
-    "phpstan": "phpstan",
+    "phpstan": "phpstan --memory-limit=1G",
     "all": [
       "@test",
       "@phpcs",

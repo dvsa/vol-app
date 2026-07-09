@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Type;
 
 use Laminas\I18n\Translator\Translator;
@@ -13,7 +15,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Service\Table\Type\Selector;
 
-class SelectorTest extends MockeryTestCase
+final class SelectorTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -28,9 +30,7 @@ class SelectorTest extends MockeryTestCase
         $this->sut = new Selector($this->table);
     }
 
-    /**
-     * @group checkboxTest
-     */
+    #[\PHPUnit\Framework\Attributes\Group('checkboxTest')]
     public function testRender(): void
     {
         $fieldset = 'table';
@@ -52,9 +52,8 @@ class SelectorTest extends MockeryTestCase
 
     /**
      * Test render with disabled attribute
-     *
-     * @group checkboxTest
      */
+    #[\PHPUnit\Framework\Attributes\Group('checkboxTest')]
     public function testRenderWithDisabledAttribute(): void
     {
         $fieldset = 'table';
@@ -80,9 +79,7 @@ class SelectorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @group checkboxTest
-     */
+    #[\PHPUnit\Framework\Attributes\Group('checkboxTest')]
     public function testRenderWithoutFieldet(): void
     {
         $fieldset = null;
@@ -102,9 +99,7 @@ class SelectorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @group checkboxTest
-     */
+    #[\PHPUnit\Framework\Attributes\Group('checkboxTest')]
     public function testRenderWithDataAttributes(): void
     {
         $fieldset = null;
@@ -131,9 +126,8 @@ class SelectorTest extends MockeryTestCase
 
     /**
      * Test render with data attribute when column is an array
-     *
-     * @group checkboxTest
      */
+    #[\PHPUnit\Framework\Attributes\Group('checkboxTest')]
     public function testRenderWithDataAttributesArray(): void
     {
         $fieldset = null;
@@ -158,9 +152,7 @@ class SelectorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @group checkboxTest
-     */
+    #[\PHPUnit\Framework\Attributes\Group('checkboxTest')]
     public function testRenderWithDataIdxSet(): void
     {
         $fieldset = null;
@@ -184,10 +176,9 @@ class SelectorTest extends MockeryTestCase
 
     /**
      * Test render with disabled callback
-     *
-     * @group checkboxTest
-     * @dataProvider disabledCallbackProvider
      */
+    #[\PHPUnit\Framework\Attributes\Group('checkboxTest')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('disabledCallbackProvider')]
     public function testRenderWithDisabledCallback($row, $expected): void
     {
         $fieldset = 'table';
@@ -205,10 +196,9 @@ class SelectorTest extends MockeryTestCase
 
     /**
      * Test render with a single aria attribute defined as a string literal.
-     *
-     * @test
-     * @group tableSelectorAriaSupport
      */
+    #[\PHPUnit\Framework\Attributes\Group('tableSelectorAriaSupport')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderWithAriaAttributeLiteralStringDefinitionSingle(): void
     {
         $column = [
@@ -219,17 +209,16 @@ class SelectorTest extends MockeryTestCase
 
         $this->assertStringContainsString(
             ' aria-label="Some Aria Attribute" ',
-            $this->sut->render(['id' => 7], $column)
+            (string) $this->sut->render(['id' => 7], $column)
         );
     }
 
     /**
      * Test render with a multiple aria attribute defined as string literals.
-     *
-     * @test
-     * @depends renderWithAriaAttributeLiteralStringDefinitionSingle
-     * @group tableSelectorAriaSupport
      */
+    #[\PHPUnit\Framework\Attributes\Depends('renderWithAriaAttributeLiteralStringDefinitionSingle')]
+    #[\PHPUnit\Framework\Attributes\Group('tableSelectorAriaSupport')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderWithAriaAttributeLiteralStringDefinitionMultiple(): void
     {
         $column = [
@@ -241,17 +230,16 @@ class SelectorTest extends MockeryTestCase
         ];
 
         $renderedResult = $this->sut->render(['id' => 7], $column);
-        $this->assertStringContainsString(' aria-label="Some Aria Attribute" ', $renderedResult);
-        $this->assertStringContainsString(' aria-checked="false" ', $renderedResult);
-        $this->assertStringContainsString(' aria-test="testing" ', $renderedResult);
+        $this->assertStringContainsString(' aria-label="Some Aria Attribute" ', (string) $renderedResult);
+        $this->assertStringContainsString(' aria-checked="false" ', (string) $renderedResult);
+        $this->assertStringContainsString(' aria-test="testing" ', (string) $renderedResult);
     }
 
     /**
      * Test render with aria attribute value being a callback.
-     *
-     * @test
-     * @group tableSelectorAriaSupport
      */
+    #[\PHPUnit\Framework\Attributes\Group('tableSelectorAriaSupport')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderWithAriaAttributeAsCallback(): void
     {
         $column = [
@@ -262,17 +250,16 @@ class SelectorTest extends MockeryTestCase
 
         $this->assertStringContainsString(
             ' aria-label="Test translated string" ',
-            $this->sut->render(['id' => 7], $column)
+            (string) $this->sut->render(['id' => 7], $column)
         );
     }
 
     /**
      * Test render with aria attribute being a callback, translator is passed to callable.
-     *
-     * @test
-     * @depends renderWithAriaAttributeAsCallback
-     * @group tableSelectorAriaSupport
      */
+    #[\PHPUnit\Framework\Attributes\Depends('renderWithAriaAttributeAsCallback')]
+    #[\PHPUnit\Framework\Attributes\Group('tableSelectorAriaSupport')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderWithAriaAttributeAsCallbackTranslatorIsPassedToCallable(): void
     {
         $translatorMock = m::mock(Translator::class);
@@ -294,11 +281,10 @@ class SelectorTest extends MockeryTestCase
 
     /**
      * Test render with aria attribute being a callback, data is passed to callable.
-     *
-     * @test
-     * @depends renderWithAriaAttributeAsCallback
-     * @group tableSelectorAriaSupport
      */
+    #[\PHPUnit\Framework\Attributes\Depends('renderWithAriaAttributeAsCallback')]
+    #[\PHPUnit\Framework\Attributes\Group('tableSelectorAriaSupport')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderWithAriaAttributeAsCallbackDataIsPassedToCallable(): void
     {
         $expectedData = ['id' => 7];
@@ -317,10 +303,9 @@ class SelectorTest extends MockeryTestCase
 
     /**
      * Test render with aria attribute contain HTML is escaped
-     *
-     * @test
-     * @group tableSelectorAriaSupport
      */
+    #[\PHPUnit\Framework\Attributes\Group('tableSelectorAriaSupport')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderWithAriaAttributeHtmlIsEscaped(): void
     {
         $column = [
@@ -331,26 +316,24 @@ class SelectorTest extends MockeryTestCase
 
         $this->assertStringNotContainsString(
             '<html>',
-            $this->sut->render(['id' => 7], $column)
+            (string) $this->sut->render(['id' => 7], $column)
         );
     }
 
     /**
-     * @return (int[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<int> | string)>>
      *
      * @psalm-return list{list{array{isExpiredForLicence: 1, id: 7}, '<input type="radio" name="table[id]" value="7" disabled="disabled" id="table[id][7]" />'}, list{array{isExpiredForLicence: 0, id: 7}, '<input type="radio" name="table[id]" value="7" id="table[id][7]" />'}}
      */
-    public function disabledCallbackProvider(): array
+    public static function disabledCallbackProvider(): \Iterator
     {
-        return [
-            [
-                ['isExpiredForLicence' => 1, 'id' => 7],
-                '<input type="radio" name="table[id]" value="7" disabled="disabled" id="table[id][7]" />'
-            ],
-            [
-                ['isExpiredForLicence' => 0, 'id' => 7],
-                '<input type="radio" name="table[id]" value="7" id="table[id][7]" />'
-            ]
+        yield [
+            ['isExpiredForLicence' => 1, 'id' => 7],
+            '<input type="radio" name="table[id]" value="7" disabled="disabled" id="table[id][7]" />'
+        ];
+        yield [
+            ['isExpiredForLicence' => 0, 'id' => 7],
+            '<input type="radio" name="table[id]" value="7" id="table[id][7]" />'
         ];
     }
 }

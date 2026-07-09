@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Organisation;
 
 use Dvsa\Olcs\Transfer\Command\Organisation\TransferTo;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Organisation\TransferTo;
 /**
  * Transfer To test
  */
-class TransferToTest extends \PHPUnit\Framework\TestCase
+final class TransferToTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

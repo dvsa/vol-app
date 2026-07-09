@@ -10,7 +10,7 @@ use Common\Service\Data\RefData;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class DynamicMultiCheckboxTest extends MockeryTestCase
+final class DynamicMultiCheckboxTest extends MockeryTestCase
 {
     private $pluginManager;
 
@@ -27,7 +27,7 @@ class DynamicMultiCheckboxTest extends MockeryTestCase
 
         $this->assertEquals('testing', $sut->getContext());
         $this->assertTrue($sut->useGroups());
-        $this->assertEquals('Testing', $sut->getLabel());
+        $this->assertSame('Testing', $sut->getLabel());
     }
 
     public function testBcSetOptions(): void
@@ -44,14 +44,14 @@ class DynamicMultiCheckboxTest extends MockeryTestCase
         $mockRefDataService
             ->expects($this->once())
             ->method('fetchListOptions')
-            ->with($this->equalTo('category'), $this->equalTo(false))
+            ->with('category', false)
             ->willReturn(['key' => 'value']);
 
         $sut = new DynamicMultiCheckbox($this->pluginManager);
         $sut->setDataService($mockRefDataService);
         $sut->setContext('category');
 
-        $this->assertEquals(['key' => 'value'], $sut->getValueOptions());
+        $this->assertSame(['key' => 'value'], $sut->getValueOptions());
 
         //check that the values are only fetched once
         $sut->getValueOptions();
@@ -60,8 +60,8 @@ class DynamicMultiCheckboxTest extends MockeryTestCase
     /**
      * @param $value
      * @param $expected
-     * @dataProvider provideSetValue
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideSetValue')]
     public function testSetValue($value, $expected): void
     {
         $sut = new DynamicMultiCheckbox($this->pluginManager);
@@ -71,24 +71,22 @@ class DynamicMultiCheckboxTest extends MockeryTestCase
     }
 
     /**
-     * @return (string|string[])[][]
+     * @return \Iterator<(int | string), array<(array<string> | string)>>
      *
      * @psalm-return list{list{'test', 'test'}, list{list{'test', 'test2'}, list{'test', 'test2'}}, list{array{id: 'test', desc: 'Test Item'}, 'test'}}
      */
-    public function provideSetValue(): array
+    public static function provideSetValue(): \Iterator
     {
-        return [
-            ['test', 'test'],
-            [[0 => 'test', 1 => 'test2'], [0 => 'test', 1 => 'test2']],
-            [['id' => 'test', 'desc' => 'Test Item'], 'test']
-        ];
+        yield ['test', 'test'];
+        yield [[0 => 'test', 1 => 'test2'], [0 => 'test', 1 => 'test2']];
+        yield [['id' => 'test', 'desc' => 'Test Item'], 'test'];
     }
 
     public function testGetDataService(): void
     {
         $serviceName = 'testListService';
 
-        $mockService = $this->createMock(\Common\Service\Data\ListDataInterface::class);
+        $mockService = $this->createStub(\Common\Service\Data\ListDataInterface::class);
 
         $this->pluginManager->expects('get')->with($serviceName)->andReturn($mockService);
         $sut =  new DynamicMultiCheckbox($this->pluginManager);
@@ -105,7 +103,7 @@ class DynamicMultiCheckboxTest extends MockeryTestCase
             'Class ' . $serviceName . ' does not implement \Common\Service\Data\ListDataInterface'
         );
 
-        $mockService = $this->createMock('\StdClass');
+        $mockService = $this->createStub('\StdClass');
 
         $this->pluginManager->expects('get')->with($serviceName)->andReturn($mockService);
         $sut =  new DynamicMultiCheckbox($this->pluginManager);

@@ -6,6 +6,8 @@
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Validators;
 
 use Common\Form\Elements\Validators\WithdrawnDate;
@@ -15,7 +17,7 @@ use Common\Form\Elements\Validators\WithdrawnDate;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class WithdrawnDateValidatorTest extends \PHPUnit\Framework\TestCase
+final class WithdrawnDateValidatorTest extends \PHPUnit\Framework\TestCase
 {
     public $validator;
     /**
@@ -29,9 +31,8 @@ class WithdrawnDateValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test isValid
-     *
-     * @dataProvider providerIsValid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerIsValid')]
     public function testIsValid($value, $context, $expected): void
     {
         $this->assertEquals($expected, $this->validator->isValid($value, $context));
@@ -40,71 +41,69 @@ class WithdrawnDateValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * Provider for isValid
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function providerIsValid()
+    public static function providerIsValid(): \Iterator
     {
-        return [
+        yield [
+            '2014-01-01',
             [
-                '2014-01-01',
-                [
-                    'isWithdrawn' => 'Y',
-                    'withdrawnDate' => [
-                        'year' => '2014',
-                        'month' => '01',
-                        'day' => '01'
-                    ]
-                ],
-                true
+                'isWithdrawn' => 'Y',
+                'withdrawnDate' => [
+                    'year' => '2014',
+                    'month' => '01',
+                    'day' => '01'
+                ]
             ],
+            true
+        ];
+        yield [
+            '2014-01-32',
             [
-                '2014-01-32',
-                [
-                    'isWithdrawn' => 'Y',
-                    'withdrawnDate' => [
-                        'year' => '2014',
-                        'month' => '01',
-                        'day' => '32'
-                    ]
-                ],
-                false
+                'isWithdrawn' => 'Y',
+                'withdrawnDate' => [
+                    'year' => '2014',
+                    'month' => '01',
+                    'day' => '32'
+                ]
             ],
+            false
+        ];
+        yield [
+            '2014-02-30',
             [
-                '2014-02-30',
-                [
-                    'isWithdrawn' => 'Y',
-                    'withdrawnDate' => [
-                        'year' => '2014',
-                        'month' => '02',
-                        'day' => '30'
-                    ]
-                ],
-                false
+                'isWithdrawn' => 'Y',
+                'withdrawnDate' => [
+                    'year' => '2014',
+                    'month' => '02',
+                    'day' => '30'
+                ]
             ],
+            false
+        ];
+        yield [
+            '2100-12-31',
             [
-                '2100-12-31',
-                [
-                    'isWithdrawn' => 'Y',
-                    'withdrawnDate' => [
-                        'year' => '2100',
-                        'month' => '12',
-                        'day' => '31'
-                    ]
-                ],
-                false
+                'isWithdrawn' => 'Y',
+                'withdrawnDate' => [
+                    'year' => '2100',
+                    'month' => '12',
+                    'day' => '31'
+                ]
             ],
+            false
+        ];
+        yield [
+            null,
             [
-                null,
-                [
-                    'isWithdrawn' => 'N',
-                    'withdrawnDate' => [
-                        'year' => '',
-                        'month' => '',
-                        'day' => ''
-                    ]
-                ],
-                true
-            ]
+                'isWithdrawn' => 'N',
+                'withdrawnDate' => [
+                    'year' => '',
+                    'month' => '',
+                    'day' => ''
+                ]
+            ],
+            true
         ];
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper;
 
 use Common\Form\View\Helper\FormCheckboxAdvanced;
@@ -8,7 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Form\ElementInterface;
 use Laminas\View\Renderer\RendererInterface;
 
-class FormCheckboxAdvancedTest extends MockeryTestCase
+final class FormCheckboxAdvancedTest extends MockeryTestCase
 {
     protected FormCheckboxAdvanced $sut;
 

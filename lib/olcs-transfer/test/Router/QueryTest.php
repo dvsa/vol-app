@@ -10,7 +10,7 @@ use Laminas\Uri\Http as HttpUri;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class QueryTest extends MockeryTestCase
+final class QueryTest extends MockeryTestCase
 {
     public function testAssembleNoParams(): void
     {

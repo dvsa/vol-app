@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Helper;
 
 use Common\View\Helper\LinkBack;
@@ -9,7 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @covers Common\View\Helper\LinkBack
  */
-class LinkBackTest extends MockeryTestCase
+final class LinkBackTest extends MockeryTestCase
 {
     /** @var  m\MockInterface */
     private $mockRequest;
@@ -34,19 +36,17 @@ class LinkBackTest extends MockeryTestCase
         $this->mockRequest = m::mock(\Laminas\Http\Request::class);
     }
 
-    /**
-     * @dataProvider dpTestInvoke
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestInvoke')]
     public function testInvoke($params, $referer, $expect): void
     {
         if ($referer !== null) {
             $this->mockRequest->shouldReceive('getHeader')->once()->with('referer')->andReturn($referer);
         }
 
-        $sut = (new LinkBack($this->mockRequest))
+        $sut = new LinkBack($this->mockRequest)
             ->setView($this->mockView);
 
-        static::assertEquals($expect, $sut->__invoke($params));
+        $this->assertEquals($expect, $sut->__invoke($params));
     }
 
     /**
@@ -54,7 +54,7 @@ class LinkBackTest extends MockeryTestCase
      *
      * @psalm-return list{array{params: null, referer: false, expect: ''}, array{params: null, referer: m\LegacyMockInterface&m\MockInterface&\Laminas\Http\Header\HeaderInterface, expect: '<a href="unit_URL" class="govuk-back-link">_TRLTD_common.link.back.label</a>'}, array{params: array{label: 'unit_PrmLbl', url: 'unit_PrmUrl2', escape: false}, referer: null, expect: '<a href="unit_PrmUrl2" class="govuk-back-link">_TRLTD_unit_PrmLbl</a>'}}
      */
-    public function dpTestInvoke(): array
+    public static function dpTestInvoke(): array
     {
         $mockHeader = m::mock(\Laminas\Http\Header\HeaderInterface::class);
         $mockHeader->shouldReceive('uri->getPath')->atMost(1)->andReturn('unit_URL');

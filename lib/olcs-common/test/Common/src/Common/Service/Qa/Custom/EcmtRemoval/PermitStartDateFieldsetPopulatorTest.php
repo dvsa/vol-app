@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\EcmtRemoval;
 
 use Common\Service\Helper\TranslationHelperService;
@@ -11,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Form\Fieldset;
 use Laminas\Form\Form;
 
-class PermitStartDateFieldsetPopulatorTest extends MockeryTestCase
+final class PermitStartDateFieldsetPopulatorTest extends MockeryTestCase
 {
     public function testPopulate(): void
     {

@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Generic Edit Action Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
+declare(strict_types=1);
 
 namespace CommonTest\Controller\Traits;
 
@@ -13,33 +9,25 @@ namespace CommonTest\Controller\Traits;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class GenericEditActionTest extends \PHPUnit\Framework\TestCase
+final class GenericEditActionTest extends \PHPUnit\Framework\TestCase
 {
-    private $sut;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        $this->sut = $this->getMockForTrait(
-            \Common\Controller\Traits\GenericEditAction::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            ['renderSection']
-        );
-    }
-
-    /**
-     * @group controller_traits
-     * @group generic_section_controller_traits
-     */
+    #[\PHPUnit\Framework\Attributes\Group('controller_traits')]
+    #[\PHPUnit\Framework\Attributes\Group('generic_section_controller_traits')]
     public function testIndexAction(): void
     {
-        $this->sut->expects($this->once())
-            ->method('renderSection');
+        $sut = new class {
+            use \Common\Controller\Traits\GenericEditAction;
 
-        $this->sut->editAction();
+            public int $renderSectionCalls = 0;
+
+            public function renderSection()
+            {
+                $this->renderSectionCalls++;
+            }
+        };
+
+        $sut->editAction();
+
+        $this->assertSame(1, $sut->renderSectionCalls);
     }
 }

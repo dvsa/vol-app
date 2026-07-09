@@ -29,15 +29,13 @@ use Psr\Container\ContainerInterface;
 /**
  * @see FormElementErrors
  */
-class FormElementErrorsTest extends MockeryTestCase
+final class FormElementErrorsTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
-    protected const VALIDATOR_MANAGER = 'ValidatorManager';
+    protected const string VALIDATOR_MANAGER = 'ValidatorManager';
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderIsCallable(): void
     {
         // Setup
@@ -48,10 +46,8 @@ class FormElementErrorsTest extends MockeryTestCase
         $this->assertIsCallable(static fn(\Laminas\Form\ElementInterface $element, array $attributes = []): string => $sut->render($element, $attributes));
     }
 
-    /**
-     * @test
-     * @depends renderIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderEscapesHtmlInMessage(): void
     {
         // Setup
@@ -67,9 +63,7 @@ class FormElementErrorsTest extends MockeryTestCase
         $this->assertStringNotContainsString('<a>', $result);
     }
 
-    /**
-     * @depends renderIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderIsCallable')]
     public function testRender(): void
     {
         $element = new \Laminas\Form\Element\Text('test');
@@ -111,7 +105,7 @@ class FormElementErrorsTest extends MockeryTestCase
 
     protected function setUpSut(ContainerInterface $container): FormElementErrors
     {
-        return (new FormElementErrorsFactory())->__invoke($container, FormElementErrors::class);
+        return new FormElementErrorsFactory()->__invoke($container, FormElementErrors::class);
     }
 
     protected function setUpTranslator(): MockInterface
@@ -123,7 +117,7 @@ class FormElementErrorsTest extends MockeryTestCase
 
     protected function setUpFormLabel(ContainerInterface $container): FormLabel
     {
-        return (new FormLabelFactory())->__invoke($container, \Laminas\Form\View\Helper\FormLabel::class);
+        return new FormLabelFactory()->__invoke($container, \Laminas\Form\View\Helper\FormLabel::class);
     }
 
     #[\Override]

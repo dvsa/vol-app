@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\BusRegStatus;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @see BusRegStatus
  */
-class BusRegStatusTest extends MockeryTestCase
+final class BusRegStatusTest extends MockeryTestCase
 {
     public $sut;
     protected $translator;
@@ -39,10 +41,10 @@ class BusRegStatusTest extends MockeryTestCase
     /**
      * Tests the formatting for the different possible input array formats
      *
-     * @dataProvider formatProvider
      *
      * @param $data
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('formatProvider')]
     public function testFormat($data): void
     {
         $regStatus = 'status id';
@@ -70,9 +72,9 @@ class BusRegStatusTest extends MockeryTestCase
     /**
      * Data provider for testFormat
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function formatProvider()
+    public static function formatProvider(): \Iterator
     {
         $regStatus = 'status id';
         $regStatusDesc = 'status description';
@@ -92,11 +94,8 @@ class BusRegStatusTest extends MockeryTestCase
         $ebsrSubmissionFormat = [
             'busReg' => $txcInboxFormat
         ];
-
-        return [
-            [$busSearchViewFormat],
-            [$txcInboxFormat],
-            [$ebsrSubmissionFormat],
-        ];
+        yield [$busSearchViewFormat];
+        yield [$txcInboxFormat];
+        yield [$ebsrSubmissionFormat];
     }
 }

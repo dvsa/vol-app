@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Helper;
 
 use Common\Service\Helper\RestrictionHelperService;
@@ -15,7 +17,7 @@ use Common\Service\Helper\RestrictionHelperService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class RestrictionHelperServiceTest extends \PHPUnit\Framework\TestCase
+final class RestrictionHelperServiceTest extends \PHPUnit\Framework\TestCase
 {
     public $helper;
     /**
@@ -29,11 +31,10 @@ class RestrictionHelperServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test isRestrictionSatisfied
-     *
-     * @dataProvider isRestrictionSatisfiedProvider
-     * @group helper_service
-     * @group restriction_helper_service
      */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('restriction_helper_service')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('isRestrictionSatisfiedProvider')]
     public function testIsRestrictionSatisfied($restrictions, $accessKeys, $expected): void
     {
         $this->assertEquals($expected, $this->helper->isRestrictionSatisfied($restrictions, $accessKeys));
@@ -42,263 +43,261 @@ class RestrictionHelperServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function isRestrictionSatisfiedProvider()
+    public static function isRestrictionSatisfiedProvider(): \Iterator
     {
-        return [
-            // Really simple restrictions
+        // Really simple restrictions
+        yield [
+            // We just need to match the string in the array
+            'foo',
+            ['foo'],
+            true
+        ];
+        yield [
+            'foo',
+            ['foo', 'bar'],
+            true
+        ];
+        yield [
+            'foo',
+            [],
+            false
+        ];
+        yield [
+            'foo',
+            ['bar'],
+            false
+        ];
+        // Simple restrictions
+        yield [
+            // We can match ANY of the items
+            ['foo', 'bar'],
+            ['foo'],
+            true
+        ];
+        yield [
+            ['foo', 'bar'],
+            ['bar'],
+            true
+        ];
+        yield [
+            ['foo', 'bar'],
+            ['foo', 'bar'],
+            true
+        ];
+        yield [
+            ['foo', 'bar'],
+            ['foo', 'bar', 'cake'],
+            true
+        ];
+        yield [
+            ['foo', 'bar'],
+            ['cake', 'fudge'],
+            false
+        ];
+        yield [
+            ['foo'],
+            ['bar'],
+            false
+        ];
+        yield [
+            ['foo'],
+            [],
+            false
+        ];
+        // Strict restrictions
+        yield [
             [
-                // We just need to match the string in the array
-                'foo',
-                ['foo'],
-                true
+                // We need to match ALL items in the sub array
+                ['foo', 'bar']
             ],
+            ['foo', 'bar'],
+            true
+        ];
+        yield [
             [
-                'foo',
+                ['foo', 'bar', 'cake']
+            ],
+            ['foo', 'bar'],
+            false
+        ];
+        yield [
+            [
+                ['foo', 'bar', 'cake']
+            ],
+            [],
+            false
+        ];
+        // Combination of Strict and Not Strict
+        yield [
+            [
+                // We need to match ALL items in the sub array
                 ['foo', 'bar'],
-                true
+                // Or just this one
+                'cake'
             ],
-            [
-                'foo',
-                [],
-                false
-            ],
-            [
-                'foo',
-                ['bar'],
-                false
-            ],
-            // Simple restrictions
-            [
-                // We can match ANY of the items
-                ['foo', 'bar'],
-                ['foo'],
-                true
-            ],
+            ['foo', 'bar'],
+            true
+        ];
+        yield [
             [
                 ['foo', 'bar'],
-                ['bar'],
-                true
+                'cake'
             ],
+            ['foo', 'bar', 'cake'],
+            true
+        ];
+        yield [
             [
                 ['foo', 'bar'],
-                ['foo', 'bar'],
-                true
+                'cake'
             ],
+            ['foo', 'cake'],
+            true
+        ];
+        yield [
             [
                 ['foo', 'bar'],
-                ['foo', 'bar', 'cake'],
-                true
+                'cake'
             ],
+            ['cake'],
+            true
+        ];
+        yield [
             [
                 ['foo', 'bar'],
-                ['cake', 'fudge'],
-                false
+                'cake'
             ],
+            ['fudge'],
+            false
+        ];
+        yield [
             [
-                ['foo'],
-                ['bar'],
-                false
-            ],
-            [
-                ['foo'],
-                [],
-                false
-            ],
-            // Strict restrictions
-            [
-                [
-                    // We need to match ALL items in the sub array
-                    ['foo', 'bar']
-                ],
                 ['foo', 'bar'],
-                true
+                'cake'
             ],
+            [],
+            false
+        ];
+        // Complex rules
+        yield [
+            [
+                // Must match ALL of these
+                [
+                    'foo',
+                    // This can be satisfied by anything in here
+                    ['fudge', 'bar']
+                ],
+                // Or this one
+                'cake'
+            ],
+            ['foo', 'fudge'],
+            true
+        ];
+        yield [
             [
                 [
-                    ['foo', 'bar', 'cake']
+                    'foo',
+                    ['fudge', 'bar']
                 ],
-                ['foo', 'bar'],
-                false
+                'cake'
             ],
+            ['foo', 'bar'],
+            true
+        ];
+        yield [
             [
                 [
-                    ['foo', 'bar', 'cake']
+                    'foo',
+                    ['fudge', 'bar']
                 ],
-                [],
-                false
+                'cake'
             ],
-            // Combination of Strict and Not Strict
+            ['cake'],
+            true
+        ];
+        yield [
             [
                 [
-                    // We need to match ALL items in the sub array
-                    ['foo', 'bar'],
-                    // Or just this one
-                    'cake'
+                    'foo',
+                    ['fudge', 'bar']
                 ],
-                ['foo', 'bar'],
-                true
+                'cake'
             ],
+            ['fudge'],
+            false
+        ];
+        yield [
             [
                 [
-                    ['foo', 'bar'],
-                    'cake'
+                    'foo',
+                    ['fudge', 'bar']
                 ],
-                ['foo', 'bar', 'cake'],
-                true
+                'cake'
             ],
+            ['fudge', 'bar'],
+            false
+        ];
+        yield [
             [
                 [
-                    ['foo', 'bar'],
-                    'cake'
+                    'foo',
+                    ['fudge', 'bar']
                 ],
-                ['foo', 'cake'],
-                true
+                'cake'
             ],
+            ['foo'],
+            false
+        ];
+        yield [
             [
                 [
-                    ['foo', 'bar'],
-                    'cake'
+                    'foo',
+                    ['fudge', 'bar']
                 ],
-                ['cake'],
-                true
+                'cake'
             ],
+            [],
+            false
+        ];
+        yield [
             [
                 [
-                    ['foo', 'bar'],
-                    'cake'
+                    ['foo', 'whip'],
+                    ['fudge', 'bar']
                 ],
-                ['fudge'],
-                false
+                'cake'
             ],
+            ['foo', 'bar'],
+            true
+        ];
+        yield [
             [
                 [
-                    ['foo', 'bar'],
-                    'cake'
+                    ['foo', 'whip'],
+                    ['fudge', 'bar']
                 ],
-                [],
-                false
+                'cake'
             ],
-            // Complex rules
-            [
-                [
-                    // Must match ALL of these
-                    [
-                        'foo',
-                        // This can be satisfied by anything in here
-                        ['fudge', 'bar']
-                    ],
-                    // Or this one
-                    'cake'
-                ],
-                ['foo', 'fudge'],
-                true
-            ],
-            [
-                [
-                    [
-                        'foo',
-                        ['fudge', 'bar']
-                    ],
-                    'cake'
-                ],
-                ['foo', 'bar'],
-                true
-            ],
-            [
-                [
-                    [
-                        'foo',
-                        ['fudge', 'bar']
-                    ],
-                    'cake'
-                ],
-                ['cake'],
-                true
-            ],
-            [
-                [
-                    [
-                        'foo',
-                        ['fudge', 'bar']
-                    ],
-                    'cake'
-                ],
-                ['fudge'],
-                false
-            ],
-            [
-                [
-                    [
-                        'foo',
-                        ['fudge', 'bar']
-                    ],
-                    'cake'
-                ],
-                ['fudge', 'bar'],
-                false
-            ],
-            [
-                [
-                    [
-                        'foo',
-                        ['fudge', 'bar']
-                    ],
-                    'cake'
-                ],
-                ['foo'],
-                false
-            ],
-            [
-                [
-                    [
-                        'foo',
-                        ['fudge', 'bar']
-                    ],
-                    'cake'
-                ],
-                [],
-                false
-            ],
-            [
-                [
-                    [
-                        ['foo', 'whip'],
-                        ['fudge', 'bar']
-                    ],
-                    'cake'
-                ],
-                ['foo', 'bar'],
-                true
-            ],
-            [
-                [
-                    [
-                        ['foo', 'whip'],
-                        ['fudge', 'bar']
-                    ],
-                    'cake'
-                ],
-                ['foo'],
-                false
-            ],
-            // Edge cases
-            [
-                null,
-                ['foo'],
-                false
-            ],
-            [
-                null,
-                [],
-                false
-            ],
-            [
-                null,
-                [null],
-                false
-            ],
+            ['foo'],
+            false
+        ];
+        // Edge cases
+        yield [
+            null,
+            ['foo'],
+            false
+        ];
+        yield [
+            null,
+            [],
+            false
+        ];
+        yield [
+            null,
+            [null],
+            false
         ];
     }
 }

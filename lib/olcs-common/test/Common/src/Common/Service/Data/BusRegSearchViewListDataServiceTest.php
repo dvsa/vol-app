@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -11,7 +13,7 @@ use Mockery as m;
  * Class BusRegSearchViewListDataServiceTest
  * @package OlcsTest\Service\Data
  */
-class BusRegSearchViewListDataServiceTest extends AbstractDataServiceTestCase
+final class BusRegSearchViewListDataServiceTest extends AbstractDataServiceTestCase
 {
     /** @var BusRegSearchViewListDataService */
     private $sut;
@@ -20,19 +22,18 @@ class BusRegSearchViewListDataServiceTest extends AbstractDataServiceTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->sut = new BusRegSearchViewListDataService($this->abstractDataServiceServices);
     }
 
     /**
-     * @dataProvider provideFetchListOptions
      * @param $context
      * @param $mockResultData
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFetchListOptions')]
     public function testFetchListOptions($context, $mockResultData, $expected): void
     {
-        $this->sut->setData('BusRegSearchView' . ucfirst($context), $mockResultData);
+        $this->sut->setData('BusRegSearchView' . ucfirst((string) $context), $mockResultData);
 
         $this->assertEquals($expected, $this->sut->fetchListOptions($context));
     }
@@ -46,9 +47,7 @@ class BusRegSearchViewListDataServiceTest extends AbstractDataServiceTestCase
         $this->sut->fetchListOptions($context);
     }
 
-    /**
-     * @dataProvider provideFetchListData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFetchListData')]
     public function testFetchListData($context, $expected): void
     {
         $params = [
@@ -76,7 +75,7 @@ class BusRegSearchViewListDataServiceTest extends AbstractDataServiceTestCase
             ->once()
             ->getMock();
 
-        $this->sut->setData('BusRegSearchView' . ucfirst($context), null);
+        $this->sut->setData('BusRegSearchView' . ucfirst((string) $context), null);
 
         $this->mockHandleQuery($mockResponse);
 
@@ -84,88 +83,82 @@ class BusRegSearchViewListDataServiceTest extends AbstractDataServiceTestCase
     }
 
     /**
-     * @return ((string|string[])[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(array<string> | string)> | string)>>
      *
      * @psalm-return list{list{'licence', list{array{licNo: 'UB1234', licId: '111'}, array{licNo: 'UB1235', licId: '222'}, array{licNo: 'UB1236', licId: '333'}}, array{111: 'UB1234', 222: 'UB1235', 333: 'UB1236'}}, list{'organisation', list{array{organisationName: 'ABC Ltd', organisationId: '111'}, array{organisationName: 'CDE Ltd', organisationId: '222'}, array{organisationName: 'FGH Ltd', organisationId: '333'}}, array{111: 'ABC Ltd', 222: 'CDE Ltd', 333: 'FGH Ltd'}}, list{'busRegStatus', list{array{busRegStatusDesc: 's1', busRegStatus: '111'}, array{busRegStatusDesc: 's2', busRegStatus: '222'}, array{busRegStatusDesc: 's3', busRegStatus: '333'}}, array{111: 's1', 222: 's2', 333: 's3'}}}
      */
-    public function provideFetchListOptions(): array
+    public static function provideFetchListOptions(): \Iterator
     {
-        return [
+        yield [
+            'licence',
             [
-                'licence',
-                [
-                    0 => ['licNo' => 'UB1234', 'licId' => '111'],
-                    1 => ['licNo' => 'UB1235', 'licId' => '222'],
-                    2 => ['licNo' => 'UB1236', 'licId' => '333']
-                ],
-                [
-                    111 => 'UB1234',
-                    222 => 'UB1235',
-                    333 => 'UB1236'
-                ]
+                0 => ['licNo' => 'UB1234', 'licId' => '111'],
+                1 => ['licNo' => 'UB1235', 'licId' => '222'],
+                2 => ['licNo' => 'UB1236', 'licId' => '333']
             ],
             [
-                'organisation',
-                [
-                    0 => ['organisationName' => 'ABC Ltd', 'organisationId' => '111'],
-                    1 => ['organisationName' => 'CDE Ltd', 'organisationId' => '222'],
-                    2 => ['organisationName' => 'FGH Ltd', 'organisationId' => '333']
-                ],
-                [
-                    111 => 'ABC Ltd',
-                    222 => 'CDE Ltd',
-                    333 => 'FGH Ltd'
-                ]
-            ],
-
+                111 => 'UB1234',
+                222 => 'UB1235',
+                333 => 'UB1236'
+            ]
+        ];
+        yield [
+            'organisation',
             [
-                'busRegStatus',
-                [
-                    0 => ['busRegStatusDesc' => 's1', 'busRegStatus' => '111'],
-                    1 => ['busRegStatusDesc' => 's2', 'busRegStatus' => '222'],
-                    2 => ['busRegStatusDesc' => 's3', 'busRegStatus' => '333']
-                ],
-                [
-                    111 => 's1',
-                    222 => 's2',
-                    333 => 's3'
-                ]
+                0 => ['organisationName' => 'ABC Ltd', 'organisationId' => '111'],
+                1 => ['organisationName' => 'CDE Ltd', 'organisationId' => '222'],
+                2 => ['organisationName' => 'FGH Ltd', 'organisationId' => '333']
             ],
+            [
+                111 => 'ABC Ltd',
+                222 => 'CDE Ltd',
+                333 => 'FGH Ltd'
+            ]
+        ];
+        yield [
+            'busRegStatus',
+            [
+                0 => ['busRegStatusDesc' => 's1', 'busRegStatus' => '111'],
+                1 => ['busRegStatusDesc' => 's2', 'busRegStatus' => '222'],
+                2 => ['busRegStatusDesc' => 's3', 'busRegStatus' => '333']
+            ],
+            [
+                111 => 's1',
+                222 => 's2',
+                333 => 's3'
+            ]
         ];
     }
 
     /**
-     * @return (string|string[][])[][]
+     * @return \Iterator<(int | string), array<(array<array<string>> | string)>>
      *
      * @psalm-return list{list{'licence', list{array{licNo: 'UB1234', licId: '111'}, array{licNo: 'UB1235', licId: '222'}, array{licNo: 'UB1236', licId: '333'}}}, list{'organisation', list{array{organisationName: 'ABC Ltd', organisationId: '111'}, array{organisationName: 'CDE Ltd', organisationId: '222'}, array{organisationName: 'FGH Ltd', organisationId: '333'}}}, list{'busRegStatus', list{array{busRegStatusDesc: 's1', busRegStatus: '111'}, array{busRegStatusDesc: 's2', busRegStatus: '222'}, array{busRegStatusDesc: 's3', busRegStatus: '333'}}}}
      */
-    public function provideFetchListData(): array
+    public static function provideFetchListData(): \Iterator
     {
-        return [
+        yield [
+            'licence',
             [
-                'licence',
-                [
-                    0 => ['licNo' => 'UB1234', 'licId' => '111'],
-                    1 => ['licNo' => 'UB1235', 'licId' => '222'],
-                    2 => ['licNo' => 'UB1236', 'licId' => '333']
-                ]
-            ],
+                0 => ['licNo' => 'UB1234', 'licId' => '111'],
+                1 => ['licNo' => 'UB1235', 'licId' => '222'],
+                2 => ['licNo' => 'UB1236', 'licId' => '333']
+            ]
+        ];
+        yield [
+            'organisation',
             [
-                'organisation',
-                [
-                    0 => ['organisationName' => 'ABC Ltd', 'organisationId' => '111'],
-                    1 => ['organisationName' => 'CDE Ltd', 'organisationId' => '222'],
-                    2 => ['organisationName' => 'FGH Ltd', 'organisationId' => '333']
-                ]
-            ],
-
+                0 => ['organisationName' => 'ABC Ltd', 'organisationId' => '111'],
+                1 => ['organisationName' => 'CDE Ltd', 'organisationId' => '222'],
+                2 => ['organisationName' => 'FGH Ltd', 'organisationId' => '333']
+            ]
+        ];
+        yield [
+            'busRegStatus',
             [
-                'busRegStatus',
-                [
-                    0 => ['busRegStatusDesc' => 's1', 'busRegStatus' => '111'],
-                    1 => ['busRegStatusDesc' => 's2', 'busRegStatus' => '222'],
-                    2 => ['busRegStatusDesc' => 's3', 'busRegStatus' => '333']
-                ]
+                0 => ['busRegStatusDesc' => 's1', 'busRegStatus' => '111'],
+                1 => ['busRegStatusDesc' => 's2', 'busRegStatus' => '222'],
+                2 => ['busRegStatusDesc' => 's3', 'busRegStatus' => '333']
             ]
         ];
     }

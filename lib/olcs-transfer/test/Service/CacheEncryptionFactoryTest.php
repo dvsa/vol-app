@@ -11,7 +11,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Cache\Storage\StorageInterface;
 
-class CacheEncryptionFactoryTest extends MockeryTestCase
+final class CacheEncryptionFactoryTest extends MockeryTestCase
 {
     public function testInvokeNoConfig()
     {
@@ -45,9 +45,9 @@ class CacheEncryptionFactoryTest extends MockeryTestCase
         $sut = new CacheEncryptionFactory();
         $service = $sut->__invoke($mockSl, CacheEncryption::class);
 
-        self::assertInstanceOf(CacheEncryption::class, $service);
-        self::assertEquals('ssweb', $service->getNodeSuffix());
-        self::assertEquals('nonprod/redis-ss', $service->getNodeKey());
-        self::assertEquals('nonprod/redis-shared', $service->getSharedKey());
+        $this->assertInstanceOf(CacheEncryption::class, $service);
+        $this->assertSame('ssweb', $service->getNodeSuffix());
+        $this->assertSame('nonprod/redis-ss', $service->getNodeKey());
+        $this->assertSame('nonprod/redis-shared', $service->getSharedKey());
     }
 }

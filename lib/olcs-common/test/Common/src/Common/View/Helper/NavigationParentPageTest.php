@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Helper;
 
 use Common\View\Helper\NavigationParentPage;
@@ -9,7 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @covers Common\View\Helper\NavigationParentPage
  */
-class NavigationParentPageTest extends MockeryTestCase
+final class NavigationParentPageTest extends MockeryTestCase
 {
     /** @var  m\MockInterface */
     private $mockBreadcrumbs;
@@ -29,9 +31,7 @@ class NavigationParentPageTest extends MockeryTestCase
         $this->mockView->shouldReceive('navigation->breadcrumbs')->once()->andReturn($this->mockBreadcrumbs);
     }
 
-    /**
-     * @dataProvider dpTestInvoke
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestInvoke')]
     public function testInvoke($activePage, $expect): void
     {
         $mockContainer = m::mock();
@@ -40,32 +40,30 @@ class NavigationParentPageTest extends MockeryTestCase
             ->shouldReceive('getContainer')->once()->andReturn($mockContainer)
             ->shouldReceive('findActive')->once()->with($mockContainer)->andReturn($activePage);
 
-        $sut = (new NavigationParentPage())
+        $sut = new NavigationParentPage()
             ->setView($this->mockView);
 
-        static::assertEquals($expect, $sut->__invoke());
+        $this->assertEquals($expect, $sut->__invoke());
     }
 
     /**
-     * @return (array|null|string)[][]
+     * @return \Iterator<(int | string), array<(array<mixed> | string | null)>>
      *
      * @psalm-return list{array{activePage: array<never, never>, expect: null}, array{activePage: array{page: mixed}, expect: 'EXPECT'}}
      */
-    public function dpTestInvoke(): array
+    public static function dpTestInvoke(): \Iterator
     {
-        return [
-            [
-                'activePage' => [],
-                'expect' => null,
+        yield [
+            'activePage' => [],
+            'expect' => null,
+        ];
+        yield [
+            'activePage' => [
+                'page' => m::mock(\Laminas\Navigation\Page\Mvc::class)
+                    ->shouldReceive('getParent')->atMost(1)->andReturn('EXPECT')
+                    ->getMock(),
             ],
-            [
-                'activePage' => [
-                    'page' => m::mock(\Laminas\Navigation\Page\Mvc::class)
-                        ->shouldReceive('getParent')->atMost(1)->andReturn('EXPECT')
-                        ->getMock(),
-                ],
-                'expect' => 'EXPECT',
-            ],
+            'expect' => 'EXPECT',
         ];
     }
 }

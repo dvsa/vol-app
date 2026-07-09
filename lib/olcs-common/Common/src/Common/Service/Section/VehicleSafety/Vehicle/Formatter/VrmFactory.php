@@ -13,7 +13,7 @@ class VrmFactory implements FactoryInterface
      * @return Vrm
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
 
         $viewHelperManager = $container->get('ViewHelperManager');

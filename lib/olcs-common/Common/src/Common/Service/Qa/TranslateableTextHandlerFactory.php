@@ -8,7 +8,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class TranslateableTextHandlerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TranslateableTextHandler
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TranslateableTextHandler
     {
         return new TranslateableTextHandler(
             $container->get('QaFormattedTranslateableTextParametersGenerator'),

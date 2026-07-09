@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Cqrs\Query;
 
 use Common\Service\Cqrs\Exception;
@@ -18,10 +20,8 @@ use Laminas\Http\Response;
 use Laminas\Http\Response as HttpResponse;
 use Laminas\Router\RouteInterface;
 
-/**
- * @covers \Common\Service\Cqrs\Query\QueryService
- */
-class QueryServiceTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Cqrs\Query\QueryService::class)]
+final class QueryServiceTest extends MockeryTestCase
 {
     private static $queryData = [
         'foo' => 'bar',
@@ -36,17 +36,11 @@ class QueryServiceTest extends MockeryTestCase
     /** @var  m\MockInterface|\Laminas\Http\Request */
     private $mockRequest;
 
-    /** @var  m\MockInterface|FlashMessengerHelperService */
-    private $mockFlashMsgr;
-
     /** @var  QueryService | m\MockInterface */
     private $sut;
 
     /** @var  QueryContainerInterface | m\MockInterface */
     private $mockQueryCntr;
-
-    /** @var  m\MockInterface */
-    private $mockQuery;
 
     /**
      * @var Container|m\MockInterface
@@ -59,7 +53,7 @@ class QueryServiceTest extends MockeryTestCase
         $this->mockRouter = m::mock(RouteInterface::class);
         $this->mockCli = m::mock(\Laminas\Http\Client::class);
         $this->mockRequest = m::mock(\Laminas\Http\Request::class);
-        $this->mockFlashMsgr = m::mock(FlashMessengerHelperService::class);
+        $mockFlashMsgr = m::mock(FlashMessengerHelperService::class);
         $this->mockContainer = m::mock(Container::class);
         $this->mockContainer->allows('offsetGet')->andReturn([])->byDefault();
 
@@ -70,18 +64,18 @@ class QueryServiceTest extends MockeryTestCase
                 $this->mockCli,
                 $this->mockRequest,
                 true,
-                $this->mockFlashMsgr,
+                $mockFlashMsgr,
                 $this->mockContainer
             ]
         )
             ->shouldAllowMockingProtectedMethods();
 
-        $this->mockQuery = m::mock(LoggerOmitResponseInterface::class)
+        $mockQuery = m::mock(LoggerOmitResponseInterface::class)
             ->shouldReceive('getArrayCopy')->atMost(1)->andReturn(self::$queryData)
             ->getMock();
 
         $this->mockQueryCntr = m::mock(QueryContainerInterface::class)
-            ->shouldReceive('getDto')->atMost(1)->andReturn($this->mockQuery)
+            ->shouldReceive('getDto')->atMost(1)->andReturn($mockQuery)
             ->getMock();
     }
 
@@ -97,7 +91,7 @@ class QueryServiceTest extends MockeryTestCase
             ->with(['unit_MESSAGES'], HttpResponse::STATUS_CODE_422)
             ->andReturn('unit_EXPECT');
 
-        static::assertEquals('unit_EXPECT', $this->sut->send($this->mockQueryCntr));
+        $this->assertEquals('unit_EXPECT', $this->sut->send($this->mockQueryCntr));
     }
 
     public function testSendFailRouteException(): void
@@ -157,7 +151,7 @@ class QueryServiceTest extends MockeryTestCase
             ->once()
             ->andThrow(new \Laminas\Http\Client\Exception\RuntimeException('unit_ExcMsg'));
 
-        $expectedResponse = new CqrsResponse((new HttpResponse())->setStatusCode(HttpResponse::STATUS_CODE_500));
+        $expectedResponse = new CqrsResponse(new HttpResponse()->setStatusCode(HttpResponse::STATUS_CODE_500));
         $response = $this->sut->send($this->mockQueryCntr);
         $this->assertEquals($expectedResponse, $response);
     }
@@ -202,7 +196,7 @@ class QueryServiceTest extends MockeryTestCase
             ->once()
             ->with(m::type(CqrsResponse::class));
 
-        static::assertInstanceOf(CqrsResponse::class, $this->sut->send($this->mockQueryCntr));
+        $this->assertInstanceOf(CqrsResponse::class, $this->sut->send($this->mockQueryCntr));
     }
 
     public function testSend404(): void

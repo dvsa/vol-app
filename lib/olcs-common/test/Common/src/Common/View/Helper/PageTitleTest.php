@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Helper;
 
 use Common\View\Helper\PageTitle;
@@ -13,7 +15,7 @@ use Laminas\View\Helper\Placeholder;
 /**
  * @covers Common\View\Helper\PageTitle
  */
-class PageTitleTest extends MockeryTestCase
+final class PageTitleTest extends MockeryTestCase
 {
     public $placeholder;
     public $translate;
@@ -30,9 +32,7 @@ class PageTitleTest extends MockeryTestCase
         $this->routeMatch = $routeMatch;
     }
 
-    /**
-     * @dataProvider providerInvoke
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerInvoke')]
     public function testInvoke($pageTitlePlaceholder, $matchedRouteName, $keyToTranslate): void
     {
         $this->routeMatch->shouldReceive('getMatchedRouteName')->andReturn($matchedRouteName);
@@ -54,28 +54,26 @@ class PageTitleTest extends MockeryTestCase
     }
 
     /**
-     * @return (null|string)[][]
+     * @return \Iterator<(int | string), array<(string | null)>>
      *
      * @psalm-return array{placeholder: list{'placeholder', 'foo/bar', 'placeholder'}, routingWithTranslation: list{null, 'foo/bar', 'page.title.foo/bar.someaction'}, routingWithoutTranslation: list{null, null, null}}
      */
-    public function providerInvoke(): array
+    public static function providerInvoke(): \Iterator
     {
-        return [
-            'placeholder' => [
-                'placeholder',
-                'foo/bar',
-                'placeholder',
-            ],
-            'routingWithTranslation' => [
-                null,
-                'foo/bar',
-                'page.title.foo/bar.someaction',
-            ],
-            'routingWithoutTranslation' => [
-                null,
-                null,
-                null,
-            ],
+        yield 'placeholder' => [
+            'placeholder',
+            'foo/bar',
+            'placeholder',
+        ];
+        yield 'routingWithTranslation' => [
+            null,
+            'foo/bar',
+            'page.title.foo/bar.someaction',
+        ];
+        yield 'routingWithoutTranslation' => [
+            null,
+            null,
+            null,
         ];
     }
 }

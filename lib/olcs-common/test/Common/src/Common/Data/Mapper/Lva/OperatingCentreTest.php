@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Lva;
 
 use Common\Data\Mapper\Lva\OperatingCentre;
@@ -17,11 +19,9 @@ use Common\RefData;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatingCentreTest extends MockeryTestCase
+final class OperatingCentreTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider adProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('adProvider')]
     public function testMapFromResult($adPlaced, $radio): void
     {
         $result = [
@@ -75,97 +75,91 @@ class OperatingCentreTest extends MockeryTestCase
     }
 
     /**
-     * @return (int|string)[][]
+     * @return \Iterator<(int | string), array<(int | string)>>
      *
      * @psalm-return list{list{1, 'adPlaced'}, list{2, 'adPlacedLater'}}
      */
-    public function adProvider(): array
+    public static function adProvider(): \Iterator
     {
-        return [
-            [RefData::AD_UPLOAD_NOW, OperatingCentre::VALUE_OPTION_AD_PLACED_NOW],
-            [RefData::AD_UPLOAD_LATER, OperatingCentre::VALUE_OPTION_AD_UPLOAD_LATER]
-        ];
+        yield [RefData::AD_UPLOAD_NOW, OperatingCentre::VALUE_OPTION_AD_PLACED_NOW];
+        yield [RefData::AD_UPLOAD_LATER, OperatingCentre::VALUE_OPTION_AD_UPLOAD_LATER];
     }
 
-    /**
-     * @dataProvider mapFromFormProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromFormProvider')]
     public function testMapFromForm($data, $expected): void
     {
         $this->assertEquals($expected, OperatingCentre::mapFromForm($data));
     }
 
     /**
-     * @return ((int|string|string[])[]|int|string)[][][]
+     * @return \Iterator<(int | string), array<array<(array<(array<string> | int | string)> | int | string)>>>
      *
      * @psalm-return list{list{array{version: 1, address: array{foo: 'bar'}, data: array{noOfVehiclesRequired: 10, noOfTrailersRequired: 11, permission: array{permission: 'Y'}}, advertisements: array{radio: 'adPlaced', adPlacedContent: array{adPlacedIn: 'Donny Star', adPlacedDate: '2015-01-01'}}}, array{version: 1, address: array{foo: 'bar'}, noOfVehiclesRequired: 10, noOfTrailersRequired: 11, permission: 'Y', adPlaced: 1, adPlacedIn: 'Donny Star', adPlacedDate: '2015-01-01', taIsOverridden: 'N'}}, list{array{version: 1, address: array{foo: 'bar'}, data: array{noOfVehiclesRequired: 10, noOfTrailersRequired: 11, permission: array{permission: 'Y'}}, advertisements: array{radio: 'adSendByPost', adPlacedContent: array{adPlacedIn: 'Donny Star', adPlacedDate: '2015-01-01'}}}, array{version: 1, address: array{foo: 'bar'}, noOfVehiclesRequired: 10, noOfTrailersRequired: 11, permission: 'Y', adPlaced: 0, adPlacedIn: 'Donny Star', adPlacedDate: '2015-01-01', taIsOverridden: 'N'}}, list{array{version: 1, address: array{foo: 'bar'}, data: array{noOfVehiclesRequired: 10, noOfTrailersRequired: 11, permission: array{permission: 'Y'}}, advertisements: array{radio: 'adPlacedLater', adPlacedContent: array{adPlacedIn: 'Donny Star', adPlacedDate: '2015-01-01'}}}, array{version: 1, address: array{foo: 'bar'}, noOfVehiclesRequired: 10, noOfTrailersRequired: 11, permission: 'Y', adPlaced: 2, adPlacedIn: 'Donny Star', adPlacedDate: '2015-01-01', taIsOverridden: 'N'}}}
      */
-    public function mapFromFormProvider(): array
+    public static function mapFromFormProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'version' => 1,
-                    'address' => ['foo' => 'bar'],
-                    'data' => [
-                        'noOfVehiclesRequired' => 10,
-                        'noOfTrailersRequired' => 11,
-                        'permission' => [
-                            'permission' => 'Y'
-                        ]
-                    ],
-                    'advertisements' => [
-                        'radio' => OperatingCentre::VALUE_OPTION_AD_PLACED_NOW,
-                        'adPlacedContent' => [
-                            'adPlacedIn' => 'Donny Star',
-                            'adPlacedDate' => '2015-01-01'
-                        ]
-                    ]
-                ],
-                [
-                    'version' => 1,
-                    'address' => ['foo' => 'bar'],
+                'version' => 1,
+                'address' => ['foo' => 'bar'],
+                'data' => [
                     'noOfVehiclesRequired' => 10,
                     'noOfTrailersRequired' => 11,
-                    'permission' => 'Y',
-                    'adPlaced' => RefData::AD_UPLOAD_NOW,
-                    'adPlacedIn' => 'Donny Star',
-                    'adPlacedDate' => '2015-01-01',
-                    'taIsOverridden' => 'N'
-
+                    'permission' => [
+                        'permission' => 'Y'
+                    ]
+                ],
+                'advertisements' => [
+                    'radio' => OperatingCentre::VALUE_OPTION_AD_PLACED_NOW,
+                    'adPlacedContent' => [
+                        'adPlacedIn' => 'Donny Star',
+                        'adPlacedDate' => '2015-01-01'
+                    ]
                 ]
             ],
             [
-                [
-                    'version' => 1,
-                    'address' => ['foo' => 'bar'],
-                    'data' => [
-                        'noOfVehiclesRequired' => 10,
-                        'noOfTrailersRequired' => 11,
-                        'permission' => [
-                            'permission' => 'Y'
-                        ]
-                    ],
-                    'advertisements' => [
-                        'radio' => OperatingCentre::VALUE_OPTION_AD_UPLOAD_LATER,
-                        'adPlacedContent' => [
-                            'adPlacedIn' => 'Donny Star',
-                            'adPlacedDate' => '2015-01-01'
-                        ]
-                    ]
-                ],
-                [
-                    'version' => 1,
-                    'address' => ['foo' => 'bar'],
+                'version' => 1,
+                'address' => ['foo' => 'bar'],
+                'noOfVehiclesRequired' => 10,
+                'noOfTrailersRequired' => 11,
+                'permission' => 'Y',
+                'adPlaced' => RefData::AD_UPLOAD_NOW,
+                'adPlacedIn' => 'Donny Star',
+                'adPlacedDate' => '2015-01-01',
+                'taIsOverridden' => 'N'
+
+            ]
+        ];
+        yield [
+            [
+                'version' => 1,
+                'address' => ['foo' => 'bar'],
+                'data' => [
                     'noOfVehiclesRequired' => 10,
                     'noOfTrailersRequired' => 11,
-                    'permission' => 'Y',
-                    'adPlaced' => RefData::AD_UPLOAD_LATER,
-                    'adPlacedIn' => 'Donny Star',
-                    'adPlacedDate' => '2015-01-01',
-                    'taIsOverridden' => 'N'
-
+                    'permission' => [
+                        'permission' => 'Y'
+                    ]
+                ],
+                'advertisements' => [
+                    'radio' => OperatingCentre::VALUE_OPTION_AD_UPLOAD_LATER,
+                    'adPlacedContent' => [
+                        'adPlacedIn' => 'Donny Star',
+                        'adPlacedDate' => '2015-01-01'
+                    ]
                 ]
+            ],
+            [
+                'version' => 1,
+                'address' => ['foo' => 'bar'],
+                'noOfVehiclesRequired' => 10,
+                'noOfTrailersRequired' => 11,
+                'permission' => 'Y',
+                'adPlaced' => RefData::AD_UPLOAD_LATER,
+                'adPlacedIn' => 'Donny Star',
+                'adPlacedDate' => '2015-01-01',
+                'taIsOverridden' => 'N'
+
             ]
         ];
     }
@@ -255,58 +249,52 @@ class OperatingCentreTest extends MockeryTestCase
         OperatingCentre::mapFormErrors($form, $errors, $fm, $th, $location, 'url');
     }
 
-    /**
-     * @dataProvider mapFromPostProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromPostProvider')]
     public function testMapFromPost($data, $expected): void
     {
         $this->assertEquals($expected, OperatingCentre::mapFromPost($data));
     }
 
     /**
-     * @return ((int|string|string[][][])[]|string)[][][]
+     * @return \Iterator<(int | string), array<array<(array<(array<array<array<string>>> | int | string)> | string)>>>
      *
      * @psalm-return list{list{array{advertisements: array{radio: 'adSendByPost', adPlacedContent: array{file: array{list: list{'foo'}}}}, bar: 'cake'}, array{advertisements: array{radio: 'adSendByPost', uploadedFileCount: 1, adPlacedContent: array{file: array{list: list{'foo'}}}}, bar: 'cake'}}, list{array{advertisements: array{radio: 'adPlacedLater'}, bar: 'cake'}, array{advertisements: array{radio: 'adPlacedLater', uploadedFileCount: 0}, bar: 'cake'}}, list{array{advertisements: array{radio: 'adPlaced'}, bar: 'cake'}, array{advertisements: array{radio: 'adPlaced', uploadedFileCount: 0}, bar: 'cake'}}}
      */
-    public function mapFromPostProvider(): array
+    public static function mapFromPostProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'advertisements' => [
-                        'radio' => OperatingCentre::VALUE_OPTION_AD_UPLOAD_LATER,
-                    ],
-                    'bar' => 'cake'
+                'advertisements' => [
+                    'radio' => OperatingCentre::VALUE_OPTION_AD_UPLOAD_LATER,
                 ],
-                [
-                    'advertisements' => [
-                        'radio' => OperatingCentre::VALUE_OPTION_AD_UPLOAD_LATER,
-                        'uploadedFileCount' => 0,
-                    ],
-                    'bar' => 'cake'
-                ]
+                'bar' => 'cake'
             ],
             [
-                [
-                    'advertisements' => [
-                        'radio' => OperatingCentre::VALUE_OPTION_AD_PLACED_NOW
-                    ],
-                    'bar' => 'cake'
+                'advertisements' => [
+                    'radio' => OperatingCentre::VALUE_OPTION_AD_UPLOAD_LATER,
+                    'uploadedFileCount' => 0,
                 ],
-                [
-                    'advertisements' => [
-                        'radio' => OperatingCentre::VALUE_OPTION_AD_PLACED_NOW,
-                        'uploadedFileCount' => 0,
-                    ],
-                    'bar' => 'cake'
-                ]
+                'bar' => 'cake'
+            ]
+        ];
+        yield [
+            [
+                'advertisements' => [
+                    'radio' => OperatingCentre::VALUE_OPTION_AD_PLACED_NOW
+                ],
+                'bar' => 'cake'
             ],
+            [
+                'advertisements' => [
+                    'radio' => OperatingCentre::VALUE_OPTION_AD_PLACED_NOW,
+                    'uploadedFileCount' => 0,
+                ],
+                'bar' => 'cake'
+            ]
         ];
     }
 
-    /**
-     * @dataProvider dpConfirmation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpConfirmation')]
     public function testMapFormErrorsConfirmation($location, $expected): void
     {
         $form = m::mock(Form::class);
@@ -351,54 +339,50 @@ class OperatingCentreTest extends MockeryTestCase
     }
 
     /**
-     * @return ((string|string[])[][][]|string)[][]
+     * @return \Iterator<(int | string), array<(array<array<array<(array<string> | string)>>> | string)>>
      *
      * @psalm-return array{externalUser: list{'external', array{address: array{postcode: list{array{ERR_OC_PC_TA_GB: 'translated'}}}}}, internalUserConfirmed: list{'internal', array{'form-actions': list{array{ERR_OC_PC_TA_GB: 'translated'}}}}, internalUserNotConfirmed: list{'internal', array{'form-actions': list{array{ERR_OC_PC_TA_GB: 'translated'}}}}}
      */
-    public function dpConfirmation(): array
+    public static function dpConfirmation(): \Iterator
     {
+        yield 'externalUser' => [
 
-        return [
-
-            'externalUser' => [
-
-                OperatingCentre::LOC_EXTERNAL,
-                [
-                    'address' =>
-                        [
-                            'postcode' =>
-                                [
-                                    0 =>
-                                        [
-                                            'ERR_OC_PC_TA_GB' => 'translated',
-                                        ],
-                                ],
-                        ],
-                ]
-            ],
-            'internalUserConfirmed' => [
-                OperatingCentre::LOC_INTERNAL,
-                [
-                    'form-actions' =>
-                        [
-                            0 =>
-                                [
-                                    'ERR_OC_PC_TA_GB' => 'translated'
-                                ],
-                        ],
-                ]
-            ],
-            'internalUserNotConfirmed' => [
-                OperatingCentre::LOC_INTERNAL,
-                [
-                    'form-actions' =>
-                        [
-                            0 =>
-                                [
-                                    'ERR_OC_PC_TA_GB' => 'translated'
-                                ],
-                        ],
-                ]
+            OperatingCentre::LOC_EXTERNAL,
+            [
+                'address' =>
+                    [
+                        'postcode' =>
+                            [
+                                0 =>
+                                    [
+                                        'ERR_OC_PC_TA_GB' => 'translated',
+                                    ],
+                            ],
+                    ],
+            ]
+        ];
+        yield 'internalUserConfirmed' => [
+            OperatingCentre::LOC_INTERNAL,
+            [
+                'form-actions' =>
+                    [
+                        0 =>
+                            [
+                                'ERR_OC_PC_TA_GB' => 'translated'
+                            ],
+                    ],
+            ]
+        ];
+        yield 'internalUserNotConfirmed' => [
+            OperatingCentre::LOC_INTERNAL,
+            [
+                'form-actions' =>
+                    [
+                        0 =>
+                            [
+                                'ERR_OC_PC_TA_GB' => 'translated'
+                            ],
+                    ],
             ]
         ];
     }

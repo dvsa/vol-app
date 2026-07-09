@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @see LinkNewWindowExternal
  */
-class LinkNewWindowExternalTest extends MockeryTestCase
+final class LinkNewWindowExternalTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {
@@ -30,6 +30,6 @@ class LinkNewWindowExternalTest extends MockeryTestCase
         $sut = new LinkNewWindowExternal();
         $sut->setView($view);
 
-        self::assertEquals($output, $sut->__invoke($url, $linkText, $linkClass, $hideNewTabMessage));
+        $this->assertSame($output, $sut->__invoke($url, $linkText, $linkClass, $hideNewTabMessage));
     }
 }

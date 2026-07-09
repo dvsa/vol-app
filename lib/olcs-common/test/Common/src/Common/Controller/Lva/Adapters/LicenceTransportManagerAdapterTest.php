@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Controller\Lva\Adapters;
 
 use Common\Controller\Lva\Adapters\LicenceTransportManagerAdapter;
@@ -14,19 +16,13 @@ use Laminas\ServiceManager\ServiceManager;
 use Laminas\Http\Response as HttpResponse;
 use Dvsa\Olcs\Transfer\Command\TransportManagerLicence\Delete;
 
-class LicenceTransportManagerAdapterTest extends MockeryTestCase
+final class LicenceTransportManagerAdapterTest extends MockeryTestCase
 {
     /** @var LicenceTransportManagerAdapter */
     protected $sut;
 
-    /** @var  ContainerInterface|\Mockery\MockInterface */
-    protected $container;
-
     /** @var TransferAnnotationBuilder $mockAnnotationBuilder */
     protected $mockAnnotationBuilder;
-
-    /** @var CachingQueryService $mockQuerySrv */
-    protected $mockQuerySrv;
 
     /** @var CommandService $mockCommandSrv */
     protected $mockCommandSrv;
@@ -34,16 +30,16 @@ class LicenceTransportManagerAdapterTest extends MockeryTestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->container = m::mock(ContainerInterface::class);
+        $container = m::mock(ContainerInterface::class);
         $this->mockAnnotationBuilder = m::mock(TransferAnnotationBuilder::class);
-        $this->mockQuerySrv = m::mock(CachingQueryService::class);
+        $mockQuerySrv = m::mock(CachingQueryService::class);
         $this->mockCommandSrv = m::mock(CommandService::class);
 
         $this->sut = new LicenceTransportManagerAdapter(
             $this->mockAnnotationBuilder,
-            $this->mockQuerySrv,
+            $mockQuerySrv,
             $this->mockCommandSrv,
-            $this->container
+            $container
         );
     }
 

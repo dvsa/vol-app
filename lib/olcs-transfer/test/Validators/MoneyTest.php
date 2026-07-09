@@ -7,6 +7,8 @@
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\Money;
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Transfer\Validators\Money;
  * @author Rob Caiger <rob@clocal.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class MoneyTest extends \PHPUnit\Framework\TestCase
+final class MoneyTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 
@@ -26,128 +28,120 @@ class MoneyTest extends \PHPUnit\Framework\TestCase
         $this->sut = new Money();
     }
 
-    /**
-     * @dataProvider isValidProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($value, $expected)
     {
         $this->assertEquals($expected, $this->sut->isValid($value));
     }
 
-    public function isValidProvider()
+    public static function isValidProvider(): \Iterator
     {
-        return [
-            [
-                'abc',
-                false
-            ],
-            [
-                'abc123',
-                false
-            ],
-            [
-                '123',
-                true
-            ],
-            [
-                123,
-                true
-            ],
-            [
-                '123.45',
-                true
-            ],
-            [
-                123.45,
-                true
-            ],
-            [
-                '123.4',
-                true
-            ],
-            [
-                123.4,
-                true
-            ],
-            [
-                '123.456',
-                false
-            ],
-            [
-                123.456,
-                false
-            ],
-            [
-                '-123.45',
-                false
-            ],
-            [
-                -123,
-                false
-            ],
+        yield [
+            'abc',
+            false
+        ];
+        yield [
+            'abc123',
+            false
+        ];
+        yield [
+            '123',
+            true
+        ];
+        yield [
+            123,
+            true
+        ];
+        yield [
+            '123.45',
+            true
+        ];
+        yield [
+            123.45,
+            true
+        ];
+        yield [
+            '123.4',
+            true
+        ];
+        yield [
+            123.4,
+            true
+        ];
+        yield [
+            '123.456',
+            false
+        ];
+        yield [
+            123.456,
+            false
+        ];
+        yield [
+            '-123.45',
+            false
+        ];
+        yield [
+            -123,
+            false
         ];
     }
 
-    /**
-     * @dataProvider isValidNegativeProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidNegativeProvider')]
     public function testIsValidNegative($value, $expected)
     {
         $this->sut->setOptions(['allow_negative' => true]);
         $this->assertEquals($expected, $this->sut->isValid($value));
     }
 
-    public function isValidNegativeProvider()
+    public static function isValidNegativeProvider(): \Iterator
     {
-        return [
-            [
-                'abc',
-                false
-            ],
-            [
-                'abc123',
-                false
-            ],
-            [
-                '123',
-                true
-            ],
-            [
-                123,
-                true
-            ],
-            [
-                '123.45',
-                true
-            ],
-            [
-                123.45,
-                true
-            ],
-            [
-                '123.4',
-                true
-            ],
-            [
-                123.4,
-                true
-            ],
-            [
-                '123.456',
-                false
-            ],
-            [
-                123.456,
-                false
-            ],
-            [
-                '-123.45',
-                true
-            ],
-            [
-                -123,
-                true
-            ],
+        yield [
+            'abc',
+            false
+        ];
+        yield [
+            'abc123',
+            false
+        ];
+        yield [
+            '123',
+            true
+        ];
+        yield [
+            123,
+            true
+        ];
+        yield [
+            '123.45',
+            true
+        ];
+        yield [
+            123.45,
+            true
+        ];
+        yield [
+            '123.4',
+            true
+        ];
+        yield [
+            123.4,
+            true
+        ];
+        yield [
+            '123.456',
+            false
+        ];
+        yield [
+            123.456,
+            false
+        ];
+        yield [
+            '-123.45',
+            true
+        ];
+        yield [
+            -123,
+            true
         ];
     }
 }

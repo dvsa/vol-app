@@ -1,15 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\IrhpPermit;
 
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetList;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Query\IrhpPermit\GetList
- */
-
-
-class GetListTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Query\IrhpPermit\GetList::class)]
+final class GetListTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {
@@ -22,16 +20,13 @@ class GetListTest extends \PHPUnit\Framework\TestCase
               'order' => 'ASC',
             ]
         );
-        static::assertEquals(
-            [
-            'irhpPermitApplication' => 2,
-            'page' => 1,
-            'limit' => 10,
-            'sort' => 'id',
-            'order' => 'ASC',
-            'sortWhitelist' => []
-            ],
-            $sut->getArrayCopy()
-        );
+        $this->assertEquals([
+        'irhpPermitApplication' => 2,
+        'page' => 1,
+        'limit' => 10,
+        'sort' => 'id',
+        'order' => 'ASC',
+        'sortWhitelist' => []
+        ], $sut->getArrayCopy());
     }
 }

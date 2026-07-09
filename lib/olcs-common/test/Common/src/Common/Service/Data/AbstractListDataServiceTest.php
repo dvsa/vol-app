@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use CommonTest\Common\Service\Data\Stub\AbstractListDataServiceStub;
 use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 
-/**
- * @covers \Common\Service\Data\AbstractListDataService
- */
-class AbstractListDataServiceTest extends AbstractListDataServiceTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Data\AbstractListDataService::class)]
+final class AbstractListDataServiceTest extends AbstractListDataServiceTestCase
 {
     /** @var  AbstractListDataServiceStub */
     private $sut;
@@ -17,7 +17,6 @@ class AbstractListDataServiceTest extends AbstractListDataServiceTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->sut = new AbstractListDataServiceStub($this->abstractListDataServiceServices);
     }
 
@@ -50,27 +49,22 @@ class AbstractListDataServiceTest extends AbstractListDataServiceTestCase
 
         $actual = $this->sut->formatDataForGroups($data);
 
-        static::assertEquals(
-            [
-                8001 => [
-                    'label' => 'unit_Desc',
-                    'options' => [],
-                ],
-                9001 => [
-                    'label' => 'unit_WithChilds',
-                    'options' => [
-                        7001 => 'unit_Desc7001',
-                        7003 => 'unit_Desc7003',
-                    ],
+        $this->assertEquals([
+            8001 => [
+                'label' => 'unit_Desc',
+                'options' => [],
+            ],
+            9001 => [
+                'label' => 'unit_WithChilds',
+                'options' => [
+                    7001 => 'unit_Desc7001',
+                    7003 => 'unit_Desc7003',
                 ],
             ],
-            $actual
-        );
+        ], $actual);
     }
 
-    /**
-     * @dataProvider dpTestFetchListOptions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestFetchListOptions')]
     public function testFetchListOptions($data, $useGroup, $expect): void
     {
         $context = 'unit_Context';
@@ -79,58 +73,56 @@ class AbstractListDataServiceTest extends AbstractListDataServiceTestCase
 
         $actual = $this->sut->fetchListOptions($context, $useGroup);
 
-        static::assertEquals($expect, $actual);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * @return ((((int|string)[]|int|string)[]|string)[]|bool|null)[][]
+     * @return \Iterator<(int | string), array<(array<(array<(array<(int | string)> | int | string)> | string)> | bool | null)>>
      *
      * @psalm-return list{array{data: null, useGroup: false, expect: array<never, never>}, array{data: list{array{id: 'unit_Id', description: 'unit_Desc'}}, useGroup: false, expect: array{unit_Id: 'unit_Desc'}}, array{data: list{array{parent: array{id: 9001}, id: 7001, description: 'unit_Desc7001'}, array{id: 9001, description: 'unit_WithChilds'}}, useGroup: true, expect: array{9001: array{label: 'unit_WithChilds', options: array{7001: 'unit_Desc7001'}}}}}
      */
-    public function dpTestFetchListOptions(): array
+    public static function dpTestFetchListOptions(): \Iterator
     {
-        return [
-            [
-                'data' => null,
-                'useGroup' => false,
-                'expect' => [],
-            ],
-            [
-                'data' => [
-                    [
-                        'id' => 'unit_Id',
-                        'description' => 'unit_Desc',
-                    ],
-                ],
-                'useGroup' => false,
-                'expect' => [
-                    'unit_Id' => 'unit_Desc',
+        yield [
+            'data' => null,
+            'useGroup' => false,
+            'expect' => [],
+        ];
+        yield [
+            'data' => [
+                [
+                    'id' => 'unit_Id',
+                    'description' => 'unit_Desc',
                 ],
             ],
-            [
-                'data' => [
-                    [
-                        'parent' => [
-                            'id' => 9001,
-                        ],
-                        'id' => 7001,
-                        'description' => 'unit_Desc7001',
-                    ],
-                    [
+            'useGroup' => false,
+            'expect' => [
+                'unit_Id' => 'unit_Desc',
+            ],
+        ];
+        yield [
+            'data' => [
+                [
+                    'parent' => [
                         'id' => 9001,
-                        'description' => 'unit_WithChilds',
+                    ],
+                    'id' => 7001,
+                    'description' => 'unit_Desc7001',
+                ],
+                [
+                    'id' => 9001,
+                    'description' => 'unit_WithChilds',
+                ],
+            ],
+            'useGroup' => true,
+            'expect' => [
+                9001 => [
+                    'label' => 'unit_WithChilds',
+                    'options' => [
+                        7001 => 'unit_Desc7001',
                     ],
                 ],
-                'useGroup' => true,
-                'expect' => [
-                    9001 => [
-                        'label' => 'unit_WithChilds',
-                        'options' => [
-                            7001 => 'unit_Desc7001',
-                        ],
-                    ],
-                ]
-            ],
+            ]
         ];
     }
 }

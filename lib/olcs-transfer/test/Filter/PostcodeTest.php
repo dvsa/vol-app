@@ -6,6 +6,8 @@
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Filter;
 
 use Dvsa\Olcs\Transfer\Filter\Postcode;
@@ -16,13 +18,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class PostcodeTest extends MockeryTestCase
+final class PostcodeTest extends MockeryTestCase
 {
     /**
-     * @dataProvider provideFilter
      * @param $input
      * @param $output
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFilter')]
     public function testFilter($input, $output)
     {
         $sut = new Postcode();
@@ -30,19 +32,17 @@ class PostcodeTest extends MockeryTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provideFilter()
+    public static function provideFilter(): \Iterator
     {
-        return [
-            ['LS9 6NF', 'LS9 6NF'],
-            ['ls96nf', 'LS9 6NF'],
-            ['ls 96nf', 'LS9 6NF'],
-            ['ls96nf  ', 'LS9 6NF'],
-            ['L23SW', 'L2 3SW'],
-            ['L23SW ', 'L2 3SW'],
-            ['w1a4aa', 'W1A 4AA'],
-            ['   ', ''],
-        ];
+        yield ['LS9 6NF', 'LS9 6NF'];
+        yield ['ls96nf', 'LS9 6NF'];
+        yield ['ls 96nf', 'LS9 6NF'];
+        yield ['ls96nf  ', 'LS9 6NF'];
+        yield ['L23SW', 'L2 3SW'];
+        yield ['L23SW ', 'L2 3SW'];
+        yield ['w1a4aa', 'W1A 4AA'];
+        yield ['   ', ''];
     }
 }

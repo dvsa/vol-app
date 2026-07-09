@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Submission;
 
 use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmissionSectionComment;
 use Dvsa\OlcsTest\Transfer\Command\CommandTest;
 
-class CreateSubmissionSectionCommentTest extends \PHPUnit\Framework\TestCase
+final class CreateSubmissionSectionCommentTest extends \PHPUnit\Framework\TestCase
 {
     use CommandTest;
 

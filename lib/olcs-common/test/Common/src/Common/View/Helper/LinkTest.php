@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @see Link
  */
-class LinkTest extends MockeryTestCase
+final class LinkTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {
@@ -46,6 +46,6 @@ class LinkTest extends MockeryTestCase
         $sut = new Link();
         $sut->setView($view);
 
-        self::assertEquals($output, $sut->__invoke($url, $linkText, $linkClass));
+        $this->assertSame($output, $sut->__invoke($url, $linkText, $linkClass));
     }
 }

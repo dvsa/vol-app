@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Document;
 
 use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Query\Document\DocumentList
- */
-class DocumentListTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Query\Document\DocumentList::class)]
+final class DocumentListTest extends MockeryTestCase
 {
     public function testGetSet()
     {
@@ -35,22 +35,22 @@ class DocumentListTest extends MockeryTestCase
 
         $sut = DocumentList::create($data);
 
-        static::assertEquals('unit_isExternal', $sut->getIsExternal());
-        static::assertEquals('unit_category', $sut->getCategory());
-        static::assertEquals('unit_documentSubCategory', $sut->getDocumentSubCategory());
-        static::assertEquals('unit_showDocs', $sut->getShowDocs());
-        static::assertEquals('unit_irfoOrganisation', $sut->getIrfoOrganisation());
-        static::assertEquals('unit_transportManager', $sut->getTransportManager());
-        static::assertEquals('unit_busReg', $sut->getBusReg());
-        static::assertEquals('unit_case', $sut->getCase());
-        static::assertEquals('unit_licence', $sut->getLicence());
-        static::assertEquals('unit_application', $sut->getApplication());
-        static::assertEquals('unit_irhpApplication', $sut->getIrhpApplication());
-        static::assertEquals('unit_page', $sut->getPage());
-        static::assertEquals('unit_limit', $sut->getLimit());
-        static::assertEquals('unit_sort', $sut->getSort());
-        static::assertEquals('unit_order', $sut->getOrder());
-        static::assertEquals('foo', $sut->getFormat());
-        static::assertEquals('Y', $sut->getOnlyUnlinked());
+        $this->assertEquals('unit_isExternal', $sut->getIsExternal());
+        $this->assertEquals('unit_category', $sut->getCategory());
+        $this->assertEquals('unit_documentSubCategory', $sut->getDocumentSubCategory());
+        $this->assertEquals('unit_showDocs', $sut->getShowDocs());
+        $this->assertEquals('unit_irfoOrganisation', $sut->getIrfoOrganisation());
+        $this->assertEquals('unit_transportManager', $sut->getTransportManager());
+        $this->assertEquals('unit_busReg', $sut->getBusReg());
+        $this->assertEquals('unit_case', $sut->getCase());
+        $this->assertEquals('unit_licence', $sut->getLicence());
+        $this->assertEquals('unit_application', $sut->getApplication());
+        $this->assertEquals('unit_irhpApplication', $sut->getIrhpApplication());
+        $this->assertEquals('unit_page', $sut->getPage());
+        $this->assertEquals('unit_limit', $sut->getLimit());
+        $this->assertEquals('unit_sort', $sut->getSort());
+        $this->assertEquals('unit_order', $sut->getOrder());
+        $this->assertEquals('foo', $sut->getFormat());
+        $this->assertEquals('Y', $sut->getOnlyUnlinked());
     }
 }

@@ -1,14 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\IrhpApplication;
 
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\BilateralMetadata;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Query\IrhpApplication\BilateralMetadata
- */
-
-class BilateralMetadataTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Query\IrhpApplication\BilateralMetadata::class)]
+final class BilateralMetadataTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

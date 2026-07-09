@@ -12,7 +12,7 @@ class SearchPeopleNameFactory implements FactoryInterface
      * @param  array|null         $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchPeopleName
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SearchPeopleName
     {
         return new SearchPeopleName();
     }

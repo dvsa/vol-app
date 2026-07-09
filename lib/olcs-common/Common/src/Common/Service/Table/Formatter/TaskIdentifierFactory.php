@@ -13,7 +13,7 @@ class TaskIdentifierFactory implements FactoryInterface
      * @return TaskIdentifier
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $urlHelper = $container->get('Helper\Url');
         return new TaskIdentifier($urlHelper);

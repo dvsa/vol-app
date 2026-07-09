@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Filter;
 
 use Common\Filter\NotPopulatedStringToZero;
@@ -8,13 +10,13 @@ use Common\Filter\NotPopulatedStringToZero;
  * Class NotPopulatedStringToZeroTest
  * @package CommonTest\Filter
  */
-class NotPopulatedStringToZeroTest extends \PHPUnit\Framework\TestCase
+final class NotPopulatedStringToZeroTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @dataProvider provideFilter
      * @param $input
      * @param $output
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFilter')]
     public function testFilter($input, $output): void
     {
         $sut = new NotPopulatedStringToZero();
@@ -22,19 +24,17 @@ class NotPopulatedStringToZeroTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provideFilter()
+    public static function provideFilter(): \Iterator
     {
-        return [
-            [new \stdClass(), '0'],
-            [4, '0'],
-            [null, '0'],
-            ['', '0'],
-            ['0', '0'],
-            ['1', '1'],
-            ['2', '2'],
-            ['15', '15'],
-        ];
+        yield [new \stdClass(), '0'];
+        yield [4, '0'];
+        yield [null, '0'];
+        yield ['', '0'];
+        yield ['0', '0'];
+        yield ['1', '1'];
+        yield ['2', '2'];
+        yield ['15', '15'];
     }
 }

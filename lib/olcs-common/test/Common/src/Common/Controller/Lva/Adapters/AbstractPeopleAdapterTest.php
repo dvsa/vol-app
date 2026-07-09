@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Controller\Lva\Adapters;
 
 use Common\Controller\Lva\AbstractController;
@@ -12,11 +14,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Form\Form;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 
-class AbstractPeopleAdapterTest extends MockeryTestCase
+final class AbstractPeopleAdapterTest extends MockeryTestCase
 {
-    protected const ID = 9001;
+    protected const int ID = 9001;
 
-    protected const LIC_ID = 8001;
+    protected const int LIC_ID = 8001;
 
     /** @var  m\MockInterface | AbstractPeopleAdapter */
     private $sut;
@@ -44,15 +46,15 @@ class AbstractPeopleAdapterTest extends MockeryTestCase
     {
         $this->sut->shouldReceive('loadPeopleDataForLicence')->once()->with(self::ID);
 
-        static::assertTrue($this->sut->loadPeopleData(AbstractController::LVA_LIC, self::ID));
+        $this->assertTrue($this->sut->loadPeopleData(AbstractController::LVA_LIC, self::ID));
     }
 
     public function testLoadPeopleDataOth(): void
     {
         $this->sut->shouldReceive('loadPeopleDataForApplication')->twice()->with(self::ID);
 
-        static::assertTrue($this->sut->loadPeopleData(AbstractController::LVA_VAR, self::ID));
-        static::assertTrue($this->sut->loadPeopleData(AbstractController::LVA_APP, self::ID));
+        $this->assertTrue($this->sut->loadPeopleData(AbstractController::LVA_VAR, self::ID));
+        $this->assertTrue($this->sut->loadPeopleData(AbstractController::LVA_APP, self::ID));
     }
 
     public function testHasInforceLicences(): void
@@ -66,7 +68,7 @@ class AbstractPeopleAdapterTest extends MockeryTestCase
 
         $this->sut->loadPeopleData(AbstractController::LVA_LIC, self::LIC_ID);
 
-        static::assertEquals('unit_EXPECT', $this->sut->hasInforceLicences());
+        $this->assertEquals('unit_EXPECT', $this->sut->hasInforceLicences());
     }
 
     public function testIsExceptionalOrganisation(): void
@@ -80,7 +82,7 @@ class AbstractPeopleAdapterTest extends MockeryTestCase
 
         $this->sut->loadPeopleData(AbstractController::LVA_LIC, self::LIC_ID);
 
-        static::assertEquals('unit_EXPECT', $this->sut->isExceptionalOrganisation());
+        $this->assertEquals('unit_EXPECT', $this->sut->isExceptionalOrganisation());
     }
 
     public function testIsSoleTrader(): void
@@ -94,7 +96,7 @@ class AbstractPeopleAdapterTest extends MockeryTestCase
 
         $this->sut->loadPeopleData(AbstractController::LVA_LIC, self::LIC_ID);
 
-        static::assertEquals('unit_EXPECT', $this->sut->isSoleTrader());
+        $this->assertEquals('unit_EXPECT', $this->sut->isSoleTrader());
     }
 
     public function testIsPartnership(): void
@@ -114,12 +116,10 @@ class AbstractPeopleAdapterTest extends MockeryTestCase
 
         $this->sut->loadPeopleData(AbstractController::LVA_LIC, self::LIC_ID);
 
-        static::assertTrue($this->sut->isPartnership());
+        $this->assertTrue($this->sut->isPartnership());
     }
 
-    /**
-     * @dataProvider dpTestAlterFormForOrganisation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestAlterFormForOrganisation')]
     public function testAlterFormForOrganisation($type, $expected): void
     {
         $mockTable = m::mock(TableBuilder::class)
@@ -143,33 +143,31 @@ class AbstractPeopleAdapterTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return array{ltd: list{'org_t_rc', 'lva.section.title.add_director'}, llp: list{'org_t_llp', 'lva.section.title.add_partner'}, partnership: list{'org_t_p', 'lva.section.title.add_partner'}, other: list{'org_t_pa', 'lva.section.title.add_person'}, irfo: list{'org_t_ir', 'lva.section.title.add_person'}}
      */
-    public function dpTestAlterFormForOrganisation(): array
+    public static function dpTestAlterFormForOrganisation(): \Iterator
     {
-        return [
-            'ltd' => [
-                \Common\RefData::ORG_TYPE_RC,
-                'lva.section.title.add_director'
-            ],
-            'llp' => [
-                \Common\RefData::ORG_TYPE_LLP,
-                'lva.section.title.add_partner'
-            ],
-            'partnership' => [
-                \Common\RefData::ORG_TYPE_PARTNERSHIP,
-                'lva.section.title.add_partner'
-            ],
-            'other' => [
-                \Common\RefData::ORG_TYPE_OTHER,
-                'lva.section.title.add_person'
-            ],
-            'irfo' => [
-                \Common\RefData::ORG_TYPE_IRFO,
-                'lva.section.title.add_person'
-            ]
+        yield 'ltd' => [
+            \Common\RefData::ORG_TYPE_RC,
+            'lva.section.title.add_director'
+        ];
+        yield 'llp' => [
+            \Common\RefData::ORG_TYPE_LLP,
+            'lva.section.title.add_partner'
+        ];
+        yield 'partnership' => [
+            \Common\RefData::ORG_TYPE_PARTNERSHIP,
+            'lva.section.title.add_partner'
+        ];
+        yield 'other' => [
+            \Common\RefData::ORG_TYPE_OTHER,
+            'lva.section.title.add_person'
+        ];
+        yield 'irfo' => [
+            \Common\RefData::ORG_TYPE_IRFO,
+            'lva.section.title.add_person'
         ];
     }
 
@@ -178,9 +176,7 @@ class AbstractPeopleAdapterTest extends MockeryTestCase
         $this->assertNull($this->sut->getAddLabelTextForOrganisation());
     }
 
-    /**
-     * @dataProvider dpTestAlterFormForOrganisation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestAlterFormForOrganisation')]
     public function testGetAddLabelTextForOrganisationReturnsAppropriateLabel($type, $expected): void
     {
         $this->sut->shouldReceive('getOrganisationType')
@@ -190,9 +186,7 @@ class AbstractPeopleAdapterTest extends MockeryTestCase
     }
 
 
-    /**
-     * @dataProvider  dpTestAlterFormForOrganisation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestAlterFormForOrganisation')]
     public function testAmendLicencePeopleListTableAltersTable($type, $expected): void
     {
         $settingsArray = [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\ContactDetail\PhoneContact;
 
 use Dvsa\Olcs\Transfer\Command\ContactDetail\PhoneContact\Update;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\ContactDetail\PhoneContact\Update;
 /**
  * @covers Dvsa\Olcs\Transfer\Command\ContactDetail\PhoneContact\Update
  */
-class UpdateTest extends \PHPUnit\Framework\TestCase
+final class UpdateTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {
@@ -26,9 +28,9 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
         /** @var Update $command */
         $command = Update::create($data);
 
-        static::assertEquals($id, $command->getId());
-        static::assertEquals($phoneNr, $command->getPhoneNumber());
-        static::assertEquals($phoneContactType, $command->getPhoneContactType());
-        static::assertEquals($contactDetailsId, $command->getContactDetailsId());
+        $this->assertEquals($id, $command->getId());
+        $this->assertEquals($phoneNr, $command->getPhoneNumber());
+        $this->assertEquals($phoneContactType, $command->getPhoneContactType());
+        $this->assertEquals($contactDetailsId, $command->getContactDetailsId());
     }
 }

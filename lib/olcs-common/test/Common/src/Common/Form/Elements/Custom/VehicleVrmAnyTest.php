@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Custom;
 
 use Common\Form\Elements\Custom\VehicleVrmAny;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Common\Form\Elements\Custom\VehicleVrmAny
- */
-class VehicleVrmAnyTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\Elements\Custom\VehicleVrmAny::class)]
+final class VehicleVrmAnyTest extends MockeryTestCase
 {
     public function testValidators(): void
     {
@@ -20,18 +20,15 @@ class VehicleVrmAnyTest extends MockeryTestCase
 
         $actual = $sut->getInputSpecification();
 
-        static::assertEquals('unit_Name', $actual['name']);
-        static::assertTrue($actual['required']);
-        static::assertInstanceOf(\Laminas\Filter\StringTrim::class, current($actual['filters']));
+        $this->assertEquals('unit_Name', $actual['name']);
+        $this->assertTrue($actual['required']);
+        $this->assertInstanceOf(\Laminas\Filter\StringTrim::class, current($actual['filters']));
 
-        static::assertEquals(
-            [
-                \Laminas\Validator\StringLength::class,
-            ],
-            array_map(
-                static fn($item) => $item['name'],
-                $actual['validators']
-            )
-        );
+        $this->assertSame([
+            \Laminas\Validator\StringLength::class,
+        ], array_map(
+            static fn($item) => $item['name'],
+            $actual['validators']
+        ));
     }
 }

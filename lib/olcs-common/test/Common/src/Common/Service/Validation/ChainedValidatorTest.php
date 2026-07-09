@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Validation\Service;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -14,14 +16,14 @@ use Laminas\InputFilter\InputInterface;
  * Class ChainedValidatorTest
  * @package OlcsTest\Ebsr\Service
  */
-class ChainedValidatorTest extends TestCase
+final class ChainedValidatorTest extends TestCase
 {
     /**
-     * @dataProvider provideValidate
      * @param $command
      * @param $validator
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideValidate')]
     public function testValidate($command, $validator, $expected): void
     {
         $sut = new ChainedValidator();
@@ -37,7 +39,7 @@ class ChainedValidatorTest extends TestCase
      *
      * @psalm-return list{list{m\LegacyMockInterface&m\MockInterface&CommandInterface, m\LegacyMockInterface&m\MockInterface&InputInterface, ValidationFailed}, list{m\LegacyMockInterface&m\MockInterface&CommandInterface, m\LegacyMockInterface&m\MockInterface&InputInterface, ValidationFailed}, list{m\LegacyMockInterface&m\MockInterface&CommandInterface, m\LegacyMockInterface&m\MockInterface&InputInterface, ValidationSuccessful}}
      */
-    public function provideValidate(): array
+    public static function provideValidate(): array
     {
         $command = m::mock(CommandInterface::class);
         $command->shouldReceive('getValue')->andReturn('e34fd6');

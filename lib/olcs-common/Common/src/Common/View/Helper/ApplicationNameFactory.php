@@ -13,7 +13,7 @@ class ApplicationNameFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationName
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ApplicationName
     {
         return new ApplicationName(
             $container->get('Config')

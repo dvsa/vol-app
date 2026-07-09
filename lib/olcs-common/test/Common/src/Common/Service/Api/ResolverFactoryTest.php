@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Api;
 
 use Common\Service\Api\Resolver;
@@ -8,7 +10,7 @@ use Common\Service\Api\ResolverFactory;
 use Mockery as m;
 use Psr\Container\ContainerInterface;
 
-class ResolverFactoryTest extends MockeryTestCase
+final class ResolverFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {

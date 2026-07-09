@@ -13,7 +13,7 @@ class AddressFactory implements FactoryInterface
      * @return Address
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $dataHelper = $container->get('Helper\Data');
         return new Address($dataHelper);

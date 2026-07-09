@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Partial;
 
 use Dvsa\Olcs\Transfer\Command\Partial\OperatingCentreEvidence;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Partial\OperatingCentreEvidence;
 /**
  * Operating Centre Evidence Partial test
  */
-class OperatingCentreEvidenceTest extends \PHPUnit\Framework\TestCase
+final class OperatingCentreEvidenceTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

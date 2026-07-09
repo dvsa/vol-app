@@ -13,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Form\Fieldset;
 use Laminas\Form\Form;
 
-class RadioFieldsetPopulatorTest extends MockeryTestCase
+final class RadioFieldsetPopulatorTest extends MockeryTestCase
 {
     public function testPopulate(): void
     {

@@ -16,7 +16,7 @@ class FeeUrlFactory implements FactoryInterface
      * @throws NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FeeUrl
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): FeeUrl
     {
         $router     = $container->get('router');
         $request    = $container->get('request');

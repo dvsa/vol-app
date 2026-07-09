@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Common\FormService\Form\Lva\TypeOfLicence;
 
 use Common\Form\Elements\InputFilters\Lva\BackToVariationActionLink;
@@ -18,12 +20,8 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * Variation Type Of Licence Test
  */
-class VariationTypeOfLicenceTest extends MockeryTestCase
+final class VariationTypeOfLicenceTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $authService;
     /**
      * @var VariationTypeOfLicence
      */
@@ -38,9 +36,9 @@ class VariationTypeOfLicenceTest extends MockeryTestCase
     {
         $this->fsm = m::mock(FormServiceManager::class)->makePartial();
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->authService = m::mock(AuthorizationService::class);
+        $authService = m::mock(AuthorizationService::class);
 
-        $this->sut = new VariationTypeOfLicence($this->fh, $this->authService, $this->fsm);
+        $this->sut = new VariationTypeOfLicence($this->fh, $authService, $this->fsm);
     }
 
     public function testGetForm(): void

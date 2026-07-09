@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Helper;
 
 use Common\Exception\File\InvalidMimeException;
@@ -14,15 +16,9 @@ use Common\Service\Helper\FileUploadHelperService;
 use Mockery as m;
 use Olcs\Logging\Log\Logger;
 
-/**
- * @covers \Common\Service\Helper\FileUploadHelperService
- */
-class FileUploadHelperServiceTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Helper\FileUploadHelperService::class)]
+final class FileUploadHelperServiceTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $mockSm;
     /** @var  FileUploadHelperService */
     private $sut;
 
@@ -44,7 +40,7 @@ class FileUploadHelperServiceTest extends MockeryTestCase
         $this->mockScan = m::mock(Scan::class);
         $this->mockUrlHelper = m::mock(UrlHelperService::class);
 
-        $this->mockSm = m::mock(ContainerInterface::class);
+        $mockSm = m::mock(ContainerInterface::class);
 
         $this->sut = new FileUploadHelperService($this->mockUrlHelper, $this->mockScan);
         $this->sut->setRequest($this->mockRequest);
@@ -164,7 +160,7 @@ class FileUploadHelperServiceTest extends MockeryTestCase
         try {
             $this->sut->process();
         } catch (\Common\Exception\ConfigurationException $configurationException) {
-            $this->assertEquals('Load data callback is not callable', $configurationException->getMessage());
+            $this->assertSame('Load data callback is not callable', $configurationException->getMessage());
             return;
         }
 
@@ -229,9 +225,7 @@ class FileUploadHelperServiceTest extends MockeryTestCase
             ->getMock();
     }
 
-    /**
-     * @dataProvider fileUploadProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('fileUploadProvider')]
     public function testProcessWithPostAndInvalidFileUpload($error, $message): void
     {
         $file = tempnam("/tmp", "fuhs");
@@ -280,24 +274,22 @@ class FileUploadHelperServiceTest extends MockeryTestCase
             }
         );
 
-        static::assertEquals(false, $this->sut->process());
+        $this->assertEquals(false, $this->sut->process());
 
         unlink($file);
     }
 
     /**
-     * @return (int|string)[][]
+     * @return \Iterator<(int | string), array<(int | string)>>
      *
      * @psalm-return list{list{3, 'message.file-upload-error.3'}, list{4, 'message.file-upload-error.4'}, list{1, 'message.file-upload-error.1'}, list{6, 'message.file-upload-error.6'}}
      */
-    public function fileUploadProvider(): array
+    public static function fileUploadProvider(): \Iterator
     {
-        return [
-            [UPLOAD_ERR_PARTIAL, 'message.file-upload-error.' . UPLOAD_ERR_PARTIAL],
-            [UPLOAD_ERR_NO_FILE, 'message.file-upload-error.' . UPLOAD_ERR_NO_FILE],
-            [UPLOAD_ERR_INI_SIZE, 'message.file-upload-error.' . UPLOAD_ERR_INI_SIZE],
-            [UPLOAD_ERR_NO_TMP_DIR, 'message.file-upload-error.' . UPLOAD_ERR_NO_TMP_DIR],
-        ];
+        yield [UPLOAD_ERR_PARTIAL, 'message.file-upload-error.' . UPLOAD_ERR_PARTIAL];
+        yield [UPLOAD_ERR_NO_FILE, 'message.file-upload-error.' . UPLOAD_ERR_NO_FILE];
+        yield [UPLOAD_ERR_INI_SIZE, 'message.file-upload-error.' . UPLOAD_ERR_INI_SIZE];
+        yield [UPLOAD_ERR_NO_TMP_DIR, 'message.file-upload-error.' . UPLOAD_ERR_NO_TMP_DIR];
     }
 
     public function testProcessWithPostFileMissing(): void
@@ -467,9 +459,7 @@ class FileUploadHelperServiceTest extends MockeryTestCase
         $this->assertEquals(false, $this->sut->process());
     }
 
-    /**
-     * @dataProvider dpTestProcessWithPostFileUploadExpection
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestProcessWithPostFileUploadExpection')]
     public function testProcessWithPostFileUploadExpection($exception, $expectErrMsg): void
     {
         $file = __FILE__;
@@ -519,25 +509,23 @@ class FileUploadHelperServiceTest extends MockeryTestCase
                 }
             );
 
-        static::assertEquals(false, $this->sut->process());
+        $this->assertEquals(false, $this->sut->process());
     }
 
     /**
-     * @return (InvalidMimeException|\Exception|string)[][]
+     * @return \Iterator<(int | string), array<(\Exception | string)>>
      *
      * @psalm-return list{array{expection: \Exception, expect: 'message.file-upload-error.any'}, array{expection: InvalidMimeException, expect: 'ERR_MIME'}}
      */
-    public function dpTestProcessWithPostFileUploadExpection(): array
+    public static function dpTestProcessWithPostFileUploadExpection(): \Iterator
     {
-        return [
-            [
-                'expection' => new \Exception('any error'),
-                'expect' => 'message.file-upload-error.any',
-            ],
-            [
-                'expection' => new InvalidMimeException('any error'),
-                'expect' => 'ERR_MIME',
-            ],
+        yield [
+            'exception' => new \Exception('any error'),
+            'expectErrMsg' => 'message.file-upload-error.any',
+        ];
+        yield [
+            'exception' => new InvalidMimeException('any error'),
+            'expectErrMsg' => 'ERR_MIME',
         ];
     }
 
@@ -692,7 +680,7 @@ class FileUploadHelperServiceTest extends MockeryTestCase
                 }
             );
 
-        static::assertEquals(false, $this->sut->process());
+        $this->assertEquals(false, $this->sut->process());
     }
 
     public static function setupLogger(): void

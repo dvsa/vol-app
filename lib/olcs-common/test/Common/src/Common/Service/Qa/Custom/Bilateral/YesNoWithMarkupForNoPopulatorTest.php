@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Bilateral;
 
 use Common\Form\Elements\InputFilters\QaRadio;
@@ -16,11 +18,9 @@ use Laminas\Form\Fieldset;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class YesNoWithMarkupForNoPopulatorTest extends MockeryTestCase
+final class YesNoWithMarkupForNoPopulatorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpPopulate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpPopulate')]
     public function testPopulate($yesNo, $expectedYesNoValue): void
     {
         $notSelectedMessage = 'not.selected.message';
@@ -76,15 +76,13 @@ class YesNoWithMarkupForNoPopulatorTest extends MockeryTestCase
     }
 
     /**
-     * @return (null|string)[][]
+     * @return \Iterator<(int | string), array<(string | null)>>
      *
      * @psalm-return list{list{'answer.value', 'Y'}, list{null, null}}
      */
-    public function dpPopulate(): array
+    public static function dpPopulate(): \Iterator
     {
-        return [
-            ['answer.value', 'Y'],
-            [null, null]
-        ];
+        yield ['answer.value', 'Y'];
+        yield [null, null];
     }
 }

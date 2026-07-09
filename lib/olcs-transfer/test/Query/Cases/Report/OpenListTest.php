@@ -10,7 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @see OpenList
  */
-class OpenListTest extends MockeryTestCase
+final class OpenListTest extends MockeryTestCase
 {
     public function testStructure()
     {
@@ -23,10 +23,10 @@ class OpenListTest extends MockeryTestCase
             ]
         );
 
-        static::assertEquals(['unit_Ta'], $sut->getTrafficAreas());
-        static::assertEquals('unit_CaseType', $sut->getCaseType());
-        static::assertEquals('unit_Lic', $sut->getLicenceStatus());
-        static::assertEquals('unit_App', $sut->getApplicationStatus());
-        static::assertCount(6, $sut->getArrayCopy());
+        $this->assertEquals(['unit_Ta'], $sut->getTrafficAreas());
+        $this->assertEquals('unit_CaseType', $sut->getCaseType());
+        $this->assertEquals('unit_Lic', $sut->getLicenceStatus());
+        $this->assertEquals('unit_App', $sut->getApplicationStatus());
+        $this->assertCount(6, $sut->getArrayCopy());
     }
 }

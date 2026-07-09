@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Filter;
 
 use Common\Filter\StripSpaces;
 
-class StripSpacesTest extends \PHPUnit\Framework\TestCase
+final class StripSpacesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @dataProvider provideFilter
      *
      * @param $input
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFilter')]
     public function testFilter($input, $expected): void
     {
         $sut = new StripSpaces();
@@ -19,18 +21,16 @@ class StripSpacesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provideFilter()
+    public static function provideFilter(): \Iterator
     {
-        return [
-            [null, null],
-            ['string', 'string'],
-            [' string', 'string'],
-            ['string ', 'string'],
-            ['st ring ', 'string'],
-            ['  st ri   n g   ', 'string'],
-            [['  st ri   n g   ', ' s  tri ng2  '], ['string', 'string2']],
-        ];
+        yield [null, null];
+        yield ['string', 'string'];
+        yield [' string', 'string'];
+        yield ['string ', 'string'];
+        yield ['st ring ', 'string'];
+        yield ['  st ri   n g   ', 'string'];
+        yield [['  st ri   n g   ', ' s  tri ng2  '], ['string', 'string2']];
     }
 }

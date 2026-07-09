@@ -6,6 +6,8 @@
  * @author Scott Callaway <scott.callaway@capgemini.com>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService as UrlHelper;
@@ -13,7 +15,7 @@ use Common\Service\Table\Formatter\IrhpPermitRangePermitNumber;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class IrhpPermitRangePermitNumberTest extends MockeryTestCase
+final class IrhpPermitRangePermitNumberTest extends MockeryTestCase
 {
     protected $urlHelper;
 
@@ -29,11 +31,11 @@ class IrhpPermitRangePermitNumberTest extends MockeryTestCase
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group IrhpPermitSectorFormatter
      *
-     * @dataProvider formatProvider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('IrhpPermitSectorFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('formatProvider')]
     public function testFormat($data, $expected): void
     {
 
@@ -48,41 +50,39 @@ class IrhpPermitRangePermitNumberTest extends MockeryTestCase
             )
             ->andReturn('WINDOW_EDIT_URL');
 
-        static::assertEquals($expected, $this->sut->format($data, []));
+        $this->assertEquals($expected, $this->sut->format($data, []));
     }
 
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function formatProvider()
+    public static function formatProvider(): \Iterator
     {
-        return [
-            [
-                'data' => [
-                    'prefix' => '',
-                    'fromNo' => '1',
-                    'toNo' => '2',
-                    'irhpPermitStock' => [
-                        'id' => '1'
-                    ],
+        yield [
+            'data' => [
+                'prefix' => '',
+                'fromNo' => '1',
+                'toNo' => '2',
+                'irhpPermitStock' => [
                     'id' => '1'
                 ],
-                'expect' => "<a class='govuk-link js-modal-ajax' href='WINDOW_EDIT_URL'>1 to 2</a>",
+                'id' => '1'
             ],
-            [
-                'data' => [
-                    'prefix' => 'UK',
-                    'fromNo' => '1',
-                    'toNo' => '2',
-                    'irhpPermitStock' => [
-                        'id' => '1'
-                    ],
+            'expected' => "<a class='govuk-link js-modal-ajax' href='WINDOW_EDIT_URL'>1 to 2</a>",
+        ];
+        yield [
+            'data' => [
+                'prefix' => 'UK',
+                'fromNo' => '1',
+                'toNo' => '2',
+                'irhpPermitStock' => [
                     'id' => '1'
                 ],
-                'expect' => "<a class='govuk-link js-modal-ajax' href='WINDOW_EDIT_URL'>UK1 to UK2</a>",
+                'id' => '1'
             ],
+            'expected' => "<a class='govuk-link js-modal-ajax' href='WINDOW_EDIT_URL'>UK1 to UK2</a>",
         ];
     }
 }

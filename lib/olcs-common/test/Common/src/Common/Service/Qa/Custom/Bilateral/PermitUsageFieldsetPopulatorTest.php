@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Bilateral;
 
 use Common\Service\Helper\TranslationHelperService;
@@ -18,7 +20,7 @@ use Laminas\Form\Form;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class PermitUsageFieldsetPopulatorTest extends MockeryTestCase
+final class PermitUsageFieldsetPopulatorTest extends MockeryTestCase
 {
     private $form;
 
@@ -63,9 +65,7 @@ class PermitUsageFieldsetPopulatorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpPopulateSingleItem
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpPopulateSingleItem')]
     public function testPopulateSingleItem($firstOptionValue, $expectedTranslationKey): void
     {
         $options = [
@@ -114,21 +114,19 @@ class PermitUsageFieldsetPopulatorTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return list{list{'journey_single', 'qanda.bilaterals.permit-usage.single-option.journey-single'}, list{'journey_multiple', 'qanda.bilaterals.permit-usage.single-option.journey-multiple'}}
      */
-    public function dpPopulateSingleItem(): array
+    public static function dpPopulateSingleItem(): \Iterator
     {
-        return [
-            [
-                'journey_single',
-                'qanda.bilaterals.permit-usage.single-option.journey-single'
-            ],
-            [
-                'journey_multiple',
-                'qanda.bilaterals.permit-usage.single-option.journey-multiple'
-            ],
+        yield [
+            'journey_single',
+            'qanda.bilaterals.permit-usage.single-option.journey-single'
+        ];
+        yield [
+            'journey_multiple',
+            'qanda.bilaterals.permit-usage.single-option.journey-multiple'
         ];
     }
 

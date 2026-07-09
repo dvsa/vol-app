@@ -11,7 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Laminas\Mvc\Controller\Plugin\Url;
 
-class SurrenderSectionTest extends MockeryTestCase
+final class SurrenderSectionTest extends MockeryTestCase
 {
     protected $mockTranslator;
 
@@ -25,9 +25,7 @@ class SurrenderSectionTest extends MockeryTestCase
         $this->mockUrlHelper = m::mock(Url::class);
     }
 
-    /**
-     * @dataProvider  surrenderDiscs
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('surrenderDiscs')]
     public function testDiscsSurrenderSection($data, $expected): void
     {
         $mockSurrender = ['surrender' => $data];
@@ -56,220 +54,215 @@ class SurrenderSectionTest extends MockeryTestCase
     }
 
     /**
-     * @return (((null|string)[]|string|true)[]|int|null|string)[][][]
+     * @return \Iterator<(int | string), array<array<(array<(array<(string | null)> | string | true)> | int | string | null)>>>
      *
      * @psalm-return array{DestroyedDiscs: list{array{discDestroyed: '10', version: 1, possessionSection: array{inPossession: 'Y', info: array{number: '10'}}, lostSection: array{lost: 'N', info: array{number: null, details: null}}, stolenSection: array{stolen: 'N', info: array{number: null, details: null}}}, list{array{label: 'Number destroyed', answer: '10', changeLinkInHeading: true, change: array{sectionLink: 'discBackLInk'}}, array{label: 'Number lost', answer: '0', changeLinkInHeading: true, change: array{sectionLink: 'discBackLInk'}}, array{label: 'Number stolen', answer: '0', changeLinkInHeading: true, change: array{sectionLink: 'discBackLInk'}}}}, LostDiscs: list{array{discLost: '10', discLostInfo: 'dog ate them', version: 1, possessionSection: array{inPossession: 'N', info: array{number: null}}, lostSection: array{lost: 'Y', info: array{number: '10', details: 'dog ate them'}}, stolenSection: array{stolen: 'N', info: array{number: null, details: null}}}, list{array{label: 'Number destroyed', answer: '0', changeLinkInHeading: true, change: array{sectionLink: 'discBackLInk'}}, array{label: 'Number lost', answer: '10', changeLinkInHeading: true, change: array{sectionLink: 'discBackLInk'}}, array{label: 'Number stolen', answer: '0', changeLinkInHeading: true, change: array{sectionLink: 'discBackLInk'}}}}, StolenDiscs: list{array{discStolen: '9', discLost: null, discStolenInfo: 'Crime ref #1 - it was a fair cop', version: 1, possessionSection: array{inPossession: 'N', info: array{number: null}}, lostSection: array{lost: 'Y', info: array{number: '0', details: 'dog ate them'}}, stolenSection: array{stolen: 'Y', info: array{number: '9', details: 'Crime ref #1 - it was a fair cop'}}}, list{array{label: 'Number destroyed', answer: '0', changeLinkInHeading: true, change: array{sectionLink: 'discBackLInk'}}, array{label: 'Number lost', answer: '0', changeLinkInHeading: true, change: array{sectionLink: 'discBackLInk'}}, array{label: 'Number stolen', answer: '9', changeLinkInHeading: true, change: array{sectionLink: 'discBackLInk'}}}}, AllTypesDiscs: list{array{discStolen: '10', discLost: '10', discLostInfo: 'dog ate them', discStolenInfo: 'Crime ref #1 - it was a fair cop', discDestroyed: '10', version: 1, possessionSection: array{inPossession: 'N', info: array{number: '10'}}, lostSection: array{lost: 'Y', info: array{number: '10', details: 'dog ate them'}}, stolenSection: array{stolen: 'Y', info: array{number: '10', details: 'Crime ref #1 - it was a fair cop'}}}, list{array{label: 'Number destroyed', answer: '10', changeLinkInHeading: true, change: array{sectionLink: 'discBackLInk'}}, array{label: 'Number lost', answer: '10', changeLinkInHeading: true, change: array{sectionLink: 'discBackLInk'}}, array{label: 'Number stolen', answer: '10', changeLinkInHeading: true, change: array{sectionLink: 'discBackLInk'}}}}}
      */
-    public function surrenderDiscs(): array
+    public static function surrenderDiscs(): \Iterator
     {
         $changeLinkInHeading = true;
-        return [
-
-            'DestroyedDiscs' => [
-                [
-                    'discDestroyed' => '10',
-                    'version' => 1,
-                    'possessionSection' => [
-                        'inPossession' => 'Y',
-                        'info' => [
-                            'number' => '10'
-                        ]
-                    ],
-                    'lostSection' => [
-                        'lost' => 'N',
-                        'info' => [
-                            'number' => null,
-                            'details' => null
-                        ]
-                    ],
-                    'stolenSection' => [
-                        'stolen' => 'N',
-                        'info' => [
-                            'number' => null,
-                            'details' => null
-                        ]
+        yield 'DestroyedDiscs' => [
+            [
+                'discDestroyed' => '10',
+                'version' => 1,
+                'possessionSection' => [
+                    'inPossession' => 'Y',
+                    'info' => [
+                        'number' => '10'
                     ]
                 ],
-
-                [
-                    [
-                        'label' => 'Number destroyed',
-                        'answer' => '10',
-                        'changeLinkInHeading' => $changeLinkInHeading,
-                        'change' => ['sectionLink' => 'discBackLInk']
-                    ],
-                    [
-                        'label' => 'Number lost',
-                        'answer' => '0',
-                        'changeLinkInHeading' => $changeLinkInHeading,
-                        'change' => ['sectionLink' => 'discBackLInk']
-                    ],
-                    [
-                        'label' => 'Number stolen',
-                        'answer' => '0',
-                        'changeLinkInHeading' => $changeLinkInHeading,
-                        'change' => ['sectionLink' => 'discBackLInk' ]
+                'lostSection' => [
+                    'lost' => 'N',
+                    'info' => [
+                        'number' => null,
+                        'details' => null
+                    ]
+                ],
+                'stolenSection' => [
+                    'stolen' => 'N',
+                    'info' => [
+                        'number' => null,
+                        'details' => null
                     ]
                 ]
-
             ],
-            'LostDiscs' => [
+
+            [
                 [
-                    'discLost' => '10',
-                    'discLostInfo' => 'dog ate them',
-                    'version' => 1,
-                    'possessionSection' => [
-                        'inPossession' => 'N',
-                        'info' => [
-                            'number' => null
-                        ]
-                    ],
-                    'lostSection' => [
-                        'lost' => 'Y',
-                        'info' => [
-                            'number' => '10',
-                            'details' => 'dog ate them'
-                        ]
-                    ],
-                    'stolenSection' => [
-                        'stolen' => 'N',
-                        'info' => [
-                            'number' => null,
-                            'details' => null
-                        ]
-                    ]
+                    'label' => 'Number destroyed',
+                    'answer' => '10',
+                    'changeLinkInHeading' => $changeLinkInHeading,
+                    'change' => ['sectionLink' => 'discBackLInk']
                 ],
-
                 [
-                    [
-                        'label' => 'Number destroyed',
-                        'answer' => '0',
-                        'changeLinkInHeading' => $changeLinkInHeading,
-                        'change' => ['sectionLink' => 'discBackLInk']
-                    ],
-                    [
-                        'label' => 'Number lost',
-                        'answer' => '10',
-                        'changeLinkInHeading' => $changeLinkInHeading,
-                        'change' => ['sectionLink' => 'discBackLInk']
-                    ],
-                    [
-                        'label' => 'Number stolen',
-                        'answer' => '0',
-                        'changeLinkInHeading' => $changeLinkInHeading,
-                        'change' => ['sectionLink' => 'discBackLInk' ]
-                    ]
-                ]
-
-            ],
-            'StolenDiscs' => [
-                [
-                    'discStolen' => '9',
-                    'discLost' => null,
-                    'discStolenInfo' => 'Crime ref #1 - it was a fair cop',
-                    'version' => 1,
-                    'possessionSection' => [
-                        'inPossession' => 'N',
-                        'info' => [
-                            'number' => null
-                        ]
-                    ],
-                    'lostSection' => [
-                        'lost' => 'Y',
-                        'info' => [
-                            'number' => '0',
-                            'details' => 'dog ate them'
-                        ]
-                    ],
-                    'stolenSection' => [
-                        'stolen' => 'Y',
-                        'info' => [
-                            'number' => '9',
-                            'details' => 'Crime ref #1 - it was a fair cop'
-                        ]
-                    ]
+                    'label' => 'Number lost',
+                    'answer' => '0',
+                    'changeLinkInHeading' => $changeLinkInHeading,
+                    'change' => ['sectionLink' => 'discBackLInk']
                 ],
-
                 [
-                    [
-                        'label' => 'Number destroyed',
-                        'answer' => '0',
-                        'changeLinkInHeading' => $changeLinkInHeading,
-                        'change' => ['sectionLink' => 'discBackLInk']
-                    ],
-                    [
-                        'label' => 'Number lost',
-                        'answer' => '0',
-                        'changeLinkInHeading' => $changeLinkInHeading,
-                        'change' => ['sectionLink' => 'discBackLInk']
-                    ],
-                    [
-                        'label' => 'Number stolen',
-                        'answer' => '9',
-                        'changeLinkInHeading' => $changeLinkInHeading,
-                        'change' => ['sectionLink' => 'discBackLInk' ]
-                    ]
+                    'label' => 'Number stolen',
+                    'answer' => '0',
+                    'changeLinkInHeading' => $changeLinkInHeading,
+                    'change' => ['sectionLink' => 'discBackLInk' ]
                 ]
-
-            ],
-            'AllTypesDiscs' => [
-                [
-                    'discStolen' => '10',
-                    'discLost' => '10',
-                    'discLostInfo' => 'dog ate them',
-                    'discStolenInfo' => 'Crime ref #1 - it was a fair cop',
-                    'discDestroyed' => '10',
-                    'version' => 1,
-                    'possessionSection' => [
-                        'inPossession' => 'N',
-                        'info' => [
-                            'number' => '10'
-                        ]
-                    ],
-                    'lostSection' => [
-                        'lost' => 'Y',
-                        'info' => [
-                            'number' => '10',
-                            'details' => 'dog ate them'
-                        ]
-                    ],
-                    'stolenSection' => [
-                        'stolen' => 'Y',
-                        'info' => [
-                            'number' => '10',
-                            'details' => 'Crime ref #1 - it was a fair cop'
-                        ]
-                    ]
-                ],
-
-                [
-                    [
-                        'label' => 'Number destroyed',
-                        'answer' => '10',
-                        'changeLinkInHeading' => $changeLinkInHeading,
-                        'change' => ['sectionLink' => 'discBackLInk']
-                    ],
-                    [
-                        'label' => 'Number lost',
-                        'answer' => '10',
-                        'changeLinkInHeading' => $changeLinkInHeading,
-                        'change' => ['sectionLink' => 'discBackLInk']
-                    ],
-                    [
-                        'label' => 'Number stolen',
-                        'answer' => '10',
-                        'changeLinkInHeading' => $changeLinkInHeading,
-                        'change' => ['sectionLink' => 'discBackLInk' ]
-                    ]
-                ]
-
             ]
+
+        ];
+        yield 'LostDiscs' => [
+            [
+                'discLost' => '10',
+                'discLostInfo' => 'dog ate them',
+                'version' => 1,
+                'possessionSection' => [
+                    'inPossession' => 'N',
+                    'info' => [
+                        'number' => null
+                    ]
+                ],
+                'lostSection' => [
+                    'lost' => 'Y',
+                    'info' => [
+                        'number' => '10',
+                        'details' => 'dog ate them'
+                    ]
+                ],
+                'stolenSection' => [
+                    'stolen' => 'N',
+                    'info' => [
+                        'number' => null,
+                        'details' => null
+                    ]
+                ]
+            ],
+
+            [
+                [
+                    'label' => 'Number destroyed',
+                    'answer' => '0',
+                    'changeLinkInHeading' => $changeLinkInHeading,
+                    'change' => ['sectionLink' => 'discBackLInk']
+                ],
+                [
+                    'label' => 'Number lost',
+                    'answer' => '10',
+                    'changeLinkInHeading' => $changeLinkInHeading,
+                    'change' => ['sectionLink' => 'discBackLInk']
+                ],
+                [
+                    'label' => 'Number stolen',
+                    'answer' => '0',
+                    'changeLinkInHeading' => $changeLinkInHeading,
+                    'change' => ['sectionLink' => 'discBackLInk' ]
+                ]
+            ]
+
+        ];
+        yield 'StolenDiscs' => [
+            [
+                'discStolen' => '9',
+                'discLost' => null,
+                'discStolenInfo' => 'Crime ref #1 - it was a fair cop',
+                'version' => 1,
+                'possessionSection' => [
+                    'inPossession' => 'N',
+                    'info' => [
+                        'number' => null
+                    ]
+                ],
+                'lostSection' => [
+                    'lost' => 'Y',
+                    'info' => [
+                        'number' => '0',
+                        'details' => 'dog ate them'
+                    ]
+                ],
+                'stolenSection' => [
+                    'stolen' => 'Y',
+                    'info' => [
+                        'number' => '9',
+                        'details' => 'Crime ref #1 - it was a fair cop'
+                    ]
+                ]
+            ],
+
+            [
+                [
+                    'label' => 'Number destroyed',
+                    'answer' => '0',
+                    'changeLinkInHeading' => $changeLinkInHeading,
+                    'change' => ['sectionLink' => 'discBackLInk']
+                ],
+                [
+                    'label' => 'Number lost',
+                    'answer' => '0',
+                    'changeLinkInHeading' => $changeLinkInHeading,
+                    'change' => ['sectionLink' => 'discBackLInk']
+                ],
+                [
+                    'label' => 'Number stolen',
+                    'answer' => '9',
+                    'changeLinkInHeading' => $changeLinkInHeading,
+                    'change' => ['sectionLink' => 'discBackLInk' ]
+                ]
+            ]
+
+        ];
+        yield 'AllTypesDiscs' => [
+            [
+                'discStolen' => '10',
+                'discLost' => '10',
+                'discLostInfo' => 'dog ate them',
+                'discStolenInfo' => 'Crime ref #1 - it was a fair cop',
+                'discDestroyed' => '10',
+                'version' => 1,
+                'possessionSection' => [
+                    'inPossession' => 'N',
+                    'info' => [
+                        'number' => '10'
+                    ]
+                ],
+                'lostSection' => [
+                    'lost' => 'Y',
+                    'info' => [
+                        'number' => '10',
+                        'details' => 'dog ate them'
+                    ]
+                ],
+                'stolenSection' => [
+                    'stolen' => 'Y',
+                    'info' => [
+                        'number' => '10',
+                        'details' => 'Crime ref #1 - it was a fair cop'
+                    ]
+                ]
+            ],
+
+            [
+                [
+                    'label' => 'Number destroyed',
+                    'answer' => '10',
+                    'changeLinkInHeading' => $changeLinkInHeading,
+                    'change' => ['sectionLink' => 'discBackLInk']
+                ],
+                [
+                    'label' => 'Number lost',
+                    'answer' => '10',
+                    'changeLinkInHeading' => $changeLinkInHeading,
+                    'change' => ['sectionLink' => 'discBackLInk']
+                ],
+                [
+                    'label' => 'Number stolen',
+                    'answer' => '10',
+                    'changeLinkInHeading' => $changeLinkInHeading,
+                    'change' => ['sectionLink' => 'discBackLInk' ]
+                ]
+            ]
+
         ];
     }
 
-    /**
-     * @dataProvider operatorLicenceSection
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('operatorLicenceSection')]
     public function testOperatorLicence($data, $expected): void
     {
         $mockSurrender = ['surrender' => $data];
@@ -303,78 +296,74 @@ class SurrenderSectionTest extends MockeryTestCase
     }
 
     /**
-     * @return ((string|string[]|true)[]|null|string)[][][]
+     * @return \Iterator<(int | string), array<array<(array<(array<string> | string | true)> | string | null)>>>
      *
      * @psalm-return array{OperatorLicenceDestroyed: list{array{licenceDocumentStatus: array{id: 'doc_sts_destroyed'}, licenceDocumentInfo: null}, list{array{label: 'Operator licence', answer: 'to be destroyed', changeLinkInHeading: true, change: array{sectionLink: 'operator-licence'}}}}, OperatorLicenceLost: list{array{licenceDocumentStatus: array{id: 'doc_sts_lost'}, licenceDocumentInfo: 'lost content'}, list{array{label: 'Operator licence', answer: 'lost', changeLinkInHeading: true, change: array{sectionLink: 'operator-licence'}}}}, OperatorLicenceStolen: list{array{licenceDocumentStatus: array{id: 'doc_sts_stolen'}, licenceDocumentInfo: 'stolen content'}, list{array{label: 'Operator licence', answer: 'stolen', changeLinkInHeading: true, change: array{sectionLink: 'operator-licence'}}}}}
      */
-    public function operatorLicenceSection(): array
+    public static function operatorLicenceSection(): \Iterator
     {
         $changeLinkInHeading = true;
-        return [
+        yield 'OperatorLicenceDestroyed' => [
+            [
 
-            'OperatorLicenceDestroyed' => [
-                [
-
-                    'licenceDocumentStatus' =>
-                        [
-                            'id' => RefData::SURRENDER_DOC_STATUS_DESTROYED,
-                        ],
-                    'licenceDocumentInfo' => null
-
-                ],
-
-                [
+                'licenceDocumentStatus' =>
                     [
-                        'label' => 'Operator licence',
-                        'answer' => 'to be destroyed',
-                        'changeLinkInHeading' => $changeLinkInHeading,
-                        'change' => ['sectionLink' => 'operator-licence']
-                    ]
-                ]
+                        'id' => RefData::SURRENDER_DOC_STATUS_DESTROYED,
+                    ],
+                'licenceDocumentInfo' => null
 
             ],
-            'OperatorLicenceLost' => [
+
+            [
                 [
-
-                    'licenceDocumentStatus' =>
-                        [
-                            'id' => RefData::SURRENDER_DOC_STATUS_LOST,
-                        ],
-                    'licenceDocumentInfo' => 'lost content'
-
-                ],
-
-                [
-                    [
-                        'label' => 'Operator licence',
-                        'answer' => 'lost',
-                        'changeLinkInHeading' => $changeLinkInHeading,
-                        'change' => ['sectionLink' => 'operator-licence']
-                    ]
+                    'label' => 'Operator licence',
+                    'answer' => 'to be destroyed',
+                    'changeLinkInHeading' => $changeLinkInHeading,
+                    'change' => ['sectionLink' => 'operator-licence']
                 ]
+            ]
+
+        ];
+        yield 'OperatorLicenceLost' => [
+            [
+
+                'licenceDocumentStatus' =>
+                    [
+                        'id' => RefData::SURRENDER_DOC_STATUS_LOST,
+                    ],
+                'licenceDocumentInfo' => 'lost content'
 
             ],
-            'OperatorLicenceStolen' => [
+
+            [
                 [
-
-                    'licenceDocumentStatus' =>
-                        [
-                            'id' => RefData::SURRENDER_DOC_STATUS_STOLEN,
-                        ],
-                    'licenceDocumentInfo' => 'stolen content'
-
-                ],
-
-                [
-                    [
-                        'label' => 'Operator licence',
-                        'answer' => 'stolen',
-                        'changeLinkInHeading' => $changeLinkInHeading,
-                        'change' => ['sectionLink' => 'operator-licence']
-                    ]
+                    'label' => 'Operator licence',
+                    'answer' => 'lost',
+                    'changeLinkInHeading' => $changeLinkInHeading,
+                    'change' => ['sectionLink' => 'operator-licence']
                 ]
+            ]
+
+        ];
+        yield 'OperatorLicenceStolen' => [
+            [
+
+                'licenceDocumentStatus' =>
+                    [
+                        'id' => RefData::SURRENDER_DOC_STATUS_STOLEN,
+                    ],
+                'licenceDocumentInfo' => 'stolen content'
 
             ],
+
+            [
+                [
+                    'label' => 'Operator licence',
+                    'answer' => 'stolen',
+                    'changeLinkInHeading' => $changeLinkInHeading,
+                    'change' => ['sectionLink' => 'operator-licence']
+                ]
+            ]
 
         ];
     }
@@ -393,9 +382,7 @@ class SurrenderSectionTest extends MockeryTestCase
         return $translations[$dataDescription];
     }
 
-    /**
-     * @dataProvider communityLicenceSection
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('communityLicenceSection')]
     public function testCommunityLicence($data, $expected): void
     {
         $mockSurrender = ['surrender' => $data];
@@ -429,75 +416,71 @@ class SurrenderSectionTest extends MockeryTestCase
     }
 
     /**
-     * @return ((string|string[]|true)[]|null|string)[][][]
+     * @return \Iterator<(int | string), array<array<(array<(array<string> | string | true)> | string | null)>>>
      *
      * @psalm-return array{communityLicenceDestroyed: list{array{communityLicenceDocumentStatus: array{id: 'doc_sts_destroyed'}, communityLicenceDocumentInfo: null}, list{array{label: 'Community licence', answer: 'to be destroyed', changeLinkInHeading: true, change: array{sectionLink: 'community-licence'}}}}, communityLicenceLost: list{array{communityLicenceDocumentStatus: array{id: 'doc_sts_lost'}, communityLicenceDocumentInfo: 'lost content'}, list{array{label: 'Community licence', answer: 'lost', changeLinkInHeading: true, change: array{sectionLink: 'community-licence'}}}}, communityLicenceStolen: list{array{communityLicenceDocumentStatus: array{id: 'doc_sts_stolen'}, communityLicenceDocumentInfo: 'stolen content'}, list{array{label: 'Community licence', answer: 'stolen', changeLinkInHeading: true, change: array{sectionLink: 'community-licence'}}}}}
      */
-    public function communityLicenceSection(): array
+    public static function communityLicenceSection(): \Iterator
     {
         $changeLinkInHeading = true;
-        return [
+        yield 'communityLicenceDestroyed' => [
+            [
 
-            'communityLicenceDestroyed' => [
-                [
-
-                    "communityLicenceDocumentStatus" => ['id' => 'doc_sts_destroyed'],
-                    "communityLicenceDocumentInfo" => null,
-
-                ],
-
-                [
-                    [
-                        'label' => 'Community licence',
-                        'answer' => 'to be destroyed',
-                        'changeLinkInHeading' => $changeLinkInHeading,
-                        'change' => ['sectionLink' => 'community-licence']
-                    ]
-                ]
+                "communityLicenceDocumentStatus" => ['id' => 'doc_sts_destroyed'],
+                "communityLicenceDocumentInfo" => null,
 
             ],
-            'communityLicenceLost' => [
+
+            [
                 [
-
-                    'communityLicenceDocumentStatus' =>
-                        [
-                            'id' => RefData::SURRENDER_DOC_STATUS_LOST,
-                        ],
-                    'communityLicenceDocumentInfo' => 'lost content'
-
-                ],
-
-                [
-                    [
-                        'label' => 'Community licence',
-                        'answer' => 'lost',
-                        'changeLinkInHeading' => $changeLinkInHeading,
-                        'change' => ['sectionLink' => 'community-licence']
-                    ]
+                    'label' => 'Community licence',
+                    'answer' => 'to be destroyed',
+                    'changeLinkInHeading' => $changeLinkInHeading,
+                    'change' => ['sectionLink' => 'community-licence']
                 ]
+            ]
+
+        ];
+        yield 'communityLicenceLost' => [
+            [
+
+                'communityLicenceDocumentStatus' =>
+                    [
+                        'id' => RefData::SURRENDER_DOC_STATUS_LOST,
+                    ],
+                'communityLicenceDocumentInfo' => 'lost content'
 
             ],
-            'communityLicenceStolen' => [
+
+            [
                 [
-
-                    'communityLicenceDocumentStatus' =>
-                        [
-                            'id' => RefData::SURRENDER_DOC_STATUS_STOLEN,
-                        ],
-                    'communityLicenceDocumentInfo' => 'stolen content'
-
-                ],
-
-                [
-                    [
-                        'label' => 'Community licence',
-                        'answer' => 'stolen',
-                        'changeLinkInHeading' => $changeLinkInHeading,
-                        'change' => ['sectionLink' => 'community-licence']
-                    ]
+                    'label' => 'Community licence',
+                    'answer' => 'lost',
+                    'changeLinkInHeading' => $changeLinkInHeading,
+                    'change' => ['sectionLink' => 'community-licence']
                 ]
+            ]
+
+        ];
+        yield 'communityLicenceStolen' => [
+            [
+
+                'communityLicenceDocumentStatus' =>
+                    [
+                        'id' => RefData::SURRENDER_DOC_STATUS_STOLEN,
+                    ],
+                'communityLicenceDocumentInfo' => 'stolen content'
 
             ],
+
+            [
+                [
+                    'label' => 'Community licence',
+                    'answer' => 'stolen',
+                    'changeLinkInHeading' => $changeLinkInHeading,
+                    'change' => ['sectionLink' => 'community-licence']
+                ]
+            ]
 
         ];
     }

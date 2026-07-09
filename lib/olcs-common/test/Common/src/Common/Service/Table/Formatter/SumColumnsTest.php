@@ -6,6 +6,8 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\SumColumns;
@@ -15,33 +17,31 @@ use Common\Service\Table\Formatter\SumColumns;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class SumColumnsTest extends \PHPUnit\Framework\TestCase
+final class SumColumnsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group SumColumnsFormatter
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('SumColumnsFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $column, $expected): void
     {
-        $this->assertSame($expected, (new SumColumns())->format($data, $column));
+        $this->assertSame($expected, new SumColumns()->format($data, $column));
     }
 
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            [[], [], '0'],
-            [['a' => 1, 'b' => 2], ['columns' => ['a', 'b']], '3'],
-            [['a' => 1, 'b' => 2], ['columns' => ['a']], '1'],
-            [['a' => 1], ['columns' => ['b']], '0'],
-        ];
+        yield [[], [], '0'];
+        yield [['a' => 1, 'b' => 2], ['columns' => ['a', 'b']], '3'];
+        yield [['a' => 1, 'b' => 2], ['columns' => ['a']], '1'];
+        yield [['a' => 1], ['columns' => ['b']], '0'];
     }
 }

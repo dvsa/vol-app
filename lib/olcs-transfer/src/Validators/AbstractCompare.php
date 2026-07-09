@@ -136,7 +136,7 @@ abstract class AbstractCompare extends AbstractValidator
      * @return bool
      */
     #[\Override]
-    abstract public function isValid($value, array $context = null);
+    abstract public function isValid($value, ?array $context = null);
 
     /**
      * Returns true if and only if values are valid for given operator.

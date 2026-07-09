@@ -6,6 +6,8 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -20,7 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class EventHistoryDescriptionTest extends MockeryTestCase
+final class EventHistoryDescriptionTest extends MockeryTestCase
 {
     protected $urlHelper;
 
@@ -47,9 +49,8 @@ class EventHistoryDescriptionTest extends MockeryTestCase
 
     /**
      * Test the format method
-     *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat(
         $data,
         $expectedRouteName,
@@ -81,142 +82,140 @@ class EventHistoryDescriptionTest extends MockeryTestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'application event history' => [
-                [
-                    'application' => ['id' => 2],
-                    'id' => 1,
-                    'eventHistoryType' => [
-                        'description' => 'foo'
-                    ]
-                ],
-                'lva-application/processing/event-history',
-                [
-                    'action' => 'edit',
-                    'application' => 2,
-                    'id' => 1,
-                ],
-                'bar',
-                '<a class="govuk-link js-modal-ajax" href="bar">foo</a>'
+        yield 'application event history' => [
+            [
+                'application' => ['id' => 2],
+                'id' => 1,
+                'eventHistoryType' => [
+                    'description' => 'foo'
+                ]
             ],
-            'variation event history' => [
-                [
-                    'application' => ['id' => 2],
-                    'id' => 1,
-                    'eventHistoryType' => ['description' => 'foo']
-                ],
-                'lva-application/processing/event-history',
-                [
-                    'action' => 'edit',
-                    'application' => 2,
-                    'id' => 1,
-                ],
-                'bar',
-                '<a class="govuk-link js-modal-ajax" href="bar">foo</a>'
+            'lva-application/processing/event-history',
+            [
+                'action' => 'edit',
+                'application' => 2,
+                'id' => 1,
             ],
-            'licence event history' => [
-                [
-                    'licence' => ['id' => 2],
-                    'id' => 1,
-                ],
-                'licence/processing/event-history',
-                [
-                    'action' => 'edit',
-                    'licence' => 2,
-                    'id' => 1,
-                ],
-                'bar',
-                '<a class="govuk-link js-modal-ajax" href="bar"></a>'
+            'bar',
+            '<a class="govuk-link js-modal-ajax" href="bar">foo</a>'
+        ];
+        yield 'variation event history' => [
+            [
+                'application' => ['id' => 2],
+                'id' => 1,
+                'eventHistoryType' => ['description' => 'foo']
             ],
-            'busreg event history' => [
-                [
-                    'busReg' => 2,
-                    'id' => 1,
-                    'eventHistoryType' => [
-                        'description' => 'foo'
-                    ]
-                ],
-                'licence/bus-processing/event-history',
-                [
-                    'action' => 'edit',
-                    'busRegId' => 2,
-                    'id' => 1,
-                ],
-                'bar',
-                '<a class="govuk-link js-modal-ajax" href="bar">foo</a>'
+            'lva-application/processing/event-history',
+            [
+                'action' => 'edit',
+                'application' => 2,
+                'id' => 1,
             ],
-            'transport manager event history' => [
-                [
-                    'transportManager' => ['id' => 2],
-                    'id' => 1,
-                    'eventHistoryType' => [
-                        'description' => 'foo'
-                    ]
-                ],
-                'transport-manager/processing/event-history',
-                [
-                    'action' => 'edit',
-                    'transportManager' => 2,
-                    'id' => 1,
-                ],
-                'bar',
-                '<a class="govuk-link js-modal-ajax" href="bar">foo</a>'
+            'bar',
+            '<a class="govuk-link js-modal-ajax" href="bar">foo</a>'
+        ];
+        yield 'licence event history' => [
+            [
+                'licence' => ['id' => 2],
+                'id' => 1,
             ],
-            'operator event history' => [
-                [
-                    'organisation' => ['id' => 2],
-                    'id' => 1,
-                    'eventHistoryType' => [
-                        'description' => 'foo'
-                    ]
-                ],
-                'operator/processing/history',
-                [
-                    'action' => 'edit',
-                    'organisation' => 2,
-                    'id' => 1,
-                ],
-                'bar',
-                '<a class="govuk-link js-modal-ajax" href="bar">foo</a>'
+            'licence/processing/event-history',
+            [
+                'action' => 'edit',
+                'licence' => 2,
+                'id' => 1,
             ],
-            'case event history' => [
-                [
-                    'case' => ['id' => 2],
-                    'id' => 1,
-                    'eventHistoryType' => [
-                        'description' => 'foo'
-                    ]
-                ],
-                'processing_history',
-                [
-                    'action' => 'edit',
-                    'case' => 2,
-                    'id' => 1,
-                ],
-                'bar',
-                '<a class="govuk-link js-modal-ajax" href="bar">foo</a>'
+            'bar',
+            '<a class="govuk-link js-modal-ajax" href="bar"></a>'
+        ];
+        yield 'busreg event history' => [
+            [
+                'busReg' => 2,
+                'id' => 1,
+                'eventHistoryType' => [
+                    'description' => 'foo'
+                ]
             ],
-            'irhp application event history' => [
-                [
-                    'irhpApplication' => ['id' => 2],
-                    'id' => 1,
-                    'eventHistoryType' => [
-                        'description' => 'foo'
-                    ]
-                ],
-                'processing_history',
-                [
-                    'action' => 'edit',
-                    'irhpApplication' => 2,
-                    'id' => 1,
-                ],
-                'bar',
-                '<a class="govuk-link js-modal-ajax" href="bar">foo</a>'
+            'licence/bus-processing/event-history',
+            [
+                'action' => 'edit',
+                'busRegId' => 2,
+                'id' => 1,
             ],
+            'bar',
+            '<a class="govuk-link js-modal-ajax" href="bar">foo</a>'
+        ];
+        yield 'transport manager event history' => [
+            [
+                'transportManager' => ['id' => 2],
+                'id' => 1,
+                'eventHistoryType' => [
+                    'description' => 'foo'
+                ]
+            ],
+            'transport-manager/processing/event-history',
+            [
+                'action' => 'edit',
+                'transportManager' => 2,
+                'id' => 1,
+            ],
+            'bar',
+            '<a class="govuk-link js-modal-ajax" href="bar">foo</a>'
+        ];
+        yield 'operator event history' => [
+            [
+                'organisation' => ['id' => 2],
+                'id' => 1,
+                'eventHistoryType' => [
+                    'description' => 'foo'
+                ]
+            ],
+            'operator/processing/history',
+            [
+                'action' => 'edit',
+                'organisation' => 2,
+                'id' => 1,
+            ],
+            'bar',
+            '<a class="govuk-link js-modal-ajax" href="bar">foo</a>'
+        ];
+        yield 'case event history' => [
+            [
+                'case' => ['id' => 2],
+                'id' => 1,
+                'eventHistoryType' => [
+                    'description' => 'foo'
+                ]
+            ],
+            'processing_history',
+            [
+                'action' => 'edit',
+                'case' => 2,
+                'id' => 1,
+            ],
+            'bar',
+            '<a class="govuk-link js-modal-ajax" href="bar">foo</a>'
+        ];
+        yield 'irhp application event history' => [
+            [
+                'irhpApplication' => ['id' => 2],
+                'id' => 1,
+                'eventHistoryType' => [
+                    'description' => 'foo'
+                ]
+            ],
+            'processing_history',
+            [
+                'action' => 'edit',
+                'irhpApplication' => 2,
+                'id' => 1,
+            ],
+            'bar',
+            '<a class="govuk-link js-modal-ajax" href="bar">foo</a>'
         ];
     }
 

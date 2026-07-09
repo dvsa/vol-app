@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Controller\Lva;
 
 use CommonTest\Common\Controller\Lva\AbstractLvaControllerTestCase;
@@ -11,7 +13,7 @@ use Common\Controller\Lva\AbstractBusinessTypeController;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class AbstractBusinessTypeControllerTest extends AbstractLvaControllerTestCase
+final class AbstractBusinessTypeControllerTest extends AbstractLvaControllerTestCase
 {
     public $request;
     public $sut;
@@ -19,7 +21,6 @@ class AbstractBusinessTypeControllerTest extends AbstractLvaControllerTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->mockController(AbstractBusinessTypeController::class);
     }
 

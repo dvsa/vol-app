@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data\Search;
 
 use Common\Service\Data\Search\SearchTypeManager;
@@ -9,7 +11,7 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
-class SearchTypeManagerFactoryTest extends TestCase
+final class SearchTypeManagerFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {

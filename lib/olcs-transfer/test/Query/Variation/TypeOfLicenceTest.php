@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Variation;
 
 use Dvsa\Olcs\Transfer\Query\Variation\TypeOfLicence;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Variation\TypeOfLicence;
 /**
  * Type of licence test
  */
-class TypeOfLicenceTest extends \PHPUnit\Framework\TestCase
+final class TypeOfLicenceTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

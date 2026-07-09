@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa;
 
 use Common\Service\Qa\DateNotInPastValidator;
@@ -13,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class DateSelectTest extends MockeryTestCase
+final class DateSelectTest extends MockeryTestCase
 {
     private $dateSelect;
 
@@ -41,9 +43,7 @@ class DateSelectTest extends MockeryTestCase
         $this->dateSelect->setValue($value);
     }
 
-    /**
-     * @dataProvider dpSetValueWithOther
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSetValueWithOther')]
     public function testSetValueWithOther($value): void
     {
         $this->dateSelect->shouldReceive('callParentSetValue')
@@ -58,7 +58,7 @@ class DateSelectTest extends MockeryTestCase
      *
      * @psalm-return list{list{array{key1: 'value1', key2: 'value2'}}, list{431}, list{true}}
      */
-    public function dpSetValueWithOther(): array
+    public static function dpSetValueWithOther(): array
     {
         return [
             [

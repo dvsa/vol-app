@@ -11,7 +11,7 @@ use Laminas\I18n\Translator\Translator;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 
-class TranslatorDelegatorFactoryTest extends TestCase
+final class TranslatorDelegatorFactoryTest extends TestCase
 {
     public function testWrapsTranslatorWithReplacementsLoadedFromRemoteLoader(): void
     {
@@ -32,24 +32,28 @@ class TranslatorDelegatorFactoryTest extends TestCase
             }
         };
 
-        $loaderPluginManager = $this->createMock(LoaderPluginManager::class);
-        $loaderPluginManager->method('get')->with('CustomLoader')->willReturn($loader);
+        $loaderPluginManager = $this->createStub(LoaderPluginManager::class);
+        $loaderPluginManager->method('get')->willReturnMap([
+            ['CustomLoader', $loader],
+        ]);
 
-        $translator = $this->createMock(Translator::class);
+        $translator = $this->createStub(Translator::class);
         $translator->method('getPluginManager')->willReturn($loaderPluginManager);
         $translator->method('translate')->willReturn('with {{token}} inside');
 
-        $container = $this->createMock(ServiceManager::class);
-        $container->method('get')->with('Config')->willReturn([
-            'translator' => [
-                'remote_translation' => [['type' => 'CustomLoader']],
-            ],
+        $container = $this->createStub(ServiceManager::class);
+        $container->method('get')->willReturnMap([
+            ['Config', [
+                'translator' => [
+                    'remote_translation' => [['type' => 'CustomLoader']],
+                ],
+            ]],
         ]);
 
         $factory = new TranslatorDelegatorFactory();
         $result = $factory($container, 'translator', fn() => $translator);
 
         $this->assertInstanceOf(TranslatorDelegator::class, $result);
-        $this->assertEquals('with value inside', $result->translate('any'));
+        $this->assertSame('with value inside', $result->translate('any'));
     }
 }

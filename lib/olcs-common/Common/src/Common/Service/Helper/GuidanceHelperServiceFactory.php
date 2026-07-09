@@ -13,7 +13,7 @@ class GuidanceHelperServiceFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): GuidanceHelperService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): GuidanceHelperService
     {
         return new GuidanceHelperService(
             $container->get('ViewHelperManager')->get('placeholder')

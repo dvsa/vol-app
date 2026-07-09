@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Router;
 
 use Dvsa\Olcs\Transfer\Router\RouteConfig;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Transfer\Router\RouteConfig;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class RouteConfigTest extends \PHPUnit\Framework\TestCase
+final class RouteConfigTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetSingleConfig()
     {

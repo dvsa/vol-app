@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Utils\View\Helper;
 
 use Dvsa\Olcs\Utils\Enum\AssetPathCacheBustingStrategy;
 use Dvsa\Olcs\Utils\View\Helper\AssetPath;
 use PHPUnit\Framework\TestCase;
 
-class AssetPathTest extends TestCase
+final class AssetPathTest extends TestCase
 {
     public function testCacheBustingStrategyNone()
     {

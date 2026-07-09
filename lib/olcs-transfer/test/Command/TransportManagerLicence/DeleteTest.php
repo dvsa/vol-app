@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\TransportManagerLicence;
 
 use Dvsa\Olcs\Transfer\Command\TransportManagerLicence\Delete;
 
-class DeleteTest extends \PHPUnit\Framework\TestCase
+final class DeleteTest extends \PHPUnit\Framework\TestCase
 {
     public function testSetYesNo(): void
     {

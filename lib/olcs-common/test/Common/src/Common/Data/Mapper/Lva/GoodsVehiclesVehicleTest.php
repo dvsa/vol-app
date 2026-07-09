@@ -7,6 +7,8 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Lva;
 
 use Common\Data\Mapper\Lva\GoodsVehiclesVehicle;
@@ -21,7 +23,7 @@ use Laminas\Form\FormInterface;
  * @author Rob Caiger <rob@clocal.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class GoodsVehiclesVehicleTest extends MockeryTestCase
+final class GoodsVehiclesVehicleTest extends MockeryTestCase
 {
     public function testMapFromResult(): void
     {
@@ -103,6 +105,6 @@ class GoodsVehiclesVehicleTest extends MockeryTestCase
             ->once()
             ->getMock();
 
-        static::assertEquals($expected, GoodsVehiclesVehicle::mapFromErrors($errors, $mockForm));
+        $this->assertEquals($expected, GoodsVehiclesVehicle::mapFromErrors($errors, $mockForm));
     }
 }

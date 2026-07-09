@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Type;
 
 use Common\Service\Table\TableBuilder;
@@ -10,7 +12,7 @@ use Common\Service\Table\Type\OperatingCentreVariationRecordAction;
 /**
  * @covers Common\Service\Table\Type\OperatingCentreVariationRecordAction
  */
-class OperatingCentreVariationRecordActionTest extends MockeryTestCase
+final class OperatingCentreVariationRecordActionTest extends MockeryTestCase
 {
     /** @var  OperatingCentreVariationRecordAction */
     protected $sut;

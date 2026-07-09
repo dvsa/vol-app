@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Password Callback Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
+declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Auth\Service\Auth\Callback;
 
@@ -15,7 +11,7 @@ use Dvsa\Olcs\Auth\Service\Auth\Callback\PasswordCallback;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class PasswordCallbackTest extends \PHPUnit\Framework\TestCase
+final class PasswordCallbackTest extends \PHPUnit\Framework\TestCase
 {
     public function testCallback(): void
     {

@@ -6,6 +6,8 @@
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\ConstrainedCountriesList;
@@ -13,7 +15,7 @@ use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class ConstrainedCountriesListTest extends MockeryTestCase
+final class ConstrainedCountriesListTest extends MockeryTestCase
 {
     public $sut;
     protected $translator;

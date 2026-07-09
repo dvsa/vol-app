@@ -18,7 +18,7 @@ class SystemInfoMessagesFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SystemInfoMessages
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SystemInfoMessages
     {
         /** @var \Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder $annotationBuilder */
         $annotationBuilder = $container->get('TransferAnnotationBuilder');

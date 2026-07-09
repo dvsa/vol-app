@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Helper;
 
 use Common\Service\Helper\ResponseHelperService;
@@ -10,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @covers Common\Service\Helper\ResponseHelperService
  */
-class ResponseHelperServiceTest extends MockeryTestCase
+final class ResponseHelperServiceTest extends MockeryTestCase
 {
     /** @var  ResponseHelperService */
     protected $sut;
@@ -61,6 +63,6 @@ class ResponseHelperServiceTest extends MockeryTestCase
 
         $result = $this->sut->tableToCsv($response, $table, 'foo');
 
-        static::assertSame($response, $result);
+        $this->assertSame($response, $result);
     }
 }

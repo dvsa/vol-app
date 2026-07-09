@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\RefData;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @see EbsrDocumentStatus
  */
-class EbsrDocumentStatusTest extends MockeryTestCase
+final class EbsrDocumentStatusTest extends MockeryTestCase
 {
     protected $viewHelperManager;
 
@@ -34,12 +36,12 @@ class EbsrDocumentStatusTest extends MockeryTestCase
     /**
      * Tests format
      *
-     * @dataProvider dataProviderFormat
      *
      * @param string $ebsrStatus
      * @param string $colour
      * @param string $label
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderFormat')]
     public function testFormat($ebsrStatus, $colour, $label): void
     {
         $statusLabel = 'status label';
@@ -70,16 +72,14 @@ class EbsrDocumentStatusTest extends MockeryTestCase
     /**
      * Data provider for testFormat
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function dataProviderFormat()
+    public static function dataProviderFormat(): \Iterator
     {
-        return [
-            [RefData::EBSR_STATUS_PROCESSING, 'orange', 'Processing'],
-            [RefData::EBSR_STATUS_VALIDATING, 'orange', 'Processing'],
-            [RefData::EBSR_STATUS_SUBMITTED, 'orange', 'Processing'],
-            [RefData::EBSR_STATUS_PROCESSED, 'green', 'Successful'],
-            [RefData::EBSR_STATUS_FAILED, 'red', 'Failed'],
-        ];
+        yield [RefData::EBSR_STATUS_PROCESSING, 'orange', 'Processing'];
+        yield [RefData::EBSR_STATUS_VALIDATING, 'orange', 'Processing'];
+        yield [RefData::EBSR_STATUS_SUBMITTED, 'orange', 'Processing'];
+        yield [RefData::EBSR_STATUS_PROCESSED, 'green', 'Successful'];
+        yield [RefData::EBSR_STATUS_FAILED, 'red', 'Failed'];
     }
 }

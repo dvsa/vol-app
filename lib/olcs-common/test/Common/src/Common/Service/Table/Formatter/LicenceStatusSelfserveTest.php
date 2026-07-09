@@ -10,7 +10,7 @@ use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class LicenceStatusSelfserveTest extends MockeryTestCase
+final class LicenceStatusSelfserveTest extends MockeryTestCase
 {
     protected $translator;
 
@@ -32,10 +32,10 @@ class LicenceStatusSelfserveTest extends MockeryTestCase
     /**
      * Test format
      *
-     * @dataProvider provider
      * @param array $data
      * @param string $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $expected): void
     {
         $this->translator->shouldReceive('translate')->andReturnUsing(
@@ -48,180 +48,178 @@ class LicenceStatusSelfserveTest extends MockeryTestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'Valid' => [
-                [
-                    'status' => [
-                        'id' => RefData::LICENCE_STATUS_VALID,
-                        'description' => 'Valid'
-                    ],
+        yield 'Valid' => [
+            [
+                'status' => [
+                    'id' => RefData::LICENCE_STATUS_VALID,
+                    'description' => 'Valid'
                 ],
-                '<span class="govuk-tag govuk-tag--green">TRANSLATED_Valid</span>',
             ],
-            'Suspended' => [
-                [
-                    'status' => [
-                        'id' => RefData::LICENCE_STATUS_SUSPENDED,
-                        'description' => 'Suspended'
-                    ],
+            '<span class="govuk-tag govuk-tag--green">TRANSLATED_Valid</span>',
+        ];
+        yield 'Suspended' => [
+            [
+                'status' => [
+                    'id' => RefData::LICENCE_STATUS_SUSPENDED,
+                    'description' => 'Suspended'
                 ],
-                '<span class="govuk-tag govuk-tag--orange">TRANSLATED_Suspended</span>',
             ],
-            'Curtailed' => [
-                [
-                    'status' => [
-                        'id' => RefData::LICENCE_STATUS_CURTAILED,
-                        'description' => 'Curtailed'
-                    ],
+            '<span class="govuk-tag govuk-tag--orange">TRANSLATED_Suspended</span>',
+        ];
+        yield 'Curtailed' => [
+            [
+                'status' => [
+                    'id' => RefData::LICENCE_STATUS_CURTAILED,
+                    'description' => 'Curtailed'
                 ],
-                '<span class="govuk-tag govuk-tag--orange">TRANSLATED_Curtailed</span>',
             ],
-            'Under consideration' => [
-                [
-                    'status' => [
-                        'id' => RefData::LICENCE_STATUS_UNDER_CONSIDERATION,
-                        'description' => 'Under consideration'
-                    ],
+            '<span class="govuk-tag govuk-tag--orange">TRANSLATED_Curtailed</span>',
+        ];
+        yield 'Under consideration' => [
+            [
+                'status' => [
+                    'id' => RefData::LICENCE_STATUS_UNDER_CONSIDERATION,
+                    'description' => 'Under consideration'
                 ],
-                '<span class="govuk-tag govuk-tag--orange">TRANSLATED_Under consideration</span>',
             ],
-            'Granted' => [
-                [
-                    'status' => [
-                        'id' => RefData::LICENCE_STATUS_GRANTED,
-                        'description' => 'Granted'
-                    ],
+            '<span class="govuk-tag govuk-tag--orange">TRANSLATED_Under consideration</span>',
+        ];
+        yield 'Granted' => [
+            [
+                'status' => [
+                    'id' => RefData::LICENCE_STATUS_GRANTED,
+                    'description' => 'Granted'
                 ],
-                '<span class="govuk-tag govuk-tag--orange">TRANSLATED_Granted</span>',
             ],
-            'Surrender under consideration' => [
-                [
-                    'status' => [
-                        'id' => RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION,
-                        'description' => 'Surrender under consideration'
-                    ],
+            '<span class="govuk-tag govuk-tag--orange">TRANSLATED_Granted</span>',
+        ];
+        yield 'Surrender under consideration' => [
+            [
+                'status' => [
+                    'id' => RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION,
+                    'description' => 'Surrender under consideration'
                 ],
-                '<span class="govuk-tag govuk-tag--green">TRANSLATED_Surrender under consideration</span>',
             ],
-            'Surrendered' => [
-                [
-                    'status' => [
-                        'id' => RefData::LICENCE_STATUS_SURRENDERED,
-                        'description' => 'Surrendered'
-                    ],
+            '<span class="govuk-tag govuk-tag--green">TRANSLATED_Surrender under consideration</span>',
+        ];
+        yield 'Surrendered' => [
+            [
+                'status' => [
+                    'id' => RefData::LICENCE_STATUS_SURRENDERED,
+                    'description' => 'Surrendered'
                 ],
-                '<span class="govuk-tag govuk-tag--red">TRANSLATED_Surrendered</span>',
             ],
-            'Revoked' => [
-                [
-                    'status' => [
-                        'id' => RefData::LICENCE_STATUS_REVOKED,
-                        'description' => 'Revoked'
-                    ],
-                    'licNo' => 'OB123',
-                    'id' => 2
+            '<span class="govuk-tag govuk-tag--red">TRANSLATED_Surrendered</span>',
+        ];
+        yield 'Revoked' => [
+            [
+                'status' => [
+                    'id' => RefData::LICENCE_STATUS_REVOKED,
+                    'description' => 'Revoked'
                 ],
-                '<span class="govuk-tag govuk-tag--red">TRANSLATED_Revoked</span>',
+                'licNo' => 'OB123',
+                'id' => 2
             ],
-            'Terminated' => [
-                [
-                    'status' => [
-                        'id' => RefData::LICENCE_STATUS_TERMINATED,
-                        'description' => 'Terminated'
-                    ],
+            '<span class="govuk-tag govuk-tag--red">TRANSLATED_Revoked</span>',
+        ];
+        yield 'Terminated' => [
+            [
+                'status' => [
+                    'id' => RefData::LICENCE_STATUS_TERMINATED,
+                    'description' => 'Terminated'
                 ],
-                '<span class="govuk-tag govuk-tag--red">TRANSLATED_Terminated</span>',
             ],
-            'CNS' => [
-                [
-                    'status' => [
-                        'id' => RefData::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT,
-                        'description' => 'CNS'
-                    ],
+            '<span class="govuk-tag govuk-tag--red">TRANSLATED_Terminated</span>',
+        ];
+        yield 'CNS' => [
+            [
+                'status' => [
+                    'id' => RefData::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT,
+                    'description' => 'CNS'
                 ],
-                '<span class="govuk-tag govuk-tag--red">TRANSLATED_CNS</span>',
             ],
-            'Withdrawn' => [
-                [
-                    'status' => [
-                        'id' => RefData::LICENCE_STATUS_WITHDRAWN,
-                        'description' => 'Withdrawn'
-                    ],
+            '<span class="govuk-tag govuk-tag--red">TRANSLATED_CNS</span>',
+        ];
+        yield 'Withdrawn' => [
+            [
+                'status' => [
+                    'id' => RefData::LICENCE_STATUS_WITHDRAWN,
+                    'description' => 'Withdrawn'
                 ],
-                '<span class="govuk-tag govuk-tag--red">TRANSLATED_Withdrawn</span>',
             ],
-            'Refused' => [
-                [
-                    'status' => [
-                        'id' => RefData::LICENCE_STATUS_REFUSED,
-                        'description' => 'Refused'
-                    ],
+            '<span class="govuk-tag govuk-tag--red">TRANSLATED_Withdrawn</span>',
+        ];
+        yield 'Refused' => [
+            [
+                'status' => [
+                    'id' => RefData::LICENCE_STATUS_REFUSED,
+                    'description' => 'Refused'
                 ],
-                '<span class="govuk-tag govuk-tag--red">TRANSLATED_Refused</span>',
             ],
-            'Not taken up' => [
-                [
-                    'status' => [
-                        'id' => RefData::LICENCE_STATUS_NOT_TAKEN_UP,
-                        'description' => 'Not taken up'
-                    ],
-                    'licNo' => 'OB123',
-                    'id' => 2
+            '<span class="govuk-tag govuk-tag--red">TRANSLATED_Refused</span>',
+        ];
+        yield 'Not taken up' => [
+            [
+                'status' => [
+                    'id' => RefData::LICENCE_STATUS_NOT_TAKEN_UP,
+                    'description' => 'Not taken up'
                 ],
-                '<span class="govuk-tag govuk-tag--red">TRANSLATED_Not taken up</span>',
+                'licNo' => 'OB123',
+                'id' => 2
             ],
-            'Cancelled' => [
-                [
-                    'status' => [
-                        'id' => RefData::LICENCE_STATUS_CANCELLED,
-                        'description' => 'Cancelled'
-                    ],
+            '<span class="govuk-tag govuk-tag--red">TRANSLATED_Not taken up</span>',
+        ];
+        yield 'Cancelled' => [
+            [
+                'status' => [
+                    'id' => RefData::LICENCE_STATUS_CANCELLED,
+                    'description' => 'Cancelled'
                 ],
-                '<span class="govuk-tag govuk-tag--grey">TRANSLATED_Cancelled</span>',
             ],
-            'Unknown' => [
-                [
-                    'status' => [
-                        'id' => 'unknown',
-                        'description' => 'Unknown'
-                    ],
+            '<span class="govuk-tag govuk-tag--grey">TRANSLATED_Cancelled</span>',
+        ];
+        yield 'Unknown' => [
+            [
+                'status' => [
+                    'id' => 'unknown',
+                    'description' => 'Unknown'
                 ],
-                '<span class="govuk-tag govuk-tag--grey">TRANSLATED_Unknown</span>',
             ],
-            'Expired' => [
-                [
-                    'status' => [
-                        'id' => 'unknown',
-                        'description' => 'Unknown'
-                    ],
-                    'isExpired' => true,
+            '<span class="govuk-tag govuk-tag--grey">TRANSLATED_Unknown</span>',
+        ];
+        yield 'Expired' => [
+            [
+                'status' => [
+                    'id' => 'unknown',
+                    'description' => 'Unknown'
                 ],
-                '<span class="govuk-tag govuk-tag--red">TRANSLATED_licence.status.expired</span>',
+                'isExpired' => true,
             ],
-            'Expiring' => [
-                [
-                    'status' => [
-                        'id' => 'unknown',
-                        'description' => 'Unknown'
-                    ],
-                    'isExpiring' => true,
+            '<span class="govuk-tag govuk-tag--red">TRANSLATED_licence.status.expired</span>',
+        ];
+        yield 'Expiring' => [
+            [
+                'status' => [
+                    'id' => 'unknown',
+                    'description' => 'Unknown'
                 ],
-                '<span class="govuk-tag govuk-tag--red">TRANSLATED_licence.status.expiring</span>',
+                'isExpiring' => true,
             ],
-            'Expiring but Surrendered' => [
-                [
-                    'status' => [
-                        'id' => RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION,
-                        'description' => 'Surrender under consideration'
-                    ],
-                    'isExpiring' => true,
+            '<span class="govuk-tag govuk-tag--red">TRANSLATED_licence.status.expiring</span>',
+        ];
+        yield 'Expiring but Surrendered' => [
+            [
+                'status' => [
+                    'id' => RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION,
+                    'description' => 'Surrender under consideration'
                 ],
-                '<span class="govuk-tag govuk-tag--green">TRANSLATED_Surrender under consideration</span>',
+                'isExpiring' => true,
             ],
+            '<span class="govuk-tag govuk-tag--green">TRANSLATED_Surrender under consideration</span>',
         ];
     }
 }

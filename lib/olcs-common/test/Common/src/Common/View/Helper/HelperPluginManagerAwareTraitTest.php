@@ -9,11 +9,13 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-class HelperPluginManagerAwareTraitTest extends MockeryTestCase
+final class HelperPluginManagerAwareTraitTest extends MockeryTestCase
 {
     public function testTrait(): void
     {
-        $trait = $this->getMockForTrait(\Common\View\Helper\PluginManagerAwareTrait::class);
+        $trait = new class {
+            use \Common\View\Helper\PluginManagerAwareTrait;
+        };
 
         $viewHelperManager = new HelperPluginManager(m::mock(ContainerInterface::class));
 

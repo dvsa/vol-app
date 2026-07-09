@@ -13,7 +13,7 @@ class SearchPeopleRecordFactory implements FactoryInterface
      * @param  array|null         $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchPeopleRecord
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SearchPeopleRecord
     {
         $authService = $container->get(AuthorizationService::class);
         $urlHelper = $container->get('Helper\Url');

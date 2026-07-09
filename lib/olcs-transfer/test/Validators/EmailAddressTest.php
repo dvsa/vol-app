@@ -6,6 +6,8 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\EmailAddress;
@@ -15,7 +17,7 @@ use Dvsa\Olcs\Transfer\Validators\EmailAddress;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class EmailAddressTest extends \PHPUnit\Framework\TestCase
+final class EmailAddressTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 
@@ -24,86 +26,82 @@ class EmailAddressTest extends \PHPUnit\Framework\TestCase
         $this->sut = new EmailAddress();
     }
 
-    /**
-     * @dataProvider isValidProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($value, $expected)
     {
         $this->assertEquals($expected, $this->sut->isValid($value));
     }
 
-    public function isValidProvider()
+    public static function isValidProvider(): \Iterator
     {
-        return [
-            [
-                #0
-                '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@' .
-                '123456789012345678901234567890123456789012345678901234567890.com',
-                true
-            ],
-            [
-                #1
-                'valid@email.com',
-                true
-            ],
-            [
-                #2
-                // total length greater than 254
-                '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@' .
-                '123456789012345678901234567890123456789012345678901234567890.' .
-                '123456789012345678901234567890123456789012345678901234567890.' .
-                '123456789012345678901234567890123456789012345678901234567890.com',
-                false
-            ],
-            [
-                #3
-                // domain parts max greater than 63 chars
-                '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890' .
-                '@1234567890123456789012345678901234567890123456789012345678901234.com',
-                false
-            ],
-            [
-                #4
-                '1234567890123456789012345678901234567890123456789012345678901',
-                false
-            ],
-            [
-                #5
-                // custom additional valid Top Level Domain
-                '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@' .
-                '123456789012345678901234567890123456789012345678901234567890.ltd',
-                true
-            ],
-            [
-                #6
-                // custom additional valid Top Level Domain
-                'valid@email.ltd',
-                true
-            ],
-            [
-                #7
-                // custom additional valid Top Level Domain
-                // total length greater than 254
-                '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@' .
-                '123456789012345678901234567890123456789012345678901234567890.' .
-                '123456789012345678901234567890123456789012345678901234567890.' .
-                '123456789012345678901234567890123456789012345678901234567890.ltd',
-                false
-            ],
-            [
-                #8
-                // custom additional valid Top Level Domain
-                // domain parts max greater than 63 chars
-                '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890' .
-                '@1234567890123456789012345678901234567890123456789012345678901234.ltd',
-                false
-            ],
-            [
-                #9
-                // invalid Top Level Domain
-                'valid@email.ppp',
-                false
-            ],
+        yield [
+            #0
+            '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@' .
+            '123456789012345678901234567890123456789012345678901234567890.com',
+            true
+        ];
+        yield [
+            #1
+            'valid@email.com',
+            true
+        ];
+        yield [
+            #2
+            // total length greater than 254
+            '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@' .
+            '123456789012345678901234567890123456789012345678901234567890.' .
+            '123456789012345678901234567890123456789012345678901234567890.' .
+            '123456789012345678901234567890123456789012345678901234567890.com',
+            false
+        ];
+        yield [
+            #3
+            // domain parts max greater than 63 chars
+            '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890' .
+            '@1234567890123456789012345678901234567890123456789012345678901234.com',
+            false
+        ];
+        yield [
+            #4
+            '1234567890123456789012345678901234567890123456789012345678901',
+            false
+        ];
+        yield [
+            #5
+            // custom additional valid Top Level Domain
+            '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@' .
+            '123456789012345678901234567890123456789012345678901234567890.ltd',
+            true
+        ];
+        yield [
+            #6
+            // custom additional valid Top Level Domain
+            'valid@email.ltd',
+            true
+        ];
+        yield [
+            #7
+            // custom additional valid Top Level Domain
+            // total length greater than 254
+            '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@' .
+            '123456789012345678901234567890123456789012345678901234567890.' .
+            '123456789012345678901234567890123456789012345678901234567890.' .
+            '123456789012345678901234567890123456789012345678901234567890.ltd',
+            false
+        ];
+        yield [
+            #8
+            // custom additional valid Top Level Domain
+            // domain parts max greater than 63 chars
+            '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890' .
+            '@1234567890123456789012345678901234567890123456789012345678901234.ltd',
+            false
+        ];
+        yield [
+            #9
+            // invalid Top Level Domain
+            'valid@email.ppp',
+            false
         ];
     }
 }

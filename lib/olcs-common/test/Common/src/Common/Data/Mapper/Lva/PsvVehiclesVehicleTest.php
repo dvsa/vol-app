@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Lva;
 
 use Common\Data\Mapper\Lva\PsvVehiclesVehicle;
@@ -19,7 +21,7 @@ use Laminas\Form\Form;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class PsvVehiclesVehicleTest extends MockeryTestCase
+final class PsvVehiclesVehicleTest extends MockeryTestCase
 {
     public function testMapFromResult(): void
     {

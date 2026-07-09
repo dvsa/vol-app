@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\RefData;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @covers Common\Service\Table\Formatter\TransportManagerName
  */
-class TransportManagerNameTest extends MockeryTestCase
+final class TransportManagerNameTest extends MockeryTestCase
 {
     protected $urlHelper;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Common\RefData;
@@ -10,7 +12,7 @@ use Common\FormService\Form\Lva\Addresses;
 /**
  * @covers Common\FormService\Form\Lva\Addresses
  */
-class AddressesTest extends MockeryTestCase
+final class AddressesTest extends MockeryTestCase
 {
     /** @var  Addresses */
     protected $sut;

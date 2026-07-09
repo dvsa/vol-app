@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper;
 
 use Common\Form\Elements\InputFilters\ActionLink;
@@ -26,11 +28,12 @@ use Laminas\View\HelperPluginManager;
 use Laminas\View\Renderer\JsonRenderer;
 use Laminas\Form\View\Helper;
 
-class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
+final class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
 {
-    protected const A_HINT = 'A HINT';
+    protected const string A_HINT = 'A HINT';
 
-    protected const A_CUSTOM_CSS_CLASS = 'A_CSS_CLASS';
+    protected const string A_CUSTOM_CSS_CLASS = 'A_CSS_CLASS';
 
     /**
      * @var \Laminas\Form\Element
@@ -300,12 +303,12 @@ class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $mockTable = $this->getMockBuilder(\Common\Service\Table\TableBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['render'])
+            ->onlyMethods(['render'])
             ->getMock();
 
-        $mockTable->expects($this->any())
+        $mockTable
             ->method('render')
-            ->will($this->returnValue('<table></table>'));
+            ->willReturn('<table></table>');
 
         $this->element->setTable($mockTable);
 
@@ -328,7 +331,7 @@ class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $markup = $viewHelper($this->element, 'formCollection', '/');
 
-        $this->assertEquals(
+        $this->assertSame(
             '<div class="label">&lt;ABC&gt;</div><div class="hint">Hint</div>',
             $markup
         );
@@ -345,7 +348,7 @@ class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $markup = $viewHelper($this->element, 'formCollection', '/');
 
-        $this->assertEquals(
+        $this->assertSame(
             '<div class="label">ABC</div>',
             $markup
         );
@@ -362,7 +365,7 @@ class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $markup = $viewHelper($this->element, 'formCollection', '/');
 
-        $this->assertEquals(
+        $this->assertSame(
             '<p class="hint">Hint</p><div class="label">ABC</div>',
             $markup
         );
@@ -453,7 +456,7 @@ class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
             . '</label>'
             . '<p class="attach-action__hint">Hint</p></li></ul>';
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $markup
         );
@@ -475,7 +478,7 @@ class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
             . '</label>'
             . '<p class="attach-action__hint">Hint</p></li></ul>';
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $markup
         );
@@ -496,9 +499,7 @@ class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
         );
     }
 
-    /**
-     * @depends testRenderHintBelow
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testRenderHintBelow')]
     public function testRenderAddsCustomHintClassToHintsThatArePositionedBelowAnElement(): void
     {
         // Setup
@@ -522,9 +523,7 @@ class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
         );
     }
 
-    /**
-     * @depends testRenderAddsCustomHintClassToHintsThatArePositionedBelowAnElement
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testRenderAddsCustomHintClassToHintsThatArePositionedBelowAnElement')]
     public function testRenderAddsCustomBelowHintClassToHintsThatArePositionedBelowAnElement(): void
     {
         // Setup
