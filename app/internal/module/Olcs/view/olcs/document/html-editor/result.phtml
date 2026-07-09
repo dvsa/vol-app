@@ -1,0 +1,104 @@
+<h1 class="govuk-heading-l">Editor.js JSON Output</h1>
+
+<div class="govuk-inset-text">
+    <p>This is the JSON output from Editor.js. We would use this to render a PDF letter, perhaps save it to the databases as JSON for later re-use. etc.</p>
+</div>
+
+<div class="json-output">
+    <pre><code><?php echo htmlspecialchars(json_encode(json_decode($editorData), JSON_PRETTY_PRINT)); ?></code></pre>
+</div>
+
+<h2 class="govuk-heading-m">HTML Preview</h2>
+
+<div class="govuk-inset-text">
+    <p>Simple HTML preview of all sections combined:</p>
+</div>
+
+<div class="html-preview">
+    <div id="preview-container"></div>
+</div>
+
+<div class="govuk-button-group">
+    <a href="<?php echo $this->url('html-editor/edit'); ?>" class="govuk-button govuk-button--secondary">Back to Editor</a>
+    <a href="<?php echo $this->url('html-editor'); ?>" class="govuk-button">Start Again</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/paragraph@latest"></script>
+
+
+<script>
+    const editorData = <?php echo $editorData; ?>;
+    const previewContainer = document.getElementById('preview-container');
+
+    function renderEditorJsToHtml(data) {
+        let html = '';
+
+        for (const [sectionName, sectionData] of Object.entries(data)) {
+            html += `<div class="section-preview">`;
+            html += `<h2>${sectionName.charAt(0).toUpperCase() + sectionName.slice(1)} Section</h2>`;
+
+            if (sectionData && sectionData.blocks) {
+                sectionData.blocks.forEach(block => {
+                    switch (block.type) {
+                        case 'header':
+                            const level = block.data.level || 2;
+                            html += `<h${level}>${block.data.text}</h${level}>`;
+                            break;
+                        case 'paragraph':
+                            html += `<p>${block.data.text}</p>`;
+                            break;
+                        case 'list':
+                            const listType = block.data.style === 'ordered' ? 'ol' : 'ul';
+                            html += `<${listType}>`;
+                            block.data.items.forEach(item => {
+                                html += `<li>${item}</li>`;
+                            });
+                            html += `</${listType}>`;
+                            break;
+                        default:
+                            html += `<div>Unsupported block type: ${block.type}</div>`;
+                    }
+                });
+            }
+
+            html += `</div>`;
+            html += `<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">`;
+        }
+
+        return html;
+    }
+
+    previewContainer.innerHTML = renderEditorJsToHtml(editorData);
+</script>
+
+<style>
+    .json-output {
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 15px;
+        margin-bottom: 20px;
+        overflow: auto;
+        max-height: 400px;
+    }
+
+    .json-output pre {
+        margin: 0;
+        white-space: pre-wrap;
+    }
+
+    .html-preview {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 20px;
+        margin-bottom: 30px;
+        background: #fff;
+    }
+
+    .section-preview {
+        margin-bottom: 20px;
+    }
+</style>

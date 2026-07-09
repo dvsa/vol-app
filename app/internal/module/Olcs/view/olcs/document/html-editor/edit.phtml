@@ -1,0 +1,137 @@
+<h1 class="govuk-heading-l">Edit Document Sections</h1>
+
+<div class="govuk-inset-text">
+    <p>This is a proof of concept for in-browser HTML editing using Editor.js. The sections you selected on the previous page will be displayed below for editing.</p>
+</div>
+
+<div id="editorjs-container">
+</div>
+
+<div class="govuk-button-group" style="margin-top: 30px;">
+    <button id="save-button" class="govuk-button">Save and View Result</button>
+</div>
+
+<form id="result-form" method="post" action="<?php echo $this->url('html-editor/result'); ?>">
+    <input type="hidden" name="editor_data" id="editor-data-input">
+</form>
+
+<!-- Load Editor.js and required plugins -->
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@2.26.5/dist/editor.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/header@2.7.0/dist/bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/list@1.8.0/dist/bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/paragraph@2.9.0/dist/bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/table@2.2.2/dist/table.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@2.5.0/dist/bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/checklist@1.5.0/dist/bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const selectedSections = <?php echo json_encode($selectedSections); ?>;
+        const sectionDefaults = <?php echo $sectionDefaults; ?>;
+
+
+        const editors = {};
+        const editorContainer = document.getElementById('editorjs-container');
+
+        selectedSections.forEach(section => {
+            const sectionDiv = document.createElement('div');
+            sectionDiv.className = 'editor-section';
+            sectionDiv.innerHTML = `
+                <h2 class="govuk-heading-m">${section.charAt(0).toUpperCase() + section.slice(1)} Section</h2>
+                <div id="editor-${section}" class="editor-instance"></div>
+                <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+            `;
+            editorContainer.appendChild(sectionDiv);
+
+            editors[section] = new EditorJS({
+                holder: `editor-${section}`,
+                tools: {
+                    header: {
+                        class: Header,
+                        inlineToolbar: true,
+                        config: {
+                            levels: [2, 3, 4],
+                            defaultLevel: 2
+                        }
+                    },
+                    list: {
+                        class: List,
+                        inlineToolbar: true
+                    },
+                    paragraph: {
+                        class: Paragraph,
+                        inlineToolbar: true
+                    },
+                    table: Table,
+                    quote: Quote,
+                    checklist: Checklist
+                },
+                data: sectionDefaults[section] || {},
+                onReady: function() {
+                    const editorElement = document.getElementById(`editor-${section}`);
+                    if (editorElement) {
+                        editorElement.classList.add('show-toolbar');
+                    }
+                }
+            });
+        });
+
+        document.getElementById('save-button').addEventListener('click', async function() {
+            const outputData = {};
+
+            for (const [section, editor] of Object.entries(editors)) {
+                outputData[section] = await editor.save();
+            }
+
+            document.getElementById('editor-data-input').value = JSON.stringify(outputData);
+            document.getElementById('result-form').submit();
+        });
+    });
+</script>
+
+<style>
+    .editor-section {
+        margin-bottom: 20px;
+        width: 75%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .editor-instance {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+
+    .ce-block__content {
+        max-width: 100%;
+    }
+
+    .ce-toolbar__content {
+        max-width: 100%;
+    }
+
+
+    .codex-editor--narrow .ce-toolbar__plus {
+        left: -25px;
+    }
+
+    .codex-editor--narrow .ce-toolbar__actions {
+        right: -25px;
+    }
+
+    .ce-block {
+        padding: 0.4em 0;
+    }
+
+    .editor-instance::before {
+        content: "Select text for formatting options or use the + button to add new blocks";
+        display: block;
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 8px;
+        font-style: italic;
+    }
+</style>
