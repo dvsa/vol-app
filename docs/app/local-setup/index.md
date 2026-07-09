@@ -111,6 +111,25 @@ If you have [nvm](https://github.com/nvm-sh/nvm) installed, use `nvm use` to aut
 
     :::
 
+    :::info Download Remote Database
+
+    The refresh script can download a copy of the DEV or INT database and restore it locally. This requires:
+
+    - VPN connection to the DVSA network
+    - AWS credentials for VOL nonprod
+    - MySQL client tools on your host machine (not just Docker)
+
+    **macOS setup:**
+
+    ```bash
+    brew install mysql-client
+    echo 'export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"' >> ~/.zshrc
+    ```
+
+    The download is ~20GB and requires ~50GB free disk space.
+
+    :::
+
 :::success
 
 All done!
