@@ -17,18 +17,17 @@ use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationBusinessDetailsTest extends MockeryTestCase
+final class ApplicationBusinessDetailsTest extends MockeryTestCase
 {
     use ButtonsAlterations;
 
     protected $sut;
 
-    protected $sm;
-
     protected $fsm;
 
     protected $fh;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();

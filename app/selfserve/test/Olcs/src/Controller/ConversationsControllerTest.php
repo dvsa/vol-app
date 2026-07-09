@@ -32,10 +32,8 @@ use Olcs\Form\Model\Form\Message\Create;
 use Olcs\Form\Model\Form\Message\Reply;
 use ReflectionClass;
 
-class ConversationsControllerTest extends TestCase
+final class ConversationsControllerTest extends TestCase
 {
-    public $mockNiTextTranslationUtil;
-    public $mockAuthService;
     public $mockFlashMessengerHelper;
     public $mockTableFactory;
     public $mockFormHelperService;
@@ -47,10 +45,11 @@ class ConversationsControllerTest extends TestCase
     public $mockFormActions;
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
-        $this->mockNiTextTranslationUtil = m::mock(NiTextTranslation::class)->makePartial();
-        $this->mockAuthService = m::mock(AuthorizationService::class)->makePartial();
+        $mockNiTextTranslationUtil = m::mock(NiTextTranslation::class)->makePartial();
+        $mockAuthService = m::mock(AuthorizationService::class)->makePartial();
         $this->mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class)->makePartial();
         $this->mockTableFactory = m::mock(TableFactory::class)->makePartial();
         $this->mockFormHelperService = m::mock(FormHelperService::class)->makePartial();
@@ -66,8 +65,8 @@ class ConversationsControllerTest extends TestCase
                       ->shouldAllowMockingProtectedMethods();
 
         $reflectionClass = new ReflectionClass(Sut::class);
-        $this->setMockedProperties($reflectionClass, 'niTextTranslationUtil', $this->mockNiTextTranslationUtil);
-        $this->setMockedProperties($reflectionClass, 'authService', $this->mockAuthService);
+        $this->setMockedProperties($reflectionClass, 'niTextTranslationUtil', $mockNiTextTranslationUtil);
+        $this->setMockedProperties($reflectionClass, 'authService', $mockAuthService);
         $this->setMockedProperties($reflectionClass, 'flashMessengerHelper', $this->mockFlashMessengerHelper);
         $this->setMockedProperties($reflectionClass, 'tableFactory', $this->mockTableFactory);
         $this->setMockedProperties($reflectionClass, 'formHelperService', $this->mockFormHelperService);

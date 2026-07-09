@@ -17,7 +17,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Form\Elements\InputFilters\ActionLink;
 use Laminas\Form\Element;
 
-class ApplicationConvictionsPenaltiesTest extends MockeryTestCase
+final class ApplicationConvictionsPenaltiesTest extends MockeryTestCase
 {
     use ButtonsAlterations;
 
@@ -25,8 +25,6 @@ class ApplicationConvictionsPenaltiesTest extends MockeryTestCase
      * @var ApplicationConvictionsPenalties
      */
     protected $sut;
-
-    protected $fh;
 
     protected $formName = 'Lva\ConvictionsPenalties';
 
@@ -36,6 +34,7 @@ class ApplicationConvictionsPenaltiesTest extends MockeryTestCase
 
     private $formHelper;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(FormHelperService::class)->makePartial();

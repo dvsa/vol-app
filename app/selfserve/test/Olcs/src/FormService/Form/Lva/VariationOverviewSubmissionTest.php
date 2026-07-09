@@ -14,7 +14,7 @@ use OlcsTest\FormService\Form\Lva\Stub\VariationOverviewSubmissionStub;
 /**
  * @covers Olcs\FormService\Form\Lva\VariationOverviewSubmission
  */
-class VariationOverviewSubmissionTest extends MockeryTestCase
+final class VariationOverviewSubmissionTest extends MockeryTestCase
 {
     /** @var  VariationOverviewSubmissionStub */
     private $sut;
@@ -24,6 +24,7 @@ class VariationOverviewSubmissionTest extends MockeryTestCase
     /** @var  m\MockInterface | \Common\Service\Helper\FormHelperService */
     private $mockFormHlp;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockForm = m::mock(\Laminas\Form\FormInterface::class);
@@ -75,31 +76,29 @@ class VariationOverviewSubmissionTest extends MockeryTestCase
     }
 
     /**
-     * @return ((int|string)[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(int | string)> | string)>>
      *
      * @psalm-return list{array{section: array{status: 'unit_ExpectedStatus'}, expect: 'variation.overview.submission.desc.notchanged'}, array{section: array{status: 1}, expect: 'variation.overview.submission.desc.req-attention'}, array{section: array{status: 2}, expect: 'variation.overview.submission.desc.must-submit'}}
      */
-    public static function dpTestAlterForm(): array
+    public static function dpTestAlterForm(): \Iterator
     {
-        return [
-            [
-                'section' => [
-                    'status' => 'unit_ExpectedStatus',
-                ],
-                'expect' => 'variation.overview.submission.desc.notchanged',
+        yield [
+            'section' => [
+                'status' => 'unit_ExpectedStatus',
             ],
-            [
-                'section' => [
-                    'status' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION,
-                ],
-                'expect' => 'variation.overview.submission.desc.req-attention',
+            'expect' => 'variation.overview.submission.desc.notchanged',
+        ];
+        yield [
+            'section' => [
+                'status' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION,
             ],
-            [
-                'section' => [
-                    'status' => RefData::VARIATION_STATUS_UPDATED,
-                ],
-                'expect' => 'variation.overview.submission.desc.must-submit',
+            'expect' => 'variation.overview.submission.desc.req-attention',
+        ];
+        yield [
+            'section' => [
+                'status' => RefData::VARIATION_STATUS_UPDATED,
             ],
+            'expect' => 'variation.overview.submission.desc.must-submit',
         ];
     }
 

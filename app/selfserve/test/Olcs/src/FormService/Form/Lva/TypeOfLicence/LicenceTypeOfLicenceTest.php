@@ -17,7 +17,7 @@ use Common\RefData;
 use Common\Form\Elements\InputFilters\Lva\BackToLicenceActionLink;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class LicenceTypeOfLicenceTest extends MockeryTestCase
+final class LicenceTypeOfLicenceTest extends MockeryTestCase
 {
     /**
      * @var LicenceTypeOfLicence
@@ -28,6 +28,7 @@ class LicenceTypeOfLicenceTest extends MockeryTestCase
 
     protected $fsm;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
@@ -69,23 +70,21 @@ class LicenceTypeOfLicenceTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool[]|int|string)[][]
+     * @return \Iterator<(int | string), array<(array<bool> | int | string)>>
      *
      * @psalm-return list{list{array{canUpdateLicenceType: false, canBecomeSpecialRestricted: true}, 'form-actions', 2}, list{array{canUpdateLicenceType: false, canBecomeSpecialRestricted: false}, 'form-actions', 3}}
      */
-    public static function paramsProvider(): array
+    public static function paramsProvider(): \Iterator
     {
-        return [
-            [
-                ['canUpdateLicenceType' => false, 'canBecomeSpecialRestricted' => true],
-                'form-actions',
-                2
-            ],
-            [
-                ['canUpdateLicenceType' => false, 'canBecomeSpecialRestricted' => false],
-                'form-actions',
-                3
-            ],
+        yield [
+            ['canUpdateLicenceType' => false, 'canBecomeSpecialRestricted' => true],
+            'form-actions',
+            2
+        ];
+        yield [
+            ['canUpdateLicenceType' => false, 'canBecomeSpecialRestricted' => false],
+            'form-actions',
+            3
         ];
     }
 

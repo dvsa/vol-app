@@ -24,7 +24,7 @@ class DiscsControllerFactory implements FactoryInterface
      * @return DiscsController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DiscsController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): DiscsController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

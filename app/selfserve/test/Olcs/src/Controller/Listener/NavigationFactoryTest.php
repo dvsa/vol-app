@@ -13,7 +13,7 @@ use Olcs\Controller\Listener\NavigationFactory;
 use Laminas\Navigation\Navigation as LaminasNavigation;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class NavigationFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
+final class NavigationFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     public function testInvoke(): void
     {

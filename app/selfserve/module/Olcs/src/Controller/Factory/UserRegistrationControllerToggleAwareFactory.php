@@ -25,7 +25,7 @@ class UserRegistrationControllerToggleAwareFactory extends BinaryFeatureToggleAw
      * @throws NotFoundExceptionInterface
      */
     #[\Override]
-    protected function createServiceWhenEnabled(ContainerInterface $container, $requestedName, array $options = null)
+    protected function createServiceWhenEnabled(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         return $container->get('ControllerManager')->get(OperatorRegistrationController::class);
     }
@@ -35,7 +35,7 @@ class UserRegistrationControllerToggleAwareFactory extends BinaryFeatureToggleAw
      * @throws NotFoundExceptionInterface
      */
     #[\Override]
-    protected function createServiceWhenDisabled(ContainerInterface $container, $requestedName, array $options = null)
+    protected function createServiceWhenDisabled(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         return $container->get('ControllerManager')->get(UserRegistrationController::class);
     }

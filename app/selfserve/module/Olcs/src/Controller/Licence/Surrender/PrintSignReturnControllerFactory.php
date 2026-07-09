@@ -22,7 +22,7 @@ class PrintSignReturnControllerFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PrintSignReturnController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): PrintSignReturnController
     {
 
         $translationHelper = $container->get(TranslationHelperService::class);

@@ -19,7 +19,7 @@ use Laminas\Mvc\Controller\Plugin\Redirect;
 /**
  * Class SearchControllerTest
  */
-class SearchControllerTest extends TestCase
+final class SearchControllerTest extends TestCase
 {
     /** @var Sut */
     protected $sut;
@@ -27,6 +27,7 @@ class SearchControllerTest extends TestCase
     /** @var m\MockInterface */
     protected $authService;
 
+    #[\Override]
     public function setUp(): void
     {
         $niTextTranslationUtil = m::mock(NiTextTranslation::class);

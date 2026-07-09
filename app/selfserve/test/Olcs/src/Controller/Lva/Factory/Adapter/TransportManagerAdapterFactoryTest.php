@@ -20,11 +20,12 @@ use Olcs\Controller\Lva\Factory\Adapter as AdapterFactory;
  *
  * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
  */
-class TransportManagerAdapterFactoryTest extends MockeryTestCase
+final class TransportManagerAdapterFactoryTest extends MockeryTestCase
 {
     /** @var ContainerInterface|\Mockery\MockInterface */
     protected $container;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->container = m::mock(ContainerInterface::class);
@@ -46,19 +47,13 @@ class TransportManagerAdapterFactoryTest extends MockeryTestCase
     {
         $factory = new AdapterFactory\LicenceTransportManagerAdapterFactory();
 
-        static::assertInstanceOf(
-            Adapters\LicenceTransportManagerAdapter::class,
-            $factory->__invoke($this->container, Adapters\LicenceTransportManagerAdapter::class)
-        );
+        $this->assertInstanceOf(Adapters\LicenceTransportManagerAdapter::class, $factory->__invoke($this->container, Adapters\LicenceTransportManagerAdapter::class));
     }
 
     public function testInvokeVariation(): void
     {
         $factory = new AdapterFactory\VariationTransportManagerAdapterFactory();
 
-        static::assertInstanceOf(
-            Adapters\VariationTransportManagerAdapter::class,
-            $factory->__invoke($this->container, Adapters\VariationTransportManagerAdapter::class)
-        );
+        $this->assertInstanceOf(Adapters\VariationTransportManagerAdapter::class, $factory->__invoke($this->container, Adapters\VariationTransportManagerAdapter::class));
     }
 }

@@ -21,7 +21,7 @@ use Olcs\Service\Processing\CreateVariationProcessingService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateVariationProcessingServiceTest extends MockeryTestCase
+final class CreateVariationProcessingServiceTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -34,6 +34,7 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
     /** @var  m\MockInterface */
     protected $commandService;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(FormHelperService::class);

@@ -13,7 +13,7 @@ use OlcsTest\FormService\Form\Lva\Stub\ApplicationOverviewSubmissionStub;
 /**
  * @covers Olcs\FormService\Form\Lva\ApplicationOverviewSubmission
  */
-class ApplicationOverviewSubmissionTest extends MockeryTestCase
+final class ApplicationOverviewSubmissionTest extends MockeryTestCase
 {
     /** @var  ApplicationOverviewSubmissionStub */
     private $sut;
@@ -23,6 +23,7 @@ class ApplicationOverviewSubmissionTest extends MockeryTestCase
     /** @var  m\MockInterface | \Common\Service\Helper\FormHelperService */
     private $mockFormHlp;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockForm = m::mock(\Laminas\Form\FormInterface::class);
