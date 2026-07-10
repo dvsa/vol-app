@@ -32,7 +32,6 @@ data "aws_iam_policy_document" "classify_document_lambda" {
     sid = "S3ReadDocuments"
     actions = [
       "s3:GetObject",
-      "s3:HeadObject",
     ]
     resources = [
       data.aws_s3_bucket.documents.arn,
@@ -83,12 +82,12 @@ data "aws_iam_policy_document" "classification_sm" {
     ]
   }
 
-  # HeadObject (IsSupportedContentType), GetObjectTagging + PutObjectTagging
+  # GetObject (IsSupportedContentType), GetObjectTagging + PutObjectTagging
   # (BuildUpdatedTagSet / TagWithClassification).
   statement {
     sid = "S3DocumentOperations"
     actions = [
-      "s3:HeadObject",
+      "s3:GetObject",
       "s3:GetObjectTagging",
       "s3:PutObjectTagging",
     ]
