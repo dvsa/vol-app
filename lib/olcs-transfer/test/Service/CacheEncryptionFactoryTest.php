@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Service\CacheEncryptionFactory;
 use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Laminas\Cache\Storage\StorageInterface;
+use Psr\Cache\CacheItemPoolInterface;
 
 class CacheEncryptionFactoryTest extends MockeryTestCase
 {
@@ -36,7 +36,7 @@ class CacheEncryptionFactoryTest extends MockeryTestCase
             ],
         ];
 
-        $cache = m::mock(StorageInterface::class);
+        $cache = m::mock(CacheItemPoolInterface::class);
 
         $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('Config')->andReturn($config);

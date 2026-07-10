@@ -14,9 +14,9 @@
     "laminas/laminas-inputfilter": "^2.33",
     "laminas/laminas-form": "^3.21",
     "paragonie/halite": "^5",
+    "psr/cache": "^1.0 || ^2.0 || ^3.0",
+    "symfony/cache": "^5.4 || ^6.4",
     "laminas/laminas-xml": "^1.7.0",
-    "laminas/laminas-cache": "^3.13",
-    "laminas/laminas-cache-storage-adapter-redis": "^2.10",
     "laminas/laminas-router": "^3.14",
     "laminas/laminas-http": "^2.15",
     "psr/container": "^1.1|^2"
