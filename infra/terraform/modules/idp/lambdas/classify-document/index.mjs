@@ -26,17 +26,17 @@ const DOCUMENT_TYPES = [
   {
     key: "BANK_STATEMENT",
     description:
-      "A statement issued by a bank or building society: opening/closing balances, dated debits and credits, a running balance, bank letterhead, (often masked) account number and sort code, and a statement period. Personal or business. NOT a one-off receipt or an internal ledger export.",
+      "A FORMAL periodic statement DOCUMENT issued by a bank or building society, laid out as a designed document page: bank letterhead/branding, an account-holder name and address block, an explicit statement period (e.g. '1 – 31 March 2026'), an opening balance and closing balance presented as summary figures, and dated debits/credits with a running balance between them. Personal or business; paper scan or PDF. The test is FORM, not content: it must read as a document the bank itself produced for a fixed period — something that could have arrived in the post as-is. If the document is a plain table / spreadsheet / CSV-style listing of transactions WITHOUT this formal statement layout, classify it as TRANSACTION_REPORT even if it shows a running balance, an account number, a sort code, or the bank's name and logo.",
   },
   {
     key: "TRANSACTION_REPORT",
     description:
-      "A listing of financial transactions that is NOT a formal bank statement - an accounting-software export, payment-processor settlement report, online-banking download, or card-machine takings report. Tabular (date, description, amount, maybe category/reference); lacks bank letterhead or opening/closing-balance framing, or comes from a third-party platform.",
+      "Any listing or export of financial transactions that is NOT laid out as a formal bank statement document. Includes: accounting-software exports (Xero, Sage, QuickBooks), payment-processor settlement reports (SumUp, Zettle, Stripe, Worldpay), card-machine takings reports, internal ledgers, and ONLINE-BANKING TRANSACTION DOWNLOADS/PRINTOUTS. Typically a raw table (date, description, amount — possibly balance, category, or reference) with no letterhead page design, no account-holder address block, no statement-period header, and no opening/closing-balance summary framing. IMPORTANT: a transaction download or screen printout from a bank's online banking still belongs here — the presence of a bank name, account number, or running-balance column does NOT make it a BANK_STATEMENT unless the full formal statement layout is also present.",
   },
   {
     key: "NEWSPAPER_ADVERT",
     description:
-      "A scanned/photographed newspaper or trade-publication advertisement - the statutory public notice of an operator licence application. Cues: masthead or page furniture, columnar print, a dated publication header, advert body naming the operator and application. May be a clipping.",
+      "A scanned or photographed newspaper or trade-publication advertisement — the statutory public notice of an operator licence application. Cues: masthead or page furniture, columnar print, a dated publication header, advert body naming the operator and the application. May be a cropped clipping.",
   },
 ];
 
