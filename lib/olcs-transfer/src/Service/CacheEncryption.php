@@ -5,8 +5,7 @@ namespace Dvsa\Olcs\Transfer\Service;
 use Dvsa\Olcs\Transfer\Query\QueryContainerInterface;
 use Dvsa\Olcs\Transfer\Query\SystemParameter\SystemParameter;
 use Dvsa\Olcs\Transfer\Query\SystemParameter\SystemParameterList;
-use Laminas\Cache\Storage\Adapter\AdapterOptions;
-use Laminas\Cache\Storage\StorageInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use ParagonIE\Halite\Symmetric\Crypto;
 use ParagonIE\Halite\Symmetric\EncryptionKey;
 use ParagonIE\HiddenString\HiddenString;
@@ -81,7 +80,7 @@ class CacheEncryption
     ];
 
     public function __construct(
-        private readonly StorageInterface $cache,
+        private readonly CacheItemPoolInterface $cache,
         private readonly string $nodeKey,
         private readonly string $sharedKey,
         private readonly string $nodeSuffix
@@ -119,7 +118,7 @@ class CacheEncryption
     public function removeItem(string $cacheKey, string $encryptionMode): bool
     {
         $nodeSuffix = $this->getSuffix($encryptionMode);
-        return $this->cache->removeItem($cacheKey . $nodeSuffix);
+        return $this->cache->deleteItem($cacheKey . $nodeSuffix);
     }
 
     /**
@@ -131,7 +130,7 @@ class CacheEncryption
     {
         $cacheConfig = $this->getCustomCacheConfig($cacheKey);
         $nodeSuffix = $this->getSuffix($cacheConfig['mode']);
-        return $this->cache->removeItem($cacheKey . $uniqueId . $nodeSuffix);
+        return $this->cache->deleteItem($cacheKey . $uniqueId . $nodeSuffix);
     }
 
     /**
@@ -141,7 +140,7 @@ class CacheEncryption
      *
      * @throws \Exception
      */
-    public function removeCustomItems(string $cacheKey, array $uniqueIds): array
+    public function removeCustomItems(string $cacheKey, array $uniqueIds): bool
     {
         if (empty($uniqueIds)) {
             throw new \Exception(self::ERR_NO_IDS_TO_DELETE);
@@ -155,7 +154,7 @@ class CacheEncryption
             $cacheKeys[$uniqueId] = $cacheKey . $uniqueId . $nodeSuffix;
         }
 
-        return $this->cache->removeItems($cacheKeys);
+        return $this->cache->deleteItems(array_values($cacheKeys));
     }
 
     /**
@@ -179,9 +178,11 @@ class CacheEncryption
         }
 
         $nodeSuffix = $this->getSuffix($encryptionMode);
-        $this->setTtlOption($ttl);
+        $item = $this->cache->getItem($cacheKey . $nodeSuffix);
+        $item->set($value);
+        $item->expiresAfter($ttl);
 
-        return $this->cache->setItem($cacheKey . $nodeSuffix, $value);
+        return $this->cache->save($item);
     }
 
     /**
@@ -208,11 +209,13 @@ class CacheEncryption
     public function getItem(string $cacheKey, string $encryptionMode)
     {
         $nodeSuffix = $this->getSuffix($encryptionMode);
-        $cacheValue = $this->cache->getItem($cacheKey . $nodeSuffix);
+        $item = $this->cache->getItem($cacheKey . $nodeSuffix);
 
-        if (is_null($cacheValue)) {
+        if (!$item->isHit()) {
             return null;
         }
+
+        $cacheValue = $item->get();
 
         //if the encryption mode for this query is public then it won't have been encrypted
         if ($encryptionMode !== self::ENCRYPTION_MODE_PUBLIC) {
@@ -236,20 +239,6 @@ class CacheEncryption
     {
         $cacheConfig = $this->getCustomCacheConfig($cacheType);
         return $this->getItem($cacheType . $uniqueId, $cacheConfig['mode']);
-    }
-
-    /**
-     * @note This isn't a great way of going about this, but there isn't a way of doing it on the Laminas client and
-     * would rather not extend it at this stage. By making the method private we make sure only the TTL passed through
-     * when each item is set will be used
-     *
-     * @param int $ttl time in seconds
-     *
-     * @return AdapterOptions
-     */
-    private function setTtlOption(int $ttl): AdapterOptions
-    {
-        return $this->cache->getOptions()->setTtl($ttl);
     }
 
     /**

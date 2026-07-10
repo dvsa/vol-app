@@ -8,8 +8,8 @@ use Dvsa\Olcs\Transfer\Query\QueryContainerInterface;
 use Dvsa\Olcs\Transfer\Service\CacheEncryption;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Laminas\Cache\Storage\Adapter\AdapterOptions;
-use Laminas\Cache\Storage\StorageInterface;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\CacheItemInterface;
 
 final class CacheEncryptionTest extends MockeryTestCase
 {
@@ -27,23 +27,29 @@ final class CacheEncryptionTest extends MockeryTestCase
         $unserialisedValue = new \stdClass();
         $cacheKey = $this->cacheIdentifier . $nodeSuffix;
 
-        $cache = m::mock(StorageInterface::class);
+        $cache = m::mock(CacheItemPoolInterface::class);
 
         // Use a real encrypt cycle to produce a valid ciphertext
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
 
         // First set the item so we capture what the cache would store
         $storedValue = null;
-        $cache->expects('getOptions->setTtl')->with(3600)->andReturn(m::mock(AdapterOptions::class));
-        $cache->expects('setItem')->with($cacheKey, m::on(function ($val) use (&$storedValue) {
+        $setItem = m::mock(CacheItemInterface::class);
+
+        $cache->expects('getItem')->with($cacheKey)->andReturn($setItem);
+        $setItem->expects('set')->with(m::on(function ($val) use (&$storedValue) {
             $storedValue = $val;
             return true;
-        }))->andReturnTrue();
+        }))->andReturnSelf();
+        $setItem->expects('expiresAfter')->with(3600)->andReturnSelf();
+        $cache->expects('save')->with($setItem)->andReturnTrue();
 
         $sut->setItem($this->cacheIdentifier, $encryptionMode, $unserialisedValue);
 
-        // Now test retrieval using the stored ciphertext
-        $cache->expects('getItem')->with($cacheKey)->andReturn($storedValue);
+        $getItem = m::mock(CacheItemInterface::class);
+        $cache->expects('getItem')->with($cacheKey)->andReturn($getItem);
+        $getItem->expects('isHit')->andReturnTrue();
+        $getItem->expects('get')->andReturn($storedValue);
 
         $this->assertEquals($unserialisedValue, $sut->getItem($this->cacheIdentifier, $encryptionMode));
     }
@@ -59,8 +65,12 @@ final class CacheEncryptionTest extends MockeryTestCase
         $uniqueId = 'uniqueid';
         $cacheKey = $identifier . $uniqueId . CacheEncryption::ENCRYPTION_PUBLIC_NODE_SUFFIX;
 
-        $cache = m::mock(StorageInterface::class);
-        $cache->expects('getItem')->with($cacheKey)->andReturn($serialisedValue);
+        $cache = m::mock(CacheItemPoolInterface::class);
+        $item = m::mock(CacheItemInterface::class);
+
+        $cache->expects('getItem')->with($cacheKey)->andReturn($item);
+        $item->expects('isHit')->andReturnTrue();
+        $item->expects('get')->andReturn($serialisedValue);
 
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
 
@@ -71,8 +81,11 @@ final class CacheEncryptionTest extends MockeryTestCase
     {
         $cacheKey = $this->cacheIdentifier . self::NODE_SUFFIX;
 
-        $cache = m::mock(StorageInterface::class);
-        $cache->expects('getItem')->with($cacheKey)->andReturnNull();
+        $cache = m::mock(CacheItemPoolInterface::class);
+        $item = m::mock(CacheItemInterface::class);
+
+        $cache->expects('getItem')->with($cacheKey)->andReturn($item);
+        $item->expects('isHit')->andReturnFalse();
 
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
 
@@ -89,9 +102,13 @@ final class CacheEncryptionTest extends MockeryTestCase
         $cacheKey = $this->cacheIdentifier . $nodeSuffix;
         $ttl = 300;
 
-        $cache = m::mock(StorageInterface::class);
-        $cache->expects('getOptions->setTtl')->with($ttl)->andReturn(m::mock(AdapterOptions::class));
-        $cache->expects('setItem')->with($cacheKey, m::type('string'))->andReturnTrue();
+        $cache = m::mock(CacheItemPoolInterface::class);
+        $item = m::mock(CacheItemInterface::class);
+
+        $cache->expects('getItem')->with($cacheKey)->andReturn($item);
+        $item->expects('set')->with(m::type('string'))->andReturnSelf();
+        $item->expects('expiresAfter')->with($ttl)->andReturnSelf();
+        $cache->expects('save')->with($item)->andReturnTrue();
 
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
 
@@ -114,9 +131,13 @@ final class CacheEncryptionTest extends MockeryTestCase
         $cacheKey = $this->cacheIdentifier . CacheEncryption::ENCRYPTION_PUBLIC_NODE_SUFFIX;
         $ttl = 300;
 
-        $cache = m::mock(StorageInterface::class);
-        $cache->expects('getOptions->setTtl')->with($ttl)->andReturn(m::mock(AdapterOptions::class));
-        $cache->expects('setItem')->with($cacheKey, $serializedValue)->andReturnTrue();
+        $cache = m::mock(CacheItemPoolInterface::class);
+        $item = m::mock(CacheItemInterface::class);
+
+        $cache->expects('getItem')->with($cacheKey)->andReturn($item);
+        $item->expects('set')->with($serializedValue)->andReturnSelf();
+        $item->expects('expiresAfter')->with($ttl)->andReturnSelf();
+        $cache->expects('save')->with($item)->andReturnTrue();
 
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
         $this->assertTrue($sut->setItem($this->cacheIdentifier, CacheEncryption::ENCRYPTION_MODE_PUBLIC, $valueToBeEncrypted, $ttl));
@@ -134,9 +155,13 @@ final class CacheEncryptionTest extends MockeryTestCase
         $uniqueId = 'uniqueid';
         $cacheKey = $identifier . $uniqueId . CacheEncryption::ENCRYPTION_PUBLIC_NODE_SUFFIX;
 
-        $cache = m::mock(StorageInterface::class);
-        $cache->expects('getOptions->setTtl')->with($config['ttl'])->andReturn(m::mock(AdapterOptions::class));
-        $cache->expects('setItem')->with($cacheKey, $serializedValue)->andReturnTrue();
+        $cache = m::mock(CacheItemPoolInterface::class);
+        $item = m::mock(CacheItemInterface::class);
+
+        $cache->expects('getItem')->with($cacheKey)->andReturn($item);
+        $item->expects('set')->with($serializedValue)->andReturnSelf();
+        $item->expects('expiresAfter')->with($config['ttl'])->andReturnSelf();
+        $cache->expects('save')->with($item)->andReturnTrue();
 
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
         $this->assertTrue($sut->setCustomItem($identifier, $valueToBeEncrypted, $uniqueId));
@@ -148,8 +173,8 @@ final class CacheEncryptionTest extends MockeryTestCase
         $uniqueId = 'uniqueid';
         $cacheKey = $identifier . $uniqueId . CacheEncryption::ENCRYPTION_PUBLIC_NODE_SUFFIX;
 
-        $cache = m::mock(StorageInterface::class);
-        $cache->expects('removeItem')->with($cacheKey)->andReturnTrue();
+        $cache = m::mock(CacheItemPoolInterface::class);
+        $cache->expects('deleteItem')->with($cacheKey)->andReturnTrue();
 
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
         $this->assertTrue($sut->removeCustomItem($identifier, $uniqueId));
@@ -166,8 +191,8 @@ final class CacheEncryptionTest extends MockeryTestCase
             'uniqueId3' => $identifier . 'uniqueId3' . CacheEncryption::ENCRYPTION_PUBLIC_NODE_SUFFIX,
         ];
 
-        $cache = m::mock(StorageInterface::class);
-        $cache->expects('removeItems')->with($cacheKeysRemoved)->andReturn([]);
+        $cache = m::mock(CacheItemPoolInterface::class);
+        $cache->expects('deleteItems')->with(array_values($cacheKeysRemoved))->andReturnTrue();
 
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
         $sut->removeCustomItems($identifier, $uniqueIds);
@@ -177,8 +202,10 @@ final class CacheEncryptionTest extends MockeryTestCase
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage(CacheEncryption::ERR_NO_IDS_TO_DELETE);
-        $cache = m::mock(StorageInterface::class);
+
+        $cache = m::mock(CacheItemPoolInterface::class);
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
+        
         $sut->removeCustomItems('cache key', []);
     }
 
@@ -186,7 +213,7 @@ final class CacheEncryptionTest extends MockeryTestCase
     public function testHasItem($hasItem, $encryptionMode, $nodeSuffix): void
     {
         $cacheKey = $this->cacheIdentifier . $nodeSuffix;
-        $cache = m::mock(StorageInterface::class);
+        $cache = m::mock(CacheItemPoolInterface::class);
         $cache->expects('hasItem')->with($cacheKey)->andReturn($hasItem);
 
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
@@ -214,7 +241,7 @@ final class CacheEncryptionTest extends MockeryTestCase
         $uniqueId = 'uniqueid';
         $cacheIdentifier = $identifier . $uniqueId . CacheEncryption::ENCRYPTION_PUBLIC_NODE_SUFFIX;
 
-        $cache = m::mock(StorageInterface::class);
+        $cache = m::mock(CacheItemPoolInterface::class);
         $cache->expects('hasItem')->with($cacheIdentifier)->andReturn($hasItem);
 
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
@@ -232,7 +259,7 @@ final class CacheEncryptionTest extends MockeryTestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('missing config for cache type missing_cache_type');
 
-        $cache = m::mock(StorageInterface::class);
+        $cache = m::mock(CacheItemPoolInterface::class);
 
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
         $sut->hasCustomItem('missing_cache_type', '');
@@ -245,7 +272,7 @@ final class CacheEncryptionTest extends MockeryTestCase
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage(CacheEncryption::ERR_NO_KEY_AVAILABLE);
-        $cache = m::mock(StorageInterface::class);
+        $cache = m::mock(CacheItemPoolInterface::class);
 
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
         $this->assertTrue($sut->setItem($this->cacheIdentifier, 'made up encryption mode', 'value'));
@@ -259,27 +286,33 @@ final class CacheEncryptionTest extends MockeryTestCase
     {
         $originalValue = ['key' => 'value', 'nested' => ['data' => true]];
         $cacheKey = $this->cacheIdentifier . $nodeSuffix;
-
         $storedValue = null;
 
-        $cache = m::mock(StorageInterface::class);
-        $cache->expects('getOptions->setTtl')->with(3600)->andReturn(m::mock(AdapterOptions::class));
-        $cache->expects('setItem')->with($cacheKey, m::on(function ($val) use (&$storedValue) {
+        $cache = m::mock(CacheItemPoolInterface::class);
+        $setItem = m::mock(CacheItemInterface::class);
+
+        $cache->expects('getItem')->with($cacheKey)->andReturn($setItem);
+        $setItem->expects('set')->with(m::on(function ($val) use (&$storedValue) {
             $storedValue = $val;
             return true;
-        }))->andReturnTrue();
+        }))->andReturnSelf();
+        $setItem->expects('expiresAfter')->with(3600)->andReturnSelf();
+        $cache->expects('save')->with($setItem)->andReturnTrue();
 
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
         $sut->setItem($this->cacheIdentifier, $encryptionMode, $originalValue);
 
-        $cache->expects('getItem')->with($cacheKey)->andReturn($storedValue);
+        $getItem = m::mock(CacheItemInterface::class);
+        $cache->expects('getItem')->with($cacheKey)->andReturn($getItem);
+        $getItem->expects('isHit')->andReturnTrue();
+        $getItem->expects('get')->andReturn($storedValue);
 
         $this->assertEquals($originalValue, $sut->getItem($this->cacheIdentifier, $encryptionMode));
     }
 
     public function testGetCustomCacheIdentifierForCqrs(): void
     {
-        $cache = m::mock(StorageInterface::class);
+        $cache = m::mock(CacheItemPoolInterface::class);
         $dto = m::mock(QueryContainerInterface::class);
 
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
@@ -298,7 +331,7 @@ final class CacheEncryptionTest extends MockeryTestCase
 
     public function testGetCustomCacheIdentifierForCqrsWhenNull(): void
     {
-        $cache = m::mock(StorageInterface::class);
+        $cache = m::mock(CacheItemPoolInterface::class);
         $dto = m::mock(QueryContainerInterface::class);
         $dto->expects('getDtoClassName')->andReturn('dto');
 
@@ -308,7 +341,7 @@ final class CacheEncryptionTest extends MockeryTestCase
 
     public function testGetQueryFromCustomIdentifier(): void
     {
-        $cache = m::mock(StorageInterface::class);
+        $cache = m::mock(CacheItemPoolInterface::class);
 
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
         $map = CacheEncryption::QUERY_MAP;
@@ -320,7 +353,7 @@ final class CacheEncryptionTest extends MockeryTestCase
 
     public function testGetQueryFromCustomIdentifierWhenNull(): void
     {
-        $cache = m::mock(StorageInterface::class);
+        $cache = m::mock(CacheItemPoolInterface::class);
 
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
         $this->assertNull($sut->getQueryFromCustomIdentifier('missing identifier'));
