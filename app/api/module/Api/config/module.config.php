@@ -541,6 +541,7 @@ return [
             ApiSrv\AddressHelper\AddressHelperService::class => ApiSrv\AddressHelper\AddressHelperServiceFactory::class,
 
             Aws\S3\S3Client::class => Dvsa\Olcs\Api\Service\S3\S3ClientFactory::class,
+            'default-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
         ],
     ],
     'view_manager' => [
