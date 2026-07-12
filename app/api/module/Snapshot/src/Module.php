@@ -22,13 +22,7 @@ class Module
     {
         $sm = $e->getApplication()->getServiceManager();
 
-        /**
-         * @var Translator $translator
-         * @var Redis      $cache
-         */
-        $cache = $sm->get('default-cache');
         $translator = $sm->get('translator');
-        $translator->setCache($cache);
     }
 
     public function getConfig()
