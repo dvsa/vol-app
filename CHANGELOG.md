@@ -1,5 +1,20 @@
 # Changelog
 
+## [8.1.3](https://github.com/dvsa/vol-app/compare/v8.1.2...v8.1.3) (2026-07-07)
+
+
+### Bug Fixes
+
+* bump app/api for re-cut after issue with cd run ([#1635](https://github.com/dvsa/vol-app/issues/1635)) ([92e02e7](https://github.com/dvsa/vol-app/commit/92e02e72aa6d40358f48b27849c408e607922a07))
+
+## [8.1.2](https://github.com/dvsa/vol-app/compare/v8.1.1...v8.1.2) (2026-07-07)
+
+
+### Bug Fixes
+
+* data export S3 upload fatals since aws-sdk/guzzle security bump ([#1633](https://github.com/dvsa/vol-app/issues/1633)) ([f22d8ba](https://github.com/dvsa/vol-app/commit/f22d8ba621f8408b481e62d89647be9f1186586b))
+* gotenberg alignment fixes ([#1630](https://github.com/dvsa/vol-app/issues/1630)) ([8969791](https://github.com/dvsa/vol-app/commit/8969791f70e6e6a9ffdf2575630c71aabedba79e))
+
 ## [8.1.1](https://github.com/dvsa/vol-app/compare/v8.1.0...v8.1.1) (2026-07-06)
 
 

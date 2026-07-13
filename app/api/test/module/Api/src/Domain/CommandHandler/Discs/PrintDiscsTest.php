@@ -17,6 +17,9 @@ use Dvsa\Olcs\Api\Entity\System\SubCategory as SubCategoryEntity;
 use Dvsa\Olcs\Api\Domain\Command\Queue\Create as CreatQueue;
 use Dvsa\Olcs\Api\Entity\Queue\Queue;
 use Dvsa\Olcs\Api\Domain\Repository\GoodsDisc as GoodsDiscRepo;
+use Dvsa\Olcs\Api\Domain\Repository\PsvDisc as PsvDiscRepo;
+use Dvsa\Olcs\Api\Domain\Repository\SystemParameter as SystemParameterRepo;
+use Dvsa\Olcs\Api\Entity\System\SystemParameter;
 
 /**
  * Print discs
@@ -31,6 +34,8 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
     {
         $this->sut = new PrintDiscs();
         $this->mockRepo('GoodsDisc', GoodsDiscRepo::class);
+        $this->mockRepo('PsvDisc', PsvDiscRepo::class);
+        $this->mockRepo('SystemParameter', SystemParameterRepo::class);
 
         $this->mockedSmServices = [
             'config' => [
@@ -41,18 +46,30 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand(): void
-    {
+    #[\PHPUnit\Framework\Attributes\DataProvider('pinnedLayoutProvider')]
+    public function testHandleCommand(
+        string $type,
+        string $toggle,
+        string $repo,
+        string $bookmark,
+        ?string $toggleValue,
+        string $expectedTemplate
+    ): void {
         $startNumber = 1;
         $userId = 2;
         $discs = $this->getDiscs();
         $data = [
-            'type' => 'Goods',
+            'type' => $type,
             'discs' => $discs,
             'startNumber' => $startNumber,
             'user' => $userId
         ];
         $command = Cmd::create($data);
+
+        $this->repoMap['SystemParameter']
+            ->shouldReceive('fetchIsEnabled')
+            ->with($toggle)
+            ->andReturn($toggleValue === '1');
 
         $queuedStartNumber = $startNumber + $this->batchSize;
         $queuedDiscs = array_slice($discs, $this->batchSize);
@@ -60,14 +77,14 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
         $options = [
             'discs' => $queuedDiscs,
             'startNumber' => $queuedStartNumber,
-            'type' => 'Goods',
+            'type' => $type,
             'user' => $userId
         ];
 
         $generateAndStoreData = [
-            'template' => 'GVDiscTemplate',
+            'template' => $expectedTemplate,
             'query' => array_merge($discs, ['user' => $userId]),
-            'knownValues' => $this->getKnownValues($startNumber),
+            'knownValues' => $this->getKnownValues($bookmark, $startNumber),
             'description' => 'Vehicle discs',
             'category' => CategoryEntity::CATEGORY_LICENSING,
             'subCategory' => SubCategoryEntity::DOC_SUB_CATEGORY_DISCS,
@@ -80,7 +97,7 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
 
         $printQueueData = [
             'documentId' => 12,
-            'jobName' => 'Goods Disc List',
+            'jobName' => $type . ' Disc List',
             'user' => $userId
         ];
         $this->expectedSideEffect(EnqueueFileCommand::class, $printQueueData, new Result());
@@ -92,7 +109,7 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
         ];
         $this->expectedSideEffect(CreatQueue::class, $data, new Result());
 
-        $this->repoMap['GoodsDisc']
+        $this->repoMap[$repo]
             ->shouldReceive('setIsPrintingOn')
             ->with($discs)
             ->once();
@@ -106,6 +123,22 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
+    /**
+     * The pinned-layout SystemParameter selects the Gotenberg-specific base
+     * template; anything else (including a missing row) keeps the legacy one.
+     */
+    public static function pinnedLayoutProvider(): array
+    {
+        return [
+            'goods, toggle missing' => ['Goods', SystemParameter::GOODS_DISC_PINNED_LAYOUT, 'GoodsDisc', 'Disc_List', null, 'GVDiscTemplate'],
+            'goods, toggle off' => ['Goods', SystemParameter::GOODS_DISC_PINNED_LAYOUT, 'GoodsDisc', 'Disc_List', '0', 'GVDiscTemplate'],
+            'goods, toggle on' => ['Goods', SystemParameter::GOODS_DISC_PINNED_LAYOUT, 'GoodsDisc', 'Disc_List', '1', 'GVDiscTemplateGotenberg'],
+            'psv, toggle missing' => ['PSV', SystemParameter::PSV_DISC_PINNED_LAYOUT, 'PsvDisc', 'Psv_Disc_Page', null, 'PSVDiscTemplate'],
+            'psv, toggle off' => ['PSV', SystemParameter::PSV_DISC_PINNED_LAYOUT, 'PsvDisc', 'Psv_Disc_Page', '0', 'PSVDiscTemplate'],
+            'psv, toggle on' => ['PSV', SystemParameter::PSV_DISC_PINNED_LAYOUT, 'PsvDisc', 'Psv_Disc_Page', '1', 'PSVDiscTemplateGotenberg'],
+        ];
+    }
+
     protected function getDiscs(): mixed
     {
         $discs = [];
@@ -115,14 +148,14 @@ class PrintDiscsTest extends AbstractCommandHandlerTestCase
         return $discs;
     }
 
-    protected function getKnownValues(mixed $startNumber): mixed
+    protected function getKnownValues(string $bookmark, mixed $startNumber): mixed
     {
         $knownValues = [
-            'Disc_List' => []
+            $bookmark => []
         ];
         $discNumber = (int) $startNumber;
         for ($i = 0; $i < $this->batchSize; $i++) {
-            $knownValues['Disc_List'][$i]['discNo'] = $discNumber++;
+            $knownValues[$bookmark][$i]['discNo'] = $discNumber++;
         }
         return $knownValues;
     }

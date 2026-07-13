@@ -184,6 +184,13 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
         $this->mockS3client->shouldAllowMockingMethod('putObject');
         $this->mockS3client->shouldReceive('putObject')
             ->once()
+            ->with(m::on(
+                // the SDK must be given the file path, never an open resource:
+                // since guzzlehttp/psr7 2.12 the SDK closes a Body resource
+                // itself and a caller-side fclose() fatals
+                static fn (array $args): bool => isset($args['SourceFile'])
+                    && !isset($args['Body'])
+            ))
             ->andReturn([]);
 
         $actual = $this->sut->handleCommand($cmd);

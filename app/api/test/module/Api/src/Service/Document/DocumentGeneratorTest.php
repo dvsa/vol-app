@@ -60,6 +60,38 @@ class DocumentGeneratorTest extends MockeryTestCase
         $this->sut->__invoke($sm, DocumentGenerator::class);
     }
 
+    public function testGenerateFromTemplateUsesRepoTrackedTemplateWithoutContentStore(): void
+    {
+        // the *DiscTemplateGotenberg templates are repo-tracked next to
+        // DocumentGenerator and must be served from disk - the content store
+        // must not be consulted for the /templates/... path at all
+        $expectedContent = file_get_contents(
+            __DIR__ . '/../../../../../../module/Api/src/Service/Document/Template/GVDiscTemplateGotenberg.rtf'
+        );
+        $this->assertNotFalse($expectedContent);
+
+        $this->contentStore->shouldReceive('read')
+            ->with('GVDiscTemplateGotenberg')
+            ->andReturn(null);
+        $this->contentStore->shouldNotReceive('read')
+            ->with('/templates/GVDiscTemplateGotenberg.rtf');
+
+        $isRepoTemplate = m::on(
+            static fn ($file) => $file instanceof \Dvsa\Olcs\DocumentShare\Data\Object\File
+                && $file->getContent() === $expectedContent
+        );
+
+        $this->document
+            ->shouldReceive('getBookmarkQueries')
+            ->with($isRepoTemplate, [])
+            ->andReturn([])
+            ->shouldReceive('populateBookmarks')
+            ->with($isRepoTemplate, [])
+            ->andReturn('populated');
+
+        $this->assertSame('populated', $this->sut->generateFromTemplate('GVDiscTemplateGotenberg'));
+    }
+
     #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testGenerateFromTemplateWithEmptyQuery(): void
     {
