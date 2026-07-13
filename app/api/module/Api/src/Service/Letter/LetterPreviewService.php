@@ -282,10 +282,10 @@ class LetterPreviewService
             // VOL-7305: chrome slot placeholders rendered from the MasterTemplate's
             // EditorJS fields. Bookmarks ([[OTC_LOGO]], [[CASEWORKER_NAME]], etc.)
             // inside the slot content are resolved by VolGrabReplacementService.
-            '{{HEADER_LEFT_CONTENT}}'  => $this->renderSlot($masterTemplate?->getHeaderLeftContent(),  $volGrabContext),
+            '{{HEADER_LEFT_CONTENT}}'  => $this->renderSlot($masterTemplate?->getHeaderLeftContent(), $volGrabContext),
             '{{HEADER_RIGHT_CONTENT}}' => $this->renderSlot($masterTemplate?->getHeaderRightContent(), $volGrabContext),
-            '{{SIGNOFF_CONTENT}}'      => $this->renderSlot($masterTemplate?->getSignoffContent(),     $volGrabContext),
-            '{{FOOTER_CONTENT}}'       => $this->renderSlot($masterTemplate?->getFooterContent(),     $volGrabContext),
+            '{{SIGNOFF_CONTENT}}'      => $this->renderSlot($masterTemplate?->getSignoffContent(), $volGrabContext),
+            '{{FOOTER_CONTENT}}'       => $this->renderSlot($masterTemplate?->getFooterContent(), $volGrabContext),
             // Recipient address block. Future enhancement could compute this from
             // the licence's correspondence address; for now we keep the placeholder
             // recognised (resolved to empty) so it doesn't leak into the output.
