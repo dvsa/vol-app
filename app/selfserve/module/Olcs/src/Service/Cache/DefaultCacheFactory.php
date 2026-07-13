@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dvsa\Olcs\Api\Service\Cache;
+namespace Olcs\Service\Cache;
 
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;

@@ -1579,9 +1579,6 @@ return [
             \Olcs\Controller\Mapper\CreateAccountMapper::class => \Olcs\Controller\Mapper\CreateAccountMapper::class,
 
         ],
-        'abstract_factories' => [
-            \Laminas\Cache\Service\StorageCacheAbstractServiceFactory::class,
-        ],
         'factories' => [
             TermsAgreedListener::class => TermsAgreedListenerFactory::class,
             'CookieListener' => \Olcs\Mvc\CookieListenerFactory::class,
@@ -1615,6 +1612,8 @@ return [
             VariationTransportManagerAdapter::class => VariationTransportManagerAdapterFactory::class,
             VariationPeopleAdapter::class => VariationPeopleAdapterFactory::class,
             \Olcs\Logging\Log\Processor\CorrelationId::class => \Olcs\Logging\Log\Processor\CorrelationIdFactory::class,
+            'cache.redis.connection' => \Olcs\Service\Cache\RedisConnectionFactory::class,
+            'default-cache' => \Olcs\Service\Cache\DefaultCacheFactory::class,
         ],
     ],
     'search' => [
