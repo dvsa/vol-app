@@ -76,7 +76,7 @@
     "phpunit/phpunit": "^13.0",
     "san/san-session-toolbar": "*",
     "rector/rector": "^2.3",
-    "dvsa/coding-standards": "^2.0",
+    "dvsa/coding-standards": "^2.1",
     "phpstan/phpstan": "^2.0",
     "vimeo/psalm": "^6.0"
   },
