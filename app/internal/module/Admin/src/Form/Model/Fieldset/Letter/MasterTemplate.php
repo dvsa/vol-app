@@ -115,6 +115,7 @@ class MasterTemplate
      * @Form\Options({
      *     "label": "Locale",
      *     "hint": "Chrome variant — en_GB (default), en_NI (NI letters), cy_GB (Welsh). Picked at letter-generation time by isNi.",
+     *     "empty_option": "Not set",
      *     "value_options": {
      *         "en_GB": "en_GB — England, Scotland and Wales (default)",
      *         "en_NI": "en_NI — Northern Ireland",

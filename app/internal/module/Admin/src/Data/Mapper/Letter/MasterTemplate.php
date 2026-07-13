@@ -54,6 +54,13 @@ class MasterTemplate implements MapperInterface
             $commandData['isDefault'] = (bool) $commandData['isDefault'];
         }
 
+        // The locale select's empty option submits '' — map to null so the API
+        // handler leaves a NULL locale untouched (pre-VOL-7305 rows) rather than
+        // coercing it on an unrelated save.
+        if (isset($commandData['locale']) && $commandData['locale'] === '') {
+            $commandData['locale'] = null;
+        }
+
         // VOL-7305: EditorJS submits a JSON string per slot field. Decode to array
         // for the command DTO. Empty/whitespace → null so the API handler treats it
         // as "leave alone" rather than "clear".
