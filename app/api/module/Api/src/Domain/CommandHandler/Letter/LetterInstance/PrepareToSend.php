@@ -122,7 +122,7 @@ final class PrepareToSend extends AbstractCommandHandler implements
 
         // Generate filename using NamingService
         $letterType = $letterInstance->getLetterType();
-        $description = $letterType ? $letterType->getName() : 'Letter';
+        $description = $this->buildDocumentDescription($letterInstance);
         $category = $letterType ? $letterType->getCategory() : null;
         $subCategory = $letterType ? $letterType->getSubCategory() : null;
 
@@ -236,6 +236,34 @@ final class PrepareToSend extends AbstractCommandHandler implements
         }
 
         return null;
+    }
+
+    /**
+     * Letter type name plus any selected radio ("pick one") choice labels.
+     *
+     * VOL-7308: variants like first/final request are letter *choices* within a
+     * single letter type, so the type name alone can't distinguish the documents
+     * in Docs & attachments. Checkbox choices are content add-ons, not variants,
+     * and are deliberately left out.
+     */
+    private function buildDocumentDescription(LetterInstanceEntity $letterInstance): string
+    {
+        $letterType = $letterInstance->getLetterType();
+        $description = $letterType ? $letterType->getName() : 'Letter';
+
+        $variantLabels = [];
+        foreach ($letterInstance->getLetterInstanceChoices() as $instanceChoice) {
+            $choice = $instanceChoice->getLetterChoice();
+            if ($choice !== null && $choice->getInputType() === 'radio' && $choice->getLabel() !== '') {
+                $variantLabels[] = $choice->getLabel();
+            }
+        }
+
+        if (!empty($variantLabels)) {
+            $description .= ' - ' . implode(', ', $variantLabels);
+        }
+
+        return $description;
     }
 
     /**
