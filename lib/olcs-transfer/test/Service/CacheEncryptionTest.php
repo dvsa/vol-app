@@ -196,10 +196,21 @@ class CacheEncryptionTest extends MockeryTestCase
         ];
 
         $cache = m::mock(CacheItemPoolInterface::class);
-        $cache->expects('deleteItems')->with(array_values($cacheKeysRemoved))->andReturnTrue();
+        $cache->expects('deleteItems')
+            ->with(array_values($cacheKeysRemoved))
+            ->andReturnTrue();
 
-        $sut = new CacheEncryption($cache, $this->nodeKey, $this->sharedKey, $this->nodeSuffix);
-        $sut->removeCustomItems($identifier, $uniqueIds);
+        $sut = new CacheEncryption(
+            $cache,
+            $this->nodeKey,
+            $this->sharedKey,
+            $this->nodeSuffix
+        );
+
+        self::assertSame(
+            [],
+            $sut->removeCustomItems($identifier, $uniqueIds)
+        );
     }
 
     public function testRemoveCustomItemsMissingIds(): void
@@ -367,5 +378,33 @@ class CacheEncryptionTest extends MockeryTestCase
 
         $sut = new CacheEncryption($cache, $this->nodeKey, $this->sharedKey, $this->nodeSuffix);
         self::assertNull($sut->getQueryFromCustomIdentifier('missing identifier'));
+    }
+
+    public function testRemoveCustomItemsReturnsKeysWhenDeletionFails(): void
+    {
+        $identifier = CacheEncryption::TRANSLATION_KEY_IDENTIFIER;
+        $uniqueIds = ['uniqueId1', 'uniqueId2'];
+
+        $expected = [
+            'uniqueId1' => $identifier . 'uniqueId1' . CacheEncryption::ENCRYPTION_PUBLIC_NODE_SUFFIX,
+            'uniqueId2' => $identifier . 'uniqueId2' . CacheEncryption::ENCRYPTION_PUBLIC_NODE_SUFFIX,
+        ];
+
+        $cache = m::mock(CacheItemPoolInterface::class);
+        $cache->expects('deleteItems')
+            ->with(array_values($expected))
+            ->andReturnFalse();
+
+        $sut = new CacheEncryption(
+            $cache,
+            $this->nodeKey,
+            $this->sharedKey,
+            $this->nodeSuffix
+        );
+
+        self::assertSame(
+            $expected,
+            $sut->removeCustomItems($identifier, $uniqueIds)
+        );
     }
 }

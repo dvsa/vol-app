@@ -547,26 +547,14 @@ return [
 
     'caches' => [
         'default-cache' => [
-            'adapter' => Laminas\Cache\Storage\Adapter\Redis::class,
             'options' => [
                 'server' => [
                     'host' => '%redis_cache_fqdn%',
                     'port' => 6379,
                 ],
-                'lib_options' => [
-                    \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_IGBINARY
-                ],
                 'ttl' => 3600, //one hour, likely to be overridden based on use case
                 'namespace' => 'zfcache',
-            ],
-            'plugins' => [
-                [
-                    'name' => 'exception_handler',
-                    'options' => [
-                        'throw_exceptions' => false,
-                    ],
-                ],
-            ],
+            ]
         ],
         'doctrinemodule.cache.redis' => [
             'adapter' => Laminas\Cache\Storage\Adapter\Redis::class,

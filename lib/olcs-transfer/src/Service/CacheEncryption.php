@@ -140,7 +140,7 @@ class CacheEncryption
      *
      * @throws \Exception
      */
-    public function removeCustomItems(string $cacheKey, array $uniqueIds): bool
+    public function removeCustomItems(string $cacheKey, array $uniqueIds): array
     {
         if (empty($uniqueIds)) {
             throw new \Exception(self::ERR_NO_IDS_TO_DELETE);
@@ -154,7 +154,9 @@ class CacheEncryption
             $cacheKeys[$uniqueId] = $cacheKey . $uniqueId . $nodeSuffix;
         }
 
-        return $this->cache->deleteItems(array_values($cacheKeys));
+        $deleted = $this->cache->deleteItems(array_values($cacheKeys));
+
+        return $deleted ? [] : $cacheKeys;
     }
 
     /**
