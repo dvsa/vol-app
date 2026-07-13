@@ -44,6 +44,81 @@ class ConverterServiceTest extends TestCase
         $this->assertStringContainsString('Test content', $result);
     }
 
+    public function testConvertJsonToHtmlKeepsDataUriImages(): void
+    {
+        $json = json_encode([
+            'time' => 1234567890,
+            'version' => '2.28.2',
+            'blocks' => [
+                [
+                    'id' => 'logo-block',
+                    'type' => 'paragraph',
+                    'data' => [
+                        // Genuine 1x1 PNG: the purifier's data-scheme handler verifies the
+                        // payload decodes to a real image, so a truncated string would be dropped.
+                        'text' => '<img src="data:image/png;base64,'
+                            . 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
+                            . '" alt="OTC logo">'
+                    ]
+                ]
+            ]
+        ]);
+
+        $result = $this->sut->convertJsonToHtml($json);
+
+        $this->assertStringContainsString('<img', $result);
+        $this->assertStringContainsString('data:image/png;base64', $result);
+    }
+
+    public function testNormalizeFillsMissingEnvelopeFields(): void
+    {
+        // Shape produced by hand-authored seeds: no top-level time, no per-block ids —
+        // both mandatory for the Setono parser.
+        $data = [
+            'version' => '2.28.2',
+            'blocks' => [
+                ['type' => 'paragraph', 'data' => ['text' => 'Office of the Traffic Commissioner']],
+                ['type' => 'paragraph', 'data' => ['text' => 'Leeds']],
+            ],
+        ];
+
+        $normalized = $this->sut->normalize($data);
+
+        $this->assertIsInt($normalized['time']);
+        $this->assertSame('2.28.2', $normalized['version']);
+        foreach ($normalized['blocks'] as $i => $block) {
+            $this->assertNotSame('', (string) $block['id'], "block $i id should be non-empty");
+            $this->assertSame($data['blocks'][$i]['data'], $block['data']);
+        }
+    }
+
+    public function testNormalizeLeavesConformantDataUntouched(): void
+    {
+        $data = [
+            'time' => 1234567890,
+            'version' => '2.31.0',
+            'blocks' => [
+                ['id' => 'abc123', 'type' => 'paragraph', 'data' => ['text' => 'Hello']],
+            ],
+        ];
+
+        $this->assertSame($data, $this->sut->normalize($data));
+    }
+
+    public function testNormalizedSeedShapeConverts(): void
+    {
+        $seedShaped = [
+            'version' => '2.28.2',
+            'blocks' => [
+                ['type' => 'paragraph', 'data' => ['text' => 'Quarry House']],
+            ],
+        ];
+
+        $html = $this->sut->convertJsonToHtml(json_encode($this->sut->normalize($seedShaped)));
+
+        $this->assertStringContainsString('Quarry House', $html);
+    }
+
     public function testConvertJsonToHtmlWithInvalidJson(): void
     {
         $this->expectException(\RuntimeException::class);

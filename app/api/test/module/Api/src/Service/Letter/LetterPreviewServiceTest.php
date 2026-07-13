@@ -1026,6 +1026,189 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $this->assertStringContainsString('<div class="letter-content">', $result);
     }
 
+    public function testRenderPreviewToleratesSeedShapedSlotJson(): void
+    {
+        // The 7.6.0 ETL seed wrote chrome slots without the top-level 'time' and per-block
+        // 'id' fields the EditorJS parser mandates. Rendering must normalise rather than 500.
+        $sut = new LetterPreviewService(
+            $this->mockRendererManager,
+            $this->mockContentStore,
+            $this->mockDocTemplateRepo,
+            $this->mockVolGrabReplacementService,
+            new \Dvsa\Olcs\Api\Service\EditorJs\ConverterService()
+        );
+
+        $this->mockVolGrabReplacementService->shouldReceive('replaceGrabs')
+            ->withAnyArgs()
+            ->andReturnUsing(fn($json, $context) => $json);
+
+        $mockRenderer = m::mock(SectionRendererInterface::class);
+        $mockRenderer->shouldReceive('render')->withAnyArgs()->andReturn('')->byDefault();
+        $this->mockRendererManager->shouldReceive('get')
+            ->with(m::type('string'))
+            ->andReturn($mockRenderer)
+            ->byDefault();
+
+        $mockLetterInstance = m::mock(LetterInstance::class);
+        $mockLetterInstance->shouldReceive('getLetterInstanceSections')->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getReference')->andReturn('REF123');
+        $mockLetterInstance->shouldReceive('getCreatedBy')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getApplication')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLicence')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getOrganisation')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCase')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')->andReturn(null);
+
+        $mockTemplate = m::mock(MasterTemplate::class);
+        $mockTemplate->shouldReceive('getHeaderLeftContent')->andReturn(null);
+        $mockTemplate->shouldReceive('getHeaderRightContent')->andReturn([
+            // seed shape: no 'time', blocks without 'id'
+            'version' => '2.28.2',
+            'blocks' => [
+                ['type' => 'paragraph', 'data' => ['text' => 'Office of the Traffic Commissioner']],
+            ],
+        ]);
+        $mockTemplate->shouldReceive('getSignoffContent')->andReturn(null);
+        $mockTemplate->shouldReceive('getFooterContent')->andReturn(null);
+        $mockTemplate->shouldReceive('getTemplateContent')->andReturn('{{HEADER_RIGHT_CONTENT}}');
+
+        $result = $sut->renderPreview($mockLetterInstance, $mockTemplate);
+
+        $this->assertStringContainsString('Office of the Traffic Commissioner', $result);
+    }
+
+    public function testOtcLogoFallsBackToLegacySlugWhenRegionSlugMissing(): void
+    {
+        $sut = $this->createSutWithRealConverter();
+
+        // 1x1 transparent PNG — the purifier verifies data-URI payloads are real images.
+        $pngBinary = base64_decode(
+            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
+        );
+
+        $mockDocument = m::mock();
+        $mockDocument->shouldReceive('getIdentifier')->andReturn('templates/Image/OTClogo.png');
+
+        $mockDocTemplate = m::mock();
+        $mockDocTemplate->shouldReceive('getDocument')->andReturn($mockDocument);
+
+        $this->mockDocTemplateRepo->shouldReceive('fetchByTemplateSlug')
+            ->with('otclogo-letters-gb')
+            ->andReturn(null);
+        $this->mockDocTemplateRepo->shouldReceive('fetchByTemplateSlug')
+            ->with('otclogo-letters')
+            ->andReturn($mockDocTemplate);
+
+        $mockFile = m::mock();
+        $mockFile->shouldReceive('getContent')->andReturn($pngBinary);
+        $this->mockContentStore->shouldReceive('read')
+            ->with('templates/Image/OTClogo.png')
+            ->andReturn($mockFile);
+
+        $result = $sut->renderPreview(
+            $this->createMinimalLetterInstance(),
+            $this->createChromeTemplate(['[[OTC_LOGO]]'], '{{HEADER_LEFT_CONTENT}}')
+        );
+
+        $this->assertStringContainsString('data:image/png;base64', $result);
+    }
+
+    public function testOtcLogoResolutionFailureIsLoggedNotFatal(): void
+    {
+        $spyLogger = m::mock(\Psr\Log\LoggerInterface::class);
+        $spyLogger->shouldReceive('warning')->atLeast()->once();
+        \Olcs\Logging\Log\Logger::setLogger($spyLogger);
+
+        try {
+            $sut = $this->createSutWithRealConverter();
+
+            $this->mockDocTemplateRepo->shouldReceive('fetchByTemplateSlug')
+                ->with('otclogo-letters-gb')
+                ->andThrow(new \RuntimeException('doc store down'));
+            $this->mockDocTemplateRepo->shouldReceive('fetchByTemplateSlug')
+                ->with('otclogo-letters')
+                ->andReturn(null);
+
+            $result = $sut->renderPreview(
+                $this->createMinimalLetterInstance(),
+                $this->createChromeTemplate(['[[OTC_LOGO]]'], '{{HEADER_LEFT_CONTENT}}')
+            );
+
+            // Letter still renders, token stripped rather than leaked
+            $this->assertStringNotContainsString('[[OTC_LOGO]]', $result);
+        } finally {
+            \Olcs\Logging\Log\Logger::setLogger(new \Psr\Log\NullLogger());
+        }
+    }
+
+    private function createSutWithRealConverter(): LetterPreviewService
+    {
+        $this->mockVolGrabReplacementService->shouldReceive('replaceGrabs')
+            ->withAnyArgs()
+            ->andReturnUsing(fn($json, $context) => $json)
+            ->byDefault();
+
+        $mockRenderer = m::mock(SectionRendererInterface::class);
+        $mockRenderer->shouldReceive('render')->withAnyArgs()->andReturn('')->byDefault();
+        $this->mockRendererManager->shouldReceive('get')
+            ->with(m::type('string'))
+            ->andReturn($mockRenderer)
+            ->byDefault();
+
+        return new LetterPreviewService(
+            $this->mockRendererManager,
+            $this->mockContentStore,
+            $this->mockDocTemplateRepo,
+            $this->mockVolGrabReplacementService,
+            new \Dvsa\Olcs\Api\Service\EditorJs\ConverterService()
+        );
+    }
+
+    private function createMinimalLetterInstance(): m\MockInterface
+    {
+        $mockLetterInstance = m::mock(LetterInstance::class);
+        $mockLetterInstance->shouldReceive('getLetterInstanceSections')->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getReference')->andReturn('REF123');
+        $mockLetterInstance->shouldReceive('getCreatedBy')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getApplication')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLicence')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getOrganisation')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCase')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')->andReturn(null);
+
+        return $mockLetterInstance;
+    }
+
+    /**
+     * @param string[] $headerLeftParagraphs
+     */
+    private function createChromeTemplate(array $headerLeftParagraphs, string $templateContent): m\MockInterface
+    {
+        $blocks = [];
+        foreach ($headerLeftParagraphs as $i => $text) {
+            $blocks[] = ['id' => 'blk-' . $i, 'type' => 'paragraph', 'data' => ['text' => $text]];
+        }
+
+        $mockTemplate = m::mock(MasterTemplate::class);
+        $mockTemplate->shouldReceive('getHeaderLeftContent')->andReturn([
+            'time' => 1234567890,
+            'version' => '2.31.0',
+            'blocks' => $blocks,
+        ]);
+        $mockTemplate->shouldReceive('getHeaderRightContent')->andReturn(null);
+        $mockTemplate->shouldReceive('getSignoffContent')->andReturn(null);
+        $mockTemplate->shouldReceive('getFooterContent')->andReturn(null);
+        $mockTemplate->shouldReceive('getTemplateContent')->andReturn($templateContent);
+
+        return $mockTemplate;
+    }
+
     private function createMockIssue(string $typeName, string $typeDescription, int $typeId): m\MockInterface
     {
         $mockIssueType = m::mock(LetterIssueType::class);

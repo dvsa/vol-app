@@ -84,9 +84,49 @@ class ConverterService
         $config = \HTMLPurifier_Config::createDefault();
         $config->set('Cache.SerializerPath', sys_get_temp_dir());
 
+        // Letter chrome embeds the OTC logo as an inline base64 image. HTMLPurifier's
+        // data-URI scheme handler only admits verified image payloads (png/gif/jpeg),
+        // so allowing the scheme does not open script or arbitrary-content vectors.
+        $config->set('URI.AllowedSchemes', [
+            'http' => true,
+            'https' => true,
+            'mailto' => true,
+            'tel' => true,
+            'data' => true,
+        ]);
+
         return $config;
     }
 
+
+    /**
+     * Normalise EditorJS data to the envelope shape the parser mandates.
+     *
+     * Hand-authored content (DB seeds, imports) often omits the top-level 'time' and
+     * per-block 'id' fields, which the Setono parser treats as required. Fill them in
+     * so such content renders instead of failing the whole conversion; content saved
+     * through the EditorJS editor already conforms and passes through untouched.
+     */
+    public function normalize(array $data): array
+    {
+        if (!isset($data['time']) || !is_int($data['time'])) {
+            $data['time'] = 0;
+        }
+
+        if (!isset($data['version']) || !is_string($data['version'])) {
+            $data['version'] = 'unknown';
+        }
+
+        if (isset($data['blocks']) && is_array($data['blocks'])) {
+            foreach ($data['blocks'] as $i => $block) {
+                if (is_array($block) && (!isset($block['id']) || !is_string($block['id']) || $block['id'] === '')) {
+                    $data['blocks'][$i]['id'] = 'gen-' . $i;
+                }
+            }
+        }
+
+        return $data;
+    }
 
     /**
      * Validate EditorJS JSON structure

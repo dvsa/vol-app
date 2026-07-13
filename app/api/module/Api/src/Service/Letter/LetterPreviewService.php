@@ -8,6 +8,7 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterInstance;
 use Dvsa\Olcs\Api\Entity\Letter\MasterTemplate;
 use Dvsa\Olcs\Api\Service\EditorJs\ConverterService;
 use Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManager;
+use Olcs\Logging\Log\Logger;
 
 /**
  * Service for rendering letter previews
@@ -307,6 +308,10 @@ class LetterPreviewService
             return '';
         }
 
+        // Hand-seeded slot content may lack the 'time'/'id' envelope fields the
+        // EditorJS parser mandates — normalise so one bad slot can't 500 the preview.
+        $editorJsContent = $this->converterService->normalize($editorJsContent);
+
         $json = json_encode($editorJsContent);
         if ($json === false) {
             return '';
@@ -344,8 +349,18 @@ class LetterPreviewService
 
         $imgTag = $this->buildLogoImgTagForSlug($slug);
         if ($imgTag === '') {
-            // Slug not seeded or document not uploaded — replace with empty so the
-            // letter still renders cleanly rather than leaking the bare token.
+            // Region-specific slug not seeded — fall back to the legacy single-slug
+            // row so environments that pre-date the -gb/-ni convention keep a logo.
+            $imgTag = $this->buildLogoImgTagForSlug(self::LOGO_TEMPLATE_SLUG);
+        }
+
+        if ($imgTag === '') {
+            // Nothing resolvable — render cleanly without a logo rather than leaking
+            // the bare token, but leave a trace: a silently blank logo cost real
+            // diagnosis time and is otherwise invisible in every environment.
+            Logger::warn('OTC logo could not be resolved for letter chrome', [
+                'slugsTried' => [$slug, self::LOGO_TEMPLATE_SLUG],
+            ]);
             return str_replace(self::OTC_LOGO_TOKEN, '', $json);
         }
 
@@ -398,7 +413,11 @@ class LetterPreviewService
                 htmlspecialchars($mime),
                 $base64
             );
-        } catch (\Exception) {
+        } catch (\Exception $e) {
+            Logger::warn('OTC logo lookup failed', [
+                'slug' => $slug,
+                'reason' => $e->getMessage(),
+            ]);
             return '';
         }
     }
