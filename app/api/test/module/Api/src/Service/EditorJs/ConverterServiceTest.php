@@ -44,9 +44,13 @@ class ConverterServiceTest extends TestCase
         $this->assertStringContainsString('Test content', $result);
     }
 
-    public function testConvertJsonToHtmlKeepsDataUriImages(): void
+    /**
+     * Genuine 1x1 PNG: the purifier's data-scheme handler verifies the payload
+     * decodes to a real image, so a truncated string would be dropped.
+     */
+    private function dataUriImageJson(): string
     {
-        $json = json_encode([
+        return json_encode([
             'time' => 1234567890,
             'version' => '2.28.2',
             'blocks' => [
@@ -54,8 +58,6 @@ class ConverterServiceTest extends TestCase
                     'id' => 'logo-block',
                     'type' => 'paragraph',
                     'data' => [
-                        // Genuine 1x1 PNG: the purifier's data-scheme handler verifies the
-                        // payload decodes to a real image, so a truncated string would be dropped.
                         'text' => '<img src="data:image/png;base64,'
                             . 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
                             . '" alt="OTC logo">'
@@ -63,11 +65,24 @@ class ConverterServiceTest extends TestCase
                 ]
             ]
         ]);
+    }
 
-        $result = $this->sut->convertJsonToHtml($json);
+    public function testConvertJsonToHtmlKeepsDataUriImagesWhenInlineImagesAllowed(): void
+    {
+        // Chrome slots (admin-authored) embed the OTC logo as an inline base64 image.
+        $result = $this->sut->convertJsonToHtml($this->dataUriImageJson(), true);
 
         $this->assertStringContainsString('<img', $result);
         $this->assertStringContainsString('data:image/png;base64', $result);
+    }
+
+    public function testConvertJsonToHtmlStripsDataUriImagesByDefault(): void
+    {
+        // Caseworker-editable content (sections/issues/todos) must NOT gain the
+        // ability to smuggle arbitrary inline images into official letters.
+        $result = $this->sut->convertJsonToHtml($this->dataUriImageJson());
+
+        $this->assertStringNotContainsString('data:image', $result);
     }
 
     public function testNormalizeFillsMissingEnvelopeFields(): void

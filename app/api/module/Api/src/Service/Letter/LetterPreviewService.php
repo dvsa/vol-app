@@ -324,7 +324,18 @@ class LetterPreviewService
 
         $jsonWithGrabs = $this->volGrabReplacementService->replaceGrabs($json, $context);
 
-        return $this->converterService->convertJsonToHtml($jsonWithGrabs);
+        try {
+            // allowInlineImages: chrome slots are admin-authored, and the OTC logo
+            // is embedded as a base64 data URI — caseworker content never gets this.
+            return $this->converterService->convertJsonToHtml($jsonWithGrabs, true);
+        } catch (\Throwable $e) {
+            // e.g. a block type the renderer doesn't support — degrade to an empty
+            // slot rather than 500ing every letter that uses this master template.
+            Logger::warn('Letter chrome slot failed to render', [
+                'reason' => $e->getMessage(),
+            ]);
+            return '';
+        }
     }
 
     /**

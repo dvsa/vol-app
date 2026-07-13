@@ -1185,6 +1185,40 @@ class LetterPreviewServiceTest extends MockeryTestCase
         }
     }
 
+    public function testSlotWithUnsupportedBlockTypeRendersEmptyNotFatal(): void
+    {
+        // The Setono renderer only supports paragraph/header/list; an 'image' or
+        // 'table' block in a seeded/imported slot must degrade to an empty slot,
+        // not 500 the whole letter.
+        $spyLogger = m::mock(\Psr\Log\LoggerInterface::class);
+        $spyLogger->shouldReceive('warning')->atLeast()->once();
+        \Olcs\Logging\Log\Logger::setLogger($spyLogger);
+
+        try {
+            $sut = $this->createSutWithRealConverter();
+
+            $mockTemplate = m::mock(MasterTemplate::class);
+            $mockTemplate->shouldReceive('getHeaderLeftContent')->andReturn([
+                'time' => 1234567890,
+                'version' => '2.31.0',
+                'blocks' => [
+                    ['id' => 'x1', 'type' => 'image', 'data' => ['url' => 'http://example.com/x.png']],
+                ],
+            ]);
+            $mockTemplate->shouldReceive('getHeaderRightContent')->andReturn(null);
+            $mockTemplate->shouldReceive('getSignoffContent')->andReturn(null);
+            $mockTemplate->shouldReceive('getFooterContent')->andReturn(null);
+            $mockTemplate->shouldReceive('getTemplateContent')
+                ->andReturn('BEFORE[{{HEADER_LEFT_CONTENT}}]AFTER');
+
+            $result = $sut->renderPreview($this->createMinimalLetterInstance(), $mockTemplate);
+
+            $this->assertStringContainsString('BEFORE[]AFTER', $result);
+        } finally {
+            \Olcs\Logging\Log\Logger::setLogger(new \Psr\Log\NullLogger());
+        }
+    }
+
     public function testOtcLogoResolutionFailureIsLoggedNotFatal(): void
     {
         $spyLogger = m::mock(\Psr\Log\LoggerInterface::class);
