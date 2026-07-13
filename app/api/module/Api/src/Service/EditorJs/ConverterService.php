@@ -109,23 +109,7 @@ class ConverterService
      */
     public function normalize(array $data): array
     {
-        if (!isset($data['time']) || !is_int($data['time'])) {
-            $data['time'] = 0;
-        }
-
-        if (!isset($data['version']) || !is_string($data['version'])) {
-            $data['version'] = 'unknown';
-        }
-
-        if (isset($data['blocks']) && is_array($data['blocks'])) {
-            foreach ($data['blocks'] as $i => $block) {
-                if (is_array($block) && (!isset($block['id']) || !is_string($block['id']) || $block['id'] === '')) {
-                    $data['blocks'][$i]['id'] = 'gen-' . $i;
-                }
-            }
-        }
-
-        return $data;
+        return EditorJsData::normalize($data);
     }
 
     /**
