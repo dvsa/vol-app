@@ -1116,6 +1116,75 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $this->assertStringContainsString('data:image/png;base64', $result);
     }
 
+    public function testOtcLogoMissingFileRendersWithoutLogoNotFatal(): void
+    {
+        // ContentStore::read() returns File|false — a missing file must degrade to a
+        // logo-less letter, not fatal with 'getContent() on bool'.
+        $spyLogger = m::mock(\Psr\Log\LoggerInterface::class);
+        $spyLogger->shouldReceive('warning')->atLeast()->once();
+        \Olcs\Logging\Log\Logger::setLogger($spyLogger);
+
+        try {
+            $sut = $this->createSutWithRealConverter();
+
+            $mockDocument = m::mock();
+            $mockDocument->shouldReceive('getIdentifier')->andReturn('templates/Image/OTClogo.png');
+            $mockDocTemplate = m::mock();
+            $mockDocTemplate->shouldReceive('getDocument')->andReturn($mockDocument);
+
+            $this->mockDocTemplateRepo->shouldReceive('fetchByTemplateSlug')
+                ->andReturn($mockDocTemplate);
+            $this->mockContentStore->shouldReceive('read')
+                ->with('templates/Image/OTClogo.png')
+                ->andReturn(false);
+
+            $result = $sut->renderPreview(
+                $this->createMinimalLetterInstance(),
+                $this->createChromeTemplate(['[[OTC_LOGO]]'], '{{HEADER_LEFT_CONTENT}}')
+            );
+
+            $this->assertStringNotContainsString('[[OTC_LOGO]]', $result);
+            $this->assertStringNotContainsString('data:image', $result);
+        } finally {
+            \Olcs\Logging\Log\Logger::setLogger(new \Psr\Log\NullLogger());
+        }
+    }
+
+    public function testOtcLogoNonImagePayloadRendersWithoutLogo(): void
+    {
+        // A stored logo the purifier would reject (SVG/WebP/corrupt) must degrade
+        // visibly here, not vanish silently downstream in cleanOutputHtml.
+        $spyLogger = m::mock(\Psr\Log\LoggerInterface::class);
+        $spyLogger->shouldReceive('warning')->atLeast()->once();
+        \Olcs\Logging\Log\Logger::setLogger($spyLogger);
+
+        try {
+            $sut = $this->createSutWithRealConverter();
+
+            $mockDocument = m::mock();
+            $mockDocument->shouldReceive('getIdentifier')->andReturn('templates/Image/OTClogo.svg');
+            $mockDocTemplate = m::mock();
+            $mockDocTemplate->shouldReceive('getDocument')->andReturn($mockDocument);
+
+            $this->mockDocTemplateRepo->shouldReceive('fetchByTemplateSlug')
+                ->andReturn($mockDocTemplate);
+
+            $mockFile = m::mock();
+            $mockFile->shouldReceive('getContent')->andReturn('<svg xmlns="http://www.w3.org/2000/svg"/>');
+            $this->mockContentStore->shouldReceive('read')->andReturn($mockFile);
+
+            $result = $sut->renderPreview(
+                $this->createMinimalLetterInstance(),
+                $this->createChromeTemplate(['[[OTC_LOGO]]'], '{{HEADER_LEFT_CONTENT}}')
+            );
+
+            $this->assertStringNotContainsString('data:', $result);
+            $this->assertStringNotContainsString('[[OTC_LOGO]]', $result);
+        } finally {
+            \Olcs\Logging\Log\Logger::setLogger(new \Psr\Log\NullLogger());
+        }
+    }
+
     public function testOtcLogoResolutionFailureIsLoggedNotFatal(): void
     {
         $spyLogger = m::mock(\Psr\Log\LoggerInterface::class);

@@ -396,24 +396,34 @@ class LetterPreviewService
                 return '';
             }
 
+            // read() returns File|false — never null (same trap documented on the
+            // legacy buildLogoImage below), so guard falsy or a missing file fatals.
             $file = $this->contentStore->read($document->getIdentifier());
-            if ($file === null) {
+            if (!$file) {
                 return '';
             }
 
             $content = (string) $file->getContent();
-            $base64 = base64_encode($content);
 
-            // Pick mime from the magic bytes — default to png so older seed files keep working
+            // The purifier's data-URI handler only admits GD-verified png/gif/jpeg —
+            // anything else (SVG, WebP, corrupt file) would be stripped *silently*
+            // downstream, so refuse it here where we can log and fall back instead.
             $info = @getimagesizefromstring($content);
-            $mime = ($info && !empty($info['mime'])) ? $info['mime'] : 'image/png';
+            $mime = $info['mime'] ?? null;
+            if (!in_array($mime, ['image/png', 'image/gif', 'image/jpeg'], true)) {
+                Logger::warn('OTC logo document is not a supported image type', [
+                    'slug' => $slug,
+                    'detectedMime' => $mime ?? 'not an image',
+                ]);
+                return '';
+            }
 
             return sprintf(
                 '<img src="data:%s;base64,%s" alt="OTC logo" style="max-width:180px;height:auto;">',
                 htmlspecialchars($mime),
-                $base64
+                base64_encode($content)
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Logger::warn('OTC logo lookup failed', [
                 'slug' => $slug,
                 'reason' => $e->getMessage(),
