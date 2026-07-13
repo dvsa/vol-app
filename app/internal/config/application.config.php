@@ -7,8 +7,6 @@ $config = [
         'Olcs\Logging',
         'Laminas\Router',
         'Laminas\Navigation',
-        'Laminas\Cache\Module',
-        'Laminas\Cache\Storage\Adapter\Redis',
         'Laminas\I18n',
         'Laminas\Mvc\Plugin\FlashMessenger',
         'Laminas\Filter',

@@ -43,8 +43,6 @@
     "ext-redis": "*",
     "dvsa/laminas-config-cloud-parameters": "^2.1",
     "laminas/laminas-authentication": "^2.19",
-    "laminas/laminas-cache": "^3.13",
-    "laminas/laminas-cache-storage-adapter-redis": "^2.10",
     "laminas/laminas-code": "^4.17",
     "laminas/laminas-escaper": "^2.18",
     "laminas/laminas-eventmanager": "^3.15",
@@ -73,7 +71,9 @@
     "psr/container": "^1.1|^2",
     "aws/aws-sdk-php": "^3.385",
     "symfony/filesystem": "^7.4",
-    "sabre/dav": "^4.7"
+    "sabre/dav": "^4.7",
+    "psr/cache": "^1.0 || ^2.0 || ^3.0",
+    "symfony/cache": "^5.4 || ^6.4"
   },
   "require-dev": {
     "laminas/laminas-developer-tools": "*",
