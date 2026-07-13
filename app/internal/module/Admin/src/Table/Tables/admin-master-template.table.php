@@ -42,6 +42,15 @@ return [
             'formatter' => fn($row) => Escape::html($row['name'] ?? ''),
         ],
         [
+            // Sibling chrome templates share a name and differ only by locale
+            // (en_GB / en_NI / ...), so without this column the rows are
+            // indistinguishable in the list.
+            'title' => 'Locale',
+            'name' => 'locale',
+            'sort' => 'locale',
+            'formatter' => fn($row) => Escape::html($row['locale'] ?? 'N/A'),
+        ],
+        [
             'title' => 'Default',
             'name' => 'isDefault',
             'sort' => 'isDefault',

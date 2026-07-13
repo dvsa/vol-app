@@ -107,15 +107,23 @@ class MasterTemplate
     public $isDefault = null;
 
     /**
+     * A select rather than free text: the resolver matches this value exactly
+     * (name + locale is a sibling template's identity), so a typo would silently
+     * break chrome resolution. customN_* one-off variants are a future extension
+     * point — add them here when the resolver learns to pick them.
+     *
      * @Form\Options({
      *     "label": "Locale",
-     *     "hint": "Chrome variant key — en_GB (default), en_NI (NI letters), cy_GB (Welsh), or customN_GB / customN_NI for one-off chromes. Picked at letter-generation time by isNi."
+     *     "hint": "Chrome variant — en_GB (default), en_NI (NI letters), cy_GB (Welsh). Picked at letter-generation time by isNi.",
+     *     "value_options": {
+     *         "en_GB": "en_GB — England, Scotland and Wales (default)",
+     *         "en_NI": "en_NI — Northern Ireland",
+     *         "cy_GB": "cy_GB — Welsh"
+     *     }
      * })
      * @Form\Required(false)
-     * @Form\Type("Text")
-     * @Form\Attributes({"class":"medium"})
-     * @Form\Filter("Laminas\Filter\StringTrim")
-     * @Form\Validator("Laminas\Validator\StringLength", options={"max":20})
+     * @Form\Type("select")
+     * @Form\Attributes({"class":"medium", "id":"locale"})
      */
     public $locale = null;
 }
