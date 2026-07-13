@@ -61,6 +61,9 @@ final class PrepareToSend extends AbstractCommandHandler implements
             throw new ValidationException(['Letter instance must be in DRAFT or READY status']);
         }
 
+        // VOL-7402: content flagged "requires input" must be edited before sending
+        $this->assertRequiredInputProvided($letterInstance);
+
         // VOL-7305: pick the right MasterTemplate row for this letter's region (GB/NI/...)
         $masterTemplate = $this->masterTemplateResolver->resolve($letterInstance);
 
@@ -236,6 +239,39 @@ final class PrepareToSend extends AbstractCommandHandler implements
         }
 
         return null;
+    }
+
+    /**
+     * VOL-7402: block sending while any issue or section flagged "requires input"
+     * still carries its default content. The flag exists precisely so a caseworker
+     * must replace boilerplate (deadlines, amounts, names) before the letter goes out.
+     *
+     * @throws ValidationException listing every offending heading
+     */
+    private function assertRequiredInputProvided(LetterInstanceEntity $letterInstance): void
+    {
+        $pending = [];
+
+        foreach ($letterInstance->getLetterInstanceIssues() as $issue) {
+            if ($issue->requiresInput() && !$issue->hasBeenEdited()) {
+                $pending[] = $issue->getHeading() ?: 'Issue';
+            }
+        }
+
+        foreach ($letterInstance->getLetterInstanceSections() as $section) {
+            if ($section->requiresInput() && !$section->hasBeenEdited()) {
+                $pending[] = $section->getLetterSectionVersion()?->getName() ?: 'Section';
+            }
+        }
+
+        if (!empty($pending)) {
+            throw new ValidationException([
+                'requiresInput' => [sprintf(
+                    'This letter cannot be sent yet. Edit the following before sending: %s',
+                    implode(', ', $pending)
+                )],
+            ]);
+        }
     }
 
     /**

@@ -81,4 +81,81 @@ class PrepareToSendTest extends MockeryTestCase
 
         $this->assertSame('Letter', $this->buildDescription($letterInstance));
     }
+
+    private function assertRequiredInput(LetterInstance $letterInstance): void
+    {
+        $method = new \ReflectionMethod(PrepareToSend::class, 'assertRequiredInputProvided');
+        $method->setAccessible(true);
+        $method->invoke(
+            (new \ReflectionClass(PrepareToSend::class))->newInstanceWithoutConstructor(),
+            $letterInstance
+        );
+    }
+
+    private function mockRequiresInputIssue(string $heading, bool $requiresInput, bool $edited): m\MockInterface
+    {
+        $issue = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue::class);
+        $issue->shouldReceive('requiresInput')->andReturn($requiresInput);
+        $issue->shouldReceive('hasBeenEdited')->andReturn($edited);
+        $issue->shouldReceive('getHeading')->andReturn($heading);
+
+        return $issue;
+    }
+
+    public function testPrepareToSendBlockedWhenRequiredInputIssueUnedited(): void
+    {
+        // VOL-7402: a section flagged "requires input" must be changed from its
+        // default content before the letter can be sent.
+        $letterInstance = m::mock(LetterInstance::class);
+        $letterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new ArrayCollection([
+            $this->mockRequiresInputIssue('Financial evidence', true, false),
+        ]));
+        $letterInstance->shouldReceive('getLetterInstanceSections')->andReturn(new ArrayCollection());
+
+        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
+
+        try {
+            $this->assertRequiredInput($letterInstance);
+        } catch (\Dvsa\Olcs\Api\Domain\Exception\ValidationException $e) {
+            $this->assertStringContainsString('Financial evidence', json_encode($e->getMessages()));
+            throw $e;
+        }
+    }
+
+    public function testPrepareToSendAllowedWhenRequiredInputProvided(): void
+    {
+        $letterInstance = m::mock(LetterInstance::class);
+        $letterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new ArrayCollection([
+            $this->mockRequiresInputIssue('Financial evidence', true, true),
+            $this->mockRequiresInputIssue('Adverts', false, false),
+        ]));
+        $letterInstance->shouldReceive('getLetterInstanceSections')->andReturn(new ArrayCollection());
+
+        $this->assertRequiredInput($letterInstance);
+        $this->expectNotToPerformAssertions();
+    }
+
+    public function testPrepareToSendBlockedWhenRequiredInputSectionUnedited(): void
+    {
+        $sectionVersion = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion::class);
+        $sectionVersion->shouldReceive('getName')->andReturn('Introductory wording');
+
+        $section = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection::class);
+        $section->shouldReceive('requiresInput')->andReturn(true);
+        $section->shouldReceive('hasBeenEdited')->andReturn(false);
+        $section->shouldReceive('getLetterSectionVersion')->andReturn($sectionVersion);
+
+        $letterInstance = m::mock(LetterInstance::class);
+        $letterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new ArrayCollection());
+        $letterInstance->shouldReceive('getLetterInstanceSections')->andReturn(new ArrayCollection([$section]));
+
+        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
+
+        try {
+            $this->assertRequiredInput($letterInstance);
+        } catch (\Dvsa\Olcs\Api\Domain\Exception\ValidationException $e) {
+            $this->assertStringContainsString('Introductory wording', json_encode($e->getMessages()));
+            throw $e;
+        }
+    }
 }

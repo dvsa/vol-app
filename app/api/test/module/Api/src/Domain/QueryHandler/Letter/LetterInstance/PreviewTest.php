@@ -143,12 +143,18 @@ class PreviewTest extends QueryHandlerTestCase
 
         $mockIssue1 = m::mock(LetterInstanceIssue::class);
         $mockIssue1->shouldReceive('getLetterIssueVersion')->andReturn($mockIssueVersion1);
+        $mockIssue1->shouldReceive('requiresInput')->andReturn(false);
+        $mockIssue1->shouldReceive('hasBeenEdited')->andReturn(false);
 
         $mockIssue2 = m::mock(LetterInstanceIssue::class);
         $mockIssue2->shouldReceive('getLetterIssueVersion')->andReturn($mockIssueVersion2);
+        $mockIssue2->shouldReceive('requiresInput')->andReturn(false);
+        $mockIssue2->shouldReceive('hasBeenEdited')->andReturn(false);
 
         $mockIssue3 = m::mock(LetterInstanceIssue::class);
         $mockIssue3->shouldReceive('getLetterIssueVersion')->andReturn($mockIssueVersion3);
+        $mockIssue3->shouldReceive('requiresInput')->andReturn(false);
+        $mockIssue3->shouldReceive('hasBeenEdited')->andReturn(false);
 
         $mockLetterInstance = m::mock(LetterInstanceEntity::class);
         $mockLetterInstance->shouldReceive('getLetterType')
@@ -232,5 +238,49 @@ class PreviewTest extends QueryHandlerTestCase
             ->andReturn(['id' => 123, 'reference' => 'VOL/LET/123']);
 
         return $mockLetterInstance;
+    }
+
+    public function testSectionsListFlagsPendingRequiredInput(): void
+    {
+        // VOL-7402: the sidebar needs to know which issue types still contain
+        // unedited "requires input" content so it can highlight them.
+        $query = Qry::create(['id' => 123]);
+
+        $mockIssueType = m::mock(LetterIssueType::class);
+        $mockIssueType->shouldReceive('getId')->andReturn(1);
+        $mockIssueType->shouldReceive('getName')->andReturn('Finances');
+
+        $mockIssueVersion = m::mock(LetterIssueVersion::class);
+        $mockIssueVersion->shouldReceive('getLetterIssueType')->andReturn($mockIssueType);
+
+        $pendingIssue = m::mock(LetterInstanceIssue::class);
+        $pendingIssue->shouldReceive('getLetterIssueVersion')->andReturn($mockIssueVersion);
+        $pendingIssue->shouldReceive('requiresInput')->andReturn(true);
+        $pendingIssue->shouldReceive('hasBeenEdited')->andReturn(false);
+
+        $mockLetterType = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterType::class);
+        $mockLetterType->shouldReceive('getMasterTemplate')->andReturn(null);
+
+        $mockLetterInstance = m::mock(LetterInstanceEntity::class);
+        $mockLetterInstance->shouldReceive('getLetterType')->andReturn($mockLetterType);
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
+            ->andReturn(new ArrayCollection([$pendingIssue]));
+        $mockLetterInstance->shouldReceive('serialize')->andReturn(['id' => 123]);
+
+        $this->repoMap['LetterInstance']->shouldReceive('fetchUsingId')
+            ->with($query)
+            ->once()
+            ->andReturn($mockLetterInstance);
+
+        $this->mockMasterTemplateResolver->shouldReceive('resolve')
+            ->andReturn(null);
+
+        $this->mockPreviewService->shouldReceive('renderPreview')
+            ->once()
+            ->andReturn('<html>Preview</html>');
+
+        $result = $this->sut->handleQuery($query);
+
+        $this->assertTrue($result['sectionsList'][0]['inputPending']);
     }
 }

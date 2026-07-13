@@ -164,7 +164,15 @@ class Preview extends AbstractQueryHandler
                         'id' => $typeId,
                         'name' => $issueType->getName(),
                         'type' => 'issueType',
+                        'inputPending' => false,
                     ];
+                }
+
+                // VOL-7402: flag types still carrying unedited "requires input"
+                // content so the sidebar can highlight them; sending is blocked
+                // server-side until they are edited.
+                if ($issue->requiresInput() && !$issue->hasBeenEdited()) {
+                    $issueTypeMap[$typeId]['inputPending'] = true;
                 }
             }
         }
