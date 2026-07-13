@@ -1005,9 +1005,16 @@ class LetterGenerationController extends AbstractInternalController implements L
                     'label' => $letterChoice['label'] ?? '',
                     'groupLabel' => $letterChoice['groupLabel'] ?? 'Other letter choices',
                     'inputType' => $letterChoice['inputType'] ?? 'checkbox',
+                    'displayOrder' => (int) ($letterChoice['displayOrder'] ?? 0),
                 ];
             }
         }
+
+        // VOL-7282: honour the admin-configured ordering (label as tiebreak)
+        usort(
+            $choices,
+            fn(array $a, array $b) => [$a['displayOrder'], $a['label']] <=> [$b['displayOrder'], $b['label']]
+        );
 
         return $choices;
     }
