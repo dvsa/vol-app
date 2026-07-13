@@ -179,7 +179,7 @@ class LetterPreviewService
                 if ($items !== '') {
                     $html .= '<div class="issue-todos">';
                     $html .= '<h4 class="todo-heading" style="font-size:14pt;font-weight:bold;color:#000;">What you need to do</h4>';
-                    $html .= '<ul class="todo-list">' . $items . '</ul>';
+                    $html .= '<div class="todo-list">' . $items . '</div>';
                     $html .= '</div>';
                 }
             }

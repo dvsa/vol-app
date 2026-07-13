@@ -1170,10 +1170,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
     private function createMinimalLetterInstance(): m\MockInterface
     {
         $mockLetterInstance = m::mock(LetterInstance::class);
-        $mockLetterInstance->shouldReceive('getLetterInstanceSections')->andReturn(new ArrayCollection());
-        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
-        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new ArrayCollection());
-        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceSections')->andReturn(new ArrayCollection())->byDefault();
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection())->byDefault();
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new ArrayCollection())->byDefault();
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')->andReturn(new ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('getReference')->andReturn('REF123');
         $mockLetterInstance->shouldReceive('getCreatedBy')->andReturn(null);
         $mockLetterInstance->shouldReceive('getApplication')->andReturn(null);
@@ -1207,6 +1207,37 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockTemplate->shouldReceive('getTemplateContent')->andReturn($templateContent);
 
         return $mockTemplate;
+    }
+
+    public function testTodosRenderInBlockContainerNotList(): void
+    {
+        // VOL-7280: the to-do group must not be a <ul> — each to-do is a block,
+        // so bullets inside a to-do's own content stay top-level and solid.
+        $mockIssueRenderer = m::mock(SectionRendererInterface::class);
+        $mockIssueRenderer->shouldReceive('render')->andReturn('<div class="issue">Issue body</div>');
+        $mockTodoRenderer = m::mock(SectionRendererInterface::class);
+        $mockTodoRenderer->shouldReceive('render')->andReturn('<div class="todo-item">Upload statements</div>');
+
+        $this->mockRendererManager->shouldReceive('get')->with('issue')->andReturn($mockIssueRenderer);
+        $this->mockRendererManager->shouldReceive('get')->with('todo')->andReturn($mockTodoRenderer);
+        $this->mockRendererManager->shouldReceive('get')->with('content-section')->andReturn($mockIssueRenderer)->byDefault();
+
+        $mockIssue = $this->createMockIssue('Adverts', 'Advert issues with your application', 1);
+
+        $mockTodo = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo::class);
+        $mockTodo->shouldReceive('getLetterInstanceIssue')->andReturn($mockIssue);
+
+        $mockLetterInstance = $this->createMinimalLetterInstance();
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
+            ->andReturn(new ArrayCollection([$mockIssue]));
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')
+            ->andReturn(new ArrayCollection([$mockTodo]));
+
+        $result = $this->sut->renderPreview($mockLetterInstance, null);
+
+        $this->assertStringContainsString('<div class="todo-list">', $result);
+        $this->assertStringNotContainsString('<ul class="todo-list">', $result);
+        $this->assertStringContainsString('What you need to do', $result);
     }
 
     private function createMockIssue(string $typeName, string $typeDescription, int $typeId): m\MockInterface
