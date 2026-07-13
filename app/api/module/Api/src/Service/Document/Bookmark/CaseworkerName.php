@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\Base\DynamicBookmark;
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\UserBundle as Qry;
+use Olcs\Logging\Log\Logger;
 
 /**
  * Caseworker name bookmark
@@ -36,6 +37,11 @@ class CaseworkerName extends DynamicBookmark
         if (!is_array($person)) {
             // Mirrors the previous LetterPreviewService::buildCaseworkerName fallback
             // when the user has no contact details / person set, or no user at all.
+            // This bookmark is shared with legacy RTF docgen (which used to fail
+            // loudly here), so make the silent degradation at least visible.
+            Logger::warn('CaseworkerName bookmark fell back to generic label', [
+                'reason' => 'no person data on user',
+            ]);
             return 'Caseworker';
         }
         return Formatter\Name::format($person);
