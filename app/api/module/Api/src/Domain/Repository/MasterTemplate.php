@@ -32,4 +32,28 @@ class MasterTemplate extends AbstractRepository
         $result = $qb->getQuery()->getResult();
         return $result[0] ?? null;
     }
+
+    /**
+     * Fetch the default master template — the chrome used when a LetterType has no
+     * template of its own. Prefers the en_GB row; tolerates a NULL locale so
+     * pre-VOL-7305 default rows keep working until re-saved.
+     *
+     * @return Entity|null
+     */
+    public function fetchDefault(): ?Entity
+    {
+        $qb = $this->createQueryBuilder();
+        $qb->andWhere($qb->expr()->eq($this->alias . '.isDefault', ':isDefault'))
+            ->andWhere($qb->expr()->orX(
+                $qb->expr()->eq($this->alias . '.locale', ':locale'),
+                $qb->expr()->isNull($this->alias . '.locale')
+            ))
+            ->setParameter('isDefault', true)
+            ->setParameter('locale', Entity::LOCALE_EN_GB)
+            ->orderBy($this->alias . '.locale', 'DESC')
+            ->setMaxResults(1);
+
+        $result = $qb->getQuery()->getResult();
+        return $result[0] ?? null;
+    }
 }

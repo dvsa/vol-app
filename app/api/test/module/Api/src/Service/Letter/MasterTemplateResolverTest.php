@@ -30,14 +30,52 @@ class MasterTemplateResolverTest extends MockeryTestCase
         $this->sut = new MasterTemplateResolver($this->mockRepo);
     }
 
-    public function testReturnsNullIfLetterTypeHasNoMasterTemplate(): void
+    public function testReturnsNullWhenNoTemplateAndNoDefaultExists(): void
     {
         $letterType = m::mock(LetterType::class);
         $letterType->shouldReceive('getMasterTemplate')->andReturn(null);
 
+        $this->mockRepo->shouldReceive('fetchDefault')->once()->andReturn(null);
+
         $letter = $this->makeLetter($letterType, isNi: false);
 
         $this->assertNull($this->sut->resolve($letter));
+    }
+
+    public function testFallsBackToDefaultTemplateWhenLetterTypeHasNone(): void
+    {
+        // Parity with pre-VOL-7305 behaviour: letter types without a linked master
+        // template must still render with the default chrome, not bare.
+        $default = $this->makeMasterTemplate('Default Letter Template', MasterTemplate::LOCALE_EN_GB);
+
+        $letterType = m::mock(LetterType::class);
+        $letterType->shouldReceive('getMasterTemplate')->andReturn(null);
+
+        $this->mockRepo->shouldReceive('fetchDefault')->once()->andReturn($default);
+        $this->mockRepo->shouldNotReceive('findByNameAndLocale');
+
+        $letter = $this->makeLetter($letterType, isNi: false);
+
+        $this->assertSame($default, $this->sut->resolve($letter));
+    }
+
+    public function testFallbackDefaultStillPivotsToNiSibling(): void
+    {
+        $default = $this->makeMasterTemplate('Default Letter Template', MasterTemplate::LOCALE_EN_GB);
+        $niSibling = $this->makeMasterTemplate('Default Letter Template', MasterTemplate::LOCALE_EN_NI);
+
+        $letterType = m::mock(LetterType::class);
+        $letterType->shouldReceive('getMasterTemplate')->andReturn(null);
+
+        $this->mockRepo->shouldReceive('fetchDefault')->once()->andReturn($default);
+        $this->mockRepo->shouldReceive('findByNameAndLocale')
+            ->with('Default Letter Template', MasterTemplate::LOCALE_EN_NI)
+            ->once()
+            ->andReturn($niSibling);
+
+        $letter = $this->makeLetter($letterType, isNi: true);
+
+        $this->assertSame($niSibling, $this->sut->resolve($letter));
     }
 
     public function testReturnsLetterTypeBaseWhenItAlreadyMatchesPreferredLocaleGb(): void

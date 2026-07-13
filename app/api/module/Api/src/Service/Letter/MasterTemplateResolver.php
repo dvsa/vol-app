@@ -32,7 +32,11 @@ class MasterTemplateResolver
      */
     public function resolve(LetterInstance $letterInstance): ?MasterTemplate
     {
-        $base = $letterInstance->getLetterType()?->getMasterTemplate();
+        // Letter types without their own template fall back to the default chrome —
+        // parity with the pre-resolver behaviour; a null here would silently render
+        // the letter bare (no logo, sender address, signoff or footer).
+        $base = $letterInstance->getLetterType()?->getMasterTemplate()
+            ?? $this->masterTemplateRepo->fetchDefault();
         if ($base === null) {
             return null;
         }

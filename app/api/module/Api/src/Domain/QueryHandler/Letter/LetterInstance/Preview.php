@@ -6,7 +6,6 @@ namespace Dvsa\Olcs\Api\Domain\QueryHandler\Letter\LetterInstance;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
-use Dvsa\Olcs\Api\Entity\Letter\MasterTemplate;
 use Dvsa\Olcs\Api\Service\Letter\LetterPreviewService;
 use Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolver;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
@@ -20,7 +19,6 @@ use Psr\Container\ContainerInterface;
 class Preview extends AbstractQueryHandler
 {
     protected $repoServiceName = 'LetterInstance';
-    protected $extraRepos = ['MasterTemplate'];
 
     private LetterPreviewService $previewService;
     private MasterTemplateResolver $masterTemplateResolver;
@@ -102,41 +100,6 @@ class Preview extends AbstractQueryHandler
             'previewHtml' => $previewHtml,
             'sectionsList' => $sectionsList,
         ];
-    }
-
-    /**
-     * Get the master template to use for rendering
-     *
-     * @param LetterInstanceEntity $letterInstance
-     * @return MasterTemplate|null
-     */
-    private function getMasterTemplate(LetterInstanceEntity $letterInstance): ?MasterTemplate
-    {
-        // First try to get from the letter type
-        $letterType = $letterInstance->getLetterType();
-        if ($letterType !== null && $letterType->getMasterTemplate() !== null) {
-            return $letterType->getMasterTemplate();
-        }
-
-        // Fall back to default template for locale
-        try {
-            $repo = $this->getRepo('MasterTemplate');
-            $result = $repo->fetchList(
-                \Dvsa\Olcs\Transfer\Query\Letter\MasterTemplate\GetList::create([
-                    'isDefault' => true,
-                    'locale' => MasterTemplate::LOCALE_EN_GB,
-                    'limit' => 1
-                ])
-            );
-
-            if (count($result) > 0) {
-                return $result[0];
-            }
-        } catch (\Exception) {
-            // Log and continue without template
-        }
-
-        return null;
     }
 
     /**

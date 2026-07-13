@@ -11,7 +11,6 @@ use Dvsa\Olcs\Api\Domain\DocumentGeneratorAwareInterface;
 use Dvsa\Olcs\Api\Domain\DocumentGeneratorAwareTrait;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
-use Dvsa\Olcs\Api\Entity\Letter\MasterTemplate;
 use Dvsa\Olcs\Api\Service\ConvertToPdf\ConvertHtmlToPdfInterface;
 use Dvsa\Olcs\Api\Service\Document\NamingServiceAwareInterface;
 use Dvsa\Olcs\Api\Service\Letter\LetterPreviewService;
@@ -38,7 +37,7 @@ final class PrepareToSend extends AbstractCommandHandler implements
 
     protected $repoServiceName = 'LetterInstance';
 
-    protected $extraRepos = ['Document', 'MasterTemplate'];
+    protected $extraRepos = ['Document'];
 
     private LetterPreviewService $previewService;
 
@@ -209,36 +208,6 @@ final class PrepareToSend extends AbstractCommandHandler implements
         $this->result->addMessage('Letter prepared for sending');
 
         return $this->result;
-    }
-
-    /**
-     * Get the master template to use for rendering
-     */
-    private function getMasterTemplate(LetterInstanceEntity $letterInstance): ?MasterTemplate
-    {
-        $letterType = $letterInstance->getLetterType();
-        if ($letterType !== null && $letterType->getMasterTemplate() !== null) {
-            return $letterType->getMasterTemplate();
-        }
-
-        try {
-            $repo = $this->getRepo('MasterTemplate');
-            $result = $repo->fetchList(
-                \Dvsa\Olcs\Transfer\Query\Letter\MasterTemplate\GetList::create([
-                    'isDefault' => true,
-                    'locale' => MasterTemplate::LOCALE_EN_GB,
-                    'limit' => 1,
-                ])
-            );
-
-            if (count($result) > 0) {
-                return $result[0];
-            }
-        } catch (\Exception $e) {
-            Logger::warn('PrepareToSend: Failed to fetch default master template: ' . $e->getMessage());
-        }
-
-        return null;
     }
 
     /**
