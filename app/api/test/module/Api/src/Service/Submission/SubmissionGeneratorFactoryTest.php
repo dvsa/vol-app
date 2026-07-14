@@ -11,9 +11,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Submission\SubmissionGeneratorFactory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Submission\SubmissionGeneratorFactory::class)]
 final class SubmissionGeneratorFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void

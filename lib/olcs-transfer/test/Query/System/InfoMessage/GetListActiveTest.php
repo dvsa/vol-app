@@ -6,9 +6,7 @@ namespace Dvsa\OlcsTest\Transfer\Query\Application;
 
 use Dvsa\Olcs\Transfer\Query\System\InfoMessage\GetListActive;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Query\System\InfoMessage\GetListActive
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Query\System\InfoMessage\GetListActive::class)]
 final class GetListActiveTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()

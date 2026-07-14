@@ -9,9 +9,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\Result;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\QueryHandler\Result
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Result::class)]
 final class ResultTest extends MockeryTestCase
 {
     public function testResultWithoutEntity(): void

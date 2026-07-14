@@ -12,9 +12,7 @@ use Dvsa\Olcs\Transfer\Query\EventHistory\EventHistory as Qry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\QueryHandler\EventHistory\EventHistory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\EventHistory\EventHistory::class)]
 final class EventHistoryTest extends QueryHandlerTestCase
 {
     public function setUp(): void

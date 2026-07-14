@@ -17,10 +17,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\FinancialEvidence;
 
-/**
- * @covers Olcs\FormService\Form\Lva\FinancialEvidence
- */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\FormService\Form\Lva\FinancialEvidence::class)]
 final class FinancialEvidenceTest extends MockeryTestCase
 {
     /** @var  FinancialEvidence */

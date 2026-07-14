@@ -9,9 +9,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Validation\Validators\AbstractCanEditEntity
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Validators\AbstractCanEditEntity::class)]
 final class AbstractCanEditEntityTest extends MockeryTestCase
 {
     /**

@@ -11,10 +11,8 @@ use Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication as Entity;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication
- * @covers Dvsa\Olcs\Api\Entity\Tm\AbstractTransportManagerApplication
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Tm\AbstractTransportManagerApplication::class)]
 final class TransportManagerApplicationEntityTest extends EntityTester
 {
     /**

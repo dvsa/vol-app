@@ -6,9 +6,7 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\StatementContactType;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\StatementContactType
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\StatementContactType::class)]
 final class StatementContactTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void

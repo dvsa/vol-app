@@ -11,10 +11,8 @@ use Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre
- * @covers Dvsa\Olcs\Api\Entity\Application\AbstractApplicationOperatingCentre
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\AbstractApplicationOperatingCentre::class)]
 final class ApplicationOperatingCentreEntityTest extends EntityTester
 {
     /**

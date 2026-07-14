@@ -8,9 +8,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Validators\AbstractCanAccessEntity;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Validation\Validators\AbstractCanAccessEntity
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Validators\AbstractCanAccessEntity::class)]
 final class AbstractCanAccessEntityTest extends MockeryTestCase
 {
     /**

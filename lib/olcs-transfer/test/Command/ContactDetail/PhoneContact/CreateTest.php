@@ -6,9 +6,7 @@ namespace Dvsa\OlcsTest\Transfer\Command\ContactDetail\PhoneContact;
 
 use Dvsa\Olcs\Transfer\Command\ContactDetail\PhoneContact\Create;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Command\ContactDetail\PhoneContact\Create
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\ContactDetail\PhoneContact\Create::class)]
 final class CreateTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()

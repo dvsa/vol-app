@@ -8,9 +8,7 @@ use Common\View\Helper\LinkBack;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Common\View\Helper\LinkBack
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\View\Helper\LinkBack::class)]
 final class LinkBackTest extends MockeryTestCase
 {
     /** @var  m\MockInterface */

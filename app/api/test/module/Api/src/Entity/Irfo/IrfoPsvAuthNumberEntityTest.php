@@ -9,10 +9,8 @@ use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthNumber as Entity;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthNumber
- * @covers Dvsa\Olcs\Api\Entity\Irfo\AbstractIrfoPsvAuthNumber
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthNumber::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Irfo\AbstractIrfoPsvAuthNumber::class)]
 final class IrfoPsvAuthNumberEntityTest extends EntityTester
 {
     /**

@@ -8,9 +8,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\FeeDueDate;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\FeeDueDate
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\FeeDueDate::class)]
 final class FeeDueDateTest extends MockeryTestCase
 {
     public function testGetQuery(): void

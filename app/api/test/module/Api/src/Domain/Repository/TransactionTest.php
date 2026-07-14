@@ -13,9 +13,7 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 use Dvsa\Olcs\Api\Entity\Fee\Transaction;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Repository\Transaction
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Transaction::class)]
 final class TransactionTest extends RepositoryTestCase
 {
     /** @var  TransactionRepo */

@@ -6,9 +6,7 @@ namespace Dvsa\OlcsTest\Transfer\Command\Lva;
 
 use Dvsa\Olcs\Transfer\Command\Lva\AbstractDeleteCompanySubsidiary;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Command\Lva\AbstractDeleteCompanySubsidiary
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\Lva\AbstractDeleteCompanySubsidiary::class)]
 final class AbstractDeleteCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetSet()

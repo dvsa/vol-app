@@ -12,9 +12,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Submission\Sections\AbstractFactory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Submission\Sections\AbstractFactory::class)]
 final class AbstractFactoryTest extends MockeryTestCase
 {
     /** @var  ContainerInterface | m\MockInterface */

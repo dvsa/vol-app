@@ -11,9 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\TotalContFee;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\TotalContFee
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\TotalContFee::class)]
 final class TotalContFeeTest extends MockeryTestCase
 {
     /** @var  TotalContFee */

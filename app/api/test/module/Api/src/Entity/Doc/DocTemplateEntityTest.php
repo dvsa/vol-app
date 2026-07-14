@@ -8,10 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Api\Entity\Doc\DocTemplate as Entity;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Doc\DocTemplate
- * @covers Dvsa\Olcs\Api\Entity\Doc\AbstractDocTemplate
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Doc\DocTemplate::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Doc\AbstractDocTemplate::class)]
 final class DocTemplateEntityTest extends EntityTester
 {
     /**

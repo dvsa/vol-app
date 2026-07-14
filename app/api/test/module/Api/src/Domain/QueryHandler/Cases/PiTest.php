@@ -13,9 +13,7 @@ use Dvsa\Olcs\Transfer\Query\Cases\Pi as Qry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\QueryHandler\Cases\Pi
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Cases\Pi::class)]
 final class PiTest extends QueryHandlerTestCase
 {
     public function setUp(): void

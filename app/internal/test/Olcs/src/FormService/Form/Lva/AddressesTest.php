@@ -9,9 +9,7 @@ use Olcs\FormService\Form\Lva\Addresses;
 use Laminas\InputFilter\InputFilter;
 use Laminas\InputFilter\Input;
 
-/**
- * @covers Olcs\FormService\Form\Lva\Addresses
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\FormService\Form\Lva\Addresses::class)]
 final class AddressesTest extends AbstractLvaFormServiceTestCase
 {
     protected $classToTest = Addresses::class;

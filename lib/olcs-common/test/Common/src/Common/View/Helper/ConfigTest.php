@@ -8,9 +8,7 @@ use Common\View\Helper\Config;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Common\View\Helper\Config
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\View\Helper\Config::class)]
 final class ConfigTest extends MockeryTestCase
 {
     public function testInvoke(): void

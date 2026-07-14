@@ -8,9 +8,7 @@ use Common\View\Helper\NavigationParentPage;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Common\View\Helper\NavigationParentPage
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\View\Helper\NavigationParentPage::class)]
 final class NavigationParentPageTest extends MockeryTestCase
 {
     /** @var  m\MockInterface */

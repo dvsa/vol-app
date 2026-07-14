@@ -16,9 +16,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\FormService\Form\Lva\Stub\AbstractOverviewSubmissionStub;
 
-/**
- * @covers Olcs\FormService\Form\Lva\AbstractOverviewSubmission
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\FormService\Form\Lva\AbstractOverviewSubmission::class)]
 final class AbstractOverviewSubmissionTest extends MockeryTestCase
 {
     /** @var  AbstractOverviewSubmissionStub */

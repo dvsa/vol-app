@@ -6,9 +6,7 @@ namespace Dvsa\OlcsTest\Api\Domain\QueryPartial;
 
 use Dvsa\Olcs\Api\Domain\QueryPartial\Paginate;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\QueryPartial\Paginate
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryPartial\Paginate::class)]
 final class PaginateTest extends QueryPartialTestCase
 {
     public function setUp(): void

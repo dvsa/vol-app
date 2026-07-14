@@ -7,9 +7,7 @@ namespace Dvsa\OlcsTest\Api\Service\Publication;
 use Dvsa\Olcs\Api\Service\Publication\ImmutableArrayObject;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Publication\ImmutableArrayObject
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Publication\ImmutableArrayObject::class)]
 final class ImmutableArrayObjectTest extends MockeryTestCase
 {
     public function testOffset(): void

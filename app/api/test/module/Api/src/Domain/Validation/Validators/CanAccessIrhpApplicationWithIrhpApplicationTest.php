@@ -9,9 +9,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Validation\Validators\CanAccessIrhpApplicationWithIrhpApplication
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Validators\CanAccessIrhpApplicationWithIrhpApplication::class)]
 final class CanAccessIrhpApplicationWithIrhpApplicationTest extends AbstractValidatorsTestCase
 {
     /**

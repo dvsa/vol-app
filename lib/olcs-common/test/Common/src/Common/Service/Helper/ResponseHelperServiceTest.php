@@ -9,9 +9,7 @@ use Common\Service\Table\TableBuilder;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Common\Service\Helper\ResponseHelperService
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Helper\ResponseHelperService::class)]
 final class ResponseHelperServiceTest extends MockeryTestCase
 {
     /** @var  ResponseHelperService */

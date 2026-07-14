@@ -15,9 +15,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\I18n\Translator\TranslatorInterface;
 
-/**
- * @covers Dvsa\Olcs\Snapshot\Service\Snapshots\TransportManagerApplication\Section\AbstractReviewService
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Snapshot\Service\Snapshots\TransportManagerApplication\Section\AbstractReviewService::class)]
 final class AbstractReviewServiceTest extends MockeryTestCase
 {
     /** @var AbstractReviewServiceStub */

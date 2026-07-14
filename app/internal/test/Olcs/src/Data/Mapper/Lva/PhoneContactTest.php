@@ -12,9 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\Lva\PhoneContact;
 use Laminas\Form\FormInterface;
 
-/**
- * @covers Olcs\Data\Mapper\Lva\PhoneContact
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Data\Mapper\Lva\PhoneContact::class)]
 final class PhoneContactTest extends MockeryTestCase
 {
     /** @var  array */

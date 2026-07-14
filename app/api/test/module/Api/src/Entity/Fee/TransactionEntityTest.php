@@ -15,10 +15,8 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Fee\Transaction
- * @covers Dvsa\Olcs\Api\Entity\Fee\AbstractTransaction
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Fee\Transaction::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Fee\AbstractTransaction::class)]
 final class TransactionEntityTest extends EntityTester
 {
     public const int FEE_1_ID = 9001;

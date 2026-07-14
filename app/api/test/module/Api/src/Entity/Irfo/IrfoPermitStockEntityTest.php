@@ -9,10 +9,8 @@ use Dvsa\Olcs\Api\Entity\Irfo\IrfoPermitStock as Entity;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Irfo\IrfoPermitStock
- * @covers Dvsa\Olcs\Api\Entity\Irfo\AbstractIrfoPermitStock
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Irfo\IrfoPermitStock::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Irfo\AbstractIrfoPermitStock::class)]
 final class IrfoPermitStockEntityTest extends EntityTester
 {
     /**

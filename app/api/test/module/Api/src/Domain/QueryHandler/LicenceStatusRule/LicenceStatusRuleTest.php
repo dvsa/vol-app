@@ -10,9 +10,7 @@ use Dvsa\Olcs\Transfer\Query;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\QueryHandler\LicenceStatusRule\LicenceStatusRule
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\LicenceStatusRule\LicenceStatusRule::class)]
 final class LicenceStatusRuleTest extends QueryHandlerTestCase
 {
     public function setUp(): void

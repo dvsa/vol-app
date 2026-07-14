@@ -13,9 +13,7 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Publication\PublicationGenerator
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Publication\PublicationGenerator::class)]
 final class PublicationGeneratorTest extends MockeryTestCase
 {
     /** @var ServiceLocatorInterface|m\MockInterface */

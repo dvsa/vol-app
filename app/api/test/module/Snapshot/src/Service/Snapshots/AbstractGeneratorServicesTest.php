@@ -9,9 +9,7 @@ use Laminas\View\Renderer\RendererInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Snapshot\Service\Snapshots\AbstractGeneratorServices
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Snapshot\Service\Snapshots\AbstractGeneratorServices::class)]
 final class AbstractGeneratorServicesTest extends MockeryTestCase
 {
     public function testGetRenderer(): void

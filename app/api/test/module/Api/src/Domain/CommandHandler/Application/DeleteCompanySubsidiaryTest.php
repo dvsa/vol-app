@@ -11,9 +11,7 @@ use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\Application\DeleteCompanySubsidiary
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Application\DeleteCompanySubsidiary::class)]
 final class DeleteCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
 {
     public const int APP_ID = 9999;

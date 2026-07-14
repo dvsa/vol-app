@@ -6,9 +6,7 @@ namespace Dvsa\OlcsTest\Transfer\Command\ContactDetail\PhoneContact;
 
 use Dvsa\Olcs\Transfer\Command\ContactDetail\PhoneContact\Update;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Command\ContactDetail\PhoneContact\Update
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\ContactDetail\PhoneContact\Update::class)]
 final class UpdateTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()

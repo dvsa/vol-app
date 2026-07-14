@@ -9,9 +9,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Service\Table\Type\OperatingCentreVariationRecordAction;
 
-/**
- * @covers Common\Service\Table\Type\OperatingCentreVariationRecordAction
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Table\Type\OperatingCentreVariationRecordAction::class)]
 final class OperatingCentreVariationRecordActionTest extends MockeryTestCase
 {
     /** @var  OperatingCentreVariationRecordAction */

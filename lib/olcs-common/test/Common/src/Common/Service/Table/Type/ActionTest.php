@@ -9,9 +9,7 @@ use Common\Service\Table\Type\Action;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Common\Service\Table\Type\Action
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Table\Type\Action::class)]
 final class ActionTest extends MockeryTestCase
 {
     public const int ID = 9999;

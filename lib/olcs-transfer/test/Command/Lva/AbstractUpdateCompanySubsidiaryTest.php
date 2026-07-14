@@ -6,10 +6,8 @@ namespace Dvsa\OlcsTest\Transfer\Command\Lva;
 
 use Dvsa\Olcs\Transfer\Command\Lva\AbstractUpdateCompanySubsidiary;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Command\Lva\AbstractCreateCompanySubsidiary
- * @covers Dvsa\Olcs\Transfer\Command\Lva\AbstractUpdateCompanySubsidiary
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\Lva\AbstractCreateCompanySubsidiary::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\Lva\AbstractUpdateCompanySubsidiary::class)]
 final class AbstractUpdateCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetSet()

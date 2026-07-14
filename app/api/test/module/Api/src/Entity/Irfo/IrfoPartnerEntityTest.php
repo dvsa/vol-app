@@ -10,10 +10,8 @@ use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Dvsa\Olcs\Api\Entity\Irfo\IrfoPartner as Entity;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Irfo\IrfoPartner
- * @covers Dvsa\Olcs\Api\Entity\Irfo\AbstractIrfoPartner
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Irfo\IrfoPartner::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Irfo\AbstractIrfoPartner::class)]
 final class IrfoPartnerEntityTest extends EntityTester
 {
     /**

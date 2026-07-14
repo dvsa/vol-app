@@ -7,9 +7,7 @@ namespace Dvsa\OlcsTest\Transfer\Query\Variation;
 use Dvsa\Olcs\Transfer\Query\PagedTrait;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Query\PagedTrait
- */
+#[\PHPUnit\Framework\Attributes\CoversTrait(\Dvsa\Olcs\Transfer\Query\PagedTrait::class)]
 final class PagedTraitTest extends MockeryTestCase
 {
     public function testGetSet()

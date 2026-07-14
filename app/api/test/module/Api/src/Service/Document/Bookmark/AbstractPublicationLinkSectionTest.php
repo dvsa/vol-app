@@ -12,9 +12,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\AbstractPublicationLinkSection
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\AbstractPublicationLinkSection::class)]
 final class AbstractPublicationLinkSectionTest extends MockeryTestCase
 {
     public function testSetGet(): void

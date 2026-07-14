@@ -9,9 +9,7 @@ use Dvsa\Olcs\Api\Entity\Types\DateType;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Types\DateType
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Types\DateType::class)]
 final class DateTypeTest extends MockeryTestCase
 {
     /** @var  DateType */

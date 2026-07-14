@@ -9,9 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Base\DateDelta;
 use Dvsa\OlcsTest\Api\Service\Document\Bookmark\Base\Stub\DateDeltaStub;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\Base\DateDelta
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\Base\DateDelta::class)]
 final class DateDeltaTest extends MockeryTestCase
 {
     public function test(): void

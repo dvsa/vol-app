@@ -12,10 +12,8 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Opposition\Opposer
- * @covers Dvsa\Olcs\Api\Entity\Opposition\AbstractOpposer
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Opposition\Opposer::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Opposition\AbstractOpposer::class)]
 final class OpposerEntityTest extends EntityTester
 {
     /**

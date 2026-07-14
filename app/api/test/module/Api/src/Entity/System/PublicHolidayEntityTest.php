@@ -8,10 +8,8 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 use Dvsa\Olcs\Api\Entity\System\PublicHoliday as Entity;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\System\PublicHoliday
- * @covers Dvsa\Olcs\Api\Entity\System\AbstractPublicHoliday
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\System\PublicHoliday::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\System\AbstractPublicHoliday::class)]
 final class PublicHolidayEntityTest extends EntityTester
 {
     protected $entityClass = Entity::class;

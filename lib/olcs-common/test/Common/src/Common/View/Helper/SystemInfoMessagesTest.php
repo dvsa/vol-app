@@ -13,9 +13,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Stdlib\ResponseInterface;
 
-/**
- * @covers Common\View\Helper\SystemInfoMessages
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\View\Helper\SystemInfoMessages::class)]
 final class SystemInfoMessagesTest extends MockeryTestCase
 {
     /** @var m\MockInterface|QueryService */

@@ -9,9 +9,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\visitor\vfsStreamStructureVisitor;
 
-/**
- * @covers Dvsa\Olcs\Cli\Service\Utils\ExportToCsv
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Utils\ExportToCsv::class)]
 final class ExportToCsvTest extends MockeryTestCase
 {
     /** @var  string */

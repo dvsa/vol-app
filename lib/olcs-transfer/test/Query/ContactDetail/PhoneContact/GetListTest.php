@@ -8,9 +8,7 @@ use Dvsa\Olcs\Transfer\Query\ContactDetail\PhoneContact\GetList;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Query\ContactDetail\PhoneContact\GetList
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Query\ContactDetail\PhoneContact\GetList::class)]
 final class GetListTest extends MockeryTestCase
 {
     public function testGetSet()

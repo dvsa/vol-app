@@ -12,9 +12,7 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
-/**
- * @covers Common\View\Factory\Helper\SystemInfoMessagesFactory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\View\Factory\Helper\SystemInfoMessagesFactory::class)]
 final class SystemInfoMessagesFactoryTest extends TestCase
 {
     public function testInvoke(): void

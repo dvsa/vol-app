@@ -9,9 +9,7 @@ use Common\Service\Table\Formatter\Translate;
 use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 use Mockery as m;
 
-/**
- * @covers Common\Service\Table\Formatter\Translate
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Table\Formatter\Translate::class)]
 final class TranslateTest extends \PHPUnit\Framework\TestCase
 {
     protected $translator;

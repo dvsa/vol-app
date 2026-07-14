@@ -8,9 +8,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\SystemInfoMessage;
 use Laminas\Form\FormInterface;
 
-/**
- * @covers Olcs\Data\Mapper\SystemInfoMessage
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Data\Mapper\SystemInfoMessage::class)]
 final class SystemInfoMessageTest extends MockeryTestCase
 {
     public const int ID = 9999;

@@ -10,9 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\I18n\View\Helper\Translate;
 use Common\RefData;
 
-/**
- * @covers Common\View\Helper\LicenceChecklist
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\View\Helper\LicenceChecklist::class)]
 final class LicenceChecklistTest extends MockeryTestCase
 {
     public $translator;

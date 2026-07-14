@@ -12,9 +12,7 @@ use Dvsa\Olcs\Transfer\Command\System\InfoMessage\Update as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\System\InfoMessage\Update
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\System\InfoMessage\Update::class)]
 final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void

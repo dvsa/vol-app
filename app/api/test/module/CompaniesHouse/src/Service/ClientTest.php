@@ -13,9 +13,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Http\Response;
 
-/**
- * @covers Dvsa\Olcs\CompaniesHouse\Service\Client
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\CompaniesHouse\Service\Client::class)]
 final class ClientTest extends MockeryTestCase
 {
     public const string COMPANY_NO = '03127414';

@@ -12,9 +12,7 @@ use Laminas\I18n\View\Helper\Translate;
 use Laminas\Router\Http\RouteMatch;
 use Laminas\View\Helper\Placeholder;
 
-/**
- * @covers Common\View\Helper\PageTitle
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\View\Helper\PageTitle::class)]
 final class PageTitleTest extends MockeryTestCase
 {
     public $placeholder;

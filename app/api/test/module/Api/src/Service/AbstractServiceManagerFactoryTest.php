@@ -10,9 +10,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\AbstractServiceManagerFactory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\AbstractServiceManagerFactory::class)]
 final class AbstractServiceManagerFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void

@@ -12,9 +12,7 @@ use Mockery as m;
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\QueryHandler\ContinuationDetail\ChecklistReminders
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\ContinuationDetail\ChecklistReminders::class)]
 final class ChecklistRemindersTest extends QueryHandlerTestCase
 {
     public function setUp(): void

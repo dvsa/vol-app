@@ -10,9 +10,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\FinancialHistory;
 
-/**
- * @covers Olcs\FormService\Form\Lva\FinancialHistory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\FormService\Form\Lva\FinancialHistory::class)]
 final class FinancialHistoryTest extends MockeryTestCase
 {
     /** @var  FinancialHistory */

@@ -7,9 +7,7 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\ObjDeadline;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\ObjDeadline
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\ObjDeadline::class)]
 final class ObjDeadlineTest extends MockeryTestCase
 {
     public function test(): void

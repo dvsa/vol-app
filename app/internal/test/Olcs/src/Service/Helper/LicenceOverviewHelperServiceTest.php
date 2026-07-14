@@ -18,8 +18,8 @@ use Olcs\Service\Helper\LicenceOverviewHelperService;
 
 /**
  * Licence Overview Helper Service Test
- * @covers Olcs\Service\Helper\LicenceOverviewHelperService
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Helper\LicenceOverviewHelperService::class)]
 final class LicenceOverviewHelperServiceTest extends MockeryTestCase
 {
     protected $sut;

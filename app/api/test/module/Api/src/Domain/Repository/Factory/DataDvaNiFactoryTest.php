@@ -10,9 +10,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Factory\DataDvaNiFactory;
 use Dvsa\Olcs\Api\Domain\Repository\DataDvaNi;
 use Mockery as m;
 
-/**
- * @covers  Dvsa\Olcs\Api\Domain\Repository\Factory\DataDvaNiFactory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Factory\DataDvaNiFactory::class)]
 final class DataDvaNiFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void

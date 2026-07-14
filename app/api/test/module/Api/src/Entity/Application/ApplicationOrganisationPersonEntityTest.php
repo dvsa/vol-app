@@ -9,10 +9,8 @@ use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson
- * @covers Dvsa\Olcs\Api\Entity\Application\AbstractApplicationOrganisationPerson
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\AbstractApplicationOrganisationPerson::class)]
 final class ApplicationOrganisationPersonEntityTest extends EntityTester
 {
     /**

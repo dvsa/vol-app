@@ -11,10 +11,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * ApplicationReadAudit Entity Unit Tests
- *
- * @covers Dvsa\Olcs\Api\Entity\Application\ApplicationReadAudit
- * @covers Dvsa\Olcs\Api\Entity\Application\AbstractApplicationReadAudit
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\ApplicationReadAudit::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\AbstractApplicationReadAudit::class)]
 final class ApplicationReadAuditEntityTest extends EntityTester
 {
     /**

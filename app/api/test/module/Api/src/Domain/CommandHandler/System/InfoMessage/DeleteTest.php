@@ -11,9 +11,7 @@ use Dvsa\Olcs\Transfer\Command\System\InfoMessage\Delete as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\System\InfoMessage\Delete
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\System\InfoMessage\Delete::class)]
 final class DeleteTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void

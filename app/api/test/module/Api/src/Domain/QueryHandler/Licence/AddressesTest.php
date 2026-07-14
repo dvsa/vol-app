@@ -13,9 +13,7 @@ use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\QueryHandler\Licence\Addresses
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Licence\Addresses::class)]
 final class AddressesTest extends QueryHandlerTestCase
 {
     public const int CONTACT_DETAILS_ID = 8888;

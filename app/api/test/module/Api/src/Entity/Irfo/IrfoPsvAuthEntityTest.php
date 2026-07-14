@@ -15,10 +15,8 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth
- * @covers Dvsa\Olcs\Api\Entity\Irfo\AbstractIrfoPsvAuth
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Irfo\AbstractIrfoPsvAuth::class)]
 final class IrfoPsvAuthEntityTest extends EntityTester
 {
     /**

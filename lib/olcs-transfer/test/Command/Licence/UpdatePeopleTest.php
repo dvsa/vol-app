@@ -8,9 +8,7 @@ use Dvsa\Olcs\Transfer\Command\Licence\UpdatePeople;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers UpdatePeople
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\Licence\UpdatePeople::class)]
 final class UpdatePeopleTest extends MockeryTestCase
 {
     public function testGetSet()

@@ -8,9 +8,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Data\AbstractPublicInquiryData;
 
-/**
- * @covers Olcs\Service\Data\AbstractPublicInquiryData
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\AbstractPublicInquiryData::class)]
 final class AbstractPublicInquiryDataTest extends MockeryTestCase
 {
     public const int LIC_ID = 9999;

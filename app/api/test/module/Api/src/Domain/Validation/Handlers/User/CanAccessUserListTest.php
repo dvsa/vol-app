@@ -8,9 +8,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\User\CanAccessUserList as Sut;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Validation\Handlers\User\CanAccessUserList
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Handlers\User\CanAccessUserList::class)]
 final class CanAccessUserListTest extends AbstractHandlerTestCase
 {
     protected $sut;

@@ -11,10 +11,8 @@ use Dvsa\Olcs\Transfer\Command\ContactDetail\PhoneContact\Delete as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\ContactDetails\PhoneContact\Delete
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\AbstractDeleteCommandHandler
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\ContactDetails\PhoneContact\Delete::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\AbstractDeleteCommandHandler::class)]
 final class DeleteTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void

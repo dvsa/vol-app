@@ -25,9 +25,9 @@ use Psr\Container\ContainerInterface;
 /**
  * Class LicenceProcessingOverviewControllerTest
  * @package OlcsTest\Controller\Licence\Processing
- * @covers Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController::class)]
 final class LicenceProcessingOverviewControllerTest extends \PHPUnit\Framework\TestCase
 {
     protected $mockScriptFactory;

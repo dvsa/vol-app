@@ -10,9 +10,7 @@ use Dvsa\Olcs\Api\Domain\QueryPartialServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\QueryBuilder
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryBuilder::class)]
 final class QueryBuilderTest extends MockeryTestCase
 {
     /** @var  QueryBuilder */

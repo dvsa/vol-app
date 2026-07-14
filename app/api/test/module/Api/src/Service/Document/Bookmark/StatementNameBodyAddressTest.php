@@ -6,9 +6,7 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\StatementNameBodyAddress;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\StatementNameBodyAddress
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\StatementNameBodyAddress::class)]
 final class StatementNameBodyAddressTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void

@@ -7,9 +7,7 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 use Dvsa\Olcs\Api\Domain\Query as DomainQry;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\TextBlock;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\TextBlock
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\TextBlock::class)]
 final class TextBlockTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQueryNull(): void

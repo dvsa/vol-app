@@ -9,9 +9,7 @@ use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Fee\CanPayOutstandingFees;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Validation\Handlers\Fee\CanPayOutstandingFees
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Handlers\Fee\CanPayOutstandingFees::class)]
 final class CanPayOutstandingFeesTest extends AbstractHandlerTestCase
 {
     /**

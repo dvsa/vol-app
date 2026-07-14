@@ -6,9 +6,7 @@ namespace Dvsa\OlcsTest\Api\Entity\View;
 
 use Dvsa\Olcs\Api\Entity\View\DocumentSearchView;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\View\DocumentSearchView
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\View\DocumentSearchView::class)]
 final class DocumentSearchViewTest extends \PHPUnit\Framework\TestCase
 {
     /** @var DocumentSearchView */

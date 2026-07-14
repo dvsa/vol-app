@@ -12,9 +12,7 @@ use Laminas\Http\Request;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-/**
- * @covers GenericMethods
- */
+#[\PHPUnit\Framework\Attributes\CoversTrait(\Common\Controller\Traits\GenericMethods::class)]
 final class GenericMethodsTest extends MockeryTestCase
 {
     /** @var  GenericMethodsStub | m\MockInterface */

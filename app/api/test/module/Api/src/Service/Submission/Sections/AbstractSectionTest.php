@@ -13,9 +13,7 @@ use Dvsa\OlcsTest\Api\Service\Submission\Sections\Stub\AbstractSectionStub;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Submission\Sections\AbstractSection
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Submission\Sections\AbstractSection::class)]
 final class AbstractSectionTest extends MockeryTestCase
 {
     /** @var  AbstractSectionStub */

@@ -12,9 +12,7 @@ use Dvsa\Olcs\Api\Service\Submission\SubmissionGenerator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Submission\SubmissionGenerator
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Submission\SubmissionGenerator::class)]
 final class SubmissionGeneratorTest extends MockeryTestCase
 {
     public function testConstructor(): void

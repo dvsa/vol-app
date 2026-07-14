@@ -15,11 +15,11 @@ use Olcs\Controller\Lva\Adapters;
 use Olcs\Controller\Lva\Factory\Adapter as AdapterFactory;
 
 /**
- * @covers Olcs\Controller\Lva\Factory\Adapter\VariationTransportManagerAdapterFactory
- * @covers Olcs\Controller\Lva\Factory\Adapter\LicenceTransportManagerAdapterFactory
  *
  * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Controller\Lva\Factory\Adapter\VariationTransportManagerAdapterFactory::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Controller\Lva\Factory\Adapter\LicenceTransportManagerAdapterFactory::class)]
 final class TransportManagerAdapterFactoryTest extends MockeryTestCase
 {
     /** @var ContainerInterface|\Mockery\MockInterface */

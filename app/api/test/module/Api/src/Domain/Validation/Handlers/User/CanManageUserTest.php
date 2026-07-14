@@ -8,9 +8,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\User\CanManageUser as Sut;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Validation\Handlers\User\CanManageUser
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Handlers\User\CanManageUser::class)]
 final class CanManageUserTest extends AbstractHandlerTestCase
 {
     protected $sut;

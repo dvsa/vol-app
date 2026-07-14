@@ -6,9 +6,7 @@ namespace Dvsa\OlcsTest\Transfer\Command\ContactDetail\PhoneContact;
 
 use Dvsa\Olcs\Transfer\Command\ContactDetail\PhoneContact\Delete;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Command\ContactDetail\PhoneContact\Delete
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\ContactDetail\PhoneContact\Delete::class)]
 final class DeleteTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()

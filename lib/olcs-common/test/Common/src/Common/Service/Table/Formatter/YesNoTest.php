@@ -10,9 +10,7 @@ use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Common\Service\Table\Formatter\YesNo
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Table\Formatter\YesNo::class)]
 final class YesNoTest extends MockeryTestCase
 {
     protected $stackHelper;

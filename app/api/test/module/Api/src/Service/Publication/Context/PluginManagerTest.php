@@ -11,9 +11,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Publication\Context\PluginManager
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Publication\Context\PluginManager::class)]
 final class PluginManagerTest extends MockeryTestCase
 {
     private PluginManager $sut;

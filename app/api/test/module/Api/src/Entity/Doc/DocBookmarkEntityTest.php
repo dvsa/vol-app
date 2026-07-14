@@ -8,10 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Api\Entity\Doc\DocBookmark as Entity;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Doc\DocBookmark
- * @covers Dvsa\Olcs\Api\Entity\Doc\AbstractDocBookmark
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Doc\DocBookmark::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Doc\AbstractDocBookmark::class)]
 final class DocBookmarkEntityTest extends EntityTester
 {
     /**

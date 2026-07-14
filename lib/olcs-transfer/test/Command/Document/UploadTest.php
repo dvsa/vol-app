@@ -7,9 +7,7 @@ namespace Dvsa\OlcsTest\Transfer\Command\Document;
 use Dvsa\Olcs\Transfer\Command\Document\Upload;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Command\Document\Upload
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\Document\Upload::class)]
 final class UploadTest extends TestCase
 {
     public function testStructure()

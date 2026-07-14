@@ -11,9 +11,7 @@ use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Common\Service\Table\Formatter\TransportManagerName
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Table\Formatter\TransportManagerName::class)]
 final class TransportManagerNameTest extends MockeryTestCase
 {
     protected $urlHelper;

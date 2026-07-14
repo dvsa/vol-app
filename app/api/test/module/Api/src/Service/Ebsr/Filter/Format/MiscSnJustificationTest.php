@@ -9,9 +9,9 @@ use Dvsa\Olcs\Api\Service\Ebsr\Filter\Format\MiscSnJustification;
 /**
  * Class MiscSnJustificationTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\Filter\Format
- * @covers Dvsa\Olcs\Api\Service\Ebsr\Filter\Format\MiscSnJustification
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Ebsr\Filter\Format\MiscSnJustification::class)]
 final class MiscSnJustificationTest extends \PHPUnit\Framework\TestCase
 {
     /**

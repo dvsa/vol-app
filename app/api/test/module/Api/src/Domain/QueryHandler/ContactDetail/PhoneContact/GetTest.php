@@ -10,9 +10,7 @@ use Dvsa\Olcs\Transfer\Query;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\QueryHandler\ContactDetail\PhoneContact\Get
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\ContactDetail\PhoneContact\Get::class)]
 final class GetTest extends QueryHandlerTestCase
 {
     public function setUp(): void

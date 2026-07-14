@@ -16,9 +16,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\Lva\AbstractCompanySubsidiary
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Lva\AbstractCompanySubsidiary::class)]
 final class AbstractCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
 {
     public const int ID = 1111;

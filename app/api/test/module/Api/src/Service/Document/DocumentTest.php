@@ -12,9 +12,7 @@ use Laminas\I18n\Translator\TranslatorInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Document\Document
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Document::class)]
 final class DocumentTest extends TestCase
 {
     /** @var Document */

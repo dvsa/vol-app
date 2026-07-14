@@ -6,9 +6,7 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\IrfoPsvFrequency as Sut;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\IrfoPsvFrequency
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\IrfoPsvFrequency::class)]
 final class IrfoPsvFrequencyTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void

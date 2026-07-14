@@ -6,9 +6,7 @@ namespace Dvsa\OlcsTest\Api\Service\Lva;
 
 use Dvsa\Olcs\Api\Service\Lva\RestrictionService;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Lva\RestrictionService
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Lva\RestrictionService::class)]
 final class RestrictionServiceTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  RestrictionService */

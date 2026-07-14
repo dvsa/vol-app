@@ -18,9 +18,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Http\Response;
 
-/**
- * @covers Common\Service\Cqrs\Query\CachingQueryService
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Cqrs\Query\CachingQueryService::class)]
 final class CachingQueryServiceTest extends MockeryTestCase
 {
     /** @var QueryContainerInterface | m\MockInterface */

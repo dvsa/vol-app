@@ -10,9 +10,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Submission\Sections\SectionGeneratorPluginManagerFactory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Submission\Sections\SectionGeneratorPluginManagerFactory::class)]
 final class SectionGeneratorPluginManagerFactoryTest extends MockeryTestCase
 {
     public function testCanCreateServiceWithName(): void

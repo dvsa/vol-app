@@ -8,9 +8,7 @@ use Common\View\Helper\ReturnToAddress;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Common\View\Helper\ReturnToAddress
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\View\Helper\ReturnToAddress::class)]
 final class ReturnToAddressTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestInvoke')]

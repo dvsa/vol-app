@@ -8,10 +8,8 @@ use Dvsa\Olcs\Api\Domain\QueryHandler;
 use Dvsa\Olcs\Api\Entity\System\SystemInfoMessage as Entity;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\System\SystemInfoMessage
- * @covers Dvsa\Olcs\Api\Entity\System\AbstractSystemInfoMessage
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\System\SystemInfoMessage::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\System\AbstractSystemInfoMessage::class)]
 final class SystemInfoMessageEntityTest extends EntityTester
 {
     /**

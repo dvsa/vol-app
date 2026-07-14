@@ -10,10 +10,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\Base\AbstractBookmark
- * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\Base\StaticBookmark
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\Base\AbstractBookmark::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\Base\StaticBookmark::class)]
 final class AbstractBookmarkTest extends MockeryTestCase
 {
     public function testGetSet(): void

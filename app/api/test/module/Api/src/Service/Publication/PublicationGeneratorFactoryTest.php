@@ -12,9 +12,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Publication\PublicationGeneratorFactory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Publication\PublicationGeneratorFactory::class)]
 final class PublicationGeneratorFactoryTest extends MockeryTestCase
 {
     public function testCanCreateServiceWithName(): void

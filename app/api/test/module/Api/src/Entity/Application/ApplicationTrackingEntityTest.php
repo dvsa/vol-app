@@ -9,10 +9,8 @@ use Dvsa\Olcs\Api\Entity\Application\ApplicationTracking as Entity;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Application\ApplicationTracking
- * @covers Dvsa\Olcs\Api\Entity\Application\AbstractApplicationTracking
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\ApplicationTracking::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\AbstractApplicationTracking::class)]
 final class ApplicationTrackingEntityTest extends EntityTester
 {
     /**

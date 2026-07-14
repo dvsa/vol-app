@@ -8,9 +8,7 @@ use Common\Validator\DateCompare;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Common\Validator\DateCompare
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Validator\DateCompare::class)]
 final class ValidateDateCompareTest extends MockeryTestCase
 {
     /**

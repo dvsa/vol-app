@@ -6,9 +6,7 @@ namespace Dvsa\OlcsTest\Transfer\Command\Application;
 
 use Dvsa\Olcs\Transfer\Command\Application\UpdateBusinessDetails;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Command\Application\UpdateBusinessDetails
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\Application\UpdateBusinessDetails::class)]
 final class UpdateBusinessDetailsTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()

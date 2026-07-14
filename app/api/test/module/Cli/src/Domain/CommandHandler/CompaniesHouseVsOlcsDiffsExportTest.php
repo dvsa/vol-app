@@ -12,9 +12,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use org\bovigo\vfs\vfsStream;
 
-/**
- * @covers Dvsa\Olcs\Cli\Domain\CommandHandler\CompaniesHouseVsOlcsDiffsExport
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Domain\CommandHandler\CompaniesHouseVsOlcsDiffsExport::class)]
 final class CompaniesHouseVsOlcsDiffsExportTest extends AbstractCommandHandlerTestCase
 {
     /** @var CompaniesHouseVsOlcsDiffsExport */

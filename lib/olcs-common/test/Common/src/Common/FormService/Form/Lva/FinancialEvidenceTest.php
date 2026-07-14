@@ -18,9 +18,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * @covers Common\FormService\Form\Lva\FinancialEvidence
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\FormService\Form\Lva\FinancialEvidence::class)]
 final class FinancialEvidenceTest extends MockeryTestCase
 {
     public $validatorPluginManager;

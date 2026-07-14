@@ -7,10 +7,8 @@ namespace Dvsa\OlcsTest\Api\Entity\System;
 use Dvsa\Olcs\Api\Entity\System\Sla as Entity;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\System\Sla
- * @covers Dvsa\Olcs\Api\Entity\System\AbstractSla
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\System\Sla::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\System\AbstractSla::class)]
 final class SlaEntityTest extends EntityTester
 {
     /**

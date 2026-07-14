@@ -6,9 +6,7 @@ namespace Dvsa\OlcsTest\Transfer\Query\Lva;
 
 use Dvsa\Olcs\Transfer\Query\Lva\AbstractGoodsVehicles;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Query\Lva\AbstractGoodsVehicles
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Query\Lva\AbstractGoodsVehicles::class)]
 final class AbstractGoodsVehiclesTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetSet()

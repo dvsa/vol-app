@@ -12,9 +12,7 @@ use Dvsa\Olcs\Transfer\Command\ContactDetail\PhoneContact\Update as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\ContactDetails\PhoneContact\Update
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\ContactDetails\PhoneContact\Update::class)]
 final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void

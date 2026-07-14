@@ -10,9 +10,7 @@ use Dvsa\Olcs\Api\Entity;
 use Dvsa\Olcs\Transfer\Command\System\InfoMessage\Create as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\System\InfoMessage\Create
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\System\InfoMessage\Create::class)]
 final class CreateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void

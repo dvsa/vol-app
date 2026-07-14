@@ -6,9 +6,7 @@ namespace Dvsa\OlcsTest\Transfer\Command\System\InfoMessage;
 
 use Dvsa\Olcs\Transfer\Command\System\InfoMessage\Create as CreateCommand;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Command\System\InfoMessage\Create
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\System\InfoMessage\Create::class)]
 final class CreateTest extends \PHPUnit\Framework\TestCase
 {
     public function test()

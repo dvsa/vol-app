@@ -11,9 +11,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Laminas\Mvc\Controller\Plugin;
 
-/**
- * @covers Common\Controller\FileController
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Controller\FileController::class)]
 final class FileControllerTest extends TestCase
 {
     /** @var  m\MockInterface */

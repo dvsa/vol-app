@@ -13,9 +13,7 @@ use Dvsa\OlcsTest\Api\Service\Document\Bookmark\Stub\AbstractStandardConditionsS
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\AbstractStandardConditions
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\AbstractStandardConditions::class)]
 final class AbstractStandardConditionsTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetQuery')]

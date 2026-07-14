@@ -9,10 +9,8 @@ use Dvsa\Olcs\Api\Entity\Application\PreviousConviction as Entity;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Application\PreviousConviction
- * @covers Dvsa\Olcs\Api\Entity\Application\AbstractPreviousConviction
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\PreviousConviction::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\AbstractPreviousConviction::class)]
 final class PreviousConvictionEntityTest extends EntityTester
 {
     /**

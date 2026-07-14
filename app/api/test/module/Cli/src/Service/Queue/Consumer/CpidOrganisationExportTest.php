@@ -15,9 +15,7 @@ use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Cli\Service\Queue\Consumer\CpidOrganisationExport
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\CpidOrganisationExport::class)]
 final class CpidOrganisationExportTest extends AbstractConsumerTestCase
 {
     protected $queueEntity = null;

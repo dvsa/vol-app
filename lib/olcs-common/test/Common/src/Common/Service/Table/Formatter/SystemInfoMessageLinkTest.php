@@ -9,9 +9,7 @@ use Common\Service\Table\Formatter\SystemInfoMessageLink;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
-/**
- * @covers Common\Service\Table\Formatter\SystemInfoMessageLink
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Table\Formatter\SystemInfoMessageLink::class)]
 final class SystemInfoMessageLinkTest extends TestCase
 {
     private const string EXPECT_URL = 'unit_Url';

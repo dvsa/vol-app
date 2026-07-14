@@ -7,9 +7,7 @@ namespace CommonTest\Util;
 use Common\Util\Escape;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Common\Util\Escape
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Util\Escape::class)]
 final class EscapeTest extends MockeryTestCase
 {
     public function testHtml(): void

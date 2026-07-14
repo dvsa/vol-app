@@ -6,9 +6,7 @@ namespace Dvsa\OlcsTest\Transfer\Command\Licence;
 
 use Dvsa\Olcs\Transfer\Command\Licence\CreateCompanySubsidiary;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Command\Licence\CreateCompanySubsidiary
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\Licence\CreateCompanySubsidiary::class)]
 final class CreateCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()

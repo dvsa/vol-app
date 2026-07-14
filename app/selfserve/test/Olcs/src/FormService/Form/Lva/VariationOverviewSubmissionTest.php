@@ -11,9 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
 use OlcsTest\FormService\Form\Lva\Stub\VariationOverviewSubmissionStub;
 
-/**
- * @covers Olcs\FormService\Form\Lva\VariationOverviewSubmission
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\FormService\Form\Lva\VariationOverviewSubmission::class)]
 final class VariationOverviewSubmissionTest extends MockeryTestCase
 {
     /** @var  VariationOverviewSubmissionStub */

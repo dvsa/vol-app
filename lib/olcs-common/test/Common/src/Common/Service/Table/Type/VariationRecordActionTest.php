@@ -10,9 +10,7 @@ use Dvsa\Olcs\Utils\Translation\TranslatorDelegator as Translator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Common\Service\Table\Type\VariationRecordAction
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Table\Type\VariationRecordAction::class)]
 final class VariationRecordActionTest extends MockeryTestCase
 {
     /** @var  VariationRecordAction */

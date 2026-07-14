@@ -9,9 +9,7 @@ use Dvsa\OlcsTest\Api\Service\Helper\Stub\AddressFormatterAwareTraitStub;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Helper\AddressFormatterAwareTrait
- */
+#[\PHPUnit\Framework\Attributes\CoversTrait(\Dvsa\Olcs\Api\Service\Helper\AddressFormatterAwareTrait::class)]
 final class AddressFormatterAwareTraitTest extends MockeryTestCase
 {
     public function testGetSet(): void

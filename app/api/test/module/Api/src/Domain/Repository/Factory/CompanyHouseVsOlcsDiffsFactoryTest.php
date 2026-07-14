@@ -10,9 +10,7 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Repository\Factory\CompaniesHouseVsOlcsDiffsFactory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Factory\CompaniesHouseVsOlcsDiffsFactory::class)]
 final class CompanyHouseVsOlcsDiffsFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void

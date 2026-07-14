@@ -10,9 +10,7 @@ use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Common\Service\Table\Formatter\AccessedCorrespondence
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Table\Formatter\AccessedCorrespondence::class)]
 final class AccessedCorrespondenceTest extends MockeryTestCase
 {
     protected $urlHelper;

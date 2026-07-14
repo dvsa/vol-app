@@ -9,9 +9,7 @@ use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Bus\Ebsr\CanAccessEbsrSubmissionWithId;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Validation\Handlers\Bus\Ebsr\CanAccessEbsrSubmissionWithId
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Handlers\Bus\Ebsr\CanAccessEbsrSubmissionWithId::class)]
 final class CanAccessEbsrSubmissionWithIdTest extends AbstractHandlerTestCase
 {
     /**

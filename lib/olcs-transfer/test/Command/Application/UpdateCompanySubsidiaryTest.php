@@ -6,9 +6,7 @@ namespace Dvsa\OlcsTest\Transfer\Command\Application;
 
 use Dvsa\Olcs\Transfer\Command\Application\UpdateCompanySubsidiary;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Command\Application\UpdateCompanySubsidiary
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\Application\UpdateCompanySubsidiary::class)]
 final class UpdateCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()

@@ -9,9 +9,7 @@ use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanAccessDocumentWithId;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanAccessDocumentWithId
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanAccessDocumentWithId::class)]
 final class CanAccessDocumentWithIdTest extends AbstractHandlerTestCase
 {
     /**

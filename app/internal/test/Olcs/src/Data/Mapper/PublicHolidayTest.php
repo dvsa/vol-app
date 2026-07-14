@@ -8,9 +8,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\PublicHoliday;
 use Laminas\Form\FormInterface;
 
-/**
- * @covers Olcs\Data\Mapper\PublicHoliday
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Data\Mapper\PublicHoliday::class)]
 final class PublicHolidayTest extends MockeryTestCase
 {
     public const int ID = 9999;

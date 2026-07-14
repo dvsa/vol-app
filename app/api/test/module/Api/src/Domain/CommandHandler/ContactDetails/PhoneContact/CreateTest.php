@@ -11,9 +11,7 @@ use Dvsa\Olcs\Transfer\Command\ContactDetail\PhoneContact\Create as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\ContactDetails\PhoneContact\Create
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\ContactDetails\PhoneContact\Create::class)]
 final class CreateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void

@@ -10,9 +10,7 @@ use Common\Service\Table\Formatter\DashboardApplicationLink;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Common\Service\Table\Formatter\DashboardApplicationLink
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Table\Formatter\DashboardApplicationLink::class)]
 final class DashboardApplicationLinkTest extends MockeryTestCase
 {
     public $sut;

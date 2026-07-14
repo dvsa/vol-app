@@ -7,9 +7,7 @@ namespace CommonTest\Data\Mapper\Lva;
 use Common\Data\Mapper\Lva\Addresses;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Common\Data\Mapper\Lva\Addresses
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Data\Mapper\Lva\Addresses::class)]
 final class AddressesTest extends MockeryTestCase
 {
     /** @var  array */

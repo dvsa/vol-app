@@ -10,9 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
 use OlcsTest\FormService\Form\Lva\Stub\ApplicationOverviewSubmissionStub;
 
-/**
- * @covers Olcs\FormService\Form\Lva\ApplicationOverviewSubmission
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\FormService\Form\Lva\ApplicationOverviewSubmission::class)]
 final class ApplicationOverviewSubmissionTest extends MockeryTestCase
 {
     /** @var  ApplicationOverviewSubmissionStub */

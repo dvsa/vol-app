@@ -11,9 +11,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Submission\Sections\SectionGeneratorPluginManager
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Submission\Sections\SectionGeneratorPluginManager::class)]
 final class SectionGeneratorPluginManagerTest extends MockeryTestCase
 {
     /** @var  SectionGeneratorPluginManager */

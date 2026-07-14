@@ -9,10 +9,8 @@ use Dvsa\Olcs\Api\Entity;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Application\S4
- * @covers Dvsa\Olcs\Api\Entity\Application\AbstractS4
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\S4::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\AbstractS4::class)]
 final class S4EntityTest extends EntityTester
 {
     /**

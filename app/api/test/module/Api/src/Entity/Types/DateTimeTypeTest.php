@@ -8,9 +8,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Dvsa\Olcs\Api\Entity\Types\DateTimeType;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Types\DateTimeType
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Types\DateTimeType::class)]
 final class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**

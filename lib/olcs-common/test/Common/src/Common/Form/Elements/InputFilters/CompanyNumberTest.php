@@ -10,8 +10,8 @@ use Laminas\Validator\StringLength;
 
 /**
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- * @covers Common\Form\Elements\InputFilters\CompanyNumber
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\Elements\InputFilters\CompanyNumber::class)]
 final class CompanyNumberTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  CompanyNumber */
