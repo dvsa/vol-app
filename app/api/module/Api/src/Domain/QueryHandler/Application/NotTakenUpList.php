@@ -36,6 +36,12 @@ class NotTakenUpList extends AbstractQueryHandler
 
     protected function getApplicationsForNtu($now)
     {
+        // The query carries the date as a 'Y-m-d' string (see ProcessNtuCommand). Convert
+        // it to a DateTime so the comparison below is DateTime vs DateTime: comparing the
+        // raw string against a DateTime with > is always false in PHP, which is why no
+        // application was ever selected. See https://dvsa.atlassian.net/browse/VOL-5546
+        $now = new DateTime($now);
+
         $trafficAreas = $this->getRepo('TrafficArea')->fetchAll();
         $applications = $this->getRepo()->fetchForNtu();
 
