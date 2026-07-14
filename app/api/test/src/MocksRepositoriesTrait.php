@@ -11,15 +11,6 @@ trait MocksRepositoriesTrait
 {
     /**
      * @return RepositoryServiceManager
-     * @deprecated Use repositoryServiceManager
-     */
-    protected function setUpRepositoryServiceManager(): RepositoryServiceManager
-    {
-        return $this->repositoryServiceManager();
-    }
-
-    /**
-     * @return RepositoryServiceManager
      */
     protected function repositoryServiceManager(): RepositoryServiceManager
     {
