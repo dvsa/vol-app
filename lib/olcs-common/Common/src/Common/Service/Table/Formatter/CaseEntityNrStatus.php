@@ -65,7 +65,7 @@ class CaseEntityNrStatus implements FormatterPluginManagerInterface
         if (!isset($data['application'])) {
             return'';
         }
-        
+
         $app = $data['application'];
         $appId = $app['id'];
 
