@@ -14,4 +14,24 @@ use Dvsa\Olcs\Transfer\FieldType\Traits as FieldTypeTraits;
 class Fee extends AbstractQuery implements FieldType\IdentityInterface
 {
     use FieldTypeTraits\Identity;
+
+    /**
+     * @Transfer\Optional
+     */
+    protected ?int $licenceId = null;
+
+    /**
+     * @Transfer\Optional
+     */
+    protected ?int $applicationId = null;
+
+    public function getLicenceId(): ?int
+    {
+        return $this->licenceId;
+    }
+
+    public function getApplicationId(): ?int
+    {
+        return $this->applicationId;
+    }
 }

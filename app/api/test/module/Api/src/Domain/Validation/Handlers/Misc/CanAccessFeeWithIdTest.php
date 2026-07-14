@@ -26,25 +26,35 @@ class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsValidInternal(): void
+    public function testIsValidInternalNoContext(): void
     {
-        /** @var CommandInterface $dto */
+        $id = 1;
         $dto = m::mock(CommandInterface::class);
+        $dto->shouldReceive('getId')->andReturn($id);
+        $dto->shouldReceive('getLicenceId')->andReturn(null);
+        $dto->shouldReceive('getApplicationId')->andReturn(null);
 
         $this->setIsGranted(Permission::INTERNAL_USER, true);
+
+        $fee = m::mock();
+        $this->mockRepo('Fee')->shouldReceive('fetchById')->with($id)->andReturn($fee);
 
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsValidCanAccessFee(): void
+    public function testIsValidCanAccessFeeNoContext(): void
     {
         $id = 1;
-        /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
         $dto->shouldReceive('getId')->andReturn($id);
+        $dto->shouldReceive('getLicenceId')->andReturn(null);
+        $dto->shouldReceive('getApplicationId')->andReturn(null);
         $this->setIsValid('canAccessFee', [$id], true);
 
         $this->setIsGranted(Permission::INTERNAL_USER, false);
+
+        $fee = m::mock();
+        $this->mockRepo('Fee')->shouldReceive('fetchById')->with($id)->andReturn($fee);
 
         $this->assertTrue($this->sut->isValid($dto));
     }
@@ -52,12 +62,37 @@ class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
     public function testIsNotValid(): void
     {
         $id = 1;
-        /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
         $dto->shouldReceive('getId')->andReturn($id);
         $this->setIsValid('canAccessFee', [$id], false);
 
         $this->setIsGranted(Permission::INTERNAL_USER, false);
+
+        $this->assertFalse($this->sut->isValid($dto));
+    }
+
+    public function testIsValidWhenFeeBelongsToLicence(): void
+    {
+        $id = 1;
+        $dto = m::mock(CommandInterface::class);
+        $dto->shouldReceive('getId')->andReturn($id);
+        $dto->shouldReceive('getLicenceId')->andReturn(212);
+
+        $this->setIsGranted(Permission::INTERNAL_USER, true);
+        $this->setIsValid('feeBelongsToLicence', [$id, 212], true);
+
+        $this->assertTrue($this->sut->isValid($dto));
+    }
+
+    public function testIsNotValidWhenFeeDoesNotBelongToLicence(): void
+    {
+        $id = 1;
+        $dto = m::mock(CommandInterface::class);
+        $dto->shouldReceive('getId')->andReturn($id);
+        $dto->shouldReceive('getLicenceId')->andReturn(212);
+
+        $this->setIsGranted(Permission::INTERNAL_USER, true);
+        $this->setIsValid('feeBelongsToLicence', [$id, 212], false);
 
         $this->assertFalse($this->sut->isValid($dto));
     }
