@@ -10,7 +10,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(RtfEncoder::class)]
-class RtfEncoderTest extends TestCase
+final class RtfEncoderTest extends TestCase
 {
     /**
      * Builds the RTF unicode entity string the encoder is expected to emit for
@@ -35,22 +35,20 @@ class RtfEncoderTest extends TestCase
     }
 
     /**
-     * @return array<string, array{0: string, 1: bool, 2: string}>
+     * @return \Iterator<string, array{string, bool, string}>
      */
-    public static function quoteRtfCodeProvider(): array
+    public static function quoteRtfCodeProvider(): \Iterator
     {
-        return [
-            'plain ascii untouched' => ['Hello world', true, 'Hello world'],
-            'single backslash escaped' => ['\\', true, '\\\\'],
-            'braces escaped' => ['{}', true, '\{\}'],
-            'backslash, braces and newline' => ["\\{}\n", true, '\\\\\{\}\line '],
-            'lf converted' => ["a\nb", true, 'a\line b'],
-            'crlf converted' => ["a\r\nb", true, 'a\line b'],
-            'cr converted' => ["a\rb", true, 'a\line b'],
-            'mixed newlines converted' => ["x\r\ny\rz\nq", true, 'x\line y\line z\line q'],
-            'newlines preserved when disabled' => ["a\nb", false, "a\nb"],
-            'braces still escaped when newlines disabled' => ["{a}\n", false, "\{a\}\n"],
-        ];
+        yield 'plain ascii untouched' => ['Hello world', true, 'Hello world'];
+        yield 'single backslash escaped' => ['\\', true, '\\\\'];
+        yield 'braces escaped' => ['{}', true, '\{\}'];
+        yield 'backslash, braces and newline' => ["\\{}\n", true, '\\\\\{\}\line '];
+        yield 'lf converted' => ["a\nb", true, 'a\line b'];
+        yield 'crlf converted' => ["a\r\nb", true, 'a\line b'];
+        yield 'cr converted' => ["a\rb", true, 'a\line b'];
+        yield 'mixed newlines converted' => ["x\r\ny\rz\nq", true, 'x\line y\line z\line q'];
+        yield 'newlines preserved when disabled' => ["a\nb", false, "a\nb"];
+        yield 'braces still escaped when newlines disabled' => ["{a}\n", false, "\{a\}\n"];
     }
 
     #[DataProvider('getUnicodeEntitiesProvider')]
@@ -60,24 +58,22 @@ class RtfEncoderTest extends TestCase
     }
 
     /**
-     * @return array<string, array{0: string, 1: string}>
+     * @return \Iterator<string, array{string, string}>
      */
-    public static function getUnicodeEntitiesProvider(): array
+    public static function getUnicodeEntitiesProvider(): \Iterator
     {
-        return [
-            'ascii passes through untouched' => ['abc123 !@#', 'abc123 !@#'],
-            'rtf control chars are ascii and untouched' => ['\{}', '\{}'],
-            'latin-1 accent (2-byte)' => ['à', self::ent(224)],
-            'first 2-byte char U+0080' => ["\u{0080}", self::ent(128)],
-            'last 2-byte char U+07FF' => ["\u{07FF}", self::ent(2047)],
-            'first 3-byte char U+0800' => ["\u{0800}", self::ent(2048)],
-            'cyrillic (3-byte)' => ['к', self::ent(1082)],
-            'black square U+25A0 (3-byte)' => ['■', self::ent(9632)],
-            'last 3-byte char U+FFFF' => ["\u{FFFF}", self::ent(65535)],
-            'byte order mark is stripped' => ["\u{FEFF}", ''],
-            'bom stripped but surrounding text kept' => ["a\u{FEFF}b", 'ab'],
-            'mixed ascii and non-ascii' => ['café', 'caf' . self::ent(233)],
-        ];
+        yield 'ascii passes through untouched' => ['abc123 !@#', 'abc123 !@#'];
+        yield 'rtf control chars are ascii and untouched' => ['\{}', '\{}'];
+        yield 'latin-1 accent (2-byte)' => ['à', self::ent(224)];
+        yield 'first 2-byte char U+0080' => ["\u{0080}", self::ent(128)];
+        yield 'last 2-byte char U+07FF' => ["\u{07FF}", self::ent(2047)];
+        yield 'first 3-byte char U+0800' => ["\u{0800}", self::ent(2048)];
+        yield 'cyrillic (3-byte)' => ['к', self::ent(1082)];
+        yield 'black square U+25A0 (3-byte)' => ['■', self::ent(9632)];
+        yield 'last 3-byte char U+FFFF' => ["\u{FFFF}", self::ent(65535)];
+        yield 'byte order mark is stripped' => ["\u{FEFF}", ''];
+        yield 'bom stripped but surrounding text kept' => ["a\u{FEFF}b", 'ab'];
+        yield 'mixed ascii and non-ascii' => ['café', 'caf' . self::ent(233)];
     }
 
     /**
@@ -94,19 +90,17 @@ class RtfEncoderTest extends TestCase
     }
 
     /**
-     * @return array<string, array{0: string, 1: string}>
+     * @return \Iterator<string, array{string, string}>
      */
-    public static function supplementaryPlaneProvider(): array
+    public static function supplementaryPlaneProvider(): \Iterator
     {
-        return [
-            // U+10000 – first supplementary code point -> surrogates D800 DC00
-            'first supplementary U+10000' => ["\u{10000}", self::ent(55296, 56320)],
-            // U+1F600 GRINNING FACE -> surrogates D83D DE00
-            'grinning face emoji U+1F600' => ["\u{1F600}", self::ent(55357, 56832)],
-            // U+10FFFF – last valid code point -> surrogates DBFF DFFF
-            'last code point U+10FFFF' => ["\u{10FFFF}", self::ent(56319, 57343)],
-            'emoji between ascii' => ["a\u{1F600}b", 'a' . self::ent(55357, 56832) . 'b'],
-        ];
+        // U+10000 – first supplementary code point -> surrogates D800 DC00
+        yield 'first supplementary U+10000' => ["\u{10000}", self::ent(55296, 56320)];
+        // U+1F600 GRINNING FACE -> surrogates D83D DE00
+        yield 'grinning face emoji U+1F600' => ["\u{1F600}", self::ent(55357, 56832)];
+        // U+10FFFF – last valid code point -> surrogates DBFF DFFF
+        yield 'last code point U+10FFFF' => ["\u{10FFFF}", self::ent(56319, 57343)];
+        yield 'emoji between ascii' => ["a\u{1F600}b", 'a' . self::ent(55357, 56832) . 'b'];
     }
 
     /**

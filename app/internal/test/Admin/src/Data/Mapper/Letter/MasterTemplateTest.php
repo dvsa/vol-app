@@ -10,7 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @see MasterTemplate
  */
-class MasterTemplateTest extends MockeryTestCase
+final class MasterTemplateTest extends MockeryTestCase
 {
     public function testMapFromFormMapsEmptyLocaleToNull(): void
     {

@@ -123,7 +123,6 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $sut->shouldReceive('handleQuery')->andReturn($response);
 
         $method = new \ReflectionMethod(Sut::class, 'fetchLetterChoicesForLetterType');
-        $method->setAccessible(true);
         $choices = $method->invoke($sut, 1);
 
         $this->assertSame(['First request', 'Final request'], array_column($choices, 'label'));

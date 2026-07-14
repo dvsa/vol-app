@@ -3,6 +3,9 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\NarrowUnusedSetUpDefinedPropertyRector;
+use Rector\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\RemoveNeverUsedMockPropertyRector;
 use Rector\PHPUnit\CodeQuality\Rector\Expression\DecorateWillReturnMapWithExpectsMockRector;
 use Rector\Php81\Rector\Array_\ArrayToFirstClassCallableRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
@@ -36,4 +39,16 @@ return RectorConfig::configure()
         // Decorates willReturnMap stubs with expects(exactly(N)) inferred from the map
         // size; breaks when not every mapped entry is consumed by the code path.
         DecorateWillReturnMapWithExpectsMockRector::class,
+        // Strip "unused" mock properties / setUp assignments. Unsafe for tests
+        // whose data providers reference a mock by its string property name
+        // (dynamic this-> access): rector can't see the use, deletes the
+        // property, and the test fatals with "undefined property". Keep them.
+        NarrowUnusedSetUpDefinedPropertyRector::class,
+        RemoveNeverUsedMockPropertyRector::class,
+        // Leave @deprecated PHPDoc as-is. Rewriting it to the PHP 8.4
+        // #[\Deprecated] attribute changes runtime behaviour: calling the
+        // symbol then emits E_USER_DEPRECATED, which failOnDeprecation turns
+        // into a failure. These are internal "use the new test format"
+        // markers on helpers that ARE called, not runtime deprecations.
+        DeprecatedAnnotationToDeprecatedAttributeRector::class,
     ]);

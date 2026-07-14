@@ -16,15 +16,14 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * PrepareToSend LetterInstance Test
  */
-class PrepareToSendTest extends MockeryTestCase
+final class PrepareToSendTest extends MockeryTestCase
 {
     private function buildDescription(LetterInstance $letterInstance): string
     {
         $method = new \ReflectionMethod(PrepareToSend::class, 'buildDocumentDescription');
-        $method->setAccessible(true);
 
         return $method->invoke(
-            (new \ReflectionClass(PrepareToSend::class))->newInstanceWithoutConstructor(),
+            new \ReflectionClass(PrepareToSend::class)->newInstanceWithoutConstructor(),
             $letterInstance
         );
     }
@@ -85,9 +84,8 @@ class PrepareToSendTest extends MockeryTestCase
     private function assertRequiredInput(LetterInstance $letterInstance): void
     {
         $method = new \ReflectionMethod(PrepareToSend::class, 'assertRequiredInputProvided');
-        $method->setAccessible(true);
         $method->invoke(
-            (new \ReflectionClass(PrepareToSend::class))->newInstanceWithoutConstructor(),
+            new \ReflectionClass(PrepareToSend::class)->newInstanceWithoutConstructor(),
             $letterInstance
         );
     }
@@ -117,7 +115,7 @@ class PrepareToSendTest extends MockeryTestCase
         try {
             $this->assertRequiredInput($letterInstance);
         } catch (\Dvsa\Olcs\Api\Domain\Exception\ValidationException $e) {
-            $this->assertStringContainsString('Financial evidence', json_encode($e->getMessages()));
+            $this->assertStringContainsString('Financial evidence', (string) json_encode($e->getMessages()));
             throw $e;
         }
     }
@@ -154,7 +152,7 @@ class PrepareToSendTest extends MockeryTestCase
         try {
             $this->assertRequiredInput($letterInstance);
         } catch (\Dvsa\Olcs\Api\Domain\Exception\ValidationException $e) {
-            $this->assertStringContainsString('Introductory wording', json_encode($e->getMessages()));
+            $this->assertStringContainsString('Introductory wording', (string) json_encode($e->getMessages()));
             throw $e;
         }
     }
