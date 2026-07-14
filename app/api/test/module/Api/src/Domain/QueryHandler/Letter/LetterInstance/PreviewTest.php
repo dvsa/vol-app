@@ -15,6 +15,7 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion;
 use Dvsa\Olcs\Api\Entity\Letter\LetterType;
 use Dvsa\Olcs\Api\Entity\Letter\MasterTemplate;
 use Dvsa\Olcs\Api\Service\Letter\LetterPreviewService;
+use Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolver;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterInstance\Preview as Qry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
@@ -25,6 +26,7 @@ use Mockery as m;
 class PreviewTest extends QueryHandlerTestCase
 {
     private m\MockInterface|LetterPreviewService $mockPreviewService;
+    private m\MockInterface|MasterTemplateResolver $mockMasterTemplateResolver;
 
     public function setUp(): void
     {
@@ -33,33 +35,36 @@ class PreviewTest extends QueryHandlerTestCase
         $this->mockRepo('MasterTemplate', MasterTemplateRepo::class);
 
         $this->mockPreviewService = m::mock(LetterPreviewService::class);
+        $this->mockMasterTemplateResolver = m::mock(MasterTemplateResolver::class);
 
         $this->mockedSmServices = [
             LetterPreviewService::class => $this->mockPreviewService,
+            MasterTemplateResolver::class => $this->mockMasterTemplateResolver,
         ];
 
         parent::setUp();
     }
 
-    public function testHandleQueryWithMasterTemplateFromLetterType(): void
+    public function testHandleQueryUsesResolvedMasterTemplate(): void
     {
+        // VOL-7305: handler delegates master-template selection to MasterTemplateResolver.
         $data = ['id' => 123];
         $query = Qry::create($data);
 
         $mockMasterTemplate = m::mock(MasterTemplate::class);
-        $mockMasterTemplate->shouldReceive('getTemplateContent')
-            ->andReturn('<html>{{LETTER_REFERENCE}}</html>');
 
         $mockLetterType = m::mock(LetterType::class);
-        $mockLetterType->shouldReceive('getMasterTemplate')
-            ->andReturn($mockMasterTemplate);
-
         $mockLetterInstance = $this->createMockLetterInstance($mockLetterType);
 
         $this->repoMap['LetterInstance']->shouldReceive('fetchUsingId')
             ->with($query)
             ->once()
             ->andReturn($mockLetterInstance);
+
+        $this->mockMasterTemplateResolver->shouldReceive('resolve')
+            ->with($mockLetterInstance)
+            ->once()
+            ->andReturn($mockMasterTemplate);
 
         $this->mockPreviewService->shouldReceive('renderPreview')
             ->with($mockLetterInstance, $mockMasterTemplate)
@@ -75,17 +80,14 @@ class PreviewTest extends QueryHandlerTestCase
         $this->assertEquals('<html>VOL/LET/123</html>', $result['previewHtml']);
     }
 
-    public function testHandleQueryFallsBackToDefaultTemplate(): void
+    public function testHandleQueryWhenResolverReturnsNull(): void
     {
+        // VOL-7305: if the resolver finds nothing, renderPreview gets null and falls
+        // back to its templateless rendering path.
         $data = ['id' => 123];
         $query = Qry::create($data);
 
         $mockLetterType = m::mock(LetterType::class);
-        $mockLetterType->shouldReceive('getMasterTemplate')
-            ->andReturn(null);
-
-        $mockDefaultTemplate = m::mock(MasterTemplate::class);
-
         $mockLetterInstance = $this->createMockLetterInstance($mockLetterType);
 
         $this->repoMap['LetterInstance']->shouldReceive('fetchUsingId')
@@ -93,40 +95,10 @@ class PreviewTest extends QueryHandlerTestCase
             ->once()
             ->andReturn($mockLetterInstance);
 
-        $this->repoMap['MasterTemplate']->shouldReceive('fetchList')
+        $this->mockMasterTemplateResolver->shouldReceive('resolve')
+            ->with($mockLetterInstance)
             ->once()
-            ->andReturn([$mockDefaultTemplate]);
-
-        $this->mockPreviewService->shouldReceive('renderPreview')
-            ->with($mockLetterInstance, $mockDefaultTemplate)
-            ->once()
-            ->andReturn('<html>Preview HTML</html>');
-
-        $result = $this->sut->handleQuery($query);
-
-        $this->assertIsArray($result);
-        $this->assertEquals('<html>Preview HTML</html>', $result['previewHtml']);
-    }
-
-    public function testHandleQueryWithNoTemplateAvailable(): void
-    {
-        $data = ['id' => 123];
-        $query = Qry::create($data);
-
-        $mockLetterType = m::mock(LetterType::class);
-        $mockLetterType->shouldReceive('getMasterTemplate')
             ->andReturn(null);
-
-        $mockLetterInstance = $this->createMockLetterInstance($mockLetterType);
-
-        $this->repoMap['LetterInstance']->shouldReceive('fetchUsingId')
-            ->with($query)
-            ->once()
-            ->andReturn($mockLetterInstance);
-
-        $this->repoMap['MasterTemplate']->shouldReceive('fetchList')
-            ->once()
-            ->andReturn([]);
 
         $this->mockPreviewService->shouldReceive('renderPreview')
             ->with($mockLetterInstance, null)
@@ -147,7 +119,8 @@ class PreviewTest extends QueryHandlerTestCase
         $mockMasterTemplate = m::mock(MasterTemplate::class);
 
         $mockLetterType = m::mock(LetterType::class);
-        $mockLetterType->shouldReceive('getMasterTemplate')
+
+        $this->mockMasterTemplateResolver->shouldReceive('resolve')
             ->andReturn($mockMasterTemplate);
 
         // Create issues with different types
@@ -170,12 +143,18 @@ class PreviewTest extends QueryHandlerTestCase
 
         $mockIssue1 = m::mock(LetterInstanceIssue::class);
         $mockIssue1->shouldReceive('getLetterIssueVersion')->andReturn($mockIssueVersion1);
+        $mockIssue1->shouldReceive('requiresInput')->andReturn(false);
+        $mockIssue1->shouldReceive('hasBeenEdited')->andReturn(false);
 
         $mockIssue2 = m::mock(LetterInstanceIssue::class);
         $mockIssue2->shouldReceive('getLetterIssueVersion')->andReturn($mockIssueVersion2);
+        $mockIssue2->shouldReceive('requiresInput')->andReturn(false);
+        $mockIssue2->shouldReceive('hasBeenEdited')->andReturn(false);
 
         $mockIssue3 = m::mock(LetterInstanceIssue::class);
         $mockIssue3->shouldReceive('getLetterIssueVersion')->andReturn($mockIssueVersion3);
+        $mockIssue3->shouldReceive('requiresInput')->andReturn(false);
+        $mockIssue3->shouldReceive('hasBeenEdited')->andReturn(false);
 
         $mockLetterInstance = m::mock(LetterInstanceEntity::class);
         $mockLetterInstance->shouldReceive('getLetterType')
@@ -221,7 +200,8 @@ class PreviewTest extends QueryHandlerTestCase
         $mockMasterTemplate = m::mock(MasterTemplate::class);
 
         $mockLetterType = m::mock(LetterType::class);
-        $mockLetterType->shouldReceive('getMasterTemplate')
+
+        $this->mockMasterTemplateResolver->shouldReceive('resolve')
             ->andReturn($mockMasterTemplate);
 
         $mockLetterInstance = m::mock(LetterInstanceEntity::class);
@@ -258,5 +238,49 @@ class PreviewTest extends QueryHandlerTestCase
             ->andReturn(['id' => 123, 'reference' => 'VOL/LET/123']);
 
         return $mockLetterInstance;
+    }
+
+    public function testSectionsListFlagsPendingRequiredInput(): void
+    {
+        // VOL-7402: the sidebar needs to know which issue types still contain
+        // unedited "requires input" content so it can highlight them.
+        $query = Qry::create(['id' => 123]);
+
+        $mockIssueType = m::mock(LetterIssueType::class);
+        $mockIssueType->shouldReceive('getId')->andReturn(1);
+        $mockIssueType->shouldReceive('getName')->andReturn('Finances');
+
+        $mockIssueVersion = m::mock(LetterIssueVersion::class);
+        $mockIssueVersion->shouldReceive('getLetterIssueType')->andReturn($mockIssueType);
+
+        $pendingIssue = m::mock(LetterInstanceIssue::class);
+        $pendingIssue->shouldReceive('getLetterIssueVersion')->andReturn($mockIssueVersion);
+        $pendingIssue->shouldReceive('requiresInput')->andReturn(true);
+        $pendingIssue->shouldReceive('hasBeenEdited')->andReturn(false);
+
+        $mockLetterType = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterType::class);
+        $mockLetterType->shouldReceive('getMasterTemplate')->andReturn(null);
+
+        $mockLetterInstance = m::mock(LetterInstanceEntity::class);
+        $mockLetterInstance->shouldReceive('getLetterType')->andReturn($mockLetterType);
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
+            ->andReturn(new ArrayCollection([$pendingIssue]));
+        $mockLetterInstance->shouldReceive('serialize')->andReturn(['id' => 123]);
+
+        $this->repoMap['LetterInstance']->shouldReceive('fetchUsingId')
+            ->with($query)
+            ->once()
+            ->andReturn($mockLetterInstance);
+
+        $this->mockMasterTemplateResolver->shouldReceive('resolve')
+            ->andReturn(null);
+
+        $this->mockPreviewService->shouldReceive('renderPreview')
+            ->once()
+            ->andReturn('<html>Preview</html>');
+
+        $result = $this->sut->handleQuery($query);
+
+        $this->assertTrue($result['sectionsList'][0]['inputPending']);
     }
 }

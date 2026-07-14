@@ -99,4 +99,34 @@ class LetterGenerationControllerTest extends MockeryTestCase
         $this->assertNotNull($error);
         $this->assertStringContainsString('Stage', $error);
     }
+
+    public function testFetchLetterChoicesSortsByDisplayOrder(): void
+    {
+        // VOL-7282: admin sets First request = 1, Final request = 2, but the modal
+        // showed them in insertion order.
+        $sut = m::mock(Sut::class, [
+            m::mock(TranslationHelperService::class),
+            m::mock(FormHelperService::class),
+            m::mock(FlashMessengerHelperService::class),
+            m::mock(Navigation::class),
+        ])->makePartial()->shouldAllowMockingProtectedMethods();
+
+        $sut->shouldReceive('fetchTemplateById')->with(1)->andReturn(['letterType' => ['id' => 7]]);
+
+        $response = m::mock();
+        $response->shouldReceive('isOk')->andReturn(true);
+        $response->shouldReceive('getResult')->andReturn([
+            'letterTypeChoices' => [
+                ['letterChoice' => ['id' => 20, 'label' => 'Final request', 'groupLabel' => 'First or final request', 'inputType' => 'radio', 'displayOrder' => 2, 'isActive' => true]],
+                ['letterChoice' => ['id' => 10, 'label' => 'First request', 'groupLabel' => 'First or final request', 'inputType' => 'radio', 'displayOrder' => 1, 'isActive' => true]],
+            ],
+        ]);
+        $sut->shouldReceive('handleQuery')->andReturn($response);
+
+        $method = new \ReflectionMethod(Sut::class, 'fetchLetterChoicesForLetterType');
+        $method->setAccessible(true);
+        $choices = $method->invoke($sut, 1);
+
+        $this->assertSame(['First request', 'Final request'], array_column($choices, 'label'));
+    }
 }

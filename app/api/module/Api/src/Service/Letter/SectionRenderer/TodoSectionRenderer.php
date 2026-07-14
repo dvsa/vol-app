@@ -9,8 +9,8 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo;
 /**
  * Renderer for LetterInstanceTodo entities.
  *
- * Outputs a single `<li>` containing the to-do description (EditorJS → HTML
- * with vol-grab replacement). The enclosing "What you need to do" block + `<ul>`
+ * Outputs a single block `<div>` containing the to-do description (EditorJS → HTML
+ * with vol-grab replacement). The enclosing "What you need to do" heading + container
  * is rendered by LetterPreviewService::renderIssues() once per issue-type group.
  */
 class TodoSectionRenderer extends AbstractSectionRenderer
@@ -60,7 +60,9 @@ class TodoSectionRenderer extends AbstractSectionRenderer
             return '';
         }
 
-        return '<li class="todo-item">' . $body . '</li>';
+        // VOL-7280: a block, not a list item — as an <li> the whole to-do became a
+        // bullet and bullets inside its own content demoted to hollow nested ones.
+        return '<div class="todo-item">' . $body . '</div>';
     }
 
     #[\Override]

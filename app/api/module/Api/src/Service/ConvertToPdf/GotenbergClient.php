@@ -141,6 +141,15 @@ class GotenbergClient implements ConvertToPdfInterface, ConvertHtmlToPdfInterfac
         $this->httpClient->setMethod(Request::METHOD_POST);
         $this->httpClient->setFileUpload('index.html', 'files', $htmlContent, 'text/html');
 
+        // VOL-7288: Chromium defaults to US Letter and ignores CSS @page size, which
+        // made letter bodies a different page width from merged A4 appendix PDFs.
+        // Honour the document's @page rule when present, A4 otherwise.
+        $this->httpClient->setParameterPost([
+            'preferCssPageSize' => 'true',
+            'paperWidth' => '8.27',
+            'paperHeight' => '11.7',
+        ]);
+
         $response = $this->httpClient->send();
 
         if (!$response->isOk()) {
