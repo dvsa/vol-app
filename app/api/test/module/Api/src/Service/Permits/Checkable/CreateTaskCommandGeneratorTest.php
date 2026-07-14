@@ -17,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class CreateTaskCommandGeneratorTest extends MockeryTestCase
+final class CreateTaskCommandGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

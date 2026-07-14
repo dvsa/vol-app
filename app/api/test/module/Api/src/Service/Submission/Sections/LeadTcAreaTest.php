@@ -8,16 +8,16 @@ namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
  * Class LeadTcAreaTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class LeadTcAreaTest extends AbstractSubmissionSectionTestCase
+final class LeadTcAreaTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\LeadTcArea::class;
 
     /**
      * Filter provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function sectionTestProvider(): array
+    public static function sectionTestProvider(): \Iterator
     {
         $case = static::getCase();
 
@@ -27,8 +27,6 @@ class LeadTcAreaTest extends AbstractSubmissionSectionTestCase
             ]
         ];
 
-        return [
-            [$case, $expectedResult],
-        ];
+        yield [$case, $expectedResult];
     }
 }

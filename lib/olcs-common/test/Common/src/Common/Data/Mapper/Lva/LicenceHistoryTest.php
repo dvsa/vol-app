@@ -6,6 +6,8 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Lva;
 
 use Common\Data\Mapper\Lva\LicenceHistory;
@@ -15,7 +17,7 @@ use Common\Data\Mapper\Lva\LicenceHistory;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class LicenceHistoryTest extends \PHPUnit\Framework\TestCase
+final class LicenceHistoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testMapFromResult(): void
     {
@@ -31,6 +33,6 @@ class LicenceHistoryTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->assertEquals($expected, $output);
+        $this->assertSame($expected, $output);
     }
 }

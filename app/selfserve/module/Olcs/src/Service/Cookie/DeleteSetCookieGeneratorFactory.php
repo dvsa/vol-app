@@ -16,7 +16,7 @@ class DeleteSetCookieGeneratorFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DeleteSetCookieGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): DeleteSetCookieGenerator
     {
         return new DeleteSetCookieGenerator(
             $container->get('CookieSetCookieFactory'),

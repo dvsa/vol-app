@@ -79,7 +79,7 @@ trait GenericRenderView
      *
      * @return ViewModel
      */
-    public function getView(array $params = null)
+    public function getView(?array $params = null)
     {
         return new ViewModel($params);
     }

@@ -9,7 +9,7 @@ class DateTime extends \DateTime
 {
     protected static $now;
 
-    public function __construct($time = 'now', \DateTimeZone $timezone = null)
+    public function __construct($time = 'now', ?\DateTimeZone $timezone = null)
     {
         if ($time == 'now') {
             $now = static::getNow();

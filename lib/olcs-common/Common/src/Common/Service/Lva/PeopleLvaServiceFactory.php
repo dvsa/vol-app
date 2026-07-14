@@ -13,7 +13,7 @@ class PeopleLvaServiceFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PeopleLvaService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): PeopleLvaService
     {
         return new PeopleLvaService(
             $container->get('Helper\Form')

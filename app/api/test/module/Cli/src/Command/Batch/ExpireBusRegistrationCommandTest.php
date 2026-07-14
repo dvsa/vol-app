@@ -8,7 +8,7 @@ use Dvsa\Olcs\Cli\Command\Batch\ExpireBusRegistrationCommand;
 use Dvsa\Olcs\Cli\Domain\Command\Bus\Expire;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class ExpireBusRegistrationCommandTest extends AbstractBatchCommandCases
+final class ExpireBusRegistrationCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

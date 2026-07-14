@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * @author Joshua Curtis <josh.curtis@valtech.co.uk>
  */
-class GracePeriodTest extends QueryHandlerTestCase
+final class GracePeriodTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -38,11 +38,8 @@ class GracePeriodTest extends QueryHandlerTestCase
         /** @var \Dvsa\Olcs\Api\Domain\QueryHandler\Result $actual */
         $actual = $this->sut->handleQuery($query);
 
-        static::assertEquals(
-            [
-                'unitKey' => 'unitVal',
-            ],
-            $actual->serialize()
-        );
+        $this->assertEquals([
+            'unitKey' => 'unitVal',
+        ], $actual->serialize());
     }
 }

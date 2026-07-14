@@ -14,10 +14,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * PermitUsageAnswerSummaryProviderTest
  */
-class PermitUsageAnswerSummaryProviderTest extends MockeryTestCase
+final class PermitUsageAnswerSummaryProviderTest extends MockeryTestCase
 {
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new PermitUsageAnswerSummaryProvider();
@@ -45,17 +46,14 @@ class PermitUsageAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public static function dpShouldIncludeSlug(): array
+    public static function dpShouldIncludeSlug(): \Iterator
     {
         $emptyList = [];
         $oneRecord = [['id' => 1]];
         $multipleRecords = [['id' => 1], ['id' => 2]];
-
-        return [
-            [$emptyList, false],
-            [$oneRecord, false],
-            [$multipleRecords, true],
-        ];
+        yield [$emptyList, false];
+        yield [$oneRecord, false];
+        yield [$multipleRecords, true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetTemplateVariables')]
@@ -78,11 +76,9 @@ class PermitUsageAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public static function dpGetTemplateVariables(): array
+    public static function dpGetTemplateVariables(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 }

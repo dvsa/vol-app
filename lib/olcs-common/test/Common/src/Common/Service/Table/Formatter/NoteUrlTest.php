@@ -6,6 +6,8 @@
  * @author Alex.Peshkov <alex.peshkov@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Module;
@@ -20,7 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex.Peshkov <alex.peshkov@valtech.co.uk>
  */
-class NoteUrlTest extends MockeryTestCase
+final class NoteUrlTest extends MockeryTestCase
 {
     public $request;
     protected $urlHelper;
@@ -69,7 +71,7 @@ class NoteUrlTest extends MockeryTestCase
             ->getMock();
 
         $expectedLink = '<a class="govuk-link js-modal-ajax" href="the_url">'
-            . (new \DateTime($data['createdOn']))->format(Module::$dateFormat) . '</a>';
+            . new \DateTime($data['createdOn'])->format(Module::$dateFormat) . '</a>';
 
         $this->assertEquals($expectedLink, $this->sut->format($data, []));
     }

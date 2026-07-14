@@ -26,7 +26,7 @@ use Olcs\Logging\Log\Logger;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class NotTakenUpListTest extends QueryHandlerTestCase
+final class NotTakenUpListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

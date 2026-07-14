@@ -1178,7 +1178,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
         $identity->setClientSecret($clientSecret);
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $config = $container->get('config');
         if (isset($config['cpms']['invoice_prefix'])) {

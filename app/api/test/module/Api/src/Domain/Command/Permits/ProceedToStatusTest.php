@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Domain\Command\Permits\ProceedToStatus;
  * Proceed to status test
  *
  */
-class ProceedToStatusTest extends \PHPUnit\Framework\TestCase
+final class ProceedToStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {
@@ -21,14 +21,11 @@ class ProceedToStatusTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals([1, 2, 3], $sut->getIds());
-        static::assertEquals('TEST', $sut->getStatus());
-        static::assertEquals(
-            [
-                'ids' => [1, 2, 3],
-                'status' => 'TEST',
-            ],
-            $sut->getArrayCopy()
-        );
+        $this->assertEquals([1, 2, 3], $sut->getIds());
+        $this->assertEquals('TEST', $sut->getStatus());
+        $this->assertEquals([
+            'ids' => [1, 2, 3],
+            'status' => 'TEST',
+        ], $sut->getArrayCopy());
     }
 }

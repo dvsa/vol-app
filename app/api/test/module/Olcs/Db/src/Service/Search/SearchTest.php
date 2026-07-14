@@ -13,12 +13,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Db\Service\Search\Search::class)]
-class SearchTest extends MockeryTestCase
+final class SearchTest extends MockeryTestCase
 {
-    /**
-     * @var array<string, (\LmcRbacMvc\Service\AuthorizationService & \Mockery\MockInterface)>
-     */
-    public $mockedSmServices;
     /** @var  SearchService */
     private $sut;
 
@@ -43,7 +39,7 @@ class SearchTest extends MockeryTestCase
         $this->mockAuthSrv->shouldReceive('getIdentity->getUser')->andReturn($this->mockUser);
         $this->mockUser->shouldReceive('getUser')->andReturnSelf();
 
-        $this->mockedSmServices = [
+        $mockedSmServices = [
             AuthorizationService::class => $this->mockAuthSrv,
         ];
 
@@ -67,24 +63,22 @@ class SearchTest extends MockeryTestCase
     /**
      * Data provider for testFilterFunctionality test.
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function filterFunctionalityDataProvider(): array
+    public static function filterFunctionalityDataProvider(): \Iterator
     {
-        return [
-            [
-                'setFilters' => [
-                    'organisationName' => 'a',
-                    'licenceTrafficArea' => 'b',
-                ],
-                'getFilters' => [
-                    'organisation_name' => 'a',
-                    'licence_traffic_area' => 'b',
-                ],
-                'filterNames' => [
-                    'organisation_name',
-                    'licence_traffic_area',
-                ],
+        yield [
+            'setFilters' => [
+                'organisationName' => 'a',
+                'licenceTrafficArea' => 'b',
+            ],
+            'getFilters' => [
+                'organisation_name' => 'a',
+                'licence_traffic_area' => 'b',
+            ],
+            'filterNames' => [
+                'organisation_name',
+                'licence_traffic_area',
             ],
         ];
     }
@@ -169,14 +163,11 @@ class SearchTest extends MockeryTestCase
         $this->sut->updateVehicleSection26($ids, $section26Value);
     }
 
-    public static function internalSearchDataProvider(): array
+    public static function internalSearchDataProvider(): \Iterator
     {
-        return
-            [
-                [ '1,112', 1, 17, 'C'],
-                [ '1,112', 1, 17, 'N'],
-                [ '1,112,17', 0, 17, 'N']
-            ];
+        yield [ '1,112', 1, 17, 'C'];
+        yield [ '1,112', 1, 17, 'N'];
+        yield [ '1,112,17', 0, 17, 'N'];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('internalSearchDataProvider')]
@@ -309,37 +300,35 @@ class SearchTest extends MockeryTestCase
         $this->assertSame($expect, $this->sut->getDateRanges());
     }
 
-    public static function setDateRangesDataProvider(): array
+    public static function setDateRangesDataProvider(): \Iterator
     {
-        return [
-            // valid from string
+        // valid from string
+        yield [
             [
-                [
-                    'field1' => '2010-02-01',
-                ],
-                [
-                    'field1' => '2010-02-01',
-                ]
+                'field1' => '2010-02-01',
             ],
-            // valid from array
             [
-                [
-                    'field1' => [
-                        'year' => '2010',
-                        'month' => '02',
-                        'day' => '01',
-                    ],
-                    'field2' => [
-                        'year' => '2010',
-                        'month' => '2',
-                        'day' => '1',
-                    ],
+                'field1' => '2010-02-01',
+            ]
+        ];
+        // valid from array
+        yield [
+            [
+                'field1' => [
+                    'year' => '2010',
+                    'month' => '02',
+                    'day' => '01',
                 ],
-                [
-                    'field1' => '2010-02-01',
-                    'field2' => '2010-02-01',
-                ]
+                'field2' => [
+                    'year' => '2010',
+                    'month' => '2',
+                    'day' => '1',
+                ],
             ],
+            [
+                'field1' => '2010-02-01',
+                'field2' => '2010-02-01',
+            ]
         ];
     }
 
@@ -351,41 +340,38 @@ class SearchTest extends MockeryTestCase
         $this->sut->setDateRanges($data);
     }
 
-    public static function invalidDateProvider(): array
+    public static function invalidDateProvider(): \Iterator
     {
-        return    // invalid
+        yield [
             [
-                [
-                    [
-                        'field6' => [
-                            'year' => '2010',
-                            'month' => '02',
-                            'day' => '',
-                        ],
-                        'field7' => [
-                            'year' => '',
-                            'month' => '02',
-                            'day' => '01',
-                        ],
-                        'field8' => [
-                            'year' => '2010',
-                            'month' => '13',
-                            'day' => '01',
-                        ],
-                        'field9' => [
-                            'year' => '2017',
-                            'month' => '02',
-                            'day' => '',
-                        ],
-                        'field10' => [
-                            'year' => '2010',
-                            'month' => '02',
-                            'day' => '53',
-                        ],
+                'field6' => [
+                    'year' => '2010',
+                    'month' => '02',
+                    'day' => '',
+                ],
+                'field7' => [
+                    'year' => '',
+                    'month' => '02',
+                    'day' => '01',
+                ],
+                'field8' => [
+                    'year' => '2010',
+                    'month' => '13',
+                    'day' => '01',
+                ],
+                'field9' => [
+                    'year' => '2017',
+                    'month' => '02',
+                    'day' => '',
+                ],
+                'field10' => [
+                    'year' => '2010',
+                    'month' => '02',
+                    'day' => '53',
+                ],
 
-                    ],
-                ]
-            ];
+            ],
+        ];
     }
 
     # VOL-3447 - Evaluate this test and reinstate/update/delete as appropriate

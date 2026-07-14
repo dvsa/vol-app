@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\I18n\Translator\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass('::class')]
-class TransportManagerResponsibilityReviewServiceTest extends MockeryTestCase
+final class TransportManagerResponsibilityReviewServiceTest extends MockeryTestCase
 {
     /** @var  TransportManagerApplication\Section\TransportManagerResponsibilityReviewService */
     protected $sut;
@@ -20,6 +20,7 @@ class TransportManagerResponsibilityReviewServiceTest extends MockeryTestCase
     /** @var TranslatorInterface */
     protected $mockTranslator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockTranslator = m::mock(TranslatorInterface::class);

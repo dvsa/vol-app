@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Rbac\Service\Permission;
@@ -8,7 +10,7 @@ use Common\Service\Table\Formatter\InternalLicencePermitReference;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class InternalLicencePermitReferenceTest extends MockeryTestCase
+final class InternalLicencePermitReferenceTest extends MockeryTestCase
 {
     protected $urlHelper;
 

@@ -20,7 +20,7 @@ use Dvsa\Olcs\DocumentShare\Data\Object\File;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class PrintJobTest extends AbstractCommandHandlerTestCase
+final class PrintJobTest extends AbstractCommandHandlerTestCase
 {
     public $mockFileUploader;
     public $config;

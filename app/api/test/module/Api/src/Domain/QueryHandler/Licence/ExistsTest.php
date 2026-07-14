@@ -14,7 +14,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ExistsTest extends QueryHandlerTestCase
+final class ExistsTest extends QueryHandlerTestCase
 {
     /**
      * set up test

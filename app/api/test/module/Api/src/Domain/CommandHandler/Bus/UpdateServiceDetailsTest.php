@@ -18,7 +18,7 @@ use Dvsa\Olcs\Api\Entity\Bus\BusReg as BusRegEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 
-class UpdateServiceDetailsTest extends AbstractCommandHandlerTestCase
+final class UpdateServiceDetailsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -153,7 +153,7 @@ class UpdateServiceDetailsTest extends AbstractCommandHandlerTestCase
         $this->repoMap['BusRegOtherService']->expects('save')
             ->andReturnUsing(
                 function (BusRegOtherServiceEntity $entity) {
-                    self::assertSame(88888, $entity->getServiceNo());
+                    $this->assertSame(88888, $entity->getServiceNo());
                 }
             );
 
@@ -203,11 +203,9 @@ class UpdateServiceDetailsTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
 
-    public static function createFeeProvider(): array
+    public static function createFeeProvider(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 }

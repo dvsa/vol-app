@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Common\Service\Helper\UrlHelperService;
@@ -16,7 +18,7 @@ use Laminas\Form\Form;
 /**
  * Licence checklist form service test
  */
-class LicenceChecklistTest extends MockeryTestCase
+final class LicenceChecklistTest extends MockeryTestCase
 {
     /** @var LicenceChecklist */
     protected $sut;
@@ -163,9 +165,7 @@ class LicenceChecklistTest extends MockeryTestCase
         $this->assertEquals($form, $this->sut->getForm($data));
     }
 
-    /**
-     * @dataProvider dpAlterOperatingCentresSection
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpAlterOperatingCentresSection')]
     public function testAlterOperatingCentresSection($vehicleTypeId, $updatedLabel, $updatedNotCheckedMessage): void
     {
         $operatingCentresCheckbox = m::mock(CheckboxAdvanced::class)->makePartial();
@@ -195,33 +195,31 @@ class LicenceChecklistTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return list{list{'app_veh_type_psv', 'existing-label', 'existing-not-checked-message'}, list{'app_veh_type_hgv', 'existing-label', 'existing-not-checked-message'}, list{'app_veh_type_mixed', 'existing-label', 'existing-not-checked-message'}, list{'app_veh_type_lgv', 'existing-label.lgv', 'existing-not-checked-message.lgv'}}
      */
-    public function dpAlterOperatingCentresSection(): array
+    public static function dpAlterOperatingCentresSection(): \Iterator
     {
-        return [
-            [
-                RefData::APP_VEHICLE_TYPE_PSV,
-                'existing-label',
-                'existing-not-checked-message'
-            ],
-            [
-                RefData::APP_VEHICLE_TYPE_HGV,
-                'existing-label',
-                'existing-not-checked-message'
-            ],
-            [
-                RefData::APP_VEHICLE_TYPE_MIXED,
-                'existing-label',
-                'existing-not-checked-message'
-            ],
-            [
-                RefData::APP_VEHICLE_TYPE_LGV,
-                'existing-label.lgv',
-                'existing-not-checked-message.lgv'
-            ],
+        yield [
+            RefData::APP_VEHICLE_TYPE_PSV,
+            'existing-label',
+            'existing-not-checked-message'
+        ];
+        yield [
+            RefData::APP_VEHICLE_TYPE_HGV,
+            'existing-label',
+            'existing-not-checked-message'
+        ];
+        yield [
+            RefData::APP_VEHICLE_TYPE_MIXED,
+            'existing-label',
+            'existing-not-checked-message'
+        ];
+        yield [
+            RefData::APP_VEHICLE_TYPE_LGV,
+            'existing-label.lgv',
+            'existing-not-checked-message.lgv'
         ];
     }
 

@@ -17,13 +17,8 @@ use Mockery as m;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 
-class DispatcherTest extends MockeryTestCase
+final class DispatcherTest extends MockeryTestCase
 {
-    /**
-     * @var \CommonTest\Common\Controller\Traits\Stubs\ControllerDelegateStub
-     */
-    public $delegate;
-    public $request;
     public $routeMatch;
     public $response;
     public $pluginManager;
@@ -32,16 +27,16 @@ class DispatcherTest extends MockeryTestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->delegate = new ControllerDelegateStub();
-        $this->request = m::mock(Request::class);
+        $delegate = new ControllerDelegateStub();
+        $request = m::mock(Request::class);
         $this->routeMatch = m::mock(RouteMatch::class);
         $this->response = m::mock(Response::class);
         $this->pluginManager = m::mock(PluginManager::class)->makePartial();
 
         $this->mvcEvent = m::mock(MvcEvent::class);
-        $this->mvcEvent->expects('getRequest')->withNoArgs()->andReturn($this->request);
+        $this->mvcEvent->expects('getRequest')->withNoArgs()->andReturn($request);
 
-        $this->dispatcher = new Dispatcher($this->delegate);
+        $this->dispatcher = new Dispatcher($delegate);
         $this->dispatcher->setEvent($this->mvcEvent);
         $this->dispatcher->setPluginManager($this->pluginManager);
     }

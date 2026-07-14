@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\IrhpApplication;
 
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Terminate;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\Terminate;
 /**
  * Terminate test
  */
-class TerminateTest extends \PHPUnit\Framework\TestCase
+final class TerminateTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

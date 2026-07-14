@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\CommunityLic;
 
 use Dvsa\Olcs\Transfer\Query\CommunityLic\CommunityLicences;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\CommunityLic\CommunityLicences;
 /**
  *  Community licences test
  */
-class CommunityLicencesTest extends \PHPUnit\Framework\TestCase
+final class CommunityLicencesTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

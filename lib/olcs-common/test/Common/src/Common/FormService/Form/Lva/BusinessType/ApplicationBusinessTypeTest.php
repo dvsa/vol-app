@@ -17,16 +17,8 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationBusinessTypeTest extends MockeryTestCase
+final class ApplicationBusinessTypeTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $authService;
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $guidanceService;
     /**
      * @var ApplicationBusinessType
      */
@@ -41,10 +33,10 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
     {
         $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->authService = m::mock(AuthorizationService::class);
-        $this->guidanceService = m::mock(\Common\Service\Helper\GuidanceHelperService::class);
+        $authService = m::mock(AuthorizationService::class);
+        $guidanceService = m::mock(\Common\Service\Helper\GuidanceHelperService::class);
 
-        $this->sut = new ApplicationBusinessType($this->fh, $this->authService, $this->guidanceService, $this->fsm);
+        $this->sut = new ApplicationBusinessType($this->fh, $authService, $guidanceService, $this->fsm);
     }
 
     public function testGetForm(): void

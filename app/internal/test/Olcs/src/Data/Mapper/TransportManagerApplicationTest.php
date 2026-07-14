@@ -10,7 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\TransportManagerApplication as Sut;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Data\Mapper\TransportManagerApplication::class)]
-class TransportManagerApplicationTest extends MockeryTestCase
+final class TransportManagerApplicationTest extends MockeryTestCase
 {
     public function testMapFromResultForTable(): void
     {
@@ -71,21 +71,19 @@ class TransportManagerApplicationTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
-    public static function dpTestMapFromResult(): array
+    public static function dpTestMapFromResult(): \Iterator
     {
-        return [
-            [
-                'inputStatus' => RefData::TMA_STATUS_DETAILS_CHECKED,
-                'outputStatus' => RefData::TMA_STATUS_INCOMPLETE,
-            ],
-            [
-                'inputStatus' => RefData::TMA_STATUS_DETAILS_SUBMITTED,
-                'outputStatus' => RefData::TMA_STATUS_INCOMPLETE,
-            ],
-            [
-                'inputStatus' => RefData::TMA_STATUS_OPERATOR_APPROVED,
-                'outputStatus' => RefData::TMA_STATUS_TM_SIGNED,
-            ],
+        yield [
+            'inputStatus' => RefData::TMA_STATUS_DETAILS_CHECKED,
+            'outputStatus' => RefData::TMA_STATUS_INCOMPLETE,
+        ];
+        yield [
+            'inputStatus' => RefData::TMA_STATUS_DETAILS_SUBMITTED,
+            'outputStatus' => RefData::TMA_STATUS_INCOMPLETE,
+        ];
+        yield [
+            'inputStatus' => RefData::TMA_STATUS_OPERATOR_APPROVED,
+            'outputStatus' => RefData::TMA_STATUS_TM_SIGNED,
         ];
     }
 

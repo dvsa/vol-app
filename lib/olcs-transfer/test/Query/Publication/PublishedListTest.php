@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Published;
 
 use DateTime;
 use Dvsa\Olcs\Transfer\Query\Publication\PublishedList;
 use Dvsa\OlcsTest\Transfer\Query\QueryTest;
 
-class PublishedListTest extends \PHPUnit\Framework\TestCase
+final class PublishedListTest extends \PHPUnit\Framework\TestCase
 {
     use QueryTest;
 

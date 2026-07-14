@@ -12,14 +12,13 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Submission\Sections\AbstractFactory
- */
-class AbstractFactoryTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Submission\Sections\AbstractFactory::class)]
+final class AbstractFactoryTest extends MockeryTestCase
 {
     /** @var  ContainerInterface | m\MockInterface */
     private $mockSl;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockSl = m::mock(ContainerInterface::class);
@@ -42,8 +41,8 @@ class AbstractFactoryTest extends MockeryTestCase
                 }
             );
 
-        $actual = (new AbstractFactory())->__invoke($this->mockSl, $reqName);
+        $actual = new AbstractFactory()->__invoke($this->mockSl, $reqName);
 
-        static::assertInstanceOf(AbstractSectionStub::class, $actual);
+        $this->assertInstanceOf(AbstractSectionStub::class, $actual);
     }
 }

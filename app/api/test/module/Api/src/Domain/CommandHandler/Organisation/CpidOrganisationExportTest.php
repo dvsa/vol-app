@@ -25,7 +25,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CpidOrganisationExportTest extends AbstractCommandHandlerTestCase
+final class CpidOrganisationExportTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -49,7 +49,7 @@ class CpidOrganisationExportTest extends AbstractCommandHandlerTestCase
                 'type' => Queue::TYPE_CPID_EXPORT_CSV,
                 'status' => Queue::STATUS_QUEUED
             ],
-            (new Result())->addMessage('RESULT')
+            new Result()->addMessage('RESULT')
         );
 
         $this->sut->handleCommand($command);

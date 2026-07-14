@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Lva;
 
 use Laminas\Form\ElementInterface;
@@ -9,7 +11,7 @@ use Common\Data\Mapper\Lva\UploadEvidence;
 use Common\Form\Form;
 use Mockery as m;
 
-class UploadEvidenceTest extends MockeryTestCase
+final class UploadEvidenceTest extends MockeryTestCase
 {
     public function testMapFromResult(): void
     {
@@ -139,9 +141,7 @@ class UploadEvidenceTest extends MockeryTestCase
         UploadEvidence::mapFromResultForm($data, $mockForm);
     }
 
-/**
- * @dataProvider dpSupportingEvidenceProvider
- */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSupportingEvidenceProvider')]
     public function testMapFromFormWithSupportIngEvidence($inputData, $expectedData): void
     {
         $input = [
@@ -153,13 +153,11 @@ class UploadEvidenceTest extends MockeryTestCase
         $this->assertEquals($expected, UploadEvidence::mapFromForm($input));
     }
 
-    public function dpSupportingEvidenceProvider(): array
+    public static function dpSupportingEvidenceProvider(): \Iterator
     {
-        return [
-            [  ["something here .."],
-                true],
-            [  [],
-                false],
-        ];
+        yield [  ["something here .."],
+            true];
+        yield [  [],
+            false];
     }
 }

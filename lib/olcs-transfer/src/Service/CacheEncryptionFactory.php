@@ -21,7 +21,7 @@ class CacheEncryptionFactory implements FactoryInterface
      * @return CacheEncryption
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CacheEncryption
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CacheEncryption
     {
         $config = $container->get('Config');
 

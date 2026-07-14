@@ -27,7 +27,7 @@ use Dvsa\OlcsTest\Api\Entity\User as UserEntity;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class UnlicensedCasesTest extends QueryHandlerTestCase
+final class UnlicensedCasesTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

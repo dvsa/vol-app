@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Transaction;
 
 use Dvsa\Olcs\Transfer\Query\Transaction\TransactionByReference;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Transaction\TransactionByReference;
 /**
  * Transaction by reference Test
  */
-class TransactionByReferenceTest extends \PHPUnit\Framework\TestCase
+final class TransactionByReferenceTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

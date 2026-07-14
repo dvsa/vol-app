@@ -44,7 +44,7 @@ class Address extends AbstractAddress
         $addressLine4 = null,
         $town = null,
         $postcode = null,
-        Country $countryCode = null
+        ?Country $countryCode = null
     ) {
         $this->setAddressLine1($addressLine1);
         $this->setAddressLine2($addressLine2);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Type;
 
 use Common\Service\Table\TableBuilder;
@@ -8,10 +10,8 @@ use Dvsa\Olcs\Utils\Translation\TranslatorDelegator as Translator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Common\Service\Table\Type\VariationRecordAction
- */
-class VariationRecordActionTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Table\Type\VariationRecordAction::class)]
+final class VariationRecordActionTest extends MockeryTestCase
 {
     /** @var  VariationRecordAction */
     protected $sut;
@@ -34,9 +34,7 @@ class VariationRecordActionTest extends MockeryTestCase
         $this->sut = new VariationRecordAction($this->table);
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testRender($action, $prefix, $expected): void
     {
         if ($prefix !== null) {
@@ -69,42 +67,40 @@ class VariationRecordActionTest extends MockeryTestCase
     }
 
     /**
-     * @return (null|string)[][]
+     * @return \Iterator<(int | string), array<(string | null)>>
      *
      * @psalm-return list{array{action: 'A', expectPrefix: 'new', expect: '(TRSLTD_STATUS) <button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit" class="action-button-link " name="table[action][foo][7]" >link-text</button>'}, array{action: 'U', expectPrefix: 'updated', expect: '(TRSLTD_STATUS) <button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit" class="action-button-link " name="table[action][foo][7]" >link-text</button>'}, array{action: 'C', expectPrefix: 'current', expect: '(TRSLTD_STATUS) <button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit" class="action-button-link " name="table[action][foo][7]" disabled="disabled">link-text</button>'}, array{action: 'D', expectPrefix: 'removed', expect: '(TRSLTD_STATUS) <button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit" class="action-button-link " name="table[action][foo][7]" disabled="disabled">link-text</button>'}, array{action: 'ABC', expectPrefix: null, expect: '<button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit" class="action-button-link " name="table[action][foo][7]" >link-text</button>'}}
      */
-    public function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [
-                'action' => 'A',
-                'expectPrefix' => 'new',
-                'expect' => '(TRSLTD_STATUS) <button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit" class="action-button-link " name="table[action][foo][7]" ' .
-                    '>link-text</button>',
-            ],
-            [
-                'action' => 'U',
-                'expectPrefix' => 'updated',
-                'expect' => '(TRSLTD_STATUS) <button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit" class="action-button-link " name="table[action][foo][7]" ' .
-                    '>link-text</button>',
-            ],
-            [
-                'action' => 'C',
-                'expectPrefix' => 'current',
-                'expect' => '(TRSLTD_STATUS) <button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit" class="action-button-link " name="table[action][foo][7]" ' .
-                    'disabled="disabled">link-text</button>',
-            ],
-            [
-                'action' => 'D',
-                'expectPrefix' => 'removed',
-                'expect' => '(TRSLTD_STATUS) <button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit" class="action-button-link " name="table[action][foo][7]" ' .
-                    'disabled="disabled">link-text</button>',
-            ],
-            [
-                'action' => 'ABC',
-                'expectPrefix' => null,
-                'expect' => '<button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit" class="action-button-link " name="table[action][foo][7]" >link-text</button>',
-            ],
+        yield [
+            'action' => 'A',
+            'prefix' => 'new',
+            'expected' => '(TRSLTD_STATUS) <button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit" class="action-button-link " name="table[action][foo][7]" ' .
+                '>link-text</button>',
+        ];
+        yield [
+            'action' => 'U',
+            'prefix' => 'updated',
+            'expected' => '(TRSLTD_STATUS) <button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit" class="action-button-link " name="table[action][foo][7]" ' .
+                '>link-text</button>',
+        ];
+        yield [
+            'action' => 'C',
+            'prefix' => 'current',
+            'expected' => '(TRSLTD_STATUS) <button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit" class="action-button-link " name="table[action][foo][7]" ' .
+                'disabled="disabled">link-text</button>',
+        ];
+        yield [
+            'action' => 'D',
+            'prefix' => 'removed',
+            'expected' => '(TRSLTD_STATUS) <button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit" class="action-button-link " name="table[action][foo][7]" ' .
+                'disabled="disabled">link-text</button>',
+        ];
+        yield [
+            'action' => 'ABC',
+            'prefix' => null,
+            'expected' => '<button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit" class="action-button-link " name="table[action][foo][7]" >link-text</button>',
         ];
     }
 }

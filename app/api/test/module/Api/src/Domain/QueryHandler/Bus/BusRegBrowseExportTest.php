@@ -13,7 +13,7 @@ use Mockery as m;
 /**
  * BusRegBrowseExport test
  */
-class BusRegBrowseExportTest extends QueryHandlerTestCase
+final class BusRegBrowseExportTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

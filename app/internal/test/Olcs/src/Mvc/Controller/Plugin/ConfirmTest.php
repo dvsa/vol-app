@@ -18,44 +18,36 @@ use Olcs\Controller\Cases\Submission\SubmissionController;
 use Olcs\Mvc\Controller\Plugin\Confirm;
 use Olcs\Service\Data\Submission;
 
-class ConfirmTest extends TestCase
+final class ConfirmTest extends TestCase
 {
     protected $sut;
-    private $permissionService;
-    protected $translationHelper;
-    protected $formHelper;
-    protected $flashMessengerHelper;
-    protected $navigation;
-    protected $urlHelper;
     protected $configHelper;
-    protected $viewRenderer;
-    protected $submissionService;
-    protected $uploadHelper;
 
+    #[\Override]
     public function setUp(): void
     {
 
-        $this->translationHelper = m::mock(TranslationHelperService::class);
-        $this->formHelper = m::mock(FormHelperService::class);
-        $this->flashMessengerHelper = m::mock(FlashMessengerHelperService::class);
-        $this->navigation = m::mock(Navigation::class);
-        $this->urlHelper = m::mock(UrlHelperService::class);
+        $translationHelper = m::mock(TranslationHelperService::class);
+        $formHelper = m::mock(FormHelperService::class);
+        $flashMessengerHelper = m::mock(FlashMessengerHelperService::class);
+        $navigation = m::mock(Navigation::class);
+        $urlHelper = m::mock(UrlHelperService::class);
         $this->configHelper = [];
-        $this->viewRenderer = m::mock(ViewRenderer::class);
-        $this->submissionService = m::mock(Submission::class);
-        $this->permissionService = m::mock(Permission::class);
-        $this->uploadHelper = m::mock(FileUploadHelperService::class);
+        $viewRenderer = m::mock(ViewRenderer::class);
+        $submissionService = m::mock(Submission::class);
+        $permissionService = m::mock(Permission::class);
+        $uploadHelper = m::mock(FileUploadHelperService::class);
         $this->sut = m::mock(SubmissionController::class, [
-            $this->translationHelper,
-            $this->formHelper,
-            $this->flashMessengerHelper,
-            $this->navigation,
-            $this->urlHelper,
+            $translationHelper,
+            $formHelper,
+            $flashMessengerHelper,
+            $navigation,
+            $urlHelper,
             $this->configHelper,
-            $this->viewRenderer,
-            $this->submissionService,
-            $this->permissionService,
-            $this->uploadHelper
+            $viewRenderer,
+            $submissionService,
+            $permissionService,
+            $uploadHelper
         ])->makePartial();
     }
     #[\PHPUnit\Framework\Attributes\Group('confirmPlugin')]
@@ -122,12 +114,10 @@ class ConfirmTest extends TestCase
         $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $result);
     }
 
-    public static function dpTestInvokeGenerateForm(): array
+    public static function dpTestInvokeGenerateForm(): \Iterator
     {
-        return [
-            ['Continue', 'Cancel', true],
-            ['customConfirm', 'customCancel', false],
-        ];
+        yield ['Continue', 'Cancel', true];
+        yield ['customConfirm', 'customCancel', false];
     }
 
     #[\PHPUnit\Framework\Attributes\Group('confirmPlugin')]

@@ -26,7 +26,7 @@ use Mockery as m;
  * Submit Application Path test
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class SubmitApplicationPathTest extends AbstractCommandHandlerTestCase
+final class SubmitApplicationPathTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

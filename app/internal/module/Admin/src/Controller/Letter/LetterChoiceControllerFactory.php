@@ -14,7 +14,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class LetterChoiceControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LetterChoiceController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LetterChoiceController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         assert($translationHelper instanceof TranslationHelperService);

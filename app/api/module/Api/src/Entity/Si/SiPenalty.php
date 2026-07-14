@@ -28,9 +28,9 @@ class SiPenalty extends AbstractSiPenalty
         SiPenaltyTypeEntity $siPenaltyType,
         SiPenaltyErruRequestedEntity $requestedErru,
         string $imposed,
-        \DateTime $startDate = null,
-        \DateTime $endDate = null,
-        string $reasonNotImposed = null
+        ?\DateTime $startDate = null,
+        ?\DateTime $endDate = null,
+        ?string $reasonNotImposed = null
     ) {
         parent::__construct();
 
@@ -42,9 +42,9 @@ class SiPenalty extends AbstractSiPenalty
         SiPenaltyTypeEntity $siPenaltyType,
         SiPenaltyErruRequestedEntity $requestedErru,
         string $imposed,
-        \DateTime $startDate = null,
-        \DateTime $endDate = null,
-        string $reasonNotImposed = null
+        ?\DateTime $startDate = null,
+        ?\DateTime $endDate = null,
+        ?string $reasonNotImposed = null
     ) {
         $this->siPenaltyType = $siPenaltyType;
         $this->imposed = $imposed;

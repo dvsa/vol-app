@@ -20,7 +20,7 @@ use Mockery as m;
 /**
  * UploadEvidenceTest
  */
-class UploadEvidenceTest extends QueryHandlerTestCase
+final class UploadEvidenceTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

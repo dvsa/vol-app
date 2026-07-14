@@ -19,11 +19,12 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * matching sibling exists.
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(MasterTemplateResolver::class)]
-class MasterTemplateResolverTest extends MockeryTestCase
+final class MasterTemplateResolverTest extends MockeryTestCase
 {
     private m\MockInterface|MasterTemplateRepo $mockRepo;
     private MasterTemplateResolver $sut;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->mockRepo = m::mock(MasterTemplateRepo::class);
@@ -39,7 +40,7 @@ class MasterTemplateResolverTest extends MockeryTestCase
 
         $letter = $this->makeLetter($letterType, isNi: false);
 
-        $this->assertNull($this->sut->resolve($letter));
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\Letter\MasterTemplate::class, $this->sut->resolve($letter));
     }
 
     public function testFallsBackToDefaultTemplateWhenLetterTypeHasNone(): void

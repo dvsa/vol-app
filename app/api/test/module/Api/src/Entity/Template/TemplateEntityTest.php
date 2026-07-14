@@ -15,7 +15,7 @@ use RuntimeException;
  *
  * Initially auto-generated but won't be overridden
  */
-class TemplateEntityTest extends EntityTester
+final class TemplateEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

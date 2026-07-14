@@ -25,7 +25,7 @@ use Mockery as m;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ApplyRangesToSuccessfulPermitApplicationsTest extends AbstractCommandHandlerTestCase
+final class ApplyRangesToSuccessfulPermitApplicationsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -11,7 +11,7 @@ use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermitTypeList as Qry;
 use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class IrfoGvPermitTypeTest extends AbstractDataServiceTestCase
+final class IrfoGvPermitTypeTest extends AbstractDataServiceTestCase
 {
     /** @var IrfoGvPermitType */
     private $sut;
@@ -36,12 +36,10 @@ class IrfoGvPermitTypeTest extends AbstractDataServiceTestCase
         $this->assertEquals($expected, $this->sut->fetchListOptions(''));
     }
 
-    public static function provideFetchListOptions(): array
+    public static function provideFetchListOptions(): \Iterator
     {
-        return [
-            [self::SINGLE_SOURCE, self::SINGLE_EXPECTED],
-            [false, []]
-        ];
+        yield [self::SINGLE_SOURCE, self::SINGLE_EXPECTED];
+        yield [false, []];
     }
 
     public function testFetchListData(): void

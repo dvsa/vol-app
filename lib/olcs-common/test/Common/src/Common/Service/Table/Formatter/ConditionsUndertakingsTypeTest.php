@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\ConditionsUndertakingsType;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class ConditionsUndertakingsTypeTest extends TestCase
+final class ConditionsUndertakingsTypeTest extends TestCase
 {
     public $sut;
     protected $translator;

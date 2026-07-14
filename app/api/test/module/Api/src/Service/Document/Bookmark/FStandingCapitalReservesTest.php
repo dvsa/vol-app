@@ -14,10 +14,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class FStandingCapitalReservesTest extends MockeryTestCase
+final class FStandingCapitalReservesTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new FStandingCapitalReserves();

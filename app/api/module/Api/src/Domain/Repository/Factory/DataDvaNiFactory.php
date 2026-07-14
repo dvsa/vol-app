@@ -21,7 +21,7 @@ class DataDvaNiFactory implements FactoryInterface
      * @return DataDvaNi
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DataDvaNi
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): DataDvaNi
     {
         return new DataDvaNi(
             $container->get('doctrine.connection.export')

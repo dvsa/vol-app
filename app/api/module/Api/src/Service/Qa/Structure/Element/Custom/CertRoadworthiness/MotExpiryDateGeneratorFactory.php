@@ -18,7 +18,7 @@ class MotExpiryDateGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): MotExpiryDateGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): MotExpiryDateGenerator
     {
         return new MotExpiryDateGenerator(
             $container->get('QaCertRoadworthinessMotExpiryDateElementFactory'),

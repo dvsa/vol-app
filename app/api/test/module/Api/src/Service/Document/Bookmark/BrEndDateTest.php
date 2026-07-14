@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BrEndDate;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BrEndDateTest extends SingleValueTestAbstract
+final class BrEndDateTest extends SingleValueTestAbstract
 {
     public const SUT_CLASS_NAME = BrEndDate::class;
 }

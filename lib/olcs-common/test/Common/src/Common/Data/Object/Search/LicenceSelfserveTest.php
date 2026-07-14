@@ -1,11 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Data\Object\Search;
 
-/**
- * @covers \Common\Data\Object\Search\LicenceSelfserve
- */
-class LicenceSelfserveTest extends SearchAbstractTest
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Data\Object\Search\LicenceSelfserve::class)]
+final class LicenceSelfserveTest extends SearchAbstractTest
 {
     protected $class = \Common\Data\Object\Search\LicenceSelfserve::class;
 
@@ -19,7 +19,7 @@ class LicenceSelfserveTest extends SearchAbstractTest
             'noOfLicencesHeld' => 0,
         ];
 
-        static::assertEquals('unit_OrgName', $col['formatter']($data));
+        $this->assertEquals('unit_OrgName', $col['formatter']($data));
 
         //  count of Licence > 0
         $data = [
@@ -27,6 +27,6 @@ class LicenceSelfserveTest extends SearchAbstractTest
             'noOfLicencesHeld' => 2,
         ];
 
-        static::assertEquals('unit_OrgName (MLH)', $col['formatter']($data));
+        $this->assertEquals('unit_OrgName (MLH)', $col['formatter']($data));
     }
 }

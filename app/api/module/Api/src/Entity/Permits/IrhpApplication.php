@@ -170,7 +170,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
      *
      * @return string
      */
-    public function getProductReferenceForTier(DateTime $now = null)
+    public function getProductReferenceForTier(?DateTime $now = null)
     {
         $now = is_null($now) ? new DateTime() : $now;
         $irhpPermitApplication = $this->getFirstIrhpPermitApplication();
@@ -1164,7 +1164,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
         RefData $status,
         IrhpPermitType $irhpPermitType,
         Licence $licence,
-        string $dateReceived = null
+        ?string $dateReceived = null
     ) {
         $irhpApplication = new self();
         $irhpApplication->source = $source;
@@ -1656,7 +1656,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
      * @param DateTime|null $expiryDate
      * @throws ForbiddenException
      */
-    public function expire(RefData $expireStatus, DateTime $expiryDate = null)
+    public function expire(RefData $expireStatus, ?DateTime $expiryDate = null)
     {
         if (!$this->canBeExpired()) {
             throw new ForbiddenException('This application cannot be expired.');

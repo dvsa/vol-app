@@ -15,14 +15,15 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class MoroccoFieldsGeneratorTest extends MockeryTestCase
+final class MoroccoFieldsGeneratorTest extends MockeryTestCase
 {
-    public const PERIOD_NAME_KEY = 'period.name.key';
+    public const string PERIOD_NAME_KEY = 'period.name.key';
 
     private $irhpPermitStock;
 
     private $moroccoFieldsGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpPermitStock = m::mock(IrhpPermitStock::class);

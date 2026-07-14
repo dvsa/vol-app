@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 /**
  * Delete Bus Test
  */
-class DeleteBusTest extends AbstractCommandHandlerTestCase
+final class DeleteBusTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

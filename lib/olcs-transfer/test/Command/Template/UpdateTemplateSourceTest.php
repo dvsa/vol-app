@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Template;
 
 use Dvsa\Olcs\Transfer\Command\Template\UpdateTemplateSource;
@@ -8,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Update template source test
  */
-class UpdateTemplateSourceTest extends TestCase
+final class UpdateTemplateSourceTest extends TestCase
 {
     public function testStructure()
     {

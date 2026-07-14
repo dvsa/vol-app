@@ -26,7 +26,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
  * @author Joshua Curtis <josh.curtis@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class DisassociateS4Test extends AbstractCommandHandlerTestCase
+final class DisassociateS4Test extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

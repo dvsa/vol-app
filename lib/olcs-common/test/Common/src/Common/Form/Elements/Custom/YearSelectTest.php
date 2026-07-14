@@ -4,6 +4,8 @@
  * Year Select Test
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Custom;
 
 use Common\Form\Elements\Custom\YearSelect;
@@ -11,7 +13,7 @@ use Common\Form\Elements\Custom\YearSelect;
 /**
  * Year Select Test
  */
-class YearSelectTest extends \PHPUnit\Framework\TestCase
+final class YearSelectTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 
@@ -34,7 +36,7 @@ class YearSelectTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(($year + 5), $this->sut->getMaxYear());
         $this->assertEquals(($year - 5), $this->sut->getMinYear());
-        $this->assertEquals(11, count($this->sut->getValueOptions()));
+        $this->assertCount(11, $this->sut->getValueOptions());
     }
 
     public function testSetOptionsMaxYear(): void
@@ -49,7 +51,7 @@ class YearSelectTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(($year + 5), $this->sut->getMaxYear());
         $this->assertEquals($year, $this->sut->getMinYear());
-        $this->assertEquals(6, count($this->sut->getValueOptions()));
+        $this->assertCount(6, $this->sut->getValueOptions());
     }
 
     public function testSetOptionsMinYear(): void
@@ -64,6 +66,6 @@ class YearSelectTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($year, $this->sut->getMaxYear());
         $this->assertEquals(($year - 5), $this->sut->getMinYear());
-        $this->assertEquals(6, count($this->sut->getValueOptions()));
+        $this->assertCount(6, $this->sut->getValueOptions());
     }
 }

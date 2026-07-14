@@ -9,7 +9,7 @@ use Dvsa\Olcs\Cli\Command\Batch\DataGovUkExportCommand;
 use Dvsa\Olcs\Cli\Domain\Command\DataGovUkExport;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class DataGovUkExportCommandTest extends AbstractBatchCommandCases
+final class DataGovUkExportCommandTest extends AbstractBatchCommandCases
 {
     protected $additionalArguments = [
         '--report-name' => 'govReport',

@@ -12,11 +12,12 @@ use Dvsa\Olcs\Transfer\Query\CompaniesHouse\AlertList as AlertListQry;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\CompaniesHouseAlert::class)]
-class CompaniesHouseAlertTest extends RepositoryTestCase
+final class CompaniesHouseAlertTest extends RepositoryTestCase
 {
     /** @var  Repository\CompaniesHouseAlert | m\MockInterface */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repository\CompaniesHouseAlert::class, true);

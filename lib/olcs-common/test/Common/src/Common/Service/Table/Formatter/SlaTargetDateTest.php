@@ -6,6 +6,8 @@
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -22,16 +24,10 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class SlaTargetDateTest extends TestCase
+final class SlaTargetDateTest extends TestCase
 {
     public $mockRouteMatch;
     protected $urlHelper;
-
-    protected $translator;
-
-    protected $router;
-
-    protected $request;
 
     protected $sut;
 
@@ -39,16 +35,16 @@ class SlaTargetDateTest extends TestCase
     protected function setUp(): void
     {
         $this->urlHelper = m::mock(UrlHelperService::class);
-        $this->translator = m::mock(TranslatorDelegator::class);
-        $this->router = m::mock(TreeRouteStack::class);
-        $this->request = m::mock(Request::class);
-        $this->sut = new SlaTargetDate($this->router, $this->request, $this->urlHelper, new Date());
+        $translator = m::mock(TranslatorDelegator::class);
+        $router = m::mock(TreeRouteStack::class);
+        $request = m::mock(Request::class);
+        $this->sut = new SlaTargetDate($router, $request, $this->urlHelper, new Date());
 
         $this->mockRouteMatch = m::mock(\Laminas\Router\RouteMatch::class);
 
-        $this->router
+        $router
             ->shouldReceive('match')
-            ->with($this->request)
+            ->with($request)
             ->andReturn($this->mockRouteMatch)
             ->getMock();
     }
@@ -56,11 +52,11 @@ class SlaTargetDateTest extends TestCase
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group SlaTargetDateFormatter
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('SlaTargetDateFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $routeMatch, $expectedRoute, $expectedRouteParams, $expectedLink): void
     {
         $this->mockRouteMatch
@@ -78,45 +74,43 @@ class SlaTargetDateTest extends TestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'case-documents-no-target-date' => [
-                [
-                    'id' => 201,
-                    'agreedDate' => '2001-01-01'
-                ],
-                'case/documents',
-                'case/documents/edit-sla',
-                ['entityType' => 'document', 'entityId' => 201],
-                '<a href="the_url" class="govuk-link js-modal-ajax">Not set</a> ',
+        yield 'case-documents-no-target-date' => [
+            [
+                'id' => 201,
+                'agreedDate' => '2001-01-01'
             ],
-            'case-documents-target-date-set' => [
-                [
-                    'id' => 201,
-                    'agreedDate' => '2001-01-01',
-                    'targetDate' => '2001-02-02',
-                    'sentDate' => '2001-01-01'
-                ],
-                'case/documents',
-                'case/documents/edit-sla',
-                ['entityType' => 'document', 'entityId' => 201],
-                '<a href="the_url" class="govuk-link js-modal-ajax">02/02/2001</a> <span class="status green">Pass</span>',
+            'case/documents',
+            'case/documents/edit-sla',
+            ['entityType' => 'document', 'entityId' => 201],
+            '<a href="the_url" class="govuk-link js-modal-ajax">Not set</a> ',
+        ];
+        yield 'case-documents-target-date-set' => [
+            [
+                'id' => 201,
+                'agreedDate' => '2001-01-01',
+                'targetDate' => '2001-02-02',
+                'sentDate' => '2001-01-01'
             ],
-            'case-documents-not-set' => [
-                [
-                    'id' => 201,
-                    'agreedDate' => '',
-                    'targetDate' => '2001-02-02',
-                    'sentDate' => '2001-01-01'
-                ],
-                'case/documents',
-                'case/documents/add-sla',
-                ['entityType' => 'document', 'entityId' => 201],
-                '<a href="the_url" class="govuk-link js-modal-ajax">Not set</a>',
-            ]
+            'case/documents',
+            'case/documents/edit-sla',
+            ['entityType' => 'document', 'entityId' => 201],
+            '<a href="the_url" class="govuk-link js-modal-ajax">02/02/2001</a> <span class="status green">Pass</span>',
+        ];
+        yield 'case-documents-not-set' => [
+            [
+                'id' => 201,
+                'agreedDate' => '',
+                'targetDate' => '2001-02-02',
+                'sentDate' => '2001-01-01'
+            ],
+            'case/documents',
+            'case/documents/add-sla',
+            ['entityType' => 'document', 'entityId' => 201],
+            '<a href="the_url" class="govuk-link js-modal-ajax">Not set</a>',
         ];
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Fee;
 
 use Dvsa\Olcs\Transfer\Query\Fee\InterimRefunds;
@@ -9,7 +11,7 @@ use Dvsa\OlcsTest\Transfer\Query\QueryTest;
 use PHPUnit\Framework\TestCase;
 use Laminas\Stdlib\ArraySerializableInterface;
 
-class InterimRefundsTest extends TestCase
+final class InterimRefundsTest extends TestCase
 {
     use QueryTest, DtoWithoutFieldTransformationsTest, DtoWithoutOptionalFieldsTest {
         DtoWithoutFieldTransformationsTest::testFieldTransformations insteadof QueryTest;

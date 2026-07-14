@@ -19,7 +19,7 @@ class IpaAnswersSummaryGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IpaAnswersSummaryGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): IpaAnswersSummaryGenerator
     {
         $answersSummaryGenerator = new IpaAnswersSummaryGenerator(
             $container->get('PermitsAnswersSummaryFactory'),

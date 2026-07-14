@@ -13,7 +13,7 @@ class TaskCheckboxFactory implements FactoryInterface
      * @return TaskCheckbox
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $tableBuilder = $container->get('TableBuilder');
         return new TaskCheckbox($tableBuilder);

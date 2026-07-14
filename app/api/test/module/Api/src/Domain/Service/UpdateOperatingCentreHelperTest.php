@@ -20,14 +20,14 @@ use Dvsa\OlcsTest\Api\Entity\Licence\LicenceBuilder;
 /**
  * @see UpdateOperatingCentreHelper
  */
-class UpdateOperatingCentreHelperTest extends MockeryTestCase
+final class UpdateOperatingCentreHelperTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
-    protected const TOTAL_AUTH_HGV_VEHICLES_COMMAND_PROPERTY = 'totAuthHgvVehicles';
-    protected const TOTAL_AUTH_LGV_VEHICLES_COMMAND_PROPERTY = 'totAuthLgvVehicles';
-    protected const A_LGV = 1;
-    protected const LGVS_NOT_SUPPORTED_FOR_PSVS_ERROR_CODE = 'ERR_OC_P_1';
+    protected const string TOTAL_AUTH_HGV_VEHICLES_COMMAND_PROPERTY = 'totAuthHgvVehicles';
+    protected const string TOTAL_AUTH_LGV_VEHICLES_COMMAND_PROPERTY = 'totAuthLgvVehicles';
+    protected const int A_LGV = 1;
+    protected const string LGVS_NOT_SUPPORTED_FOR_PSVS_ERROR_CODE = 'ERR_OC_P_1';
 
     /**
      * @var UpdateOperatingCentreHelper|null
@@ -50,114 +50,112 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getMessages());
     }
 
-    public static function validateTotalAuthTrailersProvider(): array
+    public static function validateTotalAuthTrailersProvider(): \Iterator
     {
-        return [
-            'No OCs and none required' => [
-                false,
-                [],
-                [
-                    'noOfOperatingCentres' => 0
-                ],
-                []
+        yield 'No OCs and none required' => [
+            false,
+            [],
+            [
+                'noOfOperatingCentres' => 0
             ],
-            'No OCs' => [
-                true,
-                [],
-                [
-                    'noOfOperatingCentres' => 0
-                ],
-                [
-                    'totAuthTrailers' => [
-                        ['ERR_OC_T_4' => 'ERR_OC_T_4'],
-                    ]
+            []
+        ];
+        yield 'No OCs' => [
+            true,
+            [],
+            [
+                'noOfOperatingCentres' => 0
+            ],
+            [
+                'totAuthTrailers' => [
+                    ['ERR_OC_T_4' => 'ERR_OC_T_4'],
                 ]
-            ],
-            '1 OC, less than required vehicle auth' => [
-                true,
-                [
-                    'totAuthTrailers' => 10
-                ],
-                [
-                    'noOfOperatingCentres' => 1,
-                    'minTrailerAuth' => 11
-                ],
-                [
-                    'totAuthTrailers' => [
-                        ['ERR_OC_T_1' => 'ERR_OC_T_1'],
-                    ]
-                ]
-            ],
-            '1 OC, more than required vehicle auth' => [
-                true,
-                [
-                    'totAuthTrailers' => 12
-                ],
-                [
-                    'noOfOperatingCentres' => 1,
-                    'minTrailerAuth' => 11
-                ],
-                [
-                    'totAuthTrailers' => [
-                        ['ERR_OC_T_1' => 'ERR_OC_T_1'],
-                    ]
-                ]
-            ],
-            '1 OC - Valid' => [
-                true,
-                [
-                    'totAuthTrailers' => 11
-                ],
-                [
-                    'noOfOperatingCentres' => 1,
-                    'minTrailerAuth' => 11
-                ],
-                []
-            ],
-            'multiple OC, less than required' => [
-                true,
-                [
-                    'totAuthTrailers' => 10
-                ],
-                [
-                    'noOfOperatingCentres' => 5,
-                    'minTrailerAuth' => 15,
-                    'maxTrailerAuth' => 20
-                ],
-                [
-                    'totAuthTrailers' => [
-                        ['ERR_OC_T_2' => 'ERR_OC_T_2'],
-                    ]
-                ]
-            ],
-            'multiple OC, more than required' => [
-                true,
-                [
-                    'totAuthTrailers' => 25
-                ],
-                [
-                    'noOfOperatingCentres' => 5,
-                    'minTrailerAuth' => 15,
-                    'maxTrailerAuth' => 20
-                ],
-                [
-                    'totAuthTrailers' => [
-                        ['ERR_OC_T_3' => 'ERR_OC_T_3'],
-                    ]
-                ]
-            ],
-            'multiple OC valid' => [
-                true,
-                [
-                    'totAuthTrailers' => 17
-                ],
-                [
-                    'noOfOperatingCentres' => 5,
-                    'minTrailerAuth' => 15,
-                    'maxTrailerAuth' => 20
-                ],
-                []
             ]
+        ];
+        yield '1 OC, less than required vehicle auth' => [
+            true,
+            [
+                'totAuthTrailers' => 10
+            ],
+            [
+                'noOfOperatingCentres' => 1,
+                'minTrailerAuth' => 11
+            ],
+            [
+                'totAuthTrailers' => [
+                    ['ERR_OC_T_1' => 'ERR_OC_T_1'],
+                ]
+            ]
+        ];
+        yield '1 OC, more than required vehicle auth' => [
+            true,
+            [
+                'totAuthTrailers' => 12
+            ],
+            [
+                'noOfOperatingCentres' => 1,
+                'minTrailerAuth' => 11
+            ],
+            [
+                'totAuthTrailers' => [
+                    ['ERR_OC_T_1' => 'ERR_OC_T_1'],
+                ]
+            ]
+        ];
+        yield '1 OC - Valid' => [
+            true,
+            [
+                'totAuthTrailers' => 11
+            ],
+            [
+                'noOfOperatingCentres' => 1,
+                'minTrailerAuth' => 11
+            ],
+            []
+        ];
+        yield 'multiple OC, less than required' => [
+            true,
+            [
+                'totAuthTrailers' => 10
+            ],
+            [
+                'noOfOperatingCentres' => 5,
+                'minTrailerAuth' => 15,
+                'maxTrailerAuth' => 20
+            ],
+            [
+                'totAuthTrailers' => [
+                    ['ERR_OC_T_2' => 'ERR_OC_T_2'],
+                ]
+            ]
+        ];
+        yield 'multiple OC, more than required' => [
+            true,
+            [
+                'totAuthTrailers' => 25
+            ],
+            [
+                'noOfOperatingCentres' => 5,
+                'minTrailerAuth' => 15,
+                'maxTrailerAuth' => 20
+            ],
+            [
+                'totAuthTrailers' => [
+                    ['ERR_OC_T_3' => 'ERR_OC_T_3'],
+                ]
+            ]
+        ];
+        yield 'multiple OC valid' => [
+            true,
+            [
+                'totAuthTrailers' => 17
+            ],
+            [
+                'noOfOperatingCentres' => 5,
+                'minTrailerAuth' => 15,
+                'maxTrailerAuth' => 20
+            ],
+            []
         ];
     }
 
@@ -175,27 +173,25 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getMessages());
     }
 
-    public static function validatePsvProvider(): array
+    public static function validatePsvProvider(): \Iterator
     {
-        return [
-            'Valid Sum' => [
-                false,
-                [
-                    'totAuthHgvVehicles' => 9,
-                ],
-                []
+        yield 'Valid Sum' => [
+            false,
+            [
+                'totAuthHgvVehicles' => 9,
             ],
-            'Restricted too many' => [
-                true,
-                [
-                    'totAuthHgvVehicles' => 9,
-                ],
-                [
-                    'totAuthHgvVehicles' => [
-                        ['ERR_OC_R_1' => 'ERR_OC_R_1']
-                    ]
+            []
+        ];
+        yield 'Restricted too many' => [
+            true,
+            [
+                'totAuthHgvVehicles' => 9,
+            ],
+            [
+                'totAuthHgvVehicles' => [
+                    ['ERR_OC_R_1' => 'ERR_OC_R_1']
                 ]
-            ],
+            ]
         ];
     }
 
@@ -270,41 +266,39 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function invalidTotalAuthVehicleConfigurations(): array
+    public static function invalidTotalAuthVehicleConfigurations(): \Iterator
     {
-        return [
-            'No OCs' => [
-                /* Number of vehicles to be authorized on the application: */ null,
-                /* Number of operating centres: */ 0,
-                /* Operating centre vehicle constraints[min,max]: */ [0, 11],
-                /* Expected validation error code: */ 'ERR_OC_V_4',
-            ],
-            '1 OC, less vehicles then the minimum vehicles supported' => [
-                /* Number of vehicles to be authorized on the application: */ 10,
-                /* Number of operating centres: */ 1,
-                /* Operating centre vehicle constraints[min,max]: */ [11, 11],
-                /* Expected validation error code: */ 'ERR_OC_V_1',
-            ],
-            '1 OC, more vehicles than the minimum vehicles supported' => [
-                /* Number of vehicles to be authorized on the application: */ 12,
-                /* Number of operating centres: */ 1,
-                /* Operating centre vehicle constraints[min,max]: */ [11, 11],
-                /* Expected validation error code: */ 'ERR_OC_V_1',
-            ],
-            '>1 OC, less vehicles then the minimum vehicles supported' => [
-                /* Number of vehicles to be authorized on the application: */ 14,
-                /* Number of operating centres: */ 2,
-                /* Operating centre vehicle constraints[min,max]: */ [15, 20],
-                /* Expected validation error code: */ 'ERR_OC_V_2',
-            ],
-            'multiple OC, more vehicles than the maximum vehicles supported' => [
-                /* Number of vehicles to be authorized on the application: */ 21,
-                /* Number of operating centres: */ 2,
-                /* Operating centre vehicle constraints[min,max]: */ [15, 20],
-                /* Expected validation error code: */ 'ERR_OC_V_3',
-            ],
+        yield 'No OCs' => [
+            /* Number of vehicles to be authorized on the application: */ null,
+            /* Number of operating centres: */ 0,
+            /* Operating centre vehicle constraints[min,max]: */ [0, 11],
+            /* Expected validation error code: */ 'ERR_OC_V_4',
+        ];
+        yield '1 OC, less vehicles then the minimum vehicles supported' => [
+            /* Number of vehicles to be authorized on the application: */ 10,
+            /* Number of operating centres: */ 1,
+            /* Operating centre vehicle constraints[min,max]: */ [11, 11],
+            /* Expected validation error code: */ 'ERR_OC_V_1',
+        ];
+        yield '1 OC, more vehicles than the minimum vehicles supported' => [
+            /* Number of vehicles to be authorized on the application: */ 12,
+            /* Number of operating centres: */ 1,
+            /* Operating centre vehicle constraints[min,max]: */ [11, 11],
+            /* Expected validation error code: */ 'ERR_OC_V_1',
+        ];
+        yield '>1 OC, less vehicles then the minimum vehicles supported' => [
+            /* Number of vehicles to be authorized on the application: */ 14,
+            /* Number of operating centres: */ 2,
+            /* Operating centre vehicle constraints[min,max]: */ [15, 20],
+            /* Expected validation error code: */ 'ERR_OC_V_2',
+        ];
+        yield 'multiple OC, more vehicles than the maximum vehicles supported' => [
+            /* Number of vehicles to be authorized on the application: */ 21,
+            /* Number of operating centres: */ 2,
+            /* Operating centre vehicle constraints[min,max]: */ [15, 20],
+            /* Expected validation error code: */ 'ERR_OC_V_3',
         ];
     }
 
@@ -458,55 +452,53 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function dpValidateTotalAuthLgvVehicles(): array
+    public static function dpValidateTotalAuthLgvVehicles(): \Iterator
     {
-        return [
-            'cannot have LGV and none requested' => [
-                'canHaveLgv' => false,
-                'mustHaveLgv' => false,
-                'totAuthLgvVehicles' => null,
-                'expected' => [],
+        yield 'cannot have LGV and none requested' => [
+            'canHaveLgv' => false,
+            'mustHaveLgv' => false,
+            'totAuthLgvVehicles' => null,
+            'expected' => [],
+        ];
+        yield 'cannot have LGV but some requested' => [
+            'canHaveLgv' => false,
+            'mustHaveLgv' => false,
+            'totAuthLgvVehicles' => 1,
+            'expected' => [
+                'totAuthLgvVehicles' => [
+                    ['ERR_OC_LGV_1' => 'ERR_OC_LGV_1']
+                ]
             ],
-            'cannot have LGV but some requested' => [
-                'canHaveLgv' => false,
-                'mustHaveLgv' => false,
-                'totAuthLgvVehicles' => 1,
-                'expected' => [
-                    'totAuthLgvVehicles' => [
-                        ['ERR_OC_LGV_1' => 'ERR_OC_LGV_1']
-                    ]
-                ],
+        ];
+        yield 'can have LGV and none requested' => [
+            'canHaveLgv' => true,
+            'mustHaveLgv' => false,
+            'totAuthLgvVehicles' => 0,
+            'expected' => [],
+        ];
+        yield 'can have LGV and some requested' => [
+            'canHaveLgv' => true,
+            'mustHaveLgv' => false,
+            'totAuthLgvVehicles' => 1,
+            'expected' => [],
+        ];
+        yield 'must have LGV but none requested' => [
+            'canHaveLgv' => true,
+            'mustHaveLgv' => true,
+            'totAuthLgvVehicles' => 0,
+            'expected' => [
+                'totAuthLgvVehicles' => [
+                    ['ERR_OC_LGV_2' => 'ERR_OC_LGV_2']
+                ]
             ],
-            'can have LGV and none requested' => [
-                'canHaveLgv' => true,
-                'mustHaveLgv' => false,
-                'totAuthLgvVehicles' => 0,
-                'expected' => [],
-            ],
-            'can have LGV and some requested' => [
-                'canHaveLgv' => true,
-                'mustHaveLgv' => false,
-                'totAuthLgvVehicles' => 1,
-                'expected' => [],
-            ],
-            'must have LGV but none requested' => [
-                'canHaveLgv' => true,
-                'mustHaveLgv' => true,
-                'totAuthLgvVehicles' => 0,
-                'expected' => [
-                    'totAuthLgvVehicles' => [
-                        ['ERR_OC_LGV_2' => 'ERR_OC_LGV_2']
-                    ]
-                ],
-            ],
-            'must have LGV and some requested' => [
-                'canHaveLgv' => true,
-                'mustHaveLgv' => true,
-                'totAuthLgvVehicles' => 1,
-                'expected' => [],
-            ],
+        ];
+        yield 'must have LGV and some requested' => [
+            'canHaveLgv' => true,
+            'mustHaveLgv' => true,
+            'totAuthLgvVehicles' => 1,
+            'expected' => [],
         ];
     }
 
@@ -531,6 +523,7 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
         $this->assertSame($expected, $this->sut->getMessages());
     }
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();

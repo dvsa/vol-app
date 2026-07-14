@@ -12,7 +12,7 @@ class SearchApplicationLicenceNoFactory implements FactoryInterface
      * @param  array|null         $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchApplicationLicenceNo
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SearchApplicationLicenceNo
     {
         $urlHelper = $container->get('Helper\Url');
         return new SearchApplicationLicenceNo($urlHelper);

@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Entity\Licence\GracePeriod as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class GracePeriodEntityTest extends EntityTester
+final class GracePeriodEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

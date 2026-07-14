@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class MotExpiryDateGeneratorTest extends MockeryTestCase
+final class MotExpiryDateGeneratorTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
     public function testGenerate(mixed $isSelfservePageContainer, mixed $isNi, mixed $expectedEnableFileUploads): void
@@ -61,13 +61,11 @@ class MotExpiryDateGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpTestGenerate(): array
+    public static function dpTestGenerate(): \Iterator
     {
-        return [
-            [false, false, false],
-            [false, true, false],
-            [true, false, false],
-            [true, true, true]
-        ];
+        yield [false, false, false];
+        yield [false, true, false];
+        yield [true, false, false];
+        yield [true, true, true];
     }
 }

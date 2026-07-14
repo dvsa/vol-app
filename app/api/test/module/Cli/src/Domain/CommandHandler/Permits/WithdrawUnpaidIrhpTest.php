@@ -20,7 +20,7 @@ use Mockery as m;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class WithdrawUnpaidIrhpTest extends AbstractCommandHandlerTestCase
+final class WithdrawUnpaidIrhpTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

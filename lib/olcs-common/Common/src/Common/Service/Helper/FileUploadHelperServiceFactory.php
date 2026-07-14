@@ -14,7 +14,7 @@ class FileUploadHelperServiceFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FileUploadHelperService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): FileUploadHelperService
     {
         return new FileUploadHelperService(
             $container->get('Helper\Url'),

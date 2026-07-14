@@ -13,7 +13,7 @@ use Mockery as m;
 /**
  * Get Letter Issue Type Test
  */
-class GetTest extends QueryHandlerTestCase
+final class GetTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

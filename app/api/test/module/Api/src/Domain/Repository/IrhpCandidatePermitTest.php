@@ -19,10 +19,11 @@ use Mockery as m;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class IrhpCandidatePermitTest extends RepositoryTestCase
+final class IrhpCandidatePermitTest extends RepositoryTestCase
 {
-    public const IRHP_APPLICATION_ID = 10;
+    public const int IRHP_APPLICATION_ID = 10;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(IrhpCandidatePermit::class);
@@ -54,7 +55,7 @@ class IrhpCandidatePermitTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public static function dpGetListByIrhpApplicationVariants(): array
+    public static function dpGetListByIrhpApplicationVariants(): \Iterator
     {
         $params = [
             'irhpApplication' => self::IRHP_APPLICATION_ID,
@@ -63,11 +64,8 @@ class IrhpCandidatePermitTest extends RepositoryTestCase
             'order' => 'id',
             'sort' => 'ASC',
         ];
-
-        return [
-            [GetListByIrhpApplication::create($params), 1],
-            [GetListByIrhpApplicationUnpaged::create($params), 0],
-        ];
+        yield [GetListByIrhpApplication::create($params), 1];
+        yield [GetListByIrhpApplicationUnpaged::create($params), 0];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetListByIrhpApplicationWantedOnlyVariants')]
@@ -97,7 +95,7 @@ class IrhpCandidatePermitTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public static function dpGetListByIrhpApplicationWantedOnlyVariants(): array
+    public static function dpGetListByIrhpApplicationWantedOnlyVariants(): \Iterator
     {
         $params = [
             'irhpApplication' => self::IRHP_APPLICATION_ID,
@@ -107,11 +105,8 @@ class IrhpCandidatePermitTest extends RepositoryTestCase
             'sort' => 'ASC',
             'wantedOnly' => true,
         ];
-
-        return [
-            [GetListByIrhpApplication::create($params), 1],
-            [GetListByIrhpApplicationUnpaged::create($params), 0],
-        ];
+        yield [GetListByIrhpApplication::create($params), 1];
+        yield [GetListByIrhpApplicationUnpaged::create($params), 0];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetListByIrhpApplicationPreGrantVariants')]
@@ -139,7 +134,7 @@ class IrhpCandidatePermitTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public static function dpGetListByIrhpApplicationPreGrantVariants(): array
+    public static function dpGetListByIrhpApplicationPreGrantVariants(): \Iterator
     {
         $params = [
             'irhpApplication' => self::IRHP_APPLICATION_ID,
@@ -149,11 +144,8 @@ class IrhpCandidatePermitTest extends RepositoryTestCase
             'sort' => 'ASC',
             'isPreGrant' => true
         ];
-
-        return [
-            [GetListByIrhpApplication::create($params), 1],
-            [GetListByIrhpApplicationUnpaged::create($params), 0],
-        ];
+        yield [GetListByIrhpApplication::create($params), 1];
+        yield [GetListByIrhpApplicationUnpaged::create($params), 0];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpFetchCountInRangeWhereApplicationAwaitingFee')]
@@ -206,12 +198,10 @@ class IrhpCandidatePermitTest extends RepositoryTestCase
         );
     }
 
-    public static function dpFetchCountInRangeWhereApplicationAwaitingFee(): array
+    public static function dpFetchCountInRangeWhereApplicationAwaitingFee(): \Iterator
     {
-        return [
-            [null, 0],
-            [42, 42]
-        ];
+        yield [null, 0];
+        yield [42, 42];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpFetchCountInStockWhereApplicationAwaitingFee')]
@@ -276,15 +266,13 @@ class IrhpCandidatePermitTest extends RepositoryTestCase
         );
     }
 
-    public static function dpFetchCountInStockWhereApplicationAwaitingFee(): array
+    public static function dpFetchCountInStockWhereApplicationAwaitingFee(): \Iterator
     {
-        return [
-            [RefData::EMISSIONS_CATEGORY_EURO5_REF, null, 0],
-            [RefData::EMISSIONS_CATEGORY_EURO6_REF, null, 0],
-            [null, null, 0],
-            [RefData::EMISSIONS_CATEGORY_EURO5_REF, 20, 20],
-            [RefData::EMISSIONS_CATEGORY_EURO6_REF, 20, 20],
-            [null, 20, 20]
-        ];
+        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF, null, 0];
+        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF, null, 0];
+        yield [null, null, 0];
+        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF, 20, 20];
+        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF, 20, 20];
+        yield [null, 20, 20];
     }
 }

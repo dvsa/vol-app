@@ -6,6 +6,8 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Types;
 
 use Common\Form\Elements\Types\HoursPerWeek;
@@ -15,17 +17,16 @@ use Common\Form\Elements\Types\HoursPerWeek;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class HoursPerWeekTest extends \PHPUnit\Framework\TestCase
+final class HoursPerWeekTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test get messages
-     *
-     * @group hoursPerWeekType
      */
+    #[\PHPUnit\Framework\Attributes\Group('hoursPerWeekType')]
     public function testGetMessages(): void
     {
         $element = new HoursPerWeek();
         $element->setMessages(['messages']);
-        $this->assertEquals(['messages'], $element->getMessages());
+        $this->assertSame(['messages'], $element->getMessages());
     }
 }

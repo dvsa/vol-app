@@ -12,10 +12,11 @@ use RuntimeException;
 use Laminas\Mvc\Controller\Plugin\Redirect;
 use Laminas\Mvc\MvcEvent;
 
-class IrhpApplicationViewGeneratorTest extends MockeryTestCase
+final class IrhpApplicationViewGeneratorTest extends MockeryTestCase
 {
     private $irhpApplicationViewGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpApplicationViewGenerator = new IrhpApplicationViewGenerator();

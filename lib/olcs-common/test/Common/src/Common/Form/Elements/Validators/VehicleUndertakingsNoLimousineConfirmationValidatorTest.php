@@ -6,6 +6,8 @@
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Validators;
 
 use Common\Form\Elements\Validators\VehicleUndertakingsNoLimousineConfirmationValidator;
@@ -15,7 +17,7 @@ use Common\Form\Elements\Validators\VehicleUndertakingsNoLimousineConfirmationVa
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class VehicleUndertakingsNoLimousineConfirmationValidatorTest extends \PHPUnit\Framework\TestCase
+final class VehicleUndertakingsNoLimousineConfirmationValidatorTest extends \PHPUnit\Framework\TestCase
 {
     public function testIsValidWhenValid(): void
     {

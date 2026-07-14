@@ -21,13 +21,14 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class SlaTargetDateTest extends RepositoryTestCase
+final class SlaTargetDateTest extends RepositoryTestCase
 {
     /**
      * @var m\MockInterface|Repository\SlaTargetDate
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repository\SlaTargetDate::class);

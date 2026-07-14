@@ -13,7 +13,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 use DateTime;
 
-class AvailableTypesTest extends QueryHandlerTestCase
+final class AvailableTypesTest extends QueryHandlerTestCase
 {
     private $irhpPermitType1;
 

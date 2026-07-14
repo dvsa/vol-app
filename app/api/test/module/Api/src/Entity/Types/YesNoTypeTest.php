@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Api\Entity\Types;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Dvsa\Olcs\Api\Entity\Types\YesNoType;
 
-class YesNoTypeTest extends \PHPUnit\Framework\TestCase
+final class YesNoTypeTest extends \PHPUnit\Framework\TestCase
 {
     private $type;
 
@@ -46,14 +46,12 @@ class YesNoTypeTest extends \PHPUnit\Framework\TestCase
     /**
      * Provider for convertToPHPValue
      */
-    public static function providerConvertToPhpValue(): array
+    public static function providerConvertToPhpValue(): \Iterator
     {
-        return [
-            [true, 'Y'],
-            [false, 'N'],
-            [1, 'Y'],
-            [0, 'N']
-        ];
+        yield [true, 'Y'];
+        yield [false, 'N'];
+        yield [1, 'Y'];
+        yield [0, 'N'];
     }
 
     /**
@@ -70,21 +68,19 @@ class YesNoTypeTest extends \PHPUnit\Framework\TestCase
     /**
      * Provider for convertToDatabaseValue
      */
-    public static function providerConvertToDatabaseValue(): array
+    public static function providerConvertToDatabaseValue(): \Iterator
     {
-        return [
-            ['y', 1],
-            ['Y', 1],
-            ['Yes', 1],
-            ['YES', 1],
-            ['yes', 1],
-            ['n', 0],
-            ['N', 0],
-            ['No', 0],
-            ['NO', 0],
-            ['no', 0],
-            [null, 0],
-        ];
+        yield ['y', 1];
+        yield ['Y', 1];
+        yield ['Yes', 1];
+        yield ['YES', 1];
+        yield ['yes', 1];
+        yield ['n', 0];
+        yield ['N', 0];
+        yield ['No', 0];
+        yield ['NO', 0];
+        yield ['no', 0];
+        yield [null, 0];
     }
 
     /**

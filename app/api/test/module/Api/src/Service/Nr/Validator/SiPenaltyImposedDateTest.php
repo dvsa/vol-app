@@ -11,7 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  * Class SiPenaltyImposedDateTest
  * @package Dvsa\OlcsTest\Api\Service\Nr\Validator
  */
-class SiPenaltyImposedDateTest extends TestCase
+final class SiPenaltyImposedDateTest extends TestCase
 {
     /**
      * @param $imposedErrus
@@ -33,44 +33,42 @@ class SiPenaltyImposedDateTest extends TestCase
         }
     }
 
-    public static function provideIsValid(): array
+    public static function provideIsValid(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'finalDecisionDate' => new \DateTime('2012-05-16 00:00:00'),
-                    'startDate' => new \DateTime('2013-05-16 00:00:00'),
-                    'endDate' => new \DateTime('2014-05-16 00:00:00'),
-                ],
-                true
+                'finalDecisionDate' => new \DateTime('2012-05-16 00:00:00'),
+                'startDate' => new \DateTime('2013-05-16 00:00:00'),
+                'endDate' => new \DateTime('2014-05-16 00:00:00'),
             ],
+            true
+        ];
+        yield [
             [
-                [
-                    'finalDecisionDate' => new \DateTime('2014-05-16 00:00:00'),
-                    'startDate' => new \DateTime('2013-05-16 00:00:00'),
-                    'endDate' => new \DateTime('2014-05-16 00:00:00'),
-                ],
-                false,
-                'Imposed penalty decision date later than start date'
+                'finalDecisionDate' => new \DateTime('2014-05-16 00:00:00'),
+                'startDate' => new \DateTime('2013-05-16 00:00:00'),
+                'endDate' => new \DateTime('2014-05-16 00:00:00'),
             ],
+            false,
+            'Imposed penalty decision date later than start date'
+        ];
+        yield [
             [
-                [
-                    'finalDecisionDate' => new \DateTime('2013-05-16 00:00:00'),
-                    'startDate' => new \DateTime('2015-05-16 00:00:00'),
-                    'endDate' => new \DateTime('2014-05-16 00:00:00'),
-                ],
-                false,
-                'Imposed penalty start date must be before end date'
+                'finalDecisionDate' => new \DateTime('2013-05-16 00:00:00'),
+                'startDate' => new \DateTime('2015-05-16 00:00:00'),
+                'endDate' => new \DateTime('2014-05-16 00:00:00'),
             ],
+            false,
+            'Imposed penalty start date must be before end date'
+        ];
+        yield [
             [
-                [
-                    'finalDecisionDate' => new \DateTime('2015-05-16 00:00:00'),
-                    'startDate' => null,
-                    'endDate' => new \DateTime('2014-05-16 00:00:00'),
-                ],
-                false,
-                'Imposed penalty decision date later than end date'
+                'finalDecisionDate' => new \DateTime('2015-05-16 00:00:00'),
+                'startDate' => null,
+                'endDate' => new \DateTime('2014-05-16 00:00:00'),
             ],
+            false,
+            'Imposed penalty decision date later than end date'
         ];
     }
 }

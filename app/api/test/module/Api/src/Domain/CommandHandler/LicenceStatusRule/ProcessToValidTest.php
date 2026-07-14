@@ -23,7 +23,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class ProcessToValidTest extends AbstractCommandHandlerTestCase
+final class ProcessToValidTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -58,21 +58,19 @@ class ProcessToValidTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public static function dataProviderHandleCommandOtherStatus(): array
+    public static function dataProviderHandleCommandOtherStatus(): \Iterator
     {
-        return [
-            [Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT],
-            [Licence::LICENCE_STATUS_GRANTED],
-            [Licence::LICENCE_STATUS_NOT_SUBMITTED],
-            [Licence::LICENCE_STATUS_NOT_TAKEN_UP],
-            [Licence::LICENCE_STATUS_REFUSED],
-            [Licence::LICENCE_STATUS_REVOKED],
-            [Licence::LICENCE_STATUS_SURRENDERED],
-            [Licence::LICENCE_STATUS_TERMINATED],
-            [Licence::LICENCE_STATUS_UNDER_CONSIDERATION],
-            [Licence::LICENCE_STATUS_VALID],
-            [Licence::LICENCE_STATUS_WITHDRAWN],
-        ];
+        yield [Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT];
+        yield [Licence::LICENCE_STATUS_GRANTED];
+        yield [Licence::LICENCE_STATUS_NOT_SUBMITTED];
+        yield [Licence::LICENCE_STATUS_NOT_TAKEN_UP];
+        yield [Licence::LICENCE_STATUS_REFUSED];
+        yield [Licence::LICENCE_STATUS_REVOKED];
+        yield [Licence::LICENCE_STATUS_SURRENDERED];
+        yield [Licence::LICENCE_STATUS_TERMINATED];
+        yield [Licence::LICENCE_STATUS_UNDER_CONSIDERATION];
+        yield [Licence::LICENCE_STATUS_VALID];
+        yield [Licence::LICENCE_STATUS_WITHDRAWN];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderHandleCommandOtherStatus')]
@@ -94,12 +92,10 @@ class ProcessToValidTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public static function dataProviderHandleCommand(): array
+    public static function dataProviderHandleCommand(): \Iterator
     {
-        return [
-            [Licence::LICENCE_STATUS_CURTAILED],
-            [Licence::LICENCE_STATUS_SUSPENDED],
-        ];
+        yield [Licence::LICENCE_STATUS_CURTAILED];
+        yield [Licence::LICENCE_STATUS_SUSPENDED];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderHandleCommand')]
@@ -127,7 +123,7 @@ class ProcessToValidTest extends AbstractCommandHandlerTestCase
 
         $this->assertInstanceOf(\DateTime::class, $licenceStatueRules[0]->getEndProcessedDate());
         $this->assertSame(
-            (new \DateTime())->format('Y-m-d'),
+            new \DateTime()->format('Y-m-d'),
             $licenceStatueRules[0]->getEndProcessedDate()->format('Y-m-d')
         );
 
@@ -159,13 +155,13 @@ class ProcessToValidTest extends AbstractCommandHandlerTestCase
 
         $licencedVehicle1 = new \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle(
             $licence,
-            (new \Dvsa\Olcs\Api\Entity\Vehicle\Vehicle())->setSection26(9)
+            new \Dvsa\Olcs\Api\Entity\Vehicle\Vehicle()->setSection26(9)
         );
         $licence->getLicenceVehicles()->add($licencedVehicle1);
 
         $licencedVehicle2 = new \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle(
             $licence,
-            (new \Dvsa\Olcs\Api\Entity\Vehicle\Vehicle())->setSection26(9)
+            new \Dvsa\Olcs\Api\Entity\Vehicle\Vehicle()->setSection26(9)
         );
         $licence->getLicenceVehicles()->add($licencedVehicle2);
 

@@ -21,7 +21,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use Mockery as m;
 
-class ProcessAuthResponseTest extends AbstractCommandHandlerTestCase
+final class ProcessAuthResponseTest extends AbstractCommandHandlerTestCase
 {
     protected $sut;
     private m\MockInterface $govUkAccountService;
@@ -194,45 +194,42 @@ class ProcessAuthResponseTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($redirectUrl, $result->getFlag('redirect_url'));
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
         $id = 999;
         $digitalSignatureId = 666;
-
-        return [
-            'application' => [
-                UpdateApplication::class,
-                [
-                    'application' => $id,
-                    'digitalSignature' => $digitalSignatureId,
-                ],
-                RefData::JOURNEY_NEW_APPLICATION,
+        yield 'application' => [
+            UpdateApplication::class,
+            [
+                'application' => $id,
+                'digitalSignature' => $digitalSignatureId,
             ],
-            'continuation' => [
-                UpdateContinuationDetail::class,
-                [
-                    'continuationDetail' => $id,
-                    'digitalSignature' => $digitalSignatureId,
-                ],
-                RefData::JOURNEY_CONTINUATION,
+            RefData::JOURNEY_NEW_APPLICATION,
+        ];
+        yield 'continuation' => [
+            UpdateContinuationDetail::class,
+            [
+                'continuationDetail' => $id,
+                'digitalSignature' => $digitalSignatureId,
             ],
-            'surrender' => [
-                UpdateSurrender::class,
-                [
-                    'licence' => $id,
-                    'digitalSignature' => $digitalSignatureId,
-                ],
-                RefData::JOURNEY_SURRENDER,
+            RefData::JOURNEY_CONTINUATION,
+        ];
+        yield 'surrender' => [
+            UpdateSurrender::class,
+            [
+                'licence' => $id,
+                'digitalSignature' => $digitalSignatureId,
             ],
-            'tm-application' => [
-                UpdateTmApplication::class,
-                [
-                    'application' => $id,
-                    'digitalSignature' => $digitalSignatureId,
-                    'role' => 'role',
-                ],
-                RefData::JOURNEY_TM_APPLICATION,
+            RefData::JOURNEY_SURRENDER,
+        ];
+        yield 'tm-application' => [
+            UpdateTmApplication::class,
+            [
+                'application' => $id,
+                'digitalSignature' => $digitalSignatureId,
+                'role' => 'role',
             ],
+            RefData::JOURNEY_TM_APPLICATION,
         ];
     }
 
@@ -299,7 +296,7 @@ class ProcessAuthResponseTest extends AbstractCommandHandlerTestCase
     ): void {
         $this->repoMap['DigitalSignature']->expects('save')->andReturnUsing(
             function ($digitalSignature) use ($digitalSignatureId, $firstName, $familyName, $birthDate, $jwt) {
-                assert($digitalSignature instanceof DigitalSignature);
+                $this->assertInstanceOf(DigitalSignature::class, $digitalSignature);
 
                 $expectedAttributes = [
                     Attributes::FIRST_NAME => $firstName,

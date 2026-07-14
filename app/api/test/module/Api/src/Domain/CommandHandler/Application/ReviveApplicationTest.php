@@ -26,7 +26,7 @@ use Mockery as m;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class ReviveApplicationTest extends AbstractCommandHandlerTestCase
+final class ReviveApplicationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

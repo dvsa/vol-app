@@ -18,7 +18,7 @@ class StockBasedForCpProviderFactoryFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): StockBasedForCpProviderFactory
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): StockBasedForCpProviderFactory
     {
         return new StockBasedForCpProviderFactory(
             $container->get('PermitsCommonStockBasedRestrictedCountryIdsProvider'),

@@ -21,7 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ForCpProviderTest extends MockeryTestCase
+final class ForCpProviderTest extends MockeryTestCase
 {
     private $result;
 
@@ -37,10 +37,9 @@ class ForCpProviderTest extends MockeryTestCase
 
     private $entityIdsExtractor;
 
-    private $rangeSubsetGenerator;
-
     private $forCpProvider;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->result = new Result();
@@ -77,8 +76,8 @@ class ForCpProviderTest extends MockeryTestCase
 
         $this->entityIdsExtractor = m::mock(EntityIdsExtractor::class);
 
-        $this->rangeSubsetGenerator = m::mock(RangeSubsetGenerator::class);
-        $this->rangeSubsetGenerator->shouldReceive('generate')
+        $rangeSubsetGenerator = m::mock(RangeSubsetGenerator::class);
+        $rangeSubsetGenerator->shouldReceive('generate')
             ->with($this->irhpCandidatePermit, $this->ranges)
             ->andReturn($this->rangeSubset);
 
@@ -86,7 +85,7 @@ class ForCpProviderTest extends MockeryTestCase
             $this->forCpWithCountriesProvider,
             $this->forCpWithNoCountriesProvider,
             $this->entityIdsExtractor,
-            $this->rangeSubsetGenerator
+            $rangeSubsetGenerator
         );
     }
 

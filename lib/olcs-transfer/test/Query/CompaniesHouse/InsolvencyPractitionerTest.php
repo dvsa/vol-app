@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\CompaniesHouse;
 
 use Dvsa\Olcs\Transfer\Query\CompaniesHouse\InsolvencyPractitioner;
@@ -8,7 +10,7 @@ use Dvsa\OlcsTest\Transfer\DtoWithoutOptionalFieldsTest;
 use PHPUnit\Framework\TestCase;
 use Laminas\Stdlib\ArraySerializableInterface;
 
-class InsolvencyPractitionerTest extends TestCase
+final class InsolvencyPractitionerTest extends TestCase
 {
     use QueryTest, DtoWithoutOptionalFieldsTest {
         DtoWithoutOptionalFieldsTest::testDefaultValues insteadof QueryTest;

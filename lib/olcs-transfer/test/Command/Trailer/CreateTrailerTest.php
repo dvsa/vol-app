@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Trailer;
 
 use Dvsa\Olcs\Transfer\Command\Trailer\CreateTrailer;
@@ -8,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Create trailer test
  */
-class CreateTrailerTest extends TestCase
+final class CreateTrailerTest extends TestCase
 {
     public function testStructure()
     {

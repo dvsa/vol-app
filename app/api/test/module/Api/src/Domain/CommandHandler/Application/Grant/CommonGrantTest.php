@@ -31,7 +31,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CommonGrantTest extends AbstractCommandHandlerTestCase
+final class CommonGrantTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -120,7 +120,7 @@ class CommonGrantTest extends AbstractCommandHandlerTestCase
         $application = m::mock(ApplicationEntity::class)->makePartial();
         $application->setId(111);
         $application->setLicence($licence);
-        $application->setGoodsOrPsv((new RefData())->setId(Licence::LICENCE_CATEGORY_GOODS_VEHICLE));
+        $application->setGoodsOrPsv(new RefData()->setId(Licence::LICENCE_CATEGORY_GOODS_VEHICLE));
 
         $this->repoMap['Application']->shouldReceive('fetchUsingId')
             ->with($command)

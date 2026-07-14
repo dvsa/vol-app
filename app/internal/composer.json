@@ -39,7 +39,7 @@
     }
   ],
   "require": {
-    "php": "~8.3.0",
+    "php": "~8.4.0",
     "ext-redis": "*",
     "dvsa/laminas-config-cloud-parameters": "^2.1",
     "laminas/laminas-authentication": "^2.19",
@@ -78,11 +78,10 @@
   "require-dev": {
     "laminas/laminas-developer-tools": "*",
     "mockery/mockery": "^1.6",
-    "phpunit/phpunit": "^12.5",
+    "phpunit/phpunit": "^13.0",
     "san/san-session-toolbar": "*",
     "rector/rector": "^2.3",
-    "squizlabs/php_codesniffer": "^3.7",
-    "dvsa/coding-standards": "^2.0",
+    "dvsa/coding-standards": "^2.1",
     "phpstan/phpstan": "^2.0",
     "vimeo/psalm": "^6.0"
   },

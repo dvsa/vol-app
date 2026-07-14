@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * Proceed to status test
  */
-class ProceedToStatusTest extends AbstractCommandHandlerTestCase
+final class ProceedToStatusTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

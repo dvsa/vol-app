@@ -17,13 +17,10 @@ use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Listener\OlcsEntityListener::class)]
-class OlcsEntityListenerTest extends MockeryTestCase
+final class OlcsEntityListenerTest extends MockeryTestCase
 {
     /** @var  OlcsEntityListener */
     private $sut;
-
-    /** @var  m\MockInterface|ContainerInterface */
-    private $mockSl;
     /** @var  m\MockInterface */
     private $mockAuth;
 
@@ -40,6 +37,7 @@ class OlcsEntityListenerTest extends MockeryTestCase
     /** @var  IdentityProviderInterface */
     private $mockIdentityProvider;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockMeta = m::mock(\Doctrine\ORM\Mapping\ClassMetadata::class);
@@ -59,8 +57,8 @@ class OlcsEntityListenerTest extends MockeryTestCase
 
         $this->mockIdentityProvider = m::mock(IdentityProviderInterface::class);
 
-        $this->mockSl = m::mock(ContainerInterface::class);
-        $this->mockSl
+        $mockSl = m::mock(ContainerInterface::class);
+        $mockSl
             ->shouldReceive('get')
             ->andReturnUsing(
                 function ($key) {
@@ -74,12 +72,12 @@ class OlcsEntityListenerTest extends MockeryTestCase
                 }
             );
 
-        $this->sut = (new OlcsEntityListener())->__invoke($this->mockSl, OlcsEntityListener::class);
+        $this->sut = new OlcsEntityListener()->__invoke($mockSl, OlcsEntityListener::class);
     }
 
     public function testGetSubscribedEvents(): void
     {
-        static::assertEquals(['preSoftDelete'], $this->sut->getSubscribedEvents());
+        $this->assertEquals(['preSoftDelete'], $this->sut->getSubscribedEvents());
     }
 
     public function testUpdateFieldMethodNotExists(): void
@@ -186,27 +184,24 @@ class OlcsEntityListenerTest extends MockeryTestCase
         $this->sut->preSoftDelete($lifecycleEvent);
     }
 
-    public static function dpTestModifiedBy(): array
+    public static function dpTestModifiedBy(): \Iterator
     {
         $mockUser = Entity\User\User::create(
             'abc',
             Entity\User\User::USER_TYPE_OPERATOR,
             ['loginId' => 'loginId']
         );
-
-        return [
-            [
-                'currentUser' => $mockUser,
-                'expect' => $mockUser,
-            ],
-            [
-                'currentUser' => Entity\User\User::anon(),
-                'expect' => null,
-            ],
-            [
-                'currentUser' => null,
-                'expect' => null,
-            ],
+        yield [
+            'currentUser' => $mockUser,
+            'expect' => $mockUser,
+        ];
+        yield [
+            'currentUser' => Entity\User\User::anon(),
+            'expect' => null,
+        ];
+        yield [
+            'currentUser' => null,
+            'expect' => null,
         ];
     }
 

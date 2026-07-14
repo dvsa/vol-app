@@ -10,7 +10,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-class WebServiceClientFactoryTest extends MockeryTestCase
+final class WebServiceClientFactoryTest extends MockeryTestCase
 {
     public function testInvokeMissingConfig(): void
     {

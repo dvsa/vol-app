@@ -6,16 +6,16 @@ namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
 use Dvsa\Olcs\Api\Service\Submission\Sections\ProhibitionHistory;
 
-class ProhibitionHistoryTest extends AbstractSubmissionSectionTestCase
+final class ProhibitionHistoryTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = ProhibitionHistory::class;
 
     /**
      * Filter provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function sectionTestProvider(): array
+    public static function sectionTestProvider(): \Iterator
     {
         $case = static::getCase();
 
@@ -39,8 +39,6 @@ class ProhibitionHistoryTest extends AbstractSubmissionSectionTestCase
             ]
         ];
 
-        return [
-            [$case, $expectedResult],
-        ];
+        yield [$case, $expectedResult];
     }
 }

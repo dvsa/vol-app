@@ -18,7 +18,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * @see ResetPasswordFactory
  */
-class ResetPasswordFactoryTest extends MockeryTestCase
+final class ResetPasswordFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
     use MocksAbstractCommandHandlerServicesTrait;
@@ -26,6 +26,7 @@ class ResetPasswordFactoryTest extends MockeryTestCase
 
     protected ResetPasswordFactory $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();

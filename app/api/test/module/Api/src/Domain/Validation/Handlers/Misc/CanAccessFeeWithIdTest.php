@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessFeeWithId;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
+final class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
 {
     protected $sut;
 

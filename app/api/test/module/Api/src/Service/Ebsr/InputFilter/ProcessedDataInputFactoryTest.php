@@ -15,7 +15,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Psr\Container\ContainerInterface;
 
-class ProcessedDataInputFactoryTest extends TestCase
+final class ProcessedDataInputFactoryTest extends TestCase
 {
     /**
      * Tests create service

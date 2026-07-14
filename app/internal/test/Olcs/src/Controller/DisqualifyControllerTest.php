@@ -18,27 +18,25 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class DisqualifyControllerTest extends MockeryTestCase
+final class DisqualifyControllerTest extends MockeryTestCase
 {
     protected $sut;
-    protected $mockScriptFactory;
     protected $mockFormHelper;
-    protected $mockTableFactory;
-    protected $mockViewHelperManager;
     protected $mockFlashMessengerHelper;
 
+    #[\Override]
     protected function setUp(): void
     {
-        $this->mockScriptFactory = m::mock(ScriptFactory::class);
+        $mockScriptFactory = m::mock(ScriptFactory::class);
         $this->mockFormHelper = m::mock(FormHelperService::class);
-        $this->mockTableFactory = m::mock(TableFactory::class);
-        $this->mockViewHelperManager = m::mock(HelperPluginManager::class);
+        $mockTableFactory = m::mock(TableFactory::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $this->mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
         $this->sut = m::mock(\Olcs\Controller\DisqualifyController::class, [
-            $this->mockScriptFactory,
+            $mockScriptFactory,
             $this->mockFormHelper,
-            $this->mockTableFactory,
-            $this->mockViewHelperManager,
+            $mockTableFactory,
+            $mockViewHelperManager,
             $this->mockFlashMessengerHelper,
         ])
             ->makePartial()

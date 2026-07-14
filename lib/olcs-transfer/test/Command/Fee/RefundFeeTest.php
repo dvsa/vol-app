@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Fee;
 
 use Dvsa\Olcs\Transfer\Command\Fee\RefundFee;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Fee\RefundFee;
 /**
  * Refund fee test
  */
-class RefundFeeTest extends \PHPUnit\Framework\TestCase
+final class RefundFeeTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

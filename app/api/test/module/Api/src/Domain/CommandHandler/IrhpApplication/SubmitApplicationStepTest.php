@@ -23,23 +23,15 @@ use Mockery as m;
 /**
  * Submit Application Step test
  */
-class SubmitApplicationStepTest extends AbstractCommandHandlerTestCase
+final class SubmitApplicationStepTest extends AbstractCommandHandlerTestCase
 {
-    public const IRHP_APPLICATION_ID = 23;
-    public const IRHP_PERMIT_APPLICATION_ID = 457;
-    public const SLUG = 'removals-eligibility';
-    public const REPOSITORY_NAME = 'IrhpApplication';
-    public const DESTINATION_NAME = 'DESTINATION_NAME';
-
-    private $applicationStepEntity;
+    public const int IRHP_APPLICATION_ID = 23;
+    public const int IRHP_PERMIT_APPLICATION_ID = 457;
+    public const string SLUG = 'removals-eligibility';
+    public const string REPOSITORY_NAME = 'IrhpApplication';
+    public const string DESTINATION_NAME = 'DESTINATION_NAME';
 
     private $qaEntity;
-
-    private $qaContext;
-
-    private $postData;
-
-    private $formControlStrategy;
 
     private $command;
 
@@ -54,47 +46,47 @@ class SubmitApplicationStepTest extends AbstractCommandHandlerTestCase
             'FormControlServiceManager' => m::mock(FormControlServiceManager::class)
         ];
 
-        $this->applicationStepEntity = m::mock(ApplicationStepEntity::class);
+        $applicationStepEntity = m::mock(ApplicationStepEntity::class);
 
         $this->qaEntity = m::mock(QaEntityInterface::class);
         $this->qaEntity->shouldReceive('getRepositoryName')
             ->withNoArgs()
             ->andReturn(self::REPOSITORY_NAME);
 
-        $this->qaContext = m::mock(QaContext::class);
-        $this->qaContext->shouldReceive('getApplicationStepEntity')
+        $qaContext = m::mock(QaContext::class);
+        $qaContext->shouldReceive('getApplicationStepEntity')
             ->withNoArgs()
-            ->andReturn($this->applicationStepEntity);
-        $this->qaContext->shouldReceive('getQaEntity')
+            ->andReturn($applicationStepEntity);
+        $qaContext->shouldReceive('getQaEntity')
             ->withNoArgs()
             ->andReturn($this->qaEntity);
 
         $this->mockedSmServices['QaContextGenerator']->shouldReceive('generate')
             ->with(self::IRHP_APPLICATION_ID, self::IRHP_PERMIT_APPLICATION_ID, self::SLUG)
-            ->andReturn($this->qaContext);
+            ->andReturn($qaContext);
 
-        $this->postData = [
+        $postData = [
             'fieldset123' => [
                 'qaElement' => '123'
             ]
         ];
 
-        $this->formControlStrategy = m::mock(FormControlStrategyInterface::class);
-        $this->formControlStrategy->shouldReceive('saveFormData')
-            ->with($this->qaContext, $this->postData)
+        $formControlStrategy = m::mock(FormControlStrategyInterface::class);
+        $formControlStrategy->shouldReceive('saveFormData')
+            ->with($qaContext, $postData)
             ->once()
             ->andReturn(self::DESTINATION_NAME);
 
         $this->mockedSmServices['FormControlServiceManager']->shouldReceive('getByApplicationStep')
-            ->with($this->applicationStepEntity)
-            ->andReturn($this->formControlStrategy);
+            ->with($applicationStepEntity)
+            ->andReturn($formControlStrategy);
 
         $this->command = Cmd::create(
             [
                 'id' => self::IRHP_APPLICATION_ID,
                 'irhpPermitApplication' => self::IRHP_PERMIT_APPLICATION_ID,
                 'slug' => self::SLUG,
-                'postData' => $this->postData
+                'postData' => $postData
             ]
         );
 

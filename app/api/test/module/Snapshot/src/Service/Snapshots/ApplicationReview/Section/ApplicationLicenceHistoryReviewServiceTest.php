@@ -22,10 +22,11 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationLicenceHistoryReviewServiceTest extends MockeryTestCase
+final class ApplicationLicenceHistoryReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockTranslator = m::mock(TranslatorInterface::class);
@@ -44,98 +45,96 @@ class ApplicationLicenceHistoryReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public static function providerGetConfigFromData(): array
+    public static function providerGetConfigFromData(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'prevHasLicence' => 'N',
-                    'prevHadLicence' => 'N',
-                    'prevBeenRefused' => 'N',
-                    'prevBeenRevoked' => 'N',
-                    'prevBeenAtPi' => 'N',
-                    'prevBeenDisqualifiedTc' => 'N',
-                    'prevPurchasedAssets' => 'N',
-                    'otherLicences' => []
-                ],
-                [
-                    'subSections' => [
-                        [
-                            'mainItems' => [
-                                [
-                                    'header' => 'application-review-licence-history-current-title',
-                                    'multiItems' => [
+                'prevHasLicence' => 'N',
+                'prevHadLicence' => 'N',
+                'prevBeenRefused' => 'N',
+                'prevBeenRevoked' => 'N',
+                'prevBeenAtPi' => 'N',
+                'prevBeenDisqualifiedTc' => 'N',
+                'prevPurchasedAssets' => 'N',
+                'otherLicences' => []
+            ],
+            [
+                'subSections' => [
+                    [
+                        'mainItems' => [
+                            [
+                                'header' => 'application-review-licence-history-current-title',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-current-question',
-                                                'value' => 'No'
-                                            ]
+                                            'label' => 'application-review-licence-history-current-question',
+                                            'value' => 'No'
                                         ]
                                     ]
-                                ],
-                                [
-                                    'header' => 'application-review-licence-history-applied-title',
-                                    'multiItems' => [
+                                ]
+                            ],
+                            [
+                                'header' => 'application-review-licence-history-applied-title',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-applied-question',
-                                                'value' => 'No'
-                                            ]
+                                            'label' => 'application-review-licence-history-applied-question',
+                                            'value' => 'No'
                                         ]
                                     ]
-                                ],
-                                [
-                                    'header' => 'application-review-licence-history-refused-title',
-                                    'multiItems' => [
+                                ]
+                            ],
+                            [
+                                'header' => 'application-review-licence-history-refused-title',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-refused-question',
-                                                'value' => 'No'
-                                            ]
+                                            'label' => 'application-review-licence-history-refused-question',
+                                            'value' => 'No'
                                         ]
                                     ]
-                                ],
-                                [
-                                    'header' => 'application-review-licence-history-revoked-title',
-                                    'multiItems' => [
+                                ]
+                            ],
+                            [
+                                'header' => 'application-review-licence-history-revoked-title',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-revoked-question',
-                                                'value' => 'No'
-                                            ]
+                                            'label' => 'application-review-licence-history-revoked-question',
+                                            'value' => 'No'
                                         ]
                                     ]
-                                ],
-                                [
-                                    'header' => 'application-review-licence-history-public-inquiry-title',
-                                    'multiItems' => [
+                                ]
+                            ],
+                            [
+                                'header' => 'application-review-licence-history-public-inquiry-title',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-public-inquiry-question',
-                                                'value' => 'No'
-                                            ]
+                                            'label' => 'application-review-licence-history-public-inquiry-question',
+                                            'value' => 'No'
                                         ]
                                     ]
-                                ],
-                                [
-                                    'header' => 'application-review-licence-history-disqualified-title',
-                                    'multiItems' => [
+                                ]
+                            ],
+                            [
+                                'header' => 'application-review-licence-history-disqualified-title',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-disqualified-question',
-                                                'value' => 'No'
-                                            ]
+                                            'label' => 'application-review-licence-history-disqualified-question',
+                                            'value' => 'No'
                                         ]
                                     ]
-                                ],
-                                [
-                                    'header' => 'application-review-licence-history-held-title',
-                                    'multiItems' => [
+                                ]
+                            ],
+                            [
+                                'header' => 'application-review-licence-history-held-title',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-held-question',
-                                                'value' => 'No'
-                                            ]
+                                            'label' => 'application-review-licence-history-held-question',
+                                            'value' => 'No'
                                         ]
                                     ]
                                 ]
@@ -143,222 +142,222 @@ class ApplicationLicenceHistoryReviewServiceTest extends MockeryTestCase
                         ]
                     ]
                 ]
+            ]
+        ];
+        yield [
+            [
+                'prevHasLicence' => 'Y',
+                'prevHadLicence' => 'Y',
+                'prevBeenRefused' => 'Y',
+                'prevBeenRevoked' => 'Y',
+                'prevBeenAtPi' => 'Y',
+                'prevBeenDisqualifiedTc' => 'Y',
+                'prevPurchasedAssets' => 'Y',
+                'otherLicences' => [
+                    [
+                        'licNo' => '123456789',
+                        'holderName' => 'Foo bar',
+                        'willSurrender' => 'Y',
+                        'previousLicenceType' => ['id' => OtherLicence::TYPE_CURRENT],
+                    ],
+                    [
+                        'licNo' => '223456789',
+                        'holderName' => 'Foo bar 2',
+                        'previousLicenceType' => ['id' => OtherLicence::TYPE_APPLIED],
+                    ],
+                    [
+                        'licNo' => '323456789',
+                        'holderName' => 'Foo bar 3',
+                        'previousLicenceType' => ['id' => OtherLicence::TYPE_REFUSED],
+                    ],
+                    [
+                        'licNo' => '423456789',
+                        'holderName' => 'Foo bar 4',
+                        'previousLicenceType' => ['id' => OtherLicence::TYPE_REVOKED],
+                    ],
+                    [
+                        'licNo' => '523456789',
+                        'holderName' => 'Foo bar 5',
+                        'previousLicenceType' => ['id' => OtherLicence::TYPE_PUBLIC_INQUIRY],
+                    ],
+                    [
+                        'licNo' => '623456789',
+                        'holderName' => 'Foo bar 6',
+                        'disqualificationDate' => '2013-06-20',
+                        'disqualificationLength' => '2 Days',
+                        'previousLicenceType' => ['id' => OtherLicence::TYPE_DISQUALIFIED],
+                    ],
+                    [
+                        'licNo' => '623456789',
+                        'holderName' => 'Foo bar 6',
+                        'purchaseDate' => '2013-06-20',
+                        'previousLicenceType' => ['id' => OtherLicence::TYPE_HELD],
+                    ]
+                ]
             ],
             [
-                [
-                    'prevHasLicence' => 'Y',
-                    'prevHadLicence' => 'Y',
-                    'prevBeenRefused' => 'Y',
-                    'prevBeenRevoked' => 'Y',
-                    'prevBeenAtPi' => 'Y',
-                    'prevBeenDisqualifiedTc' => 'Y',
-                    'prevPurchasedAssets' => 'Y',
-                    'otherLicences' => [
-                        [
-                            'licNo' => '123456789',
-                            'holderName' => 'Foo bar',
-                            'willSurrender' => 'Y',
-                            'previousLicenceType' => ['id' => OtherLicence::TYPE_CURRENT],
-                        ],
-                        [
-                            'licNo' => '223456789',
-                            'holderName' => 'Foo bar 2',
-                            'previousLicenceType' => ['id' => OtherLicence::TYPE_APPLIED],
-                        ],
-                        [
-                            'licNo' => '323456789',
-                            'holderName' => 'Foo bar 3',
-                            'previousLicenceType' => ['id' => OtherLicence::TYPE_REFUSED],
-                        ],
-                        [
-                            'licNo' => '423456789',
-                            'holderName' => 'Foo bar 4',
-                            'previousLicenceType' => ['id' => OtherLicence::TYPE_REVOKED],
-                        ],
-                        [
-                            'licNo' => '523456789',
-                            'holderName' => 'Foo bar 5',
-                            'previousLicenceType' => ['id' => OtherLicence::TYPE_PUBLIC_INQUIRY],
-                        ],
-                        [
-                            'licNo' => '623456789',
-                            'holderName' => 'Foo bar 6',
-                            'disqualificationDate' => '2013-06-20',
-                            'disqualificationLength' => '2 Days',
-                            'previousLicenceType' => ['id' => OtherLicence::TYPE_DISQUALIFIED],
-                        ],
-                        [
-                            'licNo' => '623456789',
-                            'holderName' => 'Foo bar 6',
-                            'purchaseDate' => '2013-06-20',
-                            'previousLicenceType' => ['id' => OtherLicence::TYPE_HELD],
-                        ]
-                    ]
-                ],
-                [
-                    'subSections' => [
-                        [
-                            'mainItems' => [
-                                [
-                                    'header' => 'application-review-licence-history-current-title',
-                                    'multiItems' => [
+                'subSections' => [
+                    [
+                        'mainItems' => [
+                            [
+                                'header' => 'application-review-licence-history-current-title',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-current-question',
-                                                'value' => 'Yes'
-                                            ]
+                                            'label' => 'application-review-licence-history-current-question',
+                                            'value' => 'Yes'
+                                        ]
+                                    ],
+                                    [
+                                        [
+                                            'label' => 'application-review-licence-history-licence-no',
+                                            'value' => '123456789'
                                         ],
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-licence-no',
-                                                'value' => '123456789'
-                                            ],
-                                            [
-                                                'label' => 'application-review-licence-history-licence-holder',
-                                                'value' => 'Foo bar'
-                                            ],
-                                            [
-                                                'label' => 'application-review-licence-history-will-surrender',
-                                                'value' => 'Yes'
-                                            ]
+                                            'label' => 'application-review-licence-history-licence-holder',
+                                            'value' => 'Foo bar'
+                                        ],
+                                        [
+                                            'label' => 'application-review-licence-history-will-surrender',
+                                            'value' => 'Yes'
                                         ]
                                     ]
-                                ],
-                                [
-                                    'header' => 'application-review-licence-history-applied-title',
-                                    'multiItems' => [
+                                ]
+                            ],
+                            [
+                                'header' => 'application-review-licence-history-applied-title',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-applied-question',
-                                                'value' => 'Yes'
-                                            ]
+                                            'label' => 'application-review-licence-history-applied-question',
+                                            'value' => 'Yes'
+                                        ]
+                                    ],
+                                    [
+                                        [
+                                            'label' => 'application-review-licence-history-licence-no',
+                                            'value' => '223456789'
                                         ],
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-licence-no',
-                                                'value' => '223456789'
-                                            ],
-                                            [
-                                                'label' => 'application-review-licence-history-licence-holder',
-                                                'value' => 'Foo bar 2'
-                                            ]
+                                            'label' => 'application-review-licence-history-licence-holder',
+                                            'value' => 'Foo bar 2'
                                         ]
                                     ]
-                                ],
-                                [
-                                    'header' => 'application-review-licence-history-refused-title',
-                                    'multiItems' => [
+                                ]
+                            ],
+                            [
+                                'header' => 'application-review-licence-history-refused-title',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-refused-question',
-                                                'value' => 'Yes'
-                                            ]
+                                            'label' => 'application-review-licence-history-refused-question',
+                                            'value' => 'Yes'
+                                        ]
+                                    ],
+                                    [
+                                        [
+                                            'label' => 'application-review-licence-history-licence-no',
+                                            'value' => '323456789'
                                         ],
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-licence-no',
-                                                'value' => '323456789'
-                                            ],
-                                            [
-                                                'label' => 'application-review-licence-history-licence-holder',
-                                                'value' => 'Foo bar 3'
-                                            ]
+                                            'label' => 'application-review-licence-history-licence-holder',
+                                            'value' => 'Foo bar 3'
                                         ]
                                     ]
-                                ],
-                                [
-                                    'header' => 'application-review-licence-history-revoked-title',
-                                    'multiItems' => [
+                                ]
+                            ],
+                            [
+                                'header' => 'application-review-licence-history-revoked-title',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-revoked-question',
-                                                'value' => 'Yes'
-                                            ]
+                                            'label' => 'application-review-licence-history-revoked-question',
+                                            'value' => 'Yes'
+                                        ]
+                                    ],
+                                    [
+                                        [
+                                            'label' => 'application-review-licence-history-licence-no',
+                                            'value' => '423456789'
                                         ],
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-licence-no',
-                                                'value' => '423456789'
-                                            ],
-                                            [
-                                                'label' => 'application-review-licence-history-licence-holder',
-                                                'value' => 'Foo bar 4'
-                                            ]
+                                            'label' => 'application-review-licence-history-licence-holder',
+                                            'value' => 'Foo bar 4'
                                         ]
                                     ]
-                                ],
-                                [
-                                    'header' => 'application-review-licence-history-public-inquiry-title',
-                                    'multiItems' => [
+                                ]
+                            ],
+                            [
+                                'header' => 'application-review-licence-history-public-inquiry-title',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-public-inquiry-question',
-                                                'value' => 'Yes'
-                                            ]
+                                            'label' => 'application-review-licence-history-public-inquiry-question',
+                                            'value' => 'Yes'
+                                        ]
+                                    ],
+                                    [
+                                        [
+                                            'label' => 'application-review-licence-history-licence-no',
+                                            'value' => '523456789'
                                         ],
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-licence-no',
-                                                'value' => '523456789'
-                                            ],
-                                            [
-                                                'label' => 'application-review-licence-history-licence-holder',
-                                                'value' => 'Foo bar 5'
-                                            ]
+                                            'label' => 'application-review-licence-history-licence-holder',
+                                            'value' => 'Foo bar 5'
                                         ]
                                     ]
-                                ],
-                                [
-                                    'header' => 'application-review-licence-history-disqualified-title',
-                                    'multiItems' => [
+                                ]
+                            ],
+                            [
+                                'header' => 'application-review-licence-history-disqualified-title',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-disqualified-question',
-                                                'value' => 'Yes'
-                                            ]
+                                            'label' => 'application-review-licence-history-disqualified-question',
+                                            'value' => 'Yes'
+                                        ]
+                                    ],
+                                    [
+                                        [
+                                            'label' => 'application-review-licence-history-licence-no',
+                                            'value' => '623456789'
                                         ],
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-licence-no',
-                                                'value' => '623456789'
-                                            ],
-                                            [
-                                                'label' => 'application-review-licence-history-licence-holder',
-                                                'value' => 'Foo bar 6'
-                                            ],
-                                            [
-                                                'label' => 'application-review-licence-history-disqualification-date',
-                                                'value' => '20 Jun 2013'
-                                            ],
-                                            [
-                                                'label' => 'application-review-licence-history-disqualification-length',
-                                                'value' => '2 Days'
-                                            ]
+                                            'label' => 'application-review-licence-history-licence-holder',
+                                            'value' => 'Foo bar 6'
+                                        ],
+                                        [
+                                            'label' => 'application-review-licence-history-disqualification-date',
+                                            'value' => '20 Jun 2013'
+                                        ],
+                                        [
+                                            'label' => 'application-review-licence-history-disqualification-length',
+                                            'value' => '2 Days'
                                         ]
                                     ]
-                                ],
-                                [
-                                    'header' => 'application-review-licence-history-held-title',
-                                    'multiItems' => [
+                                ]
+                            ],
+                            [
+                                'header' => 'application-review-licence-history-held-title',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-held-question',
-                                                'value' => 'Yes'
-                                            ]
+                                            'label' => 'application-review-licence-history-held-question',
+                                            'value' => 'Yes'
+                                        ]
+                                    ],
+                                    [
+                                        [
+                                            'label' => 'application-review-licence-history-licence-no',
+                                            'value' => '623456789'
                                         ],
                                         [
-                                            [
-                                                'label' => 'application-review-licence-history-licence-no',
-                                                'value' => '623456789'
-                                            ],
-                                            [
-                                                'label' => 'application-review-licence-history-licence-holder',
-                                                'value' => 'Foo bar 6'
-                                            ],
-                                            [
-                                                'label' => 'application-review-licence-history-purchase-date',
-                                                'value' => '20 Jun 2013'
-                                            ]
+                                            'label' => 'application-review-licence-history-licence-holder',
+                                            'value' => 'Foo bar 6'
+                                        ],
+                                        [
+                                            'label' => 'application-review-licence-history-purchase-date',
+                                            'value' => '20 Jun 2013'
                                         ]
                                     ]
                                 ]

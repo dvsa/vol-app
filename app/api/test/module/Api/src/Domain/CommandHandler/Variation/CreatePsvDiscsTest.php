@@ -27,7 +27,7 @@ use Dvsa\Olcs\Transfer\Command\Licence\CreatePsvDiscs as LicenceCreatePsvDiscs;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreatePsvDiscsTest extends AbstractCommandHandlerTestCase
+final class CreatePsvDiscsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

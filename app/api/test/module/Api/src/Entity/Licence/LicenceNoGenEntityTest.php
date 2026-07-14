@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Entity\Licence\LicenceNoGen as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class LicenceNoGenEntityTest extends EntityTester
+final class LicenceNoGenEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -37,12 +37,10 @@ class LicenceNoGenEntityTest extends EntityTester
         $this->assertSame($expected, Entity::getCategoryPrefix($refData));
     }
 
-    public static function dataProviderTestGetCategoryPrefix(): array
+    public static function dataProviderTestGetCategoryPrefix(): \Iterator
     {
-        return [
-            ['P', Licence::LICENCE_CATEGORY_PSV],
-            ['O', Licence::LICENCE_CATEGORY_GOODS_VEHICLE],
-            ['O', 'Foo'],
-        ];
+        yield ['P', Licence::LICENCE_CATEGORY_PSV];
+        yield ['O', Licence::LICENCE_CATEGORY_GOODS_VEHICLE];
+        yield ['O', 'Foo'];
     }
 }

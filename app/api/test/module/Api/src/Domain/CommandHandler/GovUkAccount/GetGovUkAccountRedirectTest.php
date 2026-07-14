@@ -15,7 +15,7 @@ use Dvsa\Olcs\Transfer\Command\GovUkAccount\GetGovUkAccountRedirect as GetGovUkA
 /**
  * Get GovUkAccount Redirect Test
  */
-class GetGovUkAccountRedirectTest extends AbstractCommandHandlerTestCase
+final class GetGovUkAccountRedirectTest extends AbstractCommandHandlerTestCase
 {
     public $acctService = null;
 

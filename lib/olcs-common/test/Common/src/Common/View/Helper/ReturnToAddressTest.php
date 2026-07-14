@@ -1,19 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Helper;
 
 use Common\View\Helper\ReturnToAddress;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Common\View\Helper\ReturnToAddress
- */
-class ReturnToAddressTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\View\Helper\ReturnToAddress::class)]
+final class ReturnToAddressTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestInvoke
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestInvoke')]
     public function testInvoke($isNi, $separator, $expect): void
     {
         $sut = new ReturnToAddress();
@@ -26,38 +24,36 @@ class ReturnToAddressTest extends MockeryTestCase
             $actualStatic = $sut::getAddress($isNi);
         }
 
-        static::assertEquals($expect, $actual);
-        static::assertEquals($actual, $actualStatic);
+        $this->assertEquals($expect, $actual);
+        $this->assertEquals($actual, $actualStatic);
     }
 
     /**
-     * @return (bool|null|string)[][]
+     * @return \Iterator<(int | string), array<(bool | string | null)>>
      *
      * @psalm-return list{array{isNi: false, separator: null, expect: 'Office of the Traffic Commissioner, Quarry House, Leeds, LS2 7UE'}, array{isNi: false, separator: '<br />', expect: 'Office of the Traffic Commissioner<br />Quarry House<br />Leeds<br />LS2 7UE'}, array{isNi: true, separator: null, expect: 'Department for Infrastructure, Quarry House, Leeds, LS2 7UE'}, array{isNi: true, separator: '<br />', expect: 'Department for Infrastructure<br />Quarry House<br />Leeds<br />LS2 7UE'}}
      */
-    public function dpTestInvoke(): array
+    public static function dpTestInvoke(): \Iterator
     {
-        return [
-            [
-                'isNi' => false,
-                'separator' => null,
-                'expect' => 'Office of the Traffic Commissioner, Quarry House, Leeds, LS2 7UE',
-            ],
-            [
-                'isNi' => false,
-                'separator' => '<br />',
-                'expect' => 'Office of the Traffic Commissioner<br />Quarry House<br />Leeds<br />LS2 7UE',
-            ],
-            [
-                'isNi' => true,
-                'separator' => null,
-                'expect' => 'Department for Infrastructure, Quarry House, Leeds, LS2 7UE',
-            ],
-            [
-                'isNi' => true,
-                'separator' => '<br />',
-                'expect' => 'Department for Infrastructure<br />Quarry House<br />Leeds<br />LS2 7UE',
-            ],
+        yield [
+            'isNi' => false,
+            'separator' => null,
+            'expect' => 'Office of the Traffic Commissioner, Quarry House, Leeds, LS2 7UE',
+        ];
+        yield [
+            'isNi' => false,
+            'separator' => '<br />',
+            'expect' => 'Office of the Traffic Commissioner<br />Quarry House<br />Leeds<br />LS2 7UE',
+        ];
+        yield [
+            'isNi' => true,
+            'separator' => null,
+            'expect' => 'Department for Infrastructure, Quarry House, Leeds, LS2 7UE',
+        ];
+        yield [
+            'isNi' => true,
+            'separator' => '<br />',
+            'expect' => 'Department for Infrastructure<br />Quarry House<br />Leeds<br />LS2 7UE',
         ];
     }
 }

@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class StockBasedRestrictedCountryIdsProviderTest extends MockeryTestCase
+final class StockBasedRestrictedCountryIdsProviderTest extends MockeryTestCase
 {
     public function testGetIds(): void
     {

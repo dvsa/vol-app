@@ -22,7 +22,7 @@ use Mockery as m;
  *
  * @author Joshua Curtis <josh.curtis@valtech.co.uk>
  */
-class TrailerTest extends QueryHandlerTestCase
+final class TrailerTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

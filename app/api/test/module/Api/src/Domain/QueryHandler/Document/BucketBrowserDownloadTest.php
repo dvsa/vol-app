@@ -14,7 +14,7 @@ use Laminas\Http\Response\Stream;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
-class BucketBrowserDownloadTest extends QueryHandlerTestCase
+final class BucketBrowserDownloadTest extends QueryHandlerTestCase
 {
     /** @var m\MockInterface|S3BucketBrowser */
     private $mockBrowser;
@@ -75,7 +75,7 @@ class BucketBrowserDownloadTest extends QueryHandlerTestCase
 
         $headers = $response->getHeaders();
         $this->assertStringStartsWith('attachment', $headers->get('Content-Disposition')->getFieldValue());
-        $this->assertStringNotContainsString('inline', $headers->get('Content-Disposition')->getFieldValue());
+        $this->assertStringNotContainsString('inline', (string) $headers->get('Content-Disposition')->getFieldValue());
         $this->assertSame('nosniff', $headers->get('X-Content-Type-Options')->getFieldValue());
     }
 
@@ -91,7 +91,7 @@ class BucketBrowserDownloadTest extends QueryHandlerTestCase
 
         // The quoted filename must not carry a raw double-quote that breaks out of the header value.
         $disposition = $response->getHeaders()->get('Content-Disposition')->getFieldValue();
-        $this->assertStringContainsString('filename="ev_il.pdf"', $disposition);
-        $this->assertStringContainsString("filename*=UTF-8''", $disposition);
+        $this->assertStringContainsString('filename="ev_il.pdf"', (string) $disposition);
+        $this->assertStringContainsString("filename*=UTF-8''", (string) $disposition);
     }
 }

@@ -36,7 +36,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class UpdateOppositionTest extends AbstractCommandHandlerTestCase
+final class UpdateOppositionTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

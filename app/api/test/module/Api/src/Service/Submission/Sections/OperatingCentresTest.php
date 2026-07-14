@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 use Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Submission\Sections\OperatingCentres::class)]
-class OperatingCentresTest extends AbstractSubmissionSectionTestCase
+final class OperatingCentresTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\OperatingCentres::class;
 
@@ -34,7 +34,7 @@ class OperatingCentresTest extends AbstractSubmissionSectionTestCase
         $ocNew->getAddress()->setPostcode('A_first');
 
         $appOcRels->add(
-            (new ApplicationOperatingCentre($app, $ocNew))
+            new ApplicationOperatingCentre($app, $ocNew)
                 ->setAction(ApplicationOperatingCentre::ACTION_ADD)
                 ->setNoOfVehiclesRequired(903)
                 ->setNoOfTrailersRequired(803)
@@ -45,7 +45,7 @@ class OperatingCentresTest extends AbstractSubmissionSectionTestCase
         $ocUpd->getAddress()->setPostcode('Z_last');
 
         $appOcRels->add(
-            (new ApplicationOperatingCentre($app, $ocUpd))
+            new ApplicationOperatingCentre($app, $ocUpd)
                 ->setAction(ApplicationOperatingCentre::ACTION_UPDATE)
                 ->setNoOfVehiclesRequired(902)
                 ->setNoOfTrailersRequired(802)
@@ -53,7 +53,7 @@ class OperatingCentresTest extends AbstractSubmissionSectionTestCase
 
         //  delete operation center in licence
         $appOcRels->add(
-            (new ApplicationOperatingCentre($app, static::generateOperatingCentre(1)))
+            new ApplicationOperatingCentre($app, static::generateOperatingCentre(1))
                 ->setAction(ApplicationOperatingCentre::ACTION_DELETE)
         );
 

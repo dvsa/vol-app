@@ -18,7 +18,7 @@ class WindowAvailabilityCheckerFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): WindowAvailabilityChecker
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): WindowAvailabilityChecker
     {
         return new WindowAvailabilityChecker(
             $container->get('RepositoryServiceManager')->get('IrhpPermitWindow'),

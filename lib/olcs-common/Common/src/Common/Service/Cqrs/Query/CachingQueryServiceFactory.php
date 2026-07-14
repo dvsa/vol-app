@@ -10,7 +10,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class CachingQueryServiceFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CachingQueryService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CachingQueryService
     {
         $config = $container->get('Config');
 

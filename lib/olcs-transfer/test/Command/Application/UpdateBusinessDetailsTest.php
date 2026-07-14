@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Application;
 
 use Dvsa\Olcs\Transfer\Command\Application\UpdateBusinessDetails;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Command\Application\UpdateBusinessDetails
- */
-class UpdateBusinessDetailsTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\Application\UpdateBusinessDetails::class)]
+final class UpdateBusinessDetailsTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {
@@ -17,6 +17,6 @@ class UpdateBusinessDetailsTest extends \PHPUnit\Framework\TestCase
 
         $command = UpdateBusinessDetails::create($data);
 
-        static::assertEquals(7777, $command->getLicence());
+        $this->assertEquals(7777, $command->getLicence());
     }
 }

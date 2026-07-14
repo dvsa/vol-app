@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking;
  * Class ConditionsAndUndertakingsTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class ConditionsAndUndertakingsTest extends AbstractSubmissionSectionTestCase
+final class ConditionsAndUndertakingsTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\ConditionsAndUndertakings::class;
 

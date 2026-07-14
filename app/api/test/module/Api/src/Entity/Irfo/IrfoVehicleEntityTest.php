@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Irfo\IrfoVehicle as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class IrfoVehicleEntityTest extends EntityTester
+final class IrfoVehicleEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

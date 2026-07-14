@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @see RefreshToken
  */
-class RefreshTokensTest extends TestCase
+final class RefreshTokensTest extends TestCase
 {
     public function testStructure(): void
     {

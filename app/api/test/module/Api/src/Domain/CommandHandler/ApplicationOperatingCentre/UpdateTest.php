@@ -33,7 +33,7 @@ use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -134,7 +134,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             \Dvsa\Olcs\Api\Domain\Command\Application\SetDefaultTrafficAreaAndEnforcementArea::class,
             ['id' => 222, 'operatingCentre' => 333],
-            (new Result())->addMessage('SET_TA')
+            new Result()->addMessage('SET_TA')
         );
 
         $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')

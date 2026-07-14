@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * QuestionAnswer Test
  */
-class QuestionAnswerTest extends QueryHandlerTestCase
+final class QuestionAnswerTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

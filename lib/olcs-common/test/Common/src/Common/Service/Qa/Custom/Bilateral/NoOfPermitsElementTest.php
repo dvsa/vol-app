@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Bilateral;
 
 use Common\Service\Qa\Custom\Bilateral\NoOfPermitsElement;
@@ -15,9 +17,9 @@ use Laminas\Validator\StringLength;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsElementTest extends MockeryTestCase
+final class NoOfPermitsElementTest extends MockeryTestCase
 {
-    public const ELEMENT_NAME = 'elementName';
+    public const string ELEMENT_NAME = 'elementName';
 
     private $noOfPermitsElement;
 

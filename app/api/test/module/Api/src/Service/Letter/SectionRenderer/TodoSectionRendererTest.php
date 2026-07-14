@@ -13,12 +13,13 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Letter\SectionRenderer\TodoSectionRenderer::class)]
-class TodoSectionRendererTest extends MockeryTestCase
+final class TodoSectionRendererTest extends MockeryTestCase
 {
     private TodoSectionRenderer $sut;
     private m\MockInterface|ConverterService $mockConverterService;
     private m\MockInterface|VolGrabReplacementService $mockVolGrabService;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockConverterService = m::mock(ConverterService::class);

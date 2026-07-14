@@ -22,7 +22,7 @@ use Mockery as m;
  * @author Mat Evans <mat.evans@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateDocumentTest extends AbstractCommandHandlerTestCase
+final class CreateDocumentTest extends AbstractCommandHandlerTestCase
 {
     private $validPdf = '%PDF-1.2';
 

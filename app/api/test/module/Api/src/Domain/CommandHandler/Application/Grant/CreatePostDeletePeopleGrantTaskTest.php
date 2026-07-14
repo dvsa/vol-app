@@ -21,7 +21,7 @@ use Mockery as m;
 /**
  * Class CreatePostDeletePeopleGrantTaskTest
  */
-class CreatePostDeletePeopleGrantTaskTest extends AbstractCommandHandlerTestCase
+final class CreatePostDeletePeopleGrantTaskTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -105,18 +105,16 @@ class CreatePostDeletePeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public static function provideCreateTaskWhenNoPeopleRemainCases(): array
+    public static function provideCreateTaskWhenNoPeopleRemainCases(): \Iterator
     {
-        return [
-            [
-                Organisation::ORG_TYPE_REGISTERED_COMPANY,
-                'Last director removed',
-                Category::TASK_SUB_CATEGORY_DIRECTOR_CHANGE_DIGITAL
-            ],
-            [Organisation::ORG_TYPE_LLP, 'Last partner removed', Category::TASK_SUB_CATEGORY_PARTNER_CHANGE_DIGITAL],
-            [Organisation::ORG_TYPE_OTHER, 'Last person removed', Category::TASK_SUB_CATEGORY_PERSON_CHANGE_DIGITAL],
-            ['some-other-test-type', 'Last person removed', Category::TASK_SUB_CATEGORY_PERSON_CHANGE_DIGITAL],
+        yield [
+            Organisation::ORG_TYPE_REGISTERED_COMPANY,
+            'Last director removed',
+            Category::TASK_SUB_CATEGORY_DIRECTOR_CHANGE_DIGITAL
         ];
+        yield [Organisation::ORG_TYPE_LLP, 'Last partner removed', Category::TASK_SUB_CATEGORY_PARTNER_CHANGE_DIGITAL];
+        yield [Organisation::ORG_TYPE_OTHER, 'Last person removed', Category::TASK_SUB_CATEGORY_PERSON_CHANGE_DIGITAL];
+        yield ['some-other-test-type', 'Last person removed', Category::TASK_SUB_CATEGORY_PERSON_CHANGE_DIGITAL];
     }
 
     private function createMockApplication(mixed $variationType, mixed $organisationType = null): mixed

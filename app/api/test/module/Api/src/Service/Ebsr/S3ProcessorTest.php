@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Ebsr\S3Processor;
 use org\bovigo\vfs\vfsStream;
 use Mockery as m;
 
-class S3ProcessorTest extends m\Adapter\Phpunit\MockeryTestCase
+final class S3ProcessorTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestProcess')]
     public function testProcess(array $s3Options, string $expectedS3Filename): void
@@ -34,22 +34,20 @@ class S3ProcessorTest extends m\Adapter\Phpunit\MockeryTestCase
         )->andReturn(['ObjectURL' => 'testurl']);
 
         $sut = new S3Processor($mockS3Client, $mockBucketName);
-        $this->assertEquals('testurl', $sut->process($identifier, $s3Options));
+        $this->assertSame('testurl', $sut->process($identifier, $s3Options));
     }
 
-    public static function dpTestProcess(): array
+    public static function dpTestProcess(): \Iterator
     {
-        return [
-            'optional filename provided' => [
-                [
-                    's3Filename' => 'provided-filename.xml'
-                ],
-                'provided-filename.xml'
+        yield 'optional filename provided' => [
+            [
+                's3Filename' => 'provided-filename.xml'
             ],
-            'no optional filename provided' => [
-                [],
-                'document.xml'
-            ],
+            'provided-filename.xml'
+        ];
+        yield 'no optional filename provided' => [
+            [],
+            'document.xml'
         ];
     }
 }

@@ -37,8 +37,8 @@ class TxcInbox extends AbstractTxcInbox implements OrganisationProviderInterface
     public function __construct(
         BusReg $busReg,
         Document $zipDocument,
-        LocalAuthority $localAuthority = null,
-        Organisation $organisation = null
+        ?LocalAuthority $localAuthority = null,
+        ?Organisation $organisation = null
     ) {
         //check the bus reg is from EBSR
         if (!$busReg->isFromEbsr()) {

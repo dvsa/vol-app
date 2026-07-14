@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\RefData;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @see DashboardTmActionLink
  */
-class DashboardTmActionLinkTest extends MockeryTestCase
+final class DashboardTmActionLinkTest extends MockeryTestCase
 {
     public $sut;
     protected $urlHelper;
@@ -22,10 +24,6 @@ class DashboardTmActionLinkTest extends MockeryTestCase
     protected $translator;
 
     protected $viewHelperManager;
-
-    protected $router;
-
-    protected $request;
 
     #[\Override]
     protected function setUp(): void
@@ -43,44 +41,40 @@ class DashboardTmActionLinkTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|string)[][]
+     * @return \Iterator<(int | string), array<(bool | string)>>
      *
      * @psalm-return list{array{statusId: 'tmap_st_awaiting_signature', isVariation: true, expectTextKey: 'provide-details'}, array{0: 'tmap_st_incomplete', isVariation: false, 1: 'provide-details'}, array{0: 'tmap_st_operator_signed', isVariation: false, 1: 'view-details'}, array{0: 'tmap_st_postal_application', isVariation: false, 1: 'view-details'}, array{0: 'tmap_st_tm_signed', isVariation: false, 1: 'view-details'}}
      */
-    public function dataProviderFormat(): array
+    public static function dataProviderFormat(): \Iterator
     {
-        return [
-            [
-                'statusId' => RefData::TMA_STATUS_AWAITING_SIGNATURE,
-                'isVariation' => true,
-                'expectTextKey' => 'provide-details',
-            ],
-            [
-                RefData::TMA_STATUS_INCOMPLETE,
-                'isVariation' => false,
-                'provide-details',
-            ],
-            [
-                RefData::TMA_STATUS_OPERATOR_SIGNED,
-                'isVariation' => false,
-                'view-details',
-            ],
-            [
-                RefData::TMA_STATUS_POSTAL_APPLICATION,
-                'isVariation' => false,
-                'view-details',
-            ],
-            [
-                RefData::TMA_STATUS_TM_SIGNED,
-                'isVariation' => false,
-                'view-details',
-            ],
+        yield [
+            'statusId' => RefData::TMA_STATUS_AWAITING_SIGNATURE,
+            'isVariation' => true,
+            'expectTextKey' => 'provide-details',
+        ];
+        yield [
+            "statusId" => RefData::TMA_STATUS_INCOMPLETE,
+            'isVariation' => false,
+            "expectTextKey" => 'provide-details',
+        ];
+        yield [
+            "statusId" => RefData::TMA_STATUS_OPERATOR_SIGNED,
+            'isVariation' => false,
+            "expectTextKey" => 'view-details',
+        ];
+        yield [
+            "statusId" => RefData::TMA_STATUS_POSTAL_APPLICATION,
+            'isVariation' => false,
+            "expectTextKey" => 'view-details',
+        ];
+        yield [
+            "statusId" => RefData::TMA_STATUS_TM_SIGNED,
+            'isVariation' => false,
+            "expectTextKey" => 'view-details',
         ];
     }
 
-    /**
-     * @dataProvider dataProviderFormat
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderFormat')]
     public function testFormat($statusId, $isVariation, $expectTextKey): void
     {
         $this->translator->expects('translate')
@@ -122,9 +116,6 @@ class DashboardTmActionLinkTest extends MockeryTestCase
         ];
         $column = [];
 
-        static::assertEquals(
-            '<a class="govuk-link" href="http://url.com" aria-label="ARIA">LINK TEXT</a>',
-            $this->sut->format($data, $column)
-        );
+        $this->assertEquals('<a class="govuk-link" href="http://url.com" aria-label="ARIA">LINK TEXT</a>', $this->sut->format($data, $column));
     }
 }

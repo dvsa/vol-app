@@ -78,7 +78,7 @@ abstract class AbstractContinuationController extends AbstractController
      *
      * @return ViewModel
      */
-    protected function getViewModel($licNo, Form $form = null, $variables = [])
+    protected function getViewModel($licNo, ?Form $form = null, $variables = [])
     {
         $stepHeader = $this->getStepHeader($this->currentStep);
 

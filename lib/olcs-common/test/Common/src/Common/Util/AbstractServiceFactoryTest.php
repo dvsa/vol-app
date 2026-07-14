@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Util;
 
 use Common\Util\AbstractServiceFactory;
@@ -9,10 +11,8 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Common\Util\AbstractServiceFactory
- */
-class AbstractServiceFactoryTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Util\AbstractServiceFactory::class)]
+final class AbstractServiceFactoryTest extends MockeryTestCase
 {
     /** @var  AbstractServiceFactory | m\MockInterface */
     protected $sut;
@@ -30,32 +30,28 @@ class AbstractServiceFactoryTest extends MockeryTestCase
         $this->mockSm = m::mock(ContainerInterface::class);
     }
 
-    /**
-     * @dataProvider dpTestCanCreate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCanCreate')]
     public function testCanCreate($requestedName, $expect): void
     {
-        static::assertEquals($expect, $this->sut->canCreate($this->mockSm, $requestedName));
+        $this->assertEquals($expect, $this->sut->canCreate($this->mockSm, $requestedName));
     }
 
     /**
-     * @return (bool|string)[][]
+     * @return \Iterator<(int | string), array<(bool | string)>>
      *
      * @psalm-return list{array{fqcn: 'Helper\Form', expect: true}, array{fqcn: 'Wrong\Wrong', expect: false}}
      */
-    public function dpTestCanCreate(): array
+    public static function dpTestCanCreate(): \Iterator
     {
         //  use real classes to test
-        return [
-            [
-                //  @see \Common\Service\Helper\FormHelperService
-                'fqcn' => 'Helper\Form',
-                'expect' => true,
-            ],
-            [
-                'fqcn' => 'Wrong\Wrong',
-                'expect' => false,
-            ],
+        yield [
+            //  @see \Common\Service\Helper\FormHelperService
+            'requestedName' => 'Helper\Form',
+            'expect' => true,
+        ];
+        yield [
+            'requestedName' => 'Wrong\Wrong',
+            'expect' => false,
         ];
     }
 
@@ -67,8 +63,8 @@ class AbstractServiceFactoryTest extends MockeryTestCase
 
         $actual = ($this->sut)($this->mockSm, $className);
 
-        static::assertInstanceOf(FactoryInterface::class, $actual);
-        static::assertInstanceOf(ServiceWithFactoryStub::class, $actual);
+        $this->assertInstanceOf(FactoryInterface::class, $actual);
+        $this->assertInstanceOf(ServiceWithFactoryStub::class, $actual);
     }
 
     public function testInvoke(): void
@@ -79,6 +75,6 @@ class AbstractServiceFactoryTest extends MockeryTestCase
 
         $actual = ($this->sut)($this->mockSm, $className);
 
-        static::assertInstanceOf('\stdClass', $actual);
+        $this->assertInstanceOf('\stdClass', $actual);
     }
 }

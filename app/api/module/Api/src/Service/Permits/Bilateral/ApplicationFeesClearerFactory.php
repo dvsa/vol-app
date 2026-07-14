@@ -16,7 +16,7 @@ class ApplicationFeesClearerFactory implements FactoryInterface
      * @return ApplicationFeesClearer
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationFeesClearer
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ApplicationFeesClearer
     {
         return new ApplicationFeesClearer(
             $container->get('CqrsCommandCreator'),

@@ -23,7 +23,7 @@ class CommunityLicencesControllerFactory implements FactoryInterface
      * @return CommunityLicencesController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CommunityLicencesController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CommunityLicencesController
     {
 
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

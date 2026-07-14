@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Ecmt;
 
 use Common\Service\Qa\Custom\Ecmt\InternationalJourneysFieldsetPopulator;
@@ -16,11 +18,9 @@ use Laminas\Form\Form;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class InternationalJourneysFieldsetPopulatorTest extends MockeryTestCase
+final class InternationalJourneysFieldsetPopulatorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTrueFalse
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTrueFalse')]
     public function testPopulate($showNiWarning): void
     {
         $radioOptions = [
@@ -71,15 +71,13 @@ class InternationalJourneysFieldsetPopulatorTest extends MockeryTestCase
     }
 
     /**
-     * @return bool[][]
+     * @return \Iterator<(int | string), array<bool>>
      *
      * @psalm-return list{list{true}, list{false}}
      */
-    public function dpTrueFalse(): array
+    public static function dpTrueFalse(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 }

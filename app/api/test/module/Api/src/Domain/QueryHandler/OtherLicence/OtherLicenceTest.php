@@ -22,7 +22,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class OtherLicenceTest extends QueryHandlerTestCase
+final class OtherLicenceTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

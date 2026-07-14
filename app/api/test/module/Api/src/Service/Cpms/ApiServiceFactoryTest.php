@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Log\NullLogger;
 
-class ApiServiceFactoryTest extends TestCase
+final class ApiServiceFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {

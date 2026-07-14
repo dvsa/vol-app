@@ -11,11 +11,10 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * ApplicationReadAudit Entity Unit Tests
- *
- * @covers Dvsa\Olcs\Api\Entity\Application\ApplicationReadAudit
- * @covers Dvsa\Olcs\Api\Entity\Application\AbstractApplicationReadAudit
  */
-class ApplicationReadAuditEntityTest extends EntityTester
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\ApplicationReadAudit::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\AbstractApplicationReadAudit::class)]
+final class ApplicationReadAuditEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -33,7 +32,7 @@ class ApplicationReadAuditEntityTest extends EntityTester
 
         $sut = new Entity\Application\ApplicationReadAudit($mockUser, $mockApp);
 
-        static::assertSame($mockUser, $sut->getUser());
-        static::assertSame($mockApp, $sut->getApplication());
+        $this->assertSame($mockUser, $sut->getUser());
+        $this->assertSame($mockApp, $sut->getApplication());
     }
 }

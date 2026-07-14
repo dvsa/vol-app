@@ -11,17 +11,17 @@ use InvalidArgumentException;
 /**
  * @see ContentWithPartialsViewModel
  */
-class ContentWithPartialsViewModelTest extends MockeryTestCase
+final class ContentWithPartialsViewModelTest extends MockeryTestCase
 {
-    public const AN_EXCEPTION_MESSAGE_WHEN_NO_PARTIALS_ARE_PROVIDED = 'Expected at least one partial to be provided';
-    public const THE_PARTIALS_VARIABLE = 'partials';
-    public const A_PARTIAL = 'A PARTIAL';
-    public const A_SECOND_PARTIAL = 'A SECOND PARTIAL';
-    public const THE_CONTENT_VARIABLE = 'content';
-    public const AN_EMPTY_CONTENT = '';
-    public const THE_CONTENT_WITH_PARTIALS_TEMPLATE = 'partials/content-with-partials';
-    public const OVERWRITE_VARIABLES = true;
-    public const AN_INVALID_PARTIALS_VALUE = 'AN_INVALID_PARTIALS_VALUE';
+    public const string AN_EXCEPTION_MESSAGE_WHEN_NO_PARTIALS_ARE_PROVIDED = 'Expected at least one partial to be provided';
+    public const string THE_PARTIALS_VARIABLE = 'partials';
+    public const string A_PARTIAL = 'A PARTIAL';
+    public const string A_SECOND_PARTIAL = 'A SECOND PARTIAL';
+    public const string THE_CONTENT_VARIABLE = 'content';
+    public const string AN_EMPTY_CONTENT = '';
+    public const string THE_CONTENT_WITH_PARTIALS_TEMPLATE = 'partials/content-with-partials';
+    public const bool OVERWRITE_VARIABLES = true;
+    public const string AN_INVALID_PARTIALS_VALUE = 'AN_INVALID_PARTIALS_VALUE';
 
     /**
      * @var ContentWithPartialsViewModel

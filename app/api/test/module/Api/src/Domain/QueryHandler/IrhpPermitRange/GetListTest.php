@@ -15,7 +15,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpPermitRange\GetList as ListQuery;
 /**
  * GetList Test
  */
-class GetListTest extends QueryHandlerTestCase
+final class GetListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

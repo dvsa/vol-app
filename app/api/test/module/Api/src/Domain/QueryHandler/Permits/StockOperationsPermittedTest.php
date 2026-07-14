@@ -19,7 +19,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class StockOperationsPermittedTest extends QueryHandlerTestCase
+final class StockOperationsPermittedTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

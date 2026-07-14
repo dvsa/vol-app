@@ -24,14 +24,14 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class ApplicationProcessingOverviewControllerTest extends MockeryTestCase
+final class ApplicationProcessingOverviewControllerTest extends MockeryTestCase
 {
     public function testIndexActionRedirects(): void
     {
         $controller = $this->getController('index');
 
         $redirect = $this->createMock(Redirect::class);
-        $redirect->expects(self::once())->method('toRoute');
+        $redirect->expects($this->once())->method('toRoute');
 
         $controller->getPluginManager()
             ->setService('redirect', $redirect);
@@ -64,8 +64,6 @@ class ApplicationProcessingOverviewControllerTest extends MockeryTestCase
             $mockRouter,
             $mockNavigation
         );
-
-        $router = $this->createMock(TreeRouteStack::class);
         $routeMatch = new RouteMatch(
             [
                 'application' => 'internal',
@@ -75,7 +73,7 @@ class ApplicationProcessingOverviewControllerTest extends MockeryTestCase
         );
 
         $event = new MvcEvent();
-        $event->setRouter($router);
+        $event->setRouter($this->createStub(TreeRouteStack::class));
         $event->setRouteMatch($routeMatch);
 
         $pluginManager = new PluginManager($this->createStub(ContainerInterface::class));

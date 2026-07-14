@@ -26,7 +26,7 @@ use Dvsa\Olcs\Api\Entity\Cases\Cases as CasesEntity;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class DeleteEnvironmentalComplaintTest extends AbstractCommandHandlerTestCase
+final class DeleteEnvironmentalComplaintTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

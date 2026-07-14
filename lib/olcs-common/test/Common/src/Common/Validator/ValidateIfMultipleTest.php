@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Validator;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -10,16 +12,16 @@ use Mockery as m;
  * Class ValidateIfMultipleTest
  * @package CommonTest\Validator
  */
-class ValidateIfMultipleTest extends MockeryTestCase
+final class ValidateIfMultipleTest extends MockeryTestCase
 {
     /**
-     * @dataProvider provideIsValid
      * @param $expected
      * @param $options
      * @param $context
      * @param $chainValid
      * @param array $errorMessages
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIsValid')]
     public function testIsValid($expected, $options, $value, $context, $chainValid, $errorMessages = []): void
     {
         $errorMessages = empty($errorMessages) ? ['error' => 'message'] : $errorMessages;
@@ -39,35 +41,33 @@ class ValidateIfMultipleTest extends MockeryTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provideIsValid()
+    public static function provideIsValid(): \Iterator
     {
-        return [
-            //context matches, field is valid
-            [true, ['context_field' => 'field', 'context_values' => ['Y']], 'isValid', ['field' => 'Y'], true],
-            //context matches, field is invalid
-            [true, ['context_field' => 'field', 'context_values' => ['Y']], 'isValid', ['field' => 'Y'], false],
-            //context doesn't match, field is invalid
-            [true, ['context_field' => 'field', 'context_values' => ['Y']], 'isValid', ['field' => 'N'], false],
-            //inverse context match, field valid
-            [
-                true,
-                ['context_field' => 'field', 'context_values' => ['Y'], 'context_truth' => 0],
-                'isValid',
-                ['field' => 'N'],
-                true
-            ],
-            //missing context
-            [false, [], 'isValid', [], false, ['no_context' => 'Context field was not found in the input']],
-            //context matches value is empty
-            [
-                true,
-                ['allow_empty' => true, 'context_field' => 'field', 'context_values' => ['Y']],
-                null,
-                ['field' => 'Y'],
-                true
-            ],
+        //context matches, field is valid
+        yield [true, ['context_field' => 'field', 'context_values' => ['Y']], 'isValid', ['field' => 'Y'], true];
+        //context matches, field is invalid
+        yield [true, ['context_field' => 'field', 'context_values' => ['Y']], 'isValid', ['field' => 'Y'], false];
+        //context doesn't match, field is invalid
+        yield [true, ['context_field' => 'field', 'context_values' => ['Y']], 'isValid', ['field' => 'N'], false];
+        //inverse context match, field valid
+        yield [
+            true,
+            ['context_field' => 'field', 'context_values' => ['Y'], 'context_truth' => 0],
+            'isValid',
+            ['field' => 'N'],
+            true
+        ];
+        //missing context
+        yield [false, [], 'isValid', [], false, ['no_context' => 'Context field was not found in the input']];
+        //context matches value is empty
+        yield [
+            true,
+            ['allow_empty' => true, 'context_field' => 'field', 'context_values' => ['Y']],
+            null,
+            ['field' => 'Y'],
+            true
         ];
     }
 }

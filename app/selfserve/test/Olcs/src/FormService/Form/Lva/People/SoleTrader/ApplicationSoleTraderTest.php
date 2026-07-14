@@ -24,7 +24,7 @@ use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class ApplicationSoleTraderTest extends MockeryTestCase
+final class ApplicationSoleTraderTest extends MockeryTestCase
 {
     use ButtonsAlterations;
 
@@ -39,26 +39,17 @@ class ApplicationSoleTraderTest extends MockeryTestCase
     protected $formHelper;
 
     /**
-     * @var FormServiceManager|m
-     */
-    protected $fsm;
-
-    /**
-     * @var ServiceLocatorInterface
-     */
-    protected $sm;
-
-    /**
      * @var PeopleLvaService|(PeopleLvaService&m\LegacyMockInterface)|(PeopleLvaService&m\MockInterface)|m\LegacyMockInterface|m\MockInterface
      */
     private $peopleLvaService;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
 
         /** @var FormServiceManager fsm */
-        $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
+        $fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
 
         $this->peopleLvaService = m::mock(PeopleLvaService::class);
 
@@ -185,29 +176,27 @@ class ApplicationSoleTraderTest extends MockeryTestCase
     }
 
     /**
-     * @return (int|null|string|true)[][][]
+     * @return \Iterator<(int | string), array<array<(int | string | true | null)>>>
      *
      * @psalm-return list{list{array{location: 'external'}}, list{array{location: 'internal', personId: null}}, list{array{location: 'internal', personId: 123, isDisqualified: true}}}
      */
-    public static function noDisqualifyProvider(): array
+    public static function noDisqualifyProvider(): \Iterator
     {
-        return [
+        yield [
+            ['location' => 'external']
+        ];
+        yield [
             [
-                ['location' => 'external']
-            ],
+                'location' => 'internal',
+                'personId' => null
+            ]
+        ];
+        yield [
             [
-                [
-                    'location' => 'internal',
-                    'personId' => null
-                ]
-            ],
-            [
-                [
-                    'location' => 'internal',
-                    'personId' => 123,
-                    'isDisqualified' => true
-                ]
-            ],
+                'location' => 'internal',
+                'personId' => 123,
+                'isDisqualified' => true
+            ]
         ];
     }
 }

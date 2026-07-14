@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * Impounding Mapper Test
  */
-class ImpoundingTest extends MockeryTestCase
+final class ImpoundingTest extends MockeryTestCase
 {
     /**
      *
@@ -25,55 +25,53 @@ class ImpoundingTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // add
+        // add
+        yield [
             [
-                [
+                'case' => 24,
+                'venue' => 'something',
+                'venueOther' => null,
+                'legislationTypes' => ['id' => 7]
+            ],
+            [
+                'fields' => [
                     'case' => 24,
                     'venue' => 'something',
-                    'venueOther' => null,
-                    'legislationTypes' => ['id' => 7]
+                    'legislationTypes' => 7,
+                    'venueOther' => null
                 ],
-                [
-                    'fields' => [
-                        'case' => 24,
-                        'venue' => 'something',
-                        'legislationTypes' => 7,
-                        'venueOther' => null
-                    ],
-                    'base' => [
-                        'case' => 24
-                    ]
+                'base' => [
+                    'case' => 24
                 ]
-            ],
-            // edit
+            ]
+        ];
+        // edit
+        yield [
             [
-                [
+                'id' => 99,
+                'version' => 3,
+                'case' => 24,
+                'venue' => null,
+                'venueOther' => 'somethingelse',
+                'legislationTypes' => ['id' => 7]
+            ],
+            [
+                'fields' => [
                     'id' => 99,
                     'version' => 3,
                     'case' => 24,
-                    'venue' => null,
+                    'venue' => 'other',
                     'venueOther' => 'somethingelse',
-                    'legislationTypes' => ['id' => 7]
+                    'legislationTypes' => 7
                 ],
-                [
-                    'fields' => [
-                        'id' => 99,
-                        'version' => 3,
-                        'case' => 24,
-                        'venue' => 'other',
-                        'venueOther' => 'somethingelse',
-                        'legislationTypes' => 7
-                    ],
-                    'base' => [
-                        'id' => 99,
-                        'version' => 3,
-                        'case' => 24
-                    ]
+                'base' => [
+                    'id' => 99,
+                    'version' => 3,
+                    'case' => 24
                 ]
-            ],
+            ]
         ];
     }
 

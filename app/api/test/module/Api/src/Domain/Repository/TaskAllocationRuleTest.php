@@ -18,7 +18,7 @@ use Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule as Entity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
 
-class TaskAllocationRuleTest extends RepositoryTestCase
+final class TaskAllocationRuleTest extends RepositoryTestCase
 {
     /** @var TaskAllocationRuleRepo|m\MockInterface */
     protected $sut;
@@ -26,6 +26,7 @@ class TaskAllocationRuleTest extends RepositoryTestCase
     /**
      * Set up
      */
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(TaskAllocationRuleRepo::class);
@@ -73,57 +74,55 @@ class TaskAllocationRuleTest extends RepositoryTestCase
     /**
      * Param provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function fetchByParametersDataProvider(): array
+    public static function fetchByParametersDataProvider(): \Iterator
     {
-        return [
-            // category, operatorType, trafficArea, isMlh, query
-            [
-                111,
-                222,
-                'gv',
-                'B',
-                true,
-                '[QUERY] AND m.category = [[111]] AND m.subCategory = [[222]] AND m.goodsOrPsv = [[gv]] AND m.trafficArea = [[B]] ' .
-                'AND m.isMlh = [[true]]'
-            ],
-            [
-                111,
-                222,
-                'gv',
-                'B',
-                null,
-                '[QUERY] AND m.category = [[111]] AND m.subCategory = [[222]] AND m.goodsOrPsv = [[gv]] AND m.trafficArea = [[B]] ' .
-                'AND m.isMlh IS NULL'
-            ],
-            [
-                111,
-                222,
-                'gv',
-                null,
-                null,
-                '[QUERY] AND m.category = [[111]] AND m.subCategory = [[222]] AND m.goodsOrPsv = [[gv]] AND m.trafficArea IS NULL ' .
-                'AND m.isMlh IS NULL'
-            ],
-            [
-                111,
-                222,
-                null,
-                null,
-                null,
-                '[QUERY] AND m.category = [[111]] AND m.subCategory = [[222]] AND m.goodsOrPsv IS NULL AND m.trafficArea IS NULL ' .
-                'AND m.isMlh IS NULL'
-            ],
-            [
-                111,
-                null,
-                null,
-                null,
-                null,
-                '[QUERY] AND m.category = [[111]] AND m.subCategory IS NULL AND m.goodsOrPsv IS NULL AND m.trafficArea IS NULL ' .
-                'AND m.isMlh IS NULL'
-            ],
+        // category, operatorType, trafficArea, isMlh, query
+        yield [
+            111,
+            222,
+            'gv',
+            'B',
+            true,
+            '[QUERY] AND m.category = [[111]] AND m.subCategory = [[222]] AND m.goodsOrPsv = [[gv]] AND m.trafficArea = [[B]] ' .
+            'AND m.isMlh = [[true]]'
+        ];
+        yield [
+            111,
+            222,
+            'gv',
+            'B',
+            null,
+            '[QUERY] AND m.category = [[111]] AND m.subCategory = [[222]] AND m.goodsOrPsv = [[gv]] AND m.trafficArea = [[B]] ' .
+            'AND m.isMlh IS NULL'
+        ];
+        yield [
+            111,
+            222,
+            'gv',
+            null,
+            null,
+            '[QUERY] AND m.category = [[111]] AND m.subCategory = [[222]] AND m.goodsOrPsv = [[gv]] AND m.trafficArea IS NULL ' .
+            'AND m.isMlh IS NULL'
+        ];
+        yield [
+            111,
+            222,
+            null,
+            null,
+            null,
+            '[QUERY] AND m.category = [[111]] AND m.subCategory = [[222]] AND m.goodsOrPsv IS NULL AND m.trafficArea IS NULL ' .
+            'AND m.isMlh IS NULL'
+        ];
+        yield [
+            111,
+            null,
+            null,
+            null,
+            null,
+            '[QUERY] AND m.category = [[111]] AND m.subCategory IS NULL AND m.goodsOrPsv IS NULL AND m.trafficArea IS NULL ' .
+            'AND m.isMlh IS NULL'
         ];
     }
 
@@ -153,22 +152,20 @@ class TaskAllocationRuleTest extends RepositoryTestCase
         );
     }
 
-    public static function fetchByParametersAttemptsLookupWithoutSubCategoryWhenCallReturnsNoResultsDataProvider(): array
+    public static function fetchByParametersAttemptsLookupWithoutSubCategoryWhenCallReturnsNoResultsDataProvider(): \Iterator
     {
-        return [
-            'Subcategory returns result' => [
-                [
-                    ['foo'],
-                ],
-                false
+        yield 'Subcategory returns result' => [
+            [
+                ['foo'],
             ],
-            'Subcategory returns no results' => [
-                [
-                    [],
-                    ['foo'],
-                ],
-                true
+            false
+        ];
+        yield 'Subcategory returns no results' => [
+            [
+                [],
+                ['foo'],
             ],
+            true
         ];
     }
 

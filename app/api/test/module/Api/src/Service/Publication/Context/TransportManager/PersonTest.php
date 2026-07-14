@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class PersonTest
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PersonTest extends MockeryTestCase
+final class PersonTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\Group('publicationFilter
 Test the transport manager name filter')]

@@ -13,7 +13,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
 
-class QueueTest extends MockeryTestCase
+final class QueueTest extends MockeryTestCase
 {
     protected $sut;
 

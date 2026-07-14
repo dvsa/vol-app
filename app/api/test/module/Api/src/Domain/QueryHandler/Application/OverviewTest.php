@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\UpdateApplicationCompletion as Upda
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class OverviewTest extends QueryHandlerTestCase
+final class OverviewTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

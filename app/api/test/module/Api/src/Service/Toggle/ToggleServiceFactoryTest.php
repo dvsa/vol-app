@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Toggle\ToggleServiceFactory;
 use Mockery as m;
 use Psr\Container\ContainerInterface;
 
-class ToggleServiceFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
+final class ToggleServiceFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     public function testInvoke(): void
     {

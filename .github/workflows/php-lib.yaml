@@ -14,7 +14,7 @@ on:
       php-version:
         type: string
         required: false
-        default: "8.3"
+        default: "8.4"
 
 jobs:
   checks:
@@ -35,7 +35,9 @@ jobs:
         with:
           php-version: ${{ inputs.php-version }}
           coverage: none
-          extensions: intl, mbstring
+          # igbinary + redis: olcs-transfer/olcs-common require ext-igbinary and
+          # exercise the redis-backed cache encryption in their test suites.
+          extensions: intl, mbstring, igbinary, redis
           # The library's phpstan script has no --memory-limit flag; phpstan's
           # parallel workers crash under the default 128M, so lift the cap.
           ini-values: memory_limit=-1

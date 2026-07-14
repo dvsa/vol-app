@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\LicenceVehicle;
 
 use Dvsa\Olcs\Transfer\Query\LicenceVehicle\LicenceVehiclesById;
@@ -7,7 +9,7 @@ use Dvsa\OlcsTest\Transfer\DtoWithoutOptionalFieldsTest;
 use Dvsa\OlcsTest\Transfer\Query\QueryTest;
 use Laminas\Stdlib\ArraySerializableInterface;
 
-class LicenceVehiclesByIdTest extends \PHPUnit\Framework\TestCase
+final class LicenceVehiclesByIdTest extends \PHPUnit\Framework\TestCase
 {
     use QueryTest, DtoWithoutOptionalFieldsTest {
         DtoWithoutOptionalFieldsTest::testDefaultValues insteadof QueryTest;

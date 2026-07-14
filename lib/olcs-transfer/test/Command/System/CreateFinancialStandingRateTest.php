@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\System;
 
 use Dvsa\Olcs\Transfer\Command\System\CreateFinancialStandingRate as Sut;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\System\CreateFinancialStandingRate as Sut;
 /**
  * Create Financial Standing Rate test
  */
-class CreateFinancialStandingRateTest extends \PHPUnit\Framework\TestCase
+final class CreateFinancialStandingRateTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

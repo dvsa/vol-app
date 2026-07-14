@@ -6,6 +6,8 @@
  * @author Nick payne <nick.payne@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\Date;
@@ -16,70 +18,66 @@ use Common\Service\Table\Formatter\TaskDate;
  *
  * @author Nick payne <nick.payne@valtech.co.uk>
  */
-class TaskDateTest extends \PHPUnit\Framework\TestCase
+final class TaskDateTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $column, $expected): void
     {
-        $this->assertEquals($expected, (new TaskDate(new Date()))->format($data, $column));
+        $this->assertEquals($expected, new TaskDate(new Date())->format($data, $column));
     }
 
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'non-urgent' => [
-                [
-                    'date' => '2013-01-01',
-                ],
-                [
-                    'dateformat' => 'd/m/Y',
-                    'name' => 'date',
-                ],
-                '01/01/2013',
+        yield 'non-urgent' => [
+            [
+                'date' => '2013-01-01',
             ],
-            'urgent' => [
-                [
-                    'date' => '2013-01-01',
-                    'urgent' => 'Y',
-                    'isClosed' => 'N',
-                ],
-                [
-                    'dateformat' => 'd/m/Y',
-                    'name' => 'date',
-                ],
-                '01/01/2013 (urgent)',
+            [
+                'dateformat' => 'd/m/Y',
+                'name' => 'date',
             ],
-            'closed non-urgent' => [
-                [
-                    'date' => '2013-01-01',
-                    'isClosed' => 'Y',
-                    'urgent' => 'N',
-                ],
-                [
-                    'dateformat' => 'd/m/Y',
-                    'name' => 'date',
-                ],
-                '01/01/2013 <span class="status red">closed</span>',
+            '01/01/2013',
+        ];
+        yield 'urgent' => [
+            [
+                'date' => '2013-01-01',
+                'urgent' => 'Y',
+                'isClosed' => 'N',
             ],
-            'closed urgent' => [
-                [
-                    'date' => '2013-01-01',
-                    'isClosed' => 'Y',
-                    'urgent' => 'Y',
-                ],
-                [
-                    'dateformat' => 'd/m/Y',
-                    'name' => 'date',
-                ],
-                '01/01/2013 (urgent) <span class="status red">closed</span>',
+            [
+                'dateformat' => 'd/m/Y',
+                'name' => 'date',
             ],
+            '01/01/2013 (urgent)',
+        ];
+        yield 'closed non-urgent' => [
+            [
+                'date' => '2013-01-01',
+                'isClosed' => 'Y',
+                'urgent' => 'N',
+            ],
+            [
+                'dateformat' => 'd/m/Y',
+                'name' => 'date',
+            ],
+            '01/01/2013 <span class="status red">closed</span>',
+        ];
+        yield 'closed urgent' => [
+            [
+                'date' => '2013-01-01',
+                'isClosed' => 'Y',
+                'urgent' => 'Y',
+            ],
+            [
+                'dateformat' => 'd/m/Y',
+                'name' => 'date',
+            ],
+            '01/01/2013 (urgent) <span class="status red">closed</span>',
         ];
     }
 }

@@ -18,7 +18,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class EnqueueTest extends AbstractCommandHandlerTestCase
+final class EnqueueTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -50,18 +50,16 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function dpHandleCommandMissingDocumentsParam(): array
+    public static function dpHandleCommandMissingDocumentsParam(): \Iterator
     {
-        return [
-            'no params' => [
-                [],
-            ],
-            'documents empty' => [
-                ['documents' => []],
-            ],
-            'documentId not number - backward compatibility' => [
-                ['documentId' => 'x'],
-            ],
+        yield 'no params' => [
+            [],
+        ];
+        yield 'documents empty' => [
+            ['documents' => []],
+        ];
+        yield 'documentId not number - backward compatibility' => [
+            ['documentId' => 'x'],
         ];
     }
 
@@ -144,97 +142,95 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
-        return [
-            'with list of documents' => [
-                'cmdData' => [
-                    'documents' => [200116, 200117],
-                    'type' => Queue::TYPE_PERMIT_PRINT,
-                    'jobName' => 'JOBNAME',
-                    'user' => 10,
-                ],
-                'expectedData' => [
-                    'type' => Queue::TYPE_PERMIT_PRINT,
-                    'status' => Queue::STATUS_QUEUED,
-                    'options' => json_encode(
-                        array_filter(
-                            [
-                                'documents' => [200116, 200117],
-                                'userId' => 10,
-                                'jobName' => 'JOBNAME',
-                            ]
-                        )
-                    ),
-                ],
-                'expectedMsgs' => ['JOBNAME queued for print (document ids: 200116, 200117)'],
+        yield 'with list of documents' => [
+            'cmdData' => [
+                'documents' => [200116, 200117],
+                'type' => Queue::TYPE_PERMIT_PRINT,
+                'jobName' => 'JOBNAME',
+                'user' => 10,
             ],
-            'with one document' => [
-                'cmdData' => [
-                    'documents' => [200116],
-                    'jobName' => 'JOBNAME',
-                    'user' => 10,
-                    'copies' => 999,
-                ],
-                'expectedData' => [
-                    'type' => Queue::TYPE_PRINT,
-                    'status' => Queue::STATUS_QUEUED,
-                    'options' => json_encode(
-                        array_filter(
-                            [
-                                'documents' => [200116],
-                                'userId' => 10,
-                                'jobName' => 'JOBNAME',
-                                'copies' => 999,
-                            ]
-                        )
-                    ),
-                ],
-                'expectedMsgs' => ['JOBNAME queued for print (document ids: 200116)'],
+            'expectedData' => [
+                'type' => Queue::TYPE_PERMIT_PRINT,
+                'status' => Queue::STATUS_QUEUED,
+                'options' => json_encode(
+                    array_filter(
+                        [
+                            'documents' => [200116, 200117],
+                            'userId' => 10,
+                            'jobName' => 'JOBNAME',
+                        ]
+                    )
+                ),
             ],
-            'with documentId - backward compatibility' => [
-                'cmdData' => [
-                    'documentId' => 200116,
-                    'jobName' => 'JOBNAME',
-                    'user' => 10,
-                ],
-                'expectedData' => [
-                    'type' => Queue::TYPE_PRINT,
-                    'status' => Queue::STATUS_QUEUED,
-                    'options' => json_encode(
-                        array_filter(
-                            [
-                                'documents' => [200116],
-                                'userId' => 10,
-                                'jobName' => 'JOBNAME',
-                            ]
-                        )
-                    ),
-                ],
-                'expectedMsgs' => ['JOBNAME queued for print (document ids: 200116)'],
+            'expectedMsgs' => ['JOBNAME queued for print (document ids: 200116, 200117)'],
+        ];
+        yield 'with one document' => [
+            'cmdData' => [
+                'documents' => [200116],
+                'jobName' => 'JOBNAME',
+                'user' => 10,
+                'copies' => 999,
             ],
-            'disc printing with documentId - backward compatibility' => [
-                'cmdData' => [
-                    'documentId' => 200116,
-                    'jobName' => 'JOBNAME',
-                    'user' => 10,
-                    'isDiscPrinting' => true,
-                ],
-                'expectedData' => [
-                    'type' => Queue::TYPE_DISC_PRINTING_PRINT,
-                    'status' => Queue::STATUS_QUEUED,
-                    'options' => json_encode(
-                        array_filter(
-                            [
-                                'documents' => [200116],
-                                'userId' => 10,
-                                'jobName' => 'JOBNAME',
-                            ]
-                        )
-                    ),
-                ],
-                'expectedMsgs' => ['JOBNAME queued for print (document ids: 200116)'],
+            'expectedData' => [
+                'type' => Queue::TYPE_PRINT,
+                'status' => Queue::STATUS_QUEUED,
+                'options' => json_encode(
+                    array_filter(
+                        [
+                            'documents' => [200116],
+                            'userId' => 10,
+                            'jobName' => 'JOBNAME',
+                            'copies' => 999,
+                        ]
+                    )
+                ),
             ],
+            'expectedMsgs' => ['JOBNAME queued for print (document ids: 200116)'],
+        ];
+        yield 'with documentId - backward compatibility' => [
+            'cmdData' => [
+                'documentId' => 200116,
+                'jobName' => 'JOBNAME',
+                'user' => 10,
+            ],
+            'expectedData' => [
+                'type' => Queue::TYPE_PRINT,
+                'status' => Queue::STATUS_QUEUED,
+                'options' => json_encode(
+                    array_filter(
+                        [
+                            'documents' => [200116],
+                            'userId' => 10,
+                            'jobName' => 'JOBNAME',
+                        ]
+                    )
+                ),
+            ],
+            'expectedMsgs' => ['JOBNAME queued for print (document ids: 200116)'],
+        ];
+        yield 'disc printing with documentId - backward compatibility' => [
+            'cmdData' => [
+                'documentId' => 200116,
+                'jobName' => 'JOBNAME',
+                'user' => 10,
+                'isDiscPrinting' => true,
+            ],
+            'expectedData' => [
+                'type' => Queue::TYPE_DISC_PRINTING_PRINT,
+                'status' => Queue::STATUS_QUEUED,
+                'options' => json_encode(
+                    array_filter(
+                        [
+                            'documents' => [200116],
+                            'userId' => 10,
+                            'jobName' => 'JOBNAME',
+                        ]
+                    )
+                ),
+            ],
+            'expectedMsgs' => ['JOBNAME queued for print (document ids: 200116)'],
         ];
     }
 }

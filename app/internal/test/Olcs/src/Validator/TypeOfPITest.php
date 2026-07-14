@@ -10,7 +10,7 @@ use Olcs\Validator\TypeOfPI;
  * Class TypeOfPITest
  * @package OlcsTest\Validator
  */
-class TypeOfPITest extends \PHPUnit\Framework\TestCase
+final class TypeOfPITest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param $expected
@@ -24,13 +24,11 @@ class TypeOfPITest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $sut->isValid($value));
     }
 
-    public static function provideIsValid(): array
+    public static function provideIsValid(): \Iterator
     {
-        return [
-            [true, ['test1']],
-            [true, ['test', 'test2', 'test3']],
-            [true, ['pi_t_tm_only']],
-            [false, ['pi_t_tm_only', 'test2']],
-        ];
+        yield [true, ['test1']];
+        yield [true, ['test', 'test2', 'test3']];
+        yield [true, ['pi_t_tm_only']];
+        yield [false, ['pi_t_tm_only', 'test2']];
     }
 }

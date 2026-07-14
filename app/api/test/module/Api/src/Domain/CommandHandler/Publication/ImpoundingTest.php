@@ -34,7 +34,7 @@ use Dvsa\Olcs\Api\Entity\Venue as VenueEntity;
 /**
  * Publish Impounding Test
  */
-class ImpoundingTest extends AbstractCommandHandlerTestCase
+final class ImpoundingTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -467,10 +467,8 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
 
         $this->repoMap['PublicationLink']
             ->shouldReceive('fetchSingleUnpublished')
-            ->with(m::on(function ($query) {
-                return $query instanceof UnpublishedImpoundingQry
-                    && $query->getPublicationSection() === PublicationSectionEntity::DECISION_SECTION;
-            }))
+            ->with(m::on(fn($query) => $query instanceof UnpublishedImpoundingQry
+                && $query->getPublicationSection() === PublicationSectionEntity::DECISION_SECTION))
             ->andReturn($publicationLinkMock);
 
         $this->repoMap['PublicationLink']
@@ -484,9 +482,7 @@ class ImpoundingTest extends AbstractCommandHandlerTestCase
             ->with(
                 'ImpoundingLicenceDecisionPublication',
                 m::type(PublicationLinkEntity::class),
-                m::on(function ($data) {
-                    return isset($data['outcome']) && $data['outcome'] === 'Withdrawn';
-                })
+                m::on(fn($data) => isset($data['outcome']) && $data['outcome'] === 'Withdrawn')
             )
             ->andReturn($publicationMock);
 

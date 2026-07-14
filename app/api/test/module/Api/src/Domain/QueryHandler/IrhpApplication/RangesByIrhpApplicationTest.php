@@ -19,7 +19,7 @@ use Mockery as m;
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-class RangesByIrhpApplicationTest extends QueryHandlerTestCase
+final class RangesByIrhpApplicationTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

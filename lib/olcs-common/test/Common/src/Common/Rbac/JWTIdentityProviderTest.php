@@ -19,11 +19,11 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
 
-class JWTIdentityProviderTest extends MockeryTestCase
+final class JWTIdentityProviderTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
-    public const DATA_WITH_ROLES = [
+    public const array DATA_WITH_ROLES = [
         'userType' => 'user_type',
         'loginId' => 'login_id',
         'id' => 1,
@@ -34,13 +34,13 @@ class JWTIdentityProviderTest extends MockeryTestCase
         ]
     ];
 
-    public const DATA_WITHOUT_ROLES = [
+    public const array DATA_WITHOUT_ROLES = [
         'userType' => 'user_type',
         'loginId' => 'login_id',
         'id' => 1
     ];
 
-    public const TOKEN_SESSION_DATA = [
+    public const array TOKEN_SESSION_DATA = [
         'Token' => [
             'refreshToken' => 'abc1234'
         ],
@@ -94,9 +94,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function validateTokenShouldReturnFalseWhenAnonymous(): void
     {
         $this->setupSut();
@@ -113,9 +111,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->assertFalse($result['valid']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function validateTokenShouldReturnFalseWhenEmptyToken(): void
     {
         $this->setupSut();
@@ -132,9 +128,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->assertFalse($result['valid']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function validateTokenShouldReturnFalseWhenCantReadToken(): void
     {
         $this->setupSut();
@@ -152,9 +146,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->assertFalse($result['valid']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function validateTokenShouldReturnFalseWhenExpiredToken(): void
     {
         $this->setupSut();
@@ -177,9 +169,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->assertFalse($result['valid']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function validateTokenShouldReturnFalseWhenTokenHasWrongUser(): void
     {
         $this->setupSut();
@@ -203,9 +193,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->assertFalse($result['valid']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function validateTokenShouldReturnTrueWhenValid(): void
     {
         $this->setupSut();
@@ -230,9 +218,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->assertEquals($result['uid'], $this->defaultLoginId);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getIdentityShouldRetriveDataFromCacheWhenShouldntUpdateAndCacheExists(): void
     {
         $this->setupSut();
@@ -253,9 +239,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->sut->getIdentity();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getIdentityShouldRetriveDataFromDBWhenIdentityIsNotInstanceOfUser(): void
     {
         // Setup
@@ -272,9 +256,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->sut->getIdentity();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getIdentityShouldRetriveDataFromDBWhenIdentityHasNoId(): void
     {
         // Setup
@@ -291,9 +273,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->sut->getIdentity();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getIdentityShouldRetriveDataFromDBWhenCacheDoesntExist(): void
     {
         // Setup
@@ -317,9 +297,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->sut->getIdentity();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getIdentityShouldStoreIdentityInTheSession(): void
     {
         // Setup
@@ -333,9 +311,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->sut->getIdentity();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getIdentityShouldReturnInstanceofUser(): void
     {
         // Setup
@@ -348,9 +324,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->assertInstanceOf(User::class, $identity);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getIdentityShouldReturnInstanceofUserWithRoles(): void
     {
         // Setup
@@ -367,9 +341,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->assertSame(['role1', 'role2', 'role3'], $identity->getRoles());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getIdentityShouldRefreshTokensWhenRequired(): void
     {
         // Setup
@@ -388,9 +360,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->sut->getIdentity();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getIdentityShouldNotRefreshTokensWhenTokenSessionIsEmpty(): void
     {
         // Setup
@@ -409,9 +379,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->sut->getIdentity();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getIdentityShouldReturnExistingIdentityWhenPresent(): void
     {
         // Setup
@@ -427,9 +395,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->sut->getIdentity();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function clearSessionShouldClearSession(): void
     {
         $this->setupSut();

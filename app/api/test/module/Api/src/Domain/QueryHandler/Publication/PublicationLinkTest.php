@@ -11,10 +11,8 @@ use Dvsa\Olcs\Transfer\Query\Publication\PublicationLink as Qry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\QueryHandler\Publication\PublicationLink
- */
-class PublicationLinkTest extends QueryHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Publication\PublicationLink::class)]
+final class PublicationLinkTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

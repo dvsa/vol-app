@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  *
  * @author Valtech <uk@valtech.co.uk>
  */
-class SearchDateRangeFieldsetTest extends TestCase
+final class SearchDateRangeFieldsetTest extends TestCase
 {
     public function testSearchAwareTraitByProxy(): void
     {

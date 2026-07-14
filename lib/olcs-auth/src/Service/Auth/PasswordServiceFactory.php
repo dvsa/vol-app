@@ -18,7 +18,7 @@ class PasswordServiceFactory implements FactoryInterface
      * @throws RuntimeException
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PasswordService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): PasswordService
     {
         $config = $container->get('Config');
 

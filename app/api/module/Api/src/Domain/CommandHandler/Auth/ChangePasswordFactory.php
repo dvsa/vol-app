@@ -22,7 +22,7 @@ class ChangePasswordFactory implements FactoryInterface
      * @return ChangePassword
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ChangePassword
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ChangePassword
     {
         $adapter = $container->get(ValidatableAdapterInterface::class);
         $instance = new ChangePassword($adapter);

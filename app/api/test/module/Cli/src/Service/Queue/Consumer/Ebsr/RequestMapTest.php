@@ -19,7 +19,7 @@ use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\Ebsr\RequestMap::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer::class)]
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class RequestMapTest extends AbstractConsumerTestCase
+final class RequestMapTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = RequestMap::class;
 

@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\StackHelperService;
@@ -16,7 +18,7 @@ use Common\Service\Table\Formatter\StackValue;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class StackValueTest extends \PHPUnit\Framework\TestCase
+final class StackValueTest extends \PHPUnit\Framework\TestCase
 {
     public function testFormatWithoutStack(): void
     {
@@ -24,7 +26,7 @@ class StackValueTest extends \PHPUnit\Framework\TestCase
         $data = [];
         $column = [];
 
-        (new StackValue(new StackHelperService()))->format($data, $column);
+        new StackValue(new StackHelperService())->format($data, $column);
     }
 
     public function testFormatWithString(): void
@@ -41,7 +43,7 @@ class StackValueTest extends \PHPUnit\Framework\TestCase
         ];
         $expected = 123;
 
-        $this->assertEquals($expected, (new StackValue(new StackHelperService()))->format($data, $column));
+        $this->assertEquals($expected, new StackValue(new StackHelperService())->format($data, $column));
     }
 
     public function testFormat(): void
@@ -58,6 +60,6 @@ class StackValueTest extends \PHPUnit\Framework\TestCase
         ];
         $expected = 123;
 
-        $this->assertEquals($expected, (new StackValue(new StackHelperService()))->format($data, $column));
+        $this->assertEquals($expected, new StackValue(new StackHelperService())->format($data, $column));
     }
 }

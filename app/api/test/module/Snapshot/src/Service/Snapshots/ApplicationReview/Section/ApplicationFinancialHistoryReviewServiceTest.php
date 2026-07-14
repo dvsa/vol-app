@@ -23,13 +23,14 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationFinancialHistoryReviewServiceTest extends MockeryTestCase
+final class ApplicationFinancialHistoryReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
     /** @var TranslatorInterface */
     protected $mockTranslator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockTranslator = m::mock(TranslatorInterface::class);
@@ -53,443 +54,441 @@ class ApplicationFinancialHistoryReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public static function providerGetConfigFromData(): array
+    public static function providerGetConfigFromData(): \Iterator
     {
-        return [
-            'Nos' => [
-                [
-                    'bankrupt' => 'N',
-                    'liquidation' => 'N',
-                    'receivership' => 'N',
-                    'administration' => 'N',
-                    'disqualified' => 'N',
-                    'insolvencyDetails' => '',
-                    'insolvencyConfirmation' => 'Y',
-                    'variationType' => [
-                        'id' => 'alksd'
-                    ],
+        yield 'Nos' => [
+            [
+                'bankrupt' => 'N',
+                'liquidation' => 'N',
+                'receivership' => 'N',
+                'administration' => 'N',
+                'disqualified' => 'N',
+                'insolvencyDetails' => '',
+                'insolvencyConfirmation' => 'Y',
+                'variationType' => [
+                    'id' => 'alksd'
                 ],
-                [
-                    'multiItems' => [
+            ],
+            [
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-bankrupt',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-bankrupt',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-liquidation',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-liquidation',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-receivership',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-receivership',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-administration',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-administration',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-disqualified',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-disqualified',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-insolvencyConfirmation',
-                                'value' => 'Confirmed'
-                            ]
+                            'label' => 'application-review-financial-history-insolvencyConfirmation',
+                            'value' => 'Confirmed'
                         ]
                     ]
                 ]
-            ],
-            'Yeses without documents' => [
-                [
-                    'bankrupt' => 'Y',
-                    'liquidation' => 'N',
-                    'receivership' => 'N',
-                    'administration' => 'N',
-                    'disqualified' => 'N',
-                    'insolvencyDetails' => 'Some text in here',
-                    'insolvencyConfirmation' => 'Y',
-                    'documents' => [],
-                    'variationType' => [
-                        'id' => 'uwieas'
-                    ],
+            ]
+        ];
+        yield 'Yeses without documents' => [
+            [
+                'bankrupt' => 'Y',
+                'liquidation' => 'N',
+                'receivership' => 'N',
+                'administration' => 'N',
+                'disqualified' => 'N',
+                'insolvencyDetails' => 'Some text in here',
+                'insolvencyConfirmation' => 'Y',
+                'documents' => [],
+                'variationType' => [
+                    'id' => 'uwieas'
                 ],
-                [
-                    'multiItems' => [
+            ],
+            [
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-bankrupt',
-                                'value' => 'Yes'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-bankrupt',
+                            'value' => 'Yes'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-liquidation',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-liquidation',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-receivership',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-receivership',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-administration',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-administration',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-disqualified',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-disqualified',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-insolvencyDetails',
-                                'value' => 'Some text in here'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-insolvencyDetails',
+                            'value' => 'Some text in here'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-evidence',
-                                'noEscape' => true,
-                                'value' => 'application-review-financial-history-evidence-send-translated'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-evidence',
+                            'noEscape' => true,
+                            'value' => 'application-review-financial-history-evidence-send-translated'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-insolvencyConfirmation',
-                                'value' => 'Confirmed'
-                            ]
+                            'label' => 'application-review-financial-history-insolvencyConfirmation',
+                            'value' => 'Confirmed'
                         ]
                     ]
                 ]
-            ],
-            'Yeses with documents' => [
-                [
-                    'bankrupt' => 'Y',
-                    'liquidation' => 'N',
-                    'receivership' => 'N',
-                    'administration' => 'N',
-                    'disqualified' => 'N',
-                    'insolvencyDetails' => 'Some text in here',
-                    'insolvencyConfirmation' => 'Y',
-                    'variationType' => [
-                        'id' => 'kdjasn'
-                    ],
+            ]
+        ];
+        yield 'Yeses with documents' => [
+            [
+                'bankrupt' => 'Y',
+                'liquidation' => 'N',
+                'receivership' => 'N',
+                'administration' => 'N',
+                'disqualified' => 'N',
+                'insolvencyDetails' => 'Some text in here',
+                'insolvencyConfirmation' => 'Y',
+                'variationType' => [
+                    'id' => 'kdjasn'
+                ],
 
-                    'documents' => [
-                        [
-                            'description' => 'evidence1',
-                            'category' => [
-                                'id' => Category::CATEGORY_LICENSING
-                            ],
-                            'subCategory' => [
-                                'id' => Category::DOC_SUB_CATEGORY_LICENCE_INSOLVENCY_DOCUMENT_DIGITAL
-                            ]
+                'documents' => [
+                    [
+                        'description' => 'evidence1',
+                        'category' => [
+                            'id' => Category::CATEGORY_LICENSING
                         ],
-                        [
-                            'description' => 'evidence2',
-                            'category' => [
-                                'id' => Category::CATEGORY_LICENSING
-                            ],
-                            'subCategory' => [
-                                'id' => Category::DOC_SUB_CATEGORY_LICENCE_INSOLVENCY_DOCUMENT_DIGITAL
-                            ]
-                        ],
-                        [
-                            'description' => 'ignore1',
-                            'category' => [
-                                'id' => 'foo'
-                            ],
-                            'subCategory' => [
-                                'id' => Category::DOC_SUB_CATEGORY_LICENCE_INSOLVENCY_DOCUMENT_DIGITAL
-                            ]
-                        ],
-                        [
-                            'description' => 'ignore2',
-                            'category' => [
-                                'id' => Category::CATEGORY_LICENSING
-                            ],
-                            'subCategory' => [
-                                'id' => 'bar'
-                            ]
+                        'subCategory' => [
+                            'id' => Category::DOC_SUB_CATEGORY_LICENCE_INSOLVENCY_DOCUMENT_DIGITAL
                         ]
-                    ]
-                ],
-                [
-                    'multiItems' => [
-                        [
-                            [
-                                'label' => 'application-review-financial-history-bankrupt',
-                                'value' => 'Yes'
-                            ]
+                    ],
+                    [
+                        'description' => 'evidence2',
+                        'category' => [
+                            'id' => Category::CATEGORY_LICENSING
                         ],
-                        [
-                            [
-                                'label' => 'application-review-financial-history-liquidation',
-                                'value' => 'No'
-                            ]
+                        'subCategory' => [
+                            'id' => Category::DOC_SUB_CATEGORY_LICENCE_INSOLVENCY_DOCUMENT_DIGITAL
+                        ]
+                    ],
+                    [
+                        'description' => 'ignore1',
+                        'category' => [
+                            'id' => 'foo'
                         ],
-                        [
-                            [
-                                'label' => 'application-review-financial-history-receivership',
-                                'value' => 'No'
-                            ]
+                        'subCategory' => [
+                            'id' => Category::DOC_SUB_CATEGORY_LICENCE_INSOLVENCY_DOCUMENT_DIGITAL
+                        ]
+                    ],
+                    [
+                        'description' => 'ignore2',
+                        'category' => [
+                            'id' => Category::CATEGORY_LICENSING
                         ],
-                        [
-                            [
-                                'label' => 'application-review-financial-history-administration',
-                                'value' => 'No'
-                            ]
-                        ],
-                        [
-                            [
-                                'label' => 'application-review-financial-history-disqualified',
-                                'value' => 'No'
-                            ]
-                        ],
-                        [
-                            [
-                                'label' => 'application-review-financial-history-insolvencyDetails',
-                                'value' => 'Some text in here'
-                            ]
-                        ],
-                        [
-                            [
-                                'label' => 'application-review-financial-history-evidence',
-                                'noEscape' => true,
-                                'value' => 'evidence1<br>evidence2'
-                            ]
-                        ],
-                        [
-                            [
-                                'label' => 'application-review-financial-history-insolvencyConfirmation',
-                                'value' => 'Confirmed'
-                            ]
+                        'subCategory' => [
+                            'id' => 'bar'
                         ]
                     ]
                 ]
             ],
-            'Director change Nos' => [
-                [
-                    'bankrupt' => 'N',
-                    'liquidation' => 'N',
-                    'receivership' => 'N',
-                    'administration' => 'N',
-                    'disqualified' => 'N',
-                    'insolvencyDetails' => '',
-                    'insolvencyConfirmation' => 'Y',
-                    'variationType' => [
-                        'id' => Application::VARIATION_TYPE_DIRECTOR_CHANGE
+            [
+                'multiItems' => [
+                    [
+                        [
+                            'label' => 'application-review-financial-history-bankrupt',
+                            'value' => 'Yes'
+                        ]
                     ],
-                ],
-                [
-                    'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-bankrupt',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-liquidation',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-liquidation',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-receivership',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-receivership',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-administration',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-administration',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-disqualified',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-disqualified',
-                                'value' => 'No'
-                            ]
+                            'label' => 'application-review-financial-history-insolvencyDetails',
+                            'value' => 'Some text in here'
+                        ]
+                    ],
+                    [
+                        [
+                            'label' => 'application-review-financial-history-evidence',
+                            'noEscape' => true,
+                            'value' => 'evidence1<br>evidence2'
+                        ]
+                    ],
+                    [
+                        [
+                            'label' => 'application-review-financial-history-insolvencyConfirmation',
+                            'value' => 'Confirmed'
                         ]
                     ]
                 ]
-            ],
-            'Director change yeses without documents' => [
-                [
-                    'bankrupt' => 'Y',
-                    'liquidation' => 'N',
-                    'receivership' => 'N',
-                    'administration' => 'N',
-                    'disqualified' => 'N',
-                    'insolvencyDetails' => 'Some text in here',
-                    'insolvencyConfirmation' => 'Y',
-                    'documents' => [],
-                    'variationType' => [
-                        'id' => Application::VARIATION_TYPE_DIRECTOR_CHANGE
-                    ],
+            ]
+        ];
+        yield 'Director change Nos' => [
+            [
+                'bankrupt' => 'N',
+                'liquidation' => 'N',
+                'receivership' => 'N',
+                'administration' => 'N',
+                'disqualified' => 'N',
+                'insolvencyDetails' => '',
+                'insolvencyConfirmation' => 'Y',
+                'variationType' => [
+                    'id' => Application::VARIATION_TYPE_DIRECTOR_CHANGE
                 ],
-                [
-                    'multiItems' => [
+            ],
+            [
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-bankrupt',
-                                'value' => 'Yes'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-bankrupt',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-liquidation',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-liquidation',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-receivership',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-receivership',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-administration',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-administration',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-disqualified',
-                                'value' => 'No'
-                            ]
-                        ],
-                        [
-                            [
-                                'label' => 'application-review-financial-history-insolvencyDetails',
-                                'value' => 'Some text in here'
-                            ]
-                        ],
-                        [
-                            [
-                                'label' => 'application-review-financial-history-evidence',
-                                'noEscape' => true,
-                                'value' => 'application-review-financial-history-evidence-send-translated'
-                            ]
+                            'label' => 'application-review-financial-history-disqualified',
+                            'value' => 'No'
                         ]
                     ]
                 ]
+            ]
+        ];
+        yield 'Director change yeses without documents' => [
+            [
+                'bankrupt' => 'Y',
+                'liquidation' => 'N',
+                'receivership' => 'N',
+                'administration' => 'N',
+                'disqualified' => 'N',
+                'insolvencyDetails' => 'Some text in here',
+                'insolvencyConfirmation' => 'Y',
+                'documents' => [],
+                'variationType' => [
+                    'id' => Application::VARIATION_TYPE_DIRECTOR_CHANGE
+                ],
             ],
-            'Director change yeses with documents' => [
-                [
-                    'bankrupt' => 'Y',
-                    'liquidation' => 'N',
-                    'receivership' => 'N',
-                    'administration' => 'N',
-                    'disqualified' => 'N',
-                    'insolvencyDetails' => 'Some text in here',
-                    'insolvencyConfirmation' => 'Y',
-                    'variationType' => [
-                        'id' => Application::VARIATION_TYPE_DIRECTOR_CHANGE
+            [
+                'multiItems' => [
+                    [
+                        [
+                            'label' => 'application-review-financial-history-bankrupt',
+                            'value' => 'Yes'
+                        ]
                     ],
+                    [
+                        [
+                            'label' => 'application-review-financial-history-liquidation',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
+                        [
+                            'label' => 'application-review-financial-history-receivership',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
+                        [
+                            'label' => 'application-review-financial-history-administration',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
+                        [
+                            'label' => 'application-review-financial-history-disqualified',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
+                        [
+                            'label' => 'application-review-financial-history-insolvencyDetails',
+                            'value' => 'Some text in here'
+                        ]
+                    ],
+                    [
+                        [
+                            'label' => 'application-review-financial-history-evidence',
+                            'noEscape' => true,
+                            'value' => 'application-review-financial-history-evidence-send-translated'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        yield 'Director change yeses with documents' => [
+            [
+                'bankrupt' => 'Y',
+                'liquidation' => 'N',
+                'receivership' => 'N',
+                'administration' => 'N',
+                'disqualified' => 'N',
+                'insolvencyDetails' => 'Some text in here',
+                'insolvencyConfirmation' => 'Y',
+                'variationType' => [
+                    'id' => Application::VARIATION_TYPE_DIRECTOR_CHANGE
+                ],
 
-                    'documents' => [
-                        [
-                            'description' => 'evidence1',
-                            'category' => [
-                                'id' => Category::CATEGORY_LICENSING
-                            ],
-                            'subCategory' => [
-                                'id' => Category::DOC_SUB_CATEGORY_LICENCE_INSOLVENCY_DOCUMENT_DIGITAL
-                            ]
+                'documents' => [
+                    [
+                        'description' => 'evidence1',
+                        'category' => [
+                            'id' => Category::CATEGORY_LICENSING
                         ],
-                        [
-                            'description' => 'evidence2',
-                            'category' => [
-                                'id' => Category::CATEGORY_LICENSING
-                            ],
-                            'subCategory' => [
-                                'id' => Category::DOC_SUB_CATEGORY_LICENCE_INSOLVENCY_DOCUMENT_DIGITAL
-                            ]
+                        'subCategory' => [
+                            'id' => Category::DOC_SUB_CATEGORY_LICENCE_INSOLVENCY_DOCUMENT_DIGITAL
+                        ]
+                    ],
+                    [
+                        'description' => 'evidence2',
+                        'category' => [
+                            'id' => Category::CATEGORY_LICENSING
                         ],
-                        [
-                            'description' => 'ignore1',
-                            'category' => [
-                                'id' => 'foo'
-                            ],
-                            'subCategory' => [
-                                'id' => Category::DOC_SUB_CATEGORY_LICENCE_INSOLVENCY_DOCUMENT_DIGITAL
-                            ]
+                        'subCategory' => [
+                            'id' => Category::DOC_SUB_CATEGORY_LICENCE_INSOLVENCY_DOCUMENT_DIGITAL
+                        ]
+                    ],
+                    [
+                        'description' => 'ignore1',
+                        'category' => [
+                            'id' => 'foo'
                         ],
-                        [
-                            'description' => 'ignore2',
-                            'category' => [
-                                'id' => Category::CATEGORY_LICENSING
-                            ],
-                            'subCategory' => [
-                                'id' => 'bar'
-                            ]
+                        'subCategory' => [
+                            'id' => Category::DOC_SUB_CATEGORY_LICENCE_INSOLVENCY_DOCUMENT_DIGITAL
+                        ]
+                    ],
+                    [
+                        'description' => 'ignore2',
+                        'category' => [
+                            'id' => Category::CATEGORY_LICENSING
+                        ],
+                        'subCategory' => [
+                            'id' => 'bar'
                         ]
                     ]
-                ],
-                [
-                    'multiItems' => [
+                ]
+            ],
+            [
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-bankrupt',
-                                'value' => 'Yes'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-bankrupt',
+                            'value' => 'Yes'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-liquidation',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-liquidation',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-receivership',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-receivership',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-administration',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-administration',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-disqualified',
-                                'value' => 'No'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-disqualified',
+                            'value' => 'No'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-insolvencyDetails',
-                                'value' => 'Some text in here'
-                            ]
-                        ],
+                            'label' => 'application-review-financial-history-insolvencyDetails',
+                            'value' => 'Some text in here'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-financial-history-evidence',
-                                'noEscape' => true,
-                                'value' => 'evidence1<br>evidence2'
-                            ]
+                            'label' => 'application-review-financial-history-evidence',
+                            'noEscape' => true,
+                            'value' => 'evidence1<br>evidence2'
                         ]
                     ]
                 ]

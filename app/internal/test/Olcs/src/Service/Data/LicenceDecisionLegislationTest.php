@@ -22,7 +22,7 @@ use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
+final class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
 {
     private $context = [
         'isNi' => 'Y',
@@ -50,18 +50,15 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
     /** @var LicenceDecisionLegislation */
     private $sut;
 
-    /** @var LicenceDataService */
-    protected $licenceDataService;
-
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->licenceDataService = m::mock(LicenceDataService::class);
+        $licenceDataService = m::mock(LicenceDataService::class);
 
         $this->sut = new LicenceDecisionLegislation(
             $this->abstractDataServiceServices,
-            $this->licenceDataService
+            $licenceDataService
         );
     }
 

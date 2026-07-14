@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Validator;
 
 use Common\Validator\Date;
@@ -9,7 +11,7 @@ use Common\Validator\Date;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DateTest extends \PHPUnit\Framework\TestCase
+final class DateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Date
@@ -22,27 +24,23 @@ class DateTest extends \PHPUnit\Framework\TestCase
         $this->sut = new Date();
     }
 
-    /**
-     * @dataProvider provideIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIsValid')]
     public function testIsValid($input, $expected): void
     {
         $this->assertEquals($expected, $this->sut->isValid($input));
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provideIsValid()
+    public static function provideIsValid(): \Iterator
     {
-        return [
-            [null, true],
-            ['2015-01-02', true],
-            ['2015-01-aa', false],
-            ['2015-aa-02', false],
-            ['aaaa-01-02', false],
-            ['98-01-02', false],
-            ['98-aa-02', false],
-        ];
+        yield [null, true];
+        yield ['2015-01-02', true];
+        yield ['2015-01-aa', false];
+        yield ['2015-aa-02', false];
+        yield ['aaaa-01-02', false];
+        yield ['98-01-02', false];
+        yield ['98-aa-02', false];
     }
 }

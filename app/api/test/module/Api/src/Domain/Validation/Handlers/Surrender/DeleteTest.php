@@ -11,7 +11,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 
-class DeleteTest extends AbstractHandlerTestCase
+final class DeleteTest extends AbstractHandlerTestCase
 {
     /**
      * @var Delete
@@ -43,24 +43,22 @@ class DeleteTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [
-                'canAccess' => true,
-                'canDelete' => true,
-                'expected' => true
-            ],
-            [
-                'canAccess' => false,
-                'canDelete' =>  true,
-                'expected' => false
-            ],
-            [
-                'canAccess' => true,
-                'canDelete' => false,
-                'expected' => false
-            ]
+        yield [
+            'canAccess' => true,
+            'canDelete' => true,
+            'expected' => true
+        ];
+        yield [
+            'canAccess' => false,
+            'canDelete' =>  true,
+            'expected' => false
+        ];
+        yield [
+            'canAccess' => true,
+            'canDelete' => false,
+            'expected' => false
         ];
     }
 }

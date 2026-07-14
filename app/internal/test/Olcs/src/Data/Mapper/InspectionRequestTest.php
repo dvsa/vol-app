@@ -12,7 +12,7 @@ use Laminas\Form\Form;
 /**
  * Inspection Request Mapper Test
  */
-class InspectionRequestTest extends MockeryTestCase
+final class InspectionRequestTest extends MockeryTestCase
 {
     public function testMapFromErrors(): void
     {

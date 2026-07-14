@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Application;
 
 use Dvsa\Olcs\Transfer\Command\Application\UpdateDeclaration;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Application\UpdateDeclaration;
 /**
  * Update Business Type test
  */
-class UpdateDeclarationTest extends \PHPUnit\Framework\TestCase
+final class UpdateDeclarationTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

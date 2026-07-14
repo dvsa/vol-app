@@ -6,6 +6,8 @@
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Filter;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -16,13 +18,13 @@ use Common\Filter\Vrm;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class VrmTest extends MockeryTestCase
+final class VrmTest extends MockeryTestCase
 {
     /**
-     * @dataProvider provideFilter
      * @param $input
      * @param $output
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFilter')]
     public function testFilter($input, $output): void
     {
         $sut = new Vrm();
@@ -30,16 +32,14 @@ class VrmTest extends MockeryTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provideFilter()
+    public static function provideFilter(): \Iterator
     {
-        return [
-            ['km04 aBC', 'KM04ABC'],
-            ['A   b   C  ', 'ABC'],
-            // special translations
-            ['II', '11'],
-            ['SO', 'S0']
-        ];
+        yield ['km04 aBC', 'KM04ABC'];
+        yield ['A   b   C  ', 'ABC'];
+        // special translations
+        yield ['II', '11'];
+        yield ['SO', 'S0'];
     }
 }

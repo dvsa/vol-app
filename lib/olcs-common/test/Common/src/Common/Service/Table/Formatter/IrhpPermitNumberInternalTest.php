@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\RefData;
@@ -11,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * IrhpPermitNumberInternal test
  */
-class IrhpPermitNumberInternalTest extends MockeryTestCase
+final class IrhpPermitNumberInternalTest extends MockeryTestCase
 {
     protected $urlHelper;
 

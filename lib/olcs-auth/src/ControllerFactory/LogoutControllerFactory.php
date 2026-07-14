@@ -15,7 +15,7 @@ class LogoutControllerFactory implements FactoryInterface
     protected const HEADER_REALM_KEY = 'HTTP_X_REALM';
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LogoutController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LogoutController
     {
         /** @var array $config */
         $config = $container->get('Config');

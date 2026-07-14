@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * SubmissionSectionComment Mapper Test
  */
-class SubmissionSectionCommentTest extends MockeryTestCase
+final class SubmissionSectionCommentTest extends MockeryTestCase
 {
     /**
      *
@@ -25,43 +25,41 @@ class SubmissionSectionCommentTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // add
+        // add
+        yield [
+            [],
+            ['fields' => []]
+        ];
+        // edit
+        yield [
             [
-                [],
-                ['fields' => []]
+                'id' => 987,
+                'submission' => ['id' => 100],
+                'submissionSection' => 'case-summary',
+                'comment' => 'test',
             ],
-            // edit
             [
-                [
+                'fields' => [
                     'id' => 987,
-                    'submission' => ['id' => 100],
+                    'submission' => 100,
                     'submissionSection' => 'case-summary',
                     'comment' => 'test',
                 ],
-                [
-                    'fields' => [
-                        'id' => 987,
-                        'submission' => 100,
-                        'submissionSection' => 'case-summary',
-                        'comment' => 'test',
-                    ],
-                ]
-            ],
-            // edit
+            ]
+        ];
+        // edit
+        yield [
             [
-                [
+                'id' => 987,
+                'comment' => 'test'
+            ],
+            [
+                'fields' => [
                     'id' => 987,
                     'comment' => 'test'
                 ],
-                [
-                    'fields' => [
-                        'id' => 987,
-                        'comment' => 'test'
-                    ],
-                ]
             ]
         ];
     }
@@ -77,19 +75,17 @@ class SubmissionSectionCommentTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($inData));
     }
 
-    public static function mapFromFormDataProvider(): array
+    public static function mapFromFormDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'fields' => [
-                        'comment' => 'test',
-                    ]
-                ],
-                [
-
+                'fields' => [
                     'comment' => 'test',
                 ]
+            ],
+            [
+
+                'comment' => 'test',
             ]
         ];
     }

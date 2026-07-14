@@ -19,7 +19,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class QuestionEntityTest extends EntityTester
+final class QuestionEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -28,6 +28,7 @@ class QuestionEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->entity = $this->instantiate($this->entityClass);
@@ -43,14 +44,12 @@ class QuestionEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isCustom());
     }
 
-    public static function dpIsCustom(): array
+    public static function dpIsCustom(): \Iterator
     {
-        return [
-            [Entity::QUESTION_TYPE_STRING, false],
-            [Entity::QUESTION_TYPE_INTEGER, false],
-            [Entity::QUESTION_TYPE_BOOLEAN, false],
-            [Entity::QUESTION_TYPE_CUSTOM, true],
-        ];
+        yield [Entity::QUESTION_TYPE_STRING, false];
+        yield [Entity::QUESTION_TYPE_INTEGER, false];
+        yield [Entity::QUESTION_TYPE_BOOLEAN, false];
+        yield [Entity::QUESTION_TYPE_CUSTOM, true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetActiveQuestionText')]

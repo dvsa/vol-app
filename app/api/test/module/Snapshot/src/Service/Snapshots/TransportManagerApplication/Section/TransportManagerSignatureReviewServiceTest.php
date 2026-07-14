@@ -22,7 +22,7 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
+final class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
 {
     /** @var TransportManagerSignatureReviewService */
     protected $sut;
@@ -30,6 +30,7 @@ class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
     /** @var TranslatorInterface */
     protected $mockTranslator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockTranslator = m::mock(TranslatorInterface::class);
@@ -74,7 +75,7 @@ class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
 
         if ($data['TmDigitalSignature']) {
             $digitalSignatureDate = new DateTime('2018-01-01');
-            $birthDate = (new DateTime('1980-01-01'))->format('d M Y');
+            $birthDate = new DateTime('1980-01-01')->format('d M Y');
             $signatureName = 'Name';
 
             $this->mockTranslator

@@ -14,7 +14,7 @@ use Common\Service\Helper\FormHelperService;
  *
  * @author Alex Peshkov <alex.pehkov@valtech.co.uk>
  */
-class LicenceTrailersTest extends MockeryTestCase
+final class LicenceTrailersTest extends MockeryTestCase
 {
     /**
      * @var LicenceTrailers
@@ -26,6 +26,7 @@ class LicenceTrailersTest extends MockeryTestCase
      */
     private $formHelper;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(FormHelperService::class);

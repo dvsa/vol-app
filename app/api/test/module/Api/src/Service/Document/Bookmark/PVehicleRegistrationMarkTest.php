@@ -13,14 +13,14 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\PVehicleRegistrationMark;
 /**
  * PVehicleRegistrationMark Test
  */
-class PVehicleRegistrationMarkTest extends \PHPUnit\Framework\TestCase
+final class PVehicleRegistrationMarkTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
         $bookmark = new PVehicleRegistrationMark();
         $query = $bookmark->getQuery(['impounding' => 123]);
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
-        $this->assertTrue(is_null($bookmark->getQuery([])));
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Domain\Query\Bookmark\ImpoundingBundle::class, $bookmark->getQuery([]));
     }
 
     public function testRender(): void

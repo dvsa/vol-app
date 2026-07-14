@@ -18,7 +18,7 @@ use Dvsa\OlcsTest\MocksServicesTrait;
  * Class LoginFactoryTest
  * @see LoginFactory
  */
-class LoginFactoryTest extends MockeryTestCase
+final class LoginFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
     use MocksAbstractCommandHandlerServicesTrait;
@@ -52,6 +52,7 @@ class LoginFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(Login::class, $result);
     }
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();

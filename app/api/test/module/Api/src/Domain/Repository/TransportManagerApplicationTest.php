@@ -12,21 +12,19 @@ use Mockery as m;
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\TransportManagerApplication::class)]
-class TransportManagerApplicationTest extends RepositoryTestCase
+final class TransportManagerApplicationTest extends RepositoryTestCase
 {
-    public const APP_ID = 9001;
+    public const int APP_ID = 9001;
 
     /** @var  Repository\TransportManagerApplication | m\MockInterface */
     protected $sut;
 
-    /** @var  m\MockInterface */
-    private $mockQb;
-
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repository\TransportManagerApplication::class, true);
 
-        $this->mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
     }
 
     public function testFetchWithContactDetailsByApplication(): void
@@ -319,16 +317,13 @@ class TransportManagerApplicationTest extends RepositoryTestCase
 
         $actual = $this->sut->fetchStatByAppId(self::APP_ID);
 
-        static::assertEquals($expectQry, $this->query);
-        static::assertEquals(
-            [
-                'action' => [
-                    'A' => 3,
-                    'U' => 5,
-                    'D' => 7,
-                ]
-            ],
-            $actual
-        );
+        $this->assertEquals($expectQry, $this->query);
+        $this->assertEquals([
+            'action' => [
+                'A' => 3,
+                'U' => 5,
+                'D' => 7,
+            ]
+        ], $actual);
     }
 }

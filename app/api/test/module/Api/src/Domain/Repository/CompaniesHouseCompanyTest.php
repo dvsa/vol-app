@@ -22,8 +22,9 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class CompaniesHouseCompanyTest extends RepositoryTestCase
+final class CompaniesHouseCompanyTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(CompaniesHouseCompanyRepo::class);

@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 /**
  * Update SubmissionSectionComment Test
  */
-class UpdateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
+final class UpdateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -129,13 +129,11 @@ class UpdateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function emptyCommentProvider(): array
+    public static function emptyCommentProvider(): \Iterator
     {
-        return [
-            [null],
-            ['']
-        ];
+        yield [null];
+        yield [''];
     }
 }

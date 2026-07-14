@@ -48,7 +48,7 @@ class FormRow extends AbstractHelper
      *
      * @return static|string
      */
-    public function __invoke(ElementInterface $element = null)
+    public function __invoke(?ElementInterface $element = null)
     {
         if (!$element instanceof \Laminas\Form\ElementInterface) {
             return $this;

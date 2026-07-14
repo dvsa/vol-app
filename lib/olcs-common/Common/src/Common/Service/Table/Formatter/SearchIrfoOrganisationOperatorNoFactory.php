@@ -12,7 +12,7 @@ class SearchIrfoOrganisationOperatorNoFactory implements FactoryInterface
      * @param  array|null         $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchIrfoOrganisationOperatorNo
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SearchIrfoOrganisationOperatorNo
     {
         $urlHelper = $container->get('Helper\Url');
         return new SearchIrfoOrganisationOperatorNo($urlHelper);

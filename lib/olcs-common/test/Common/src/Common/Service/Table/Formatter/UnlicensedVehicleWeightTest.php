@@ -4,6 +4,8 @@
  * UnlicensedVehicleWeightTest.php
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\StackHelperService;
@@ -15,11 +17,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  *
  * @package CommonTest\Service\Table\Formatter
  */
-class UnlicensedVehicleWeightTest extends TestCase
+final class UnlicensedVehicleWeightTest extends TestCase
 {
-    /**
-     * @dataProvider formatProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('formatProvider')]
     public function testFormat($data, $expected): void
     {
         $column = [
@@ -29,33 +29,31 @@ class UnlicensedVehicleWeightTest extends TestCase
             'name' => 'weight',
         ];
 
-        $this->assertEquals($expected, (new \Common\Service\Table\Formatter\UnlicensedVehicleWeight(new StackHelperService()))->format($data, $column));
+        $this->assertEquals($expected, new \Common\Service\Table\Formatter\UnlicensedVehicleWeight(new StackHelperService())->format($data, $column));
     }
 
     /**
-     * @return ((int|null)[][]|string)[][]
+     * @return \Iterator<(int | string), array<(array<array<(int | null)>> | string)>>
      *
      * @psalm-return array{'empty weight': list{array{vehicle: array{platedWeight: null}}, ''}, 'weight specified': list{array{vehicle: array{platedWeight: 99}}, '99 kg'}}
      */
-    public function formatProvider(): array
+    public static function formatProvider(): \Iterator
     {
-        return [
-            'empty weight' => [
-                [
-                    'vehicle' => [
-                        'platedWeight' => null,
-                    ],
+        yield 'empty weight' => [
+            [
+                'vehicle' => [
+                    'platedWeight' => null,
                 ],
-                '',
             ],
-            'weight specified' => [
-                [
-                    'vehicle' => [
-                        'platedWeight' => 99,
-                    ],
+            '',
+        ];
+        yield 'weight specified' => [
+            [
+                'vehicle' => [
+                    'platedWeight' => 99,
                 ],
-                '99 kg',
             ],
+            '99 kg',
         ];
     }
 }

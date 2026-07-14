@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\NullableNumber;
@@ -12,40 +14,38 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @package CommonTest\Service\Table\Formatter
  */
-class NullableNumberTest extends MockeryTestCase
+final class NullableNumberTest extends MockeryTestCase
 {
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group NullableNumberFormatter
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('NullableNumberFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data): void
     {
-        $this->assertEquals($data['expected'], (new NullableNumber())->format($data, ['name' => 'permitsRequired']));
+        $this->assertEquals($data['expected'], new NullableNumber()->format($data, ['name' => 'permitsRequired']));
     }
 
     /**
-     * @return (int|null)[][][]
+     * @return \Iterator<(int | string), array<array<(int | null)>>>
      *
      * @psalm-return list{list{array{permitsRequired: null, expected: 0}}, list{array{permitsRequired: 3, expected: 3}}}
      */
-    public function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'permitsRequired' => null,
-                    'expected' => 0
-                ],
+                'permitsRequired' => null,
+                'expected' => 0
             ],
+        ];
+        yield [
             [
-                [
-                    'permitsRequired' => 3,
-                    'expected' => 3
-                ],
+                'permitsRequired' => 3,
+                'expected' => 3
             ],
         ];
     }

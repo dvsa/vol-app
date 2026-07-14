@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\InputFilters;
 
 use Common\Form\Elements\InputFilters\Phone;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-/**
- * @covers \Common\Form\Elements\InputFilters\Phone
- */
-class PhoneTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\Elements\InputFilters\Phone::class)]
+final class PhoneTest extends MockeryTestCase
 {
     public function testInit(): void
     {
@@ -17,8 +17,8 @@ class PhoneTest extends MockeryTestCase
 
         $sut->init();
 
-        static::assertSame('\d(\+|-|\(|\))*', $sut->getAttribute('pattern'));
-        static::assertSame('contact-number-optional', $sut->getLabel());
+        $this->assertSame('\d(\+|-|\(|\))*', $sut->getAttribute('pattern'));
+        $this->assertSame('contact-number-optional', $sut->getLabel());
     }
 
     public function testValidators(): void
@@ -30,18 +30,15 @@ class PhoneTest extends MockeryTestCase
 
         $actual = $sut->getInputSpecification();
 
-        static::assertEquals('unit_Name', $actual['name']);
-        static::assertFalse($actual['required']);
-        static::assertEquals(
-            [
-                \Laminas\Validator\NotEmpty::class,
-                \Laminas\Validator\Regex::class,
-                \Laminas\Validator\StringLength::class,
-            ],
-            array_map(
-                static fn($item) => $item['name'],
-                $actual['validators']
-            )
-        );
+        $this->assertEquals('unit_Name', $actual['name']);
+        $this->assertFalse($actual['required']);
+        $this->assertSame([
+            \Laminas\Validator\NotEmpty::class,
+            \Laminas\Validator\Regex::class,
+            \Laminas\Validator\StringLength::class,
+        ], array_map(
+            static fn($item) => $item['name'],
+            $actual['validators']
+        ));
     }
 }

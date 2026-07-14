@@ -6,6 +6,8 @@
  * @author Alex Peshkov <alex.peshkov@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\InputFilters;
 
 use Common\Form\Elements\InputFilters\FeeWaiveNote;
@@ -15,7 +17,7 @@ use Common\Form\Elements\InputFilters\FeeWaiveNote;
  *
  * @author Alex Peshkov <alex.peshkov@clocal.co.uk>
  */
-class FeeWaiveNoteTest extends \PHPUnit\Framework\TestCase
+final class FeeWaiveNoteTest extends \PHPUnit\Framework\TestCase
 {
     /**+
      * Holds the element
@@ -33,12 +35,12 @@ class FeeWaiveNoteTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test validators
-     * @group feeWaiveNote
      */
+    #[\PHPUnit\Framework\Attributes\Group('feeWaiveNote')]
     public function testValidators(): void
     {
         $spec = $this->element->getInputSpecification();
-        $this->assertEquals($spec['validators'][0]['name'], \Laminas\Validator\StringLength::class);
-        $this->assertEquals($spec['validators'][1]['name'], \Laminas\Validator\NotEmpty::class);
+        $this->assertEquals(\Laminas\Validator\StringLength::class, $spec['validators'][0]['name']);
+        $this->assertEquals(\Laminas\Validator\NotEmpty::class, $spec['validators'][1]['name']);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Common;
 
 use Common\Service\Qa\Custom\Common\DateBeforeValidator;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class DateSelectMustBeBeforeTest extends MockeryTestCase
+final class DateSelectMustBeBeforeTest extends MockeryTestCase
 {
     public function testGetInputSpecification(): void
     {

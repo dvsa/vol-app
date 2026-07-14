@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa;
 
 use Common\Service\Qa\TranslateableTextParameterHandler;
@@ -13,7 +15,7 @@ use Laminas\View\Helper\AbstractHelper;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class TranslateableTextParameterHandlerTest extends MockeryTestCase
+final class TranslateableTextParameterHandlerTest extends MockeryTestCase
 {
     private $helper;
 

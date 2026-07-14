@@ -14,7 +14,7 @@ use Dvsa\OlcsTest\Api\Domain\Repository\Query\AbstractDbQueryTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CreateGoodsDiscsTest extends AbstractDbQueryTestCase
+final class CreateGoodsDiscsTest extends AbstractDbQueryTestCase
 {
     protected $tableNameMap = [
         GoodsDisc::class => 'goods_disc',
@@ -61,23 +61,21 @@ class CreateGoodsDiscsTest extends AbstractDbQueryTestCase
         ],
     ];
 
-    public static function paramProvider(): array
+    public static function paramProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'licence' => 1102,
-                    'applciation' => 321,
-                    'isCopy' => 1,
-                ],
-                [],
-                [
-                    'licence' => 1102,
-                    'applciation' => 321,
-                    'isCopy' => 1,
-                ],
-                []
-            ]
+                'licence' => 1102,
+                'applciation' => 321,
+                'isCopy' => 1,
+            ],
+            [],
+            [
+                'licence' => 1102,
+                'applciation' => 321,
+                'isCopy' => 1,
+            ],
+            []
         ];
     }
 

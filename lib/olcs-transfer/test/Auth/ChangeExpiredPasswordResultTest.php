@@ -8,11 +8,9 @@ use Dvsa\Olcs\Transfer\Result\Auth\ChangeExpiredPasswordResult;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-class ChangeExpiredPasswordResultTest extends TestCase
+final class ChangeExpiredPasswordResultTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructThrowsInvalidArgumentExceptionWhenCodeIsNotValid()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -21,31 +19,32 @@ class ChangeExpiredPasswordResultTest extends TestCase
         new ChangeExpiredPasswordResult(999);
     }
 
-    /**
-     * @test
-     * @dataProvider validCodeDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('codeDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructCreatesInstanceWhenCodeIsValid(int $code)
     {
         $this->assertInstanceOf(ChangeExpiredPasswordResult::class, new ChangeExpiredPasswordResult($code));
     }
 
-    public function validCodeDataProvider()
+    public static function validCodeDataProvider(): \Iterator
     {
-        return [
-            'Success' => [ChangeExpiredPasswordResult::SUCCESS, true],
-            'Success with challenge' => [ChangeExpiredPasswordResult::SUCCESS_WITH_CHALLENGE, true],
-            'Failure' => [ChangeExpiredPasswordResult::FAILURE, false],
-            'Failure new password invalid' => [ChangeExpiredPasswordResult::FAILURE_NEW_PASSWORD_INVALID, false],
-            'failure not authorized' => [ChangeExpiredPasswordResult::FAILURE_NOT_AUTHORIZED, false],
-            'failure client error' => [ChangeExpiredPasswordResult::FAILURE_CLIENT_ERROR, false],
-        ];
+        yield 'Success' => [ChangeExpiredPasswordResult::SUCCESS, true];
+        yield 'Success with challenge' => [ChangeExpiredPasswordResult::SUCCESS_WITH_CHALLENGE, true];
+        yield 'Failure' => [ChangeExpiredPasswordResult::FAILURE, false];
+        yield 'Failure new password invalid' => [ChangeExpiredPasswordResult::FAILURE_NEW_PASSWORD_INVALID, false];
+        yield 'failure not authorized' => [ChangeExpiredPasswordResult::FAILURE_NOT_AUTHORIZED, false];
+        yield 'failure client error' => [ChangeExpiredPasswordResult::FAILURE_CLIENT_ERROR, false];
     }
 
-    /**
-     * @test
-     * @dataProvider validCodeDataProvider
-     */
+    public static function codeDataProvider(): \Iterator
+    {
+        foreach (self::validCodeDataProvider() as $name => [$code, $isValid]) {
+            yield $name => [$code];
+        }
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('validCodeDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function isValidReturnsExpectedResponse(int $code, bool $isValid)
     {
         $result = new ChangeExpiredPasswordResult($code);

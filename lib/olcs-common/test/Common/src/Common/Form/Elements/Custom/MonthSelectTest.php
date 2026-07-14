@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Custom;
 
 use Common\Form\Elements\Custom\MonthSelect;
@@ -15,7 +17,7 @@ use Common\Form\Elements\Custom\MonthSelect;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class MonthSelectTest extends \PHPUnit\Framework\TestCase
+final class MonthSelectTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 

@@ -183,8 +183,8 @@ class PublicationLink extends AbstractPublicationLink
         PublicationEntity $publication,
         PublicationSectionEntity $publicationSection,
         TrafficAreaEntity $trafficArea,
-        LicenceEntity $licence = null,
-        ApplicationEntity $application = null
+        ?LicenceEntity $licence = null,
+        ?ApplicationEntity $application = null
     ) {
         if (!$publication->canGenerate()) {
             throw new ForbiddenException(self::ADD_ENTRY_ERROR);

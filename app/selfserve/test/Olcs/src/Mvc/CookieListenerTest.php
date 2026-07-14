@@ -17,7 +17,7 @@ use Laminas\Mvc\MvcEvent;
 use Laminas\View\Helper\Placeholder;
 use Laminas\View\Helper\Placeholder\Container;
 
-class CookieListenerTest extends MockeryTestCase
+final class CookieListenerTest extends MockeryTestCase
 {
     /**
      * @var CookieListener
@@ -28,6 +28,7 @@ class CookieListenerTest extends MockeryTestCase
 
     protected $placeholder;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->cookieReader = m::mock(CookieReader::class);

@@ -12,7 +12,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class ConvictionControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ConvictionController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ConvictionController
     {
         $translationHelperService = $container->get(TranslationHelperService::class);
         assert($translationHelperService instanceof TranslationHelperService);

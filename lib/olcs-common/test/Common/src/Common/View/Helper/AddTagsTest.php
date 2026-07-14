@@ -6,6 +6,8 @@
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Helper;
 
 use Common\View\Helper\AddTags;
@@ -15,11 +17,9 @@ use Common\View\Helper\AddTags;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class AddTagsTest extends \PHPUnit\Framework\TestCase
+final class AddTagsTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider provideStrings
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideStrings')]
     public function testInvoke($input, $expected): void
     {
         $helper = new AddTags();
@@ -28,21 +28,19 @@ class AddTagsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return string[][]
-     *
-     * @psalm-return list{list{'no text to replace', 'no text to replace'}, list{'text to replace (if applicable)', 'text to replace <span class=js-hidden>(if applicable)</span>'}, list{'multiline to replace (if
-                applicable)', 'multiline to replace <span class=js-hidden>(if applicable)</span>'}}
-     */
-    public function provideStrings(): array
+     * @return \Iterator<(int | string), array<string>>
+    *
+    * @psalm-return list{list{'no text to replace', 'no text to replace'}, list{'text to replace (if applicable)', 'text to replace <span class=js-hidden>(if applicable)</span>'}, list{'multiline to replace (if
+               applicable)', 'multiline to replace <span class=js-hidden>(if applicable)</span>'}}
+    */
+    public static function provideStrings(): \Iterator
     {
-        return [
-            ['no text to replace', 'no text to replace'],
-            ['text to replace (if applicable)', 'text to replace <span class=js-hidden>(if applicable)</span>'],
-            [
-                'multiline to replace (if
+        yield ['no text to replace', 'no text to replace'];
+        yield ['text to replace (if applicable)', 'text to replace <span class=js-hidden>(if applicable)</span>'];
+        yield [
+            'multiline to replace (if
                 applicable)',
-                'multiline to replace <span class=js-hidden>(if applicable)</span>'
-            ]
+            'multiline to replace <span class=js-hidden>(if applicable)</span>'
         ];
     }
 }

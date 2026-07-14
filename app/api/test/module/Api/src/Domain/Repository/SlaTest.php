@@ -18,8 +18,9 @@ use Dvsa\Olcs\Api\Domain\Repository;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class SlaTest extends RepositoryTestCase
+final class SlaTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repository\Sla::class);

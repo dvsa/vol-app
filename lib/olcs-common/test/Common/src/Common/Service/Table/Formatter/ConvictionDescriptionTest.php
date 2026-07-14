@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\ConvictionDescription;
@@ -8,11 +10,9 @@ use Common\Service\Table\Formatter\ConvictionDescription;
  * Class ConvictionDescriptionTest
  * @package CommonTest\Service\Table\Formatter
  */
-class ConvictionDescriptionTest extends \PHPUnit\Framework\TestCase
+final class ConvictionDescriptionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider convictionDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('convictionDataProvider')]
     public function testFormat($convictionData, $expected): void
     {
         $sut = new ConvictionDescription();
@@ -25,43 +25,41 @@ class ConvictionDescriptionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return ((null|string|string[])[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(array<string> | string | null)> | string)>>
      *
      * @psalm-return list{list{array{convictionCategory: array{id: 'conv_c_cat_1144', description: 'User defined'}, categoryText: 'userdefinedtext_01234567890123456789'}, 'userdefinedtext_01234567890123...'}, list{array{convictionCategory: null, categoryText: 'userdefinedtext_01234567890123456789'}, 'userdefinedtext_01234567890123...'}, list{array{convictionCategory: array{id: 'conv_c_cat_someother', description: 'Some Other_012345678901234567890123456789'}, categoryText: 'userdefinedtext_01234567890123456789'}, 'Some Other_0123456789012345678...'}}
      */
-    public function convictionDataProvider(): array
+    public static function convictionDataProvider(): \Iterator
     {
-        return [
+        yield [
+            /* Test User defined category - should use categoryText */
             [
-                /* Test User defined category - should use categoryText */
-                [
-                    'convictionCategory' => [
-                        'id' => 'conv_c_cat_1144',
-                        'description' => 'User defined',
-                    ],
-                    'categoryText' => 'userdefinedtext_01234567890123456789'
+                'convictionCategory' => [
+                    'id' => 'conv_c_cat_1144',
+                    'description' => 'User defined',
                 ],
-                'userdefinedtext_01234567890123...'
+                'categoryText' => 'userdefinedtext_01234567890123456789'
             ],
+            'userdefinedtext_01234567890123...'
+        ];
+        yield [
+            /* Test empty category - should use categoryText */
             [
-                /* Test empty category - should use categoryText */
-                [
-                    'convictionCategory' => null,
-                    'categoryText' => 'userdefinedtext_01234567890123456789'
-                ],
-                'userdefinedtext_01234567890123...'
+                'convictionCategory' => null,
+                'categoryText' => 'userdefinedtext_01234567890123456789'
             ],
+            'userdefinedtext_01234567890123...'
+        ];
+        yield [
+            /* Test other category - should use categoryDescription */
             [
-                /* Test other category - should use categoryDescription */
-                [
-                    'convictionCategory' => [
-                        'id' => 'conv_c_cat_someother',
-                        'description' => 'Some Other_012345678901234567890123456789',
-                    ],
-                    'categoryText' => 'userdefinedtext_01234567890123456789'
+                'convictionCategory' => [
+                    'id' => 'conv_c_cat_someother',
+                    'description' => 'Some Other_012345678901234567890123456789',
                 ],
-                'Some Other_0123456789012345678...'
-            ]
+                'categoryText' => 'userdefinedtext_01234567890123456789'
+            ],
+            'Some Other_0123456789012345678...'
         ];
     }
 }

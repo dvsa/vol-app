@@ -14,7 +14,7 @@ use Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter::class)]
-class ApplicationPeopleAdapterTest extends MockeryTestCase
+final class ApplicationPeopleAdapterTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCanModify')]
     public function testCanModify(bool $isExcOrg, bool $isInForce, bool $expect): void
@@ -42,32 +42,30 @@ class ApplicationPeopleAdapterTest extends MockeryTestCase
 
         $sut->loadPeopleData(AbstractController::LVA_LIC, 999);
 
-        static::assertEquals($expect, $sut->canModify());
+        $this->assertEquals($expect, $sut->canModify());
     }
 
     /**
-     * @return bool[][]
+     * @return \Iterator<(int | string), array<bool>>
      *
      * @psalm-return list{array{inForce: false, isExcOrg: true, expect: true}, array{inForce: true, isExcOrg: false, expect: true}, array{isExcOrg: true, inForce: true, expect: false}}
      */
-    public static function dpTestCanModify(): array
+    public static function dpTestCanModify(): \Iterator
     {
-        return [
-            [
-                'isExcOrg' => false,
-                'isInForce' => true,
-                'expect' => true,
-            ],
-            [
-                'isExcOrg' => true,
-                'isInForce' => false,
-                'expect' => true,
-            ],
-            [
-                'isExcOrg' => true,
-                'isInForce' => true,
-                'expect' => false,
-            ],
+        yield [
+            'isExcOrg' => false,
+            'isInForce' => true,
+            'expect' => true,
+        ];
+        yield [
+            'isExcOrg' => true,
+            'isInForce' => false,
+            'expect' => true,
+        ];
+        yield [
+            'isExcOrg' => true,
+            'isInForce' => true,
+            'expect' => false,
         ];
     }
 }

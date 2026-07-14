@@ -26,7 +26,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class UpdateImpoundingTest extends AbstractCommandHandlerTestCase
+final class UpdateImpoundingTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

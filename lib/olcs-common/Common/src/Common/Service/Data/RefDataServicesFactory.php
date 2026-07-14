@@ -16,7 +16,7 @@ class RefDataServicesFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): RefDataServices
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): RefDataServices
     {
         return new RefDataServices(
             $container->get(AbstractListDataServiceServices::class),

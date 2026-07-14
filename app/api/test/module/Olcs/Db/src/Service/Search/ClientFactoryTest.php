@@ -10,7 +10,7 @@ use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Mockery as m;
 use Psr\Container\ContainerInterface;
 
-class ClientFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
+final class ClientFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     public function testInvoke(): void
     {

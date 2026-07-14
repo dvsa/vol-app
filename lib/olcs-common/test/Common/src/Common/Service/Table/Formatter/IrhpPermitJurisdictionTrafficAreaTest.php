@@ -6,41 +6,41 @@
  * @author Scott Callaway <scott.callaway@capgemini.com>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\IrhpPermitJurisdictionTrafficArea;
 
-class IrhpPermitJurisdictionTrafficAreaTest extends \PHPUnit\Framework\TestCase
+final class IrhpPermitJurisdictionTrafficAreaTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group IrhpPermitJurisdictionFormatter
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('IrhpPermitJurisdictionFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $expected): void
     {
-        $this->assertEquals($expected, (new IrhpPermitJurisdictionTrafficArea())->format($data));
+        $this->assertEquals($expected, new IrhpPermitJurisdictionTrafficArea()->format($data));
     }
 
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'basic traffic area' => [
-                [
-                    'trafficArea' => [
-                        'name' => 'North East of England'
-                    ],
+        yield 'basic traffic area' => [
+            [
+                'trafficArea' => [
+                    'name' => 'North East of England'
                 ],
-                'North East of England',
-            ]
+            ],
+            'North East of England',
         ];
     }
 }

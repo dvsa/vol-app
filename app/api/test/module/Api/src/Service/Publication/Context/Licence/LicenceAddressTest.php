@@ -17,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class LicenceAddressTest
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class LicenceAddressTest extends MockeryTestCase
+final class LicenceAddressTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\Group('publicationFilter
 Test the licence address filter')]

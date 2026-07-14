@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table;
 
 use Common\Rbac\Service\Permission;
@@ -12,7 +14,7 @@ use Laminas\ServiceManager\ServiceManager;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-class TableFactoryTest extends MockeryTestCase
+final class TableFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {
@@ -33,7 +35,7 @@ class TableFactoryTest extends MockeryTestCase
 
         $table = $tableFactory->__invoke($serviceLocator, TableBuilder::class)->getTableBuilder();
 
-        $this->assertTrue($table instanceof TableBuilder);
+        $this->assertInstanceOf(\Common\Service\Table\TableBuilder::class, $table);
     }
 
     /**

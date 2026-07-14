@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Data\Mapper\Licence\Surrender\Sections;
 
 use Common\Data\Mapper\Licence\Surrender\ReviewDetails;
@@ -8,81 +10,48 @@ use CommonTest\Common\Data\Mapper\Licence\Surrender\ReviewContactDetailsMocksAnd
 use PHPUnit\Framework\TestCase;
 use Laminas\Mvc\Controller\Plugin\Url;
 
-class ReviewDetailsTest extends TestCase
+final class ReviewDetailsTest extends TestCase
 {
     use ReviewContactDetailsMocksAndExpectationsTrait;
-
-    protected $sut;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->sut = new ReviewDetails();
+        $sut = new ReviewDetails();
     }
 
-    /**
-     * @dataProvider  dpReviewDetails
-     */
-    public function testMakeSectionsLicence($licence, $surrender): void
+    public function testMakeSectionsLicence(): void
     {
-        $mockTranslator = \Mockery::mock(TranslationHelperService::class);
-        $mockUrlHelper = \Mockery::mock(Url::class);
-        $mockLicence = $licence[0];
-        $mockSurrender = $surrender[0];
-        $this->mockTranslatorForLicenceDetails($mockTranslator);
-        $this->mockTranslatorForCurrentDiscs($mockTranslator);
-        $this->mockTranslatorForOperatorLicence($mockTranslator);
+        foreach (['StandardLicence', 'StandardInternational'] as $typeOfLicence) {
+            $mockTranslator = \Mockery::mock(TranslationHelperService::class);
+            $mockUrlHelper = \Mockery::mock(Url::class);
+            $mockLicence = $this->mockLicence();
+            $mockSurrender = $this->surrender();
+            $this->mockTranslatorForLicenceDetails($mockTranslator);
+            $this->mockTranslatorForCurrentDiscs($mockTranslator);
+            $this->mockTranslatorForOperatorLicence($mockTranslator);
 
-        $this->mockUrlHelperFromRoute($mockUrlHelper, 'licence/surrender/current-discs/review/GET', 4);
-        $this->mockUrlHelperFromRoute($mockUrlHelper, 'licence/surrender/operator-licence/review/GET', 2);
+            $this->mockUrlHelperFromRoute($mockUrlHelper, 'licence/surrender/current-discs/review/GET', 4);
+            $this->mockUrlHelperFromRoute($mockUrlHelper, 'licence/surrender/operator-licence/review/GET', 2);
 
-        $typeOfLicence = $this->dataName();
+            $expected = [
+                $this->expectedForLicenceDetails(),
+                $this->expectedDiscs(),
+                $this->expectedOperatorLicence()
 
-        $expected = [
-            $this->expectedForLicenceDetails(),
-            $this->expectedDiscs(),
-            $this->expectedOperatorLicence()
+            ];
 
-        ];
+            if ($typeOfLicence === 'StandardInternational') {
+                $mockSurrender['surrender']['isInternationalLicence'] = true;
+                $this->mockUrlHelperFromRoute($mockUrlHelper, 'licence/surrender/community-licence/review/GET', 2);
+                $this->mockTranslatorForCommunityLicence($mockTranslator);
+                $expected[] = $this->expectedCommunityLicence();
+            }
 
-        if ($typeOfLicence === 'StandardInternational') {
-            $mockSurrender['surrender']['isInternationalLicence'] = true;
-            $this->mockUrlHelperFromRoute($mockUrlHelper, 'licence/surrender/community-licence/review/GET', 2);
-            $this->mockTranslatorForCommunityLicence($mockTranslator);
-            $expected[] = $this->expectedCommunityLicence();
+            $sections = ReviewDetails::makeSections($mockLicence, $mockUrlHelper, $mockTranslator, $mockSurrender);
+
+            $this->assertSame($expected, $sections);
         }
-
-        $sections = ReviewDetails::makeSections($mockLicence, $mockUrlHelper, $mockTranslator, $mockSurrender);
-
-        $this->assertSame($expected, $sections);
-    }
-
-    /**
-     * @return array[][][]
-     *
-     * @psalm-return array{StandardLicence: list{list{array}, list{array}}, StandardInternational: list{list{array}, list{array}}}
-     */
-    public function dpReviewDetails(): array
-    {
-        return [
-            'StandardLicence' => [
-                [
-                    $this->mockLicence()
-                ],
-                [
-                    $this->surrender()
-                ]
-            ],
-            'StandardInternational' => [
-                [
-                    $this->mockLicence()
-                ],
-                [
-                    $this->surrender()
-                ]
-            ]
-
-        ];
     }
 
     public function surrender(): array

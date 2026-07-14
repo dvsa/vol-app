@@ -12,7 +12,7 @@ use Mockery as m;
 /**
  * Class DataRetentionRuleTest
  */
-class DataRetentionRuleTest extends MockeryTestCase
+final class DataRetentionRuleTest extends MockeryTestCase
 {
     public function testMapFromResult(): void
     {

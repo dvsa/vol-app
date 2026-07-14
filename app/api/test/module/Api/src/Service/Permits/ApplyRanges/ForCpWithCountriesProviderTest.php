@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ForCpWithCountriesProviderTest extends MockeryTestCase
+final class ForCpWithCountriesProviderTest extends MockeryTestCase
 {
     private $result;
 
@@ -41,6 +41,7 @@ class ForCpWithCountriesProviderTest extends MockeryTestCase
 
     private $forCpWithCountriesProvider;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->result = new Result();

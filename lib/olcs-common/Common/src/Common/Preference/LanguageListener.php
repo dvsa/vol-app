@@ -64,7 +64,7 @@ class LanguageListener implements ListenerAggregateInterface, FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LanguageListener
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LanguageListener
     {
         $this->languagePref = $container->get('LanguagePreference');
         $this->flashMessenger = $container->get('Helper\FlashMessenger');

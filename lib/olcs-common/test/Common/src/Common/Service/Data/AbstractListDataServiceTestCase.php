@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use Common\Service\Data\AbstractListDataServiceServices;
@@ -16,7 +18,6 @@ class AbstractListDataServiceTestCase extends AbstractDataServiceTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->abstractListDataServiceServices = new AbstractListDataServiceServices(
             $this->abstractDataServiceServices
         );

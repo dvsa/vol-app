@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class ApplicationPathEntityTest extends EntityTester
+final class ApplicationPathEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

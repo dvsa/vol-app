@@ -22,9 +22,9 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Bus\GrantBusReg::class)]
-class GrantBusRegTest extends AbstractCommandHandlerTestCase
+final class GrantBusRegTest extends AbstractCommandHandlerTestCase
 {
-    public const BUS_REG_ID = 9999;
+    public const int BUS_REG_ID = 9999;
 
     /** @var  GrantBusReg */
     protected $sut;
@@ -149,31 +149,26 @@ class GrantBusRegTest extends AbstractCommandHandlerTestCase
 
         $actual = $this->sut->handleCommand($command);
 
-        static::assertEquals(
-            [
-                'id' => [
-                    'bus' => self::BUS_REG_ID,
-                ],
-                'messages' => [
-                    'Bus Reg granted successfully',
-                ],
+        $this->assertEquals([
+            'id' => [
+                'bus' => self::BUS_REG_ID,
             ],
-            $actual->toArray()
-        );
+            'messages' => [
+                'Bus Reg granted successfully',
+            ],
+        ], $actual->toArray());
         $this->assertInstanceOf(Result::class, $actual);
     }
 
     /**
      * data provider for testHandleCommand
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function handleCommandProvider(): array
+    public static function handleCommandProvider(): \Iterator
     {
-        return [
-            [BusRegEntity::STATUS_VAR],
-            [BusRegEntity::STATUS_CANCEL],
-        ];
+        yield [BusRegEntity::STATUS_VAR];
+        yield [BusRegEntity::STATUS_CANCEL];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandEbsrProvider')]
@@ -235,13 +230,11 @@ class GrantBusRegTest extends AbstractCommandHandlerTestCase
     /**
      * Data provider for testHandleCommandEbsrRecord
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function handleCommandEbsrProvider(): array
+    public static function handleCommandEbsrProvider(): \Iterator
     {
-        return [
-            [BusRegEntity::STATUS_VAR, SendEbsrRegistered::class],
-            [BusRegEntity::STATUS_CANCEL, SendEbsrCancelled::class],
-        ];
+        yield [BusRegEntity::STATUS_VAR, SendEbsrRegistered::class];
+        yield [BusRegEntity::STATUS_CANCEL, SendEbsrCancelled::class];
     }
 }

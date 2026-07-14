@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper;
 
 use Common\Form\NoOfPermitsForm;
@@ -15,7 +17,7 @@ use Laminas\Form\Fieldset;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsFormTest extends TestCase
+final class NoOfPermitsFormTest extends TestCase
 {
     public function testParentNotValidNoZeroesCheckRequired(): void
     {

@@ -117,14 +117,14 @@ final class CompaniesHouseVsOlcsDiffsExport extends AbstractCommandHandler
         $row = $dbalResult->fetchAssociative();
 
         if ($row !== false) {
-            fputcsv($fh, array_keys($row));
-            fputcsv($fh, $row);
+            fputcsv($fh, array_keys($row), ',', '"', '\\');
+            fputcsv($fh, $row, ',', '"', '\\');
         }
 
         //  add rows
         while (($row = $dbalResult->fetchAssociative()) !== false) {
             //  add rows to csv from pool
-            fputcsv($fh, $row);
+            fputcsv($fh, $row, ',', '"', '\\');
         }
 
         //  close file
@@ -132,7 +132,7 @@ final class CompaniesHouseVsOlcsDiffsExport extends AbstractCommandHandler
     }
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $config = $container->get('config');
         $exportCfg = (!empty($config['ch-vs-olcs-export']) ? $config['ch-vs-olcs-export'] : []);

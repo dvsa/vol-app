@@ -8,7 +8,7 @@ use Common\Util\Redirect;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class RedirectTest extends MockeryTestCase
+final class RedirectTest extends MockeryTestCase
 {
     protected $sut;
 

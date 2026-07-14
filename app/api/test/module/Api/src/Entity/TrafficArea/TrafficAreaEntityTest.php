@@ -16,7 +16,7 @@ use Mockery as m;
  * Initially auto-generated but won't be overridden
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class TrafficAreaEntityTest extends EntityTester
+final class TrafficAreaEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -25,22 +25,22 @@ class TrafficAreaEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public const PUB_RECIPIENT_NAME1 = 'name 1';
-    public const PUB_RECIPIENT_NAME2 = 'name 2';
-    public const PUB_RECIPIENT_NAME3 = 'name 3';
-    public const PUB_RECIPIENT_NAME4 = 'name 4';
-    public const PUB_RECIPIENT_NAME5 = 'name 5';
-    public const PUB_RECIPIENT_NAME6 = 'name 6';
-    public const PUB_RECIPIENT_NAME7 = 'name 7';
-    public const PUB_RECIPIENT_NAME8 = 'name 8';
-    public const PUB_RECIPIENT_EMAIL1 = 'email1@foo.bar';
-    public const PUB_RECIPIENT_EMAIL2 = 'email2@foo.bar';
-    public const PUB_RECIPIENT_EMAIL3 = 'email3@foo.bar';
-    public const PUB_RECIPIENT_EMAIL4 = 'email4@foo.bar';
-    public const PUB_RECIPIENT_EMAIL5 = 'email5@foo.bar';
-    public const PUB_RECIPIENT_EMAIL6 = 'email6@foo.bar';
-    public const PUB_RECIPIENT_EMAIL7 = 'email7@foo.bar';
-    public const PUB_RECIPIENT_EMAIL8 = 'email8@foo.bar';
+    public const string PUB_RECIPIENT_NAME1 = 'name 1';
+    public const string PUB_RECIPIENT_NAME2 = 'name 2';
+    public const string PUB_RECIPIENT_NAME3 = 'name 3';
+    public const string PUB_RECIPIENT_NAME4 = 'name 4';
+    public const string PUB_RECIPIENT_NAME5 = 'name 5';
+    public const string PUB_RECIPIENT_NAME6 = 'name 6';
+    public const string PUB_RECIPIENT_NAME7 = 'name 7';
+    public const string PUB_RECIPIENT_NAME8 = 'name 8';
+    public const string PUB_RECIPIENT_EMAIL1 = 'email1@foo.bar';
+    public const string PUB_RECIPIENT_EMAIL2 = 'email2@foo.bar';
+    public const string PUB_RECIPIENT_EMAIL3 = 'email3@foo.bar';
+    public const string PUB_RECIPIENT_EMAIL4 = 'email4@foo.bar';
+    public const string PUB_RECIPIENT_EMAIL5 = 'email5@foo.bar';
+    public const string PUB_RECIPIENT_EMAIL6 = 'email6@foo.bar';
+    public const string PUB_RECIPIENT_EMAIL7 = 'email7@foo.bar';
+    public const string PUB_RECIPIENT_EMAIL8 = 'email8@foo.bar';
 
     /**
      * Test getPublicationRecipients
@@ -140,9 +140,9 @@ class TrafficAreaEntityTest extends EntityTester
     /**
      * Data provider for testGetPublicationRecipients
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function publicationRecipientsProvider(): array
+    public static function publicationRecipientsProvider(): \Iterator
     {
         $adPoliceRecipients = [
             self::PUB_RECIPIENT_EMAIL2 => self::PUB_RECIPIENT_NAME2,
@@ -163,12 +163,9 @@ class TrafficAreaEntityTest extends EntityTester
             self::PUB_RECIPIENT_EMAIL5 => self::PUB_RECIPIENT_NAME5,
             self::PUB_RECIPIENT_EMAIL7 => self::PUB_RECIPIENT_NAME7
         ];
-
-        return [
-            ['A&D', 'Y', 1, 0, 0, 0, $adPoliceRecipients],
-            ['A&D', 'N', 0, 1, 0, 0, $adNonPoliceRecipients],
-            ['N&P', 'Y', 0, 0, 1, 0, $npPoliceRecipients],
-            ['N&P', 'N', 0, 0, 0, 1, $npNonPoliceRecipients]
-        ];
+        yield ['A&D', 'Y', 1, 0, 0, 0, $adPoliceRecipients];
+        yield ['A&D', 'N', 0, 1, 0, 0, $adNonPoliceRecipients];
+        yield ['N&P', 'Y', 0, 0, 1, 0, $npPoliceRecipients];
+        yield ['N&P', 'N', 0, 0, 0, 1, $npNonPoliceRecipients];
     }
 }

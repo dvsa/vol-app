@@ -18,7 +18,7 @@ class SessionFactory implements FactoryInterface
      * @throws Exception
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Session
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Session
     {
         $sessionName = $container->get('config')['auth']['session_name'] ?? '';
         if (empty($sessionName)) {

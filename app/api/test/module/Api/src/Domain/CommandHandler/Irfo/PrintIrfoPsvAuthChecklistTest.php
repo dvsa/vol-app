@@ -25,7 +25,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 /**
  * Print IRFO PSV Auth Checklist Test
  */
-class PrintIrfoPsvAuthChecklistTest extends AbstractCommandHandlerTestCase
+final class PrintIrfoPsvAuthChecklistTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -140,39 +140,37 @@ class PrintIrfoPsvAuthChecklistTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function handleCommandProvider(): array
+    public static function handleCommandProvider(): \Iterator
     {
-        return [
-            [
-                IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_EU_REG_17,
-                'IRFO_app_eu_regular_service'
-            ],
-            [
-                IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_EU_REG_19A,
-                'IRFO_app_eu_regular_service'
-            ],
-            [
-                IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_NON_EU_OCCASIONAL_19,
-                'IRFO_app_non_eu_service'
-            ],
-            [
-                IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_NON_EU_REG_18,
-                'IRFO_app_non_eu_service'
-            ],
-            [
-                IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_NON_EU_REG_19,
-                'IRFO_app_non_eu_service'
-            ],
-            [
-                IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_SHUTTLE_OPERATOR_20,
-                'IRFO_app_non_eu_service'
-            ],
-            [
-                IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_OWN_AC_21,
-                'IRFO_app_non_eu_service'
-            ],
+        yield [
+            IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_EU_REG_17,
+            'IRFO_app_eu_regular_service'
+        ];
+        yield [
+            IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_EU_REG_19A,
+            'IRFO_app_eu_regular_service'
+        ];
+        yield [
+            IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_NON_EU_OCCASIONAL_19,
+            'IRFO_app_non_eu_service'
+        ];
+        yield [
+            IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_NON_EU_REG_18,
+            'IRFO_app_non_eu_service'
+        ];
+        yield [
+            IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_NON_EU_REG_19,
+            'IRFO_app_non_eu_service'
+        ];
+        yield [
+            IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_SHUTTLE_OPERATOR_20,
+            'IRFO_app_non_eu_service'
+        ];
+        yield [
+            IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_OWN_AC_21,
+            'IRFO_app_non_eu_service'
         ];
     }
 

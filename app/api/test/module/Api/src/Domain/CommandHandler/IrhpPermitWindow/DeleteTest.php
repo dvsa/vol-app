@@ -19,7 +19,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow as PermitWindowEntity;
  *
  * @author Scott Callaway <scott.callaway@capgemini.com>
  */
-class DeleteTest extends AbstractCommandHandlerTestCase
+final class DeleteTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

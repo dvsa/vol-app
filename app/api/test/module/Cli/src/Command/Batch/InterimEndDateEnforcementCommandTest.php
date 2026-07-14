@@ -16,7 +16,7 @@ use Laminas\Mvc\Application;
 use Symfony\Component\Console\Command\Command;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class InterimEndDateEnforcementCommandTest extends AbstractBatchCommandCases
+final class InterimEndDateEnforcementCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

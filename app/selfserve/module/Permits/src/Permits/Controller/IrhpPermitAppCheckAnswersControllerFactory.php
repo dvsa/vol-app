@@ -23,7 +23,7 @@ class IrhpPermitAppCheckAnswersControllerFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpPermitAppCheckAnswersController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): IrhpPermitAppCheckAnswersController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         $formHelper = $container->get(FormHelperService::class);

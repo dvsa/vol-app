@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Lva;
 
 use Dvsa\Olcs\Transfer\Command\Lva\AbstractUpdateCompanySubsidiary;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Command\Lva\AbstractCreateCompanySubsidiary
- * @covers Dvsa\Olcs\Transfer\Command\Lva\AbstractUpdateCompanySubsidiary
- */
-class AbstractUpdateCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\Lva\AbstractCreateCompanySubsidiary::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\Lva\AbstractUpdateCompanySubsidiary::class)]
+final class AbstractUpdateCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetSet()
     {
@@ -24,9 +24,9 @@ class AbstractUpdateCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals(111, $command->getId());
-        static::assertEquals(2, $command->getVersion());
-        static::assertEquals('unit_name', $command->getName());
-        static::assertEquals('unit_CompNo', $command->getCompanyNo());
+        $this->assertEquals(111, $command->getId());
+        $this->assertEquals(2, $command->getVersion());
+        $this->assertEquals('unit_name', $command->getName());
+        $this->assertEquals('unit_CompNo', $command->getCompanyNo());
     }
 }

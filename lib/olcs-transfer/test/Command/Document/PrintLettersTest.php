@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Document;
 
 use Dvsa\Olcs\Transfer\Command\Document\PrintLetters;
@@ -7,7 +9,7 @@ use Dvsa\OlcsTest\Transfer\Command\CommandTest;
 use Dvsa\OlcsTest\Transfer\DtoWithoutOptionalFieldsTest;
 use PHPUnit\Framework\TestCase;
 
-class PrintLettersTest extends TestCase
+final class PrintLettersTest extends TestCase
 {
     use CommandTest, DtoWithoutOptionalFieldsTest {
         DtoWithoutOptionalFieldsTest::testDefaultValues insteadof CommandTest;

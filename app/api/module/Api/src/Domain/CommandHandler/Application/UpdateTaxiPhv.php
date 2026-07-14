@@ -97,7 +97,7 @@ final class UpdateTaxiPhv extends AbstractCommandHandler implements Transactione
         );
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $fullContainer = $container;
 

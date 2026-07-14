@@ -9,9 +9,7 @@ use PHPUnit\Framework\Assert as Assert;
  */
 trait DtoWithoutFieldTransformationsTest
 {
-    /**
-     * @doesNotPerformAssertions
-     */
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testFieldTransformations()
     {
         // the test as defined by DtoTest is only relevant to Dto with filtered fields

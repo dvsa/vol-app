@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BkmOurRef as Sut;
 /**
  * BkmOurRef Test
  */
-class BkmOurRefTest extends \PHPUnit\Framework\TestCase
+final class BkmOurRefTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -31,15 +31,13 @@ class BkmOurRefTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'id' => 123
-                ],
-                'PT2/21/123'
+                'id' => 123
             ],
+            'PT2/21/123'
         ];
     }
 }

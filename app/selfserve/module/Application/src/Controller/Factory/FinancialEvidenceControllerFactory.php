@@ -27,7 +27,7 @@ class FinancialEvidenceControllerFactory implements FactoryInterface
      * @return FinancialEvidenceController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FinancialEvidenceController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): FinancialEvidenceController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

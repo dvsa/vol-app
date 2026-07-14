@@ -30,6 +30,7 @@ abstract class AbstractConsumerTestCase extends MockeryTestCase
 
     protected $consumerClass = 'override_me';
 
+    #[\Override]
     public function setUp(): void
     {
         $this->chm = m::mock(CommandHandlerManager::class);

@@ -10,9 +10,9 @@ use Dvsa\Olcs\Api\Service\GovUkAccount\Response\GetAuthorisationUrlResponse;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class GovUkAccountServiceTest extends MockeryTestCase
+final class GovUkAccountServiceTest extends MockeryTestCase
 {
-    public const CONFIG = [
+    public const array CONFIG = [
         'redirect_uri' => [
             'logged_in' => 'logged_in_uri',
         ],
@@ -26,6 +26,7 @@ class GovUkAccountServiceTest extends MockeryTestCase
 
     protected GovUkAccount $provider;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->provider = m::mock(GovUkAccount::class);
@@ -108,9 +109,9 @@ class GovUkAccountServiceTest extends MockeryTestCase
         $result = $sut->getAuthorisationUrl('some_state', false);
 
         $this->assertInstanceOf(GetAuthorisationUrlResponse::class, $result);
-        $this->assertEquals('some_url', $result->getUrl());
-        $this->assertEquals('some_state', $result->getState());
-        $this->assertEquals('some_nonce', $result->getNonce());
+        $this->assertSame('some_url', $result->getUrl());
+        $this->assertSame('some_state', $result->getState());
+        $this->assertSame('some_nonce', $result->getNonce());
     }
 
     public function testGetAuthorisationUrlWithIdentityAssurance(): void
@@ -134,9 +135,9 @@ class GovUkAccountServiceTest extends MockeryTestCase
         $result = $sut->getAuthorisationUrl('some_state', true);
 
         $this->assertInstanceOf(GetAuthorisationUrlResponse::class, $result);
-        $this->assertEquals('some_url', $result->getUrl());
-        $this->assertEquals('some_state', $result->getState());
-        $this->assertEquals('some_nonce', $result->getNonce());
+        $this->assertSame('some_url', $result->getUrl());
+        $this->assertSame('some_state', $result->getState());
+        $this->assertSame('some_nonce', $result->getNonce());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderMeetsVectorOfTrust')]
@@ -147,19 +148,17 @@ class GovUkAccountServiceTest extends MockeryTestCase
         $this->assertEquals($shouldPass, $result);
     }
 
-    public static function dataProviderMeetsVectorOfTrust(): array
+    public static function dataProviderMeetsVectorOfTrust(): \Iterator
     {
-        return [
-            'P0 meets P0' => [GovUkAccountService::VOT_P0, GovUkAccountService::VOT_P0, true],
-            'P1 meets P0' => [GovUkAccountService::VOT_P1, GovUkAccountService::VOT_P0, true],
-            'P2 meets P0' => [GovUkAccountService::VOT_P2, GovUkAccountService::VOT_P0, true],
-            'P0 does not meet P1' => [GovUkAccountService::VOT_P0, GovUkAccountService::VOT_P1, false],
-            'P1 meets P1' => [GovUkAccountService::VOT_P1, GovUkAccountService::VOT_P1, true],
-            'P2 meets P1' => [GovUkAccountService::VOT_P2, GovUkAccountService::VOT_P1, true],
-            'P0 does not meet P2' => [GovUkAccountService::VOT_P0, GovUkAccountService::VOT_P2, false],
-            'P1 does not meet P2' => [GovUkAccountService::VOT_P1, GovUkAccountService::VOT_P2, false],
-            'P2 meets P2' => [GovUkAccountService::VOT_P2, GovUkAccountService::VOT_P2, true],
-        ];
+        yield 'P0 meets P0' => [GovUkAccountService::VOT_P0, GovUkAccountService::VOT_P0, true];
+        yield 'P1 meets P0' => [GovUkAccountService::VOT_P1, GovUkAccountService::VOT_P0, true];
+        yield 'P2 meets P0' => [GovUkAccountService::VOT_P2, GovUkAccountService::VOT_P0, true];
+        yield 'P0 does not meet P1' => [GovUkAccountService::VOT_P0, GovUkAccountService::VOT_P1, false];
+        yield 'P1 meets P1' => [GovUkAccountService::VOT_P1, GovUkAccountService::VOT_P1, true];
+        yield 'P2 meets P1' => [GovUkAccountService::VOT_P2, GovUkAccountService::VOT_P1, true];
+        yield 'P0 does not meet P2' => [GovUkAccountService::VOT_P0, GovUkAccountService::VOT_P2, false];
+        yield 'P1 does not meet P2' => [GovUkAccountService::VOT_P1, GovUkAccountService::VOT_P2, false];
+        yield 'P2 meets P2' => [GovUkAccountService::VOT_P2, GovUkAccountService::VOT_P2, true];
     }
 
     #[\PHPUnit\Framework\Attributes\Depends('testMeetsVectorOfTrust')]
@@ -193,135 +192,133 @@ class GovUkAccountServiceTest extends MockeryTestCase
         $this->assertEquals($expectedOutput, GovUkAccountService::processNames($nameData));
     }
 
-    public static function dpProcessNames(): array
+    public static function dpProcessNames(): \Iterator
     {
-        return [
-            'single record' => [
-                [
-                    0 => [
-                        'validUntil' => null,
-                        'nameParts' => [
-                            0 => [
-                                'type' => 'GivenName',
-                                'value' => 'Given-Name-1',
-                            ],
-                            1 => [
-                                'type' => 'FamilyName',
-                                'value' => 'Family-Name',
-                            ],
-                            2 => [
-                                'type' => 'GivenName',
-                                'value' => 'Given-Name-2',
-                            ],
-                        ]
-                    ],
-                ],
-                [
-                    'firstName' => 'Given-Name-1 Given-Name-2',
-                    'familyName' => 'Family-Name',
+        yield 'single record' => [
+            [
+                0 => [
+                    'validUntil' => null,
+                    'nameParts' => [
+                        0 => [
+                            'type' => 'GivenName',
+                            'value' => 'Given-Name-1',
+                        ],
+                        1 => [
+                            'type' => 'FamilyName',
+                            'value' => 'Family-Name',
+                        ],
+                        2 => [
+                            'type' => 'GivenName',
+                            'value' => 'Given-Name-2',
+                        ],
+                    ]
                 ],
             ],
-            'multiple records' => [
-                [
-                    0 => [
-                        'validUntil' => '2021-12-25',
-                        'nameParts' => [
-                            0 => [
-                                'type' => 'GivenName',
-                                'value' => 'skipped',
-                            ],
-                            1 => [
-                                'type' => 'FamilyName',
-                                'value' => 'skipped',
-                            ],
+            [
+                'firstName' => 'Given-Name-1 Given-Name-2',
+                'familyName' => 'Family-Name',
+            ],
+        ];
+        yield 'multiple records' => [
+            [
+                0 => [
+                    'validUntil' => '2021-12-25',
+                    'nameParts' => [
+                        0 => [
+                            'type' => 'GivenName',
+                            'value' => 'skipped',
                         ],
-                    ],
-                    1 => [
-                        'validUntil' => null,
-                        'nameParts' => [
-                            0 => [
-                                'type' => 'GivenName',
-                                'value' => 'Given-Name-1',
-                            ],
-                            1 => [
-                                'type' => 'FamilyName',
-                                'value' => 'Family-Name',
-                            ],
-                            2 => [
-                                'type' => 'GivenName',
-                                'value' => 'Given-Name-2',
-                            ],
-                        ],
-                    ],
-                    2 => [
-                        'validUntil' => null,
-                        'nameParts' => [
-                            0 => [
-                                'type' => 'GivenName',
-                                'value' => 'ignored',
-                            ],
-                            1 => [
-                                'type' => 'FamilyName',
-                                'value' => 'ignored',
-                            ],
+                        1 => [
+                            'type' => 'FamilyName',
+                            'value' => 'skipped',
                         ],
                     ],
                 ],
-                [
-                    'firstName' => 'Given-Name-1 Given-Name-2',
-                    'familyName' => 'Family-Name',
+                1 => [
+                    'validUntil' => null,
+                    'nameParts' => [
+                        0 => [
+                            'type' => 'GivenName',
+                            'value' => 'Given-Name-1',
+                        ],
+                        1 => [
+                            'type' => 'FamilyName',
+                            'value' => 'Family-Name',
+                        ],
+                        2 => [
+                            'type' => 'GivenName',
+                            'value' => 'Given-Name-2',
+                        ],
+                    ],
+                ],
+                2 => [
+                    'validUntil' => null,
+                    'nameParts' => [
+                        0 => [
+                            'type' => 'GivenName',
+                            'value' => 'ignored',
+                        ],
+                        1 => [
+                            'type' => 'FamilyName',
+                            'value' => 'ignored',
+                        ],
+                    ],
                 ],
             ],
-            'default to first record if all have valid until date' => [
-                [
-                    0 => [
-                        'validUntil' => '2021-12-25',
-                        'nameParts' => [
-                            0 => [
-                                'type' => 'GivenName',
-                                'value' => 'Given-Name-1',
-                            ],
-                            1 => [
-                                'type' => 'FamilyName',
-                                'value' => 'Family-Name',
-                            ],
-                            2 => [
-                                'type' => 'GivenName',
-                                'value' => 'Given-Name-2',
-                            ],
+            [
+                'firstName' => 'Given-Name-1 Given-Name-2',
+                'familyName' => 'Family-Name',
+            ],
+        ];
+        yield 'default to first record if all have valid until date' => [
+            [
+                0 => [
+                    'validUntil' => '2021-12-25',
+                    'nameParts' => [
+                        0 => [
+                            'type' => 'GivenName',
+                            'value' => 'Given-Name-1',
                         ],
-                    ],
-                    1 => [
-                        'validUntil' => '2021-12-25',
-                        'nameParts' => [
-                            0 => [
-                                'type' => 'GivenName',
-                                'value' => 'skipped',
-                            ],
-                            1 => [
-                                'type' => 'FamilyName',
-                                'value' => 'skipped',
-                            ],
+                        1 => [
+                            'type' => 'FamilyName',
+                            'value' => 'Family-Name',
                         ],
-                    ],
-                    2 => [
-                        'validUntil' => '2021-12-25',
-                        'nameParts' => [
-                            0 => [
-                                'type' => 'GivenName',
-                                'value' => 'also skipped',
-                            ],
-                            1 => [
-                                'type' => 'FamilyName',
-                                'value' => 'also skipped',
-                            ],
+                        2 => [
+                            'type' => 'GivenName',
+                            'value' => 'Given-Name-2',
                         ],
                     ],
                 ],
-                [
-                    'firstName' => 'Given-Name-1 Given-Name-2',
-                    'familyName' => 'Family-Name',
+                1 => [
+                    'validUntil' => '2021-12-25',
+                    'nameParts' => [
+                        0 => [
+                            'type' => 'GivenName',
+                            'value' => 'skipped',
+                        ],
+                        1 => [
+                            'type' => 'FamilyName',
+                            'value' => 'skipped',
+                        ],
+                    ],
                 ],
+                2 => [
+                    'validUntil' => '2021-12-25',
+                    'nameParts' => [
+                        0 => [
+                            'type' => 'GivenName',
+                            'value' => 'also skipped',
+                        ],
+                        1 => [
+                            'type' => 'FamilyName',
+                            'value' => 'also skipped',
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'firstName' => 'Given-Name-1 Given-Name-2',
+                'familyName' => 'Family-Name',
             ],
         ];
     }

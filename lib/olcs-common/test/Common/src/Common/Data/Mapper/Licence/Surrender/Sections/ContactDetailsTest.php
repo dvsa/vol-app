@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Data\Mapper\Licence\Surrender\Sections;
 
 use Common\Data\Mapper\Licence\Surrender\Sections\ContactDetails;
@@ -9,7 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Laminas\Mvc\Controller\Plugin\Url;
 
-class ContactDetailsTest extends MockeryTestCase
+final class ContactDetailsTest extends MockeryTestCase
 {
     use ReviewContactDetailsMocksAndExpectationsTrait;
 

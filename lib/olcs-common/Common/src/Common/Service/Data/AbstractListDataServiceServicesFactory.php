@@ -16,7 +16,7 @@ class AbstractListDataServiceServicesFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AbstractListDataServiceServices
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): AbstractListDataServiceServices
     {
         return new AbstractListDataServiceServices(
             $container->get(AbstractDataServiceServices::class)

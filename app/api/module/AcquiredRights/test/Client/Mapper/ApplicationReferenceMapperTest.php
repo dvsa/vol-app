@@ -23,7 +23,7 @@ class ApplicationReferenceMapperTest extends MockeryTestCase
 
     #[DataProvider('dataProviderResponseDataAndExceptionMap')]
     #[Test]
-    public function createFromResponseArrayValidOrThrowsAppropriateExceptions(array $data, string $exceptionMessage = null): void
+    public function createFromResponseArrayValidOrThrowsAppropriateExceptions(array $data, ?string $exceptionMessage = null): void
     {
         if (!is_null($exceptionMessage)) {
             $this->expectException(MapperParseException::class);
@@ -131,7 +131,7 @@ class ApplicationReferenceMapperTest extends MockeryTestCase
         ];
     }
 
-    private static function generateData(array $override = [], string $unsetKey = null): array
+    private static function generateData(array $override = [], ?string $unsetKey = null): array
     {
         $result = array_merge([
             'id' => '6fcf9551-ade4-4b48-b078-6db59559a182',

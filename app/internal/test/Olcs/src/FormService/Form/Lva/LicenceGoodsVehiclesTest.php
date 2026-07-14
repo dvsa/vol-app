@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\LicenceGoodsVehicles;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class LicenceGoodsVehiclesTest extends MockeryTestCase
+final class LicenceGoodsVehiclesTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -22,9 +22,10 @@ class LicenceGoodsVehiclesTest extends MockeryTestCase
 
     protected $sm;
 
+    #[\Override]
     public function setUp(): void
     {
-        $this->sm = $this->createMock(ServiceLocatorInterface::class);
+        $this->sm = $this->createStub(ServiceLocatorInterface::class);
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
         $this->formHelper
             ->shouldReceive('getServiceLocator')
@@ -45,7 +46,7 @@ class LicenceGoodsVehiclesTest extends MockeryTestCase
         $mockTableElement = m::mock(\Laminas\Form\Fieldset::class);
         $mockValidator = m::mock();
 
-        $this->sm->method('get')->with('oneRowInTablesRequired')->willReturn($mockValidator);
+        $this->sm->method('get')->willReturnMap([['oneRowInTablesRequired', $mockValidator]]);
 
         // Expectations
         $this->formHelper->shouldReceive('createForm')

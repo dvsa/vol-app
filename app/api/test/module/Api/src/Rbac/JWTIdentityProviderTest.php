@@ -25,7 +25,7 @@ use Dvsa\OlcsTest\MocksServicesTrait;
  *
  * @see JWTIdentityProvider
  */
-class JWTIdentityProviderTest extends MockeryTestCase
+final class JWTIdentityProviderTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
@@ -176,10 +176,11 @@ class JWTIdentityProviderTest extends MockeryTestCase
 
         $identity = $sut->getIdentity();
 
-        self::assertSame(UserEntity::USER_TYPE_INTERNAL, $identity->getUser()->getUserType());
-        self::assertSame('systemUser', $identity->getUser()->getLoginId());
+        $this->assertSame(UserEntity::USER_TYPE_INTERNAL, $identity->getUser()->getUserType());
+        $this->assertSame('systemUser', $identity->getUser()->getLoginId());
     }
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();

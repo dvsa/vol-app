@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Rbac\JWTIdentityProvider;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Dvsa\OlcsTest\MocksServicesTrait;
 
-class IdentityProviderFactoryTest extends MockeryTestCase
+final class IdentityProviderFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
@@ -18,6 +18,7 @@ class IdentityProviderFactoryTest extends MockeryTestCase
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();
@@ -87,8 +88,8 @@ class IdentityProviderFactoryTest extends MockeryTestCase
     {
         // Setup
         $this->setUpSut();
-        $this->config(['auth' => ['identity_provider' => static::class]]);
-        $this->serviceManager->setService(static::class, $this->setUpMockService(static::class));
+        $this->config(['auth' => ['identity_provider' => self::class]]);
+        $this->serviceManager->setService(self::class, $this->setUpMockService(\stdClass::class));
 
         // Expectations
         $this->expectException(\RuntimeException::class);

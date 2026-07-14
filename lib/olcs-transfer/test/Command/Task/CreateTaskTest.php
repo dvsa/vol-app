@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Task;
 
 use Dvsa\Olcs\Transfer\Command\Task\CreateTask;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Task\CreateTask;
 /**
  * CreateTask test
  */
-class CreateTaskTest extends \PHPUnit\Framework\TestCase
+final class CreateTaskTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

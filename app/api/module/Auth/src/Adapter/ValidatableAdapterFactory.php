@@ -26,7 +26,7 @@ class ValidatableAdapterFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ValidatableAdapterInterface
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ValidatableAdapterInterface
     {
         $config = $container->get('config');
         $adapterConfig = $this->getAdapterConfig($config);

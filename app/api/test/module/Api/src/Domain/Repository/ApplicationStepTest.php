@@ -16,8 +16,9 @@ use Mockery as m;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ApplicationStepTest extends RepositoryTestCase
+final class ApplicationStepTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(ApplicationStep::class);

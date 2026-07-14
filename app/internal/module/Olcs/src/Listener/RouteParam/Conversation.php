@@ -85,7 +85,7 @@ class Conversation implements ListenerAggregateInterface, FactoryInterface
     }
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Conversation
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Conversation
     {
         $this->annotationBuilder = $container->get(AnnotationBuilder::class);
         $this->queryService = $container->get(QueryService::class);

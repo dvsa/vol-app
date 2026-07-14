@@ -40,7 +40,7 @@ class AcquiredRightsService
      * @throws \Dvsa\Olcs\AcquiredRights\Exception\ServiceException
      * @throws \Dvsa\Olcs\Api\Domain\Exception\ValidationException
      */
-    public function verifyAcquiredRightsByReference(string $reference, DateTimeImmutable $dateOfBirth, string $inputFieldName = null): ApplicationReference
+    public function verifyAcquiredRightsByReference(string $reference, DateTimeImmutable $dateOfBirth, ?string $inputFieldName = null): ApplicationReference
     {
         try {
             $this->checkAcquiredRightsExpiry();

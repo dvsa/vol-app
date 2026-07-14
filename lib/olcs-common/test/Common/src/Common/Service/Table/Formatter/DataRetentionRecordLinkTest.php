@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -12,17 +14,17 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 /**
  * DataRetentionRecord Link test
  */
-class DataRetentionRecordLinkTest extends TestCase
+final class DataRetentionRecordLinkTest extends TestCase
 {
-    private const ORGANISATION_NAME = 'DVSA';
+    private const string ORGANISATION_NAME = 'DVSA';
 
-    private const ORGANISATION_ID = 'ORG123';
+    private const string ORGANISATION_ID = 'ORG123';
 
-    private const LIC_NO = 'OB1234';
+    private const string LIC_NO = 'OB1234';
 
-    private const LICENCE_ID = 9;
+    private const int LICENCE_ID = 9;
 
-    private const ENTITY_ID = 9;
+    private const int ENTITY_ID = 9;
 
     protected $urlHelper;
 
@@ -46,9 +48,8 @@ class DataRetentionRecordLinkTest extends TestCase
 
     /**
      * @param array  $queryData           Query Data
-     *
-     * @dataProvider entityTypeDataProviderWithUrl
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('entityTypeDataProviderWithUrl')]
     public function testFormat($queryData, $statusArray): void
     {
         $queryData = array_merge(
@@ -71,7 +72,7 @@ class DataRetentionRecordLinkTest extends TestCase
             '<a class="govuk-link" href="DATA_RETENTION_RECORD_URL" target="_self">' . $queryData['organisationName'] . '</a> / ' .
             '<a class="govuk-link" href="DATA_RETENTION_RECORD_URL" target="_self">' . $queryData['licNo'] . '</a> / ' .
             '<a class="govuk-link" href="DATA_RETENTION_RECORD_URL" target="_self">' .
-            ucfirst($queryData['entityName']) . ' ' . $queryData['entityPk'] .
+            ucfirst((string) $queryData['entityName']) . ' ' . $queryData['entityPk'] .
             '</a>' .
             $statusLabel,
             $this->sut->format($queryData, [])
@@ -82,75 +83,73 @@ class DataRetentionRecordLinkTest extends TestCase
      * Parameter 1: query data
      * Parameter 2: URL parameters for last entity
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function entityTypeDataProviderWithUrl()
+    public static function entityTypeDataProviderWithUrl(): \Iterator
     {
-        return [
-            'Licence entity type' => [
-                [
-                    'entityName' => 'licence',
-                    'actionConfirmation' => false,
-                    'nextReviewDate' => '2030-12-25'
-                ],
-                DataRetentionRecordLink::STATUS_POSTPONED
+        yield 'Licence entity type' => [
+            [
+                'entityName' => 'licence',
+                'actionConfirmation' => false,
+                'nextReviewDate' => '2030-12-25'
             ],
-            'Application entity type' => [
-                [
-                    'entityName' => 'application',
-                    'actionConfirmation' => true,
-                    'nextReviewDate' => '2030-12-25'
-                ],
-                DataRetentionRecordLink::STATUS_DELETION
+            DataRetentionRecordLink::STATUS_POSTPONED
+        ];
+        yield 'Application entity type' => [
+            [
+                'entityName' => 'application',
+                'actionConfirmation' => true,
+                'nextReviewDate' => '2030-12-25'
             ],
-            'Transport manager entity type' => [
-                [
-                    'entityName' => 'transport_manager',
-                    'actionConfirmation' => false,
-                    'nextReviewDate' => null
-                ],
-                DataRetentionRecordLink::STATUS_REVIEW
+            DataRetentionRecordLink::STATUS_DELETION
+        ];
+        yield 'Transport manager entity type' => [
+            [
+                'entityName' => 'transport_manager',
+                'actionConfirmation' => false,
+                'nextReviewDate' => null
             ],
-            'IRFO GV entity type' => [
-                [
-                    'entityName' => 'irfo_gv_permit',
-                    'actionConfirmation' => false,
-                    'nextReviewDate' => '2030-12-25'
-                ],
-                DataRetentionRecordLink::STATUS_POSTPONED
+            DataRetentionRecordLink::STATUS_REVIEW
+        ];
+        yield 'IRFO GV entity type' => [
+            [
+                'entityName' => 'irfo_gv_permit',
+                'actionConfirmation' => false,
+                'nextReviewDate' => '2030-12-25'
             ],
-            'IRFO PSV auth entity type' => [
-                [
-                    'entityName' => 'irfo_psv_auth',
-                    'actionConfirmation' => true,
-                    'nextReviewDate' => '2030-12-25'
-                ],
-                DataRetentionRecordLink::STATUS_DELETION
+            DataRetentionRecordLink::STATUS_POSTPONED
+        ];
+        yield 'IRFO PSV auth entity type' => [
+            [
+                'entityName' => 'irfo_psv_auth',
+                'actionConfirmation' => true,
+                'nextReviewDate' => '2030-12-25'
             ],
-            'Organisation entity type' => [
-                [
-                    'entityName' => 'organisation',
-                    'actionConfirmation' => false,
-                    'nextReviewDate' => null
-                ],
-                DataRetentionRecordLink::STATUS_REVIEW
+            DataRetentionRecordLink::STATUS_DELETION
+        ];
+        yield 'Organisation entity type' => [
+            [
+                'entityName' => 'organisation',
+                'actionConfirmation' => false,
+                'nextReviewDate' => null
             ],
-            'Case entity type' => [
-                [
-                    'entityName' => 'cases',
-                    'actionConfirmation' => false,
-                    'nextReviewDate' => '2030-12-25'
-                ],
-                DataRetentionRecordLink::STATUS_POSTPONED
+            DataRetentionRecordLink::STATUS_REVIEW
+        ];
+        yield 'Case entity type' => [
+            [
+                'entityName' => 'cases',
+                'actionConfirmation' => false,
+                'nextReviewDate' => '2030-12-25'
             ],
-            'Licence entity type to review' => [
-                [
-                    'entityName' => 'licence',
-                    'actionConfirmation' => false,
-                    'nextReviewDate' => (new \DateTime())->format('Y-m-d')
-                ],
-                DataRetentionRecordLink::STATUS_REVIEW
+            DataRetentionRecordLink::STATUS_POSTPONED
+        ];
+        yield 'Licence entity type to review' => [
+            [
+                'entityName' => 'licence',
+                'actionConfirmation' => false,
+                'nextReviewDate' => new \DateTime()->format('Y-m-d')
             ],
+            DataRetentionRecordLink::STATUS_REVIEW
         ];
     }
 

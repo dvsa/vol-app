@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\TransportManagerApplication;
 
 use Dvsa\Olcs\Transfer\Command\TransportManagerApplication\SendAmendTmApplication;
 use Dvsa\OlcsTest\Transfer\Command\CommandTest;
 use Dvsa\OlcsTest\Transfer\DtoWithoutOptionalFieldsTest;
 
-class SendAmendTmApplicationTest extends \PHPUnit\Framework\TestCase
+final class SendAmendTmApplicationTest extends \PHPUnit\Framework\TestCase
 {
     use CommandTest, DtoWithoutOptionalFieldsTest {
         DtoWithoutOptionalFieldsTest::testDefaultValues insteadof CommandTest;

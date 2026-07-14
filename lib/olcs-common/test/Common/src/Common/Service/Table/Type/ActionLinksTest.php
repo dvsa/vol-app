@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Type;
 
 use Common\Service\Table\TableBuilder;
@@ -10,11 +12,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Service\Table\Type\ActionLinks;
 use Dvsa\Olcs\Utils\Translation\TranslatorDelegator as Translator;
 
-class ActionLinksTest extends MockeryTestCase
+final class ActionLinksTest extends MockeryTestCase
 {
     protected $sut;
-
-    protected $table;
 
     protected $sm;
 
@@ -23,11 +23,11 @@ class ActionLinksTest extends MockeryTestCase
     {
         $this->sm = new ServiceManager();
 
-        $this->table = m::mock(TableBuilder::class);
-        $this->table->expects('getServiceLocator')
+        $table = m::mock(TableBuilder::class);
+        $table->expects('getServiceLocator')
             ->andReturn($this->sm);
 
-        $this->sut = new ActionLinks($this->table);
+        $this->sut = new ActionLinks($table);
     }
 
     public function testRender(): void

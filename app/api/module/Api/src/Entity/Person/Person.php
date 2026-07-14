@@ -37,7 +37,7 @@ class Person extends AbstractPerson implements OrganisationProviderInterface
      *
      * @return $this
      */
-    public function updatePerson($forename, $familyName, RefData $title = null, $birthDate = null, $birthPlace = null)
+    public function updatePerson($forename, $familyName, ?RefData $title = null, $birthDate = null, $birthPlace = null)
     {
         $this->setForename($forename);
         $this->setFamilyName($familyName);

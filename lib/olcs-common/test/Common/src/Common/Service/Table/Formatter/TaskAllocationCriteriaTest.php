@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\TaskAllocationCriteria;
@@ -9,13 +11,12 @@ use Common\Service\Table\Formatter\TaskAllocationCriteria;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class TaskAllocationCriteriaTest extends \PHPUnit\Framework\TestCase
+final class TaskAllocationCriteriaTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the format method
-     *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($expected, $data): void
     {
         $sut = new TaskAllocationCriteria();
@@ -26,17 +27,15 @@ class TaskAllocationCriteriaTest extends \PHPUnit\Framework\TestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            // expected, data
-            ['Goods, MLH', ['goodsOrPsv' => ['id' => 'lcat_gv'], 'isMlh' => true]],
-            ['Goods, Non-MLH', ['goodsOrPsv' => ['id' => 'lcat_gv'], 'isMlh' => false]],
-            ['PSV', ['goodsOrPsv' => ['id' => 'lcat_psv']]],
-            ['N/A', ['goodsOrPsv' => ['id' => 'XXXX'], 'isMlh' => true]],
-            ['N/A', ['goodsOrPsv' => null]],
-        ];
+        // expected, data
+        yield ['Goods, MLH', ['goodsOrPsv' => ['id' => 'lcat_gv'], 'isMlh' => true]];
+        yield ['Goods, Non-MLH', ['goodsOrPsv' => ['id' => 'lcat_gv'], 'isMlh' => false]];
+        yield ['PSV', ['goodsOrPsv' => ['id' => 'lcat_psv']]];
+        yield ['N/A', ['goodsOrPsv' => ['id' => 'XXXX'], 'isMlh' => true]];
+        yield ['N/A', ['goodsOrPsv' => null]];
     }
 }

@@ -13,12 +13,13 @@ use Olcs\FormService\Form\Lva\LockBusinessDetails;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class LockBusinessDetailsTest extends MockeryTestCase
+final class LockBusinessDetailsTest extends MockeryTestCase
 {
     protected $sut;
 
     protected $formHelper;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);

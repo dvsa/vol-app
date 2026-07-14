@@ -18,7 +18,7 @@ use Dvsa\Olcs\Api\Entity\Fee\Fee as FeeEntity;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ResolvePaymentTest extends \PHPUnit\Framework\TestCase
+final class ResolvePaymentTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

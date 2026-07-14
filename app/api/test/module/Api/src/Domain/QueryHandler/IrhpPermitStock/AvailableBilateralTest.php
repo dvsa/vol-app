@@ -13,7 +13,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\AvailableBilateral as AvailableBila
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class AvailableBilateralTest extends QueryHandlerTestCase
+final class AvailableBilateralTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

@@ -8,7 +8,7 @@ use Common\Service\Table\ContentHelper;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Laminas\Http\Response;
 
-class ContentHelperTest extends TestCase
+final class ContentHelperTest extends TestCase
 {
     /**
      * Setup the content helper
@@ -25,7 +25,7 @@ class ContentHelperTest extends TestCase
      */
     public function testTranslatorSet(): void
     {
-        $translatorMock = $this->createMock(\Dvsa\Olcs\Utils\Translation\TranslatorDelegator::class);
+        $translatorMock = $this->createStub(\Dvsa\Olcs\Utils\Translation\TranslatorDelegator::class);
 
         $mock = $this->createPartialMock(ContentHelper::class, ['getTranslator']);
 
@@ -58,7 +58,7 @@ class ContentHelperTest extends TestCase
 
         $mock->expects($this->once())
             ->method('getContent')
-            ->will($this->returnValue('SomeContent'));
+            ->willReturn('SomeContent');
 
         $contentHelper = $this->getContentHelper($mock);
 
@@ -67,9 +67,8 @@ class ContentHelperTest extends TestCase
 
     /**
      * Test renderAttributes
-     *
-     * @dataProvider attributesProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('attributesProvider')]
     public function testRenderAttributes($attrs, $expected): void
     {
         $contentHelper = $this->getContentHelper(null);
@@ -80,24 +79,21 @@ class ContentHelperTest extends TestCase
     /**
      * Provider for renderAttributes
      *
-     * @return ((int|null|string)[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(int | string | null)> | string)>>
      *
      * @psalm-return list{list{array{name: 'bob', id: 123, type: 'test'}, 'name="bob" id="123" type="test"'}, list{array{name: null, id: 123, type: 'test'}, 'name="" id="123" type="test"'}, list{array<never, never>, ''}}
      */
-    public function attributesProvider(): array
+    public static function attributesProvider(): \Iterator
     {
-        return [
-            [['name' => 'bob', 'id' => 123, 'type' => 'test'], 'name="bob" id="123" type="test"'],
-            [['name' => null, 'id' => 123, 'type' => 'test'], 'name="" id="123" type="test"'],
-            [[], '']
-        ];
+        yield [['name' => 'bob', 'id' => 123, 'type' => 'test'], 'name="bob" id="123" type="test"'];
+        yield [['name' => null, 'id' => 123, 'type' => 'test'], 'name="" id="123" type="test"'];
+        yield [[], ''];
     }
 
     /**
      * Test replaceContent
-     *
-     * @dataProvider replaceContentProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('replaceContentProvider')]
     public function testReplaceContent($content, $vars, $expected): void
     {
         $contentHelper = $this->getContentHelper(null);
@@ -108,18 +104,16 @@ class ContentHelperTest extends TestCase
     /**
      * Data provider for replaceContent
      *
-     * @return (string|string[])[][]
+     * @return \Iterator<(int | string), array<(array<string> | string)>>
      *
      * @psalm-return list{list{'<p>No Variables</p>', array<never, never>, '<p>No Variables</p>'}, list{'<p>Foo {{bar}}</p>', array{bar: 'BOB'}, '<p>Foo BOB</p>'}, list{'<p>Foo {{bar}} {{cake}}</p>', array{bar: 'BOB'}, '<p>Foo BOB </p>'}, list{'{{[paragraph]}}', array{content: 'FOO'}, '<p>FOO</p>'}, list{'{{[paragraph]}}{{[paragraph]}}', array{content: 'FOO'}, '<p>FOO</p><p>FOO</p>'}}
      */
-    public function replaceContentProvider(): array
+    public static function replaceContentProvider(): \Iterator
     {
-        return [
-            ['<p>No Variables</p>', [], '<p>No Variables</p>'],
-            ['<p>Foo {{bar}}</p>', ['bar' => 'BOB'], '<p>Foo BOB</p>'],
-            ['<p>Foo {{bar}} {{cake}}</p>', ['bar' => 'BOB'], '<p>Foo BOB </p>'],
-            ['{{[paragraph]}}', ['content' => 'FOO'], '<p>FOO</p>'],
-            ['{{[paragraph]}}{{[paragraph]}}', ['content' => 'FOO'], '<p>FOO</p><p>FOO</p>']
-        ];
+        yield ['<p>No Variables</p>', [], '<p>No Variables</p>'];
+        yield ['<p>Foo {{bar}}</p>', ['bar' => 'BOB'], '<p>Foo BOB</p>'];
+        yield ['<p>Foo {{bar}} {{cake}}</p>', ['bar' => 'BOB'], '<p>Foo BOB </p>'];
+        yield ['{{[paragraph]}}', ['content' => 'FOO'], '<p>FOO</p>'];
+        yield ['{{[paragraph]}}{{[paragraph]}}', ['content' => 'FOO'], '<p>FOO</p><p>FOO</p>'];
     }
 }

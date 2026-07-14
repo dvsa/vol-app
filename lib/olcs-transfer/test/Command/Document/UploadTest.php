@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Document;
 
 use Dvsa\Olcs\Transfer\Command\Document\Upload;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Command\Document\Upload
- */
-class UploadTest extends TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\Document\Upload::class)]
+final class UploadTest extends TestCase
 {
     public function testStructure()
     {
@@ -61,26 +61,26 @@ class UploadTest extends TestCase
         /** @var Upload $command */
         $command = Upload::create($data);
 
-        static::assertEquals($filename, $command->getFilename());
-        static::assertEquals($content, $command->getContent());
-        static::assertEquals($irfoOrganisation, $command->getIrfoOrganisation());
-        static::assertEquals($submission, $command->getSubmission());
-        static::assertEquals($trafficArea, $command->getTrafficArea());
-        static::assertEquals($operatingCentre, $command->getOperatingCentre());
-        static::assertEquals($opposition, $command->getOpposition());
-        static::assertEquals($category, $command->getCategory());
-        static::assertEquals($subCategory, $command->getSubCategory());
-        static::assertEquals($description, $command->getDescription());
-        static::assertEquals($isExternal, $command->getIsExternal());
-        static::assertEquals($isScan, $command->getIsScan());
-        static::assertEquals($isEbsrPack, $command->getIsEbsrPack());
-        static::assertEquals($issuedDate, $command->getIssuedDate());
-        static::assertEquals($user, $command->getUser());
-        static::assertEquals($shouldUploadOnly, $command->getShouldUploadOnly());
-        static::assertEquals($additionalCopy, $command->getAdditionalCopy());
-        static::assertEquals($additionalEntities, $command->getAdditionalEntities());
-        static::assertEquals($irhpApplication, $command->getIrhpApplication());
-        static::assertEquals($surrender, $command->getSurrender());
+        $this->assertEquals($filename, $command->getFilename());
+        $this->assertEquals($content, $command->getContent());
+        $this->assertEquals($irfoOrganisation, $command->getIrfoOrganisation());
+        $this->assertEquals($submission, $command->getSubmission());
+        $this->assertEquals($trafficArea, $command->getTrafficArea());
+        $this->assertEquals($operatingCentre, $command->getOperatingCentre());
+        $this->assertEquals($opposition, $command->getOpposition());
+        $this->assertEquals($category, $command->getCategory());
+        $this->assertEquals($subCategory, $command->getSubCategory());
+        $this->assertEquals($description, $command->getDescription());
+        $this->assertEquals($isExternal, $command->getIsExternal());
+        $this->assertEquals($isScan, $command->getIsScan());
+        $this->assertEquals($isEbsrPack, $command->getIsEbsrPack());
+        $this->assertEquals($issuedDate, $command->getIssuedDate());
+        $this->assertEquals($user, $command->getUser());
+        $this->assertEquals($shouldUploadOnly, $command->getShouldUploadOnly());
+        $this->assertEquals($additionalCopy, $command->getAdditionalCopy());
+        $this->assertEquals($additionalEntities, $command->getAdditionalEntities());
+        $this->assertEquals($irhpApplication, $command->getIrhpApplication());
+        $this->assertEquals($surrender, $command->getSurrender());
         $this->assertEquals($isPostSubmissionUpload, $command->getIsPostSubmissionUpload());
     }
 

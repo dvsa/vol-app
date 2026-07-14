@@ -29,7 +29,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 /**
  * Grant IrfoPsvAuth Test
  */
-class GrantIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
+final class GrantIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

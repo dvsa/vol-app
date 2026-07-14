@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Entity\Application\PreviousConviction as PrevConvictionEntity;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class DeletePreviousConvictionTest extends AbstractCommandHandlerTestCase
+final class DeletePreviousConvictionTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

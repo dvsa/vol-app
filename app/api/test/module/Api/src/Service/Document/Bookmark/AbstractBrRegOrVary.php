@@ -43,29 +43,27 @@ class AbstractBrRegOrVary extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'variationNo' => 0,
-                ],
-                static::RENDER_REG
+                'variationNo' => 0,
             ],
+            static::RENDER_REG
+        ];
+        yield [
             [
-                [
-                    'variationNo' => 1,
-                ],
-                static::RENDER_VARY
+                'variationNo' => 1,
             ],
+            static::RENDER_VARY
+        ];
+        yield [
             [
-                [
-                    'variationNo' => 222,
-                ],
-                static::RENDER_VARY
+                'variationNo' => 222,
             ],
+            static::RENDER_VARY
         ];
     }
 

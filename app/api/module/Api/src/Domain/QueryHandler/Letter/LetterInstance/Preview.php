@@ -152,7 +152,7 @@ class Preview extends AbstractQueryHandler
      * @return self
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): self
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): self
     {
         $this->previewService = $container->get(LetterPreviewService::class);
         $this->masterTemplateResolver = $container->get(MasterTemplateResolver::class);

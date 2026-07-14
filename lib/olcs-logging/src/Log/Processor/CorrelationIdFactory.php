@@ -15,7 +15,7 @@ class CorrelationIdFactory implements FactoryInterface
      * @return CorrelationId
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CorrelationId
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CorrelationId
     {
         return new CorrelationId(
             $container->get('Request')

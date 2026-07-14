@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Entity\WithdrawableInterface;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EndIrhpApplicationsAndPermitsTest extends AbstractCommandHandlerTestCase
+final class EndIrhpApplicationsAndPermitsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -45,7 +45,7 @@ class EndIrhpApplicationsAndPermitsTest extends AbstractCommandHandlerTestCase
                 'id' => $licenceId,
                 'reason' => $withdrawReason,
             ],
-            (new Result())->addMessage($endIrhpApplicationsCmdMessage)
+            new Result()->addMessage($endIrhpApplicationsCmdMessage)
         );
 
         $endIrhpPermitsCmdMessage = 'Cleared IRHP permits for licence 52';
@@ -56,7 +56,7 @@ class EndIrhpApplicationsAndPermitsTest extends AbstractCommandHandlerTestCase
                 'id' => $licenceId,
                 'context' => $context,
             ],
-            (new Result())->addMessage($endIrhpPermitsCmdMessage)
+            new Result()->addMessage($endIrhpPermitsCmdMessage)
         );
 
         $command = Command::create(
@@ -78,33 +78,31 @@ class EndIrhpApplicationsAndPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
-        return [
-            [
-                WithdrawableInterface::WITHDRAWN_REASON_BY_USER,
-                Command::CONTEXT_SURRENDER,
-            ],
-            [
-                WithdrawableInterface::WITHDRAWN_REASON_BY_USER,
-                Command::CONTEXT_REVOKE,
-            ],
-            [
-                WithdrawableInterface::WITHDRAWN_REASON_BY_USER,
-                Command::CONTEXT_CNS,
-            ],
-            [
-                WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED,
-                Command::CONTEXT_SURRENDER,
-            ],
-            [
-                WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED,
-                Command::CONTEXT_REVOKE,
-            ],
-            [
-                WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED,
-                Command::CONTEXT_CNS,
-            ],
+        yield [
+            WithdrawableInterface::WITHDRAWN_REASON_BY_USER,
+            Command::CONTEXT_SURRENDER,
+        ];
+        yield [
+            WithdrawableInterface::WITHDRAWN_REASON_BY_USER,
+            Command::CONTEXT_REVOKE,
+        ];
+        yield [
+            WithdrawableInterface::WITHDRAWN_REASON_BY_USER,
+            Command::CONTEXT_CNS,
+        ];
+        yield [
+            WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED,
+            Command::CONTEXT_SURRENDER,
+        ];
+        yield [
+            WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED,
+            Command::CONTEXT_REVOKE,
+        ];
+        yield [
+            WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED,
+            Command::CONTEXT_CNS,
         ];
     }
 }

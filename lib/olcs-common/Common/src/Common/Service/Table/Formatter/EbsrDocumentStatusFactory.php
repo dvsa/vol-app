@@ -13,7 +13,7 @@ class EbsrDocumentStatusFactory implements FactoryInterface
      * @return EbsrDocumentStatus
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $viewHelperManager = $container->get('ViewHelperManager');
         return new EbsrDocumentStatus($viewHelperManager);

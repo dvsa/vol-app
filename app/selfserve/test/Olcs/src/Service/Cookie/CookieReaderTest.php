@@ -14,7 +14,7 @@ use Olcs\Service\Cookie\PreferencesFactory;
 use RuntimeException;
 use Laminas\Http\Header\Cookie;
 
-class CookieReaderTest extends MockeryTestCase
+final class CookieReaderTest extends MockeryTestCase
 {
     private $cookieState;
 
@@ -24,6 +24,7 @@ class CookieReaderTest extends MockeryTestCase
 
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->cookieState = m::mock(CookieState::class);
@@ -50,17 +51,15 @@ class CookieReaderTest extends MockeryTestCase
     }
 
     /**
-     * @return (\stdClass|null|string)[][]
+     * @return \Iterator<(int | string), array<(\stdClass | string | null)>>
      *
      * @psalm-return list{list{null}, list{\stdClass}, list{'cookie'}}
      */
-    public static function dpFalseCookieStateWhenNotCookieObject(): array
+    public static function dpFalseCookieStateWhenNotCookieObject(): \Iterator
     {
-        return [
-            [null],
-            [new \stdClass()],
-            ['cookie'],
-        ];
+        yield [null];
+        yield [new \stdClass()];
+        yield ['cookie'];
     }
 
     public function testFalseCookieStateWhenInvalidJson(): void

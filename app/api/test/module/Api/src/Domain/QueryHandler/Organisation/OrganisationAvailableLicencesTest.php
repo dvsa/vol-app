@@ -24,7 +24,7 @@ use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitWindow as IrhpPermitWindowRepo;
 use Dvsa\Olcs\Transfer\Query\Organisation\OrganisationAvailableLicences as Qry;
 use Mockery as m;
 
-class OrganisationAvailableLicencesTest extends QueryHandlerTestCase
+final class OrganisationAvailableLicencesTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -125,19 +125,17 @@ class OrganisationAvailableLicencesTest extends QueryHandlerTestCase
             'selectedLicence' => null,
         ];
 
-        static::assertEquals($expected, $this->sut->handleQuery($query));
+        $this->assertEquals($expected, $this->sut->handleQuery($query));
     }
 
-    public static function dpHandleQueryProvider(): array
+    public static function dpHandleQueryProvider(): \Iterator
     {
-        return [
-            [true, false, ['eligiblelicences'], true],
-            [true, true, ['eligiblelicences'], true],
-            [false, true, ['eligiblelicences'], true],
-            [true, false, [], false],
-            [true, true, [], false],
-            [false, true, [], false],
-        ];
+        yield [true, false, ['eligiblelicences'], true];
+        yield [true, true, ['eligiblelicences'], true];
+        yield [false, true, ['eligiblelicences'], true];
+        yield [true, false, [], false];
+        yield [true, true, [], false];
+        yield [false, true, [], false];
     }
 
     public function testHandleQueryMultiStockNoStockId(): void
@@ -195,7 +193,7 @@ class OrganisationAvailableLicencesTest extends QueryHandlerTestCase
             'selectedLicence' => null,
         ];
 
-        static::assertEquals($expected, $this->sut->handleQuery($query));
+        $this->assertEquals($expected, $this->sut->handleQuery($query));
     }
 
     public function testHandleQueryMultiStockNoStockIdOrWindow(): void
@@ -244,6 +242,6 @@ class OrganisationAvailableLicencesTest extends QueryHandlerTestCase
             'selectedLicence' => null,
         ];
 
-        static::assertEquals($expected, $this->sut->handleQuery($query));
+        $this->assertEquals($expected, $this->sut->handleQuery($query));
     }
 }

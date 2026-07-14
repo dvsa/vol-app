@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class LicenceTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator
  */
-class LicenceTest extends MockeryTestCase
+final class LicenceTest extends MockeryTestCase
 {
     public function testIsValidNoLicence(): void
     {
@@ -66,45 +66,43 @@ class LicenceTest extends MockeryTestCase
     /**
      * Provides an array of licence statuses and whether the licence is goods or psv, alongside whether these are valid
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isValidProvider(): array
+    public static function isValidProvider(): \Iterator
     {
-        return [
-            [LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, LicenceEntity::LICENCE_CATEGORY_PSV, false],
-            [LicenceEntity::LICENCE_STATUS_NOT_SUBMITTED, LicenceEntity::LICENCE_CATEGORY_PSV, false],
-            [LicenceEntity::LICENCE_STATUS_SUSPENDED, LicenceEntity::LICENCE_CATEGORY_PSV, true],
-            [LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_CATEGORY_PSV, true],
-            [LicenceEntity::LICENCE_STATUS_CURTAILED, LicenceEntity::LICENCE_CATEGORY_PSV, true],
-            [LicenceEntity::LICENCE_STATUS_GRANTED, LicenceEntity::LICENCE_CATEGORY_PSV, false],
-            [LicenceEntity::LICENCE_STATUS_SURRENDERED, LicenceEntity::LICENCE_CATEGORY_PSV, false],
-            [LicenceEntity::LICENCE_STATUS_WITHDRAWN, LicenceEntity::LICENCE_CATEGORY_PSV, false],
-            [LicenceEntity::LICENCE_STATUS_REFUSED, LicenceEntity::LICENCE_CATEGORY_PSV, false],
-            [LicenceEntity::LICENCE_STATUS_REVOKED, LicenceEntity::LICENCE_CATEGORY_PSV, false],
-            [LicenceEntity::LICENCE_STATUS_NOT_TAKEN_UP, LicenceEntity::LICENCE_CATEGORY_PSV, false],
-            [LicenceEntity::LICENCE_STATUS_TERMINATED, LicenceEntity::LICENCE_CATEGORY_PSV, false],
-            [LicenceEntity::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT, LicenceEntity::LICENCE_CATEGORY_PSV, false],
-            [LicenceEntity::LICENCE_STATUS_UNLICENSED, LicenceEntity::LICENCE_CATEGORY_PSV, false],
-            [LicenceEntity::LICENCE_STATUS_CANCELLED, LicenceEntity::LICENCE_CATEGORY_PSV, false],
-            [LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false],
-            [LicenceEntity::LICENCE_STATUS_NOT_SUBMITTED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false],
-            [LicenceEntity::LICENCE_STATUS_SUSPENDED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false],
-            [LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false],
-            [LicenceEntity::LICENCE_STATUS_CURTAILED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false],
-            [LicenceEntity::LICENCE_STATUS_GRANTED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false],
-            [LicenceEntity::LICENCE_STATUS_SURRENDERED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false],
-            [LicenceEntity::LICENCE_STATUS_WITHDRAWN, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false],
-            [LicenceEntity::LICENCE_STATUS_REFUSED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false],
-            [LicenceEntity::LICENCE_STATUS_REVOKED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false],
-            [LicenceEntity::LICENCE_STATUS_NOT_TAKEN_UP, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false],
-            [LicenceEntity::LICENCE_STATUS_TERMINATED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false],
-            [
-                LicenceEntity::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT,
-                LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
-                false
-            ],
-            [LicenceEntity::LICENCE_STATUS_UNLICENSED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false],
-            [LicenceEntity::LICENCE_STATUS_CANCELLED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false],
+        yield [LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, LicenceEntity::LICENCE_CATEGORY_PSV, false];
+        yield [LicenceEntity::LICENCE_STATUS_NOT_SUBMITTED, LicenceEntity::LICENCE_CATEGORY_PSV, false];
+        yield [LicenceEntity::LICENCE_STATUS_SUSPENDED, LicenceEntity::LICENCE_CATEGORY_PSV, true];
+        yield [LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_CATEGORY_PSV, true];
+        yield [LicenceEntity::LICENCE_STATUS_CURTAILED, LicenceEntity::LICENCE_CATEGORY_PSV, true];
+        yield [LicenceEntity::LICENCE_STATUS_GRANTED, LicenceEntity::LICENCE_CATEGORY_PSV, false];
+        yield [LicenceEntity::LICENCE_STATUS_SURRENDERED, LicenceEntity::LICENCE_CATEGORY_PSV, false];
+        yield [LicenceEntity::LICENCE_STATUS_WITHDRAWN, LicenceEntity::LICENCE_CATEGORY_PSV, false];
+        yield [LicenceEntity::LICENCE_STATUS_REFUSED, LicenceEntity::LICENCE_CATEGORY_PSV, false];
+        yield [LicenceEntity::LICENCE_STATUS_REVOKED, LicenceEntity::LICENCE_CATEGORY_PSV, false];
+        yield [LicenceEntity::LICENCE_STATUS_NOT_TAKEN_UP, LicenceEntity::LICENCE_CATEGORY_PSV, false];
+        yield [LicenceEntity::LICENCE_STATUS_TERMINATED, LicenceEntity::LICENCE_CATEGORY_PSV, false];
+        yield [LicenceEntity::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT, LicenceEntity::LICENCE_CATEGORY_PSV, false];
+        yield [LicenceEntity::LICENCE_STATUS_UNLICENSED, LicenceEntity::LICENCE_CATEGORY_PSV, false];
+        yield [LicenceEntity::LICENCE_STATUS_CANCELLED, LicenceEntity::LICENCE_CATEGORY_PSV, false];
+        yield [LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false];
+        yield [LicenceEntity::LICENCE_STATUS_NOT_SUBMITTED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false];
+        yield [LicenceEntity::LICENCE_STATUS_SUSPENDED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false];
+        yield [LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false];
+        yield [LicenceEntity::LICENCE_STATUS_CURTAILED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false];
+        yield [LicenceEntity::LICENCE_STATUS_GRANTED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false];
+        yield [LicenceEntity::LICENCE_STATUS_SURRENDERED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false];
+        yield [LicenceEntity::LICENCE_STATUS_WITHDRAWN, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false];
+        yield [LicenceEntity::LICENCE_STATUS_REFUSED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false];
+        yield [LicenceEntity::LICENCE_STATUS_REVOKED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false];
+        yield [LicenceEntity::LICENCE_STATUS_NOT_TAKEN_UP, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false];
+        yield [LicenceEntity::LICENCE_STATUS_TERMINATED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false];
+        yield [
+            LicenceEntity::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT,
+            LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
+            false
         ];
+        yield [LicenceEntity::LICENCE_STATUS_UNLICENSED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false];
+        yield [LicenceEntity::LICENCE_STATUS_CANCELLED, LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, false];
     }
 }

@@ -18,7 +18,7 @@ class HtmlPurifierFactory implements FactoryInterface
         'a[href|class|id|target],p[class|style|id],b,i[class|style|id],strong,br,span[class|style|id],h1[class|id],h2[class|id],h3[class|id],h4[class|id],li[class|style|id],ul[class|style|id]';
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): HTMLPurifier
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): HTMLPurifier
     {
         $appConfig = $container->get('Config');
         $config = HTMLPurifier_Config::createDefault();

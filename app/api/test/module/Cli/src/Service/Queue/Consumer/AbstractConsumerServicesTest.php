@@ -9,7 +9,7 @@ use Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractConsumerServices;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class AbstractConsumerServicesTest extends MockeryTestCase
+final class AbstractConsumerServicesTest extends MockeryTestCase
 {
     public function testGetCommandHandlerManager(): void
     {

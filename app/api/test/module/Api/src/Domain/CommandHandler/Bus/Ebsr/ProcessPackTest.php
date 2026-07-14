@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\Command\Queue\Create as CreateQueue;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class ProcessPackTest extends ProcessPackTestCase
+final class ProcessPackTest extends ProcessPackTestCase
 {
     public function setUp(): void
     {

@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EmissionsStandardCriteriaTest extends MockeryTestCase
+final class EmissionsStandardCriteriaTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpMatches')]
     public function testMatches(mixed $rangeEmissionsCategoryId, mixed $criteriaEmissionsCategoryId, mixed $expected): void
@@ -33,13 +33,11 @@ class EmissionsStandardCriteriaTest extends MockeryTestCase
         );
     }
 
-    public static function dpMatches(): array
+    public static function dpMatches(): \Iterator
     {
-        return [
-            [RefData::EMISSIONS_CATEGORY_EURO5_REF, RefData::EMISSIONS_CATEGORY_EURO5_REF, true],
-            [RefData::EMISSIONS_CATEGORY_EURO5_REF, RefData::EMISSIONS_CATEGORY_EURO6_REF, false],
-            [RefData::EMISSIONS_CATEGORY_EURO6_REF, RefData::EMISSIONS_CATEGORY_EURO5_REF, false],
-            [RefData::EMISSIONS_CATEGORY_EURO6_REF, RefData::EMISSIONS_CATEGORY_EURO6_REF, true],
-        ];
+        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF, RefData::EMISSIONS_CATEGORY_EURO5_REF, true];
+        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF, RefData::EMISSIONS_CATEGORY_EURO6_REF, false];
+        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF, RefData::EMISSIONS_CATEGORY_EURO5_REF, false];
+        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF, RefData::EMISSIONS_CATEGORY_EURO6_REF, true];
     }
 }

@@ -31,7 +31,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class GoodsVehiclesTest extends QueryHandlerTestCase
+final class GoodsVehiclesTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

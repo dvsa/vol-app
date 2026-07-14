@@ -15,7 +15,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 use DateTime;
 
-class AvailableYearsTest extends QueryHandlerTestCase
+final class AvailableYearsTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -180,13 +180,11 @@ class AvailableYearsTest extends QueryHandlerTestCase
         );
     }
 
-    public static function dpTestHandleQueryUnsupportedType(): array
+    public static function dpTestHandleQueryUnsupportedType(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL],
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQueryNoYears')]
@@ -215,11 +213,9 @@ class AvailableYearsTest extends QueryHandlerTestCase
         );
     }
 
-    public static function dpTestHandleQueryNoYears(): array
+    public static function dpTestHandleQueryNoYears(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM],
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM];
     }
 }

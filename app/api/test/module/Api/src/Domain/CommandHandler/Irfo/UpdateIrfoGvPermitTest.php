@@ -20,7 +20,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 /**
  * Update Irfo Gv Permit Test
  */
-class UpdateIrfoGvPermitTest extends AbstractCommandHandlerTestCase
+final class UpdateIrfoGvPermitTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -92,7 +92,7 @@ class UpdateIrfoGvPermitTest extends AbstractCommandHandlerTestCase
 
         $this->assertSame($this->references[IrfoGvPermitType::class][22], $savedIrfoGvPermit->getIrfoGvPermitType());
         $this->assertEquals(2014, $savedIrfoGvPermit->getYearRequired());
-        $this->assertEquals('2015-01-01', $savedIrfoGvPermit->getInForceDate()->format('Y-m-d'));
+        $this->assertSame('2015-01-01', $savedIrfoGvPermit->getInForceDate()->format('Y-m-d'));
         $this->assertEquals('Y', $savedIrfoGvPermit->getIsFeeExempt());
         $this->assertEquals(1, $savedIrfoGvPermit->getNoOfCopies());
     }

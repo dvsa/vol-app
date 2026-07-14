@@ -15,16 +15,17 @@ use Symfony\Component\Mailer\Envelope;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email as SymfonyEmail;
 
-class GovUkNotifyTransportTest extends MockeryTestCase
+final class GovUkNotifyTransportTest extends MockeryTestCase
 {
-    private const EN_TEMPLATE_ID = '11111111-2222-3333-4444-555555555555';
-    private const CY_TEMPLATE_ID = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee';
+    private const string EN_TEMPLATE_ID = '11111111-2222-3333-4444-555555555555';
+    private const string CY_TEMPLATE_ID = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee';
 
     /** @var NotifyClient&\Mockery\MockInterface */
     private $notifyClient;
 
     private GovUkNotifyTransport $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         Logger::setLogger(new \Psr\Log\NullLogger());
@@ -113,7 +114,7 @@ class GovUkNotifyTransportTest extends MockeryTestCase
 
     public function testMissingPayloadHeaderFails(): void
     {
-        $email = (new SymfonyEmail())
+        $email = new SymfonyEmail()
             ->from('from@example.com')
             ->to('user@example.com')
             ->subject('Subj')
@@ -138,7 +139,7 @@ class GovUkNotifyTransportTest extends MockeryTestCase
      */
     private function buildEmail(array $payload): SymfonyEmail
     {
-        $email = (new SymfonyEmail())
+        $email = new SymfonyEmail()
             ->from(new Address('from@example.com'))
             ->to(new Address('user@example.com'))
             ->subject('Subj')

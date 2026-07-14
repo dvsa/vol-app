@@ -12,7 +12,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use stdClass;
 
-class PartialHelperInitializerTest extends MockeryTestCase
+final class PartialHelperInitializerTest extends MockeryTestCase
 {
     private $serviceLocator;
 
@@ -20,6 +20,7 @@ class PartialHelperInitializerTest extends MockeryTestCase
 
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $partial = m::mock(Partial::class);

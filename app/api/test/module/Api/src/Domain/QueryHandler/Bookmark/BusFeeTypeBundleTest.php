@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Bus as BusRepo;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusFeeTypeBundleTest extends QueryHandlerTestCase
+final class BusFeeTypeBundleTest extends QueryHandlerTestCase
 {
     protected $refData = [
         FeeTypeEntity::FEE_TYPE_BUSVAR,
@@ -97,15 +97,13 @@ class BusFeeTypeBundleTest extends QueryHandlerTestCase
     /**
      * Provider for testHandleQuery
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function handleQueryProvider(): array
+    public static function handleQueryProvider(): \Iterator
     {
-        return [
-            [0, FeeTypeEntity::FEE_TYPE_BUSAPP, true, TrafficAreaEntity::SCOTTISH_TRAFFIC_AREA_CODE],
-            [1, FeeTypeEntity::FEE_TYPE_BUSVAR, true, TrafficAreaEntity::SCOTTISH_TRAFFIC_AREA_CODE],
-            [0, FeeTypeEntity::FEE_TYPE_BUSAPP, false, null],
-            [1, FeeTypeEntity::FEE_TYPE_BUSVAR, false, null],
-        ];
+        yield [0, FeeTypeEntity::FEE_TYPE_BUSAPP, true, TrafficAreaEntity::SCOTTISH_TRAFFIC_AREA_CODE];
+        yield [1, FeeTypeEntity::FEE_TYPE_BUSVAR, true, TrafficAreaEntity::SCOTTISH_TRAFFIC_AREA_CODE];
+        yield [0, FeeTypeEntity::FEE_TYPE_BUSAPP, false, null];
+        yield [1, FeeTypeEntity::FEE_TYPE_BUSVAR, false, null];
     }
 }

@@ -34,8 +34,8 @@ class IrhpCandidatePermit extends AbstractIrhpCandidatePermit implements Deletab
     public static function createNew(
         IrhpPermitApplication $irhpPermitApplication,
         RefData $requestedEmissionsCategory,
-        float $intensityOfUse = null,
-        float $applicationScore = null
+        ?float $intensityOfUse = null,
+        ?float $applicationScore = null
     ) {
         $irhpCandidatePermit = new self();
         $irhpCandidatePermit->irhpPermitApplication = $irhpPermitApplication;

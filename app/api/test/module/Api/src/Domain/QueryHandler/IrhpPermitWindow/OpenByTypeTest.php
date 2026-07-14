@@ -17,7 +17,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\OpenByType as ListQuery;
  * Open By Type Test
  * @author Andy Newton <andy@vitri.ltd>
  */
-class OpenByTypeTest extends QueryHandlerTestCase
+final class OpenByTypeTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

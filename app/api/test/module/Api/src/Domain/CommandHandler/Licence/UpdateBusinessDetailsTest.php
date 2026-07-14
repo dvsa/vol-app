@@ -14,12 +14,10 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\Licence\UpdateBusinessDetails
- */
-class UpdateBusinessDetailsTest extends AbstractCommandHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Licence\UpdateBusinessDetails::class)]
+final class UpdateBusinessDetailsTest extends AbstractCommandHandlerTestCase
 {
-    public const ID = 111;
+    public const int ID = 111;
 
     /** @var  UpdateBusinessDetails */
     protected $sut;
@@ -91,7 +89,7 @@ class UpdateBusinessDetailsTest extends AbstractCommandHandlerTestCase
             'flags' => ['tradingNamesChanged' => 1]
         ];
 
-        static::assertEquals($expected, $actual->toArray());
+        $this->assertEquals($expected, $actual->toArray());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCmdTaskNotCreated')]
@@ -119,24 +117,22 @@ class UpdateBusinessDetailsTest extends AbstractCommandHandlerTestCase
             'flags' => ['tradingNamesChanged' => $hasChanged]
         ];
 
-        static::assertEquals($expected, $actual->toArray());
+        $this->assertEquals($expected, $actual->toArray());
     }
 
-    public static function dpTestHandleCmdTaskNotCreated(): array
+    public static function dpTestHandleCmdTaskNotCreated(): \Iterator
     {
-        return [
-            [
-                'hasChanged' => true,
-                'isGranted' => false,
-            ],
-            [
-                'hasChanged' => false,
-                'isGranted' => true,
-            ],
-            [
-                'hasChanged' => false,
-                'isGranted' => false,
-            ],
+        yield [
+            'hasChanged' => true,
+            'isGranted' => false,
+        ];
+        yield [
+            'hasChanged' => false,
+            'isGranted' => true,
+        ];
+        yield [
+            'hasChanged' => false,
+            'isGranted' => false,
         ];
     }
 

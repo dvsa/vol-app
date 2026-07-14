@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Command\IrhpPermitWindow\Close;
 /**
  * Close IRHP Permit Window Test
  */
-class CloseTest extends \PHPUnit\Framework\TestCase
+final class CloseTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

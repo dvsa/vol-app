@@ -22,10 +22,11 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ConditionsUndertakingsReviewServiceTest extends MockeryTestCase
+final class ConditionsUndertakingsReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockTranslator = m::mock(TranslatorInterface::class);

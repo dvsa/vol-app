@@ -18,11 +18,12 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class OperatingCentresReviewServiceTest extends MockeryTestCase
+final class OperatingCentresReviewServiceTest extends MockeryTestCase
 {
     /** @var OperatingCentresReviewService review service */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockTranslator = m::mock(TranslatorInterface::class);
@@ -63,7 +64,7 @@ class OperatingCentresReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($continuationDetail));
     }
 
-    public static function dpGetConfigFromData(): array
+    public static function dpGetConfigFromData(): \Iterator
     {
         $loc1 = m::mock()
             ->shouldReceive('getOperatingCentre')
@@ -118,96 +119,93 @@ class OperatingCentresReviewServiceTest extends MockeryTestCase
             ->andReturn(4)
             ->withNoArgs()
             ->getMock();
-
-        return [
-            'licence cannot have trailers, vehicle type not mixed with lgv' => [
-                false,
-                false,
-                [$loc1, $loc2],
+        yield 'licence cannot have trailers, vehicle type not mixed with lgv' => [
+            false,
+            false,
+            [$loc1, $loc2],
+            [
                 [
-                    [
-                        ['value' => 'continuations.oc-section.table.name', 'header' => true],
-                        ['value' => 'continuations.oc-section.table.vehicles', 'header' => true]
-                    ],
-                    [
-                        ['value' => 'Baz, Cake'],
-                        ['value' => '3']
-                    ],
-                    [
-                        ['value' => 'Foo, Bar'],
-                        ['value' => '1']
-                    ]
-                ]
-            ],
-            'licence cannot have trailers, vehicle type mixed with lgv' => [
-                false,
-                true,
-                [$loc1, $loc2],
+                    ['value' => 'continuations.oc-section.table.name', 'header' => true],
+                    ['value' => 'continuations.oc-section.table.vehicles', 'header' => true]
+                ],
                 [
-                    [
-                        ['value' => 'continuations.oc-section.table.name', 'header' => true],
-                        ['value' => 'continuations.oc-section.table.heavy-goods-vehicles', 'header' => true]
-                    ],
-                    [
-                        ['value' => 'Baz, Cake'],
-                        ['value' => '3']
-                    ],
-                    [
-                        ['value' => 'Foo, Bar'],
-                        ['value' => '1']
-                    ]
-                ]
-            ],
-            'licence can have trailers, vehicle type not mixed with lgv' => [
-                true,
-                false,
-                [$loc1, $loc2],
+                    ['value' => 'Baz, Cake'],
+                    ['value' => '3']
+                ],
                 [
-                    [
-                        ['value' => 'continuations.oc-section.table.name', 'header' => true],
-                        ['value' => 'continuations.oc-section.table.vehicles', 'header' => true],
-                        ['value' => 'continuations.oc-section.table.trailers', 'header' => true]
-                    ],
-                    [
-                        ['value' => 'Baz, Cake'],
-                        ['value' => '3'],
-                        ['value' => '4']
-                    ],
-                    [
-                        ['value' => 'Foo, Bar'],
-                        ['value' => '1'],
-                        ['value' => '2']
-                    ]
+                    ['value' => 'Foo, Bar'],
+                    ['value' => '1']
                 ]
-            ],
-            'licence can have trailers, vehicle type mixed with lgv' => [
-                true,
-                true,
-                [$loc1, $loc2],
+            ]
+        ];
+        yield 'licence cannot have trailers, vehicle type mixed with lgv' => [
+            false,
+            true,
+            [$loc1, $loc2],
+            [
                 [
-                    [
-                        ['value' => 'continuations.oc-section.table.name', 'header' => true],
-                        ['value' => 'continuations.oc-section.table.heavy-goods-vehicles', 'header' => true],
-                        ['value' => 'continuations.oc-section.table.trailers', 'header' => true]
-                    ],
-                    [
-                        ['value' => 'Baz, Cake'],
-                        ['value' => '3'],
-                        ['value' => '4']
-                    ],
-                    [
-                        ['value' => 'Foo, Bar'],
-                        ['value' => '1'],
-                        ['value' => '2']
-                    ]
+                    ['value' => 'continuations.oc-section.table.name', 'header' => true],
+                    ['value' => 'continuations.oc-section.table.heavy-goods-vehicles', 'header' => true]
+                ],
+                [
+                    ['value' => 'Baz, Cake'],
+                    ['value' => '3']
+                ],
+                [
+                    ['value' => 'Foo, Bar'],
+                    ['value' => '1']
                 ]
-            ],
-            'no operating centres' => [
-                false,
-                false,
-                [],
-                [],
-            ],
+            ]
+        ];
+        yield 'licence can have trailers, vehicle type not mixed with lgv' => [
+            true,
+            false,
+            [$loc1, $loc2],
+            [
+                [
+                    ['value' => 'continuations.oc-section.table.name', 'header' => true],
+                    ['value' => 'continuations.oc-section.table.vehicles', 'header' => true],
+                    ['value' => 'continuations.oc-section.table.trailers', 'header' => true]
+                ],
+                [
+                    ['value' => 'Baz, Cake'],
+                    ['value' => '3'],
+                    ['value' => '4']
+                ],
+                [
+                    ['value' => 'Foo, Bar'],
+                    ['value' => '1'],
+                    ['value' => '2']
+                ]
+            ]
+        ];
+        yield 'licence can have trailers, vehicle type mixed with lgv' => [
+            true,
+            true,
+            [$loc1, $loc2],
+            [
+                [
+                    ['value' => 'continuations.oc-section.table.name', 'header' => true],
+                    ['value' => 'continuations.oc-section.table.heavy-goods-vehicles', 'header' => true],
+                    ['value' => 'continuations.oc-section.table.trailers', 'header' => true]
+                ],
+                [
+                    ['value' => 'Baz, Cake'],
+                    ['value' => '3'],
+                    ['value' => '4']
+                ],
+                [
+                    ['value' => 'Foo, Bar'],
+                    ['value' => '1'],
+                    ['value' => '2']
+                ]
+            ]
+        ];
+        yield 'no operating centres' => [
+            false,
+            false,
+            [],
+            [],
         ];
     }
 
@@ -239,46 +237,44 @@ class OperatingCentresReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getSummaryFromData($continuationDetail));
     }
 
-    public static function dpGetSummaryFromData(): array
+    public static function dpGetSummaryFromData(): \Iterator
     {
-        return [
-            'vehicles and trailers' => [
+        yield 'vehicles and trailers' => [
+            [
+                'totAuthVehicles',
+                'totAuthTrailers',
+            ],
+            [
                 [
-                    'totAuthVehicles',
-                    'totAuthTrailers',
+                    ['value' => 'continuations.oc-section.table.vehicles', 'header' => true],
+                    ['value' => 8]
                 ],
                 [
-                    [
-                        ['value' => 'continuations.oc-section.table.vehicles', 'header' => true],
-                        ['value' => 8]
-                    ],
-                    [
-                        ['value' => 'continuations.oc-section.table.trailers', 'header' => true],
-                        ['value' => 2]
-                    ]
+                    ['value' => 'continuations.oc-section.table.trailers', 'header' => true],
+                    ['value' => 2]
                 ]
+            ]
+        ];
+        yield 'hgv, lgv and trailers' => [
+            [
+                'totAuthHgvVehicles',
+                'totAuthLgvVehicles',
+                'totAuthTrailers',
             ],
-            'hgv, lgv and trailers' => [
+            [
                 [
-                    'totAuthHgvVehicles',
-                    'totAuthLgvVehicles',
-                    'totAuthTrailers',
+                    ['value' => 'continuations.oc-section.table.heavy-goods-vehicles', 'header' => true],
+                    ['value' => 5]
                 ],
                 [
-                    [
-                        ['value' => 'continuations.oc-section.table.heavy-goods-vehicles', 'header' => true],
-                        ['value' => 5]
-                    ],
-                    [
-                        ['value' => 'continuations.oc-section.table.light-goods-vehicles', 'header' => true],
-                        ['value' => 3]
-                    ],
-                    [
-                        ['value' => 'continuations.oc-section.table.trailers', 'header' => true],
-                        ['value' => 2]
-                    ]
+                    ['value' => 'continuations.oc-section.table.light-goods-vehicles', 'header' => true],
+                    ['value' => 3]
+                ],
+                [
+                    ['value' => 'continuations.oc-section.table.trailers', 'header' => true],
+                    ['value' => 2]
                 ]
-            ],
+            ]
         ];
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Lva\TransportManager\Sections;
 
 use Common\Data\Mapper\Lva\TransportManager\Sections\OtherLicences;
@@ -7,7 +9,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-class OtherLicencesTest extends MockeryTestCase
+final class OtherLicencesTest extends MockeryTestCase
 {
     private $mockTranslator;
 

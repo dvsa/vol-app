@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
 use Olcs\Logging\Test\RecordingLogger;
 
-class ApiServiceTest extends TestCase
+final class ApiServiceTest extends TestCase
 {
     use ClientOptionsTestTrait;
     use GuzzleTestTrait;
@@ -25,11 +25,6 @@ class ApiServiceTest extends TestCase
      * @var RecordingLogger
      */
     private $logger;
-
-    /**
-     * @var HttpClient
-     */
-    private $httpClient;
 
     /**
      * @var ApiService
@@ -46,6 +41,7 @@ class ApiServiceTest extends TestCase
      */
     private $accessTokenResponse;
 
+    #[\Override]
     public function setUp(): void
     {
         $userId = '555';
@@ -56,14 +52,14 @@ class ApiServiceTest extends TestCase
 
         $this->logger = new RecordingLogger();
 
-        $this->httpClient = new HttpClient(
+        $httpClient = new HttpClient(
             $this->setUpMockClient(),
             $this->getClientOptions(),
             $this->logger
         );
 
         $this->sut = new ApiService(
-            $this->httpClient,
+            $httpClient,
             $this->identity,
             $this->logger
         );
@@ -247,7 +243,7 @@ class ApiServiceTest extends TestCase
         ];
 
         $response = $this->sut->get('/get/payment-status', 'CARD', $params);
-        $this->assertStringContainsString("503 Service Unavailable", $response);
+        $this->assertStringContainsString("503 Service Unavailable", (string) $response);
     }
 
     public function testEmptyResponse(): void

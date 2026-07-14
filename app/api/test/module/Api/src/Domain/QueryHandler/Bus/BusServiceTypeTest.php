@@ -22,7 +22,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class BusServiceTypeTest extends QueryHandlerTestCase
+final class BusServiceTypeTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

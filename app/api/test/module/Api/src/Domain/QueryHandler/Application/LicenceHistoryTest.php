@@ -23,7 +23,7 @@ use Doctrine\ORM\Query;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class LicenceHistoryTest extends QueryHandlerTestCase
+final class LicenceHistoryTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

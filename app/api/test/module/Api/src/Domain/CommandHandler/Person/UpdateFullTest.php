@@ -21,7 +21,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class UpdateFullTest extends AbstractCommandHandlerTestCase
+final class UpdateFullTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

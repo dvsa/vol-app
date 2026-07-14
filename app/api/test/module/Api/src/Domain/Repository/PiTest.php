@@ -24,8 +24,9 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class PiTest extends RepositoryTestCase
+final class PiTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(PiRepo::class);

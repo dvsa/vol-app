@@ -19,7 +19,7 @@ use Mockery as m;
 /**
  * CreateSi Test
  */
-class CreateSiTest extends AbstractCommandHandlerTestCase
+final class CreateSiTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -101,9 +101,9 @@ class CreateSiTest extends AbstractCommandHandlerTestCase
 
         $this->assertSame($this->references[CaseEntity::class][$caseId], $savedSi->getCase());
         $this->assertInstanceOf(\DateTime::class, $savedSi->getCheckDate());
-        $this->assertEquals($checkDate, $savedSi->getCheckDate()->format('Y-m-d'));
+        $this->assertSame($checkDate, $savedSi->getCheckDate()->format('Y-m-d'));
         $this->assertInstanceOf(\DateTime::class, $savedSi->getInfringementDate());
-        $this->assertEquals($infringementDate, $savedSi->getInfringementDate()->format('Y-m-d'));
+        $this->assertSame($infringementDate, $savedSi->getInfringementDate()->format('Y-m-d'));
         $this->assertSame(
             $this->references[SiCategoryEntity::class][SiCategoryEntity::ERRU_DEFAULT_CATEGORY],
             $savedSi->getSiCategory()

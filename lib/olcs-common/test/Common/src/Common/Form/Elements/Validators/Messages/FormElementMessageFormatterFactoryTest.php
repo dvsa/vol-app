@@ -16,19 +16,19 @@ use Psr\Container\ContainerInterface;
 /**
  * @see FormElementMessageFormatterFactory
  */
-class FormElementMessageFormatterFactoryTest extends MockeryTestCase
+final class FormElementMessageFormatterFactoryTest extends MockeryTestCase
 {
-    protected const VALIDATOR_MANAGER = 'ValidatorManager';
+    protected const string VALIDATOR_MANAGER = 'ValidatorManager';
 
-    protected const MESSAGE_KEY = 'MESSAGE KEY';
+    protected const string MESSAGE_KEY = 'MESSAGE KEY';
 
-    protected const VALIDATOR_NAME = 'VALIDATOR NAME';
+    protected const string VALIDATOR_NAME = 'VALIDATOR NAME';
 
-    protected const CONFIG_SERVICE = 'config';
+    protected const string CONFIG_SERVICE = 'config';
 
-    protected const VALIDATION_CONFIG_NAMESPACE = 'validation';
+    protected const string VALIDATION_CONFIG_NAMESPACE = 'validation';
 
-    protected const DEFAULT_MESSAGE_TEMPLATES_TO_REPLACE_VARIABLE = 'default_message_templates_to_replace';
+    protected const string DEFAULT_MESSAGE_TEMPLATES_TO_REPLACE_VARIABLE = 'default_message_templates_to_replace';
 
     protected FormElementMessageFormatterFactory $sut;
 
@@ -57,6 +57,6 @@ class FormElementMessageFormatterFactoryTest extends MockeryTestCase
         $replacement = $formatter->getReplacementFor(static::MESSAGE_KEY);
 
         $this->assertInstanceOf(ValidatorDefaultMessageProvider::class, $replacement);
-        $this->assertEquals(static::VALIDATOR_NAME, $replacement->getValidatorName());
+        $this->assertSame(static::VALIDATOR_NAME, $replacement->getValidatorName());
     }
 }

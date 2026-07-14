@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Api\Domain\Query;
 use Dvsa\Olcs\Api\Domain\Query;
 use Dvsa\Olcs\Api\Domain\Query\Bookmark;
 
-class EachPropertyHasAGetterTest extends \PHPUnit\Framework\TestCase
+final class EachPropertyHasAGetterTest extends \PHPUnit\Framework\TestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testEachPropertyHasGetter(mixed $bookmarkClass): void
@@ -20,34 +20,30 @@ class EachPropertyHasAGetterTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public static function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
-        return [
-            Bookmark\ApplicationBundle::class => [Bookmark\ApplicationBundle::class],
-            Bookmark\ConditionsUndertakings::class => [Bookmark\ConditionsUndertakings::class],
-            Bookmark\FStandingCapitalReserves::class => [Bookmark\FStandingCapitalReserves::class],
-            Bookmark\InterimConditionsUndertakings::class => [Bookmark\InterimConditionsUndertakings::class],
-            Bookmark\PreviousHearingBundle::class => [Bookmark\PreviousHearingBundle::class],
-            Bookmark\PreviousPublicationByApplication::class => [Bookmark\PreviousPublicationByApplication::class],
-            Bookmark\PreviousPublicationByLicence::class => [Bookmark\PreviousPublicationByLicence::class],
-            Bookmark\PreviousPublicationByPi::class => [Bookmark\PreviousPublicationByPi::class],
-            Bookmark\PublicationLatestByTaAndTypeBundle::class => [Bookmark\PublicationLatestByTaAndTypeBundle::class],
-            Bookmark\PublicationLinkBundle::class => [Bookmark\PublicationLinkBundle::class],
-            Bookmark\TotalContFee::class => [Bookmark\TotalContFee::class],
-            Bookmark\Unpublished::class => [Bookmark\Unpublished::class],
-            Bookmark\UnpublishedApplication::class => [Bookmark\UnpublishedApplication::class],
-            Bookmark\UnpublishedBusReg::class => [Bookmark\UnpublishedBusReg::class],
-            Bookmark\UnpublishedImpounding::class => [Bookmark\UnpublishedImpounding::class],
-            Bookmark\UnpublishedLicence::class => [Bookmark\UnpublishedLicence::class],
-            Bookmark\UnpublishedPi::class => [Bookmark\UnpublishedPi::class],
-
-            Query\Application\NotTakenUpList::class => [Query\Application\NotTakenUpList::class],
-            Query\Bus\ByLicenceRoute::class => [Query\Bus\ByLicenceRoute::class],
-            Query\Bus\EbsrSubmissionList::class => [Query\Bus\EbsrSubmissionList::class],
-            Query\Bus\PreviousVariationByRouteNo::class => [Query\Bus\PreviousVariationByRouteNo::class],
-            Query\Bus\TxcInboxList::class => [Query\Bus\TxcInboxList::class],
-
-            Query\User\UserListSelfserve::class => [Query\User\UserListSelfserve::class],
-        ];
+        yield Bookmark\ApplicationBundle::class => [Bookmark\ApplicationBundle::class];
+        yield Bookmark\ConditionsUndertakings::class => [Bookmark\ConditionsUndertakings::class];
+        yield Bookmark\FStandingCapitalReserves::class => [Bookmark\FStandingCapitalReserves::class];
+        yield Bookmark\InterimConditionsUndertakings::class => [Bookmark\InterimConditionsUndertakings::class];
+        yield Bookmark\PreviousHearingBundle::class => [Bookmark\PreviousHearingBundle::class];
+        yield Bookmark\PreviousPublicationByApplication::class => [Bookmark\PreviousPublicationByApplication::class];
+        yield Bookmark\PreviousPublicationByLicence::class => [Bookmark\PreviousPublicationByLicence::class];
+        yield Bookmark\PreviousPublicationByPi::class => [Bookmark\PreviousPublicationByPi::class];
+        yield Bookmark\PublicationLatestByTaAndTypeBundle::class => [Bookmark\PublicationLatestByTaAndTypeBundle::class];
+        yield Bookmark\PublicationLinkBundle::class => [Bookmark\PublicationLinkBundle::class];
+        yield Bookmark\TotalContFee::class => [Bookmark\TotalContFee::class];
+        yield Bookmark\Unpublished::class => [Bookmark\Unpublished::class];
+        yield Bookmark\UnpublishedApplication::class => [Bookmark\UnpublishedApplication::class];
+        yield Bookmark\UnpublishedBusReg::class => [Bookmark\UnpublishedBusReg::class];
+        yield Bookmark\UnpublishedImpounding::class => [Bookmark\UnpublishedImpounding::class];
+        yield Bookmark\UnpublishedLicence::class => [Bookmark\UnpublishedLicence::class];
+        yield Bookmark\UnpublishedPi::class => [Bookmark\UnpublishedPi::class];
+        yield Query\Application\NotTakenUpList::class => [Query\Application\NotTakenUpList::class];
+        yield Query\Bus\ByLicenceRoute::class => [Query\Bus\ByLicenceRoute::class];
+        yield Query\Bus\EbsrSubmissionList::class => [Query\Bus\EbsrSubmissionList::class];
+        yield Query\Bus\PreviousVariationByRouteNo::class => [Query\Bus\PreviousVariationByRouteNo::class];
+        yield Query\Bus\TxcInboxList::class => [Query\Bus\TxcInboxList::class];
+        yield Query\User\UserListSelfserve::class => [Query\User\UserListSelfserve::class];
     }
 }

@@ -19,7 +19,7 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateAddressesStatusTest extends AbstractUpdateStatusTestCase
+final class UpdateAddressesStatusTest extends AbstractUpdateStatusTestCase
 {
     protected $section = 'Addresses';
 

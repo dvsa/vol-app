@@ -19,7 +19,7 @@ use Mockery as m;
 /**
  * Update NonPi Test
  */
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var UpdateCommandHandler
@@ -144,13 +144,11 @@ class UpdateTest extends AbstractCommandHandlerTestCase
     /**
      * expected witness input and output values
      */
-    public static function dpWitnessProvider(): array
+    public static function dpWitnessProvider(): \Iterator
     {
-        return [
-            [4, 4],
-            [1, 1],
-            [0, 0],
-            [null, 0]
-        ];
+        yield [4, 4];
+        yield [1, 1];
+        yield [0, 0];
+        yield [null, 0];
     }
 }

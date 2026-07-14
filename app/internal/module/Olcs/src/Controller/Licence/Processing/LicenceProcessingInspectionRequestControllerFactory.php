@@ -16,7 +16,7 @@ use Olcs\Service\Data\OperatingCentresForInspectionRequest;
 class LicenceProcessingInspectionRequestControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceProcessingInspectionRequestController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LicenceProcessingInspectionRequestController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         assert($translationHelper instanceof TranslationHelperService);

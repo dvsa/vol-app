@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\TransportManagerApplication;
 
 use Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList;
 /**
  * Get List Test
  */
-class GetListTest extends \PHPUnit\Framework\TestCase
+final class GetListTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

@@ -25,7 +25,7 @@ use Mockery as m;
 /**
  * Class Delete User Test
  */
-class DeleteUserTest extends AbstractCommandHandlerTestCase
+final class DeleteUserTest extends AbstractCommandHandlerTestCase
 {
     /** @var UserEntity|m\Mock */
     private $userEntity;

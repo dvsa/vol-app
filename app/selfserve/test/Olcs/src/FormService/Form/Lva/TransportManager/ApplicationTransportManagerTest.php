@@ -18,7 +18,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  * @author Rob Caiger <rob@clocal.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ApplicationTransportManagerTest extends MockeryTestCase
+final class ApplicationTransportManagerTest extends MockeryTestCase
 {
     use ButtonsAlterations;
 
@@ -26,12 +26,11 @@ class ApplicationTransportManagerTest extends MockeryTestCase
 
     protected $formHelper;
 
-    protected $fsm;
-
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(FormHelperService::class);
-        $this->fsm = m::mock(FormServiceManager::class)->makePartial();
+        $fsm = m::mock(FormServiceManager::class)->makePartial();
 
         $this->sut = new Sut($this->formHelper, m::mock(AuthorizationService::class));
     }

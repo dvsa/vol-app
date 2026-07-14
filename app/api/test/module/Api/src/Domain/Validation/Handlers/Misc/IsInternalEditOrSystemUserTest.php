@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsInternalEditOrSystemUser;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class IsInternalEditOrSystemUserTest extends AbstractHandlerTestCase
+final class IsInternalEditOrSystemUserTest extends AbstractHandlerTestCase
 {
     /**
      * @var IsInternalEditOrSystemUser

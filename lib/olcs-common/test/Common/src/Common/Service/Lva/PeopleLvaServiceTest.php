@@ -6,6 +6,8 @@
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Printing;
 
 use Common\Service\Helper\FormHelperService;
@@ -22,7 +24,7 @@ use Laminas\Form\Form;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class PeopleLvaServiceTest extends MockeryTestCase
+final class PeopleLvaServiceTest extends MockeryTestCase
 {
     /** @var PeopleLvaService */
     private $sut;

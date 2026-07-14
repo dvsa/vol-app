@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ConditionalFeeUpdaterTest extends MockeryTestCase
+final class ConditionalFeeUpdaterTest extends MockeryTestCase
 {
     private $feeUpdater;
 
@@ -28,6 +28,7 @@ class ConditionalFeeUpdaterTest extends MockeryTestCase
 
     private $conditionalFeeUpdater;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->feeUpdater = m::mock(FeeUpdater::class);

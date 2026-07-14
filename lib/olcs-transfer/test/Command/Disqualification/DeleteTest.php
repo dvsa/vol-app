@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Disqualification;
 
 use Dvsa\Olcs\Transfer\Command\Disqualification\Delete;
@@ -14,7 +16,7 @@ use Laminas\Stdlib\ArraySerializableInterface;
  *
  * @package Dvsa\OlcsTest\Transfer\Command\Disqualification
  */
-class DeleteTest extends TestCase
+final class DeleteTest extends TestCase
 {
     use CommandTest, DtoWithoutFieldTransformationsTest, DtoWithoutOptionalFieldsTest {
         DtoWithoutFieldTransformationsTest::testFieldTransformations insteadof CommandTest;

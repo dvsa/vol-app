@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Nr\Mapping\CgrResponseXml;
 use Olcs\XmlTools\Filter\MapXmlFile;
 use PHPUnit\Framework\TestCase;
 
-class CgrResponseXmlTest extends TestCase
+final class CgrResponseXmlTest extends TestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTemplate')]
     public function testXmlMapping(string $template): void
@@ -132,13 +132,11 @@ class CgrResponseXmlTest extends TestCase
                 ],
         ];
 
-        $this->assertEquals($expected, $sut->mapData($domDocument));
+        $this->assertSame($expected, $sut->mapData($domDocument));
     }
 
-    public static function dpTemplate(): array
+    public static function dpTemplate(): \Iterator
     {
-        return [
-            ['checkGoodReputeResponseTemplate.xml'],
-        ];
+        yield ['checkGoodReputeResponseTemplate.xml'];
     }
 }

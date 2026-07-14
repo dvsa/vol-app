@@ -28,59 +28,41 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Joshua Curtis <josh.curtis@valtech.co.uk>
  */
-class ConditionsUndertakingsControllerTest extends AbstractLvaControllerTestCase
+final class ConditionsUndertakingsControllerTest extends AbstractLvaControllerTestCase
 {
     protected $sut;
 
-    protected $mockNiTextTranslationUtil;
-
-    protected $mockAuthService;
-
-    protected $mockFormHelper;
-
-    protected $mockFlashMessengerHelper;
-
-    protected $mockFormServiceManager;
-
-    protected $mockTableFactory;
-
-    protected $mockStringHelper;
-
     protected $mockLvaAdapter;
-
-    protected $mockRestrictionHelper;
-
-    protected $mockNavigation;
 
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->mockNiTextTranslationUtil = m::mock(NiTextTranslation::class);
-        $this->mockAuthService = m::mock(AuthorizationService::class);
-        $this->mockFormHelper = m::mock(FormHelperService::class);
-        $this->mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
-        $this->mockFormServiceManager = m::mock(FormServiceManager::class);
-        $this->mockTableFactory = m::mock(TableFactory::class);
-        $this->mockStringHelper = m::mock(StringHelperService::class);
+        $mockNiTextTranslationUtil = m::mock(NiTextTranslation::class);
+        $mockAuthService = m::mock(AuthorizationService::class);
+        $mockFormHelper = m::mock(FormHelperService::class);
+        $mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
+        $mockFormServiceManager = m::mock(FormServiceManager::class);
+        $mockTableFactory = m::mock(TableFactory::class);
+        $mockStringHelper = m::mock(StringHelperService::class);
         $this->mockLvaAdapter = m::mock(ApplicationConditionsUndertakingsAdapter::class);
-        $this->mockRestrictionHelper = m::mock(RestrictionHelperService::class);
-        $this->mockNavigation = m::mock('navigation');
+        $mockRestrictionHelper = m::mock(RestrictionHelperService::class);
+        $mockNavigation = m::mock('navigation');
 
         $this->mockController(
             ConditionsUndertakingsController::class,
             [
-            $this->mockNiTextTranslationUtil,
-            $this->mockAuthService,
-            $this->mockFormHelper,
-            $this->mockFlashMessengerHelper,
-            $this->mockFormServiceManager,
-            $this->mockTableFactory,
-            $this->mockStringHelper,
+            $mockNiTextTranslationUtil,
+            $mockAuthService,
+            $mockFormHelper,
+            $mockFlashMessengerHelper,
+            $mockFormServiceManager,
+            $mockTableFactory,
+            $mockStringHelper,
             $this->mockLvaAdapter,
-            $this->mockRestrictionHelper,
-            $this->mockNavigation
+            $mockRestrictionHelper,
+            $mockNavigation
             ]
         );
 

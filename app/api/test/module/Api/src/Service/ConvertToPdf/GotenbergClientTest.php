@@ -11,7 +11,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\ConvertToPdf\GotenbergClient::class)]
-class GotenbergClientTest extends MockeryTestCase
+final class GotenbergClientTest extends MockeryTestCase
 {
     public function testConvertHtmlRequestsA4PageSize(): void
     {
@@ -33,10 +33,8 @@ class GotenbergClientTest extends MockeryTestCase
             ->with('index.html', 'files', '<html></html>', 'text/html');
         $httpClient->shouldReceive('setParameterPost')
             ->once()
-            ->with(m::on(function (array $params): bool {
-                return ($params['preferCssPageSize'] ?? null) === 'true'
-                    && isset($params['paperWidth'], $params['paperHeight']);
-            }));
+            ->with(m::on(fn(array $params): bool => ($params['preferCssPageSize'] ?? null) === 'true'
+                && isset($params['paperWidth'], $params['paperHeight'])));
         $httpClient->shouldReceive('send')->once()->andReturn($response);
 
         try {

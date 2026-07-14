@@ -11,7 +11,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintStock as ReadyToPrintStockQuery
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class ReadyToPrintStockTest extends QueryHandlerTestCase
+final class ReadyToPrintStockTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

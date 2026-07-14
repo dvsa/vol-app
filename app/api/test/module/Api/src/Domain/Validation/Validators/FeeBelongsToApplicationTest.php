@@ -12,7 +12,7 @@ use Mockery as m;
 /**
  * Fee Belongs To Application Test
  */
-class FeeBelongsToApplicationTest extends AbstractValidatorsTestCase
+final class FeeBelongsToApplicationTest extends AbstractValidatorsTestCase
 {
     /**
      * @var FeeBelongsToApplication

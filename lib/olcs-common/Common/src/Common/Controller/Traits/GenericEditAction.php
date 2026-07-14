@@ -18,7 +18,7 @@ trait GenericEditAction
     /**
      * Render the edit form
      *
-     * @return Response
+     * @return \Laminas\Http\Response
      */
     public function editAction()
     {

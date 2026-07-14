@@ -21,7 +21,7 @@ class AbstractServiceFactory implements AbstractFactoryInterface
      * {@inheritdoc}
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $serviceClassName = $this->getClassName($requestedName);
 

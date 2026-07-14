@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\User;
 
 use Dvsa\Olcs\Transfer\Query\User\UserList;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Query\User\UserList
- */
-class UserListTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Query\User\UserList::class)]
+final class UserListTest extends MockeryTestCase
 {
     public function testGetSet()
     {
@@ -23,11 +23,11 @@ class UserListTest extends MockeryTestCase
 
         $sut = UserList::create($data);
 
-        static::assertEquals('p.forename', $sut->getSort());
-        static::assertEquals('ASC', $sut->getOrder());
-        static::assertEquals(1, $sut->getOrganisation());
-        static::assertEquals(12, $sut->getTeam());
-        static::assertEquals(true, $sut->getIsInternal());
-        static::assertEquals(['operator-user', 'operator-tm'], $sut->getRoles());
+        $this->assertEquals('p.forename', $sut->getSort());
+        $this->assertEquals('ASC', $sut->getOrder());
+        $this->assertEquals(1, $sut->getOrganisation());
+        $this->assertEquals(12, $sut->getTeam());
+        $this->assertEquals(true, $sut->getIsInternal());
+        $this->assertEquals(['operator-user', 'operator-tm'], $sut->getRoles());
     }
 }

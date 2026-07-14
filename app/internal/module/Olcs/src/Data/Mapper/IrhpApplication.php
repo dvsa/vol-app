@@ -79,7 +79,7 @@ class IrhpApplication implements MapperInterface
      * @param array $applicationSteps|null
      * @return array
      */
-    public function mapFromForm(array $data, array $applicationSteps = null)
+    public function mapFromForm(array $data, ?array $applicationSteps = null)
     {
         $additionalData = [];
 

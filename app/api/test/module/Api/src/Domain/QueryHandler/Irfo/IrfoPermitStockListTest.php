@@ -18,7 +18,7 @@ use Mockery as m;
 /**
  * IrfoPermitStockList Test
  */
-class IrfoPermitStockListTest extends QueryHandlerTestCase
+final class IrfoPermitStockListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

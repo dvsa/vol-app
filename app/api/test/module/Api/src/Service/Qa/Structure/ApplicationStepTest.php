@@ -15,15 +15,15 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ApplicationStepTest extends MockeryTestCase
+final class ApplicationStepTest extends MockeryTestCase
 {
-    public const TYPE = 'checkbox';
+    public const string TYPE = 'checkbox';
 
-    public const FIELDSET_NAME = 'fieldset123';
+    public const string FIELDSET_NAME = 'fieldset123';
 
-    public const SHORT_NAME = 'Cabotage';
+    public const string SHORT_NAME = 'Cabotage';
 
-    public const SLUG = 'slug';
+    public const string SLUG = 'slug';
 
     private $elementRepresentation;
 
@@ -33,6 +33,7 @@ class ApplicationStepTest extends MockeryTestCase
 
     private $validatorList;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->elementRepresentation = ['elementRepresentation'];
@@ -76,12 +77,10 @@ class ApplicationStepTest extends MockeryTestCase
         );
     }
 
-    public static function dpGetRepresentation(): array
+    public static function dpGetRepresentation(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 
     public function testGetValidatorList(): void

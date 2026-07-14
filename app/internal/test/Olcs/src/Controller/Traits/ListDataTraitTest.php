@@ -8,7 +8,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversTrait(\Olcs\Controller\Traits\ListDataTrait::class)]
-class ListDataTraitTest extends MockeryTestCase
+final class ListDataTraitTest extends MockeryTestCase
 {
     /**
      * @var \OlcsTest\Controller\Traits\Stub\StubListDataTrait
@@ -17,6 +17,7 @@ class ListDataTraitTest extends MockeryTestCase
     /** @var  m\MockInterface */
     private $mockResponse;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockResponse = m::mock(\Common\Service\Cqrs\Response::class);
@@ -55,7 +56,7 @@ class ListDataTraitTest extends MockeryTestCase
     {
         $this->mockResponse->shouldReceive('isOk')->andReturn(false);
 
-        static::assertEquals([], $this->sut->getListDataUser());
+        $this->assertEquals([], $this->sut->getListDataUser());
     }
 
     public function testGetListDataOptions(): void
@@ -75,12 +76,9 @@ class ListDataTraitTest extends MockeryTestCase
 
         $actual = $this->sut->getListDataUser(null, ['unit_Key' => 'unit_Val']);
 
-        static::assertEquals(
-            [
-                'unit_Key' => 'unit_Val',
-                'unit_Id1' => 'unit_Val1',
-            ],
-            $actual
-        );
+        $this->assertEquals([
+            'unit_Key' => 'unit_Val',
+            'unit_Id1' => 'unit_Val1',
+        ], $actual);
     }
 }

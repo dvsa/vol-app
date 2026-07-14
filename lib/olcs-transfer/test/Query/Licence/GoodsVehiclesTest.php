@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Licence;
 
 use Dvsa\Olcs\Transfer\Query\Licence\GoodsVehicles;
@@ -12,7 +14,7 @@ use Laminas\Validator\ValidatorPluginManager;
 use PHPUnit\Framework\TestCase;
 use Mockery as m;
 
-class GoodsVehiclesTest extends TestCase
+final class GoodsVehiclesTest extends TestCase
 {
     public function testGetVehicleIdsReturnsAnArrayProvided()
     {
@@ -43,23 +45,19 @@ class GoodsVehiclesTest extends TestCase
     }
 
     /**
-     * @return array[]
+     * @return \Iterator<(int | string), array<mixed>>
      */
-    public function getValidVehicleIdSets(): array
+    public static function getValidVehicleIdSets(): \Iterator
     {
-        return [
-            'no vehicle ids' => [],
-            'empty array of vehicle ids' => [[]],
-            'max number of vehicle ids' => [array_fill(0, 100, 1)],
-            'numeric string vehicle id' => [["1"]],
-            'associative vehicle id array' => [["foo" => 1]],
-        ];
+        yield 'no vehicle ids' => [];
+        yield 'empty array of vehicle ids' => [[]];
+        yield 'max number of vehicle ids' => [array_fill(0, 100, 1)];
+        yield 'numeric string vehicle id' => [["1"]];
+        yield 'associative vehicle id array' => [["foo" => 1]];
     }
 
-    /**
-     * @dataProvider getValidVehicleIdSets
-     */
-    public function testItAcceptsValidSetsOfVehicleIds(array $vehicleIdsSet = null): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getValidVehicleIdSets')]
+    public function testItAcceptsValidSetsOfVehicleIds(?array $vehicleIdsSet = null): void
     {
         // Setup
         $sut = GoodsVehicles::create(['vehicleIds' => $vehicleIdsSet]);
@@ -73,23 +71,19 @@ class GoodsVehiclesTest extends TestCase
     }
 
     /**
-     * @return array[]
+     * @return \Iterator<(int | string), array<mixed>>
      */
-    public function getInvalidVehicleIdSets(): array
+    public static function getInvalidVehicleIdSets(): \Iterator
     {
-        return [
-            'too many vehicle ids' => [array_fill(0, 101, 1)],
-            'zero vehicle id' => [[0]],
-            'negative vehicle id' => [[-1]],
-            'decimal vehicle id' => [[1.05]],
-            'alpha vehicle id' => [["a"]],
-        ];
+        yield 'too many vehicle ids' => [array_fill(0, 101, 1)];
+        yield 'zero vehicle id' => [[0]];
+        yield 'negative vehicle id' => [[-1]];
+        yield 'decimal vehicle id' => [[1.05]];
+        yield 'alpha vehicle id' => [["a"]];
     }
 
-    /**
-     * @dataProvider getInvalidVehicleIdSets
-     */
-    public function testItDoesNotAcceptInvalidSetsOfVehicleIds(array $vehicleIdsSet = null): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getInvalidVehicleIdSets')]
+    public function testItDoesNotAcceptInvalidSetsOfVehicleIds(?array $vehicleIdsSet = null): void
     {
         // Setup
         $sut = GoodsVehicles::create(['vehicleIds' => $vehicleIdsSet]);

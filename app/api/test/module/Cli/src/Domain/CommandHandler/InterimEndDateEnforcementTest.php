@@ -12,7 +12,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use Olcs\Logging\Log\Logger;
 
-class InterimEndDateEnforcementTest extends AbstractCommandHandlerTestCase
+final class InterimEndDateEnforcementTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

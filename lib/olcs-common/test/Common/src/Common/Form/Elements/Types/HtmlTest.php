@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Types;
 
 use Common\Form\Elements\Types\Html;
@@ -8,13 +10,13 @@ use Common\Form\View\Helper\FormElement;
 use Mockery;
 use Laminas\View\Renderer\PhpRenderer;
 
-class HtmlTest extends \PHPUnit\Framework\TestCase
+final class HtmlTest extends \PHPUnit\Framework\TestCase
 {
-    public const INITIAL_HTML_PAYLOAD = '<em>TEST</em>';
+    public const string INITIAL_HTML_PAYLOAD = '<em>TEST</em>';
 
-    public const UPDATED_HTML_PAYLOAD = '<em>TEST 2</em>';
+    public const string UPDATED_HTML_PAYLOAD = '<em>TEST 2</em>';
 
-    public const MALICIOUS_HTML_PAYLOAD = '<script>alert("TEST")</script>';
+    public const string MALICIOUS_HTML_PAYLOAD = '<script>alert("TEST")</script>';
 
     /** @var Html */
     private $htmlElement;

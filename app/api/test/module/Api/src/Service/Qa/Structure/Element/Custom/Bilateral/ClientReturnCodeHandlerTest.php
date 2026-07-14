@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ClientReturnCodeHandlerTest extends MockeryTestCase
+final class ClientReturnCodeHandlerTest extends MockeryTestCase
 {
     private $irhpPermitApplication;
 
@@ -28,6 +28,7 @@ class ClientReturnCodeHandlerTest extends MockeryTestCase
 
     private $clientReturnCodeHandler;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpPermitApplication = m::mock(IrhpPermitApplication::class);

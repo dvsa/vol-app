@@ -15,7 +15,7 @@ use Mockery as m;
 /**
  * Test the short term permit app unsuccessful email
  */
-class SendEcmtShortTermUnsuccessfulTest extends AbstractPermitTestCase
+final class SendEcmtShortTermUnsuccessfulTest extends AbstractPermitTestCase
 {
     public $orgEmails;
     public $contactDetails;

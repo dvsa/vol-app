@@ -123,7 +123,7 @@ class OlcsEntityListener implements EventSubscriber, AuthAwareInterface, Factory
         );
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->sl = $container;
         return $this;

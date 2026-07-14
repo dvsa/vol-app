@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 use Mockery as m;
 
-class CanDeleteSurrenderTest extends AbstractValidatorsTestCase
+final class CanDeleteSurrenderTest extends AbstractValidatorsTestCase
 {
     /**
      * @var CanDeleteSurrender
@@ -55,41 +55,39 @@ class CanDeleteSurrenderTest extends AbstractValidatorsTestCase
         $this->assertSame($expected, $this->sut->isValid(1));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            'is_withdrawn' => [
-                'surrender' => [
-                    'status' => RefData::SURRENDER_STATUS_WITHDRAWN,
-                    'createdOn' => new \DateTime(),
-                    'lastModifiedOn' => new \DateTime()
-                ],
-                'expected' => true
+        yield 'is_withdrawn' => [
+            'surrender' => [
+                'status' => RefData::SURRENDER_STATUS_WITHDRAWN,
+                'createdOn' => new \DateTime(),
+                'lastModifiedOn' => new \DateTime()
             ],
-            'has_expired_created_on' => [
-                'surrender' => [
-                    'status' => RefData::SURRENDER_STATUS_COMM_LIC_DOCS_COMPLETE,
-                    'createdOn' => date_create('3 days ago'),
-                    'lastModifiedOn' => null
-                ],
-                'expected' => true
+            'expected' => true
+        ];
+        yield 'has_expired_created_on' => [
+            'surrender' => [
+                'status' => RefData::SURRENDER_STATUS_COMM_LIC_DOCS_COMPLETE,
+                'createdOn' => date_create('3 days ago'),
+                'lastModifiedOn' => null
             ],
-            'has_expired_last_modified' => [
-                'surrender' => [
-                    'status' => RefData::SURRENDER_STATUS_COMM_LIC_DOCS_COMPLETE,
-                    'createdOn' => date_create('5 days ago'),
-                    'lastModifiedOn' => date_create('4 days ago')
-                ],
-                'expected' => true
+            'expected' => true
+        ];
+        yield 'has_expired_last_modified' => [
+            'surrender' => [
+                'status' => RefData::SURRENDER_STATUS_COMM_LIC_DOCS_COMPLETE,
+                'createdOn' => date_create('5 days ago'),
+                'lastModifiedOn' => date_create('4 days ago')
             ],
-            'not_withdrawn_or_expired' => [
-                'surrender' => [
-                    'status' => RefData::SURRENDER_STATUS_DETAILS_CONFIRMED,
-                    'createdOn' => new \DateTime(),
-                    'lastModifiedOn' => new \DateTime()
-                ],
-                'expected' => false
+            'expected' => true
+        ];
+        yield 'not_withdrawn_or_expired' => [
+            'surrender' => [
+                'status' => RefData::SURRENDER_STATUS_DETAILS_CONFIRMED,
+                'createdOn' => new \DateTime(),
+                'lastModifiedOn' => new \DateTime()
             ],
+            'expected' => false
         ];
     }
 }

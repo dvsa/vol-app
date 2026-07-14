@@ -4,6 +4,8 @@
  * SeriousInfringementLinkTest.php
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -16,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  *
  * @package CommonTest\Service\Table\Formatter
  */
-class SeriousInfringementLinkTest extends TestCase
+final class SeriousInfringementLinkTest extends TestCase
 {
     protected $urlHelper;
 

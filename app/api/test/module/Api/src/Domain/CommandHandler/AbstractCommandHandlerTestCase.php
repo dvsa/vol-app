@@ -84,6 +84,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
     /** @var  m\MockInterface | TransactionManagerInterface */
     protected $mockTransationMngr;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->repoManager = m::mock(RepositoryServiceManager::class);
@@ -517,7 +518,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
      *
      * @return Application
      */
-    protected function getTestingApplication(Licence $licence = null, mixed $status = null, int $isVariation = 0): Application
+    protected function getTestingApplication(?Licence $licence = null, mixed $status = null, int $isVariation = 0): Application
     {
         if ($licence === null) {
             $licence = $this->getTestingLicence();
@@ -541,7 +542,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
      * @return Licence
      */
     protected function getTestingLicence(
-        Organisation $organisation = null,
+        ?Organisation $organisation = null,
         mixed $status = null
     ): Licence {
         if ($organisation === null) {

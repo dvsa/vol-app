@@ -66,11 +66,11 @@ abstract class AbstractDataExport extends AbstractCommandHandler
 
         while (($row = $dbalResult->fetchAssociative()) !== false) {
             if (!$firstRow) {
-                fputcsv($fh, array_keys($row));
+                fputcsv($fh, array_keys($row), ',', '"', '\\');
                 $firstRow = true;
             }
 
-            fputcsv($fh, $row);
+            fputcsv($fh, $row, ',', '"', '\\');
         }
 
         fclose($fh);
@@ -103,8 +103,8 @@ abstract class AbstractDataExport extends AbstractCommandHandler
                 $this->result->addMessage('Creating CSV file: ' . $filePath);
                 $fh = fopen($filePath, 'w');
 
-                fputcsv($fh, array_keys($row));
-                fputcsv($fh, $row);
+                fputcsv($fh, array_keys($row), ',', '"', '\\');
+                fputcsv($fh, $row, ',', '"', '\\');
 
                 $fileHandles[$key] = $fh;
                 $filePaths[$key] = $filePath;
@@ -113,7 +113,7 @@ abstract class AbstractDataExport extends AbstractCommandHandler
             }
 
             $fh = $fileHandles[$key];
-            fputcsv($fh, $row);
+            fputcsv($fh, $row, ',', '"', '\\');
         }
 
         foreach ($fileHandles as $key => $fh) {
@@ -141,11 +141,11 @@ abstract class AbstractDataExport extends AbstractCommandHandler
         while (($row = $dbalResult->fetchAssociative()) !== false) {
             if (!$titleAdded) {
                 //  add title & first row
-                fputcsv($handle, array_keys($row));
+                fputcsv($handle, array_keys($row), ',', '"', '\\');
                 $titleAdded = true;
             }
 
-            fputcsv($handle, $row);
+            fputcsv($handle, $row, ',', '"', '\\');
         }
 
         rewind($handle);

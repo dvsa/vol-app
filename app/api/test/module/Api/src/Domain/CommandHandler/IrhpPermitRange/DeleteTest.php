@@ -15,7 +15,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractDeleteCommandHandlerTestCase
  *
  * @author Scott Callaway <scott.callaway@capgemini.com>
  */
-class DeleteTest extends AbstractDeleteCommandHandlerTestCase
+final class DeleteTest extends AbstractDeleteCommandHandlerTestCase
 {
     protected $cmdClass = DeleteCmd::class;
     protected $sutClass = DeleteHandler::class;

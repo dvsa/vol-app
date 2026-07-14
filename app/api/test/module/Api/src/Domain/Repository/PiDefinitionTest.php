@@ -23,8 +23,9 @@ use Dvsa\Olcs\Api\Domain\Repository\PiDefinition as Repo;
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class PiDefinitionTest extends RepositoryTestCase
+final class PiDefinitionTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);

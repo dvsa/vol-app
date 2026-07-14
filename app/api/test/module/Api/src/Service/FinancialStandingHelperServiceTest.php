@@ -27,7 +27,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class FinancialStandingHelperServiceTest extends MockeryTestCase
+final class FinancialStandingHelperServiceTest extends MockeryTestCase
 {
     /**
      * @var FinancialStandingHelperService
@@ -81,7 +81,7 @@ class FinancialStandingHelperServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getFinanceCalculation($auths));
     }
 
-    public static function financeCalculationProvider(): array
+    public static function financeCalculationProvider(): \Iterator
     {
         // For an operator:
         //  * with a goods standard international application with 3 vehicles,
@@ -90,134 +90,132 @@ class FinancialStandingHelperServiceTest extends MockeryTestCase
         //  * plus a psv restricted licence with 1 vehicle, the finance is £2,700
         //  * plus another goods app with 2 vehicles (2 x 3900) = £7,800
         //  * The total required finance is £14,800 + £5,100 + £2,700 + £7,800 = £30,400
-        return [
-            'list contains entry that is psv, either si or sn, and vehicle authorisation > 0' => [
-                'auths' => [
-                    0 => [
-                      'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                      'type' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                      'count' => 3,
-                      'hgvCount' => 3,
-                      'lgvCount' => 0,
-                    ],
-                    1 => [
-                      'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                      'type' => Licence::LICENCE_TYPE_RESTRICTED,
-                      'count' => 3,
-                      'hgvCount' => 3,
-                      'lgvCount' => 0,
-                    ],
-                    2 => [
-                      'category' => Licence::LICENCE_CATEGORY_PSV,
-                      'type' => Licence::LICENCE_TYPE_RESTRICTED,
-                      'count' => 1,
-                      'hgvCount' => 1,
-                      'lgvCount' => 0,
-                    ],
-                    3 => [
-                      'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                      'type' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                      'count' => 2,
-                      'hgvCount' => 2,
-                      'lgvCount' => 0,
-                    ],
+        yield 'list contains entry that is psv, either si or sn, and vehicle authorisation > 0' => [
+            'auths' => [
+                0 => [
+                  'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                  'type' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                  'count' => 3,
+                  'hgvCount' => 3,
+                  'lgvCount' => 0,
                 ],
-                'expected' => 30400,
-            ],
-            'list contains entry that is goods, either si or sn, and vehicle/hgv authorisation > 0' => [
-                'auths' => [
-                    0 => [
-                      'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                      'type' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                      'count' => 5,
-                      'hgvCount' => 2,
-                      'lgvCount' => 3,
-                    ],
-                    1 => [
-                      'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                      'type' => Licence::LICENCE_TYPE_RESTRICTED,
-                      'count' => 3,
-                      'hgvCount' => 3,
-                      'lgvCount' => 0,
-                    ],
-                    2 => [
-                      'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                      'type' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                      'count' => 4,
-                      'hgvCount' => 4,
-                      'lgvCount' => 0,
-                    ],
+                1 => [
+                  'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                  'type' => Licence::LICENCE_TYPE_RESTRICTED,
+                  'count' => 3,
+                  'hgvCount' => 3,
+                  'lgvCount' => 0,
                 ],
-                'expected' => 34000,
-            ],
-            'list contains entry that is restricted and lgv authorisation > 0' => [
-                'auths' => [
-                    0 => [
-                      'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                      'type' => Licence::LICENCE_TYPE_RESTRICTED,
-                      'count' => 2,
-                      'hgvCount' => 2,
-                      'lgvCount' => 0,
-                    ],
-                    1 => [
-                      'category' => Licence::LICENCE_CATEGORY_PSV,
-                      'type' => Licence::LICENCE_TYPE_RESTRICTED,
-                      'count' => 3,
-                      'hgvCount' => 3,
-                      'lgvCount' => 0,
-                    ],
-                    2 => [
-                      'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                      'type' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                      'count' => 2,
-                      'hgvCount' => 0,
-                      'lgvCount' => 2,
-                    ],
+                2 => [
+                  'category' => Licence::LICENCE_CATEGORY_PSV,
+                  'type' => Licence::LICENCE_TYPE_RESTRICTED,
+                  'count' => 1,
+                  'hgvCount' => 1,
+                  'lgvCount' => 0,
                 ],
-                'expected' => 14500,
-            ],
-            'list contains entry that is goods, si, and lgv authorisation > 0' => [
-                'auths' => [
-                    0 => [
-                      'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                      'type' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                      'count' => 2,
-                      'hgvCount' => 0,
-                      'lgvCount' => 2,
-                    ],
-                    1 => [
-                      'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                      'type' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                      'count' => 5,
-                      'hgvCount' => 0,
-                      'lgvCount' => 5,
-                    ],
+                3 => [
+                  'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                  'type' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                  'count' => 2,
+                  'hgvCount' => 2,
+                  'lgvCount' => 0,
                 ],
-                'expected' => 6400,
             ],
-            'list contains goods/sn and goods/restricted (bugfix)' => [
-                'auths' => [
-                    0 => [
-                      'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                      'type' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                      'count' => 14,
-                      'hgvCount' => 14,
-                      'lgvCount' => 0,
-                    ],
-                    1 => [
-                      'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                      'type' => Licence::LICENCE_TYPE_RESTRICTED,
-                      'count' => 12,
-                      'hgvCount' => 12,
-                      'lgvCount' => 0,
-                    ],
+            'expected' => 30400,
+        ];
+        yield 'list contains entry that is goods, either si or sn, and vehicle/hgv authorisation > 0' => [
+            'auths' => [
+                0 => [
+                  'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                  'type' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                  'count' => 5,
+                  'hgvCount' => 2,
+                  'lgvCount' => 3,
                 ],
-                'expected' => 78100,
+                1 => [
+                  'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                  'type' => Licence::LICENCE_TYPE_RESTRICTED,
+                  'count' => 3,
+                  'hgvCount' => 3,
+                  'lgvCount' => 0,
+                ],
+                2 => [
+                  'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                  'type' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                  'count' => 4,
+                  'hgvCount' => 4,
+                  'lgvCount' => 0,
+                ],
             ],
-            'no auths' => [
-                'auths' => [],
-                'expected' => 0,
+            'expected' => 34000,
+        ];
+        yield 'list contains entry that is restricted and lgv authorisation > 0' => [
+            'auths' => [
+                0 => [
+                  'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                  'type' => Licence::LICENCE_TYPE_RESTRICTED,
+                  'count' => 2,
+                  'hgvCount' => 2,
+                  'lgvCount' => 0,
+                ],
+                1 => [
+                  'category' => Licence::LICENCE_CATEGORY_PSV,
+                  'type' => Licence::LICENCE_TYPE_RESTRICTED,
+                  'count' => 3,
+                  'hgvCount' => 3,
+                  'lgvCount' => 0,
+                ],
+                2 => [
+                  'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                  'type' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                  'count' => 2,
+                  'hgvCount' => 0,
+                  'lgvCount' => 2,
+                ],
             ],
+            'expected' => 14500,
+        ];
+        yield 'list contains entry that is goods, si, and lgv authorisation > 0' => [
+            'auths' => [
+                0 => [
+                  'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                  'type' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                  'count' => 2,
+                  'hgvCount' => 0,
+                  'lgvCount' => 2,
+                ],
+                1 => [
+                  'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                  'type' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                  'count' => 5,
+                  'hgvCount' => 0,
+                  'lgvCount' => 5,
+                ],
+            ],
+            'expected' => 6400,
+        ];
+        yield 'list contains goods/sn and goods/restricted (bugfix)' => [
+            'auths' => [
+                0 => [
+                  'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                  'type' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                  'count' => 14,
+                  'hgvCount' => 14,
+                  'lgvCount' => 0,
+                ],
+                1 => [
+                  'category' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                  'type' => Licence::LICENCE_TYPE_RESTRICTED,
+                  'count' => 12,
+                  'hgvCount' => 12,
+                  'lgvCount' => 0,
+                ],
+            ],
+            'expected' => 78100,
+        ];
+        yield 'no auths' => [
+            'auths' => [],
+            'expected' => 0,
         ];
     }
 

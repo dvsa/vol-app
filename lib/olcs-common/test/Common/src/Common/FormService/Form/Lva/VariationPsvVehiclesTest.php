@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Laminas\Form\Form;
@@ -12,7 +14,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationPsvVehiclesTest extends AbstractLvaFormServiceTestCase
+final class VariationPsvVehiclesTest extends AbstractLvaFormServiceTestCase
 {
     protected $classToTest = VariationPsvVehicles::class;
 

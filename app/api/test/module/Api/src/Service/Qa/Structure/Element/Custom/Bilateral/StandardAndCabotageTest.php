@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class StandardAndCabotageTest extends MockeryTestCase
+final class StandardAndCabotageTest extends MockeryTestCase
 {
     public function testGetRepresentation(): void
     {

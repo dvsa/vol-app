@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class StockAvailabilityCheckerTest extends MockeryTestCase
+final class StockAvailabilityCheckerTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHasAvailability')]
     public function testHasAvailability(mixed $stockAvailabilityCount, mixed $expected): void
@@ -34,12 +34,10 @@ class StockAvailabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    public static function dpTestHasAvailability(): array
+    public static function dpTestHasAvailability(): \Iterator
     {
-        return [
-            [0, false],
-            [1, true],
-            [2, true],
-        ];
+        yield [0, false];
+        yield [1, true];
+        yield [2, true];
     }
 }

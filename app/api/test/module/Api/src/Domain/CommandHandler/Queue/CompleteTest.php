@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Domain\Command\Queue\Delete as DeleteQueueCmd;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class CompleteTest extends AbstractCommandHandlerTestCase
+final class CompleteTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

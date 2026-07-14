@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-  backupGlobals="true"
-  colors="true"
-  executionOrder="random"
-  failOnRisky="true"
-  failOnWarning="true"
-  convertDeprecationsToExceptions="true"
->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd" backupGlobals="true" colors="true" executionOrder="random" failOnDeprecation="true" failOnNotice="true" failOnWarning="true" failOnRisky="true" failOnIncomplete="true" failOnSkipped="true" failOnPhpunitDeprecation="true" failOnPhpunitNotice="true" failOnPhpunitWarning="true" displayDetailsOnTestsThatTriggerDeprecations="true" displayDetailsOnTestsThatTriggerNotices="true" displayDetailsOnTestsThatTriggerWarnings="true" displayDetailsOnIncompleteTests="true" displayDetailsOnSkippedTests="true" displayDetailsOnPhpunitDeprecations="true" displayDetailsOnPhpunitNotices="true" cacheDirectory=".phpunit.cache">
   <php>
     <ini name="date.timezone" value="UTC"/>
   </php>
@@ -17,7 +9,4 @@
     </testsuite>
   </testsuites>
   <logging/>
-  <listeners>
-    <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener"/>
-  </listeners>
 </phpunit>

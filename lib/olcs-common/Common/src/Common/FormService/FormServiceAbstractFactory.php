@@ -246,7 +246,7 @@ class FormServiceAbstractFactory implements AbstractFactoryInterface
     }
 
     #[\Override]
-    public function __invoke($container, $requestedName, array $options = null)
+    public function __invoke($container, $requestedName, ?array $options = null)
     {
         /** @var FormServiceManager $formServiceLocator */
         /** @var FormHelperService $formHelper */

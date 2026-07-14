@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\Vrm;
 use PHPUnit\Framework\TestCase;
 
-class VrmTest extends TestCase
+final class VrmTest extends TestCase
 {
     protected $sut;
 
@@ -14,26 +16,22 @@ class VrmTest extends TestCase
         $this->sut = new Vrm();
     }
 
-    /**
-     * @dataProvider isValidProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid(string $value, bool $isValid)
     {
         $this->assertEquals($isValid, $this->sut->isValid($value));
     }
 
-    public function isValidProvider()
+    public static function isValidProvider(): \Iterator
     {
-        return [
-            'Matches defined Pattern' => [
-                'BP10ABC', true
-            ],
-            'Catches exceptional VRM #1' => [
-                '11', true
-            ],
-            'Invalid Pattern' => [
-                'SH7SSSD', false
-            ],
+        yield 'Matches defined Pattern' => [
+            'BP10ABC', true
+        ];
+        yield 'Catches exceptional VRM #1' => [
+            '11', true
+        ];
+        yield 'Invalid Pattern' => [
+            'SH7SSSD', false
         ];
     }
 }

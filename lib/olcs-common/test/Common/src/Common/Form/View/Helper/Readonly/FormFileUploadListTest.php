@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper\Readonly;
 
 use Common\Form\Elements\Types\Address;
@@ -12,10 +14,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Form\Element;
 use Laminas\Form\FieldsetInterface;
 
-/**
- * @covers \Common\Form\View\Helper\Readonly\FormFileUploadList
- */
-class FormFileUploadListTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\View\Helper\Readonly\FormFileUploadList::class)]
+final class FormFileUploadListTest extends MockeryTestCase
 {
     public function testRenderInvalidElement(): void
     {
@@ -29,7 +29,7 @@ class FormFileUploadListTest extends MockeryTestCase
     {
         $sut = new FormFileUploadList();
 
-        static::assertEquals('', $sut(new FileUploadList()));
+        $this->assertSame('', $sut(new FileUploadList()));
     }
 
     public function testRender(): void
@@ -42,7 +42,7 @@ class FormFileUploadListTest extends MockeryTestCase
         $mockUplElmChildItem2 = (clone $mockUplElmChildItem);
         $mockUplElmChildItem2->setName("unit_elm2");
 
-        $mockFileItem = (new FileUploadListItem('unit_UplItem'))
+        $mockFileItem = new FileUploadListItem('unit_UplItem')
             ->add($mockUplElmChildItem)
             ->add($mockUplElmChildItem2);
 
@@ -53,7 +53,7 @@ class FormFileUploadListTest extends MockeryTestCase
         $mockOtherElm = m::mock(Address::class);
         $mockOtherElm->shouldReceive('getName')->withAnyArgs()->andReturn('unit_Address');
 
-        $list = (new FileUploadList())
+        $list = new FileUploadList()
             ->add($mockFileItem)
             ->add($mockOtherElm)
             ->add($mockFileItem2);
@@ -72,15 +72,12 @@ class FormFileUploadListTest extends MockeryTestCase
         $sut = new FormFileUploadList();
         $sut->setView($mockView);
 
-        static::assertEquals(
-            '<div class="help__text">' .
-            '<h3 class="file__heading">_TRANSL_common.file-upload.table.col.FileName</h3>' .
-            '<ul class="js-upload-list">' .
-            '<li class="file">_FORM_ITEM_RENDER_RESULT__FORM_ITEM_RENDER_RESULT_</li>' .
-            '<li class="file">_FORM_ITEM_RENDER_RESULT__FORM_ITEM_RENDER_RESULT_</li>' .
-            '</ul>' .
-            '</div>',
-            $sut($list)
-        );
+        $this->assertSame('<div class="help__text">' .
+        '<h3 class="file__heading">_TRANSL_common.file-upload.table.col.FileName</h3>' .
+        '<ul class="js-upload-list">' .
+        '<li class="file">_FORM_ITEM_RENDER_RESULT__FORM_ITEM_RENDER_RESULT_</li>' .
+        '<li class="file">_FORM_ITEM_RENDER_RESULT__FORM_ITEM_RENDER_RESULT_</li>' .
+        '</ul>' .
+        '</div>', $sut($list));
     }
 }

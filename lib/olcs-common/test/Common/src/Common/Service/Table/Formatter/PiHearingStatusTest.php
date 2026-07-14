@@ -4,6 +4,8 @@
  * PI Hearing status formatter test
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\PiHearingStatus;
@@ -11,50 +13,48 @@ use Common\Service\Table\Formatter\PiHearingStatus;
 /**
  * PI Hearing status formatter test
  */
-class PiHearingStatusTest extends \PHPUnit\Framework\TestCase
+final class PiHearingStatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group PiHearingStatusFormatter
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('PiHearingStatusFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $expected): void
     {
-        $this->assertEquals($expected, (new PiHearingStatus())->format($data));
+        $this->assertEquals($expected, new PiHearingStatus()->format($data));
     }
 
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'cancelled' => [
-                [
-                    'isCancelled' => 'Y',
-                    'isAdjourned' => 'N',
-                ],
-                '<span class="status red">CNL</span>',
+        yield 'cancelled' => [
+            [
+                'isCancelled' => 'Y',
+                'isAdjourned' => 'N',
             ],
-            'adjourned' => [
-                [
-                    'isCancelled' => 'N',
-                    'isAdjourned' => 'Y',
-                ],
-                '<span class="status orange">ADJ</span>',
+            '<span class="status red">CNL</span>',
+        ];
+        yield 'adjourned' => [
+            [
+                'isCancelled' => 'N',
+                'isAdjourned' => 'Y',
             ],
-            'other' => [
-                [
-                    'isCancelled' => 'N',
-                    'isAdjourned' => 'N',
-                ],
-                '',
+            '<span class="status orange">ADJ</span>',
+        ];
+        yield 'other' => [
+            [
+                'isCancelled' => 'N',
+                'isAdjourned' => 'N',
             ],
+            '',
         ];
     }
 }

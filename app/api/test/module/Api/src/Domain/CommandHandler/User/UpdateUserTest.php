@@ -52,7 +52,7 @@ use Mockery\Mock;
 /**
  * Update User Test
  */
-class UpdateUserTest extends AbstractCommandHandlerTestCase
+final class UpdateUserTest extends AbstractCommandHandlerTestCase
 {
     public $config = [
         'auth' => [

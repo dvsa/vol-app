@@ -36,7 +36,7 @@ class ApplicationPathGroup extends AbstractApplicationPathGroup
      *
      * @return ApplicationPath|null
      */
-    public function getActiveApplicationPath(\DateTime $dateTime = null)
+    public function getActiveApplicationPath(?\DateTime $dateTime = null)
     {
         if (!isset($dateTime)) {
             // get the latest active if specific datetime not provided

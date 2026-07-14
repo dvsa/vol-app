@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Bilateral;
 
 use Common\Service\Helper\TranslationHelperService;
@@ -16,7 +18,7 @@ use Laminas\Form\Form;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class CabotageOnlyFieldsetPopulatorTest extends MockeryTestCase
+final class CabotageOnlyFieldsetPopulatorTest extends MockeryTestCase
 {
     public function testPopulate(): void
     {

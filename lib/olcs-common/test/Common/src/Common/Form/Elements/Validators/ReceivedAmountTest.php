@@ -6,6 +6,8 @@
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Validators;
 
 use Common\Form\Elements\Validators\ReceivedAmount as Sut;
@@ -15,7 +17,7 @@ use Common\Form\Elements\Validators\ReceivedAmount as Sut;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ReceivedAmountTest extends \PHPUnit\Framework\TestCase
+final class ReceivedAmountTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 
@@ -25,53 +27,49 @@ class ReceivedAmountTest extends \PHPUnit\Framework\TestCase
         $this->sut = new Sut();
     }
 
-    /**
-     * @dataProvider isValidProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($value, $context, $expected): void
     {
         $this->assertEquals($expected, $this->sut->isValid($value, $context));
     }
 
     /**
-     * @return (bool|null|string|string[])[][]
+     * @return \Iterator<(int | string), array<(array<string> | bool | string | null)>>
      *
      * @psalm-return list{list{'0', null, true}, list{'100', null, true}, list{'100', array{minAmountForValidator: '10'}, true}, list{'10', array{minAmountForValidator: '10'}, true}, list{'9.99', array{minAmountForValidator: '10'}, false}}
      */
-    public function isValidProvider(): array
+    public static function isValidProvider(): \Iterator
     {
-        return [
+        yield [
+            '0',
+            null,
+            true,
+        ];
+        yield [
+            '100',
+            null,
+            true,
+        ];
+        yield [
+            '100',
             [
-                '0',
-                null,
-                true,
+                'minAmountForValidator' => '10',
             ],
+            true,
+        ];
+        yield [
+            '10',
             [
-                '100',
-                null,
-                true,
+                'minAmountForValidator' => '10',
             ],
+            true,
+        ];
+        yield [
+            '9.99',
             [
-                '100',
-                [
-                    'minAmountForValidator' => '10',
-                ],
-                true,
+                'minAmountForValidator' => '10',
             ],
-            [
-                '10',
-                [
-                    'minAmountForValidator' => '10',
-                ],
-                true,
-            ],
-            [
-                '9.99',
-                [
-                    'minAmountForValidator' => '10',
-                ],
-                false,
-            ],
+            false,
         ];
     }
 }

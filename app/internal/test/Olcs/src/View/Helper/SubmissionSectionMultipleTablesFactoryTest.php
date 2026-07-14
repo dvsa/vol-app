@@ -11,7 +11,7 @@ use Olcs\View\Helper\SubmissionSectionMultipleTables;
 use Olcs\View\Helper\SubmissionSectionMultipleTablesFactory;
 use Mockery as m;
 
-class SubmissionSectionMultipleTablesFactoryTest extends MockeryTestCase
+final class SubmissionSectionMultipleTablesFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {

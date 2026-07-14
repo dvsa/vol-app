@@ -17,7 +17,7 @@ class VariationOverviewSubmissionFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): VariationOverviewSubmission
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): VariationOverviewSubmission
     {
         // Create an instance of the ConcreteClass with the $formHelper dependency retrieved from the container
         return new VariationOverviewSubmission($container->get('Helper\Translation'), $container->get(FormHelperService::class));

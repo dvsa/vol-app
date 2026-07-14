@@ -138,7 +138,7 @@ class LoginController
     /**
      * @return Form
      */
-    protected function createLoginForm(array $data = null): Form
+    protected function createLoginForm(?array $data = null): Form
     {
         $form = $this->formHelper->createForm(Login::class);
         if (!is_null($data)) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Controller\Plugin;
 
 use Common\Controller\Plugin\FeaturesEnabled;
@@ -9,7 +11,7 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
-class FeaturesEnabledFactoryTest extends TestCase
+final class FeaturesEnabledFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {

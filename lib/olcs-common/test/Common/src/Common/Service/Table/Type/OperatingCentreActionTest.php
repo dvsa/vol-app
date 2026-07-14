@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Type;
 
 use Common\Service\Table\TableBuilder;
@@ -12,7 +14,7 @@ use Common\Service\Table\Type\OperatingCentreAction;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class OperatingCentreActionTest extends MockeryTestCase
+final class OperatingCentreActionTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -34,7 +36,7 @@ class OperatingCentreActionTest extends MockeryTestCase
         $data = ['id' => 1];
         $column = ['action' => 'FOO'];
 
-        $this->assertStringNotContainsString('(Schedule 4/1)', $this->sut->render($data, $column));
+        $this->assertStringNotContainsString('(Schedule 4/1)', (string) $this->sut->render($data, $column));
     }
 
     public function testRenderWithS4(): void
@@ -44,6 +46,6 @@ class OperatingCentreActionTest extends MockeryTestCase
         $data = ['id' => 1, 's4' => 'FOO'];
         $column = ['action' => 'FOO'];
 
-        $this->assertStringContainsString('(Schedule 4/1)', $this->sut->render($data, $column));
+        $this->assertStringContainsString('(Schedule 4/1)', (string) $this->sut->render($data, $column));
     }
 }

@@ -13,8 +13,9 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class SubmissionTest extends RepositoryTestCase
+final class SubmissionTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);

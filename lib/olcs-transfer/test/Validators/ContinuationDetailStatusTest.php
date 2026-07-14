@@ -6,6 +6,8 @@
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\ContinuationDetailStatus;
@@ -15,7 +17,7 @@ use Dvsa\Olcs\Transfer\Validators\ContinuationDetailStatus;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class ContinuationDetailStatusTest extends \PHPUnit\Framework\TestCase
+final class ContinuationDetailStatusTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 
@@ -24,27 +26,23 @@ class ContinuationDetailStatusTest extends \PHPUnit\Framework\TestCase
         $this->sut = new ContinuationDetailStatus();
     }
 
-    /**
-     * @dataProvider dataProviderIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderIsValid')]
     public function testIsValid($value, $expected)
     {
         $this->assertEquals($expected, $this->sut->isValid($value));
     }
 
-    public function dataProviderIsValid()
+    public static function dataProviderIsValid(): \Iterator
     {
-        return [
-            ['con_det_sts_prepared', true],
-            ['con_det_sts_printing', true],
-            ['con_det_sts_printed', true],
-            ['con_det_sts_unacceptable', true],
-            ['con_det_sts_acceptable', true],
-            ['con_det_sts_complete', true],
-            ['con_det_sts_error', true],
-            [null, false],
-            [' ', false],
-            ['con_det_sts_xxxx ', false],
-        ];
+        yield ['con_det_sts_prepared', true];
+        yield ['con_det_sts_printing', true];
+        yield ['con_det_sts_printed', true];
+        yield ['con_det_sts_unacceptable', true];
+        yield ['con_det_sts_acceptable', true];
+        yield ['con_det_sts_complete', true];
+        yield ['con_det_sts_error', true];
+        yield [null, false];
+        yield [' ', false];
+        yield ['con_det_sts_xxxx ', false];
     }
 }

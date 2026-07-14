@@ -16,7 +16,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use Laminas\Stdlib\ArraySerializableInterface;
 
-class DeletePeopleViaVariationTest extends AbstractCommandHandlerTestCase
+final class DeletePeopleViaVariationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

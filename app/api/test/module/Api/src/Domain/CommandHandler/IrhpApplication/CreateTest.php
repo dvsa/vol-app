@@ -28,7 +28,7 @@ use Mockery as m;
 /**
  * Create Irhp Application test
  */
-class CreateTest extends AbstractCommandHandlerTestCase
+final class CreateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -183,18 +183,15 @@ class CreateTest extends AbstractCommandHandlerTestCase
             ]
         ];
 
-        self::assertEquals($expectedResult, $this->sut->handleCommand($command)->toArray());
+        $this->assertEquals($expectedResult, $this->sut->handleCommand($command)->toArray());
     }
 
-    public static function dpTestHandleCommand(): array
+    public static function dpTestHandleCommand(): \Iterator
     {
-        return
-            [
-                [true, IrhpInterface::SOURCE_INTERNAL, false],
-                [true, IrhpInterface::SOURCE_INTERNAL, true],
-                [false, IrhpInterface::SOURCE_SELFSERVE, true],
-                [false, IrhpInterface::SOURCE_SELFSERVE, false],
-            ];
+        yield [true, IrhpInterface::SOURCE_INTERNAL, false];
+        yield [true, IrhpInterface::SOURCE_INTERNAL, true];
+        yield [false, IrhpInterface::SOURCE_SELFSERVE, true];
+        yield [false, IrhpInterface::SOURCE_SELFSERVE, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpLicenceNotEligible')]
@@ -262,11 +259,9 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function dpLicenceNotEligible(): array
+    public static function dpLicenceNotEligible(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 }

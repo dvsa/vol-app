@@ -34,13 +34,14 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\PreviousPublicationByApplication;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PublicationLinkTest extends RepositoryTestCase
+final class PublicationLinkTest extends RepositoryTestCase
 {
     /**
      * @var PublicationLink
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(PublicationLinkRepo::class);
@@ -465,7 +466,7 @@ class PublicationLinkTest extends RepositoryTestCase
     public function testFetchIneligiblePiPublicationLinks(): void
     {
         $publicationEntityId = 1;
-        $today = (new Datetime())->format('Y-m-d');
+        $today = new Datetime()->format('Y-m-d');
         $mockQb = $this->createMockQb('[QUERY]');
         $this->mockCreateQueryBuilder($mockQb);
 

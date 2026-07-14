@@ -17,7 +17,7 @@ class AnswersSummaryRowsAdderFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AnswersSummaryRowsAdder
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): AnswersSummaryRowsAdder
     {
         return new AnswersSummaryRowsAdder(
             $container->get('QaSupplementedApplicationStepsProvider'),

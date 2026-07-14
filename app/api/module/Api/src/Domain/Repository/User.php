@@ -318,7 +318,7 @@ class User extends AbstractRepository
      *
      * @return null|string
      */
-    public function findUserNameAvailable($base, callable $fncSfx = null, $tryCnt = self::USERNAME_GEN_TRY_COUNT)
+    public function findUserNameAvailable($base, ?callable $fncSfx = null, $tryCnt = self::USERNAME_GEN_TRY_COUNT)
     {
         if ($fncSfx === null) {
             $fncSfx = fn($base, $idx) => $base . ($idx > 0 ? (string)$idx : '');

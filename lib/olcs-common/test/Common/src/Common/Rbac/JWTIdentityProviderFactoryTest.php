@@ -16,7 +16,7 @@ use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class JWTIdentityProviderFactoryTest extends MockeryTestCase
+final class JWTIdentityProviderFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
@@ -28,9 +28,7 @@ class JWTIdentityProviderFactoryTest extends MockeryTestCase
         $this->setUpServiceManager();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -40,10 +38,8 @@ class JWTIdentityProviderFactoryTest extends MockeryTestCase
         $this->assertIsCallable(fn(\Psr\Container\ContainerInterface $container, string $requestedName, ?array $options = null): \Common\Rbac\JWTIdentityProvider => $this->sut->__invoke($container, $requestedName, $options));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeReturnsAnInstanceOfJWTIdentityProvider(): void
     {
         // Setup
@@ -57,10 +53,8 @@ class JWTIdentityProviderFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(JWTIdentityProvider::class, $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeThrowsExceptionWhenConfigIsMissing(): void
     {
         // Setup

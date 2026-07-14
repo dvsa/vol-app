@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service;
 
 use Psr\Container\ContainerInterface;
@@ -8,7 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Common\Service\FormAnnotationBuilderFactory;
 
-class FormAnnotationBuilderFactoryTest extends MockeryTestCase
+final class FormAnnotationBuilderFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {

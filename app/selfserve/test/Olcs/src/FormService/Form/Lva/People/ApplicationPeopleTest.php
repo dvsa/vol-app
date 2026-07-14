@@ -20,7 +20,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationPeopleTest extends MockeryTestCase
+final class ApplicationPeopleTest extends MockeryTestCase
 {
     use ButtonsAlterations;
 
@@ -34,15 +34,11 @@ class ApplicationPeopleTest extends MockeryTestCase
      */
     protected $formHelper;
 
-    /**
-     * @var FormServiceManager|m\Mock
-     */
-    protected $fsm;
-
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
-        $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
+        $fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
 
         $this->sut = new Sut($this->formHelper, m::mock(AuthorizationService::class));
     }

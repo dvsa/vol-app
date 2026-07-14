@@ -17,7 +17,7 @@ use Dvsa\OlcsTest\Api\Entity\User as UserEntity;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class PeopleTest extends QueryHandlerTestCase
+final class PeopleTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

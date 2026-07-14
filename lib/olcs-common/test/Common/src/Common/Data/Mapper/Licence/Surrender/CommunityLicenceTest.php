@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Licence\Surrender;
 
 use Common\Data\Mapper\Licence\Surrender\CommunityLicence;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class CommunityLicenceTest extends MockeryTestCase
+final class CommunityLicenceTest extends MockeryTestCase
 {
     private $communityLicence;
 
@@ -16,87 +18,79 @@ class CommunityLicenceTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider resultData
      *
      * @param $apiData
      * @param $formData
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('resultData')]
     public function testMapFromResult($apiData, $formData): void
     {
-        static::assertEquals(
-            $formData,
-            $this->communityLicence->mapFromResult($apiData)
-        );
+        $this->assertEquals($formData, $this->communityLicence->mapFromResult($apiData));
     }
 
     /**
-     * @dataProvider  resultData
      * @param $apiData
      * @param $formData
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('resultData')]
     public function testMapFromForm($apiData, $formData): void
     {
         $apiData['communityLicenceDocumentStatus'] = $apiData['communityLicenceDocumentStatus']['id'];
 
-        static::assertEquals(
-            $apiData,
-            $this->communityLicence->mapFromForm($formData)
-        );
+        $this->assertEquals($apiData, $this->communityLicence->mapFromForm($formData));
     }
 
     /**
-     * @return ((string|string[])[]|null|string)[][][]
+     * @return \Iterator<(int | string), array<array<(array<(array<string> | string)> | string | null)>>>
      *
      * @psalm-return array{possession: array{apiData: array{communityLicenceDocumentStatus: array{id: 'doc_sts_destroyed'}, communityLicenceDocumentInfo: null}, formData: array{communityLicenceDocument: array{communityLicenceDocument: 'possession'}}}, lost: array{apiData: array{communityLicenceDocumentStatus: array{id: 'doc_sts_lost'}, communityLicenceDocumentInfo: 'lost info'}, formData: array{communityLicenceDocument: array{communityLicenceDocument: 'lost', lostContent: array{details: 'lost info'}}}}, stolen: array{apiData: array{communityLicenceDocumentStatus: array{id: 'doc_sts_stolen'}, communityLicenceDocumentInfo: 'stolen info'}, formData: array{communityLicenceDocument: array{communityLicenceDocument: 'stolen', stolenContent: array{details: 'stolen info'}}}}}
      */
-    public function resultData(): array
+    public static function resultData(): \Iterator
     {
-        return [
-            'possession' => [
-                'apiData' => [
+        yield 'possession' => [
+            'apiData' => [
 
-                    "communityLicenceDocumentStatus" => ['id' => 'doc_sts_destroyed'],
-                    "communityLicenceDocumentInfo" => null,
+                "communityLicenceDocumentStatus" => ['id' => 'doc_sts_destroyed'],
+                "communityLicenceDocumentInfo" => null,
 
-                ],
-                'formData' => [
-                    'communityLicenceDocument' => [
-                        'communityLicenceDocument' => 'possession'
+            ],
+            'formData' => [
+                'communityLicenceDocument' => [
+                    'communityLicenceDocument' => 'possession'
+                ]
+            ]
+        ];
+        yield 'lost' => [
+            'apiData' => [
+
+                "communityLicenceDocumentStatus" => ['id' => 'doc_sts_lost'],
+                "communityLicenceDocumentInfo" => 'lost info',
+
+            ],
+            'formData' => [
+                'communityLicenceDocument' => [
+                    'communityLicenceDocument' => 'lost',
+                    'lostContent' => [
+                        'details' => 'lost info'
                     ]
                 ]
+            ]
+        ];
+        yield 'stolen' => [
+            'apiData' => [
+
+                "communityLicenceDocumentStatus" => ['id' => 'doc_sts_stolen'],
+                "communityLicenceDocumentInfo" => 'stolen info',
+
             ],
-            'lost' => [
-                'apiData' => [
-
-                    "communityLicenceDocumentStatus" => ['id' => 'doc_sts_lost'],
-                    "communityLicenceDocumentInfo" => 'lost info',
-
-                ],
-                'formData' => [
-                    'communityLicenceDocument' => [
-                        'communityLicenceDocument' => 'lost',
-                        'lostContent' => [
-                            'details' => 'lost info'
-                        ]
+            'formData' => [
+                'communityLicenceDocument' => [
+                    'communityLicenceDocument' => 'stolen',
+                    'stolenContent' => [
+                        'details' => 'stolen info'
                     ]
                 ]
-            ],
-            'stolen' => [
-                'apiData' => [
-
-                    "communityLicenceDocumentStatus" => ['id' => 'doc_sts_stolen'],
-                    "communityLicenceDocumentInfo" => 'stolen info',
-
-                ],
-                'formData' => [
-                    'communityLicenceDocument' => [
-                        'communityLicenceDocument' => 'stolen',
-                        'stolenContent' => [
-                            'details' => 'stolen info'
-                        ]
-                    ]
-                ]
-            ],
+            ]
         ];
     }
 

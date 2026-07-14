@@ -12,7 +12,7 @@ use Laminas\Form\Form;
 /**
  * Other Licence Mapper Test
  */
-class OtherLicenceTest extends MockeryTestCase
+final class OtherLicenceTest extends MockeryTestCase
 {
     public function testMapFromResult(): void
     {
@@ -29,26 +29,12 @@ class OtherLicenceTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($data));
     }
 
-    public static function mapFromFormProvider(): array
+    public static function mapFromFormProvider(): \Iterator
     {
-        return [
+        yield [
+            // data
             [
-                // data
-                [
-                    'data' => [
-                        'licNo' => 'licno',
-                        'role'  => 'role',
-                        'operatingCentres' => 'oc',
-                        'totalAuthVehicles' => 'tav',
-                        'hoursPerWeek' => 'hpw',
-                        'id' => 1,
-                        'version' => 2,
-                        'redirectId' => 3,
-                        'redirectAction' => 'edit-tm-application'
-                    ]
-                ],
-                // expected
-                [
+                'data' => [
                     'licNo' => 'licno',
                     'role'  => 'role',
                     'operatingCentres' => 'oc',
@@ -56,26 +42,26 @@ class OtherLicenceTest extends MockeryTestCase
                     'hoursPerWeek' => 'hpw',
                     'id' => 1,
                     'version' => 2,
-                    'tmaId' => 3
+                    'redirectId' => 3,
+                    'redirectAction' => 'edit-tm-application'
                 ]
             ],
+            // expected
             [
-                // data
-                [
-                    'data' => [
-                        'licNo' => 'licno',
-                        'role'  => 'role',
-                        'operatingCentres' => 'oc',
-                        'totalAuthVehicles' => 'tav',
-                        'hoursPerWeek' => 'hpw',
-                        'id' => 1,
-                        'version' => 2,
-                        'redirectId' => 3,
-                        'redirectAction' => 'edit-tm-licence'
-                    ]
-                ],
-                // expected
-                [
+                'licNo' => 'licno',
+                'role'  => 'role',
+                'operatingCentres' => 'oc',
+                'totalAuthVehicles' => 'tav',
+                'hoursPerWeek' => 'hpw',
+                'id' => 1,
+                'version' => 2,
+                'tmaId' => 3
+            ]
+        ];
+        yield [
+            // data
+            [
+                'data' => [
                     'licNo' => 'licno',
                     'role'  => 'role',
                     'operatingCentres' => 'oc',
@@ -83,8 +69,20 @@ class OtherLicenceTest extends MockeryTestCase
                     'hoursPerWeek' => 'hpw',
                     'id' => 1,
                     'version' => 2,
-                    'tmlId' => 3
+                    'redirectId' => 3,
+                    'redirectAction' => 'edit-tm-licence'
                 ]
+            ],
+            // expected
+            [
+                'licNo' => 'licno',
+                'role'  => 'role',
+                'operatingCentres' => 'oc',
+                'totalAuthVehicles' => 'tav',
+                'hoursPerWeek' => 'hpw',
+                'id' => 1,
+                'version' => 2,
+                'tmlId' => 3
             ]
         ];
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Permits;
 
 use Dvsa\Olcs\Transfer\Query\Permits\MaxPermittedReachedByStockAndLicence;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\MaxPermittedReachedByStockAndLicence;
 /**
  * Max permitted reached by stock and licence test
  */
-class MaxPermittedReachedByStockAndLicenceTest extends \PHPUnit\Framework\TestCase
+final class MaxPermittedReachedByStockAndLicenceTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

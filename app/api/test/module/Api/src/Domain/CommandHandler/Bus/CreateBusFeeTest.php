@@ -26,7 +26,7 @@ use Dvsa\Olcs\Api\Entity\Fee\Fee as FeeEntity;
 /**
  * Create Bus Fee Test
  */
-class CreateBusFeeTest extends AbstractCommandHandlerTestCase
+final class CreateBusFeeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -136,13 +136,11 @@ class CreateBusFeeTest extends AbstractCommandHandlerTestCase
     /**
      * Provider for testHandleCommand
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function handleCommandProvider(): array
+    public static function handleCommandProvider(): \Iterator
     {
-        return [
-            [0, FeeTypeEntity::FEE_TYPE_BUSAPP],
-            [1, FeeTypeEntity::FEE_TYPE_BUSVAR]
-        ];
+        yield [0, FeeTypeEntity::FEE_TYPE_BUSAPP];
+        yield [1, FeeTypeEntity::FEE_TYPE_BUSVAR];
     }
 }

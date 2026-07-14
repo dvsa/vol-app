@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\OriginalCopy;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class OriginalCopyTest extends \PHPUnit\Framework\TestCase
+final class OriginalCopyTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

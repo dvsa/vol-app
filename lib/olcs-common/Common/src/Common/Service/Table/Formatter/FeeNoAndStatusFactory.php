@@ -17,7 +17,7 @@ class FeeNoAndStatusFactory implements FactoryInterface
      * @throws NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $feeStatusFormatter = $container->get(FormatterPluginManager::class)->get(FeeStatus::class);
         return new FeeNoAndStatus($feeStatusFormatter);

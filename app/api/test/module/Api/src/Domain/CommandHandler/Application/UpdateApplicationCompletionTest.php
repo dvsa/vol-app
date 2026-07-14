@@ -31,7 +31,7 @@ use Dvsa\Olcs\Api\Entity\User\Permission;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateApplicationCompletionTest extends AbstractCommandHandlerTestCase
+final class UpdateApplicationCompletionTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -88,9 +88,9 @@ class UpdateApplicationCompletionTest extends AbstractCommandHandlerTestCase
 
         // Order of the array can't be guaranteed, so here we assert that the messages are present
         $this->assertCount(3, $messages);
-        $this->assertTrue(in_array('Addresses updated', $messages));
-        $this->assertTrue(in_array('Bt updated', $messages));
-        $this->assertTrue(in_array('Tol updated', $messages));
+        $this->assertContains('Addresses updated', $messages);
+        $this->assertContains('Bt updated', $messages);
+        $this->assertContains('Tol updated', $messages);
     }
 
     public function testHandleCommandIsVariation(): void
@@ -164,8 +164,8 @@ class UpdateApplicationCompletionTest extends AbstractCommandHandlerTestCase
 
         if ($expectResetSignature) {
             $this->assertSame('N', $application->getDeclarationConfirmation());
-            $this->assertSame(null, $application->getSignatureType());
-            $this->assertSame(null, $application->getDigitalSignature());
+            $this->assertNull($application->getSignatureType());
+            $this->assertNull($application->getDigitalSignature());
         } else {
             $this->assertSame('Y', $application->getDeclarationConfirmation());
             $this->assertSame($digitalSignature, $application->getDigitalSignature());
@@ -173,26 +173,22 @@ class UpdateApplicationCompletionTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public static function dpTestHandleCommandResetSignature(): array
+    public static function dpTestHandleCommandResetSignature(): \Iterator
     {
-        return [
-            [true, 'typeOfLicence', true, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED],
-            [false, 'typeOfLicence', true, ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION],
-            [false, 'typeOfLicence', true, ApplicationEntity::APPLICATION_STATUS_GRANTED],
-            [false, 'typeOfLicence', true, ApplicationEntity::APPLICATION_STATUS_VALID],
-
-            [true, 'addresses', true, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED],
-            [true, 'typeOfLicence', true, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED],
-            [true, 'financialHistory', true, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED],
-            [false, 'undertakings', true, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED],
-            [false, 'declarationsInternal', true, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED],
-
-            [false, 'addresses', false, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED],
-            [false, 'typeOfLicence', false, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED],
-            [false, 'financialHistory', false, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED],
-            [false, 'undertakings', false, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED],
-            [false, 'declarationsInternal', false, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED],
-        ];
+        yield [true, 'typeOfLicence', true, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED];
+        yield [false, 'typeOfLicence', true, ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION];
+        yield [false, 'typeOfLicence', true, ApplicationEntity::APPLICATION_STATUS_GRANTED];
+        yield [false, 'typeOfLicence', true, ApplicationEntity::APPLICATION_STATUS_VALID];
+        yield [true, 'addresses', true, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED];
+        yield [true, 'typeOfLicence', true, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED];
+        yield [true, 'financialHistory', true, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED];
+        yield [false, 'undertakings', true, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED];
+        yield [false, 'declarationsInternal', true, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED];
+        yield [false, 'addresses', false, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED];
+        yield [false, 'typeOfLicence', false, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED];
+        yield [false, 'financialHistory', false, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED];
+        yield [false, 'undertakings', false, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED];
+        yield [false, 'declarationsInternal', false, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED];
     }
 
     public function testHandleCommandResetSignatureNoExisting(): void
@@ -230,7 +226,7 @@ class UpdateApplicationCompletionTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
 
         $this->assertSame('N', $application->getDeclarationConfirmation());
-        $this->assertSame(null, $application->getSignatureType());
-        $this->assertSame(null, $application->getDigitalSignature());
+        $this->assertNull($application->getSignatureType());
+        $this->assertNull($application->getDigitalSignature());
     }
 }

@@ -19,11 +19,11 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class QuestionHandlerDelegatorTest extends MockeryTestCase
+final class QuestionHandlerDelegatorTest extends MockeryTestCase
 {
-    public const HANDLER_2_QUESTION_ID = 60;
+    public const int HANDLER_2_QUESTION_ID = 60;
 
-    public const REQUIRED_PERMITS = [
+    public const array REQUIRED_PERMITS = [
         'requiredPermitsKey1' => 'requiredPermitsValue1',
         'requiredPermitsKey2' => 'requiredPermitsValue2'
     ];
@@ -38,6 +38,7 @@ class QuestionHandlerDelegatorTest extends MockeryTestCase
 
     private $handler2;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpPermitApplication = m::mock(IrhpPermitApplication::class);

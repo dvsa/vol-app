@@ -24,7 +24,7 @@ use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion as ApplicationComplet
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class UpdateTypeOfLicenceStatusTest extends AbstractUpdateStatusTestCase
+final class UpdateTypeOfLicenceStatusTest extends AbstractUpdateStatusTestCase
 {
     protected $section = 'TypeOfLicence';
 

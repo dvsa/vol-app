@@ -45,6 +45,7 @@ abstract class BaseAbstractDbQueryTestCase extends MockeryTestCase
     abstract protected function getSut(): mixed;
     abstract protected function getExpectedQuery(): string;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->connection = m::mock(Connection::class);

@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\HearingBundle;
 /**
  * Class HearingBundleTest
  */
-class HearingBundleTest extends \PHPUnit\Framework\TestCase
+final class HearingBundleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * test structure

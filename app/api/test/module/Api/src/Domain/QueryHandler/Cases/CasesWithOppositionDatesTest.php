@@ -19,7 +19,7 @@ use Dvsa\Olcs\Transfer\Query\Cases\CasesWithOppositionDates as Qry;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CasesWithOppositionDatesTest extends QueryHandlerTestCase
+final class CasesWithOppositionDatesTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -131,7 +131,7 @@ class CasesWithOppositionDatesTest extends QueryHandlerTestCase
 
         $this->assertSame('', $serialized['oooDate']);
         $this->assertSame('', $serialized['oorDate']);
-        $this->assertSame(2, count($serialized['application']['publicationLinks']));
+        $this->assertCount(2, $serialized['application']['publicationLinks']);
         $this->assertSame($publicationLink1Id, $serialized['application']['publicationLinks'][0]['id']);
         $this->assertSame($publicationLink2Id, $serialized['application']['publicationLinks'][1]['id']);
     }

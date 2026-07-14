@@ -11,7 +11,7 @@ use Dvsa\Olcs\Transfer\Query\CompaniesHouse\InsolvencyPractitioner as Query;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class InsolvencyPractitionerTest extends QueryHandlerTestCase
+final class InsolvencyPractitionerTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

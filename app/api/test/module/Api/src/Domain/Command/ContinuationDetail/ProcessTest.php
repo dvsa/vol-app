@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ContinuationDetail\Process;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ProcessTest extends \PHPUnit\Framework\TestCase
+final class ProcessTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

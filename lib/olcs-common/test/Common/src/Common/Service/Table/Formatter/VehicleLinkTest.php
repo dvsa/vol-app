@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -10,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * Vehicle Url formatter test
  */
-class VehicleLinkTest extends MockeryTestCase
+final class VehicleLinkTest extends MockeryTestCase
 {
     protected $urlHelper;
 

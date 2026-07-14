@@ -85,7 +85,7 @@ class Question extends AbstractQuestion
      *
      * @return QuestionText|null
      */
-    public function getActiveQuestionText(\DateTime $dateTime = null)
+    public function getActiveQuestionText(?\DateTime $dateTime = null)
     {
         if (!isset($dateTime)) {
             // get the latest active if specific datetime not provided

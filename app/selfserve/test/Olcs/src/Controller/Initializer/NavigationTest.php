@@ -16,7 +16,7 @@ use Mockery as m;
 /**
  * Navigation initializer test
  */
-class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
+final class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     public function testInvoke(): void
     {

@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Entity\Tm\TransportManager;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CreateForTmTest extends AbstractCommandHandlerTestCase
+final class CreateForTmTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

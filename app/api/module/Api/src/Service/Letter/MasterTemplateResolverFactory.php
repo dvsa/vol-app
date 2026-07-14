@@ -13,7 +13,7 @@ use Psr\Container\ContainerInterface;
 class MasterTemplateResolverFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): MasterTemplateResolver
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): MasterTemplateResolver
     {
         $repoManager = $container->get('RepositoryServiceManager');
 

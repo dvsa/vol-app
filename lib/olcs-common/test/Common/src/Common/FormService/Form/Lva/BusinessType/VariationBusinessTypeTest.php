@@ -18,16 +18,8 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationBusinessTypeTest extends MockeryTestCase
+final class VariationBusinessTypeTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $authService;
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $guidanceService;
     /**
      * @var VariationBusinessType
      */
@@ -42,10 +34,10 @@ class VariationBusinessTypeTest extends MockeryTestCase
     {
         $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->authService = m::mock(AuthorizationService::class);
-        $this->guidanceService = m::mock(\Common\Service\Helper\GuidanceHelperService::class);
+        $authService = m::mock(AuthorizationService::class);
+        $guidanceService = m::mock(\Common\Service\Helper\GuidanceHelperService::class);
 
-        $this->sut = new VariationBusinessType($this->fh, $this->authService, $this->guidanceService, $this->fsm);
+        $this->sut = new VariationBusinessType($this->fh, $authService, $guidanceService, $this->fsm);
     }
 
     public function testGetForm(): void

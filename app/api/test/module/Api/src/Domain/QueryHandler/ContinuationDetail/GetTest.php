@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 /**
  * Continuation Get test
  */
-class GetTest extends QueryHandlerTestCase
+final class GetTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -313,7 +313,7 @@ class GetTest extends QueryHandlerTestCase
                 m::mock()
                     ->shouldReceive('getCompletedDate')
                     ->with(true)
-                    ->andReturn((new DateTime('now'))->sub(new \DateInterval('P60D')))
+                    ->andReturn(new DateTime('now')->sub(new \DateInterval('P60D')))
                     ->once()
                     ->getMock()
             )

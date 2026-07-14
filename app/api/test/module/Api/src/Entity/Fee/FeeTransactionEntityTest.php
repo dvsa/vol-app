@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class FeeTransactionEntityTest extends EntityTester
+final class FeeTransactionEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -43,19 +43,17 @@ class FeeTransactionEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->isRefundedOrReversed());
     }
 
-    public static function isRefundedProvider(): array
+    public static function isRefundedProvider(): \Iterator
     {
-        return [
+        yield [
+            [],
+            false,
+        ];
+        yield [
             [
-                [],
-                false,
+                m::mock(Entity::class),
             ],
-            [
-                [
-                    m::mock(Entity::class),
-                ],
-                true,
-            ]
+            true,
         ];
     }
 }

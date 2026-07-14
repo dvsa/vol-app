@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
 class JwtVerificationServiceFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): JwtVerificationService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): JwtVerificationService
     {
         $config = $container->get('Config');
         $webdavConfig = $config[WebDavJsonWebTokenGenerationServiceFactory::CONFIG_KEY_NAMESPACE] ?? [];

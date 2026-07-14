@@ -8,10 +8,8 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\User\CanAccessUserList as Sut;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Validation\Handlers\User\CanAccessUserList
- */
-class CanAccessUserListTest extends AbstractHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Handlers\User\CanAccessUserList::class)]
+final class CanAccessUserListTest extends AbstractHandlerTestCase
 {
     protected $sut;
 
@@ -49,14 +47,12 @@ class CanAccessUserListTest extends AbstractHandlerTestCase
 
         $dto = \Dvsa\Olcs\Transfer\Query\User\UserList::create([]);
 
-        $this->assertSame(false, $this->sut->isValid($dto));
+        $this->assertFalse($this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

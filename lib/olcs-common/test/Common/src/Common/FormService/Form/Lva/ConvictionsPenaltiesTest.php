@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Common\Form\Elements\InputFilters\ActionLink;
@@ -16,7 +18,7 @@ use Laminas\Form\Fieldset;
 use Laminas\Form\Form;
 use Mockery as m;
 
-class ConvictionsPenaltiesTest extends AbstractLvaFormServiceTestCase
+final class ConvictionsPenaltiesTest extends AbstractLvaFormServiceTestCase
 {
     public $translator;
     public $urlHelper;

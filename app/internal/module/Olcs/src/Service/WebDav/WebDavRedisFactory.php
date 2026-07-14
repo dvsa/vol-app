@@ -20,7 +20,7 @@ class WebDavRedisFactory implements FactoryInterface
     public const SERVICE_NAME = 'WebDavRedis';
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ?\Redis
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ?\Redis
     {
         $config = $container->get('Config');
         $redisConfig = $config['caches']['default-cache']['options']['server'] ?? [];

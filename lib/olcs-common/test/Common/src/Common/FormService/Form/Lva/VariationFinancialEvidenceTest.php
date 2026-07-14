@@ -18,21 +18,14 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\FormService\Form\Lva\VariationFinancialEvidence;
 
-class VariationFinancialEvidenceTest extends MockeryTestCase
+final class VariationFinancialEvidenceTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $authService;
     public $validatorPluginManager;
     /** @var  VariationFinancialEvidence */
     protected $sut;
 
     /** @var  m\MockInterface|\Common\Service\Helper\FormHelperService */
     protected $formHelper;
-
-    /** @var  \Common\FormService\FormServiceManager */
-    protected $fsm;
 
     /** @var  m\MockInterface */
     protected $urlHelper;
@@ -44,10 +37,10 @@ class VariationFinancialEvidenceTest extends MockeryTestCase
     protected function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
-        $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
+        $fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
         $this->urlHelper = m::mock(UrlHelperService::class);
         $this->translator = m::mock(TranslationHelperService::class);
-        $this->authService = m::mock(\LmcRbacMvc\Service\AuthorizationService::class);
+        $authService = m::mock(\LmcRbacMvc\Service\AuthorizationService::class);
         $this->validatorPluginManager = m::mock(ValidatorPluginManager::class);
 
         $sm = new ServiceManager();
@@ -55,10 +48,10 @@ class VariationFinancialEvidenceTest extends MockeryTestCase
         $sm->setService('Helper\Url', $this->urlHelper);
         $sm->setService('Helper\Translation', $this->translator);
 
-        $this->fsm->shouldReceive('getServiceLocator')->andReturn($sm);
+        $fsm->shouldReceive('getServiceLocator')->andReturn($sm);
         $this->sut = new VariationFinancialEvidence(
             $this->formHelper,
-            $this->authService,
+            $authService,
             $this->translator,
             $this->urlHelper,
             $this->validatorPluginManager

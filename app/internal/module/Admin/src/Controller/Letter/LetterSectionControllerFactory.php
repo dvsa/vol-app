@@ -15,7 +15,7 @@ use Psr\Container\ContainerInterface;
 class LetterSectionControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LetterSectionController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LetterSectionController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         $formHelper = $container->get(FormHelperService::class);

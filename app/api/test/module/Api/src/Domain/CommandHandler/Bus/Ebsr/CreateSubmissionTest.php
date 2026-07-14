@@ -19,7 +19,7 @@ use LmcRbacMvc\Identity\IdentityInterface;
 /**
  * Create Submission Test
  */
-class CreateSubmissionTest extends AbstractCommandHandlerTestCase
+final class CreateSubmissionTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

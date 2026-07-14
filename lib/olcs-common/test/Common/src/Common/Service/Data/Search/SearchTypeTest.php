@@ -21,7 +21,7 @@ use LmcRbacMvc\Service\RoleService;
  * Class SearchTypeTest
  * @package CommonTest\Service\Data\Search
  */
-class SearchTypeTest extends TestCase
+final class SearchTypeTest extends TestCase
 {
     private function getMockSearchTypeManager(): m\MockInterface
     {

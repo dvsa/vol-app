@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\QueryPartialServiceManager;
 use Psr\Container\ContainerInterface;
 use Mockery as m;
 
-class WithIrhpApplicationFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
+final class WithIrhpApplicationFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     public function testInvoke(): void
     {

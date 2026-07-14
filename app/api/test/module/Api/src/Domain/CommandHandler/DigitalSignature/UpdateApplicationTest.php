@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class UpdateApplicationTest extends AbstractCommandHandlerTestCase
+final class UpdateApplicationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

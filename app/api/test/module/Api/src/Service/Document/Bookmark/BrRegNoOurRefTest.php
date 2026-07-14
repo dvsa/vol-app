@@ -15,7 +15,7 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class BrRegNoOurRefTest extends SingleValueTestAbstract
+final class BrRegNoOurRefTest extends SingleValueTestAbstract
 {
     public const SUT_CLASS_NAME = \Dvsa\Olcs\Api\Service\Document\Bookmark\BrRegNoOurRef::class;
 }

@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\IrhpPermit;
 
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByLicence;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByLicence
- */
-class GetListByLicenceTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByLicence::class)]
+final class GetListByLicenceTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {
@@ -18,25 +18,22 @@ class GetListByLicenceTest extends \PHPUnit\Framework\TestCase
                 'limit' => 10,
             ]
         );
-        static::assertEquals(7, $sut->getLicence());
-        static::assertEquals(1, $sut->getPage());
-        static::assertEquals(10, $sut->getLimit());
-        static::assertNull($sut->getIrhpPermitType());
-        static::assertNull($sut->getCountry());
-        static::assertNull($sut->getStatus());
-        static::assertNull($sut->getValidOnly());
-        static::assertEquals(
-            [
-                'licence' => 7,
-                'page' => 1,
-                'limit' => 10,
-                'irhpPermitType' => null,
-                'country' => null,
-                'status' => null,
-                'validOnly' => null,
-            ],
-            $sut->getArrayCopy()
-        );
+        $this->assertEquals(7, $sut->getLicence());
+        $this->assertEquals(1, $sut->getPage());
+        $this->assertEquals(10, $sut->getLimit());
+        $this->assertNull($sut->getIrhpPermitType());
+        $this->assertNull($sut->getCountry());
+        $this->assertNull($sut->getStatus());
+        $this->assertNull($sut->getValidOnly());
+        $this->assertEquals([
+            'licence' => 7,
+            'page' => 1,
+            'limit' => 10,
+            'irhpPermitType' => null,
+            'country' => null,
+            'status' => null,
+            'validOnly' => null,
+        ], $sut->getArrayCopy());
     }
 
     public function testStructureOptional()
@@ -52,24 +49,21 @@ class GetListByLicenceTest extends \PHPUnit\Framework\TestCase
                 'validOnly' => true,
             ]
         );
-        static::assertEquals(7, $sut->getLicence());
-        static::assertEquals(1, $sut->getPage());
-        static::assertEquals(10, $sut->getLimit());
-        static::assertEquals(2, $sut->getIrhpPermitType());
-        static::assertEquals('DE', $sut->getCountry());
-        static::assertEquals('permit_status', $sut->getStatus());
-        static::assertEquals(true, $sut->getValidOnly());
-        static::assertEquals(
-            [
-                'licence' => 7,
-                'irhpPermitType' => 2,
-                'country' => 'DE',
-                'page' => 1,
-                'limit' => 10,
-                'status' => 'permit_status',
-                'validOnly' => true,
-            ],
-            $sut->getArrayCopy()
-        );
+        $this->assertEquals(7, $sut->getLicence());
+        $this->assertEquals(1, $sut->getPage());
+        $this->assertEquals(10, $sut->getLimit());
+        $this->assertEquals(2, $sut->getIrhpPermitType());
+        $this->assertEquals('DE', $sut->getCountry());
+        $this->assertEquals('permit_status', $sut->getStatus());
+        $this->assertEquals(true, $sut->getValidOnly());
+        $this->assertEquals([
+            'licence' => 7,
+            'irhpPermitType' => 2,
+            'country' => 'DE',
+            'page' => 1,
+            'limit' => 10,
+            'status' => 'permit_status',
+            'validOnly' => true,
+        ], $sut->getArrayCopy());
     }
 }

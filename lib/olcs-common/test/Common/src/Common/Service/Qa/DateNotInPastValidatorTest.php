@@ -6,6 +6,8 @@
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa;
 
 use Common\Service\Qa\DateNotInPastValidator;
@@ -18,7 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class DateNotInPastValidatorTest extends MockeryTestCase
+final class DateNotInPastValidatorTest extends MockeryTestCase
 {
     private $dateNotInPastValidator;
 
@@ -35,9 +37,7 @@ class DateNotInPastValidatorTest extends MockeryTestCase
         $this->dateNotInPastValidator = new DateNotInPastValidator($dateTimeFactory, $options);
     }
 
-    /**
-     * @dataProvider dpIsValidTrue
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValidTrue')]
     public function testIsValidTrue($date): void
     {
         $this->assertTrue(
@@ -46,23 +46,19 @@ class DateNotInPastValidatorTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return list{list{'2019-11-27'}, list{'2019-11-28'}, list{'2019-12-01'}, list{'2020-11-25'}}
      */
-    public function dpIsValidTrue(): array
+    public static function dpIsValidTrue(): \Iterator
     {
-        return [
-            ['2019-11-27'],
-            ['2019-11-28'],
-            ['2019-12-01'],
-            ['2020-11-25'],
-        ];
+        yield ['2019-11-27'];
+        yield ['2019-11-28'];
+        yield ['2019-12-01'];
+        yield ['2020-11-25'];
     }
 
-    /**
-     * @dataProvider dpIsValidFalse
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValidFalse')]
     public function testIsValidFalse($date): void
     {
         $this->assertFalse(
@@ -80,18 +76,16 @@ class DateNotInPastValidatorTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return list{list{'2019-11-26'}, list{'2019-11-01'}, list{'2019-10-30'}, list{'2018-06-06'}, list{'2018-12-12'}}
      */
-    public function dpIsValidFalse(): array
+    public static function dpIsValidFalse(): \Iterator
     {
-        return [
-            ['2019-11-26'],
-            ['2019-11-01'],
-            ['2019-10-30'],
-            ['2018-06-06'],
-            ['2018-12-12'],
-        ];
+        yield ['2019-11-26'];
+        yield ['2019-11-01'];
+        yield ['2019-10-30'];
+        yield ['2018-06-06'];
+        yield ['2018-12-12'];
     }
 }

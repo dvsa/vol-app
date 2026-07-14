@@ -13,7 +13,7 @@ use Dvsa\Olcs\Transfer\Command\Surrender\Delete as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class DeleteTest extends AbstractCommandHandlerTestCase
+final class DeleteTest extends AbstractCommandHandlerTestCase
 {
     /** @var Sut */
     protected $sut;

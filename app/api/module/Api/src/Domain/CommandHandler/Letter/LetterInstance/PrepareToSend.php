@@ -301,7 +301,7 @@ final class PrepareToSend extends AbstractCommandHandler implements
      * Factory method for dependency injection
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): mixed
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): mixed
     {
         $this->previewService = $container->get(LetterPreviewService::class);
         $this->masterTemplateResolver = $container->get(MasterTemplateResolver::class);

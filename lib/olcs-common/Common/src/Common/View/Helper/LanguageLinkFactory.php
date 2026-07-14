@@ -13,7 +13,7 @@ class LanguageLinkFactory implements FactoryInterface
      *
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LanguageLink
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LanguageLink
     {
         $languagePref = $container->get('LanguagePreference');
 

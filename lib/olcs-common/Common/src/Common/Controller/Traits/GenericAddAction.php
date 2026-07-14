@@ -18,7 +18,7 @@ trait GenericAddAction
     /**
      * Render the add form
      *
-     * @return Response
+     * @return \Laminas\Http\Response
      */
     public function addAction()
     {

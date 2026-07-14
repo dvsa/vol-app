@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa;
 
 use Common\Service\Qa\FormattedTranslateableTextParametersGenerator;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class FormattedTranslateableTextParametersGeneratorTest extends MockeryTestCase
+final class FormattedTranslateableTextParametersGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {
@@ -45,7 +47,7 @@ class FormattedTranslateableTextParametersGeneratorTest extends MockeryTestCase
 
         $sut = new FormattedTranslateableTextParametersGenerator($translateableTextParameterHandler);
 
-        $this->assertEquals(
+        $this->assertSame(
             [$formattedParameter1, $formattedParameter2],
             $sut->generate($parameters)
         );

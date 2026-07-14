@@ -11,12 +11,13 @@ use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
-class QueueFactoryTest extends TestCase
+final class QueueFactoryTest extends TestCase
 {
     protected $sm;
 
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new QueueFactory();

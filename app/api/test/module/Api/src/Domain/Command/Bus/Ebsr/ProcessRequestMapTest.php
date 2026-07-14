@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\Command\Bus\Ebsr\ProcessRequestMap;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ProcessRequestMapTest extends \PHPUnit\Framework\TestCase
+final class ProcessRequestMapTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

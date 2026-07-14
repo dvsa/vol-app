@@ -23,7 +23,7 @@ use Mockery as m;
 /**
  * Preview LetterInstance QueryHandler Test
  */
-class PreviewTest extends QueryHandlerTestCase
+final class PreviewTest extends QueryHandlerTestCase
 {
     private m\MockInterface|LetterPreviewService $mockPreviewService;
     private m\MockInterface|MasterTemplateResolver $mockMasterTemplateResolver;
@@ -108,7 +108,7 @@ class PreviewTest extends QueryHandlerTestCase
         $result = $this->sut->handleQuery($query);
 
         $this->assertIsArray($result);
-        $this->assertStringContainsString('Preview without template', $result['previewHtml']);
+        $this->assertStringContainsString('Preview without template', (string) $result['previewHtml']);
     }
 
     public function testBuildSectionsListGroupsByIssueType(): void

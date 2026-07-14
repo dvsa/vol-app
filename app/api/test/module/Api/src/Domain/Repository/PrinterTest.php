@@ -22,8 +22,9 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class PrinterTest extends RepositoryTestCase
+final class PrinterTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(PrinterRepo::class, true);

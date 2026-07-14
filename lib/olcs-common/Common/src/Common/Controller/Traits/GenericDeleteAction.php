@@ -18,7 +18,7 @@ trait GenericDeleteAction
     /**
      * Delete
      *
-     * @return Response
+     * @return \Laminas\Http\Response
      */
     public function deleteAction()
     {

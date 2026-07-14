@@ -14,7 +14,7 @@ class OcContextListDataServiceFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OcContextListDataService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): OcContextListDataService
     {
         return new OcContextListDataService(
             $container->get('DataServiceManager')->get(LicenceOperatingCentre::class),

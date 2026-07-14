@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper;
 
 use Common\Data\Mapper\LetterGenerationDocument;
@@ -15,7 +17,7 @@ use Common\Data\Mapper\LetterGenerationDocument;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class LetterGenerationDocumentTest extends \PHPUnit\Framework\TestCase
+final class LetterGenerationDocumentTest extends \PHPUnit\Framework\TestCase
 {
     public function testMapFromResult(): void
     {

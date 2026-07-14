@@ -18,7 +18,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class ErruRequestEntityTest extends EntityTester
+final class ErruRequestEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -103,14 +103,12 @@ class ErruRequestEntityTest extends EntityTester
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function canModifyProvider(): array
+    public static function canModifyProvider(): \Iterator
     {
-        return [
-            [Entity::FAILED_CASE_TYPE, false],
-            [Entity::SENT_CASE_TYPE, false],
-            [Entity::DEFAULT_CASE_TYPE, true]
-        ];
+        yield [Entity::FAILED_CASE_TYPE, false];
+        yield [Entity::SENT_CASE_TYPE, false];
+        yield [Entity::DEFAULT_CASE_TYPE, true];
     }
 }

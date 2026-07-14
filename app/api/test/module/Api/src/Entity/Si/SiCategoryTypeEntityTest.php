@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Si\SiCategoryType as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class SiCategoryTypeEntityTest extends EntityTester
+final class SiCategoryTypeEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Trailer;
 
 use Dvsa\Olcs\Transfer\Command\Trailer\UpdateTrailer;
@@ -8,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Update trailer test
  */
-class UpdateTrailerTest extends TestCase
+final class UpdateTrailerTest extends TestCase
 {
     public function testStructure()
     {
@@ -28,7 +30,6 @@ class UpdateTrailerTest extends TestCase
 
         // Use reflection to set the value of trailerNo property
         $reflectionProperty = new \ReflectionProperty(UpdateTrailer::class, 'trailerNo');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($command, $trailerNo);
 
         $this->assertEquals($id, $command->getId());

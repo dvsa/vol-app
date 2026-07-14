@@ -42,9 +42,9 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
+          php-version: "8.4"
           coverage: none
-          extensions: intl, pdo_mysql, redis, mbstring
+          extensions: intl, pdo_mysql, redis, mbstring, igbinary
       - name: Get composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
@@ -75,9 +75,9 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
+          php-version: "8.4"
           coverage: none
-          extensions: intl, pdo_mysql, redis, mbstring
+          extensions: intl, pdo_mysql, redis, mbstring, igbinary
       - name: Get composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
@@ -110,9 +110,9 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
+          php-version: "8.4"
           coverage: none
-          extensions: intl, pdo_mysql, redis, mbstring
+          extensions: intl, pdo_mysql, redis, mbstring, igbinary
       - name: Get composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
@@ -150,9 +150,9 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
+          php-version: "8.4"
           coverage: none
-          extensions: intl, pdo_mysql, redis, mbstring
+          extensions: intl, pdo_mysql, redis, mbstring, igbinary
       - name: Get composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT

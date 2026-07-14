@@ -14,26 +14,19 @@ use Mockery as m;
 /**
  * WithContactDetailsTest
  */
-class WithContactDetailsTest extends QueryPartialTestCase
+final class WithContactDetailsTest extends QueryPartialTestCase
 {
-    /**
-     * @var \Dvsa\Olcs\Api\Domain\QueryPartial\WithRefdata
-     */
-    public $withRefdata;
     /** @var m\Mock */
     private $em;
-
-    /** @var m\Mock */
-    private $with;
 
     public function setUp(): void
     {
         $this->em = m::mock(EntityManagerInterface::class);
         // Cannot mock With as it is Final
-        $this->with = new With();
+        $with = new With();
         // Cannot mock WithRefdata as it is Final
-        $this->withRefdata = new WithRefdata($this->em, $this->with);
-        $this->sut = new WithContactDetails($this->em, $this->with, $this->withRefdata);
+        $withRefdata = new WithRefdata($this->em, $with);
+        $this->sut = new WithContactDetails($this->em, $with, $withRefdata);
 
         parent::setUp();
     }
@@ -58,27 +51,25 @@ class WithContactDetailsTest extends QueryPartialTestCase
         );
     }
 
-    public static function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
-        return [
-            [
-                'SELECT a, a_cd, a_cd_a, a_cd_a_cc, a_cd_pc FROM foo a LEFT JOIN a.contactDetails a_cd ' .
-                    'LEFT JOIN a_cd.address a_cd_a LEFT JOIN a_cd_a.countryCode a_cd_a_cc ' .
-                    'LEFT JOIN a_cd.phoneContacts a_cd_pc',
-                []
-            ],
-            [
-                'SELECT a, a_cd, a_cd_a, a_cd_a_cc, a_cd_pc FROM foo a LEFT JOIN a.PROP a_cd ' .
-                    'LEFT JOIN a_cd.address a_cd_a LEFT JOIN a_cd_a.countryCode a_cd_a_cc ' .
-                    'LEFT JOIN a_cd.phoneContacts a_cd_pc',
-                ['PROP'],
-            ],
-            [
-                'SELECT a, ALIAS, ALIAS_a, ALIAS_a_cc, ALIAS_pc FROM foo a LEFT JOIN a.PROP ALIAS ' .
-                    'LEFT JOIN ALIAS.address ALIAS_a LEFT JOIN ALIAS_a.countryCode ALIAS_a_cc ' .
-                    'LEFT JOIN ALIAS.phoneContacts ALIAS_pc',
-                ['PROP', 'ALIAS']
-            ],
+        yield [
+            'SELECT a, a_cd, a_cd_a, a_cd_a_cc, a_cd_pc FROM foo a LEFT JOIN a.contactDetails a_cd ' .
+                'LEFT JOIN a_cd.address a_cd_a LEFT JOIN a_cd_a.countryCode a_cd_a_cc ' .
+                'LEFT JOIN a_cd.phoneContacts a_cd_pc',
+            []
+        ];
+        yield [
+            'SELECT a, a_cd, a_cd_a, a_cd_a_cc, a_cd_pc FROM foo a LEFT JOIN a.PROP a_cd ' .
+                'LEFT JOIN a_cd.address a_cd_a LEFT JOIN a_cd_a.countryCode a_cd_a_cc ' .
+                'LEFT JOIN a_cd.phoneContacts a_cd_pc',
+            ['PROP'],
+        ];
+        yield [
+            'SELECT a, ALIAS, ALIAS_a, ALIAS_a_cc, ALIAS_pc FROM foo a LEFT JOIN a.PROP ALIAS ' .
+                'LEFT JOIN ALIAS.address ALIAS_a LEFT JOIN ALIAS_a.countryCode ALIAS_a_cc ' .
+                'LEFT JOIN ALIAS.phoneContacts ALIAS_pc',
+            ['PROP', 'ALIAS']
         ];
     }
 }

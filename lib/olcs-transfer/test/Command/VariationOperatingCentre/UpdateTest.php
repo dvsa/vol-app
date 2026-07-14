@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\VariationOperatingCentre;
 
 use DateTime;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\VariationOperatingCentre\Update;
 use Dvsa\OlcsTest\Transfer\Command\CommandTest;
 use PHPUnit\Framework\TestCase;
 
-class UpdateTest extends TestCase
+final class UpdateTest extends TestCase
 {
     use CommandTest;
 

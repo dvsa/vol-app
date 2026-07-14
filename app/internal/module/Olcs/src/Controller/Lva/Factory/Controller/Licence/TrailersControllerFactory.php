@@ -24,7 +24,7 @@ class TrailersControllerFactory implements FactoryInterface
      * @return TrailersController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TrailersController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TrailersController
     {
 
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

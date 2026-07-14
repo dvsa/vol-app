@@ -10,7 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * ClearPropertiesTraitTest
  */
-class ClearPropertiesTraitTest extends MockeryTestCase
+final class ClearPropertiesTraitTest extends MockeryTestCase
 {
     public function testClearProperties(): void
     {

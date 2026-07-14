@@ -13,7 +13,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class CreateConversationControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $formHelper = $container->get(FormHelperService::class);
         $translationHelper = $container->get(TranslationHelperService::class);

@@ -12,7 +12,7 @@ use Dvsa\Olcs\CompaniesHouse\Service\Exception\ServiceException;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class ByNumberTest extends QueryHandlerTestCase
+final class ByNumberTest extends QueryHandlerTestCase
 {
     protected $sut;
 
@@ -35,7 +35,7 @@ class ByNumberTest extends QueryHandlerTestCase
             ->once()
             ->andReturn(['test']);
 
-        $query = (new \Dvsa\Olcs\Transfer\Query\CompaniesHouse\ByNumber())->create($queryData);
+        $query = new \Dvsa\Olcs\Transfer\Query\CompaniesHouse\ByNumber()->create($queryData);
         $actual = $this->sut->handleQuery($query);
 
         $expected = [
@@ -53,7 +53,7 @@ class ByNumberTest extends QueryHandlerTestCase
             ->once()
             ->andThrow(NotFoundException::class);
 
-        $query = (new \Dvsa\Olcs\Transfer\Query\CompaniesHouse\ByNumber())->create($queryData);
+        $query = new \Dvsa\Olcs\Transfer\Query\CompaniesHouse\ByNumber()->create($queryData);
         $this->expectException(DomainNotFoundException::class);
         $actual = $this->sut->handleQuery($query);
 
@@ -72,7 +72,7 @@ class ByNumberTest extends QueryHandlerTestCase
             ->once()
             ->andThrow(ServiceException::class);
 
-        $query = (new \Dvsa\Olcs\Transfer\Query\CompaniesHouse\ByNumber())->create($queryData);
+        $query = new \Dvsa\Olcs\Transfer\Query\CompaniesHouse\ByNumber()->create($queryData);
         $this->expectException(\Exception::class);
         $this->sut->handleQuery($query);
     }
@@ -85,7 +85,7 @@ class ByNumberTest extends QueryHandlerTestCase
             ->once()
             ->andReturn(['test']);
 
-        $query = (new \Dvsa\Olcs\Transfer\Query\CompaniesHouse\ByNumber())->create($queryData);
+        $query = new \Dvsa\Olcs\Transfer\Query\CompaniesHouse\ByNumber()->create($queryData);
         $actual = $this->sut->handleQuery($query);
         $expected = [
             'count' => 1,

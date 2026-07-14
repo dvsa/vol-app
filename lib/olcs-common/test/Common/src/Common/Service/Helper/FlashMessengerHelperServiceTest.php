@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Helper;
 
 use Mockery as m;
@@ -17,7 +19,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class FlashMessengerHelperServiceTest extends MockeryTestCase
+final class FlashMessengerHelperServiceTest extends MockeryTestCase
 {
     /**
      * Holds the SUT
@@ -39,10 +41,8 @@ class FlashMessengerHelperServiceTest extends MockeryTestCase
         $this->sut = new FlashMessengerHelperService($this->mockFlashMessenger);
     }
 
-    /**
-     * @group helper_service
-     * @group flash_messenger_helper_service
-     */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('flash_messenger_helper_service')]
     public function testAddErrorMessage(): void
     {
         $message = 'foo';
@@ -55,10 +55,8 @@ class FlashMessengerHelperServiceTest extends MockeryTestCase
         $this->assertSame($this->mockFlashMessenger, $this->sut->addErrorMessage($message));
     }
 
-    /**
-     * @group helper_service
-     * @group flash_messenger_helper_service
-     */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('flash_messenger_helper_service')]
     public function testAddProminentErrorMessage(): void
     {
         $message = 'foo';
@@ -71,10 +69,8 @@ class FlashMessengerHelperServiceTest extends MockeryTestCase
         $this->sut->addProminentErrorMessage($message);
     }
 
-    /**
-     * @group helper_service
-     * @group flash_messenger_helper_service
-     */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('flash_messenger_helper_service')]
     public function testAddSuccessMessage(): void
     {
         $message = 'foo';
@@ -87,10 +83,8 @@ class FlashMessengerHelperServiceTest extends MockeryTestCase
         $this->assertSame($this->mockFlashMessenger, $this->sut->addSuccessMessage($message));
     }
 
-    /**
-     * @group helper_service
-     * @group flash_messenger_helper_service
-     */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('flash_messenger_helper_service')]
     public function testAddWarningMessage(): void
     {
         $message = 'foo';
@@ -103,10 +97,8 @@ class FlashMessengerHelperServiceTest extends MockeryTestCase
         $this->assertSame($this->mockFlashMessenger, $this->sut->addWarningMessage($message));
     }
 
-    /**
-     * @group helper_service
-     * @group flash_messenger_helper_service
-     */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('flash_messenger_helper_service')]
     public function testAddInfoMessage(): void
     {
         $message = 'foo';

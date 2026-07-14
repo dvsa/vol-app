@@ -16,7 +16,7 @@ use Laminas\Form\Form;
 /**
  * NoOfPermitsTest
  */
-class NoOfPermitsTest extends TestCase
+final class NoOfPermitsTest extends TestCase
 {
     public function testMapForFormOptions(): void
     {

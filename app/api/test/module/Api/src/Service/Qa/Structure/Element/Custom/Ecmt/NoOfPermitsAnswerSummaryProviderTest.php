@@ -19,10 +19,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsAnswerSummaryProviderTest extends MockeryTestCase
+final class NoOfPermitsAnswerSummaryProviderTest extends MockeryTestCase
 {
     private $noOfPermitsAnswerSummaryProvider;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->noOfPermitsAnswerSummaryProvider = new NoOfPermitsAnswerSummaryProvider();
@@ -108,11 +109,9 @@ class NoOfPermitsAnswerSummaryProviderTest extends MockeryTestCase
         $this->assertEquals($expectedTemplateVariables, $templateVariables);
     }
 
-    public static function dpSnapshot(): array
+    public static function dpSnapshot(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 }

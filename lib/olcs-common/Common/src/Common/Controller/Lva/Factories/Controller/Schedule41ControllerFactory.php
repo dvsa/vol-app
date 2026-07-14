@@ -18,7 +18,7 @@ class Schedule41ControllerFactory implements FactoryInterface
      * @param array|null $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Schedule41Controller
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Schedule41Controller
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

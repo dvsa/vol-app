@@ -15,7 +15,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class IrhpPermitJurisdictionQuotaEntityTest extends EntityTester
+final class IrhpPermitJurisdictionQuotaEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -31,9 +31,9 @@ class IrhpPermitJurisdictionQuotaEntityTest extends EntityTester
 
         $entity = $this->createEntity($trafficArea, $stock);
 
-        self::assertInstanceOf(Entity::class, $entity);
-        self::assertEquals($trafficArea, $entity->getTrafficArea());
-        self::assertEquals($stock, $entity->getIrhpPermitStock());
+        $this->assertInstanceOf(Entity::class, $entity);
+        $this->assertEquals($trafficArea, $entity->getTrafficArea());
+        $this->assertEquals($stock, $entity->getIrhpPermitStock());
     }
 
     public function testUpdate(): void

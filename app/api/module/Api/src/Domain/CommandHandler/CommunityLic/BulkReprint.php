@@ -102,7 +102,7 @@ final class BulkReprint extends AbstractCommandHandler implements UploaderAwareI
         $this->licences = [];
 
         rewind($fp);
-        while (($row = fgetcsv($fp)) !== false) {
+        while (($row = fgetcsv($fp, null, ',', '"', '\\')) !== false) {
             $this->processRow($row);
             $this->lineNumber++;
         }

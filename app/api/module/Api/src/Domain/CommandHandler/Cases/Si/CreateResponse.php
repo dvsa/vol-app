@@ -119,7 +119,7 @@ final class CreateResponse extends AbstractCommandHandler implements AuthAwareIn
         return UploadCmd::create($data);
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $fullContainer = $container;
 

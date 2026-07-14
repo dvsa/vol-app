@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Element;
 
 use Common\Form\Element\DynamicSelect;
@@ -12,7 +14,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  * Class DynamicSelectTest
  * @package CommonTest\Form\Element
  */
-class DynamicSelectTest extends TestCase
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
+final class DynamicSelectTest extends TestCase
 {
     private $sut;
 
@@ -52,7 +55,7 @@ class DynamicSelectTest extends TestCase
         $this->mockRefDataService
             ->expects($this->once())
             ->method('fetchListOptions')
-            ->with($this->equalTo('category'), $this->equalTo(false))
+            ->with('category', false)
             ->willReturn(['key' => 'value']);
 
         $this->sut->setDataService($this->mockRefDataService);
@@ -69,7 +72,7 @@ class DynamicSelectTest extends TestCase
         $this->mockRefDataService
             ->expects($this->once())
             ->method('fetchListOptions')
-            ->with($this->equalTo('category'), $this->equalTo(false))
+            ->with('category', false)
             ->willReturn(['key' => 'value']);
 
         $this->sut->setOtherOption(true);
@@ -87,7 +90,7 @@ class DynamicSelectTest extends TestCase
         $this->mockRefDataService
             ->expects($this->once())
             ->method('fetchListOptions')
-            ->with($this->equalTo('category'), $this->equalTo(false))
+            ->with('category', false)
             ->willReturn(['key' => 'value', 'exclude' => 'me', 'one_more' => 'one more value']);
 
         $this->sut->setExclude(['exclude']);
@@ -105,7 +108,7 @@ class DynamicSelectTest extends TestCase
         $this->mockRefDataService
             ->expects($this->once())
             ->method('fetchListOptions')
-            ->with($this->equalTo('category'), $this->equalTo(false))
+            ->with('category', false)
             ->willReturn(['key' => 'value']);
 
         $this->sut->setOtherOption(false);
@@ -122,8 +125,8 @@ class DynamicSelectTest extends TestCase
     /**
      * @param $value
      * @param $expected
-     * @dataProvider provideSetValue
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideSetValue')]
     public function testSetValue($value, $expected, $multiple = false): void
     {
         $this->sut->setAttribute('multiple', $multiple);
@@ -133,20 +136,18 @@ class DynamicSelectTest extends TestCase
     }
 
     /**
-     * @return ((string|string[])[]|null|string|true)[][]
+     * @return \Iterator<(int | string), array<(array<(array<string> | string)> | string | true | null)>>
      *
      * @psalm-return list{list{'test', 'test'}, list{list{'test', 'test2'}, list{'test', 'test2'}}, list{array{id: 'test', desc: 'Test Item'}, 'test'}, list{array<never, never>, null}, list{list{array{id: 'test', desc: 'Test Item'}, list{'test2'}}, list{'test', list{'test2'}}, true}, list{list{array{id: 'test', desc: 'Test Item'}, array{id: 'test2', desc: 'Test Item'}}, list{'test', 'test2'}, true}}
      */
-    public function provideSetValue(): array
+    public static function provideSetValue(): \Iterator
     {
-        return [
-            ['test', 'test'],
-            [[0 => 'test', 1 => 'test2'], [0 => 'test', 1 => 'test2']],
-            [['id' => 'test', 'desc' => 'Test Item'], 'test'],
-            [[], null],
-            [[['id' => 'test', 'desc' => 'Test Item'], [0 => 'test2']], ['test', [0 => 'test2']], true],
-            [[['id' => 'test', 'desc' => 'Test Item'], ['id' => 'test2', 'desc' => 'Test Item']], ['test', 'test2'], true]
-        ];
+        yield ['test', 'test'];
+        yield [[0 => 'test', 1 => 'test2'], [0 => 'test', 1 => 'test2']];
+        yield [['id' => 'test', 'desc' => 'Test Item'], 'test'];
+        yield [[], null];
+        yield [[['id' => 'test', 'desc' => 'Test Item'], [0 => 'test2']], ['test', [0 => 'test2']], true];
+        yield [[['id' => 'test', 'desc' => 'Test Item'], ['id' => 'test2', 'desc' => 'Test Item']], ['test', 'test2'], true];
     }
 
     public function testGetDataServiceThrows(): void
@@ -157,7 +158,7 @@ class DynamicSelectTest extends TestCase
             'Class ' . $serviceName . ' does not implement \Common\Service\Data\ListDataInterface'
         );
 
-        $mockService = $this->createMock('\StdClass');
+        $mockService = $this->createStub('\StdClass');
         $this->pluginManager->expects('get')->with($serviceName)->andReturn($mockService);
         $this->sut->setServiceName($serviceName);
         $this->assertEquals($mockService, $this->sut->getDataService());

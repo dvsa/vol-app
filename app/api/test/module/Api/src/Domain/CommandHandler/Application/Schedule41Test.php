@@ -27,7 +27,7 @@ use Dvsa\Olcs\Api\Domain\Command\Cases\ConditionUndertaking\CreateConditionUnder
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class Schedule41Test extends AbstractCommandHandlerTestCase
+final class Schedule41Test extends AbstractCommandHandlerTestCase
 {
     protected $application;
     protected $licence;

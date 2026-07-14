@@ -20,11 +20,12 @@ use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Fee::class)]
-class FeeTest extends RepositoryTestCase
+final class FeeTest extends RepositoryTestCase
 {
     /** @var   FeeRepo */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(FeeRepo::class, true);
@@ -450,13 +451,11 @@ class FeeTest extends RepositoryTestCase
         );
     }
 
-    public static function statusProvider(): array
+    public static function statusProvider(): \Iterator
     {
-        return [
-            ['all'],
-            ['current'],
-            ['historical'],
-        ];
+        yield ['all'];
+        yield ['current'];
+        yield ['historical'];
     }
 
     public function testFetchLatestFeeByTypeStatusesAndApplicationId(): void
@@ -540,9 +539,7 @@ class FeeTest extends RepositoryTestCase
             ->shouldReceive('withRefdata')->once()->andReturnSelf()
             ->shouldReceive('order')->once()->andReturnSelf();
 
-        static::assertNull(
-            $this->sut->fetchLatestFeeByTypeStatusesAndApplicationId($feeType, $feeStatuses, $appId)
-        );
+        $this->assertNull($this->sut->fetchLatestFeeByTypeStatusesAndApplicationId($feeType, $feeStatuses, $appId));
     }
 
     public function testFetchOutstandingFeesByApplicationId(): void
@@ -800,7 +797,7 @@ class FeeTest extends RepositoryTestCase
 
         $this->assertStringContainsString(
             'foo',
-            $this->sut->fetchApplicationFeeByPsvAuthId($irfoPsvAuthId)
+            (string) $this->sut->fetchApplicationFeeByPsvAuthId($irfoPsvAuthId)
         );
     }
 

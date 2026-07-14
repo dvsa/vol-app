@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper;
 
 use Common\Form\View\Helper\FormDateSelect;
@@ -13,7 +15,7 @@ use Laminas\I18n\Translator\Translator;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Renderer\PhpRenderer;
 
-class FormDateSelectTest extends MockeryTestCase
+final class FormDateSelectTest extends MockeryTestCase
 {
     private $sut;
 

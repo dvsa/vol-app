@@ -6,6 +6,8 @@
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -20,18 +22,10 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class FeeUrlTest extends MockeryTestCase
+final class FeeUrlTest extends MockeryTestCase
 {
     public $mockRouteMatch;
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $mockUrlHelper;
     protected $urlHelper;
-
-    protected $router;
-
-    protected $request;
 
     protected $sut;
 
@@ -39,13 +33,13 @@ class FeeUrlTest extends MockeryTestCase
     protected function setUp(): void
     {
         $this->urlHelper = m::mock(UrlHelperService::class);
-        $this->router = m::mock(TreeRouteStack::class);
-        $this->request = m::mock(Request::class);
-        $this->sut = new FeeUrl($this->router, $this->request, $this->urlHelper);
+        $router = m::mock(TreeRouteStack::class);
+        $request = m::mock(Request::class);
+        $this->sut = new FeeUrl($router, $request, $this->urlHelper);
 
         $this->mockRouteMatch = m::mock(\Laminas\Router\RouteMatch::class);
-        $this->mockUrlHelper = m::mock();
-        $this->request
+        $mockUrlHelper = m::mock();
+        $request
             ->shouldReceive('getQuery')
             ->andReturn(
                 m::mock()
@@ -57,9 +51,9 @@ class FeeUrlTest extends MockeryTestCase
             ->once()
             ->getMock();
 
-        $this->router
+        $router
             ->shouldReceive('match')
-            ->with($this->request)
+            ->with($request)
             ->andReturn($this->mockRouteMatch)
             ->getMock();
     }
@@ -73,11 +67,11 @@ class FeeUrlTest extends MockeryTestCase
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group FeeStatusFormatter
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('FeeStatusFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $routeMatch, $expectedRoute, $expectedRouteParams, $expectedLink): void
     {
         $this->mockRouteMatch
@@ -95,91 +89,89 @@ class FeeUrlTest extends MockeryTestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'operator fee' => [
-                [
-                    'id' => '99',
-                    'description' => 'operator fee',
-                ],
-                'operator/fees',
-                'operator/fees/fee_action',
-                ['fee' => '99', 'action' => 'edit-fee'],
-                '<a class="govuk-link" href="the_url">operator fee</a>',
+        yield 'operator fee' => [
+            [
+                'id' => '99',
+                'description' => 'operator fee',
             ],
-            'licence fee' => [
-                [
-                    'id' => '99',
-                    'description' => 'licence fee',
-                ],
-                'licence/fees',
-                'licence/fees/fee_action',
-                ['fee' => '99', 'action' => 'edit-fee'],
-                '<a class="govuk-link" href="the_url">licence fee</a>',
+            'operator/fees',
+            'operator/fees/fee_action',
+            ['fee' => '99', 'action' => 'edit-fee'],
+            '<a class="govuk-link" href="the_url">operator fee</a>',
+        ];
+        yield 'licence fee' => [
+            [
+                'id' => '99',
+                'description' => 'licence fee',
             ],
-            'application fee' => [
-                [
-                    'id' => '99',
-                    'description' => 'app fee',
-                ],
-                'lva-application/fees',
-                'lva-application/fees/fee_action',
-                ['fee' => '99', 'action' => 'edit-fee'],
-                '<a class="govuk-link" href="the_url">app fee</a>',
+            'licence/fees',
+            'licence/fees/fee_action',
+            ['fee' => '99', 'action' => 'edit-fee'],
+            '<a class="govuk-link" href="the_url">licence fee</a>',
+        ];
+        yield 'application fee' => [
+            [
+                'id' => '99',
+                'description' => 'app fee',
             ],
-            'bus reg fee' => [
-                [
-                    'id' => '99',
-                    'description' => 'bus reg fee',
-                ],
-                'licence/bus-fees',
-                'licence/bus-fees/fee_action',
-                ['fee' => '99', 'action' => 'edit-fee'],
-                '<a class="govuk-link" href="the_url">bus reg fee</a>',
+            'lva-application/fees',
+            'lva-application/fees/fee_action',
+            ['fee' => '99', 'action' => 'edit-fee'],
+            '<a class="govuk-link" href="the_url">app fee</a>',
+        ];
+        yield 'bus reg fee' => [
+            [
+                'id' => '99',
+                'description' => 'bus reg fee',
             ],
-            'ECMT fee link' => [
-                [
-                    'id' => '99',
-                    'description' => 'ECMT fee',
-                ],
-                'licence/irhp-fees/table',
-                'licence/irhp-fees/fee_action',
-                ['fee' => '99', 'action' => 'edit-fee'],
-                '<a class="govuk-link" href="the_url">ECMT fee</a>',
+            'licence/bus-fees',
+            'licence/bus-fees/fee_action',
+            ['fee' => '99', 'action' => 'edit-fee'],
+            '<a class="govuk-link" href="the_url">bus reg fee</a>',
+        ];
+        yield 'ECMT fee link' => [
+            [
+                'id' => '99',
+                'description' => 'ECMT fee',
             ],
-            'IRHP fee link' => [
-                [
-                    'id' => '99',
-                    'description' => 'IRHP fee',
-                ],
-                'licence/irhp-application-fees/table',
-                'licence/irhp-application-fees/fee_action',
-                ['fee' => '99', 'action' => 'edit-fee'],
-                '<a class="govuk-link" href="the_url">IRHP fee</a>',
+            'licence/irhp-fees/table',
+            'licence/irhp-fees/fee_action',
+            ['fee' => '99', 'action' => 'edit-fee'],
+            '<a class="govuk-link" href="the_url">ECMT fee</a>',
+        ];
+        yield 'IRHP fee link' => [
+            [
+                'id' => '99',
+                'description' => 'IRHP fee',
             ],
-            'misc fee' => [
-                [
-                    'id' => '99',
-                    'description' => 'misc fee',
-                ],
-                'admin-dashboard/admin-payment-processing/misc-fees',
-                'admin-dashboard/admin-payment-processing/misc-fees/fee_action',
-                ['fee' => '99', 'action' => 'edit-fee', 'controller' => 'Admin\PaymentProcessingController'],
-                '<a class="govuk-link" href="the_url">misc fee</a>',
+            'licence/irhp-application-fees/table',
+            'licence/irhp-application-fees/fee_action',
+            ['fee' => '99', 'action' => 'edit-fee'],
+            '<a class="govuk-link" href="the_url">IRHP fee</a>',
+        ];
+        yield 'misc fee' => [
+            [
+                'id' => '99',
+                'description' => 'misc fee',
             ],
-            'dashboard fee link' => [
-                [
-                    'id' => '99',
-                    'description' => 'my fee',
-                ],
-                'fees',
-                'fees/pay',
-                ['fee' => '99'],
-                '<a class="govuk-link" href="the_url">my fee</a>',
+            'admin-dashboard/admin-payment-processing/misc-fees',
+            'admin-dashboard/admin-payment-processing/misc-fees/fee_action',
+            ['fee' => '99', 'action' => 'edit-fee', 'controller' => 'Admin\PaymentProcessingController'],
+            '<a class="govuk-link" href="the_url">misc fee</a>',
+        ];
+        yield 'dashboard fee link' => [
+            [
+                'id' => '99',
+                'description' => 'my fee',
             ],
+            'fees',
+            'fees/pay',
+            ['fee' => '99'],
+            '<a class="govuk-link" href="the_url">my fee</a>',
         ];
     }
 }

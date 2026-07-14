@@ -36,7 +36,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class WithdrawApplicationTest extends AbstractCommandHandlerTestCase
+final class WithdrawApplicationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -237,12 +237,12 @@ class WithdrawApplicationTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             \Dvsa\Olcs\Api\Domain\Command\Application\CloseTexTask::class,
             ['id' => 1],
-            (new Result())->addMessage('CLOSE_TEX_TASK')
+            new Result()->addMessage('CLOSE_TEX_TASK')
         );
         $this->expectedSideEffect(
             \Dvsa\Olcs\Api\Domain\Command\Application\CloseFeeDueTask::class,
             ['id' => 1],
-            (new Result())->addMessage('CLOSE_FEEDUE_TASK')
+            new Result()->addMessage('CLOSE_FEEDUE_TASK')
         );
 
         $this->expectedSideEffect(
@@ -296,7 +296,7 @@ class WithdrawApplicationTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             CreateSnapshot::class,
             ['id' => 532, 'event' => CreateSnapshot::ON_WITHDRAW],
-            (new Result())->addMessage('Snapshot created')
+            new Result()->addMessage('Snapshot created')
         );
         $this->expectedSideEffect(
             CeaseGoodsDiscsForApplication::class,
@@ -354,7 +354,7 @@ class WithdrawApplicationTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             CreateSnapshot::class,
             ['id' => 532, 'event' => CreateSnapshot::ON_WITHDRAW],
-            (new Result())->addMessage('Snapshot created')
+            new Result()->addMessage('Snapshot created')
         );
         $this->expectedSideEffect(
             \Dvsa\Olcs\Transfer\Command\Publication\Application::class,

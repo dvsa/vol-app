@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateVehiclesStatus;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateVehiclesStatusTest extends \PHPUnit\Framework\TestCase
+final class UpdateVehiclesStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

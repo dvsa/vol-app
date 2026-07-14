@@ -35,7 +35,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateFeeTest extends AbstractCommandHandlerTestCase
+final class CreateFeeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -141,7 +141,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
 
         $this->assertEquals('Some fee', $savedFee->getDescription());
-        $this->assertEquals('2015-01-01', $savedFee->getInvoicedDate()->format('Y-m-d'));
+        $this->assertSame('2015-01-01', $savedFee->getInvoicedDate()->format('Y-m-d'));
         $this->assertSame($this->references[Licence::class][33], $savedFee->getLicence());
         $this->assertSame($this->references[Application::class][22], $savedFee->getApplication());
         $this->assertSame($this->references[BusReg::class][44], $savedFee->getBusReg());
@@ -205,11 +205,11 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
 
         $this->assertEquals($expected, $result->toArray());
 
-        $this->assertEquals('2015-01-01', $savedFee->getInvoicedDate()->format('Y-m-d'));
+        $this->assertSame('2015-01-01', $savedFee->getInvoicedDate()->format('Y-m-d'));
         $this->assertSame($this->references[Licence::class][33], $savedFee->getLicence());
         $this->assertSame($this->references[Application::class][22], $savedFee->getApplication());
-        $this->assertEquals(246.9, $savedFee->getNetAmount());
-        $this->assertEquals(246.9, $savedFee->getGrossAmount());
+        $this->assertEqualsWithDelta(246.9, $savedFee->getNetAmount(), PHP_FLOAT_EPSILON);
+        $this->assertEqualsWithDelta(246.9, $savedFee->getGrossAmount(), PHP_FLOAT_EPSILON);
         $this->assertEquals(0, $savedFee->getVatAmount());
         $this->assertSame($this->refData[FeeEntity::STATUS_OUTSTANDING], $savedFee->getFeeStatus());
         $this->assertSame($this->references[FeeType::class][99], $savedFee->getFeeType());
@@ -265,7 +265,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
 
         $this->assertEquals('some fee type', $savedFee->getDescription());
-        $this->assertEquals('2015-01-01', $savedFee->getInvoicedDate()->format('Y-m-d'));
+        $this->assertSame('2015-01-01', $savedFee->getInvoicedDate()->format('Y-m-d'));
         $this->assertSame($this->references[Licence::class][33], $savedFee->getLicence());
         $this->assertSame($this->references[BusReg::class][44], $savedFee->getBusReg());
         $this->assertEquals('123.45', $savedFee->getNetAmount());
@@ -323,7 +323,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
 
         $this->assertEquals('some fee type', $savedFee->getDescription());
-        $this->assertEquals('2015-01-01', $savedFee->getInvoicedDate()->format('Y-m-d'));
+        $this->assertSame('2015-01-01', $savedFee->getInvoicedDate()->format('Y-m-d'));
         $this->assertSame($this->references[IrfoGvPermit::class][55], $savedFee->getIrfoGvPermit());
         $this->assertEquals('123.45', $savedFee->getNetAmount());
         $this->assertEquals('123.45', $savedFee->getGrossAmount());
@@ -380,7 +380,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
 
         $this->assertEquals('some fee type', $savedFee->getDescription());
-        $this->assertEquals('2015-01-01', $savedFee->getInvoicedDate()->format('Y-m-d'));
+        $this->assertSame('2015-01-01', $savedFee->getInvoicedDate()->format('Y-m-d'));
         $this->assertSame($this->references[IrfoPsvAuth::class][66], $savedFee->getIrfoPsvAuth());
         $this->assertEquals('123.45', $savedFee->getNetAmount());
         $this->assertEquals('123.45', $savedFee->getGrossAmount());
@@ -432,7 +432,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
 
         $this->assertEquals('some fee type', $savedFee->getDescription());
-        $this->assertEquals('2015-01-01', $savedFee->getInvoicedDate()->format('Y-m-d'));
+        $this->assertSame('2015-01-01', $savedFee->getInvoicedDate()->format('Y-m-d'));
         $this->assertEquals('123.45', $savedFee->getNetAmount());
         $this->assertEquals('123.45', $savedFee->getGrossAmount());
         $this->assertEquals(0, $savedFee->getVatAmount());
@@ -550,12 +550,12 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
             $this->expectedSideEffect(
                 RecommendWaiveCmd::class,
                 $waiveData,
-                (new Result())->addMessage('waive recommended')
+                new Result()->addMessage('waive recommended')
             );
             $this->expectedSideEffect(
                 ApproveWaiveCmd::class,
                 $waiveData,
-                (new Result())->addMessage('waive approved')
+                new Result()->addMessage('waive approved')
             );
         }
 
@@ -573,7 +573,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
 
         $this->assertEquals('some fee type', $savedFee->getDescription());
-        $this->assertEquals('2015-01-01', $savedFee->getInvoicedDate()->format('Y-m-d'));
+        $this->assertSame('2015-01-01', $savedFee->getInvoicedDate()->format('Y-m-d'));
         $this->assertEquals($amount, $savedFee->getNetAmount());
         $this->assertEquals($amount, $savedFee->getGrossAmount());
         $this->assertEquals(0, $savedFee->getVatAmount());
@@ -581,20 +581,18 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->assertSame($this->references[FeeType::class][101], $savedFee->getFeeType());
     }
 
-    public static function feeAmountsProvider(): array
+    public static function feeAmountsProvider(): \Iterator
     {
-        return [
-            [0, FeeEntity::STATUS_PAID],
-            [0.0, FeeEntity::STATUS_PAID],
-            [0.00, FeeEntity::STATUS_PAID],
-            [0.01, FeeEntity::STATUS_OUTSTANDING],
-            [-0.0, FeeEntity::STATUS_PAID],
-            ['0', FeeEntity::STATUS_PAID],
-            ['0.0', FeeEntity::STATUS_PAID],
-            ['0.00', FeeEntity::STATUS_PAID],
-            ['0.01', FeeEntity::STATUS_OUTSTANDING],
-            [null, FeeEntity::STATUS_PAID],
-            [-0.01, FeeEntity::STATUS_OUTSTANDING]
-        ];
+        yield [0, FeeEntity::STATUS_PAID];
+        yield [0.0, FeeEntity::STATUS_PAID];
+        yield [0.00, FeeEntity::STATUS_PAID];
+        yield [0.01, FeeEntity::STATUS_OUTSTANDING];
+        yield [-0.0, FeeEntity::STATUS_PAID];
+        yield ['0', FeeEntity::STATUS_PAID];
+        yield ['0.0', FeeEntity::STATUS_PAID];
+        yield ['0.00', FeeEntity::STATUS_PAID];
+        yield ['0.01', FeeEntity::STATUS_OUTSTANDING];
+        yield [null, FeeEntity::STATUS_PAID];
+        yield [-0.01, FeeEntity::STATUS_OUTSTANDING];
     }
 }

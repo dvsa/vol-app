@@ -13,7 +13,7 @@ class TranslationHelperServiceFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TranslationHelperService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TranslationHelperService
     {
         return new TranslationHelperService(
             $container->get('translator')
