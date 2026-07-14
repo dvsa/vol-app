@@ -6,8 +6,8 @@ namespace Dvsa\Olcs\Api\Domain\QueryHandler\Letter\LetterInstance;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
-use Dvsa\Olcs\Api\Entity\Letter\MasterTemplate;
 use Dvsa\Olcs\Api\Service\Letter\LetterPreviewService;
+use Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolver;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Psr\Container\ContainerInterface;
 
@@ -19,9 +19,9 @@ use Psr\Container\ContainerInterface;
 class Preview extends AbstractQueryHandler
 {
     protected $repoServiceName = 'LetterInstance';
-    protected $extraRepos = ['MasterTemplate'];
 
     private LetterPreviewService $previewService;
+    private MasterTemplateResolver $masterTemplateResolver;
 
     /**
      * Bundle for fetching letter instance with all relationships
@@ -83,8 +83,8 @@ class Preview extends AbstractQueryHandler
         /** @var LetterInstanceEntity $letterInstance */
         $letterInstance = $this->getRepo()->fetchUsingId($query);
 
-        // Get the master template from the letter type, or fall back to default
-        $masterTemplate = $this->getMasterTemplate($letterInstance);
+        // VOL-7305: pick the right MasterTemplate row for this letter's region (GB/NI/...)
+        $masterTemplate = $this->masterTemplateResolver->resolve($letterInstance);
 
         // Render the preview HTML
         $previewHtml = $this->previewService->renderPreview($letterInstance, $masterTemplate);
@@ -100,41 +100,6 @@ class Preview extends AbstractQueryHandler
             'previewHtml' => $previewHtml,
             'sectionsList' => $sectionsList,
         ];
-    }
-
-    /**
-     * Get the master template to use for rendering
-     *
-     * @param LetterInstanceEntity $letterInstance
-     * @return MasterTemplate|null
-     */
-    private function getMasterTemplate(LetterInstanceEntity $letterInstance): ?MasterTemplate
-    {
-        // First try to get from the letter type
-        $letterType = $letterInstance->getLetterType();
-        if ($letterType !== null && $letterType->getMasterTemplate() !== null) {
-            return $letterType->getMasterTemplate();
-        }
-
-        // Fall back to default template for locale
-        try {
-            $repo = $this->getRepo('MasterTemplate');
-            $result = $repo->fetchList(
-                \Dvsa\Olcs\Transfer\Query\Letter\MasterTemplate\GetList::create([
-                    'isDefault' => true,
-                    'locale' => MasterTemplate::LOCALE_EN_GB,
-                    'limit' => 1
-                ])
-            );
-
-            if (count($result) > 0) {
-                return $result[0];
-            }
-        } catch (\Exception) {
-            // Log and continue without template
-        }
-
-        return null;
     }
 
     /**
@@ -162,7 +127,15 @@ class Preview extends AbstractQueryHandler
                         'id' => $typeId,
                         'name' => $issueType->getName(),
                         'type' => 'issueType',
+                        'inputPending' => false,
                     ];
+                }
+
+                // VOL-7402: flag types still carrying unedited "requires input"
+                // content so the sidebar can highlight them; sending is blocked
+                // server-side until they are edited.
+                if ($issue->requiresInput() && !$issue->hasBeenEdited()) {
+                    $issueTypeMap[$typeId]['inputPending'] = true;
                 }
             }
         }
@@ -182,6 +155,7 @@ class Preview extends AbstractQueryHandler
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): self
     {
         $this->previewService = $container->get(LetterPreviewService::class);
+        $this->masterTemplateResolver = $container->get(MasterTemplateResolver::class);
         return parent::__invoke($container, $requestedName, $options);
     }
 }
