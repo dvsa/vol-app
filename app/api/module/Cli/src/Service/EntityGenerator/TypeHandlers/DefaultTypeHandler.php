@@ -71,12 +71,16 @@ class DefaultTypeHandler extends AbstractTypeHandler
             if ($doctrineType === 'boolean' && is_string($default)) {
                 // For boolean columns, use numeric values (0 or 1) for compatibility
                 $defaultValue = ($default === '1' || $default === 'true') ? '1' : '0';
-            } elseif (in_array($doctrineType, ['integer', 'smallint', 'bigint', 'decimal', 'float']) && is_numeric($default)) {
-                // For numeric types, don't quote the default value in options
+            } elseif (in_array($doctrineType, ['integer', 'smallint', 'bigint']) && is_numeric($default)) {
+                // For integer types, don't quote the default value in options
                 $defaultValue = (string) $default;
+            } elseif (in_array($doctrineType, ['decimal', 'float']) && is_numeric($default)) {
+                // Keep decimal defaults as strings: a float literal loses trailing zeros
+                // (0.00 renders as DEFAULT '0'), causing spurious schema diffs against
+                // MySQL's introspected '0.00'
+                $defaultValue = var_export((string) $default, true);
             } elseif (is_string($default)) {
-                // For string types in options array, use double quotes escaped for PHP
-                $defaultValue = '"' . addslashes($default) . '"';
+                $defaultValue = var_export($default, true);
             } else {
                 $defaultValue = $this->generateDefaultValue($default);
             }
@@ -96,11 +100,11 @@ class DefaultTypeHandler extends AbstractTypeHandler
         $annotations[] = '#[ORM\Column(' . implode(', ', $options) . ')]';
 
         // Check if field is translatable from EntityConfig
-        $columnConfig = $config[$column->getName()] ?? null;
+        $columnConfig = $config['fieldConfig'] ?? ($config[$column->getName()] ?? null);
         if ($columnConfig instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig && $columnConfig->translatable) {
-            $annotations[] = '@Gedmo\Translatable';
+            $annotations[] = '#[Gedmo\Translatable]';
         } elseif (is_array($columnConfig) && ($columnConfig['translatable'] ?? false)) {
-            $annotations[] = '@Gedmo\Translatable';
+            $annotations[] = '#[Gedmo\Translatable]';
         }
 
         return implode("\n    ", $annotations);

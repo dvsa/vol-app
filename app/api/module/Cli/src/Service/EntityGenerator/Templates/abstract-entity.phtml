@@ -49,13 +49,13 @@ use <?php echo $import; ?>;
 <?php foreach ($uniqueConstraints as $constraint): ?>
 #[ORM\UniqueConstraint(<?php echo $this->generateOptionsFromAttributes($constraint, 'unique-constraints'); ?>)]
 <?php endforeach; ?>
+#[ORM\MappedSuperclass]
 <?php if ($hasCreatedOn || $hasModifiedOn): ?>
 #[ORM\HasLifecycleCallbacks]
 <?php endif; ?>
 <?php if ($softDeletable): ?>
 #[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 <?php endif; ?>
-#[ORM\MappedSuperclass]
 abstract class <?php echo $className; ?> implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -84,8 +84,7 @@ abstract class <?php echo $className; ?> implements BundleSerializableInterface,
      * @var <?php echo $field['property']['type']; ?>
 
      */
-    <?php echo $field['annotation']; ?>
-    
+    <?php echo $field['annotation'] . "\n"; ?>
     protected $<?php echo $field['property']['name']; ?><?php if ($field['property']['defaultValue'] !== 'null'): ?> = <?php echo $field['property']['defaultValue']; ?><?php endif; ?>;
 
 <?php endif; ?>

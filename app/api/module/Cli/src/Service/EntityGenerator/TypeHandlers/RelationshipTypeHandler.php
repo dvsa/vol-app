@@ -54,7 +54,7 @@ class RelationshipTypeHandler extends AbstractTypeHandler
         $relationType = $isOneToOne ? 'OneToOne' : 'ManyToOne';
 
         $options = [
-            'targetEntity: ' . $targetEntity . '::class',
+            'targetEntity: \\' . ltrim($targetEntity, '\\') . '::class',
             "fetch: 'LAZY'"
         ];
 
@@ -92,13 +92,13 @@ class RelationshipTypeHandler extends AbstractTypeHandler
             $annotations[] = '#[ORM\Id]';
         }
 
+        $annotations[] = sprintf("#[ORM\JoinColumn(%s)]", implode(', ', $joinOptions));
+
         $annotations[] = sprintf(
             "#[ORM\%s(%s)]",
             $relationType,
             implode(', ', $options)
         );
-
-        $annotations[] = sprintf("#[ORM\JoinColumn(%s)]", implode(', ', $joinOptions));
 
         // Add OrderBy annotation if specified (only for collections)
         if ($relationType === 'OneToMany' || $relationType === 'ManyToMany') {
