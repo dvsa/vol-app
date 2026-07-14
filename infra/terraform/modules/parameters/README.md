@@ -14,7 +14,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_application_paramters"></a> [application\_paramters](#module\_application\_paramters) | terraform-aws-modules/ssm-parameter/aws | n/a |
+| <a name="module_application_paramters"></a> [application\_paramters](#module\_application\_paramters) | terraform-aws-modules/ssm-parameter/aws | >= 2.1.1 |
 
 ## Resources
 
