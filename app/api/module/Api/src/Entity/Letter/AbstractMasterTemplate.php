@@ -101,13 +101,55 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     protected $isDefault = 0;
 
     /**
-     * en_GB, cy_GB, etc
+     * Locale / chrome variant key — extended vocabulary beyond strict ISO codes,
+     * e.g. en_GB, en_NI, cy_GB, customN_GB, customN_NI. Picked at letter-generation
+     * time by MasterTemplateResolver from the letter context (currently isNi).
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="locale", length=5, nullable=true)
+     * @ORM\Column(type="string", name="locale", length=20, nullable=true)
      */
     protected $locale;
+
+    /**
+     * EditorJS JSON for the top-left header slot (typically the logo). Replaces
+     * the {{HEADER_LEFT_CONTENT}} placeholder in template_content at render time.
+     *
+     * @var array|null
+     *
+     * @ORM\Column(type="json", name="header_left_content", nullable=true)
+     */
+    protected $headerLeftContent;
+
+    /**
+     * EditorJS JSON for the top-right header slot (typically the address block).
+     * Replaces the {{HEADER_RIGHT_CONTENT}} placeholder at render time.
+     *
+     * @var array|null
+     *
+     * @ORM\Column(type="json", name="header_right_content", nullable=true)
+     */
+    protected $headerRightContent;
+
+    /**
+     * EditorJS JSON for the signoff slot (typically "Yours, ..." + caseworker name).
+     * Replaces the {{SIGNOFF_CONTENT}} placeholder at render time.
+     *
+     * @var array|null
+     *
+     * @ORM\Column(type="json", name="signoff_content", nullable=true)
+     */
+    protected $signoffContent;
+
+    /**
+     * EditorJS JSON for the footer slot (typically a single-line footer note).
+     * Replaces the {{FOOTER_CONTENT}} placeholder at render time.
+     *
+     * @var array|null
+     *
+     * @ORM\Column(type="json", name="footer_content", nullable=true)
+     */
+    protected $footerContent;
 
     /**
      * Version
@@ -301,6 +343,102 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     public function getLocale()
     {
         return $this->locale;
+    }
+
+    /**
+     * Set the header left content (EditorJS JSON)
+     *
+     * @param array|null $headerLeftContent
+     *
+     * @return MasterTemplate
+     */
+    public function setHeaderLeftContent($headerLeftContent)
+    {
+        $this->headerLeftContent = $headerLeftContent;
+
+        return $this;
+    }
+
+    /**
+     * Get the header left content (EditorJS JSON)
+     *
+     * @return array|null
+     */
+    public function getHeaderLeftContent()
+    {
+        return $this->headerLeftContent;
+    }
+
+    /**
+     * Set the header right content (EditorJS JSON)
+     *
+     * @param array|null $headerRightContent
+     *
+     * @return MasterTemplate
+     */
+    public function setHeaderRightContent($headerRightContent)
+    {
+        $this->headerRightContent = $headerRightContent;
+
+        return $this;
+    }
+
+    /**
+     * Get the header right content (EditorJS JSON)
+     *
+     * @return array|null
+     */
+    public function getHeaderRightContent()
+    {
+        return $this->headerRightContent;
+    }
+
+    /**
+     * Set the signoff content (EditorJS JSON)
+     *
+     * @param array|null $signoffContent
+     *
+     * @return MasterTemplate
+     */
+    public function setSignoffContent($signoffContent)
+    {
+        $this->signoffContent = $signoffContent;
+
+        return $this;
+    }
+
+    /**
+     * Get the signoff content (EditorJS JSON)
+     *
+     * @return array|null
+     */
+    public function getSignoffContent()
+    {
+        return $this->signoffContent;
+    }
+
+    /**
+     * Set the footer content (EditorJS JSON)
+     *
+     * @param array|null $footerContent
+     *
+     * @return MasterTemplate
+     */
+    public function setFooterContent($footerContent)
+    {
+        $this->footerContent = $footerContent;
+
+        return $this;
+    }
+
+    /**
+     * Get the footer content (EditorJS JSON)
+     *
+     * @return array|null
+     */
+    public function getFooterContent()
+    {
+        return $this->footerContent;
     }
 
     /**

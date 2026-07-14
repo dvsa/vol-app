@@ -40,4 +40,31 @@ class CaseworkerNameTest extends \PHPUnit\Framework\TestCase
             $bookmark->render()
         );
     }
+
+    public function testRenderFallbackIsLogged(): void
+    {
+        // This bookmark is shared with legacy RTF docgen, which used to fail loudly
+        // on missing person data — the graceful fallback must at least be visible.
+        $spyLogger = new class extends \Psr\Log\AbstractLogger {
+            public array $records = [];
+
+            public function log($level, $message, array $context = []): void
+            {
+                $this->records[] = [$level, (string) $message];
+            }
+        };
+        \Olcs\Logging\Log\Logger::setLogger($spyLogger);
+
+        try {
+            $bookmark = new CaseworkerName();
+            $bookmark->setData([]);
+
+            $this->assertEquals('Caseworker', $bookmark->render());
+            $this->assertNotEmpty(
+                array_filter($spyLogger->records, static fn($r) => $r[0] === 'warning')
+            );
+        } finally {
+            \Olcs\Logging\Log\Logger::setLogger(new \Psr\Log\NullLogger());
+        }
+    }
 }
