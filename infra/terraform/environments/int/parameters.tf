@@ -47,7 +47,7 @@ module "parameters" {
     olcs_aws_version                             = "latest"
     olcs_cpmsclientid                            = "olcs"
     olcs_cpmsclientid_ni                         = "olni"
-    olcs_cpmsserver                              = "api.accept.dev.cpms.dvsacloud.uk"
+    olcs_cpmsserver                              = "https://api.accept.dev.cpms.dvsacloud.uk"
     olcs_document_store_backend                  = "webdav"
     olcs_document_store_s3_bucket                = "olcs-devappqa-base-sabredav"
     olcs_document_store_s3_key_prefix            = "migration/olcs"
